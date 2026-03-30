@@ -1,11 +1,13 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-nspkg,
 }:
 
 buildPythonPackage rec {
   version = "3.0.2";
+  format = "setuptools";
   pname = "azure-mgmt-nspkg";
 
   src = fetchPypi {
@@ -18,10 +20,13 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ olcai maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      olcai
+      maxwilson
+    ];
   };
 }

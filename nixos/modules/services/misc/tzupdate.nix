@@ -1,45 +1,81 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.tzupdate;
-in {
+in
+{
   options.services.tzupdate = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable the tzupdate timezone updating service. This provides
         a one-shot service which can be activated with systemctl to
         update the timezone.
       '';
     };
+
+    package = lib.mkPackageOption pkgs "tzupdate" { };
+
+    timer.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Enable the tzupdate timer to update the timezone automatically.
+      '';
+    };
+
+    timer.interval = lib.mkOption {
+      type = lib.types.str;
+      default = "hourly";
+      description = ''
+        The interval at which the tzupdate timer should run. See
+        {manpage}`systemd.time(7)` to understand the format.
+      '';
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # We need to have imperative time zone management for this to work.
     # This will give users an error if they have set an explicit time
     # zone, which is better than silently overriding it.
     time.timeZone = null;
 
-    # We provide a one-shot service which can be manually run. We could
-    # provide a service that runs on startup, but it's tricky to get
-    # a service to run after you have *internet* access.
+    # We provide a one-shot service that runs at startup once network
+    # interfaces are up, but we can’t ensure we actually have Internet access
+    # at that point. It can also be run manually with `systemctl start tzupdate`.
     systemd.services.tzupdate = {
       description = "tzupdate timezone update service";
+      wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      script = ''
+        timezone="$(${lib.getExe cfg.package} --print-only)"
+        if [[ -n "$timezone" ]]; then
+          echo "Setting timezone to '$timezone'"
+          timedatectl set-timezone "$timezone"
+        fi
+      '';
 
       serviceConfig = {
         Type = "oneshot";
-        # We could link directly into pkgs.tzdata, but at least timedatectl seems
-        # to expect the symlink to point directly to a file in etc.
-        # Setting the "debian timezone file" to point at /dev/null stops it doing anything.
-        ExecStart = "${pkgs.tzupdate}/bin/tzupdate -z /etc/zoneinfo -d /dev/null";
       };
+    };
+
+    systemd.timers.tzupdate = {
+      enable = cfg.timer.enable;
+      timerConfig = {
+        OnStartupSec = "30s";
+        OnCalendar = cfg.timer.interval;
+        Persistent = true;
+      };
+      wantedBy = [ "timers.target" ];
     };
   };
 
-  meta.maintainers = [ maintainers.michaelpj ];
+  meta.maintainers = with lib.maintainers; [ doronbehar ];
 }

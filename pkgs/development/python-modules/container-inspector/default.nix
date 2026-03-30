@@ -1,56 +1,47 @@
-{ lib
-, attrs
-, buildPythonPackage
-, click
-, commoncode
-, dockerfile-parse
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  click,
+  commoncode,
+  dockerfile-parse,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "container-inspector";
-  version = "32.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "33.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-J9glnfs6l36/IQoIvE8a+Cw4B8x/6r5UeAU8+T/OiQg=";
+    repo = "container-inspector";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uwfqPh4e5zNO0K5rKZ2pxgOkX/KF9pzCsKdYbQuw9MA=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     click
     dockerfile-parse
     commoncode
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "container_inspector"
-  ];
+  pythonImportsCheck = [ "container_inspector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of analysis utilities and command line tools for container images";
     homepage = "https://github.com/nexB/container-inspector";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nexB/container-inspector/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

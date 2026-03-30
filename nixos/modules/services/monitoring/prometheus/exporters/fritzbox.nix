@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.fritzbox;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9133;
@@ -11,15 +16,15 @@ in
     gatewayAddress = mkOption {
       type = types.str;
       default = "fritz.box";
-      description = lib.mdDoc ''
+      description = ''
         The hostname or IP of the FRITZ!Box.
       '';
     };
 
     gatewayPort = mkOption {
-      type = types.int;
+      type = types.port;
       default = 49000;
-      description = lib.mdDoc ''
+      description = ''
         The port of the FRITZ!Box UPnP service.
       '';
     };

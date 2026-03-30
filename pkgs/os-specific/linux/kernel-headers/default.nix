@@ -1,10 +1,15 @@
-{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
-, bison ? null, flex ? null, python ? null, rsync ? null
-, writeTextFile
+{
+  stdenvNoCC,
+  lib,
+  buildPackages,
+  fetchurl,
+  perl,
+  elf-header,
+  bison,
+  flex,
+  rsync,
+  writeTextFile,
 }:
-
-assert stdenvNoCC.hostPlatform.isAndroid ->
-  (flex != null && bison != null && python != null && rsync != null);
 
 let
 
@@ -32,97 +37,131 @@ let
     destination = "/include/byteswap.h";
   };
 
-  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
-    inherit src;
+  makeLinuxHeaders =
+    {
+      src,
+      version,
+      patches ? [ ],
+    }:
+    stdenvNoCC.mkDerivation {
+      inherit src;
 
-    pname = "linux-headers";
-    inherit version;
+      pname = "linux-headers";
+      inherit version;
 
-    ARCH = stdenvNoCC.hostPlatform.linuxArch;
+      env.ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
-    strictDeps = true;
-    enableParallelBuilding = true;
+      strictDeps = true;
+      enableParallelBuilding = true;
 
-    # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
-    # We do this so we have a build->build, not build->host, C compiler.
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-    # `elf-header` is null when libc provides `elf.h`.
-    nativeBuildInputs = [
-      perl elf-header
-    ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
-      flex bison python rsync
-    ] ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin &&
-                        stdenvNoCC.hostPlatform.isMips) [
-      darwin-endian-h
-      darwin-byteswap-h
-    ];
+      # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
+      # We do this so we have a build->build, not build->host, C compiler.
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
+      # `elf-header` is null when libc provides `elf.h`.
+      nativeBuildInputs = [
+        perl
+        elf-header
+      ]
+      ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
+        bison
+        flex
+        rsync
+      ]
+      ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin && stdenvNoCC.hostPlatform.isMips) [
+        darwin-endian-h
+        darwin-byteswap-h
+      ];
 
-    extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
+      extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) [
+        "ppc"
+      ];
 
-    inherit patches;
+      inherit patches;
 
-    hardeningDisable = lib.optional stdenvNoCC.buildPlatform.isDarwin "format";
+      hardeningDisable = lib.optional stdenvNoCC.buildPlatform.isDarwin "format";
 
-    makeFlags = [
-      "SHELL=bash"
-      # Avoid use of runtime build->host compilers for checks. These
-      # checks only cared to work around bugs in very old compilers, so
-      # these changes should be safe.
-      "cc-version:=9999"
-      "cc-fullversion:=999999"
-      # `$(..)` expanded by make alone
-      "HOSTCC:=$(CC_FOR_BUILD)"
-      "HOSTCXX:=$(CXX_FOR_BUILD)"
-    ];
+      makeFlags = [
+        "SHELL=bash"
+        # Avoid use of runtime build->host compilers for checks. These
+        # checks only cared to work around bugs in very old compilers, so
+        # these changes should be safe.
+        "cc-version:=9999"
+        "cc-fullversion:=999999"
+        # `$(..)` expanded by make alone
+        "HOSTCC:=$(CC_FOR_BUILD)"
+        "HOSTCXX:=$(CXX_FOR_BUILD)"
+        # To properly detect LFS flags 32-bit build environments like
+        # pkgsi686Linux.linuxHeaders Kbuild uses this Makefile bit:
+        #     HOST_LFS_CFLAGS := $(shell getconf LFS_CFLAGS 2>/dev/null)
+        #
+        # `getconf` is not available in early bootstrap and thus the
+        # build fails on filesystems with 64-bit inodes as:
+        #     linux-headers> fixdep: error fstat'ing file: scripts/basic/.fixdep.d: Value too large for defined data type
+        #
+        # Let's hardcode subset of the output of `getconf` for this case.
+        "HOST_LFS_CFLAGS=-D_FILE_OFFSET_BITS=64"
+      ];
 
-    # Skip clean on darwin, case-sensitivity issues.
-    buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
-      make mrproper $makeFlags
-    '' + (if stdenvNoCC.hostPlatform.isAndroid then ''
-      make defconfig
-      make headers_install
-    '' else ''
-      make headers $makeFlags
-    '');
+      # Skip clean on darwin, case-sensitivity issues.
+      buildPhase =
+        lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
+          make mrproper $makeFlags
+        ''
+        + (
+          if stdenvNoCC.hostPlatform.isAndroid then
+            ''
+              make defconfig
+              make headers_install
+            ''
+          else
+            ''
+              make headers $makeFlags
+            ''
+        );
 
-    checkPhase = ''
-      make headers_check $makeFlags
-    '';
+      checkPhase = ''
+        make headers_check $makeFlags
+      '';
 
-    # The following command requires rsync:
-    #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
-    # but rsync depends on popt which does not compile on aarch64 without
-    # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
-    # so we replicate it with cp. This also reduces bootstrap closure size.
-    installPhase = ''
-      mkdir -p $out
-      cp -r usr/include $out
-      find $out -type f ! -name '*.h' -delete
-    ''
-    # Some builds (e.g. KVM) want a kernel.release.
-    + ''
-      mkdir -p $out/include/config
-      echo "${version}-default" > $out/include/config/kernel.release
-    '';
+      # The following command requires rsync:
+      #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
+      # but rsync depends on popt which does not compile on aarch64 without
+      # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
+      # so we replicate it with cp. This also reduces bootstrap closure size.
+      installPhase = ''
+        mkdir -p $out
+        cp -r usr/include $out
+        find $out -type f ! -name '*.h' -delete
+      ''
+      # Some builds (e.g. KVM) want a kernel.release.
+      + ''
+        mkdir -p $out/include/config
+        echo "${version}-default" > $out/include/config/kernel.release
+      '';
 
-    meta = with lib; {
-      description = "Header files and scripts for Linux kernel";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
+      meta = {
+        description = "Header files and scripts for Linux kernel";
+        license = lib.licenses.gpl2Only;
+        platforms = lib.platforms.linux;
+        teams = [ lib.teams.linux-kernel ];
+      };
     };
-  };
-in {
+in
+{
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "6.0"; in
+  linuxHeaders =
+    let
+      version = "6.18.7";
+    in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        sha256 = "sha256-XCRDpVON5SaI77VcJ6sFOcH161jAz9FqK5+7CP2BeI4=";
+        hash = "sha256-tyak0Vz5rgYhm1bYeCB3bjTYn7wTflX7VKm5wwFbjx4=";
       };
       patches = [
-         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+        ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
     };
 }

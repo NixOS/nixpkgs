@@ -1,30 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, django
-, pytestCheckHook
-, parso
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  parso,
+
+  # tests
+  attrs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.18.1";
-  disabled = pythonOlder "3.6";
+  version = "0.19.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
     rev = "v${version}";
-    sha256 = "sha256-wWNPNi16WtefvB7GcQBnWMbHVlVzxSFs4TKRqEasuR0=";
+    hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [ parso ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    django
+  dependencies = [ parso ];
+
+  nativeCheckInputs = [
+    attrs
     pytestCheckHook
   ];
 
@@ -33,20 +43,37 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # Assertions mismatches with pytest>=6.0
-    "test_completion"
-
     # sensitive to platform, causes false negatives on darwin
     "test_import"
-  ] ++ lib.optionals (stdenv.isAarch64 && pythonOlder "3.9") [
-    # AssertionError: assert 'foo' in ['setup']
-    "test_init_extension_module"
+  ]
+  ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+    # InvalidPythonEnvironment: The python binary is potentially unsafe.
+    "test_create_environment_executable"
+    # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
+    "test_dict_keys_completions"
+    # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
+    "test_dict_completion"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # Jedi.api.environment.InvalidPythonEnvironment: The python binary is potentially unsafe
+    "test/test_inference/test_sys_path.py::test_venv_and_pths"
+    "test/test_api/test_environment.py::test_create_environment_venv_path"
+    "test/test_api/test_environment.py::test_create_environment_executable"
+    # can't find system env nor venv
+    "test/test_api/test_environment.py::test_find_system_environments"
+    "test/test_api/test_environment.py::test_scanning_venvs"
+    # https://github.com/davidhalter/jedi/issues/2064
+    "test/test_api/test_interpreter.py::test_string_annotation"
+    # type repr mismatch: Union[Type, int] vs Type | int
+    "test/test_inference/test_mixed.py::test_compiled_signature_annotation_string"
+  ];
+
+  meta = {
+    description = "Autocompletion tool for Python that can be used for text editors";
     homepage = "https://github.com/davidhalter/jedi";
-    description = "An autocompletion tool for Python that can be used for text editors";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

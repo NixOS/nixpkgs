@@ -1,43 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, python
-, django
-, nodejs
-, js2py
-, six
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  nodejs,
+  packaging,
+  python,
+  setuptools,
+  six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-js-reverse";
-  # Support for Django 4.0 not yet released
-  version = "unstable-2022-09-16";
+  version = "0.10.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ierror";
+    owner = "vintasoftware";
     repo = "django-js-reverse";
-    rev = "7cab78c4531780ab4b32033d5104ccd5be1a246a";
-    sha256 = "sha256-oA4R5MciDMcSsb+GAgWB5jhj+nl7E8t69u0qlx2G93E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0S1g8tLWaJVV2QGPeiBOevhz9f0ueINxA9HOcnXuyYg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-requires_system_checks-list-or-tuple";
-      url = "https://github.com/ierror/django-js-reverse/commit/1477ba44b62c419d12ebec86e56973f1ae56f712.patch";
-      sha256 = "sha256-xUtCziewVhnCOaNWddJBH4/Vvhwjjq/wcQDvh2YzWMQ=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
+    packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nodejs
-    js2py
     six
   ];
+
+  # Js2py is needed for tests but it's unmaintained and insecure
+  doCheck = false;
 
   checkPhase = ''
     ${python.interpreter} django_js_reverse/tests/unit_tests.py
@@ -45,10 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_js_reverse" ];
 
-  meta = with lib; {
-    description = "Javascript url handling for Django that doesn't hurt";
-    homepage = "https://django-js-reverse.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+  meta = {
+    description = "Javascript URL handling for Django";
+    homepage = "https://django-js-reverse.readthedocs.io/";
+    changelog = "https://github.com/vintasoftware/django-js-reverse/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

@@ -1,103 +1,273 @@
-{lib, stdenvNoCC, git, git-lfs, cacert}: let
-  urlToName = url: rev: let
-    inherit (lib) removeSuffix splitString last;
-    base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
-
-    matched = builtins.match "(.*)\\.git" base;
-
-    short = builtins.substring 0 7 rev;
-
-    appendShort = if (builtins.match "[a-f0-9]*" rev) != null
-      then "-${short}"
-      else "";
-  in "${if matched == null then base else builtins.head matched}${appendShort}";
-in
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
-, fetchSubmodules ? true, deepClone ? false
-, branchName ? null
-, sparseCheckout ? ""
-, nonConeMode ? false
-, name ? urlToName url rev
-, # Shell code executed after the file has been fetched
-  # successfully. This can do things like check or transform the file.
-  postFetch ? ""
-, preferLocalBuild ? true
-, fetchLFS ? false
-, # Shell code to build a netrc file for BASIC auth
-  netrcPhase ? null
-, # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
-  # needed for netrcPhase
-  netrcImpureEnvVars ? []
-, meta ? {}
-, allowedRequisites ? null
+{
+  config,
+  lib,
+  stdenvNoCC,
+  git,
+  git-lfs,
+  cacert,
 }:
 
-/* NOTE:
-   fetchgit has one problem: git fetch only works for refs.
-   This is because fetching arbitrary (maybe dangling) commits may be a security risk
-   and checking whether a commit belongs to a ref is expensive. This may
-   change in the future when some caching is added to git (?)
-   Usually refs are either tags (refs/tags/*) or branches (refs/heads/*)
-   Cloning branches will make the hash check fail when there is an update.
-   But not all patches we want can be accessed by tags.
+let
+  urlToName =
+    {
+      url,
+      rev,
+      append,
+    }:
+    let
+      shortRev = lib.sources.shortRev rev;
+      appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
+    in
+    "${lib.sources.urlToName url}${if append == "" then appendShort else append}";
 
-   The workaround is getting the last n commits so that it's likely that they
-   still contain the hash we want.
+  getRevWithTag =
+    {
+      rev ? null,
+      tag ? null,
+    }:
+    if tag != null && rev != null then
+      throw "fetchgit requires one of either `rev` or `tag` to be provided (not both)."
+    else if tag != null then
+      "refs/tags/${tag}"
+    else if rev != null then
+      rev
+    else
+      # FIXME fetching HEAD if no rev or tag is provided is problematic at best
+      "HEAD";
+in
 
-   for now : increase depth iteratively (TODO)
+lib.makeOverridable (
+  lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-   real fix: ask git folks to add a
-   git fetch $HASH contained in $BRANCH
-   facility because checking that $HASH is contained in $BRANCH is less
-   expensive than fetching --depth $N.
-   Even if git folks implemented this feature soon it may take years until
-   server admins start using the new version?
-*/
+    excludeDrvArgNames = [
+      # Additional stdenv.mkDerivation arguments from derived fetchers.
+      "derivationArgs"
 
-assert deepClone -> leaveDotGit;
-assert nonConeMode -> (sparseCheckout != "");
+      # Hashes, handled by `lib.fetchers.withNormalizedHash`
+      # whose outputs contain outputHash* attributes.
+      # Use `hash` when overriding with `<pkg>.overrideAttrs`.
+      "sha256"
+    ];
 
-if md5 != "" then
-  throw "fetchgit does not support md5 anymore, please use sha256"
-else if hash != "" && sha256 != "" then
-  throw "Only one of sha256 or hash can be set"
-else
-stdenvNoCC.mkDerivation {
-  inherit name;
-  builder = ./builder.sh;
-  fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
+    extendDrvArgs =
+      finalAttrs:
+      lib.fetchers.withNormalizedHash { } (
+        # NOTE Please document parameter additions or changes in
+        #   ../../../doc/build-helpers/fetchers.chapter.md
+        {
+          url,
+          tag ? null,
+          rev ? null,
+          name ? urlToName {
+            inherit url;
+            rev = lib.revOrTag finalAttrs.revCustom finalAttrs.tag;
+            # when rootDir is specified, avoid invalidating the result when rev changes
+            append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
+          },
+          # When null, will default to: `deepClone || fetchTags`
+          leaveDotGit ? null,
+          outputHash ? lib.fakeHash,
+          outputHashAlgo ? null,
+          fetchSubmodules ? true,
+          deepClone ? false,
+          branchName ? null,
+          # When null, will default to: `lib.optional (rootdir != "") rootdir`
+          sparseCheckout ? null,
+          # When null, will default to: `rootDir != ""`
+          nonConeMode ? null,
+          nativeBuildInputs ? [ ],
+          # Shell code executed before the file has been fetched.  This, in
+          # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
+          # run operations between the checkout completing and deleting the .git
+          # directory.
+          preFetch ? "",
+          # Shell code executed after `git checkout` and before .git directory removal/sanitization.
+          postCheckout ? "",
+          # Shell code executed after the file has been fetched
+          # successfully. This can do things like check or transform the file.
+          postFetch ? "",
+          preferLocalBuild ? true,
+          fetchLFS ? false,
+          # Shell code to build a netrc file for BASIC auth
+          netrcPhase ? null,
+          # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+          # needed for netrcPhase
+          netrcImpureEnvVars ? [ ],
+          passthru ? { },
+          meta ? { },
+          allowedRequisites ? null,
+          # fetch all tags after tree (useful for git describe)
+          fetchTags ? false,
+          # make this subdirectory the root of the result
+          rootDir ? "",
+          # GIT_CONFIG_GLOBAL (as a file)
+          gitConfigFile ? config.gitConfigFile,
+          # Additional stdenvNoCC.mkDerivation arguments.
+          # It is typically for derived fetchers to pass down additional arguments,
+          # and the specified arguments have lower precedence than other mkDerivation arguments.
+          derivationArgs ? { },
+        }:
 
-  nativeBuildInputs = [ git ]
-    ++ lib.optionals fetchLFS [ git-lfs ];
+        /*
+          NOTE:
+          fetchgit has one problem: git fetch only works for refs.
+          This is because fetching arbitrary (maybe dangling) commits creates garbage collection risks
+          and checking whether a commit belongs to a ref is expensive. This may
+          change in the future when some caching is added to git (?)
+          Usually refs are either tags (refs/tags/*) or branches (refs/heads/*)
+          Cloning branches will make the hash check fail when there is an update.
+          But not all patches we want can be accessed by tags.
 
-  outputHashAlgo = if hash != "" then null else "sha256";
-  outputHashMode = "recursive";
-  outputHash = if hash != "" then
-    hash
-  else if sha256 != "" then
-    sha256
-  else
-    lib.fakeSha256;
+          The workaround is getting the last n commits so that it's likely that they
+          still contain the hash we want.
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName sparseCheckout nonConeMode postFetch;
+          for now : increase depth iteratively (TODO)
 
-  postHook = if netrcPhase == null then null else ''
-    ${netrcPhase}
-    # required that git uses the netrc file
-    mv {,.}netrc
-    export HOME=$PWD
-  '';
+          real fix: ask git folks to add a
+          git fetch $HASH contained in $BRANCH
+          facility because checking that $HASH is contained in $BRANCH is less
+          expensive than fetching --depth $N.
+          Even if git folks implemented this feature soon it may take years until
+          server admins start using the new version?
+        */
 
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        let
+          finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+          finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
+        in
 
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
-  ];
+        derivationArgs
+        // {
+          __structuredAttrs = true;
 
+          inherit name;
 
-  inherit preferLocalBuild meta allowedRequisites;
+          builder = ./builder.sh;
+          fetcher = ./nix-prefetch-git;
 
-  passthru = {
-    gitRepoUrl = url;
-  };
+          nativeBuildInputs = [
+            git
+            cacert
+          ]
+          ++ lib.optionals fetchLFS [ git-lfs ]
+          ++ nativeBuildInputs;
+
+          hash =
+            if outputHashAlgo == null || outputHash == "" || lib.hasPrefix outputHashAlgo outputHash then
+              outputHash
+            else
+              "${outputHashAlgo}:${outputHash}";
+
+          outputHash =
+            if finalAttrs.hash == "" then
+              lib.fakeHash
+            else if finalHashHasColon then
+              lib.elemAt finalHashColonMatch 1
+            else
+              finalAttrs.hash;
+          outputHashAlgo = if finalHashHasColon then lib.head finalHashColonMatch else null;
+          outputHashMode = "recursive";
+
+          sparseCheckout =
+            let
+              default = lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir;
+            in
+            lib.defaultTo default sparseCheckout;
+          sparseCheckoutText =
+            # Changed to throw on 2023-06-04
+            assert (
+              lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
+            );
+            assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
+            # git-sparse-checkout(1) says:
+            # > When the --stdin option is provided, the directories or patterns are read
+            # > from standard in as a newline-delimited list instead of from the arguments.
+            builtins.concatStringsSep "\n" finalAttrs.sparseCheckout;
+
+          inherit
+            url
+            fetchLFS
+            fetchSubmodules
+            deepClone
+            branchName
+            preFetch
+            postCheckout
+            postFetch
+            fetchTags
+            rootDir
+            gitConfigFile
+            ;
+          leaveDotGit =
+            if leaveDotGit != null then
+              assert fetchTags -> leaveDotGit;
+              assert rootDir != "" -> !leaveDotGit;
+              leaveDotGit
+            else
+              deepClone || fetchTags;
+          nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
+          inherit tag;
+          revCustom = rev;
+          rev = getRevWithTag {
+            inherit (finalAttrs) tag;
+            rev = finalAttrs.revCustom;
+          };
+
+          postHook =
+            if netrcPhase == null then
+              null
+            else
+              ''
+                ${netrcPhase}
+                # required that git uses the netrc file
+                mv {,.}netrc
+                export NETRC=$PWD/.netrc
+                export HOME=$PWD
+              '';
+
+          impureEnvVars =
+            lib.fetchers.proxyImpureEnvVars
+            ++ netrcImpureEnvVars
+            ++ [
+              "GIT_PROXY_COMMAND"
+              "NIX_GIT_SSL_CAINFO"
+              "SOCKS_SERVER"
+
+              # This is a parameter intended to be set by setup hooks or preFetch
+              # scripts that want per-URL control over HTTP proxies used by Git
+              # (if per-URL control isn't needed, `http_proxy` etc. will
+              # suffice). It must be a whitespace-separated (with backslash as an
+              # escape character) list of pairs like this:
+              #
+              #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
+              #
+              # where the URLs are as documented in the `git-config` manual page
+              # under `http.<url>.*`, and the proxies are as documented on the
+              # same page under `http.proxy`.
+              "FETCHGIT_HTTP_PROXIES"
+            ];
+
+          outputChecks.out = {
+            ${if allowedRequisites != null then "allowedRequisites" else null} = allowedRequisites;
+          };
+
+          inherit preferLocalBuild meta;
+
+          env = {
+            NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;
+          };
+
+          passthru = {
+            gitRepoUrl = url;
+          }
+          // passthru;
+        }
+      );
+
+    # No ellipsis.
+    inheritFunctionArgs = false;
+  }
+)
+// {
+  inherit getRevWithTag;
 }

@@ -1,55 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pysigma
-, pysigma-backend-elasticsearch
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pysigma,
+  pysigma-backend-elasticsearch,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
-  version = "0.1.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lRw9zNyAIdwCT0uhZ9NxJXWs+sB/cyGFtZIIBImTNcM=";
+    tag = "v${version}";
+    hash = "sha256-lYTaE4ar7VjyA/tnjiXQJtjHPP9bCjdYuPHYjbZEuxY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "pysigma" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     pysigma
     pysigma-backend-elasticsearch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    requests
-  ];
+  # Starting with 2.0.0 all tests require network access
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "sigma.backends.opensearch"
-  ];
+  #pythonImportsCheck = [ "sigma.backends.opensearch" ];
 
-  disabledTests = [
-    # Tests requires network access
-    "test_connect_lucene"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library to support OpenSearch for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-opensearch";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-opensearch/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

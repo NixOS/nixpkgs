@@ -1,61 +1,96 @@
-{ lib
-, acme
-, aiohttp
-, asynctest
-, atomicwrites-homeassistant
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pycognito
-, pytest-aiohttp
-, pytestCheckHook
-, snitun
-, warrant
+{
+  lib,
+  acme,
+  aiohttp,
+  async-timeout,
+  atomicwrites-homeassistant,
+  attrs,
+  buildPythonPackage,
+  ciso8601,
+  cryptography,
+  fetchFromGitHub,
+  freezegun,
+  grpcio,
+  icmplib,
+  josepy,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-socket,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  sentence-stream,
+  setuptools,
+  snitun,
+  syrupy,
+  voluptuous,
+  webrtc-models,
+  xmltodict,
+  yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "0.56.0";
+  version = "1.15.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-IgDOugHr4fCD9o3QQY5w/ibjak/d56R31KgQAbjUkkI=";
+    repo = "hass-nabucasa";
+    tag = finalAttrs.version;
+    hash = "sha256-WwpCAIfl/2fp01v9Rq4tQW70aoVlvhEJl31XQTAENmA=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "acme==" "acme>=" \
-      --replace "cryptography>=2.8,<38.0" "cryptography" \
-      --replace "pycognito==" "pycognito>=" \
-      --replace "snitun==" "snitun>=" \
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     aiohttp
+    async-timeout
     atomicwrites-homeassistant
     attrs
+    ciso8601
+    cryptography
+    grpcio
+    icmplib
+    josepy
     pycognito
+    pyjwt
+    sentence-stream
     snitun
-    warrant
+    voluptuous
+    webrtc-models
+    yarl
   ];
 
-  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
-
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    freezegun
     pytest-aiohttp
+    pytest-socket
+    pytest-timeout
     pytestCheckHook
+    syrupy
+    xmltodict
   ];
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/NabuCasa/hass-nabucasa";
+  meta = {
     description = "Python module for the Home Assistant cloud integration";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    homepage = "https://github.com/NabuCasa/hass-nabucasa";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fab
+      Scriptkiddi
+    ];
   };
-}
+})

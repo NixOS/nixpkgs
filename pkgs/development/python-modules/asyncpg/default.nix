@@ -1,45 +1,67 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, uvloop
-, postgresql
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cython,
+  libpq,
+  uvloop,
+  postgresql,
+  pytest-xdist,
+  pytest8_3CheckHook,
+  setuptools,
+  distro,
 }:
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.27.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.31.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cgmG2aRwXdikD98XIDb1rnhyJQNqfrRucExFqo9iwFQ=";
+    hash = "sha256-yYk4bIOUC/vXhxgPKxUZQV4tPWJ3pw2dDwFFrHNQBzU=";
   };
 
-  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    libpq.pg_config
     uvloop
     postgresql
+    postgresql.pg_config
+    pytest-xdist
+    pytest8_3CheckHook
+    distro
   ];
 
-  pythonImportsCheck = [
-    "asyncpg"
-  ];
+  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
+  doCheck = postgresql.doInstallCheck;
 
-  meta = with lib; {
+  preCheck = ''
+    rm -rf asyncpg/
+
+    export PGBIN=${lib.getBin postgresql}/bin
+  '';
+
+  # https://github.com/MagicStack/asyncpg/issues/1236
+  disabledTests = [ "test_connect_params" ];
+
+  pythonImportsCheck = [ "asyncpg" ];
+
+  meta = {
     description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
+    changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${version}";
     longDescription = ''
       Asyncpg is a database interface library designed specifically for
       PostgreSQL and Python/asyncio. asyncpg is an efficient, clean
       implementation of PostgreSQL server binary protocol for use with Python's
       asyncio framework.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

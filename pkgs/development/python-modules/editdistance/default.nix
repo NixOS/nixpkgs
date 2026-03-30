@@ -1,45 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, cython
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  cython,
+  pdm-backend,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "editdistance";
-  version = "0.6.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roy-ht";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-c0TdH1nJAKrepatCSCTLaKsDv9NKruMQadCjclKGxBw=";
+    repo = "editdistance";
+    tag = "v${version}";
+    hash = "sha256-Ncdg8S/UHYqJ1uFnHk9qhHMM3Lrop00woSu3PLKvuBI=";
   };
 
   nativeBuildInputs = [
     cython
+    pdm-backend
+    setuptools
   ];
 
-  preBuild = ''
-    cythonize --inplace editdistance/bycython.pyx
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-   pytestCheckHook
-  ];
+  pythonImportsCheck = [ "editdistance" ];
 
-  pythonImportsCheck = [
-    "editdistance"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the edit distance (Levenshtein distance)";
     homepage = "https://github.com/roy-ht/editdistance";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

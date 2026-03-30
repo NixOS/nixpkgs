@@ -1,20 +1,31 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
-  version = "0.8.1";
   pname = "node-semver";
+  version = "0.9.0";
+  format = "setuptools";
 
-  checkInputs = [ pytest ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "281600d009606f4f63ddcbe148992e235b39a69937b9c20359e2f4a2adbb1e00";
+  src = fetchFromGitHub {
+    owner = "podhmo";
+    repo = "python-node-semver";
+    tag = version;
+    hash = "sha256-Ncl+RUvy9G9lF3EzLz2HfiDB02tEgAlZ34Wbn4mlF6Y=";
   };
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "nodesemver" ];
+
+  meta = {
+    changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
+    description = "Port of node-semver";
     homepage = "https://github.com/podhmo/python-semver";
-    description = "A port of node-semver";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,26 +1,31 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pylsqpack";
-  version = "0.3.16";
+  version = "0.3.23";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tnps4/aTfYUGgYJ3FL5zCqNhwEnjd1Lj7Z3xHn8jL/s=";
+    hash = "sha256-9VsSaUDYsxVzMfEj1EKNcDppim22Wmp4kffsG5DIbFY=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pylsqpack" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the ls-qpack QPACK library";
     homepage = "https://github.com/aiortc/pylsqpack";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

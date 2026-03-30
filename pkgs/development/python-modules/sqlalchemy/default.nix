@@ -1,145 +1,123 @@
-{ stdenv
-, lib
-, isPyPy
-, pythonOlder
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  isPyPy,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nix-update-script,
 
-# build
-, cython
+  # build
+  cython,
+  setuptools,
 
-# propagates
-, greenlet
-, importlib-metadata
-, typing-extensions
+  # propagates
+  greenlet,
+  typing-extensions,
 
-# optionals
-, aiosqlite
-, asyncmy
-, asyncpg
-, cx_oracle
-, mariadb
-, mypy
-, mysql-connector
-, mysqlclient
-# TODO: oracledb
-, pg8000
-, psycopg
-, psycopg2
-, psycopg2cffi
-# TODO: pymssql
-, pymysql
-, pyodbc
-# TODO: sqlcipher3
+  # optionals
+  aiomysql,
+  # TODO: aioodbc
+  aiosqlite,
+  asyncmy,
+  asyncpg,
+  cx-oracle,
+  mariadb,
+  mypy,
+  mysql-connector,
+  mysqlclient,
+  oracledb,
+  pg8000,
+  psycopg,
+  psycopg2,
+  psycopg2cffi,
+  pymssql,
+  pymysql,
+  pyodbc,
+  sqlcipher3,
+  types-greenlet,
 
-# tests
-, mock
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "SQLAlchemy";
-  version = "1.4.41"; # TODO: check python3Packages.fastapi when updating to >= 1.4.42
-  disabled = pythonOlder "3.7";
+buildPythonPackage (finalAttrs: {
+  pname = "sqlalchemy";
+  version = "2.0.48";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ApL3DReX48VOhi5vMK5HQBRki8nHI+FKL9pzCtsKl5E=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "sqlalchemy";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-0MHxHcQr7XvRZ3j1wj/PMIk94TVhyixDAgeAYKd1nGk=";
   };
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cython
-  ];
+  postPatch = ''
+    sed -i '/tag_build = dev/d' setup.cfg
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
+
+  dependencies = [
     greenlet
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  passthru.optional-dependencies = rec {
-    asyncio = [
-      greenlet
-    ];
+  optional-dependencies = lib.fix (self: {
+    asyncio = [ greenlet ];
     mypy = [
-      #mypy
+      mypy
+      types-greenlet
     ];
-    mssql = [
-      pyodbc
-    ];
-    mssql_pymysql = [
-      # TODO: pymssql
-    ];
-    mssql_pyodbc = [
-      pyodbc
-    ];
-    mysql = [
-      mysqlclient
-    ];
-    mysql_connector = [
-      mysql-connector
-    ];
-    mariadb_connector = [
-      mariadb
-    ];
-    oracle = [
-      cx_oracle
-    ];
-    oracle_oracledb = [
-      # TODO: oracledb
-    ];
-    postgresql = [
-      psycopg2
-    ];
-    postgresql_pg8000 = [
-      pg8000
-    ];
-    postgresql_asyncpg = [
-      asyncpg
-    ] ++ asyncio;
-    postgresql_psycopg2binary = [
-      psycopg2
-    ];
-    postgresql_psycopg2cffi = [
-      psycopg2cffi
-    ];
-    postgresql_psycopg = [
-      psycopg
-    ];
-    pymysql = [
-      pymysql
-    ];
-    aiomysql = [
-      aiomysql
-    ] ++ asyncio;
-    asyncmy = [
-      asyncmy
-    ] ++ asyncio;
-    aiosqlite = [
-      aiosqlite
-      typing-extensions
-    ] ++ asyncio;
-    sqlcipher = [
-      # TODO: sqlcipher3
-    ];
-  };
+    mssql = [ pyodbc ];
+    mssql_pymysql = [ pymssql ];
+    mssql_pyodbc = [ pyodbc ];
+    mysql = [ mysqlclient ];
+    mysql_connector = [ mysql-connector ];
+    mariadb_connector = [ mariadb ];
+    oracle = [ cx-oracle ];
+    oracle_oracledb = [ oracledb ];
+    postgresql = [ psycopg2 ];
+    postgresql_pg8000 = [ pg8000 ];
+    postgresql_asyncpg = [ asyncpg ] ++ self.asyncio;
+    postgresql_psycopg2binary = [ psycopg2 ];
+    postgresql_psycopg2cffi = [ psycopg2cffi ];
+    postgresql_psycopg = [ psycopg ];
+    postgresql_psycopgbinary = [ psycopg ];
+    pymysql = [ pymysql ];
+    aiomysql = [ aiomysql ] ++ self.asyncio;
+    # TODO: aioodbc
+    asyncmy = [ asyncmy ] ++ self.asyncio;
+    aiosqlite = [ aiosqlite ] ++ self.asyncio;
+    sqlcipher = [ sqlcipher3 ];
+  });
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     mock
   ];
 
-  # disable mem-usage tests on mac, has trouble serializing pickle files
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "MemUsageWBackendTest"
-    "MemUsageTest"
+  disabledTestPaths = [
+    # typing correctness, not interesting
+    "test/ext/mypy"
+    "test/typing"
+    # slow and high memory usage, not interesting
+    "test/aaa_profiling"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    description = "The Python SQL toolkit and Object Relational Mapper";
-    homepage = "http://www.sqlalchemy.org/";
-    license = licenses.mit;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
+    ];
   };
-}
+
+  meta = {
+    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/${finalAttrs.src.tag}";
+    description = "Python SQL toolkit and Object Relational Mapper";
+    homepage = "http://www.sqlalchemy.org/";
+    license = lib.licenses.mit;
+  };
+})

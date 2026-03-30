@@ -1,71 +1,144 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.virtualisation.azureImage;
 in
 {
-  imports = [ ./azure-common.nix ];
+  imports = [
+    ./azure-common.nix
+    ./disk-size-option.nix
+    ../image/file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "azureImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
-  options = {
-    virtualisation.azureImage.diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 2048;
-      description = lib.mdDoc ''
-        Size of disk image. Unit is MB.
+  options.virtualisation.azureImage = {
+    bootSize = mkOption {
+      type = types.int;
+      default = 256;
+      description = ''
+        ESP partition size. Unit is MB.
+        Only effective when vmGeneration is `v2`.
+      '';
+    };
+
+    contents = mkOption {
+      type = with types; listOf attrs;
+      default = [ ];
+      description = ''
+        Extra contents to add to the image.
+      '';
+    };
+
+    label = mkOption {
+      type = types.str;
+      default = "nixos";
+      description = ''
+        NixOS partition label.
+      '';
+    };
+
+    vmGeneration = mkOption {
+      type =
+        with types;
+        enum [
+          "v1"
+          "v2"
+        ];
+      default = "v1";
+      description = ''
+        VM Generation to use.
+        For v2, secure boot needs to be turned off during creation.
+      '';
+    };
+
+    additionalSpace = mkOption {
+      type = types.str;
+      default = "512M";
+      example = "2048M";
+      description = ''
+        additional disk space to be added to the image if diskSize "auto"
+        is used.
       '';
     };
   };
+
   config = {
+    image.extension = "vhd";
+    system.nixos.tags = [ "azure" ];
+    system.build.image = config.system.build.azureImage;
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
+      inherit (config.image) baseName;
+
+      # Azure expects vhd format with fixed size,
+      # generating raw format and convert with subformat args afterwards
+      format = "raw";
       postVM = ''
-        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
+        ${lib.getExe' pkgs.vmTools.qemu "qemu-img"} convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/${config.image.fileName}
         rm $diskImage
+      ''
+      + lib.optionalString (cfg.diskSize == "auto") ''
+        truncate -s +${cfg.additionalSpace} "$out/${config.image.fileName}"
+        ${lib.getExe' pkgs.cloud-utils "growpart"} "$out/${config.image.fileName}" 1
       '';
       configFile = ./azure-config-user.nix;
-      format = "raw";
-      inherit (cfg) diskSize;
+
+      bootSize = "${toString cfg.bootSize}M";
+      partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";
+
+      inherit (cfg) contents label;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
 
-    # Azure metadata is available as a CD-ROM drive.
-    fileSystems."/metadata".device = "/dev/sr0";
+    boot.growPartition = true;
+    boot.loader.grub = rec {
+      efiSupport = (cfg.vmGeneration == "v2");
+      device = if efiSupport then "nodev" else "/dev/sda";
+      efiInstallAsRemovable = efiSupport;
+      # Force grub to run in text mode and output to console
+      # by disabling font and splash image
+      font = null;
+      splashImage = null;
+      # For Gen 1 VM, configurate grub output to serial_com0.
+      # Not needed for Gen 2 VM wbere serial_com0 does not exist,
+      # and outputting to console is enough to make Azure Serial Console working
+      extraConfig = lib.mkIf (!efiSupport) ''
+        serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+        terminal_input --append serial
+        terminal_output --append serial
+      '';
+    };
 
-    systemd.services.fetch-ssh-keys = {
-      description = "Fetch host keys and authorized_keys for root user";
+    fileSystems = {
+      "/" = {
+        device = "/dev/disk/by-label/${cfg.label}";
+        inherit (cfg) label;
+        fsType = "ext4";
+        autoResize = true;
+      };
 
-      wantedBy = [ "sshd.service" "waagent.service" ];
-      before = [ "sshd.service" "waagent.service" ];
-
-      path  = [ pkgs.coreutils ];
-      script =
-        ''
-          eval "$(cat /metadata/CustomData.bin)"
-          if ! [ -z "$ssh_host_ecdsa_key" ]; then
-            echo "downloaded ssh_host_ecdsa_key"
-            echo "$ssh_host_ecdsa_key" > /etc/ssh/ssh_host_ed25519_key
-            chmod 600 /etc/ssh/ssh_host_ed25519_key
-          fi
-
-          if ! [ -z "$ssh_host_ecdsa_key_pub" ]; then
-            echo "downloaded ssh_host_ecdsa_key_pub"
-            echo "$ssh_host_ecdsa_key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
-            chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
-          fi
-
-          if ! [ -z "$ssh_root_auth_key" ]; then
-            echo "downloaded ssh_root_auth_key"
-            mkdir -m 0700 -p /root/.ssh
-            echo "$ssh_root_auth_key" > /root/.ssh/authorized_keys
-            chmod 600 /root/.ssh/authorized_keys
-          fi
-        '';
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
-      serviceConfig.StandardError = "journal+console";
-      serviceConfig.StandardOutput = "journal+console";
+      "/boot" = lib.mkIf (cfg.vmGeneration == "v2") {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+      };
     };
   };
 }

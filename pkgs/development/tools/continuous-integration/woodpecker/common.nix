@@ -1,23 +1,33 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.15.5";
-  srcSha256 = "yaA2PKw4xuqd8vGXh/GhcJJHw4mJ1z97tWJTREE14ow=";
-  yarnSha256 = "1jpb4gblmknl81f6iclqg8ba82ca931q38xpm0kzki8y5ayk9n67";
+  version = "3.13.0";
+  vendorHash = "sha256-EkOg1D+zeEbVBPr4fpCPI31CvMnTD7FZ2hhQW7UzN8A=";
+  nodeModulesHash = "sha256-wORM+24nE771llb1Q7bn6iDtlJpm3kOqO3wTLUQmjyQ=";
 in
 {
-  inherit version yarnSha256;
+  inherit version vendorHash nodeModulesHash;
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "woodpecker";
-    rev = "v${version}";
-    sha256 = srcSha256;
+    tag = "v${version}";
+    hash = "sha256-EeND2L5l37fo3JBlFORR4m0tXQWlJ2qqIXIdQ1vJdgM=";
   };
 
-  postBuild = ''
-    cd $GOPATH/bin
+  postInstall = ''
+    cd $out/bin
     for f in *; do
-      mv -- "$f" "woodpecker-$f"
+      if [ "$f" = cli ]; then
+        # Issue a warning to the user if they call the deprecated executable
+        cat >woodpecker << EOF
+    #!/bin/sh
+    echo 'WARNING: calling \`woodpecker\` is deprecated, use \`woodpecker-cli\` instead.' >&2
+    $out/bin/woodpecker-cli "\$@"
+    EOF
+        chmod +x woodpecker
+        patchShebangs woodpecker
+      fi
+        mv -- "$f" "woodpecker-$f"
     done
     cd -
   '';
@@ -25,12 +35,17 @@ in
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/woodpecker-ci/woodpecker/version.Version=${version}"
+    "-X go.woodpecker-ci.org/woodpecker/v3/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://woodpecker-ci.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie techknowlogick ];
+    changelog = "https://github.com/woodpecker-ci/woodpecker/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      ambroisie
+      marcusramberg
+      techknowlogick
+    ];
   };
 }

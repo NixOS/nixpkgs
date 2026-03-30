@@ -1,21 +1,22 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "struct";
-  version = "1.0.17";
+  version = "1.0.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0cw4cspkm553v019zsj2bsmal0i378pm0hv29w82j3v5vysvndq1";
+    sha256 = "sha256-/M6n3YTBEE7TurtHoo8F4AEqicKE85qwlAkEUJFSlM4=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/struct/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/struct/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Additional structure manipulation functions";
   };
 }

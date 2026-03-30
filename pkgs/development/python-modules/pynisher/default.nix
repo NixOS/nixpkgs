@@ -1,21 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pynisher";
-  version = "1.0.0";
+  version = "1.0.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5FJQCN+yO1gh7HK47MRR/SAr8Qzix3bfrjyzsakBQXA=";
+    hash = "sha256-JyK3ldIhKd3VJHA4u6cnrgbs2zpZQgcIF758jUpoDjE=";
   };
 
   propagatedBuildInputs = [
@@ -26,14 +24,13 @@ buildPythonPackage rec {
   # No tests in the Pypi archive
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pynisher"
-  ];
+  pythonImportsCheck = [ "pynisher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module intended to limit a functions resources";
-    homepage = "https://github.com/sfalkner/pynisher";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    homepage = "https://github.com/automl/pynisher";
+    changelog = "https://github.com/automl/pynisher/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

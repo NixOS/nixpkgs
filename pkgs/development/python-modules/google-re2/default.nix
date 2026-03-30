@@ -1,38 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pybind11
-, re2
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pybind11,
+  re2,
 }:
 
 buildPythonPackage rec {
   pname = "google-re2";
-  version = "1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.1.20251105";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IcitwpY2DeH/QmuqOMcS6tpiLChY0ZXrSH5BXZQZTpE=";
+    pname = "google_re2";
+    inherit version;
+    hash = "sha256-HbFKKS7oMDuR6R58N+BawX08Rn8pQWx5rHCni+PmW9o=";
   };
 
-  propagatedBuildInputs = [
-    pybind11
-    re2
-    six
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "re2"
-  ];
+  buildInputs = [ re2 ];
 
-  meta = with lib; {
+  dependencies = [ pybind11 ];
+
+  doCheck = false; # no tests in sdist
+
+  pythonImportsCheck = [ "re2" ];
+
+  meta = {
     description = "RE2 Python bindings";
     homepage = "https://github.com/google/re2";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ alexbakker ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ alexbakker ];
   };
 }

@@ -1,34 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.0.21";
-  format = "pyproject";
+  version = "0.20231004.0";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
-    rev = "refs/tags/${pname}-${version}";
-    sha256 = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
+    tag = "pypng-${version}";
+    hash = "sha256-xNUI3yGfwmaccCxgljIZzgJ6YgNxcuOzCXDE7RFJP2I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [ setuptools ];
+
+  patches = [
+    # pngsuite is imported by code/test_png.py but is not defined in
+    # setup.cfg, so it isn't built - this adds it to py_modules
+    ./setup-cfg-pngsuite.patch
   ];
 
-  pythonImportsCheck = [ "png" ];
+  # allow tests to use the binaries produced by this package
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
-  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [
+    "png"
+    "pngsuite"
+  ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage = "https://github.com/drj11/pypng";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    homepage = "https://gitlab.com/drj11/pypng";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

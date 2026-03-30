@@ -1,43 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, astropy
-, astropy-helpers
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # tests
+  astropy,
+  numpy,
+  pillow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyavm";
-  version = "0.9.5";
+  version = "0.9.8";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "PyAVM";
-    inherit version;
-    sha256 = "sha256-gV78ypvYwohHmdjP3lN5F97PfmxuV91tvw5gsYeZ7i8=";
+    inherit pname version;
+    hash = "sha256-zhHCeex1vfgj0MOGEkoVKKXns2+l3U0mSZInk58Rf4g=";
   };
 
-  propagatedBuildInputs = [
-    astropy-helpers
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     astropy
+    numpy
     pillow
     pytestCheckHook
   ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
-  '';
-
   pythonImportsCheck = [ "pyavm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple pure-python AVM meta-data handling";
     homepage = "https://astrofrog.github.io/pyavm/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

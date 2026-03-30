@@ -1,18 +1,22 @@
-{ buildPythonPackage
+{
+  buildPythonPackage,
 
-, sentencepiece
-, pkg-config
+  sentencepiece,
+  pkg-config,
 }:
 
 buildPythonPackage rec {
   pname = "sentencepiece";
+  format = "setuptools";
   inherit (sentencepiece) version src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ sentencepiece.dev ];
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
+
+  pythonImportsCheck = [ "sentencepiece" ];
 
   # sentencepiece installs 'bin' output.
-  meta = builtins.removeAttrs sentencepiece.meta [ "outputsToInstall" ];
+  meta = removeAttrs sentencepiece.meta [ "outputsToInstall" ];
 }

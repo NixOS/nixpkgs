@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchPypi
-, fsspec
-, lxml
-, numpy
-, pytestCheckHook
-, pythonOlder
-, zarr
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchPypi,
+  fsspec,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  setuptools,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2022.8.12";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2026.1.14";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PnTg/UiDhHfrz0Dgm3eAvQle5ZILIjj0heLGhGOj3LQ=";
+    hash = "sha256-pCPFg+HuzZyiVWQtR/Rj76jX8jZaDhEOsBZ1cEk+DIw=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ numpy ];
+
+  nativeCheckInputs = [
     dask
     fsspec
     lxml
@@ -47,16 +46,20 @@ buildPythonPackage rec {
     "test_write_imagej_raw"
     # https://github.com/cgohlke/tifffile/issues/142
     "test_func_bitorder_decode"
+    # Test file is missing
+    "test_issue_invalid_predictor"
   ];
 
-  pythonImportsCheck = [
-    "tifffile"
-  ];
+  pythonImportsCheck = [ "tifffile" ];
 
-  meta = with lib; {
+  # flaky, often killed due to OOM or timeout
+  env.SKIP_LARGE = "1";
+
+  meta = {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lebastr ];
+    changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lebastr ];
   };
 }

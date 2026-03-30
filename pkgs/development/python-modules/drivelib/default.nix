@@ -1,37 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, expiringdict
-, google-auth-httplib2
-, google-auth-oauthlib
-, google-api-python-client
+{
+  lib,
+  buildPythonPackage,
+  expiringdict,
+  fetchPypi,
+  google-api-python-client,
+  google-auth,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  oauth2client,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "drivelib";
   version = "0.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bz3dn6wm9mlm2w8czwjmhvf3ws3iggr57hvd8z8acl1qafr2g4m";
+    hash = "sha256-lTyRncKBMoU+ahuekt+LQ/PhNqySf4a4qLSmyo1t468=";
   };
 
-  propagatedBuildInputs = [
-    google-api-python-client
-    google-auth-oauthlib
-    google-auth-httplib2
-    expiringdict
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
   ];
 
-  # tests depend on a google auth token
+  dependencies = [
+    expiringdict
+    google-api-python-client
+    google-auth
+    google-auth-httplib2
+    google-auth-oauthlib
+    oauth2client
+  ];
+
+  # Tests depend on a google auth token
   doCheck = false;
 
   pythonImportsCheck = [ "drivelib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy access to the most common Google Drive API calls";
-    homepage = "https://pypi.org/project/drivelib/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gravndal ];
+    homepage = "https://github.com/Lykos153/python-drivelib";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ gravndal ];
   };
 }

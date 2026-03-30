@@ -1,69 +1,57 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, astroid
-, pytestCheckHook
-, docstring-parser
-, marshmallow
-, sphinx
-, hypothesis
-, vaa
-, deal-solver
-, pygments
-, typeguard
-, urllib3
-, flake8
+{
+  lib,
+  astroid,
+  buildPythonPackage,
+  deal-solver,
+  docstring-parser,
+  fetchFromGitHub,
+  flit-core,
+  hypothesis,
+  marshmallow,
+  pygments,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonAtLeast,
+  sphinx,
+  typeguard,
+  urllib3,
+  vaa,
 }:
 
 buildPythonPackage rec {
   pname = "deal";
-  version = "4.23.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "4.24.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "life4";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-YwozwoTb1JsvrwcTntlpWpQJ9DszH2lmtuKkK8qZiG0=";
+    repo = "deal";
+    tag = version;
+    hash = "sha256-nLZ06Xfa9Q+Saf8qPXG1Xo6y6oO6kifhfK/gryZ6q90=";
   };
 
-  postPatch = ''
-    # don't do coverage
-    substituteInPlace pyproject.toml \
-      --replace "\"--cov-fail-under=100\"," "" \
-      --replace "\"--cov=deal\"," "" \
-      --replace "\"--cov-report=html\"," "" \
-      --replace "\"--cov-report=term-missing:skip-covered\"," ""
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     astroid
     deal-solver
     pygments
     typeguard
   ];
 
-  checkInputs = [
-    pytestCheckHook
-
+  nativeCheckInputs = [
     docstring-parser
-    marshmallow
-    sphinx
     hypothesis
-    vaa
+    marshmallow
+    pytest-cov-stub
+    pytestCheckHook
+    sphinx
     urllib3
-    flake8
+    vaa
   ];
 
   disabledTests = [
-    # needs internet access
+    # Tests need internet access
     "test_smoke_has"
     "test_pure_offline"
     "test_raises_doesnt_override_another_contract"
@@ -77,23 +65,39 @@ buildPythonPackage rec {
     "test_scheme_contract_is_satisfied_when_setting_arg"
     "test_scheme_contract_is_satisfied_within_chain"
     "test_scheme_errors_rewrite_message"
+    # assert errors
+    "test_doctest"
+    "test_no_violations"
+    "test_source_get_lambda_multiline_splitted_dec"
+    # assert basically correct but fails in string match due to '' removed
+    "test_unknown_command"
+  ]
+  ++ lib.optional (pythonAtLeast "3.13") [
+    # assert basically correct but string match fails in due to
+    # ('pathlib._local', 'Path.write_text') != ('pathlib', 'Path.write_text')
+    "test_infer"
   ];
 
   disabledTestPaths = [
-    # needs internet access
+    # Test needs internet access
     "tests/test_runtime/test_offline.py"
+    # depends on typeguard <4.0.0 for tests, but >=4.0.0 seems fine for runtime
+    # https://github.com/life4/deal/blob/9be70fa1c5a0635880619b2cea83a9f6631eb236/pyproject.toml#L40
+    "tests/test_testing.py"
   ];
 
   pythonImportsCheck = [ "deal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for design by contract (DbC) and checking values, exceptions, and side-effects";
     longDescription = ''
       In a nutshell, deal empowers you to write bug-free code.
-      By adding a few decorators to your code, you get for free tests, static analysis, formal verification, and much more
+      By adding a few decorators to your code, you get for free tests, static analysis, formal verification,
+      and much more.
     '';
     homepage = "https://github.com/life4/deal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    changelog = "https://github.com/life4/deal/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

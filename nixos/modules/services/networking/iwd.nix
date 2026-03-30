@@ -1,32 +1,38 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
-    mkEnableOption mkIf mkOption types
-    recursiveUpdate;
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    recursiveUpdate
+    optionalAttrs
+    ;
 
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
-  defaults = {
-    # without UseDefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
-    # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
-    General.UseDefaultInterface = with config.networking.networkmanager; (enable && (wifi.backend == "iwd"));
-  };
+  defaults =
+    with config.networking.networkmanager;
+    optionalAttrs (enable && (wifi.backend == "iwd")) {
+      # without DefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
+      # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
+      DriverQuirks.DefaultInterface = "?*";
+    };
   configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
 
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption (lib.mdDoc "iwd");
+    enable = mkEnableOption "iwd";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.iwd;
-      defaultText = lib.literalExpression "pkgs.iwd";
-      description = lib.mdDoc ''
-        The iwd package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "iwd" { };
 
     settings = mkOption {
       type = ini.type;
@@ -41,20 +47,28 @@ in
         };
       };
 
-      description = lib.mdDoc ''
+      description = ''
         Options passed to iwd.
-        See [here](https://iwd.wiki.kernel.org/networkconfigurationsettings) for supported options.
+        See {manpage}`iwd.config(5)` for supported options.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = !config.networking.wireless.enable;
-      message = ''
-        Only one wireless daemon is allowed at the time: networking.wireless.enable and networking.wireless.iwd.enable are mutually exclusive.
-      '';
-    }];
+    assertions = [
+      {
+        assertion = !config.networking.wireless.enable;
+        message = ''
+          Only one wireless daemon is allowed at the time: networking.wireless.enable and networking.wireless.iwd.enable are mutually exclusive.
+        '';
+      }
+      {
+        assertion = !(cfg.settings ? General && cfg.settings.General ? UseDefaultInterface);
+        message = ''
+          `networking.wireless.iwd.settings.General.UseDefaultInterface` has been deprecated. Use `networking.wireless.iwd.settings.DriverQuirks.DefaultInterface` instead.
+        '';
+      }
+    ];
 
     environment.etc."iwd/${configFile.name}".source = configFile;
 
@@ -71,10 +85,12 @@ in
     };
 
     systemd.services.iwd = {
+      path = [ config.networking.resolvconf.package ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ dtzWill ];
+  meta.maintainers = [ ];
 }

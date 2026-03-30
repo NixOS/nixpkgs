@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyblackbird";
-  version = "0.5";
+  version = "0.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "koolsb";
-    repo = pname;
-    rev = version;
-    sha256 = "0m1yd1cb3z8011x7nicxpf091bdcwghcphn0l21c65f71rabzg6s";
+    repo = "pyblackbird";
+    tag = version;
+    hash = "sha256-+ehzrr+RrwFKOOuxBq3+mwnuMPxZFV4QTZG1IRgsbLc=";
   };
 
   propagatedBuildInputs = [
@@ -23,12 +25,14 @@ buildPythonPackage rec {
 
   # Test setup try to create a serial port
   doCheck = false;
+
   pythonImportsCheck = [ "pyblackbird" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation for Monoprice Blackbird units";
     homepage = "https://github.com/koolsb/pyblackbird";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/koolsb/pyblackbird/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

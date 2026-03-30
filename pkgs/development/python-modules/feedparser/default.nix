@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sgmllib3k
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  setuptools,
+  sgmllib3k,
 }:
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "6.0.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "6.0.12";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J9pIX0Y3znFjzeqxOoAxK5O30MG3db70pHYpoxELylE=";
+    hash = "sha256-ZPds6Qrj6O9dHt4PjTtQzia8znHdiuXoKxzS1KX5Qig=";
   };
 
-  propagatedBuildInputs = [
-    sgmllib3k
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ sgmllib3k ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkPhase = ''
     # Tests are failing
@@ -29,14 +30,13 @@ buildPythonPackage rec {
     ${python.interpreter} -Wd tests/runtests.py
   '';
 
-  pythonImportsCheck = [
-    "feedparser"
-  ];
+  pythonImportsCheck = [ "feedparser" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/kurtmckee/feedparser";
+  meta = {
     description = "Universal feed parser";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ domenkozar ];
+    homepage = "https://github.com/kurtmckee/feedparser";
+    changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

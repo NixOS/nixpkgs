@@ -1,48 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, ghostscript
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  pkgs,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pillow,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UedRrhUEA3wfwfSBURkTewEYAs1fbDU52wZsRVsUp+E=";
+    hash = "sha256-+9fnWVQaxyXCnFBmEgA945Mkm5QxDqeK5Eyx0EsiAJU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+      --replace "--isort --flake8" ""
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [
-    ghostscript
+  nativeCheckInputs = [
+    pkgs.ghostscript
     pillow
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  pythonImportsCheck = [
-    "pydyf"
-  ];
+  pythonImportsCheck = [ "pydyf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rprecenth ];
+    changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rprecenth ];
   };
 }

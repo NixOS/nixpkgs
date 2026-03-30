@@ -1,85 +1,82 @@
-{ lib
-, buildPythonPackage
-, bash
-, cmake
-, fetchPypi
-, isPy27
-, nbval
-, numpy
-, protobuf
-, pytestCheckHook
-, six
-, tabulate
-, typing-extensions
-, pythonRelaxDepsHook
-, pytest-runner
+{
+  buildPythonPackage,
+  onnx, # pkgs.onnx
+
+  # dependencies
+  ml-dtypes,
+  numpy,
+  protobuf,
+  typing-extensions,
+
+  # tests
+  parameterized,
+  pillow,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
+buildPythonPackage {
+  inherit (onnx)
+    pname
+    src # Needed for testing.
+    version
+    ;
 
-buildPythonPackage rec {
-  pname = "onnx";
-  version = "1.12.0";
-  format = "setuptools";
+  format = "wheel";
 
-  disabled = isPy27;
+  dontUseWheelUnpack = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-E7PnfSdSO52/TzDfyclZRVhZ1eNOkhxE9xLWm4Np7/k=";
-  };
+  postUnpack = ''
+    cp -rv "${onnx.dist}" "$sourceRoot/dist"
+    chmod +w "$sourceRoot/dist"
+  '';
 
-  nativeBuildInputs = [
-    cmake
-    pythonRelaxDepsHook
+  buildInputs = [
+    # onnx must be included to avoid shrinking during fixupPhase removing the RUNPATH entry on
+    # onnx_cpp2py_export.cpython-*.so.
+    onnx
   ];
 
-  pythonRelaxDeps = [ "protobuf" ];
-
-  propagatedBuildInputs = [
-    protobuf
+  dependencies = [
+    ml-dtypes
     numpy
-    six
+    protobuf
     typing-extensions
   ];
 
-  checkInputs = [
-    nbval
+  nativeCheckInputs = [
+    parameterized
+    pillow
     pytestCheckHook
-    pytest-runner
-    tabulate
-  ];
-
-  postPatch = ''
-    chmod +x tools/protoc-gen-mypy.sh.in
-    patchShebangs tools/protoc-gen-mypy.py
-    substituteInPlace tools/protoc-gen-mypy.sh.in \
-      --replace "/bin/bash" "${bash}/bin/bash"
-  '';
-
-  preBuild = ''
-    export MAX_JOBS=$NIX_BUILD_CORES
-  '';
-
-  disabledTestPaths = [
-    # Unexpected output fields from running code: {'stderr'}
-    "onnx/examples/np_array_tensorproto.ipynb"
+    writableTmpDirAsHomeHook
   ];
 
   # The executables are just utility scripts that aren't too important
   postInstall = ''
-    rm -r $out/bin
+    rm -rv $out/bin
   '';
 
-  # The setup.py does all the configuration
-  dontUseCmakeConfigure = true;
+  # detecting source dir as a python package confuses pytest
+  preCheck = ''
+    rm onnx/__init__.py
+  '';
 
-  pythonImportsCheck = [
-    "onnx"
+  enabledTestPaths = [
+    "onnx/test"
+    "examples"
   ];
 
-  meta = with lib; {
-    description = "Open Neural Network Exchange";
-    homepage = "https://onnx.ai";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ acairncross ];
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "onnx" ];
+
+  meta = {
+    # Explicitly inherit from ONNX's meta to avoid pulling in attributes added by stdenv.mkDerivation.
+    inherit (onnx.meta)
+      changelog
+      description
+      homepage
+      license
+      maintainers
+      ;
   };
 }

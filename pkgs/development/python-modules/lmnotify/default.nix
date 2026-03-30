@@ -1,18 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oauthlib
-, requests
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oauthlib,
+  requests,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "lmnotify";
   version = "0.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,14 +26,12 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lmnotify"
-  ];
+  pythonImportsCheck = [ "lmnotify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for sending notifications to LaMetric Time";
     homepage = "https://github.com/keans/lmnotify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rhoriguchi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
   };
 }

@@ -1,36 +1,43 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, click
-, colorama
-, cryptography
-, exrex
-, fetchFromGitHub
-, pyopenssl
-, pyperclip
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, questionary
-, requests
-, requests-mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  click,
+  colorama,
+  cryptography,
+  exrex,
+  fetchFromGitHub,
+  poetry-core,
+  pyopenssl,
+  pyperclip,
+  pytest-mock,
+  pytestCheckHook,
+  questionary,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "myjwt";
-  version = "1.6.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-A9tsQ6L+y3doL5pJbau3yKnmQtX2IPXWyW/YCLhS7nc=";
+    tag = version;
+    hash = "sha256-jqBnxo7Omn5gLMCQ7SNbjo54nyFK7pn94796z2Qc9lg=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "cryptography"
+    "pyopenssl"
+    "questionary"
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     click
     colorama
     cryptography
@@ -41,27 +48,22 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     requests-mock
   ];
 
-  postPatch = ''
-    # Remove all version pinning (E.g., tornado==5.1.1 -> tornado)
-    sed -i -e "s/==[0-9.]*//" requirements.txt
-  '';
+  pythonImportsCheck = [ "myjwt" ];
 
-  pythonImportsCheck = [
-    "myjwt"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
     homepage = "https://github.com/mBouamama/MyJWT";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tyki6/MyJWT/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "myjwt";
     # Build failures
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

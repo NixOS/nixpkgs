@@ -1,15 +1,25 @@
-{ qtModule
-, qtbase
-, qtmultimedia
-, pkg-config
-, flite
-, alsa-lib
-, speechd
+{
+  qtModule,
+  lib,
+  stdenv,
+  qtbase,
+  qtmultimedia,
+  pkg-config,
+  flite,
+  alsa-lib,
+  speechd-minimal,
 }:
 
 qtModule {
   pname = "qtspeech";
-  qtInputs = [ qtbase qtmultimedia ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ flite alsa-lib speechd ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    flite
+    alsa-lib
+    speechd-minimal
+  ];
+  propagatedBuildInputs = [
+    qtbase
+    qtmultimedia
+  ];
 }

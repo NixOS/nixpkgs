@@ -1,45 +1,65 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, django
-, tablib
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  django,
+  tablib,
+
+  # tests
+  django-filter,
+  lxml,
+  openpyxl,
+  psycopg2,
+  pytz,
+  pyyaml,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.4.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "2.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jieter";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "04vvgf18diwp0mgp14b71a0dxhgrcslv1ljybi300gvzvzjnp3qv";
+    repo = "django-tables2";
+    tag = "v${version}";
+    hash = "sha256-gEURC3LUBdqebd4+TAJcbgn4SpY1oTI+tg9p2GGKClE=";
   };
 
-  propagatedBuildInputs = [
-    django
-    tablib
-  ];
+  build-system = [ hatchling ];
 
-  pythonImportsCheck = [
-    # Requested setting DJANGO_TABLES2_TEMPLATE, but settings are not configured.
-  ];
+  dependencies = [ django ];
 
-  doCheck = false; # needs django-boostrap{3,4} packages
+  optional-dependencies = {
+    tablib = [ tablib ] ++ tablib.optional-dependencies.xls ++ tablib.optional-dependencies.yaml;
+  };
 
-  # Leave this in! Discovering how to run tests is annoying in Django apps
-  checkPhase = ''
-    ${python.interpreter} example/manage.py test
-  '';
+  env.DJANGO_SETTINGS_MODULE = "tests.app.settings";
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    django-filter
+    lxml
+    openpyxl
+    psycopg2
+    pytz
+    pyyaml
+    pytest-django
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  meta = {
+    changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";
     description = "Django app for creating HTML tables";
     homepage = "https://github.com/jieter/django-tables2";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

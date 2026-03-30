@@ -1,16 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "slicerator";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,10 +22,10 @@ buildPythonPackage rec {
   # run_tests.py not packaged with pypi release
   doCheck = false;
 
-  meta = with lib; {
-    description = "A lazy-loading, fancy-sliceable iterable";
+  meta = {
+    description = "Lazy-loading, fancy-sliceable iterable";
     homepage = "https://github.com/soft-matter/slicerator";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ ];
   };
 }

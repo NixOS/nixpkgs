@@ -1,7 +1,10 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.matterbridge;
@@ -17,19 +20,21 @@ in
 {
   options = {
     services.matterbridge = {
-      enable = mkEnableOption (lib.mdDoc "Matterbridge chat platform bridge");
+      enable = lib.mkEnableOption "Matterbridge chat platform bridge";
 
-      configPath = mkOption {
-        type = with types; nullOr str;
+      package = lib.mkPackageOption pkgs "matterbridge" { };
+
+      configPath = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         example = "/etc/nixos/matterbridge.toml";
-        description = lib.mdDoc ''
+        description = ''
           The path to the matterbridge configuration file.
         '';
       };
 
-      configFile = mkOption {
-        type = types.str;
+      configFile = lib.mkOption {
+        type = lib.types.str;
         example = ''
           # WARNING: as this file contains credentials, do not use this option!
           # It is kept only for backwards compatibility, and would cause your
@@ -62,7 +67,7 @@ in
               account="mattermost.work"
               channel="off-topic"
         '';
-        description = lib.mdDoc ''
+        description = ''
           WARNING: THIS IS INSECURE, as your password will end up in
           {file}`/nix/store`, thus publicly readable. Use
           `services.matterbridge.configPath` instead.
@@ -70,38 +75,37 @@ in
           The matterbridge configuration file in the TOML file format.
         '';
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "matterbridge";
-        description = lib.mdDoc ''
+        description = ''
           User which runs the matterbridge service.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "matterbridge";
-        description = lib.mdDoc ''
+        description = ''
           Group which runs the matterbridge service.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    warnings = optional options.services.matterbridge.configFile.isDefined
-      "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
+  config = lib.mkIf cfg.enable {
+    warnings = lib.optional options.services.matterbridge.configFile.isDefined "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
-    users.users = optionalAttrs (cfg.user == "matterbridge")
-      { matterbridge = {
-          group = "matterbridge";
-          isSystemUser = true;
-        };
+    users.users = lib.optionalAttrs (cfg.user == "matterbridge") {
+      matterbridge = {
+        group = "matterbridge";
+        isSystemUser = true;
       };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "matterbridge")
-      { matterbridge = { };
-      };
+    users.groups = lib.optionalAttrs (cfg.group == "matterbridge") {
+      matterbridge = { };
+    };
 
     systemd.services.matterbridge = {
       description = "Matterbridge chat platform bridge";
@@ -111,7 +115,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.matterbridge}/bin/matterbridge -conf ${matterbridgeConfToml}";
+        ExecStart = "${cfg.package}/bin/matterbridge -conf ${matterbridgeConfToml}";
         Restart = "always";
         RestartSec = "10";
       };

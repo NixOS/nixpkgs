@@ -1,37 +1,74 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmake, python
-, libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, shapely, pythonOlder, isPyPy, lz4, requests, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  libosmium,
+  protozero,
+  expat,
+  bzip2,
+  zlib,
+  pybind11,
+  pytest-httpserver,
+  pytestCheckHook,
+  scikit-build-core,
+  ninja,
+  shapely,
+  werkzeug,
+  isPyPy,
+  lz4,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "3.5.0";
+  version = "4.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.4" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "osmcode";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-dumTyca1nLPa6B3p5fmUGWa6jReHOeFPc9heTz/2zao=";
+    repo = "pyosmium";
+    tag = "v${version}";
+    hash = "sha256-baLa3Zy67kbUBGoDqJjfO/ICSbr7cNYY8bUuVfcy3yQ=";
   };
 
+  build-system = [
+    scikit-build-core
+    ninja
+  ];
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libosmium protozero boost expat bzip2 zlib pybind11 lz4 ];
-  propagatedBuildInputs = [ requests ];
+
+  buildInputs = [
+    libosmium
+    protozero
+    expat
+    bzip2
+    zlib
+    pybind11
+    lz4
+  ];
+
+  dependencies = [ requests ];
 
   preBuild = "cd ..";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     shapely
+    werkzeug
+    pytest-httpserver
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python bindings for libosmium";
     homepage = "https://osmcode.org/pyosmium";
-    changelog = "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/osmcode/pyosmium/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

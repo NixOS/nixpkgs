@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.git;
@@ -9,51 +12,111 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption (lib.mdDoc "git");
+      enable = lib.mkEnableOption "git, a distributed version control system";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.git;
-        defaultText = literalExpression "pkgs.git";
-        example = literalExpression "pkgs.gitFull";
-        description = lib.mdDoc "The git package to use";
+      package = lib.mkPackageOption pkgs "git" {
+        example = "gitFull";
       };
 
-      config = mkOption {
-        type = with types; attrsOf (attrsOf anything);
-        default = { };
+      config = lib.mkOption {
+        type =
+          with lib.types;
+          let
+            gitini = attrsOf (attrsOf anything);
+          in
+          either gitini (listOf gitini)
+          // {
+            merge =
+              loc: defs:
+              let
+                config =
+                  builtins.foldl'
+                    (
+                      acc:
+                      { value, ... }@x:
+                      acc
+                      // (
+                        if builtins.isList value then
+                          {
+                            ordered = acc.ordered ++ value;
+                          }
+                        else
+                          {
+                            unordered = acc.unordered ++ [ x ];
+                          }
+                      )
+                    )
+                    {
+                      ordered = [ ];
+                      unordered = [ ];
+                    }
+                    defs;
+              in
+              [ (gitini.merge loc config.unordered) ] ++ config.ordered;
+          };
+        default = [ ];
         example = {
           init.defaultBranch = "main";
-          url."https://github.com/".insteadOf = [ "gh:" "github:" ];
+          url."https://github.com/".insteadOf = [
+            "gh:"
+            "github:"
+          ];
         };
-        description = lib.mdDoc ''
-          Configuration to write to /etc/gitconfig. See the CONFIGURATION FILE
-          section of git-config(1) for more information.
+        description = ''
+          Configuration to write to /etc/gitconfig. A list can also be
+          specified to keep the configuration in order. For example, setting
+          `config` to `[ { foo.x = 42; } { bar.y = 42; }]` will put the `foo`
+          section before the `bar` section unlike the default alphabetical
+          order, which can be helpful for sections such as `include` and
+          `includeIf`. See the CONFIGURATION FILE section of {manpage}`git-config(1)` for
+          more information.
         '';
       };
 
-      lfs = {
-        enable = mkEnableOption (lib.mdDoc "git-lfs");
+      prompt = {
+        enable = lib.mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
+      };
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.git-lfs;
-          defaultText = literalExpression "pkgs.git-lfs";
-          description = lib.mdDoc "The git-lfs package to use";
-        };
+      lfs = {
+        enable = lib.mkEnableOption "git-lfs (Large File Storage)";
+
+        package = lib.mkPackageOption pkgs "git-lfs" { };
+
+        enablePureSSHTransfer = lib.mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
+      };
+
+      attributes = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = "*.pdf diff=pdf";
+        description = ''
+          Assign git attributes to files (one pattern per line):
+
+              PATTERN1 ATTR1 ATTR2 ...
+
+          Blank lines and lines beginning with # are ignored. See
+          {manpage}`gitattributes(5)` for more information.
+        '';
       };
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
-      environment.etc.gitconfig = mkIf (cfg.config != {}) {
-        text = generators.toGitINI cfg.config;
+      environment.etc.gitconfig = lib.mkIf (cfg.config != [ ]) {
+        text = lib.concatMapStringsSep "\n" lib.generators.toGitINI cfg.config;
+      };
+
+      environment.etc.gitattributes = lib.mkIf (cfg.attributes != "") {
+        text = cfg.attributes + "\n";
       };
     })
-    (mkIf (cfg.enable && cfg.lfs.enable) {
-      environment.systemPackages = [ cfg.lfs.package ];
+    (lib.mkIf (cfg.enable && cfg.lfs.enable) {
+      environment.systemPackages = lib.mkMerge [
+        [ cfg.lfs.package ]
+        (lib.mkIf cfg.lfs.enablePureSSHTransfer [ pkgs.git-lfs-transfer ])
+      ];
       programs.git.config = {
         filter.lfs = {
           clean = "git-lfs clean -- %f";
@@ -63,7 +126,12 @@ in
         };
       };
     })
+    (lib.mkIf (cfg.enable && cfg.prompt.enable) {
+      environment.interactiveShellInit = ''
+        source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
+      '';
+    })
   ];
 
-  meta.maintainers = with maintainers; [ figsoda ];
+  meta.maintainers = [ lib.maintainers.mushrowan ];
 }

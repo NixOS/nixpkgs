@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, mock
-, prettytable
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, requests
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  flask,
+  mock,
+  prettytable,
+  pyserial,
+  pytestCheckHook,
+  requests,
+  stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pynx584";
-  version = "0.8.1";
-  disabled = pythonOlder "3.6";
-
+  version = "0.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-nF8+LbKqy/GrnPpykS5wEQMPoFYxi40pfM3Ys/UXCeo=";
+    repo = "pynx584";
+    tag = "0.8.2";
+    hash = "sha256-q5ra7tH4kaBrw0VAiyMsmWOkVhA7Y6bRuFP8dlxQjsE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     prettytable
     pyserial
@@ -32,17 +34,17 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "nx584" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for communicating to NX584/NX8E interfaces";
     homepage = "https://github.com/kk7ds/pynx584";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

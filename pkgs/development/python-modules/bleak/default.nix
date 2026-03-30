@@ -1,60 +1,82 @@
-{ lib
-, async-timeout
-, bluez
-, buildPythonPackage
-, dbus-fast
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bluez,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  bumble,
+  dbus-fast,
+  pyobjc-core,
+  pyobjc-framework-CoreBluetooth,
+  pyobjc-framework-libdispatch,
+  typing-extensions,
+
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.19.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hbldh";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Sdgsf1gFA0UcyFuaScwqmvHV2E6Crb6vSQgUbBox5hw=";
+    repo = "bleak";
+    tag = "v${version}";
+    hash = "sha256-zplCwm0LxDTbNvjWK6VYEFe0Azd2ginkoPZpV7Tpv20=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
+  ''
+  # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace bleak/backends/bluezdbus/version.py \
+      --replace-fail \
+        '"bluetoothctl"' \
+        '"${lib.getExe' bluez "bluetoothctl"}"'
+  '';
 
-  propagatedBuildInputs = [
-    async-timeout
+  build-system = [ poetry-core ];
+
+  dependencies = [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus-fast
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-CoreBluetooth
+    pyobjc-framework-libdispatch
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    bumble
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    substituteInPlace bleak/backends/bluezdbus/__init__.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-  '';
+  pythonImportsCheck = [ "bleak" ];
 
-  pythonImportsCheck = [
-    "bleak"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ oxzi ];
+    changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ ];
   };
 }

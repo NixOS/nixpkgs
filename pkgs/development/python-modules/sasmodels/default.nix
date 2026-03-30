@@ -1,60 +1,95 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytest
-, numpy
-, scipy
-, matplotlib
-, docutils
-, pyopencl
-, opencl-headers
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  columnize,
+  hatch-requirements-txt,
+  hatch-sphinx,
+  hatch-vcs,
+  hatchling,
+  siphash24,
+  sphinx,
+
+  numpy,
+  scipy,
+  bumps,
+  docutils,
+  matplotlib,
+  opencl-headers,
+  pycuda,
+  pyopencl,
+
+  # optional-dependencies
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
-    rev = "v${version}";
-    hash = "sha256-RVEPu07gp1ScciJQmjizyELcOD2WSjIlxunj5LnmXdw=";
+    tag = "v${version}";
+    hash = "sha256-2AeFYFyK3jgJB/t4wMiHyKuKBD7CVLKl6cRSeICO+zQ=";
   };
 
-  buildInputs = [
-    opencl-headers
-  ];
-
-  propagatedBuildInputs = [
-    docutils
-    matplotlib
-    numpy
-    scipy
-    pyopencl
-  ];
-
-  # Note: the 1.0.5 release should be compatible with pytest6, so this can
-  # be set back to 'pytest' at that point
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test -c ./pytest.ini
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"tccbox",' ""
   '';
 
-  pythonImportsCheck = [
-    "sasmodels"
+  build-system = [
+    columnize
+    hatch-requirements-txt
+    hatch-sphinx
+    hatch-vcs
+    hatchling
+    siphash24
+    sphinx
   ];
 
-  meta = with lib; {
+  buildInputs = [ opencl-headers ];
+
+  pythonRemoveDeps = [
+    "tccbox" # unpackaged
+  ];
+  dependencies = [
+    numpy
+    scipy
+  ];
+
+  optional-dependencies = {
+    full = [
+      docutils
+      bumps
+      matplotlib
+      columnize
+    ];
+    server = [ bumps ];
+    opencl = [ pyopencl ];
+    cuda = [ pycuda ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.full;
+
+  pythonImportsCheck = [ "sasmodels" ];
+
+  meta = {
     description = "Library of small angle scattering models";
     homepage = "https://github.com/SasView/sasmodels";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rprospero ];
+    changelog = "https://github.com/SasView/sasmodels/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }

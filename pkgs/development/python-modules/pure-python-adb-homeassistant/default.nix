@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 buildPythonPackage rec {
   pname = "pure-python-adb-homeassistant";
   version = "0.1.7.dev0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xXXEp8oYGcJLTfoBDUSZrIHSgDvB2EHbVMHoG4Hk+t8=";
+    hash = "sha256-xXXEp8oYGcJLTfoBDUSZrIHSgDvB2EHbVMHoG4Hk+t8=";
   };
 
   # Disable tests as they require docker, docker-compose and a dedicated
@@ -17,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adb_messenger" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the ADB client";
     homepage = "https://github.com/JeffLIrion/pure-python-adb";
-    license = licenses.mit;
-    maintainers = [ maintainers.makefu ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.makefu ];
   };
 }

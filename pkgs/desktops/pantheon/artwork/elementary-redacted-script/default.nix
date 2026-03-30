@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,16 +24,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Font for concealing text";
     homepage = "https://github.com/elementary/fonts";
-    license = licenses.ofl;
-    maintainers = teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.ofl;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,39 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pytz
-, mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.7.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.21.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oPgbgaq5RQM4C2qmf36i+qXDQA9sV16abCleNkdGYC0=";
+    pname = "google_cloud_bigquery_datatransfer";
+    inherit version;
+    hash = "sha256-zVgZBASf80Iv4RPHFa9Oy7E8+/UqU+l63UH6nl6+SHA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
     google-api-core
     libcst
     proto-plus
+    protobuf
     pytz
-  ];
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -41,10 +50,16 @@ buildPythonPackage rec {
     "google.cloud.bigquery_datatransfer_v1"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests require project ID
+    "test_list_data_sources"
+  ];
+
+  meta = {
     description = "BigQuery Data Transfer API client library";
-    homepage = "https://github.com/googleapis/python-bigquery-datatransfer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-bigquery-datatransfer";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-datatransfer-v${version}/packages/google-cloud-bigquery-datatransfer/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

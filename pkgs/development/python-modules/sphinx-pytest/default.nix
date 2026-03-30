@@ -1,45 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytest
-, sphinx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytest,
+  sphinx,
+  defusedxml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-pytest";
-  version = "0.0.3";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vRHPq6BAuhn5QvHG2BGen9v6ezA3RgFVtustsNxU+n8=";
+    repo = "sphinx-pytest";
+    tag = "v${version}";
+    hash = "sha256-z71IrUr3e2oAPeZMjUBwMwy2SkoAA3oxtK4+iR9vLEc=";
   };
-
-  format = "flit";
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   pythonImportsCheck = [ "sphinx_pytest" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # https://github.com/sphinx-extensions2/sphinx-pytest/issues/28
+    "test_no_transforms"
+  ];
+
+  meta = {
+    changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/${src.tag}";
     description = "Helpful pytest fixtures for Sphinx extensions";
     homepage = "https://github.com/chrisjsewell/sphinx-pytest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

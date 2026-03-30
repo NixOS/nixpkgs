@@ -1,57 +1,59 @@
-{ lib
-, buildPythonPackage
-, chardet
-, docutils
-, fetchPypi
-, pbr
-, pygments
-, pytestCheckHook
-, pythonOlder
-, restructuredtext_lint
-, setuptools-scm
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  docutils,
+  fetchPypi,
+  pbr,
+  pygments,
+  pytestCheckHook,
+  restructuredtext-lint,
+  setuptools-scm,
+  stevedore,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "1.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HpmaFP5BXqltidUFPHkNAQYfGbZzdwa4F9FXnCoHzBY=";
+    hash = "sha256-EmetMnWJcfvPmRRCQXo5Nce8nlJVDnNiLg5WulXqHUA=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "docutils" ];
+
+  build-system = [
     setuptools-scm
+    wheel
   ];
 
-  buildInputs = [
-    pbr
-  ];
+  buildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     chardet
     stevedore
-    restructuredtext_lint
+    restructuredtext-lint
     pygments
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-Wignore::PendingDeprecationWarning"
   ];
 
-  pythonImportsCheck = [
-    "doc8"
-  ];
+  pythonImportsCheck = [ "doc8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Style checker for Sphinx (or other) RST documentation";
+    mainProgram = "doc8";
     homepage = "https://github.com/pycqa/doc8";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/PyCQA/doc8/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -1,57 +1,106 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pyparsing
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  typing-extensions,
+  pytestCheckHook,
+  setuptools,
+  cython,
+  numpy,
+  fonttools,
+  pillow,
+  pyside6,
+  matplotlib,
+  pymupdf,
+  pyqt5,
+  withGui ? false,
+  qt6,
+  librecad,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
-  version = "0.18.1";
+  version = "1.4.3";
   pname = "ezdxf";
-  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "ezdxf";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-x1p9dWrbDtDreXdBuzOA4Za+ZC40y4xdEU7MGb9uUec=";
+    tag = "v${version}";
+    hash = "sha256-v/xW/Tg3OgzwvSNy3cfkxzf6R33ZvW4VE8k7MB+rM+w=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = lib.optionals withGui [ qt6.wrapQtAppsHook ];
+
+  dependencies = [
     pyparsing
     typing-extensions
+    numpy
+    fonttools
+  ]
+  ++ lib.optionals withGui ([ qt6.qtbase ] ++ optional-dependencies.draw);
+
+  optional-dependencies = {
+    draw = [
+      pyside6
+      matplotlib
+      pymupdf
+      pillow
+    ];
+    draw5 = [
+      pyqt5
+      matplotlib
+      pymupdf
+      pillow
+    ];
+  };
+
+  build-system = [
+    setuptools
+    cython
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dontWrapQtApps = true;
 
-  disabledTests = [
-    # requires geomdl dependency
-    "TestNurbsPythonCorrectness"
-    "test_rational_spline_curve_points_by_nurbs_python"
-    "test_rational_spline_derivatives_by_nurbs_python"
-    "test_from_nurbs_python_curve_to_ezdxf_bspline"
-    "test_from_ezdxf_bspline_to_nurbs_python_curve_non_rational"
-    "test_from_ezdxf_bspline_to_nurbs_python_curve_rational"
-    # AssertionError: assert 44.99999999999999 == 45
-    "test_dimension_transform_interface"
-  ];
+  preFixup = lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  checkInputs = [ pillow ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "ezdxf"
     "ezdxf.addons"
   ];
 
-  meta = with lib; {
+  preCheck = ''
+    ln -s "${librecad}/${
+      if stdenv.hostPlatform.isDarwin then
+        "Applications/LibreCAD.app/Contents/Resources"
+      else
+        "share/librecad"
+    }/fonts" fonts/librecad
+  '';
+
+  # The default updateScript of Python packages does not filter prerelease versions.
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9]+\\.[0-9]+\\.[0-9]+$";
+  };
+
+  meta = {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
-    homepage = "https://github.com/mozman/ezdxf/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hodapp ];
-    platforms = platforms.unix;
+    mainProgram = "ezdxf";
+    homepage = "https://ezdxf.mozman.at/";
+    changelog = "https://github.com/mozman/ezdxf/blob/${src.rev}/notes/pages/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

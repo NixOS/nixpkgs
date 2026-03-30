@@ -1,59 +1,108 @@
-{ stdenv, lib, fetchurl, fetchpatch, runtimeShell, buildPackages
-, gettext, pkg-config, python3
-, avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
-, curl, systemd, libxml2, poppler, gawk
-, sane-drivers
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  buildPackages,
+  gettext,
+  pkg-config,
+  python3,
+  avahi,
+  libgphoto2,
+  libieee1284,
+  libjpeg,
+  libpng,
+  libtiff,
+  libusb1,
+  libv4l,
+  net-snmp,
+  curl,
+  systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  libxml2,
+  poppler,
+  gawk,
+  sane-drivers,
+  nixosTests,
+  autoconf,
+  automake,
+  libtool,
+  autoconf-archive,
 
-# List of { src name backend } attibute sets - see installFirmware below:
-, extraFirmware ? []
+  # List of { src name backend } attribute sets - see installFirmware below:
+  extraFirmware ? [ ],
 
-# For backwards compatibility with older setups; use extraFirmware instead:
-, gt68xxFirmware ? null, snapscanFirmware ? null
+  # For backwards compatibility with older setups; use extraFirmware instead:
+  gt68xxFirmware ? null,
+  snapscanFirmware ? null,
 
-# Not included by default, scan snap drivers require fetching of unfree binaries.
-, scanSnapDriversUnfree ? false, scanSnapDriversPackage ? sane-drivers.epjitsu
+  # Not included by default, scan snap drivers require fetching of unfree binaries.
+  scanSnapDriversUnfree ? false,
+  scanSnapDriversPackage ? sane-drivers.epjitsu,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sane-backends";
-  version = "1.0.32";
+  version = "1.4.0";
 
-  src = fetchurl {
-    # raw checkouts of the repo do not work because, the configure script is
-    # only functional in manually uploaded release tarballs.
-    # https://gitlab.com/sane-project/backends/-/issues/440
-    # unfortunately this make the url unpredictable on update, to find the link
-    # go to https://gitlab.com/sane-project/backends/-/releases and choose
-    # the link with other in the URL.
-    url = "https://gitlab.com/sane-project/backends/uploads/104f09c07d35519cc8e72e604f11643f/sane-backends-1.0.32.tar.gz";
-    sha256 = "055iicihxa6b28iv5fnz13n67frdr5nrydq2c846f9x7q0vw4a1s";
+  src = fetchFromGitLab {
+    owner = "sane-project";
+    repo = "backends";
+    tag = finalAttrs.version;
+    hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
   patches = [
-    # sane-desc will be used in postInstall so compile it for build
-    # https://github.com/void-linux/void-packages/blob/master/srcpkgs/sane/patches/sane-desc-cross.patch
+    # Fix hangs in tests, hopefully
+    # FIXME: remove in next release
     (fetchpatch {
-      name = "compile-sane-desc-for-build.patch";
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/4b97cd2fb4ec38712544438c2491b6d7d5ab334a/srcpkgs/sane/patches/sane-desc-cross.patch";
-      sha256 = "sha256-y6BOXnOJBSTqvRp6LwAucqaqv+OLLyhCS/tXfLpnAPI=";
+      url = "https://gitlab.com/sane-project/backends/-/commit/8acc267d5f4049d8438456821137ae56e91baea9.patch";
+      hash = "sha256-IyupDeH1MPvEBnGaUzBbCu106Gp7zXxlPGFAaiiINQI=";
     })
-    # generate hwdb entries for scanners handled by other backends like epkowa
-    # https://gitlab.com/sane-project/backends/-/issues/619
-    ./sane-desc-generate-entries-unsupported-scanners.patch
+    # Fix multipages scanning
+    # https://gitlab.com/sane-project/backends/-/merge_requests/883
+    (fetchpatch {
+      url = "https://gitlab.com/sane-project/backends/-/commit/fbf80b0fc1d262ed40d4b49dd53c14707083ef60.patch";
+      hash = "sha256-9KKTr7p1vCgvGr6hFY83K5gbL7Ilm4Uzc86JIxv+ahI=";
+      revert = true;
+    })
   ];
 
   postPatch = ''
-    # related to the compile-sane-desc-for-build
-    substituteInPlace tools/Makefile.in \
-      --replace 'cc -I' '$(CC_FOR_BUILD) -I'
+    # Do not create lock dir in install phase
+    sed -i '/^install-lockpath:/!b;n;c\       # pass' backend/Makefile.am
   '';
 
-  outputs = [ "out" "doc" "man" ];
+  preConfigure = ''
+    # create version files, so that autotools macros can use them:
+    # https://gitlab.com/sane-project/backends/-/issues/440
+    printf "%s\n" "$version" > .tarball-version
+    printf "%s\n" "$version" > .version
+
+    autoreconf -fiv
+
+    # Fixes for cross compilation
+    # https://github.com/NixOS/nixpkgs/issues/308283
+
+    # sane-desc will be used in postInstall so compile it for build
+    # https://github.com/void-linux/void-packages/blob/master/srcpkgs/sane/patches/sane-desc-cross.patch
+    patch -p1 -i ${./sane-desc-cross.patch}
+  '';
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
+    autoconf
+    autoconf-archive
+    automake
     gettext
+    libtool
     pkg-config
     python3
   ];
@@ -69,66 +118,77 @@ stdenv.mkDerivation {
     libxml2
     poppler
     gawk
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libieee1284
     libv4l
     net-snmp
-    systemd
+  ]
+  ++ lib.optionals withSystemd [
+    systemdLibs
   ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    lib.optional (avahi != null)   "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb"
-  ;
+  configureFlags = [
+    "--with-lockdir=/var/lock/sane"
+  ]
+  ++ lib.optionals (avahi != null) [ "--with-avahi" ]
+  ++ lib.optionals (libusb1 != null) [ "--with-usb" ];
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
-  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
+  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}"
+  ];
 
-  postInstall = let
+  postInstall =
+    let
+      compatFirmware =
+        extraFirmware
+        ++ lib.optional (gt68xxFirmware != null) {
+          src = gt68xxFirmware.fw;
+          inherit (gt68xxFirmware) name;
+          backend = "gt68xx";
+        }
+        ++ lib.optional (snapscanFirmware != null) {
+          src = snapscanFirmware;
+          name = "your-firmwarefile.bin";
+          backend = "snapscan";
+        };
 
-    compatFirmware = extraFirmware
-      ++ lib.optional (gt68xxFirmware != null) {
-        src = gt68xxFirmware.fw;
-        inherit (gt68xxFirmware) name;
-        backend = "gt68xx";
-      }
-      ++ lib.optional (snapscanFirmware != null) {
-        src = snapscanFirmware;
-        name = "your-firmwarefile.bin";
-        backend = "snapscan";
-      };
+      installFirmware = f: ''
+        mkdir -p $out/share/sane/${f.backend}
+        ln -sv ${f.src} $out/share/sane/${f.backend}/${f.name}
+      '';
+    in
+    ''
+      mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
+      ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
+      ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
 
-    installFirmware = f: ''
-      mkdir -p $out/share/sane/${f.backend}
-      ln -sv ${f.src} $out/share/sane/${f.backend}/${f.name}
-    '';
+      # net.conf conflicts with the file generated by the nixos module
+      rm $out/etc/sane.d/net.conf
 
-  in ''
-    mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
-    # the created 49-libsane references /bin/sh
-    substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
-      --replace "RUN+=\"/bin/sh" "RUN+=\"${runtimeShell}"
+    ''
+    + lib.optionalString scanSnapDriversUnfree ''
+      # the ScanSnap drivers live under the epjitsu subdirectory, which was already created by the build but is empty.
+      rmdir $out/share/sane/epjitsu
+      ln -svT ${scanSnapDriversPackage} $out/share/sane/epjitsu
+    ''
+    + lib.concatStrings (map installFirmware compatFirmware);
 
-    substituteInPlace $out/lib/libsane.la \
-      --replace "-ljpeg" "-L${lib.getLib libjpeg}/lib -ljpeg"
+  # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
+  # https://github.com/NixOS/nixpkgs/issues/224569
+  enableParallelInstalling = false;
 
-    # net.conf conflicts with the file generated by the nixos module
-    rm $out/etc/sane.d/net.conf
+  doInstallCheck = true;
 
-  ''
-  + lib.optionalString scanSnapDriversUnfree ''
-    # the ScanSnap drivers live under the epjitsu subdirectory, which was already created by the build but is empty.
-    rmdir $out/share/sane/epjitsu
-    ln -svT ${scanSnapDriversPackage} $out/share/sane/epjitsu
-  ''
-  + lib.concatStrings (builtins.map installFirmware compatFirmware);
+  passthru.tests = {
+    inherit (nixosTests) sane;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
       Collection of open-source SANE backends (device drivers).
@@ -138,7 +198,8 @@ stdenv.mkDerivation {
       scanners, see http://www.sane-project.org/sane-backends.html.
     '';
     homepage = "http://www.sane-project.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.symphorien ];
   };
-}
+})

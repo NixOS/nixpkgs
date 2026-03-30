@@ -1,20 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "tflint-ruleset-aws";
-  version = "0.17.1";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2Qr+tG1cmDF9MdsLMOnIdSGWMVAYYVgobE/SuJZRqJg=";
+    hash = "sha256-PRJ0rQIBIREIbJ8DHe+llxknQEopMVNO7yPYQbOFKjs=";
   };
 
-  vendorHash = "sha256-P3yqDqVoC6XCX5OJ8kTvIk6Qq8X02Be51TajIkZxdbI=";
+  vendorHash = "sha256-PScCXLqBlM2+pzSubuDoZ1QWdWLCuN/l5V7DIrlwL+w=";
+
+  postPatch = ''
+    # some automation for creating new releases on GitHub, which we don't need
+    rm -rf tools/release
+  '';
 
   # upstream Makefile also does a  go test $(go list ./... | grep -v integration)
   preCheck = ''
@@ -22,17 +28,24 @@ buildGoModule rec {
   '';
 
   postInstall = ''
+    # allow use as a versioned dependency, i.e., with `source = ...` and
+    # `version = ...` in `.tflintrc`:
     mkdir -p $out/github.com/terraform-linters/${pname}/${version}
     mv $out/bin/${pname} $out/github.com/terraform-linters/${pname}/${version}/
+
+    # allow use as an unversioned dependency, e.g., if one wants `.tflintrc` to
+    # solely rely on Nix to pin versions:
+    ln -s $out/github.com/terraform-linters/${pname}/${version}/${pname} $out/
+
     # remove other binaries from bin
     rm -R $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/terraform-linters/tflint-ruleset-aws";
+    changelog = "https://github.com/terraform-linters/tflint-ruleset-aws/blob/v${version}/CHANGELOG.md";
     description = "TFLint ruleset plugin for Terraform AWS Provider";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ flokli ];
-    license = with licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ flokli ];
+    license = with lib.licenses; [ mpl20 ];
   };
 }

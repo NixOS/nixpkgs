@@ -1,46 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, numpy
-, pythonOlder
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  numpy,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyhamcrest";
-  version = "2.0.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hamcrest";
     repo = "PyHamcrest";
-    rev = "refs/tags/V${version}";
-    hash = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
+    tag = "V${version}";
+    hash = "sha256-VkfHRo4k8g9/QYG4r79fXf1NXorVdpUKUgVrbV2ELMU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    hatchling
-    hatch-vcs
+  patches = [
+    # https://github.com/hamcrest/PyHamcrest/pull/270
+    ./python314-compat.patch
   ];
 
-  checkInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  nativeCheckInputs = [
     numpy
     pytest-xdist
     pytestCheckHook
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/hamcrest/PyHamcrest";
+  disabledTests = [
+    # Tests started failing with numpy 1.24
+    "test_numpy_numeric_type_complex"
+    "test_numpy_numeric_type_float"
+    "test_numpy_numeric_type_int"
+  ];
+
+  pythonImportsCheck = [ "hamcrest" ];
+
+  meta = {
     description = "Hamcrest framework for matcher objects";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
-      alunduil
-    ];
+    homepage = "https://github.com/hamcrest/PyHamcrest";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ alunduil ];
   };
 }

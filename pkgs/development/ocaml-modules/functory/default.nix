@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchurl, ocaml, findlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+}:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
-
-let param =
-  if lib.versionAtLeast ocaml.version "4.02" then {
-    version = "0.6";
-    sha256 = "18wpyxblz9jh5bfp0hpffnd0q8cq1b0dqp0f36vhqydfknlnpx8y";
-  } else {
-    version = "0.5";
-    sha256 = "1j17rhifdjv1z262dma148ywg34x0zjn8vczdrnkwajsm4qg1hw3";
-  };
+let
+  param =
+    if lib.versionAtLeast ocaml.version "4.02" then
+      {
+        version = "0.6";
+        sha256 = "18wpyxblz9jh5bfp0hpffnd0q8cq1b0dqp0f36vhqydfknlnpx8y";
+      }
+    else
+      {
+        version = "0.5";
+        sha256 = "1j17rhifdjv1z262dma148ywg34x0zjn8vczdrnkwajsm4qg1hw3";
+      };
 in
 
 stdenv.mkDerivation {
@@ -21,7 +29,10 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
 
   strictDeps = true;
 
@@ -29,11 +40,12 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.lri.fr/~filliatr/functory/";
-    description = "A distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
+    description = "Distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
+    broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;
   };
 }

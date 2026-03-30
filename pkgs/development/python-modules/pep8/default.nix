@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "pep8";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,11 +17,11 @@ buildPythonPackage rec {
   # FAIL: test_checkers_testsuite (testsuite.test_all.Pep8TestCase)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pep8.readthedocs.org/";
     description = "Python style guide checker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    mainProgram = "pep8";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-
 }

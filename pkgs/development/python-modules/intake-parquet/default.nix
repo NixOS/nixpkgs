@@ -1,44 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, dask
-, fastparquet
-, pyarrow
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fastparquet,
+  fetchFromGitHub,
+  pandas,
+  pyarrow,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "intake-parquet";
-  version = "0.2.3";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intake";
-    repo = pname;
-    rev = version;
-    sha256 = "037jd3qkk6dybssp570kzvaln2c6pk2avd2b5mll42gaxdxxnp02";
+    repo = "intake-parquet";
+    tag = version;
+    hash = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  # Break circular dependency
+  pythonRemoveDeps = [ "intake" ];
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     pandas
     dask
     fastparquet
     pyarrow
   ];
 
-  postPatch = ''
-    # Break circular dependency
-    substituteInPlace requirements.txt \
-      --replace "intake" ""
-  '';
-
   doCheck = false;
 
   #pythonImportsCheck = [ "intake_parquet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parquet plugin for Intake";
     homepage = "https://github.com/intake/intake-parquet";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

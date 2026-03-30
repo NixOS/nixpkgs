@@ -1,38 +1,80 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel-yaml, CommonMark, lxml, aiosqlite
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # deps
+  setuptools,
+  aiohttp,
+  attrs,
+  yarl,
+  # optional deps
+  base58,
+  python-magic,
+  python-olm,
+  unpaddedbase64,
+  pycryptodome,
+  # check deps
+  pytestCheckHook,
+  pytest-asyncio,
+  aiosqlite,
+  asyncpg,
+  ruamel-yaml,
+
+  withOlm ? false,
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.18.7";
+  version = "0.21.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-fxDkHSlfiyxDdCvz3CyAWeip08ozH+lqEzmM26a4/Xg=";
+  src = fetchFromGitHub {
+    owner = "mautrix";
+    repo = "python";
+    tag = "v${version}";
+    hash = "sha256-4nEjKIWzXd0e/cLL4py9SS+/YIcGHq2f+cCTEY2ENmE=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
+  build-system = [ setuptools ];
 
-    # defined in optional-requirements.txt
-    sqlalchemy
+  dependencies = [
+    aiohttp
+    attrs
+    yarl
+  ]
+  ++ lib.optionals withOlm optional-dependencies.encryption;
+
+  optional-dependencies = {
+    detect_mimetype = [ python-magic ];
+    encryption = [
+      base58
+      python-olm
+      unpaddedbase64
+      pycryptodome
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
     aiosqlite
+    asyncpg
     ruamel-yaml
-    CommonMark
-    lxml
   ];
 
-  disabled = pythonOlder "3.8";
-
-  # no tests available
-  doCheck = false;
+  disabledTestPaths = lib.optionals (!withOlm) [ "mautrix/crypto/" ];
 
   pythonImportsCheck = [ "mautrix" ];
 
-  meta = with lib; {
+  meta = {
+    description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
-    description = "A Python 3 asyncio Matrix framework.";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nyanloutre ma27 sumnerevans ];
+    changelog = "https://github.com/mautrix/python/releases/tag/${src.tag}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      nyanloutre
+      sumnerevans
+      nickcao
+    ];
   };
 }

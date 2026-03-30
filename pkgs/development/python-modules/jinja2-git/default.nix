@@ -1,33 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "jinja2-git";
-  version = "unstable-2021-07-20";
-  format = "pyproject";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "jinja2-git";
-    # this is master, we can't patch because of poetry.lock :(
-    # luckily, there appear to have been zero API changes since then, only
-    # dependency upgrades
-    rev = "c6d19b207eb6ac07182dc8fea35251d286c82512";
-    sha256 = "0yw0318w57ksn8azmdyk3zmyzfhw0k281fddnxyf4115bx3aph0g";
+    tag = version;
+    hash = "sha256-ZcKRLHcZ/rpiUyYK4ifDJaZriN+YyRF1RKCjIKum98U=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
-  propagatedBuildInputs = [ jinja2 ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ jinja2 ];
+
+  # the tests need to be run on the git repository
+  doCheck = false;
+
   pythonImportsCheck = [ "jinja2_git" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wemake-services/jinja2-git";
     description = "Jinja2 extension to handle git-specific things";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/wemake-services/jinja2-git/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

@@ -1,75 +1,75 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, fetchpatch
-, python-dateutil
-, pytz
-, regex
-, tzlocal
-, hijri-converter
-, convertdate
-, fasttext
-, langdetect
-, parameterized
-, pytestCheckHook
-, GitPython
-, parsel
-, requests
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  python-dateutil,
+  pytz,
+  regex,
+  tzlocal,
+  hijridate,
+  convertdate,
+  fasttext,
+  numpy,
+  langdetect,
+  parameterized,
+  pytestCheckHook,
+  gitpython,
+  parsel,
+  requests,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.3";
+  version = "1.4.0";
 
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    rev = "v${version}";
-    sha256 = "sha256-2bZaaaLT3hocIiqLZpudP6gmiYwxPNMrjG9dYF3GvTc=";
+    tag = "v${version}";
+    hash = "sha256-CmcQf0cGcZVmZfpLSYDGdZUj83T7enNRl9FTY1Q6vtk=";
   };
 
-  patches = [
-    ./regex-compat.patch
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace \
-      'regex !=2019.02.19,!=2021.8.27,<2022.3.15' \
-      'regex'
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     pytz
     regex
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
-    calendars = [ hijri-converter convertdate ];
-    fasttext = [ fasttext ];
+  optional-dependencies = {
+    calendars = [
+      hijridate
+      convertdate
+    ];
+    fasttext = [
+      fasttext
+      numpy
+    ];
     langdetect = [ langdetect ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
-    GitPython
+    gitpython
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME="$TEMPDIR"
   '';
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # access network
@@ -79,10 +79,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dateparser" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.tag}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    mainProgram = "dateparser-download";
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

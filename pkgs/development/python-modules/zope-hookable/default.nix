@@ -1,24 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_testing
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-hookable";
-  version = "5.2";
+  version = "8.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.hookable";
-    inherit version;
-    sha256 = "sha256-TDAYvPKznPXMz0CCb3mbS4wUAFbbeA+WywyjMqJDvSk=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.hookable";
+    tag = version;
+    hash = "sha256-pryx55dzvg+6jSUj4avskTnGKe6w1HkEh6v6OOlHIXY=";
   };
 
-  checkInputs = [ zope_testing ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "zope.hookable" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "src/zope/hookable/tests" ];
+
+  pythonNamespaces = [ "zope" ];
+
+  meta = {
     description = "Supports the efficient creation of “hookable” objects";
     homepage = "https://github.com/zopefoundation/zope.hookable";
-    license = licenses.zpl21;
+    changelog = "https://github.com/zopefoundation/zope.hookable/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.zpl21;
   };
 }

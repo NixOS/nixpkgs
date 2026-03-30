@@ -1,48 +1,74 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, urllib3
-, geojson
-, isPy3k
-, sqlalchemy
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  dask,
+  urllib3,
+  geojson,
+  verlib2,
+  pueblo,
+  pandas,
+  sqlalchemy,
+  pytestCheckHook,
+  pytz,
+  setuptools,
+  orjson,
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.27.2";
-  disabled = !isPy3k;
+  version = "2.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Ch4O3enHlQ+XO6+r7cnptrGJwnElHp07UubJuErft6U=";
+  src = fetchFromGitHub {
+    owner = "crate";
+    repo = "crate-python";
+    tag = version;
+    hash = "sha256-K09jezBINTw4sUl1Xvm4lJa68ZpwMy9ju/pxdRwnaE4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    orjson
     urllib3
     sqlalchemy
     geojson
+    verlib2
+    pueblo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    dask
+    pandas
     pytestCheckHook
+    pytz
   ];
 
   disabledTests = [
-    # network access
+    # the following tests require network access
     "test_layer_from_uri"
+    "test_additional_settings"
+    "test_basic"
+    "test_cluster"
+    "test_default_settings"
+    "test_dynamic_http_port"
+    "test_environment_variables"
+    "test_verbosity"
   ];
 
   disabledTestPaths = [
     # imports setuptools.ssl_support, which doesn't exist anymore
-    "src/crate/client/test_http.py"
+    "tests/client/test_http.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/crate/crate-python";
-    description = "A Python client library for CrateDB";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    description = "Python client library for CrateDB";
+    changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

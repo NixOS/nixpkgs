@@ -1,54 +1,123 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, rich
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  markdown-it-py,
+  platformdirs,
+  rich,
+  typing-extensions,
+  mdit-py-plugins,
+
+  # optional-dependencies
+  tree-sitter,
+  tree-sitter-c-sharp,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-make,
+  tree-sitter-markdown,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-sql,
+  tree-sitter-yaml,
+  tree-sitter-zeek,
+
+  # tests
+  jinja2,
+  pytest-aiohttp,
+  pytest-xdist,
+  pytestCheckHook,
+  syrupy,
+  time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.1.18";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "8.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XVmbt8r5HL8r64ISdJozmM+9HuyvqbpdejWICzFnfiw=";
+    repo = "textual";
+    tag = "v${version}";
+    hash = "sha256-jYjw4iqJ/CrawQwcwqAfQLc04tfdTqq6ERJsfx4FDMs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "rich"
+  ];
+  dependencies = [
+    markdown-it-py
+    mdit-py-plugins
+    platformdirs
     rich
-  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
-  ];
+  ]
+  ++ markdown-it-py.optional-dependencies.plugins
+  ++ markdown-it-py.optional-dependencies.linkify;
 
-  checkInputs = [
+  optional-dependencies = {
+    syntax = [
+      tree-sitter
+      tree-sitter-c-sharp
+      tree-sitter-html
+      tree-sitter-javascript
+      tree-sitter-make
+      tree-sitter-markdown
+      tree-sitter-python
+      tree-sitter-rust
+      tree-sitter-sql
+      tree-sitter-yaml
+      tree-sitter-zeek
+    ];
+  };
+
+  nativeCheckInputs = [
+    jinja2
+    pytest-aiohttp
+    pytest-xdist
     pytestCheckHook
+    syrupy
+    time-machine
+    tree-sitter
+    tree-sitter-markdown
+    tree-sitter-python
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'rich = "^12.3.0"' 'rich = "*"'
-  '';
-
-  pythonImportsCheck = [
-    "textual"
+  disabledTestPaths = [
+    # Snapshot tests require syrupy<4
+    "tests/snapshot_tests/test_snapshots.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Assertion issues
+    "test_textual_env_var"
+
+    # fixture 'snap_compare' not found
+    "test_progress_bar_width_1fr"
+  ];
+
+  pytestFlags = [
+    # Some tests in groups require state from previous tests
+    # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
+    "--dist=loadgroup"
+  ];
+
+  pythonImportsCheck = [ "textual" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jyooru ];
+    changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gepbird ];
   };
 }

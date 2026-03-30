@@ -1,33 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "drf-spectacular-sidecar";
-  version = "2022.11.1";
+  version = "2026.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
-    rev = version;
-    sha256 = "sha256-ztUdV+Bhi3zx5UiwnpiQM/RglUH1n9J48Beuq2GPWdg=";
+    tag = version;
+    hash = "sha256-8+KfFyGcwA99mSZi95uOqOqzcJUa1GXu0BYva+hJDOw=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "drf_spectacular_sidecar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serve self-contained distribution builds of Swagger UI and Redoc with Django";
     homepage = "https://github.com/tfranzel/drf-spectacular-sidecar";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

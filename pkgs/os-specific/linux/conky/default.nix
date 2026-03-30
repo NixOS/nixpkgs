@@ -1,146 +1,203 @@
-{ config, lib, stdenv, fetchFromGitHub, pkg-config, cmake
+{
+  config,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
 
-# dependencies
-, glib, libXinerama, catch2
+  # dependencies
+  glib,
+  libxfixes,
+  libxinerama,
+  catch2,
+  gperf,
 
-# optional features without extra dependencies
-, mpdSupport          ? true
-, ibmSupport          ? true # IBM/Lenovo notebooks
+  # lib.optional features without extra dependencies
+  mpdSupport ? true,
+  ibmSupport ? true, # IBM/Lenovo notebooks
 
-# optional features with extra dependencies
+  # lib.optional features with extra dependencies
 
-# ouch, this is ugly, but this gives the man page
-, docsSupport         ? true, docbook2x, libxslt ? null
-                            , man ? null, less ? null
-                            , docbook_xsl ? null , docbook_xml_dtd_44 ? null
+  docsSupport ? true,
+  buildPackages,
+  pandoc,
+  python3,
 
-, ncursesSupport      ? true      , ncurses       ? null
-, x11Support          ? true      , freetype, xorg
-, xdamageSupport      ? x11Support, libXdamage    ? null
-, doubleBufferSupport ? x11Support
-, imlib2Support       ? x11Support, imlib2        ? null
+  ncursesSupport ? true,
+  ncurses ? null,
+  x11Support ? true,
+  freetype,
+  libxft,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  waylandSupport ? true,
+  pango,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  xdamageSupport ? x11Support,
+  libxdamage ? null,
+  doubleBufferSupport ? x11Support,
+  imlib2Support ? x11Support,
+  imlib2 ? null,
 
-, luaSupport          ? true      , lua           ? null
-, luaImlib2Support    ? luaSupport && imlib2Support
-, luaCairoSupport     ? luaSupport && x11Support, cairo ? null
-, toluapp ? null
+  luaSupport ? true,
+  lua ? null,
+  luaImlib2Support ? luaSupport && imlib2Support,
+  luaCairoSupport ? luaSupport && (x11Support || waylandSupport),
+  cairo ? null,
+  toluapp ? null,
 
-, wirelessSupport     ? true      , wirelesstools ? null
-, nvidiaSupport       ? false     , libXNVCtrl ? null
-, pulseSupport        ? config.pulseaudio or false, libpulseaudio ? null
+  wirelessSupport ? true,
+  wirelesstools ? null,
+  nvidiaSupport ? false,
+  libXNVCtrl ? null,
+  pulseSupport ? config.pulseaudio or false,
+  libpulseaudio ? null,
 
-, curlSupport         ? true      , curl ? null
-, rssSupport          ? curlSupport
-, weatherMetarSupport ? curlSupport
-, weatherXoapSupport  ? curlSupport
-, journalSupport      ? true, systemd ? null
-, libxml2 ? null
+  curlSupport ? true,
+  curl ? null,
+  rssSupport ? curlSupport,
+  journalSupport ? true,
+  systemd ? null,
+  libxml2 ? null,
+
+  extrasSupport ? true,
+
+  versionCheckHook,
+  expat,
 }:
 
-assert docsSupport         -> docbook2x != null && libxslt != null
-                           && man != null && less != null
-                           && docbook_xsl != null && docbook_xml_dtd_44 != null;
+assert docsSupport -> pandoc != null && python3 != null;
 
-assert ncursesSupport      -> ncurses != null;
+assert ncursesSupport -> ncurses != null;
 
-assert xdamageSupport      -> x11Support && libXdamage != null;
-assert imlib2Support       -> x11Support && imlib2     != null;
-assert luaSupport          -> lua != null;
-assert luaImlib2Support    -> luaSupport && imlib2Support
-                                         && toluapp != null;
-assert luaCairoSupport     -> luaSupport && toluapp != null
-                                         && cairo   != null;
-assert luaCairoSupport || luaImlib2Support
-                           -> lua.luaversion == "5.3";
+assert xdamageSupport -> x11Support && libxdamage != null;
+assert imlib2Support -> x11Support && imlib2 != null;
+assert luaSupport -> lua != null;
+assert luaImlib2Support -> luaSupport && imlib2Support && toluapp != null;
+assert luaCairoSupport -> luaSupport && toluapp != null && cairo != null;
+assert luaCairoSupport || luaImlib2Support -> lua.luaversion == "5.4";
 
-assert wirelessSupport     -> wirelesstools != null;
-assert nvidiaSupport       -> libXNVCtrl != null;
-assert pulseSupport        -> libpulseaudio != null;
+assert wirelessSupport -> wirelesstools != null;
+assert nvidiaSupport -> libXNVCtrl != null;
+assert pulseSupport -> libpulseaudio != null;
 
-assert curlSupport         -> curl != null;
-assert rssSupport          -> curlSupport && libxml2 != null;
-assert weatherMetarSupport -> curlSupport;
-assert weatherXoapSupport  -> curlSupport && libxml2 != null;
-assert journalSupport      -> systemd != null;
+assert curlSupport -> curl != null;
+assert rssSupport -> curlSupport && libxml2 != null;
+assert journalSupport -> systemd != null;
 
-with lib;
+assert extrasSupport -> python3 != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
-  version = "1.13.1";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
-    rev = "v${version}";
-    sha256 = "sha256-3eCRzjfHGFiKuxmRHvnzqAg/+ApUKnHhsumWnio/Qxg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WZjYs68/u7XUUriLPW3VMJIFP/HsnraHT6w84usQMYM=";
   };
 
+  # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
   postPatch = ''
-    sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
-      cmake/ConkyPlatformChecks.cmake
-  '' + optionalString docsSupport ''
-    # Drop examples, since they contain non-ASCII characters that break docbook2x :(
-    sed -i 's/ Example: .*$//' doc/config_settings.xml
-
-    substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
-
-    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
+    substituteInPlace cmake/ConkyPlatformChecks.cmake \
+      --replace-fail "pkg_get_variable(Wayland_SCANNER wayland-scanner wayland_scanner)" "set(Wayland_SCANNER ${lib.getExe buildPackages.wayland-scanner})"
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ glib libXinerama ]
-    ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
-    ++ optional  ncursesSupport     ncurses
-    ++ optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
-    ++ optional  xdamageSupport     libXdamage
-    ++ optional  imlib2Support      imlib2
-    ++ optional  luaSupport         lua
-    ++ optionals luaImlib2Support   [ toluapp imlib2 ]
-    ++ optionals luaCairoSupport    [ toluapp cairo ]
-    ++ optional  wirelessSupport    wirelesstools
-    ++ optional  curlSupport        curl
-    ++ optional  rssSupport         libxml2
-    ++ optional  weatherXoapSupport libxml2
-    ++ optional  nvidiaSupport      libXNVCtrl
-    ++ optional  pulseSupport       libpulseaudio
-    ++ optional  journalSupport     systemd
-    ;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gperf
+  ]
+  ++ lib.optional docsSupport pandoc
+  ++ lib.optional (docsSupport || extrasSupport) (
+    # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
+    buildPackages.python3.withPackages (ps: [
+      ps.jinja2
+      ps.pyyaml
+    ])
+  )
+  ++ lib.optional luaImlib2Support toluapp
+  ++ lib.optional luaCairoSupport toluapp;
 
-  cmakeFlags = []
-    ++ optional docsSupport         "-DMAINTAINER_MODE=ON"
-    ++ optional curlSupport         "-DBUILD_CURL=ON"
-    ++ optional (!ibmSupport)       "-DBUILD_IBM=OFF"
-    ++ optional imlib2Support       "-DBUILD_IMLIB2=ON"
-    ++ optional luaCairoSupport     "-DBUILD_LUA_CAIRO=ON"
-    ++ optional luaImlib2Support    "-DBUILD_LUA_IMLIB2=ON"
-    ++ optional (!mpdSupport)       "-DBUILD_MPD=OFF"
-    ++ optional (!ncursesSupport)   "-DBUILD_NCURSES=OFF"
-    ++ optional rssSupport          "-DBUILD_RSS=ON"
-    ++ optional (!x11Support)       "-DBUILD_X11=OFF"
-    ++ optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
-    ++ optional doubleBufferSupport "-DBUILD_XDBE=ON"
-    ++ optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
-    ++ optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
-    ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
-    ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
-    ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
-    ++ optional journalSupport      "-DBUILD_JOURNAL=ON"
-    ;
+  buildInputs = [
+    glib
+    libxinerama
+  ]
+  ++ lib.optional ncursesSupport ncurses
+  ++ lib.optionals x11Support [
+    freetype
+    libxfixes
+    libice
+    libx11
+    libxext
+    libxft
+    libxfixes
+    libsm
+    expat
+  ]
+  ++ lib.optionals waylandSupport [
+    pango
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional xdamageSupport libxdamage
+  ++ lib.optional imlib2Support imlib2
+  ++ lib.optional luaSupport lua
+  ++ lib.optional luaImlib2Support imlib2
+  ++ lib.optional luaCairoSupport cairo
+  ++ lib.optional wirelessSupport wirelesstools
+  ++ lib.optional curlSupport curl
+  ++ lib.optional rssSupport libxml2
+  ++ lib.optional nvidiaSupport libXNVCtrl
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional journalSupport systemd;
 
-  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
-  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
-  enableParallelBuilding = false;
+  cmakeFlags = [
+    (lib.cmakeBool "REPRODUCIBLE_BUILD" true)
+    (lib.cmakeBool "RELEASE" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_EXTRAS" extrasSupport)
+    (lib.cmakeBool "BUILD_DOCS" docsSupport)
+    (lib.cmakeBool "BUILD_CURL" curlSupport)
+    (lib.cmakeBool "BUILD_IBM" ibmSupport)
+    (lib.cmakeBool "BUILD_IMLIB2" imlib2Support)
+    (lib.cmakeBool "BUILD_LUA_CAIRO" luaCairoSupport)
+    (lib.cmakeBool "BUILD_LUA_IMLIB2" luaImlib2Support)
+    (lib.cmakeBool "BUILD_MPD" mpdSupport)
+    (lib.cmakeBool "BUILD_NCURSES" ncursesSupport)
+    (lib.cmakeBool "BUILD_RSS" rssSupport)
+    (lib.cmakeBool "BUILD_X11" x11Support)
+    (lib.cmakeBool "BUILD_WAYLAND" waylandSupport)
+    (lib.cmakeBool "BUILD_XDAMAGE" xdamageSupport)
+    (lib.cmakeBool "BUILD_XDBE" doubleBufferSupport)
+    (lib.cmakeBool "BUILD_WLAN" wirelessSupport)
+    (lib.cmakeBool "BUILD_NVIDIA" nvidiaSupport)
+    (lib.cmakeBool "BUILD_PULSEAUDIO" pulseSupport)
+    (lib.cmakeBool "BUILD_JOURNAL" journalSupport)
+    (lib.cmakeFeature "CMAKE_INSTALL_DATAROOTDIR" "${placeholder "out"}/share")
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
-    homepage = "http://conky.sourceforge.net/";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
+    homepage = "https://conky.cc";
+    changelog = "https://github.com/brndnmtthws/conky/releases/tag/${finalAttrs.src.tag}";
     description = "Advanced, highly configurable system monitor based on torsmo";
-    maintainers = [ maintainers.guibert ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    mainProgram = "conky";
+    maintainers = [ lib.maintainers.guibert ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

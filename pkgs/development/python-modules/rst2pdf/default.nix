@@ -1,36 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, docutils
-, importlib-metadata
-, jinja2
-, packaging
-, pygments
-, pyyaml
-, reportlab
-, smartypants
-, pillow
-, pytestCheckHook
-, pymupdf
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  docutils,
+  importlib-metadata,
+  jinja2,
+  packaging,
+  pygments,
+  pyyaml,
+  reportlab,
+  smartypants,
+  pillow,
+  pytestCheckHook,
+  pymupdf,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.99";
-
-  format = "pyproject";
+  version = "0.105";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fa23fa93bddd1f52d058ceaeab6582c145546d80f2f8a95974f3703bd6c8152";
+    hash = "sha256-hX6HQQFOxQFfegCq+13Mu1Y3jvTB2lWoKNRLz1/zrNs=";
   };
 
-  outputs = [ "out" "man" ];
+  pythonRelaxDeps = [ "packaging" ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
+    installShellFiles
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -45,11 +56,9 @@ buildPythonPackage rec {
     pillow
   ];
 
-  pythonImportsCheck = [
-    "rst2pdf"
-  ];
+  pythonImportsCheck = [ "rst2pdf" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pymupdf
     sphinx
@@ -59,14 +68,16 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $man/share/man/man1/
-    ${docutils}/bin/rst2man.py doc/rst2pdf.rst $man/share/man/man1/rst2pdf.1
+    ${lib.getExe' docutils "rst2man"} doc/rst2pdf.rst rst2pdf.1
+    installManPage rst2pdf.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert reStructured Text to PDF via ReportLab";
+    mainProgram = "rst2pdf";
     homepage = "https://rst2pdf.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

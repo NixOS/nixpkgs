@@ -1,43 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.13.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.62.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Rq4DuCbXX4DSIr01AFYo0O4+wQv4B5yzrrX9a2ecAFI=";
+    pname = "google_cloud_container";
+    inherit version;
+    hash = "sha256-O647Jw3v9kD1Pn0naPvAP/vzUxqIZWD7nk97VRRs1T8=";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    grpc-google-iam-v1
-    libcst
-    proto-plus
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  checkInputs = [
+  dependencies = [
+    google-api-core
+    libcst
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_list_clusters"
   ];
 
@@ -47,10 +54,11 @@ buildPythonPackage rec {
     "google.cloud.container_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Container Engine API client library";
-    homepage = "https://github.com/googleapis/python-container";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-container";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-container-v${version}/packages/google-cloud-container/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

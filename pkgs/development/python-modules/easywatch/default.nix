@@ -1,12 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, watchdog
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "easywatch";
   version = "0.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,11 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "easywatch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dead-simple way to watch a directory";
     homepage = "https://github.com/Ceasar/easywatch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }
-

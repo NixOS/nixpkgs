@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchFromSourcehut, pythonOlder
-, cmake, cython, alure2, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromSourcehut,
+  cmake,
+  cython_0,
+  setuptools,
+  alure2,
 }:
 
 buildPythonPackage rec {
   pname = "palace";
   version = "0.2.5";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
+    repo = "palace";
     rev = version;
     sha256 = "1z0m35y4v1bg6vz680pwdicm9ssryl0q6dm9hfpb8hnifmridpcj";
   };
@@ -17,24 +23,28 @@ buildPythonPackage rec {
   # Nix uses Release CMake configuration instead of what is assumed by palace.
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE
+      --replace-fail IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
+
+  build-system = [
+    cmake
+    cython_0
+    setuptools
+  ];
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ cython ];
-  propagatedBuildInputs = [ alure2 ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ alure2 ];
 
   doCheck = false; # FIXME: tests need an audio device
+
   pythonImportsCheck = [ "palace" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Audio Library and Codecs Environment";
     homepage = "https://mcsinyx.gitlab.io/palace";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

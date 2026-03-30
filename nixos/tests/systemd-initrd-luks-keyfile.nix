@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: let
+{ lib, pkgs, ... }:
+let
 
   keyfile = pkgs.writeText "luks-keyfile" ''
     MIGHAoGBAJ4rGTSo/ldyjQypd0kuS7k2OSsmQYzMH6TNj3nQ/vIUjDn7fqa3slt2
@@ -6,40 +7,47 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
     FllUkMD5oqjOR/YcboxG8Z3B5sJuvTP9llsF+gnuveWih9dpbBr7AgEC
   '';
 
-in {
+in
+{
   name = "systemd-initrd-luks-keyfile";
 
-  nodes.machine = { pkgs, ... }: {
-    # Use systemd-boot
-    virtualisation = {
-      emptyDiskImages = [ 512 ];
-      useBootLoader = true;
-      useEFIBoot = true;
-    };
-    boot.loader.systemd-boot.enable = true;
-
-    environment.systemPackages = with pkgs; [ cryptsetup ];
-    boot.initrd.systemd = {
-      enable = true;
-      emergencyAccess = true;
-    };
-
-    specialisation.boot-luks.configuration = {
-      boot.initrd.luks.devices = lib.mkVMOverride {
-        cryptroot = {
-          device = "/dev/vdc";
-          keyFile = "/etc/cryptroot.key";
-        };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [ 512 ];
+        useBootLoader = true;
+        # Necessary to boot off the encrypted disk because it requires a init script coming from the Nix store
+        mountHostNixStore = true;
+        useEFIBoot = true;
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
-      boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
+      boot.loader.systemd-boot.enable = true;
+
+      environment.systemPackages = with pkgs; [ cryptsetup ];
+      boot.initrd.systemd = {
+        enable = true;
+        emergencyAccess = true;
+      };
+
+      specialisation.boot-luks.configuration = {
+        boot.initrd.luks.devices = lib.mkVMOverride {
+          cryptroot = {
+            device = "/dev/vdb";
+            keyFile = "/etc/cryptroot.key";
+          };
+        };
+        virtualisation.rootDevice = "/dev/mapper/cryptroot";
+        boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
+      };
     };
-  };
 
   testScript = ''
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdc")
+    machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
+    machine.succeed("cryptsetup luksOpen --key-file ${keyfile} /dev/vdb cryptroot")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
@@ -50,4 +58,4 @@ in {
     machine.wait_for_unit("multi-user.target")
     assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
   '';
-})
+}

@@ -1,29 +1,31 @@
-{ system ? builtins.currentSystem, config ? { }
-, pkgs ? import ../../.. { inherit system config; } }:
-
-with import ../../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+{
+  runTest,
+  ...
+}:
 
 let
-  writefreelyTest = { name, type }:
-    makeTest {
+  writefreelyTest =
+    { name, type }:
+    runTest {
       name = "writefreely-${name}";
 
-      nodes.machine = { config, pkgs, ... }: {
-        services.writefreely = {
-          enable = true;
-          host = "localhost:3000";
-          admin.name = "nixos";
+      nodes.machine =
+        { config, pkgs, ... }:
+        {
+          services.writefreely = {
+            enable = true;
+            host = "localhost:3000";
+            admin.name = "nixos";
 
-          database = {
-            inherit type;
-            createLocally = type == "mysql";
-            passwordFile = pkgs.writeText "db-pass" "pass";
+            database = {
+              inherit type;
+              createLocally = type == "mysql";
+              passwordFile = pkgs.writeText "db-pass" "pass";
+            };
+
+            settings.server.port = 3000;
           };
-
-          settings.server.port = 3000;
         };
-      };
 
       testScript = ''
         start_all()
@@ -32,7 +34,8 @@ let
         machine.succeed("curl --fail http://localhost:3000")
       '';
     };
-in {
+in
+{
   sqlite = writefreelyTest {
     name = "sqlite";
     type = "sqlite3";

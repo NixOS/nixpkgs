@@ -1,26 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-applehelp";
-  version = "1.0.2";
-  disabled = isPy27;
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a072735ec80e7675e3f432fcae8610ecf509c5f1869d17e2eecff44389cdbc58";
+    pname = "sphinxcontrib_applehelp";
+    inherit version;
+    hash = "sha256-LynvMxc1zpWO+kc0hz8ISUGXCJTGCQQIsHnGGy4cBtE=";
   };
 
+  nativeBuildInputs = [ flit-core ];
+
   # Check is disabled due to circular dependency of sphinx
+  dontCheckRuntimeDeps = true;
   doCheck = false;
 
-  meta = with lib; {
-    description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
+  pythonNamespaces = [ "sphinxcontrib" ];
+
+  meta = {
+    description = "Sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-applehelp";
-    license = licenses.bsd0;
-    maintainers = teams.sphinx.members;
+    license = lib.licenses.bsd2;
   };
 }

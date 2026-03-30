@@ -11,17 +11,28 @@
 # Like python-packages.nix, packages from top-level.nix are not in the scope
 # of the `callPackage` used for packages here. So, when we do need packages
 # from outside, we can `inherit` them from `pkgs`.
-{ pkgs
-, lib
-, stdenv
-, fetchurl
-, newScope
-, octave
+{
+  pkgs,
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  newScope,
+  octave,
 }:
 
-with lib;
+let
+  inherit (lib)
+    catAttrs
+    concatLists
+    filter
+    makeScope
+    unique
+    ;
+in
 
-makeScope newScope (self:
+makeScope newScope (
+  self:
   let
     callPackage = self.callPackage;
 
@@ -33,18 +44,23 @@ makeScope newScope (self:
 
     # Given a list of required Octave package derivations, get a list of
     # ALL required Octave packages needed for the ones specified to run.
-    computeRequiredOctavePackages = drvs: let
-      # Check whether a derivation is an octave package
-      hasOctavePackage = drv: drv?isOctavePackage;
-      packages = filter hasOctavePackage drvs;
-    in unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
+    computeRequiredOctavePackages =
+      drvs:
+      let
+        # Check whether a derivation is an octave package
+        hasOctavePackage = drv: drv ? isOctavePackage;
+        packages = filter hasOctavePackage drvs;
+      in
+      unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
 
-  in {
+  in
+  {
 
-    inherit callPackage buildOctavePackage computeRequiredOctavePackages;
+    inherit buildOctavePackage computeRequiredOctavePackages;
 
     inherit (callPackage ../development/interpreters/octave/hooks { })
-      writeRequiredOctavePackagesHook;
+      writeRequiredOctavePackagesHook
+      ;
 
     arduino = callPackage ../development/octave-modules/arduino {
       inherit (pkgs) arduino-core-unwrapped;
@@ -68,6 +84,8 @@ makeScope newScope (self:
 
     dataframe = callPackage ../development/octave-modules/dataframe { };
 
+    datatypes = callPackage ../development/octave-modules/datatypes { };
+
     dicom = callPackage ../development/octave-modules/dicom { };
 
     divand = callPackage ../development/octave-modules/divand { };
@@ -75,12 +93,6 @@ makeScope newScope (self:
     doctest = callPackage ../development/octave-modules/doctest { };
 
     econometrics = callPackage ../development/octave-modules/econometrics { };
-
-    fem-fenics = callPackage ../development/octave-modules/fem-fenics {
-      # PLACEHOLDER until KarlJoad gets dolfin packaged.
-      dolfin = null;
-      ffc = null;
-    };
 
     fits = callPackage ../development/octave-modules/fits { };
 
@@ -104,7 +116,14 @@ makeScope newScope (self:
       inherit (pkgs) gsl;
     };
 
-    image = callPackage ../development/octave-modules/image { };
+    image = callPackage ../development/octave-modules/image {
+      inherit (pkgs)
+        mesa
+        gnuplot
+        makeFontsConf
+        writableTmpDirAsHomeHook
+        ;
+    };
 
     image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
 
@@ -116,14 +135,17 @@ makeScope newScope (self:
 
     interval = callPackage ../development/octave-modules/interval { };
 
-    level-set = callPackage ../development/octave-modules/level-set { };
-
     linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
 
     lssa = callPackage ../development/octave-modules/lssa { };
 
     ltfat = callPackage ../development/octave-modules/ltfat {
-      inherit (octave) fftw fftwSinglePrec portaudio jdk;
+      inherit (octave)
+        fftw
+        fftwSinglePrec
+        portaudio
+        jdk
+        ;
       inherit (pkgs) fftwFloat fftwLongDouble;
     };
 
@@ -162,8 +184,6 @@ makeScope newScope (self:
 
     optiminterp = callPackage ../development/octave-modules/optiminterp { };
 
-    parallel = callPackage ../development/octave-modules/parallel { };
-
     quaternion = callPackage ../development/octave-modules/quaternion { };
 
     queueing = callPackage ../development/octave-modules/queueing { };
@@ -171,8 +191,6 @@ makeScope newScope (self:
     signal = callPackage ../development/octave-modules/signal { };
 
     sockets = callPackage ../development/octave-modules/sockets { };
-
-    sparsersb = callPackage ../development/octave-modules/sparsersb { };
 
     stk = callPackage ../development/octave-modules/stk { };
 
@@ -188,21 +206,9 @@ makeScope newScope (self:
       inherit (octave) python;
     };
 
-    tisean = callPackage ../development/octave-modules/tisean { };
-
     tsa = callPackage ../development/octave-modules/tsa { };
 
-    vibes = callPackage ../development/octave-modules/vibes {
-      vibes = null;
-      # TODO: Need to package vibes:
-      # https://github.com/ENSTABretagneRobotics/VIBES
-    };
-
     video = callPackage ../development/octave-modules/video { };
-
-    vrml = callPackage ../development/octave-modules/vrml {
-      freewrl = null;
-    };
 
     windows = callPackage ../development/octave-modules/windows { };
 
@@ -210,4 +216,14 @@ makeScope newScope (self:
       inherit (pkgs) zeromq autoreconfHook;
     };
 
-  })
+  }
+  // lib.optionalAttrs config.allowAliases {
+    fem-fenics = throw "octavePackages.fem-fenics has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    level-set = throw "octavePackages.level-set has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    parallel = throw "octavePackages.parallel has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    sparsersb = throw "octavePackages.sparsersb has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    tisean = throw "octavePackages.tisean has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    vibes = throw "octavePackages.vibes has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    vrml = throw "octavePackages.vrml has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+  }
+)

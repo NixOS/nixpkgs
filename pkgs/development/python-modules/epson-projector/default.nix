@@ -1,25 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
-, pyserial-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  pyserial-asyncio-fast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "epson-projector";
-  version = "0.5.0";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "epson_projector";
     inherit version;
-    sha256 = "sha256-a9pRncC22DCKX+7ObC8PORpR+RGbOBor2lbwzfrU8tk=";
+    hash = "sha256-/9Nc3xOxnXFfTsS8s83MXTkVAhqLwrKnmfR/E87s+Bk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    async-timeout
-    pyserial-asyncio
+    pyserial-asyncio-fast
   ];
 
   # tests need real device
@@ -33,10 +36,11 @@ buildPythonPackage rec {
     "epson_projector.projector_tcp"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Epson projector support for Python";
     homepage = "https://github.com/pszafer/epson_projector";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/pszafer/epson_projector/releases/tag/v.${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

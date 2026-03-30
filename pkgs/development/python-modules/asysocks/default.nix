@@ -1,37 +1,41 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  h11,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asysocks";
-  version = "0.2.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.2.18";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rhqML/w8Hp8xZogjc2ZD+Y9C9c/w1e4X7WNoFaLz9Ps=";
+    hash = "sha256-zGGW6CyK3Is84jId3fY1UAx2AxbaS3zKMhtTLLs9/fU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
+    cryptography
+    h11
   ];
 
   # Upstream hasn't release the tests yet
   doCheck = false;
 
-  pythonImportsCheck = [
-    "asysocks"
-  ];
+  pythonImportsCheck = [ "asysocks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Socks4/5 client and server library";
     homepage = "https://github.com/skelsec/asysocks";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/skelsec/asysocks/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

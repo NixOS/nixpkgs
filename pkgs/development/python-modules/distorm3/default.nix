@@ -1,40 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, yasm
+{
+  lib,
+  buildPythonPackage,
+  distutils,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  yasm,
 }:
 
 buildPythonPackage rec {
   pname = "distorm3";
   version = "3.5.2";
-
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
-    rev = version;
-    sha256 = "012bh1l2w7i9q8rcnznj3x0lra09d5yxd3r42cbrqdwl1mmg26qn";
+    tag = version;
+    hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
   };
 
-  checkInputs = [
+  build-system = [
+    distutils
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     yasm
   ];
 
-  disabledTests = [
-    # TypeError: __init__() missing 3 required positional...
-    "test_dummy"
-  ];
+  # TypeError: __init__() missing 3 required positional...
+  doCheck = false;
 
   pythonImportsCheck = [ "distorm3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disassembler library for x86/AMD64";
     homepage = "https://github.com/gdabah/distorm";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/gdabah/distorm/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

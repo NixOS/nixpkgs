@@ -1,57 +1,80 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python
-, zope_testrunner
-, transaction
-, six
-, zope_interface
-, zodbpickle
-, zconfig
-, persistent
-, zc_lockfile
-, BTrees
-, manuel
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  btrees,
+  persistent,
+  transaction,
+  zc-lockfile,
+  zconfig,
+  zodbpickle,
+  zope-interface,
+
+  # tests
+  manuel,
+  zope-testing,
+  zope-testrunner,
 }:
 
-buildPythonPackage rec {
-  pname = "ZODB";
-  version = "5.7.0";
+buildPythonPackage (finalAttrs: {
+  pname = "zodb";
+  version = "6.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+kC7wF7NoewkNc0MbdAqE7dphGBVikYENm9qCmhAHNM=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zodb";
+    tag = finalAttrs.version;
+    hash = "sha256-R6qf/9Sr70OsZzes+haT/J6RIz6Wlof/l6rQRl3snHI=";
   };
 
-  # remove broken test
   postPatch = ''
+    # remove broken test
     rm -vf src/ZODB/tests/testdocumentation.py
+  ''
+  + lib.optionalString (pythonAtLeast "3.14") ''
+    # remove broken under python 3.14
+    rm -vf src/ZODB/tests/testConnectionSavepoint.py
+    rm -vf src/ZODB/tests/testMVCCMappingStorage.py
+    rm -vf src/ZODB/tests/testFileStorage.py
+    rm -vf src/ZODB/tests/testblob.py
   '';
 
-  propagatedBuildInputs = [
-    transaction
-    six
-    zope_interface
-    zodbpickle
-    zconfig
+  build-system = [ setuptools ];
+
+  dependencies = [
+    btrees
     persistent
-    zc_lockfile
-    BTrees
+    transaction
+    zc-lockfile
+    zconfig
+    zodbpickle
+    zope-interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     manuel
-    zope_testrunner
+    zope-testing
+    zope-testrunner
   ];
 
   checkPhase = ''
     ${python.interpreter} -m zope.testrunner --test-path=src []
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zope Object Database: object database and persistence";
-    homepage = "https://pypi.python.org/pypi/ZODB";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    homepage = "https://zodb-docs.readthedocs.io/";
+    changelog = "https://github.com/zopefoundation/ZODB/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    downloadPage = "https://github.com/zopefoundation/ZODB";
+    license = lib.licenses.zpl21;
+    maintainers = [ ];
   };
-}
+})

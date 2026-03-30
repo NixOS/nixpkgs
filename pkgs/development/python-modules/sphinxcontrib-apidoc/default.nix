@@ -1,16 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
-  version = "0.3.0";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-cpv1ks97fdV8TAV5T3MtwCYScnXXhcKlSUUh/d53P7k=";
+    pname = "sphinxcontrib_apidoc";
+    inherit version;
+    hash = "sha256-MpuYENZpiPSOEnpr0YzI77vRzSC43rRpGjVzivSa2I0=";
   };
 
   postPatch = ''
@@ -18,17 +22,20 @@ buildPythonPackage rec {
     rm test-requirements.txt requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     pbr
+    setuptools
   ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
-  meta = with lib; {
+  pythonNamespaces = [ "sphinxcontrib" ];
+
+  meta = {
     description = "Sphinx extension for running sphinx-apidoc on each build";
     homepage = "https://github.com/sphinx-contrib/apidoc";
-    license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.bsd2;
+    teams = [ lib.teams.openstack ];
   };
 }

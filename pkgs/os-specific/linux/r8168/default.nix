@@ -1,23 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
 
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in stdenv.mkDerivation rec {
-  name = "r8168-${kernel.version}-${version}";
+in
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "r8168";
   # on update please verify that the source matches the realtek version
-  version = "8.048.03";
+  version = "8.056.02";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
-  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
-  # I've verified manually (`diff -r`) that the source code for version 8.046.00
+  # [1] https://www.realtek.com/Download/List?cate_id=584
+  # I've verified manually (`diff -r`) that the source code for version 8.055.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "1l8llpcnapcaafxp7wlyny2ywh7k6q5zygwwjl9h0l6p04cghss4";
+    sha256 = "sha256-KKfI03RrD+34+KSxwTwDkeB4sGFNY/tU/YbfrfVkTp8=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -27,12 +35,13 @@ in stdenv.mkDerivation rec {
   # avoid using the Makefile directly -- it doesn't understand
   # any kernel but the current.
   # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)/src"
     "modules"
   ];
   preBuild = ''
+    absSrc=$(realpath src)
+    makeFlagsArray+=("M=$absSrc")
     makeFlagsArray+=("EXTRA_CFLAGS=-DCONFIG_R8168_NAPI -DCONFIG_R8168_VLAN -DCONFIG_ASPM -DENABLE_S5WOL -DENABLE_EEE")
   '';
 
@@ -44,16 +53,15 @@ in stdenv.mkDerivation rec {
     find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Realtek r8168 driver";
     longDescription = ''
       A kernel module for Realtek 8168 network cards.
       If you want to use this driver, you might need to blacklist the r8169 driver
       by adding "r8169" to boot.blacklistedKernelModules.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ timokau ];
-    broken = (lib.versions.majorMinor kernel.modDirVersion) != "5.15";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

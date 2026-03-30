@@ -1,61 +1,71 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, beautifulsoup4
-, httpx
-, importlib-metadata
-, multidict
-, typer
-, yarl
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  aiohttp,
+  beautifulsoup4,
+  httpx,
+  multidict,
+  typer,
+  yarl,
+
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.1.4";
-  format = "pyproject";
+  version = "1.3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-4IPBulzRoAAplyM/1MPE40IW4IXBIGYLydzpY64Gl0c=";
+    tag = "v${version}";
+    hash = "sha256-3osyh4Er0bZ8dvOtDV1w66zOWuzECIWeL8M90gqi+D8=";
   };
 
-  postPatch = ''
-    # https://github.com/alandtse/auth_capture_proxy/issues/14
-    # https://github.com/alandtse/auth_capture_proxy/issues/15
-    substituteInPlace pyproject.toml \
-       --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-       --replace 'importlib-metadata = "^3.4.0"' 'importlib-metadata = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     beautifulsoup4
     httpx
-    importlib-metadata
     multidict
     typer
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  meta = with lib; {
-    description = "A proxy to capture authentication information from a webpage";
+  disabledTests = [
+    # test fails with frequency 1/200
+    # https://github.com/alandtse/auth_capture_proxy/issues/25
+    "test_return_timer_countdown_refresh_html"
+    # AttributeError: 'NoneType' object has no attribute 'get'
+    "test_replace_empty_action_urls"
+  ];
+
+  pythonImportsCheck = [ "authcaptureproxy" ];
+
+  meta = {
+    changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
+    description = "Proxy to capture authentication information from a webpage";
+    mainProgram = "auth_capture_proxy";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ graham33 hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      graham33
+      hexa
+    ];
   };
 }

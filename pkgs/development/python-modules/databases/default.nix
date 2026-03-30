@@ -1,45 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlalchemy
-, aiocontextvars
-, aiopg
-, pythonOlder
-, pytestCheckHook
-, pymysql
-, asyncpg
-, aiomysql
-, aiosqlite
+{
+  lib,
+  aiomysql,
+  aiopg,
+  aiosqlite,
+  asyncmy,
+  asyncpg,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.6.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    hash = "sha256-kHsA9XpolGmtuAGzRTj61igooLG9/LBQyv7TtuqiJ/A=";
+    repo = "databases";
+    tag = version;
+    hash = "sha256-Zf9QqBgDhWAnHdNvzjXtri5rdT00BOjc4YTNzJALldM=";
   };
 
-  propagatedBuildInputs = [
-    aiopg
-    aiomysql
-    aiosqlite
-    asyncpg
-    pymysql
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ sqlalchemy ];
+
+  optional-dependencies = {
+    postgresql = [ asyncpg ];
+    asyncpg = [ asyncpg ];
+    aiopg = [ aiopg ];
+    mysql = [ aiomysql ];
+    aiomysql = [ aiomysql ];
+    asyncmy = [ asyncmy ];
+    sqlite = [ aiosqlite ];
+    aiosqlite = [ aiosqlite ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # circular dependency on starlette
@@ -49,14 +49,13 @@ buildPythonPackage rec {
     "tests/test_connection_options.py"
   ];
 
-  pythonImportsCheck = [
-    "databases"
-  ];
+  pythonImportsCheck = [ "databases" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/encode/databases/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

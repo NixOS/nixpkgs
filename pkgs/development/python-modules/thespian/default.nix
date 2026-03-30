@@ -1,14 +1,24 @@
-{ fetchPypi, buildPythonPackage, lib }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-  version = "3.10.6";
   pname = "thespian";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c987a8042ba2303e22371f38a67354593dd81c4c11ba1eba7f6657409288d5ed";
+    hash = "sha256-92krWgkXCmH7Qa0Q+0cY2KKwKjDeJYLA8I0DtSmoRog=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   # Do not run the test suite: it takes a long time and uses
   # significant system resources, including requiring localhost
@@ -16,10 +26,15 @@ buildPythonPackage rec {
   # CI configuration and do not need to be duplicated here.
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "thespian"
+    "thespian.actors"
+  ];
+
+  meta = {
     description = "Python Actor concurrency library";
     homepage = "http://thespianpy.com/";
-    license = licenses.mit;
-    maintainers = [ maintainers.kquick ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.kquick ];
   };
 }

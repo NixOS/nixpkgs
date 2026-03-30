@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, click
-, h11
-, httptools
-, python-dotenv
-, pyyaml
-, typing-extensions
-, uvloop
-, watchfiles
-, websockets
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  click,
+  h11,
+  httptools,
+  python-dotenv,
+  pyyaml,
+  uvloop,
+  watchfiles,
+  websockets,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.18.2";
-  disabled = pythonOlder "3.6";
+  version = "0.40.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    hash = "sha256-nxtDqYh2OmDtoV10CEBGYQrQBf+Xtuf5k9yR6UfCgYc=";
+    repo = "uvicorn";
+    tag = version;
+    hash = "sha256-YpmvMZJxxpMdwbhFQSu+0fo7kcM6w3zJ7jI5LVamV1E=";
   };
 
   outputs = [
@@ -31,14 +31,14 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     click
     h11
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
-  passthru.optional-dependencies.standard = [
+  optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml
@@ -52,9 +52,7 @@ buildPythonPackage rec {
     cp -R tests $testsout/tests
   '';
 
-  pythonImportsCheck = [
-    "uvicorn"
-  ];
+  pythonImportsCheck = [ "uvicorn" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
   doCheck = false;
@@ -63,11 +61,12 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.uvicorn.org/";
-    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
-    description = "The lightning-fast ASGI server";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    changelog = "https://github.com/encode/uvicorn/blob/${src.tag}/CHANGELOG.md";
+    description = "Lightning-fast ASGI server";
+    mainProgram = "uvicorn";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

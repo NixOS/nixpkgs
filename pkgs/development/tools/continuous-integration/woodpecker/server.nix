@@ -1,27 +1,35 @@
-{ lib, buildGoModule, callPackage, fetchFromGitHub, woodpecker-frontend }:
+{
+  buildGoModule,
+  callPackage,
+}:
 let
   common = callPackage ./common.nix { };
 in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "woodpecker-server";
-  inherit (common) version src ldflags postBuild;
-  vendorSha256 = null;
-
-  postPatch = ''
-    cp -r ${woodpecker-frontend} web/dist
-  '';
+  inherit (common)
+    version
+    src
+    ldflags
+    postInstall
+    vendorHash
+    ;
 
   subPackages = "cmd/server";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
+
+  postPatch = ''
+    cp -r ${finalAttrs.passthru.webui} web/dist
+  '';
 
   passthru = {
-    inherit woodpecker-frontend;
-
+    webui = callPackage ./webui.nix { };
     updateScript = ./update.sh;
   };
 
   meta = common.meta // {
     description = "Woodpecker Continuous Integration server";
+    mainProgram = "woodpecker-server";
   };
-}
+})

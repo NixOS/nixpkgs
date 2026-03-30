@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, parver
-, pulumi
-, pythonOlder
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parver,
+  pulumi,
+  semver,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pulumi-aws";
-  # Version is independant of pulumi's.
-  version = "5.19.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  # Version is independent of pulumi's.
+  version = "7.23.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZpbWqhTScWOlcVsX4OYlA5dYQg0UsfOhMLllXjEDdUI=";
+    tag = "v${version}";
+    hash = "sha256-yD6VJ51AWJk4jlHJUtoHXGPtQvAyS0EuItbS1Obq6lc=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # We need the version of pulumi-aws in its package metadata to be accurate
+    # as this seems to be used to determine which version of the
+    # pulumi-resource-aws plugin to be dynamically downloaded by the pulumi CLI
+    substituteInPlace pyproject.toml \
+      --replace-fail "7.0.0a0+dev" "${version}"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     parver
     pulumi
     semver
@@ -35,14 +42,13 @@ buildPythonPackage rec {
   # Checks require cloud resources
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pulumi_aws"
-  ];
+  pythonImportsCheck = [ "pulumi_aws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pulumi python amazon web services provider";
     homepage = "https://github.com/pulumi/pulumi-aws";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

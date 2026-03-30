@@ -1,47 +1,46 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, jaraco_functools
-, jaraco_text
-, more-itertools
-, portend
-, pypytools
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, requests-unixsocket
-, setuptools-scm
-, setuptools-scm-git-archive
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  jaraco-functools,
+  jaraco-text,
+  more-itertools,
+  portend,
+  pypytools,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
+  requests-toolbelt,
+  requests-unixsocket,
+  setuptools,
+  setuptools-scm,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "8.6.0";
-
-  disabled = pythonOlder "3.7";
+  version = "11.1.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NmrfbnyslVVIbC0b5il5kwIu/2+MRlXBRDJozKPwjiU=";
+    hash = "sha256-v7cMSWY/Y7BEDytU28aw0WUOVt/k4mQfWbLG9ye0Sso=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
-  propagatedBuildInputs = [
-    jaraco_functools
+  dependencies = [
+    jaraco-functools
     more-itertools
     six
   ];
 
-  checkInputs = [
-    jaraco_text
+  nativeCheckInputs = [
+    jaraco-text
     portend
     pypytools
     pytest-mock
@@ -65,7 +64,8 @@ buildPythonPackage rec {
   disabledTests = [
     "tls" # touches network
     "peercreds_unix_sock" # test urls no longer allowed
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "http_over_https_error"
     "bind_addr_unix"
     "test_ssl_env"
@@ -79,17 +79,16 @@ buildPythonPackage rec {
     "cheroot/test/test_ssl.py"
   ];
 
-  pythonImportsCheck = [
-    "cheroot"
-  ];
+  pythonImportsCheck = [ "cheroot" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, pure-Python HTTP";
+    mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

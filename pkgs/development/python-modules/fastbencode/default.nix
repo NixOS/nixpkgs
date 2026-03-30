@@ -1,39 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
-, cython
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  rustc,
+  rustPlatform,
+  setuptools,
+  setuptools-rust,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.1";
-  format = "setuptools";
+  version = "0.3.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  src = fetchFromGitHub {
+    owner = "breezy-team";
+    repo = "fastbencode";
+    tag = "v${version}";
+    hash = "sha256-e+Ei+UIJ5sve6k3ApPJ2nswTgZLkzxZmpthK/f/rfCs=";
+  };
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wal451pQSLuoM9kNbnSKVZUMqLWfEukXwqLI58p+tvU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-dqD/QF6/XCB9H/QkEobfIOo9S663fh9AHUuHqCoEcLM=";
   };
 
   nativeBuildInputs = [
-    cython
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
   ];
 
-  pythonImportsCheck = [
-    "fastbencode"
+  build-system = [
+    setuptools
+    setuptools-rust
   ];
+
+  pythonImportsCheck = [ "fastbencode" ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest fastbencode.tests.test_suite
+    runHook preCheck
+    ${python.interpreter} -m unittest tests.test_suite
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast implementation of bencode";
     homepage = "https://github.com/breezy-team/fastbencode";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ marsam ];
+    changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

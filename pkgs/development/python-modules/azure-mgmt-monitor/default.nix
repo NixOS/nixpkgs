@@ -1,44 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "5.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-U5OSFnOZV7/eXUEDU1TQBywrXjxwQ8qiEQJVFd3y57Q=";
+    pname = "azure_mgmt_monitor";
+    inherit version;
+    hash = "sha256-t19TZEHUMPaf+HOhZG5fXbyzCAoQdopZ0K3AFUFiOBY=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
+    isodate
     azure-common
     azure-mgmt-core
   ];
 
-  pythonNamespaces = [
-    "azure.mgmt"
-  ];
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Monitor Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

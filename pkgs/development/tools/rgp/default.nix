@@ -1,54 +1,72 @@
-{ lib
-, stdenv
-, makeWrapper
-, fetchurl
-, autoPatchelfHook
-, dbus
-, fontconfig
-, freetype
-, glib
-, libGLU
-, libglvnd
-, libX11
-, libxcb
-, libXi
-, ncurses
-, qtbase
-, qtdeclarative
-, zlib
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  autoPatchelfHook,
+  dbus,
+  directx-shader-compiler,
+  fontconfig,
+  freetype,
+  glib,
+  libdrm,
+  libGLU,
+  libglvnd,
+  libice,
+  libkrb5,
+  libsm,
+  libx11,
+  libxcb,
+  libxi,
+  libxkbcommon,
+  libxml2_13,
+  ncurses,
+  wayland,
+  libxcb-util,
+  zlib,
+  zstd,
 }:
 
 let
-  buildNum = "2022-08-01-115";
+  buildNum = "2025-12-08-1746";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rgp";
-  version = "1.13.1";
+  version = "2.6.1";
 
   src = fetchurl {
-    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-e88vk+ZtDPB/1HrDKXbzkDaMESNE+qIW7ERwrqe+ZN8=";
+    url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    hash = "sha256-rfFZPA8DzgP5axSHToEBvhRTgWAejn/z0WlLMectya0=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     dbus
+    directx-shader-compiler
     fontconfig
     freetype
     glib
+    libdrm
     libGLU
     libglvnd
-    libX11
+    libice
+    libkrb5
+    libsm
+    libx11
     libxcb
-    libXi
+    libxi
+    libxkbcommon
+    libxml2_13
     ncurses
-    qtbase
-    qtdeclarative
+    wayland
+    libxcb-util
     zlib
+    zstd
   ];
-
-  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/opt/rgp $out/bin
@@ -59,19 +77,23 @@ stdenv.mkDerivation rec {
 
     for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler RadeonMemoryVisualizer RadeonRaytracingAnalyzer rga rtda; do
       # makeWrapper is needed so that executables are started from the opt
-      # directory, where qt.conf and other tools are
+      # directory, where qt.conf and other tools are.
+      # Unset Qt theme, it does not work if the nixos Qt version is different from the packaged one.
       makeWrapper \
         $out/opt/rgp/$prog \
-        $out/bin/$prog
+        $out/bin/$prog \
+        --unset QT_QPA_PLATFORMTHEME \
+        --unset QT_STYLE_OVERRIDE \
+        --prefix LD_LIBRARY_PATH : $out/opt/rgp/lib
     done
   '';
 
-  meta = with lib; {
-    description = "A tool from AMD that allows for deep inspection of GPU workloads";
+  meta = {
+    description = "Tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

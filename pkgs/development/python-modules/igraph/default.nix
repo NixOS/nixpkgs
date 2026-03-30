@@ -1,58 +1,85 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pkg-config
-, igraph
-, texttable
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  setuptools,
+  igraph,
+  texttable,
+  cairocffi,
+  matplotlib,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.10.2";
+  version = "1.0.0";
 
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = version;
-    hash = "sha256-ro2EkJQxW8aHejAvkaXI9mJC5XgFt31akhzFDAPZ4ow=";
+    tag = version;
+    postFetch = ''
+      # export-subst prevents reproducability
+      rm $out/.git_archival.json
+    '';
+    hash = "sha256-Y7ZQ1yNoD8A5b6c92OGz9Unietdg1uNt/Za6nxdCSP0=";
   };
 
   postPatch = ''
     rm -r vendor
   '';
 
-  nativeBuildInputs = [
-    pkg-config
+  nativeBuildInputs = [ pkg-config ];
+
+  build-system = [
+    cmake
+    setuptools
   ];
 
-  buildInputs = [
-    igraph
-  ];
+  dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    texttable
-  ];
+  buildInputs = [ igraph ];
+
+  dependencies = [ texttable ];
+
+  optional-dependencies = {
+    cairo = [ cairocffi ];
+    matplotlib = [ matplotlib ];
+    plotly = [ plotly ];
+    plotting = [ cairocffi ];
+  };
 
   # NB: We want to use our igraph, not vendored igraph, but even with
   # pkg-config on the PATH, their custom setup.py still needs to be explicitly
   # told to do it. ~ C.
-  setupPyGlobalFlags = [ "--use-pkg-config" ];
+  env.IGRAPH_USE_PKG_CONFIG = true;
 
-  checkInputs = [
-    unittestCheckHook
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    "testAuthorityScore"
+    "test_labels"
   ];
 
   pythonImportsCheck = [ "igraph" ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance graph data structures and algorithms";
+    mainProgram = "igraph";
     homepage = "https://igraph.org/python/";
     changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      MostAwesomeDude
+      dotlambda
+    ];
   };
 }

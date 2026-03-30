@@ -1,7 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config
-, marisa, qttools, qtlocation }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  marisa,
+  qttools,
+  qtlocation,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libosmscout";
   version = "2022.04.25";
 
@@ -12,16 +22,34 @@ mkDerivation rec {
     sha256 = "sha256-Qe5TkF4BwlsEI7emC0gdc7SmS4QrSGLiO0QdjuJA09g=";
   };
 
+  patches = [
+    # Fix build with libxml v2.12
+    # FIXME: Remove at next package update
+    (fetchpatch {
+      name = "libxml-2.12-fix.patch";
+      url = "https://github.com/Framstag/libosmscout/commit/db7b307de1a1146a6868015a0adfc2e21b7d5e39.patch";
+      hash = "sha256-5NDamzb2K18sMVfREnUNksgD2NL7ELzLl83SlGIveO0=";
+    })
+  ];
+
   cmakeFlags = [ "-DOSMSCOUT_BUILD_TESTS=OFF" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ marisa qttools qtlocation ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    marisa
+    qttools
+    qtlocation
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, high-level interfaces for offline location and POI lokup, rendering and routing functionalities based on OpenStreetMap (OSM) data";
-    homepage = "http://libosmscout.sourceforge.net/";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    homepage = "https://libosmscout.sourceforge.net/";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.Thra11 ];
+    platforms = lib.platforms.linux;
   };
 }

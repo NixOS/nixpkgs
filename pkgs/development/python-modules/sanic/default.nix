@@ -1,63 +1,73 @@
-{ lib
-, stdenv
-, aiofiles
-, beautifulsoup4
-, buildPythonPackage
-, doCheck ? true
-, fetchFromGitHub
-, gunicorn
-, httptools
-, multidict
-, pytest-asyncio
-, pytest-benchmark
-, pytest-sugar
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
-, sanic-routing
-, sanic-testing
-, ujson
-, uvicorn
-, uvloop
-, websockets
-, aioquic
+{
+  lib,
+  stdenv,
+  aiofiles,
+  aioquic,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gunicorn,
+  html5tagger,
+  httptools,
+  multidict,
+  pytest-asyncio,
+  pytestCheckHook,
+  sanic-ext,
+  sanic-routing,
+  sanic-testing,
+  setuptools,
+  tracerite,
+  typing-extensions,
+  ujson,
+  uvicorn,
+  uvloop,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.6.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "25.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-krEQd0ak9Uua+r+pYmLStlizgE4HmZBO8Q0I2/gWAwU=";
+    repo = "sanic";
+    tag = "v${version}";
+    hash = "sha256-ygMTULkavd/5Mqxn/iS1TC29hfFcF6q3/kT8S7V1Xdo=";
   };
 
-  propagatedBuildInputs = [
+  # test compat for testing with pytest-asyncio
+  patches = [ ./pytest9-compat.patch ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
-    aioquic
     httptools
+    html5tagger
     multidict
     sanic-routing
+    tracerite
+    typing-extensions
     ujson
     uvloop
     websockets
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    ext = [ sanic-ext ];
+    http3 = [ aioquic ];
+  };
+
+  nativeCheckInputs = [
     beautifulsoup4
     gunicorn
-    pytest-asyncio
+    pytest-asyncio # upstream tests with anyio + pytest-sanic instead
     pytestCheckHook
     sanic-testing
     uvicorn
-  ];
-
-  inherit doCheck;
+  ]
+  ++ optional-dependencies.http3;
 
   preCheck = ''
     # Some tests depends on sanic on PATH
@@ -66,70 +76,66 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
-  '' + lib.optionalString stdenv.isDarwin  ''
-    # OSError: [Errno 24] Too many open files
-    ulimit -n 1024
+  ''
+  # Work around "OSError: AF_UNIX path too long"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace worker/test_socket.py \
+      --replace-fail '"./test.sock"' '"/tmp/test.sock"'
   '';
 
-  # uvloop usage is buggy
-  #SANIC_NO_UVLOOP = true;
-
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
-
   disabledTests = [
-    # Require networking
-    "test_full_message"
-    # Fails to parse cmdline arguments
-    "test_dev"
-    "test_auto_reload"
-    "test_host_port_ipv6_loopback"
-    "test_num_workers"
-    "test_debug"
-    "test_access_logs"
-    "test_noisy_exceptions"
-    # OSError: foo
-    "test_bad_headers"
+    # EOFError: Ran out of input
+    "test_server_run_with_repl"
+    # InvalidStatusCode: server rejected WebSocket connection: HTTP 400
+    "test_websocket_route_with_subprotocols"
+    # nic.exceptions.SanicException: Cannot setup Sanic Simple Server without a path to a directory
+    "test_load_app_simple"
+    # ModuleNotFoundError: No module named '/build/source/tests/tests/static'
+    "test_input_is_dir"
+    # Racy, e.g. Address already in use
+    "test_logger_vhosts"
+    # Event loop is closed
+    "test_asyncio_server_no_start_serving"
+    "test_asyncio_server_start_serving"
+    "test_create_asyncio_server"
+    "test_create_server_main_convenience"
+    "test_create_server_main"
+    "test_create_server_no_startup"
     "test_create_server_trigger_events"
-    "test_json_body_requests"
-    "test_missing_startup_raises_exception"
-    "test_no_body_requests"
-    "test_oserror_warning"
-    "test_running_multiple_offset_warning"
-    "test_streaming_body_requests"
-    "test_trigger_before_events_create_server"
-    "test_keep_alive_connection_context"
-    # Racy tests
-    "test_keep_alive_client_timeout"
-    "test_keep_alive_server_timeout"
-    "test_zero_downtime"
-    # broke with ujson 5.4 upgrade
-    # https://github.com/sanic-org/sanic/pull/2504
-    "test_json_response_json"
+    "test_multiple_uvloop_configs_display_warning"
+    "test_uvloop_cannot_never_called_with_create_server"
+    # Our mailcap database has a different mime type name for xml documentations
+    # AssertionError: assert 'text/xml; charset=utf-8' == 'application/xml'
+    "test_guess_content_type"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # KeyError: "getgrnam(): name not found: 'root'"
+    "test_validate_group_sets_gid"
   ];
 
   disabledTestPaths = [
     # We are not interested in benchmarks
     "benchmark/"
-    # unable to create async loop
-    "test_app.py"
-    "test_asgi.py"
+    # We are also not interested in typing
+    "typing/test_typing.py"
     # occasionally hangs
     "test_multiprocessing.py"
+    # Failed: async def functions are not natively supported.
+    "test_touchup.py"
   ];
 
-  # avoid usage of nixpkgs-review in darwin since tests will compete usage
+  # Avoid usage of nixpkgs-review in darwin since tests will compete usage
   # for the same local port
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "sanic" ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc AluisioASG ];
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ p0lyw0lf ];
+    mainProgram = "sanic";
   };
 }

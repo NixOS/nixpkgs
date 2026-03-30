@@ -1,19 +1,22 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, result
-, seq
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  result,
+  seq,
 }:
 
 buildDunePackage rec {
   pname = "tiny_httpd";
-  version = "0.12";
+  version = "0.16";
 
-  minimalOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1z9hzc0ib7pg9fsjmpggjqwrnip57izr2v0na7vc7s25lxsiag6a";
+    sha256 = "sha256-9L4WCduQNj5Jd/u3SozuXiGTkgojwfGIP5KgQmnWgQw=";
   };
 
   buildInputs = [ result ];
@@ -24,5 +27,6 @@ buildDunePackage rec {
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "http_of_dir";
   };
 }

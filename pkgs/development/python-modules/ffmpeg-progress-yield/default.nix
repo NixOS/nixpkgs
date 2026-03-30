@@ -1,33 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, tqdm
-, pytestCheckHook
-, ffmpeg
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  uv-build,
+  tqdm,
+  pytest-asyncio,
+  pytestCheckHook,
+  ffmpeg,
+  procps,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.3.0";
+  version = "1.1.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-/FkVzssJZYafn3MlN8bODd7kA917x9oW0JivIOWxl+8=";
+  src = fetchFromGitHub {
+    owner = "slhck";
+    repo = "ffmpeg-progress-yield";
+    tag = "v${version}";
+    hash = "sha256-Cy2ShWEwtfk/eDCXZL3qPrTRMJZtCtjOVHfmW0NbuN4=";
   };
 
-  propagatedBuildInputs = [ colorama tqdm ];
+  build-system = [ uv-build ];
 
-  checkInputs = [ pytestCheckHook ffmpeg ];
+  dependencies = [
+    tqdm
+  ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    ffmpeg
+    procps
+  ];
+
+  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
+    # cannot access /usr/bin/pgrep from the sandbox
+    "test_context_manager"
+    "test_context_manager_with_exception"
+    "test_automatic_cleanup_on_exception"
+    "test_async_context_manager"
+    "test_async_context_manager_with_exception"
+    "test_async_automatic_cleanup_on_exception"
+  ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Run an ffmpeg command with progress";
+    mainProgram = "ffmpeg-progress-yield";
     homepage = "https://github.com/slhck/ffmpeg-progress-yield";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    changelog = "https://github.com/slhck/ffmpeg-progress-yield/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

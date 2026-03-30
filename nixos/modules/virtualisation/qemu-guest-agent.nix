@@ -1,31 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.qemuGuest;
-in {
+in
+{
 
   options.services.qemuGuest = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Whether to enable the qemu guest agent.";
-      };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.qemu_kvm.ga;
-        defaultText = literalExpression "pkgs.qemu_kvm.ga";
-        description = lib.mdDoc "The QEMU guest agent package.";
-      };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to enable the qemu guest agent.";
+    };
+    package = mkPackageOption pkgs [ "qemu_kvm" "ga" ] { };
   };
 
-  config = mkIf cfg.enable (
-      mkMerge [
+  config = mkIf cfg.enable (mkMerge [
     {
 
       services.udev.extraRules = ''
-        SUBSYSTEM=="virtio-ports", ATTR{name}=="org.qemu.guest_agent.0", TAG+="systemd" ENV{SYSTEMD_WANTS}="qemu-guest-agent.service"
+        SUBSYSTEM=="virtio-ports", ATTR{name}=="org.qemu.guest_agent.0", TAG+="systemd", ENV{SYSTEMD_WANTS}="qemu-guest-agent.service"
       '';
 
       systemd.services.qemu-guest-agent = {
@@ -40,6 +40,5 @@ in {
         };
       };
     }
-  ]
-  );
+  ]);
 }

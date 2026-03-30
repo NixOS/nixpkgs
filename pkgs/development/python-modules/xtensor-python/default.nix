@@ -1,40 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, gtest
-, xtensor
-, pybind11
-, numpy
+{
+  lib,
+  stdenv,
+  toPythonModule,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  xtensor,
+  pybind11,
+  numpy,
 }:
 
-buildPythonPackage rec {
-  pname = "xtensor-python";
-  version = "0.25.1";
+toPythonModule (
+  stdenv.mkDerivation (finalAttrs: {
+    pname = "xtensor-python";
+    version = "0.29.0";
 
-  src = fetchFromGitHub {
-    owner = "xtensor-stack";
-    repo = pname;
-    rev = version;
-    sha256 = "17la76hn4r1jv67dzz8x2pzl608r0mnvz854407mchlzj6rhsxza";
-  };
+    src = fetchFromGitHub {
+      owner = "xtensor-stack";
+      repo = "xtensor-python";
+      tag = finalAttrs.version;
+      hash = "sha256-GN1X46gmeXh3pM6sw9sSUahLOxnSoimoY+K66vy8SxM=";
+    };
 
-  nativeBuildInputs = [ cmake pybind11 ];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ pybind11 ];
+    nativeCheckInputs = [ gtest ];
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    cmakeFlags = [
+      # Always build the tests, even if not running them, because testing whether
+      # they can be built is a test in itself.
+      (lib.cmakeBool "BUILD_TESTS" true)
+    ];
 
-  propagatedBuildInputs = [ xtensor numpy ];
+    propagatedBuildInputs = [
+      xtensor
+      numpy
+    ];
 
-  dontUseSetuptoolsBuild = true;
-  dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
+    checkTarget = "xtest";
 
-  checkInputs = [
-    gtest
-  ];
-
-  meta = with lib; {
-    homepage = "https://github.com/xtensor-stack/xtensor-python";
-    description = "Python bindings for the xtensor C++ multi-dimensional array library";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lsix ];
-  };
-}
+    meta = {
+      homepage = "https://github.com/xtensor-stack/xtensor-python";
+      description = "Python bindings for the xtensor C++ multi-dimensional array library";
+      license = lib.licenses.bsd3;
+    };
+  })
+)

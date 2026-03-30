@@ -1,66 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, build
-, git
-, importlib-metadata
-, pep517
-, pytest-mock
-, pytestCheckHook
-, setuptools
-, tomlkit
-, virtualenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  build,
+  gitMinimal,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+  tomli-w,
+  trove-classifiers,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.3.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
-    rev = version;
-    hash = "sha256-3Ryfq0MwrL/mKP8DmkhLOyFlulf3c73z9fFIzMuqOrg=";
+    repo = "poetry-core";
+    tag = version;
+    hash = "sha256-gGXAPdFnrS/T7xvw8rpzI/7nW0bXdUiZnPeEwDgtWuQ=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     build
-    git
-    pep517
+    gitMinimal
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
     setuptools
-    tomlkit
+    tomli-w
+    trove-classifiers
     virtualenv
   ];
 
-  # Requires git history to work correctly
   disabledTests = [
+    # Requires git history to work correctly
     "default_with_excluded_data"
     "default_src_with_excluded_data"
+    "test_package_with_include"
+    # Distribution timestamp mismatches, as we operate on 1980-01-02
+    "test_sdist_mtime_zero"
+    "test_sdist_members_mtime_default"
+    "test_dist_info_date_time_default_value"
   ];
 
-  pythonImportsCheck = [
-    "poetry.core"
-  ];
+  pythonImportsCheck = [ "poetry.core" ];
 
-  # Allow for package to use pep420's native namespaces
-  pythonNamespaces = [
-    "poetry"
-  ];
+  # Allow for packages to use PEP420's native namespace
+  pythonNamespaces = [ "poetry" ];
 
-  meta = with lib; {
-    description = "Core utilities for Poetry";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
+
+  meta = {
+    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.tag}/CHANGELOG.md";
+    description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.python ];
   };
 }

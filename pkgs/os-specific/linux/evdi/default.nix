@@ -1,42 +1,86 @@
-{ lib, stdenv, fetchFromGitHub, kernel, libdrm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  libdrm,
+  python3,
+}:
 
-stdenv.mkDerivation rec {
+let
+  python3WithLibs = python3.withPackages (
+    ps: with ps; [
+      pybind11
+    ]
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.12.0";
+  version = "1.14.15";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JZKZ7+1OMbBtUA7pAZ41TzeDDyiD0h7yTXJINJ5FjN4=";
+    repo = "evdi";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tms+UNws+oBmwLvDFaDSIa/bUdSpK+CADodbsip3tRg=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
+  prePatch = ''
+    substituteInPlace module/Makefile \
+      --replace-fail '/etc/os-release' '/dev/null'
+  '';
+
+  env.CFLAGS = toString [
+    "-Wno-error"
+    "-Wno-error=sign-compare"
+  ];
+
+  postBuild = ''
+    # Don't use makeFlags for userspace stuff
+    make library pyevdi
+  '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildInputs = [ kernel libdrm ];
-
-  makeFlags = kernel.makeFlags ++ [
-    "KVER=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  buildInputs = [
+    kernel
+    libdrm
+    python3WithLibs
   ];
 
-  hardeningDisable = [ "format" "pic" "fortify" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KVER=${kernel.modDirVersion}"
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "module"
+  ];
+
+  hardeningDisable = [
+    "format"
+    "pic"
+    "fortify"
+  ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    broken = kernel.kernelOlder "4.19";
+    changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${finalAttrs.version}";
     description = "Extensible Virtual Display Interface";
-    maintainers = with maintainers; [ eyjhb ];
-    platforms = platforms.linux;
-    license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = kernel.kernelOlder "4.19" || stdenv.isAarch64;
+    license = with lib.licenses; [
+      mit
+      lgpl21Plus
+      gpl2Only
+    ];
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

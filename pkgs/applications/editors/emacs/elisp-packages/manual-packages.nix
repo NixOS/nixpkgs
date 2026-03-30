@@ -1,95 +1,64 @@
 { lib, pkgs }:
 
-self: with self; {
+self:
+let
+  inherit (self) callPackage;
+in
+lib.packagesFromDirectoryRecursive {
+  inherit callPackage;
+  directory = ./manual-packages;
+}
+// {
+  inherit (pkgs) emacspeak;
 
-  agda-input = callPackage ./manual-packages/agda-input { };
-
-  agda2-mode = callPackage ./manual-packages/agda2-mode { };
-
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
-
-  cask = callPackage ./manual-packages/cask { };
-
-  control-lock = callPackage ./manual-packages/control-lock { };
-
-  ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
-
-  elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
-
-  emacspeak = callPackage ./manual-packages/emacspeak { };
-
-  ement = callPackage ./manual-packages/ement { };
-
-  ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
-
-  evil-markdown = callPackage ./manual-packages/evil-markdown { };
-
-  font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
-
-  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
-
-  git-undo = callPackage ./manual-packages/git-undo { };
-
-  haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
-
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
-
-  helm-words = callPackage ./manual-packages/helm-words { };
-
-  idris2-mode = callPackage ./manual-packages/idris2-mode { };
-
-  isearch-plus = callPackage ./manual-packages/isearch-plus { };
-
-  isearch-prop = callPackage ./manual-packages/isearch-prop { };
-
-  jam-mode = callPackage ./manual-packages/jam-mode { };
-
-  llvm-mode = callPackage ./manual-packages/llvm-mode { };
-
-  matrix-client = callPackage ./manual-packages/matrix-client {
-    _map = self.map;
+  codeium = callPackage ./manual-packages/codeium {
+    inherit (pkgs) codeium;
   };
 
-  nano-theme = callPackage ./manual-packages/nano-theme { };
+  eaf-browser = callPackage ./manual-packages/eaf-browser {
+    inherit (pkgs) aria2;
+  };
 
-  ott-mode = callPackage ./manual-packages/ott-mode { };
+  eaf-git = callPackage ./manual-packages/eaf-git {
+    inherit (pkgs) ripgrep;
+  };
 
-  perl-completion = callPackage ./manual-packages/perl-completion { };
+  elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
 
-  pod-mode = callPackage ./manual-packages/pod-mode { };
+  lsp-bridge = callPackage ./manual-packages/lsp-bridge {
+    inherit (pkgs)
+      basedpyright
+      git
+      go
+      gopls
+      python3
+      ;
+  };
 
-  power-mode = callPackage ./manual-packages/power-mode { };
+  lua = callPackage ./manual-packages/lua { inherit (pkgs) lua; };
 
-  prisma-mode = callPackage ./manual-packages/prisma-mode { };
+  straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
 
   structured-haskell-mode = self.shm;
 
-  sv-kalender = callPackage ./manual-packages/sv-kalender { };
+  texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
-  tsc = callPackage ./manual-packages/tsc { };
-
-  urweb-mode = callPackage ./manual-packages/urweb-mode { };
-
-  voicemacs = callPackage ./manual-packages/voicemacs { };
-
-  yes-no = callPackage ./manual-packages/yes-no { };
-
-  youtube-dl = callPackage ./manual-packages/youtube-dl { };
-
-  # From old emacsPackages (pre emacsPackagesNg)
-  cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
-  color-theme-solarized = callPackage ./manual-packages/color-theme-solarized { };
-  hsc3-mode = callPackage ./manual-packages/hsc3 { };
-  prolog-mode = callPackage ./manual-packages/prolog { };
-  rect-mark = callPackage ./manual-packages/rect-mark { };
-  session-management-for-emacs = callPackage ./manual-packages/session-management-for-emacs { };
-  sunrise-commander = callPackage ./manual-packages/sunrise-commander { };
+  zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
 
   # camelCase aliases for some of the kebab-case expressions above
-  colorThemeSolarized = color-theme-solarized;
-  emacsSessionManagement = session-management-for-emacs;
-  rectMark = rect-mark;
-  sunriseCommander = sunrise-commander;
+  colorThemeSolarized = self.color-theme-solarized;
+  emacsSessionManagement = self.session-management-for-emacs;
+  rectMark = self.rect-mark;
+  sunriseCommander = self.sunrise-commander;
+}
+### Aliases
+// lib.optionalAttrs pkgs.config.allowAliases {
+  agda-input = throw "emacsPackages.agda-input is contained in emacsPackages.agda2-mode, please use that instead."; # Added 2024-07-17
+  ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
+  ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
+  haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17
+  matrix-client = throw "emacsPackages.matrix-client is deprecated in favor of emacsPackages.ement."; # Added 2024-08-17
+  perl-completion = throw "emacsPackages.perl-completion was removed, since it is broken."; # Added 2024-07-19
 }

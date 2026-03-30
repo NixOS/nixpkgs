@@ -1,53 +1,64 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, numpy
-, protobuf
-, pythonOlder
-, requests
-, six
-, torch
-, tqdm
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # build-system
+  setuptools,
+  # dependencies
+  emoji,
+  networkx,
+  numpy,
+  peft,
+  protobuf,
+  requests,
+  torch,
+  tqdm,
+  transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stanza";
-  version = "1.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-v4/wYfXqOwSXxx864LNxviRtsqu5DXqs9diswA1oZXc=";
+    repo = "stanza";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zY2+8QuPJTX/HSkE/gKMCWpSanKpYSGZeeYgb4eFuuw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     emoji
+    networkx
     numpy
+    peft
     protobuf
     requests
-    six
     torch
     tqdm
     transformers
   ];
 
-  # Tests require network access
+  # Most tests require resources from the network (models). Many of the ones that do run are slow
+  # and some of them fail.
+  #
+  # Maintaining a list of "tests we can actually run in CI" isn't feasible, there are WAY too many
+  # exceptions and no useful pytest marks.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stanza"
-  ];
+  pythonImportsCheck = [ "stanza" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Stanford NLP Python Library for Many Human Languages";
     homepage = "https://github.com/stanfordnlp/stanza/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ riotbib ];
+    changelog = "https://github.com/stanfordnlp/stanza/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      riotbib
+      Stebalien
+    ];
   };
-}
+})

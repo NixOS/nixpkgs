@@ -1,55 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rcssmin
-, rjsmin
-, django-appconf
-, beautifulsoup4
-, brotli
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  django,
+  django-appconf,
+  rcssmin,
+  rjsmin,
+
+  # tests
+  beautifulsoup4,
+  brotli,
+  calmjs,
+  csscompressor,
+  django-sekizai,
+  jinja2,
+  pytestCheckHook,
+  pytest-django,
+
 }:
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.1";
-  format = "setuptools";
+  version = "4.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "django_compressor";
-    inherit version;
-    hash = "sha256-js5iHSqY9sZjVIDLizcB24kKmfeT+VyiDLAKvBlNMx0=";
+  src = fetchFromGitHub {
+    owner = "django-compressor";
+    repo = "django-compressor";
+    tag = version;
+    hash = "sha256-ymht/nl3UUFXLc54aqDADXArVG6jUNQppBJCNKp2P68=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rcssmin == 1.1.0" "rcssmin>=1.1.0" \
-      --replace "rjsmin == 1.2.0" "rjsmin>=1.2.0"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    django
+    django-appconf
     rcssmin
     rjsmin
-    django-appconf
   ];
 
-  pythonImportsCheck = [
-    "compressor"
-  ];
+  env.DJANGO_SETTINGS_MODULE = "compressor.test_settings";
 
-  doCheck = false; # missing package django-sekizai
-
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     brotli
+    calmjs
+    csscompressor
+    django-sekizai
+    jinja2
     pytestCheckHook
+    pytest-django
   ];
 
-  DJANGO_SETTINGS_MODULE = "compressor.test_settings";
+  # Getting error: compressor.exceptions.OfflineGenerationError: You have
+  # offline compression enabled but key "..." is missing from offline manifest.
+  # You may need to run "python manage.py compress"
+  disabledTestPaths = [ "compressor/tests/test_offline.py" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # we set mtime to 1980-01-02
+    "test_css_mtimes"
+  ];
+
+  pythonImportsCheck = [ "compressor" ];
+
+  meta = {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";
-    homepage = "https://django-compressor.readthedocs.org/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ desiderius ];
+    homepage = "https://django-compressor.readthedocs.org/";
+    changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
+    license = lib.licenses.mit;
   };
 }

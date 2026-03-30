@@ -1,85 +1,82 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, fetchpatch
-, fsspec
-, huggingface-hub
-, importlib-metadata
-, multiprocess
-, numpy
-, packaging
-, pandas
-, pyarrow
-, pythonOlder
-, requests
-, responses
-, tqdm
-, xxhash
-}:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # build-system
+  setuptools,
 
+  # dependencies
+  dill,
+  filelock,
+  fsspec,
+  httpx,
+  huggingface-hub,
+  multiprocess,
+  numpy,
+  pandas,
+  pyarrow,
+  pyyaml,
+  requests,
+  tqdm,
+  xxhash,
+}:
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.6.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
+    repo = "datasets";
+    tag = version;
+    hash = "sha256-K8JqIbYz3ZfT1t1h5dRGCo9kBQp0E+kElqzaw2InaOI=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Backport support for dill<3.7
-      url = "https://github.com/huggingface/datasets/pull/5166.patch";
-      hash = "sha256-QigpXKHi2B60M/iIWSqvBU9hW5vBu6IHGML22aCMevo=";
-    })
+  build-system = [
+    setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "responses<0.19" "responses"
-  '';
-
-  propagatedBuildInputs = [
-    aiohttp
+  dependencies = [
     dill
+    filelock
     fsspec
+    httpx
     huggingface-hub
     multiprocess
     numpy
-    packaging
     pandas
     pyarrow
+    pyyaml
     requests
-    responses
     tqdm
     xxhash
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  ]
+  ++ fsspec.optional-dependencies.http;
+
+  pythonRelaxDeps = [
+    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
+    # "pin until dill has official support for determinism"
+    "dill"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L127
+    "multiprocess"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L130
+    "fsspec"
   ];
 
-  # Tests require pervasive internet access.
+  # Tests require pervasive internet access
   doCheck = false;
 
-  # Module import will attempt to create a cache directory.
+  # Module import will attempt to create a cache directory
   postFixup = "export HF_MODULES_CACHE=$TMPDIR";
 
-  pythonImportsCheck = [
-    "datasets"
-  ];
+  pythonImportsCheck = [ "datasets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-access datasets and evaluation metrics for natural language processing";
+    mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
-    changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/huggingface/datasets/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ osbm ];
   };
 }

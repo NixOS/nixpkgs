@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "wrapio";
   version = "2.0.0";
-
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CUocIbdZ/tJQCxAHzhFpB267ynlXf8Mu+thcRRc0yeg=";
+    hash = "sha256-CUocIbdZ/tJQCxAHzhFpB267ynlXf8Mu+thcRRc0yeg=";
   };
 
-  doCheck = false;
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "wrapio" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/Exahilosys/wrapio";
+  meta = {
     description = "Handling event-based streams";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    homepage = "https://github.com/Exahilosys/wrapio";
+    changelog = "https://github.com/Exahilosys/wrapio/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

@@ -1,31 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, idna
-, multidict
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  expandvars,
+  setuptools,
+  idna,
+  multidict,
+  propcache,
+  hypothesis,
+  pydantic,
+  pytest-codspeed,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.8.1";
+  version = "1.23.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-r4h4RbjC4GDrVgX/crby3SqrenYTeTc/2J0xT0dSq78=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "yarl";
+    tag = "v${version}";
+    hash = "sha256-vjWV9fgBg7Mw54hsXWnO81CxJCe9WzB0okMEUz1KRAc=";
   };
 
-  postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
-  '';
+  build-system = [
+    cython
+    expandvars
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     idna
     multidict
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+    propcache
   ];
 
   preCheck = ''
@@ -33,7 +45,12 @@ buildPythonPackage rec {
     pushd tests
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    hypothesis
+    pydantic
+    pytest-codspeed
+    pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -43,10 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yarl" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/aio-libs/yarl/blob/${src.tag}/CHANGES.rst";
     description = "Yet another URL library";
     homepage = "https://github.com/aio-libs/yarl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

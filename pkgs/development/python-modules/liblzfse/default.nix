@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lzfse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lzfse,
 }:
 buildPythonPackage rec {
   pname = "pyliblzfse";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,14 +22,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "liblzfse"
-  ];
+  pythonImportsCheck = [ "liblzfse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for LZFSE";
     homepage = "https://github.com/ydkhatri/pyliblzfse";
-    license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

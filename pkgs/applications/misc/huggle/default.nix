@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, ncurses
-, which
-, cmake
-, unzip
-, wrapQtAppsHook
-, qtwebengine
-, libyamlcpp
-, libirc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  which,
+  cmake,
+  wrapQtAppsHook,
+  qtwebengine,
+  yaml-cpp,
+  libirc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "huggle";
-  version = "3.4.10";
+  version = "3.4.13";
 
   src = fetchFromGitHub {
     owner = "huggle";
     repo = "huggle3-qt-lx";
     rev = version;
-    sha256 = "UzoX4kdzYU50W0MUhfpo0HaSfvG3eINNC8u5t/gKuqI=";
+    sha256 = "sha256-f7Oo6x262Ju9KY8f/xjm9gL6I1fRCaDsQWGWJMUNUfY=";
     fetchSubmodules = true;
   };
 
@@ -30,9 +30,17 @@ stdenv.mkDerivation rec {
     which
     cmake
   ];
-  buildInputs = [ ncurses libyamlcpp qtwebengine libirc ];
+  buildInputs = [
+    ncurses
+    yaml-cpp
+    qtwebengine
+    libirc
+  ];
 
-  patches = [ ./00-remove-third-party.patch ./01-extensions.patch ];
+  patches = [
+    ./00-remove-third-party.patch
+    ./01-extensions.patch
+  ];
   postPatch = ''
     rm -r src/3rd
     echo ${version} > src/huggle_core/version.txt
@@ -40,9 +48,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace '@libirc_includes@' '${libirc.out}'
   '';
 
+  cmakeBuildType = "None";
+
   cmakeFlags = [
-    "-S" "/build/source/src"
-    "-DCMAKE_BUILD_TYPE=None"
+    "-S"
+    "/build/source/src"
     "-DINSTALL_DATA_DIR=bin"
     "-DQT5_BUILD=ON"
     "-DWEB_ENGINE=ON"
@@ -53,11 +63,12 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ];
 
-  meta = with lib; {
+  meta = {
     description = "Anti-vandalism tool for use on MediaWiki-based projects";
+    mainProgram = "huggle";
     homepage = "https://github.com/huggle/huggle3-qt-lx";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.fee1-dead ];
-    platforms = platforms.x86_64;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.fee1-dead ];
+    platforms = lib.platforms.x86_64;
   };
 }

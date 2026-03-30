@@ -1,34 +1,52 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, numpy
-, dill
-, astropy
-, scipy
-, pandas
-, pytestCheckHook
-, lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  h5py,
+  numpy,
+  dill,
+  astropy,
+  scipy,
+  pandas,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
-  version = "5.0.2";
-  disabled = pythonOlder "3.5";
+  pname = "hickle";
+  version = "5.0.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
+    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini --replace "--cov=./hickle" ""
-  '';
+  patches = [
+    # fixes support for numpy 2.x, the PR is not yet merged https://github.com/telegraphic/hickle/pull/186
+    # FIXME: Remove this patch when the numpy 2.x support arrives
+    ./numpy-2.x-support.patch
+    # fixes test failing with numpy 2.3 as ndarray.tostring was deleted
+    # FIXME: delete once https://github.com/telegraphic/hickle/pull/187 is merged
+    ./numpy-2.3-ndarray-tostring.patch
+  ];
 
-  propagatedBuildInputs = [ h5py numpy dill ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook scipy pandas astropy
+  dependencies = [
+    dill
+    h5py
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    astropy
+    pandas
+    pytestCheckHook
+    pytest-cov-stub
+    scipy
   ];
 
   pythonImportsCheck = [ "hickle" ];
@@ -36,6 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

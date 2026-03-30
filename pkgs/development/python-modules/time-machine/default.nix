@@ -1,38 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, backports-zoneinfo
-, python-dateutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  python-dateutil,
+  tokenize-rt,
+  freezegun,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "time-machine";
-  version = "2.8.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-EFlvO9QlOP351kZAFQ+hwghL+7m+Cin/OyLV3NX+y8E=";
+    repo = "time-machine";
+    tag = finalAttrs.version;
+    hash = "sha256-UWoKvNz0ojVZtkIUGT02zJitza+mkyToANQMsU64xL4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
-  checkInputs = [
+  optional-dependencies.cli = [
+    tokenize-rt
+  ];
+
+  nativeCheckInputs = [
+    freezegun
     pytestCheckHook
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cli;
 
-  disabledTests = lib.optionals (pythonAtLeast "3.9") [
+  disabledTests = [
+    # https://github.com/adamchainz/time-machine/issues/405
+    "test_destination_string_naive"
     # Assertion Errors related to Africa/Addis_Ababa
     "test_destination_datetime_tzinfo_zoneinfo_nested"
     "test_destination_datetime_tzinfo_zoneinfo_no_orig_tz"
@@ -40,14 +47,13 @@ buildPythonPackage rec {
     "test_move_to_datetime_with_tzinfo_zoneinfo"
   ];
 
-  pythonImportsCheck = [
-    "time_machine"
-  ];
+  pythonImportsCheck = [ "time_machine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/adamchainz/time-machine/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

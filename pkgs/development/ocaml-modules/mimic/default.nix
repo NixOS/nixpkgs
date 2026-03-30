@@ -1,21 +1,29 @@
-{ lib, buildDunePackage, fetchurl
-, fmt, mirage-flow, cstruct, logs, ke, lwt
-, alcotest, alcotest-lwt, bigstringaf
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-flow,
+  cstruct,
+  logs,
+  ke,
+  lwt,
+  alcotest,
+  alcotest-lwt,
+  bigstringaf,
 }:
 
 buildDunePackage rec {
   pname = "mimic";
-  version = "0.0.5";
+  version = "0.0.9";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
-    sha256 = "sha256-3qFjttVLgXKHOsr71550z7aVBcHPYzwdFeMpwHgWPa0=";
+    hash = "sha256-lU3xzrVIqSKnhUQIhaXRamr39zXWw3DtNdM5EUtp4p8=";
   };
 
   propagatedBuildInputs = [
-    fmt
     lwt
     mirage-flow
     logs
@@ -30,10 +38,10 @@ buildDunePackage rec {
     ke
   ];
 
-  meta = with lib; {
-    description = "A simple protocol dispatcher";
-    license = licenses.isc;
+  meta = {
+    description = "Simple protocol dispatcher";
+    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ocaml-git";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

@@ -1,49 +1,42 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, setuptools-scm
-, pytestCheckHook
-, ApplicationServices
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  pkgconfig,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.24.1";
-  format = "setuptools";
+  version = "0.53.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  # Fetching from GitHub as Pypi contains different versions
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "uharfbuzz";
-    rev = "v${version}";
-    sha256 = "sha256-DyFXbwB28JH2lvmWDezRh49tjCvleviUNSE5LHG3kUg=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-EY5jAzcAHY4lmGsitVFtFMijEfAaSCifCjkdJhU2N1g=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     cython
+    pkgconfig
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "uharfbuzz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streamlined Cython bindings for the harfbuzz shaping engine";
     homepage = "https://github.com/harfbuzz/uharfbuzz";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

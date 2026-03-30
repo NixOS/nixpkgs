@@ -1,56 +1,82 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-auth
-, google-cloud-iam
-, google-cloud-core
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  google-auth,
+  google-cloud-core,
+  google-cloud-iam,
+  google-cloud-kms,
+  google-cloud-testutils,
+  google-resumable-media,
+  mock,
+  protobuf,
+  pytestCheckHook,
+  pytest-asyncio,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "3.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OC80uR3iIS48LntA7AedJ+4uPbuumbdbG82MYwY84jU=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-storage";
+    tag = "v${version}";
+    hash = "sha256-CHku6tiELE3deP6ZCRx/ekn60FmF3gO51cOAF1DkQrI=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "google-auth" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     google-cloud-core
     google-resumable-media
+    requests
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    protobuf = [ protobuf ];
+  };
+
+  nativeCheckInputs = [
     google-cloud-iam
     google-cloud-kms
     google-cloud-testutils
     mock
     pytestCheckHook
+    pytest-asyncio
   ];
 
-  # disable tests which require credentials and network access
+  enabledTestPaths = [
+    "tests/unit/"
+    "tests/system/"
+  ];
+
   disabledTests = [
+    # Disable tests which require credentials and network access
     "create"
     "download"
     "get"
     "post"
-    "upload"
+    "test_anonymous_client_access_to_public_bucket"
     "test_build_api_url"
     "test_ctor_mtls"
+    "test_ctor_w_api_endpoint_override"
+    "test_ctor_w_custom_endpoint_use_auth"
     "test_hmac_key_crud"
     "test_list_buckets"
     "test_open"
-    "test_anonymous_client_access_to_public_bucket"
+    "test_restore_bucket"
+    "test_set_api_request_attr"
+    "upload"
+    "test_update_user_agent_when_default_clientinfo_provided"
+    "test_update_user_agent_when_none_clientinfo_provided"
+    "test_update_user_agent_with_existing_user_agent"
   ];
 
   disabledTestPaths = [
@@ -59,6 +85,7 @@ buildPythonPackage rec {
     "tests/system/test_bucket.py"
     "tests/system/test_fileio.py"
     "tests/system/test_kms_integration.py"
+    "tests/unit/test_transfer_manager.py"
   ];
 
   preCheck = ''
@@ -71,10 +98,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.storage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/googleapis/python-storage/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

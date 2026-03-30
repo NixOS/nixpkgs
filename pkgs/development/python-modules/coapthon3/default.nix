@@ -1,15 +1,22 @@
-{ buildPythonPackage, cachetools, fetchFromGitHub, isPy27, lib }:
+{
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  isPy27,
+  lib,
+}:
 
 buildPythonPackage rec {
-  pname = "CoAPthon3";
+  pname = "coapthon3";
   version = "1.0.2";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Tanganelli";
-    repo = pname;
+    repo = "CoAPthon3";
     rev = version;
-    sha256 = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
+    hash = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
   };
 
   propagatedBuildInputs = [ cachetools ];
@@ -18,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "coapthon" ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
-    description = "Python3 library to the CoAP protocol compliant with the RFC.";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urbas ];
+    description = "Python3 library to the CoAP protocol compliant with the RFC";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urbas ];
   };
 }

@@ -1,52 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, paramiko
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paramiko,
+  pytestCheckHook,
+  requests,
+  requests-toolbelt,
+  responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "1.3.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-FY0JLDBoKmh85VoKh3UuPPRbMAIjs3l/fZM4owniH1c=";
+    owner = "proxmoxer";
+    repo = "proxmoxer";
+    rev = "cf1bcde696537c74ef00d8e71fb86735fb4c2c79";
+    hash = "sha256-h5Sla7/4XiZSGwKstyiqs/T2Qgi13jI9YMVPqDcF3sA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     paramiko
     requests
   ];
 
-  checkInputs = [
-    mock
-    nose
+  nativeCheckInputs = [
     pytestCheckHook
+    requests-toolbelt
+    responses
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # Tests require openssh_wrapper which is outdated and not available
-    "tests/paramiko_tests.py"
+    "tests/test_openssh.py"
   ];
 
-  pythonImportsCheck = [
-    "proxmoxer"
+  disabledTests = [
+    # Tests require openssh_wrapper which is outdated and not available
+    "test_repr_openssh"
+
+    # Test fails randomly
+    "test_timeout"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "proxmoxer" ];
+
+  meta = {
     description = "Python wrapper for Proxmox API v2";
     homepage = "https://github.com/proxmoxer/proxmoxer";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${version}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

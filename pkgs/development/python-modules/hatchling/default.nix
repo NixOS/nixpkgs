@@ -1,46 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# runtime
-, editables
-, importlib-metadata # < 3.8
-, packaging
-, pathspec
-, pluggy
-, tomli
+  # runtime
+  editables,
+  packaging,
+  pathspec,
+  pluggy,
+  trove-classifiers,
 
-# tests
-, build
-, python
-, requests
-, virtualenv
+  # tests
+  build,
+  python,
+  requests,
+  virtualenv,
 }:
 
-let
+buildPythonPackage rec {
   pname = "hatchling";
-  version = "1.9.0";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "pyproject";
+  version = "1.29.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tXxzYvQ3uUJuS5QiiiHSrFgE+7KrywGt3iVEo1uzA80=";
+    hash = "sha256-eTwxgW2VLO5AW4NIjOABxxnzJdnNpp8fxM11BSdkDqY=";
   };
 
-  # listed in backend/src/hatchling/ouroboros.py
-  propagatedBuildInputs = [
+  # listed in backend/pyproject.toml
+  dependencies = [
     editables
     packaging
     pathspec
     pluggy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
+    trove-classifiers
   ];
 
   pythonImportsCheck = [
@@ -52,15 +45,14 @@ buildPythonPackage {
   doCheck = false;
 
   # listed in /backend/tests/downstream/requirements.txt
-  checkInputs = [
+  nativeCheckInputs = [
     build
-    packaging
     requests
     virtualenv
   ];
 
   preCheck = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   checkPhase = ''
@@ -69,10 +61,15 @@ buildPythonPackage {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, extensible Python build backend";
+    mainProgram = "hatchling";
     homepage = "https://hatch.pypa.io/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ofek ];
+    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      hexa
+      ofek
+    ];
   };
 }

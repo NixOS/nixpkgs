@@ -1,32 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "buildcatrust";
-  version = "0.1.3";
+  version = "0.5.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256:0s0m0fy943dakw9cbd40h46qmrhhgrcp292kppyb34m6y27sbagy";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-I7f2LCQ8dGFOX/d04mOUll7IL7y5Qn1EPu9UO5496So=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ flit-core ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
   disabledTestPaths = [
     # Non-hermetic, needs internet access (e.g. attempts to retrieve NSS store).
     "buildcatrust/tests/test_nonhermetic.py"
   ];
 
-  pythonImportsCheck = [ "buildcatrust" "buildcatrust.cli" ];
+  pythonImportsCheck = [
+    "buildcatrust"
+    "buildcatrust.cli"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Build SSL/TLS trust stores";
+    mainProgram = "buildcatrust";
     homepage = "https://github.com/lukegb/buildcatrust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukegb ];
   };
-}
+})

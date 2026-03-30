@@ -1,60 +1,67 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  nixosTests,
+  nextcloud32Packages,
+  nextcloud33Packages,
+}:
 
 let
-  generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
-    pname = "nextcloud";
-    inherit version;
+  generic =
+    {
+      version,
+      hash,
+      eol ? false,
+      extraVulnerabilities ? [ ],
+      packages,
+    }:
+    stdenvNoCC.mkDerivation rec {
+      pname = "nextcloud";
+      inherit version;
 
-    src = fetchurl {
-      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      src = fetchurl {
+        url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
+        inherit hash;
+      };
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/
+        cp -R . $out/
+        runHook postInstall
+      '';
+
+      meta = {
+        changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
+        description = "Sharing solution for files, calendars, contacts and more";
+        homepage = "https://nextcloud.com";
+        teams = [ lib.teams.nextcloud ];
+        license = lib.licenses.agpl3Plus;
+        platforms = lib.platforms.linux;
+        knownVulnerabilities =
+          extraVulnerabilities ++ (lib.optional eol "Nextcloud version ${version} is EOL");
+      };
     };
-
-    patches = [ ./0001-Setup-remove-custom-dbuser-creation-behavior.patch ];
-
-    passthru.tests = nixosTests.nextcloud;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/
-      cp -R . $out/
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "Sharing solution for files, calendars, contacts and more";
-      homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
-      license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
-      knownVulnerabilities = extraVulnerabilities
-        ++ (optional eol "Nextcloud version ${version} is EOL");
-    };
-  };
-in {
-  nextcloud23 = throw ''
-    Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud24;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades accross multiple major versions!
-  '';
-
-  nextcloud24 = generic {
-    version = "24.0.7";
-    sha256 = "a1c7344a4eb27260a9f6f6e6f586bdc4fb35e1e9330e1a6e8d46c05634db6384";
+in
+{
+  nextcloud32 = generic {
+    version = "32.0.6";
+    hash = "sha256-RLwz/A4xplC7UguxI8CqplGbf3uThhM9Vhred+U/cTA=";
+    packages = nextcloud32Packages;
   };
 
-  nextcloud25 = generic {
-    version = "25.0.1";
-    sha256 = "72d4076924caf19139c40178597af6211799e20440ce196fb43b9c4e47d77515";
+  nextcloud33 = generic {
+    version = "33.0.0";
+    hash = "sha256-b3cwkCJpyHn58q1KoKInyxa1QI7kbwk/aL0yYz90Gr8=";
+    packages = nextcloud33Packages;
   };
 
   # tip: get the sha with:

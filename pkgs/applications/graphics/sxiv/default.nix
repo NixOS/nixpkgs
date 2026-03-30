@@ -1,22 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, libXft, imlib2, giflib, libexif, conf ? null }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxft,
+  imlib2,
+  giflib,
+  libexif,
+  conf ? null,
+}:
 
-with lib;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sxiv";
   version = "26";
 
   src = fetchFromGitHub {
     owner = "muennich";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sxiv";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xaawlfdy7b277m38mgg4423kd7p1ffn0dq4hciqs6ivbb3q9c4f";
   };
 
-  configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = lib.optionalString (conf != null) (builtins.toFile "config.def.h" conf);
+  preBuild = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h";
 
-  buildInputs = [ libXft imlib2 giflib libexif ];
+  buildInputs = [
+    libxft
+    imlib2
+    giflib
+    libexif
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -29,6 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/muennich/sxiv";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with lib.maintainers; [ h7x4 ];
+    mainProgram = "sxiv";
   };
-}
+})

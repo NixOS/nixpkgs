@@ -1,31 +1,48 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  poetry-core,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "aiorwlock";
-  version = "1.3.0";
+  version = "1.5.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-g/Eth99LlyiguP2hdWWFqw1lKxB7q1nGCE4bGtaSq0U=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiorwlock";
+    tag = "v${version}";
+    hash = "sha256-QwjwuXjaxE1Y+Jzn8hJXY4wKltAT8mdOM7jJ9MF+DhA=";
   };
 
-  checkInputs = [
-    pytestCheckHook
+  build-system = [ poetry-core ];
+
+  patches = [
+    # Fix cross-event-loop race condition in lock acquisition
+    # https://github.com/aio-libs/aiorwlock/pull/503
+    (fetchpatch {
+      url = "https://github.com/aio-libs/aiorwlock/commit/05608d401e4a68c69c6b9f421dd20535a9dbe523.patch?full_index=1";
+      hash = "sha256-97c6Li6nq7ViNvUIdPL8f/ATOSsmiAMaJeBFj+jPJcM=";
+    })
+  ];
+
+  nativeCheckInputs = [
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aiorwlock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read write lock for asyncio";
     homepage = "https://github.com/aio-libs/aiorwlock";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang ];
+    changelog = "https://github.com/aio-libs/aiorwlock/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ billhuang ];
   };
 }

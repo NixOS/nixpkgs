@@ -1,33 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hyperopt
-, mock
-, numpy
-, poetry-core
-, prometheus-client
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hyperopt,
+  mock,
+  numpy,
+  poetry-core,
+  prometheus-client,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
   version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Paperspace";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "19plkgwwfs6298vjplgsvhirixi3jbngq5y07x9c0fjxk39fa2dk";
+    repo = "gradient-utils";
+    tag = "v${version}";
+    hash = "sha256-swnl0phdOsBSP8AX/OySI/aYI9z60Ss3SsJox/mb9KY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     hyperopt
@@ -35,16 +31,19 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     requests
     pytestCheckHook
   ];
 
   postPatch = ''
+    # https://github.com/Paperspace/gradient-utils/issues/68
+    # https://github.com/Paperspace/gradient-utils/issues/72
     substituteInPlace pyproject.toml \
       --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
-      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"'
+      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"' \
+      --replace 'pymongo = "^3.11.0"' 'pymongo = ">=3.11.0"'
   '';
 
   preCheck = ''
@@ -56,15 +55,13 @@ buildPythonPackage rec {
     "tests/integration/test_metrics.py"
   ];
 
-  pythonImportsCheck = [
-    "gradient_utils"
-  ];
+  pythonImportsCheck = [ "gradient_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utils and helpers library for Gradient";
     homepage = "https://github.com/Paperspace/gradient-utils";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,43 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asn1crypto
-, cbor2
-, pythonOlder
-, pydantic
-, pyopenssl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  asn1crypto,
+  cbor2,
+  cryptography,
+  pyopenssl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "webauthn";
-  version = "1.6.0";
-  disabled = pythonOlder "3";
+  version = "2.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Ts0zKnQg1EaBNB9xQmzOpEVwDSFwHNjIhEP1jTwEOFI=";
+    tag = "v${version}";
+    hash = "sha256-aZDptKJPFU6Oo4vKkIWkqkJ5ogDe5x3v7PAQRixWFe4=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
     cbor2
-    pydantic
+    cryptography
     pyopenssl
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "webauthn" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/duo-labs/py_webauthn";
+  meta = {
     description = "Implementation of the WebAuthn API";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/duo-labs/py_webauthn";
+    changelog = "https://github.com/duo-labs/py_webauthn/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

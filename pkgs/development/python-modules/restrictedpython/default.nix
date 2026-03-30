@@ -1,34 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "5.2";
-  format = "setuptools";
+  version = "8.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "RestrictedPython";
-    inherit version;
-    sha256 = "sha256-Y02h9sXBIqJi9DOwg+49F6mgOfjxs3eFl++0dGHNNhs=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "RestrictedPython";
+    tag = version;
+    hash = "sha256-UcmH1I2p+XmQm4Y5M+Ms/LMSchor6GD6V9dxippa4HI=";
   };
 
-  checkInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 78.1.1,< 81" setuptools
+  '';
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "RestrictedPython"
-  ];
+  pythonImportsCheck = [ "RestrictedPython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ juaningan ];
+    changelog = "https://github.com/zopefoundation/RestrictedPython/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ juaningan ];
   };
 }

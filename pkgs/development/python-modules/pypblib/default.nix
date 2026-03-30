@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "pypblib";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypblib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pypblib/";
     description = "PBLib Python3 Bindings";
-    license = licenses.mit;
-    maintainers = [ maintainers.marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marius851000 ];
   };
 }

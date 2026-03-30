@@ -1,51 +1,78 @@
-{ lib
-, stdenv
-, fetchurl
-, guileSupport ? false, guile
-# avoid guile depend on bootstrap to prevent dependency cycles
-, inBootstrap ? false
-, pkg-config
-, gnumake
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gettext,
+  guileSupport ? false,
+  guile,
+  texinfo,
+  # avoid guile depend on bootstrap to prevent dependency cycles
+  inBootstrap ? false,
+  pkg-config,
+  gnumake,
 }:
 
 let
   guileEnabled = guileSupport && !inBootstrap;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
-  version = "4.3";
+  version = "4.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.gz";
-    sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
-  # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
-  patches = [
-    # Replaces /bin/sh with sh, see patch file for reasoning
-    ./0001-No-impure-bin-sh.patch
-    # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
-    # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
-    # included Makefiles, don't look in /usr/include and friends.
-    ./0002-remove-impure-dirs.patch
-  ];
+  # To update patches:
+  #  $ version=4.4.1
+  #  $ git clone https://git.savannah.gnu.org/git/make.git
+  #  $ cd make && git checkout -b nixpkgs $version
+  #  $ git am --directory=../patches
+  #  $ # make changes, resolve conflicts, etc.
+  #  $ git format-patch --output-directory ../patches --diff-algorithm=histogram $version
+  #
+  # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
+  # convenient to keep them in a separate directory but we can defer listing the
+  # directory until derivation realization to avoid unnecessary Nix evaluations.
+  patches = lib.filesystem.listFilesRecursive ./patches;
 
-  nativeBuildInputs = lib.optionals guileEnabled [ pkg-config ];
-  buildInputs = lib.optionals guileEnabled [ guile ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ]
+  ++ lib.optionals (!inBootstrap) [ texinfo ];
 
-  configureFlags = lib.optional guileEnabled "--with-guile"
+  buildInputs =
+    lib.optionals guileEnabled [ guile ]
+    # gettext gets pulled in via autoreconfHook because strictDeps is not set,
+    # and is linked against. Without this, it doesn't end up in HOST_PATH.
+    # TODO: enable strictDeps, and either make this dependency explicit, or remove it
+    ++ lib.optional stdenv.isCygwin gettext;
 
-    # Make uses this test to decide whether it should keep track of
-    # subseconds. Apple made this possible with APFS and macOS 10.13.
-    # However, we still support macOS 10.11 and 10.12. Binaries built
-    # in Nixpkgs will be unable to use futimens to set mtime less than
-    # a second. So, tell Make to ignore nanoseconds in mtime here by
-    # overriding the autoconf test for the struct.
-    # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
-    ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
+  configureFlags =
+    lib.optional guileEnabled "--with-guile"
+    # fnmatch.c:124:14: error: conflicting types for 'getenv'; have 'char *(void)'
+    ++ lib.optional stdenv.hostPlatform.isCygwin "CFLAGS=-std=gnu17";
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ]
+  ++ lib.optionals (!inBootstrap) [ "doc" ];
+
+  postBuild = lib.optionalString (!inBootstrap) ''
+    makeinfo --html --no-split doc/make.texi
+  '';
+
+  postInstall = lib.optionalString (!inBootstrap) ''
+    mkdir -p $doc/share/doc/$pname-$version
+    cp ./make.html $doc/share/doc/$pname-$version/index.html
+  '';
+
   separateDebugInfo = true;
 
   passthru.tests = {
@@ -53,8 +80,8 @@ stdenv.mkDerivation rec {
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
-  meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
+  meta = {
+    description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -66,10 +93,9 @@ stdenv.mkDerivation rec {
       to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
-
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vrthra ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

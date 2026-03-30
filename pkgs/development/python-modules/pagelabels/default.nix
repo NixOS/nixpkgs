@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, pdfrw }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pdfrw,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pagelabels";
-  version = "1.2.0";
+  version = "1.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "07as5kzyvj66bfgvx8bph8gkyj6cgm4lhgxwb78bpdl4m8y8kpma";
+    inherit (finalAttrs) pname version;
+    sha256 = "sha256-GAEyhECToKnIWBxnYTSOsYKZBjl50b/82mZ68i8I2ug=";
   };
 
-  buildInputs = [ pdfrw ];
+  dependencies = [
+    pdfrw
+  ];
 
   # upstream doesn't contain tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "Python library to manipulate PDF page labels.";
+  meta = {
+    description = "Python library to manipulate PDF page labels";
     homepage = "https://github.com/lovasoa/pagelabels-py";
-    maintainers = with maintainers; [ teto ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ teto ];
+    license = lib.licenses.gpl3;
   };
-}
+})

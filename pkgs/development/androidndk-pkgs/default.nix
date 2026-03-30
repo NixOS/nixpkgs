@@ -1,11 +1,16 @@
-{ lib, androidenv, buildPackages, pkgs, targetPackages
+{
+  lib,
+  androidenv,
+  buildPackages,
+  pkgs,
+  targetPackages,
+  config,
 }:
 
-{
-  "21" =
+let
+  makeNdkPkgs =
+    ndkVersion: llvmPackages:
     let
-      ndkVersion = "21.0.6113669";
-
       buildAndroidComposition = buildPackages.buildPackages.androidenv.composeAndroidPackages {
         includeNDK = true;
         inherit ndkVersion;
@@ -15,81 +20,40 @@
         includeNDK = true;
         inherit ndkVersion;
       };
+      majorVersion = lib.versions.major ndkVersion;
     in
     import ./androidndk-pkgs.nix {
-      inherit lib;
+      inherit config lib;
       inherit (buildPackages)
-        makeWrapper autoPatchelfHook;
+        makeWrapper
+        autoPatchelfHook
+        ;
       inherit (pkgs)
         stdenv
-        runCommand wrapBintoolsWith wrapCCWith;
+        runCommand
+        wrapBintoolsWith
+        wrapCCWith
+        ;
+
+      # For hardeningUnsupportedFlagsByTargetPlatform
+      inherit llvmPackages;
+
       # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
       # but for splicing messing up on infinite recursion for the variants we
       # *dont't* use. Using this workaround, but also making a test to ensure
       # these two really are the same.
       buildAndroidndk = buildAndroidComposition.ndk-bundle;
       androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_21;
+      targetAndroidndkPkgs =
+        if targetPackages ? "androidndkPkgs_${majorVersion}" then
+          targetPackages."androidndkPkgs_${majorVersion}"
+        else
+          throw "androidndkPkgs_${majorVersion}: no targetPackages, use `buildPackages.androidndkPkgs_${majorVersion}";
     };
+in
 
-  "23b" =
-    let
-      ndkVersion = "23.1.7779620";
-
-      buildAndroidComposition = buildPackages.buildPackages.androidenv.composeAndroidPackages {
-        includeNDK = true;
-        inherit ndkVersion;
-      };
-
-      androidComposition = androidenv.composeAndroidPackages {
-        includeNDK = true;
-        inherit ndkVersion;
-      };
-    in
-    import ./androidndk-pkgs.nix {
-      inherit lib;
-      inherit (buildPackages)
-        makeWrapper autoPatchelfHook;
-      inherit (pkgs)
-        stdenv
-        runCommand wrapBintoolsWith wrapCCWith;
-      # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
-      # but for splicing messing up on infinite recursion for the variants we
-      # *dont't* use. Using this workaround, but also making a test to ensure
-      # these two really are the same.
-      buildAndroidndk = buildAndroidComposition.ndk-bundle;
-      androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_23b;
-    };
-
-  "24" =
-    let
-      ndkVersion = "24.0.8215888";
-
-      buildAndroidComposition = buildPackages.buildPackages.androidenv.composeAndroidPackages {
-        includeNDK = true;
-        inherit ndkVersion;
-      };
-
-      androidComposition = androidenv.composeAndroidPackages {
-        includeNDK = true;
-        inherit ndkVersion;
-      };
-    in
-    import ./androidndk-pkgs.nix {
-      inherit lib;
-      inherit (buildPackages)
-        makeWrapper autoPatchelfHook;
-      inherit (pkgs)
-        stdenv
-        runCommand wrapBintoolsWith wrapCCWith;
-      # buildPackages.foo rather than buildPackages.buildPackages.foo would work,
-      # but for splicing messing up on infinite recursion for the variants we
-      # *dont't* use. Using this workaround, but also making a test to ensure
-      # these two really are the same.
-      buildAndroidndk = buildAndroidComposition.ndk-bundle;
-      androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_24;
-    };
-
+lib.recurseIntoAttrs {
+  "27" = makeNdkPkgs "27.0.12077973" pkgs.llvmPackages_18;
+  "28" = makeNdkPkgs "28.0.13004108" pkgs.llvmPackages_19;
+  "29" = makeNdkPkgs "29.0.14206865" pkgs.llvmPackages_21;
 }

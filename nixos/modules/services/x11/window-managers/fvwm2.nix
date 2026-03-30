@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -12,35 +17,34 @@ in
   imports = [
     (mkRenamedOptionModule
       [ "services" "xserver" "windowManager" "fvwm" ]
-      [ "services" "xserver" "windowManager" "fvwm2" ])
+      [ "services" "xserver" "windowManager" "fvwm2" ]
+    )
   ];
 
   ###### interface
 
   options = {
     services.xserver.windowManager.fvwm2 = {
-      enable = mkEnableOption (lib.mdDoc "Fvwm2 window manager");
+      enable = mkEnableOption "Fvwm2 window manager";
 
       gestures = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether or not to enable libstroke for gesture support";
+        description = "Whether or not to enable libstroke for gesture support";
       };
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "fvwm2";
-        start =
-          ''
-            ${fvwm2}/bin/fvwm &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "fvwm2";
+      start = ''
+        ${fvwm2}/bin/fvwm &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ fvwm2 ];
   };

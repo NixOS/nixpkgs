@@ -1,42 +1,46 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, libopus
-, pynacl
-, pythonOlder
-, withVoice ? true
-, ffmpeg
+{
+  lib,
+  stdenv,
+  aiohttp,
+  audioop-lts,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ffmpeg,
+  libopus,
+  pynacl,
+  setuptools,
+  withVoice ? true,
 }:
 
-buildPythonPackage rec {
+let
   pname = "discord.py";
-  version = "2.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "2.6.4";
+in
+buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rapptz";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DX9AmVhwP7XgzUApY8d+UB6LGqymErsaSzaisuKAOB0=";
+    repo = "discord.py";
+    tag = "v${version}";
+    hash = "sha256-glFXgTNdOQ3cG/jlvi/1ASon2HpcoKli45IhLhjpIvA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ] ++ lib.optionals withVoice [
-    libopus
-    pynacl
-    ffmpeg
-  ];
+  build-system = [ setuptools ];
 
-  patchPhase = ''
+  dependencies = [
+    aiohttp
+    audioop-lts
+  ]
+  ++ lib.optionals withVoice [ pynacl ];
+
+  patchPhase = lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \
-      --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
-  '' + lib.optionalString withVoice ''
+      --replace-fail "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+
     substituteInPlace "discord/player.py" \
-      --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
+      --replace-fail "executable: str = 'ffmpeg'" "executable: str = '${lib.getExe ffmpeg}'"
   '';
 
   # Only have integration tests with discord
@@ -44,19 +48,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "discord"
-    "discord.file"
-    "discord.member"
-    "discord.user"
-    "discord.state"
-    "discord.guild"
+    "discord.types"
+    "discord.ui"
     "discord.webhook"
-    "discord.ext.commands.bot"
+    "discord.app_commands"
+    "discord.ext.commands"
+    "discord.ext.tasks"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Discord API";
     homepage = "https://discordpy.rtfd.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivar ];
+    changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getpsyched ];
   };
 }

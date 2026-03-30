@@ -1,12 +1,13 @@
-{ fetchurl
-, lib
-, stdenv
-, ocaml
-, isabelle
-, cvc3
-, perl
-, wget
-, which
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ocaml,
+  isabelle,
+  cvc3,
+  perl,
+  wget,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +18,26 @@ stdenv.mkDerivation rec {
     sha256 = "c296998acd14d5b93a8d5be7ee178007ef179957465966576bda26944b1b7fca";
   };
 
-  buildInputs = [ ocaml isabelle cvc3 perl wget which ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    ocaml
+    isabelle
+    cvc3
+    perl
+    wget
+    which
+  ];
 
   installPhase = ''
     mkdir -pv "$out"
-    export HOME="$out"
+    export HOME="$TMPDIR"
     export PATH=$out/bin:$PATH
+
+    # Stop Isabelle trying to use `/tmp`.
+    user_home="$(isabelle getenv -b ISABELLE_HOME_USER)"
+    mkdir -p "$user_home/etc"
+    echo 'ISABELLE_TMP_PREFIX="$TMPDIR/isabelle"' > "$user_home/etc/settings"
 
     pushd zenon
     ./configure --prefix $out

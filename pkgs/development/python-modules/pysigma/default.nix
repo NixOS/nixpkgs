@@ -1,49 +1,79 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  diskcache-stubs,
+  diskcache,
+  fetchFromGitHub,
+  jinja2,
+  packaging,
+  poetry-core,
+  pyparsing,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  types-pyyaml,
+  typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma";
-  version = "0.8.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SXZ6bo1b5xhVGSlWr51ZCxT0Ov1g/qd8V43P5KEhY+s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QPGpmEWfgea420y8mmUF+CHV3xslr39TvxPxAjhI8d4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "diskcache-stubs"
+    "jinja2"
+    "packaging"
+    "pyparsing"
+    "types-pyyaml"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    diskcache
+    diskcache-stubs
+    jinja2
+    packaging
     pyparsing
     pyyaml
+    requests
+    types-pyyaml
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [
-    "sigma"
+  disabledTests = [
+    # Tests require network connection
+    "test_sigma_plugin_directory_default"
+    "test_sigma_plugin_directory_get_plugins_compatible"
+    "test_sigma_plugin_find_compatible_version"
+    "test_sigma_plugin_installation"
+    "test_sigma_plugin_pysigma_version_from_pypi"
+    "test_sigma_plugin_version_compatible"
+    "test_validator_valid_attack_tags_online"
+    "test_validator_valid_d3fend_tags_online"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "sigma" ];
+
+  meta = {
     description = "Library to parse and convert Sigma rules into queries";
     homepage = "https://github.com/SigmaHQ/pySigma";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SigmaHQ/pySigma/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,146 +1,169 @@
-{ lib
-, stdenv
-, bokeh
-, buildPythonPackage
-, click
-, cloudpickle
-, distributed
-, fastparquet
-, fetchFromGitHub
-, fetchpatch
-, fsspec
-, jinja2
-, numpy
-, packaging
-, pandas
-, partd
-, pyarrow
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, scipy
-, toolz
-, zarr
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  util-linux,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  click,
+  cloudpickle,
+  fsspec,
+  importlib-metadata,
+  packaging,
+  partd,
+  pyyaml,
+  toolz,
+
+  # optional-dependencies
+  numpy,
+  pyarrow,
+  lz4,
+  pandas,
+  distributed,
+  bokeh,
+  jinja2,
+
+  # tests
+  hypothesis,
+  psutil,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask";
-  version = "2022.10.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "2026.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zHJR2WjHigUMWtRJW25+gk1fKGKedU53BBjwx5zaodA=";
+    repo = "dask";
+    tag = finalAttrs.version;
+    hash = "sha256-JfCiABGSCJKKSz2/r8fvpVwdQSZqvoQICe+lDvuNhoM=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fix test_repartition_npartitions on platforms other than x86-64
-      url = "https://github.com/dask/dask/commit/65f40ad461c57065f981e6213e33b1d13cc9bc8f.patch";
-      hash = "sha256-KyTSms4ik1kYtL+I/huAxD+zK2AAuPkwmHA9FYk601Y=";
-    })
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace dask/tests/test_system.py \
+      --replace-fail \
+        '"taskset",' \
+        '"${lib.getExe' util-linux "taskset"}",'
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cloudpickle
     fsspec
+    importlib-metadata
     packaging
     partd
     pyyaml
     toolz
   ];
 
-  passthru.optional-dependencies = {
-    array = [
-      numpy
-    ];
+  optional-dependencies = lib.fix (self: {
+    array = [ numpy ];
     complete = [
-      distributed
-    ];
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
-      numpy
       pandas
-    ];
-    distributed = [
-      distributed
-    ];
+      pyarrow
+    ]
+    ++ self.array;
+    distributed = [ distributed ];
     diagnostics = [
       bokeh
       jinja2
     ];
-  };
+  });
 
-  checkInputs = [
-    fastparquet
+  nativeCheckInputs = [
+    hypothesis
+    psutil
     pyarrow
-    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-mock
     pytest-rerunfailures
+    pytest-timeout
     pytest-xdist
-    scipy
-    zarr
-  ];
+    pytestCheckHook
+    versionCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.array
+  ++ finalAttrs.passthru.optional-dependencies.dataframe;
 
-  dontUseSetuptoolsCheck = true;
-
-  postPatch = ''
-    # versioneer hack to set version of GitHub package
-    echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
-
-    substituteInPlace setup.py \
-      --replace "version=versioneer.get_version()," "version='${version}'," \
-      --replace "cmdclass=versioneer.get_cmdclass()," ""
-
-    substituteInPlace setup.cfg \
-      --replace " --durations=10" "" \
-      --replace " -v" ""
-  '';
-
-  pytestFlagsArray = [
+  pytestFlags = [
     # Rerun failed tests up to three times
-    "--reruns 3"
-    # Don't run tests that require network access
-    "-m 'not network'"
-    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
-    "-W" "ignore::DeprecationWarning"
+    "--reruns=3"
+
+    # FutureWarning: The previous implementation of stack is deprecated and will be removed in a
+    # future version of pandas.
+    "-Wignore::FutureWarning"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Test requires features of python3Packages.psutil that are
-    # blocked in sandboxed-builds
-    "test_auto_blocksize_csv"
-    # AttributeError: 'str' object has no attribute 'decode'
-    "test_read_dir_nometa"
-  ] ++ [
-    "test_chunksize_files"
-    # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
-    "test_set_index_string"
+  disabledTestMarks = [
+    # Don't run tests that require network access
+    "network"
+  ];
+
+  disabledTests = [
+    # https://github.com/dask/dask/issues/10931
+    "test_combine_first_all_nans"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeWarning: divide by zero encountered in det
+    "test_array_notimpl_function_dask"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/dask/dask/issues/12042
+    "test_multiple_repartition_partition_size"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "dask"
-    "dask.array"
     "dask.bag"
     "dask.bytes"
+    "dask.diagnostics"
+
+    # Requires the `dask.optional-dependencies.array` that are only in `nativeCheckInputs`
+    "dask.array"
+    # Requires the `dask.optional-dependencies.dataframe` that are only in `nativeCheckInputs`
     "dask.dataframe"
     "dask.dataframe.io"
     "dask.dataframe.tseries"
-    "dask.diagnostics"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal task scheduling abstraction";
+    mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

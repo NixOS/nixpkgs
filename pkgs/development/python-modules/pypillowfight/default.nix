@@ -1,38 +1,43 @@
-{ lib, buildPythonPackage, fetchFromGitLab, nose, pillow
-, isPy3k, isPyPy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pillow,
+  pytestCheckHook,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "pypillowfight";
-  version = "0.3.0";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "OpenPaperwork";
     repo = "libpillowfight";
-    rev = version;
-    sha256 = "096242v425mlqqj5g1giy59p7grxp05g78w6bk37vzph98jrgv3w";
+    tag = version;
+    hash = "sha256-ZH1Eg8GLe3LZ7elohQCYCToEvx8bGaRSrcsT+qSY9s4=";
   };
 
-  prePatch = ''
+  postPatch = ''
     echo '#define INTERNAL_PILLOWFIGHT_VERSION "${version}"' > src/pillowfight/_version.h
   '';
 
-  # Disable tests because they're designed to only work on Debian:
-  # https://github.com/jflesch/libpillowfight/issues/2#issuecomment-268259174
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  # Python 2.x is not supported, see:
-  # https://github.com/jflesch/libpillowfight/issues/1
-  disabled = !isPy3k && !isPyPy;
+  dependencies = [ pillow ];
 
-  # This is needed by setup.py regardless of whether tests are enabled.
-  buildInputs = [ nose ];
-  propagatedBuildInputs = [ pillow ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    # Package has non-portable behavior that makes it not work on Darwin
+    # https://github.com/NixOS/nixpkgs/pull/433141#issuecomment-3180885173
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library containing various image processing algorithms";
     inherit (src.meta) homepage;
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }

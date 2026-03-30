@@ -1,13 +1,12 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-with lib;
-
 {
   name = "xautolock";
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes.machine = {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
+    imports = [
+      ./common/x11.nix
+      ./common/user-account.nix
+    ];
 
     test-support.displayManager.auto.user = "bob";
     services.xserver.xautolock.enable = true;
@@ -21,4 +20,4 @@ with lib;
     machine.sleep(120)
     machine.succeed("pgrep xlock")
   '';
-})
+}

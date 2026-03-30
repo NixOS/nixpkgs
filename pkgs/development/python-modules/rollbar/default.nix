@@ -1,36 +1,36 @@
-{ lib
-, aiocontextvars
-, blinker
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, httpx
-, mock
-, pytestCheckHook
-, requests
-, six
-, pythonOlder
-, webob
+{
+  lib,
+  aiocontextvars,
+  blinker,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  httpx,
+  mock,
+  pytestCheckHook,
+  requests,
+  six,
+  webob,
 }:
 
 buildPythonPackage rec {
   pname = "rollbar";
-  version = "0.16.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AjE9/GBxDsc2qwM9D4yWnYV6i5kc1n4MGpFiDooE7eI=";
+    hash = "sha256-UZQC6sObzE+khIIYcva7GEl/t7bIEWcEeGfRdxTTs3k=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     webob
     blinker
     mock
@@ -44,14 +44,13 @@ buildPythonPackage rec {
   # https://github.com/rollbar/pyrollbar/pull/340
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rollbar"
-  ];
+  pythonImportsCheck = [ "rollbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Error tracking and logging from Python to Rollbar";
+    mainProgram = "rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

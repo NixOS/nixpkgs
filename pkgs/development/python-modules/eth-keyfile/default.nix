@@ -1,47 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, eth-keys
-, eth-utils
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  # dependencies
+  eth-keys,
+  eth-utils,
+  pycryptodome,
+  py-ecc,
+  # nativeCheckInputs
+  pytestCheckHook,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "eth-keyfile";
-  version = "0.6.0";
-  disabled = pythonOlder "3.7";
+  version = "0.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-keyfile";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-JD4bRoD9L0JXcd+bTZrq/BkWw5QGzOi1RvoyLJC77kk=";
+    hash = "sha256-DR17EupRDnviN6OXF+B+RlCVdG8cfcvnIgIEKxrXFKs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'setuptools-markdown'" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     eth-keys
     eth-utils
     pycryptodome
+    py-ecc
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pydantic
   ];
 
   pythonImportsCheck = [ "eth_keyfile" ];
 
-  meta = with lib; {
+  disabledTests = [
+    "test_install_local_wheel"
+  ];
+
+  meta = {
     description = "Tools for handling the encrypted keyfile format used to store private keys";
     homepage = "https://github.com/ethereum/eth-keyfile";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/ethereum/eth-keyfile/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }

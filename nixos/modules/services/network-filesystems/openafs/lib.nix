@@ -1,31 +1,50 @@
-{ config, lib, ...}:
+{ config, lib, ... }:
 
 let
-  inherit (lib) concatStringsSep mkOption types;
-
-in {
-
-  mkCellServDB = cellName: db: ''
-    >${cellName}
-  '' + (concatStringsSep "\n" (map (dbm: if (dbm.ip != "" && dbm.dnsname != "") then dbm.ip + " #" + dbm.dnsname else "")
-                                   db))
-     + "\n";
-
-  # CellServDB configuration type
-  cellServDBConfig = {
-    ip = mkOption {
-      type = types.str;
-      default = "";
-      example = "1.2.3.4";
-      description = lib.mdDoc "IP Address of a database server";
-    };
-    dnsname = mkOption {
-      type = types.str;
-      default = "";
-      example = "afs.example.org";
-      description = lib.mdDoc "DNS full-qualified domain name of a database server";
+  inherit (lib)
+    concatStringsSep
+    concatMapAttrsStringSep
+    mkOption
+    types
+    optionalString
+    ;
+  cellServDBMemberType = types.submodule {
+    options = {
+      ip = mkOption {
+        type = types.str;
+        default = "";
+        example = "1.2.3.4";
+        description = "IP Address of a database server";
+      };
+      dnsname = mkOption {
+        type = types.str;
+        default = "";
+        example = "afs.example.org";
+        description = "DNS full-qualified domain name of a database server";
+      };
     };
   };
+  cellServDBCellType = types.listOf cellServDBMemberType;
+in
+{
+
+  mkCellServDB = concatMapAttrsStringSep "" (
+    cellName: db:
+    ''
+      >${cellName}
+    ''
+    + (concatStringsSep "\n" (
+      map (dbm: optionalString (dbm.ip != "" && dbm.dnsname != "") "${dbm.ip} #${dbm.dnsname}") db
+    ))
+    + "\n"
+  );
+
+  # CellServDB configuration type
+  cellServDBType =
+    thisCell:
+    types.coercedTo (types.listOf types.anything) (m: { "${thisCell}" = m; }) (
+      types.attrsOf cellServDBCellType
+    );
 
   openafsMod = config.services.openafsClient.packages.module;
   openafsBin = config.services.openafsClient.packages.programs;

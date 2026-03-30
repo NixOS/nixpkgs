@@ -1,43 +1,51 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, cmdliner, ppxlib }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildDunePackage,
+  cmdliner,
+  ppxlib,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bisect_ppx";
-  version = "2.8.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "bisect_ppx";
-    rev = version;
-    sha256 = "sha256-pOeeSxzUF1jXQjA71atSZALdgQ2NB9qpKo5iaDnPwhQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-3qXobZLPivFDtls/3WNqDuAgWgO+tslJV47kjQPoi6o=";
   };
 
-  patches = lib.optionals (lib.versionAtLeast ppxlib.version "0.26.0") [
-    # Ppxlib >= 0.26.0 compatibility
-    # remove when a new version is released
+  # Ensure compatibility with ppxlib 0.36
+  patches = lib.optionals (lib.versionAtLeast ppxlib.version "0.36") [
     (fetchpatch {
-      name = "${pname}-${version}-ppxlib-0.26-compatibility.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/aantron/bisect_ppx/pull/400.patch";
-      sha256 = "sha256-WAn6+d6pMUr79LVugOENuh9s0gbVEcTg0rxXMz1P3ak=";
+      url = "https://github.com/aantron/bisect_ppx/commit/f35fdf4bdcb82c308d70f7c9c313a77777f54bdf.patch";
+      hash = "sha256-hQMDU6zrHDV9JszGAj2p4bd9zlqqjc1TLU+cfMEgz9c=";
     })
     (fetchpatch {
-      name = "${pname}-${version}-ppxlib-0.28-compatibility.patch";
-      url = "https://github.com/anmonteiro/bisect_ppx/commit/cc442a08e3a2e0e18deb48f3a696076ac0986728.patch";
-      sha256 = "sha256-pPHhmtd81eWhQd4X0gfZNPYT75+EkurwivP7acfJbNc=";
+      url = "https://github.com/aantron/bisect_ppx/commit/07bfceec652773de4b140cebc236a15e2429809e.patch";
+      hash = "sha256-9gDIndPIZMkIkd847qd2QstsZJInBPuWXAUIzZMkHcw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/aantron/bisect_ppx/commit/4f0cb2a2e1b0b786b6b5f1c94985b201aa012f12.patch";
+      hash = "sha256-20nr7ApKPnnol0VEOirwXdJX+AiFRzBzAq4YzCWn7W0=";
     })
   ];
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.11";
 
   buildInputs = [
     cmdliner
     ppxlib
   ];
 
-  meta = with lib; {
-    description = "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested.";
+  meta = {
+    description = "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested";
     homepage = "https://github.com/aantron/bisect_ppx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "bisect-ppx-report";
   };
-}
+})

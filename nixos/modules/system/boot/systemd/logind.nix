@@ -1,75 +1,42 @@
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
-
-let
-  cfg = config.services.logind;
-
-  logindHandlerType = types.enum [
-    "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
-  ];
-in
 {
-  options = {
-    services.logind.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "IdleAction=lock";
-      description = lib.mdDoc ''
-        Extra config options for systemd-logind. See
-        [
-        logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html) for available options.
+  config,
+  lib,
+  utils,
+  ...
+}:
+{
+  options.services.logind = {
+    settings.Login = lib.mkOption {
+      description = ''
+        Settings option for systemd-logind.
+        See {manpage}`logind.conf(5)` for available options.
       '';
-    };
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+        options.KillUserProcesses = lib.mkOption {
+          default = false;
+          type = lib.types.bool;
+          description = ''
+            Specifies whether the processes of a user should be killed
+            when the user logs out.  If true, the scope unit corresponding
+            to the session and all processes inside that scope will be
+            terminated.  If false, the scope is "abandoned"
+            (see {manpage}`systemd.scope(5)`),
+            and processes are not killed.
 
-    services.logind.killUserProcesses = mkOption {
-      default = false;
-      type = types.bool;
-      description = lib.mdDoc ''
-        Specifies whether the processes of a user should be killed
-        when the user logs out.  If true, the scope unit corresponding
-        to the session and all processes inside that scope will be
-        terminated.  If false, the scope is "abandoned" (see
-        [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)), and processes are not killed.
+            See {manpage}`logind.conf(5)` for more details.
 
-        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=)
-        for more details.
-      '';
-    };
-
-    services.logind.lidSwitch = mkOption {
-      default = "suspend";
-      example = "ignore";
-      type = logindHandlerType;
-
-      description = lib.mdDoc ''
-        Specifies what to be done when the laptop lid is closed.
-      '';
-    };
-
-    services.logind.lidSwitchDocked = mkOption {
-      default = "ignore";
-      example = "suspend";
-      type = logindHandlerType;
-
-      description = lib.mdDoc ''
-        Specifies what to be done when the laptop lid is closed
-        and another screen is added.
-      '';
-    };
-
-    services.logind.lidSwitchExternalPower = mkOption {
-      default = cfg.lidSwitch;
-      defaultText = literalExpression "services.logind.lidSwitch";
-      example = "ignore";
-      type = logindHandlerType;
-
-      description = lib.mdDoc ''
-        Specifies what to do when the laptop lid is closed and the system is
-        on external power. By default use the same action as specified in
-        services.logind.lidSwitch.
-      '';
+            Defaulted to false in nixpkgs because many tools that rely on
+            persistent user processes—like `tmux`, `screen`, `mosh`, `VNC`,
+            `nohup`, and more — would break by the systemd-default behavior.
+          '';
+        };
+      };
+      default = { };
+      example = {
+        KillUserProcesses = false;
+        HandleLidSwitch = "ignore";
+      };
     };
   };
 
@@ -78,28 +45,21 @@ in
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
-    ] ++ optionals config.systemd.package.withImportd [
+    ]
+    ++ lib.optionals config.systemd.package.withImportd [
       "dbus-org.freedesktop.import1.service"
-    ] ++ optionals config.systemd.package.withMachined [
+    ]
+    ++ lib.optionals config.systemd.package.withMachined [
       "dbus-org.freedesktop.machine1.service"
-    ] ++ optionals config.systemd.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-    ] ++ [
+    ]
+    ++ [
       "dbus-org.freedesktop.login1.service"
       "user@.service"
       "user-runtime-dir@.service"
     ];
 
-    environment.etc = {
-      "systemd/logind.conf".text = ''
-        [Login]
-        KillUserProcesses=${if cfg.killUserProcesses then "yes" else "no"}
-        HandleLidSwitch=${cfg.lidSwitch}
-        HandleLidSwitchDocked=${cfg.lidSwitchDocked}
-        HandleLidSwitchExternalPower=${cfg.lidSwitchExternalPower}
-        ${cfg.extraConfig}
-      '';
-    };
+    environment.etc."systemd/logind.conf".text =
+      utils.systemdUtils.lib.settingsToSections config.services.logind.settings;
 
     # Restarting systemd-logind breaks X11
     # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101
@@ -113,4 +73,33 @@ in
     systemd.services."user-runtime-dir@".stopIfChanged = false;
     systemd.services."user-runtime-dir@".restartIfChanged = false;
   };
+
+  imports =
+    let
+      settingsRename =
+        old: new:
+        lib.mkRenamedOptionModule
+          [ "services" "logind" old ]
+          [ "services" "logind" "settings" "Login" new ];
+    in
+    [
+      (lib.mkRemovedOptionModule [
+        "services"
+        "logind"
+        "extraConfig"
+      ] "Use services.logind.settings.Login instead.")
+
+      (settingsRename "killUserProcesses" "KillUserProcesses")
+      (settingsRename "powerKey" "HandlePowerKey")
+      (settingsRename "powerKeyLongPress" "HandlePowerKeyLongPress")
+      (settingsRename "rebootKey" "HandleRebootKey")
+      (settingsRename "rebootKeyLongPress" "HandleRebootKeyLongPress")
+      (settingsRename "suspendKey" "HandleSuspendKey")
+      (settingsRename "suspendKeyLongPress" "HandleSuspendKeyLongPress")
+      (settingsRename "hibernateKey" "HandleHibernateKey")
+      (settingsRename "hibernateKeyLongPress" "HandleHibernateKeyLongPress")
+      (settingsRename "lidSwitch" "HandleLidSwitch")
+      (settingsRename "lidSwitchExternalPower" "HandleLidSwitchExternalPower")
+      (settingsRename "lidSwitchDocked" "HandleLidSwitchDocked")
+    ];
 }

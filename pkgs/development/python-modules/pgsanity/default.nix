@@ -1,26 +1,36 @@
-{ lib
-, python
-, fetchPypi
-, buildPythonPackage
-, postgresql
-, unittestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  postgresql,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pgsanity";
-  version = "0.2.9";
+  version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de0bbd6fe4f98bf5139cb5f466eac2e2abaf5a7b050b9e4867b87bf360873173";
+    sha256 = "sha256-Po/DPQpk54w1gWOL9aArN6I8dmMb7uRYxuRMI6MIDKU=";
   };
 
-  checkInputs = [ unittestCheckHook postgresql ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  unittestFlagsArray = [ "test" ];
+
   propagatedBuildInputs = [ postgresql ];
 
-  meta = with lib; {
+  # To find "ecpg"
+  nativeBuildInputs = [ (lib.getDev postgresql) ];
+
+  meta = {
     homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
+    mainProgram = "pgsanity";
     longDescription = ''
       PgSanity checks the syntax of Postgresql SQL files by
       taking a file that has a list of bare SQL in it,
@@ -28,7 +38,7 @@ buildPythonPackage rec {
       run it through ecpg and
       let ecpg report on the syntax errors of the SQL.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ nalbyuites ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nalbyuites ];
   };
 }

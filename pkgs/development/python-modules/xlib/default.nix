@@ -1,43 +1,47 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, setuptools-scm
-, xorg
-, python
-, mock
-, nose
-, pytestCheckHook
-, util-linux
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  setuptools,
+  setuptools-scm,
+  libx11,
+  xvfb,
+  xauth,
+  mock,
+  pytestCheckHook,
+  util-linux,
 }:
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.31";
+  version = "0.33";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    rev = version;
-    sha256 = "155p9xhsk01z9vdml74h07svlqy6gljnx9c6qbydcr14lwghwn06";
+    tag = version;
+    hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
-  patches = [
-    ./fix-no-protocol-specified.patch
-  ];
-
   nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ xorg.libX11 ];
+
+  buildInputs = [ libx11 ];
+
   propagatedBuildInputs = [ six ];
 
-  doCheck = !stdenv.isDarwin;
-  checkInputs = [
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeCheckInputs = [
     pytestCheckHook
     mock
-    nose
     util-linux
-    xorg.xauth
-    xorg.xorgserver
+    xauth
+    xvfb
   ];
 
   disabledTestPaths = [
@@ -45,10 +49,11 @@ buildPythonPackage rec {
     "test/test_xlib_display.py"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
     description = "Fully functional X client library for Python programs";
-    homepage = "http://python-xlib.sourceforge.net/";
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/python-xlib/python-xlib";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
-
 }

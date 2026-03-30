@@ -1,59 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, nose
-, numpy
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oldest-supported-numpy,
+  pytestCheckHook,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ecos";
-  version = "2.0.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.0.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos-python";
-    rev = "v${version}";
-    sha256 = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
+    tag = "v${version}";
+    hash = "sha256-nfu1FicWr233r+VHxkQf1vqh2y4DGymJRmik8RJYJkA=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix for test_interface_bb.py tests
-    (fetchpatch {
-      name = "test_interface_bb_use_nparray.patch";
-      url = "https://github.com/embotech/ecos-python/commit/4440dcb7ddbd92217bc83d8916b72b61537dffbf.patch";
-      hash = "sha256-pcTPviK916jzCLllRhopbC9wDHv+aS6GmV/92sUwzHc=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" numpy
+  '';
 
-  propagatedBuildInputs = [
-    numpy
+  build-system = [ setuptools ];
+
+  dependencies = [
+    oldest-supported-numpy
     scipy
   ];
 
-  checkInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    cd ./src
-    nosetests test_interface.py test_interface_bb.py
-  '';
+  pythonImportsCheck = [ "ecos" ];
 
-  pythonImportsCheck = [
-    "ecos"
-  ];
-
-  meta = with lib; {
-    description = "Python package for ECOS: Embedded Cone Solver";
+  meta = {
+    description = "Python interface for ECOS";
     homepage = "https://github.com/embotech/ecos-python";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

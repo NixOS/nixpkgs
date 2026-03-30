@@ -1,48 +1,42 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, libiconv
-, pandas
-, python
-, pythonOlder
-, readstat
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  narwhals,
+  pandas,
+  python,
+  readstat,
+  setuptools,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.1.9";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Roche";
     repo = "pyreadstat";
-    rev = "v${version}";
-    hash = "sha256-OtvAvZTmcBTGfgp3Ddp9JJuZegr1o6c7rTMOuLwJSpk=";
+    tag = "v${version}";
+    hash = "sha256-CXZ9edMmup4+/2lImt6Zy19RIqGig1sUIK35snvIFEk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    setuptools
   ];
 
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    narwhals
     readstat
     pandas
   ];
 
-  pythonImportsCheck = [
-    "pyreadstat"
-  ];
+  pythonImportsCheck = [ "pyreadstat" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -56,10 +50,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
-    description = "Python package to read SAS, SPSS and Stata files into pandas data frames using the readstat C library";
+  meta = {
+    description = "Module to read SAS, SPSS and Stata files into pandas data frames";
     homepage = "https://github.com/Roche/pyreadstat";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ swflint ];
+    changelog = "https://github.com/Roche/pyreadstat/blob/${src.tag}/change_log.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ swflint ];
   };
 }

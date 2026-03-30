@@ -1,20 +1,24 @@
-{ lib, buildDunePackage, dns, lwt, mirage-clock, mirage-time
-, mirage-random, mirage-crypto-rng, mtime, randomconv
-, cstruct, fmt, logs, rresult, domain-name, ipaddr, alcotest
-, ca-certs, ca-certs-nss
-, happy-eyeballs
-, tcpip
-, tls, tls-mirage
+{
+  buildDunePackage,
+  dns,
+  mirage-crypto-rng,
+  mtime,
+  randomconv,
+  domain-name,
+  alcotest,
 }:
 
 buildDunePackage {
   pname = "dns-client";
   inherit (dns) src version;
 
-  propagatedBuildInputs = [ cstruct fmt logs dns randomconv domain-name ipaddr
-                            lwt mirage-random mirage-time mirage-clock
-                            ca-certs ca-certs-nss happy-eyeballs tcpip tls tls-mirage
-                            mtime mirage-crypto-rng ];
+  propagatedBuildInputs = [
+    dns
+    randomconv
+    domain-name
+    mtime
+    mirage-crypto-rng
+  ];
   checkInputs = [ alcotest ];
   doCheck = true;
 

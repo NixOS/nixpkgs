@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools
-, perl # For building web manuals
-, which, ed
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  libx11,
+  libxext,
+  libxt,
+  xorgproto,
+  perl, # For building web manuals
+  which,
+  ed,
+  DarwinTools, # For building on Darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plan9port";
-  version = "2021-10-19";
+  version = "0-unstable-2025-11-10";
 
   src = fetchFromGitHub {
     owner = "9fans";
-    repo = pname;
-    rev = "d0d440860f2000a1560abb3f593cdc325fcead4c";
-    hash = "sha256-2aYXqPGwrReyFPrLDtEjgQd/RJjpOfI3ge/tDocYpRQ=";
+    repo = "plan9port";
+    rev = "f39a2407b6e6ace6af68e466bfa2f362b9a9dd36";
+    hash = "sha256-YvrwUC+aMqp/Kvvfd7HGvYkbP8Dm/Z5/SVH4gG9BdRA=";
   };
 
   postPatch = ''
@@ -35,13 +44,25 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs = [ perl which ] ++ (if !stdenv.isDarwin then [
-    fontconfig freetype # fontsrv uses these
-    libX11 libXext libXt xorgproto
-  ] else [
-    Carbon Cocoa IOKit Metal QuartzCore
-    DarwinTools
-  ]);
+  buildInputs = [
+    perl
+    which
+  ]
+  ++ (
+    if !stdenv.hostPlatform.isDarwin then
+      [
+        fontconfig
+        freetype # fontsrv uses these
+        libx11
+        libxext
+        libxt
+        xorgproto
+      ]
+    else
+      [
+        DarwinTools
+      ]
+  );
 
   configurePhase = ''
     runHook preConfigure
@@ -49,7 +70,7 @@ stdenv.mkDerivation rec {
     CC9='$(command -v $CC)'
     CFLAGS='$NIX_CFLAGS_COMPILE'
     LDFLAGS='$(for f in $NIX_LDFLAGS; do echo "-Wl,$f"; done | xargs echo)'
-    ${lib.optionalString (!stdenv.isDarwin) "X11='${libXt.dev}/include'"}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libxt.dev}/include'"}
     EOF
 
     # make '9' available in the path so there's some way to find out $PLAN9
@@ -67,7 +88,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    ./INSTALL -b
+    PLAN9_TARGET=$out/plan9 ./INSTALL -b
     runHook postBuild
   '';
 
@@ -104,21 +125,23 @@ stdenv.mkDerivation rec {
     ./test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
       from their native Plan 9 environment to Unix-like operating systems.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      AndersonTorres bbarker ehmry ftrvxmtrx kovirobi ylh
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      bbarker
+      ftrvxmtrx
+      kovirobi
+      matthewdargan
+      ylh
     ];
     mainProgram = "9";
-    platforms = platforms.unix;
-    # TODO: revisit this when the sdk situation on x86_64-darwin changes
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    platforms = lib.platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

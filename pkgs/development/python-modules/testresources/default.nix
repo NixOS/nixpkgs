@@ -1,26 +1,56 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, pbr, fixtures, testtools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pbr,
+  fixtures,
+  testtools,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "testresources";
-  version = "2.0.1";
+  version = "2.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ee9d1982154a1e212d4e4bac6b610800bfb558e4fb853572a827bc14a96e4417";
+  src = fetchFromGitHub {
+    owner = "testing-cabal";
+    repo = "testresources";
+    tag = version;
+    hash = "sha256-cdZObOgBOUxYg4IGUUMb6arlpb6NTU7w+EW700LKH4Y=";
   };
 
-  propagatedBuildInputs = [ pbr ];
+  build-system = [
+    setuptools
+    pbr
+  ];
 
-  checkInputs = [ fixtures testtools ];
+  dependencies = [
+    pbr
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m testtools.run discover
-  '';
+  nativeCheckInputs = [
+    fixtures
+    testtools
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # imports fixtures.test.helpers, but fixtures does not install tests anymore
+    # https://github.com/testing-cabal/fixtures/commit/349afbb1ec7dde2e472b4563025660a35e595153
+    "testresources/tests/test_test_resource.py"
+  ];
+
+  env.PBR_VERSION = version;
+
+  meta = {
     description = "Pyunit extension for managing expensive test resources";
     homepage = "https://launchpad.net/testresources";
-    license = licenses.bsd2;
+    license = with lib.licenses; [
+      asl20 # or
+      bsd3
+    ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

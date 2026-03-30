@@ -1,25 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pylutron";
-  version = "0.2.9";
+  version = "0.2.18";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xy5XPNOrvdPZMCfa2MYA+xtUcFdGSurW5QYL6H7n2VI=";
+    hash = "sha256-7ZnNfa4POUTMi9sDGMyR6gu9Xpg+j/JmyWVnBBSnRSE=";
   };
+
+  build-system = [ setuptools ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "pylutron" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for controlling a Lutron RadioRA 2 system";
     homepage = "https://github.com/thecynic/pylutron";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/thecynic/pylutron/releases/tag/${version}";
+    license = with lib.licenses; [
+      mit
+      psfl
+    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

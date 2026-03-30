@@ -1,13 +1,23 @@
-{ lib, stdenv, config, vim_configurable, macvim, vimPlugins
-, useMacvim ? stdenv.isDarwin && (config.vimacs.macvim or true)
-, vimacsExtraArgs ? "" }:
+{
+  lib,
+  stdenv,
+  config,
+  vim-full,
+  macvim,
+  vimPlugins,
+  useMacvim ? stdenv.hostPlatform.isDarwin && (config.vimacs.macvim or true),
+  vimacsExtraArgs ? "",
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vimacs";
-  version = lib.getVersion vimPackage;
-  vimPackage = if useMacvim then macvim else vim_configurable;
+  version = lib.getVersion finalAttrs.vimPackage;
+  vimPackage = if useMacvim then macvim else vim-full;
 
-  buildInputs = [ vimPackage vimPlugins.vimacs ];
+  buildInputs = [
+    finalAttrs.vimPackage
+    vimPlugins.vimacs
+  ];
 
   buildCommand = ''
     mkdir -p "$out"/bin
@@ -18,17 +28,17 @@ stdenv.mkDerivation rec {
       --replace '--cmd "let g:VM_Enabled = 1"' \
                 '--cmd "let g:VM_Enabled = 1" --cmd "set rtp^=@rtp@" ${vimacsExtraArgs}' \
       --replace @rtp@ ${vimPlugins.vimacs} \
-      --replace @bin@ ${vimPackage}
+      --replace @bin@ ${finalAttrs.vimPackage}
     for prog in vm gvm gvimacs vmdiff vimacsdiff
     do
       ln -s "$out"/bin/vimacs $out/bin/$prog
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vim-Improved eMACS: Emacs emulation for Vim";
     homepage = "http://algorithm.com.au/code/vimacs";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ millerjason ];
   };
-}
+})

@@ -1,25 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, redis }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  redis,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huey";
-  version = "2.4.2";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coleifer";
-    repo = pname;
-    rev = version;
-    sha256 = "00fi04991skq61gjrmig8ry6936pc8zs7p8py8spfipbxf1irkjg";
+    repo = "huey";
+    tag = finalAttrs.version;
+    hash = "sha256-vXp8xISf8g1VjIus/Xr4wKFFaVg5x4CXgP8IUUKYl+o=";
   };
 
-  propagatedBuildInputs = [ redis ];
+  build-system = [ setuptools ];
+
+  dependencies = [ redis ];
 
   # connects to redis
   doCheck = false;
 
-  meta = with lib; {
-    description = "A little task queue for python";
+  pythonImportsCheck = [ "huey" ];
+
+  meta = {
+    description = "Module to queue tasks";
     homepage = "https://github.com/coleifer/huey";
-    license = licenses.mit;
-    maintainers = [ maintainers.globin ];
+    changelog = "https://github.com/coleifer/huey/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

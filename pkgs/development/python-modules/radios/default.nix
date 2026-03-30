@@ -1,67 +1,74 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiodns
-, aiohttp
-, awesomeversion
-, backoff
-, cachetools
-, pycountry
-, pydantic
-, yarl
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  aiodns,
+  aiohttp,
+  awesomeversion,
+  backoff,
+  cachetools,
+  mashumaro,
+  orjson,
+  pycountry,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "radios";
-  version = "0.1.1";
-
-  disabled = pythonOlder "3.9";
-
-  format = "pyproject";
+  version = "0.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
-    rev = "v${version}";
-    hash = "sha256-NCBch9MCWVD6ez0sIUph8rwOOzEMZtwC4atXJe53xZM=";
+    tag = "v${version}";
+    hash = "sha256-GXiLwwjZ/pN3HquzLLWq/2EfhmrJyCXq0sovIGRB3uQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "pycountry" ];
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiodns
     aiohttp
     awesomeversion
     backoff
     cachetools
+    mashumaro
+    orjson
     pycountry
-    pydantic
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "radios" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    changelog = "https://github.com/frenck/python-radios/releases/tag/v${version}";
     description = "Asynchronous Python client for the Radio Browser API";
     homepage = "https://github.com/frenck/python-radios";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

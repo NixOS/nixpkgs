@@ -1,40 +1,51 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml, fetchpatch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  packaging,
+
+  # tests
+  poppler-qt5,
+  qgis,
+  qgis-ltr,
+}:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.7.1";
+  version = "6.15.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "sip";
-    inherit version;
-    sha256 = "sha256-KBcP34gPk3Am/If6qcF3sGLDU8XRaeoyQrB4AmFN3Qw=";
+    inherit pname version;
+    hash = "sha256-3C5YwXmKdOGzHCjoNzOYIv6PpVKIrjDomG6ygQDrylo=";
   };
 
-  propagatedBuildInputs = [ packaging ply toml ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    packaging
+    setuptools
+  ];
 
   # There aren't tests
   doCheck = false;
 
-  # FIXME: Why isn't this detected automatically?
-  # Needs to be specified in pyproject.toml, e.g.:
-  # [tool.sip.bindings.MODULE]
-  # tags = [PLATFORM_TAG]
-  platform_tag =
-    if stdenv.targetPlatform.isLinux then
-      "WS_X11"
-    else if stdenv.targetPlatform.isDarwin then
-      "WS_MACX"
-    else if stdenv.targetPlatform.isWindows then
-      "WS_WIN"
-    else
-      throw "unsupported platform";
-
   pythonImportsCheck = [ "sipbuild" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    # test depending packages
+    inherit poppler-qt5 qgis qgis-ltr;
+  };
+
+  meta = {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    homepage = "https://riverbankcomputing.com/";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

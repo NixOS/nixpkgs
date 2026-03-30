@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, zlib, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libipasirglucose4";
@@ -7,7 +13,7 @@ stdenv.mkDerivation rec {
   # that as the version number, I guess.
   version = "2017";
 
-  libname = pname + stdenv.targetPlatform.extensions.sharedLibrary;
+  libname = pname + stdenv.hostPlatform.extensions.sharedLibrary;
 
   src = fetchurl {
     url = "https://baldur.iti.kit.edu/sat-competition-2017/solvers/incremental/glucose-ipasir.zip";
@@ -24,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     $CXX -shared -o ${libname} \
-        ${if stdenv.cc.isClang then "" else "-Wl,-soname,${libname}"} \
+        ${lib.optionalString (!stdenv.cc.isClang) "-Wl,-soname,${libname}"} \
         ipasirglucoseglue.o libipasirglucose4.a
   '';
 
@@ -32,10 +38,10 @@ stdenv.mkDerivation rec {
     install -D ${libname} $out/lib/${libname}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shared library providing IPASIR interface to the Glucose SAT solver";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kini ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kini ];
   };
 }

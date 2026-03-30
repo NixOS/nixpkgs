@@ -1,10 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
-, cheroot
-, dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  cheroot,
+  legacy-cgi,
+  dbutils,
+  mysqlclient,
+  pymysql,
+  mysql-connector,
+  psycopg2,
 }:
 
 buildPythonPackage rec {
   version = "0.62";
+  format = "setuptools";
   pname = "web.py";
 
   src = fetchPypi {
@@ -12,24 +22,33 @@ buildPythonPackage rec {
     sha256 = "5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e";
   };
 
-  propagatedBuildInputs = [ cheroot ];
+  propagatedBuildInputs = [
+    cheroot
+    legacy-cgi
+  ];
 
   # requires multiple running databases
   doCheck = false;
 
   pythonImportsCheck = [ "web" ];
 
-  checkInputs = [ pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    dbutils
+    mysqlclient
+    pymysql
+    mysql-connector
+    psycopg2
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Makes web apps";
     longDescription = ''
       Think about the ideal way to write a web app.
       Write the code to make it happen.
     '';
     homepage = "https://webpy.org/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ layus SuperSandro2000 ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ layus ];
   };
-
 }

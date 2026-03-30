@@ -1,18 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, async-timeout }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
-  version = "3.0.2";
+  version = "3.2.2";
+  pyproject = true;
 
-  disabled = !isPy3k;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8d92f2f5790da038d828ac862673e0bb43e8e972e4c70b1714dd9a0fb776c8d1";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = "ha-ffmpeg";
+    tag = version;
+    hash = "sha256-TbSoKoOiLx3O7iykiTri5GBHGj7WoB8iSCpFIrV4ZgU=";
   };
 
-  propagatedBuildInputs = [ async-timeout ];
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [
+    "async_timeout"
+  ];
 
   # only manual tests
   doCheck = false;
@@ -23,10 +32,11 @@ buildPythonPackage rec {
     "haffmpeg.tools"
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/pvizeli/ha-ffmpeg";
-    description = "Library for home-assistant to handle ffmpeg";
-    license = licenses.bsd3;
-    maintainers = teams.home-assistant.members;
+  meta = {
+    description = "Library for Home Assistant to handle ffmpeg";
+    homepage = "https://github.com/home-assistant-libs/ha-ffmpeg/";
+    changelog = "https://github.com/home-assistant-libs/ha-ffmpeg/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.home-assistant ];
   };
 }

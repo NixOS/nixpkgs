@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl
-, dune-configurator
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  dune-configurator,
 }:
 
 buildDunePackage rec {
@@ -11,15 +15,14 @@ buildDunePackage rec {
     sha256 = "02wr9ph4q0nxmqgbc67ydf165hmrdv9b655krm2glc3ahb6larxi";
   };
 
-  useDune2 = true;
-
   buildInputs = [ dune-configurator ];
 
   meta = {
-    description = "encoding variable-length quantities, in particular base64";
+    description = "Encoding variable-length quantities, in particular base64";
     license = lib.licenses.mit;
     homepage = "https://github.com/flowtype/ocaml-vlq";
     maintainers = [ lib.maintainers.nomeata ];
+    broken = lib.versionAtLeast ocaml.version "5.0";
   };
 
 }

@@ -1,35 +1,42 @@
-{ stdenv
-, lib
-, desktop-file-utils
-, fetchurl
-, gettext
-, glib
-, gtk4
-, json-glib
-, itstool
-, libadwaita
-, libunwind
-, libxml2
-, meson
-, ninja
-, pango
-, pkg-config
-, polkit
-, shared-mime-info
-, systemd
-, wrapGAppsHook4
-, gnome
+{
+  stdenv,
+  lib,
+  desktop-file-utils,
+  fetchurl,
+  elfutils,
+  gettext,
+  glib,
+  gtk4,
+  json-glib,
+  itstool,
+  libadwaita,
+  libdex,
+  libpanel,
+  libunwind,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  shared-mime-info,
+  systemd,
+  wrapGAppsHook4,
+  gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "3.46.0";
+  version = "49.0";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "PkMNV4FQqN0LB1sX0vzBunBNQogCYvDMZR8z5JO+QHE=";
+    url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/wQTljd4XIQZSIYgh6QyO5gWgNlCKWQJMhtXT8soKHg=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +52,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elfutils
     glib
     gtk4
     json-glib
-    pango
     polkit
     systemd
     libadwaita
+    libdex
+    libpanel
     libunwind
   ];
 
@@ -63,14 +72,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = "sysprof";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System-wide profiler for Linux";
-    homepage = "https://wiki.gnome.org/Apps/Sysprof";
+    homepage = "https://gitlab.gnome.org/GNOME/sysprof";
     longDescription = ''
       Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open
       system call to profile the entire system, not just a single
@@ -78,8 +86,8 @@ stdenv.mkDerivation rec {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
-}
+})

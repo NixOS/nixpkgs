@@ -1,28 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zconfig
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zconfig,
+  manuel,
+  unittestCheckHook,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
   pname = "zdaemon";
-  version = "4.3";
+  version = "5.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f249fc6885646d165d7d6b228a7b71f5170fc7117de9e0688271f8fb97840f72";
+    hash = "sha256-8GwsfK9RnHYINPj+JuVzWVDVAX9y1cII3IsZABQFlM0=";
   };
 
-  propagatedBuildInputs = [ zconfig ];
+  build-system = [ setuptools ];
 
-  # too many deps..
+  dependencies = [ zconfig ];
+
+  pythonImportsCheck = [ "zdaemon" ];
+
+  # require zc-customdoctests but it is not packaged
   doCheck = false;
 
-  meta = with lib; {
-    description = "A daemon process control library and tools for Unix-based systems";
-    homepage = "https://pypi.python.org/pypi/zdaemon";
-    license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
-  };
+  nativeCheckInputs = [
+    manuel
+    unittestCheckHook
+    # zc-customdoctests
+    zope-testing
+  ];
 
+  unittestFlagsArray = [ "src/zdaemon/tests" ];
+
+  meta = {
+    description = "Daemon process control library and tools for Unix-based systems";
+    mainProgram = "zdaemon";
+    homepage = "https://github.com/zopefoundation/zdaemon";
+    changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
+    license = lib.licenses.zpl21;
+    maintainers = [ ];
+    broken = true;
+  };
 }

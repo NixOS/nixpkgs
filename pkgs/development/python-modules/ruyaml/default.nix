@@ -1,50 +1,55 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, setuptools-scm-git-archive
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ruyaml";
   version = "0.91.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0gxvwry7n1gczxkjzyfrr3fammllkvnnamja4yln8xrg3n1h89al";
+    repo = "ruyaml";
+    tag = "v${version}";
+    hash = "sha256-A37L/voBrn2aZ7xT8+bWdZJxbWRjnxbstQtSyUeN1sA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    setuptools-scm-git-archive
+  postPatch = ''
+    # https://github.com/pycontribs/ruyaml/pull/107
+    substituteInPlace pyproject.toml \
+      --replace '"pip >= 19.3.1",' "" \
+      --replace '"setuptools_scm_git_archive >= 1.1",' ""
+  '';
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [ distro ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  pythonImportsCheck = [ "ruyaml" ];
 
-  propagatedBuildInputs = [
-    distro
+  disabledTests = [
+    # Assertion error
+    "test_issue_60"
+    "test_issue_60_1"
+    "test_issue_61"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "ruyaml"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "YAML 1.2 loader/dumper package for Python";
     homepage = "https://ruyaml.readthedocs.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,23 +1,25 @@
-{ lib
-, buildDunePackage
-, ppx_sexp_conv
-, base
-, async
-, async_kernel
-, async_unix
-, cohttp
-, conduit-async
-, core_unix
-, uri
-, uri-sexp
-, logs
-, fmt
-, sexplib0
-, ipaddr
-, magic-mime
-, ounit
-, mirage-crypto
-, core
+{
+  lib,
+  buildDunePackage,
+  ppx_sexp_conv,
+  base,
+  async,
+  async_kernel,
+  async_unix,
+  cohttp,
+  conduit-async,
+  core_unix ? null,
+  uri,
+  uri-sexp,
+  logs,
+  fmt,
+  sexplib0,
+  ipaddr,
+  magic-mime,
+  ounit,
+  mirage-crypto,
+  core,
+  digestif,
 }:
 
 buildDunePackage {
@@ -27,6 +29,8 @@ buildDunePackage {
     version
     src
     ;
+
+  minimalOCamlVersion = if lib.versionOlder cohttp.version "6.0.0" then "4.14" else "5.1";
 
   buildInputs = [ ppx_sexp_conv ];
 
@@ -47,12 +51,14 @@ buildDunePackage {
     ipaddr
   ];
 
-  # Examples don't compile with core 0.15.  See https://github.com/mirage/ocaml-cohttp/pull/864.
-  doCheck = false;
+  doCheck = true;
   checkInputs = [
     ounit
-    mirage-crypto
     core
+    digestif
+  ]
+  ++ lib.optionals (lib.versionOlder cohttp.version "6.0.0") [
+    mirage-crypto
   ];
 
   meta = cohttp.meta // {

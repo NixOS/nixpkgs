@@ -1,45 +1,47 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, filebytes
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  filebytes,
+  keystone-engine,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ropper";
-  version = "1.13.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.13.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sashs";
     repo = "Ropper";
-    rev = "v${version}";
-    hash = "sha256-3tWWIYqh/G/b7Z6BMua5bRvtSh4SibT6pv/NArhmqPE=";
+    tag = "v${version}";
+    hash = "sha256-MOAbACLDdeKCMV4K/n1rAQlxDN0JoDIiUF6Zr3yPw8o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     capstone
     filebytes
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    ropchain = [ keystone-engine ];
+  };
 
-  pythonImportsCheck = [
-    "ropper"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  pythonImportsCheck = [ "ropper" ];
+
+  meta = {
     description = "Show information about files in different file formats";
     homepage = "https://scoding.de/ropper/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bennofs ];
+    changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bennofs ];
+    mainProgram = "ropper";
   };
 }

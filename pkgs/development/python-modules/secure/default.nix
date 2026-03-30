@@ -1,31 +1,41 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, maya
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  maya,
+  requests,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
   pname = "secure";
-  disabled = isPy27;
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeerror";
     repo = "secure.py";
-    rev = version;
-    sha256 = "1ajz1nx0nnhsc80xbgbc42ib2h08qnccvsp5i583rd9b0f9pklwk";
+    tag = "v${version}";
+    hash = "sha256-lyosOejztFEINGKO0wAYv3PWBL7vpmAq+eQunwP9h5I=";
   };
 
-  propagatedBuildInputs = [ maya requests ];
+  build-system = [ setuptools ];
 
-  # no tests in release
-  doCheck = false;
+  dependencies = [
+    maya
+    requests
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "secure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds optional security headers and cookie attributes for Python web frameworks";
     homepage = "https://github.com/TypeError/secure.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    changelog = "https://github.com/TypeError/secure/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

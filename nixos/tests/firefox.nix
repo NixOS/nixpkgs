@@ -1,69 +1,52 @@
-import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
-let firefoxPackage' = firefoxPackage.override (args: {
-      extraPrefsFiles = (args.extraPrefsFiles or []) ++ [
-        # make sure that autoplay is enabled by default for the audio test
-        (builtins.toString (builtins.toFile "autoplay-pref.js" ''defaultPref("media.autoplay.default",0);''))
-      ];
-  });
-
-in
 {
-  name = firefoxPackage'.unwrapped.pname;
+  lib,
+  pkgs,
+  firefoxPackage,
+  ...
+}:
+{
+  name = firefoxPackage.pname;
+
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco shlevy ];
+    maintainers = [ shlevy ];
   };
 
   nodes.machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
-      environment.systemPackages = [
-        firefoxPackage'
-        pkgs.xdotool
-      ];
+    {
+      imports = [ ./common/x11.nix ];
+      environment.systemPackages = [ pkgs.xdotool ];
 
-      # Create a virtual sound device, with mixing
-      # and all, for recording audio.
-      boot.kernelModules = [ "snd-aloop" ];
-      sound.enable = true;
-      sound.extraConfig = ''
-        pcm.!default {
-          type plug
-          slave.pcm pcm.dmixer
-        }
-        pcm.dmixer {
-          type dmix
-          ipc_key 1
-          slave {
-            pcm "hw:Loopback,0,0"
-            rate 48000
-            periods 128
-            period_time 0
-            period_size 1024
-            buffer_size 8192
-          }
-        }
-        pcm.recorder {
-          type hw
-          card "Loopback"
-          device 1
-          subdevice 0
-        }
-      '';
+      programs.firefox = {
+        enable = true;
+        preferences."media.autoplay.default" = 0;
+        package = firefoxPackage;
+      };
+
+      hardware.alsa = {
+        enable = true;
+        enableRecorder = true;
+        defaultDevice.playback = "pcm.recorder";
+      };
 
       systemd.services.audio-recorder = {
         description = "Record NixOS test audio to /tmp/record.wav";
-        script = "${pkgs.alsa-utils}/bin/arecord -D recorder -f S16_LE -r48000 /tmp/record.wav";
+        script = "${pkgs.alsa-utils}/bin/arecord -Drecorder -fS16_LE -r48000 -c2 /tmp/record.wav";
       };
 
     };
 
-  testScript = ''
+  testScript =
+    let
+      exe = lib.getExe firefoxPackage;
+    in
+    ''
       from contextlib import contextmanager
 
 
       @contextmanager
-      def record_audio(machine: Machine):
+      def record_audio(machine: BaseMachine):
           """
           Perform actions while recording the
           machine audio output.
@@ -73,7 +56,7 @@ in
           machine.systemctl("stop audio-recorder")
 
 
-      def wait_for_sound(machine: Machine):
+      def wait_for_sound(machine: BaseMachine):
           """
           Wait until any sound has been emitted.
           """
@@ -97,7 +80,7 @@ in
 
       with subtest("Wait until Firefox has finished loading the Valgrind docs page"):
           machine.execute(
-              "xterm -e '${firefoxPackage'.unwrapped.binaryName} file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &"
+              "xterm -e '${exe} file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &"
           )
           machine.wait_for_window("Valgrind")
           machine.sleep(40)
@@ -105,7 +88,7 @@ in
       with subtest("Check whether Firefox can play sound"):
           with record_audio(machine):
               machine.succeed(
-                  "${firefoxPackage'.unwrapped.binaryName} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
+                  "${exe} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
               )
               wait_for_sound(machine)
           machine.copy_from_vm("/tmp/record.wav")
@@ -122,4 +105,4 @@ in
           machine.screenshot("screen")
     '';
 
-})
+}

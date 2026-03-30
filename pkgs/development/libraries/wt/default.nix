@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
-, pcre, harfbuzz, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  pkg-config,
+  doxygen,
+  qtbase,
+  libharu,
+  pango,
+  fcgi,
+  firebird,
+  libmysqlclient,
+  libpq,
+  graphicsmagick,
+  glew,
+  openssl,
+  harfbuzz,
+  icu,
 }:
 
 let
@@ -17,13 +34,28 @@ let
         inherit sha256;
       };
 
-      nativeBuildInputs = [ cmake pkg-config ];
+      nativeBuildInputs = [
+        cmake
+        pkg-config
+      ];
       buildInputs = [
-        boost doxygen qt48Full libharu
-        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
-        openssl pcre harfbuzz icu
+        boost
+        doxygen
+        qtbase
+        libharu
+        pango
+        fcgi
+        firebird
+        libmysqlclient
+        libpq
+        graphicsmagick
+        glew
+        openssl
+        harfbuzz
+        icu
       ];
 
+      dontWrapQtApps = true;
       cmakeFlags = [
         "-DWT_CPP_11_MODE=-std=c++11"
         "--no-warn-unused-cli"
@@ -32,25 +64,20 @@ let
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DGM_PREFIX=${graphicsmagick}"
       ]
-      ++ lib.optional (libmysqlclient != null)
-        "-DMYSQL_PREFIX=${libmysqlclient}";
+      ++ lib.optional (libmysqlclient != null) "-DMYSQL_PREFIX=${libmysqlclient}";
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
-        platforms = platforms.linux;
-        license = licenses.gpl2;
-        maintainers = with maintainers; [ juliendehos willibutz ];
+        platforms = lib.platforms.linux;
+        license = lib.licenses.gpl2;
+        maintainers = with lib.maintainers; [ juliendehos ];
       };
     };
-in {
-  wt3 = generic {
-    version = "3.7.1";
-    sha256 = "19gf5lbrc5shpvcdyzjh20k8zdj4cybxqvkhwqfl9rvhw89qr11k";
-  };
-
+in
+{
   wt4 = generic {
-    version = "4.6.1";
-    sha256 = "04pv4kb8d576bfnd9kjc3cfjls9cm3cgpaiabwb3iyq9z0w585gh";
+    version = "4.12.0";
+    sha256 = "sha256-/SM/iTp/TQU8nq647UAHexFb3S5n6pk3lDkra3AEjis=";
   };
 }

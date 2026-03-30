@@ -4,6 +4,7 @@ use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
 use JSON;
+use Time::Piece;
 
 # Keep track of deleted uids and gids.
 my $uidMapFile = "/var/lib/nixos/uid-map";
@@ -20,6 +21,13 @@ sub updateFile {
     my ($path, $contents, $perms) = @_;
     return if $is_dry;
     write_file($path, { atomic => 1, binmode => ':utf8', perms => $perms // 0644 }, $contents) or die;
+}
+
+# Converts an ISO date to number of days since 1970-01-01
+sub dateToDays {
+    my ($date) = @_;
+    my $time = Time::Piece->strptime($date, "%Y-%m-%d");
+    return $time->epoch / 60 / 60 / 24;
 }
 
 sub nscdInvalidate {
@@ -46,15 +54,14 @@ sub dry_print {
 # Functions for allocating free GIDs/UIDs. FIXME: respect ID ranges in
 # /etc/login.defs.
 sub allocId {
-    my ($used, $prevUsed, $idMin, $idMax, $up, $getid) = @_;
-    my $id = $up ? $idMin : $idMax;
+    my ($used, $prevUsed, $idMin, $idMax, $delta, $getid) = @_;
+    my $id = $delta > 0 ? $idMin : $idMax;
     while ($id >= $idMin && $id <= $idMax) {
         if (!$used->{$id} && !$prevUsed->{$id} && !defined &$getid($id)) {
             $used->{$id} = 1;
             return $id;
         }
-        $used->{$id} = 1;
-        if ($up) { $id++; } else { $id--; }
+        $id += $delta;
     }
     die "$0: out of free UIDs or GIDs\n";
 }
@@ -69,19 +76,19 @@ sub allocGid {
         $gidsUsed{$prevGid} = 1;
         return $prevGid;
     }
-    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, 0, sub { my ($gid) = @_; getgrgid($gid) });
+    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, -1, sub { my ($gid) = @_; getgrgid($gid) });
 }
 
 sub allocUid {
     my ($name, $isSystemUser) = @_;
-    my ($min, $max, $up) = $isSystemUser ? (400, 999, 0) : (1000, 29999, 1);
+    my ($min, $max, $delta) = $isSystemUser ? (400, 999, -1) : (1000, 29999, 1);
     my $prevUid = $uidMap->{$name};
     if (defined $prevUid && $prevUid >= $min && $prevUid <= $max && !defined $uidsUsed{$prevUid}) {
         dry_print("reviving", "would revive", "user '$name' with UID $prevUid");
         $uidsUsed{$prevUid} = 1;
         return $prevUid;
     }
-    return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
+    return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $delta, sub { my ($uid) = @_; getpwuid($uid) });
 }
 
 # Read the declared users/groups
@@ -147,7 +154,7 @@ foreach my $g (@{$spec->{groups}}) {
     if (defined $existing) {
         $g->{gid} = $existing->{gid} if !defined $g->{gid};
         if ($g->{gid} != $existing->{gid}) {
-            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid})");
+            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid}) in /etc/group");
             $g->{gid} = $existing->{gid};
         }
         $g->{password} = $existing->{password}; # do we want this?
@@ -209,32 +216,34 @@ foreach my $u (@{$spec->{users}}) {
     if (defined $existing) {
         $u->{uid} = $existing->{uid} if !defined $u->{uid};
         if ($u->{uid} != $existing->{uid}) {
-            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid})");
+            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid}) in /etc/passwd");
             $u->{uid} = $existing->{uid};
         }
     } else {
         $u->{uid} = allocUid($name, $u->{isSystemUser}) if !defined $u->{uid};
 
-        if (defined $u->{initialPassword}) {
-            $u->{hashedPassword} = hashPassword($u->{initialPassword});
-        } elsif (defined $u->{initialHashedPassword}) {
-            $u->{hashedPassword} = $u->{initialHashedPassword};
+        if (!defined $u->{hashedPassword}) {
+            if (defined $u->{initialPassword}) {
+                $u->{hashedPassword} = hashPassword($u->{initialPassword});
+            } elsif (defined $u->{initialHashedPassword}) {
+                $u->{hashedPassword} = $u->{initialHashedPassword};
+            }
         }
     }
 
     # Ensure home directory incl. ownership and permissions.
     if ($u->{createHome} and !$is_dry) {
-        make_path($u->{home}, { mode => oct($u->{homeMode}) }) if ! -e $u->{home};
+        make_path($u->{home}, { mode => 0755 }) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
         chmod oct($u->{homeMode}), $u->{home};
     }
 
-    if (defined $u->{passwordFile}) {
-        if (-e $u->{passwordFile}) {
-            $u->{hashedPassword} = read_file($u->{passwordFile});
+    if (defined $u->{hashedPasswordFile}) {
+        if (-e $u->{hashedPasswordFile}) {
+            $u->{hashedPassword} = read_file($u->{hashedPasswordFile});
             chomp $u->{hashedPassword};
         } else {
-            warn "warning: password file ‘$u->{passwordFile}’ does not exist\n";
+            warn "warning: password file ‘$u->{hashedPasswordFile}’ does not exist\n";
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});
@@ -283,22 +292,26 @@ my %shadowSeen;
 
 foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf8" }) : ()) {
     chomp $line;
-    my ($name, $hashedPassword, @rest) = split(':', $line, -9);
-    my $u = $usersOut{$name};;
+    # struct name copied from `man 3 shadow`
+    my ($sp_namp, $sp_pwdp, $sp_lstch, $sp_min, $sp_max, $sp_warn, $sp_inact, $sp_expire, $sp_flag) = split(':', $line, -9);
+    my $u = $usersOut{$sp_namp};;
     next if !defined $u;
-    $hashedPassword = "!" if !$spec->{mutableUsers};
-    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
-    chomp $hashedPassword;
-    push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
-    $shadowSeen{$name} = 1;
+    $sp_pwdp = "!" if !$spec->{mutableUsers};
+    $sp_pwdp = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    $sp_expire = dateToDays($u->{expires}) if defined $u->{expires};
+    chomp $sp_pwdp;
+    push @shadowNew, join(":", $sp_namp, $sp_pwdp, $sp_lstch, $sp_min, $sp_max, $sp_warn, $sp_inact, $sp_expire, $sp_flag) . "\n";
+    $shadowSeen{$sp_namp} = 1;
 }
 
 foreach my $u (values %usersOut) {
     next if defined $shadowSeen{$u->{name}};
     my $hashedPassword = "!";
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword};
+    my $expires = "";
+    $expires = dateToDays($u->{expires}) if defined $u->{expires};
     # FIXME: set correct value for sp_lstchg.
-    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
+    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::", $expires, "") . "\n";
 }
 
 updateFile("/etc/shadow", \@shadowNew, 0640);
@@ -321,19 +334,20 @@ $subUidsPrevUsed{$_} = 1 foreach values %{$subUidMap};
 sub allocSubUid {
     my ($name, @rest) = @_;
 
-    # TODO: No upper bounds?
-    my ($min, $max, $up) = (100000, 100000 * 100, 1);
+    # The upper bound of 29000 users is derived from limits in
+    # nixos/modules/programs/shadow.nix which allocates the UID ranges
+    # 1000-29999 for regular users. System users are not allocated
+    # subordinate user or group IDs, and so after removing those 999
+    # system users, we end up with 29000 users that are non-system users
+    # that need subUIDs and subGIDs.
+    my ($min, $max, $delta) = (100000, 100000 + 29000 * 65536 - 1, 65536);
     my $prevId = $subUidMap->{$name};
     if (defined $prevId && !defined $subUidsUsed{$prevId}) {
         $subUidsUsed{$prevId} = 1;
         return $prevId;
     }
 
-    my $id = allocId(\%subUidsUsed, \%subUidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
-    my $offset = $id - 100000;
-    my $count = $offset * 65536;
-    my $subordinate = 100000 + $count;
-    return $subordinate;
+    return allocId(\%subUidsUsed, \%subUidsPrevUsed, $min, $max, $delta, sub { undef });
 }
 
 my @subGids;
@@ -353,6 +367,14 @@ foreach my $u (values %usersOut) {
 
     if($u->{autoSubUidGidRange}) {
         my $subordinate = allocSubUid($name);
+        if (defined $subUidMap->{$name} && $subUidMap->{$name} != $subordinate) {
+          print STDERR "warning: The subuids for '$name' changed, as they coincided with the subuids of a different user (see /etc/subuid). "
+            . "The range now starts with $subordinate instead of $subUidMap->{$name}. "
+            . "If the subuids were used (e.g. with rootless container managers like podman), please change the ownership of affected files accordingly. "
+            . "Alternatively, to keep the old overlapping ranges, add this to the system configuration: "
+            . "users.users.$name.subUidRanges = [{startUid = $subUidMap->{$name}; count = 65536;}]; "
+            . "users.users.$name.subGidRanges = [{startGid = $subUidMap->{$name}; count = 65536;}];\n";
+        }
         $subUidMap->{$name} = $subordinate;
         my $value = join(":", ($name, $subordinate, 65536));
         push @subUids, $value;
@@ -362,4 +384,4 @@ foreach my $u (values %usersOut) {
 
 updateFile("/etc/subuid", join("\n", @subUids) . "\n");
 updateFile("/etc/subgid", join("\n", @subGids) . "\n");
-updateFile($subUidMapFile, encode_json($subUidMap) . "\n");
+updateFile($subUidMapFile, to_json($subUidMap) . "\n");

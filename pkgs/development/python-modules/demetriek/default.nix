@@ -1,65 +1,67 @@
-{ lib
-, aiohttp
-, awesomeversion
-, backoff
-, buildPythonPackage
-, pydantic
-, fetchFromGitHub
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "0.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-demetriek";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-LCHHBcZgO9gw5jyaJiiS4lKyb0ut+PJvKTylIvIKHhc=";
+    tag = "v${version}";
+    hash = "sha256-6vzQaifvQ24LpSQFwPMvEvb1wuyv0iRpLCFHFO9V7sc=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
-    pydantic
+    mashumaro
+    orjson
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "demetriek"
-  ];
+  pythonImportsCheck = [ "demetriek" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python client for LaMetric TIME devices";
     homepage = "https://github.com/frenck/python-demetriek";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frenck/python-demetriek/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,53 +1,78 @@
-{ lib
-, aiohttp
-, async-lru
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
-, six
-, vcrpy
+{
+  lib,
+  aiohttp,
+  async-lru,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  oauthlib,
+  pytestCheckHook,
+  requests-oauthlib,
+  requests,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.12.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ru0DCl9MOrU4uZvLXDxM4txD0D/GR4eYBHvqeMcbTVA=";
+    owner = "tweepy";
+    repo = "tweepy";
+    tag = "v${version}";
+    hash = "sha256-9rJrZb9X3twVtfnQTFjWLH/TttfUNm4KA3/6AIHDKc0=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-lru
+  build-system = [ flit-core ];
+
+  dependencies = [
     oauthlib
     requests
     requests-oauthlib
-    six
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    async = [
+      aiohttp
+      async-lru
+    ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
     vcrpy
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pythonImportsCheck = [ "tweepy" ];
+
+  # The checks with streaming fail due to (seemingly) not decoding (or unexpectedly sending response in) GZIP
+  # Same issue impacted mastodon-py, see https://github.com/halcy/Mastodon.py/commit/cd86887d88bbc07de462d1e00a8fbc3d956c0151 (who just disabled these)
+  disabledTestPaths = [ "tests/test_client.py" ];
+
+  disabledTests = [
+    "test_indicate_direct_message_typing"
+    "testcachedifferentqueryparameters"
+    "testcachedresult"
+    "testcreatedestroyblock"
+    "testcreatedestroyfriendship"
+    "testcreateupdatedestroylist"
+    "testgetfollowerids"
+    "testgetfollowers"
+    "testgetfriendids"
+    "testgetfriends"
+    "testgetuser"
+    "testcursorcursoritems"
+    "testcursorcursorpages"
+    "testcursornext"
   ];
 
-  pythonImportsCheck = [
-    "tweepy"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Twitter library for Python";
     homepage = "https://github.com/tweepy/tweepy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/tweepy/tweepy/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

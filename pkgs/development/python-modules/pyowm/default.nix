@@ -1,50 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, pysocks
-, pythonOlder
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  pysocks,
+  requests,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "3.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "csparpa";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
+    repo = "pyowm";
+    tag = version;
+    hash = "sha256-D1Cl3uWoEIUqA0R+bjRL2YgsVKj5inuBAVLJYluADg0=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "geojson" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     geojson
     pysocks
     requests
+    setuptools
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Run only tests which don't require network access
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  enabledTestPaths = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "pyowm"
-  ];
+  pythonImportsCheck = [ "pyowm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/csparpa/pyowm/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

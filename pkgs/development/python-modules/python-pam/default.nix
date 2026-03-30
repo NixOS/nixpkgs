@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pam
-, six
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pam,
+  six,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "python-pam";
   version = "2.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FirefighterBlu3";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
+    repo = "python-pam";
+    tag = "v${version}";
+    hash = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
   };
 
   postPatch = ''
@@ -25,13 +26,9 @@ buildPythonPackage rec {
       --replace 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pam
-  ];
+  buildInputs = [ pam ];
 
   propagatedBuildInputs = [
     six
@@ -40,10 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pam" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python pam module";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar mkg20001 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mkg20001
+    ];
   };
 }

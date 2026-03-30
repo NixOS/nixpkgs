@@ -1,60 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build deps
-, poetry-core
+  # build deps
+  poetry-core,
 
-# propagates
-, cbor2
-, python-dateutil
-, pyyaml
-, tomlkit
-, u-msgpack-python
+  # propagates
+  cbor2,
+  colorama,
+  python-dateutil,
+  pyyaml,
+  rich-argparse,
+  ruamel-yaml,
+  tomli,
+  tomlkit,
+  u-msgpack-python,
 
-# tested using
-, pytestCheckHook
+  # tested using
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "1.3.0"; # test with `nix-build pkgs/pkgs-lib/format`
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256:nTM3jrPf0kGE15J+ZXBIt2+NGSW2a6VlZCKj70n5kHM=";
+    repo = "remarshal";
+    tag = "v${version}";
+    hash = "sha256-/K8x6ij23pk5O1+XJdFHaGbZ47nFMbXzp+4UMO5dGp4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-      --replace 'PyYAML = "^5.3"' 'PyYAML = "*"' \
-      --replace 'tomlkit = "^0.7"' 'tomlkit = "*"'
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cbor2
+    colorama
     python-dateutil
     pyyaml
+    rich-argparse
+    ruamel-yaml
+    tomli
     tomlkit
     u-msgpack-python
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/${src.tag}";
     description = "Convert between TOML, YAML and JSON";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
-    maintainers = with maintainers; [ offline ];
+    maintainers = [ ];
+    mainProgram = "remarshal";
   };
 }

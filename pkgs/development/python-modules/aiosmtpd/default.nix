@@ -1,42 +1,44 @@
-{ lib
-, atpublic
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  atpublic,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+
+  # for passthru.tests
+  django,
+  aiosmtplib,
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.4.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
-    rev = version;
-    sha256 = "0hbpyns1j1fpvpj7gyb8cz359j7l4hzfqbig74xp4xih59sih0wj";
+    repo = "aiosmtpd";
+    tag = "v${version}";
+    hash = "sha256-Ih/xbWM9O/fFQiZezydlPlIr36fLRc2lLgdfxD5Jviw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     atpublic
     attrs
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  # Fixes for Python 3.10 can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
-  doCheck = pythonOlder "3.10";
+  # Fixes can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
+  doCheck = false;
 
   disabledTests = [
     # Requires git
@@ -45,18 +47,22 @@ buildPythonPackage rec {
     "test_byclient"
   ];
 
-  pythonImportsCheck = [
-    "aiosmtpd"
-  ];
+  pythonImportsCheck = [ "aiosmtpd" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit django aiosmtplib;
+  };
+
+  meta = {
     description = "Asyncio based SMTP server";
+    mainProgram = "aiosmtpd";
     homepage = "https://aiosmtpd.readthedocs.io/";
+    changelog = "https://github.com/aio-libs/aiosmtpd/releases/tag/v${version}";
     longDescription = ''
       This is a server for SMTP and related protocols, similar in utility to the
       standard library's smtpd.py module.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

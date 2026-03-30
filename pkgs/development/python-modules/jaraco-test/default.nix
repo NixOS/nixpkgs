@@ -1,53 +1,47 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, setuptools-scm
-, toml
-, jaraco_functools
-, jaraco-context
-, more-itertools
-, jaraco_collections
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  jaraco-functools,
+  jaraco-context,
+  jaraco-collections,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-test";
-  version = "5.1.0";
+  version = "5.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
-
-  src = fetchPypi {
-    pname = "jaraco.test";
-    inherit version;
-    sha256 = "04a7503c0c78cd057bd6b5f16ad1e3379b911b619df6694480a564ebc214c0a8";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "jaraco.test";
+    tag = "v${version}";
+    hash = "sha256-Ym0r92xCh+DNpFexqPlRVgcDGYNvnaJHEs5/RMaUr+s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"coherent.licensed",' ""
+  '';
 
-  propagatedBuildInputs = [
-    toml
-    jaraco_functools
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    jaraco-functools
     jaraco-context
-    more-itertools
-    jaraco_collections
+    jaraco-collections
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pythonImportsCheck = [ "jaraco.test" ];
 
   meta = {
     description = "Testing support by jaraco";
     homepage = "https://github.com/jaraco/jaraco.test";
+    changelog = "https://github.com/jaraco/jaraco.test/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

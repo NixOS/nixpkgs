@@ -1,18 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
-  version = "0.2.4";
+  version = "0.2.6";
   pname = "python-lzf";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1l8m6vzwm1m8hn7ldw8j8r2b6r199k8z3q0wnhdyy4p68hahyhni";
+  src = fetchFromGitHub {
+    owner = "teepark";
+    repo = "python-lzf";
+    tag = "release-${version}";
+    hash = "sha256-n5E75kRqe0dDbyFicoyLBAVi/SuoUU7qJka3viipQk8=";
   };
 
-  meta = with lib; {
-    description = "liblzf python bindings";
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  meta = {
+    description = "Liblzf python bindings";
     homepage = "https://github.com/teepark/python-lzf";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

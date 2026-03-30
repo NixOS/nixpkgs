@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "ajpy";
   version = "0.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -12,10 +17,9 @@ buildPythonPackage rec {
   # ajpy doesn't have tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "AJP package crafting library";
     homepage = "https://github.com/hypn0s/AJPy/";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ y0no ];
+    license = lib.licenses.lgpl2;
   };
 }

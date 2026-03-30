@@ -1,32 +1,40 @@
-{ config, lib, options, pkgs, ... }: let
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+let
   cfg = config.services.ergochat;
-in {
+in
+{
   options = {
     services.ergochat = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "Ergo IRC daemon");
+      enable = lib.mkEnableOption "Ergo IRC daemon";
 
       openFilesLimit = lib.mkOption {
         type = lib.types.int;
         default = 1024;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of open files. Limits the clients and server connections.
         '';
       };
 
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = (pkgs.formats.yaml {}).generate "ergo.conf" cfg.settings;
-        defaultText = "generated config file from <literal>.settings</literal>";
-        description = lib.mdDoc ''
+        default = (pkgs.formats.yaml { }).generate "ergo.conf" cfg.settings;
+        defaultText = lib.literalMD "generated config file from `settings`";
+        description = ''
           Path to configuration file.
-          Setting this will skip any configuration done via `.settings`
+          Setting this will skip any configuration done via `settings`
         '';
       };
 
       settings = lib.mkOption {
-        type = (pkgs.formats.yaml {}).type;
-        description = lib.mdDoc ''
+        type = (pkgs.formats.yaml { }).type;
+        description = ''
           Ergo IRC daemon configuration file.
           https://raw.githubusercontent.com/ergochat/ergo/master/default.yaml
         '';
@@ -37,7 +45,7 @@ in {
           server = {
             name = "example.com";
             listeners = {
-              ":6667" = {};
+              ":6667" = { };
             };
             casemapping = "permissive";
             enforce-utf = true;
@@ -130,20 +138,17 @@ in {
     environment.etc."ergo.yaml".source = cfg.configFile;
 
     # merge configured values with default values
-    services.ergochat.settings =
-      lib.mapAttrsRecursive (_: lib.mkDefault) options.services.ergochat.settings.default;
+    services.ergochat.settings = lib.mapAttrsRecursive (
+      _: lib.mkDefault
+    ) options.services.ergochat.settings.default;
 
     systemd.services.ergochat = {
       description = "Ergo IRC daemon";
       wantedBy = [ "multi-user.target" ];
-      # reload is not applying the changed config. further investigation is needed
-      # at some point this should be enabled, since we don't want to restart for
-      # every config change
-      # reloadIfChanged = true;
-      restartTriggers = [ cfg.configFile ];
+      reloadTriggers = [ cfg.configFile ];
       serviceConfig = {
+        Type = "notify-reload";
         ExecStart = "${pkgs.ergochat}/bin/ergo run --conf /etc/ergo.yaml";
-        ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         DynamicUser = true;
         StateDirectory = "ergo";
         LimitNOFILE = toString cfg.openFilesLimit;
@@ -151,5 +156,8 @@ in {
     };
 
   };
-  meta.maintainers = with lib.maintainers; [ lassulus tv ];
+  meta.maintainers = with lib.maintainers; [
+    lassulus
+    tv
+  ];
 }

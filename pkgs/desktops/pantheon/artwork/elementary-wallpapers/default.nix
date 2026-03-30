@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, gettext
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  gettext,
+  meson,
+  ninja,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
-  version = "6.1.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "wallpapers";
     rev = version;
-    sha256 = "sha256-E/cUxa/GNt/01EjuuvurHxJu3qV9e+jcdcCi2+NxVDA=";
+    sha256 = "sha256-qbqYr+3Vqwi1UBD0fRW6lI2rj5Iy51taZRGxDTpKfpg=";
   };
 
   nativeBuildInputs = [
@@ -32,17 +33,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of wallpapers for elementary";
     homepage = "https://github.com/elementary/wallpapers";
-    license = licenses.publicDomain;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }
-

@@ -1,10 +1,19 @@
-{ lib, buildDunePackage, fetchurl, alcotest, fmt, menhir, re }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  fmt,
+  menhir,
+  re,
+}:
 
 buildDunePackage rec {
   pname = "graphql_parser";
   version = "0.14.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/andreas/ocaml-graphql-server/releases/download/${version}/graphql-${version}.tbz";
@@ -12,7 +21,10 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ menhir ];
-  propagatedBuildInputs = [ fmt re ];
+  propagatedBuildInputs = [
+    fmt
+    re
+  ];
 
   checkInputs = [ alcotest ];
 

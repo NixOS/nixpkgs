@@ -1,48 +1,39 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "python-rabbitair";
   version = "0.0.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rabbit-air";
-    repo = pname;
+    repo = "python-rabbitair";
     rev = "v${version}";
     hash = "sha256-CGr7NvnGRNTiKq5BpB/zmfgyd/2ggTbO0nj+Q+MavTs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cryptography
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "rabbitair"
-  ];
+  pythonImportsCheck = [ "rabbitair" ];
 
   disabledTests = [
     # Tests require network access
@@ -56,10 +47,10 @@ buildPythonPackage rec {
     "test_zeroconf"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the control of Rabbit Air air purifiers";
     homepage = "https://github.com/rabbit-air/python-rabbitair";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

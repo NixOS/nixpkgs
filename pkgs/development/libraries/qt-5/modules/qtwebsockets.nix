@@ -1,7 +1,18 @@
-{ qtModule, qtbase, qtdeclarative }:
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+}:
 
 qtModule {
   pname = "qtwebsockets";
-  qtInputs = [ qtbase qtdeclarative ];
-  outputs = [ "out" "dev" "bin" ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 }

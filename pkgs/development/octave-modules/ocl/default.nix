@@ -1,29 +1,27 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "ocl";
-  version = "1.1.1";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0ayi5x9zk9p4zm0qsr3i94lyp5468c9d1a7mqrqjqpdvkhrw0xnm";
+    sha256 = "sha256-ymahtzdCX4D3rBMThUmhWOY238yckP0bmNE0xFhK0No=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/ocl/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/ocl/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Use OpenCL for parallelization";
     longDescription = ''
-       Package using OpenCL for parallelization, mostly suitable to
-       Single-Instruction-Multiple-Data (SIMD) computations, selectively
-       using available OpenCL hardware and drivers.
+      Package using OpenCL for parallelization, mostly suitable to
+      Single-Instruction-Multiple-Data (SIMD) computations, selectively
+      using available OpenCL hardware and drivers.
     '';
-    # error: structure has no member 'dir'
-    broken = stdenv.isDarwin;
   };
 }

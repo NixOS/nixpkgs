@@ -1,20 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bleach
-, bokeh
-, param
-, pyviz-comms
-, markdown
-, pyct
-, testpath
-, tqdm
-, nodejs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bleach,
+  bokeh,
+  linkify-it-py,
+  markdown,
+  markdown-it-py,
+  mdit-py-plugins,
+  narwhals,
+  pandas,
+  param,
+  pyviz-comms,
+  pyct,
+  requests,
+  setuptools,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.14.1";
+  version = "1.8.5";
 
   format = "wheel";
 
@@ -22,32 +29,44 @@ buildPythonPackage rec {
   # artifacts using npm, the bundling invoked in setup.py
   # tries to fetch even more artifacts
   src = fetchPypi {
-    inherit pname version format;
-    hash = "sha256-DSurTC+inYSoGJ047u03K+wEQhGFqqRX0uS5qb3sNEI=";
+    inherit pname version;
+    format = "wheel";
+    hash = "sha256-srrwEPz6xMku7/5x9GmQey9/rc/9025C+HxUHLtIw7M=";
+    dist = "py3";
+    python = "py3";
   };
+
+  pythonRelaxDeps = [ "bokeh" ];
 
   propagatedBuildInputs = [
     bleach
     bokeh
-    param
-    pyviz-comms
+    linkify-it-py
     markdown
+    markdown-it-py
+    mdit-py-plugins
+    narwhals
+    pandas
+    param
     pyct
-    testpath
+    pyviz-comms
+    requests
+    setuptools
     tqdm
+    typing-extensions
   ];
+
+  pythonImportsCheck = [ "panel" ];
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
 
-  passthru = {
-    inherit nodejs; # For convenience
-  };
-
-  meta = with lib; {
-    description = "A high level dashboarding library for python visualization libraries";
-    homepage = "https://pyviz.org";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+  meta = {
+    description = "High level dashboarding library for python visualization libraries";
+    mainProgram = "panel";
+    homepage = "https://github.com/holoviz/panel";
+    changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ locnide ];
   };
 }

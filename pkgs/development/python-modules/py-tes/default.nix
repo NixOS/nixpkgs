@@ -1,49 +1,56 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  python-dateutil,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  setuptools,
+  sphinx-rtd-theme,
 }:
 
 buildPythonPackage rec {
   pname = "py-tes";
-  version = "0.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ohsu-comp-bio";
-    repo = pname;
-    rev = version;
-    hash = "sha256-HZeyCQHiqfdquWQD5axS73JDjDMUieONwm5VyA+vTFk=";
+    repo = "py-tes";
+    tag = version;
+    hash = "sha256-hZF4koc/nZ8rBYKfhIQCLtn4DKiljJrSBgkKX8bMoQ0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     future
     python-dateutil
     requests
+    sphinx-rtd-theme
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "tes"
+  pythonImportsCheck = [ "tes" ];
+
+  disabledTestPaths = [
+    # Tests require running funnel
+    "tests/integration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for the GA4GH Task Execution API";
     homepage = "https://github.com/ohsu-comp-bio/py-tes";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ohsu-comp-bio/py-tes/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,25 +1,39 @@
-{ lib, stdenv
-, fetchurl
-, gtk3
-, which
-, pkg-config
-, intltool
-, file
-, libintl
-, hicolor-icon-theme
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk3,
+  which,
+  pkg-config,
+  intltool,
+  file,
+  libintl,
+  hicolor-icon-theme,
+  python3,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geany";
-  version = "1.38";
+  version = "2.1";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
-    url = "https://download.geany.org/${pname}-${version}.tar.bz2";
-    sha256 = "abff176e4d48bea35ee53037c49c82f90b6d4c23e69aed6e4a5ca8ccd3aad546";
+    url = "https://download.geany.org/geany-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-a5aohERjMAwQuWkqCl7a2CNu7J6ENC9XX4PU/IkzEig=";
   };
+
+  patches = [
+    # The test runs into UB in headless environments and crashes at least on headless Darwin.
+    # Remove if https://github.com/geany/geany/pull/3676 is merged (or the issue fixed otherwise).
+    ./disable-test-sidebar.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -28,18 +42,22 @@ stdenv.mkDerivation rec {
     which
     file
     hicolor-icon-theme
-    wrapGAppsHook
+    python3
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
+
+  preCheck = ''
+    patchShebangs --build tests/ctags/runner.sh
+    patchShebangs --build scripts
+  '';
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.
@@ -61,8 +79,9 @@ stdenv.mkDerivation rec {
       - Plugin interface
     '';
     homepage = "https://www.geany.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ frlan ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ frlan ];
+    platforms = lib.platforms.all;
+    mainProgram = "geany";
   };
-}
+})

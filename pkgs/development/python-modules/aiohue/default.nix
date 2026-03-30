@@ -1,35 +1,47 @@
-{ lib
-, aiohttp
-, asyncio-throttle
-, awesomeversion
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  asyncio-throttle,
+  awesomeversion,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-cov-stub,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohue";
-  version = "4.5.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "4.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Lcs+Ieh5TEUE+sHqFAZr9rsAZMsI9t2/w87r36IUa1A=";
+    repo = "aiohue";
+    tag = finalAttrs.version;
+    hash = "sha256-Ex1ofLnpoO2oVQ3bc0Fy1kaSd1JGoL8DmnOgFRwz3D8=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     awesomeversion
     aiohttp
     asyncio-throttle
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
+    pytest-aiohttp
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [
@@ -42,10 +54,11 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to talk to Philips Hue";
     homepage = "https://github.com/home-assistant-libs/aiohue";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/home-assistant-libs/aiohue/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

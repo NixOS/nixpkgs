@@ -1,29 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, python, isPy27
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
-  pname = "querystring_parser";
+  pname = "querystring-parser";
   version = "1.2.4";
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "644fce1cffe0530453b43a83a38094dbe422ccba8c9b2f2a1c00280e14ca8a62";
+    pname = "querystring_parser";
+    inherit version;
+    hash = "sha256-ZE/OHP/gUwRTtDqDo4CU2+QizLqMmy8qHAAoDhTKimI=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  build-system = [ setuptools ];
 
-  checkPhase = "${python.interpreter} querystring_parser/tests.py -k 'not test_parse_normalized'";
-  # one test fails due to https://github.com/bernii/querystring-parser/issues/35
-  doCheck = true;
+  dependencies = [ six ];
 
-  meta = with lib; {
+  # https://github.com/bernii/querystring-parser/issues/35
+  doCheck = false;
+
+  pythonImportsCheck = [ "querystring_parser" ];
+
+  meta = {
+    description = "Module to handle nested dictionaries";
     homepage = "https://github.com/bernii/querystring-parser";
-    description = "QueryString parser for Python/Django that correctly handles nested dictionaries";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tbenst ];
+    changelog = "https://github.com/bernii/querystring-parser/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

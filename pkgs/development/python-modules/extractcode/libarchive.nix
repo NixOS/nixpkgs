@@ -1,29 +1,31 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, libarchive
-, libb2
-, bzip2
-, expat
-, lz4
-, xz
-, zlib
-, zstd
-, plugincode
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  libarchive,
+  libb2,
+  bzip2,
+  expat,
+  lz4,
+  xz,
+  zlib,
+  zstd,
+  plugincode,
 }:
 
 buildPythonPackage rec {
   pname = "extractcode-libarchive";
   version = "21.5.31";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "scancode-plugins";
-    rev = "v${version}";
-    sha256 = "02qinla281fc6pmg5xzsrmqnf9js76f2qcbf98zq7m2dkn70as4w";
+    tag = "v${version}";
+    hash = "sha256-nGgFjp1N1IM/Sm4xLJw5WiZncc369/LqNcwFJBS1EQs=";
   };
 
-  sourceRoot = "source/builtins/extractcode_libarchive-linux";
+  sourceRoot = "${src.name}/builtins/extractcode_libarchive-linux";
 
   preBuild = ''
     pushd src/extractcode_libarchive/lib
@@ -41,22 +43,21 @@ buildPythonPackage rec {
     popd
   '';
 
-  propagatedBuildInputs = [
-    plugincode
-  ];
+  propagatedBuildInputs = [ plugincode ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "extractcode_libarchive"
-  ];
+  pythonImportsCheck = [ "extractcode_libarchive" ];
 
-  meta = with lib; {
-    description = "A ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
-    homepage = "https://github.com/nexB/scancode-plugins/tree/main/builtins/extractcode_libarchive-linux";
-    license = with licenses; [ asl20 bsd2 ];
-    maintainers = teams.determinatesystems.members;
-    platforms = platforms.linux;
+  meta = {
+    description = "ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
+    homepage = "https://github.com/aboutcode-org/scancode-plugins/tree/main/builtins/extractcode_libarchive-linux";
+    license = with lib.licenses; [
+      asl20
+      bsd2
+    ];
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

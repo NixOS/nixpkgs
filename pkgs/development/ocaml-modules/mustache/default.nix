@@ -1,21 +1,31 @@
-{ lib, buildDunePackage, fetchFromGitHub, ezjsonm, menhir, menhirLib, ounit }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ezjsonm,
+  menhir,
+  menhirLib,
+  ounit2,
+}:
 
 buildDunePackage rec {
   pname = "mustache";
-  version = "3.1.0";
-  useDune2 = true;
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "rgrinberg";
     repo = "ocaml-mustache";
-    rev = "v${version}";
-    sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
+    tag = "v${version}";
+    hash = "sha256-7rdp7nrjc25/Nuj/cf78qxS3Qy4ufaNcKjSnYh4Ri8U=";
   };
 
-  buildInputs = [ ezjsonm menhir ];
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ menhirLib ];
 
-  doCheck = true;
-  checkInputs = [ ounit ];
+  doCheck = false; # Disabled because of "Error: Program mustache-ocaml not found in the tree or in PATH"
+  checkInputs = [
+    ezjsonm
+    ounit2
+  ];
 
   meta = {
     description = "Mustache logic-less templates in OCaml";

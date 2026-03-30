@@ -1,57 +1,57 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitLab
-, gobject-introspection
-, idna
-, libsoup
-, precis-i18n
-, pygobject3
-, pyopenssl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  fetchFromGitLab,
+  gobject-introspection,
+  idna,
+  libsoup_3,
+  packaging,
+  precis-i18n,
+  pygobject3,
+  pyopenssl,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "3.2.5";
-
-  disabled = pythonOlder "3.7";
+  version = "7.1.0";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
-    rev = version;
-    sha256 = "sha256-HIPvZu8Zj69k1FCbkrlSeGtur5cT0TNIYfdXcRbYLwQ=";
+    tag = version;
+    hash = "sha256-eQYGOLV9P7zrqXB8dW8/CatBUT3xpl5h1TChKbY369g=";
   };
 
   nativeBuildInputs = [
     # required for pythonImportsCheck otherwise libsoup cannot be found
     gobject-introspection
+    setuptools
   ];
 
-  buildInputs = [
-    precis-i18n
-  ];
+  buildInputs = [ precis-i18n ];
 
   propagatedBuildInputs = [
     gobject-introspection
     idna
-    libsoup
+    libsoup_3
+    packaging
     pygobject3
     pyopenssl
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nbxmpp" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
     description = "Non-blocking Jabber/XMPP module";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

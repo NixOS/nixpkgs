@@ -1,12 +1,24 @@
-{ buildDunePackage, xtmpl, ppxlib }:
+{
+  buildDunePackage,
+  xtmpl,
+  ppxlib,
+}:
 
 buildDunePackage {
   pname = "xtmpl_ppx";
-  minimalOCamlVersion = "4.11";
 
-  inherit (xtmpl) src version useDune2;
+  inherit (xtmpl) src version;
 
-  buildInputs = [ ppxlib xtmpl ];
+  # Fix for ppxlib ≥ 0.37
+  postPatch = ''
+    substituteInPlace ppx/ppx_xtmpl.ml --replace-fail 'Parse.longident b' \
+      'Astlib.Longident.parse s'
+  '';
+
+  buildInputs = [
+    ppxlib
+    xtmpl
+  ];
 
   meta = xtmpl.meta // {
     description = "Xml templating library, ppx extension";

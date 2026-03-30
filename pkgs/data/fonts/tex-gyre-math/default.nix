@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 let
   variants = {
@@ -28,27 +32,36 @@ let
     };
   };
 
-  mkVariant = variant: {displayName, version, sha256, outputHash}:
-    let dotless_version = builtins.replaceStrings ["."] [""] version; in
+  mkVariant =
+    variant:
+    {
+      displayName,
+      version,
+      sha256,
+      outputHash,
+    }:
+    let
+      dotless_version = builtins.replaceStrings [ "." ] [ "" ] version;
+    in
     stdenv.mkDerivation rec {
-      name = "tex-gyre-${variant}-math-${version}";
+      pname = "tex-gyre-${variant}-math";
       inherit version;
 
       src = fetchzip {
-        url = "http://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
+        url = "https://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
         inherit sha256;
       };
 
       installPhase = ''
         install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
-        install -m444 -Dt $out/share/doc/${name}    doc/*.txt
+        install -m444 -Dt $out/share/doc/${pname}-${version}    doc/*.txt
       '';
 
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
       inherit outputHash;
 
-      meta = with lib; {
+      meta = {
         longDescription = ''
           TeX Gyre ${displayName} Math is a math companion for the TeX Gyre
           ${displayName} family of fonts (see
@@ -58,10 +71,10 @@ let
         # "The TeX Gyre Math fonts are licensed under the GUST Font License (GFL),
         # which is a free license, legally equivalent to the LaTeX Project Public
         # License (LPPL), version 1.3c or later." - GUST website
-        license = licenses.lppl13c;
-        maintainers = with maintainers; [ siddharthist ];
-        platforms = platforms.all;
+        license = lib.licenses.lppl13c;
+        maintainers = with lib.maintainers; [ siddharthist ];
+        platforms = lib.platforms.all;
       };
     };
 in
-  lib.mapAttrs mkVariant variants
+lib.mapAttrs mkVariant variants

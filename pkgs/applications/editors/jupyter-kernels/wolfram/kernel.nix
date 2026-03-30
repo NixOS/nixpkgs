@@ -1,13 +1,17 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wolfram-for-jupyter-kernel";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "WolframResearch";
     repo = "WolframLanguageForJupyter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "19d9dvr0bv7iy0x8mk4f576ha7z7h7id39nyrggwf9cp7gymxf47";
   };
 
@@ -22,11 +26,11 @@ stdenv.mkDerivation rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "A Jupyter kernel for Wolfram Language.";
+  meta = {
+    description = "Jupyter kernel for Wolfram Language";
     homepage = "https://github.com/WolframResearch/WolframLanguageForJupyter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,44 +1,40 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  flit-core,
+  fetchFromGitHub,
+  pytestCheckHook,
+  sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "breathe";
-  version = "4.34.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.35.0-unstable-2025-01-16";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "michaeljones";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OOc3XQjqQa0cVpA+/HHco+koL+0whUm5qC7x3xiEdwQ=";
+    owner = "breathe-doc";
+    repo = "breathe";
+    rev = "9711e826e0c46a635715e5814a83cab9dda79b7b"; # 4.35.0 lacks sphinx 7.2+ compat
+    hash = "sha256-Ie+8RLWeBgbC4s3TC6ege2YNdfdM0d906BPxB7EOwq8=";
   };
 
-  propagatedBuildInputs = [
-    docutils
-    sphinx
-  ];
+  build-system = [ flit-core ];
 
-  checkInputs = [
+  dependencies = [ sphinx ];
+
+  nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "breathe"
-  ];
+  pythonImportsCheck = [ "breathe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx Doxygen renderer";
-    homepage = "https://github.com/michaeljones/breathe";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    inherit (sphinx.meta) platforms;
+    mainProgram = "breathe-apidoc";
+    homepage = "https://github.com/breathe-doc/breathe";
+    license = lib.licenses.bsd3;
   };
 }

@@ -1,32 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, cmake
-, glib
-, gtkmm3
-, harfbuzz
-, libX11
-, libXdmcp
-, libxcb
-, makeWrapper
-, pcre2
-, pkg-config
-, xcbutilcursor
-, xcbutilkeysyms
-, xcbutilwm
-, xmodmap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  cmake,
+  glib,
+  gtkmm3,
+  harfbuzz,
+  libx11,
+  libxdmcp,
+  libxcb,
+  makeWrapper,
+  pcre2,
+  pkg-config,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-wm,
+  libxcb-util,
+  xmodmap,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypr";
-  version = "unstable-2022-05-25";
+  version = "unstable-2023-01-26";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "Hypr";
-    rev = "3e3d943c446ae77c289611a1a875c8dff8883c1e";
-    hash = "sha256-lyaGGm53qxg7WVoFxZ7kerLe12P1N3JbN8nut6oZS50=";
+    rev = "af4641847b578b233a6f06806f575b3f320d74da";
+    hash = "sha256-FUKR5nceEhm9GWa61hHO8+y4GBz7LYKXPB0OpQcQ674=";
   };
 
   patches = [
@@ -44,14 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtkmm3
     harfbuzz
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxcb
     pcre2
-    xcbutilcursor
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-wm
+    libxcb-util
   ];
+
+  # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-c++11-narrowing";
 
   installPhase = ''
     runHook preInstall
@@ -61,17 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/Hypr --prefix PATH : ${lib.makeBinPath [ xmodmap ]}
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
-    description = "A tiling X11 window manager written in modern C++";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
-    inherit (libX11.meta) platforms;
-    broken = stdenv.isDarwin; # xcb/xcb_atom.h not found
+    description = "Tiling X11 window manager written in modern C++";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    inherit (libx11.meta) platforms;
     mainProgram = "Hypr";
   };
 })

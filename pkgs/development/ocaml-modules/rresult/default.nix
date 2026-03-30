@@ -1,14 +1,28 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  result,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-rresult";
-  version = "0.6.0";
+  version = "0.7.0";
   src = fetchurl {
     url = "https://erratique.ch/software/rresult/releases/rresult-${version}.tbz";
-    sha256 = "1k69a3gvrk7f2cshwjzvk7818f0bwxhacgd14wxy6d4gmrggci86";
+    sha256 = "sha256-Eap/W4NGDmBDHjFU4+MsBx1G4VHqV2DPJDd4Bb+XVUA=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ result ];
@@ -23,5 +37,6 @@ stdenv.mkDerivation rec {
     description = "Result value combinators for OCaml";
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
+    broken = !(lib.versionAtLeast ocaml.version "4.07");
   };
 }

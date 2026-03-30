@@ -1,21 +1,56 @@
-{ lib, stdenv, apacheHttpd, autoconf, automake, autoreconfHook, curl, fetchFromGitHub, glib, lasso, libtool, libxml2, libxslt, openssl, pkg-config, xmlsec }:
+{
+  lib,
+  stdenv,
+  apacheHttpd,
+  autoconf,
+  automake,
+  autoreconfHook,
+  curl,
+  fetchFromGitHub,
+  glib,
+  lasso,
+  libtool,
+  libxml2,
+  libxslt,
+  openssl,
+  pkg-config,
+  xmlsec,
+}:
 
 stdenv.mkDerivation rec {
 
   pname = "mod_auth_mellon";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "mod_auth_mellon";
     rev = "v${version}";
-    sha256 = "0alfa8hz09jdg29bi1mvhwyr2nl0nvss2a2kybrcjvdw1fx6vijn";
+    sha256 = "sha256-VcR+HZ5S7fLrGqT1SHCQLQw6v516G0x+wf8Wb5Sy4Gk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];
-  buildInputs = [ apacheHttpd curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    autoconf
+    automake
+  ];
+  buildInputs = [
+    apacheHttpd
+    curl
+    glib
+    lasso
+    libtool
+    libxml2
+    libxslt
+    openssl
+    xmlsec
+  ];
 
-  configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
+  configureFlags = [
+    "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
+    "--exec-prefix=$out"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,12 +59,13 @@ stdenv.mkDerivation rec {
     cp ./.libs/mod_auth_mellon.so $out/modules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/latchset/mod_auth_mellon";
-    description = "An Apache module with a simple SAML 2.0 service provider";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    description = "Apache module with a simple SAML 2.0 service provider";
+    mainProgram = "mellon_create_metadata.sh";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
 
 }

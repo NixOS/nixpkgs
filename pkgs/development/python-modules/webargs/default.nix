@@ -1,24 +1,37 @@
-{ buildPythonPackage, fetchPypi, lib, isPy27, marshmallow, pytestCheckHook
-, pytest-aiohttp, webtest, webtest-aiohttp, flask, django, bottle, tornado
-, pyramid, falcon, aiohttp }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  flit-core,
+  marshmallow,
+  pytestCheckHook,
+  pytest-aiohttp,
+  webtest,
+  webtest-aiohttp,
+  flask,
+  django,
+  bottle,
+  tornado,
+  pyramid,
+  falcon,
+  aiohttp,
+}:
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.2.0";
-  disabled = isPy27;
+  version = "8.7.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mdaJQMRS4HcmSFoV/vQ/EviubAxbORvLp2Bl1FJ/uF0=";
+    hash = "sha256-eZv5A5x2wj/Y3BlREHp1qeVhIDwV1q6PicHkbiNGNsE=";
   };
 
-  pythonImportsCheck = [
-    "webargs"
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ marshmallow ];
+  dependencies = [ marshmallow ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
     webtest
@@ -32,10 +45,12 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "webargs" ];
+
+  meta = {
     description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";
     homepage = "https://github.com/marshmallow-code/webargs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cript0nauta ];
   };
 }

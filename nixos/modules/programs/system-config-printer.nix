@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -10,16 +13,15 @@ with lib;
 
     programs.system-config-printer = {
 
-      enable = mkEnableOption (lib.mdDoc "system-config-printer, a Graphical user interface for CUPS administration");
+      enable = lib.mkEnableOption "system-config-printer, a Graphical user interface for CUPS administration";
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.programs.system-config-printer.enable {
+  config = lib.mkIf config.programs.system-config-printer.enable {
 
     environment.systemPackages = [
       pkgs.system-config-printer

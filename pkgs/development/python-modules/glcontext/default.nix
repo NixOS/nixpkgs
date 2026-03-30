@@ -1,33 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, libGL
-, libX11
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  libGL,
+  libx11,
 }:
 
 buildPythonPackage rec {
   pname = "glcontext";
-  version = "2.3.7";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moderngl";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-U/oP9nx7iTK6EYbUl90UD7fTOo5oDlh9ULPNjRibsXE=";
+    repo = "glcontext";
+    tag = version;
+    hash = "sha256-GC2sb6xQjg99xLcXSynLOOyyqNwCHZwZqrs9RZh99pY=";
   };
 
-  disabled = !isPy3k;
+  build-system = [ setuptools ];
 
-  buildInputs = [ libGL libX11 ];
+  buildInputs = [
+    libGL
+    libx11
+  ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace glcontext/x11.cpp \
-      --replace '"libGL.so"' '"${libGL}/lib/libGL.so"' \
-      --replace '"libX11.so"' '"${libX11}/lib/libX11.so"'
+      --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
+      --replace-fail '"libX11.so"' '"${libx11}/lib/libX11.so"'
     substituteInPlace glcontext/egl.cpp \
-      --replace '"libGL.so"' '"${libGL}/lib/libGL.so"' \
-      --replace '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
+      --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
+      --replace-fail '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
   '';
 
   # Tests fail because they try to open display. See
@@ -37,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glcontext" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moderngl/glcontext";
     description = "OpenGL implementation for ModernGL";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ friedelino ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ ];
   };
 }

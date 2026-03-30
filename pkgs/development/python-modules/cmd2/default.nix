@@ -1,78 +1,60 @@
-{ lib
-, stdenv
-, attrs
-, buildPythonPackage
-, colorama
-, fetchPypi
-, glibcLocales
-, importlib-metadata
-, pyperclip
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, typing-extensions
-, wcwidth
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  gnureadline,
+  pyperclip,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  rich-argparse,
+  setuptools-scm,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.4.2";
-
-  disabled = pythonOlder "3.6";
+  version = "3.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Bz5VXAWFOw9pZfPQMym6vfnjil8s6gKOYaZM1+63StU=";
+    hash = "sha256-bGNyobJs0Uu2IJZTyJ1zAP58FDno3KMPW2tv/bXyFPo=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  build-system = [ setuptools-scm ];
 
-  buildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    attrs
-    colorama
+  dependencies = [
     pyperclip
+    rich-argparse
     wcwidth
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
-  checkInputs = [
-    pytestCheckHook
+  doCheck = true;
+
+  nativeCheckInputs = [
     glibcLocales
+    pytestCheckHook
+    pytest-cov-stub
     pytest-mock
   ];
 
   disabledTests = [
-    # don't require vim for tests, it causes lots of rebuilds
+    # Don't require vim for tests, it causes lots of rebuilds
     "test_find_editor_not_specified"
     "test_transcript"
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Fake the impure dependencies pbpaste and pbcopy
-    mkdir bin
-    echo '#!${stdenv.shell}' > bin/pbpaste
-    echo '#!${stdenv.shell}' > bin/pbcopy
-    chmod +x bin/{pbcopy,pbpaste}
-    export PATH=$(realpath bin):$PATH
-  '';
-
-  doCheck = !stdenv.isDarwin;
-
   pythonImportsCheck = [ "cmd2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ teto ];
+    changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

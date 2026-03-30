@@ -4,12 +4,16 @@
 This hook starts a PostgreSQL server during the `checkPhase`. Example:
 
 ```nix
-{ stdenv, postgresql, postgresqlTestHook }:
+{
+  stdenv,
+  postgresql,
+  postgresqlTestHook,
+}:
 stdenv.mkDerivation {
 
   # ...
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresql
     postgresqlTestHook
   ];
@@ -18,13 +22,13 @@ stdenv.mkDerivation {
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
 ```nix
-  checkPhase ''
-    runHook preCheck
+checkPhase ''
+  runHook preCheck
 
-    # ... your tests
+  # ... your tests
 
-    runHook postCheck
-  ''
+  runHook postCheck
+''
 ```
 
 ## Variables {#sec-postgresqlTestHook-variables}
@@ -45,6 +49,13 @@ Bash-only variables:
  - `postgresqlTestSetupCommands`: bash commands to run after database start, defaults to running `$postgresqlTestSetupSQL` as database administrator.
  - `postgresqlEnableTCP`: set to `1` to enable TCP listening. Flaky; not recommended.
  - `postgresqlStartCommands`: defaults to `pg_ctl start`.
+ - `postgresqlExtraSettings`: Additional configuration to add to `postgresql.conf`
+
+## Hooks {#sec-postgresqlTestHook-hooks}
+
+A number of additional hooks are run in postgresqlTestHook
+
+ - `postgresqlTestSetupPost`: run after postgresql has been set up.
 
 ## TCP and the Nix sandbox {#sec-postgresqlTestHook-tcp}
 

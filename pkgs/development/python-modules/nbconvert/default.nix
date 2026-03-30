@@ -1,28 +1,26 @@
-{ beautifulsoup4
-, bleach
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, fetchpatch
-, fetchurl
-, hatchling
-, importlib-metadata
-, ipywidgets
-, jinja2
-, jupyter_core
-, jupyterlab-pygments
-, lib
-, markupsafe
-, mistune
-, nbclient
-, packaging
-, pandocfilters
-, pygments
-, pyppeteer
-, pytestCheckHook
-, pythonOlder
-, tinycss2
-, traitlets
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  beautifulsoup4,
+  bleach,
+  defusedxml,
+  jinja2,
+  jupyter-core,
+  jupyterlab-pygments,
+  markupsafe,
+  mistune,
+  nbclient,
+  packaging,
+  pandocfilters,
+  pygments,
+  traitlets,
+  flaky,
+  ipykernel,
+  ipywidgets,
+  pytestCheckHook,
 }:
 
 let
@@ -31,24 +29,20 @@ let
     url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
     hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.2.3";
-
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  version = "7.16.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eufMxoSVtWXasVNFnufmUDmXCRPrEVBw2m4sZzzw6fg=";
+    hash = "sha256-V2p+N8ZIDae4Rl7vpmwXhEJDgWzhzMNyYzxrccPA9YI=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
   # various exporter templates
-  patches = [
-    ./templates.patch
-  ];
+  patches = [ ./templates.patch ];
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
@@ -57,16 +51,14 @@ in buildPythonPackage rec {
     cp ${style-css} share/templates/classic/static/style.css
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     bleach
     defusedxml
     jinja2
-    jupyter_core
+    jupyter-core
     jupyterlab-pygments
     markupsafe
     mistune
@@ -74,20 +66,23 @@ in buildPythonPackage rec {
     packaging
     pandocfilters
     pygments
-    tinycss2
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ]
+  ++ bleach.optional-dependencies.css;
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    flaky
+    ipykernel
     ipywidgets
-    pyppeteer
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -104,8 +99,9 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/nbconvert";
+    changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    teams = [ lib.teams.jupyter ];
   };
 }

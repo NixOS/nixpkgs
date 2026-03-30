@@ -1,58 +1,61 @@
-{ lib
-, buildPythonPackage
-, dunamai
-, fetchFromGitHub
-, jinja2
-, markupsafe
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  dunamai,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  poetry,
+  pytestCheckHook,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "0.18.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UO2D80cZurfPCtDXAEQ4nOJdhNtIghLtZN7gL+9xbGc=";
+    repo = "poetry-dynamic-versioning";
+    tag = "v${version}";
+    hash = "sha256-SKVx20RrwhCpdDIc2Pu1oFaXWe2d2GnbJGUX7KqMvo0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     dunamai
     jinja2
-    markupsafe
     tomlkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    poetry
   ];
+
+  # virtualenv: error: argument dest: the destination . is not write-able at /
+  doCheck = false;
 
   disabledTests = [
     # these require .git, but leaveDotGit = true doesn't help
     "test__get_version__defaults"
     "test__get_version__format_jinja"
+    # these expect to be able to run the poetry cli which fails in test hook
+    "test_integration"
   ];
 
-  pythonImportsCheck = [
-    "poetry_dynamic_versioning"
-  ];
+  pythonImportsCheck = [ "poetry_dynamic_versioning" ];
 
-  meta = with lib; {
+  setupHook = ./setup-hook.sh;
+
+  meta = {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";
+    mainProgram = "poetry-dynamic-versioning";
     homepage = "https://github.com/mtkennerly/poetry-dynamic-versioning";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/mtkennerly/poetry-dynamic-versioning/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

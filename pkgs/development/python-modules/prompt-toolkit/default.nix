@@ -1,33 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, six
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.31";
-  format = "setuptools";
+  version = "3.0.52";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    pname = "prompt_toolkit";
-    inherit version;
-    sha256 = "sha256-mtqVLJ0Xh/Uv9tXzSE0LTfiVJ4fAh+32offCyx6ogUg=";
+  src = fetchFromGitHub {
+    owner = "prompt-toolkit";
+    repo = "python-prompt-toolkit";
+    tag = version;
+    hash = "sha256-ggCy7xTvOkjy6DgsO/rPNtQiAQ4FjsK4ShrvkIHioNQ=";
   };
 
-  propagatedBuildInputs = [
-    six
-    wcwidth
-  ];
+  postPatch = ''
+    # https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
+    substituteInPlace src/prompt_toolkit/__init__.py \
+      --replace-fail 'metadata.version("prompt_toolkit")' '"${version}"'
+  '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ wcwidth ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tests/test_completion.py:206: AssertionError
@@ -35,11 +37,9 @@ buildPythonPackage rec {
     "test_pathcompleter_can_expanduser"
   ];
 
-  pythonImportsCheck = [
-    "prompt_toolkit"
-  ];
+  pythonImportsCheck = [ "prompt_toolkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for building powerful interactive command lines";
     longDescription = ''
       prompt_toolkit could be a replacement for readline, but it can be
@@ -48,7 +48,8 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

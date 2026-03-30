@@ -1,7 +1,15 @@
-{lib, buildPythonPackage, numpy, pkgs, pybind11 }:
+{
+  lib,
+  buildPythonPackage,
+  numpy,
+  pkgs,
+  pybind11,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (pkgs.fasttext) pname version src;
+
+  format = "setuptools";
 
   buildInputs = [ pybind11 ];
 
@@ -13,10 +21,10 @@ buildPythonPackage rec {
     HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python module for text classification and representation learning";
     homepage = "https://fasttext.cc/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

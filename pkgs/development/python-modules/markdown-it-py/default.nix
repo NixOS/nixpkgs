@@ -1,60 +1,93 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, linkify-it-py
-, mdurl
-, psutil
-, pytest-benchmark
-, pytest-regressions
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  commonmark,
+  fetchFromGitHub,
+  flit-core,
+  ipykernel,
+  jupyter-sphinx,
+  linkify-it-py,
+  markdown,
+  mdit-py-plugins,
+  mdurl,
+  mistletoe,
+  mistune,
+  myst-parser,
+  panflute,
+  pyyaml,
+  sphinx,
+  sphinx-book-theme,
+  sphinx-copybutton,
+  sphinx-design,
+  stdenv,
+  pytest-regressions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "2.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-6UATJho3SuIbLktZtFcDrCTWIAh52E+n5adcgl49un0=";
+    repo = "markdown-it-py";
+    tag = "v${version}";
+    hash = "sha256-92J9cMit2zwyjoE8G1YpwDxj+wiApQW2eUHxUOUt3as=";
   };
 
-  nativeBuildInputs = [
+  # fix downstrem usage of markdown-it-py[linkify]
+  pythonRelaxDeps = [ "linkify-it-py" ];
+
+  build-system = [
     flit-core
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    linkify-it-py
-    mdurl
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  dependencies = [ mdurl ];
 
-  checkInputs = [
-    psutil
-    pytest-benchmark
+  nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.linkify;
 
-  pythonImportsCheck = [
-    "markdown_it"
-  ];
+  # disable and remove benchmark tests
+  preCheck = ''
+    rm -r benchmarking
+  '';
+  doCheck = !stdenv.hostPlatform.isi686;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "markdown_it" ];
+
+  optional-dependencies = {
+    compare = [
+      commonmark
+      markdown
+      mistletoe
+      mistune
+      panflute
+      # FIXME package markdown-it-pyrs
+    ];
+    linkify = [ linkify-it-py ];
+    plugins = [ mdit-py-plugins ];
+    rtd = [
+      mdit-py-plugins
+      myst-parser
+      pyyaml
+      sphinx
+      sphinx-copybutton
+      sphinx-design
+      sphinx-book-theme
+      jupyter-sphinx
+      ipykernel
+    ];
+  };
+
+  meta = {
     description = "Markdown parser in Python";
     homepage = "https://markdown-it-py.readthedocs.io/";
-    changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    mainProgram = "markdown-it";
   };
 }

@@ -1,96 +1,112 @@
-{ lib, stdenv
-, python
-, qt
-, gtk
-, removeReferencesTo
-, featuresInfo
-, features
-, versionAttr
-, sourceSha256
-# If overriden. No need to set default values, as they are given defaults in
-# the main expressions
-, overrideSrc
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  python,
+  qt,
+  gtk,
+  removeReferencesTo,
+  featuresInfo,
+  features,
+  version,
+  sourceSha256,
+  # If overridden. No need to set default values, as they are given defaults in
+  # the main expressions
+  overrideSrc,
+  fetchFromGitHub,
 }:
 
-rec {
-  version = builtins.concatStringsSep "." (
-    lib.attrVals [ "major" "minor" "patch" ] versionAttr
-  );
-  src = if overrideSrc != {} then
-    overrideSrc
-  else
-    fetchFromGitHub {
-      repo = "gnuradio";
-      owner = "gnuradio";
-      rev = "v${version}";
-      sha256 = sourceSha256;
-    }
-  ;
+let
   # Check if a feature is enabled, while defaulting to true if feat is not
   # specified.
-  hasFeature = feat: (
-    if builtins.hasAttr feat features then
-      features.${feat}
+  hasFeature = feat: (if builtins.hasAttr feat features then features.${feat} else true);
+  versionAttr = {
+    major = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+    minor = builtins.elemAt (lib.splitVersion version) 2;
+    patch = builtins.elemAt (lib.splitVersion version) 3;
+  };
+  cross = stdenv.hostPlatform != stdenv.buildPlatform;
+in
+{
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (hasFeature "man-pages") [
+    "man"
+  ];
+  src =
+    if overrideSrc != { } then
+      overrideSrc
     else
-      true
+      fetchFromGitHub {
+        repo = "gnuradio";
+        owner = "gnuradio";
+        rev = "v${version}";
+        sha256 = sourceSha256;
+      };
+  nativeBuildInputs = [
+    removeReferencesTo
+  ]
+  ++ lib.flatten (
+    lib.mapAttrsToList (
+      feat: info:
+      (lib.optionals (hasFeature feat) (
+        (lib.optionals (builtins.hasAttr "native" info) info.native)
+        ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
+      ))
+    ) featuresInfo
   );
-  nativeBuildInputs = lib.flatten (lib.mapAttrsToList (
-    feat: info: (
-      if hasFeature feat then
-        (if builtins.hasAttr "native" info then info.native else []) ++
-        (if builtins.hasAttr "pythonNative" info then info.pythonNative else [])
-      else
-        []
-    )
-  ) featuresInfo);
-  buildInputs = lib.flatten (lib.mapAttrsToList (
-    feat: info: (
-      if hasFeature feat then
-        (if builtins.hasAttr "runtime" info then info.runtime else []) ++
-        (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
-      else
-        []
-    )
-  ) featuresInfo);
-  cmakeFlags = lib.mapAttrsToList (
-    feat: info: (
+  buildInputs = lib.flatten (
+    lib.mapAttrsToList (
+      feat: info:
+      (lib.optionals (hasFeature feat) (
+        (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
+        ++ (lib.optionals (
+          builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
+        ) info.pythonRuntime)
+      ))
+    ) featuresInfo
+  );
+  cmakeFlags = [
+    # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
+    (lib.cmakeBool "PYBIND11_USE_CROSSCOMPILING" (cross && hasFeature "gnuradio-runtime"))
+  ]
+  ++ lib.mapAttrsToList (
+    feat: info:
+    (
       if feat == "basic" then
         # Abuse this unavoidable "iteration" to set this flag which we want as
         # well - it means: Don't turn on features just because their deps are
         # satisfied, let only our cmakeFlags decide.
-        "-DENABLE_DEFAULT=OFF"
+        (lib.cmakeBool "ENABLE_DEFAULT" false)
       else
-        if hasFeature feat then
-          "-DENABLE_${info.cmakeEnableFlag}=ON"
-        else
-          "-DENABLE_${info.cmakeEnableFlag}=OFF"
-    )) featuresInfo
-  ;
+        (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
+    )
+  ) featuresInfo;
   disallowedReferences = [
-    # TODO: Should this be conditional?
     stdenv.cc
     stdenv.cc.cc
   ]
-    # If python-support is disabled, we probably don't want it referenced
-    ++ lib.optionals (!hasFeature "python-support") [ python ]
-  ;
+  # If python-support is disabled, we probably don't want it referenced
+  ++ lib.optionals (!hasFeature "python-support") [ python ];
   # Gcc references from examples
-  stripDebugList = [ "lib" "bin" ]
-    ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
-    ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
-    ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ]
-  ;
-  postInstall = ""
+  stripDebugList = [
+    "lib"
+    "bin"
+  ]
+  ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
+  ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
+  ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ];
+  postInstall =
+    ""
     # Gcc references
     + lib.optionalString (hasFeature "gnuradio-runtime") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
     ''
     # Clang references in InstalledDir
-    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.isDarwin) ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
-    ''
-  ;
+    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.hostPlatform.isDarwin) ''
+      remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+    '';
   # NOTE: Outputs are disabled due to upstream not using GNU InstallDIrs cmake
   # module. It's not that bad since it's a development package for most
   # purposes. If closure size needs to be reduced, features should be disabled
@@ -102,21 +118,33 @@ rec {
       features
       featuresInfo
       python
-    ;
-  } // lib.optionalAttrs (hasFeature "gr-qtgui") {
+      ;
+    gnuradioOlder = lib.versionOlder versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
+  }
+  // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit qt;
-  } // lib.optionalAttrs (hasFeature "gnuradio-companion") {
+  }
+  // lib.optionalAttrs (hasFeature "gnuradio-companion") {
     inherit gtk;
   };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
   dontWrapQtApps = true;
-  # Tests should succeed, but it's hard to get LD_LIBRARY_PATH right in order
-  # for it to happen.
-  doCheck = false;
+  # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
+  # find libgnuradio-runtim.3.*.dylib .
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export QT_QPA_PLATFORM=offscreen
+  ''
+  + lib.optionalString (hasFeature "gr-qtgui") ''
+    export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Software Defined Radio (SDR) software";
+    mainProgram = "gnuradio-config-info";
     longDescription = ''
       GNU Radio is a free & open-source software development toolkit that
       provides signal processing blocks to implement software radios. It can be
@@ -127,8 +155,13 @@ rec {
       real-world radio systems.
     '';
     homepage = "https://www.gnuradio.org";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ doronbehar bjornfor fpletz jiegec ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      doronbehar
+      bjornfor
+      fpletz
+      jiegec
+    ];
   };
 }

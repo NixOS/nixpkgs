@@ -1,39 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, nose
-, nibabel
-, pydicom
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nibabel,
+  pydicom,
+  pylibjpeg,
+  pint,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dcmstack";
-  version = "0.8";
-
-  disabled = pythonAtLeast "3.8";
-  # https://github.com/moloney/dcmstack/issues/67
+  version = "0.9-unstable-2024-12-05";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moloney";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1n24pp3rqz7ss1z6276fxynnppraxadbl3b9p8ijrcqnpzbzih7p";
+    repo = "dcmstack";
+    rev = "68575996c8956152865e3598b15f621d7c803a96";
+    hash = "sha256-QXnBtlXkxYDJFdjiqCoEuBMcHnq+87YmHX8j5EPW7HU=";
   };
 
-  propagatedBuildInputs = [ nibabel pydicom ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
+  dependencies = [
+    nibabel
+    pydicom
+    pylibjpeg
+    pint
+  ];
 
-  meta = with lib; {
-    homepage = "https://github.com/moloney/dcmstack";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "dcmstack" ];
+
+  disabledTestPaths = [
+    # AttributeError: 'TestNitoolCli' object has no attribute 'out_dir'
+    "test/test_cli.py"
+  ];
+
+  meta = {
     description = "DICOM to Nifti conversion preserving metadata";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    homepage = "https://github.com/moloney/dcmstack";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

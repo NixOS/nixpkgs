@@ -1,21 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "diff-match-patch";
-  version = "20200713";
+  version = "20241021";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "diff_match_patch";
+    inherit version;
+    hash = "sha256-vq5XqZ+kgIRTKTXuKWi4Zh24YYYuyCxvIfSs3W2DUHM=";
+  };
+
+  dependencies = [ flit-core ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     homepage = "https://github.com/diff-match-patch-python/diff-match-patch";
     description = "Diff, Match and Patch libraries for Plain Text";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "da6f5a01aa586df23dfc89f3827e1cafbb5420be9d87769eeb079ddfd9477a18";
-  };
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest -v diff_match_patch.tests
-  '';
 }

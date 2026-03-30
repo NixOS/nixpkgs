@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "syncer";
-  version = "1.3.0";
-  disabled = pythonOlder "3.7";
+  version = "2.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "miyakogi";
-    repo = pname;
+    repo = "syncer";
     rev = "v${version}";
-    sha256 = "13y8jllix1ipkcg9lxa4nxk8kj24vivxfizf4d02cdrha9dw500v";
+    sha256 = "sha256-3EYWy6LuZ/3i+9d0QaclCqWMMw5O3WzhTY3LUL5iMso=";
   };
 
   # Tests require an not maintained package (xfail)
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "syncer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python async to sync converter";
     homepage = "https://github.com/miyakogi/syncer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

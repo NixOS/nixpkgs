@@ -1,43 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools,
+  legacy-cgi,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20220916.1";
-  format = "setuptools";
+  version = "20260313.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GKnJ1aRLuJp+wQVjzL51o/KteGD5k4X221bDzpIiEEQ=";
+    hash = "sha256-LfjeQV3aiCHwopHNZkWfuImyhFjuZQF3j2guVVMIR+k=";
   };
 
-  postPatch = ''
-    # this test has issues with an import statement
-    # rm tests/tags.py
-    sed -i '/from .tags import/d' tests/__init__.py
+  build-system = [ setuptools ];
 
-    # this assertion errors without obvious reason
-    sed -i '/self.assertEqual(csv0, str(r4))/d' tests/caching.py
+  nativeCheckInputs = [ pytestCheckHook ];
 
-    # some sql tests fail against sqlite engine
-    sed -i '/from .sql import/d' tests/__init__.py
-  '';
+  checkInputs = [ legacy-cgi ];
+
+  enabledTestPaths = [
+    "tests/*.py"
+  ];
+
+  disabledTestPaths = [
+    # these tests already seem to be broken on the upstream
+    "tests/nosql.py::TestFields::testRun"
+    "tests/nosql.py::TestSelect::testGroupByAndDistinct"
+    "tests/nosql.py::TestExpressions::testOps"
+    "tests/nosql.py::TestExpressions::testRun"
+    "tests/nosql.py::TestImportExportUuidFields::testRun"
+    "tests/nosql.py::TestConnection::testRun"
+    "tests/restapi.py::TestRestAPI::test_search"
+    "tests/validation.py::TestValidateAndInsert::testRun"
+    "tests/validation.py::TestValidateUpdateInsert::testRun"
+    "tests/validators.py::TestValidators::test_IS_IN_DB"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_scheduler"
+  ];
 
   pythonImportsCheck = [ "pydal" ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest tests
-    runHook postCheck
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ] ;
-    maintainers = with maintainers; [ wamserma ];
+    changelog = "https://github.com/web2py/pydal/commits/v${version}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.acpilight;
 in
 {
   options = {
     hardware.acpilight = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Enable acpilight.
           This will allow brightness control via xbacklight from users in the video group
         '';
@@ -18,7 +21,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ acpilight ];
     services.udev.packages = with pkgs; [ acpilight ];
   };

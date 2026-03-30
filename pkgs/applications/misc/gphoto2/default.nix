@@ -1,22 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, gettext
-, libexif
-, libgphoto2
-, libjpeg
-, libtool
-, popt
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  libexif,
+  libgphoto2,
+  libjpeg,
+  libtool,
+  popt,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gphoto2";
-  version = "2.5.28";
+  version = "2.5.32";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "gphoto2";
     rev = "v${version}";
-    sha256 = "sha256-t5EnM4WaDbOTPM+rJW+hQxBgNErnnZEN9lZvxTKoDhA=";
+    sha256 = "sha256-9Tn6CBxZpzPnlyiBYdpQGViT3NEcup6AXT7Z0DqI/vA=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +39,8 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  meta = with lib; {
-    description = "A ready to use set of digital camera software applications";
+  meta = {
+    description = "Ready to use set of digital camera software applications";
     longDescription = ''
 
       A set of command line utilities for manipulating over 1400 different
@@ -43,8 +48,9 @@ stdenv.mkDerivation rec {
 
     '';
     homepage = "http://www.gphoto.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.jcumming ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.jcumming ];
+    mainProgram = "gphoto2";
   };
 }

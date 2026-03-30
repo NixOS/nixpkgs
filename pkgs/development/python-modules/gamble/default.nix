@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "gamble";
-  version = "0.10";
-  disabled = pythonOlder "3.6";
+  version = "0.14.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1lb5x076blnnz2hj7k92pyq0drbjwsls6pmnabpvyvs4ddhz5w9w";
+  src = fetchFromGitHub {
+    owner = "jpetrucciani";
+    repo = "gamble";
+    tag = version;
+    hash = "sha256-vzaY5gJ0Ou2ArUJ0kuTWzTeLfiRDhUt/Hxpns9rFiDk=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "gamble"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "gamble" ];
+
+  meta = {
     description = "Collection of gambling classes/tools";
     homepage = "https://github.com/jpetrucciani/gamble";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    changelog = "https://github.com/jpetrucciani/gamble/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

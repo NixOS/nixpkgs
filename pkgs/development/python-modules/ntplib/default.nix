@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "ntplib";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,10 +17,9 @@ buildPythonPackage rec {
   # Require networking
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python NTP library";
     homepage = "http://code.google.com/p/ntplib/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-
 }

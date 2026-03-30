@@ -1,33 +1,41 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hpack
-, hyperframe
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  hpack,
+  hyperframe,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "h2";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-qDrKCPvnqst5/seIycC6yTY0NWDtnsGLgqE6EsKNKrs=";
+  src = fetchFromGitHub {
+    owner = "python-hyper";
+    repo = "h2";
+    tag = "v${version}";
+    hash = "sha256-04we2xeh5LtLA4La9WPfXQVczDIz7NpL/6y9TmIELgM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     hpack
     hyperframe
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+  ];
+
+  disabledTests = [
+    # timing sensitive
+    "test_changing_max_frame_size"
   ];
 
   pythonImportsCheck = [
@@ -35,10 +43,11 @@ buildPythonPackage rec {
     "h2.config"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-hyper/h2/blob/${src.tag}/CHANGELOG.rst";
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://github.com/python-hyper/h2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

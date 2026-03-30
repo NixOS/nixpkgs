@@ -1,64 +1,100 @@
-{ buildPythonPackage, lib, fetchPypi
-, pytestCheckHook, filelock, mock, pep8
-, cython, setuptools-scm
-, six, pyshp, shapely, geos, numpy
-, gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, proj, flufl_lock
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  fontconfig,
+  gdal,
+  geos,
+  matplotlib,
+  numpy,
+  owslib,
+  pillow,
+  proj,
+  pyproj,
+  pyshp,
+  pytest-mpl,
+  pytestCheckHook,
+  scipy,
+  setuptools-scm,
+  shapely,
 }:
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.21.0";
+  version = "0.25.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "Cartopy";
-    sha256 = "sha256-zh06KKEy6UyJrDN2mlD4H2VjSrK9QFVjF+Fb1srRzkI=";
+    inherit pname version;
+    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
   };
 
-  postPatch = ''
-    # https://github.com/SciTools/cartopy/issues/1880
-    substituteInPlace lib/cartopy/tests/test_crs.py \
-      --replace "test_osgb(" "dont_test_osgb(" \
-      --replace "test_epsg(" "dont_test_epsg("
-  '';
+  build-system = [ setuptools-scm ];
 
   nativeBuildInputs = [
     cython
     geos # for geos-config
     proj
-    setuptools-scm
   ];
 
   buildInputs = [
-    geos proj
+    geos
+    proj
   ];
 
-  propagatedBuildInputs = [
-    # required
-    six pyshp shapely numpy
-
-    # optional
-    gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib
+  dependencies = [
+    matplotlib
+    numpy
+    pyproj
+    pyshp
+    shapely
   ];
 
-  checkInputs = [ pytestCheckHook filelock mock pep8 flufl_lock ];
+  optional-dependencies = {
+    ows = [
+      owslib
+      pillow
+    ];
+    plotting = [
+      gdal
+      pillow
+      scipy
+    ];
+  };
 
-  pytestFlagsArray = [
-    "--pyargs" "cartopy"
-    "-m" "'not network and not natural_earth'"
+  nativeCheckInputs = [
+    pytest-mpl
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  preCheck = ''
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    export HOME=$TMPDIR
+  '';
+
+  pytestFlags = [
+    "--pyargs"
+    "cartopy"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "natural_earth"
   ];
 
   disabledTests = [
-    "test_nightshade_image"
-    "background_img"
+    "test_gridliner_constrained_adjust_datalim"
     "test_gridliner_labels_bbox_style"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Process geospatial data to create maps and perform analyses";
-    license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
+    mainProgram = "feature_download";
   };
 }

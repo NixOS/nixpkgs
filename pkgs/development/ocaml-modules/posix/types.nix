@@ -1,11 +1,9 @@
-{ lib, buildDunePackage, posix-base }:
+{ buildDunePackage, posix-base }:
 
 buildDunePackage {
   pname = "posix-types";
 
-  inherit (posix-base) version src useDune2;
-
-  minimumOCamlVersion = "4.03";
+  inherit (posix-base) version src;
 
   propagatedBuildInputs = [ posix-base ];
 

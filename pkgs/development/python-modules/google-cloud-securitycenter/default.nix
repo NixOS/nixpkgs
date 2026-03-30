@@ -1,37 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc-google-iam-v1
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.16.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.42.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DU+0gpnWqmtm5nkLoHbEq5k3pnybsEag+aKEp7+HFmo=";
+    pname = "google_cloud_securitycenter";
+    inherit version;
+    hash = "sha256-zwCV0I0vBIgvVRXG31JX8M00u8mzXGMCw/5QpEMKa+Q=";
   };
 
-  propagatedBuildInputs = [
-    grpc-google-iam-v1
-    google-api-core
-    libcst
-    proto-plus
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  checkInputs = [
-    mock
+  dependencies = [
+    grpc-google-iam-v1
+    google-api-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
@@ -43,10 +48,11 @@ buildPythonPackage rec {
     "google.cloud.securitycenter_v1p1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Security Command Center API API client library";
-    homepage = "https://github.com/googleapis/python-securitycenter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

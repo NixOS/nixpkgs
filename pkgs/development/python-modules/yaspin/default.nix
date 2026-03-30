@@ -1,52 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, termcolor
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  termcolor,
 }:
 
 buildPythonPackage rec {
   pname = "yaspin";
-  version = "2.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pavdmyt";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Z+L0SaRe/uN20KS25Di40AjHww9QUjkFaw0Jgbe9yPg=";
+    repo = "yaspin";
+    tag = "v${version}";
+    hash = "sha256-uHW0lSkmNYZh4OGCFgaiIoqhY6KFojSyyEezTNxYqMw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = [ termcolor ];
+
+  pythonRelaxDeps = [
+    "termcolor"
   ];
 
-  propagatedBuildInputs = [
-    termcolor
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-mock
+    pytest-xdist
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/pavdmyt/yaspin/pull/212
-    substituteInPlace pyproject.toml \
-      --replace 'termcolor-whl = "1.1.2"' 'termcolor = "*"'
+  # tests assert for \033 which gets turned off in termcolor when TERM dumb is used which is used by nix
+  preCheck = ''
+    export FORCE_COLOR=1
   '';
 
-  pythonImportsCheck = [
-    "yaspin"
-  ];
+  pythonImportsCheck = [ "yaspin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet Another Terminal Spinner";
     homepage = "https://github.com/pavdmyt/yaspin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

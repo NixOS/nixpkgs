@@ -1,58 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, async-timeout
-, docopt
-, pyserial
-, pyserial-asyncio
-, setuptools
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docopt,
+  pyserial,
+  pyserial-asyncio-fast,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rflink";
-  version = "0.0.63";
-  format = "setuptools";
+  version = "0.0.68";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aequitas";
     repo = "python-rflink";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-BNKcXtsBB90KQe4HXmfJ7H3yepk1dEkozSEy5v8KSAA=";
+    tag = version;
+    hash = "sha256-0mMBZYN3xzRotVuLw2HgzSVhsXUv531x3i97B2lI5KE=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     pyserial
-    pyserial-asyncio
-    setuptools
+    pyserial-asyncio-fast
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/aequitas/python-rflink/issues/65
-    "tests/test_proxy.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version=version_from_git()" "version='${version}'"
   '';
 
-  pythonImportsCheck = [
-    "rflink.protocol"
-  ];
+  pythonImportsCheck = [ "rflink.protocol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and CLI tools for interacting with RFlink 433MHz transceiver";
     homepage = "https://github.com/aequitas/python-rflink";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/aequitas/python-rflink/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

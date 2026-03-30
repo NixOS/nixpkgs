@@ -1,38 +1,49 @@
-{ stdenvNoCC, stdenv
-, lib
-, dpkg, autoPatchelfHook, makeWrapper
-, fetchurl
-, alsa-lib, openssl, udev
-, libglvnd
-, libX11, libXcursor, libXi, libXrandr
-, libpulseaudio
-, libva
-, ffmpeg
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  fetchurl,
+  alsa-lib,
+  openssl,
+  udev,
+  libglvnd,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxfixes,
+  libpulseaudio,
+  libva,
+  ffmpeg_7,
+  libpng,
+  libjpeg8,
+  curl,
+  vulkan-loader,
+  zenity,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_28";
+  version = "150_97c";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20220622215230id_/https://builds.parsecgaming.com/package/parsec-linux.deb";
-    sha256 = "1hfdzjd8qiksv336m4s4ban004vhv00cv2j461gc6zrp37s0fwhc";
+    url = "https://web.archive.org/web/20250226223019/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-8Wkbo6l1NGBPX2QMJszq+u9nLM96tu7WYRTQq6/CzM8=";
   };
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    dpkg-deb -x $src .
-
-    runHook postUnpack
-  '';
-
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     stdenv.cc.cc # libstdc++
     libglvnd
-    libX11
+    libx11
   ];
 
   runtimeDependenciesPath = lib.makeLibraryPath [
@@ -43,11 +54,20 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    ffmpeg_7
+    libpng
+    libjpeg8
+    curl
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxfixes
+    vulkan-loader
+  ];
+
+  binPath = lib.makeBinPath [
+    zenity
   ];
 
   prepareParsec = ''
@@ -64,18 +84,40 @@ stdenvNoCC.mkDerivation {
     mv usr/* $out
 
     wrapProgram $out/bin/parsecd \
+      --prefix PATH : "$binPath" \
       --prefix LD_LIBRARY_PATH : "$runtimeDependenciesPath" \
       --run "$prepareParsec"
+
+    substituteInPlace $out/share/applications/parsecd.desktop \
+      --replace "/usr/bin/parsecd" "parsecd" \
+      --replace "/usr/share/icons" "${placeholder "out"}/share/icons"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://parsecgaming.com/";
+  # Only the main binary needs to be patched, the wrapper script handles
+  # everything else. The libraries in `share/parsec/skel` would otherwise
+  # contain dangling references when copied out of the nix store.
+  dontAutoPatchelf = true;
+
+  fixupPhase = ''
+    runHook preFixup
+
+    autoPatchelf $out/bin
+
+    runHook postFixup
+  '';
+
+  meta = {
+    homepage = "https://parsec.app/";
+    changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ arcnmx ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      arcnmx
+      pabloaul
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "parsecd";
   };
 }

@@ -1,99 +1,148 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
-, hatchling
-, orjson
-, passlib
-, peewee
-, python-jose
-, sqlalchemy
-, trio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  annotated-doc,
+  starlette,
+  pydantic,
+  typing-extensions,
+
+  # tests
+  anyio,
+  dirty-equals,
+  flask,
+  inline-snapshot,
+  passlib,
+  pwdlib,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  sqlalchemy,
+  trio,
+
+  # optional-dependencies
+  fastapi-cli,
+  httpx,
+  jinja2,
+  itsdangerous,
+  python-multipart,
+  pyyaml,
+  ujson,
+  orjson,
+  email-validator,
+  uvicorn,
+  pydantic-settings,
+  pydantic-extra-types,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.85.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.128.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-j3Set+xWNcRqbn90DJOJQhMrJYI3msvWHlFvN1habP0=";
+    repo = "fastapi";
+    tag = version;
+    hash = "sha256-qUTSqTe9mQzfuwqsTCQY6u7Tcnh9XNy4tr5o0/qFFLs=";
   };
 
-  nativeBuildInputs = [
-    hatchling
+  build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    "anyio"
+    "starlette"
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette==" "starlette>="
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
+    annotated-doc
     starlette
     pydantic
+    typing-extensions
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
+  optional-dependencies = {
+    all = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      itsdangerous
+      pyyaml
+      ujson
+      orjson
+      email-validator
+      uvicorn
+    ]
+    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+      pydantic-settings
+      pydantic-extra-types
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
+    standard = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      email-validator
+      uvicorn
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
+  };
+
+  nativeCheckInputs = [
+    anyio
+    dirty-equals
     flask
-    httpx
-    orjson
+    inline-snapshot
     passlib
-    peewee
-    python-jose
+    pwdlib
+    pyjwt
     pytestCheckHook
     pytest-asyncio
-    sqlalchemy
     trio
-  ] ++ passlib.optional-dependencies.bcrypt;
+    sqlalchemy
+  ]
+  ++ anyio.optional-dependencies.trio
+  ++ passlib.optional-dependencies.bcrypt
+  ++ optional-dependencies.all;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
-    "-W ignore::DeprecationWarning"
-  ];
-
-  disabledTestPaths = [
-    # Disabled tests require orjson which requires rust nightly
-    "tests/test_default_response_class.py"
-    # Don't test docs and examples
-    "docs_src"
+    "-Wignore::DeprecationWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [
-    "test_get_custom_response"
-    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
-    "test_websocket_invalid_data"
-    "test_websocket_no_credentials"
-    # TypeError: __init__() missing 1...starlette-releated
-    "test_head"
-    "test_options"
-    "test_trace"
+    # Coverage test
+    "test_fastapi_cli"
+    # Likely pydantic compat issue
+    "test_exception_handler_body_access"
   ];
 
-  pythonImportsCheck = [
-    "fastapi"
+  disabledTestPaths = [
+    # Don't test docs and examples
+    "docs_src"
+    "tests/test_tutorial/test_sql_databases"
+    # Infinite recursion with strawberry-graphql
+    "tests/test_tutorial/test_graphql/test_tutorial001.py"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "fastapi" ];
+
+  meta = {
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
     description = "Web framework for building APIs";
-    homepage = "https://github.com/tiangolo/fastapi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    homepage = "https://github.com/fastapi/fastapi";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

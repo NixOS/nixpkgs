@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "colorclass";
   version = "2.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -12,9 +17,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Robpol86/colorclass";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Automatic support for console colors";
   };
 }

@@ -1,59 +1,71 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, niapy
-, numpy
-, pandas
-, poetry-core
-, scikit-learn
-, toml-adapt
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  niapy,
+  numpy,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
+  scikit-learn,
+  toml-adapt,
+  typer,
+  typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "1.1.11";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "lukapecnik";
+    owner = "firefly-cpp";
     repo = "NiaAML";
-    rev = version;
-    sha256 = "sha256-B87pI1EpZj1xECrgTmzN5S35Cy1nPowBRyu1IDb5zCE=";
+    tag = version;
+    hash = "sha256-AUQhdJc2nSuggV6zNOMihVJIbHAQX6EXsnhn97Tp35A=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+    "typer"
+  ];
+
+  build-system = [
     poetry-core
     toml-adapt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    loguru
     niapy
     numpy
     pandas
     scikit-learn
+    typer
+    typing-extensions
   ];
 
-  # create scikit-learn dep version consistent
+  # create scikit-learn and niapy deps version consistent
   preBuild = ''
     toml-adapt -path pyproject.toml -a change -dep scikit-learn -ver X
+    toml-adapt -path pyproject.toml -a change -dep niapy -ver X
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [
-    "niaaml"
-  ];
+  pythonImportsCheck = [ "niaaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python automated machine learning framework";
-    homepage = "https://github.com/lukapecnik/NiaAML";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    homepage = "https://github.com/firefly-cpp/NiaAML";
+    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, distributed
-, mpi4py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  dask,
+  distributed,
+  mpi4py,
 }:
 
 buildPythonPackage rec {
   pname = "dask-mpi";
-  version = "2022.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2025.10.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CgTx19NaBs3/UGWTMw1EFOokLJFySYzhkfV0LqxJnhc=";
+    hash = "sha256-YxQOdPrILlB5jlfn/b3SVKUTg87lyjeqazRbGHF1g8A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dask
     distributed
     mpi4py
@@ -28,14 +29,13 @@ buildPythonPackage rec {
   # Hardcoded mpirun path in tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dask_mpi"
-  ];
+  pythonImportsCheck = [ "dask_mpi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deploy Dask using mpi4py";
+    mainProgram = "dask-mpi";
     homepage = "https://github.com/dask/dask-mpi";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

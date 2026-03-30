@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl git jq moreutils nix nix-prefetch
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -8,34 +8,29 @@
 #
 set -euo pipefail
 shopt -s inherit_errexit
+set -x
 
 show_usage() {
   cat <<DOC
-Usage: ./update-provider [--force] [--no-build] [<owner>/]<provider>
+Usage: ./update-provider [--force] [--no-build] <owner>_<provider>
 
-Update a single provider in the providers.json inventory file.
+Add or update a single provider in the providers.json inventory file.
 
-For example to update 'terraform-providers.aws' run:
+For example to update 'terraform-providers.hashicorp_aws' run:
 
-    ./update-provider aws
-
-If the provider is not in the list already, use the form '<owner>/<provider>'
-to add the provider to the list:
-
-    ./update-provider hetznercloud/hcloud
+    ./update-provider hashicorp_aws
 
 Options:
 
   * --force: Force the update even if the version matches.
   * --no-build: Don't build provider
-  * --vendor-hash <SRI-hash>: Override the SHA256 or "null".
 DOC
 }
 
+build=1
 force=
 provider=
-build=1
-vendorHash=
+spdx=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -51,10 +46,9 @@ while [[ $# -gt 0 ]]; do
     build=0
     shift
     ;;
-  --vendor-hash)
-    force=1
-    vendorHash=$2
-    shift 2
+  --no-spdx)
+    spdx=0
+    shift
     ;;
   *)
     if [[ -n ${provider} ]]; then
@@ -92,51 +86,57 @@ update_attr() {
 repo_root=$(git rev-parse --show-toplevel)
 
 generate_hash() {
-  nix-prefetch -I nixpkgs="${repo_root}" \
-    "{ sha256 }: (import ${repo_root} {}).terraform-providers.${provider}.$1.overrideAttrs (_: { inherit sha256; })"
+  nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
 }
 
 echo_provider() {
   echo "== terraform-providers.${provider}: $* =="
 }
 
+is_stable_version() {
+  [[ $1 =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+}
+
 pushd "$(dirname "$0")" >/dev/null
 
-if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
+provider="$(echo "$provider" | tr '[:upper:]' '[:lower:]')"
+homepage="$(read_attr homepage)"
+
+if [[ $homepage == "null" ]]; then
+  homepage="https://registry.terraform.io/providers/${provider//_//}"
   echo_provider "init"
-  source_address=registry.terraform.io/${provider}
-  provider=$(basename "${provider}")
-  update_attr "provider-source-address" "${source_address}"
-  update_attr version "0"
+  update_attr homepage "${homepage}"
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
+  update_attr spdx ""
+fi
+
+old_rev="$(read_attr rev)"
+registry_response_unstable=$(curl -s "${homepage//providers/v1/providers}")
+
+if is_stable_version "${old_rev}"; then
+  version_stable=$(jq -r '.versions | map(select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))) | last' <<<"${registry_response_unstable}")
+  registry_response_stable=$(curl -s "${homepage//providers/v1/providers}/${version_stable}")
+  rev="$(jq -r '.tag' <<<"${registry_response_stable}")"
+  registry_response=$registry_response_stable
 else
-  source_address="$(read_attr provider-source-address)"
+  rev="$(jq -r '.tag' <<<"${registry_response_unstable}")"
+  registry_response=$registry_response_unstable
 fi
 
-old_vendor_hash=$(read_attr vendorHash)
-old_version=$(read_attr version)
-
-# The provider source address (used inside Terraform `required_providers` block) is
-# used to compute the registry API endpoint
-#
-# registry.terraform.io/hashicorp/aws (provider source address)
-# registry.terraform.io/providers/hashicorp/aws (provider URL for the website)
-# registry.terraform.io/v1/providers/hashicorp/aws (provider URL for the JSON API)
-registry_response=$(curl -s https://"${source_address/\///v1/providers/}")
-
-version="$(jq -r '.version' <<<"${registry_response}")"
-if [[ ${old_version} == "${version}" && ${force} != 1 && -z ${vendorHash} && ${old_vendor_hash} != "${vendorHash}" ]]; then
-  echo_provider "already at version ${version}"
-  exit
+if [[ ${force} != 1 ]]; then
+  if [[ ${old_rev} == "${rev}" ]]; then
+    echo_provider "already at version ${rev}"
+    exit
+  fi
+  if [[ ${rev//v/} =~ [[:alpha:]] ]]; then
+    echo_provider "not updating to unstable version ${rev}"
+    exit
+  fi
 fi
-if [[ ${version} =~ [[:alpha:]] && ${force} != 1 ]]; then
-  echo_provider "not updating to unstable version ${version}"
-  exit
-fi
-echo_provider "updating from ${old_version} to ${version}"
-update_attr version "${version}"
+echo_provider "updating from ${old_rev} to ${rev}"
+update_attr rev "${rev}"
 
 provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
 
@@ -144,22 +144,25 @@ org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
 update_attr owner "${org}"
 repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
-rev="$(jq -r '.tag' <<<"${registry_response}")"
-update_attr rev "${rev}"
+
+if [[ ${spdx} == 1 ]]; then
+  old_spdx="$(read_attr spdx)"
+  if [[ ${old_spdx} != null ]]; then
+    spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+    update_attr spdx "${spdx}"
+  fi
+fi
+
 echo_provider "calculating hash"
 hash=$(generate_hash src)
 update_attr hash "${hash}"
 
-if [[ -z ${vendorHash} ]]; then
-  if [[ ${old_vendor_hash} == null ]]; then
-    vendorHash=null
-  else
-    echo_provider "calculating vendorHash"
-    vendorHash=$(generate_hash go-modules)
-  fi
+old_vendor_hash="$(read_attr vendorHash)"
+if [[ ${old_vendor_hash} != null ]]; then
+  echo_provider "calculating vendorHash"
+  vendorHash=$(generate_hash goModules)
+  update_attr vendorHash "${vendorHash}"
 fi
-
-update_attr vendorHash "${vendorHash}"
 
 # Check that the provider builds
 if [[ ${build} == 1 ]]; then

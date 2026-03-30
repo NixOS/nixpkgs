@@ -1,18 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, actdiag
-, blockdiag
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  actdiag,
+  blockdiag,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-actdiag";
   version = "3.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,14 +23,14 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.actdiag"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.actdiag" ];
 
-  meta = with lib; {
+  pythonNamespaces = [ "sphinxcontrib" ];
+
+  meta = {
     description = "Sphinx actdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-actdiag";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ davidtwco ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

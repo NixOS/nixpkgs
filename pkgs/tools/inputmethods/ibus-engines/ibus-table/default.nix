@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, docbook2x, pkg-config
-, gtk3, dconf, gobject-introspection
-, ibus, python3, wrapGAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  docbook2x,
+  pkg-config,
+  gtk3,
+  dconf,
+  gobject-introspection,
+  ibus,
+  python3,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
-  version = "1.16.11";
+  version = "1.17.17";
 
   src = fetchFromGitHub {
-    owner  = "kaio";
-    repo   = "ibus-table";
-    rev    = version;
-    sha256 = "sha256-lojHn6esoE5MLyPZ/U70+6o0X2D8EH+R69dgQo+59t4=";
+    owner = "kaio";
+    repo = "ibus-table";
+    rev = version;
+    sha256 = "sha256-Y8tZBcRlND4DsBE0YQXrulgT0kn8WrGUAOEg0j1Nvc8=";
   };
 
   postPatch = ''
@@ -36,11 +46,13 @@ stdenv.mkDerivation rec {
     dconf
     gtk3
     ibus
-    (python3.withPackages (pypkgs: with pypkgs; [
-      dbus-python
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages (
+      pypkgs: with pypkgs; [
+        dbus-python
+        pygobject3
+        (toPythonModule ibus)
+      ]
+    ))
   ];
 
   nativeBuildInputs = [
@@ -48,7 +60,7 @@ stdenv.mkDerivation rec {
     docbook2x
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postUnpack = ''
@@ -56,12 +68,13 @@ stdenv.mkDerivation rec {
       --replace "docbook2man" "docbook2man --sgml"
   '';
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
-    description  = "An IBus framework for table-based input methods";
-    homepage     = "https://github.com/kaio/ibus-table/wiki";
-    license      = licenses.lgpl21;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ mudri ];
+    description = "IBus framework for table-based input methods";
+    mainProgram = "ibus-table-createdb";
+    homepage = "https://github.com/kaio/ibus-table/wiki";
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mudri ];
   };
 }

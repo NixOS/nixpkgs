@@ -1,34 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, aiofiles
-, aiohttp
-, click-log
-, emoji
-, glom
-, jinja2
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  aiofiles,
+  aiohttp,
+  backports-datetime-fromisoformat,
+  click,
+  click-log,
+  emoji,
+  glom,
+  jinja2,
+  pyyaml,
+  freezegun,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dinghy";
-  version = "0.15.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nedbat";
-    repo = pname;
-    rev = version;
-    hash = "sha256-bfB1VVeIl1KzjY0oQ0jQ8M/fK5LZQqYU7AX201QX+Mk=";
+    repo = "dinghy";
+    tag = version;
+    hash = "sha256-51BXQdDxlI6+3ctDSa/6tyRXBb1E9BVej9qy7WtkOGM=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
+    backports-datetime-fromisoformat
+    click
     click-log
     emoji
     glom
@@ -36,18 +42,22 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "dinghy.cli"
-  ];
+  pythonImportsCheck = [ "dinghy.cli" ];
 
-  meta = with lib; {
-    description = "A GitHub activity digest tool";
+  meta = {
+    description = "GitHub activity digest tool";
+    mainProgram = "dinghy";
     homepage = "https://github.com/nedbat/dinghy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ trundle veehaitch ];
+    changelog = "https://github.com/nedbat/dinghy/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      trundle
+      veehaitch
+    ];
   };
 }

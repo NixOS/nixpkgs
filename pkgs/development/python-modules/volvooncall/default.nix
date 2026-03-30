@@ -1,39 +1,42 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, geopy
-, docopt
-, certifi
-, amqtt
-, websockets
-, aiohttp
-, pytestCheckHook
-, asynctest
-, pytest-asyncio
+{
+  lib,
+  aiohttp,
+  amqtt,
+  buildPythonPackage,
+  certifi,
+  docopt,
+  fetchFromGitHub,
+  fetchpatch,
+  geopy,
+  mock,
+  pytest-asyncio_0,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "volvooncall";
-  version = "0.10.1";
-
-  disabled = pythonOlder "3.8";
-
+  version = "0.10.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "volvooncall";
-    rev = "v${version}";
-    hash = "sha256-udYvgKj7Rlc/hA86bbeBfnoVRjKkXT4TwpceWz226cU=";
+    tag = "v${version}";
+    hash = "sha256-xr3g93rt3jvxVZrZY7cFh5eBP3k0arsejsgvx8p5EV4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
+  patches = [
+    # Remove asynctest, https://github.com/molobrakos/volvooncall/pull/92
+    (fetchpatch {
+      name = "remove-asnyc.patch";
+      url = "https://github.com/molobrakos/volvooncall/commit/ef0df403250288c00ed4c600e9dfa79dcba8941e.patch";
+      hash = "sha256-U+hM7vzD9JSEUumvjPSLpVQcc8jAuZHG3/1dQ3wnIcA=";
+    })
   ];
 
-  passthru.optional-dependencies = {
+  propagatedBuildInputs = [ aiohttp ];
+
+  optional-dependencies = {
     console = [
       certifi
       docopt
@@ -46,17 +49,20 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    asynctest
-    pytest-asyncio
+    mock
+    pytest-asyncio_0
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.mqtt;
+  ]
+  ++ optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
+    license = lib.licenses.unlicense;
+    mainProgram = "voc";
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

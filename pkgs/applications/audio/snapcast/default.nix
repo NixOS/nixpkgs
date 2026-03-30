@@ -1,34 +1,72 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, darwin
-, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
-, aixlog, popl
-, pulseaudioSupport ? false, libpulseaudio
-, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  asio,
+  avahi,
+  boost,
+  expat,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  soxr,
+  aixlog,
+  popl,
+  pulseaudioSupport ? false,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  pipewire,
+  nixosTests,
+  openssl,
+}:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snapcast";
-  version = "0.26.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
-    owner  = "badaix";
-    repo   = "snapcast";
-    rev    = "v${version}";
-    sha256 = "sha256-CCifn9OEFM//Hk1PJj8T3MXIV8pXCTdBBXPsHuZwLyQ=";
+    owner = "badaix";
+    repo = "snapcast";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kUw4yQpCxgjP4hH2Lpxc7l+ufhYSKs7xL80aJuPrqOo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    boost17x
-    asio avahi flac libogg libvorbis
-    aixlog popl soxr
-  ] ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optionals stdenv.isDarwin [darwin.apple_sdk.frameworks.IOKit darwin.apple_sdk.frameworks.AudioToolbox];
+    boost
+    asio
+    avahi
+    expat
+    flac
+    libogg
+    libvorbis
+    libopus
+    aixlog
+    popl
+    soxr
+    openssl
+  ]
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    TARGET = "MACOS";
+  };
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport)
+    (lib.cmakeBool "BUILD_WITH_PIPEWIRE" pipewireSupport)
+  ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...
@@ -39,11 +77,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.snapcast = nixosTests.snapcast;
 
-  meta = with lib; {
+  meta = {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

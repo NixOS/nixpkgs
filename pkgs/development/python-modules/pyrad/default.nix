@@ -1,60 +1,58 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, lib
-, poetry-core
-, netaddr
-, six
-, unittestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  setuptools,
+  netaddr,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrad";
-  version = "2.4";
-  format = "pyproject";
+  version = "2.5.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyradius";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
+    repo = "pyrad";
+    tag = finalAttrs.version;
+    hash = "sha256-94BjJRzCSJu/bVuYYKFlJkBcOVcQjmbDJ8QG+JwVpxY=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Migrate to poetry-core
-      url = "https://github.com/pyradius/pyrad/commit/a4b70067dd6269e14a2f9530d820390a8a454231.patch";
-      hash = "sha256-1We9wrVY3Or3GLIKK6hZvEjVYv6JOaahgP9zOMvgErE=";
-    })
+  build-system = [ setuptools ];
+
+  dependencies = [ netaddr ];
+
+  # Upstream doesn't exclude docs, example, and pyrad.tests from package
+  # discovery, causing them to be installed into site-packages.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'exclude = ["tests*"]' 'exclude = ["docs*", "example*", "pyrad.tests*"]'
+  '';
+
+  outputs = [
+    "out"
+    "doc"
   ];
 
   nativeBuildInputs = [
-    poetry-core
+    sphinxHook
+    sphinx-rtd-theme
   ];
 
-  propagatedBuildInputs = [
-    netaddr
-    six
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    substituteInPlace tests/testServer.py \
-      --replace "def testBind(self):" "def dontTestBind(self):" \
-      --replace "def testBindv6(self):" "def dontTestBindv6(self):"
-  '';
+  pythonImportsCheck = [ "pyrad" ];
 
-  checkInputs = [
-    unittestCheckHook
-  ];
+  passthru.updateScript = nix-update-script { };
 
-  pythonImportsCheck = [
-    "pyrad"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python RADIUS Implementation";
     homepage = "https://github.com/pyradius/pyrad";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})

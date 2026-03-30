@@ -1,65 +1,99 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cliff
-, oslo-i18n
-, oslo-utils
-, openstacksdk
-, pbr
-, requests-mock
-, simplejson
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  cliff,
+  fetchFromGitHub,
+  keystoneauth1,
+  openstacksdk,
+  oslo-i18n,
+  oslo-utils,
+  pbr,
+  pythonAtLeast,
+  requests,
+  requests-mock,
+  setuptools,
+  stdenv,
+  stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "unstable-2022-03-09";
+  version = "4.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
-    sha256 = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
+    tag = version;
+    hash = "sha256-Z6qzyT6tmQP2Y4q+hqvna7nRJmmLxEL6XKGrTJu9Ymw=";
   };
 
-  # fake version to make pbr.packaging happy and not reject it...
-  PBR_VERSION = "2.5.0";
-
-  nativeBuildInputs = [
-    pbr
+  patches = [
+    ./fix-pyproject.diff
   ];
 
-  propagatedBuildInputs = [
+  env.PBR_VERSION = version;
+
+  build-system = [
+    pbr
+    setuptools
+  ];
+
+  dependencies = [
     cliff
+    keystoneauth1
     openstacksdk
     oslo-i18n
     oslo-utils
-    simplejson
+    requests
+    stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     stestr
   ];
 
-  checkPhase = ''
-    # tests parse cli output which slightly changed
-    stestr run -e <(echo "
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_filtering_option_to_parser
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_create
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_set
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_unset
-    ")
-  '';
+  checkPhase =
+    let
+      disabledTests =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+        ]
+        ++ lib.optionals (pythonAtLeast "3.14") [
+          # Disable test incompatible with Python 3.14+
+          # See upstream issue: https://bugs.launchpad.net/python-openstackclient/+bug/2138684
+          "osc_lib.tests.utils.test_tags.TestTagHelps"
+        ];
+    in
+    ''
+      runHook preCheck
+      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
+      runHook postCheck
+    '';
 
-  pythonImportsCheck = [ "osc_lib" ];
+  pythonImportsCheck = [
+    "osc_lib"
+    "osc_lib.api"
+    "osc_lib.cli"
+    "osc_lib.command"
+    "osc_lib.test"
+    "osc_lib.tests"
+    "osc_lib.tests.api"
+    "osc_lib.tests.cli"
+    "osc_lib.tests.command"
+    "osc_lib.tests.utils"
+    "osc_lib.utils"
+  ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

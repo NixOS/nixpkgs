@@ -1,13 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "pycritty";
   version = "0.4.0";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Lh2zAEJTyzI8dJTNuyaf7gzhySMpui+CF9qRiubwFhE=";
+    hash = "sha256-Lh2zAEJTyzI8dJTNuyaf7gzhySMpui+CF9qRiubwFhE=";
   };
 
   postPatch = ''
@@ -23,10 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycritty" ];
 
-  meta = with lib; {
-    description = "A CLI tool for changing your alacritty configuration on the fly";
+  meta = {
+    description = "CLI tool for changing your alacritty configuration on the fly";
+    mainProgram = "pycritty";
     homepage = "https://github.com/antoniosarosi/pycritty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jperras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jperras ];
   };
 }

@@ -1,8 +1,11 @@
 # tcsd daemon.
-
-{ config, options, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.tcsd;
@@ -37,10 +40,10 @@ in
 
     services.tcsd = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Whether to enable tcsd, a Trusted Computing management service
           that provides TCG Software Stack (TSS).  The tcsd daemon is
           the only portal to the Trusted Platform Module (TPM), a hardware
@@ -48,45 +51,45 @@ in
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "tss";
-        type = types.str;
-        description = lib.mdDoc "User account under which tcsd runs.";
+        type = lib.types.str;
+        description = "User account under which tcsd runs.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "tss";
-        type = types.str;
-        description = lib.mdDoc "Group account under which tcsd runs.";
+        type = lib.types.str;
+        description = "Group account under which tcsd runs.";
       };
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         default = "/var/lib/tpm";
-        type = types.path;
-        description = lib.mdDoc ''
+        type = lib.types.path;
+        description = ''
           The location of the system persistent storage file.
           The system persistent storage file holds keys and data across
           restarts of the TCSD and system reboots.
         '';
       };
 
-      firmwarePCRs = mkOption {
+      firmwarePCRs = lib.mkOption {
         default = "0,1,2,3,4,5,6,7";
-        type = types.str;
-        description = lib.mdDoc "PCR indices used in the TPM for firmware measurements.";
+        type = lib.types.str;
+        description = "PCR indices used in the TPM for firmware measurements.";
       };
 
-      kernelPCRs = mkOption {
+      kernelPCRs = lib.mkOption {
         default = "8,9,10,11,12";
-        type = types.str;
-        description = lib.mdDoc "PCR indices used in the TPM for kernel measurements.";
+        type = lib.types.str;
+        description = "PCR indices used in the TPM for kernel measurements.";
       };
 
-      platformCred = mkOption {
+      platformCred = lib.mkOption {
         default = "${cfg.stateDir}/platform.cert";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/platform.cert"'';
-        type = types.path;
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/platform.cert"'';
+        type = lib.types.path;
+        description = ''
           Path to the platform credential for your TPM. Your TPM
           manufacturer may have provided you with a set of credentials
           (certificates) that should be used when creating identities
@@ -96,20 +99,20 @@ in
           on this process. '';
       };
 
-      conformanceCred = mkOption {
+      conformanceCred = lib.mkOption {
         default = "${cfg.stateDir}/conformance.cert";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/conformance.cert"'';
-        type = types.path;
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/conformance.cert"'';
+        type = lib.types.path;
+        description = ''
           Path to the conformance credential for your TPM.
           See also the platformCred option'';
       };
 
-      endorsementCred = mkOption {
+      endorsementCred = lib.mkOption {
         default = "${cfg.stateDir}/endorsement.cert";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/endorsement.cert"'';
-        type = types.path;
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/endorsement.cert"'';
+        type = lib.types.path;
+        description = ''
           Path to the endorsement credential for your TPM.
           See also the platformCred option'';
       };
@@ -119,7 +122,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.trousers ];
 
@@ -150,13 +153,13 @@ in
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "tss") {
+    users.users = lib.optionalAttrs (cfg.user == "tss") {
       tss = {
         group = "tss";
         isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "tss") { tss = {}; };
+    users.groups = lib.optionalAttrs (cfg.group == "tss") { tss = { }; };
   };
 }

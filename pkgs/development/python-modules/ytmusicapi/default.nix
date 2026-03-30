@@ -1,43 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "0.24.0";
-  format = "pyproject";
+  version = "1.11.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vbSWgBze3tFLEpHdh3JXij3m5R6iAhTSjrCMaSLZalY=";
+  src = fetchFromGitHub {
+    owner = "sigma67";
+    repo = "ytmusicapi";
+    tag = version;
+    hash = "sha256-csTe1fxoqc2/sDIq/2aVFvhfdhHpXlCrMkPoxZtScnY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   doCheck = false; # requires network access
 
-  pythonImportsCheck = [
-    "ytmusicapi"
-  ];
+  pythonImportsCheck = [ "ytmusicapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for YouTube Music";
     homepage = "https://github.com/sigma67/ytmusicapi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/sigma67/ytmusicapi/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    mainProgram = "ytmusicapi";
   };
 }

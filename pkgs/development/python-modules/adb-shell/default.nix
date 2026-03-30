@@ -1,21 +1,23 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, isPy3k
-, libusb1
-, mock
-, pyasn1
-, pythonAtLeast
-, pycryptodome
-, pytestCheckHook
-, rsa
+{
+  lib,
+  pythonOlder,
+  aiofiles,
+  async-timeout,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  isPy3k,
+  libusb1,
+  mock,
+  pyasn1,
+  pycryptodome,
+  pytestCheckHook,
+  rsa,
 }:
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    hash = "sha256-+RU3nyJpHq0r/9erEbjUILpwIPWq14HdOX7LkSxySs4=";
+    hash = "sha256-pOkFUh3SEu/ch9R1lVoQn50nufQp8oI+D4/+Ybal5CA=";
   };
 
   propagatedBuildInputs = [
@@ -33,31 +35,29 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiofiles
+      async-timeout
     ];
-    usb = [
-      libusb1
-    ];
+    usb = [ libusb1 ];
   };
 
-  checkInputs = [
+  doCheck = pythonOlder "3.12"; # FIXME: tests are broken on 3.13
+
+  nativeCheckInputs = [
     mock
     pycryptodome
     pytestCheckHook
   ]
-  ++ passthru.optional-dependencies.async
-  ++ passthru.optional-dependencies.usb;
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "adb_shell"
-  ];
+  pythonImportsCheck = [ "adb_shell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of ADB with shell and FileSync functionality";
     homepage = "https://github.com/JeffLIrion/adb_shell";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

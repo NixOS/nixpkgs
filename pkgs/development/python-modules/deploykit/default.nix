@@ -1,44 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, bash
-, openssh
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  bash,
+  openssh,
+  pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "deploykit";
-  version = "1.0.1";
+  version = "1.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "numtide";
-    repo = pname;
+    repo = "deploykit";
     rev = version;
-    hash = "sha256-eKyqsGgnJmF2wUYa7HjC1Jwsh03qVTJEP1MtL7JL4Ts=";
+    hash = "sha256-RONE/oJdNmVjLYdJWDTzyXnmStkLIx92GsydaYYG5O4=";
   };
 
-  buildInputs = [
-    setuptools
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bash
     openssh
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_ssh" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_ssh" ];
 
   # don't swallow stdout/stderr
-  pytestFlagsArray = [ "-s" ];
+  pytestFlags = [ "-s" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "deploykit" ];
+
+  meta = {
     description = "Execute commands remote via ssh and locally in parallel with python";
     homepage = "https://github.com/numtide/deploykit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 zowoq ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/numtide/deploykit/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mic92
+      zowoq
+    ];
+    platforms = lib.platforms.unix;
   };
 }

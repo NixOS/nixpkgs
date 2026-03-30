@@ -1,43 +1,41 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.7.6.5";
+  version = "1.7.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R+DauHpRbAuZks1bDJCDSOTH2WQwTRBrIn+tKK4DIZ4=";
+    hash = "sha256-X2ltTzl66bCvObH6/7MZV8Ud+8WjgVhWRy1PTocpN+4=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   # darwin seems to hang
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   checkPhase = ''
-    cd examples
+    runHook preCheck
     ${python.interpreter} -m ppft.tests
+    runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "ppft"
-  ];
+  pythonImportsCheck = [ "ppft" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed and parallel Python";
+    mainProgram = "ppserver";
     homepage = "https://ppft.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/uqfoundation/ppft/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

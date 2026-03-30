@@ -1,38 +1,41 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, behave
-, allure-python-commons
-, setuptools-scm
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  behave,
+  allure-python-commons,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "allure-behave";
-  version = "2.10.0";
+  version = "2.15.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-BzDu/LJBstuchkvUAeCDSIDIiFLZmC4y0s3d+1paGxs=";
+  src = fetchFromGitHub {
+    owner = "allure-framework";
+    repo = "allure-python";
+    tag = version;
+    hash = "sha256-06SKodvyoT0mYn4RmAIryZc+VyTI79KXFK+2/zuhzQ0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  sourceRoot = "${src.name}/allure-behave";
 
-  pythonImportsCheck = [ "allure_behave" ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     allure-python-commons
     behave
   ];
 
-  meta = with lib; {
-    description = "Allure behave integration.";
+  doCheck = false; # no tests
+
+  pythonImportsCheck = [ "allure_behave" ];
+
+  meta = {
+    description = "Allure behave integration";
     homepage = "https://github.com/allure-framework/allure-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

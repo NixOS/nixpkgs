@@ -1,56 +1,65 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, libqtxdg
-, perl
-, xorg
-, autoPatchelfHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  autoPatchelfHook,
+  gitUpdater,
+  kwindowsystem,
+  layer-shell-qt,
+  libxdmcp,
+  libpthread-stubs,
+  libqtxdg,
+  lxqt-build-tools,
+  perl,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screengrab";
-  version = "2.5.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    sha256 = "QEe1vOAeUDOlQfTh5/BvwBv9+v40NsuoMbC77+U6GCA=";
+    repo = "screengrab";
+    tag = finalAttrs.version;
+    hash = "sha256-LORWv3qLgQF2feKodOg72g5DCfWZvB8vi0bw9jbr+tQ=";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     pkg-config
     perl # needed by LXQtTranslateDesktop.cmake
+    qttools
     autoPatchelfHook # fix libuploader.so and libextedit.so not found
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
     kwindowsystem
+    layer-shell-qt
+    libxdmcp
+    libpthread-stubs
     libqtxdg
-    xorg.libpthreadstubs
-    xorg.libXdmcp
+    qtbase
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    mainProgram = "screengrab";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

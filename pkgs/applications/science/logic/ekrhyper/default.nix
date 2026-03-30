@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ocaml, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ekrhyper";
@@ -9,18 +15,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fEe0DIMGj7wO+79/BZf45kykgyTXpbZJsyFSt31XqpM=";
   };
 
-  buildInputs = [
+  strictDeps = true;
+  nativeBuildInputs = [
     ocaml
     perl
   ];
-  setSourceRoot = "export sourceRoot=$(echo */ekrh/src/)";
+  setSourceRoot = "export sourceRoot=$(echo */ekrh/src)";
   preInstall = "export INSTALLDIR=$out";
   postInstall = ''for i in "$out/casc"/*; do ln -s "$i" "$out/bin/ekrh-casc-$(basename $i)"; done '';
 
-  meta = with lib; {
+  meta = {
     description = "Automated first-order theorem prover";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,54 +1,107 @@
-{ lib
-, amqp
-, azure-servicebus
-, buildPythonPackage
-, cached-property
-, case
-, fetchPypi
-, importlib-metadata
-, Pyro4
-, pytestCheckHook
-, pythonOlder
-, pytz
-, vine
+{
+  lib,
+  amqp,
+  azure-identity,
+  azure-servicebus,
+  azure-storage-queue,
+  boto3,
+  buildPythonPackage,
+  confluent-kafka,
+  fetchFromGitHub,
+  google-cloud-pubsub,
+  google-cloud-monitoring,
+  grpcio,
+  hypothesis,
+  kazoo,
+  msgpack,
+  packaging,
+  protobuf,
+  pycurl,
+  pymongo,
+  #, pyro4
+  pytestCheckHook,
+  pyyaml,
+  redis,
+  setuptools,
+  sqlalchemy,
+  tzdata,
+  urllib3,
+  vine,
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.2.4";
-  format = "setuptools";
+  version = "5.6.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N87j7nJflOqLsXPqq3wXYCA+pTu+uuImMoYA+dJ5lhA=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "kombu";
+    tag = "v${version}";
+    hash = "sha256-J0cEQsMHKethrfDVDDvIjc/iZpoCYLH9INHtgKmH9Pk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     amqp
+    packaging
+    tzdata
     vine
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-    importlib-metadata
   ];
 
-  checkInputs = [
-    azure-servicebus
-    case
-    Pyro4
+  optional-dependencies = {
+    msgpack = [ msgpack ];
+    yaml = [ pyyaml ];
+    redis = [ redis ];
+    mongodb = [ pymongo ];
+    sqs = [
+      boto3
+      urllib3
+      pycurl
+    ];
+    zookeeper = [ kazoo ];
+    sqlalchemy = [ sqlalchemy ];
+    azurestoragequeues = [
+      azure-identity
+      azure-storage-queue
+    ];
+    azureservicebus = [ azure-servicebus ];
+    confluentkafka = [ confluent-kafka ];
+    gcpubsub = [
+      google-cloud-pubsub
+      google-cloud-monitoring
+      grpcio
+      protobuf
+    ];
+    # pyro4 doesn't support Python 3.11
+    #pyro = [
+    #  pyro4
+    #];
+  };
+
+  nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
-    pytz
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pythonImportsCheck = [ "kombu" ];
+
+  disabledTests = [
+    # Disable pyro4 test
+    "test_driver_version"
+    # AssertionError: assert [call('WATCH'..., 'test-tag')] ==...
+    "test_global_keyprefix_transaction"
+    # Broken on latest redis-py, see https://github.com/celery/kombu/issues/2362
+    "test_connparams_health_check_interval_supported"
   ];
 
-  pythonImportsCheck = [
-    "kombu"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/celery/kombu/blob/v${version}/Changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

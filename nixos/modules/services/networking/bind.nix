@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.bind;
@@ -10,90 +12,154 @@ let
 
   bindUser = "named";
 
-  bindZoneCoerce = list: builtins.listToAttrs (lib.forEach list (zone: { name = zone.name; value = zone; }));
+  bindZoneCoerce =
+    list:
+    builtins.listToAttrs (
+      lib.forEach list (zone: {
+        name = zone.name;
+        value = zone;
+      })
+    );
 
-  bindZoneOptions = { name, config, ... }: {
-    options = {
-      name = mkOption {
-        type = types.str;
-        default = name;
-        description = lib.mdDoc "Name of the zone.";
-      };
-      master = mkOption {
-        description = lib.mdDoc "Master=false means slave server";
-        type = types.bool;
-      };
-      file = mkOption {
-        type = types.either types.str types.path;
-        description = lib.mdDoc "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
-      };
-      masters = mkOption {
-        type = types.listOf types.str;
-        description = lib.mdDoc "List of servers for inclusion in stub and secondary zones.";
-      };
-      slaves = mkOption {
-        type = types.listOf types.str;
-        description = lib.mdDoc "Addresses who may request zone transfers.";
-        default = [ ];
-      };
-      extraConfig = mkOption {
-        type = types.str;
-        description = lib.mdDoc "Extra zone config to be appended at the end of the zone section.";
-        default = "";
+  bindRndcMacType = "hmac-sha256";
+
+  bindRndcKeyFile = "/etc/bind/rndc.key";
+
+  bindNamedExe = lib.getExe' bindPkg "named";
+
+  bindRndcExe = lib.getExe' bindPkg "rndc";
+
+  bindZoneOptions =
+    { name, config, ... }:
+    {
+      options = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = name;
+          description = "Name of the zone.";
+        };
+        master = lib.mkOption {
+          description = "Master=false means slave server";
+          type = lib.types.bool;
+        };
+        file = lib.mkOption {
+          type = lib.types.either lib.types.str lib.types.path;
+          description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
+        };
+        masters = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "List of servers for inclusion in stub and secondary zones.";
+        };
+        slaves = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "Addresses who may request zone transfers.";
+          default = [ ];
+        };
+        allowQuery = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = ''
+            List of address ranges allowed to query this zone. Instead of the address(es), this may instead
+            contain the single string "any".
+          '';
+          default = [ "any" ];
+        };
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
+          description = "Extra zone config to be appended at the end of the zone section.";
+          default = "";
+        };
       };
     };
+
+  testRndcKey = pkgs.writeTextFile {
+    name = "testrndc.key";
+    text = ''
+      key "rndc-key" {
+        algorithm ${bindRndcMacType};
+        secret "Ini0XSebb9LrYz7zprobBLZ2iwBEK5S9vh9zj/DozR8=";
+      };
+    '';
   };
 
-  confFile = pkgs.writeText "named.conf"
-    ''
-      include "/etc/bind/rndc.key";
+  testFakeDir = "/tmp/test-fake-directory-for-named-checkconf";
+
+  confFile = pkgs.writeTextFile {
+    name = "named.conf";
+    checkPhase = ''
+      ${lib.optionalString cfg.checkConfig ''
+        echo "Checking named configuration file...";
+        mkdir -p ${testFakeDir}
+        ${lib.getExe' bindPkg "named-checkconf"} -z $target
+      ''}
+
+      substituteInPlace $target \
+        --replace-fail ${testRndcKey} ${bindRndcKeyFile} \
+        --replace-fail ${testFakeDir} ${cfg.directory}
+    '';
+
+    # The include path in the first line will be replaced in the postCheck hook.
+    text = ''
+      include "${testRndcKey}";
       controls {
         inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
       };
 
-      acl cachenetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
-      acl badnetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
+      acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
+      acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
       options {
-        listen-on { ${concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-        allow-query { cachenetworks; };
+        listen-on port ${toString cfg.listenOnPort} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn
+        } };
+        listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
+        } };
+        allow-query-cache { cachenetworks; };
         blackhole { badnetworks; };
         forward ${cfg.forward};
-        forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "${cfg.directory}";
+        forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
+        directory "${testFakeDir}";
         pid-file "/run/named/named.pid";
         ${cfg.extraOptions}
       };
 
       ${cfg.extraConfig}
 
-      ${ concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], extraConfig ? "" }:
-            ''
-              zone "${name}" {
-                type ${if master then "master" else "slave"};
-                file "${file}";
-                ${ if master then
-                   ''
-                     allow-transfer {
-                       ${concatMapStrings (ip: "${ip};\n") slaves}
-                     };
-                   ''
-                   else
-                   ''
-                     masters {
-                       ${concatMapStrings (ip: "${ip};\n") masters}
-                     };
-                   ''
-                }
-                allow-query { any; };
-                ${extraConfig}
-              };
-            '')
-          (attrValues cfg.zones) }
+      ${lib.concatMapStrings (
+        {
+          name,
+          file,
+          master ? true,
+          slaves ? [ ],
+          masters ? [ ],
+          allowQuery ? [ ],
+          extraConfig ? "",
+        }:
+        ''
+          zone "${name}" {
+            type ${if master then "master" else "slave"};
+            file "${file}";
+            ${
+              if master then
+                ''
+                  allow-transfer {
+                    ${lib.concatMapStrings (ip: "${ip};\n") slaves}
+                  };
+                ''
+              else
+                ''
+                  masters {
+                    ${lib.concatMapStrings (ip: "${ip};\n") masters}
+                  };
+                ''
+            }
+            allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
+            ${extraConfig}
+          };
+        ''
+      ) (lib.attrValues cfg.zones)}
     '';
-
+  };
 in
 
 {
@@ -104,87 +170,107 @@ in
 
     services.bind = {
 
-      enable = mkEnableOption (lib.mdDoc "BIND domain name server");
+      enable = lib.mkEnableOption "BIND domain name server";
 
+      package = lib.mkPackageOption pkgs "bind" { };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bind;
-        defaultText = literalExpression "pkgs.bind";
-        description = lib.mdDoc "The BIND package to use.";
-      };
-
-      cacheNetworks = mkOption {
-        default = [ "127.0.0.0/24" ];
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
+      cacheNetworks = lib.mkOption {
+        default = [
+          "127.0.0.0/24"
+          "::1/128"
+        ];
+        type = lib.types.listOf lib.types.str;
+        description = ''
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
-          allowed to query zones configured with the `zones` option.
+          allowed to query zones configured with the `zones` option
+          by default (although this may be overridden within each
+          zone's configuration, via the `allowQuery` option).
           It is recommended that you limit cacheNetworks to avoid your
           server being used for DNS amplification attacks.
         '';
       };
 
-      blockedNetworks = mkOption {
+      blockedNetworks = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
+        type = lib.types.listOf lib.types.str;
+        description = ''
           What networks are just blocked.
         '';
       };
 
-      ipv4Only = mkOption {
+      ipv4Only = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Only use ipv4, even if the host supports ipv6.
         '';
       };
 
-      forwarders = mkOption {
+      forwarders = lib.mkOption {
         default = config.networking.nameservers;
-        defaultText = literalExpression "config.networking.nameservers";
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression "config.networking.nameservers";
+        type = lib.types.listOf lib.types.str;
+        description = ''
           List of servers we should forward requests to.
         '';
       };
 
-      forward = mkOption {
+      forward = lib.mkOption {
         default = "first";
-        type = types.enum ["first" "only"];
-        description = lib.mdDoc ''
+        type = lib.types.enum [
+          "first"
+          "only"
+        ];
+        description = ''
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
         '';
       };
 
-      listenOn = mkOption {
+      listenOn = lib.mkOption {
         default = [ "any" ];
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
+        type = lib.types.listOf lib.types.str;
+        description = ''
           Interfaces to listen on.
         '';
       };
 
-      listenOnIpv6 = mkOption {
+      listenOnPort = lib.mkOption {
+        default = 53;
+        type = lib.types.port;
+        description = ''
+          Port to listen on.
+        '';
+      };
+
+      listenOnIpv6 = lib.mkOption {
         default = [ "any" ];
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
+        type = lib.types.listOf lib.types.str;
+        description = ''
           Ipv6 interfaces to listen on.
         '';
       };
 
-      directory = mkOption {
-        type = types.str;
-        default = "/run/named";
-        description = lib.mdDoc "Working directory of BIND.";
+      listenOnIpv6Port = lib.mkOption {
+        default = 53;
+        type = lib.types.port;
+        description = ''
+          Ipv6 port to listen on.
+        '';
       };
 
-      zones = mkOption {
+      directory = lib.mkOption {
+        type = lib.types.str;
+        default = "/run/named";
+        description = "Working directory of BIND.";
+      };
+
+      zones = lib.mkOption {
         default = [ ];
-        type = with types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (types.submodule bindZoneOptions));
-        description = lib.mdDoc ''
+        type =
+          with lib.types;
+          coercedTo (listOf attrs) bindZoneCoerce (attrsOf (lib.types.submodule bindZoneOptions));
+        description = ''
           List of zones we claim authority over.
         '';
         example = {
@@ -198,74 +284,137 @@ in
         };
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the generated named configuration file.
         '';
       };
 
-      extraOptions = mkOption {
-        type = types.lines;
+      extraOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the options section of the
           generated named configuration file.
         '';
       };
 
-      configFile = mkOption {
-        type = types.path;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Additional command-line arguments to pass to named.
+        '';
+        example = [
+          "-n"
+          "4"
+        ];
+      };
+
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = confFile;
-        defaultText = literalExpression "confFile";
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression "confFile";
+        description = ''
           Overridable config file to use for named. By default, that
-          generated by nixos.
+          generated by nixos. If overriden, it will not be checked by
+          named-checkconf.
         '';
       };
 
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Check configuration.
+
+          The configuration will not be checked if you override the config file
+          with `configFile`.
+        '';
+      };
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    networking.resolvconf.useLocalResolver = mkDefault true;
+    networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
-    users.users.${bindUser} =
-      {
-        group = bindUser;
-        description = "BIND daemon user";
-        isSystemUser = true;
+    users.users.${bindUser} = {
+      group = bindUser;
+      description = "BIND daemon user";
+      isSystemUser = true;
+    };
+    users.groups.${bindUser} = { };
+
+    systemd.tmpfiles.settings."bind" = lib.mkIf (cfg.directory != "/run/named") {
+      ${cfg.directory} = {
+        d = {
+          user = bindUser;
+          group = bindUser;
+          age = "-";
+        };
       };
-    users.groups.${bindUser} = {};
-
+    };
     systemd.services.bind = {
       description = "BIND Domain Name Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -m 0755 -p /etc/bind
-        if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+        if ! [ -f ${bindRndcKeyFile} ]; then
+          ${lib.getExe' bindPkg "rndc-confgen"} -c ${bindRndcKeyFile} -a -A ${bindRndcMacType} 2>/dev/null
         fi
-
-        ${pkgs.coreutils}/bin/mkdir -p /run/named
-        chown ${bindUser} /run/named
-
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.directory}
-        chown ${bindUser} ${cfg.directory}
       '';
 
       serviceConfig = {
-        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
-        ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
-        ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+        Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
+        ExecStart = "${bindNamedExe} ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraArgs}";
+        ExecReload = "${bindRndcExe} -k '${bindRndcKeyFile}' reload";
+        ExecStop = "${bindRndcExe} -k '${bindRndcKeyFile}' stop";
+        User = bindUser;
+        RuntimeDirectory = "named";
+        RuntimeDirectoryPreserve = "yes";
+        ConfigurationDirectory = "bind";
+        ReadWritePaths = [
+          (lib.mapAttrsToList (
+            name: config: if (lib.hasPrefix "/" config.file) then "-${dirOf config.file}" else ""
+          ) cfg.zones)
+          cfg.directory
+        ];
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "strict";
+        ReadOnlyPaths = "/sys";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6 AF_NETLINK" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictNamespaces = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "~@mount @debug @clock @reboot @resources @privileged @obsolete acct modify_ldt add_key adjtimex clock_adjtime delete_module fanotify_init finit_module get_mempolicy init_module io_destroy io_getevents iopl ioperm io_setup io_submit io_cancel kcmp kexec_load keyctl lookup_dcookie migrate_pages move_pages open_by_handle_at perf_event_open process_vm_readv process_vm_writev ptrace remap_file_pages request_key set_mempolicy swapoff swapon uselib vmsplice";
       };
 
       unitConfig.Documentation = "man:named(8)";

@@ -1,44 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, googleapis-common-protos
-, grpcio
-, grpcio-status
-, protobuf
-, proto-plus
-, requests
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  google-auth,
+  googleapis-common-protos,
+  grpcio,
+  grpcio-gcp,
+  grpcio-status,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.10.2";
-  format = "setuptools";
+  version = "2.29.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-EMBvdzn+V3gfh1Izdejho6RnS/Y5LNYTGjIiGCuXEyA=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-api-core";
+    tag = "v${version}";
+    hash = "sha256-wqDGtCYAH2f+P3zUfXgiQTePLr7a0qzUTeEc6pdCGio=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     googleapis-common-protos
     google-auth
-    grpcio
-    grpcio-status
     protobuf
     proto-plus
     requests
   ];
 
-  checkInputs = [
-    mock
+  pythonRelaxDeps = [ "protobuf" ];
+
+  optional-dependencies = {
+    async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
+    grpc = [
+      grpcio
+      grpcio-status
+    ];
+    grpcgcp = [ grpcio-gcp ];
+    grpcio-gcp = [ grpcio-gcp ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
   ];
 
@@ -62,19 +76,19 @@ buildPythonPackage rec {
     "test_exception_with_error_code"
   ];
 
-  pythonImportsCheck = [
-    "google.api_core"
-  ];
+  pythonImportsCheck = [ "google.api_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core Library for Google Client Libraries";
     longDescription = ''
       This library is not meant to stand-alone. Instead it defines common
       helpers used by all Google API clients.
     '';
     homepage = "https://github.com/googleapis/python-api-core";
-    changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/googleapis/python-api-core/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
   };
 }

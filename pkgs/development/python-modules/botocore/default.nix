@@ -1,46 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, jmespath
-, docutils
-, simplejson
-, mock
-, nose
-, urllib3
+{
+  lib,
+  awscrt,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jmespath,
+  python-dateutil,
+  urllib3,
+
+  # tests
+  jsonschema,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.27.75"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.42.31"; # N.B: if you change this, change boto3 and awscli to a matching version
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+LHaK0HojFjbUdsMbv9spWQliUjOSlrH6WrDWkabDU8=";
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = "botocore";
+    tag = version;
+    hash = "sha256-avuv1uXKMeSr3SL+BI9XW8tDCQM/dlXFn590di3S03k=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     jmespath
-    docutils
-    simplejson
+    python-dateutil
     urllib3
   ];
 
-  checkInputs = [ mock nose ];
+  nativeCheckInputs = [
+    jsonschema
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    nosetests -v
-  '';
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
 
-  # Network access
-  doCheck = false;
+    # Disable slow tests (only run unit tests)
+    "tests/functional"
+  ];
 
   pythonImportsCheck = [ "botocore" ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    crt = [ awscrt ];
+  };
+
+  meta = {
+    description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
-    license = licenses.asl20;
-    description = "A low-level interface to a growing number of Amazon Web Services";
+    changelog = "https://github.com/boto/botocore/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

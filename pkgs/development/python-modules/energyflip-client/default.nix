@@ -1,12 +1,12 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -14,13 +14,11 @@ buildPythonPackage rec {
   version = "0.2.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dennisschroer";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-neuZ6pZWW/Rgexu/iCEymjnxi5l/IuLKPFn6S9U4DgU=";
+    repo = "energyflip-client";
+    tag = "v${version}";
+    hash = "sha256-neuZ6pZWW/Rgexu/iCEymjnxi5l/IuLKPFn6S9U4DgU=";
   };
 
   propagatedBuildInputs = [
@@ -29,19 +27,17 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "energyflip"
-  ];
+  pythonImportsCheck = [ "energyflip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with the API behind EnergyFlip";
     homepage = "https://github.com/dennisschroer/energyflip-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,11 +1,18 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableMinimal ? false
-, enableAppletSymlinks ? true
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
-, extraConfig ? ""
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitLab,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableMinimal ? false,
+  enableAppletSymlinks ? true,
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+  useMusl ? stdenv.hostPlatform.libc == "musl",
+  musl,
+  extraConfig ? "",
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -13,10 +20,7 @@ assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 let
   configParser = ''
     function parseconfig {
-        while read LINE; do
-            NAME=`echo "$LINE" | cut -d \  -f 1`
-            OPTION=`echo "$LINE" | cut -d \  -f 2`
-
+        while IFS=" " read NAME OPTION; do
             if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
 
             echo "parseconfig: removing $NAME"
@@ -50,37 +54,44 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.35.0";
+  version = "1.37.0";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+u6yRMNaNIozT0pZ5EYm7ocPsHtohNaMEK6LwZ+DppQ=";
+    sha256 = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
   };
 
-  hardeningDisable = [ "format" "pie" ]
-    ++ lib.optionals enableStatic [ "fortify" ];
+  hardeningDisable = [
+    "format"
+  ]
+  ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [
+    # Allow BusyBox to be invoked as "<something>-busybox". This is
+    # necessary when it's run from the Nix store as <hash>-busybox during
+    # stdenv bootstrap.
     ./busybox-in-store.patch
-    (fetchurl {
-      name = "CVE-2022-28391.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-libbb-sockaddr2str-ensure-only-printable-characters-.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
-      sha256 = "sha256-yviw1GV+t9tbHbY7YNxEqPi7xEreiXVqbeRyf8c6Awo=";
+    # Fix aarch64 build failure: sha1_process_block64_shaNI is x86-specific
+    # https://lists.busybox.net/pipermail/busybox/2024-September/090943.html
+    ./fix-aarch64-sha1.patch
+    # archival: disallow path traversals (CVE-2023-39810)
+    (fetchpatch {
+      name = "CVE-2023-39810.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
     })
-    (fetchurl {
-      name = "CVE-2022-28391.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
-      sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
+    # tar: strip unsafe hardlink components - GNU tar does the same
+    (fetchpatch {
+      name = "CVE-2026-26157_CVE-2026-26158.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
+      hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
-    (fetchurl {
-      name = "CVE-2022-30065.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2022-30065.patch?id=4ffd996b3f8298c7dd424b912c245864c816e354";
-      sha256 = "sha256-+WSYxI6eF8S0tya/S62f9Nc6jVMnHO0q1OyM69GlNTY=";
-    })
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   separateDebugInfo = true;
 
@@ -126,6 +137,10 @@ stdenv.mkDerivation rec {
     # Bump from 4KB, much faster I/O
     CONFIG_FEATURE_COPYBUF_KB 64
 
+    # Doesn't build with current kernel headers.
+    # https://bugs.busybox.net/show_bug.cgi?id=15934
+    CONFIG_TC n
+
     # Set the path for the udhcpc script
     CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
 
@@ -158,18 +173,29 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = false; # tries to access the net
 
-  meta = with lib; {
+  passthru.shellPath = "/bin/ash";
+
+  meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ TethysSvensson qyliss ];
-    platforms = platforms.linux;
-    priority = 10;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "busybox";
+    maintainers = with lib.maintainers; [
+      TethysSvensson
+      qyliss
+    ];
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.linux;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;
   };
 }

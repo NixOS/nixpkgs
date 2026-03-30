@@ -1,62 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, cython
-, cmake
-, symengine
-, pytest
-, sympy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  setuptools,
+  cmake,
+  symengine,
+  pytest,
+  sympy,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "v${version}";
-    sha256 = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    tag = "v${version}";
+    hash = "sha256-adzODm7gAqwAf7qzfRQ1AG8mC3auiXM4OsV/0h+ZmUg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # setuptools 61 compat
-      url = "https://github.com/symengine/symengine.py/commit/987e665e71cf92d1b021d7d573a1b9733408eecf.patch";
-      hash = "sha256-2QbNdw/lKYRIRpOU5BiwF2kK+5Lh2j/Q82MKUIvl0+c=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "\"cmake\"" "\"${cmake}/bin/cmake\"" \
-      --replace "'cython>=0.29.24'" "'cython'"
+      --replace-fail "'cython>=0.29.24'" "'cython'"
   '';
 
-  nativeBuildUnputs = [ cmake ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  buildInputs = [ cython ];
+  dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytest sympy ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  setupPyBuildFlags = [
-    "--symengine-dir=${symengine}/"
-    "--define=\"CYTHON_BIN=${cython}/bin/cython\""
+  buildInputs = [
+    symengine
+  ];
+
+  nativeCheckInputs = [
+    pytest
+    sympy
   ];
 
   checkPhase = ''
-    mkdir empty
-    cd empty
+    runHook preCheck
+
+    mkdir empty && cd empty
     ${python.interpreter} ../bin/test_python.py
+
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library providing wrappers to SymEngine";
     homepage = "https://github.com/symengine/symengine.py";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

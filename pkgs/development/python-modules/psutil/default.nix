@@ -1,67 +1,84 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, CoreFoundation
-, fetchPypi
-, IOKit
-, pytestCheckHook
-, python
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pytest-instafail,
+  pytest-xdist,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.3";
-  format = "setuptools";
+  version = "7.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fM/N/qT8SwoCyiwx3n/NGGvrnP+CB4AOFKtm95x3OvY=";
+  src = fetchFromGitHub {
+    owner = "giampaolo";
+    repo = "psutil";
+    tag = "release-${version}";
+    hash = "sha256-HGIFf7E356o0OcgLOPjACmrPXneQt/8IhzyudKKuLdg=";
   };
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-      CoreFoundation
-    ] ++ lib.optionals stdenv.isDarwin [
-      IOKit
-  ];
+  postPatch = ''
+    # stick to the old SDK name for now
+    # https://developer.apple.com/documentation/iokit/kiomasterportdefault/
+    # https://developer.apple.com/documentation/iokit/kiomainportdefault/
+    substituteInPlace psutil/arch/osx/cpu.c \
+      --replace-fail kIOMainPortDefault kIOMasterPortDefault
+  '';
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-instafail
+    pytest-xdist
   ];
 
   # Segfaults on darwin:
   # https://github.com/giampaolo/psutil/issues/1715
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
-  # - the other disabled tests are likely due to sanboxing (missing specific errors)
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/psutil/tests/test_system.py"
+  # - the other disabled tests are likely due to sandboxing (missing specific errors)
+  enabledTestPaths = [
+    # Note: $out must be referenced as test import paths are relative
+    "tests/test_system.py"
   ];
 
-  # Note: $out must be referenced as test import paths are relative
   disabledTests = [
+    # Some of the tests have build-system hardware-based impurities (like
+    # reading temperature sensor values).  Disable them to avoid the failures
+    # that sometimes result.
     "cpu_freq"
     "cpu_times"
     "disk_io_counters"
     "sensors_battery"
+    "sensors_temperatures"
     "user"
+    "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
   ];
 
-  pythonImportsCheck = [
-    "psutil"
-  ];
+  preCheck = ''
+    rm -rf psutil
+  '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "psutil" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

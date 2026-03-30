@@ -1,32 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, google-api-core
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.5.2";
-  disabled = pythonOlder "3.7";
+  version = "1.42.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-D0pIR1vQEt/7aIxMo0uDlxvt+fwS2DxCurU/lxMHAjo=";
+    pname = "google_cloud_compute";
+    inherit version;
+    hash = "sha256-CLHbxXWLqlSRCHvO+1dOWdkRUgtxTtp5tOvxy0KdjZg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
-  ];
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
@@ -37,18 +46,19 @@ buildPythonPackage rec {
     "google.cloud.compute_v1"
   ];
 
-  # disable tests that require credentials
   disabledTestPaths = [
+    # Disable tests that require credentials
     "tests/system/test_addresses.py"
     "tests/system/test_instance_group.py"
     "tests/system/test_pagination.py"
     "tests/system/test_smoke.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "API Client library for Google Cloud Compute";
-    homepage = "https://github.com/googleapis/python-compute";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpetrucciani ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-compute";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-compute-v${version}/packages/google-cloud-compute/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

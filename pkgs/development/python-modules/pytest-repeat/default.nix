@@ -1,35 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  hatch-vcs,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
-  version = "0.9.1";
+  version = "0.9.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5cd3289745ab3156d43eb9c8e7f7d00a926f3ae5c9cf425bec649b2fe15bad5b";
+    pname = "pytest_repeat";
+    inherit version;
+    hash = "sha256-2SrBTfqm/8/mkX5dFvDJvII4DBNbA8Kl9BLSY38iRIU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pytest_repeat" ];
+
+  meta = {
     description = "Pytest plugin for repeating tests";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/pytest-dev/pytest-repeat/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

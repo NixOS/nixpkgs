@@ -1,17 +1,20 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin {
   name = "discourse-saved-searches";
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-saved-searches";
-    rev = "d1df24c0f94d36f5184eb2d9354b86f821e96a90";
-    sha256 = "sha256-kAFGxhiIh4enZ8jyePgzHakA99RERbUCoXsxPsZQjNI=";
+    rev = "d13a708d33fc24bb6cc111e8d84fb896caf81ef4";
+    sha256 = "sha256-3hnmtHR1k1bZKH3ezauQPr7pfbQYRTbGV8a39w6m6F8=";
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/discourse/discourse-saved-searches";
-    maintainers = with maintainers; [ dpausp ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Allow users to save searches and be notified of new results";
   };
 }

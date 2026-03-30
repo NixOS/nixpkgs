@@ -1,42 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, peewee
-, wtforms
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  peewee,
+  wtforms,
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wtf-peewee";
-  version = "3.0.3";
+  version = "3.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "faa953fe3f705d4f2b48f3c1a81c5c5a6a38f9ed1378c9a830e6efc1b0fccb15";
+  src = fetchFromGitHub {
+    owner = "coleifer";
+    repo = "wtf-peewee";
+    tag = finalAttrs.version;
+    hash = "sha256-9gVvcPFVA3051Y0sn0mLq1ejKqcGlKZVbIaQ/uH5f4Y=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-wtforms3.patch";
-      url = "https://github.com/coleifer/wtf-peewee/commit/b1764f4474c73a9a2b34ae6b7db61274f5252a7f.patch";
-      sha256 = "0maz3fm9bi8p80nk9sdb34xq55xq8ihm51y7k0m8ck9aaypvwbig";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     peewee
     wtforms
   ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} runtests.py
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WTForms integration for peewee models";
     homepage = "https://github.com/coleifer/wtf-peewee/";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

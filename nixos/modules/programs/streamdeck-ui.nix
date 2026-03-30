@@ -1,28 +1,42 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.streamdeck-ui;
-in {
+in
+{
   options.programs.streamdeck-ui = {
-    enable = mkEnableOption (lib.mdDoc "streamdeck-ui");
+    enable = lib.mkEnableOption "streamdeck-ui";
 
-    autoStart = mkOption {
+    autoStart = lib.mkOption {
       default = true;
-      type = types.bool;
-      description = lib.mdDoc "Whether streamdeck-ui should be started automatically.";
+      type = lib.types.bool;
+      description = "Whether streamdeck-ui should be started automatically.";
     };
+
+    package = lib.mkPackageOption pkgs "streamdeck-ui" {
+      default = [ "streamdeck-ui" ];
+    };
+
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      streamdeck-ui
-      (mkIf cfg.autoStart (makeAutostartItem { name = "streamdeck-ui"; package = streamdeck-ui; }))
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.package
+      (lib.mkIf cfg.autoStart (
+        pkgs.makeAutostartItem {
+          name = "streamdeck-ui-noui";
+          package = cfg.package;
+        }
+      ))
     ];
 
-    services.udev.packages = with pkgs; [ streamdeck-ui ];
+    services.udev.packages = [ cfg.package ];
   };
 
-  meta.maintainers = with maintainers; [ majiir ];
+  meta.maintainers = with lib.maintainers; [ majiir ];
 }

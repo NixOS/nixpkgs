@@ -1,49 +1,57 @@
-{ lib
-, aiohttp
-, aioresponses
-, asynccmd
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  asynccmd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest-asyncio,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyspcwebgw";
-  version = "0.6.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mbrrg";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Pjv8AxXuwi48Z8U+LSZZ+OhXrE3KlX7jlmnXTBLxXOs=";
+    repo = "pyspcwebgw";
+    tag = "v${version}";
+    hash = "sha256-gdIrbr25GXaX26B1f7u0NKbqqnAC2tmMFZspzW6I4HI=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # https://github.com/pyspcwebgw/pyspcwebgw/pull/27
+    (fetchpatch {
+      name = "replace-async-timeout-with-asyncio.timeout.patch";
+      url = "https://github.com/pyspcwebgw/pyspcwebgw/commit/22cacc8db53cf2a244c30c0e62a0dad90fbcb00b.patch";
+      hash = "sha256-Og0imZts49jwjbz7Yp41UIzwU/lVjKVc/Tp4+vNz32U=";
+    })
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     asynccmd
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    pytest8_3CheckHook
   ];
 
   pythonImportsCheck = [ "pyspcwebgw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the SPC Web Gateway REST API";
     homepage = "https://github.com/mbrrg/pyspcwebgw";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

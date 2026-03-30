@@ -1,39 +1,32 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-django
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytest-django,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "5.4.0";
+  version = "5.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
+    hash = "sha256-1cDpdf+rLaG14TDd1wEHAiYXb69NFTFeOHD1Ib1oOVY=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-cov-stub
     pytest-django
     pytest-xdist
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i "/--cov/d" tox.ini
-  '';
-
-  # Darwin sandbox causes most tests to fail
-  doCheck = !stdenv.isDarwin;
 
   disabledTests = [
     # Very time sensitive, can fail on over subscribed machines
@@ -47,14 +40,12 @@ buildPythonPackage rec {
     "test_cache_write_unpicklable_object"
   ];
 
-  pythonImportsCheck = [
-    "diskcache"
-  ];
+  pythonImportsCheck = [ "diskcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,69 +1,85 @@
-{ stdenv, lib, lndir, makeWrapper
-, fetchFromGitHub, cmake
-, libusb-compat-0_1, pkg-config
-, usePython ? false
-, python ? null
-, ncurses, swig2
-, extraPackages ? []
-} :
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  libusb-compat-0_1,
+  ncurses,
+  usePython ? false,
+  python ? null,
+  swig,
+  extraPackages ? [ ],
+  buildPackages,
+  testers,
+}:
 
-let
-
-  version = "0.8.1";
-  modulesVersion = with lib; versions.major version + "." + versions.minor version;
-  modulesPath = "lib/SoapySDR/modules" + modulesVersion;
-  extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
-  inherit version;
+  # Don't forget to change passthru.abiVersion
+  version = "0.8.1-unstable-2025-10-05-03";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
-    rev = "soapy-sdr-${version}";
-    sha256 = "19f2x0pkxvf9figa0pl6xqlcz8fblvqb19mcnj632p0l8vk6qdv2";
+
+    # update to include latest patch for newer cmake support
+    rev = "1667b4e6301d7ad47b340dcdcd6e9969bf57d843";
+    hash = "sha256-UCpYBUb2k1bHy1z2Mvmv+1ZX1BloSsPrTydFV3Ga3Os=";
   };
 
-  patches = [
-    # see https://github.com/pothosware/SoapySDR/issues/352 for upstream issue
-    ./fix-pkgconfig.patch
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    libusb-compat-0_1
+    ncurses
+  ]
+  ++ lib.optionals usePython [
+    python
+    swig
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
-  buildInputs = [ libusb-compat-0_1 ncurses ]
-    ++ lib.optionals usePython [ python swig2 ];
+  propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 
-  propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
+  cmakeFlags = lib.optionals usePython [ "-DUSE_PYTHON_CONFIG=ON" ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
-
-  # https://github.com/pothosware/SoapySDR/issues/352
-  postPatch = ''
-    substituteInPlace lib/SoapySDR.in.pc \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
-
-  postFixup = lib.optionalString (lib.length extraPackages != 0) ''
+  postFixup = lib.optionalString (extraPackages != [ ]) (
     # Join all plugins via symlinking
-    for i in ${toString extraPackages}; do
-      ${lndir}/bin/lndir -silent $i $out
-    done
-    # Needed for at least the remote plugin server
-    for file in $out/bin/*; do
-        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg extraPackagesSearchPath}
-    done
-  '';
+    lib.pipe extraPackages [
+      (map (pkg: ''
+        ${buildPackages.lndir}/bin/lndir -silent ${pkg} $out
+      ''))
+      lib.concatStrings
+    ]
+    + ''
+      # Needed for at least the remote plugin server
+      for file in $out/bin/*; do
+          wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg (lib.makeSearchPath finalAttrs.passthru.searchPath extraPackages)}
+      done
+    ''
+  );
 
-  meta = with lib; {
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    # SOAPY_SDR_ABI_VERSION defined in include/SoapySDR/Version.h
+    abiVersion = "0.8-3";
+    searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
+  };
+
+  meta = {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
-    license = licenses.boost;
-    maintainers = with maintainers; [ markuskowa ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
+      markuskowa
+      numinit
+    ];
     mainProgram = "SoapySDRUtil";
-    platforms = platforms.unix;
+    pkgConfigModules = [ "SoapySDR" ];
+    platforms = lib.platforms.unix;
   };
-}
+})

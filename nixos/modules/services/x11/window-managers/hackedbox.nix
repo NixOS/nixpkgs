@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.hackedbox.enable = mkEnableOption (lib.mdDoc "hackedbox");
+    services.xserver.windowManager.hackedbox.enable = mkEnableOption "hackedbox";
   };
 
   ###### implementation

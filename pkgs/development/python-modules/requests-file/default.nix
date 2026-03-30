@@ -1,38 +1,41 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, requests
-, six
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "requests-file";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-B9dCCNM4nQHDirie9AOvDP7GOVfVOgCB2OynONAkfY4=";
+  src = fetchFromGitHub {
+    owner = "dashea";
+    repo = "requests-file";
+    tag = version;
+    hash = "sha256-JtdtE44yiw2mLMZ0bJv0QiGWb7f8ywPLF7+BUufh/g4=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    six
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ requests ];
 
-  pythonImportsCheck = [
-    "requests_file"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "requests_file" ];
+
+  meta = {
     description = "Transport adapter for fetching file:// URLs with the requests python library";
     homepage = "https://github.com/dashea/requests-file";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

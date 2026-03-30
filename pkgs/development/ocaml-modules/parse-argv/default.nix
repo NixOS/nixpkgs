@@ -1,15 +1,17 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, astring
-, ounit
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  astring,
+  ounit,
 }:
 
 buildDunePackage rec {
   pname = "parse-argv";
   version = "0.2.0";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/mirage/parse-argv/releases/download/v${version}/parse-argv-v${version}.tbz";
@@ -18,7 +20,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ astring ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
   meta = {

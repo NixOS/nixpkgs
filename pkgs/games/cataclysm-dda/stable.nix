@@ -1,52 +1,44 @@
-{ lib
-, callPackage
-, CoreFoundation
-, fetchFromGitHub
-, fetchpatch
-, pkgs
-, wrapCDDA
-, attachPkgs
-, tiles ? true
-, Cocoa
-, debug ? false
-, useXdgDir ? false
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pkgs,
+  wrapCDDA,
+  attachPkgs,
+  tiles ? true,
+  debug ? false,
+  useXdgDir ? false,
 }:
 
 let
   common = callPackage ./common.nix {
-    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+    inherit tiles debug useXdgDir;
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.F-3";
+    version = "0.H";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
-      rev = version;
-      sha256 = "sha256-2su1uQaWl9WG41207dRvOTdVKcQsEz/y0uTi9JX52uI=";
+      tag = "${version}-RELEASE";
+      sha256 = "sha256-ZCD5qgqYSX7sS+Tc1oNYq9soYwNUUuWamY2uXfLjGoY=";
     };
 
     patches = [
-      # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-stable.patch
-
-      # Fixes compiler errors when compiling against SDL2_ttf >= 1.20.0, https://github.com/CleverRaven/Cataclysm-DDA/pull/59083
-      # Remove with next version update.
+      # fix compilation of the vendored flatbuffers under gcc14
       (fetchpatch {
-        url = "https://github.com/CleverRaven/Cataclysm-DDA/commit/625fadf3d493c1712d9ade2b849ff6a79765c7a7.patch";
-        hash = "sha256-c0NXkd6jSGSruKrwuYUmLbgiL97YQDkUm313fnMJ7GA=";
+        name = "fix-flatbuffers-with-gcc14";
+        url = "https://github.com/CleverRaven/Cataclysm-DDA/commit/1400b1018ff37196bd24ba4365bd50beb571ac14.patch";
+        hash = "sha256-H0jct6lSQxu48eOZ4f8HICxo89qX49Ksw+Xwwtp7iFM=";
       })
-    ];
-
-    makeFlags = common.makeFlags ++ [
-      # Makefile declares version as 0.F, with no minor release number
-      "VERSION=${version}"
+      # Unconditionally look for translation files in $out/share/locale
+      ./locale-path.patch
     ];
 
     meta = common.meta // {
-      maintainers = with lib.maintainers;
-        common.meta.maintainers ++ [ skeidel ];
+      changelog = "https://github.com/CleverRaven/Cataclysm-DDA/blob/${version}/data/changelog.txt";
     };
   });
 in

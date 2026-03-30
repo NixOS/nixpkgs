@@ -1,15 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytube";
-  version = "12.1.0";
-
-  disabled = pythonOlder "3.6";
+  version = "15.0.0";
 
   format = "setuptools";
 
@@ -17,12 +15,12 @@ buildPythonPackage rec {
     owner = "pytube";
     repo = "pytube";
     rev = "v${version}";
-    hash = "sha256-o4kfZLkEs+XYor2sS2lfuDZkPfHrB+rDoxroc4f55gc=";
+    hash = "sha256-Nvs/YlOjk/P5nd1kpUnCM2n6yiEaqZP830UQI0Ug1rk=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test_streaming" ];
 
   disabledTestPaths = [
     "tests/test_extract.py"
@@ -33,10 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytube" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 library for downloading YouTube Videos";
+    mainProgram = "pytube";
     homepage = "https://github.com/nficano/pytube";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,42 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-common
-, azure-core
-, msrest
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-secrets";
-  version = "4.6.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "4.10.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-+owR1P9XpAteQgegJSx90p0Kk5logFa0nX4rTENtOlo=";
+    pname = "azure_keyvault_secrets";
+    inherit version;
+    hash = "sha256-Zm+kKJL5zudJVj5VGpDwYENauHiXfJUmUXOoJG1UajY=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    azure-common
     azure-core
-    msrest
+    isodate
+    typing-extensions
   ];
 
-  pythonNamespaces = [
-    "azure.keyvault"
-  ];
+  pythonNamespaces = [ "azure.keyvault" ];
 
-  # requires checkout from mono-repo
+  # Tests require checkout from mono-repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Secrets Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-secrets";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-secrets_${version}/sdk/keyvault/azure-keyvault-secrets";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

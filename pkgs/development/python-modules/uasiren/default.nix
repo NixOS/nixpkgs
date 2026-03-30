@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build time
-, setuptools-scm
+  # build time
+  setuptools-scm,
 
-# propagates
-, aiohttp
+  # propagates
+  aiohttp,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 let
@@ -23,22 +25,17 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
-    repo = pname;
+    repo = "uasiren";
     rev = "v${version}";
     hash = "sha256-NHrnG5Vhz+JZgcTJyfIgGz0Ye+3dFVv2zLCCqw2++oM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -47,12 +44,11 @@ buildPythonPackage {
     "uasiren.client"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/v${version}";
     description = "Implements siren.pp.ua API - public wrapper for api.ukrainealarm.com API that returns info about Ukraine air-raid alarms";
     homepage = "https://github.com/PaulAnnekov/uasiren";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }
-

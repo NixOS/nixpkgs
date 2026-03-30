@@ -1,48 +1,55 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pytestCheckHook
-, setuptools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anyconfig";
-  version = "0.13.0";
+  version = "0.14.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-A/8uF2KvOI+7vtHBq3+fHsAGqR2n2zpouWPabneV0qw=";
+  src = fetchFromGitHub {
+    owner = "ssato";
+    repo = "python-anyconfig";
+    tag = "RELEASE_${finalAttrs.version}";
+    hash = "sha256-ngXj/KzErz81T09j6tlV9OYDX3DqW5I8xo/ulLNokpQ=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=src -vv" ""
+    sed -i '/addopts =/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # OSError: /build/anyconfig-0.12.0/tests/res/cli/no_template/10/e/10.* should exists but not
     "test_runs_for_datasets"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Python 3.14: output format has changed
+    "test_dumps"
+    "test_dump"
   ];
 
   disabledTestPaths = [
     # NameError: name 'TT' is not defined
     "tests/schema/test_jsonschema.py"
+    "tests/backend/loaders/pickle/test_pickle_stdlib.py"
   ];
 
   pythonImportsCheck = [ "anyconfig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library provides common APIs to load and dump configuration files in various formats";
+    mainProgram = "anyconfig_cli";
     homepage = "https://github.com/ssato/python-anyconfig";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tboerger ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tboerger ];
   };
-}
+})

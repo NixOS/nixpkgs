@@ -1,12 +1,17 @@
-{ stdenv, lib, fetchurl }:
+{
+  fetchurl,
+  gitUpdater,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.3.20";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    sha256 = "sha256-VTUMZ2mqbszM7uXOYV6Grg7dkeGAGVXYjBX0hA/vOTg=";
+    hash = "sha256-7+zgEiWlMvS1LPh2TSCgDg0p7W+Fsz2TAt9IlqkPpas=";
   };
 
   patches = [
@@ -21,10 +26,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/rubygems/rubygems.git";
+    rev-prefix = "v";
+    ignoredVersions = "(pre|alpha|beta|rc|bundler).*";
+  };
+
+  meta = {
     description = "Package management framework for Ruby";
+    changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
-    license = with licenses; [ mit /* or */ ruby ];
-    maintainers = with maintainers; [ zimbatm ];
+    license = with lib.licenses; [
+      mit # or
+      ruby
+    ];
+    mainProgram = "gem";
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

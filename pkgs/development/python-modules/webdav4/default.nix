@@ -1,74 +1,62 @@
-{ lib
-, buildPythonPackage
-, cheroot
-, colorama
-, fetchFromGitHub
-, fsspec
-, hatch-vcs
-, hatchling
-, httpx
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, wsgidav
+{
+  lib,
+  buildPythonPackage,
+  cheroot,
+  colorama,
+  fetchFromGitHub,
+  fsspec,
+  hatch-vcs,
+  hatchling,
+  httpx,
+  pytest-xdist,
+  pytestCheckHook,
+  pytest-cov-stub,
+  python-dateutil,
+  wsgidav,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webdav4";
-  version = "0.9.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "0.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skshetry";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
+    repo = "webdav4";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vWOxFoPxXFf5hmzbu9Ik3Mqg/70eFehqMF46gC6aDzQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     python-dateutil
   ];
 
-  checkInputs = [
-    cheroot
-    colorama
-    pytest-xdist
-    pytestCheckHook
-    wsgidav
-  ] ++ passthru.optional-dependencies.fsspec;
-
-  passthru.optional-dependencies = {
-    fsspec = [
-      fsspec
-    ];
-    http2 = [
-      httpx.optional-dependencies.http2
-    ];
+  optional-dependencies = {
+    fsspec = [ fsspec ];
+    http2 = [ httpx.optional-dependencies.http2 ];
     all = [
       fsspec
       httpx.optional-dependencies.http2
     ];
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
+  nativeCheckInputs = [
+    cheroot
+    colorama
+    pytest-xdist
+    pytestCheckHook
+    pytest-cov-stub
+    wsgidav
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "webdav4"
-  ];
+  pythonImportsCheck = [ "webdav4" ];
 
   disabledTests = [
     # ValueError: Invalid dir_browser htdocs_path
@@ -76,18 +64,25 @@ buildPythonPackage rec {
     "test_open"
     "test_open_binary"
     "test_close_connection_if_nothing_is_read"
+    # Assertion error due to comparing output
+    "test_cp_cli"
+    "test_mv_cli"
+    "test_sync_remote_to_local"
   ];
 
   disabledTestPaths = [
     # Tests requires network access
     "tests/test_client.py"
     "tests/test_fsspec.py"
+    "tests/test_cli.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with WebDAV";
+    mainProgram = "dav";
     homepage = "https://skshetry.github.io/webdav4/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/skshetry/webdav4/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,9 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, cctools
-, fixDarwinDylibNames
-, autoSignDarwinBinariesHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cctools,
+  fixDarwinDylibNames,
+  autoSignDarwinBinariesHook,
+  replaceVars,
+  buildPackages,
+  binutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,18 +19,36 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    cctools
-    fixDarwinDylibNames
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      binutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   dontConfigure = true;
 
+  patches = [
+    (replaceVars ./0001-fix-cross-compilation.patch {
+      emulator = "${stdenv.hostPlatform.emulator buildPackages}";
+    })
+  ];
+
   buildPhase =
     let
-      ccc = if stdenv.isDarwin then "ccc.osx" else "ccc";
+      ccc = if stdenv.hostPlatform.isDarwin then "ccc.osx" else "ccc";
     in
     ''
       runHook preBuild
@@ -51,11 +73,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A Mixed Integer Linear Programming (MILP) solver";
-    homepage = "http://lpsolve.sourceforge.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smironov ];
-    platforms = platforms.unix;
+  meta = {
+    description = "Mixed Integer Linear Programming (MILP) solver";
+    mainProgram = "lp_solve";
+    homepage = "https://lpsolve.sourceforge.net";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

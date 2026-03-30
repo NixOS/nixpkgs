@@ -1,15 +1,33 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtmultimedia, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  qtmultimedia,
+  qtbase,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "unstable-20-06-26";
   pname = "herqq";
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtmultimedia ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  outputs = [ "out" "dev" ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+  ];
 
-  sourceRoot = "source/herqq";
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  sourceRoot = "${src.name}/herqq";
   src = fetchFromGitHub {
     owner = "ThomArmax";
     repo = "HUPnP";
@@ -17,10 +35,10 @@ mkDerivation rec {
     sha256 = "FxN/QlLB3sZ6Vn/9VIKNUntX/B4+crQZ7t760pwFqY8=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://herqq.org";
-    description = "A software library for building UPnP devices and control points";
-    platforms = platforms.linux;
+    description = "Software library for building UPnP devices and control points";
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

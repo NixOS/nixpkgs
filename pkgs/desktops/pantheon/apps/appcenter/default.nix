@@ -1,61 +1,62 @@
-{ lib
-, stdenv
-, nix-update-script
-, appstream
-, dbus
-, fetchFromGitHub
-, flatpak
-, glib
-, granite
-, gtk3
-, json-glib
-, libgee
-, libhandy
-, libsoup
-, libxml2
-, meson
-, ninja
-, packagekit
-, pkg-config
-, python3
-, vala
-, polkit
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  wrapGAppsHook4,
+  appstream,
+  dbus,
+  flatpak,
+  glib,
+  granite7,
+  gtk4,
+  json-glib,
+  libadwaita,
+  libgee,
+  libportal-gtk4,
+  libsoup_3,
+  libxml2,
+  polkit,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "4.0.0";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-6QWvDBhOxoK8HjmygV92WPDgq2Jbk4igWDbXrXc7/FQ=";
+    repo = "appcenter";
+    tag = version;
+    hash = "sha256-K8XqWHR9TLkekPvx8VuigIWnqMRJcNf/rkfzUQAE0iU=";
   };
 
   nativeBuildInputs = [
-    dbus # for pkg-config
     meson
     ninja
     pkg-config
-    python3
+    sassc
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     appstream
+    dbus
     flatpak
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
     json-glib
+    libadwaita
     libgee
-    libhandy
-    libsoup
+    libportal-gtk4
+    libsoup_3
     libxml2
-    packagekit
     polkit
   ];
 
@@ -65,22 +66,23 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+    # Since we do not build libxml2 with legacy support,
+    # we cannot use compressed appstream metadata.
+    # https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7f14537727bf6845d0eea08cd1fdc30accc2a53
+    substituteInPlace src/Core/FlatpakBackend.vala \
+      --replace-fail ".xml.gz" ".xml"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elementary/appcenter";
-    description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    description = "Open, pay-what-you-want app store for indie developers, designed for elementary OS";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.appcenter";
   };
 }

@@ -1,25 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, cryptography
-, ecdsa
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cryptography,
 }:
 
 buildPythonPackage rec {
   version = "3.3.1";
   pname = "sshpubkeys";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ojarva";
-    repo = "python-${pname}";
-    rev = version;
-    sha256 = "1qsixmqg97kyvg1naw76blq4314vaw4hl5f9wi0v111mcmdia1r4";
+    repo = "python-sshpubkeys";
+    # https://github.com/ojarva/python-sshpubkeys/issues/94
+    tag = "v3.2.0";
+    hash = "sha256-2OJatnQuCt9XQ797F5nEmgEZl5/tu9lrAry5yBGW61g=";
   };
 
-  propagatedBuildInputs = [ cryptography ecdsa ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [
+    cryptography
+  ];
+
+  pythonImportsCheck = [ "sshpubkeys" ];
+
+  meta = {
+    changelog = "https://github.com/ojarva/python-sshpubkeys/releases/tag/${src.tag}";
     description = "OpenSSH Public Key Parser for Python";
     homepage = "https://github.com/ojarva/python-sshpubkeys";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

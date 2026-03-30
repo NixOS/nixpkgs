@@ -1,29 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  matplotlib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-plt";
-  version = "1.1.0";
+  version = "1.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IkTNlierFXIG9WSVUfVoirfQ6z7JOYlCaa5NhnBSuxc=";
+    hash = "sha256-TOuyVH2wKKruy7SBNW3z62yzpmBT6l6RcKhoO1XUFhE=";
   };
 
-  checkInputs = [
+  postPatch = ''
+    sed -i '/addopts =/d' setup.cfg
+  '';
+
+  nativeCheckInputs = [
     pytestCheckHook
     matplotlib
   ];
 
-  meta = with lib; {
-    description = "provides fixtures for quickly creating Matplotlib plots in your tests";
+  meta = {
+    description = "Provides fixtures for quickly creating Matplotlib plots in your tests";
     homepage = "https://www.nengo.ai/pytest-plt/";
     changelog = "https://github.com/nengo/pytest-plt/blob/master/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = [ maintainers.doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.doronbehar ];
   };
 }

@@ -1,35 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.7.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.18.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HFntFmPn3FPhCrB+nnJlBD9zqG2jDsP2naEl2IxhRqE=";
+    pname = "google_cloud_trace";
+    inherit version;
+    hash = "sha256-RtQrkCc9o7xIULsNa5ogXrgmpUVh/xswyjPMkhdMPzc=";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    google-cloud-core
-    proto-plus
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  checkInputs = [
+  dependencies = [
+    google-api-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -37,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # require credentials
+    # Tests require credentials
     "test_batch_write_spans"
     "test_list_traces"
   ];
@@ -48,10 +55,11 @@ buildPythonPackage rec {
     "google.cloud.trace_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud Trace API client library";
-    homepage = "https://github.com/googleapis/python-trace";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

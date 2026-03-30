@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
 {
-  options.services.expressvpn.enable = mkOption {
-    type = types.bool;
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  options.services.expressvpn.enable = lib.mkOption {
+    type = lib.types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Enable the ExpressVPN daemon.
     '';
   };
 
-  config = mkIf config.services.expressvpn.enable {
+  config = lib.mkIf config.services.expressvpn.enable {
     boot.kernelModules = [ "tun" ];
 
     systemd.services.expressvpn = {
@@ -21,9 +24,13 @@ with lib;
         RestartSec = 5;
       };
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "network-online.target" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
     };
   };
 
-  meta.maintainers = with maintainers; [ yureien ];
+  meta.maintainers = with lib.maintainers; [ yureien ];
 }

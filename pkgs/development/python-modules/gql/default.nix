@@ -1,108 +1,95 @@
-{ lib
-, aiofiles
-, aiohttp
-, backoff
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, graphql-core
-, mock
-, parse
-, pytest-asyncio
-, pytest-console-scripts
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, urllib3
-, vcrpy
-, websockets
-, yarl
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  anyio,
+  backoff,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphql-core,
+  httpx,
+  parse,
+  pytest-asyncio_0,
+  pytest-console-scripts,
+  pytestCheckHook,
+  requests,
+  requests-toolbelt,
+  setuptools,
+  vcrpy,
+  websockets,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yr8IyAwZ6y2MPTe6bHRW+CIp19R3ZJWHuqdN5qultnQ=";
+    repo = "gql";
+    tag = "v${version}";
+    hash = "sha256-bPdlFN6MRT6G9Mw2g2BBfsOGpQmT7pbRatpqa7CImSs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    anyio
     backoff
     graphql-core
     yarl
   ];
 
-  checkInputs = [
-    aiofiles
-    mock
+  nativeCheckInputs = [
     parse
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ] ++ passthru.optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
+      aiofiles
       aiohttp
       botocore
+      httpx
       requests
       requests-toolbelt
-      urllib3
       websockets
     ];
-    aiohttp = [
-      aiohttp
-    ];
+    aiofiles = [ aiofiles ];
+    aiohttp = [ aiohttp ];
+    httpx = [ httpx ];
     requests = [
       requests
       requests-toolbelt
-      urllib3
     ];
-    websockets = [
-      websockets
-    ];
-    botocore = [
-      botocore
-    ];
+    websockets = [ websockets ];
+    botocore = [ botocore ];
   };
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+  disabledTestMarks = [
+    "online"
   ];
 
-  disabledTests = [
-    # Tests requires network access
-    "test_execute_result_error"
-    "test_http_transport"
-  ];
+  pythonImportsCheck = [ "gql" ];
 
-  disabledTestPaths = [
-    # Exclude linter tests
-    "gql-checker/tests/test_flake8_linter.py"
-    "gql-checker/tests/test_pylama_linter.py"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "gql"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/graphql-python/gql/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "gql-cli";
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -10,32 +10,26 @@ buildPythonPackage rec {
   version = "1.0.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "TkTech";
-    repo = pname;
+    repo = "mutf8";
     rev = "v${version}";
     hash = "sha256-4Ojn3t0EbOVdrYEiY8JegJuvW9sz8jt9tKFwOluiGQo=";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     # Using pytestCheckHook results in test failures
     pytest
   '';
 
-  pythonImportsCheck = [
-    "mutf8"
-  ];
+  pythonImportsCheck = [ "mutf8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast MUTF-8 encoder & decoder";
     homepage = "https://github.com/TkTech/mutf8";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

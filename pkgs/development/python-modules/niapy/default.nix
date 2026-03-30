@@ -1,47 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, openpyxl
-, pandas
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  openpyxl,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.0.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-h3bCitNFjw2WQtsQFR25VJlNVMojdfik+lrPMKwp8Mw=";
+    tag = "v${version}";
+    hash = "sha256-5Cxxug/FyucU+MkWXMtH43AembfZ/kj5r8nId5664z8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     matplotlib
     numpy
     openpyxl
     pandas
   ];
 
-  checkInputs = [
+  pythonRelaxDeps = [
+    "numpy"
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
   ];
 
-  pythonImportsCheck = [
-    "niapy"
-  ];
+  pythonImportsCheck = [ "niapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Micro framework for building nature-inspired algorithms";
     homepage = "https://niapy.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/NiaOrg/NiaPy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

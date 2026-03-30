@@ -1,31 +1,48 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cffi, crc32c, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  crc32c,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "google-crc32c";
-  version = "1.5.0";
+  version = "1.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-crc32c";
-    rev = "v${version}";
-    sha256 = "sha256-Tx7UBIwKzSBbpuqdqGiXTbmBE+1MDRknVe3Zee0UHKQ=";
+    tag = "v${version}";
+    hash = "sha256-bNTWyOWie1tPiptJ6NPCyC5kzcCpgOZ0w5hKVw07iwc=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ crc32c ];
 
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
 
-  LDFLAGS = "-L${crc32c}/lib";
-  CFLAGS = "-I${crc32c}/include";
+  env = {
+    LDFLAGS = "-L${crc32c}/lib";
+    CFLAGS = "-I${crc32c}/include";
+  };
 
-  checkInputs = [ pytestCheckHook crc32c ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    crc32c
+  ];
 
   pythonImportsCheck = [ "google_crc32c" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/googleapis/python-crc32c";
+  meta = {
     description = "Wrapper the google/crc32c hardware-based implementation of the CRC32C hashing algorithm";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ freezeboy SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/python-crc32c";
+    changelog = "https://github.com/googleapis/python-crc32c/blob/${src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = [ ];
   };
 }

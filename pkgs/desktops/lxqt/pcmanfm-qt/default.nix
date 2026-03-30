@@ -1,60 +1,67 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libexif
-, lxqt
-, qtbase
-, qttools
-, qtx11extras
-, qtimageformats
-, libfm-qt
-, menu-cache
-, lxmenu-data
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  layer-shell-qt,
+  libexif,
+  libfm-qt,
+  lxqt-build-tools,
+  lxqt-menu-data,
+  menu-cache,
+  pkg-config,
+  qtbase,
+  qtimageformats,
+  qttools,
+  qtwayland,
+  qtsvg,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "pcmanfm-qt";
     rev = version;
-    sha256 = "3N+4rhmvVUvQ6svtyOMY0+eP2Kz7EpkmZ3Ua+W4gg0Y=";
+    hash = "sha256-Pv3N/JfUbLyCBpnmnEHL7i2du1q8vSKxTR1uIEsEe/U=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    layer-shell-qt
     libexif
-    qtbase
-    qttools
-    qtx11extras
-    qtimageformats # add-on module to support more image file formats
     libfm-qt
-    libfm-qt
+    lxqt-menu-data
     menu-cache
-    lxmenu-data
+    qtbase
+    qtimageformats # add-on module to support more image file formats
+    qtwayland
+    qtsvg
   ];
 
   passthru.updateScript = gitUpdater { };
 
   postPatch = ''
-    substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
+    substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace-fail @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/pcmanfm-qt";
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    mainProgram = "pcmanfm-qt";
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

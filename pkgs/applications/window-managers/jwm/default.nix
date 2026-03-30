@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, expat
-, fontconfig
-, freetype
-, gettext
-, libX11
-, libXau
-, libXdmcp
-, libXext
-, libXft
-, libXinerama
-, libXmu
-, libXpm
-, libjpeg
-, libpng
-, librsvg
-, pango
-, pkg-config
-, which
-, xorg
-, xorgproto
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  expat,
+  fontconfig,
+  freetype,
+  gettext,
+  libx11,
+  libxau,
+  libxdmcp,
+  libxext,
+  libxft,
+  libxinerama,
+  libxmu,
+  libxpm,
+  libjpeg,
+  libpng,
+  librsvg,
+  pango,
+  pkg-config,
+  which,
+  libxrender,
+  xorgproto,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.3";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-HPcNXf+frYbT8lr5vU5xpUnyjGpQ5rc2G14EjDwpk3c=";
+    hash = "sha256-odGqHdm8xnjEcXmpKMy51HEhbjcROLL3hRSdlbmTr2g=";
   };
 
   nativeBuildInputs = [
@@ -49,21 +50,25 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    libX11
-    libXau
-    libXdmcp
-    libXext
-    libXft
-    libXinerama
-    libXmu
-    libXpm
+    libx11
+    libxau
+    libxdmcp
+    libxext
+    libxft
+    libxinerama
+    libxmu
+    libxpm
     libjpeg
     libpng
     librsvg
     pango
-    xorg.libXrender
+    libxrender
     xorgproto
   ];
+
+  postPatch = ''
+    sed -i '/AM_ICONV/i AC_CONFIG_MACRO_DIRS([m4])' configure.ac
+  '';
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
@@ -79,5 +84,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "jwm";
   };
 }

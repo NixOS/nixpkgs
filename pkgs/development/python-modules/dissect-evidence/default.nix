@@ -1,52 +1,51 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-evidence";
-  version = "3.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.evidence";
-    rev = version;
-    hash = "sha256-X0WMv96Wo3vDZ6HYGdWfn7OKhFuT5Qjzkyj4HzMqCiM=";
+    tag = version;
+    hash = "sha256-kSM2fXaK3H6os/RexwOGg2d8UptoAlHnYK7FlMTg2bI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/fox-it/dissect.evidence/issues/46
+    "test_ewf"
   ];
 
-  pythonImportsCheck = [
-    "dissect.evidence"
-  ];
+  pythonImportsCheck = [ "dissect.evidence" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parsers for various forensic evidence file containers";
     homepage = "https://github.com/fox-it/dissect.evidence";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.evidence/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

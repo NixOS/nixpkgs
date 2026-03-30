@@ -1,28 +1,58 @@
-{ lib, python, fetchPypi, buildPythonPackage, cython }:
+{
+  lib,
+  python,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython,
+  setuptools,
+  libstemmer,
+}:
 
 buildPythonPackage rec {
-  pname = "PyStemmer";
-  version = "2.0.1";
+  pname = "pystemmer";
+  version = "3.0.0";
+  format = "setuptools";
+  pyproejct = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9b81c35302f1d2a5ad9465b85986db246990db93d97d3e8f129269ed7102788e";
+  src = fetchFromGitHub {
+    owner = "snowballstem";
+    repo = "pystemmer";
+    tag = "v${version}";
+    hash = "sha256-c3ucbneUo5UBfdrd5Ktl4HriVusvWBEA1brrgahEQ9A=";
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  preBuild = ''
-    cython src/Stemmer.pyx
+  postConfigure = ''
+    export PYSTEMMER_SYSTEM_LIBSTEMMER="${lib.getDev libstemmer}/include"
   '';
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libstemmer}/include" ];
+    NIX_CFLAGS_LINK = toString [ "-L${libstemmer}/lib" ];
+  };
+
+  pythonImportsCheck = [ "Stemmer" ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} runtests.py
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Snowball stemming algorithms, for information retrieval";
+    downloadPage = "https://github.com/snowballstem/pystemmer";
     homepage = "http://snowball.tartarus.org/";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = with lib.licenses; [
+      bsd3
+      mit
+    ];
+    platforms = lib.platforms.unix;
   };
 }

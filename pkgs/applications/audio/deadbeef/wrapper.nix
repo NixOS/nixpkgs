@@ -1,7 +1,13 @@
-{ symlinkJoin, deadbeef, makeWrapper, plugins }:
+{
+  symlinkJoin,
+  deadbeef,
+  makeWrapper,
+  plugins,
+}:
 
 symlinkJoin {
-  name = "deadbeef-with-plugins-${deadbeef.version}";
+  pname = "deadbeef-with-plugins";
+  inherit (deadbeef) version;
 
   paths = [ deadbeef ] ++ plugins;
 

@@ -1,58 +1,60 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pytz,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "eiswarnung";
-  version = "1.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sMR16if2Q+lK+ilnVNYVootBN2LFwBQLlZFkoX+oS/g=";
+    tag = "v${version}";
+    hash = "sha256-/61qrRfD7/gaEcvFot34HYXOVLWwTDi/fvcgHDTv9u0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    yarl
-  ];
-
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
-  pythonImportsCheck = [
-    "eiswarnung"
+  pythonRelaxDeps = [ "pytz" ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiohttp
+    pytz
+    yarl
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "eiswarnung" ];
+
+  meta = {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

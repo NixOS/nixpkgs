@@ -1,43 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, coverage
-, isPy27
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonAtLeast,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aiounittest";
-  version = "1.4.2";
-  disabled = isPy27;
+  version = "1.5.0";
+  pyproject = true;
+
+  # https://github.com/kwarunek/aiounittest/issues/28
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "kwarunek";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
+    repo = "aiounittest";
+    tag = version;
+    hash = "sha256-zX3KpDw7AaEwOLkiHX/ZD+rSMeN7qi9hOVAmVH6Jxgg=";
   };
 
-  propagatedBuildInputs = [
-    wrapt
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    nose
-    coverage
-  ];
+  dependencies = [ wrapt ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aiounittest" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/kwarunek/aiounittest/releases/tag/${src.tag}";
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,34 +1,45 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, zope_interface, twisted, greenlet }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  greenlet,
+  setuptools,
+  twisted,
+  zope-interface,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python3-eventlib";
-  version = "0.3.0";
-
-  disabled = !isPy3k;
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-eventlib";
-    rev = version;
-    sha256 = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-jN9nn+rI4TJLrEiEIoVxQ3XnXWSws1FenGUfG3doc94=";
   };
 
-  propagatedBuildInputs = [ zope_interface twisted greenlet ];
+  build-system = [ setuptools ];
 
-  dontUseSetuptoolsCheck = true;
+  dependencies = [
+    greenlet
+    twisted
+    zope-interface
+  ];
 
   pythonImportsCheck = [ "eventlib" ];
 
-  meta = with lib; {
-    description = "A networking library written in Python";
+  meta = {
+    description = "Networking library written in Python";
     homepage = "https://github.com/AGProjects/python3-eventlib";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chanley ];
     longDescription = ''
       Eventlib is a networking library written in Python. It achieves high
       scalability by using non-blocking I/O while at the same time retaining
       high programmer usability by using coroutines to make the non-blocking io
       operations appear blocking at the source code level.
     '';
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ chanley ];
   };
-}
+})

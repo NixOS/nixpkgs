@@ -1,48 +1,57 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools-scm
-, pyserial
-, pyusb
-, pyvisa
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  gpib-ctypes,
+  pyserial,
+  pyusb,
+  pyvisa,
+  typing-extensions,
+  psutil,
+  zeroconf,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.5.3";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-37GptqqBSIFOpm6SpS61ZZ9C4iU5AiOduVq255mTRNo=";
+    tag = version;
+    hash = "sha256-fXLT3W48HQ744LkwZn784KKmUE8gxDCR+lkcL9xX45g=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    pyserial
-    pyusb
+  dependencies = [
     pyvisa
     typing-extensions
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    gpib-ctypes = [ gpib-ctypes ];
+    serial = [ pyserial ];
+    usb = [ pyusb ];
+    psutil = [ psutil ];
+    hislip-discovery = [ zeroconf ];
+    # vicp = [ pyvicp zeroconf ];
+  };
 
-  postConfigure = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "PyVISA backend that implements a large part of the Virtual Instrument Software Architecture in pure Python";
+  meta = {
+    description = "Module that implements the Virtual Instrument Software Architecture";
     homepage = "https://github.com/pyvisa/pyvisa-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    changelog = "https://github.com/pyvisa/pyvisa-py/blob/${src.tag}/CHANGES";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
   };
 }

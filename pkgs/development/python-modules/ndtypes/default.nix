@@ -1,23 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, python
-, numpy
-, libndtypes
-, isPy27
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  python,
+  numpy,
+  libndtypes,
+  isPy27,
 }:
 
 buildPythonPackage {
   pname = "ndtypes";
+  format = "setuptools";
   disabled = isPy27;
   inherit (libndtypes) version src meta;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'include_dirs = ["libndtypes"]' \
-                'include_dirs = ["${libndtypes}/include"]' \
+                'include_dirs = ["${libndtypes.dev}/include"]' \
       --replace 'library_dirs = ["libndtypes"]' \
                 'library_dirs = ["${libndtypes}/lib"]' \
       --replace 'runtime_library_dirs = ["$ORIGIN"]' \
@@ -27,7 +34,8 @@ buildPythonPackage {
   postInstall = ''
     mkdir $out/include
     cp python/ndtypes/*.h $out/include
-  '' + lib.optionalString stdenv.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libndtypes}/lib $out/${python.sitePackages}/ndtypes/_ndtypes.*.so
   '';
 

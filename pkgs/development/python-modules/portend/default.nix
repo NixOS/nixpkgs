@@ -1,27 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytestCheckHook, setuptools-scm, tempora  }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools-scm,
+  tempora,
+}:
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "3.1.0";
+  version = "3.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "239e3116045ea823f6df87d6168107ad75ccc0590e37242af0cc1e98c5d224e4";
+    hash = "sha256-qp1Aqx+eFL231AH0IhDfNdAXybl5kbrrGFaM7fuMZIk=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml;
+  '';
 
-  propagatedBuildInputs = [ tempora ];
+  build-system = [ setuptools-scm ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [ tempora ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "portend" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Monitor TCP ports for bound or unbound states";
     homepage = "https://github.com/jaraco/portend";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

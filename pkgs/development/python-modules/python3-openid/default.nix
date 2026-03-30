@@ -1,8 +1,15 @@
-{ lib, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
+{
+  lib,
+  isPy3k,
+  buildPythonPackage,
+  fetchPypi,
+  defusedxml,
+}:
 
 buildPythonPackage rec {
   pname = "python3-openid";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,9 +22,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  meta = with lib; {
+  meta = {
     description = "OpenID support for modern servers and consumers";
     homepage = "https://github.com/necaris/python3-openid";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

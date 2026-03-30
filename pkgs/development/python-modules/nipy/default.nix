@@ -1,49 +1,85 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, nose
-, matplotlib
-, nibabel
-, numpy
-, scipy
-, sympy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+
+  # build-system
+  cython,
+  meson-python,
+  ninja,
+  setuptools,
+
+  # dependencies
+  numpy,
+  scipy,
+  nibabel,
+  sympy,
+  transforms3d,
+
+  # optional-dependencies
+  matplotlib,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.5.0";
+  version = "0.6.1";
   pname = "nipy";
-  disabled = pythonOlder "2.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a8a2c97ce854fece4aced5a6394b9fdca5846150ad6d2a36b86590924af3c848";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nipy";
+    tag = version;
+    hash = "sha256-KGMGu0/0n1CzN++ri3Ig1AJjeZfkl4KzNgm6jdwXB7o=";
   };
 
-  buildInputs = lib.optionals doCheck [ nose ];
-  propagatedBuildInputs = [ matplotlib nibabel numpy scipy sympy ];
+  patches = [
+    # https://github.com/nipy/nipy/pull/589
+    (fetchpatch2 {
+      url = "https://github.com/nipy/nipy/pull/589/commits/76f2aae95dede9b8ac025dc32ce94791904f25e4.patch?full_index=1";
+      hash = "sha256-Rnwfx6JKl+nE9wvBGKXFtizjuB4Bl1QDF88CvSZU/RQ=";
+    })
+  ];
 
-  checkPhase = ''    # wants to be run in a different directory
-    mkdir nosetests
-    cd nosetests
-    ${python.interpreter} -c "import nipy; nipy.test()"
-    rm -rf .
+  postPatch = ''
+    patchShebangs nipy/_build_utils/cythoner.py
   '';
 
-  # failing test:
-  # nipy.algorithms.statistics.models.tests.test_olsR.test_results(11.593139639404727, 11.593140144880794, 6)  # disagrees by 1 at 6th decimal place
-  # erroring tests:
-  # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_altprotocol
-  # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_agreement
-  # nipy.tests.test_scripts.test_nipy_4d_realign   # because `nipy_4d_realign` script isn't found at test time; works from nix-shell, so could be patched
-  # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
-  doCheck = false;
+  build-system = [
+    cython
+    meson-python
+    setuptools
+    ninja
+    numpy
+  ];
 
-  meta = with lib; {
+  dependencies = [
+    nibabel
+    numpy
+    scipy
+    sympy
+    transforms3d
+  ];
+
+  optional-dependencies.optional = [ matplotlib ];
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.optional;
+
+  doCheck = false; # partial imports … circular dependencies. needs more time to figure out.
+
+  pythonImportsCheck = [
+    "nipy"
+    "nipy.testing"
+    "nipy.algorithms"
+  ];
+
+  meta = {
     homepage = "https://nipy.org/nipy";
     description = "Software for structural and functional neuroimaging analysis";
-    license = licenses.bsd3;
+    downloadPage = "https://github.com/nipy/nipy";
+    license = lib.licenses.bsd3;
   };
-
 }

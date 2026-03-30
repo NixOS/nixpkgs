@@ -30,7 +30,7 @@ This will create a `result` directory containing the following:
 These three files are meant to be copied over to the other already running
 Linux Distribution.
 
-Note it's symlinks pointing elsewhere, so `cd` in, and use
+Note its symlinks pointing elsewhere, so `cd` in, and use
 `scp * root@$destination` to copy it over, rather than rsync.
 
 Once you finished copying, execute `kexec-boot` *on the destination*, and after
@@ -41,15 +41,12 @@ In case you want to describe your own system closure to kexec into, instead of
 the default installer image, you can build your own `configuration.nix`:
 
 ```nix
-{ modulesPath, ... }: {
-  imports = [
-    (modulesPath + "/installer/netboot/netboot-minimal.nix")
-  ];
+{ modulesPath, ... }:
+{
+  imports = [ (modulesPath + "/installer/netboot/netboot-minimal.nix") ];
 
   services.openssh.enable = true;
-  users.users.root.openssh.authorizedKeys.keys = [
-    "my-ssh-pubkey"
-  ];
+  users.users.root.openssh.authorizedKeys.keys = [ "my-ssh-pubkey" ];
 }
 ```
 

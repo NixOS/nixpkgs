@@ -1,48 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.28";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "newville";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-J35AqVSFpIsw0XThbLCJjS9NFRFeyYV/YrwdfcOrFhk=";
+    owner = "lmfit";
+    repo = "asteval";
+    tag = version;
+    hash = "sha256-qENmfqWaKhNKMTTYg2QrhL1eqhda8dUOP8b0Wcq4Ats=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=asteval --cov-report xml" ""
-  '';
+  pythonImportsCheck = [ "asteval" ];
 
-  pythonImportsCheck = [
-    "asteval"
+  disabledTests = [
+    # AssertionError: 'ImportError' != None
+    "test_set_default_nodehandler"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AST evaluator of Python expression using ast module";
-    homepage = "https://github.com/newville/asteval";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/lmfit/asteval";
+    changelog = "https://github.com/lmfit/asteval/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

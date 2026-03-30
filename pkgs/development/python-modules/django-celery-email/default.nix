@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-appconf
-, celery
-, pytest-django
-, pytestCheckHook
-, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-appconf,
+  celery,
+  pytest-django,
+  pytestCheckHook,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "django-celery-email";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pmclanahan";
-    repo = pname;
+    repo = "django-celery-email";
     rev = version;
-    sha256 = "sha256-LBavz5Nh2ObmIwLCem8nHvsuKgPwkzbS/OzFPmSje/M=";
+    hash = "sha256-LBavz5Nh2ObmIwLCem8nHvsuKgPwkzbS/OzFPmSje/M=";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +28,9 @@ buildPythonPackage rec {
     celery
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];
@@ -38,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "djcelery_email" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pmclanahan/django-celery-email";
     description = "Django email backend that uses a celery task for sending the email";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

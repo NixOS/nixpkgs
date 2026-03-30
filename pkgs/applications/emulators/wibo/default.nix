@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, srcOnly
-, cmake
-, unzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  srcOnly,
+  cmake,
+  unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wibo";
-  version = "0.2.4";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
-    rev = version;
-    hash = "sha256-dpfKSiIWE9L5BLPH2t8RsUz7Ufkdo/5zn1dewaEgJl0=";
+    rev = finalAttrs.version;
+    hash = "sha256-6YcraHBFWmm8TBfuFHbM9jGvUm9KvTOplJrFSTQkt70=";
   };
 
   nativeBuildInputs = [
@@ -25,22 +26,24 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
   # Test step from https://github.com/decompals/wibo/blob/main/.github/workflows/ci.yml
-  checkPhase = let
-    gc = srcOnly {
-      name = "GC_WII_COMPILERS";
-      src = fetchzip {
-        url = "https://cdn.discordapp.com/attachments/727918646525165659/917185027656286218/GC_WII_COMPILERS.zip";
-        hash = "sha256-o+UrmIbCsa74LxtLofT0DKrTRgT0qDK5/V7GsG2Zprc=";
-        stripRoot = false;
+  checkPhase =
+    let
+      gc = srcOnly {
+        name = "GC_WII_COMPILERS";
+        src = fetchzip {
+          url = "https://files.decomp.dev/compilers_20230715.zip";
+          hash = "sha256-IX3byvEUVJB6Rmc+NqO9ZNt1jl95nQpEIqxbHI+uUio=";
+          stripRoot = false;
+        };
+        meta.license = lib.licenses.unfree;
       };
-      meta.license = lib.licenses.unfree;
-    };
-  in lib.optionalString doCheck ''
-    MWCIncludes=. ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
-    file test.o | grep "ELF 32-bit"
-  '';
+    in
+    lib.optionalString finalAttrs.doCheck ''
+      MWCIncludes=../test ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
+      file test.o | grep "ELF 32-bit"
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "Quick-and-dirty wrapper to run 32-bit windows EXEs on linux";
     longDescription = ''
       A minimal, low-fuss wrapper that can run really simple command-line
@@ -48,8 +51,9 @@ stdenv.mkDerivation rec {
       than WINE.
     '';
     homepage = "https://github.com/decompals/WiBo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
     platforms = [ "i686-linux" ];
+    mainProgram = "wibo";
   };
-}
+})

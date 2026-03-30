@@ -1,16 +1,18 @@
-{ buildPythonPackage
-, acme
-, certbot
-, dnspython
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  dnspython,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-rfc2136";
+  format = "setuptools";
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.6";
+
+  sourceRoot = "${src.name}/certbot-dns-rfc2136";
 
   propagatedBuildInputs = [
     acme
@@ -18,13 +20,14 @@ buildPythonPackage rec {
     dnspython
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-pno:cacheprovider"
+
+    # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
+    "-Wignore::DeprecationWarning"
   ];
-
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
-
-  sourceRoot = "source/certbot-dns-rfc2136";
 
   meta = certbot.meta // {
     description = "RFC 2136 DNS Authenticator plugin for Certbot";

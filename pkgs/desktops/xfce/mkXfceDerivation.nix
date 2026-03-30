@@ -1,31 +1,55 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  xfce4-dev-tools,
+  hicolor-icon-theme,
+  xfce,
+  wrapGAppsHook3,
+  gitUpdater,
+}:
 
-{ category
-, pname
-, version
-, attrPath ? "xfce.${pname}"
-, rev-prefix ? "${pname}-"
-, rev ? "${rev-prefix}${version}"
-, sha256
-, odd-unstable ? true
-, patchlevel-unstable ? true
-, ...
-} @ args:
+{
+  category,
+  pname,
+  version,
+  attrPath ? "xfce.${pname}",
+  rev-prefix ? "${pname}-",
+  rev ? "${rev-prefix}${version}",
+  sha256,
+  odd-unstable ? true,
+  patchlevel-unstable ? true,
+  passthru ? { },
+  meta ? { },
+  ...
+}@args:
 
 let
-  inherit (builtins) filter getAttr head isList;
-  inherit (lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
+  inherit (builtins)
+    filter
+    getAttr
+    head
+    isList
+    ;
+  inherit (lib)
+    attrNames
+    concatLists
+    recursiveUpdate
+    zipAttrsWithNames
+    ;
 
-  filterAttrNames = f: attrs:
-    filter (n: f (getAttr n attrs)) (attrNames attrs);
+  filterAttrNames = f: attrs: filter (n: f (getAttr n attrs)) (attrNames attrs);
 
-  concatAttrLists = attrsets:
-    zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
+  concatAttrLists =
+    attrsets: zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
-  template = rec {
-    inherit pname version;
-
-    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook ];
+  template = {
+    nativeBuildInputs = [
+      pkg-config
+      xfce4-dev-tools
+      wrapGAppsHook3
+    ];
     buildInputs = [ hicolor-icon-theme ];
     configureFlags = [ "--enable-maintainer-mode" ];
 
@@ -37,23 +61,41 @@ let
     };
 
     enableParallelBuilding = true;
-    outputs = [ "out" "dev" ];
+    outputs = [
+      "out"
+      "dev"
+    ];
 
     pos = builtins.unsafeGetAttrPos "pname" args;
 
-    passthru.updateScript = gitUpdater {
-      inherit rev-prefix odd-unstable patchlevel-unstable;
-    };
+    passthru = {
+      updateScript = gitUpdater {
+        inherit rev-prefix odd-unstable patchlevel-unstable;
+      };
+    }
+    // passthru;
 
-    meta = with lib; {
-      homepage = "https://gitlab.xfce.org/${category}/${pname}";
-      license = licenses.gpl2Plus; # some libraries are under LGPLv2+
-      platforms = platforms.linux;
-    };
+    meta =
+
+      {
+        homepage = "https://gitlab.xfce.org/${category}/${pname}";
+        license = lib.licenses.gpl2Plus; # some libraries are under LGPLv2+
+        platforms = lib.platforms.linux;
+      }
+      // meta;
   };
 
-  publicArgs = removeAttrs args [ "category" "pname" "sha256" ];
+  publicArgs = removeAttrs args [
+    "category"
+    "sha256"
+  ];
 in
 
-stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [ template args ])
-# TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256
+stdenv.mkDerivation (
+  publicArgs
+  // template
+  // concatAttrLists [
+    template
+    args
+  ]
+)

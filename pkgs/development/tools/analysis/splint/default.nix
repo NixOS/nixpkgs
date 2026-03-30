@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, flex }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "splint";
@@ -9,15 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "02pv8kscsrkrzip9r08pfs9xs98q74c52mlxzbii6cv6vx1vd3f7";
   };
 
-  patches = [ ./tmpdir.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [ ./tmpdir.patch ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   buildInputs = [ flex ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.splint.org/";
     description = "Annotation-assisted lightweight static analyzer for C";
+    mainProgram = "splint";
 
     longDescription = ''
       Splint is a tool for statically checking C programs for security
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
       checking than can be done by any standard lint.
     '';
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-# This module defines a NixOS configuration with the Plasma 5 desktop.
+# This module defines a NixOS configuration with the Plasma 6 desktop.
 # It's used by the graphical installation CD.
 
 { pkgs, ... }:
@@ -6,15 +6,16 @@
 {
   services.xserver = {
     enable = true;
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5 = {
-      enable = true;
-    };
+    desktopManager.plasma6.enable = true;
+  };
+
+  services = {
+    displayManager.plasma-login-manager.enable = true;
     libinput.enable = true; # for touchpad support on many laptops
   };
 
-  # Enable sound in virtualbox appliances.
-  hardware.pulseaudio.enable = true;
-
-  environment.systemPackages = [ pkgs.glxinfo pkgs.firefox ];
+  environment.systemPackages = [
+    pkgs.mesa-demos
+    pkgs.firefox
+  ];
 }

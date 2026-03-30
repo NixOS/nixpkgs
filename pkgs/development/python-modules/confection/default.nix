@@ -1,43 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, srsly
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # tests
+  catalogue,
+  hypothesis,
+  numpy,
+  pydantic,
+  pytestCheckHook,
+
+  # passthru
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "confection";
-  version = "0.0.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3qxB94CYCMZN+sKqbmDfkRyAs6HJkFLE/5yJx1DKqYM=";
+    repo = "confection";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-64QwxK0Rl67n5vb/CuRJw/42A/SE9/Q5gtqITggYqhg=";
   };
 
-  propagatedBuildInputs = [
-    pydantic
-    srsly
+  build-system = [
+    setuptools
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "confection" ];
+
+  nativeCheckInputs = [
+    catalogue
+    hypothesis
+    numpy
+    pydantic
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "confection"
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "release-v(.*)"
+      ];
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Library that offers a configuration system";
     homepage = "https://github.com/explosion/confection";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/explosion/confection/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

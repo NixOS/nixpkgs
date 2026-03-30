@@ -1,34 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-xprocess
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-xprocess,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.9.0";
-  disabled = pythonOlder "3.6";
+  version = "0.13.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pallets";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-LO1VdirKWXIAy3U8oRtnFI58qO+yn6Vm5bZdCjdgKwo=";
+    repo = "cachelib";
+    tag = version;
+    hash = "sha256-8jg+zfdIATvu/GSFvqHl4cNMu+s2IFWC22vPZ7Q3WYI=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xprocess
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # requires set up local server
+    "tests/test_dynamodb_cache.py"
+    "tests/test_mongodb_cache.py"
+  ];
+
   pythonImportsCheck = [ "cachelib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pallets/cachelib";
     description = "Collection of cache libraries in the same API interface";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

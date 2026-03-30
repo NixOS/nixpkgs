@@ -1,27 +1,25 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.passSecretService;
 in
 {
   options.services.passSecretService = {
-    enable = mkEnableOption (lib.mdDoc "pass secret service");
+    enable = lib.mkEnableOption "pass secret service";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.pass-secret-service;
-      defaultText = literalExpression "pkgs.pass-secret-service";
-      description = lib.mdDoc "Which pass-secret-service package to use.";
-      example = literalExpression "pkgs.pass-secret-service.override { python3 = pkgs.python310 }";
+    package = lib.mkPackageOption pkgs "pass-secret-service" {
+      example = "pass-secret-service.override { python3 = pkgs.python315 }";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
   };
 
-  meta.maintainers = with maintainers; [ aidalgol ];
+  meta.maintainers = with lib.maintainers; [ jluttine ];
 }

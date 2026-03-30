@@ -1,28 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, impacket
-, netaddr
-, pythonOlder
-, pypykatz
-, rich
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  impacket,
+  netaddr,
+  poetry-core,
+  pypykatz,
+  rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lsassy";
-  version = "3.1.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.1.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Hackndo";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/YDBzH8Mji6PWBEIbsgZcTvoAWAsBbJV3cHfySY/gGA=";
+    repo = "lsassy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lPbZnoR6qWfVBSRAbTJsKpjBieidNsYgAXI3CXHEt1w=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "impacket"
+    "netaddr"
+    "rich"
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     impacket
     netaddr
     pypykatz
@@ -32,14 +39,14 @@ buildPythonPackage rec {
   # Tests require an active domain controller
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lsassy"
-  ];
+  pythonImportsCheck = [ "lsassy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";
     homepage = "https://github.com/Hackndo/lsassy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Hackndo/lsassy/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "lsassy";
   };
-}
+})

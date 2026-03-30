@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spotipy
-, click
-, pycryptodomex
-, mutagen
-, requests
-, deezer-py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  spotipy,
+  click,
+  pycryptodomex,
+  mutagen,
+  requests,
+  deezer-py,
 }:
 
 buildPythonPackage rec {
@@ -15,11 +15,9 @@ buildPythonPackage rec {
   version = "3.6.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xEahzA1PIrGPfnnOcuXQLVQpSVOUFk6/0v9ViLgWCwk=";
+    hash = "sha256-xEahzA1PIrGPfnnOcuXQLVQpSVOUFk6/0v9ViLgWCwk=";
   };
 
   propagatedBuildInputs = [
@@ -34,14 +32,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "deezer"
-  ];
+  pythonImportsCheck = [ "deezer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deezer downloader built from the ashes of Deezloader Remix";
-    homepage = "https://git.freezerapp.xyz/RemixDev/deemix-py";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ natto1784 ];
+    mainProgram = "deemix";
+    homepage = "https://gitlab.com/RemixDev/deemix-py";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ natto1784 ];
   };
 }

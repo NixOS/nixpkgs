@@ -1,53 +1,62 @@
-{ lib
-, astral
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  astral,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  num2words,
+  pdm-backend,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.4";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
-    rev = "v${version}";
-    sha256 = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
+    tag = "v${version}";
+    hash = "sha256-nM9LHcXuDpQ2j4ACF6W5H3iTJcKdbcY4bkbumIkKyeE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "astral"
   ];
 
-  propagatedBuildInputs = [
-    astral
-    pytz
+  build-system = [
+    pdm-backend
   ];
 
-  checkInputs = [
+  dependencies = [
+    num2words
+  ];
+
+  optional-dependencies = {
+    astral = [ astral ];
+  };
+
+  nativeCheckInputs = [
+    hypothesis
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
+    syrupy
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "^2020.5" ">=2020.5"
-  '';
-
-  pytestFlagsArray = [
-    "tests"
-  ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "hdate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/py-libhdate/py-libhdate/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

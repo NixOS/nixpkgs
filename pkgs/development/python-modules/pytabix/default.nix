@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pytabix";
   version = "0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,10 +25,10 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "tabix" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/slowkow/pytabix";
     description = "Python interface for tabix";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

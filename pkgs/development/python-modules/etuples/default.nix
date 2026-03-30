@@ -1,45 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cons
-, multipledispatch
-, pytestCheckHook
-, pytest-html
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cons,
+  multipledispatch,
+  py,
+  pytestCheckHook,
+  pytest-html,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "etuples";
-  version = "0.3.5";
+  version = "0.3.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "etuples";
-    rev = "v${version}";
-    sha256 = "sha256-gJNxrO2d/eF4t3bBlz/BwF+9eT1nKrVrTP3F6/dEN00=";
+    tag = "v${version}";
+    hash = "sha256-h5MLj1z3qZiUXcNIDtUIbV5zeyTzxerbSezFD5Q27n0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     cons
     multipledispatch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
     pytest-html
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--html=testing-report.html"
     "--self-contained-html"
   ];
 
   pythonImportsCheck = [ "etuples" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python S-expression emulation using tuple-like objects";
     homepage = "https://github.com/pythological/etuples";
-    changelog = "https://github.com/pythological/etuples/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Etjean ];
+    changelog = "https://github.com/pythological/etuples/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Etjean ];
   };
 }

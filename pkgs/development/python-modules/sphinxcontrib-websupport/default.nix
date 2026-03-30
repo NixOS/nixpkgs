@@ -1,22 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinxcontrib-serializinghtml
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  jinja2,
+  sphinxcontrib-serializinghtml,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
-  version = "1.2.4";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "4edf0223a0685a7c485ae5a156b6f529ba1ee481a1417817935b20bde1956232";
+    pname = "sphinxcontrib_websupport";
+    inherit version;
+    hash = "sha256-C3Nn07rGRUsfl+QqqMTU1KG3VtUl/HJuu+VXHgM+ec0=";
   };
 
-  propagatedBuildInputs = [ six sphinxcontrib-serializinghtml ];
+  nativeBuildInputs = [ flit-core ];
 
+  propagatedBuildInputs = [
+    jinja2
+    sphinxcontrib-serializinghtml
+  ];
+
+  # circular dependency on sphinx
+  dontCheckRuntimeDeps = true;
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = {
     description = "Sphinx API for Web Apps";

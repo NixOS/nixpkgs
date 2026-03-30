@@ -1,24 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  mock,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-runtimeconfig";
-  version = "0.33.2";
+  version = "0.36.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-MPmyvm2FSrUzb1y5i4xl5Cqea6sxixLoZ7V1hxNi7hw=";
+    pname = "google_cloud_runtimeconfig";
+    inherit version;
+    hash = "sha256-+pDFyELolBTJfz/RIoNbGNHC30tyKhZ7D6XiQTKO2t0=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ mock pytestCheckHook ];
+  dependencies = [
+    google-api-core
+    google-cloud-core
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   # Client tests require credentials
   disabledTests = [ "client_options" ];
@@ -30,10 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.runtimeconfig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud RuntimeConfig API client library";
-    homepage = "https://pypi.org/project/google-cloud-runtimeconfig";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/python-runtimeconfig";
+    changelog = "https://github.com/googleapis/python-runtimeconfig/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

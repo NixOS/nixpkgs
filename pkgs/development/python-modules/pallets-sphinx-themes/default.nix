@@ -1,26 +1,41 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx, packaging }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+  packaging,
+  flit-core,
+  sphinx-notfound-page,
+}:
 
 buildPythonPackage rec {
   pname = "pallets-sphinx-themes";
-  version = "2.0.2";
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "pallets-sphinx-themes";
-    rev = version;
-    sha256 = "0nvznv6abmkkda2fahydd4rykd94rmz74hx5aypv6j22zvf5pj8b";
+    tag = version;
+    hash = "sha256-+etmWzjCiYbM8cHSnJr0tHs3DpvozNYShQ6x60UADS4=";
   };
 
-  propagatedBuildInputs = [ packaging sphinx ];
+  build-system = [
+    flit-core
+  ];
+
+  dependencies = [
+    packaging
+    sphinx
+    sphinx-notfound-page
+  ];
 
   pythonImportsCheck = [ "pallets_sphinx_themes" ];
 
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pallets/pallets-sphinx-themes";
     description = "Sphinx theme for Pallets projects";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

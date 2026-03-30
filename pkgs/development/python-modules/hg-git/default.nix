@@ -1,36 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dulwich
-, mercurial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  dulwich,
+  mercurial,
 }:
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "1.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-P3Ng9bD16AX7DJac/Y168GSWLTIAD3I1aLblYIDQiyk=";
+    pname = "hg_git";
+    inherit version;
+    hash = "sha256-Pr+rNkqBubVlsQCyqd5mdr8D357FzSd3Kuz5EWeez8M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     dulwich
     mercurial
   ];
 
-  pythonImportsCheck = [
-    "hggit"
-  ];
+  # the dulwich version we are using is ahead of the one used upstream by hg-git.
+  # the build was failing because it could not import 'ANNOTATED_TAG_SUFFIX' from
+  # 'dulwich.refs'.
+  patches = [ ./dulwich_ANNOTATED_TAG_SUFFIX_renamed.patch ];
 
-  meta = with lib; {
+  pythonRelaxDeps = [ "dulwich" ];
+
+  pythonImportsCheck = [ "hggit" ];
+
+  meta = {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "https://hg-git.github.io/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

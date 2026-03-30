@@ -1,15 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, twisted
-, pytest-twisted
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchPypi,
+  pyqt5,
+  twisted,
+  pytest-twisted,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qt5reactor";
   version = "0.6.3";
+  format = "setuptools";
+
+  # AttributeError: module 'configparser' has no attribute 'SafeConfigParser'
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,17 +27,17 @@ buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-twisted
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "qt5reactor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twisted Qt Integration";
     homepage = "https://github.com/twisted/qt5reactor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

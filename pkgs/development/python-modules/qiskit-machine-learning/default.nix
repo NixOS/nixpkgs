@@ -1,49 +1,52 @@
-{ lib
-, pythonOlder
-, pythonAtLeast
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
   # Python Inputs
-, fastdtw
-, numpy
-, psutil
-, qiskit-terra
-, scikit-learn
-, sparse
-, torch
+  fastdtw,
+  numpy,
+  psutil,
+  qiskit,
+  scikit-learn,
+  sparse,
+  torch,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
+  pytestCheckHook,
+  ddt,
+  pytest-timeout,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.4.0";
-
-  disabled = pythonOlder "3.6";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-WZSXt+sVeO64wCVbDgBhuGvo5jTn/JKh9oNSO7ZY9wo=";
+    tag = version;
+    hash = "sha256-l7lzdGSarj1DiC0igeyr6kP+GYYE+eGKdW9+IN+2uh8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     fastdtw
     numpy
     psutil
     torch
-    qiskit-terra
+    qiskit
     scikit-learn
     sparse
   ];
 
-  doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
-  checkInputs = [
+  doCheck = false; # TODO: enable. Tests fail on unstable due to some multithreading issue?
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt
@@ -52,11 +55,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_machine_learning" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--durations=10"
     "--showlocals"
     "-vv"
-    "--ignore=test/connectors/test_torch_connector.py"  # TODO: fix, get multithreading errors with python3.9, segfaults
+  ];
+  disabledTestPaths = [
+    "test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
   ];
   disabledTests = [
     # Slow tests >10 s
@@ -75,12 +80,13 @@ buildPythonPackage rec {
     "test_qgan_training"
   ];
 
-  meta = with lib; {
+  meta = {
+    broken = true; # incompatible with qiskit >= 2.0 (see https://github.com/Qiskit/qiskit-machine-learning/issues/934)
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

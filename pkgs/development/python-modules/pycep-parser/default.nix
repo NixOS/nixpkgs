@@ -1,57 +1,55 @@
-{ lib
-, assertpy
-, buildPythonPackage
-, fetchFromGitHub
-, lark
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, regex
-, typing-extensions
+{
+  lib,
+  assertpy,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lark,
+  pytestCheckHook,
+  regex,
+  typing-extensions,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycep-parser";
-  version = "0.3.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CghTNdZZJJOakMySNPRCTYx+1aEY8ROUvS9loc9JcPo=";
+    tag = finalAttrs.version;
+    hash = "sha256-pEFgpLfGcJhUWfs/nG1r7GfIS045cfNh7MVQokluXmM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  # We can't use pythonRelaxDeps to relax the build-system
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build~=0.9.0" "uv_build"
+  '';
+
+  pythonRelaxDeps = [ "regex" ];
+
+  dependencies = [
     lark
     regex
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     assertpy
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'regex = "^2022.3.15"' 'regex = "*"'
-  '';
+  pythonImportsCheck = [ "pycep" ];
 
-  pythonImportsCheck = [
-    "pycep"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/gruebel/pycep/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

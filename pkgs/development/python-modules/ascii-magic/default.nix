@@ -1,36 +1,54 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchPypi
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pillow,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ascii-magic";
-  version = "1.6";
+  version = "2.7.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "ascii_magic";
-    inherit version;
-    sha256 = "sha256-faVRj3No5z8R4hUaDAYIBKoUniZ7Npt+52U/vXsEalE=";
+  src = fetchFromGitHub {
+    owner = "LeandroBarone";
+    repo = "python-ascii_magic";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-werCg7LW7MKMoYp/QxZU74MSc6WmscwWfvGRG4Dn60c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     pillow
   ];
 
-  # Project is not tagging releases and tests are not shipped with PyPI source
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ascii_magic"
+  pythonImportsCheck = [ "ascii_magic" ];
+
+  preCheck = ''
+    ln -s ascii_magic/tests/*.{jpg,png} ./
+  '';
+
+  disabledTests = [
+    # Test requires network access
+    "test_from_url"
+    "test_quick_test"
+    "test_wrong_url"
+    # No clipboard in the sandbox
+    "test_from_clipboard"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to converts pictures into ASCII art";
     homepage = "https://github.com/LeandroBarone/python-ascii_magic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/LeandroBarone/python-ascii_magic#changelog";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

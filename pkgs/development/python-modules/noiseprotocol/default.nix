@@ -1,26 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cryptography, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "noiseprotocol";
   version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plizonczyk";
     repo = "noiseprotocol";
-    rev = "v${version}";
-    sha256 = "1mk0rqpjifdv3v1cjwkdnjbrfmzzjm9f3qqs1r8vii4j2wvhm6am";
+    tag = "v${version}";
+    hash = "sha256-VZkKNxeSxLhRDhrj4VKV/1eXl7RtcsnCHru5KC/OYNY=";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [ cryptography ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "noise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Noise Protocol Framework";
     homepage = "https://github.com/plizonczyk/noiseprotocol/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/plizonczyk/noiseprotocol/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -127,8 +127,7 @@ echo "$urllist" | xargs wget $wgetargs -nH -r -c --no-parent && {
 
     # TODO fetch only missing tar.xz files
     echo "fetching $filecount tar.xz files ..."
-    urllist="$(echo "$filelist" | while read file; do echo "$BASE_URL/$file"; done)"
-    echo "$urllist" | xargs wget $wgetargs -nH -r -c --no-parent
+    echo "$filelist" | xargs wget $wgetargs -nH -r -c --no-parent
 
     echo "generating sha256 files ..."
     find . -type f -name '*.tar.xz' | while read src; do
@@ -157,7 +156,7 @@ files_before=$(grep -c 'src = ' "$SRCS")
 echo "writing output file $SRCS ..."
 cat >"$SRCS" <<EOF
 # DO NOT EDIT! This file is generated automatically.
-# Command: $0 $@
+# Command: ./maintainers/scripts/fetch-kde-qt.sh $@
 { fetchurl, mirror }:
 
 {

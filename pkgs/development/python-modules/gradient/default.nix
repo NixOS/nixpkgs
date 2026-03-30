@@ -1,34 +1,35 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, click-completion
-, click-didyoumean
-, click-help-colors
-, colorama
-, fetchPypi
-, gradient_statsd
-, gradient-utils
-, gql
-, halo
-, marshmallow
-, progressbar2
-, pyopenssl
-, pyyaml
-, requests
-, requests-toolbelt
-, terminaltables
-, websocket-client
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  click-completion,
+  click-didyoumean,
+  click-help-colors,
+  colorama,
+  fetchPypi,
+  gradient-statsd,
+  gradient-utils,
+  gql,
+  halo,
+  marshmallow,
+  progressbar2,
+  pyopenssl,
+  pyyaml,
+  requests,
+  requests-toolbelt,
+  terminaltables,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "2.0.6";
+  version = "3.10.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pqyyNzx2YPP3qmWQbzGd3q2HzCkrWlIVSJZeFrGm9dk=";
+    hash = "sha256-TL9Jbo9UvQhgG9aT3wjLD8DvTY48Os04DdaUfNAwcu4=";
   };
 
   postPatch = ''
@@ -36,9 +37,9 @@ buildPythonPackage rec {
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
       --replace 'gql[requests]==3.0.0a6' 'gql' \
-      --replace 'PyYAML==' 'PyYAML>=' \
+      --replace 'PyYAML==5.*' 'PyYAML' \
       --replace 'marshmallow<' 'marshmallow>=' \
-      --replace 'websocket-client==' 'websocket-client>='
+      --replace 'websocket-client==0.57.*' 'websocket-client'
   '';
 
   propagatedBuildInputs = [
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     click-help-colors
     colorama
     gql
-    gradient_statsd
+    gradient-statsd
     gradient-utils
     halo
     marshmallow
@@ -71,11 +72,12 @@ buildPythonPackage rec {
   #   "gradient"
   # ];
 
-  meta = with lib; {
-    description = "The command line interface for Gradient";
+  meta = {
+    description = "Command line interface for Gradient";
+    mainProgram = "gradient";
     homepage = "https://github.com/Paperspace/gradient-cli";
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

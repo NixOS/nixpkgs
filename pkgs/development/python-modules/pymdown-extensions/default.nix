@@ -1,11 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
-, markdown
-, pyyaml
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  markdown,
+  pyyaml,
+  pygments,
+
+  # for passthru.tests
+  mkdocstrings,
+  mkdocs-material,
+  mkdocs-mermaid2-plugin,
+  hydrus,
 }:
 
 let
@@ -38,31 +45,53 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "9.5";
-  format = "pyproject";
+  version = "10.20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-bgvoY+8bbGoG1A93A+Uan1UDpQmEUu/TJu3FOkXechQ=";
+    tag = version;
+    hash = "sha256-ei1qbWDH/gpyj111TXeUR3uxmpg+wbfuPscqahjIEOU=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ markdown pygments ];
+  dependencies = [
+    markdown
+    pygments
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
 
+  disabledTests = [
+    # test artifact mismatch
+    "test_toc_tokens"
+    # Tests fails with AssertionError
+    "test_windows_root_conversion"
+  ];
+
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit
+      mkdocstrings
+      mkdocs-material
+      mkdocs-mermaid2-plugin
+      hydrus
+      ;
+  };
+
+  meta = {
     description = "Extensions for Python Markdown";
     homepage = "https://facelessuser.github.io/pymdown-extensions/";
-    license = with licenses; [ mit bsd2 ];
-    maintainers = with maintainers; [ cpcloud ];
+    license = with lib.licenses; [
+      mit
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

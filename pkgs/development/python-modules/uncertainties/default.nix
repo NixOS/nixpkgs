@@ -1,27 +1,59 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose, numpy, future
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # optional-dependencies
+  numpy,
+
+  # tests
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.1.7";
+  version = "3.2.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
+  src = fetchFromGitHub {
+    owner = "lmfit";
+    repo = "uncertainties";
+    tag = version;
+    hash = "sha256-XfEiE27azEBNCZ6sIBncJI1cYocoXwgxEkclVgR5O34=";
   };
 
-  propagatedBuildInputs = [ future ];
-  checkInputs = [ nose numpy ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    nosetests -sv
-  '';
+  optional-dependencies.arrays = [ numpy ];
 
-  meta = with lib; {
-    homepage = "https://pythonhosted.org/uncertainties/";
+  nativeCheckInputs = [
+    pytestCheckHook
+    scipy
+  ]
+  ++ optional-dependencies.arrays;
+
+  disabledTests = [
+    # Flaky tests, see: https://github.com/lmfit/uncertainties/issues/343
+    "test_repeated_summation_complexity"
+  ];
+
+  pythonImportsCheck = [ "uncertainties" ];
+
+  meta = {
+    homepage = "https://uncertainties.readthedocs.io/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
-    maintainers = with maintainers; [ rnhmjoj ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      rnhmjoj
+      doronbehar
+    ];
+    license = lib.licenses.bsd3;
   };
 }

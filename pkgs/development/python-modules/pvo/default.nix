@@ -1,61 +1,59 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  mashumaro,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "0.2.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
-    rev = "v${version}";
-    sha256 = "sha256-2/O81MnFYbdOrzLiTSoX7IW+3ZGyyE/tIqgKr/sEaHI=";
+    tag = "v${version}";
+    hash = "sha256-UdMcY7Va8LAW3x4CR6hIrIdwrXiHh1Hs3tK+SWBrJFE=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    pydantic
-    yarl
-  ];
-
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace "0.0.0" "${version}"
   '';
 
-  pythonImportsCheck = [
-    "pvo"
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiohttp
+    mashumaro
+    yarl
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    syrupy
+  ];
+
+  pythonImportsCheck = [ "pvo" ];
+
+  meta = {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

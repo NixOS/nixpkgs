@@ -1,40 +1,35 @@
 # FIXME: make gdk-pixbuf dependency optional
-{ stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lib
-, substituteAll
-, makeFontsConf
-, freefont_ttf
-, pikepdf
-, pytest
-, glibcLocales
-, cairo
-, cffi
-, numpy
-, withXcffib ? false
-, xcffib
-, python
-, glib
-, gdk-pixbuf
+{
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  replaceVars,
+  pikepdf,
+  pytestCheckHook,
+  cairo,
+  cffi,
+  flit-core,
+  numpy,
+  withXcffib ? false,
+  xcffib,
+  glib,
+  gdk-pixbuf,
 }:
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "1.4.0";
-
-  disabled = pythonOlder "3.5";
+  version = "1.7.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UJM5syzNjXsAwiBMMnNs3njbU6MuahYtMSR40lYmzZo=";
+    hash = "sha256-LkjuhkiE7Eo6NL+oyauZmfaIKG63FKFaQ+ydBow2VXs=";
   };
 
   patches = [
     # OSError: dlopen() failed to load a library: gdk-pixbuf-2.0 / gdk-pixbuf-2.0-0
-    (substituteAll {
-      src = ./dlopen-paths.patch;
+    (replaceVars ./dlopen-paths.patch {
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
       cairo = cairo.out;
       glib = glib.out;
@@ -43,39 +38,31 @@ buildPythonPackage rec {
     ./fix_test_scaled_font.patch
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "pytest-cov" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" "" \
-      --replace "--flake8 --isort" ""
-  '';
+  nativeBuildInputs = [ flit-core ];
 
-  LC_ALL = "en_US.UTF-8";
+  propagatedBuildInputs = [
+    cairo
+    cffi
+  ]
+  ++ lib.optional withXcffib xcffib;
 
-  # checkPhase require at least one 'normal' font and one 'monospace',
-  # otherwise glyph tests fails
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  nativeCheckInputs = [
+    numpy
+    pikepdf
+    pytestCheckHook
+  ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  pythonImportsCheck = [ "cairocffi" ];
 
-  propagatedBuildInputs = [ cairo cffi ]
-    ++ lib.optional withXcffib xcffib;
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
 
-  # pytestCheckHook does not work
-  checkInputs = [ numpy pikepdf pytest glibcLocales ];
-
-  checkPhase = ''
-    py.test $out/${python.sitePackages}
-  '';
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };
 }

@@ -1,33 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodomex
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pycryptodomex,
+  requests,
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
   pname = "gpsoauth";
-
-  disabled = pythonOlder "3.8";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-68rnLrMlp/BsvqlbnV5kvsJTcDEtsV6OLkbE1U5ynno=";
+    hash = "sha256-njt2WmpOA2TewbxBV70+1+XsMGZYnihdC0aYaRCqa9I=";
   };
 
-  propagatedBuildInputs = [ pycryptodomex requests ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    pycryptodomex
+    requests
+  ];
+
+  pythonRelaxDeps = [ "urllib3" ];
 
   # upstream tests are not very comprehensive
   doCheck = false;
 
   pythonImportsCheck = [ "gpsoauth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Google Play Services OAuth";
     homepage = "https://github.com/simon-weber/gpsoauth";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jgillich ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jgillich ];
   };
 }

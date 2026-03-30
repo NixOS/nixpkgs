@@ -1,51 +1,64 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3Packages
-, sox
-, flac
-, lame
-, wrapQtAppsHook
-, ffmpeg
-, vorbis-tools
-, pulseaudio
-, nodejs
-, youtube-dl
-, opusTools
-, gst_all_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  sox,
+  flac,
+  lame,
+  wrapQtAppsHook,
+  ffmpeg,
+  vorbis-tools,
+  pulseaudio,
+  nodejs,
+  yt-dlp,
+  opus-tools,
+  gst_all_1,
+  enableSonos ? true,
+  qtwayland,
 }:
-let packages = [
-  vorbis-tools
-  sox
-  flac
-  lame
-  opusTools
-  gst_all_1.gstreamer
-  nodejs
-  ffmpeg
-  youtube-dl
-] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
+let
+  packages = [
+    vorbis-tools
+    sox
+    flac
+    lame
+    opus-tools
+    gst_all_1.gstreamer
+    nodejs
+    ffmpeg
+    yt-dlp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2020-10-17";
+  version = "2025-12-21";
+  format = "setuptools";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "eb9da74d887acd70ed179e6e4c0cbed4ff83de04";
-    sha256 = "1l565n3rmyghc4vzh80gazvdks1i97j1h94x33pkmxxlf9a9rncj";
+    rev = "9cdc5f3f9060ef4078522366ce896356515d8e52";
+    hash = "sha256-UMzOIxgeTpAFQZtYirOYPoVcKgiKdGx2zwVyWmo32w4=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    PyChromecast
-    psutil
-    mutagen
-    flask
-    netifaces
-    requests
-    pyqt5
-  ];
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  propagatedBuildInputs =
+    with python3Packages;
+    (
+      [
+        pychromecast
+        psutil
+        mutagen
+        flask
+        netifaces
+        requests
+        pyqt5
+      ]
+      ++ lib.optionals enableSonos [ soco ]
+    );
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -67,18 +80,20 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/video.py \
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
       --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
-  '' + lib.optionalString stdenv.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
-    substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/audio_devices.py \
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mkchromecast.com/";
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shou ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shou ];
+    mainProgram = "mkchromecast";
   };
 }

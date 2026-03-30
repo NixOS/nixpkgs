@@ -1,70 +1,75 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, setuptools-scm
-, shapely
-, sqlalchemy
-, alembic
-, psycopg2
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  sqlalchemy,
+  alembic,
+  pytest-benchmark,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.12.5";
-  format = "setuptools";
+  version = "0.18.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "GeoAlchemy2";
-    inherit version;
-    hash = "sha256-McJQLc4xe1ezNeTrh1YtUB+jnkbHKL5RTZuGCR4I3Wc=";
+  src = fetchFromGitHub {
+    owner = "geoalchemy";
+    repo = "geoalchemy2";
+    tag = version;
+    hash = "sha256-kSsKud4/uL5ycPiuS+JPXJ6XH9ZgQ+kHOTC5RtG9C0I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    packaging
-    shapely
+  dependencies = [
     sqlalchemy
+    packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     alembic
-    psycopg2
+    pytest-benchmark
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.shapely;
 
-  pytestFlagsArray = [
-    # tests require live postgis database
-    "--deselect=tests/test_pickle.py::TestPickle::test_pickle_unpickle"
-    "--deselect=tests/gallery/test_specific_compilation.py::test_specific_compilation"
-  ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTestPaths = [
-    # tests require live postgis database
+    # tests require live databases
     "tests/gallery/test_decipher_raster.py"
     "tests/gallery/test_length_at_insert.py"
+    "tests/gallery/test_insert_raster.py"
+    "tests/gallery/test_orm_mapped_v2.py"
+    "tests/gallery/test_specific_compilation.py"
     "tests/gallery/test_summarystatsagg.py"
     "tests/gallery/test_type_decorator.py"
     "tests/test_functional.py"
     "tests/test_functional_postgresql.py"
+    "tests/test_functional_mysql.py"
     "tests/test_alembic_migrations.py"
+    "tests/test_pickle.py"
   ];
 
-  pythonImportsCheck = [
-    "geoalchemy2"
-  ];
+  pythonImportsCheck = [ "geoalchemy2" ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    shapely = [ shapely ];
+  };
+
+  meta = {
     description = "Toolkit for working with spatial databases";
-    homepage =  "https://geoalchemy-2.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    homepage = "https://geoalchemy-2.readthedocs.io/";
+    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

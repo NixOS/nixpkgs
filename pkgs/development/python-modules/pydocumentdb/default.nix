@@ -1,12 +1,14 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, six
-, requests
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  six,
+  requests,
 }:
 
 buildPythonPackage rec {
   version = "2.3.5";
+  format = "setuptools";
   pname = "pydocumentdb";
 
   src = fetchPypi {
@@ -19,15 +21,18 @@ buildPythonPackage rec {
     touch changelog.md
   '';
 
-  propagatedBuildInputs = [ six requests ];
+  propagatedBuildInputs = [
+    six
+    requests
+  ];
 
   # requires an active Azure Cosmos service
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Azure Cosmos DB API";
     homepage = "https://github.com/Azure/azure-cosmos-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

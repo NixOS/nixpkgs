@@ -1,36 +1,49 @@
-{ lib, buildDunePackage, fetchFromGitLab
-, ff-sig, zarith, zarith_stubs_js, integers_stubs_js, integers, hex
-, alcotest, ff-pbt }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  zarith,
+  zarith_stubs_js ? null,
+  integers_stubs_js,
+  integers,
+  hex,
+  alcotest,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bls12-381";
-  version = "5.0.0";
+  version = "6.1.0";
   src = fetchFromGitLab {
-    owner = "dannywillems";
-    repo = "ocaml-bls12-381";
-    rev = version;
-    sha256 = "sha256-Hy/I+743HSToZgGPFFiAbx7nrybHsE2PwycDsu3DuHM=";
+    owner = "nomadic-labs";
+    repo = "cryptography/ocaml-bls12-381";
+    rev = finalAttrs.version;
+    hash = "sha256-z2ZSOrXgm+XjdrY91vqxXSKhA0DyJz6JkkNljDZznX8=";
   };
 
   minimalOCamlVersion = "4.08";
 
+  postPatch = ''
+    patchShebangs ./src/*.sh
+  '';
+
   propagatedBuildInputs = [
-    ff-sig
     zarith
     zarith_stubs_js
     integers_stubs_js
-    integers
     hex
+    integers
   ];
 
-  checkInputs = [ alcotest ff-pbt ];
+  checkInputs = [
+    alcotest
+  ];
 
   doCheck = true;
 
   meta = {
-    homepage = "https://gitlab.com/dannywillems/ocaml-bls12-381";
-    description = "OCaml binding for bls12-381 from librustzcash";
+    homepage = "https://nomadic-labs.gitlab.io/cryptography/ocaml-bls12-381/bls12-381/";
+    description = "Implementation of BLS12-381 and some cryptographic primitives built on top of it";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

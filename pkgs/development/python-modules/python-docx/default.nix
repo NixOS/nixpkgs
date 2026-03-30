@@ -1,34 +1,62 @@
-{ lib
-, behave
-, buildPythonPackage
-, fetchPypi
-, lxml
-, pytest
-, pyparsing
-, mock
+{
+  lib,
+  behave,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  mock,
+  pyparsing,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "python-docx";
-  version = "0.8.11";
+  version = "1.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1105d233a0956dd8dd1e710d20b159e2d72ac3c301041b95f4d4ceb3e0ebebc4";
+  src = fetchFromGitHub {
+    owner = "python-openxml";
+    repo = "python-docx";
+    tag = "v${version}";
+    hash = "sha256-5x2VmMiY5fZiXoswCDcs89olL0vbpGzmJZThrNS/SmI=";
   };
 
-  checkInputs = [ behave mock pyparsing pytest ];
-  propagatedBuildInputs = [ lxml ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    py.test tests
+  dependencies = [
+    lxml
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    behave
+    mock
+    pyparsing
+    pytestCheckHook
+  ];
+
+  postCheck = ''
     behave --format progress --stop --tags=-wip
   '';
 
+  pythonImportsCheck = [ "docx" ];
+
+  disabledTests = [
+    # https://github.com/python-openxml/python-docx/issues/1302
+    "it_accepts_unicode_providing_there_is_no_encoding_declaration"
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+  ];
+
   meta = {
     description = "Create and update Microsoft Word .docx files";
-    homepage = "https://python-docx.readthedocs.io/en/latest/";
+    homepage = "https://python-docx.readthedocs.io/";
+    changelog = "https://github.com/python-openxml/python-docx/blob/v${version}/HISTORY.rst";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.alexchapman ];
+    maintainers = with lib.maintainers; [ alexchapman ];
   };
 }

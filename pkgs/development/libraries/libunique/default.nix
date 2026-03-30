@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, dbus-glib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gtk2,
+  dbus-glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunique";
@@ -15,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   # Patches from Gentoo portage
   patches = [
@@ -23,16 +31,21 @@ stdenv.mkDerivation rec {
     ./1.1.6-fix-test.patch
     ./1.1.6-G_CONST_RETURN.patch
     ./1.1.6-include-terminator.patch
-  ] ++ [ ./gcc7-bug.patch ];
+  ]
+  ++ [ ./gcc7-bug.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib gtk2 dbus-glib ];
+  buildInputs = [
+    glib
+    gtk2
+    dbus-glib
+  ];
 
   doCheck = true;
 
   meta = {
-    homepage = "https://wiki.gnome.org/Attic/LibUnique";
-    description = "A library for writing single instance applications";
+    homepage = "https://gitlab.gnome.org/Archive/unique";
+    description = "Library for writing single instance applications";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; linux ++ darwin;
   };

@@ -1,54 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, git
-, hatchling
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  gitMinimal,
+  hatchling,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "hatch-vcs";
-  version = "0.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "hatch_vcs";
     inherit version;
-    sha256 = "sha256-mRPXM7NO7JuwNF0GJsoyFlpK0t4V0c5kPDbQnKkIq/8=";
+    hash = "sha256-A5X6EmlANAIVCQw0Siv04qd7y+faqxb0Gze5jJWAn/k=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     hatchling
     setuptools-scm
   ];
 
-  checkInputs = [
-    git
+  nativeCheckInputs = [
+    gitMinimal
     pytestCheckHook
   ];
 
   disabledTests = [
-    # incompatible with setuptools-scm>=7
-    # https://github.com/ofek/hatch-vcs/issues/8
-    "test_write"
+    # reacts to our setup-hook pretending a version
+    "test_custom_tag_pattern_get_version"
   ];
 
-  pythonImportsCheck = [
-    "hatch_vcs"
-  ];
+  pythonImportsCheck = [ "hatch_vcs" ];
 
-  meta = with lib; {
-    description = "A plugin for Hatch that uses your preferred version control system (like Git) to determine project versions";
+  meta = {
+    changelog = "https://github.com/ofek/hatch-vcs/releases/tag/v${version}";
+    description = "Plugin for Hatch that uses your preferred version control system (like Git) to determine project versions";
     homepage = "https://github.com/ofek/hatch-vcs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

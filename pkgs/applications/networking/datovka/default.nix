@@ -1,32 +1,46 @@
-{ lib
-, mkDerivation
-, fetchurl
-, libxml2
-, libisds
-, qmake
-, qtbase
-, qtsvg
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wrapQtAppsHook,
+  libxml2,
+  libdatovka,
+  qmake,
+  qtbase,
+  qtwebsockets,
+  qtsvg,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "datovka";
-  version = "4.15.6";
+  version = "4.28.0";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/datove_schranky/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1qs1yd9qqsf56jm9w6sffkqb2l8s3i9qgi2q8vd59ss19ym6yky2";
+    url = "https://gitlab.nic.cz/datovka/datovka/-/archive/v${version}/datovka-v${version}.tar.gz";
+    sha256 = "sha256-vTfmJEwbfaPFnZE8o3YnZhjwfMZ0At7eZ0iMoh4/HQE=";
   };
 
-  buildInputs = [ libisds qmake qtbase qtsvg libxml2 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapQtAppsHook
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libdatovka
+    qmake
+    qtbase
+    qtsvg
+    libxml2
+    qtwebsockets
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Client application for operating Czech government-provided Databox infomation system";
     homepage = "https://www.datovka.cz/";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.mmahut ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.linux;
+    mainProgram = "datovka";
   };
 }

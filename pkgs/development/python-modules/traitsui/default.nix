@@ -1,22 +1,23 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, traits
-, pyface
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  traits,
+  pyface,
 }:
 
 buildPythonPackage rec {
   pname = "traitsui";
-  version = "7.4.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "8.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TFs9Oq6qvR7IGgqMQPnM0o+oy51k7RORfJkNF0ZU+h0=";
+    hash = "sha256-kBudHLxFUT4Apzl2d7CYRBsod0tojzChWbrUgBv0A2Q=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     traits
@@ -26,14 +27,13 @@ buildPythonPackage rec {
   # Needs X server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "traitsui"
-  ];
+  pythonImportsCheck = [ "traitsui" ];
 
-  meta = with lib; {
+  meta = {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/traitsui";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ knedlsepp ];
+    changelog = "https://github.com/enthought/traitsui/releases/tag/${version}";
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ ];
   };
 }

@@ -1,18 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyterlab
-, jupyter-lsp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  jupyterlab,
+  jupyter-lsp,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "3.10.2";
+  version = "5.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-VZrUaS+X9C3WufCzMKuScD8CuORbuvbpz1mJiolyIqA=";
+    pname = "jupyterlab_lsp";
+    inherit version;
+    hash = "sha256-Y2hIhbNcHcnYPlS0sGOAyTda19dRopdWSbNXMIyNMLk=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jupyterlab
@@ -22,11 +28,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "jupyterlab_lsp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol integration for Jupyter(Lab)";
     homepage = "https://github.com/jupyter-lsp/jupyterlab-lsp";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

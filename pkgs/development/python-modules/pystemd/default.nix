@@ -1,38 +1,68 @@
-{ stdenv
-, buildPythonPackage
-, lib
-, python
-, systemd
-, pytest
-, mock
-, pkg-config }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  systemd,
+  lxml,
+  psutil,
+  pytestCheckHook,
+  pkg-config,
+  cython,
+}:
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.10.0";
-  src = python.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
-  };
+  version = "0.15.3";
+  pyproject = true;
 
-  disabled = python.pythonOlder "3.4";
+  src = fetchFromGitHub {
+    owner = "systemd";
+    repo = "pystemd";
+    tag = "v${version}";
+    hash = "sha256-qFBa2hIcF0hyb+QyVpFG0qOpWsVVVTGCqgfChic6JCI=";
+  };
 
   buildInputs = [ systemd ];
 
-  nativeBuildInputs = [ pkg-config ];
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  checkInputs = [ pytest mock ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  checkPhase = "pytest tests";
+  dependencies = [
+    lxml
+    psutil
+  ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Having the source root in `sys.path` causes import issues
+  preCheck = ''
+    cd tests
+  '';
+
+  disabledTestPaths = [
+    "test_version.py" # Requires cstq which is not in nixpkgs
+    "test_pickle.py" # fails with "Could not open a bus to DBus"
+  ];
+
+  pythonImportsCheck = [ "pystemd" ];
+
+  meta = {
     description = ''
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way
     '';
-    homepage = "https://github.com/facebookincubator/pystemd/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
+    homepage = "https://github.com/facebookincubator/pystemd";
+    changelog = "https://github.com/systemd/pystemd/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

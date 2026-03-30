@@ -1,33 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  python-dateutil,
+  six,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bson";
   version = "0.5.10";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "14355m3dchz446fl54ym78bn4wi20hddx1614f8rl4sin0m1nlfn";
+  src = fetchFromGitHub {
+    owner = "py-bson";
+    repo = "bson";
+    tag = finalAttrs.version;
+    hash = "sha256-mirRpo27RoOBlwxVOKnHaDIzJOErp7c2VxCOunUm/u4=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # Upstream PR: https://github.com/py-bson/bson/pull/113
+    (fetchpatch {
+      name = "python-3.11.patch";
+      url = "https://github.com/py-bson/bson/commit/5346e73124de8a1f9e2a1960501416529e4cee02.patch";
+      hash = "sha256-kNs00j/FDjb2av+0WMORrCo75NcuaJXUl4SbYlksnfo=";
+    })
+    # Upstream PR: https://github.com/py-bson/bson/pull/140
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/py-bson/bson/commit/4e6b4c206f7204034ef74bff8ae84a95d76d1684.patch";
+      includes = [ "setup.py" ];
+      hash = "sha256-JOmW/KMqzFdXKH4TMR/PG1YU3SvLTBc3L3E9kXag3bQ=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     six
   ];
 
-  # 0.5.10 was not tagged, https://github.com/py-bson/bson/issues/108
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bson" ];
 
-  meta = with lib; {
+  meta = {
     description = "BSON codec for Python";
     homepage = "https://github.com/py-bson/bson";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = [
+      lib.licenses.asl20
+      lib.licenses.bsd3
+    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

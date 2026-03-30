@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "rfc3339";
   version = "6.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rfc3339" ];
 
-  meta = with lib; {
+  meta = {
     description = "Format dates according to the RFC 3339";
     homepage = "https://hg.sr.ht/~henryprecheur/rfc3339";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

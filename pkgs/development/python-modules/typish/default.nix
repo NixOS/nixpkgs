@@ -1,22 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "typish";
   version = "1.9.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "typish";
-    rev = "7875850f55e2df8a9e2426e2d484ab618e347c7f";
-    sha256 = "0mc5hw92f15mwd92rb2q9isc4wi7xq76449w7ph5bskcspas0wrf";
+    tag = "v${version}";
+    hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
 
-  checkInputs = [
+  # Tests fail on Python 3.14
+  # TypeError: 'member_descriptor' object is not iterable
+  disabled = pythonAtLeast "3.14";
+
+  nativeCheckInputs = [
     numpy
     pytestCheckHook
   ];
@@ -27,14 +34,18 @@ buildPythonPackage rec {
     "tests/functions/test_instance_of.py"
   ];
 
-  pythonImportsCheck = [
-    "typish"
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/ramonhagenaars/typish/issues/32
+    "test_get_origin"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "typish" ];
+
+  meta = {
     description = "Python module for checking types of objects";
     homepage = "https://github.com/ramonhagenaars/typish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fmoda3 ];
+    changelog = "https://github.com/ramonhagenaars/typish/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fmoda3 ];
   };
 }

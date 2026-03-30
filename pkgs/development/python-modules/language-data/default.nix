@@ -1,46 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marisa-trie
-, poetry-core
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marisa-trie,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "language-data";
-  version = "1.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rspeer";
+    owner = "georgkrause";
     repo = "language_data";
-    rev = "v${version}";
-    sha256 = "51TUVHXPHG6ofbnxI6+o5lrtr+QCIpGKu+OjDK3l7Mc=";
+    tag = "v${version}";
+    hash = "sha256-cWjeb2toGrnNSsK566e18NgWhv6YdQrKEzFPilmBdoA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    marisa-trie
-  ];
+  dependencies = [ marisa-trie ];
 
-  # Module has no tests
+  pythonImportsCheck = [ "language_data" ];
+
+  # No unittests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "language_data"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Supplement module for langcodes";
-    homepage = "https://github.com/rspeer/language_data";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/georgkrause/language_data";
+    changelog = "https://github.com/georgkrause/language_data/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

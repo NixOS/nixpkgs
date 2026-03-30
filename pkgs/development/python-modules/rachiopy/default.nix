@@ -1,35 +1,41 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rachiopy";
-  version = "1.0.3";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rfverbruggen";
-    repo = pname;
-    rev = version;
-    sha256 = "1d5v9qc7ymzns3ivc5fzwxnxz9sjkhklh57cw05va95mpk5kdskc";
+    repo = "rachiopy";
+    tag = version;
+    hash = "sha256-PsdEXNy8vUxba/C00ARhLTQU9gMlChy9XdU20r+Maus=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "rachiopy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Rachio Irrigation controller";
     homepage = "https://github.com/rfverbruggen/rachiopy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/rfverbruggen/rachiopy/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

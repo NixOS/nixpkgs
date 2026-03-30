@@ -1,43 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hy,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.2.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hylang";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-UvLk5d1lhoXBP2y3YfxVBCoKb3PMHUeNnnbAX6iypiU=";
+    repo = "hyrule";
+    tag = version;
+    hash = "sha256-nyB2vsXR1yiSzp1r/UCCQwM5FfIa4P8obTcWSu7JFoA=";
   };
 
-  propagatedBuildInputs = [
-    hy
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ hy ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Some tests depends on hy on PATH
   preCheck = "PATH=${hy}/bin:$PATH";
 
   pythonImportsCheck = [ "hyrule" ];
 
-  meta = with lib; {
-    description = "Hyrule is a utility library for the Hy programming language";
+  meta = {
+    description = "Utility library for the Hy programming language";
     homepage = "https://github.com/hylang/hyrule";
-    changelog = "https://github.com/hylang/hylure/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    changelog = "https://github.com/hylang/hyrule/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

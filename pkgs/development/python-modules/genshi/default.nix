@@ -1,28 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Genshi";
-  version = "0.7.7";
+  pname = "genshi";
+  version = "0.7.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
+    hash = "sha256-hbDbETYlMU8PRPP+bvDrJWTWw03S7lZ3tJXRUUK7SXM=";
   };
 
-  # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)
-  # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    setuptools six
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python components for parsing HTML, XML and other textual content";
     longDescription = ''
       Python library that provides an integrated set of components for
@@ -30,6 +28,6 @@ buildPythonPackage rec {
       content for output generation on the web.
     '';
     homepage = "https://genshi.edgewall.org/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

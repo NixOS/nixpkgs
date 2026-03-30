@@ -1,86 +1,94 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, isodate
-, pyparsing
+  # builds
+  poetry-core,
 
-# propagates <3.8
-, importlib-metadata
+  # propagates
+  pyparsing,
 
-# extras: networkx
-, networkx
+  # extras: networkx
+  networkx,
 
-# extras: html
-, html5lib
+  # extras: html
+  html5lib,
 
-# tests
-, pytestCheckHook
+  # tests
+  pip,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "7.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RDFLib";
-    repo = pname;
-    rev = version;
-    hash = "sha256:1ih7vx4i16np1p8ig5faw74apmbm7kgyj9alya521yvzid6d7pzd";
+    repo = "rdflib";
+    tag = version;
+    hash = "sha256-jZ5mbTz/ra/ZHAFyMmtqaM4RZw851gfTCBCRuPcGeYA=";
   };
 
-  propagatedBuildInputs = [
-    isodate
-    html5lib
+  build-system = [ poetry-core ];
+
+  dependencies = [
     pyparsing
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  passthru.optional-dependencies = {
-    html = [
-      html5lib
-    ];
-    networkx = [
-      networkx
-    ];
+  optional-dependencies = {
+    html = [ html5lib ];
+    networkx = [ networkx ];
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.networkx
-  ++ passthru.optional-dependencies.html;
+  __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  nativeCheckInputs = [
+    pip
+    pytest-cov-stub
+    pytestCheckHook
+    setuptools
+  ]
+  ++ optional-dependencies.networkx
+  ++ optional-dependencies.html;
+
+  disabledTestPaths = [
     # requires network access
-    "--deselect=rdflib/__init__.py::rdflib"
-    "--deselect=test/jsonld/test_onedotone.py::test_suite"
+    "rdflib/__init__.py::rdflib"
+    "test/jsonld/test_onedotone.py::test_suite"
   ];
 
   disabledTests = [
     # Requires network access
     "test_service"
     "testGuessFormatForParse"
-  ] ++ lib.optionals stdenv.isDarwin [
+    "test_infix_owl_example1"
+    "test_context"
+    "test_example"
+    "test_guess_format_for_parse"
+    "rdflib.extras.infixowl"
+    # Upstream don't seem worried about these two tests failing
+    # https://github.com/RDFLib/rdflib/issues/2649#issuecomment-2443482119
+    "test_sparqleval"
+    "test_parser"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Require loopback network access
     "TestGraphHTTP"
   ];
 
-  pythonImportsCheck = [
-    "rdflib"
-  ];
+  pythonImportsCheck = [ "rdflib" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/RDFLib/rdflib/blob/${src.tag}/CHANGELOG.md";
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

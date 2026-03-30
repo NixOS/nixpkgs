@@ -1,39 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pyarrow,
+  pytz,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "neo4j";
-  version = "5.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "6.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-g5jeqE1eu+4iqXp57EF9xt8To2oyI3ey5URGRoPLs1Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-1Ef9SMJid0q+tI8hceriNu2vsLAyW4Jxt53ifcmi5VA=";
   };
 
-  propagatedBuildInputs = [
-    pytz
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >=" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ pytz ];
+
+  optional-dependencies = {
+    numpy = [ numpy ];
+    pandas = [
+      numpy
+      pandas
+    ];
+    pyarrow = [ pyarrow ];
+  };
 
   # Missing dependencies
   doCheck = false;
 
-  pythonImportsCheck = [
-    "neo4j"
-  ];
+  pythonImportsCheck = [ "neo4j" ];
 
-  meta = with lib; {
+  meta = {
     description = "Neo4j Bolt Driver for Python";
     homepage = "https://github.com/neo4j/neo4j-python-driver";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

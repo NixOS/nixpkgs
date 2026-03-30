@@ -1,92 +1,112 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, debugger
-, fetchPypi
-, Mako
-, packaging
-, pysocks
-, pygments
-, ropgadget
-, capstone
-, colored-traceback
-, paramiko
-, pip
-, psutil
-, pyelftools
-, pyserial
-, python-dateutil
-, requests
-, rpyc
-, tox
-, unicorn
-, intervaltree
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  debugger,
+  fetchPypi,
+  capstone,
+  colored-traceback,
+  intervaltree,
+  mako,
+  packaging,
+  paramiko,
+  psutil,
+  pyelftools,
+  pygments,
+  pyserial,
+  pysocks,
+  python-dateutil,
+  requests,
+  ropgadget,
+  rpyc,
+  setuptools,
+  six,
+  sortedcontainers,
+  unicorn,
+  unix-ar,
+  zstandard,
+  installShellFiles,
 }:
 
 let
   debuggerName = lib.strings.getName debugger;
 in
 buildPythonPackage rec {
-  version = "4.8.0";
   pname = "pwntools";
+  version = "4.15.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QgUuLYg3EOTh2gQekWdabXGftOXvLdJFyyhT2hEmkpA=";
+    hash = "sha256-2ZqRcpjBynJBtRu6mtIhLyr0Qe9mSIBZskJlCOmip3Y=";
   };
 
   postPatch = ''
-    # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,
-    # but since that is a niche use case and it requires extra work to get unicorn 1.0.2rc3 to work we relax
-    # the bound here. Check if this is still necessary when updating!
-    sed -i 's/unicorn>=1.0.2rc1,<1.0.2rc4/unicorn>=1.0.2rc1/' setup.py
-
     # Upstream hardcoded the check for the command `gdb-multiarch`;
-    # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
+    # Forcefully use the provided debugger as `gdb`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+
+    # Disable update checks
+    substituteInPlace pwnlib/update.py \
+      --replace-fail 'disabled        = False' 'disabled        = True'
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [
+    "pip"
+    "unicorn"
   ];
 
   propagatedBuildInputs = [
-    Mako
-    packaging
-    pysocks
-    pygments
-    ropgadget
     capstone
     colored-traceback
+    intervaltree
+    mako
+    packaging
     paramiko
-    pip
     psutil
     pyelftools
+    pygments
     pyserial
+    pysocks
     python-dateutil
     requests
+    ropgadget
     rpyc
-    tox
+    six
+    sortedcontainers
     unicorn
-    intervaltree
+    unix-ar
+    zstandard
   ];
 
   doCheck = false; # no setuptools tests for the package
 
   postInstall = ''
-    installShellCompletion --bash extra/bash_completion.d/shellcraft
+    installShellCompletion --cmd pwn \
+      --bash extra/bash_completion.d/pwn \
+      --zsh extra/zsh_completion/_pwn
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/bin"
     makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
   '';
 
-  meta = with lib; {
-    homepage = "http://pwntools.com";
+  pythonImportsCheck = [ "pwn" ];
+
+  meta = {
     description = "CTF framework and exploit development library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
+    homepage = "https://pwntools.com";
+    changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      bennofs
+      kristoff3r
+      pamplemousse
+    ];
   };
 }

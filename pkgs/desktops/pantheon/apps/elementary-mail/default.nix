@@ -1,48 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, python3
-, vala
-, gtk3
-, libxml2
-, libhandy
-, webkitgtk_4_1
-, folks
-, glib-networking
-, granite
-, evolution-data-server
-, wrapGAppsHook
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  libxml2,
+  libhandy,
+  libportal-gtk3,
+  webkitgtk_4_1,
+  elementary-gtk-theme,
+  elementary-icon-theme,
+  folks,
+  glib-networking,
+  granite,
+  evolution-data-server,
+  wrapGAppsHook3,
+  libgee,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-mail";
-  version = "7.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
-    rev = version;
-    sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
+    tag = finalAttrs.version;
+    hash = "sha256-6DY8pJXPXz6uaBKR/qLxYpAQfpzlzi/wtj1douhSjpQ=";
   };
 
   patches = [
-    # build: fix documentation build
-    # https://github.com/elementary/mail/pull/795
+    # Adapt to libcamel API changes in 3.57.1
+    # https://github.com/elementary/mail/pull/1023
     (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/52a422cb1c5f061d8a683005e44da0a1c2195096.patch";
-      sha256 = "sha256-ndcIZXvmQbM/31Wtm6OSCnXdMYx+OlJrqV+baq6m+KY=";
-    })
-    # build: support webkit2gtk-4.1
-    # https://github.com/elementary/mail/pull/794
-    (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/7d4878543b27251664852c708d54abc1e4580eab.patch";
-      sha256 = "sha256-yl6Bzjinp+ti/aX+t22GibGeQFtharZNk3MmbuJm0Tk=";
+      url = "https://github.com/elementary/mail/commit/8cb5bb87ceca9000c2a556bafeb059b9f1cbf2f1.patch";
+      hash = "sha256-NFZVvKJyPTV+lRcefTIgm2jOmCfrY+TlawDYzGTBd7Y=";
     })
   ];
 
@@ -51,12 +48,12 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    elementary-icon-theme
     evolution-data-server
     folks
     glib-networking
@@ -64,26 +61,29 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libhandy
+    libportal-gtk3
     webkitgtk_4_1
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Mail app designed for elementary OS";
     homepage = "https://github.com/elementary/mail";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
+    changelog = "https://github.com/elementary/mail/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.mail";
   };
-}
+})

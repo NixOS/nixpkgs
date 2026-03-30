@@ -1,69 +1,76 @@
-{ lib
-, beautifulsoup4
-, bleach
-, buildPythonPackage
-, chardet
-, django
-, django_contrib_comments
-, fetchPypi
-, filebrowser_safe
-, future
-, grappelli_safe
-, isPyPy
-, pep8
-, pillow
-, pyflakes
-, pythonOlder
-, requests
-, requests-oauthlib
-, tzlocal
+{
+  lib,
+  beautifulsoup4,
+  bleach,
+  buildPythonPackage,
+  chardet,
+  django,
+  django-contrib-comments,
+  fetchFromGitHub,
+  filebrowser-safe,
+  grappelli-safe,
+  isPyPy,
+  pillow,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-django,
+  pytz,
+  requests,
+  requests-oauthlib,
+  requirements-parser,
+  setuptools,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "mezzanine";
-  version = "6.0.0";
+  version = "6.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || isPyPy;
+  disabled = isPyPy;
 
-  src = fetchPypi {
-    pname = "Mezzanine";
-    inherit version;
-    hash = "sha256-R/PB4PFQpVp6jnCasyPszgC294SKjLzq2oMkR2qV86s=";
+  src = fetchFromGitHub {
+    owner = "stephenmcd";
+    repo = "mezzanine";
+    tag = "v${version}";
+    hash = "sha256-TdGWlquS4hsnxIM0bhbWR7C0X4wyUcqC+YrBDSShRhg=";
   };
 
-  buildInputs = [
-    pyflakes
-    pep8
+  patches = [
+    # drop git requirement from tests and fake stable branch
+    ./tests-no-git.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     bleach
     chardet
     django
-    django_contrib_comments
-    filebrowser_safe
-    future
-    grappelli_safe
+    django-contrib-comments
+    filebrowser-safe
+    grappelli-safe
     pillow
+    pytz
     requests
     requests-oauthlib
     tzlocal
-  ] ++ bleach.optional-dependencies.css;
+  ]
+  ++ bleach.optional-dependencies.css;
 
-  # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-django
+    pytest-cov-stub
+    pytestCheckHook
+    requirements-parser
+  ];
 
-  # sed calls will be unecessary in v3.1.11+
-  preConfigure = ''
-    sed -i 's/==/>=/' setup.py
-  '';
-
-  LC_ALL = "en_US.UTF-8";
-
-  meta = with lib; {
+  meta = {
+    # not updated to django 5.x
+    broken = lib.versionAtLeast django.version "5";
     description = "Content management platform built using the Django framework";
+    mainProgram = "mezzanine-project";
     longDescription = ''
       Mezzanine is a powerful, consistent, and flexible content
       management platform. Built using the Django framework, Mezzanine
@@ -81,9 +88,8 @@ buildPythonPackage rec {
     '';
     homepage = "http://mezzanine.jupo.org/";
     downloadPage = "https://github.com/stephenmcd/mezzanine/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prikhi ];
+    platforms = lib.platforms.unix;
   };
 }
-

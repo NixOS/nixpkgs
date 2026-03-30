@@ -1,14 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, p7zip,
-  cabextract, zip, lzip, zpaq, gnutar, gnugrep, diffutils, file,
-  gzip, bzip2, xz}:
-
-# unrar is unfree, as well as 7z with unrar support, not including it (patool doesn't support unar)
-# it will still use unrar if present in the path
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  installShellFiles,
+  argcomplete,
+  pytestCheckHook,
+  p7zip,
+  cabextract,
+  zip,
+  lzip,
+  zpaq,
+  gnutar,
+  unar, # Free alternative to unrar
+  gnugrep,
+  diffutils,
+  file,
+  gzip,
+  bzip2,
+  xz,
+}:
 
 let
   compression-utilities = [
     p7zip
     gnutar
+    unar
     cabextract
     zip
     lzip
@@ -23,34 +41,50 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "1.12";
+  version = "4.0.4";
+  format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
-    repo = pname;
-    rev = "upstream/${version}";
-    sha256 = "0v4r77sm3yzh7y1whfwxmp01cchd82jbhvbg9zsyd2yb944imzjy";
+    repo = "patool";
+    tag = version;
+    hash = "sha256-65pOIVr18vxl20lp61yrVq2oNNnZdhXOHBddaDn7G2c=";
   };
 
   postPatch = ''
     substituteInPlace patoolib/util.py \
-      --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
+      --replace-fail 'path = os.environ.get("PATH", os.defpath)' 'path = os.environ.get("PATH", os.defpath) + ":${lib.makeBinPath compression-utilities}"'
   '';
 
-  checkInputs = [ pytestCheckHook ] ++ compression-utilities;
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd patool \
+      --bash <(${argcomplete}/bin/register-python-argcomplete -s bash $out/bin/patool) \
+      --fish <(${argcomplete}/bin/register-python-argcomplete -s fish $out/bin/patool) \
+      --zsh <(${argcomplete}/bin/register-python-argcomplete -s zsh $out/bin/patool)
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
   disabledTests = [
     "test_unzip"
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
-  ];
+    "test_7z"
+    "test_7z_file"
+    "test_7za_file"
+    "test_p7azip"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
-  meta = with lib; {
-    description = "portable archive file manager";
+  meta = {
+    description = "Portable archive file manager";
+    mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

@@ -1,29 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  distutils,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "thrift";
-  version = "0.16.0";
+  version = "0.22.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-K1tkiPze0h+dMSqiPJ/2oBldD2ribdvVrZ4+Jd/BRAg=";
+    hash = "sha256-QugnavvV9U/h02SFi2h3vF5aSl7Wn2oAW5TKSRj+FGY=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [
+    distutils
+    setuptools
+  ];
+
+  dependencies = [ six ];
 
   # No tests. Breaks when not disabling.
   doCheck = false;
 
   pythonImportsCheck = [ "thrift" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Apache Thrift RPC system";
     homepage = "https://thrift.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hbunke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hbunke ];
   };
 }

@@ -1,67 +1,96 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, importlib-metadata
-, importlib-resources
-, pyrsistent
-, pythonOlder
-, twisted
-, typing-extensions
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  jsonpath-ng,
+  jsonschema-specifications,
+  pip,
+  pytestCheckHook,
+  referencing,
+  rpds-py,
+
+  # optionals
+  fqdn,
+  idna,
+  isoduration,
+  jsonpointer,
+  rfc3339-validator,
+  rfc3986-validator,
+  rfc3987,
+  rfc3987-syntax,
+  uri-template,
+  webcolors,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.16.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.26.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FlBZ8Hbv9pcbrlt0L8App7TvP5vPBMFOR3anYF3hSyM=";
+    hash = "sha256-DCZwfi762Kob/Ft84XDz/MwuSRj/hZibqf+p+ssr4yY=";
   };
 
   postPatch = ''
     patchShebangs json/bin/jsonschema_suite
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
-    pyrsistent
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
+    jsonpath-ng
+    jsonschema-specifications
+    referencing
+    rpds-py
   ];
 
-  checkInputs = [
-    twisted
+  optional-dependencies = {
+    format = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3987
+      uri-template
+      webcolors
+    ];
+    format-nongpl = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3986-validator
+      rfc3987-syntax
+      uri-template
+      webcolors
+    ];
+  };
+
+  nativeCheckInputs = [
+    pip
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export JSON_SCHEMA_TEST_SUITE=json
-    trial jsonschema
-  '';
+  pythonImportsCheck = [ "jsonschema" ];
 
-  pythonImportsCheck = [
-    "jsonschema"
-  ];
-
-  meta = with lib; {
-    description = "An implementation of JSON Schema validation for Python";
+  meta = {
+    description = "Implementation of JSON Schema validation";
     homepage = "https://github.com/python-jsonschema/jsonschema";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "jsonschema";
   };
 }

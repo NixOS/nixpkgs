@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+{ lib, ... }:
 
 let
   # Settings for both servers and agents
@@ -26,70 +26,94 @@ let
 
   firewallSettings = {
     # See https://www.consul.io/docs/install/ports.html
-    allowedTCPPorts = [ 8301 8302 8600 8500 8300 ];
-    allowedUDPPorts = [ 8301 8302 8600 ];
+    allowedTCPPorts = [
+      8301
+      8302
+      8600
+      8500
+      8300
+    ];
+    allowedUDPPorts = [
+      8301
+      8302
+      8600
+    ];
   };
 
-  client = index: { pkgs, ... }:
+  client =
+    index:
+    { pkgs, ... }:
     let
       ip = builtins.elemAt allConsensusClientHosts index;
     in
-      {
-        environment.systemPackages = [ pkgs.consul ];
+    {
+      environment.systemPackages = [ pkgs.consul ];
 
-        networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = ip; prefixLength = 16; }
-        ];
-        networking.firewall = firewallSettings;
+      networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
+        {
+          address = ip;
+          prefixLength = 16;
+        }
+      ];
+      networking.firewall = firewallSettings;
 
-        services.consul = {
-          enable = true;
-          inherit webUi;
-          extraConfig = defaultExtraConfig // {
-            server = false;
-            retry_join = allConsensusServerHosts;
-            bind_addr = ip;
-          };
+      services.consul = {
+        enable = true;
+        inherit webUi;
+        extraConfig = defaultExtraConfig // {
+          server = false;
+          retry_join = allConsensusServerHosts;
+          bind_addr = ip;
         };
       };
+    };
 
-  server = index: { pkgs, ... }:
+  server =
+    index:
+    { pkgs, ... }:
     let
       numConsensusServers = builtins.length allConsensusServerHosts;
       thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
       ip = thisConsensusServerHost; # since we already use IPs to identify servers
     in
-      {
-        networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = ip; prefixLength = 16; }
-        ];
-        networking.firewall = firewallSettings;
+    {
+      networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
+        {
+          address = ip;
+          prefixLength = 16;
+        }
+      ];
+      networking.firewall = firewallSettings;
 
-        services.consul =
-          assert builtins.elem thisConsensusServerHost allConsensusServerHosts;
-          {
-            enable = true;
-            inherit webUi;
-            extraConfig = defaultExtraConfig // {
-              server = true;
-              bootstrap_expect = numConsensusServers;
-              # Tell Consul that we never intend to drop below this many servers.
-              # Ensures to not permanently lose consensus after temporary loss.
-              # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
-              autopilot.min_quorum = numConsensusServers;
-              retry_join =
-                # If there's only 1 node in the network, we allow self-join;
-                # otherwise, the node must not try to join itself, and join only the other servers.
-                # See https://github.com/hashicorp/consul/issues/2868
-                if numConsensusServers == 1
-                  then allConsensusServerHosts
-                  else builtins.filter (h: h != thisConsensusServerHost) allConsensusServerHosts;
-              bind_addr = ip;
-            };
+      services.consul =
+        assert builtins.elem thisConsensusServerHost allConsensusServerHosts;
+        {
+          enable = true;
+          inherit webUi;
+          extraConfig = defaultExtraConfig // {
+            server = true;
+            bootstrap_expect = numConsensusServers;
+            # Tell Consul that we never intend to drop below this many servers.
+            # Ensures to not permanently lose consensus after temporary loss.
+            # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
+            autopilot.min_quorum = numConsensusServers;
+            retry_join =
+              # If there's only 1 node in the network, we allow self-join;
+              # otherwise, the node must not try to join itself, and join only the other servers.
+              # See https://github.com/hashicorp/consul/issues/2868
+              if numConsensusServers == 1 then
+                allConsensusServerHosts
+              else
+                builtins.filter (h: h != thisConsensusServerHost) allConsensusServerHosts;
+            bind_addr = ip;
           };
-      };
-in {
+        };
+    };
+in
+{
   name = "consul";
+
+  node.pkgsReadOnly = false;
 
   nodes = {
     server1 = server 0;
@@ -145,7 +169,7 @@ in {
     client2.succeed("[ $(consul kv get testkey) == 42 ]")
 
 
-    def rolling_reboot_test(proper_rolling_procedure=True):
+    def rolling_restart_test(proper_rolling_procedure=True):
         """
         Tests that the cluster can tolearate failures of any single server,
         following the recommended rolling upgrade procedure from
@@ -158,7 +182,13 @@ in {
         """
 
         for server in servers:
-            server.crash()
+            server.block()
+            server.systemctl("stop consul")
+
+            # Make sure the stopped peer is recognized as being down
+            client1.wait_until_succeeds(
+              f"[ $(consul members | grep {server.name} | grep -o -E 'failed|left' | wc -l) == 1 ]"
+            )
 
             # For each client, wait until they have connection again
             # using `kv get -recurse` before issuing commands.
@@ -170,8 +200,8 @@ in {
             client2.succeed("[ $(consul kv get testkey) == 43 ]")
             client2.succeed("consul kv delete testkey")
 
-            # Restart crashed machine.
-            server.start()
+            server.unblock()
+            server.systemctl("start consul")
 
             if proper_rolling_procedure:
                 # Wait for recovery.
@@ -197,10 +227,14 @@ in {
         """
 
         for server in servers:
-            server.crash()
+            server.block()
+            server.systemctl("stop --no-block consul")
 
         for server in servers:
-            server.start()
+            # --no-block is async, so ensure it has been stopped by now
+            server.wait_until_fails("systemctl is-active --quiet consul")
+            server.unblock()
+            server.systemctl("start consul")
 
         # Wait for recovery.
         wait_for_healthy_servers()
@@ -217,13 +251,13 @@ in {
 
     # Run the tests.
 
-    print("rolling_reboot_test()")
-    rolling_reboot_test()
+    print("rolling_restart_test()")
+    rolling_restart_test()
 
     print("all_servers_crash_simultaneously_test()")
     all_servers_crash_simultaneously_test()
 
-    print("rolling_reboot_test(proper_rolling_procedure=False)")
-    rolling_reboot_test(proper_rolling_procedure=False)
+    print("rolling_restart_test(proper_rolling_procedure=False)")
+    rolling_restart_test(proper_rolling_procedure=False)
   '';
-})
+}

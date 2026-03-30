@@ -1,21 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyopenssl
-, twisted
-, service-identity
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyopenssl,
+  twisted,
+  service-identity,
 }:
 
 buildPythonPackage rec {
   pname = "txgithub";
   version = "15.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "16gbizy8vkxasxylwzj4p66yw8979nvzxdj6csidgmng7gi2k8nx";
   };
 
-  propagatedBuildInputs = [ pyopenssl twisted service-identity ];
+  propagatedBuildInputs = [
+    pyopenssl
+    twisted
+    service-identity
+  ];
 
   # fix python3 issues
   patchPhase = ''
@@ -29,11 +35,10 @@ buildPythonPackage rec {
   # No tests distributed
   doCheck = false;
 
-  meta = with lib; {
-    description = "GitHub API client implemented using Twisted.";
-    homepage    = "https://github.com/tomprince/txgithub";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ ];
+  meta = {
+    description = "GitHub API client implemented using Twisted";
+    homepage = "https://github.com/tomprince/txgithub";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-
 }

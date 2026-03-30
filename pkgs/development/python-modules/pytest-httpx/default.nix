@@ -1,48 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.21.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.36.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
-    rev = "v${version}";
-    hash = "sha256-mUzmtZCguaab4fAE7VcUhv+NQVYiPpxxHpiVVlzwrIo=";
+    tag = "v${version}";
+    hash = "sha256-WuvfhLRKbfhVehyz/0PAUlIYbwfTYlQMRC8uTWD1T00=";
   };
 
-  buildInputs = [
-    pytest
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  buildInputs = [ pytest ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ httpx ];
+
+  pythonRelaxDeps = [ "httpx" ];
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_httpx"
-  ];
+  pythonImportsCheck = [ "pytest_httpx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Send responses to httpx";
     homepage = "https://github.com/Colin-b/pytest_httpx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Colin-b/pytest_httpx/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

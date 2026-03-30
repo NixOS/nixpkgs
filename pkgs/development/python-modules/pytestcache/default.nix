@@ -1,9 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, execnet }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  execnet,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-cache";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,9 +26,9 @@ buildPythonPackage rec {
   # Too many failing tests. Are they maintained?
   doCheck = false;
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-cache/";
-    description = "pytest plugin with mechanisms for caching across test runs";
+    description = "Pytest plugin with mechanisms for caching across test runs";
   };
 }

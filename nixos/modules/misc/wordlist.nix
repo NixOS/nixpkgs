@@ -1,29 +1,35 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  concatAndSort = name: files: pkgs.runCommand name {} ''
-    awk 1 ${lib.escapeShellArgs files} | sed '{ /^\s*$/d; s/^\s\+//; s/\s\+$// }' | sort | uniq > $out
-  '';
+  concatAndSort =
+    name: files:
+    pkgs.runCommand name { } ''
+      awk 1 ${lib.escapeShellArgs files} | sed '{ /^\s*$/d; s/^\s\+//; s/\s\+$// }' | sort | uniq > $out
+    '';
 in
 {
   options = {
     environment.wordlist = {
-      enable = mkEnableOption (lib.mdDoc "environment variables for lists of words");
+      enable = lib.mkEnableOption "environment variables for lists of words";
 
-      lists = mkOption {
-        type = types.attrsOf (types.nonEmptyListOf types.path);
+      lists = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.nonEmptyListOf lib.types.path);
 
         default = {
           WORDLIST = [ "${pkgs.scowl}/share/dict/words.txt" ];
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             WORDLIST = [ "''${pkgs.scowl}/share/dict/words.txt" ];
           }
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           A set with the key names being the environment variable you'd like to
           set and the values being a list of paths to text documents containing
           lists of words. The various files will be merged, sorted, duplicates
@@ -34,7 +40,7 @@ in
           task.
         '';
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             WORDLIST = [ "''${pkgs.scowl}/share/dict/words.txt" ];
             AUGMENTED_WORDLIST = [
@@ -50,10 +56,9 @@ in
     };
   };
 
-  config = mkIf config.environment.wordlist.enable {
-    environment.variables =
-      lib.mapAttrs
-        (name: value: "${concatAndSort "wordlist-${name}" value}")
-        config.environment.wordlist.lists;
+  config = lib.mkIf config.environment.wordlist.enable {
+    environment.variables = lib.mapAttrs (
+      name: value: "${concatAndSort "wordlist-${name}" value}"
+    ) config.environment.wordlist.lists;
   };
 }

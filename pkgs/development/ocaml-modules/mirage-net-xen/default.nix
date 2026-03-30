@@ -1,14 +1,14 @@
-{ lib
-, buildDunePackage
-, netchannel
-, ppx_sexp_conv
-, lwt
-, cstruct
-, mirage-net
-, mirage-xen
-, io-page
-, lwt-dllist
-, logs
+{
+  buildDunePackage,
+  netchannel,
+  ppx_sexp_conv,
+  lwt,
+  cstruct,
+  mirage-net,
+  mirage-xen,
+  io-page,
+  lwt-dllist,
+  logs,
 }:
 
 buildDunePackage {
@@ -19,6 +19,8 @@ buildDunePackage {
     version
     meta
     ;
+
+  duneVersion = "3";
 
   nativeBuildInputs = [
     ppx_sexp_conv

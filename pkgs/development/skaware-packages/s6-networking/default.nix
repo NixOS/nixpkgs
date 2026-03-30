@@ -1,11 +1,18 @@
-{ lib, skawarePackages
+{
+  lib,
+  skawarePackages,
+  skalibs,
+  execline,
+  s6,
+  s6-dns,
 
-# Whether to build the TLS/SSL tools and what library to use
-# acceptable values: "bearssl", "libressl", false
-, sslSupport ? "bearssl" , libressl, bearssl
+  # Whether to build the TLS/SSL tools and what library to use
+  # acceptable values: "bearssl", "libressl", false
+  sslSupport ? "bearssl",
+  libressl,
+  bearssl,
 }:
 
-with skawarePackages;
 let
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
@@ -16,15 +23,28 @@ let
 in
 assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-networking";
-  version = "2.5.1.1";
-  sha256 = "sha256-esedTePZwTUy5ESrdJfE4ErQ+nIp1QKYTZ3H1IqmRBg=";
+  version = "2.7.2.1";
+  sha256 = "sha256-Z5+GUthb40PawfB2SXzTbKjFZACUh4D4XcZONAVeLBs=";
 
-  description = "A suite of small networking utilities for Unix systems";
+  manpages = skawarePackages.buildManPages {
+    pname = "s6-networking-man-pages";
+    version = "2.7.2.1.4";
+    sha256 = "sha256-N5BXi21JEgF3X5FKg5SzKNKfzYS5uTRqbUvbsrEZ2xg=";
+    description = "Port of the documentation for the s6-networking suite to mdoc";
+    maintainers = [ lib.maintainers.sternenseemann ];
+  };
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  description = "Suite of small networking utilities for Unix systems";
+
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   # TODO: nsss support
   configureFlags = [
@@ -48,15 +68,15 @@ buildPackage {
     "--with-dynlib=${s6-dns.lib}/lib"
   ]
   ++ (lib.optionals sslSupportEnabled [
-       "--enable-ssl=${sslSupport}"
-       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
-       "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
-       "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
-     ]);
+    "--enable-ssl=${sslSupport}"
+    "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
+    "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
+    "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
+  ]);
 
   postInstall = ''
     # remove all s6 executables from build directory
-    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
+    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable) proxy-server
     rm libs6net.* libstls.* libs6tls.* libsbearssl.*
 
     mv doc $doc/share/doc/s6-networking/html

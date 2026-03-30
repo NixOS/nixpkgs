@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 tar xf $src
 cd */
 tarballdir=$(pwd)

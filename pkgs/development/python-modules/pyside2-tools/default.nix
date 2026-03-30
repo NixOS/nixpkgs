@@ -1,5 +1,14 @@
-{ wrapPython, python, lib, stdenv, cmake, qt5,
-  shiboken2, pyside2 }:
+{
+  wrapPython,
+  python,
+  lib,
+  stdenv,
+  cmake,
+  qt5,
+  distutils,
+  shiboken2,
+  pyside2,
+}:
 
 stdenv.mkDerivation {
   pname = "pyside2-tools";
@@ -15,15 +24,26 @@ stdenv.mkDerivation {
 
   postPatch = ''
     cd sources/pyside2-tools
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.1)" \
+      "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  nativeBuildInputs = [ cmake wrapPython ];
-  propagatedBuildInputs = [ shiboken2 pyside2 ];
-  buildInputs = [ python qt5.qtbase ];
-
-  cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
+  nativeBuildInputs = [
+    cmake
+    distutils
+    wrapPython
   ];
+  propagatedBuildInputs = [
+    shiboken2
+    pyside2
+  ];
+  buildInputs = [
+    python
+    qt5.qtbase
+  ];
+
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   dontWrapQtApps = true;
 
@@ -43,10 +63,10 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PySide2 development tools";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
   };
 }

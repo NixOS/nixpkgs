@@ -1,54 +1,82 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, requests
-, django
-, boto3
-, python
-, mock
-, pytestCheckHook
-, pytest-django
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  django,
+  fetchFromGitHub,
+  hatchling,
+  idna,
+  mock,
+  pytest-django,
+  pytestCheckHook,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "8.6";
+  version = "14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anymail";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-hLNILUV7qzqHfh7l3SJAoFveUIRSCHTjEQ3ZC3PhZUY=";
+    repo = "django-anymail";
+    tag = "v${version}";
+    hash = "sha256-S/HEbWyvfAQ/kHodN0ylrg1lU7lYWGUznSqVC+yUzSU=";
   };
 
-  propagatedBuildInputs = [
-    six
-    requests
+  build-system = [ hatchling ];
+
+  dependencies = [
     django
-    boto3
+    idna
+    requests
+    urllib3
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-django
+  optional-dependencies = {
+    amazon-ses = [ boto3 ];
+    postal = [ cryptography ];
+    sendgrid = [ cryptography ];
+    # not packaged
+    # resend = [ svix ];
+    # uts46 = [ uts46 ];
+  };
+
+  nativeCheckInputs = [
     mock
-  ];
+    responses
+    pytest-django
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.amazon-ses;
+
+  disabledTestMarks = [ "live" ];
 
   disabledTests = [
-    # Require networking
-    "test_debug_logging"
-    "test_no_debug_logging"
+    # misrecognized as a fixture due to function name starting with test_
+    "test_file_content"
   ];
+
+  disabledTestPaths = [
+    # likely guessed mime type mismatch
+    "tests/test_resend_backend.py::ResendBackendStandardEmailTests::test_attachments"
+  ];
+
+  preCheck = ''
+    export CONTINOUS_INTEGRATION=1
+    export DJANGO_SETTINGS_MODULE=tests.test_settings.settings_${lib.versions.major django.version}_0
+  '';
 
   pythonImportsCheck = [ "anymail" ];
 
-  DJANGO_SETTINGS_MODULE = "tests.test_settings.settings_3_2";
-
-  meta = with lib; {
+  meta = {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/anymail/django-anymail/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

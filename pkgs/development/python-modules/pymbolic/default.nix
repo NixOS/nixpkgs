@@ -1,47 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matchpy
-, pytestCheckHook
-, pythonOlder
-, pytools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  constantdict,
+  pytools,
+  typing-extensions,
+
+  # optional-dependencies
+  matchpy,
+  numpy,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymbolic";
-  version = "2022.1";
-  format = "setuptools";
+  version = "2025.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tS9FHdC5gD4D3jMgrzt85XIwcAYcbSMcACFvbaQlkBI=";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pymbolic";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cn2EdhMn5qjK854AF5AY4Hv4M5Ib6gPRJk+kQvsFWRk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
+    constantdict
     pytools
+    typing-extensions
   ];
 
-  checkInputs = [
-    matchpy
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    # pytest is a test requirement not a run-time one
-      substituteInPlace setup.py \
-        --replace '"pytest>=2.3",' ""
-  '';
-
-  pythonImportsCheck = [
-    "pymbolic"
-  ];
-
-  meta = with lib; {
-    description = "A package for symbolic computation";
-    homepage = "https://documen.tician.de/pymbolic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+  optional-dependencies = {
+    matchpy = [ matchpy ];
+    numpy = [ numpy ];
   };
-}
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  pythonImportsCheck = [ "pymbolic" ];
+
+  meta = {
+    description = "Package for symbolic computation";
+    homepage = "https://documen.tician.de/pymbolic/";
+    changelog = "https://github.com/inducer/pymbolic/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qbisi ];
+  };
+})

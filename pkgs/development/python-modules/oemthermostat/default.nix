@@ -1,48 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "oemthermostat";
   version = "1.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cadair";
     repo = "openenergymonitor_thermostat";
-    rev = "v${version}";
-    sha256 = "vrMw3/X8MtejO1WyUA1DOlfVCPTCPgcK5p3+OlTWcM4=";
+    tag = "v${version}";
+    hash = "sha256-vrMw3/X8MtejO1WyUA1DOlfVCPTCPgcK5p3+OlTWcM4=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  dependencies = [ requests ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "oemthermostat" ];
 
-  pythonImportsCheck = [
-    "oemthermostat"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with OpenEnergyMonitor thermostats";
     homepage = "https://github.com/Cadair/openenergymonitor_thermostat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Cadair/openenergymonitor_thermostat/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

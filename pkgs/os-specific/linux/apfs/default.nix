@@ -1,35 +1,56 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  nixosTests,
 }:
 
+let
+  tag = "0.3.16";
+in
 stdenv.mkDerivation {
   pname = "apfs";
-  version = "unstable-2022-08-15-${kernel.version}";
+  version = "${tag}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "e4bf2d51d3fe8485ad2b28a89c157ada32ee3d77";
-    sha256 = "sha256-zvl1H9AIExgt6t2A2w7zDwXmRsmLY8y3P6EfbBuFdh8=";
+    tag = "v${tag}";
+    hash = "sha256-11ypevJwxNKAmJbl2t+nGXq40hjWbLIdltLqSeTVdHc=";
   };
 
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests.apfs = nixosTests.apfs;
+
+    inherit tag;
+    updateScript = ./update.sh;
+  };
+
+  meta = {
     description = "APFS module for linux";
+    longDescription = ''
+      The Apple File System (APFS) is the copy-on-write filesystem currently
+      used on all Apple devices. This module provides a degree of experimental
+      support on Linux.
+      If you make use of the write support, expect data corruption.
+      Read-only support is somewhat more complete, with sealed volumes,
+      snapshots, and all the missing compression algorithms recently added.
+      Encryption is still not in the works though.
+    '';
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.9";
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

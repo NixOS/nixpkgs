@@ -1,39 +1,47 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.smartctl;
-  format = pkgs.formats.yaml {};
-  configFile = format.generate "smartctl-exporter.yml" {
-    smartctl_exporter = {
-      bind_to = "${cfg.listenAddress}:${toString cfg.port}";
-      url_path = "/metrics";
-      smartctl_location = "${pkgs.smartmontools}/bin/smartctl";
-      collect_not_more_than_period = cfg.maxInterval;
-      devices = cfg.devices;
-    };
-  };
-in {
+
+  inherit (lib) mkOption types literalExpression;
+
+  args = lib.escapeShellArgs (
+    [
+      "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
+      "--smartctl.interval=${cfg.maxInterval}"
+    ]
+    ++ map (device: "--smartctl.device=${device}") cfg.devices
+    ++ cfg.extraFlags
+  );
+
+in
+{
   port = 9633;
 
   extraOpts = {
     devices = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
-      description = lib.mdDoc ''
+      description = ''
         Paths to the disks that will be monitored. Will autodiscover
         all disks if none given.
       '';
     };
+
     maxInterval = mkOption {
       type = types.str;
       default = "60s";
       example = "2m";
-      description = lib.mdDoc ''
+      description = ''
         Interval that limits how often a disk can be queried.
       '';
     };
@@ -50,23 +58,23 @@ in {
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkOverride 50 (
-        if cfg.devices != [] then
-          cfg.devices
-        else [
-          "block-blkext rw"
-          "block-sd rw"
-          "char-nvme rw"
-        ]
-      );
-      ExecStart = ''
-        ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter -config ${configFile}
-      '';
+      DeviceAllow = lib.mkOverride 50 [
+        "block-blkext rw"
+        "block-sd rw"
+        "char-nvme rw"
+      ];
+      ExecStart = "${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter ${args}";
       PrivateDevices = lib.mkForce false;
       ProtectProc = "invisible";
       ProcSubset = "pid";
-      SupplementaryGroups = [ "disk" ];
-      SystemCallFilter = [ "@system-service" "~@privileged" ];
+      SupplementaryGroups = [
+        "disk"
+        "smartctl-exporter-access"
+      ];
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged"
+      ];
     };
   };
 }

@@ -1,62 +1,91 @@
-{ lib
-, astropy
-, astropy-extension-helpers
-, astropy-healpix
-, buildPythonPackage
-, cython
-, fetchPypi
-, numpy
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools-scm
+{
+  lib,
+  asdf,
+  astropy,
+  astropy-healpix,
+  buildPythonPackage,
+  cython,
+  dask,
+  dask-image,
+  extension-helpers,
+  fetchFromGitHub,
+  fsspec,
+  gwcs,
+  numpy,
+  pillow,
+  pyavm,
+  pytest-astropy,
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  tqdm,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.9";
-  format = "setuptools";
+  version = "0.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zhjI4MjlCV9zR0nNcss+C36CZXY/imGsalfKMGacfi0=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "reproject";
+    tag = "v${version}";
+    hash = "sha256-30u/APFJiMA1fY50jKLE7MdXMDmUMMZ+ER6mmhx7CJc=";
   };
 
-  nativeBuildInputs = [
-    astropy-extension-helpers
-    cython
+  build-system = [
+    setuptools
     setuptools-scm
+    cython
+    extension-helpers
+    numpy
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     astropy-healpix
+    dask
+    dask-image
+    fsspec
     numpy
+    pillow
+    pyavm
     scipy
-  ];
+    zarr
+  ]
+  ++ dask.optional-dependencies.array;
 
-  checkInputs = [
-    pytest-astropy
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-astropy
+    pytest-xdist
+    asdf
+    gwcs
+    shapely
+    tqdm
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "build/lib*"
-    # Avoid failure due to user warning: Distutils was imported before Setuptools
-    "-p no:warnings"
   ];
 
-  pythonImportsCheck = [
-    "reproject"
+  disabledTestPaths = [
+    # Uses network
+    "build/lib*/reproject/interpolation/"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "reproject" ];
+
+  meta = {
     description = "Reproject astronomical images";
+    downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smaret ];
+    changelog = "https://github.com/astropy/reproject/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

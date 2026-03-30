@@ -1,41 +1,37 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.9.0";
+  version = "1.16.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-u3brP3WsnoqRy3R0OQQkIbq+avS7nemx9GKpvTq+vxg=";
+    repo = "smbprotocol";
+    tag = "v${version}";
+    hash = "sha256-OZedYBOMBO/EegSvg7aq5lIOWdxSOHh+yHDFZ7bwLec=";
   };
 
   propagatedBuildInputs = [
     cryptography
     pyspnego
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/jborean93/smbprotocol/issues/119
     "test_copymode_local_to_local_symlink_dont_follow"
     "test_copystat_local_to_local_symlink_dont_follow_fail"
@@ -45,14 +41,13 @@ buildPythonPackage rec {
     "test_recv_"
   ];
 
-  pythonImportsCheck = [
-    "smbprotocol"
-  ];
+  pythonImportsCheck = [ "smbprotocol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SMBv2 and v3 Client";
     homepage = "https://github.com/jborean93/smbprotocol";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jborean93/smbprotocol/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,25 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, nose, jinja2, mock, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pyyaml,
+  jinja2,
+  mock,
+  pytestCheckHook,
+  distutils,
+  zope-dottedname,
+}:
 
 buildPythonPackage rec {
   pname = "webassets";
-  version = "2.0";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kc1042jydgk54xpgcp0r1ib4gys91nhy285jzfcxj3pfqrk4w8n";
+    hash = "sha256-BSDl/W+8wBL0hv78YblmR02o/Bs1sFaansLLB4LxYHo=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
-  checkInputs = [ nose jinja2 mock pytest ];
+  build-system = [ setuptools ];
 
-  # Needs Babel CLI tool
-  doCheck = false;
-  checkPhase = "py.test";
+  dependencies = [
+    pyyaml
+    zope-dottedname
+  ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    jinja2
+    mock
+    pytestCheckHook
+    distutils
+  ];
+
+  disabledTests = [
+    "TestFilterBaseClass"
+    "TestAutoprefixer6Filter"
+    "TestBabel"
+  ];
+
+  meta = {
     description = "Media asset management for Python, with glue code for various web frameworks";
+    mainProgram = "webassets";
     homepage = "https://github.com/miracle2k/webassets/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mesa,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6-sip";
-  version = "13.4.0";
+  version = "13.10.2";
+  format = "setuptools";
 
   src = fetchPypi {
-    pname = "PyQt6_sip";
+    pname = "pyqt6_sip";
     inherit version;
-    sha256 = "sha256-bYej7lhy11EbdpV9aKMhCTUsrzt6QqAdnuIAMrNQ2Xk=";
+    hash = "sha256-RkrRVr9SZQDOa9BcrHqCKAr2MJl02BZzm0qaYnFW+v4=";
   };
 
   # There is no test code and the check phase fails with:
@@ -18,11 +21,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "PyQt6.sip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt5";
-    homepage = "https://www.riverbankcomputing.com/software/sip/";
-    license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ LunNova ];
+    homepage = "https://github.com/Python-SIP/sip";
+    license = lib.licenses.gpl3Only;
+    inherit (mesa.meta) platforms;
+    maintainers = with lib.maintainers; [ LunNova ];
   };
 }

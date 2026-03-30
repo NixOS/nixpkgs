@@ -1,19 +1,17 @@
 # Evince.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-with lib;
+let
+  cfg = config.programs.evince;
 
-let cfg = config.programs.evince;
-
-in {
-
-  # Added 2019-08-09
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "evince" "enable" ]
-      [ "programs" "evince" "enable" ])
-  ];
+in
+{
 
   ###### interface
 
@@ -21,24 +19,17 @@ in {
 
     programs.evince = {
 
-      enable = mkEnableOption
-        (lib.mdDoc "Evince, the GNOME document viewer");
+      enable = lib.mkEnableOption "Evince, the GNOME document viewer";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.evince;
-        defaultText = literalExpression "pkgs.evince";
-        description = lib.mdDoc "Evince derivation to use.";
-      };
+      package = lib.mkPackageOption pkgs "evince" { };
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.programs.evince.enable {
+  config = lib.mkIf config.programs.evince.enable {
 
     environment.systemPackages = [ cfg.package ];
 

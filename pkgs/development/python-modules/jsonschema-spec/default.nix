@@ -1,52 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, jsonschema
-, pathable
-, pyyaml
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build
+  poetry-core,
+
+  # propagates
+  pathable,
+  pyyaml,
+  referencing,
+  requests,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.1.2";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "0.3.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-RfkD2fVH9OUTe0XNpHO6brQ4+8zbMpae6AgdeFpYXa8=";
+    repo = "jsonschema-spec";
+    tag = version;
+    hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
   };
 
   postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace 'referencing = ">=0.28.0,<0.30.0"' 'referencing = ">=0.28.0"'
   '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
+  pythonRelaxDeps = [ "referencing" ];
+
   propagatedBuildInputs = [
-    jsonschema
     pathable
     pyyaml
-    typing-extensions
+    referencing
+    requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
+    responses
   ];
 
-  meta = with lib; {
+  passthru.skipBulkUpdate = true; # newer versions under the jsonschema-path name
+
+  meta = {
     changelog = "https://github.com/p1c2u/jsonschema-spec/releases/tag/${version}";
     description = "JSONSchema Spec with object-oriented paths";
     homepage = "https://github.com/p1c2u/jsonschema-spec";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

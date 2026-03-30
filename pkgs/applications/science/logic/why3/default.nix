@@ -1,47 +1,117 @@
-{ callPackage, fetchurl, lib, stdenv
-, ocamlPackages, coqPackages, rubber, hevea, emacs }:
+{
+  callPackage,
+  fetchurl,
+  lib,
+  stdenv,
+  ocamlPackages,
+  coqPackages,
+  rubber,
+  hevea,
+  emacs,
+  version ? "1.8.2",
+  ideSupport ? true,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.5.1";
+  inherit version;
 
   src = fetchurl {
     url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
+    hash =
+      {
+        "1.8.2" = "sha256-t9ES7dW8zmvM4AI9K8g06yrhocQteupE/6Ek1km1C+o=";
+        "1.7.2" = "sha256-VaSG/FiO2MDdSSFXGJJrIylQx0LPwtT8AF7TpPVZhCQ=";
+        "1.6.0" = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
+      }
+      ."${version}";
   };
 
-  buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir
-    # Emacs compilation of why3.el
-    emacs
-    # Documentation
-    rubber hevea
-    # GUI
-    lablgtk3-sourceview3
-    # WebIDE
-    js_of_ocaml js_of_ocaml-ppx
-    # S-expression output for why3pp
-    ppx_deriving ppx_sexp_conv ]
-    ++
-    # Coq Support
-    (with coqPackages; [ coq flocq ])
-  ;
+  strictDeps = true;
 
-  propagatedBuildInputs = with ocamlPackages; [ camlzip menhirLib num re sexplib ];
+  nativeBuildInputs =
+    lib.optional ideSupport wrapGAppsHook3
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      menhir
+    ])
+    ++ [
+      # Coq Support
+      coqPackages.coq
+    ];
+
+  buildInputs =
+    with ocamlPackages;
+    [
+      ocamlgraph
+      zarith
+      # Emacs compilation of why3.el
+      emacs
+      # Documentation
+      rubber
+      hevea
+    ]
+    ++
+      lib.optional ideSupport
+        # GUI
+        lablgtk3-sourceview3
+    ++ [
+      # WebIDE
+      js_of_ocaml
+      js_of_ocaml-ppx
+      # S-expression output for why3pp
+      ppx_deriving
+      ppx_sexp_conv
+    ]
+    ++
+      # Coq Support
+      (with coqPackages; [
+        coq
+        flocq
+      ]);
+
+  propagatedBuildInputs = with ocamlPackages; [
+    camlzip
+    menhirLib
+    (if lib.versionAtLeast version "1.8.0" then zarith else num)
+    re
+    sexplib
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--enable-verbose-make" ];
+  configureFlags = [
+    "--enable-verbose-make"
+    (lib.enableFeature ideSupport "ide")
+  ];
 
-  installTargets = [ "install" "install-lib" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  passthru.withProvers = callPackage ./with-provers.nix {};
+  installTargets = [
+    "install"
+    "install-lib"
+  ];
 
-  meta = with lib; {
-    description = "A platform for deductive program verification";
-    homepage    = "http://why3.lri.fr/";
-    license     = licenses.lgpl21;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vbgl ];
+  postInstall = ''
+    mkdir -p $dev/lib
+    mv $out/lib/ocaml $dev/lib/
+  '';
+
+  passthru.withProvers = callPackage ./with-provers.nix { };
+
+  meta = {
+    description = "Platform for deductive program verification";
+    homepage = "https://why3.lri.fr/";
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      vbgl
+    ];
   };
 }

@@ -1,64 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, importlib-metadata
-, isort
-, poetry-core
-, pytest
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isort,
+  poetry-core,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "3.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stephrdev";
-    repo = pname;
-    rev = version;
-    hash = "sha256-gbEO3HBDeZ+nUACzpeV6iVuCdNHS5956wFzIYkbam+M=";
+    repo = "pytest-isort";
+    tag = version;
+    hash = "sha256-fMt2tYc+Ngb57T/VJYxI2UN25qvIrgIsEoImVIitDK4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    isort
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ isort ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  patches = [
-    # Can be removed with the next release, https://github.com/stephrdev/pytest-isort/pull/44
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/stephrdev/pytest-isort/commit/f17ed2d294ae90e415d051e1c720982e3dd01bff.patch";
-      sha256 = "sha256-PiOs0c61BNx/tZN11DYblOd7tNzGthNnlkmYMTI9v18=";
-    })
-  ];
+  pythonImportsCheck = [ "pytest_isort" ];
 
-  pythonImportsCheck = [
-    "pytest_isort"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to perform isort checks (import ordering)";
     homepage = "https://github.com/moccu/pytest-isort/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

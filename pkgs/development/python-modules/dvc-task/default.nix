@@ -1,60 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools-scm
-, kombu
-, shortuuid
-, celery
-, funcy
-, pytest-celery
-, pytest-mock
-, pytest-test-utils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  celery,
+  fetchFromGitHub,
+  funcy,
+  kombu,
+  pytest-celery,
+  pytest-mock,
+  pytest-test-utils,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  shortuuid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-task";
-  version = "0.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.40.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
-    rev = version;
-    hash = "sha256-LXjfFuLifgzU+3/EevycVCR7LhYBOoN6xg4YeNo5R4M=";
+    repo = "dvc-task";
+    tag = finalAttrs.version;
+    hash = "sha256-bRQJLncxCigYPEtlvKjUtKqhcBkB7erEtoJQ30yGamE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    kombu
-    shortuuid
+  dependencies = [
     celery
     funcy
+    kombu
+    shortuuid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-celery
     pytest-mock
     pytest-test-utils
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "dvc_task"
+  pythonImportsCheck = [ "dvc_task" ];
+
+  disabledTests = [
+    # Test is flaky
+    "test_start_already_exists"
+    # Tests require a Docker setup
+    "celery_setup_worker"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Celery task queue used in DVC";
     homepage = "https://github.com/iterative/dvc-task";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    changelog = "https://github.com/iterative/dvc-task/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

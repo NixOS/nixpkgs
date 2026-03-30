@@ -1,26 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, mock, git
-, cherrypy, gevent, tornado }:
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchPypi,
+  gevent,
+  git,
+  mock,
+  pytestCheckHook,
+  setuptools,
+  tornado,
+}:
 
 buildPythonPackage rec {
   pname = "ws4py";
-  version = "0.5.1";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483";
+    hash = "sha256-n4exm3c/CgdEo486+jaoAyht0xl/C7Ndm3UpPscALRk=";
   };
 
-  checkInputs = [ pytest mock git ];
-  propagatedBuildInputs = [ cherrypy gevent tornado ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkPhase = ''
-    pytest
-  '';
+  propagatedBuildInputs = [
+    cherrypy
+    gevent
+    tornado
+  ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    git
+    mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "ws4py" ];
+
+  meta = {
+    description = "WebSocket package for Python";
     homepage = "https://ws4py.readthedocs.org";
-    description = "A WebSocket package for Python";
-    maintainers = [];
-    license = licenses.bsd3;
+    changelog = "https://github.com/Lawouach/WebSocket-for-Python/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

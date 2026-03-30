@@ -1,45 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "result";
-  version = "0.7.0";
+  version = "0.17.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rustedpy";
     repo = "result";
-     rev = "v${version}";
-    sha256 = "sha256-bEf3OJg6ksDvzZE7ezA58Q2FObb5V7BG8vkKtX284Jg=";
+    rev = "v${version}";
+    hash = "sha256-o+7qKxGQCeMUnsmEReggvf+XwQWFHRCYArYk3DxCa50=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"--flake8",' "" \
-      --replace '"--tb=short",' "" \
-      --replace '"--cov=result",' "" \
-      --replace '"--cov=tests",' "" \
-      --replace '"--cov-report=term",' "" \
-      --replace '"--cov-report=xml",' ""
-  '';
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    #TODO: figure out the failure "match o:" Invalid Syntax
-    "tests/test_pattern_matching.py"
   ];
 
   pythonImportsCheck = [ "result" ];
 
-  meta = with lib; {
-    description = "A simple Result type for Python 3 inspired by Rust, fully type annotated";
+  meta = {
+    description = "Rust-like result type for Python";
     homepage = "https://github.com/rustedpy/result";
-    license = licenses.mit;
-    maintainers = [];
+    changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emattiza ];
   };
 }

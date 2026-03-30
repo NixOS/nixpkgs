@@ -1,48 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, ply
-, pytestCheckHook
-, six
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  jinja2,
+  mock,
+  packaging,
+  ply,
+  pytestCheckHook,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.3.1";
+  version = "3.3.9";
+  pyproject = true;
 
-  # pypi sdist misses requirements.txt
   src = fetchFromGitHub {
     owner = "dropbox";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
+    repo = "stone";
+    tag = "v${version}";
+    hash = "sha256-3tUV2JrE3S2Tj/9aHvzfBTkIWUmWzkWNsVLr5yWRE/Q=";
   };
 
   postPatch = ''
-    sed -i '/pytest-runner/d' setup.py
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner == 5.3.2'," ""
   '';
 
-  propagatedBuildInputs = [ ply six ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook mock ];
-
-  # try to import from `test` directory, which is exported by the python interpreter
-  # and cannot be overriden without removing some py3 to py2 support
-  disabledTestPaths = [
-    "test/test_tsd_types.py"
-    "test/test_js_client.py"
+  dependencies = [
+    jinja2
+    ply
+    six
+    packaging
   ];
-  disabledTests = [
-    "test_type_name_with_module"
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
   ];
 
   pythonImportsCheck = [ "stone" ];
 
-  meta = with lib; {
-    description = "Official Api Spec Language for Dropbox";
+  meta = {
+    description = "Official API Spec Language for Dropbox API V2";
     homepage = "https://github.com/dropbox/stone";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "stone";
   };
 }

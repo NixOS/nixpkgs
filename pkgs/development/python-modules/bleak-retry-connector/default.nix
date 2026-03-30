@@ -1,64 +1,55 @@
-{ lib
-, async-timeout
-, bleak
-, dbus-fast
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytest-asyncio
+{
+  lib,
+  bleak,
+  bluetooth-adapters,
+  dbus-fast,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "2.8.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XBIBI/39l0JOJOX5GChTJ+Snwb9jjfofmM4cAdsV8lg=";
+    repo = "bleak-retry-connector";
+    tag = "v${version}";
+    hash = "sha256-aGk5wNrQ8ti2qu1FxmOqPtDpivm5DRaKvwzDNz9rFmQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    async-timeout
+  dependencies = [
     bleak
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus-fast
+    bluetooth-adapters
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # broken mocking
-    "test_establish_connection_can_cache_services_services_missing"
-    "test_establish_connection_with_dangerous_use_cached_services"
-    "test_establish_connection_without_dangerous_use_cached_services"
-  ];
+  # ModuleNotFoundError: No module named 'dbus_fast'
+  doCheck = stdenv.hostPlatform.isLinux;
 
-  pythonImportsCheck = [
-    "bleak_retry_connector"
-  ];
+  pythonImportsCheck = [ "bleak_retry_connector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/bleak-retry-connector/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

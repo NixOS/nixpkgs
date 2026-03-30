@@ -1,62 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, importlib-resources
-, jsonschema
-, jsonschema-spec
-, lazy-object-proxy
-, openapi-schema-validator
-, pyyaml
+  # build-system
+  poetry-core,
 
-# optional
-, requests
+  # propagates
+  jsonschema,
+  jsonschema-path,
+  lazy-object-proxy,
+  openapi-schema-validator,
 
-# tests
-, mock
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.5.1";
-  format = "pyproject";
+  version = "0.7.2";
+  pyproject = true;
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
-    owner = "p1c2u";
-    repo = pname;
-    rev = version;
-    hash = "sha256-8VhD57dNG0XrPUdcq39GEfHUAgdDwJ8nv+Lp57OpTLg=";
+    owner = "python-openapi";
+    repo = "openapi-spec-validator";
+    tag = version;
+    hash = "sha256-APEx7+vc824DLmdzLvhfFVrcjPxVwwUwxkh19gjXEvc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    importlib-resources
     jsonschema
-    jsonschema-spec
+    jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-    pyyaml
   ];
 
-  passthru.optional-dependencies.requests = [
-    requests
-  ];
-
-  preCheck = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -71,11 +56,11 @@ buildPythonPackage rec {
     "openapi_spec_validator.readers"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
+    mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rvl ];
+    license = lib.licenses.asl20;
   };
 }

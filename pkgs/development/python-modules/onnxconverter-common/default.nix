@@ -1,40 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, packaging
-, protobuf
-, onnx
-, unittestCheckHook
-, onnxruntime
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  packaging,
+  protobuf,
+  onnx,
+  unittestCheckHook,
+  onnxruntime,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "onnxconverter-common";
-  version = "1.12.2"; # Upstream no longer seems to push tags
+  version = "0.16.0";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxconverter-common";
-    rev = "814cdf494d987900d30b16971c0e8334aaca9ae6";
-    hash = "sha256-XA/kl8aT1wLthl1bMihtv/1ELOW1sGO/It5XfJtD+sY=";
+    tag = "v${version}";
+    hash = "sha256-M62mbIqFwnPdRlf6J8DrNRhLH0uHns51K/pWnWLxI5Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [ "protobuf" ];
+
+  dependencies = [
     numpy
-    packaging # undeclared dependency
+    packaging
     protobuf
     onnx
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "onnxconverter_common" ];
+
+  nativeCheckInputs = [
     onnxruntime
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   # Failing tests
   # https://github.com/microsoft/onnxconverter-common/issues/242
@@ -42,7 +55,8 @@ buildPythonPackage {
 
   meta = {
     description = "ONNX Converter and Optimization Tools";
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://github.com/microsoft/onnxconverter-common";
+    changelog = "https://github.com/microsoft/onnxconverter-common/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
   };
 }

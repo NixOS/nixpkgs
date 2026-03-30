@@ -1,83 +1,91 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, kguiaddons
-, kwindowsystem
-, libXdamage
-, libdbusmenu
-, liblxqt
-, libpulseaudio
-, libqtxdg
-, libstatgrab
-, libsysstat
-, lm_sensors
-, lxmenu-data
-, lxqt-build-tools
-, lxqt-globalkeys
-, gitUpdater
-, menu-cache
-, pcre
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
-, solid
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  libdbusmenu-lxqt,
+  kguiaddons,
+  kwindowsystem,
+  layer-shell-qt,
+  libxdamage,
+  libxdmcp,
+  libxtst,
+  libdbusmenu,
+  liblxqt,
+  libpthread-stubs,
+  libpulseaudio,
+  libqtxdg,
+  libstatgrab,
+  libsysstat,
+  lm_sensors,
+  lxqt-build-tools,
+  lxqt-globalkeys,
+  lxqt-menu-data,
+  pcre,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  solid,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel";
-  version = "1.2.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    sha256 = "A/zoK6V+4tFeu8mSFukLeKnFVKl66QtKLtu7N7Z2P2w=";
+    repo = "lxqt-panel";
+    tag = finalAttrs.version;
+    hash = "sha256-n/U2EgEZfh8mJWtEX+HByqHqtm9NqIXnURqUzSOcvns=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
+    libdbusmenu-lxqt
     kguiaddons
     kwindowsystem
-    libXdamage
+    layer-shell-qt
+    libxdamage
+    libxdmcp
+    libxtst
     libdbusmenu
     liblxqt
+    libpthread-stubs
     libpulseaudio
     libqtxdg
     libstatgrab
     libsysstat
     lm_sensors
-    lxmenu-data
     lxqt-globalkeys
-    menu-cache
+    lxqt-menu-data
     pcre
     qtbase
     qtsvg
-    qttools
-    qtx11extras
+    qtwayland
     solid
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.libpthreadstubs
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-panel";
-    description = "The LXQt desktop panel";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    description = "LXQt desktop panel";
+    mainProgram = "lxqt-panel";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

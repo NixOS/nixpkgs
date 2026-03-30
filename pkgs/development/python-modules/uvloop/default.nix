@@ -1,101 +1,93 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cython
-, libuv
-, CoreServices
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-# Check Inputs
-, aiohttp
-, psutil
-, pyopenssl
-, pytestCheckHook
+  # build-system
+  cython,
+  setuptools,
+
+  # native dependencies
+  libuv,
+
+  # tests
+  psutil,
+  pyopenssl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.17.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "0.22.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Dd9rr5zxGhoixxSH858Vss9461vefltF+7meip2RueE=";
+  src = fetchFromGitHub {
+    owner = "MagicStack";
+    repo = "uvloop";
+    tag = "v${version}";
+    hash = "sha256-9NJugzxFycr1LLZXiDKbpeVcIvlCPHHIcYMp8jmffuE=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    rm -rf vendor
+
+    substituteInPlace setup.py \
+      --replace-fail "use_system_libuv = False" "use_system_libuv = True"
+  '';
+
+  build-system = [
     cython
+    setuptools
   ];
 
-  buildInputs = [
-    libuv
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    ApplicationServices
-  ];
+  env.LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
 
-  dontUseSetuptoolsCheck = true;
-  checkInputs = [
+  buildInputs = [ libuv ];
+
+  nativeCheckInputs = [
+    pyopenssl
     pytestCheckHook
     psutil
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    aiohttp
-  ];
-
-  LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
-
-  pytestFlagsArray = [
-    # from pytest.ini, these are NECESSARY to prevent failures
-    "--capture=no"
-    "--assert=plain"
-    "--strict"
-    "--tb=native"
-    # Depend on pyopenssl
-    "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_flush_before_shutdown"
-    "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_renegotiation"
-    # test gets stuck in epoll_pwait on hydras aarch64 builders
-    # https://github.com/MagicStack/uvloop/issues/412
-    "--deselect=tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
-    # Tries to import cythonized file for which the .pyx file is not shipped via PyPi
-    "--deselect=tests/test_libuv_api.py::Test_UV_libuv::test_libuv_get_loop_t_ptr"
-    # Tries to run "env", but fails to find it
-    "--deselect=tests/test_process.py::Test_UV_Process::test_process_env_2"
-    "--deselect=tests/test_process.py::Test_AIO_Process::test_process_env_2"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Flaky test: https://github.com/MagicStack/uvloop/issues/412
-    "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
-    # Broken: https://github.com/NixOS/nixpkgs/issues/160904
-    "--deselect=tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
-    # Flaky test: https://github.com/MagicStack/uvloop/issues/513
-    "--deselect=tests/test_tcp.py::Test_UV_TCP::test_create_server_5"
-    "--deselect=tests/test_tcp.py::Test_UV_TCP::test_create_server_6"
   ];
 
   disabledTestPaths = [
     # ignore code linting tests
     "tests/test_sourcecode.py"
+    # Tries to run "env", but fails to find it, even with coreutils provided
+    "tests/test_process.py::Test_UV_Process::test_process_env_2"
+    "tests/test_process.py::Test_AIO_Process::test_process_env_2"
+    # AssertionError: b'' != b'out\n'
+    "tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
+    "tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+    # Depends on performance of builder
+    "tests/test_base.py::TestBaseUV.test_call_at"
+    # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
+    "tests/test_dns.py"
+    # Asserts on exact wording of error message
+    "tests/test_tcp.py::Test_AIO_TCP::test_create_connection_open_con_addr"
+    # ConnectionAbortedError: SSL handshake is taking longer than 15.0 seconds
+    "tests/test_tcp.py::Test_AIO_TCPSSL::test_create_connection_ssl_1"
+    # Fails randomly on hydra
+    # https://github.com/MagicStack/uvloop/issues/709
+    "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # Segmentation fault
+    "tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
+    # Broken: https://github.com/NixOS/nixpkgs/issues/160904
+    "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
   ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = ''
+    # force using installed/compiled uvloop
+    rm -rf uvloop
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     # https://github.com/MagicStack/uvloop/issues/463
     export TMPDIR="/tmp"
-  '' + ''
-    # pyopenssl is not well supported by upstream
-    # https://github.com/NixOS/nixpkgs/issues/175875
-    substituteInPlace tests/test_tcp.py \
-      --replace "from OpenSSL import SSL as openssl_ssl" ""
-    # force using installed/compiled uvloop vs source by moving tests to temp dir
-    export TEST_DIR=$(mktemp -d)
-    cp -r tests $TEST_DIR
-    pushd $TEST_DIR
-  '';
-
-  postCheck = ''
-    popd
   '';
 
   pythonImportsCheck = [
@@ -106,10 +98,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/MagicStack/uvloop/releases/tag/${src.tag}";
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

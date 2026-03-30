@@ -1,78 +1,80 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
-, docutils
-, jinja2
-, markdown-it-py
-, mdit-py-plugins
-, pyyaml
-, sphinx
-, typing-extensions
-, beautifulsoup4
-, pytest-param-files
-, pytest-regressions
-, sphinx-pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  docutils,
+  jinja2,
+  markdown-it-py,
+  mdit-py-plugins,
+  pyyaml,
+  sphinx,
+  typing-extensions,
+
+  # tests
+  beautifulsoup4,
+  defusedxml,
+  pytest-param-files,
+  pytest-regressions,
+  pytestCheckHook,
+  sphinx-pytest,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "myst-parser";
-  version = "0.18.0";
+  version = "5.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-GEtrC7o5YnkuvBfQQfhG5P74QMiHz63Fdh1cC/r5CF0=";
+    repo = "myst-parser";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0lGejdGVVvZar3sPBbvThXzJML7PcR5+shyDHTTtVEY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "docutils>=0.15,<0.19" "docutils>=0.15"
-  '';
+  build-system = [ flit-core ];
 
-  format = "flit";
-
-  nativeBuildInputs = [ flit-core ];
-
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "markdown-it-py"
+  ];
+  dependencies = [
     docutils
     jinja2
-    mdit-py-plugins
     markdown-it-py
+    mdit-py-plugins
     pyyaml
     sphinx
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "myst_parser" ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
+    defusedxml
     pytest-param-files
     pytest-regressions
-    sphinx-pytest
     pytestCheckHook
+    sphinx-pytest
+  ]
+  ++ markdown-it-py.optional-dependencies.linkify;
+
+  disabledTestPaths = [
+    # outdated sphinx fixtures
+    "tests/test_renderers/test_fixtures_sphinx.py"
   ];
 
-  disabledTests = [
-    # AssertionError due to different files
-    "test_basic"
-    "test_footnotes"
-    "test_gettext_html"
-    "test_fieldlist_extension"
-    # docutils 0.19 expectation mismatches
-    "test_docutils_roles"
-  ];
+  pythonImportsCheck = [ "myst_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
-}
+})

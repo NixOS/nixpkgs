@@ -1,28 +1,40 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.flow;
-in {
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    optionalString
+    ;
+in
+{
   port = 9590;
   extraOpts = {
     brokers = mkOption {
       type = types.listOf types.str;
       example = literalExpression ''[ "kafka.example.org:19092" ]'';
-      description = lib.mdDoc "List of Kafka brokers to connect to.";
+      description = "List of Kafka brokers to connect to.";
     };
 
     asn = mkOption {
       type = types.ints.positive;
       example = 65542;
-      description = lib.mdDoc "The ASN being monitored.";
+      description = "The ASN being monitored.";
     };
 
     partitions = mkOption {
       type = types.listOf types.int;
-      default = [];
-      description = lib.mdDoc ''
+      default = [ ];
+      description = ''
         The number of the partitions to consume, none means all.
       '';
     };
@@ -30,7 +42,7 @@ in {
     topic = mkOption {
       type = types.str;
       example = "pmacct.acct";
-      description = lib.mdDoc "The Kafka topic to consume from.";
+      description = "The Kafka topic to consume from.";
     };
   };
 
@@ -42,7 +54,7 @@ in {
           -asn ${toString cfg.asn} \
           -topic ${cfg.topic} \
           -brokers ${concatStringsSep "," cfg.brokers} \
-          ${optionalString (cfg.partitions != []) "-partitions ${concatStringsSep "," cfg.partitions}"} \
+          ${optionalString (cfg.partitions != [ ]) "-partitions ${concatStringsSep "," cfg.partitions}"} \
           -addr ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}
       '';
     };

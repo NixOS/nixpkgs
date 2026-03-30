@@ -1,38 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markupsafe
-, babel
-, pytestCheckHook
-, email-validator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  babel,
+  hatchling,
+  setuptools,
+
+  # dependencies
+  markupsafe,
+
+  # optional-dependencies
+  email-validator,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
   pname = "wtforms";
+  version = "3.2.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "WTForms";
-    inherit version;
-    sha256 = "1g654ghavds387hqxmhg9s8x222x89wbq1ggzxbsyn6x2axindbb";
+  src = fetchFromGitHub {
+    owner = "wtforms";
+    repo = "wtforms";
+    tag = version;
+    hash = "sha256-jwjP/wkk8MdNJbPE8MlkrH4DyR304Ju41nN4lMo3jFs=";
   };
 
-  propagatedBuildInputs = [ markupsafe babel ];
-
-
-  checkInputs = [
-    pytestCheckHook
-    email-validator
+  nativeBuildInputs = [
+    babel
+    hatchling
+    setuptools
   ];
+
+  propagatedBuildInputs = [ markupsafe ];
+
+  optional-dependencies = {
+    email = [ email-validator ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "wtforms" ];
 
-  meta = with lib; {
-    description = "A flexible forms validation and rendering library for Python";
+  meta = {
+    description = "Flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bhipple ];
+    license = lib.licenses.bsd3;
   };
-
 }

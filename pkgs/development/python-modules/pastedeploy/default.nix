@@ -1,26 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pastedeploy";
-  version = "2.1.1";
+  version = "3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pylons";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-9/8aM/G/EdapCZJlx0ZPzNbmw2uYjA1zGbNWJAWoeCU=";
+    repo = "pastedeploy";
+    tag = version;
+    hash = "sha256-yR7UxAeF0fQrbU7tl29GpPeEAc4YcxHdNQWMD67pP3g=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  pythonImportsCheck = [ "paste.deploy" ];
+
+  meta = {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "https://github.com/Pylons/pastedeploy";
-    license = licenses.mit;
-    maintainers = teams.openstack.members;
+    changelog = "https://github.com/Pylons/pastedeploy/blob/${src.tag}/docs/news.rst";
+    license = lib.licenses.mit;
+    teams = [ lib.teams.openstack ];
   };
 }

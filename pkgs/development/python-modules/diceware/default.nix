@@ -1,33 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest-runner
-, setuptools
-, coverage, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "diceware";
-  version = "0.10";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-srTMm1n1aNLvUb/fn34a+UHSX7j1wl8XAZHburzpZWk=";
+    hash = "sha256-VLaQgJ8MVqswhaGOFaDDgE1KDRJ/OK7wtc9fhZ0PZjk=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ setuptools ];
+  dependencies = [ setuptools ];
 
-  checkInputs = [ coverage pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
-  checkPhase = ''
-    py.test -m 'not packaging'
-  '';
+  disabledTestMarks = [
+    # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
+    "packaging"
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "diceware" ];
+
+  meta = {
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
+    mainProgram = "diceware";
     homepage = "https://github.com/ulif/diceware";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ asymmetric ];
+    changelog = "https://github.com/ulif/diceware/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ asymmetric ];
   };
 }

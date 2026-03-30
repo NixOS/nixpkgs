@@ -1,9 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "yubico-client";
   version = "1.13.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,10 +20,9 @@ buildPythonPackage rec {
   # pypi package missing test_utils and github releases is behind
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Verifying Yubico OTPs based on the validation protocol version 2.0";
     homepage = "https://github.com/Kami/python-yubico-client/";
-    maintainers= with maintainers; [ peterromfeldhk ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

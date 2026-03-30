@@ -1,24 +1,26 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, wrapQtAppsHook
-, pcre
-, poco
-, qtbase
-, qtsvg
-, qwt6_1
-, nlohmann_json
-, soapysdr-with-plugins
-, portaudio
-, alsa-lib
-, muparserx
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  wrapQtAppsHook,
+  pcre,
+  poco,
+  qtbase,
+  qtsvg,
+  qwt6_1,
+  nlohmann_json,
+  soapysdr-with-plugins,
+  portaudio,
+  alsa-lib,
+  muparserx,
+  python3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pothos";
   version = "0.7.1";
 
@@ -33,13 +35,53 @@ mkDerivation rec {
   patches = [
     # spuce's CMakeLists.txt uses QT5_USE_Modules, which does not seem to work on Nix
     ./spuce.patch
+    # Poco had some breaking API changes in 1.12
+    (fetchpatch {
+      name = "poco-1.12-compat.patch";
+      url = "https://github.com/pothosware/PothosCore/commit/092d1209b0fd0aa8a1733706c994fa95e66fd017.patch";
+      hash = "sha256-bZXG8kD4+1LgDV8viZrJ/DMjg8UvW7b5keJQDXurfkA=";
+    })
+    # various source files are missing imports of <cstring>
+    # https://github.com/pothosware/PothosBlocks/issues/80
+    ./cstring.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config doxygen wrapQtAppsHook ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.9)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace spuce/{,spuce}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace spuce/qt_{fir,iir,other,window}/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace {audio,blocks,comms,flow,plotters,python,soapy,widgets}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.9)" "cmake_minimum_required(VERSION 3.10)"
+
+  '';
+
+  # poco 1.14 requires c++17
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    doxygen
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    pcre poco qtbase qtsvg qwt6_1 nlohmann_json
-    soapysdr-with-plugins portaudio alsa-lib muparserx python3
+    pcre
+    poco
+    qtbase
+    qtsvg
+    qwt6_1
+    nlohmann_json
+    soapysdr-with-plugins
+    portaudio
+    alsa-lib
+    muparserx
+    python3
   ];
 
   postInstall = ''
@@ -64,11 +106,11 @@ mkDerivation rec {
     wrapQtApp $out/bin/spuce_window_plot
   '';
 
-  meta = with lib; {
-    description = "The Pothos data-flow framework";
+  meta = {
+    description = "Pothos data-flow framework";
     homepage = "https://github.com/pothosware/PothosCore/wiki";
-    license = licenses.boost;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.boost;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

@@ -1,49 +1,54 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fastnumbers
-, fetchFromGitHub
-, hypothesis
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  numpy,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "fastnumbers";
-  version = "3.2.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "5.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SethMMorton";
-    repo = pname;
-    rev = version;
-    sha256 = "1v9l5p90y6ygrs0qmgdzxfv2vp1mpfp65snkl9jp6kcy44g3alhp";
+    repo = "fastnumbers";
+    tag = version;
+    hash = "sha256-7UjUkZPGsrtdQhgisI5IA37WvgGGiEXsey9NhATy064=";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
+
+  dependencies = [ typing-extensions ];
 
   # Tests fail due to numeric precision differences on ARM
   # See https://github.com/SethMMorton/fastnumbers/issues/28
   doCheck = !stdenv.hostPlatform.isAarch;
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
+    numpy
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fastnumbers"
-  ];
+  pytestFlags = [ "--hypothesis-profile=standard" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "fastnumbers" ];
+
+  meta = {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SethMMorton/fastnumbers/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

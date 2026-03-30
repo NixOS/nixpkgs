@@ -1,26 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools, paramiko, scp, tenacity
-, textfsm, ntc-templates, pyserial, pytestCheckHook, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ntc-templates,
+  paramiko,
+  poetry-core,
+  pyserial,
+  pyyaml,
+  rich,
+  ruamel-yaml,
+  scp,
+  textfsm,
+}:
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.1.2";
+  version = "4.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9e3iooZw09/TRwBhRoZl+A+bSQbtIOaw+02eHJvmevw=";
+    hash = "sha256-lwG7LBoV6y6AdMsuKMoAfGm5+lKWG4O5jHV+rWuA3u8=";
   };
 
-  buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ paramiko scp tenacity pyyaml textfsm ntc-templates pyserial ];
+  build-system = [ poetry-core ];
 
-  # tests require closed-source pyats and genie packages
+  dependencies = [
+    ntc-templates
+    paramiko
+    pyserial
+    pyyaml
+    rich
+    ruamel-yaml
+    scp
+    textfsm
+  ];
+
+  # Tests require closed-source pyats and genie packages
   doCheck = false;
 
-  meta = with lib; {
-    description =
-      "Multi-vendor library to simplify Paramiko SSH connections to network devices";
+  pythonImportsCheck = [ "netmiko" ];
+
+  meta = {
+    description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
     homepage = "https://github.com/ktbyers/netmiko/";
-    license = licenses.mit;
-    maintainers = [ maintainers.astro ];
+    changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.astro ];
   };
 }

@@ -1,25 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "managesieve";
-  version = "0.7.1";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44930a3b48332d23b35a5305ae7ba47904d4485ed1b7a22208b7d5ad9d60427a";
+    hash = "sha256-LVwe0Pn6YPIAuoIaxXMfvCbOfS4NAjozkrdMNZDq+uU=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "managesieve" ];
+
+  meta = {
     description = "ManageSieve client library for remotely managing Sieve scripts";
     homepage = "https://managesieve.readthedocs.io/";
     # PSFL for the python module, GPLv3 only for sieveshell
-    license = with licenses; [ gpl3Only psfl ];
-    maintainers = with maintainers; [ dadada ];
+    license = with lib.licenses; [
+      gpl3Only
+      psfl
+    ];
+    maintainers = with lib.maintainers; [ dadada ];
+    mainProgram = "sieveshell";
   };
 }

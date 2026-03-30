@@ -1,64 +1,66 @@
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
 
   cfg = config.services.freefall;
 
-in {
+in
+{
 
   options.services.freefall = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to protect HP/Dell laptop hard drives (not SSDs) in free fall.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freefall;
-      defaultText = literalExpression "pkgs.freefall";
-      description = lib.mdDoc ''
-        freefall derivation to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "freefall" { };
 
-    devices = mkOption {
-      type = types.listOf types.str;
+    devices = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "/dev/sda" ];
-      description = lib.mdDoc ''
+      description = ''
         Device paths to all internal spinning hard drives.
       '';
     };
 
   };
 
-  config = let
+  config =
+    let
 
-    mkService = dev:
-      assert dev != "";
-      let dev' = utils.escapeSystemdPath dev; in
-      nameValuePair "freefall-${dev'}" {
-        description = "Free-fall protection for ${dev}";
-        after = [ "${dev'}.device" ];
-        wantedBy = [ "${dev'}.device" ];
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/freefall ${dev}";
-          Restart = "on-failure";
-          Type = "forking";
+      mkService =
+        dev:
+        assert dev != "";
+        let
+          dev' = utils.escapeSystemdPath dev;
+        in
+        lib.nameValuePair "freefall-${dev'}" {
+          description = "Free-fall protection for ${dev}";
+          after = [ "${dev'}.device" ];
+          wantedBy = [ "${dev'}.device" ];
+          serviceConfig = {
+            ExecStart = "${cfg.package}/bin/freefall ${dev}";
+            Restart = "on-failure";
+            Type = "forking";
+          };
         };
-      };
 
-  in mkIf cfg.enable {
+    in
+    lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package ];
 
-    systemd.services = builtins.listToAttrs (map mkService cfg.devices);
+      systemd.services = builtins.listToAttrs (map mkService cfg.devices);
 
-  };
+    };
 
 }

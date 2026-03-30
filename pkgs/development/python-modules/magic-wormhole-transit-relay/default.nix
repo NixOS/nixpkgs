@@ -1,32 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autobahn
-, mock
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  autobahn,
+  twisted,
+  python,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-transit-relay";
-  version = "0.2.1";
+  version = "0.5.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ppsx2s1ysikns1h053x67z2zmficbn3y3kf52bzzslhd2s02j6b";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole-transit-relay";
+    tag = finalAttrs.version;
+    hash = "sha256-UhV0M8Nl9Y850PQcJoDyIvIPRyBS8gyF2Ub9qF3aq0U=";
   };
 
-  propagatedBuildInputs = [ autobahn twisted ];
-
-  checkInputs = [ mock twisted ];
-
-  checkPhase = ''
-    trial -j$NIX_BUILD_CORES wormhole_transit_relay
+  postPatch = ''
+    # Passing the environment to twistd is necessary to preserve Python's site path.
+    substituteInPlace src/wormhole_transit_relay/test/test_backpressure.py --replace-fail \
+      'reactor.spawnProcess(proto, exe, args)' \
+      'reactor.spawnProcess(proto, exe, args, None)'
   '';
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  dependencies = [
+    autobahn
+    twisted
+  ];
+
+  pythonImportsCheck = [ "wormhole_transit_relay" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    twisted
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  postCheck = ''
+    # Avoid collision with twisted's plugin cache (#164775).
+    rm "$out/${python.sitePackages}/twisted/plugins/dropin.cache"
+  '';
+
+  meta = {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${finalAttrs.src.rev}/NEWS.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})

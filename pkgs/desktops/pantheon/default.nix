@@ -1,236 +1,241 @@
-{ config, pkgs, lib, gnome }:
+{
+  config,
+  pkgs,
+  lib,
+  gnome,
+}:
 
+lib.makeScope pkgs.newScope (
+  self: with self; {
 
-lib.makeScope pkgs.newScope (self: with self; {
+    switchboardPlugs = [
+      switchboard-plug-about
+      switchboard-plug-applications
+      switchboard-plug-bluetooth
+      switchboard-plug-datetime
+      switchboard-plug-display
+      switchboard-plug-keyboard
+      switchboard-plug-mouse-touchpad
+      switchboard-plug-network
+      switchboard-plug-notifications
+      switchboard-plug-onlineaccounts
+      switchboard-plug-pantheon-shell
+      switchboard-plug-parental-controls
+      switchboard-plug-power
+      switchboard-plug-printers
+      switchboard-plug-security-privacy
+      switchboard-plug-sharing
+      switchboard-plug-sound
+      switchboard-plug-wacom
+    ];
 
-  switchboardPlugs = [
-    switchboard-plug-a11y
-    switchboard-plug-about
-    switchboard-plug-applications
-    switchboard-plug-bluetooth
-    switchboard-plug-datetime
-    switchboard-plug-display
-    switchboard-plug-keyboard
-    switchboard-plug-mouse-touchpad
-    switchboard-plug-network
-    switchboard-plug-notifications
-    switchboard-plug-onlineaccounts
-    switchboard-plug-pantheon-shell
-    switchboard-plug-power
-    switchboard-plug-printers
-    switchboard-plug-security-privacy
-    switchboard-plug-sharing
-    switchboard-plug-sound
-    switchboard-plug-wacom
-  ];
+    wingpanelIndicators = [
+      elementary-monitor
+      wingpanel-applications-menu
+      wingpanel-indicator-bluetooth
+      wingpanel-indicator-datetime
+      wingpanel-indicator-keyboard
+      wingpanel-indicator-network
+      wingpanel-indicator-nightlight
+      wingpanel-indicator-notifications
+      wingpanel-indicator-power
+      wingpanel-indicator-sound
+      wingpanel-quick-settings
+    ];
 
-  wingpanelIndicators = [
-    wingpanel-applications-menu
-    wingpanel-indicator-a11y
-    wingpanel-indicator-bluetooth
-    wingpanel-indicator-datetime
-    wingpanel-indicator-keyboard
-    wingpanel-indicator-network
-    wingpanel-indicator-nightlight
-    wingpanel-indicator-notifications
-    wingpanel-indicator-power
-    wingpanel-indicator-session
-    wingpanel-indicator-sound
-  ];
+    teams = [ lib.teams.pantheon ];
 
-  maintainers = lib.teams.pantheon.members;
+    mutter = pkgs.mutter48;
 
-  mutter = pkgs.gnome.mutter338;
+    # Using 48 to match Mutter used in Pantheon
+    gnome-settings-daemon = pkgs.gnome-settings-daemon48;
 
-  # Using 3.38 to match Mutter used in Pantheon
-  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon338;
+    elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
-  elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
+    touchegg = pkgs.touchegg.override { withPantheon = true; };
 
-  touchegg = pkgs.touchegg.override { withPantheon = true; };
+    #### APPS
 
-  #### APPS
+    appcenter = callPackage ./apps/appcenter { };
 
-  appcenter = callPackage ./apps/appcenter { };
+    elementary-calculator = callPackage ./apps/elementary-calculator { };
 
-  elementary-calculator = callPackage ./apps/elementary-calculator { };
+    elementary-calendar = callPackage ./apps/elementary-calendar { };
 
-  elementary-calendar = callPackage ./apps/elementary-calendar { };
+    elementary-camera = callPackage ./apps/elementary-camera { };
 
-  elementary-camera = callPackage ./apps/elementary-camera { };
+    elementary-code = callPackage ./apps/elementary-code { };
 
-  elementary-code = callPackage ./apps/elementary-code { };
+    elementary-dock = callPackage ./apps/elementary-dock { };
 
-  elementary-dock = callPackage ./apps/elementary-dock { };
+    elementary-files = callPackage ./apps/elementary-files { };
 
-  elementary-files = callPackage ./apps/elementary-files { };
+    elementary-feedback = callPackage ./apps/elementary-feedback { };
 
-  elementary-feedback = callPackage ./apps/elementary-feedback { };
+    elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
 
-  elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
+    elementary-mail = callPackage ./apps/elementary-mail { };
 
-  elementary-mail = callPackage ./apps/elementary-mail { };
+    elementary-maps = callPackage ./apps/elementary-maps { };
 
-  elementary-music = callPackage ./apps/elementary-music { };
+    elementary-monitor = callPackage ./apps/elementary-monitor { };
 
-  elementary-photos = callPackage ./apps/elementary-photos { };
+    elementary-music = callPackage ./apps/elementary-music { };
 
-  elementary-screenshot = callPackage ./apps/elementary-screenshot { };
+    elementary-photos = callPackage ./apps/elementary-photos { };
 
-  elementary-tasks = callPackage ./apps/elementary-tasks { };
+    elementary-screenshot = callPackage ./apps/elementary-screenshot { };
 
-  elementary-terminal = callPackage ./apps/elementary-terminal { };
+    elementary-tasks = callPackage ./apps/elementary-tasks { };
 
-  elementary-videos = callPackage ./apps/elementary-videos { };
+    elementary-terminal = callPackage ./apps/elementary-terminal { };
 
-  epiphany = pkgs.epiphany.override { withPantheon = true; };
+    elementary-videos = callPackage ./apps/elementary-videos { };
 
-  sideload = callPackage ./apps/sideload { };
+    epiphany = pkgs.epiphany.override { withPantheon = true; };
 
-  #### DESKTOP
+    sideload = callPackage ./apps/sideload { };
 
-  elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
+    #### DESKTOP
 
-  elementary-greeter = callPackage ./desktop/elementary-greeter { };
+    elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
 
-  elementary-onboarding = callPackage ./desktop/elementary-onboarding { };
+    elementary-greeter = callPackage ./desktop/elementary-greeter { };
 
-  elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
+    elementary-onboarding = callPackage ./desktop/elementary-onboarding { };
 
-  elementary-session-settings = callPackage ./desktop/elementary-session-settings {
-    inherit (gnome) gnome-session gnome-keyring;
-  };
+    elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
-  elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
+    elementary-session-settings = callPackage ./desktop/elementary-session-settings { };
 
-  file-roller-contract = callPackage ./desktop/file-roller-contract {
-    inherit (gnome) file-roller;
-  };
+    elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 
-  gala = callPackage ./desktop/gala { };
+    file-roller-contract = callPackage ./desktop/file-roller-contract { };
 
-  gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
-    inherit (gnome) gnome-bluetooth_1_0;
-  };
+    gala = callPackage ./desktop/gala { };
 
-  wingpanel = callPackage ./desktop/wingpanel { };
+    wingpanel = callPackage ./desktop/wingpanel { };
 
-  wingpanel-with-indicators = callPackage ./desktop/wingpanel/wrapper.nix {
-    indicators = null;
-  };
+    wingpanel-with-indicators = callPackage ./desktop/wingpanel/wrapper.nix {
+      indicators = null;
+    };
 
-  #### LIBRARIES
+    #### LIBRARIES
 
-  granite = callPackage ./granite { };
+    granite = callPackage ./libraries/granite { };
 
-  granite7 = callPackage ./granite/7 { };
+    granite7 = callPackage ./libraries/granite/7 { };
 
-  #### SERVICES
+    live-chart = callPackage ./libraries/live-chart { };
 
-  contractor = callPackage ./services/contractor { };
+    pantheon-wayland = callPackage ./libraries/pantheon-wayland { };
 
-  elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
+    #### SERVICES
 
-  elementary-notifications = callPackage ./services/elementary-notifications { };
+    contractor = callPackage ./services/contractor { };
 
-  elementary-settings-daemon = callPackage ./services/elementary-settings-daemon { };
+    elementary-bluetooth-daemon = callPackage ./services/elementary-bluetooth-daemon { };
 
-  pantheon-agent-geoclue2 = callPackage ./services/pantheon-agent-geoclue2 { };
+    elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
 
-  pantheon-agent-polkit = callPackage ./services/pantheon-agent-polkit { };
+    elementary-notifications = callPackage ./services/elementary-notifications { };
 
-  xdg-desktop-portal-pantheon = callPackage ./services/xdg-desktop-portal-pantheon { };
+    elementary-settings-daemon = callPackage ./services/elementary-settings-daemon { };
 
-  #### WINGPANEL INDICATORS
+    pantheon-agent-geoclue2 = callPackage ./services/pantheon-agent-geoclue2 { };
 
-  wingpanel-applications-menu = callPackage ./desktop/wingpanel-indicators/applications-menu { };
+    pantheon-agent-polkit = callPackage ./services/pantheon-agent-polkit { };
 
-  wingpanel-indicator-a11y = callPackage ./desktop/wingpanel-indicators/a11y { };
+    xdg-desktop-portal-pantheon = callPackage ./services/xdg-desktop-portal-pantheon { };
 
-  wingpanel-indicator-bluetooth = callPackage ./desktop/wingpanel-indicators/bluetooth { };
+    #### WINGPANEL INDICATORS
 
-  wingpanel-indicator-datetime = callPackage ./desktop/wingpanel-indicators/datetime { };
+    wingpanel-applications-menu = callPackage ./desktop/wingpanel-indicators/applications-menu { };
 
-  wingpanel-indicator-keyboard = callPackage ./desktop/wingpanel-indicators/keyboard { };
+    wingpanel-indicator-a11y = callPackage ./desktop/wingpanel-indicators/a11y { };
 
-  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network { };
+    wingpanel-indicator-bluetooth = callPackage ./desktop/wingpanel-indicators/bluetooth { };
 
-  wingpanel-indicator-nightlight = callPackage ./desktop/wingpanel-indicators/nightlight { };
+    wingpanel-indicator-datetime = callPackage ./desktop/wingpanel-indicators/datetime { };
 
-  wingpanel-indicator-notifications = callPackage ./desktop/wingpanel-indicators/notifications { };
+    wingpanel-indicator-keyboard = callPackage ./desktop/wingpanel-indicators/keyboard { };
 
-  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power {
-    inherit (gnome) gnome-power-manager;
-  };
+    wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network { };
 
-  wingpanel-indicator-session = callPackage ./desktop/wingpanel-indicators/session { };
+    wingpanel-indicator-nightlight = callPackage ./desktop/wingpanel-indicators/nightlight { };
 
-  wingpanel-indicator-sound = callPackage ./desktop/wingpanel-indicators/sound { };
+    wingpanel-indicator-notifications = callPackage ./desktop/wingpanel-indicators/notifications { };
 
-  #### SWITCHBOARD
+    wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power { };
 
-  switchboard = callPackage ./apps/switchboard { };
+    wingpanel-indicator-sound = callPackage ./desktop/wingpanel-indicators/sound { };
 
-  switchboard-with-plugs = callPackage ./apps/switchboard/wrapper.nix {
-    plugs = null;
-  };
+    wingpanel-quick-settings = callPackage ./desktop/wingpanel-indicators/quick-settings { };
 
-  switchboard-plug-a11y = callPackage ./apps/switchboard-plugs/a11y { };
+    #### SWITCHBOARD
 
-  switchboard-plug-about = callPackage ./apps/switchboard-plugs/about { };
+    switchboard = callPackage ./apps/switchboard { };
 
-  switchboard-plug-applications = callPackage ./apps/switchboard-plugs/applications { };
+    switchboard-with-plugs = callPackage ./apps/switchboard/wrapper.nix {
+      plugs = null;
+    };
 
-  switchboard-plug-bluetooth = callPackage ./apps/switchboard-plugs/bluetooth { };
+    switchboard-plug-about = callPackage ./apps/switchboard-plugs/about { };
 
-  switchboard-plug-datetime = callPackage ./apps/switchboard-plugs/datetime { };
+    switchboard-plug-applications = callPackage ./apps/switchboard-plugs/applications { };
 
-  switchboard-plug-display = callPackage ./apps/switchboard-plugs/display { };
+    switchboard-plug-bluetooth = callPackage ./apps/switchboard-plugs/bluetooth { };
 
-  switchboard-plug-keyboard = callPackage ./apps/switchboard-plugs/keyboard { };
+    switchboard-plug-datetime = callPackage ./apps/switchboard-plugs/datetime { };
 
-  switchboard-plug-mouse-touchpad = callPackage ./apps/switchboard-plugs/mouse-touchpad { };
+    switchboard-plug-display = callPackage ./apps/switchboard-plugs/display { };
 
-  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network { };
+    switchboard-plug-keyboard = callPackage ./apps/switchboard-plugs/keyboard { };
 
-  switchboard-plug-notifications = callPackage ./apps/switchboard-plugs/notifications { };
+    switchboard-plug-mouse-touchpad = callPackage ./apps/switchboard-plugs/mouse-touchpad { };
 
-  switchboard-plug-onlineaccounts = callPackage ./apps/switchboard-plugs/onlineaccounts { };
+    switchboard-plug-network = callPackage ./apps/switchboard-plugs/network { };
 
-  switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell { };
+    switchboard-plug-notifications = callPackage ./apps/switchboard-plugs/notifications { };
 
-  switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };
+    switchboard-plug-onlineaccounts = callPackage ./apps/switchboard-plugs/onlineaccounts { };
 
-  switchboard-plug-printers = callPackage ./apps/switchboard-plugs/printers { };
+    switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell { };
 
-  switchboard-plug-security-privacy = callPackage ./apps/switchboard-plugs/security-privacy { };
+    switchboard-plug-parental-controls = callPackage ./apps/switchboard-plugs/parental-controls { };
 
-  switchboard-plug-sharing = callPackage ./apps/switchboard-plugs/sharing { };
+    switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };
 
-  switchboard-plug-sound = callPackage ./apps/switchboard-plugs/sound { };
+    switchboard-plug-printers = callPackage ./apps/switchboard-plugs/printers { };
 
-  switchboard-plug-wacom = callPackage ./apps/switchboard-plugs/wacom { };
+    switchboard-plug-security-privacy = callPackage ./apps/switchboard-plugs/security-privacy { };
 
-  ### ARTWORK
+    switchboard-plug-sharing = callPackage ./apps/switchboard-plugs/sharing { };
 
-  elementary-gtk-theme = callPackage ./artwork/elementary-gtk-theme { };
+    switchboard-plug-sound = callPackage ./apps/switchboard-plugs/sound { };
 
-  elementary-icon-theme = callPackage ./artwork/elementary-icon-theme { };
+    switchboard-plug-wacom = callPackage ./apps/switchboard-plugs/wacom { };
 
-  elementary-redacted-script = callPackage ./artwork/elementary-redacted-script { };
+    ### ARTWORK
 
-  elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
+    elementary-gtk-theme = callPackage ./artwork/elementary-gtk-theme { };
 
-  elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
+    elementary-icon-theme = callPackage ./artwork/elementary-icon-theme { };
 
-  ### THIRD-PARTY
+    elementary-redacted-script = callPackage ./artwork/elementary-redacted-script { };
 
-  # Put packages that ONLY works with Pantheon in pkgs/desktops/pantheon/third-party,
-  # specifically third party switchboard plugins and wingpanel indicators.
-  # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
-  # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+    elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
 
-}) // lib.optionalAttrs config.allowAliases {
+    elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
+
+    ### THIRD-PARTY
+
+    # As suggested in https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+    # please avoid putting third-party packages in the `pantheon` scope.
+
+  }
+)
+// lib.optionalAttrs config.allowAliases {
 
   ### ALIASES
 
@@ -242,12 +247,18 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
 
-  evince = pkgs.gnome.evince; # added 2022-03-18
+  evince = pkgs.evince; # added 2022-03-18
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
-  file-roller = pkgs.gnome.file-roller; # added 2022-03-12
+  file-roller = pkgs.file-roller; # added 2022-03-12
+
+  gnome-bluetooth-contract = throw "pantheon.gnome-bluetooth-contract has been removed, abandoned by upstream."; # added 2022-06-30
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
+
+  switchboard-plug-a11y = throw "pantheon.switchboard-plug-a11y has been removed, abandoned by upstream."; # added 2024-08-23
+
+  wingpanel-indicator-session = throw "pantheon.wingpanel-indicator-session has been removed, abandoned by upstream."; # added 2024-08-23
 
 }

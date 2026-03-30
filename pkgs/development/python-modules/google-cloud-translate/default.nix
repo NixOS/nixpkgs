@@ -1,41 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.8.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.24.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cptSFyAByZRZ7Dr93skVPeCvUoh0/PMACp3dmOEQfuc=";
+    pname = "google_cloud_translate";
+    inherit version;
+    hash = "sha256-LzuLkPjNr2OkNdGOY7IcNlDeMfxPhYYj8tDWm+DNPpo=";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    google-cloud-core
-    libcst
-    proto-plus
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  checkInputs = [
+  dependencies = [
+    google-api-core
+    google-cloud-core
+    grpc-google-iam-v1
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -50,10 +59,16 @@ buildPythonPackage rec {
     "google.cloud.translate_v3beta1"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests require PROJECT_ID
+    "test_list_glossaries"
+  ];
+
+  meta = {
     description = "Google Cloud Translation API client library";
-    homepage = "https://github.com/googleapis/python-translate";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-translate";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-translate-v${version}/packages/google-cloud-translate/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,44 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, pythonOlder
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  msrest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservicesbackup";
-  version = "5.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "10.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-BciA3sFyja5xo9yS3WVglC73y8gTfw8UejdEzbD4HYE=";
+    pname = "azure_mgmt_recoveryservicesbackup";
+    inherit version;
+    hash = "sha256-DKw8a4cjBjWbvEdQHRhLcAhGzlSPk/nA9u99HRC3I+k=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
+    isodate
+    msrest
   ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.mgmt.recoveryservicesbackup"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.recoveryservicesbackup" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Recovery Services Backup Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-recoveryservicesbackup_${version}/sdk/recoveryservices/azure-mgmt-recoveryservicesbackup/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

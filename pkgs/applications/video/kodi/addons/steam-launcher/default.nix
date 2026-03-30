@@ -1,4 +1,13 @@
-{ lib, buildKodiAddon, fetchFromGitHub, steam }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  steam,
+  which,
+  xdotool,
+  dos2unix,
+  wmctrl,
+}:
 buildKodiAddon {
   pname = "steam-launcher";
   namespace = "script.steam.launcher";
@@ -7,13 +16,25 @@ buildKodiAddon {
   src = fetchFromGitHub rec {
     owner = "teeedubb";
     repo = owner + "-xbmc-repo";
-    rev = "8260bf9b464846a1f1965da495d2f2b7ceb81d55";
-    sha256 = "1fj3ry5s44nf1jzxk4bmnpa4b9p23nrpmpj2a4i6xf94h7jl7p5k";
+    rev = "d5cea4b590b0ff08ac169b757946b7cb5145b983";
+    sha256 = "sha256-arBMMOoHQuHRcJ7eXD1jvA45Svei7c0srcBZkdAzqY0=";
   };
 
-  propagatedBuildInputs = [ steam ];
+  propagatedBuildInputs = [
+    steam
+    which
+    xdotool
+  ];
 
-  meta = with lib; {
+  postInstall = ''
+    substituteInPlace $out/share/kodi/addons/script.steam.launcher/resources/main.py \
+      --replace "\"which\"" "\"${which}/bin/which\"" \
+      --replace "\"xdotool\"" "\"${xdotool}/bin/xdotool\"" \
+      --replace "\"wmctrl\"" "\"${wmctrl}/bin/wmctrl\""
+    ${dos2unix}/bin/dos2unix $out/share/kodi/addons/script.steam.launcher/resources/scripts/steam-launcher.sh
+  '';
+
+  meta = {
     homepage = "https://forum.kodi.tv/showthread.php?tid=157499";
     description = "Launch Steam in Big Picture Mode from Kodi";
     longDescription = ''
@@ -23,7 +44,7 @@ buildKodiAddon {
       restart/maximise. Running pre/post Steam scripts can be
       configured via the addon.
     '';
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

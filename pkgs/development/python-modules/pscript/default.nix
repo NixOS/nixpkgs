@@ -1,23 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, nodejs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  nodejs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pscript";
-  version = "0.7.6";
+  version = "0.8.0";
+  pyproject = true;
 
-  # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "flexxui";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "169px5n4jjnpdn9y86f28qwd95bwf1q1rz0a1h3lb5nn5c6ym8c4";
+    repo = "pscript";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pqjig3dFJ4zfpor6TT6fiBMS7lAtJE/bAYbzl46W/YY=";
   };
 
-  checkInputs = [
+  postPatch = ''
+    # https://github.com/flexxui/pscript/pull/77
+    substituteInPlace pscript/commonast.py \
+      --replace-fail "ast.Ellipsis" "ast.Constant"
+  '';
+
+  build-system = [ flit-core ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     nodejs
   ];
@@ -27,13 +37,18 @@ buildPythonPackage rec {
     rm -rf pscript_legacy
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pscript" ];
+
+  disabledTests = [
+    # https://github.com/flexxui/pscript/issues/69
+    "test_async_and_await"
+  ];
+
+  meta = {
     description = "Python to JavaScript compiler";
-    license = licenses.bsd2;
     homepage = "https://pscript.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    changelog = "https://github.com/flexxui/pscript/blob/${finalAttrs.src.tag}/docs/releasenotes.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
-
-
-
+})

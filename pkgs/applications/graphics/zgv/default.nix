@@ -1,15 +1,32 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, SDL, SDL_image, libjpeg, libpng, libtiff }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  SDL,
+  SDL_image,
+  libjpeg,
+  libpng,
+  libtiff,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zgv";
   version = "5.9";
   src = fetchurl {
-    url = "https://www.svgalib.org/rus/zgv/${pname}-${version}.tar.gz";
+    url = "https://www.svgalib.org/rus/zgv/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1fk4i9x0cpnpn3llam0zy2pkmhlr2hy3iaxhxg07v9sizd4dircj";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL SDL_image libjpeg libpng libtiff ];
+  buildInputs = [
+    SDL
+    SDL_image
+    libjpeg
+    libpng
+    libtiff
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -18,9 +35,10 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    ./add-include.patch
     (fetchpatch {
-    url = "https://foss.aueb.gr/mirrors/linux/gentoo/media-gfx/zgv/files/zgv-5.9-libpng15.patch";
-    sha256 = "1blw9n04c28bnwcmcn64si4f5zpg42s8yn345js88fyzi9zm19xw";
+      url = "https://foss.aueb.gr/mirrors/linux/gentoo/media-gfx/zgv/files/zgv-5.9-libpng15.patch";
+      sha256 = "1blw9n04c28bnwcmcn64si4f5zpg42s8yn345js88fyzi9zm19xw";
     })
     ./switch.patch
   ];
@@ -32,11 +50,12 @@ stdenv.mkDerivation rec {
     cp src/zgv $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.svgalib.org/rus/zgv/";
     description = "Picture viewer with a thumbnail-based selector";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    mainProgram = "zgv";
   };
-}
+})

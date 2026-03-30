@@ -1,8 +1,13 @@
-{ fetchFromGitHub, lib, i3, pcre }:
+{
+  fetchFromGitHub,
+  lib,
+  i3,
+  pcre,
+}:
 
-i3.overrideAttrs (oldAttrs: rec {
+i3.overrideAttrs (oldAttrs: {
   pname = "i3-rounded";
-  version = "unstable-2021-10-03";
+  version = "4.21.1";
 
   src = fetchFromGitHub {
     owner = "LinoBigatti";
@@ -13,11 +18,14 @@ i3.overrideAttrs (oldAttrs: rec {
 
   buildInputs = oldAttrs.buildInputs ++ [ pcre ];
 
-  meta = with lib; {
-    description = "A fork of i3-gaps that adds rounding to window corners";
+  # Some tests are failing.
+  doCheck = false;
+
+  meta = {
+    description = "Fork of i3-gaps that adds rounding to window corners";
     homepage = "https://github.com/LinoBigatti/i3-rounded";
-    maintainers = with maintainers; [ marsupialgutz ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ marsupialgutz ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 })

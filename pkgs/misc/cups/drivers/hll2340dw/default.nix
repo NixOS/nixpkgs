@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file
-, a2ps, coreutils, perl, gnugrep, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  dpkg,
+  gnused,
+  makeWrapper,
+  ghostscript,
+  file,
+  a2ps,
+  coreutils,
+  perl,
+  gnugrep,
+  which,
 }:
 
 let
@@ -20,7 +33,12 @@ stdenv.mkDerivation {
   inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups ghostscript dpkg a2ps ];
+  buildInputs = [
+    cups
+    ghostscript
+    dpkg
+    a2ps
+  ];
 
   dontUnpack = true;
 
@@ -45,9 +63,14 @@ stdenv.mkDerivation {
       $out/opt/brother/Printers/HLL2340D/cupswrapper/paperconfigml1 \
     ; do
       wrapProgram $f \
-        --prefix PATH : ${lib.makeBinPath [
-          coreutils ghostscript gnugrep gnused
-        ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            ghostscript
+            gnugrep
+            gnused
+          ]
+        }
     done
 
     mkdir -p $out/lib/cups/filter/
@@ -57,16 +80,26 @@ stdenv.mkDerivation {
     ln -s $out/opt/brother/Printers/HLL2340D/cupswrapper/brother-HLL2340D-cups-en.ppd $out/share/cups/model/
 
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
-      --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          ghostscript
+          a2ps
+          file
+          gnused
+          gnugrep
+          coreutils
+          which
+        ]
+      }
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.brother.com/";
     description = "Brother hl-l2340dw printer driver";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=es&prod=hll2340dw_us_eu_as&os=128&flang=English";
-    maintainers = [ maintainers.qknight ];
+    maintainers = [ lib.maintainers.qknight ];
   };
 }

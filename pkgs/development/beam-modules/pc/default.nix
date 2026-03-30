@@ -1,12 +1,21 @@
-{ lib, buildHex }:
+{
+  lib,
+  fetchHex,
+  buildRebar3,
+}:
 
-buildHex {
+buildRebar3 rec {
   name = "pc";
-  version = "1.12.0";
-  sha256 = "1gdvixy4j560qjdiv5qjgnl5wl3rrn231dv1m4vdq4b9l4g4p27x";
+  version = "1.15.0";
+
+  src = fetchHex {
+    pkg = name;
+    inherit version;
+    sha256 = "sha256-TA+tT2Q3yuNT1RfaIY/ng0e4/6RLmBeIdJTKquVFlbM=";
+  };
 
   meta = {
-    description = "a rebar3 port compiler for native code";
+    description = "Rebar3 port compiler for native code";
     license = lib.licenses.mit;
     homepage = "https://github.com/blt/port_compiler";
   };

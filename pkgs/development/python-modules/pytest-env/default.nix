@@ -1,20 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pytest,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-env";
-  version = "0.6.2";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hl0ln0cicdid4qjk7mv90lw9xkb0v71dlj7q7rn89vzxxm9b53y";
+    pname = "pytest_env";
+    inherit version;
+    hash = "sha256-R14uvoYmzuAfSR8wSnSxITd0I5fWx4TqS8JY8GkjK4A=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
-  meta = with lib; {
+  buildInputs = [ pytest ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Pytest plugin used to set environment variables";
     homepage = "https://github.com/MobileDynasty/pytest-env";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

@@ -1,68 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pythonAtLeast
-, poetry-core
-
-# propagates
-, pylev
-, pastel
-
-# python36+
-, crashtest
-
-# python2
-, typing
-, enum34
-
-# tests
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  crashtest,
+  fetchFromGitHub,
+  pastel,
+  poetry-core,
+  pylev,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "clikit";
   version = "0.6.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdispater";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "clikit";
+    tag = version;
     hash = "sha256-xAsUNhVQBjtSFHyjjnicAKRC3+Tdn3AdGDUYhmOOIdA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      'crashtest = { version = "^0.3.0", python = "^3.6" }' \
-      'crashtest = { version = "*", python = "^3.6" }'
-  '';
+  pythonRelaxDeps = [ "crashtest" ];
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    crashtest
+    pastel
+    pylev
   ];
 
-  propagatedBuildInputs = [
-    pylev
-    pastel
-  ]
-  ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
-  ++ lib.optionals isPy27 [ typing enum34 ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "clikit"
-  ];
+  pythonImportsCheck = [ "clikit" ];
 
-  meta = with lib; {
+  meta = {
+    description = "Group of utilities to build beautiful and testable command line interfaces";
     homepage = "https://github.com/sdispater/clikit";
-    description = "A group of utilities to build beautiful and testable command line interfaces";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    changelog = "https://github.com/sdispater/clikit/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

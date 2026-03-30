@@ -1,32 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  py,
+  pytest-benchmark,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sqlitedict";
-  version = "2.0.0";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "sqlitedict";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-8dmGn5h3NigCdDtnDYjpjntRpyjk7ivRp1B8x8nUgpE=";
+    tag = "v${version}";
+    hash = "sha256-GfvvkQ6a75UBPn70IFOvjvL1MedSc4siiIjA3IsQnic=";
   };
+
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [
+    py
+    pytest-benchmark
+    pytestCheckHook
+  ];
 
   preCheck = ''
     mkdir tests/db
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "sqlitedict" ];
 
-  meta = with lib; {
+  pytestFlags = [ "--benchmark-disable" ];
+
+  meta = {
     description = "Persistent, thread-safe dict";
     homepage = "https://github.com/RaRe-Technologies/sqlitedict";
-    license = licenses.asl20;
-    maintainers = [ maintainers.arnoldfarkas ];
+    changelog = "https://github.com/piskvorky/sqlitedict/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arnoldfarkas ];
   };
 }

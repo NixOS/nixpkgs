@@ -1,24 +1,27 @@
-{ lib, fetchFromGitLab, buildDunePackage }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "fix";
-  version = "20220121";
+  version = "20250919";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "fix";
-    rev = "${version}";
-    sha256 = "sha256-suWkZDLnXEO/4QCGmNuyLFOV0LJsFOMD13gxOcgu6JQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-CVxOLlSKKX1kb1bi6IbSo7SH5GsVynI4de0c5NUmq+s=";
   };
 
-  minimumOCamlVersion = "4.03";
-  useDune2 = true;
+  minimalOCamlVersion = "4.03";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.inria.fr/fpottier/fix/";
-    description = "A simple OCaml module for computing the least solution of a system of monotone equations";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ vbgl ];
+    description = "Simple OCaml module for computing the least solution of a system of monotone equations";
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

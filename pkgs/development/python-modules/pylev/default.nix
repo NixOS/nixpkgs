@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pylev";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "toastdriven";
@@ -21,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Levenshtein implementation";
     homepage = "https://github.com/toastdriven/pylev";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

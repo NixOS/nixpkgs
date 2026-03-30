@@ -1,53 +1,66 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, boehmgc
-, buildPackages
-, coverageAnalysis ? null
-, gawk
-, gmp
-, libffi
-, libtool
-, libunistring
-, makeWrapper
-, pkg-config
-, pkgsBuildBuild
-, readline
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  boehmgc,
+  buildPackages,
+  coverageAnalysis ? null,
+  gawk,
+  gmp,
+  libffi,
+  libtool,
+  libunistring,
+  libxcrypt,
+  makeWrapper,
+  pkg-config,
+  autoreconfHook,
+  pkgsBuildBuild,
+  readline,
+  writeScript,
 }:
 
 let
   # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null
-            then coverageAnalysis
-            else stdenv.mkDerivation;
+  builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
 in
 builder rec {
   pname = "guile";
-  version = "3.0.8";
+  version = "3.0.11";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2qcGClbygE6bdMjX5/6L7tErQ6qyeJo4WFGD/MF7ihM=";
+    sha256 = "sha256-gYx50jZlen+pb7NkE3zHtBs73uDWXGF0ygN2lVlXlGA=";
   };
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+  ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile;
+  ]
+  ++ lib.optional (
+    !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
+  ) pkgsBuildBuild.guile_3_0;
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
-  ];
+  ]
+  ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) autoreconfHook;
+
   buildInputs = [
     libffi
     libtool
     libunistring
     readline
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxcrypt
   ];
   propagatedBuildInputs = [
     boehmgc
@@ -59,33 +72,49 @@ builder rec {
     # flags, see below.
     libtool
     libunistring
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxcrypt
   ];
+
+  strictDeps = true;
 
   # According to
   # https://git.savannah.gnu.org/cgit/guix.git/tree/gnu/packages/guile.scm?h=a39207f7afd977e4e4299c6f0bb34bcb6d153818#n405
   # starting with Guile 3.0.8, parallel builds can be done
   # bit-reproducibly as long as we're not cross-compiling
-  enableParallelBuilding = stdenv.buildPlatform == stdenv.hostPlatform;
+  enableParallelBuilding = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
 
   patches = [
     ./eai_system.patch
-  ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
-  ++ lib.optional stdenv.isDarwin
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
-      sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
-    });
+  ]
+  # Fix cross-compilation, can be removed at next release (as well as the autoreconfHook)
+  # Include this only conditionally so we don't have to run the autoreconfHook for the native build.
+  ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) (fetchpatch {
+    url = "https://cgit.git.savannah.gnu.org/cgit/guile.git/patch/?id=c117f8edc471d3362043d88959d73c6a37e7e1e9";
+    hash = "sha256-GFwJiwuU8lT1fNueMOcvHh8yvA4HYHcmPml2fY/HSjw=";
+  })
+  ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
+  ++ lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
+    url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
+    sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
+  });
 
-  # Explicitly link against libgcc_s, to work around the infamous
-  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-
-  # don't have "libgcc_s.so.1" on clang
-  LDFLAGS = lib.optionalString
-    (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+  env = {
+    # Fix build with gcc15
+    NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+  }
+  // lib.optionalAttrs (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) {
+    # Explicitly link against libgcc_s, to work around the infamous
+    # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+    # don't have "libgcc_s.so.1" on clang
+    LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
-  ] ++ lib.optionals stdenv.isSunOS [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isSunOS [
     # Make sure the right <gmp.h> is found, and not the incompatible
     # /usr/include/mp.h from OpenSolaris.  See
     # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
@@ -98,12 +127,9 @@ builder rec {
     # See below.
     "--without-threads"
   ]
-  # Disable JIT on Apple Silicon, as it is not yet supported
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=44505";
-  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "--enable-jit=no"
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
-  ++ lib.optional (stdenv.isDarwin) "--disable-lto";
+  ++ lib.optional (stdenv.hostPlatform.isDarwin) "--disable-lto";
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -114,20 +140,32 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+            s|-lcrypt|-L${libxcrypt}/lib -lcrypt|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|includedir=$out|includedir=$dev|g
             "
-    '';
+  '';
 
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
   doInstallCheck = doCheck;
 
+  # guile-3 uses ELF files to store bytecode. strip does not
+  # always handle them correctly and destroys the image:
+  # darwin: In procedure bytevector-u8-ref: Argument 2 out of range
+  # linux binutils-2.45: $ guile --version
+  # Pre-boot error; key: misc-error, args: ("load-thunk-from-memory" "missing DT_GUILE_ENTRY" () #f)Aborted
+  dontStrip = true;
+
   setupHook = ./setup-hook-3.0.sh;
 
-  passthru = {
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts
@@ -141,7 +179,7 @@ builder rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -152,8 +190,8 @@ builder rec {
       system calls, networking support, multiple threads, dynamic linking, a
       foreign function call interface, and powerful string processing.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

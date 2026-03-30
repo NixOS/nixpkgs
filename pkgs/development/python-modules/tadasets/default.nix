@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, matplotlib
-, pytest
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  matplotlib,
+  pytest,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "tadasets";
-  version = "0.0.4";
+  version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0e6c14678750315febd97fcf334bbbfd2695ebd91b4fe7707bb1220d7348416";
+    hash = "sha256-C+l19J0PHjZTlzAhXbojicaOyr/gjN8fuH7cLyb449w=";
   };
 
   propagatedBuildInputs = [
@@ -21,15 +23,15 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     scipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Great data sets for Topological Data Analysis";
     homepage = "https://tadasets.scikit-tda.org";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

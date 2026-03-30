@@ -1,39 +1,50 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, sphinx
-, setuptools-scm
-, django
-, redis
-, celery
-, pytest-django
-, pytestCheckHook
-, mock
-, gitMinimal }:
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  celery,
+  django-storages,
+  django,
+  fetchFromGitHub,
+  flit-core,
+  flit-scm,
+  gitMinimal,
+  mock,
+  pytest-cov-stub,
+  pytest-django,
+  pytestCheckHook,
+  redis,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.16.5";
+  version = "3.20.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Jfzi+o4ja2sNCSPfX9eRq3WGid1gcfehhayAD1L4f2U=";
-    leaveDotGit = true;
+    repo = "django-health-check";
+    tag = version;
+    hash = "sha256-voB3shugfM/nO0vPd9yA4NOUB+E9aVcFnqG1mtfRYFc=";
   };
+
+  build-system = [
+    flit-core
+    flit-scm
+  ];
 
   buildInputs = [
     sphinx
     django
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    gitMinimal
-  ];
+  nativeBuildInputs = [ gitMinimal ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    boto3
+    django-storages
+    pytest-cov-stub
     pytest-django
     pytestCheckHook
     mock
@@ -41,21 +52,18 @@ buildPythonPackage rec {
     redis
   ];
 
-  postPatch = ''
-    # We don't want to generate coverage
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "--cov=health_check" "" \
-      --replace "--cov-report=term" "" \
-      --replace "--cov-report=xml" ""
-  '';
+  disabledTests = [
+    # commandline output mismatch
+    "test_command_with_non_existence_subset"
+  ];
 
   pythonImportsCheck = [ "health_check" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable app that runs a full check on the deployment";
     homepage = "https://github.com/KristianOellegaard/django-health-check";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/revsys/django-health-check/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -1,13 +1,17 @@
 # This module defines global configuration for the xonsh.
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.xonsh;
-
+  package = cfg.package.override { inherit (cfg) extraPackages; };
+  bashCompletionPath = "${cfg.bashCompletion.package}/share/bash-completion/bash_completion";
 in
 
 {
@@ -16,38 +20,58 @@ in
 
     programs.xonsh = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure xonsh as an interactive shell.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xonsh;
-        defaultText = literalExpression "pkgs.xonsh";
-        example = literalExpression "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
-        description = lib.mdDoc ''
-          xonsh package to use.
+      package = lib.mkPackageOption pkgs "xonsh" {
+        extraDescription = ''
+          The argument `extraPackages` of this package will be overridden by
+          the option `programs.xonsh.extraPackages`.
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "";
-        description = lib.mdDoc "Control file to customize your shell behavior.";
-        type = types.lines;
+        description = ''
+          Extra text added to the end of `/etc/xonsh/xonshrc`,
+          the system-wide control file for xonsh.
+        '';
+        type = lib.types.lines;
       };
 
+      extraPackages = lib.mkOption {
+        default = (ps: [ ]);
+        defaultText = lib.literalExpression "ps: [ ]";
+        example = lib.literalExpression ''
+          ps: with ps; [ numpy xonsh.xontribs.xontrib-vox ]
+        '';
+        type =
+          with lib.types;
+          coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
+        description = ''
+          Xontribs and extra Python packages to be available in xonsh.
+        '';
+      };
+
+      bashCompletion = {
+        enable = lib.mkEnableOption "bash completions for xonsh" // {
+          default = true;
+        };
+        package = lib.mkPackageOption pkgs "bash-completion" { };
+      };
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    environment.etc.xonshrc.text = ''
-      # /etc/xonshrc: DO NOT EDIT -- this file has been generated automatically.
+    environment.etc."xonsh/xonshrc".text = ''
+      # /etc/xonsh/xonshrc: DO NOT EDIT -- this file has been generated automatically.
 
 
       if not ''${...}.get('__NIXOS_SET_ENVIRONMENT_DONE'):
@@ -69,18 +93,16 @@ in
               aliases['ls'] = _ls_alias
           del _ls_alias
 
+      ${lib.optionalString cfg.bashCompletion.enable "$BASH_COMPLETIONS = '${bashCompletionPath}'"}
 
       ${cfg.config}
     '';
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
-        "${cfg.package}/bin/xonsh"
-      ];
-
+    environment.shells = [
+      "/run/current-system/sw/bin/xonsh"
+      "${lib.getExe package}"
+    ];
   };
-
 }
-

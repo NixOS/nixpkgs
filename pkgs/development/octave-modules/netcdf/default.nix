@@ -1,26 +1,30 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, netcdf
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
+  netcdf,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "netcdf";
-  version = "1.0.14";
+  version = "1.0.19";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1wdwl76zgcg7kkdxjfjgf23ylzb0x4dyfliffylyl40g6cjym9lf";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-netcdf";
+    tag = "v${version}";
+    sha256 = "sha256-yt39bd6EBLj7mr6EYngPfPXEMusncc9tx5So1Cp1zkM=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     netcdf
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/netcdf/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
-    description = "A NetCDF interface for Octave";
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/netcdf/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
+    description = "NetCDF interface for Octave";
   };
 }

@@ -1,50 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, toml
-, pyyaml
-, packaging
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  toml,
+  pyyaml,
+  packvers,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dparse2";
-  version = "0.6.1";
+  version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1tbNW7Gy7gvMnETdAM2ahHiwbhG9qvdYZggia1+7eGo=";
+    repo = "dparse2";
+    tag = version;
+    hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
   };
 
   propagatedBuildInputs = [
     toml
     pyyaml
-    packaging
+    packvers
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Requries pipenv
+    # Requires pipenv
     "tests/test_parse.py"
   ];
 
-  pythonImportsCheck = [
-    "dparse2"
-  ];
+  pythonImportsCheck = [ "dparse2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse Python dependency files";
     homepage = "https://github.com/nexB/dparse2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,59 +1,71 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytest-httpbin
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytest-cov-stub,
+  pytest-httpbin,
+  pytest-mock,
+  pytestCheckHook,
+  requests-mock,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
-  version = "1.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
-    rev = "v${version}";
-    hash = "sha256-Q5oDAgAZYYUYqjDByXNXFNVKmRyjzIGVE4LN9j8vk4c=";
+    tag = "v${version}";
+    hash = "sha256-fu3DGTsLrw+MHZCFF4WHMpyjqkexH/c8j9ko9ZAeAwU=";
   };
-
-  propagatedBuildInputs = [
-    beautifulsoup4
-    lxml
-    requests
-  ];
-
-  checkInputs = [
-    pytest-httpbin
-    pytest-mock
-    pytestCheckHook
-    requests-mock
-  ];
 
   postPatch = ''
     # Is in setup_requires but not used in setup.py
     substituteInPlace setup.py \
       --replace "'pytest-runner'" ""
     substituteInPlace setup.cfg \
-      --replace " --cov --cov-config .coveragerc --flake8" ""
+      --replace " --flake8" ""
   '';
 
-  pythonImportsCheck = [
-    "mechanicalsoup"
+  build-system = [ setuptools ];
+
+  dependencies = [
+    beautifulsoup4
+    lxml
+    requests
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-httpbin
+    pytest-mock
+    pytestCheckHook
+    requests-mock
+  ];
+
+  pythonImportsCheck = [ "mechanicalsoup" ];
+
+  disabledTests = [
+    # Missing module
+    "test_select_form_associated_elements"
+  ];
+
+  meta = {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jgillich fab ];
+    changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      jgillich
+      fab
+    ];
   };
 }

@@ -1,17 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, glib, nodePackages, gjs }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gjs,
+  typescript,
+  unstableGitUpdater,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-pop-shell";
-  version = "unstable-2022-10-11";
+  version = "1.2.0-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "886a069c0582b371e90ac3602b1747ea5fba616c";
-    hash = "sha256-DwJ3IFhYuEW0LQrmN/mOspEiudj4X5BCLhdOyP74EVs=";
+    rev = "3cb093b8e6a36c48dd5e84533dc874ea74cd8a9e";
+    hash = "sha256-FNNc3RY+x6y4bRU9BCUcQdzkG6iM8kKeRGkziQrTUM0=";
   };
 
-  nativeBuildInputs = [ glib nodePackages.typescript gjs ];
+  nativeBuildInputs = [
+    glib
+    gjs
+    typescript
+  ];
 
   buildInputs = [ gjs ];
 
@@ -24,6 +36,7 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "pop-shell@system76.com";
     extensionPortalSlug = "pop-shell";
+    updateScript = unstableGitUpdater { };
   };
 
   postPatch = ''
@@ -36,11 +49,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/share/gnome-shell/extensions/pop-shell@system76.com/*/main.js
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard-driven layer for GNOME Shell";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.genofire ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.genofire ];
     homepage = "https://github.com/pop-os/shell";
   };
 }

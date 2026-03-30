@@ -1,39 +1,40 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, mpfr
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  mpfr,
 }:
 
 buildOctavePackage rec {
   pname = "interval";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0a0sz7b4y53qgk1xr4pannn4w7xiin2pf74x7r54hrr1wf4abp20";
+    sha256 = "sha256-wBMbet0UveqpB8Fo68yYe2RA9ny1YGmEmyS8rSwK0XY=";
   };
 
   propagatedBuildInputs = [
     mpfr
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/interval/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/interval/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Interval arithmetic to evaluate functions over subsets of their domain";
     longDescription = ''
-       The interval package for real-valued interval arithmetic allows one to
-       evaluate functions over subsets of their domain. All results are verified,
-       because interval computations automatically keep track of any errors.
+      The interval package for real-valued interval arithmetic allows one to
+      evaluate functions over subsets of their domain. All results are verified,
+      because interval computations automatically keep track of any errors.
 
-       These concepts can be used to handle uncertainties, estimate arithmetic
-       errors and produce reliable results. Also it can be applied to
-       computer-assisted proofs, constraint programming, and verified computing.
+      These concepts can be used to handle uncertainties, estimate arithmetic
+      errors and produce reliable results. Also it can be applied to
+      computer-assisted proofs, constraint programming, and verified computing.
 
-       The implementation is based on interval boundaries represented by
-       binary64 numbers and is conforming to IEEE Std 1788-2015, IEEE standard
-       for interval arithmetic.
+      The implementation is based on interval boundaries represented by
+      binary64 numbers and is conforming to IEEE Std 1788-2015, IEEE standard
+      for interval arithmetic.
     '';
   };
 }

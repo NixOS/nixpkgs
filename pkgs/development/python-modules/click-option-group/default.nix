@@ -1,37 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, click
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.5";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.5.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "click-contrib";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-ur7ycioZmgWMp4N+MURj1ggYMzs2eauteg1B5eLkSvc=";
+    repo = "click-option-group";
+    tag = "v${version}";
+    hash = "sha256-ASzX80aZB3SQqz8AgDTJTE1jgY+MgA0P5yTW9m6+Ovk=";
   };
 
-  propagatedBuildInputs = [
-    click
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ click ];
 
-  pythonImportsCheck = [
-    "click_option_group"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "click_option_group" ];
+
+  meta = {
     description = "Option groups missing in Click";
     longDescription = ''
       Option groups are convenient mechanism for logical structuring
@@ -40,8 +40,8 @@ buildPythonPackage rec {
       for example). Moreover, argparse stdlib package contains this
       functionality out of the box.
     '';
-    homepage = "https://github.com/click-contrib/click-option-group";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    homepage = "https://github.com/click-contrib/click-option-group/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

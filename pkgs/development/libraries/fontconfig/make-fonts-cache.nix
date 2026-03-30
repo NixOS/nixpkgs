@@ -1,15 +1,29 @@
-{ runCommand, lib, fontconfig, fontDirectories }:
+{
+  buildPackages,
+  writeText,
+  fontconfig,
+  lib,
+  runCommand,
+  stdenv,
+}:
+let
+  fontconfig' = fontconfig;
+in
+{
+  fontconfig ? fontconfig',
+  fontDirectories,
+}:
 
+let
+  fontDirsPath = writeText "font-dirs" ''
+    <!-- Font directories -->
+    ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
+  '';
+in
 runCommand "fc-cache"
   {
-    nativeBuildInputs = [ fontconfig.bin ];
     preferLocalBuild = true;
     allowSubstitutes = false;
-    passAsFile = [ "fontDirs" ];
-    fontDirs = ''
-      <!-- Font directories -->
-      ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
-    '';
   }
   ''
     export FONTCONFIG_FILE=$(pwd)/fonts.conf
@@ -21,11 +35,14 @@ runCommand "fc-cache"
       <include>${fontconfig.out}/etc/fonts/fonts.conf</include>
       <cachedir>$out</cachedir>
     EOF
-    cat "$fontDirsPath" >> fonts.conf
+    cat "${fontDirsPath}" >> fonts.conf
     echo "</fontconfig>" >> fonts.conf
 
+    # N.B.: fc-cache keys its cache entries by architecture.
+    # We must invoke the host `fc-cache` (not the build fontconfig) if we want
+    # the cache to be usable by the host.
     mkdir -p $out
-    fc-cache -sv
+    ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe' fontconfig "fc-cache"} -sv
 
     # This is not a cache dir in the normal sense -- it won't be automatically
     # recreated.

@@ -1,44 +1,44 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, isPy3k
-
-# pythonPackages
-, GitPython
-, pbr
-, pyyaml
-, six
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gitpython,
+  pbr,
+  pyyaml,
+  rich,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "bandit";
-  version = "1.7.4";
-  disabled = !isPy3k;
+  version = "1.9.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LWOoxXNBe64ziWLUubBvvGCA907NlVoJKEnh5lxxe9I=";
+    hash = "sha256-tYnl3ir+cL1NU/oMHaYZn0CFr2Zv3gDooDTxUqUs1ig=";
   };
 
-  propagatedBuildInputs = [
-    GitPython
-    pbr
+  build-system = [ pbr ];
+
+  dependencies = [
+    gitpython
     pyyaml
-    six
+    rich
     stevedore
   ];
 
   # Framework is Tox, tox performs 'pip install' inside the virtual-env
-  #   and this requires Network Connectivity
+  # and this requires Network Connectivity
   doCheck = false;
+
+  pythonImportsCheck = [ "bandit" ];
 
   meta = {
     description = "Security oriented static analyser for python code";
-    homepage = "https://bandit.readthedocs.io/en/latest/";
+    homepage = "https://bandit.readthedocs.io/";
+    changelog = "https://github.com/PyCQA/bandit/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

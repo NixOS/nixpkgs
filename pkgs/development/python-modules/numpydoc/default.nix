@@ -1,41 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, jinja2
-, sphinx
-, pytestCheckHook
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jinja2,
+  sphinx,
+  tabulate,
+
+  # tests
+  matplotlib,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.4.0";
-  format = "setuptools";
-
-  disabled = isPy27;
+  version = "1.10.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "sha256-lJTa8cdhL1mQX6CeZcm4qQu6yzgE2R96lOd4gx5vz6U=";
+    hash = "sha256-P3lw9u7jCRImCmsxrHK7okMoMM1nIlaewX7o0+9f+gE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Jinja2>=2.10,<3.1" "Jinja2>=2.10,<3.2"
-    substituteInPlace setup.cfg \
-      --replace "--cov-report=" "" \
-      --replace "--cov=numpydoc" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     sphinx
+    tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     matplotlib
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -43,16 +46,23 @@ buildPythonPackage rec {
     # https://github.com/numpy/numpydoc/issues/373
     "test_MyClass"
     "test_my_function"
-    "test_reference"
+
+    # AttributeError: 'MockApp' object has no attribute '_exception_on_warning'
+    "test_mangle_docstring_validation_exclude"
+    "test_mangle_docstring_validation_warnings"
+    "test_mangle_docstrings_overrides"
+    # AttributeError: 'MockBuilder' object has no attribute '_translator'
+    "test_mangle_docstrings_basic"
+    "test_mangle_docstrings_inherited_class_members"
   ];
 
-  pythonImportsCheck = [
-    "numpydoc"
-  ];
+  pythonImportsCheck = [ "numpydoc" ];
 
   meta = {
+    changelog = "https://github.com/numpy/numpydoc/releases/tag/v${version}";
     description = "Sphinx extension to support docstrings in Numpy format";
+    mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
-   };
+  };
 }

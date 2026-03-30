@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, pycryptodome
-, requests
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pycryptodome,
+  requests,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "micloud";
-  version = "0.5";
+  version = "0.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Squachen";
     repo = "micloud";
     rev = "v_${version}";
-    sha256 = "sha256-1qtOsEH+G5ASsRyVCa4U0WQ/9kDRn1WpPNkvuvWFovQ=";
+    hash = "sha256-IsNXFs1N+rKwqve2Pjp+wRTZCxHF4acEo6KyhsSKuqI=";
   };
 
   propagatedBuildInputs = [
@@ -30,10 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "micloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Xiaomi cloud connect library";
+    mainProgram = "micloud";
     homepage = "https://github.com/Squachen/micloud";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

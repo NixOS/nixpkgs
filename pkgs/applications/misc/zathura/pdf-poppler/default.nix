@@ -1,28 +1,58 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core, girara, poppler }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  zathura_core,
+  girara,
+  poppler,
+  desktop-file-utils,
+  appstream,
+  appstream-glib,
+  gitUpdater,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-pdf-poppler";
-  version = "0.3.0";
+  version = "2026.02.03";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "1vfl4vkyy3rf39r1sqaa7y8113bgkh2bkfq3nn2inis9mrykmk6m";
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura-pdf-poppler";
+    tag = finalAttrs.version;
+    hash = "sha256-ddW2SepBoR9BpqcAIAONmd2P5AjkhmWyIjIDeTnHO4Y=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config zathura_core ];
-  buildInputs = [ poppler girara ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    appstream
+    appstream-glib
+    zathura_core
+  ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  buildInputs = [
+    poppler
+    girara
+  ];
 
-  meta = with lib; {
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     homepage = "https://pwmt.org/projects/zathura-pdf-poppler/";
-    description = "A zathura PDF plugin (poppler)";
+    description = "Zathura PDF plugin (poppler)";
     longDescription = ''
       The zathura-pdf-poppler plugin adds PDF support to zathura by
       using the poppler rendering library.
     '';
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

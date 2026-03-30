@@ -1,47 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fpyutils
-, pyfakefs
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fpyutils,
+  pyfakefs,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.1.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "9.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frnmst";
-    repo = pname;
-    rev = version;
-    hash = "sha256-jt2ZZV63s7LL0R9ay/tvMH3cIDElYXiNPBuHlxj/Z8E=";
+    repo = "md-toc";
+    tag = version;
+    hash = "sha256-YVDFYxxKMKOrHyymewLTTkmBgg6YVqWou4hTKHJmbOg=";
   };
 
-  propagatedBuildInputs = [
-    fpyutils
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ fpyutils ];
+
+  nativeCheckInputs = [
     pyfakefs
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "md_toc/tests/*.py"
-  ];
+  enabledTestPaths = [ "md_toc/tests/*.py" ];
 
-  pythonImportsCheck = [
-    "md_toc"
-  ];
+  pythonImportsCheck = [ "md_toc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Table of contents generator for Markdown";
+    mainProgram = "md_toc";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,49 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, six
-, astropy
-, pytestCheckHook
-, pytest-doctestplus
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  numpy,
+  pandas,
+  packaging,
+
+  astropy,
+  pytestCheckHook,
+  pytest-doctestplus,
 }:
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.6.2";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "0.9.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Id8rPK8qq71gHn5DKnEi7Lp081GFbcFtGU+v89Vlt9o=";
+  src = fetchFromGitHub {
+    owner = "sunpy";
+    repo = "drms";
+    tag = "v${version}";
+    hash = "sha256-Hd65bpJCknBeRd27JlcIkzzoZv5nGR7C6oMSGPFiyjA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
-    six
+    packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     astropy
     pytestCheckHook
     pytest-doctestplus
   ];
 
+  disabledTests = [
+    "test_query_hexadecimal_strings"
+    "test_jsocinfoconstants" # Need network
+  ];
+
+  disabledTestPaths = [ "docs/tutorial.rst" ];
+
   pythonImportsCheck = [ "drms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/sunpy/drms/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

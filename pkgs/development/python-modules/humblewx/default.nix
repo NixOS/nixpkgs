@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, wxPython_4_0
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  wxpython,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "humblewx";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thetimelineproj";
-    repo = pname;
+    repo = "humblewx";
     rev = version;
     sha256 = "0fv8gwlbcj000qq34inbwgxf0xgibs590dsyqnw0mmyb7f1iq210";
   };
 
-  # timeline is not compatible with wxPython_4_1. reported upstream
-  propagatedBuildInputs = [ wxPython_4_0 ];
+  propagatedBuildInputs = [ wxpython ];
 
   checkPhase = ''
     runHook preCheck

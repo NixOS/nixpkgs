@@ -1,18 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, six
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  pbr,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "os-service-types";
-  version = "1.7.0";
+  version = "1.8.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "31800299a82239363995b91f1ebf9106ac7758542a1e4ef6dc737a5932878c6c";
+    pname = "os_service_types";
+    inherit version;
+    hash = "sha256-q3ZI1yMoSZQxluG7AKMOLiXmAPo7V7skHRW39SG1tXU=";
   };
 
   postPatch = ''
@@ -21,7 +25,15 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [ pbr six ];
+  build-system = [
+    pbr
+    setuptools
+  ];
+
+  dependencies = [
+    pbr
+    six
+  ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;
@@ -32,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "os_service_types" ];
 
-  meta = with lib; {
-    description = "Python library for consuming OpenStack sevice-types-authority data";
+  meta = {
+    description = "Python library for consuming OpenStack service-types-authority data";
     homepage = "https://github.com/openstack/os-service-types";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

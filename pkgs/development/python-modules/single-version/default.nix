@@ -1,31 +1,33 @@
-{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "single-version";
-  version = "1.5.1";
-  format = "pyproject";
+  version = "1.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-I8ATQzPRH9FVjqPoqrNjYMBU5azpmkLjRmHcz943C10=";
+    repo = "single-version";
+    tag = "v${version}";
+    hash = "sha256-dUmJhNCPuq/7WGzFQXLjb8JrQgQn7qyBqzPWaKzD9hc=";
   };
-
-  patches = [
-    ./0001-set-poetry-core.patch
-  ];
 
   nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "single_version" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to let you have a single source of version in your code base";
     homepage = "https://github.com/hongquan/single-version";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

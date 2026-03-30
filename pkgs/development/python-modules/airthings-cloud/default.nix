@@ -1,23 +1,21 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "airthings-cloud";
-  version = "0.1.0";
+  version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAirthings";
-    rev = version;
-    sha256 = "sha256-sqHNK6biSWso4uOYimzU7PkEn0uP5sHAaPGsS2vSMNY=";
+    tag = version;
+    hash = "sha256-HdH/z5xsumOXU0ZYOUc8LHpjKGkfp5e5yGER+Nm8xB4=";
   };
 
   propagatedBuildInputs = [
@@ -28,14 +26,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "airthings"
-  ];
+  pythonImportsCheck = [ "airthings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Airthings";
     homepage = "https://github.com/Danielhiversen/pyAirthings";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Danielhiversen/pyAirthings/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,38 +1,69 @@
-{ lib, buildPythonPackage, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3
-, wrapGAppsHook, nest-asyncio, pycairo, py-desmume, pygtkspellcheck, setuptools
-, skytemple-files, skytemple-icons
+{
+  buildPythonPackage,
+  explorerscript,
+  fetchFromGitHub,
+  setuptools,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  lib,
+  ndspy,
+  nest-asyncio,
+  pmdsky-debug-py,
+  pycairo,
+  pygobject3,
+  pygtkspellcheck,
+  range-typed-integers,
+  skytemple-files,
+  skytemple-icons,
+  skytemple-ssb-emulator,
+  wrapGAppsHook3,
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.3.8.post2";
+  version = "1.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-ssb-debugger";
     rev = version;
-    sha256 = "sha256-dd0qsSNBwxuSopjz2PLqEFddZpvMgeJIjBXY5P6OAow=";
+    hash = "sha256-J4UAxNxB2QSaTW1r1xL9wKGTISv0H4RdDnRiZp4idts=";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gtksourceview3 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    gtk3
+    gtksourceview4
+  ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+  dependencies = [
+    explorerscript
+    ndspy
     nest-asyncio
+    pmdsky-debug-py
     pycairo
-    py-desmume
+    pygobject3
     pygtkspellcheck
-    setuptools
+    range-typed-integers
     skytemple-files
     skytemple-icons
+    skytemple-ssb-emulator
   ];
 
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
   pythonImportsCheck = [ "skytemple_ssb_debugger" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    mainProgram = "skytemple-ssb-debugger";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

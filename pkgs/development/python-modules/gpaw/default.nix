@@ -1,25 +1,29 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-, writeTextFile
-, fetchurl
-, blas
-, lapack
-, mpi
-, scalapack
-, libxc
-, libvdwxc
-, which
-, ase
-, numpy
-, scipy
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  writeTextFile,
+  fetchurl,
+  blas,
+  lapack,
+  mpi,
+  fftw,
+  scalapack,
+  libxc,
+  libvdwxc,
+  which,
+  ase,
+  numpy,
+  scipy,
+  pyyaml,
+  inetutils,
 }:
 
-assert lib.asserts.assertMsg (!blas.isILP64)
-  "A 32 bit integer implementation of BLAS is required.";
+assert lib.asserts.assertMsg (!blas.isILP64) "A 32 bit integer implementation of BLAS is required.";
 
-assert lib.asserts.assertMsg (!lapack.isILP64)
-  "A 32 bit integer implementation of LAPACK is required.";
+assert lib.asserts.assertMsg (
+  !lapack.isILP64
+) "A 32 bit integer implementation of LAPACK is required.";
 
 let
   gpawConfig = writeTextFile {
@@ -27,12 +31,12 @@ let
     text = ''
       # Compiler
       compiler = 'gcc'
-      mpicompiler = '${mpi}/bin/mpicc'
-      mpilinker = '${mpi}/bin/mpicc'
+      mpicompiler = '${lib.getDev mpi}/bin/mpicc'
+      mpilinker = '${lib.getDev mpi}/bin/mpicc'
 
       # BLAS
       libraries += ['blas']
-      library_dirs += ['${blas}/lib']
+      library_dirs += ['${lib.getLib blas}/lib']
 
       # FFTW
       fftw = True
@@ -47,9 +51,8 @@ let
       libxc = True
       if libxc:
         xc = '${libxc}/'
-        include_dirs += [xc + 'include']
-        library_dirs += [xc + 'lib/']
-        extra_link_args += ['-Wl,-rpath={xc}/lib'.format(xc=xc)]
+        include_dirs += ['${lib.getDev libxc}/include']
+        library_dirs += ['${lib.getLib libxc}/lib']
         if 'xc' not in libraries:
           libraries.append('xc')
 
@@ -57,35 +60,53 @@ let
       libvdwxc = True
       if libvdwxc:
         vdwxc = '${libvdwxc}/'
-        extra_link_args += ['-Wl,-rpath=%s/lib' % vdwxc]
-        library_dirs += ['%s/lib' % vdwxc]
-        include_dirs += ['%s/include' % vdwxc]
+        library_dirs += ['${lib.getLib libvdwxc}/lib']
+        include_dirs += ['${lib.getDev libvdwxc}/include']
         libraries += ['vdwxc']
     '';
   };
 
-  setupVersion = "0.9.20000";
+  setupVersion = "24.11.0";
   pawDataSets = fetchurl {
     url = "https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-${setupVersion}.tar.gz";
-    sha256 = "07yldxnn38gky39fxyv3rfzag9p4lb0xfpzn15wy2h9aw4mnhwbc";
+    hash = "sha256-lkyBzCj3+RpGhtPTGCxOvaMO+wnT+Wt/lerjFGSZwRA=";
   };
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "gpaw";
-  version = "22.8.0";
+  version = "25.1.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "gpaw";
-    repo = pname;
+    repo = "gpaw";
     rev = version;
-    hash = "sha256-Kgf8yuGua7mcGP+jVVmbE8JCsbrfzewRTRt3ihq9YX4=";
+    hash = "sha256-tdS383qT6hBr5hOqjoFS36nRSS2vdVkUR7sExwjWhng=";
   };
 
-  nativeBuildInputs = [ which ];
+  # `inetutils` is required because importing `gpaw`, as part of
+  # pythonImportsCheck, tries to execute its binary, which in turn tries to
+  # execute `rsh` as a side-effect.
+  nativeBuildInputs = [
+    which
+    inetutils
+  ];
 
-  buildInputs = [ blas scalapack libxc libvdwxc ];
+  buildInputs = [
+    blas
+    scalapack
+    libxc
+    libvdwxc
+    fftw
+  ];
 
-  propagatedBuildInputs = [ ase scipy numpy mpi ];
+  propagatedBuildInputs = [
+    ase
+    scipy
+    numpy
+    (lib.getBin mpi)
+    pyyaml
+  ];
 
   patches = [ ./SetupPath.patch ];
 
@@ -109,15 +130,17 @@ in buildPythonPackage rec {
   '';
 
   doCheck = false; # Requires MPI runtime to work in the sandbox
-  pythonImportsCheckHook = [ "gpaw" ];
+  pythonImportsCheck = [ "gpaw" ];
 
-  passthru = { inherit mpi; };
+  passthru = {
+    inherit mpi;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Density functional theory and beyond within the projector-augmented wave method";
     homepage = "https://wiki.fysik.dtu.dk/gpaw/index.html";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

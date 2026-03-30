@@ -1,39 +1,59 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, django
-, django_compat
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nix-update-script,
+
+  # build-system
+  flit-gettext,
+  flit-scm,
+
+  # dependencies
+  django,
+
+  # tests
+  pytest-cov-stub,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.2.1";
+  version = "3.7.6";
+  pyproject = true;
 
-  # the wheel comes with pre-built assets, allowing us to avoid fighting
-  # with npm/webpack/gettext to build them ourselves.
-  format = "wheel";
-  src = fetchPypi {
-    inherit version format;
-    pname = "django_hijack";
-    dist = "py3";
-    python = "py3";
-    sha256 = "sha256-sHI3ULJH5bH2n2AKQLHVEkBAYfM5GOC/+0qpKDFOods=";
+  src = fetchFromGitHub {
+    owner = "django-hijack";
+    repo = "django-hijack";
+    tag = version;
+    hash = "sha256-kcFDV6Qvavw50zaIS2UYsArotBSgYlpJxGZzYrZu2jc=";
   };
 
-  propagatedBuildInputs = [ django django_compat ];
+  build-system = [
+    flit-gettext
+    flit-scm
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-django ];
+  dependencies = [ django ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-django
+  ];
+
   preCheck = ''
-    export DJANGO_SETTINGS_MODULE='hijack.tests.test_app.settings'
+    export DJANGO_SETTINGS_MODULE=tests.test_app.settings
   '';
-  pytestFlagsArray = [ "--pyargs" "hijack" ];
 
-  meta = with lib; {
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-    homepage = "https://github.com/arteria/django-hijack";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    homepage = "https://github.com/django-hijack/django-hijack";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

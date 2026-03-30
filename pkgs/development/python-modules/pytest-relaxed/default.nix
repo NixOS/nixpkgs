@@ -1,44 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, six
-, decorator
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  invoke,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "1.1.5";
   pname = "pytest-relaxed";
+  version = "2.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e39a7e5b14e14dfff0de0ad720dfffa740c128d599ab14cfac13f4deb34164a6";
+    hash = "sha256-lW6gKOww27+2gN2Oe0p/uPgKI5WV6Ius4Bi/LA1xgkg=";
   };
 
-  # newer decorator versions are incompatible and cause the test suite to fail
-  # but only a few utility functions are used from this package which means it has no actual impact on test execution in paramiko and Fabric
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "decorator>=4,<5" "decorator>=4" \
-      --replace "pytest>=3,<5" "pytest>=3"
-  '';
+  patches = [
+    # https://github.com/bitprophet/pytest-relaxed/issues/28
+    # https://github.com/bitprophet/pytest-relaxed/pull/29
+    ./fix-oldstyle-hookimpl-setup.patch
+  ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ six decorator ];
+  propagatedBuildInputs = [ decorator ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    invoke
+    pytestCheckHook
+  ];
 
-  # lots of assertion errors mainly around decorator
-  doCheck = false;
+  enabledTestPaths = [ "tests" ];
 
-  meta = with lib; {
+  disabledTests = [
+    "test_skips_pytest_fixtures"
+  ];
+
+  pythonImportsCheck = [ "pytest_relaxed" ];
+
+  meta = {
     homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
-    license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
-    # see https://github.com/bitprophet/pytest-relaxed/issues/12
-    broken = true;
+    changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${version}/docs/changelog.rst";
+    license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
 }

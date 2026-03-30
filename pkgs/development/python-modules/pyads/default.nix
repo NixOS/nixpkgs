@@ -1,46 +1,42 @@
-{ lib
-, adslib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  adslib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.3.9";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stlehmann";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-eNouFJQDgp56fgkA7wZKfosKWOKU6OvXRjFwjCMvZqI=";
+    repo = "pyads";
+    tag = version;
+    hash = "sha256-Uh8QS9l0O1UCOM03eZ3Wo8aohgUxSbErRX2/zEUP10k=";
   };
 
-  buildInputs = [
-    adslib
-  ];
+  build-system = [ setuptools ];
+
+  buildInputs = [ adslib ];
 
   patchPhase = ''
     substituteInPlace pyads/pyads_ex.py \
-      --replace "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
+      --replace-fail "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyads"
-  ];
+  pythonImportsCheck = [ "pyads" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for TwinCAT ADS library";
     homepage = "https://github.com/MrLeeh/pyads";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    changelog = "https://github.com/stlehmann/pyads/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

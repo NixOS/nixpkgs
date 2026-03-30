@@ -1,65 +1,56 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cached-property
-, colorama
-, fetchFromGitHub
-, git
-, pdm-pep517
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  git,
+  jsonschema,
+  pdm-backend,
+  pytest-gitconfig,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.24.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Gcht9pmh15dvSHRsG9y82l4HoJ7l/gxbmrRh7Jow2Bs=";
+    repo = "griffe";
+    tag = version;
+    hash = "sha256-AMMTAqsJfj2MltTgAxfvjUTVzi+ZFmx+J9pzhMp28Z4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-      --replace 'version = {source = "scm"}' 'license-expression = "ISC"'
-  '';
+  build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  dependencies = [ colorama ];
 
-  propagatedBuildInputs = [
-    colorama
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     git
+    jsonschema
+    pytest-gitconfig
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
-    async = [
-      aiofiles
-    ];
+  optional-dependencies = {
+    async = [ aiofiles ];
   };
 
-  pythonImportsCheck = [
-    "griffe"
+  pythonImportsCheck = [ "griffe" ];
+
+  disabledTestPaths = [
+    # Circular dependencies
+    "tests/test_api.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Signatures for entire Python programs";
     homepage = "https://github.com/mkdocstrings/griffe";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/griffe/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "griffe";
   };
 }

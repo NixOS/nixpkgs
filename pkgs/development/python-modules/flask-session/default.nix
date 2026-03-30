@@ -1,27 +1,80 @@
-{ lib, fetchPypi, buildPythonPackage, pytestCheckHook, flask, cachelib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  flask,
+  cachelib,
+  msgspec,
+
+  # tests
+  boto3,
+  flask-sqlalchemy,
+  memcachedTestHook,
+  pytestCheckHook,
+  redis,
+  redisTestHook,
+  pymongo,
+  pymemcache,
+  python-memcached,
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Session";
-  version = "0.4.0";
+  pname = "flask-session";
+  version = "0.8.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ye1UMh+oxMoBMv/TNpWCdZ7aclL7SzvuSA5pDRukH0Y=";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
+    repo = "flask-session";
+    tag = version;
+    hash = "sha256-QLtsM0MFgZbuLJPLc5/mUwyYc3bYxildNKNxOF8Z/3Y=";
   };
 
-  propagatedBuildInputs = [ flask cachelib ];
+  build-system = [ flit-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [
+    cachelib
+    flask
+    msgspec
+  ];
 
-  # The rest of the tests require database servers and optional db connector dependencies
-  pytestFlagsArray = [ "-k" "'null_session or filesystem_session'" ];
+  nativeCheckInputs = [
+    flask-sqlalchemy
+    memcachedTestHook
+    pytestCheckHook
+    redis
+    redisTestHook
+    pymongo
+    pymemcache
+    python-memcached
+    boto3
+  ];
+
+  disabledTests = [
+    # unfree
+    "test_mongo_default"
+  ];
+
+  disabledTestPaths = [ "tests/test_dynamodb.py" ];
 
   pythonImportsCheck = [ "flask_session" ];
 
-  meta = with lib; {
-    description = "A Flask extension that adds support for server-side sessions";
-    homepage = "https://github.com/fengsp/flask-session";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zhaofengli ];
+  __darwinAllowLocalNetworking = true;
+
+  # Hang indefinitely
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
+  meta = {
+    description = "Flask extension that adds support for server-side sessions";
+    homepage = "https://github.com/pallets-eco/flask-session";
+    changelog = "https://github.com/pallets-eco/flask-session/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

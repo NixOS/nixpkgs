@@ -1,33 +1,53 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
-, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools-scm
-, pytest, sphinx, tornado, typeguard
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools-scm,
+  tornado,
+  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "8.0.1";
+  version = "9.1.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43242a20e3e73291a28bcbcacfd6e000b02d3857a9a9fff56b297a27afdc932f";
+    hash = "sha256-EWnTdsKX5944jRi0SBdg1Hiw6Zp3fK06nIblVvS2l8s=";
   };
 
-  nativeBuildInputs = [ pbr setuptools-scm ];
-  propagatedBuildInputs = [ six ]
-    ++ lib.optionals isPy27 [ futures monotonic typing ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/jd/tenacity/commit/eed7d785e667df145c0e3eeddff59af64e4e860d.patch";
+      includes = [
+        "tenacity/__init__.py"
+        "tests/test_asyncio.py"
+        "tests/test_issue_478.py"
+      ];
+      hash = "sha256-TMhBjRmG7pBP3iKq83RQzkV9yO2TEcA+3mo9cz6daxs=";
+    })
+  ];
 
-  checkInputs = [ pytest sphinx tornado ]
-    ++ lib.optionals isPy3k [ typeguard ];
-  checkPhase = if isPy27 then ''
-    pytest --ignore='tenacity/tests/test_asyncio.py'
-  '' else ''
-    pytest
-  '';
+  build-system = [ setuptools-scm ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    tornado
+    typeguard
+  ];
+
+  pythonImportsCheck = [ "tenacity" ];
+
+  meta = {
     homepage = "https://github.com/jd/tenacity";
+    changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
     description = "Retrying library for Python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

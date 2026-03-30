@@ -1,25 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "exrex";
-  version = "0.10.5";
+  version = "0.11.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1wq8nyycdprxl9q9y1pfhkbca4rvysj45h1xn7waybl3v67v3f1z";
+  src = fetchFromGitHub {
+    owner = "asciimoo";
+    repo = "exrex";
+    # https://github.com/asciimoo/exrex/issues/68
+    rev = "239e4da37ff3a66d8b4b398d189299ae295594c3";
+    hash = "sha256-Tn/XIIy2wnob+1FmP9bdD9+gHLQZDofF2c1FqOijKWA=";
   };
 
-  # Projec thas no released tests
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=about['__version__']," "version='${version}',"
+  '';
+
+  nativeBuildInputs = [ setuptools ];
+
+  dontWrapPythonPrograms = true;
+
+  # Project thas no released tests
   doCheck = false;
+
   pythonImportsCheck = [ "exrex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Irregular methods on regular expressions";
     homepage = "https://github.com/asciimoo/exrex";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

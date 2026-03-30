@@ -1,30 +1,36 @@
-{ lib
-, buildPythonPackage
-, certifi
-, circuitbreaker
-, cryptography
-, fetchFromGitHub
-, pyopenssl
-, python-dateutil
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  circuitbreaker,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  python-dateutil,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.85.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.165.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NaVD7oWdKrUC0wjoFTbRg02tCFMlRyNIRHciTtyra7w=";
+    tag = "v${version}";
+    hash = "sha256-pF3+0Hogk4FmPOp20ROVb3304+mGs0iUYeiNkszCGPY=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "cryptography"
+    "pyOpenSSL"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     circuitbreaker
     cryptography
@@ -33,24 +39,21 @@ buildPythonPackage rec {
     pytz
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "configparser==4.0.2 ; python_version < '3'" "" \
-      --replace "cryptography>=3.2.1,<=37.0.2" "cryptography" \
-      --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL"
-  '';
-
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164
   doCheck = false;
 
-  pythonImportsCheck = [
-    "oci"
-  ];
+  pythonImportsCheck = [ "oci" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oracle Cloud Infrastructure Python SDK";
-    homepage = "https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/";
-    license = with licenses; [ asl20 /* or */ upl ];
-    maintainers = with maintainers; [ ilian ];
+    homepage = "https://github.com/oracle/oci-python-sdk";
+    changelog = "https://github.com/oracle/oci-python-sdk/blob/${src.tag}/CHANGELOG.rst";
+    license = with lib.licenses; [
+      asl20 # or
+      upl
+    ];
+    maintainers = with lib.maintainers; [
+      ilian
+    ];
   };
 }

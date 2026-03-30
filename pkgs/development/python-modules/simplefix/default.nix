@@ -1,25 +1,35 @@
-{ lib, python, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "simplefix";
-  version = "1.0.15";
+  version = "1.0.17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "simplefix";
     owner = "da4089";
-    rev = "v${version}";
-    sha256 = "sha256-GQHMotxNRuRv6zXhrD02T+aFgfYe3RnvUGADsBeSPbA=";
+    tag = "v${version}";
+    hash = "sha256-D85JW3JRQ1xErw6krMbAg94WYjPi76Xqjv/MGNMY5ZU=";
   };
 
-  checkPhase = ''
-    cd test
-    ${python.interpreter} -m unittest all
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "simplefix" ];
+
+  unittestFlagsArray = [
+    "-s"
+    "test"
+  ];
+
+  meta = {
     description = "Simple FIX Protocol implementation for Python";
     homepage = "https://github.com/da4089/simplefix";
-    license = licenses.mit;
-    maintainers = with maintainers; [ catern ];
+    changelog = "https://github.com/da4089/simplefix/releases/tag/v${version}";
+    license = lib.licenses.mit;
   };
 }

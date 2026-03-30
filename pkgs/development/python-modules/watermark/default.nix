@@ -1,44 +1,49 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, importlib-metadata
-, ipython
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  ipython,
+  py3nvml,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "watermark";
-  version = "2.3.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasbt";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-E3UxdGlxTcvkiKa3RoG9as6LybyW+QrCUZvA9VHwxlk=";
+    repo = "watermark";
+    tag = "v${version}";
+    hash = "sha256-WeHMzSt4HUJZ9M9/Yu1h3VB5GuD/I9x+v6VyUhsmFhU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ipython
-  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  checkInputs =  [
+  optional-dependencies = {
+    gpu = [ py3nvml ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "watermark"
-  ];
+  pythonImportsCheck = [ "watermark" ];
 
-  meta = with lib; {
+  meta = {
     description = "IPython extension for printing date and timestamps, version numbers, and hardware information";
     homepage = "https://github.com/rasbt/watermark";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nphilou ];
+    changelog = "https://github.com/rasbt/watermark/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nphilou ];
   };
 }

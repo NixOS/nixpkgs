@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, untangle
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-vcr,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  untangle,
 }:
 
 buildPythonPackage rec {
@@ -14,11 +14,9 @@ buildPythonPackage rec {
   version = "0.52";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "oblogic7";
-    repo = pname;
+    repo = "pyqvrpro";
     rev = "v${version}";
     hash = "sha256-lOd2AqnrkexNqT/usmJts5NW7vJtV8CRsliYgkhgRaU=";
   };
@@ -29,19 +27,17 @@ buildPythonPackage rec {
     untangle
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-vcr
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyqvrpro"
-  ];
+  pythonImportsCheck = [ "pyqvrpro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interfacing with QVR Pro API";
     homepage = "https://github.com/oblogic7/pyqvrpro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

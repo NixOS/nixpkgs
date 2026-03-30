@@ -1,34 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-runner
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "token-bucket";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "falconry";
-    repo = pname;
-    rev = version;
-    sha256 = "0a703y2d09kvv2l9vq7vc97l4pi2wwq1f2hq783mbw2238jymb3m";
+    repo = "token-bucket";
+    tag = version;
+    hash = "sha256-dazqJRpC8FUHOhgKFzDnIl5CT2L74J2o2Hsm0IQf4Cg=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
+  patches = [
+    # Replace imp with importlib, https://github.com/falconry/token-bucket/pull/24
+    (fetchpatch {
+      name = "remove-imp.patch";
+      url = "https://github.com/falconry/token-bucket/commit/10a3c9f4de00f4933349f66b4c72b6c96db6e766.patch";
+      hash = "sha256-Hk5+i3xzeA3F1kXRaRarWT9mff2lT2WNmTfTZvYzGYI=";
+    })
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
+  '';
 
-  meta = with lib; {
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  meta = {
     description = "Token Bucket Implementation for Python Web Apps";
     homepage = "https://github.com/falconry/token-bucket";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/falconry/token-bucket/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

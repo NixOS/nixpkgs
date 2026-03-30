@@ -1,57 +1,58 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, pytest
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  aiohttp,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mockservers";
   version = "0.6.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gr1N";
-    repo = pname;
+    repo = "pytest-mockservers";
     rev = version;
-    sha256 = "0xql0fnw7m2zn103601gqbpyd761kzvgjj2iz9hjsv56nr4z1g9i";
+    hash = "sha256-Mb3wSbambC1h+lFI+fafwZzm78IvADNAsF/Uw60DFHc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  patches = [
+    # https://github.com/Gr1N/pytest-mockservers/pull/75
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/Gr1N/pytest-mockservers/commit/c7731186a4e12851ab1c15ab56e652bb48ed59c4.patch";
+      hash = "sha256-/5X3xjJwt2gs3t6f/6n1QZ+CTBq/5+cQE+MgNWyz+Hs=";
+    })
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     aiohttp
     pytest-asyncio
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pytest_mockservers"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "A set of fixtures to test your requests to HTTP/UDP servers";
+  # relies on the removed event_loop fixture
+  disabledTests = [ "test_udp_server_factory" ];
+
+  pythonImportsCheck = [ "pytest_mockservers" ];
+
+  meta = {
+    description = "Set of fixtures to test your requests to HTTP/UDP servers";
     homepage = "https://github.com/Gr1N/pytest-mockservers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

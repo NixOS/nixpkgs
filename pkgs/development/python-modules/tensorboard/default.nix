@@ -1,75 +1,61 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, numpy
-, wheel
-, werkzeug
-, protobuf
-, grpcio
-, markdown
-, absl-py
-, google-auth-oauthlib
-, setuptools
-, tensorboard-data-server
-, tensorboard-plugin-wit
-, tensorboard-plugin-profile
-}:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 
-# tensorflow/tensorboard is built from a downloaded wheel, because
-# https://github.com/tensorflow/tensorboard/issues/719 blocks
-# buildBazelPackage.
+  # dependencies
+  absl-py,
+  grpcio,
+  markdown,
+  numpy,
+  packaging,
+  pillow,
+  protobuf,
+  setuptools,
+  tensorboard-data-server,
+  werkzeug,
+  standard-imghdr,
+
+  versionCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.10.0";
+  version = "2.20.0";
   format = "wheel";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
+  # tensorflow/tensorboard is built from a downloaded wheel, because
+  # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-dskaXolZzSIIzDLLF6DLACutq7ZqBqwq8Cp4EPSaWeM=";
+    hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";
   };
 
-  postPatch = ''
-    chmod u+rwx -R ./dist
-    pushd dist
-    wheel unpack --dest unpacked ./*.whl
-    pushd unpacked/tensorboard-${version}
+  pythonRelaxDeps = [
+    "google-auth-oauthlib"
+    "protobuf"
+  ];
 
-    substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<1.0,>=0.4.1)" \
-      --replace "protobuf (<3.20,>=3.9.2)" "protobuf (>=3.9.2)"
-
-    popd
-    wheel pack ./unpacked/tensorboard-${version}
-    popd
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     grpcio
-    google-auth-oauthlib
     markdown
     numpy
+    packaging
+    pillow
     protobuf
     setuptools
     tensorboard-data-server
-    tensorboard-plugin-profile
-    tensorboard-plugin-wit
     werkzeug
-    # not declared in install_requires, but used at runtime
-    # https://github.com/NixOS/nixpkgs/issues/73840
-    wheel
-  ];
 
-  # in the absence of a real test suite, run cli and imports
-  checkPhase = ''
-    $out/bin/tensorboard --help > /dev/null
-  '';
+    # Requires 'imghdr' which has been removed from python in 3.13
+    # ModuleNotFoundError: No module named 'imghdr'
+    # https://github.com/tensorflow/tensorboard/issues/6964
+    standard-imghdr
+  ];
 
   pythonImportsCheck = [
     "tensorboard"
@@ -81,10 +67,16 @@ buildPythonPackage rec {
     "tensorboard.util"
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
+    mainProgram = "tensorboard";
+    maintainers = [ ];
   };
 }

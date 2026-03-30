@@ -1,23 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-eventserver";
-  version = "1.0.0";
+  version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-eventserver";
     rev = version;
-    sha256 = "1xcf7ljvi5ixhwx9rkg3hnwcyv4wsgd2yb6is11jffbrdp00j2bq";
+    hash = "sha256-PWLGPORNprTfG+jgXI1sxyVkRTwSEib4SZhPdOBchwE=";
   };
 
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "skytemple_eventserver" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-eventserver";
     description = "Websocket server that emits SkyTemple UI events";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

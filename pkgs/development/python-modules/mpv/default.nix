@@ -1,33 +1,51 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
-, mpv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mpv,
+  setuptools,
+  pytestCheckHook,
+  pyvirtualdisplay,
+  xvfb,
 }:
 
 buildPythonPackage rec {
   pname = "mpv";
-  version = "1.0.1";
-  disabled = isPy27;
+  version = "1.0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
-    rev = "v${version}";
-    sha256 = "sha256-UCJ1PknnWQiFciTEMxTUqDzz0Z8HEWycLuQqYeyQhoM=";
+    tag = "v${version}";
+    hash = "sha256-MHdQnnjxnbOkIf56VLGi7vgNbrjhU/ODUBdZoXjxXxE=";
   };
-
-  buildInputs = [ mpv ];
 
   postPatch = ''
     substituteInPlace mpv.py \
-      --replace "sofile = ctypes.util.find_library('mpv')" \
-                'sofile = "${mpv}/lib/libmpv${stdenv.targetPlatform.extensions.sharedLibrary}"'
+      --replace-fail "sofile = ctypes.util.find_library('mpv')" \
+                     'sofile = "${mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  # tests impure, will error if it can't load libmpv.so
-  checkPhase = "${python.interpreter} -c 'import mpv'";
+  build-system = [ setuptools ];
 
-  meta = with lib; {
-    description = "A python interface to the mpv media player";
+  buildInputs = [ mpv ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyvirtualdisplay
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    xvfb
+  ];
+
+  pythonImportsCheck = [ "mpv" ];
+
+  meta = {
+    description = "Python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

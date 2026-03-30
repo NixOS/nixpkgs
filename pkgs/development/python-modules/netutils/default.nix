@@ -1,58 +1,66 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  napalm,
+  poetry-core,
+  pytestCheckHook,
+  pyyaml,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.17.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-3c44ZJIEBhKggtqs77gt2fY3tI00ZGmFGLIGR8LF6aE=";
+    repo = "netutils";
+    tag = "v${version}";
+    hash = "sha256-LdLNDzO5ANpTqpcemgyNoZxm6LDYRonS5o8mMmdg4vM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = [ jsonschema ];
+
+  optional-dependencies.optionals = [
+    jsonschema
+    napalm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     pytestCheckHook
     pyyaml
     toml
   ];
 
-  pythonImportsCheck = [
-    "netutils"
-  ];
+  pythonImportsCheck = [ "netutils" ];
 
   disabledTests = [
     # Tests require network access
     "test_is_fqdn_resolvable"
     "test_fqdn_to_ip"
     "test_tcp_ping"
-    # Skip SPhinx test
+    # Skip Sphinx test
     "test_sphinx_build"
+    # OSError: [Errno 22] Invalid argument
+    "test_compare_type5"
+    "test_encrypt_type5"
+    "test_compare_cisco_type5"
+    "test_get_napalm_getters_napalm_installed_default"
+    "test_encrypt_cisco_type5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

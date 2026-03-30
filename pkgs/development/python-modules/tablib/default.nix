@@ -1,42 +1,75 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, isPy27
-, odfpy
-, openpyxl
-, pandas
-, setuptools-scm
-, pytestCheckHook
-, pytest-cov
-, pyyaml
-, unicodecsv
-, xlrd
-, xlwt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  markuppy,
+  odfpy,
+  openpyxl,
+  pandas,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pyyaml,
+  setuptools-scm,
+  tabulate,
+  unicodecsv,
+  xlrd,
+  xlwt,
 }:
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.2.1";
-  disabled = isPy27;
+  version = "3.9.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pX8ncLjCJf6+wcseZQEqac8w3Si+gQ4P+Y0CR2jH0PE=";
+    hash = "sha256-G2q9jtsPNWAeBMYWHXlmD9zeSrtKVPZsyfkFS9VdX+I=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ xlwt openpyxl pyyaml xlrd odfpy ];
-  checkInputs = [ pytestCheckHook pytest-cov unicodecsv pandas ];
 
-  # test_tablib needs MarkupPy, which isn't packaged yet
-  pytestFlagsArray = [ "--ignore=tests/test_tablib.py" ];
+  optional-dependencies = {
+    all = [
+      markuppy
+      odfpy
+      openpyxl
+      pandas
+      pyyaml
+      tabulate
+      xlrd
+      xlwt
+    ];
+    cli = [ tabulate ];
+    html = [ markuppy ];
+    ods = [ odfpy ];
+    pandas = [ pandas ];
+    xls = [
+      xlrd
+      xlwt
+    ];
+    xlsx = [ openpyxl ];
+    yaml = [ pyyaml ];
+  };
+
+  nativeCheckInputs = [
+    pandas
+    pytestCheckHook
+    pytest-cov-stub
+    unicodecsv
+  ];
+
+  disabledTestPaths = [
+    # test_tablib needs MarkupPy, which isn't packaged yet
+    "tests/test_tablib.py"
+  ];
 
   pythonImportsCheck = [ "tablib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Format-agnostic tabular dataset library";
     homepage = "https://tablib.readthedocs.io/";
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,24 +1,43 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
-, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  uucp,
+  uutf,
+  cmdliner,
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
+  cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "uuseg";
-  webpage = "https://erratique.ch/software/${pname}";
-in
-
-stdenv.mkDerivation rec {
-
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "15.0.0";
+  inherit version;
 
   src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
+    url = "https://erratique.ch/software/uuseg/releases/uuseg-${finalAttrs.version}.tbz";
+    hash =
+      {
+        "17.0.0" = "sha256-Fn41ajEFbMv3LLkD+zqy76217/kWFS7q9jm9ubc6TI4=";
+        "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
+      }
+      ."${finalAttrs.version}";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [  topkg uutf ]
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [
+    topkg
+    uutf
+  ]
   ++ lib.optional cmdlinerSupport cmdliner;
   propagatedBuildInputs = [ uucp ];
 
@@ -34,12 +53,12 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) installPhase;
 
-  meta = with lib; {
-    description = "An OCaml library for segmenting Unicode text";
-    homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+  meta = {
+    description = "OCaml library for segmenting Unicode text";
+    homepage = "https://erratique.ch/software/uuseg";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "usegtrip";
     inherit (ocaml.meta) platforms;
   };
-}
+})

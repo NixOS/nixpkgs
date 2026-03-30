@@ -1,25 +1,29 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocamlnet, cpu }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  cpu,
+}:
 
 buildDunePackage rec {
   pname = "parany";
-  version = "12.1.2";
+  version = "14.0.1";
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.03.0";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "yOeJzb2Wr6jA4efI9/fuqDCl/Tza3zxT3YjAiJmhHHg=";
+    hash = "sha256-QR3Rq30iKhft+9tVCgJLOq9bwJe7bcay/kMTXjjCLjE=";
   };
 
-  propagatedBuildInputs = [ ocamlnet cpu ];
+  propagatedBuildInputs = [ cpu ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    homepage = "https://github.com/UnixJunkie/parany";
     description = "Generalized map/reduce for multicore computing";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl2;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl2;
   };
 }

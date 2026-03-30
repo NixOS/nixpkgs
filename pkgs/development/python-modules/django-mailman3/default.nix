@@ -1,32 +1,83 @@
-{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django-compressor
-, django-allauth, mailmanclient, django, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  django-gravatar2,
+  django-allauth,
+  mailmanclient,
+  pytz,
+
+  # tests
+  django,
+  pytest-django,
+  pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.7";
+  version = "1.3.15";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "6ea8c24c13e7afe744f18e18e4d19d0e74223e0d9bd5d782deea85dcb865feb7";
+    pname = "django_mailman3";
+    inherit version;
+    hash = "sha256-+ZFrJpy5xdW6Yde/XEvxoAN8+TSQdiI0PfjZ7bHG0Rs=";
   };
 
-  propagatedBuildInputs = [
-    django-gravatar2 django-compressor django-allauth mailmanclient
+  patches = [
+    (fetchpatch {
+      name = "django-5.2.patch";
+      url = "https://gitlab.com/mailman/django-mailman3/-/commit/465c1ffc77556bb8a80a678f53a40f16b9766cc6.patch";
+      excludes = [
+        ".gitlab-ci.yml"
+        "README.rst"
+      ];
+      hash = "sha256-gSFczuNLlMclqixOu6ElS0BewUTGyhP6RXtE/waLzyo=";
+    })
   ];
-  checkInputs = [ django mock ];
 
-  checkPhase = ''
-    cd $NIX_BUILD_TOP/$sourceRoot
-    PYTHONPATH=.:$PYTHONPATH django-admin.py test --settings=django_mailman3.tests.settings_test
+  pythonRelaxDeps = [ "django-allauth" ];
+
+  build-system = [ pdm-backend ];
+
+  dependencies = [
+    django-allauth
+    django-gravatar2
+    mailmanclient
+    pytz
+  ]
+  ++ django-allauth.optional-dependencies.openid
+  ++ django-allauth.optional-dependencies.socialaccount;
+
+  nativeCheckInputs = [
+    django
+    pytest-django
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=django_mailman3.tests.settings_test
   '';
 
   pythonImportsCheck = [ "django_mailman3" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mailman;
+  };
+
+  meta = {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin qyliss ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
+    broken =
+      lib.versionAtLeast django-allauth.version "65.0.0" || lib.versionAtLeast django.version "5.3";
   };
 }

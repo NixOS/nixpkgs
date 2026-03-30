@@ -1,16 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "python-juicenet";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jesserockz";
@@ -19,21 +17,17 @@ buildPythonPackage rec {
     hash = "sha256-5RKnVwOfEHzFZCiC8OUpS8exKrENK+I3Ok45HlKEvtU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyjuicenet"
-  ];
+  pythonImportsCheck = [ "pyjuicenet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read and control Juicenet/Juicepoint/Juicebox based EVSE devices";
     homepage = "https://github.com/jesserockz/python-juicenet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

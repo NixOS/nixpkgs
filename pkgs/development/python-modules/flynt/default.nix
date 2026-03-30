@@ -1,32 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, astor
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  lib,
+  pytestCheckHook,
+  hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flynt";
-  version = "0.66";
-
-  disabled = pythonOlder "3.6";
+  version = "1.0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikamensh";
     repo = "flynt";
-    rev = version;
-    hash = "sha256-DV433wqLjF5k4g8J7rj5gZfaw+Y4/TDOoFKo3eKDjZ4=";
+    tag = finalAttrs.version;
+    hash = "sha256-SkkCA4fEHplt9HkEn+QOq4k9lW5qJeZzLZEbNEtKBSo=";
   };
 
-  propagatedBuildInputs = [ astor ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "command line tool to automatically convert a project's Python code from old format style strings into Python 3.6+'s f-strings";
+  pythonImportsCheck = [ "flynt" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_fstringify"
+    "test_mixed_quote_types_unsafe"
+  ];
+
+  meta = {
+    description = "Tool to automatically convert old string literal formatting to f-strings";
     homepage = "https://github.com/ikamensh/flynt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/ikamensh/flynt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
+    mainProgram = "flynt";
   };
-}
+})

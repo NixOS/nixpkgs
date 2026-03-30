@@ -1,27 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  bc,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2022-05-07";
+  version = "${kernel.version}-unstable-2025-12-15";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "8821cu-20210118";
-    rev = "14aac4269afe5d21d1cc0032bdc1426128f83734";
-    hash = "sha256-TLakNRhHvYAbK0slKsFgSjqJdxVStzZhi1EEajmr7hg=";
+    repo = "8821cu-20210916";
+    rev = "7f63a9da2e8ed83403f6f920e9b1628a37b38ef4";
+    hash = "sha256-RgGO6r2mx6MiDOWpPJIC0MvX7rejWu+TdHWtsW1PNOY=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
-      --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
-      --replace /sbin/depmod \# \
-      --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+      --replace-fail /lib/modules/ "${kernel.dev}/lib/modules/" \
+      --replace-fail /sbin/depmod \# \
+      --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
   preInstall = ''
@@ -30,11 +36,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl8821cu driver";
-    homepage = "https://github.com/morrownr/8821cu";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.contrun ];
+    homepage = "https://github.com/morrownr/8821cu-20210916";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ contrun ];
   };
 }

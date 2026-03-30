@@ -1,64 +1,61 @@
-{ lib
-, asyncssh
-, buildPythonPackage
-, dulwich
-, fetchFromGitHub
-, fsspec
-, funcy
-, GitPython
-, pathspec
-, pygit2
-, pygtrie
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp-retry,
+  asyncssh,
+  buildPythonPackage,
+  dulwich,
+  fetchFromGitHub,
+  fsspec,
+  funcy,
+  gitpython,
+  pathspec,
+  pygit2,
+  pygtrie,
+  setuptools,
+  setuptools-scm,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.1.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-YivsP5c0fnpm/0VCFfyH054LYAQbyEdH+wZTRxsCAY4=";
+    repo = "scmrepo";
+    tag = version;
+    hash = "sha256-nkHEeslQM+F4PpNrrbSql+jCJDHmdaGfGkciluhXmHo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1" \
-      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp-retry
     asyncssh
     dulwich
     fsspec
     funcy
-    GitPython
+    gitpython
     pathspec
     pygit2
     pygtrie
+    tqdm
   ];
 
   # Requires a running Docker instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "scmrepo"
-  ];
+  pythonImportsCheck = [ "scmrepo" ];
 
-  meta = with lib; {
+  meta = {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/scmrepo/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

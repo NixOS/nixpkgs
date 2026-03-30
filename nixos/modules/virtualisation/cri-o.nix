@@ -1,10 +1,19 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.virtualisation.cri-o;
 
-  crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
+  crioPackage = pkgs.cri-o.override {
+    extraPackages =
+      cfg.extraPackages
+      ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
+  };
 
   format = pkgs.formats.toml { };
 
@@ -12,42 +21,56 @@ let
 in
 {
   meta = {
-    maintainers = teams.podman.members;
+    teams = [ teams.podman ];
   };
 
   options.virtualisation.cri-o = {
-    enable = mkEnableOption (lib.mdDoc "Container Runtime Interface for OCI (CRI-O)");
+    enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "btrfs" "overlay" "vfs" ];
+      type = types.enum [
+        "aufs"
+        "btrfs"
+        "devmapper"
+        "overlay"
+        "vfs"
+        "zfs"
+      ];
       default = "overlay";
-      description = lib.mdDoc "Storage driver to be used";
+      description = "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
+      type = types.enum [
+        "trace"
+        "debug"
+        "info"
+        "warn"
+        "error"
+        "fatal"
+      ];
       default = "info";
-      description = lib.mdDoc "Log level to be used";
+      description = "Log level to be used";
     };
 
     pauseImage = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Override the default pause image for pod sandboxes";
+      description = "Override the default pause image for pod sandboxes";
       example = "k8s.gcr.io/pause:3.2";
     };
 
     pauseCommand = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Override the default pause command";
+      description = "Override the default pause command";
       example = "/pause";
     };
 
     runtime = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Override the default runtime";
+      description = "Override the default runtime";
       example = "crun";
     };
 
@@ -59,7 +82,7 @@ in
           pkgs.gvisor
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed in the CRI-O wrapper.
       '';
     };
@@ -68,7 +91,7 @@ in
       type = types.package;
       default = crioPackage;
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The final CRI-O package (including extra packages).
       '';
     };
@@ -76,14 +99,14 @@ in
     networkDir = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc "Override the network_dir option.";
+      description = "Override the network_dir option.";
       internal = true;
     };
 
     settings = mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for cri-o, see
         <https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md>.
       '';
@@ -91,9 +114,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package pkgs.cri-tools ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.cri-tools
+    ];
 
-    environment.etc."crictl.yaml".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
+    environment.etc."crictl.yaml".source = "${cfg.package}/etc/crictl.yaml";
 
     virtualisation.cri-o.settings.crio = {
       storage_driver = cfg.storageDriver;
@@ -113,9 +139,7 @@ in
         log_level = cfg.logLevel;
         manage_ns_lifecycle = true;
         pinns_path = "${cfg.package}/bin/pinns";
-        hooks_dir =
-          optional (config.virtualisation.containers.ociSeccompBpfHook.enable)
-            config.boot.kernelPackages.oci-seccomp-bpf-hook;
+        hooks_dir = optional (config.virtualisation.containers.ociSeccompBpfHook.enable) config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
         default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
         runtimes = mkIf (cfg.runtime != null) {
@@ -124,8 +148,10 @@ in
       };
     };
 
-    environment.etc."cni/net.d/10-crio-bridge.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
-    environment.etc."cni/net.d/99-loopback.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/99-loopback.conf";
+    environment.etc."cni/net.d/10-crio-bridge.conflist".source =
+      "${cfg.package}/etc/cni/net.d/10-crio-bridge.conflist";
+    environment.etc."cni/net.d/99-loopback.conflist".source =
+      "${cfg.package}/etc/cni/net.d/99-loopback.conflist";
     environment.etc."crio/crio.conf.d/00-default.conf".source = cfgFile;
 
     # Enable common /etc/containers configuration
@@ -140,7 +166,7 @@ in
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/crio";
-        ExecReload = "/bin/kill -s HUP $MAINPID";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         TasksMax = "infinity";
         LimitNOFILE = "1048576";
         LimitNPROC = "1048576";

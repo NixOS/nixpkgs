@@ -1,46 +1,113 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ansible
-, pytest
-, mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  coreutils,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  ansible-compat,
+  ansible-core,
+  packaging,
+  pytest-xdist,
+
+  # buildInputs
+  pytest,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-ansible";
-  version = "2.2.4";
+  version = "26.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
-    rev = "v${version}";
-    sha256 = "0vr015msciwzz20zplxalfmfx5hbg8rkf8vwjdg3z12fba8z8ks4";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3pppBAgAfkwJNPRsI6CH4UDMqyZ45+mFNejlQwX5bCg=";
   };
 
-  patchPhase = ''
-    sed -i "s/'setuptools-markdown'//g" setup.py
+  postPatch = ''
+    substituteInPlace inventory \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 
-  # requires pandoc < 2.0
-  # buildInputs = [ setuptools-markdown ];
-  checkInputs =  [ mock ];
-  propagatedBuildInputs = [ ansible ];
+  dependencies = [
+    ansible-core
+    ansible-compat
+    packaging
+    pytest-xdist
+  ];
 
-  # tests not included with release, even on github
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-  checkPhase = ''
-    HOME=$TMPDIR pytest tests/
-  '';
+  enabledTestPaths = [ "tests/" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # pytest unrecognized arguments in test_pool.py
+    "test_ansible_test"
+    # Host unreachable in the inventory
+    "test_become"
+    # [Errno -3] Temporary failure in name resolution
+    "test_connection_failure_v2"
+    "test_connection_failure_extra_inventory_v2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "test_ansible_facts"
+    "test_func"
+    "test_param_override_with_marker"
+  ];
+
+  disabledTestPaths = [
+    # Test want s to execute pytest in a subprocess
+    "tests/integration/test_molecule.py"
+
+    # TypeError: Cannot define type '_AnsibleLazyTemplateDict' since '_AnsibleLazyTemplateDict'
+    # already extends '_AnsibleTaggedDict'.
+    "tests/test_host_manager.py"
+
+    # assert <ExitCode.TESTS_FAILED: 1> == <ExitCode.OK: 0>
+    "tests/test_fixtures.py"
+    "tests/test_params.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "tests/test_adhoc.py"
+    "tests/test_adhoc_result.py"
+  ]
+  ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
+    # Test fail in the NixOS environment
+    "tests/test_adhoc.py"
+  ];
+
+  pythonImportsCheck = [ "pytest_ansible" ];
+
+  meta = {
+    description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
-    description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
-    # https://github.com/ansible-community/pytest-ansible/blob/v2.2.4/setup.py#L124
-    broken = lib.versionAtLeast ansible.version "2.10";
+    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      robsliwi
+    ];
   };
-}
+})

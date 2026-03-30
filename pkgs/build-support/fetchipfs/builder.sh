@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 # Curl flags to handle redirects, not use EPSV, handle cookies for
 # servers to need them during redirects, and work on SSL without a
 # certificate (this isn't a security problem because we check the

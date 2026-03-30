@@ -1,22 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi,
-  click
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  click,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "click-didyoumean";
-  version = "0.3.0";
+  version = "0.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f184f0d851d96b6d29297354ed981b7dd71df7ff500d82fa6d11f0856bee8035";
+  src = fetchFromGitHub {
+    owner = "click-contrib";
+    repo = "click-didyoumean";
+    tag = "v${version}";
+    hash = "sha256-C8OrJUfBFiDM/Jnf1iJo8pGEd0tUhar1vu4fVIfGzq8=";
   };
 
-  propagatedBuildInputs = [ click ];
+  build-system = [ poetry-core ];
 
-  meta = with lib; {
+  dependencies = [ click ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Enable git-like did-you-mean feature in click";
     homepage = "https://github.com/click-contrib/click-didyoumean";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbode ];
   };
 }

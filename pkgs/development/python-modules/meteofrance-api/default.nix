@@ -1,68 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, requests-mock
-, typing-extensions
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytz,
+  requests,
+  requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meteofrance-api";
-  version = "1.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-1ZN/9ur6uhK7M5TurmmWgUjzkc79MPqKnT637hbAAWA=";
+    repo = "meteofrance-api";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zvfFMxXbCul14OXaoRdjMWKW3FYyTUcYGklHgb04nvA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     requests
-    typing-extensions
-    urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "meteofrance_api"
-  ];
+  pythonImportsCheck = [ "meteofrance_api" ];
 
   disabledTests = [
     # Tests require network access
     "test_currentphenomenons"
+    "test_dictionary"
     "test_forecast"
-    "test_full_with_coastal_bulletint"
+    "test_full_with_coastal_bulletin"
     "test_fulls"
     "test_no_rain_expected"
     "test_picture_of_the_day"
     "test_places"
     "test_rain"
     "test_session"
+    "test_observation"
     "test_workflow"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access information from the Meteo-France API";
     homepage = "https://github.com/hacf-fr/meteofrance-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "meteofrance-api";
   };
-}
+})

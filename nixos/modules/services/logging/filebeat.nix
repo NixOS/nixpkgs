@@ -1,37 +1,39 @@
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     attrValues
     literalExpression
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
-    types;
+    types
+    ;
 
   cfg = config.services.filebeat;
 
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
 in
 {
   options = {
 
     services.filebeat = {
 
-      enable = mkEnableOption (lib.mdDoc "filebeat");
+      enable = mkEnableOption "filebeat";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.filebeat;
-        defaultText = literalExpression "pkgs.filebeat";
-        example = literalExpression "pkgs.filebeat7";
-        description = lib.mdDoc ''
-          The filebeat package to use.
-        '';
+      package = mkPackageOption pkgs "filebeat" {
+        example = "filebeat7";
       };
 
       inputs = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Inputs specify how Filebeat locates and processes input data.
 
           This is like `services.filebeat.settings.filebeat.inputs`,
@@ -46,23 +48,28 @@ in
 
           See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
-        default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = json.type;
-          options = {
-            type = mkOption {
-              type = types.str;
-              default = name;
-              description = lib.mdDoc ''
-                The input type.
+        default = { };
+        type = types.attrsOf (
+          types.submodule (
+            { name, ... }:
+            {
+              freeformType = json.type;
+              options = {
+                type = mkOption {
+                  type = types.str;
+                  default = name;
+                  description = ''
+                    The input type.
 
-                Look for the value after `type:` on
-                the individual input pages linked from
-                <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
-              '';
-            };
-          };
-        }));
+                    Look for the value after `type:` on
+                    the individual input pages linked from
+                    <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
+                  '';
+                };
+              };
+            }
+          )
+        );
         example = literalExpression ''
           {
             journald.id = "everything";  # Only for filebeat7
@@ -77,7 +84,7 @@ in
       };
 
       modules = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Filebeat modules provide a quick way to get started
           processing common log formats. They contain default
           configurations, Elasticsearch ingest pipeline definitions,
@@ -96,23 +103,28 @@ in
 
           See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
-        default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = json.type;
-          options = {
-            module = mkOption {
-              type = types.str;
-              default = name;
-              description = lib.mdDoc ''
-                The name of the module.
+        default = { };
+        type = types.attrsOf (
+          types.submodule (
+            { name, ... }:
+            {
+              freeformType = json.type;
+              options = {
+                module = mkOption {
+                  type = types.str;
+                  default = name;
+                  description = ''
+                    The name of the module.
 
-                Look for the value after `module:` on
-                the individual input pages linked from
-                <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
-              '';
-            };
-          };
-        }));
+                    Look for the value after `module:` on
+                    the individual input pages linked from
+                    <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
+                  '';
+                };
+              };
+            }
+          )
+        );
         example = literalExpression ''
           {
             nginx = {
@@ -139,7 +151,7 @@ in
               type = with types; listOf str;
               default = [ "127.0.0.1:9200" ];
               example = [ "myEShost:9200" ];
-              description = lib.mdDoc ''
+              description = ''
                 The list of Elasticsearch nodes to connect to.
 
                 The events are distributed to these nodes in round
@@ -157,9 +169,9 @@ in
             filebeat = {
               inputs = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
-                description = lib.mdDoc ''
+                description = ''
                   Inputs specify how Filebeat locates and processes
                   input data. Use [](#opt-services.filebeat.inputs) instead.
 
@@ -168,9 +180,9 @@ in
               };
               modules = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
-                description = lib.mdDoc ''
+                description = ''
                   Filebeat modules provide a quick way to get started
                   processing common log formats. They contain default
                   configurations, Elasticsearch ingest pipeline
@@ -185,7 +197,7 @@ in
             };
           };
         };
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             settings = {
@@ -199,7 +211,7 @@ in
           };
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Configuration for filebeat. See
           <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html>
           for supported values.
@@ -234,10 +246,7 @@ in
 
           umask u=rwx,g=,o=
 
-          ${utils.genJqSecretsReplacementSnippet
-              cfg.settings
-              "/var/lib/filebeat/filebeat.yml"
-           }
+          ${utils.genJqSecretsReplacementSnippet cfg.settings "/var/lib/filebeat/filebeat.yml"}
         '';
         ExecStart = ''
           ${cfg.package}/bin/filebeat -e \

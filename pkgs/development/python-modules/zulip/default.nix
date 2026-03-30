@@ -1,48 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
-, matrix-client
-, distro
-, click
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  distro,
+  click,
+  typing-extensions,
+  matrix-nio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zulip";
-  version = "0.8.2";
+  version = "0.9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  # no sdist on PyPI
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "python-zulip-api";
-    rev = version;
-    hash = "sha256-Z5WrV/RDQwdKUBF86M5/xWhXn3fGNqJtqO5PTd7s5ME=";
+    tag = version;
+    hash = "sha256-mcqIfha+4nsqlshayLQ2Sd+XOYVKf1FkoczjiFRNybc=";
   };
   sourceRoot = "${src.name}/zulip";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
-    matrix-client
     distro
     click
     typing-extensions
-  ];
+  ]
+  ++ requests.optional-dependencies.security;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    matrix-nio
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "zulip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings for the Zulip message API";
     homepage = "https://github.com/zulip/python-zulip-api";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

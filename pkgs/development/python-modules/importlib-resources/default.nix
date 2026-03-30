@@ -1,48 +1,58 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
-, typing ? null
-, pythonOlder
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  importlib-metadata,
+
+  # Reverse dependency
+  sage,
+
+  # tests
+  jaraco-collections,
+  jaraco-test,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.9.0";
-  format = "pyproject";
-  disabled = isPy27;
+  version = "6.5.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "sha256-VIHpf7Ra+Nzy95iVJiVZHFj+WZ0HNdhrEPVN4IamFoE=";
+    hash = "sha256-GF+Hre9bzCiESdmPtPugfOp4vANkVd1ExfxKL+eP7Sw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    typing
+  dependencies = [ importlib-metadata ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    jaraco-collections
+    jaraco-test
   ];
 
-  checkInputs = [
-    unittestCheckHook
-  ];
+  pythonImportsCheck = [ "importlib_resources" ];
 
-  pythonImportsCheck = [
-    "importlib_resources"
-  ];
+  passthru.tests = {
+    inherit sage;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Read resources from Python packages";
     homepage = "https://importlib-resources.readthedocs.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

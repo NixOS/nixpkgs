@@ -1,81 +1,239 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
-  makeProg = args: pkgs.substituteAll (args // {
-    dir = "bin";
-    isExecutable = true;
-  });
-
-  nixos-build-vms = makeProg {
-    name = "nixos-build-vms";
-    src = ./nixos-build-vms/nixos-build-vms.sh;
-    inherit (pkgs) runtimeShell;
-  };
-
-  nixos-install = makeProg {
-    name = "nixos-install";
-    src = ./nixos-install.sh;
-    inherit (pkgs) runtimeShell;
-    nix = config.nix.package.out;
-    path = makeBinPath [
-      pkgs.jq
-      nixos-enter
-    ];
-  };
-
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
+  makeProg =
+    args:
+    pkgs.replaceVarsWith (
+      args
+      // {
+        dir = "bin";
+        isExecutable = true;
+        nativeBuildInputs = [
+          pkgs.installShellFiles
+        ];
+        postInstall = ''
+          installManPage ${args.manPage}
+        '';
+      }
+    );
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    nixInstantiate = "${pkgs.nix}/bin/nix-instantiate";
-    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
-    inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
-    xserverEnabled = config.services.xserver.enable;
+    replacements = {
+      perl = "${
+        pkgs.perl.withPackages (p: [
+          p.FileSlurp
+          p.ConfigIniFiles
+        ])
+      }/bin/perl";
+      hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
+      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
+      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
+      xserverEnabled = config.services.xserver.enable;
+    };
+    manPage = ./manpages/nixos-generate-config.8;
   };
-
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (pkgs) runtimeShell;
-    inherit (config.system.nixos) version codeName revision;
-    inherit (config.system) configurationRevision;
-    json = builtins.toJSON ({
-      nixosVersion = config.system.nixos.version;
-    } // optionalAttrs (config.system.nixos.revision != null) {
-      nixpkgsRevision = config.system.nixos.revision;
-    } // optionalAttrs (config.system.configurationRevision != null) {
-      configurationRevision = config.system.configurationRevision;
-    });
+    replacements = {
+      inherit (pkgs) runtimeShell;
+      inherit (config.system.nixos) version codeName revision;
+      inherit (config.system) configurationRevision;
+      json = builtins.toJSON (
+        {
+          nixosVersion = config.system.nixos.version;
+        }
+        // lib.optionalAttrs (config.system.nixos.revision != null) {
+          nixpkgsRevision = config.system.nixos.revision;
+        }
+        // lib.optionalAttrs (config.system.configurationRevision != null) {
+          configurationRevision = config.system.configurationRevision;
+        }
+      );
+    };
+    manPage = ./manpages/nixos-version.8;
   };
 
-  nixos-enter = makeProg {
-    name = "nixos-enter";
-    src = ./nixos-enter.sh;
-    inherit (pkgs) runtimeShell;
+  nixos-install = pkgs.nixos-install.override { };
+  nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
+    nix = config.nix.package;
   };
 
+  defaultFlakeTemplate = ''
+    {
+      inputs = {
+        # This is pointing to an unstable release.
+        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # i.e. nixos-24.11
+        # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+      };
+      outputs = inputs\@{ self, nixpkgs, ... }: {
+        # NOTE: '${options.networking.hostName.default}' is the default hostname
+        nixosConfigurations.${options.networking.hostName.default} = nixpkgs.lib.nixosSystem {
+          modules = [ ./configuration.nix ];
+        };
+      };
+    }
+  '';
+
+  defaultConfigTemplate = ''
+    # Edit this configuration file to define what should be installed on
+    # your system. Help is available in the configuration.nix(5) man page, on
+    # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+
+    { config, lib, pkgs, ... }:
+
+    {
+      imports =
+        [ # Include the results of the hardware scan.
+          ./hardware-configuration.nix
+        ];
+
+    $bootLoaderConfig
+      # networking.hostName = "nixos"; # Define your hostname.
+
+      # Configure network connections interactively with nmcli or nmtui.
+      networking.networkmanager.enable = true;
+
+      # Set your time zone.
+      # time.timeZone = "Europe/Amsterdam";
+
+      # Configure network proxy if necessary
+      # networking.proxy.default = "http://user:password\@proxy:port/";
+      # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+      # Select internationalisation properties.
+      # i18n.defaultLocale = "en_US.UTF-8";
+      # console = {
+      #   font = "Lat2-Terminus16";
+      #   keyMap = "us";
+      #   useXkbConfig = true; # use xkb.options in tty.
+      # };
+
+    $xserverConfig
+
+    $desktopConfiguration
+      # Configure keymap in X11
+      # services.xserver.xkb.layout = "us";
+      # services.xserver.xkb.options = "eurosign:e,caps:escape";
+
+      # Enable CUPS to print documents.
+      # services.printing.enable = true;
+
+      # Enable sound.
+      # services.pulseaudio.enable = true;
+      # OR
+      # services.pipewire = {
+      #   enable = true;
+      #   pulse.enable = true;
+      # };
+
+      # Enable touchpad support (enabled default in most desktopManager).
+      # services.libinput.enable = true;
+
+      # Define a user account. Don't forget to set a password with ‘passwd’.
+      # users.users.alice = {
+      #   isNormalUser = true;
+      #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      #   packages = with pkgs; [
+      #     tree
+      #   ];
+      # };
+
+      # programs.firefox.enable = true;
+
+      # List packages installed in system profile.
+      # You can use https://search.nixos.org/ to find more packages (and options).
+      # environment.systemPackages = with pkgs; [
+      #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+      #   wget
+      # ];
+
+      # Some programs need SUID wrappers, can be configured further or are
+      # started in user sessions.
+      # programs.mtr.enable = true;
+      # programs.gnupg.agent = {
+      #   enable = true;
+      #   enableSSHSupport = true;
+      # };
+
+      # List services that you want to enable:
+
+      # Enable the OpenSSH daemon.
+      # services.openssh.enable = true;
+
+      # Open ports in the firewall.
+      # networking.firewall.allowedTCPPorts = [ ... ];
+      # networking.firewall.allowedUDPPorts = [ ... ];
+      # Or disable the firewall altogether.
+      # networking.firewall.enable = false;
+
+      # Copy the NixOS configuration file and link it from the resulting system
+      # (/run/current-system/configuration.nix). This is useful in case you
+      # accidentally delete configuration.nix.
+      # system.copySystemConfiguration = true;
+
+      # This option defines the first version of NixOS you have installed on this particular machine,
+      # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+      #
+      # Most users should NEVER change this value after the initial install, for any reason,
+      # even if you've upgraded your system to a new NixOS release.
+      #
+      # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+      # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+      # to actually do that.
+      #
+      # This value being lower than the current NixOS release does NOT mean your system is
+      # out of date, out of support, or vulnerable.
+      #
+      # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+      # and migrated your data accordingly.
+      #
+      # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+      system.stateVersion = "${config.system.nixos.release}"; # Did you read the comment?
+
+    }
+  '';
 in
-
 {
-
   options.system.nixos-generate-config = {
-    configuration = mkOption {
+
+    flake = lib.mkOption {
       internal = true;
-      type = types.str;
-      description = lib.mdDoc ''
+      type = lib.types.str;
+      default = defaultFlakeTemplate;
+      description = ''
+        The NixOS module that `nixos-generate-config`
+        saves to `/etc/nixos/flake.nix` if --flake is set.
+
+        This is an internal option. No backward compatibility is guaranteed.
+        Use at your own risk!
+
+        Note that this string gets spliced into a Perl script. The perl
+        variable `$bootLoaderConfig` can be used to
+        splice in the boot loader configuration.
+      '';
+    };
+
+    configuration = lib.mkOption {
+      internal = true;
+      type = lib.types.str;
+      default = defaultConfigTemplate;
+      description = ''
         The NixOS module that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
 
@@ -88,11 +246,11 @@ in
       '';
     };
 
-    desktopConfiguration = mkOption {
+    desktopConfiguration = lib.mkOption {
       internal = true;
-      type = types.listOf types.lines;
-      default = [];
-      description = lib.mdDoc ''
+      type = lib.types.listOf lib.types.lines;
+      default = [ ];
+      description = ''
         Text to preseed the desktop configuration that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
 
@@ -106,139 +264,73 @@ in
     };
   };
 
-  options.system.disableInstallerTools = mkOption {
+  options.system.disableInstallerTools = lib.mkOption {
     internal = true;
-    type = types.bool;
+    type = lib.types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
-      read-only systems which are not expected to be rebuild or
+      read-only systems which are not expected to rebuild or
       reconfigure themselves. Use at your own risk!
     '';
   };
 
-  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
+  imports =
+    let
+      mkToolModule =
+        {
+          name,
+          package ? pkgs.${name},
+        }:
+        { config, ... }:
+        {
+          options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
+            default = config.nix.enable && !config.system.disableInstallerTools;
+            defaultText = "config.nix.enable && !config.system.disableInstallerTools";
+          };
 
-    system.nixos-generate-config.configuration = mkDefault ''
-      # Edit this configuration file to define what should be installed on
-      # your system.  Help is available in the configuration.nix(5) man page
-      # and in the NixOS manual (accessible by running ‘nixos-help’).
+          config = lib.mkIf config.system.tools.${name}.enable {
+            environment.systemPackages = [ package ];
+          };
+        };
+    in
+    [
+      (mkToolModule { name = "nixos-build-vms"; })
+      (mkToolModule { name = "nixos-enter"; })
+      (mkToolModule {
+        name = "nixos-generate-config";
+        package = config.system.build.nixos-generate-config;
+      })
+      (mkToolModule {
+        name = "nixos-install";
+        package = config.system.build.nixos-install;
+      })
+      (mkToolModule {
+        name = "nixos-option";
+        package = pkgs.nixos-option.override { nix = config.nix.package; };
+      })
+      (mkToolModule {
+        name = "nixos-rebuild";
+        package = config.system.build.nixos-rebuild;
+      })
+      (mkToolModule {
+        name = "nixos-version";
+        package = nixos-version;
+      })
+      (lib.mkRemovedOptionModule [ "system" "rebuild" "enableNg" ] ''
+        The Bash implementation of nixos-rebuild has been removed in favor of the new Python implementation.
+        If you have any issues with the new implementation, please create an issue in GitHub and tag the maintainers of 'nixos-rebuild-ng'.
+      '')
+    ];
 
-      { config, pkgs, ... }:
+  config = {
+    documentation.man.man-db.skipPackages = [ nixos-version ];
 
-      {
-        imports =
-          [ # Include the results of the hardware scan.
-            ./hardware-configuration.nix
-          ];
-
-      $bootLoaderConfig
-        # networking.hostName = "nixos"; # Define your hostname.
-        # Pick only one of the below networking options.
-        # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-        # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
-        # Set your time zone.
-        # time.timeZone = "Europe/Amsterdam";
-
-        # Configure network proxy if necessary
-        # networking.proxy.default = "http://user:password\@proxy:port/";
-        # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-        # Select internationalisation properties.
-        # i18n.defaultLocale = "en_US.UTF-8";
-        # console = {
-        #   font = "Lat2-Terminus16";
-        #   keyMap = "us";
-        #   useXkbConfig = true; # use xkbOptions in tty.
-        # };
-
-      $xserverConfig
-
-      $desktopConfiguration
-        # Configure keymap in X11
-        # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = {
-        #   "eurosign:e";
-        #   "caps:escape" # map caps to escape.
-        # };
-
-        # Enable CUPS to print documents.
-        # services.printing.enable = true;
-
-        # Enable sound.
-        # sound.enable = true;
-        # hardware.pulseaudio.enable = true;
-
-        # Enable touchpad support (enabled default in most desktopManager).
-        # services.xserver.libinput.enable = true;
-
-        # Define a user account. Don't forget to set a password with ‘passwd’.
-        # users.users.alice = {
-        #   isNormalUser = true;
-        #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-        #   packages = with pkgs; [
-        #     firefox
-        #     thunderbird
-        #   ];
-        # };
-
-        # List packages installed in system profile. To search, run:
-        # \$ nix search wget
-        # environment.systemPackages = with pkgs; [
-        #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-        #   wget
-        # ];
-
-        # Some programs need SUID wrappers, can be configured further or are
-        # started in user sessions.
-        # programs.mtr.enable = true;
-        # programs.gnupg.agent = {
-        #   enable = true;
-        #   enableSSHSupport = true;
-        # };
-
-        # List services that you want to enable:
-
-        # Enable the OpenSSH daemon.
-        # services.openssh.enable = true;
-
-        # Open ports in the firewall.
-        # networking.firewall.allowedTCPPorts = [ ... ];
-        # networking.firewall.allowedUDPPorts = [ ... ];
-        # Or disable the firewall altogether.
-        # networking.firewall.enable = false;
-
-        # Copy the NixOS configuration file and link it from the resulting system
-        # (/run/current-system/configuration.nix). This is useful in case you
-        # accidentally delete configuration.nix.
-        # system.copySystemConfiguration = true;
-
-        # This value determines the NixOS release from which the default
-        # settings for stateful data, like file locations and database versions
-        # on your system were taken. It‘s perfectly fine and recommended to leave
-        # this value at the release version of the first install of this system.
-        # Before changing this value read the documentation for this option
-        # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-        system.stateVersion = "${config.system.nixos.release}"; # Did you read the comment?
-
-      }
-    '';
-
-    environment.systemPackages =
-      [ nixos-build-vms
-        nixos-install
-        nixos-rebuild
-        nixos-generate-config
-        nixos-version
-        nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
-
+    # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
+      inherit nixos-generate-config nixos-install;
+      nixos-rebuild = nixos-rebuild-ng;
     };
-
   };
-
 }

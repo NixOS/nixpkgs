@@ -1,19 +1,20 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, statistics
-, lapack
-, blas
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  statistics,
+  lapack,
+  blas,
 }:
 
 buildOctavePackage rec {
   pname = "optim";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1175bckiryz0i6zm8zvq7y5rq3lwkmhyiky1gbn33np9qzxcsl3i";
+    sha256 = "sha256-VUqOGLtxla6GH1BZwU8aVXhEJlwa3bW/vzq5iFUkeH4=";
   };
 
   buildInputs = [
@@ -26,11 +27,16 @@ buildOctavePackage rec {
     statistics
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/optim/index.html";
-    license = with licenses; [ gpl3Plus publicDomain ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/optim/";
+    license = with lib.licenses; [
+      gpl3Plus
+      publicDomain
+    ];
     # Modified BSD code seems removed
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Non-linear optimization toolkit";
+    # Hasn't been updated since 2022, and fails to build with octave >= 10.1.0
+    broken = true;
   };
 }

@@ -1,31 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonApplication
-, poetry
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  beangulp,
+  beancount,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "beancount-ing-diba";
-  version = "0.6.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "beancount-ing-diba";
     rev = "v${version}";
-    sha256 = "sha256-1cdXqdeTz38n0g13EXJ1/IF/gJJCe1uL/Z5NJz4DL+E=";
+    sha256 = "sha256-zjwajl+0ix4wnW0bf4MAuO9Lr9F8sBv87TIL5Ghmlxg=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
-  nativeBuildInputs = [
-    poetry
+  propagatedBuildInputs = [
+    beancount
+    beangulp
   ];
 
-  meta = with lib; {
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  meta = {
     homepage = "https://github.com/siddhantgoel/beancount-ing-diba";
     description = "Beancount Importers for ING-DiBa (Germany) CSV Exports";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

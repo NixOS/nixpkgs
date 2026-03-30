@@ -1,46 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libGL
-, libX11
-, glcontext
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libGL,
+  libx11,
+  setuptools,
+  glcontext,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.7.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "5.12.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sfmCY5Yny1HgZfEN10AE1Ev1EVQ6JE51646DXjoQxyA=";
+    hash = "sha256-UpNqmMyy8uHW48sYUospGfaDHn4/kk54i1hzutzlEps=";
   };
 
-  buildInputs = [
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    substituteInPlace _moderngl.py \
+      --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
+      --replace-fail '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
+  '';
+
+  build-system = [ setuptools ];
+
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
     libGL
-    libX11
+    libx11
   ];
 
-  propagatedBuildInputs = [
-    glcontext
-  ];
+  dependencies = [ glcontext ];
 
   # Tests need a display to run.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "moderngl"
-  ];
+  pythonImportsCheck = [ "moderngl" ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance rendering for Python";
     homepage = "https://github.com/moderngl/moderngl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ c0deaddict ];
-    # should be mesaPlatforms, darwin build breaks.
-    platforms = platforms.linux;
+    changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ c0deaddict ];
+    inherit (pkgs.mesa.meta) platforms;
   };
 }

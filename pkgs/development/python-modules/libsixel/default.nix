@@ -1,10 +1,13 @@
-{ buildPythonPackage
-, lib
-, libsixel
+{
+  buildPythonPackage,
+  lib,
+  stdenv,
+  libsixel,
 }:
 
 buildPythonPackage rec {
   version = libsixel.version;
+  format = "setuptools";
   pname = "libsixel";
 
   src = libsixel.src;
@@ -13,7 +16,7 @@ buildPythonPackage rec {
   prePatch = ''
     substituteInPlace libsixel/__init__.py --replace \
       'from ctypes.util import find_library' \
-      'find_library = lambda _x: "${lib.getLib libsixel}/lib/libsixel.so"'
+      'find_library = lambda _x: "${lib.getLib libsixel}/lib/libsixel${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   # no tests
@@ -21,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libsixel" ];
 
-  meta = with lib; {
+  meta = {
     description = "SIXEL graphics encoder/decoder implementation";
     homepage = "https://github.com/libsixel/libsixel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rmcgibbo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rmcgibbo ];
   };
 }

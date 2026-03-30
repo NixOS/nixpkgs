@@ -1,29 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib
-, easy-format
+{
+  lib,
+  easy-format,
+  buildDunePackage,
+  fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-dum";
-  version = "1.0.1";
+buildDunePackage (finalAttrs: {
+  pname = "dum";
+  version = "1.0.3";
 
-  src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = "dum";
-    rev = "v${version}";
-    sha256 = "0yrxl97szjc0s2ghngs346x3y0xszx2chidgzxk93frjjpsr1mlr";
+  src = fetchurl {
+    url = "https://github.com/mjambon/dum/releases/download/${finalAttrs.version}/dum-${finalAttrs.version}.tbz";
+    hash = "sha256-ZFojUD/IoxVTDfGyh2wveFsSz4D19pKkHrNuU+LFJlE=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ];
+  postPatch = ''
+    substituteInPlace "dum.ml" \
+    --replace-fail "Lazy.lazy_is_val" "Lazy.is_val" \
+    --replace-fail "Obj.final_tag" "Obj.custom_tag"
+  '';
+
   propagatedBuildInputs = [ easy-format ];
 
-  strictDeps = true;
-
-  createFindlibDestdir = true;
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mjambon/dum";
     description = "Inspect the runtime representation of arbitrary OCaml values";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.alexfmpe ];
+    longDescription = ''
+      Dum is a library for inspecting the runtime representation of
+      arbitrary OCaml values. Shared or cyclic data are detected
+      and labelled. This guarantees that printing would always
+      terminate. This makes it possible to print values such as closures,
+      objects or exceptions in depth and without risk.
+    '';
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
-}
+})

@@ -1,36 +1,34 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pdunehd";
-  version = "1.3.2";
-
-  disabled = pythonOlder "3.6";
+  version = "1.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "valentinalexeev";
     repo = "pdunehd";
-    rev = version;
-    sha256 = "06p0k82nf89rsakr8d2hdb19dp1wqp9bsf54lwb0qma47iakljjh";
+    tag = version;
+    sha256 = "sha256-8CL7ZQ+tV0CKdqWWiPDbo6Q5d1iIj/vNbYshdjUpYSw=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # no tests implemented
   doCheck = false;
 
   pythonImportsCheck = [ "pdunehd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Dune HD media player API";
     homepage = "https://github.com/valentinalexeev/pdunehd";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/valentinalexeev/pdunehd/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

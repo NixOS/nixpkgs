@@ -1,27 +1,42 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, fmt, bigstringaf, angstrom, alcotest }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fmt,
+  bigstringaf,
+  angstrom,
+  alcotest,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "encore";
-  version = "0.8";
+  version = "0.8.1";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/encore/releases/download/v${version}/encore-v${version}.tbz";
-    sha256 = "a406bc9863b04bb424692045939d6c170a2bb65a98521ae5608d25b0559344f6";
+    url = "https://github.com/mirage/encore/releases/download/v${finalAttrs.version}/encore-${finalAttrs.version}.tbz";
+    hash = "sha256-qg6heSBc6OSfb7vZxEi4rrKh+nx+ffnsCfVvhVR3yY0=";
   };
 
-  useDune2 = true;
-
-  propagatedBuildInputs = [ angstrom fmt bigstringaf ];
+  propagatedBuildInputs = [
+    angstrom
+    fmt
+    bigstringaf
+  ];
   checkInputs = [ alcotest ];
   doCheck = true;
 
   meta = {
     homepage = "https://github.com/mirage/encore";
     description = "Library to generate encoder/decoder which ensure isomorphism";
+    longDescription = ''
+      Encore is a little library to provide an interface to generate an angstrom decoder and
+      an internal encoder from a shared description. The goal is to ensure a dual isomorphism
+      between them.
+    '';
+    changelog = "https://raw.githubusercontent.com/mirage/encore/refs/tags/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

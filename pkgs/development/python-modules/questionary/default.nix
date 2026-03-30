@@ -1,52 +1,53 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, prompt-toolkit
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  prompt-toolkit,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "unstable-2022-07-27";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmbo";
-    repo = pname;
-    rev = "848b040c5b7086ffe75bd92c656e15e94d905146";
-    hash = "sha256-W0d1Uoy5JdN3BFfeyk1GG0HBzmgKoBApaGad0UykZaY=";
+    repo = "questionary";
+    tag = version;
+    hash = "sha256-r7F5y6KD6zonQGtO/9OuCTMTWdkCdd9aqTgKg6eWp08=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "prompt_toolkit" ];
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-  ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ prompt-toolkit ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ulimit -n 1024
+  '';
 
   disabledTests = [
-    # TypeError: <lambda>() missing 1 required...
+    # RuntimeError: no running event loop
+    "test_blank_line_fix"
+
+    # TypeError: Attrs.__new__() missing 1 required positional argument: 'dim'
+    # https://github.com/tmbo/questionary/issues/461
     "test_print_with_style"
   ];
 
-  pythonImportsCheck = [
-    "questionary"
-  ];
+  pythonImportsCheck = [ "questionary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tmbo/questionary/blob/${src.rev}/docs/pages/changelog.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

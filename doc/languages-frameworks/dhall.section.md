@@ -16,8 +16,8 @@ https://prelude.dhall-lang.org/v20.1.0/package.dhall
   sha256:26b0ef498663d269e4dc6a82b0ee289ec565d683ef4c00d0ebdd25333a5a3c98
 ```
 
-… and if the import is cached then the interpreter will load the import from
-cache instead of fetching the URL.
+… and if the import is cached, then the interpreter will load the import from
+the cache instead of fetching the URL.
 
 Nixpkgs uses this trick to add all of a Dhall expression's dependencies into the
 cache so that the Dhall interpreter never needs to resolve any remote URLs.  In
@@ -89,26 +89,26 @@ buildDhallPackage {
 # ./example.nix
 
 let
-  nixpkgs = builtins.fetchTarball {
-    url    = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
-    sha256 = "1pbl4c2dsaz2lximgd31m96jwbps6apn3anx8cvvhk1gl9rkg107";
+  nixpkgs = fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
+    hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
-  dhallOverlay = self: super: {
-    true = self.callPackage ./true.nix { };
-  };
+  dhallOverlay = self: super: { true = self.callPackage ./true.nix { }; };
 
   overlay = self: super: {
     dhallPackages = super.dhallPackages.override (old: {
-      overrides =
-        self.lib.composeExtensions (old.overrides or (_: _: {})) dhallOverlay;
+      overrides = self.lib.composeExtensions (old.overrides or (_: _: { })) dhallOverlay;
     });
   };
 
-  pkgs = import nixpkgs { config = {}; overlays = [ overlay ]; };
+  pkgs = import nixpkgs {
+    config = { };
+    overlays = [ overlay ];
+  };
 
 in
-  pkgs
+pkgs
 ```
 
 … which we can then build using this command:
@@ -163,8 +163,8 @@ result
   ```
 
 The `source.dhall` file is only present for packages that specify
-`source = true;`.  By default, Dhall packages omit the `source.dhall` in order
-to conserve disk space when they are used exclusively as dependencies.  For
+`source = true;`. By default, Dhall packages omit the `source.dhall` in order
+to conserve disk space when they are used exclusively as dependencies. For
 example, if we build the Prelude package it will only contain the binary
 encoding of the expression:
 
@@ -182,18 +182,19 @@ result
 ```
 
 Typically, you only specify `source = true;` for the top-level Dhall expression
-of interest (such as our example `true.nix` Dhall package).  However, if you
+of interest (such as our example `true.nix` Dhall package). However, if you
 wish to specify `source = true` for all Dhall packages, then you can amend the
 Dhall overlay like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     # Enable source for all Dhall packages
-    buildDhallPackage =
-      args: super.buildDhallPackage (args // { source = true; });
+    buildDhallPackage = args: super.buildDhallPackage (args // { source = true; });
 
     true = self.callPackage ./true.nix { };
   };
+}
 ```
 
 … and now the Prelude will contain the fully decoded result of interpreting
@@ -266,7 +267,7 @@ of `buildDhallPackage` that accepts the following arguments:
 * `src`: The directory containing Dhall code that you want to turn into a Dhall
   package
 
-* `file`: The top-level file (`package.dhall` by default) that is the entrypoint
+* `file`: The top-level file (`package.dhall` by default) that is the entry point
   to the rest of the package
 
 * `document`: Set to `true` to generate documentation for the package
@@ -290,12 +291,12 @@ terms of `buildDhallPackage` that accepts the following arguments:
   directory other than the root of the repository)
 
 * `file`: The top-level file (`${directory}/package.dhall` by default) that is
-  the entrypoint to the rest of the package
+  the entry point to the rest of the package
 
 * `document`: Set to `true` to generate documentation for the package
 
 Additionally, `buildDhallGitHubPackage` accepts the same arguments as
-`fetchFromGitHub`, such as `sha256` or `fetchSubmodules`.
+`fetchFromGitHub`, such as `hash` or `fetchSubmodules`.
 
 ## `dhall-to-nixpkgs` {#ssec-dhall-dhall-to-nixpkgs}
 
@@ -303,20 +304,17 @@ You can use the `dhall-to-nixpkgs` command-line utility to automate
 packaging Dhall code.  For example:
 
 ```ShellSession
-$ nix-env --install --attr haskellPackages.dhall-nixpkgs
-
-$ nix-env --install --attr nix-prefetch-git  # Used by dhall-to-nixpkgs
-
-$ dhall-to-nixpkgs github https://github.com/Gabriel439/dhall-semver.git
+$ nix-shell -p haskellPackages.dhall-nixpkgs nix-prefetch-git
+[nix-shell]$ dhall-to-nixpkgs github https://github.com/Gabriella439/dhall-semver.git
 { buildDhallGitHubPackage, Prelude }:
   buildDhallGitHubPackage {
     name = "dhall-semver";
     githubBase = "github.com";
-    owner = "Gabriel439";
+    owner = "Gabriella439";
     repo = "dhall-semver";
     rev = "2d44ae605302ce5dc6c657a1216887fbb96392a4";
     fetchSubmodules = false;
-    sha256 = "0y8shvp8srzbjjpmnsvz9c12ciihnx1szs0yzyi9ashmrjvd0jcz";
+    hash = "sha256-n0nQtswVapWi/x7or0O3MEYmAkt/a1uvlOtnje6GGnk=";
     directory = "";
     file = "package.dhall";
     source = false;
@@ -324,6 +322,10 @@ $ dhall-to-nixpkgs github https://github.com/Gabriel439/dhall-semver.git
     dependencies = [ (Prelude.overridePackage { file = "package.dhall"; }) ];
     }
 ```
+
+:::{.note}
+`nix-prefetch-git` is added to the `nix-shell -p` invocation above, because it has to be in `$PATH` for `dhall-to-nixpkgs` to work.
+:::
 
 The utility takes care of automatically detecting remote imports and converting
 them to package dependencies.  You can also use the utility on local
@@ -408,9 +410,9 @@ error: build of '/nix/store/0f1hla7ff1wiaqyk1r2ky4wnhnw114fi-true.drv' failed
 ```
 
 … because the default Prelude selected by Nixpkgs revision
-`94b2848559b12a8ed1fe433084686b2a81123c99is` is version 20.1.0, which doesn't
-have the same integrity check as version 19.0.0.  This means that version
-19.0.0 is not cached and the interpreter is not allowed to fall back to
+`94b2848559b12a8ed1fe433084686b2a81123c99` is version 20.1.0, which doesn't
+have the same integrity check as version 19.0.0. This means that version
+19.0.0 is not cached, and the interpreter is not allowed to fall back to
 importing the URL.
 
 However, we can override the default Prelude version by using `dhall-to-nixpkgs`
@@ -428,22 +430,26 @@ $ dhall-to-nixpkgs github https://github.com/dhall-lang/dhall-lang.git \
 the Prelude globally for all packages, like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     true = self.callPackage ./true.nix { };
 
     Prelude = self.callPackage ./Prelude.nix { };
   };
+}
 ```
 
 … or selectively overriding the Prelude dependency for just the `true` package,
 like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     true = self.callPackage ./true.nix {
       Prelude = self.callPackage ./Prelude.nix { };
     };
   };
+}
 ```
 
 ## Overrides {#ssec-dhall-overrides}
@@ -453,11 +459,13 @@ You can override any of the arguments to `buildDhallGitHubPackage` or
 For example, suppose we wanted to selectively enable `source = true` just for the Prelude.  We can do that like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     Prelude = super.Prelude.overridePackage { source = true; };
 
-    …
+    # ...
   };
+}
 ```
 
 [semantic-integrity-checks]: https://docs.dhall-lang.org/tutorials/Language-Tour.html#installing-packages

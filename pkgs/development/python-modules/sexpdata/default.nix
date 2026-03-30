@@ -1,23 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sexpdata";
-  version = "0.0.3";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ac827a616c5e87ebb60fd6686fb86f8a166938c645f4089d92de3ffbdd494e0";
+    hash = "sha256-krZ7A2H2dm+PnkS5UZzz+8+vp1Xbhbv4k8Phz03awQk=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   doCheck = false;
 
-  meta = with lib; {
-    description = "S-expression parser for Python";
-    homepage = "https://github.com/tkf/sexpdata";
-    license = licenses.bsd0;
-  };
+  pythonImportsCheck = [ "sexpdata" ];
 
+  meta = {
+    description = "S-expression parser for Python";
+    homepage = "https://github.com/jd-boyd/sexpdata";
+    changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+  };
 }

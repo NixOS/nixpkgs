@@ -1,50 +1,41 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
-  version = "1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.clfs";
-    rev = version;
-    hash = "sha256-5rG8YiVBU4ETLgQoFnMaeXHttIB26+OhIdYjKDKmPBc=";
+    tag = version;
+    hash = "sha256-IwiE7sikZ2Rqg8GS0DKLbV/ENcRPTm0eAS3xvVG0gLw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    dissect-cstruct
-  ];
+  dependencies = [ dissect-cstruct ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.clfs"
-  ];
+  pythonImportsCheck = [ "dissect.clfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
     homepage = "https://github.com/fox-it/dissect.clfs";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

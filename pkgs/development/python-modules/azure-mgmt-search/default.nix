@@ -1,39 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
-  version = "8.0.0";
+  version = "9.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "a96d50c88507233a293e757202deead980c67808f432b8e897c4df1ca088da7e";
+    pname = "azure_mgmt_search";
+    inherit version;
+    hash = "sha256-oNoOwzLR9D0PastjuM/YAIWwdeka/PgS+MdprZ/crYQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
-    msrest
-    msrestazure
+    isodate
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "azure.mgmt.search" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Search Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-search_${version}/sdk/search/azure-mgmt-search/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

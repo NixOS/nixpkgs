@@ -1,93 +1,73 @@
-{ lib, stdenv, fetchurl, config, wrapGAppsHook
-, alsa-lib
-, atk
-, cairo
-, curl
-, cups
-, dbus-glib
-, dbus
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gtk3
-, libkrb5
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXrandr
-, libXt
-, libXtst
-, libcanberra
-, libnotify
-, adwaita-icon-theme
-, libGLU, libGL
-, nspr
-, nss
-, pango
-, pipewire
-, pciutils
-, libheimdal
-, libpulseaudio
-, systemd
-, channel
-, generated
-, writeScript
-, writeText
-, xidel
-, coreutils
-, gnused
-, gnugrep
-, gnupg
-, ffmpeg
-, runtimeShell
-, mesa # firefox wants gbm for drm+dmabuf
-, systemLocale ? config.i18n.defaultLocale or "en_US"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  config,
+  wrapGAppsHook3,
+  autoPatchelfHook,
+  alsa-lib,
+  curl,
+  dbus-glib,
+  gtk3,
+  libxtst,
+  libva,
+  pciutils,
+  pipewire,
+  adwaita-icon-theme,
+  generated,
+  writeScript,
+  writeText,
+  xidel,
+  coreutils,
+  gnused,
+  gnugrep,
+  gnupg,
+  runtimeShell,
+  systemLocale ? config.i18n.defaultLocale or "en_US",
+  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
+  applicationName ? "Firefox",
+  undmg,
 }:
 
 let
 
   inherit (generated) version sources;
 
+  binaryName = "firefox";
+
   mozillaPlatforms = {
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
+    aarch64-linux = "linux-aarch64";
+    # bundles are universal and can be re-used for both darwin architectures
+    aarch64-darwin = "mac";
+    x86_64-darwin = "mac";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
-  isPrefixOf = prefix: string:
-    builtins.substring 0 (builtins.stringLength prefix) string == prefix;
+  isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
 
-  sourceMatches = locale: source:
-      (isPrefixOf source.locale locale) && source.arch == arch;
+  sourceMatches = locale: source: (isPrefixOf source.locale locale) && source.arch == arch;
 
   policies = {
     DisableAppUpdate = true;
-  } // config.firefox.policies or {};
+  }
+  // config.firefox.policies or { };
 
   policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") { } sources;
 
   mozLocale =
-    if systemLocale == "ca_ES@valencia"
-    then "ca-valencia"
-    else lib.replaceStrings ["_"] ["-"] systemLocale;
+    if systemLocale == "ca_ES@valencia" then
+      "ca-valencia"
+    else
+      lib.replaceStrings [ "_" ] [ "-" ] systemLocale;
 
   source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
-  pname = "firefox-${channel}-bin-unwrapped";
-
+  pname = "firefox-bin-unwrapped";
 in
 
 stdenv.mkDerivation {
@@ -95,122 +75,117 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha256; };
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsa-lib
-      atk
-      cairo
-      curl
-      cups
-      dbus-glib
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      glibc
-      gtk3
-      libkrb5
-      mesa
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libxcb
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXinerama
-      libXrender
-      libXrandr
-      libXt
-      libXtst
-      libcanberra
-      libnotify
-      libGLU libGL
-      nspr
-      nss
-      pango
-      pipewire
-      pciutils
-      libheimdal
-      libpulseaudio
-      systemd
-      ffmpeg
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+  sourceRoot = lib.optional stdenv.hostPlatform.isDarwin ".";
 
-  inherit gtk3;
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    autoPatchelfHook
+    patchelfUnstable
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    undmg
+  ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gtk3
+    adwaita-icon-theme
+    alsa-lib
+    dbus-glib
+    libxtst
+  ];
+  runtimeDependencies = [
+    curl
+    pciutils
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libva.out
+  ];
+  appendRunpaths = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "${pipewire}/lib"
+  ];
+  # Firefox uses "relrhack" to manually process relocations from a fixed offset
+  patchelfFlags = [ "--no-clobber-old-sections" ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [ gtk3 adwaita-icon-theme ];
-
-  # "strip" after "patchelf" may break binaries.
-  # See: https://github.com/NixOS/patchelf/issues/10
-  dontStrip = true;
-  dontPatchELF = true;
-
-  postPatch = ''
-    # Don't download updates from Mozilla directly
-    echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
-  '';
+  # don't break code signing
+  dontFixup = stdenv.hostPlatform.isDarwin;
 
   installPhase =
-    ''
-      mkdir -p "$prefix/usr/lib/firefox-bin-${version}"
-      cp -r * "$prefix/usr/lib/firefox-bin-${version}"
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv Firefox*.app "$out/Applications/${applicationName}.app"
+      ''
+    else
+      ''
+        mkdir -p "$prefix/lib/firefox-bin-${version}"
+        cp -r * "$prefix/lib/firefox-bin-${version}"
 
-      mkdir -p "$out/bin"
-      ln -s "$prefix/usr/lib/firefox-bin-${version}/firefox" "$out/bin/"
+        mkdir -p "$out/bin"
+        ln -s "$prefix/lib/firefox-bin-${version}/firefox" "$out/bin/${binaryName}"
 
-      for executable in \
-        firefox firefox-bin plugin-container \
-        updater crashreporter webapprt-stub
-      do
-        if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
-          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-            "$out/usr/lib/firefox-bin-${version}/$executable"
-        fi
-      done
+        # See: https://github.com/mozilla/policy-templates/blob/master/README.md
+        mkdir -p "$out/lib/firefox-bin-${version}/distribution";
+        ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
+      '';
 
-      find . -executable -type f -exec \
-        patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/firefox-bin-${version}/{}" \;
+  passthru = {
+    inherit applicationName binaryName;
+    libName = "firefox-bin-${version}";
+    ffmpegSupport = true;
+    gssSupport = true;
+    gtk3 = gtk3;
 
-      # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
-      ln -s "$out/usr/lib" "$out/lib"
-
-      gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
-
-      # See: https://github.com/mozilla/policy-templates/blob/master/README.md
-      mkdir -p "$out/lib/firefox-bin-${version}/distribution";
-      ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
-    '';
-
-  passthru.binaryName = "firefox";
-  passthru.libName = "firefox-bin-${version}";
-  passthru.execdir = "/bin";
-  passthru.ffmpegSupport = true;
-  passthru.gssSupport = true;
-  # update with:
-  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
-  passthru.updateScript = import ./update.nix {
-    inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
-    baseUrl =
-      if channel == "devedition"
-        then "https://archive.mozilla.org/pub/devedition/releases/"
-        else "https://archive.mozilla.org/pub/firefox/releases/";
+    # update with:
+    # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
+    updateScript = import ./update.nix {
+      inherit
+        pname
+        writeScript
+        xidel
+        coreutils
+        gnused
+        gnugrep
+        gnupg
+        curl
+        runtimeShell
+        ;
+      baseUrl = "https://archive.mozilla.org/pub/firefox/releases/";
+    };
   };
-  meta = with lib; {
+
+  meta = {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = licenses.mpl20;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = {
+      shortName = "firefox";
+      fullName = "Firefox Terms of Use";
+      url = "https://www.mozilla.org/about/legal/terms/firefox/";
+      # "You Are Responsible for the Consequences of Your Use of Firefox"
+      # (despite the heading, not an indemnity clause) states the following:
+      #
+      # > You agree that you will not use Firefox to infringe anyone’s rights
+      # > or violate any applicable laws or regulations.
+      # >
+      # > You will not do anything that interferes with or disrupts Mozilla’s
+      # > services or products (or the servers and networks which are connected
+      # > to Mozilla’s services).
+      #
+      # This conflicts with FSF freedom 0: "The freedom to run the program as
+      # you wish, for any purpose". (Why should Mozilla be involved in
+      # instances where you break your local laws just because you happen to
+      # use Firefox whilst doing it?)
+      free = false;
+      redistributable = true; # since MPL-2.0 still applies
+    };
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
-    hydraPlatforms = [];
-    maintainers = with maintainers; [ taku0 lovesegfault ];
+    hydraPlatforms = [ ];
+    maintainers = with lib.maintainers; [
+      taku0
+      lovesegfault
+    ];
+    mainProgram = binaryName;
   };
 }

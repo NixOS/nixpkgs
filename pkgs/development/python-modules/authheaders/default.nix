@@ -1,22 +1,52 @@
-{ buildPythonPackage, fetchPypi, lib
-, authres, dnspython, dkimpy, publicsuffix2
+{
+  lib,
+  authres,
+  buildPythonPackage,
+  dkimpy,
+  dnspython,
+  fetchFromGitHub,
+  publicsuffix2,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.15.1";
+  version = "0.16.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-90rOvu+CbHtammrMDZpPx7rIboIT2X/jL1GtfjpmuOk=";
+  src = fetchFromGitHub {
+    owner = "ValiMail";
+    repo = "authentication-headers";
+    tag = version;
+    hash = "sha256-BFMZpSJ4qCEL42xTiM/D5dkatxohiCrOWAkNZHFUhac=";
   };
 
-  propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [
+    authres
+    dnspython
+    dkimpy
+    publicsuffix2
+    setuptools
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "authheaders" ];
+
+  disabledTests = [
+    # Test fails with timeout even if the resolv.conf hack is present
+    "test_authenticate_dmarc_psdsub"
+  ];
+
+  meta = {
     description = "Python library for the generation of email authentication headers";
     homepage = "https://github.com/ValiMail/authentication-headers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/ValiMail/authentication-headers/blob${version}/CHANGES";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "dmarc-policy-find";
   };
 }

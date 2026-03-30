@@ -2,7 +2,7 @@
 
 We'll cover imperative container management using `nixos-container`
 first. Be aware that container management is currently only possible as
-`root`.
+`root`, and that you need to enable [](#opt-boot.enableContainers) explicitly.
 
 You create a container with identifier `foo` as follows:
 
@@ -77,7 +77,7 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
 
 There are several ways to change the configuration of the container.
 First, on the host, you can edit
-`/var/lib/container/name/etc/nixos/configuration.nix`, and run
+`/var/lib/nixos-containers/foo/etc/nixos/configuration.nix`, and run
 
 ```ShellSession
 # nixos-container update foo

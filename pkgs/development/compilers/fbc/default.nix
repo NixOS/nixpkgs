@@ -1,57 +1,30 @@
-{ stdenv
-, buildPackages
-, lib
-, fetchzip
-, fetchpatch
-, gpm
-, libffi
-, libGL
-, libX11
-, libXext
-, libXpm
-, libXrandr
-, ncurses
+{
+  stdenv,
+  buildPackages,
+  lib,
+  fetchzip,
+  gpm,
+  libffi,
+  libGL,
+  libx11,
+  libxext,
+  libxpm,
+  libxrandr,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fbc";
-  version = "1.09.0";
+  version = "1.10.1";
 
   src = fetchzip {
     # Bootstrap tarball has sources pretranslated from FreeBASIC to C
     url = "https://github.com/freebasic/fbc/releases/download/${version}/FreeBASIC-${version}-source-bootstrap.tar.xz";
-    sha256 = "1q1gxp5kjz4vkcs9jl0x01v8qm1q2j789lgvxvikzd591ay0xini";
+    hash = "sha256-LBROv3m1DrEfSStMbNuLC+fldYNfSS+D09bJyNMNPP0=";
   };
-
-  patches = [
-    # Fixes fbc_tests.udt_wstring_.midstmt ascii getting stuck due to stack corruption
-    # Remove when >1.09.0
-    (fetchpatch {
-      name = "fbc-tests-Fix-stack-corruption.patch";
-      url = "https://github.com/freebasic/fbc/commit/42f4f6dfdaafdd5302a647152f16cda78e4ec904.patch";
-      excludes = [ "changelog.txt" ];
-      sha256 = "sha256-Bn+mnTIkM2/uM2k/b9+Up4HJ7SJWwfD3bWLJsSycFRE=";
-    })
-    # Respect SOURCE_DATE_EPOCH when set
-    # Remove when >1.09.0
-    (fetchpatch {
-      name = "fbc-SOURCE_DATE_EPOCH-support.patch";
-      url = "https://github.com/freebasic/fbc/commit/74ea6efdcfe9a90d1c860f64d11ab4a6cd607269.patch";
-      excludes = [ "changelog.txt" ];
-      sha256 = "sha256-v5FTi4vKOvSV03kigZDiOH8SEGEphhzkBL6p1hd+NtU=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs tests/warnings/test.sh
-
-    # Some tests lack proper dependency on libstdc++
-    for missingStdcpp in tests/cpp/{class,call2}-fbc.bas; do
-      sed -i -e "/'"' TEST_MODE : /a #inclib "stdc++"' $missingStdcpp
-    done
-
-    # Help compiler find libstdc++ with gcc backend
-    sed -i -e '/fbcAddLibPathFor( "libgcc.a" )/a fbcAddLibPathFor( "libstdc++.so" )' src/compiler/fbc.bas
   '';
 
   dontConfigure = true;
@@ -65,13 +38,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libffi
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     gpm
     libGL
-    libX11
-    libXext
-    libXpm
-    libXrandr
+    libx11
+    libxext
+    libxpm
+    libxrandr
   ];
 
   enableParallelBuilding = true;
@@ -100,15 +74,20 @@ stdenv.mkDerivation rec {
       BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld
     make rtlib -j$buildJobs \
       "FBC=$PWD/bin/fbc${stdenv.buildPlatform.extensions.executable} -i $PWD/inc" \
-      ${if (stdenv.buildPlatform == stdenv.hostPlatform) then
-        "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
-      else
-        "TARGET=${stdenv.hostPlatform.config}"
+      ${
+        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+          "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
+        else
+          "TARGET=${stdenv.hostPlatform.config}"
       }
 
     echo Install patched build compiler and host rtlib to local directory
     make install-compiler prefix=$PWD/patched-fbc
-    make install-rtlib prefix=$PWD/patched-fbc ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) "TARGET=${stdenv.hostPlatform.config}"}
+    make install-rtlib prefix=$PWD/patched-fbc ${
+      lib.optionalString (
+        stdenv.buildPlatform != stdenv.hostPlatform
+      ) "TARGET=${stdenv.hostPlatform.config}"
+    }
     make clean
 
     echo Compile patched host everything with previous patched stage
@@ -148,17 +127,18 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freebasic.net/";
-    description = "A multi-platform BASIC Compiler";
+    description = "Multi-platform BASIC Compiler";
+    mainProgram = "fbc";
     longDescription = ''
       FreeBASIC is a completely free, open-source, multi-platform BASIC compiler (fbc),
       with syntax similar to (and support for) MS-QuickBASIC, that adds new features
       such as pointers, object orientation, unsigned data types, inline assembly,
       and many others.
     '';
-    license = licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; windows ++ linux;
+    license = lib.licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; windows ++ linux;
   };
 }

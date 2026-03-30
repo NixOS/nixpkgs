@@ -1,52 +1,56 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, numba
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numba,
+  numpy,
+  optuna,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bmcfee";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-t5I7NJmIeV0uucPyvR+UJ24NK7fIzYlNJ8bECkbvdjI=";
+    repo = "resampy";
+    tag = version;
+    hash = "sha256-LOWpOPAEK+ga7c3bR15QvnHmON6ARS1Qee/7U/VMlTY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
-    cython
     numba
   ];
 
-  checkInputs = [
+  optional-dependencies.design = [ optuna ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     scipy
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov-report term-missing --cov resampy --cov-report=xml" ""
-  '';
-
-  pythonImportsCheck = [
-    "resampy"
+  disabledTests = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # crashing the interpreter
+    "test_quality_sine_parallel"
+    "test_resample_nu_quality_sine_parallel"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "resampy" ];
+
+  meta = {
     description = "Efficient signal resampling";
     homepage = "https://github.com/bmcfee/resampy";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.isc;
+    maintainers = [ ];
   };
 }

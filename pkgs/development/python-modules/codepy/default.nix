@@ -1,35 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytools
-, appdirs
-, six
-, cgen
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  cgen,
+  numpy,
+  platformdirs,
+  pytools,
+  typing-extensions,
+  boost,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "codepy";
-  version = "2019.1";
+  version = "2025.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-viMfB/nDrvDA/IGRZEX+yXylxbbmqbh/fgdYXBzK0zM=";
+    repo = "codepy";
+    tag = "v${version}";
+    hash = "sha256-PHIC3q9jQlRRoUoemVtyrl5hcZXMX28gRkI5Xpk9yBY=";
   };
 
-  buildInputs = [ pytools six cgen ];
-  propagatedBuildInputs = [ appdirs ];
+  build-system = [ hatchling ];
+
+  dependencies = [
+    cgen
+    numpy
+    platformdirs
+    pytools
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "codepy" ];
 
-  # Tests are broken
-  doCheck = false;
+  doCheck = false; # tests require boost setup for ad hoc module compilation
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/inducer/codepy";
     description = "Generate and execute native code at run time, from Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

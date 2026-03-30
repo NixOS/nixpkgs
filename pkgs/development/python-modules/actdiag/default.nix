@@ -1,50 +1,49 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "actdiag";
   version = "3.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blockdiag";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
+    repo = "actdiag";
+    tag = version;
+    hash = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
-  propagatedBuildInputs = [
-    blockdiag
-    setuptools
+  patches = [ ./fix_test_generate.patch ];
+
+  build-system = [ setuptools ];
+
+  propagatedBuildInputs = [ blockdiag ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "src/actdiag/tests/" ];
+
+  disabledTests = [
+    # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
+    "svg"
+    "noviewbox"
   ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "actdiag" ];
 
-  pytestFlagsArray = [
-    "src/actdiag/tests/"
-  ];
-
-  pythonImportsCheck = [
-    "actdiag"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+    changelog = "https://github.com/blockdiag/actdiag/blob/${version}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    mainProgram = "actdiag";
+    platforms = lib.platforms.unix;
   };
 }

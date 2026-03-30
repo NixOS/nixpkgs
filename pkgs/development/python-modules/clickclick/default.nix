@@ -1,30 +1,54 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy36, flake8, click, pyyaml, six, pytestCheckHook, pytest-cov }:
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromCodeberg,
+  flake8,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "clickclick";
-  version = "1.2.2";
+  version = "20.10.2";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "hjacobs";
     repo = "python-clickclick";
     rev = version;
-    sha256 = "1rij9ws9nhsmagiy1vclzliiqfkxi006rf65qvrw1k3sm2s8p5g0";
+    hash = "sha256-gefU6CI4ibtvonsaKZmuffuUNUioBn5ODs72BI5zXOw=";
   };
 
-  checkInputs = [ pytestCheckHook pytest-cov ];
-  propagatedBuildInputs = [ flake8 click pyyaml six ];
+  build-system = [ setuptools ];
 
-  # test_cli asserts on exact quoting style of output
-  disabledTests = [
-    "test_cli"
-  ] ++ lib.optionals isPy36 [
-    "test_choice_default"
+  dependencies = [
+    flake8
+    click
+    pyyaml
+    six
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  pythonImportsCheck = [ "clickclick" ];
+
+  disabledTests = [
+    # Tests asserts on exact quoting style of output
+    "test_choice_default"
+    "test_cli"
+  ];
+
+  meta = {
     description = "Click command line utilities";
-    homepage = "https://github.com/hjacobs/python-clickclick/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
+    homepage = "https://codeberg.org/hjacobs/python-clickclick/";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,23 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27,
-  cssselect, cssutils, lxml, mock, nose, requests, cachetools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  lxml,
+  cssselect,
+  cssutils,
+  requests,
+  cachetools,
+  lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "premailer";
   version = "3.10.0";
-  disabled = isPy27; # no longer compatible with urllib
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d1875a8411f5dc92b53ef9f193db6c0f879dc378d618e0ad292723e388bfe4c2";
+  src = fetchFromGitHub {
+    owner = "peterbe";
+    repo = "premailer";
+    rev = "f4ded0b9701c4985e7ff5c5beda83324c264ea62";
+    hash = "sha256-8ALdpR3aIDg0wP+JYCPY1f7mEJgdJm8xlLlgGpa0Sa4=";
   };
 
-  buildInputs = [ mock nose ];
-  propagatedBuildInputs = [ cachetools cssselect cssutils lxml requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    lxml
+    cssselect
+    cssutils
+    requests
+    cachetools
+  ];
+
+  pythonImportsCheck = [ "premailer" ];
 
   meta = {
-    description = "Turns CSS blocks into style attributes ";
+    changelog = "https://github.com/peterbe/premailer/blob/master/CHANGES.rst";
+    description = "Turns CSS blocks into style attributes";
     homepage = "https://github.com/peterbe/premailer";
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.linsui ];
   };
 }

@@ -1,37 +1,60 @@
-{ buildPythonPackage, fetchFromGitHub, lib, six, pypblib, pytestCheckHook }:
-
-buildPythonPackage rec {
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  setuptools,
+  six,
+  pypblib,
+  pytestCheckHook,
+}:
+buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "0.1.7.dev1";
+  version = "1.8.dev30";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "pysathq";
-    repo = "pysat";
-    rev = version;
-    sha256 = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
+  build-system = [ setuptools ];
+
+  src = fetchPypi {
+    inherit (finalAttrs) version;
+    pname = "python_sat";
+    hash = "sha256-KaR6NPD6wzA0WcYzq/ptRFBeI0Pfumz/S2rVlsDKnU4=";
   };
 
-  propagatedBuildInputs = [ six pypblib ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  # https://github.com/pysathq/pysat/pull/102
-  postPatch = ''
-    # Fix for case-insensitive filesystem
-    cat >>solvers/patches/cadical.patch <<EOF
-diff --git solvers/cadical/VERSION solvers/cdc/VERSION
-deleted file mode 100644
---- solvers/cadical/VERSION
-+++ /dev/null
-@@ -1 +0,0 @@
--1.0.3
-EOF
+  preBuild = ''
+    export MAKEFLAGS="-j$NIX_BUILD_CORES"
   '';
 
-  meta = with lib; {
-    description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
+  propagatedBuildInputs = [
+    six
+    pypblib
+  ];
+
+  pythonImportsCheck = [
+    "pysat"
+    "pysat.examples"
+    "pysat.allies"
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # Due to `python -m pytest` appending the local directory to `PYTHONPATH`,
+  # importing `pysat.examples` in the tests fails. Removing the `pysat`
+  # directory fixes since then only the installed version in `$out` is
+  # imported, which has `pysat.examples` correctly installed.
+  # See https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    rm -r pysat
+  '';
+
+  meta = {
+    description = "Toolkit for SAT-based prototyping in Python (without optional dependencies)";
     homepage = "https://github.com/pysathq/pysat";
-    license = licenses.mit;
-    maintainers = [ maintainers.marius851000 ];
+    changelog = "https://pysathq.github.io/updates/";
+    license = lib.licenses.mit;
+    maintainers = [
+      lib.maintainers.marius851000
+      lib.maintainers.chrjabs
+    ];
+    platforms = lib.platforms.all;
   };
-}
+})

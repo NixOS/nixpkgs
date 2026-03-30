@@ -1,22 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.nextdns;
-in {
+in
+{
   options = {
     services.nextdns = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the NextDNS DNS/53 to DoH Proxy service.";
+        description = "Whether to enable the NextDNS DNS/53 to DoH Proxy service.";
       };
       arguments = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "-config" "10.0.3.0/24=abcdef" ];
-        description = lib.mdDoc "Additional arguments to be passed to nextdns run.";
+        default = [ ];
+        example = [
+          "-config"
+          "10.0.3.0/24=abcdef"
+        ];
+        description = "Additional arguments to be passed to nextdns run.";
       };
     };
   };

@@ -1,66 +1,75 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, numba
-, numpy
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rapidjson
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-fancy-pypi-readme,
+  hatchling,
+
+  # dependencies
+  awkward-cpp,
+  fsspec,
+  numpy,
+  packaging,
+
+  # tests
+  numba,
+  numexpr,
+  pandas,
+  pyarrow,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward";
-  version = "1.10.2";
-  format = "setuptools";
+  version = "2.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MDvAkZ8JMts+eKklTBf83rEl5L5lzYlLQN+8O/3fwFQ=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "awkward";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ovbhCPTNxyfL7tkvBCiHF0kZt0l0oMSpdsE4E9S4JJY=";
   };
 
-  nativeBuildInputs = [
-    cmake
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatchling
   ];
 
-  buildInputs = [
-    pyyaml
-    rapidjson
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    awkward-cpp
+    fsspec
     numpy
-    setuptools
+    packaging
   ];
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
-    pytestCheckHook
-    numba
-  ];
+  pythonImportsCheck = [ "awkward" ];
 
-  disabledTests = [
-    # incomatible with numpy 1.23
-    "test_numpyarray"
+  nativeCheckInputs = [
+    fsspec
+    numba
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
-    "tests-cuda"
+    # Need to be run on a GPU platform.
+    "tests-cuda/*"
   ];
 
-  pythonImportsCheck = [
-    "awkward"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

@@ -1,41 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django-guardian
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django-guardian,
+  djangorestframework,
+  pytest-django,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-guardian";
-  version = "0.3.0";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rpkilby";
     repo = "django-rest-framework-guardian";
     rev = version;
-    sha256 = "sha256-jl/VEl1pUHU8J1d5ZQSGJweNJayIGw1iVAmwID85fqw=";
+    hash = "sha256-7SaKyWoLen5DAwSyrWeA4rEmjXMcPwJ7LM7WYxk+IKs=";
   };
 
-  postPatch = ''
-    chmod +x manage.py
-    patchShebangs manage.py
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django-guardian
     djangorestframework
   ];
 
-  checkPhase = ''
-    ./manage.py test
-  '';
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
+
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   pythonImportsCheck = [ "rest_framework_guardian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django-guardian support for Django REST Framework";
     homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

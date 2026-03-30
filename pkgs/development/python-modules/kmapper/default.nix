@@ -1,49 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, numpy
-, scipy
-, jinja2
-, pytestCheckHook
-, networkx
-, matplotlib
-, igraph
-, plotly
-, ipywidgets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jinja2,
+  numpy,
+  scikit-learn,
+  scipy,
+
+  # tests
+  anywidget,
+  igraph,
+  ipywidgets,
+  matplotlib,
+  networkx,
+  plotly,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kmapper";
-  version = "2.0.1";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "kepler-mapper";
-    rev = "v${version}";
-    sha256 = "1jqqrn7ig9kylcc8xbslxmchzghr9jgffaab3g3y3nyghk8azlgj";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i909J0yI8v8BqGbCkcjBAdA02Io+qpILdDkojZj0wv4=";
   };
 
-  propagatedBuildInputs = [
-    scikit-learn
-    numpy
-    scipy
+  build-system = [ setuptools ];
+
+  dependencies = [
     jinja2
+    numpy
+    scikit-learn
+    scipy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    networkx
-    matplotlib
+  pythonImportsCheck = [ "kmapper" ];
+
+  nativeCheckInputs = [
+    anywidget
     igraph
-    plotly
     ipywidgets
+    matplotlib
+    networkx
+    plotly
+    pytestCheckHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # UnboundLocalError: cannot access local variable 'X_blend' where it is not associated with a value
+    "test_tuple_projection"
+    "test_tuple_projection_fit"
+  ];
+
+  meta = {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
     homepage = "https://kepler-mapper.scikit-tda.org/";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    downloadPage = "https://github.com/scikit-tda/kepler-mapper";
+    changelog = "https://github.com/scikit-tda/kepler-mapper/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

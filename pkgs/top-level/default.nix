@@ -1,91 +1,167 @@
-/* This function composes the Nix Packages collection. It:
+/*
+  This function composes the Nix Packages collection. It:
 
-     1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
+    1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
 
-     2. Applies the final stage to the given `config` if it is a function
+    2. Applies the final stage to the given `config` if it is a function
 
-     3. Defaults to no non-standard config and no cross-compilation target
+    3. Defaults to no non-standard config and no cross-compilation target
 
-     4. Uses the above to infer the default standard environment's (stdenv's)
-        stages if no stdenv's are provided
+    4. Uses the above to infer the default standard environment's (stdenv's)
+       stages if no stdenv's are provided
 
-     5. Folds the stages to yield the final fully booted package set for the
-        chosen stdenv
+    5. Folds the stages to yield the final fully booted package set for the
+       chosen stdenv
 
-   Use `impure.nix` to also infer the `system` based on the one on which
-   evaluation is taking place, and the configuration from environment variables
-   or dot-files. */
+  Use `impure.nix` to also infer the `system` based on the one on which
+  evaluation is taking place, and the configuration from environment variables
+  or dot-files.
+*/
 
-{ # The system packages will be built on. See the manual for the
+let
+  # We hoist this above the closure so that the same thunk is shared
+  # between multiple imports of Nixpkgs. This ensures that commands
+  # like `nix eval nixpkgs#legacyPackages.x86_64-darwin.pkgsStatic.hello`
+  # print only one warning, which would otherwise be spammy in common
+  # scenarios that instantiate many copies of Nixpkgs.
+  #
+  # Unfortunately, flakes’ handling of transitive dependencies mean
+  # that it’s still likely users will see multiple warnings, but
+  # there’s nothing we can do about that within the constraints of the
+  # Nix language.
+  x86_64DarwinDeprecationWarning =
+    pristineLib.warn
+      "Nixpkgs 26.05 will be the last release to support x86_64-darwin; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.05"
+      (x: x);
+
+  pristineLib = import ../../lib;
+in
+
+{
+  # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
-  localSystem
+  localSystem,
 
-, # The system packages will ultimately be run on.
-  crossSystem ? localSystem
+  # The system packages will ultimately be run on.
+  crossSystem ? localSystem,
 
-, # Allow a configuration attribute set to be passed in as an argument.
-  config ? {}
+  # Allow a configuration attribute set to be passed in as an argument.
+  config ? { },
 
-, # List of overlays layers used to extend Nixpkgs.
-  overlays ? []
+  # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
+  # until <https://github.com/NixOS/nix/issues/11503> is fixed.
+  __allowFileset ? true,
 
-, # List of overlays to apply to target packages only.
-  crossOverlays ? []
+  # List of overlays layers used to extend Nixpkgs.
+  overlays ? [ ],
 
-, # A function booting the final package set for a specific standard
+  # List of overlays to apply to target packages only.
+  crossOverlays ? [ ],
+
+  # A function booting the final package set for a specific standard
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
-  stdenvStages ? import ../stdenv
+  stdenvStages ? import ../stdenv,
 
-, # Ignore unexpected args.
+  # Ignore unexpected args.
   ...
-} @ args:
+}@args:
 
 let # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
 
-in let
-  lib = import ../../lib;
+in
+let
+  lib =
+    if __allowFileset then
+      pristineLib
+    else
+      pristineLib.extend (
+        _: _: {
+          fileset = abort ''
+
+            The use of `lib.fileset` is currently forbidden in Nixpkgs due to the
+            upstream Nix bug <https://github.com/NixOS/nix/issues/11503>. This
+            causes difficult‐to‐debug errors when combined with chroot stores,
+            such as in the NixOS installer.
+
+            For packages that require source to be vendored inside Nixpkgs,
+            please use a subdirectory of the package instead.
+          '';
+        }
+      );
 
   inherit (lib) throwIfNot;
 
   checked =
-    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
-    throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
-    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
-    ;
+    (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
+      (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
+      (
+        if
+          (
+            ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+            && config.allowDeprecatedx86_64Darwin == false
+          )
+        then
+          x86_64DarwinDeprecationWarning
+        else
+          x: x
+      );
 
   localSystem = lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
+  #
+  # See `lib.systems.equals` documentation for more details.
+  #
+  # Note that it is generally not possible to compare systems as given in
+  # parameters, e.g. if systems are initialized as
+  #
+  #   localSystem = { system = "x86_64-linux"; };
+  #   crossSystem = { config = "x86_64-unknown-linux-gnu"; };
+  #
+  # Both systems are semantically equivalent as the same vendor and ABI are
+  # inferred from the system double in `localSystem`.
   crossSystem =
-    if crossSystem0 == null || crossSystem0 == args.localSystem
-    then localSystem
-    else lib.systems.elaborate crossSystem0;
+    let
+      system = lib.systems.elaborate crossSystem0;
+    in
+    if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
 
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
-  config1 =
-    if lib.isFunction config0
-    then config0 { inherit pkgs; }
-    else config0;
+  config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-      ({ options, ... }: {
-        _file = "nixpkgs.config";
-        config = config1;
-      })
+      (
+        { options, ... }:
+        {
+          _file = "nixpkgs.config";
+          config = config1;
+        }
+      )
     ];
+    class = "nixpkgsConfig";
   };
 
   # take all the rest as-is
-  config = lib.showWarnings configEval.config.warnings configEval.config;
+  config =
+    let
+      failedAssertionsString = lib.concatMapStringsSep "\n" (x: "- ${x.message}") (
+        lib.filter (x: !x.assertion) configEval.config.assertions
+      );
+    in
+    if failedAssertionsString != "" then
+      throw "Failed assertions:\n${failedAssertionsString}"
+    else
+      lib.showWarnings configEval.config.warnings configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -114,18 +190,31 @@ in let
   # experience here.)
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
-  # Partially apply some arguments for building bootstraping stage pkgs
+  # Partially apply some arguments for building bootstrapping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
-  allPackages = newArgs: import ./stage.nix ({
-    inherit lib nixpkgsFun;
-  } // newArgs);
+  allPackages =
+    newArgs:
+    import ./stage.nix (
+      {
+        inherit lib nixpkgsFun;
+      }
+      // newArgs
+    );
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib localSystem crossSystem config overlays crossOverlays;
+    inherit
+      lib
+      localSystem
+      crossSystem
+      config
+      overlays
+      crossOverlays
+      ;
   };
 
   pkgs = boot stages;
 
-in checked pkgs
+in
+checked pkgs

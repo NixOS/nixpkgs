@@ -1,38 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
-, python-socks
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  python-socks,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.4.1";
-  disabled = pythonOlder "3.6";
+  version = "1.9.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+WEetlyCQaZ/s3O+8ECzz4rTd6n2VGoStiC2UR6Oqe8=";
+    pname = "websocket_client";
+    inherit version;
+    hash = "sha256-noE2JLbrYZmZqX3HlYRpIXwxdjErOhakvRvH4IpG7Jg=";
   };
 
-  propagatedBuildInputs = [
-    python-socks
-    six
-   ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    optional = [
+      python-socks
+      # wsaccel is not available at the moment
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "websocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Websocket client for Python";
     homepage = "https://github.com/websocket-client/websocket-client";
     changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "wsdump";
   };
 }

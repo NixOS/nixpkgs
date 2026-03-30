@@ -1,24 +1,38 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytest
-, python
-, pillow
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  packaging,
+  setuptools,
+  pkgconfig,
+  freetype,
+  pytest,
+  python,
+  pillow,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.15";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytroll";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-w3HlnsHYB0R+HZOXtzygC2RST3gllPI7SYtwSCVXhTU=";
+    repo = "aggdraw";
+    tag = "v${version}";
+    hash = "sha256-rBasRGdlM6/NsUd8+KsgHoZMsWhAhneSWjTeZ/QQZZ8=";
   };
 
-  checkInputs = [
+  build-system = [
+    packaging
+    setuptools
+    pkgconfig
+  ];
+
+  buildInputs = [ freetype ];
+
+  nativeCheckInputs = [
     numpy
     pillow
     pytest
@@ -32,10 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aggdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "High quality drawing interface for PIL";
     homepage = "https://github.com/pytroll/aggdraw";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/pytroll/aggdraw/blob/${src.tag}CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

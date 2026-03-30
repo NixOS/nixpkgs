@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "pysocks";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PySocks";
@@ -15,10 +17,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "SOCKS module for Python";
-    license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-
 }

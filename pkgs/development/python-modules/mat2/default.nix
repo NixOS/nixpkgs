@@ -1,68 +1,59 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, unittestCheckHook
-, pythonOlder
-, fetchFromGitLab
-, fetchpatch
-, substituteAll
-, bubblewrap
-, exiftool
-, ffmpeg
-, mailcap
-, wrapGAppsHook
-, gdk-pixbuf
-, gobject-introspection
-, librsvg
-, poppler_gi
-, mutagen
-, pygobject3
-, pycairo
-, dolphinIntegration ? false
-, plasma5Packages
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pytestCheckHook,
+  fetchFromGitHub,
+  fetchpatch,
+  replaceVars,
+  exiftool,
+  ffmpeg,
+  setuptools,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  gnome,
+  gobject-introspection,
+  librsvg,
+  poppler_gi,
+  webp-pixbuf-loader,
+  mutagen,
+  pygobject3,
+  pycairo,
+  dolphinIntegration ? false,
+  kdePackages,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.13.0";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchFromGitLab {
-    domain = "0xacab.org";
+  src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "mat2";
-    rev = version;
-    hash = "sha256-H3l8w2F+ZcJ1P/Dg0ZVBJPUK0itLocL7a0jeSrG3Ws8=";
+    tag = version;
+    hash = "sha256-JTt2/PuSxOXXHUuRP42y8jxw09mNMMz1piJM4ldnjq0=";
   };
 
   patches = [
     # hardcode paths to some binaries
-    (substituteAll ({
-      src = ./paths.patch;
-      exiftool = "${exiftool}/bin/exiftool";
-      ffmpeg = "${ffmpeg}/bin/ffmpeg";
-    } // lib.optionalAttrs dolphinIntegration {
-      kdialog = "${plasma5Packages.kdialog}/bin/kdialog";
-    }))
+    (replaceVars ./paths.patch {
+      exiftool = lib.getExe exiftool;
+      ffmpeg = lib.getExe ffmpeg;
+      kdialog = if dolphinIntegration then lib.getExe kdePackages.kdialog else null;
+      # replaced in postPatch
+      mat2 = null;
+      mat2svg = null;
+    })
     # the executable shouldn't be called .mat2-wrapped
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
-    # fix gobject-introspection typelib path for Nautilus extension
-    (substituteAll {
-      src = ./fix_poppler.patch;
-      poppler_path = "${poppler_gi}/lib/girepository-1.0";
-    })
-    # https://0xacab.org/jvoisin/mat2/-/issues/178
     (fetchpatch {
-      url = "https://0xacab.org/jvoisin/mat2/-/commit/618e0a8e3984fd534b95ef3dbdcb8a76502c90b5.patch";
-      hash = "sha256-l9UFim3hGj+d2uKITiDG1OnqGeo2McBIiRSmK0Vidg8=";
-    })
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    (substituteAll {
-      src = ./bubblewrap-path.patch;
-      bwrap = "${bubblewrap}/bin/bwrap";
+      name = "fix-test_html.patch";
+      url = "https://github.com/jvoisin/mat2/commit/00b4f110711754496932c59d5af3c0b2ed694484.patch";
+      hash = "sha256-5h/nM1dK8HmYtoIBVGOvUegMFBpGxcfpn5O6QrjLi9M=";
     })
   ];
 
@@ -72,42 +63,51 @@ buildPythonPackage rec {
       --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
   '';
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gdk-pixbuf
-    librsvg
     poppler_gi
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mutagen
     pygobject3
     pycairo
   ];
 
   postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+
     install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
-    install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
-    buildPythonPath "$out $pythonPath $propagatedBuildInputs"
-    patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
-  '' + lib.optionalString dolphinIntegration ''
+  ''
+  + lib.optionalString dolphinIntegration ''
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
-    description = "A handy tool to trash your metadata";
-    homepage = "https://0xacab.org/jvoisin/mat2";
-    changelog = "https://0xacab.org/jvoisin/mat2/-/blob/${version}/CHANGELOG.md";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+  meta = {
+    description = "Handy tool to trash your metadata";
+    homepage = "https://github.com/jvoisin/mat2";
+    changelog = "https://github.com/jvoisin/mat2/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Plus;
+    mainProgram = "mat2";
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

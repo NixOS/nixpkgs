@@ -1,41 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docstring-parser";
-  version = "0.14.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.17.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";
-    rev = "${version}";
-    hash = "sha256-NIijq+QR0panVCGDEQrTlkAvHfIexwS0PxFikglxd74=";
+    tag = version;
+    hash = "sha256-hR+i1HU/ZpN6I3a8k/Wv2OrXgB4ls/A5OHZRqxEZS78=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "docstring_parser"
-  ];
+  pythonImportsCheck = [ "docstring_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse Python docstrings in various flavors";
     homepage = "https://github.com/rr-/docstring_parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    changelog = "https://github.com/rr-/docstring_parser/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

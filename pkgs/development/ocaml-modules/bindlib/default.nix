@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, earley
-, timed
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  earley,
+  timed,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bindlib";
   version = "6.0.0";
 
@@ -13,19 +14,22 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "rlepigre";
-    repo = "ocaml-${pname}";
-    rev = version;
+    repo = "ocaml-bindlib";
+    rev = finalAttrs.version;
     hash = "sha256-058yMbz9ExvgNG/kY9tPk70XSeVRSSKVg4n4F4fmPu4=";
   };
 
-  checkInputs = [ earley timed ];
+  checkInputs = [
+    earley
+    timed
+  ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rlepigre.github.io/ocaml-bindlib";
     description = "Efficient binder representation in Ocaml";
-    license = licenses.gpl3;
-    changelog = "https://github.com/rlepigre/ocaml-bindlib/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.gpl3;
+    changelog = "https://github.com/rlepigre/ocaml-bindlib/raw/${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

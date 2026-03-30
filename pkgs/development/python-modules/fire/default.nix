@@ -1,29 +1,52 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  six,
+  hypothesis,
+  mock,
+  levenshtein,
+  pytestCheckHook,
+  termcolor,
+  pythonAtLeast,
+}:
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.4.0";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
-    rev = "v${version}";
-    sha256 = "1caz6j2kdhj0kccrnqri6b4g2d6wzkkx8y9vxyvm7axvrwkv2vyn";
+    tag = "v${version}";
+    hash = "sha256-TZLL7pzX8xPtB/9k3l5395eHrNojmqTH7PfB1kf99Io=";
   };
 
-  propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
+  build-system = [ setuptools ];
 
-  checkInputs = [ hypothesis mock python-Levenshtein pytest ];
+  dependencies = [
+    six
+    termcolor
+  ];
 
-  # ignore test which asserts exact usage statement, default behavior
-  # changed in python3.8. This can likely be remove >=0.3.1
-  checkPhase = ''
-    py.test -k 'not testInitRequiresFlag'
-  '';
+  nativeCheckInputs = [
+    hypothesis
+    mock
+    levenshtein
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
-    description = "A library for automatically generating command line interfaces";
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "testFireAsyncio"
+  ];
+
+  pythonImportsCheck = [ "fire" ];
+
+  meta = {
+    description = "Library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line
       interfaces (CLIs) from absolutely any Python object.
@@ -42,7 +65,8 @@ buildPythonPackage rec {
         REPL with the modules and variables you'll need already imported
         and created.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
+    homepage = "https://github.com/google/python-fire";
+    changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
+    license = lib.licenses.asl20;
   };
 }

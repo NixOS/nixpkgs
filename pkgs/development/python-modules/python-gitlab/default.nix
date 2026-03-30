@@ -1,50 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, argcomplete
-, requests
-, requests-toolbelt
-, pyyaml
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchPypi,
+  gql,
+  pyyaml,
+  requests-toolbelt,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "3.11.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "8.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-25Rytq5PupaLQJ3DL67iDdZQiQZdqpPgjSG3lqZdZXg=";
+    pname = "python_gitlab";
+    inherit version;
+    hash = "sha256-Zg8V4/iJ7EMHl9JgMivGHZD42QrM/BC6N1k7Ea7Tcb0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     requests-toolbelt
   ];
 
-  passthru.optional-dependencies = {
-    autocompletion = [
-      argcomplete
-    ];
-    yaml = [
-      pyyaml
-    ];
+  optional-dependencies = {
+    autocompletion = [ argcomplete ];
+    graphql = [ gql ] ++ gql.optional-dependencies.httpx;
+    yaml = [ pyyaml ];
   };
 
   # Tests rely on a gitlab instance on a local docker setup
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gitlab"
-  ];
+  pythonImportsCheck = [ "gitlab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ nyanloutre ];
+    changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ nyanloutre ];
+    mainProgram = "gitlab";
   };
 }

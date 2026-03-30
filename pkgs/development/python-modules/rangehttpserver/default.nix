@@ -1,46 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, nose
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytest7CheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "rangehttpserver";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danvk";
     repo = "RangeHTTPServer";
-    rev = version;
-    sha256 = "1sy9j6y8kp5jiwv2vd652v94kspp1yd4dwxrfqfn6zwnfyv2mzv5";
+    tag = version;
+    hash = "sha256-wvGJ5wHYLb7wJUGgurkdRTABV6kTH7/GXzXgpd0Ypbc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
-    nose
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest7CheckHook
     requests
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
+  pythonImportsCheck = [ "RangeHTTPServer" ];
 
-  pythonImportsCheck = [
-    "RangeHTTPServer"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "SimpleHTTPServer with support for Range requests";
     homepage = "https://github.com/danvk/RangeHTTPServer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/danvk/RangeHTTPServer/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

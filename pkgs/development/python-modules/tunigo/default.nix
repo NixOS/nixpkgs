@@ -1,8 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, mock, responses, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  mock,
+  responses,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "tunigo";
   version = "1.0.0";
+  format = "setuptools";
 
   propagatedBuildInputs = [ requests ];
 
@@ -13,15 +22,19 @@ buildPythonPackage rec {
     sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
   };
 
-  checkInputs = [ mock responses pytest ];
+  nativeCheckInputs = [
+    mock
+    responses
+    pytest
+  ];
 
   checkPhase = ''
     py.test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python API for the browse feature of Spotify";
     homepage = "https://github.com/trygveaa/python-tunigo";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

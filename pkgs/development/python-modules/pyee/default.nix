@@ -1,52 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, twisted
-, typing-extensions
-, vcversioner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytest-asyncio_0,
+  pytest-trio,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  twisted,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "9.0.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "13.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J3DEkoq8ch9GtwXmpysMWUgMSmnJqDygsAu5lPHqSzI=";
+    hash = "sha256-s5HjxaQ00fURiiVhUAHbyPZpz0EKtn0ExNTgfFVIHDc=";
   };
 
-  buildInputs = [
-    vcversioner
+  postPatch = ''
+    # specifies a string for addopts, but must be a list since pytest9
+    sed -i '/addopts/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-trio
     pytestCheckHook
     twisted
   ];
 
-  pythonImportsCheck = [
-    "pyee"
-  ];
+  pythonImportsCheck = [ "pyee" ];
 
-  meta = with lib; {
-    description = "A port of Node.js's EventEmitter to Python";
+  meta = {
+    description = "Port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

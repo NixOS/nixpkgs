@@ -1,58 +1,76 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  ciso8601,
+  fetchFromGitHub,
+  frozenlist,
+  mashumaro,
+  poetry-core,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-cov-stub,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2022.10.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2025.02.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    hash = "sha256-DJkqFj87N8OlWHNto+tInj8QvVoNA9faLBb/pBbQl0U=";
+    repo = "aionotion";
+    tag = version;
+    hash = "sha256-MqH3CPp+dAX5DXtnHio95KGQ+Ok2TXrX6rn/AMx5OsY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core==" "poetry-core>="
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
+    ciso8601
+    frozenlist
+    mashumaro
+    pyjwt
+    yarl
   ];
 
-  checkInputs = [
+  pythonRelaxDeps = [
+    "ciso8601"
+    "frozenlist"
+    "mashumaro"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "examples"
-  ];
+  disabledTestPaths = [ "examples" ];
 
-  pythonImportsCheck = [
-    "aionotion"
-  ];
+  pythonImportsCheck = [ "aionotion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

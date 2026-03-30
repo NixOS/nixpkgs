@@ -1,26 +1,45 @@
-{ lib, stdenv, toPythonModule, cmake, orocos-kdl, eigen, python }:
+{
+  lib,
+  stdenv,
+  toPythonModule,
+  cmake,
+  pybind11,
+  orocos-kdl,
+  eigen,
+  python,
+}:
 
-toPythonModule (stdenv.mkDerivation {
-  pname = "pykdl";
-  inherit (orocos-kdl) version src;
+toPythonModule (
+  stdenv.mkDerivation {
+    pname = "pykdl";
+    inherit (orocos-kdl) version src;
 
-  sourceRoot = "source/python_orocos_kdl";
+    sourceRoot = "${orocos-kdl.src.name}/python_orocos_kdl";
 
-  # Fix hardcoded installation path
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace dist-packages site-packages
-  '';
+    # Fix hardcoded installation path
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace dist-packages site-packages
+    '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ orocos-kdl eigen ];
-  propagatedBuildInputs = [ python ];
+    nativeBuildInputs = [
+      cmake
+      pybind11
+    ];
+    buildInputs = [
+      orocos-kdl
+      eigen
+    ];
+    propagatedBuildInputs = [ python ];
 
-  meta = with lib; {
-    description = "Kinematics and Dynamics Library (Python bindings)";
-    homepage = "https://www.orocos.org/kdl.html";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
-  };
-})
+    cmakeFlags = [ "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}" ];
+
+    meta = {
+      description = "Kinematics and Dynamics Library (Python bindings)";
+      homepage = "https://www.orocos.org/kdl.html";
+      license = lib.licenses.lgpl21Only;
+      maintainers = with lib.maintainers; [ lopsided98 ];
+      platforms = lib.platforms.all;
+    };
+  }
+)

@@ -1,86 +1,100 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+{ lib, hostPkgs, ... }:
 
 let
   # Make sure we don't have to go through the startup tutorial
-  customMuseScoreConfig = pkgs.writeText "MuseScore3.ini" ''
+  customMuseScoreConfig = hostPkgs.writeText "MuseScore4.ini" ''
     [application]
-    startup\firstStart=false
+    hasCompletedFirstLaunchSetup=true
+    welcomeDialogLastShownIndex=0
+    welcomeDialogLastShownVersion=${hostPkgs.musescore.version}
+    welcomeDialogShowOnStartup=false
 
-    [ui]
-    application\startup\showTours=false
-    application\startup\showStartCenter=false
-    '';
+    [project]
+    preferredScoreCreationMode=1
+
+    [tours]
+    lastShownTours=",project_opened/input-by-duration"
+  '';
 in
 {
   name = "musescore";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ turion ];
   };
 
-  nodes.machine = { ... }:
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [
+        ./common/x11.nix
+      ];
 
-  {
-    imports = [
-      ./common/x11.nix
-    ];
-
-    services.xserver.enable = true;
-    environment.systemPackages = with pkgs; [
-      musescore
-      pdfgrep
-    ];
-  };
+      services.xserver.enable = true;
+      environment.systemPackages = with pkgs; [
+        musescore
+        pdfgrep
+      ];
+    };
 
   enableOCR = true;
 
-  testScript = { ... }: ''
-    start_all()
-    machine.wait_for_x()
+  testScript =
+    { ... }:
+    ''
+      start_all()
+      machine.wait_for_x()
 
-    # Inject custom settings
-    machine.succeed("mkdir -p /root/.config/MuseScore/")
-    machine.succeed(
-        "cp ${customMuseScoreConfig} /root/.config/MuseScore/MuseScore3.ini"
-    )
+      # Inject custom settings
+      machine.succeed("mkdir -p /root/.config/MuseScore/")
+      machine.succeed(
+          "cp ${customMuseScoreConfig} /root/.config/MuseScore/MuseScore4.ini"
+      )
 
-    # Start MuseScore window
-    machine.execute("DISPLAY=:0.0 mscore >&2 &")
+      # Start MuseScore window
+      machine.execute("env XDG_RUNTIME_DIR=$PWD DISPLAY=:0.0 mscore >&2 &")
 
-    # Wait until MuseScore has launched
-    machine.wait_for_window("MuseScore")
+      # Wait until MuseScore has launched
+      machine.wait_for_window("MuseScore Studio")
 
-    # Wait until the window has completely initialised
-    machine.wait_for_text("MuseScore")
+      machine.screenshot("MuseScore0")
 
-    # Start entering notes
-    machine.send_key("n")
-    # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
-    machine.send_chars("cdef6gg5aaaa7g")
-    # Make sure the VM catches up with all the keys
-    machine.sleep(1)
+      # Create a new score
+      machine.send_key("ctrl-n")
 
-    machine.screenshot("MuseScore0")
+      # Wait until the creation wizard appears
+      machine.wait_for_window("New score")
 
-    # Go to the export dialogue and create a PDF
-    machine.send_key("alt-f")
-    machine.sleep(1)
-    machine.send_key("e")
+      machine.screenshot("MuseScore1")
 
-    # Wait until the export dialogue appears.
-    machine.wait_for_window("Export")
-    machine.screenshot("MuseScore1")
-    machine.send_key("ret")
-    machine.sleep(1)
-    machine.send_key("ret")
+      machine.send_key("tab")
+      machine.send_key("tab")
+      machine.send_key("ret")
 
-    machine.screenshot("MuseScore2")
+      machine.sleep(2)
 
-    # Wait until PDF is exported
-    machine.wait_for_file("/root/Documents/MuseScore3/Scores/Untitled.pdf")
+      machine.send_key("right")
+      # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
+      machine.send_chars("cdef6gg5aaaa7g")
+      machine.sleep(1)
 
-    # Check that it contains the title of the score
-    machine.succeed("pdfgrep Title /root/Documents/MuseScore3/Scores/Untitled.pdf")
+      machine.screenshot("MuseScore2")
 
-    machine.screenshot("MuseScore3")
-  '';
-})
+      # Go to the export dialogue and create a PDF
+      machine.send_key("ctrl-p")
+
+      # Wait until the Print dialogue appears.
+      machine.wait_for_window("Print")
+
+      machine.screenshot("MuseScore3")
+      machine.send_key("alt-p")
+
+      # Wait until PDF is exported
+      machine.wait_for_file('"/root/Untitled score.pdf"')
+
+      machine.screenshot("MuseScore4")
+
+      ## Check that it contains the title of the score
+      machine.succeed('pdfgrep "Untitled score" "/root/Untitled score.pdf"')
+      machine.copy_from_vm("/root/Untitled score.pdf")
+    '';
+}

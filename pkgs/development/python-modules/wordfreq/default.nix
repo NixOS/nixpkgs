@@ -1,27 +1,30 @@
-{ lib
-, buildPythonPackage
-, regex
-, langcodes
-, ftfy
-, msgpack
-, mecab-python3
-, jieba
-, pytestCheckHook
-, isPy27
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  poetry-core,
+  regex,
+  langcodes,
+  ftfy,
+  msgpack,
+  mecab-python3,
+  jieba,
+  pytestCheckHook,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "wordfreq";
-  version = "2.5.1";
-  disabled = isPy27;
+  version = "3.0.2";
+  pyproject = true;
 
-   src = fetchFromGitHub {
-    owner = "LuminosoInsight";
+  src = fetchFromGitHub {
+    owner = "rspeer";
     repo = "wordfreq";
-    rev = "v${version}";
-    sha256 = "1lw7kbsydd89hybassnnhqnj9s5ch9wvgd6pla96198nrq9mj7fw";
-   };
+    tag = "v${version}";
+    hash = "sha256-ANOBbQWLB35Vz6oil6QZDpsNpKHeKUJnDKA5Q9JRVdE=";
+  };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     regex
@@ -32,11 +35,7 @@ buildPythonPackage rec {
     jieba
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "regex ==" "regex >="
-  '';
-
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTests = [
     # These languages require additional dictionaries that aren't packaged
     "test_languages"
@@ -44,10 +43,9 @@ buildPythonPackage rec {
     "test_korean"
   ];
 
-  meta = with lib; {
-    description = "A library for looking up the frequencies of words in many languages, based on many sources of data";
-    homepage =  "https://github.com/LuminosoInsight/wordfreq/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
+  meta = {
+    description = "Library for looking up the frequencies of words in many languages, based on many sources of data";
+    homepage = "https://github.com/rspeer/wordfreq/";
+    license = lib.licenses.mit;
   };
 }

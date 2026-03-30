@@ -1,65 +1,84 @@
-{ lib
-, asyncclick
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, pydantic
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  asyncclick,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  hatchling,
+  kasa-crypt,
+  mashumaro,
+  orjson,
+  ptpython,
+  pytest-asyncio,
+  pytest-freezer,
+  pytest-mock,
+  pytest-socket,
+  pytest-xdist,
+  pytestCheckHook,
+  rich,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.10.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-9zCUYB+TYgDMoTHpR0u42Usq2EKp8vtzlTgU82eXxl8=";
+    owner = "python-kasa";
+    repo = "python-kasa";
+    tag = version;
+    hash = "sha256-OIkqNGTnIPoHYrE5NhAxSsRCTyMGvNADvIg28EuKsEw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     asyncclick
-    importlib-metadata
-    pydantic
+    cryptography
+    mashumaro
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-freezer
     pytest-mock
+    pytest-socket
+    pytest-xdist
     pytestCheckHook
     voluptuous
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
+  optional-dependencies = {
+    shell = [
+      ptpython
+      rich
+    ];
+    speedups = [
+      kasa-crypt
+      orjson
+    ];
+  };
+
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTestPaths = [
     # Skip the examples tests
-    "kasa/tests/test_readme_examples.py"
+    "tests/test_readme_examples.py"
+    # Failing on hydra
+    "tests/test_cli.py"
   ];
 
-  pythonImportsCheck = [
-    "kasa"
-  ];
+  pythonImportsCheck = [ "kasa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for TP-Link Kasa Smarthome products";
     homepage = "https://python-kasa.readthedocs.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/python-kasa/python-kasa/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "kasa";
   };
 }

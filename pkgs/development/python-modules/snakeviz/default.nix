@@ -1,22 +1,55 @@
-{ lib, fetchPypi, buildPythonPackage, tornado }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipython,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  tornado,
+}:
 
 buildPythonPackage rec {
   pname = "snakeviz";
-  version = "2.1.1";
+  version = "2.2.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d96c006304f095cb4b3fb7ed98bb866ca35a7ca4ab9020bbc27d295ee4c94d9";
+  src = fetchFromGitHub {
+    owner = "jiffyclub";
+    repo = "snakeviz";
+    tag = "v${version}";
+    hash = "sha256-s/OATRnkooucRkLer5A66X9xDEA7aKNo+c10m1N7Guw=";
   };
 
-  # Upstream doesn't run tests from setup.py
-  doCheck = false;
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [ tornado ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    ipython
+    pytestCheckHook
+    requests
+  ];
+
+  pythonImportsCheck = [ "snakeviz" ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+    export HOME="$PWD/.home"
+    mkdir -p "$HOME"
+  '';
+
+  meta = {
     description = "Browser based viewer for profiling data";
+    mainProgram = "snakeviz";
     homepage = "https://jiffyclub.github.io/snakeviz";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nixy ];
+    changelog = "https://github.com/jiffyclub/snakeviz/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      nixy
+      pbsds
+    ];
   };
 }

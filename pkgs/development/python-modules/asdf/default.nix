@@ -1,98 +1,77 @@
-{ lib
-, asdf-standard
-, asdf-transform-schemas
-, astropy
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, importlib-resources
-, jmespath
-, jsonschema
-, lz4
-, numpy
-, packaging
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, semantic-version
-, setuptools-scm
+{
+  lib,
+  aiohttp,
+  asdf-standard,
+  asdf-transform-schemas,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  importlib-metadata,
+  jmespath,
+  lz4,
+  numpy,
+  packaging,
+  psutil,
+  pytest-remotedata,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.13.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "5.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "asdf-format/";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-u8e7ot5NDRqQFH0eLVnGinBQmQD73BlR5K9HVjA7SIg=";
+    owner = "asdf-format";
+    repo = "asdf";
+    tag = version;
+    hash = "sha256-pET6isOd8u0mK+axgedUcQkz4y5PCSzPMy+LOqEgtEs=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  patches = [
-    # Fix default validation, https://github.com/asdf-format/asdf/pull/1203
-    (fetchpatch {
-      name = "default-validation.patch";
-      url = "https://github.com/asdf-format/asdf/commit/6f79f620b4632e20178d9bd53528702605d3e976.patch";
-      sha256 = "sha256-h/dYhXRCf5oIIC+u6+8C91mJnmEzuNmlEzqc0UEhLy0=";
-      excludes = [
-          "CHANGES.rst"
-      ];
-    })
-  ];
-
-  postPatch = ''
-    # https://github.com/asdf-format/asdf/pull/1203
-    substituteInPlace pyproject.toml \
-      --replace "'jsonschema >=4.0.1, <4.10.0'," "'jsonschema >=4.0.1',"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asdf-standard
     asdf-transform-schemas
+    importlib-metadata
     jmespath
-    jsonschema
     numpy
     packaging
     pyyaml
     semantic-version
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
+    attrs
   ];
 
-  checkInputs = [
-    astropy
+  nativeCheckInputs = [
+    aiohttp
+    fsspec
     lz4
-    pytest-astropy
+    psutil
+    pytest-remotedata
     pytestCheckHook
-  ];
-
-  preCheck = ''
-    export PY_IGNORE_IMPORTMISMATCH=1
-  '';
-
-  pythonImportsCheck = [
-    "asdf"
+    requests
   ];
 
   disabledTests = [
-    "config.rst"
+    # AssertionError: assert 527033 >= 1048801
+    "test_update_add_array_at_end"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "asdf" ];
+
+  meta = {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

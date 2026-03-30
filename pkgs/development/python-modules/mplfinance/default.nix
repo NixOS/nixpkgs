@@ -1,15 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, matplotlib, pandas }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  matplotlib,
+  pandas,
+}:
 
 buildPythonPackage rec {
   pname = "mplfinance";
-  version = "0.12.7a7";
+  version = "0.12.10b0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pATiprTELt8GrEkeKjILPfpdNDVoex5t+Mc+6Gg7cPY=";
+    hash = "sha256-faFQtYUapRGa1uBrVeSDOLYZu2dz8bhd9d5npf/ZF78=";
   };
 
-  propagatedBuildInputs = [ matplotlib pandas ];
+  propagatedBuildInputs = [
+    matplotlib
+    pandas
+  ];
 
   # tests are only included on GitHub where this version misses a tag
   # and half of them fail
@@ -17,10 +27,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mplfinance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Matplotlib utilities for the visualization, and visual analysis, of financial data";
     homepage = "https://github.com/matplotlib/mplfinance";
-    license = [ licenses.bsd3 ];
-    maintainers = [ maintainers.ehmry ];
+    license = [ lib.licenses.bsd3 ];
   };
 }

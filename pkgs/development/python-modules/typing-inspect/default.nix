@@ -1,43 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, typing-extensions
-, mypy-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  typing-extensions,
+  mypy-extensions,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "typing-inspect";
-  version = "0.8.0";
+  version = "0.9.0-unstable-2025-10-20";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "typing_inspect";
-    sha256 = "sha256-ix/wxACUO2FF34EZxBwkTKggfx8QycBXru0VYOSAbj0=";
+  src = fetchFromGitHub {
+    owner = "ilevkivskyi";
+    repo = "typing_inspect";
+    rev = "58c98c084ebeb45ee51935506ed1cc3449105fa9";
+    hash = "sha256-uGGtV32TGckoM3JALNu2OjIE+gmzJc7VMJlQeKJVFd8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     typing-extensions
     mypy-extensions
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # https://github.com/ilevkivskyi/typing_inspect/issues/84
-    "test_typed_dict_typing_extension"
-  ];
+  pythonImportsCheck = [ "typing_inspect" ];
 
-  pythonImportsCheck = [
-    "typing_inspect"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Runtime inspection utilities for Python typing module";
     homepage = "https://github.com/ilevkivskyi/typing_inspect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
   };
 }

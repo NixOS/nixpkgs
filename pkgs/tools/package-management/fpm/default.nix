@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "fpm";
@@ -7,11 +11,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "fpm";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to build packages for multiple platforms with ease";
-    homepage    = "https://github.com/jordansissel/fpm";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ manveru nicknovitski ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/jordansissel/fpm";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      nicknovitski
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "fpm";
   };
 }

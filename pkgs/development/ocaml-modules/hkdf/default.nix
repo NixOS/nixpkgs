@@ -1,26 +1,34 @@
-{ lib, buildDunePackage, fetchurl, cstruct, mirage-crypto, alcotest }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  digestif,
+  alcotest,
+  ohex,
+}:
 
 buildDunePackage rec {
   pname = "hkdf";
-  version = "1.0.4";
+  version = "2.0.0";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0nzx6vzbc1hh6vx1ly8df4b16lgps6zjpp9mjycsnnn49bddc9mr";
+    url = "https://github.com/hannesm/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-VLBxJ5viTTn1nK0QNIAGq/8961x0/RGHZN/C/7ITWNM=";
   };
 
-  useDune2 = true;
-
-  propagatedBuildInputs = [ cstruct mirage-crypto ];
-  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [ digestif ];
+  checkInputs = [
+    alcotest
+    ohex
+  ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (RFC 5869)";
     homepage = "https://github.com/hannesm/ocaml-hkdf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

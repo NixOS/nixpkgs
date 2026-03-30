@@ -1,50 +1,108 @@
-{ lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
-, testers, Security, garage }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+  openssl,
+  pkg-config,
+  protobuf,
+  cacert,
+  nix-update-script,
+  nixosTests,
+}:
+let
+  generic =
+    {
+      version,
+      hash,
+      cargoHash,
+      cargoPatches ? [ ],
+      eol ? false,
+      broken ? false,
+    }:
+    rustPlatform.buildRustPackage {
+      pname = "garage";
+      inherit version;
 
-rustPlatform.buildRustPackage rec {
-  pname = "garage";
-  version = "0.7.3";
+      src = fetchFromGitea {
+        domain = "git.deuxfleurs.fr";
+        owner = "Deuxfleurs";
+        repo = "garage";
+        rev = "v${version}";
+        inherit hash;
+      };
 
-  src = fetchFromGitea {
-    domain = "git.deuxfleurs.fr";
-    owner = "Deuxfleurs";
-    repo = "garage";
-    rev = "v${version}";
-    sha256 = "sha256-WDhe2L+NalMoIy2rhfmv8KCNDMkcqBC9ezEKKocihJg=";
+      inherit cargoHash cargoPatches;
+
+      nativeBuildInputs = [
+        protobuf
+        pkg-config
+      ];
+
+      buildInputs = [
+        openssl
+      ];
+
+      checkInputs = [
+        cacert
+      ];
+
+      env.OPENSSL_NO_VENDOR = true;
+
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.2.0/nix/compile.nix#L71-L78
+      # on version changes for checking if changes are required here
+      buildFeatures = [
+        "bundled-libs"
+        "consul-discovery"
+        "fjall"
+        "journald"
+        "k2v"
+        "kubernetes-discovery"
+        "lmdb"
+        "metrics"
+        "sqlite"
+        "syslog"
+        "telemetry-otlp"
+      ];
+
+      passthru = {
+        tests = nixosTests."garage_${lib.versions.major version}";
+        updateScript = nix-update-script {
+          extraArgs = [
+            "--version-regex"
+            "v(${lib.versions.major version}\\.[0-9.]+)"
+          ];
+        };
+      };
+
+      meta = {
+        description = "S3-compatible object store for small self-hosted geo-distributed deployments";
+        changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v${version}";
+        homepage = "https://garagehq.deuxfleurs.fr";
+        license = lib.licenses.agpl3Only;
+        maintainers = with lib.maintainers; [
+          adamcstephens
+          nickcao
+          _0x4A6F
+          teutat3s
+        ];
+        knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
+        inherit broken;
+        mainProgram = "garage";
+      };
+    };
+in
+rec {
+  garage_1 = generic {
+    version = "1.3.1";
+    hash = "sha256-wkCnJmbulnhzwHvzdpzh9MRceOzmPdhOogffwhqNGPg=";
+    cargoHash = "sha256-jfYe2A6zkVgTLrWBDbahICSKCRO3FwsBPNSVFapH0Rs=";
   };
 
-  cargoSha256 = "sha256-5m4c8/upBYN8nuysDhGKEnNVJjEGC+yLrraicrAQOfI=";
-
-  nativeBuildInputs = [ protobuf pkg-config ];
-
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
-
-  OPENSSL_NO_VENDOR = true;
-
-  # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.7.2/default.nix#L84-L98
-  # on version changes for checking if changes are required here
-  buildFeatures = [
-    "kubernetes-discovery"
-  ];
-
-  # To make integration tests pass, we include the optional k2v feature here,
-  # but not in buildFeatures. See:
-  # https://garagehq.deuxfleurs.fr/documentation/reference-manual/k2v/
-  checkFeatures = [
-    "k2v"
-    "kubernetes-discovery"
-  ];
-
-  passthru = {
-    tests.version = testers.testVersion { package = garage; };
+  garage_2 = generic {
+    version = "2.2.0";
+    hash = "sha256-UaWHZPV0/Jgeiwvvr9V9Gqthn5KXErLx8gL4JdBRDVs=";
+    cargoHash = "sha256-U6Wipvlw3XdKUBNZMznENJ9m+9fzP9Nb6217+Kytu7s=";
   };
 
-  meta = {
-    description = "S3-compatible object store for small self-hosted geo-distributed deployments";
-    homepage = "https://garagehq.deuxfleurs.fr";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s ];
-  };
+  garage = garage_1;
 }

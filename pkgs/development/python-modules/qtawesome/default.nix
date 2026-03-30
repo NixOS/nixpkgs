@@ -1,47 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyqt5
-, pytestCheckHook
-, pythonOlder
-, qtpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyqt6,
+  pytestCheckHook,
+  qtpy,
 }:
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.2.1";
+  version = "1.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KcYCXrTP8ED5j/VTLTw7a8zotDSqIu9ultmwp8Ip5nM=";
+    repo = "qtawesome";
+    tag = "v${version}";
+    hash = "sha256-CdELoMML7j9m1HrAY8MhKcYx5Q4xuEMZIBeyzQnRQtk=";
   };
 
   propagatedBuildInputs = [
-    pyqt5
+    pyqt6
     qtpy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Requires https://github.com/boylea/qtbot which is unmaintained
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qtawesome"
-  ];
+  pythonImportsCheck = [ "qtawesome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Iconic fonts in PyQt and PySide applications";
+    mainProgram = "qta-browser";
     homepage = "https://github.com/spyder-ide/qtawesome";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux; # fails on Darwin
+    changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux; # fails on Darwin
   };
 }

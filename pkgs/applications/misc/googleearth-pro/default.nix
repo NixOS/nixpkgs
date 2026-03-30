@@ -1,49 +1,59 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchurl
-, freetype
-, glib
-, libGL
-, libGLU
-, libSM
+{
+  lib,
+  stdenv,
+  fetchurl,
+  freetype,
+  glib,
+  libGL,
+  libGLU,
+  libsm,
 
-, libXrender
-, libX11
+  libxcomposite,
+  libxi,
+  libxrender,
+  libx11,
 
-, libxcb
-, sqlite
-, zlib
-, fontconfig
-, dpkg
-, libproxy
-, libxml2
-, gst_all_1
-, dbus
-, makeWrapper
+  libxcb,
+  sqlite,
+  zlib,
+  fontconfig,
+  dpkg,
+  libproxy,
+  libxml2_13,
+  gst_all_1,
+  dbus,
+  makeWrapper,
 
-, cups
-, alsa-lib
+  cups,
+  alsa-lib,
 
-, xkeyboardconfig
-, autoPatchelfHook
+  xkeyboard-config,
+  autoPatchelfHook,
+  wrapQtAppsHook,
 }:
 let
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else throw "Unsupported system ${stdenv.hostPlatform.system} ";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "Unsupported system ${stdenv.hostPlatform.system} ";
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.4.8248";
+  version = "7.3.6.10201";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "1pbapi267snlrjari5k93y6kbrjsqhqxgkxxqaqv4r25az00dx6d";
+    sha256 = "sha256-LqkXOSfE52+7x+Y0DBjYzvVKO0meytLNHuS/ia88FbI=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
-  propagatedBuildInputs = [ xkeyboardconfig ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    autoPatchelfHook
+    wrapQtAppsHook
+  ];
+  propagatedBuildInputs = [ xkeyboard-config ];
   buildInputs = [
     dbus
     cups
@@ -54,12 +64,14 @@ mkDerivation rec {
     gst_all_1.gstreamer
     libGL
     libGLU
-    libSM
-    libX11
-    libXrender
+    libsm
+    libx11
+    libxcomposite
+    libxi
+    libxrender
     libproxy
     libxcb
-    libxml2
+    libxml2_13
     sqlite
     zlib
     alsa-lib
@@ -70,17 +82,22 @@ mkDerivation rec {
   dontBuild = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
-    dpkg --fsys-tarfile ${src} | tar --extract
+    mkdir deb
+    dpkg --fsys-tarfile $src | tar --extract -C deb
+
+    runHook postUnpack
   '';
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir $out
-    mv usr/* $out/
-    rmdir usr
-    mv * $out/
+    mv deb/usr/* $out/
+    rmdir deb/usr
+    mv deb/* $out/
     rm $out/bin/google-earth-pro $out/opt/google/earth/pro/googleearth
 
     # patch and link googleearth binary
@@ -109,16 +126,20 @@ mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/googleearth-pro \
       --set QT_QPA_PLATFORM xcb \
-      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
   '';
 
-  meta = with lib; {
-    description = "A world sphere viewer";
+  meta = {
+    description = "World sphere viewer";
     homepage = "https://www.google.com/earth/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ friedelino shamilton ];
-    platforms = platforms.linux;
-    knownVulnerabilities = [ "Includes vulnerable bundled libraries." ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      xddxdd
+    ];
+    platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj."
+    ];
   };
 }

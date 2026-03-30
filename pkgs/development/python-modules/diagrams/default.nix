@@ -1,59 +1,63 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, round
-, graphviz
-, inkscape
-, imagemagick
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  imagemagick,
+  inkscape,
+  jinja2,
+  hatchling,
+  pytestCheckHook,
+  round,
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.22.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "0.25.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mingrammer";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-LUuClvBJeOxtrg+S+lYLpP7T1RXCy5dNjFYQO3H54QE=";
+    repo = "diagrams";
+    tag = "v${version}";
+    hash = "sha256-uDBmQSEn9LMT2CbR3VDhxW1ec4udXN5wZ1H1+RX/K0U=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
-  '';
+  patches = [
+    ./remove-black-requirement.patch
+  ];
+
+  pythonRemoveDeps = [ "pre-commit" ];
+
+  pythonRelaxDeps = [ "graphviz" ];
 
   preConfigure = ''
     patchShebangs autogen.sh
     ./autogen.sh
   '';
 
-  patches = [
-    # The build-system section is missing
-    ./build_poetry.patch
-    ./remove-black-requirement.patch
-  ];
-
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ hatchling ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
-  nativeBuildInputs = [ inkscape imagemagick jinja2 poetry-core round ];
+  nativeBuildInputs = [
+    inkscape
+    imagemagick
+    jinja2
+    round
+  ];
 
-  propagatedBuildInputs = [ graphviz ];
+  dependencies = [ graphviz ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "diagrams" ];
 
-  meta = with lib; {
+  meta = {
     description = "Diagram as Code";
-    homepage    = "https://diagrams.mingrammer.com/";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://diagrams.mingrammer.com/";
+    changelog = "https://github.com/mingrammer/diagrams/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ addict3d ];
   };
 }

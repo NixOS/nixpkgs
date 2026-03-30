@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, dune_3, ordering }:
+{
+  buildDunePackage,
+  dune_3,
+  ordering,
+  pp,
+}:
 
 buildDunePackage {
   pname = "dyn";
@@ -7,10 +12,12 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ ordering ];
+  propagatedBuildInputs = [
+    ordering
+    pp
+  ];
 
   meta = dune_3.meta // {
     description = "Dynamic type";
   };
 }
-

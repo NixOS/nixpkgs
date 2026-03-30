@@ -1,31 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, virtual-display
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pyvirtualdisplay,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xvfb";
-  version = "2.0.0";
-  disabled = isPy27;
+  version = "3.1.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kyq5rg27dsnj7dc6x9y7r8vwf8rc88y2ppnnw6r96alw0nn9fn4";
+    pname = "pytest_xvfb";
+    inherit version;
+    hash = "sha256-kFk2NEJ9l0snLoRXk+RTP1uCfJ2EwFGHkBNiRQQXXkQ=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    virtual-display
-  ];
+  dependencies = [ pyvirtualdisplay ];
 
-  meta = with lib; {
-    description = "A pytest plugin to run Xvfb for tests";
+  meta = {
+    description = "Pytest plugin to run Xvfb for tests";
     homepage = "https://github.com/The-Compiler/pytest-xvfb";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/The-Compiler/pytest-xvfb/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,17 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "keyboard";
-  version = "0.13.5";
+  # the commit tagged v0.13.5 on github actually has version 0.13.4,
+  # and fetchPypi reports 404 error; very strange!
+  version = "0.13.5-unstable-2023-01-31";
 
   src = fetchFromGitHub {
     owner = "boppreh";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-U4GWhPp28azBE3Jn9xpLxudOKx0PjnYO77EM2HsJ9lM=";
+    repo = "keyboard";
+    rev = "d232de09bda50ecb5211ebcc59b85bc6da6aaa24";
+    hash = "sha256-Xk419Zvx9pDgMcaWZn52WD41cFaXXzJlvmPGxaWdR0k=";
   };
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "keyboard" ];
 
@@ -20,11 +28,12 @@ buildPythonPackage rec {
   # AttributeError: module 'ctypes' has no attribute 'WinDLL'
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Hook and simulate keyboard events on Windows and Linux";
     homepage = "https://github.com/boppreh/keyboard";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/boppreh/keyboard/releases";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ulysseszhan ];
+    platforms = lib.platforms.linux;
   };
 }

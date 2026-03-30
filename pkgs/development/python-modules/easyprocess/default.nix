@@ -1,21 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
-  pname = "EasyProcess";
+  pname = "easyprocess";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
+    pname = "EasyProcess";
+    inherit version;
+    hash = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
   };
 
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use python subprocess interface";
     homepage = "https://github.com/ponty/EasyProcess";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ layus ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ layus ];
   };
 }

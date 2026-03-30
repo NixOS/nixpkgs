@@ -1,44 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, python
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "funcparserlib";
-  version = "1.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vlasovskikh";
-    repo = pname;
+    repo = "funcparserlib";
     rev = version;
-    sha256 = "sha256-moWaOzyF/yhDQCLEp7bc0j8wNv7FM7cvvpCwon3j+gI=";
+    hash = "sha256-LE9ItCaEzEGeahpM3M3sSnDBXEr6uX5ogEkO5x2Jgzc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     six
   ];
 
-  pythonImportsCheck = [
-    "funcparserlib"
-  ];
+  pythonImportsCheck = [ "funcparserlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Recursive descent parsing library based on functional combinators";
     homepage = "https://github.com/vlasovskikh/funcparserlib";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

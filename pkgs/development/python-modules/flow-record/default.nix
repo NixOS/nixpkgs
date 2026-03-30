@@ -1,68 +1,86 @@
-{ lib
-, buildPythonPackage
-, elasticsearch
-, fetchFromGitHub
-, lz4
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  duckdb,
+  elastic-transport,
+  elasticsearch,
+  fastavro,
+  fetchFromGitHub,
+  httpx,
+  lz4,
+  maxminddb,
+  msgpack,
+  pytest7CheckHook,
+  pytz,
+  setuptools-scm,
+  setuptools,
+  structlog,
+  tqdm,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.21";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
-    rev = version;
-    hash = "sha256-hULz5pIqCKujVH3SpzFgzNM9R7WTtqAmuNOxG7VlUd0=";
+    tag = version;
+    hash = "sha256-hJZCWF81pMeHOZGc6zTA046hV1J0PNQGMlPD3mgyrRI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    msgpack
-  ];
+  dependencies = [ msgpack ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compression = [
       lz4
       zstandard
     ];
-    elastic = [
-      elasticsearch
+    duckdb = [
+      duckdb
+      pytz
     ];
+    elastic = [ elasticsearch ];
+    geoip = [ maxminddb ];
+    avro = [ fastavro ] ++ fastavro.optional-dependencies.snappy;
+    splunk = [ httpx ];
+    # xlsx = [ openpyxl ]; # Not available
+    full = [
+      structlog
+      tqdm
+    ]
+    ++ optional-dependencies.compression;
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [
+    elastic-transport
+    pytest7CheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "flow.record"
-  ];
+  pythonImportsCheck = [ "flow.record" ];
 
   disabledTestPaths = [
-    # Test requires rdump
-    "tests/test_rdump.py"
+    # Input not available
+    "tests/adapter/test_xlsx.py"
+    # Requires rdump
+    "tests/tools/test_rdump.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [ "test_rdump_fieldtype_path_json" ];
+
+  meta = {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

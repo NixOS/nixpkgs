@@ -1,28 +1,42 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, libv4l
-, fltk
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
+  libv4l,
+  fltk,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "image-acquisition";
-  version = "0.2.2";
+  version = "0.3.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1amp6npkddnnz2i5rm6gvn65qrbn0nxzl2cja3dvc2xqg396wrhh";
+  src = fetchFromGitHub {
+    owner = "Andy1978";
+    repo = "octave-image-acquisition";
+    tag = "image-acquisition-${version}";
+    sha256 = "sha256-vS1i0PNAyfkxuMSfm+OGvFXkpbD4H6VJrs4eb+LxYBA=";
   };
 
   buildInputs = [
-    libv4l
     fltk
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/image-acquisition/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  propagatedBuildInputs = [
+    libv4l
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "image-acquisition-(.*)"
+    ];
+  };
+
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/image-acquisition/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Functions to capture images from connected devices";
     longDescription = ''
       The Octave-forge Image Aquisition package provides functions to

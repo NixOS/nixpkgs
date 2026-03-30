@@ -1,38 +1,59 @@
-{ lib, buildPythonPackage, fetchFromGitHub, GitPython, click, ordered-set, pillow, sortedcollections }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-let
-  aikku93-tilequant = fetchFromGitHub {
-    owner = "SkyTemple";
-    repo = "aikku93-tilequant";
-    rev = "6604e0906edff384b6c8d4cde03e6601731f66fd";
-    sha256 = "0w19h3n2i0xriqsy0b0rifjgbv4hqd7gl78fw0cappkrdykij5r1";
-  };
-in
+  # build-system
+  setuptools,
+  setuptools-dso,
+
+  # dependencies
+  click,
+  ordered-set,
+  pillow,
+  sortedcollections,
+}:
+
 buildPythonPackage rec {
   pname = "tilequant";
-  version = "0.4.0.post0";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    sha256 = "189af203iay3inj1bbgm3hh1fshn879bcm28ypbvfp27fy7j5b25";
+    repo = "tilequant";
+    tag = version;
+    # Fetch tilequant source files
+    fetchSubmodules = true;
+    hash = "sha256-MgyKLwVdL2DRR8J88q7Q57rQiX4FTOlQ5rTY3UuhaJM=";
   };
 
-  postPatch = ''
-    cp -R --no-preserve=mode ${aikku93-tilequant} __aikku93_tilequant
-  '';
+  build-system = [
+    setuptools
+    setuptools-dso
+  ];
 
-  buildInputs = [ GitPython ];
-  propagatedBuildInputs = [ click ordered-set pillow sortedcollections ];
+  pythonRelaxDeps = [
+    "click"
+  ];
+  dependencies = [
+    click
+    ordered-set
+    pillow
+    sortedcollections
+    setuptools-dso
+  ];
 
   doCheck = false; # there are no tests
-  pythonImportsCheck = [ "skytemple_tilequant" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/SkyTemple/tilequant";
+  pythonImportsCheck = [ "tilequant" ];
+
+  meta = {
     description = "Tool for quantizing image colors using tile-based palette restrictions";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    homepage = "https://github.com/SkyTemple/tilequant";
+    changelog = "https://github.com/SkyTemple/tilequant/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    mainProgram = "tilequant";
   };
 }

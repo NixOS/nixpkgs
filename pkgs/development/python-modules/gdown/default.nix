@@ -1,48 +1,54 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, filelock
-, requests
-, tqdm
-, setuptools
-, six
-, pythonOlder
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  filelock,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  requests,
+  setuptools,
+  tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gdown";
-  version = "4.5.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "5.2.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bL991BCFiMc0qliBMdjh1S5k8Ic4cPcfdMusGV8MYO8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-JHwq0fV521tmtUwE5qhxmV/I/XAhcIuVC4unsyz5AyM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-vcs
+    hatch-fancy-pypi-readme
+  ];
+
+  dependencies = [
     beautifulsoup4
     filelock
     requests
-    tqdm
     setuptools
-    six
-  ] ++ requests.optional-dependencies.socks;
+    tqdm
+  ]
+  ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null
   '';
 
-  pythonImportsCheck = [
-    "gdown"
-  ];
+  pythonImportsCheck = [ "gdown" ];
 
-  meta = with lib; {
-    description = "A CLI tool for downloading large files from Google Drive";
+  meta = {
+    description = "CLI tool for downloading large files from Google Drive";
     homepage = "https://github.com/wkentaro/gdown";
-    license = licenses.mit;
-    maintainers = with maintainers; [ breakds ];
+    changelog = "https://github.com/wkentaro/gdown/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ breakds ];
+    mainProgram = "gdown";
   };
-}
+})

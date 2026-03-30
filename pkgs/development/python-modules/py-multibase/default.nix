@@ -1,46 +1,42 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy27
-, lib
-, morphys
-, pytest
-, pytest-runner
-, python-baseconv
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  morphys,
+  pytestCheckHook,
+  python-baseconv,
+  setuptools,
+  six,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-multibase";
-  version = "1.0.3";
-  disabled = isPy27;
+  version = "2.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version ;
-    sha256 = "d28a20efcbb61eec28f55827a0bf329c7cea80fffd933aecaea6ae8431267fe4";
+  src = fetchFromGitHub {
+    owner = "multiformats";
+    repo = "py-multibase";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k5vQqrSe1glT2YIcD+FIhQTpCZQvx5D4z1n7omuypcI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "[pytest]" ""
-    substituteInPlace setup.cfg --replace "python_classes = *TestCase" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     morphys
-    six
     python-baseconv
+    six
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "Multibase is a protocol for distinguishing base encodings and other simple string encodings";
+  pythonImportsCheck = [ "multibase" ];
+
+  meta = {
+    description = "Module for distinguishing base encodings and other simple string encodings";
     homepage = "https://github.com/multiformats/py-multibase";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    changelog = "https://github.com/multiformats/py-multibase/blob/${finalAttrs.src.tag}/HISTORY.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

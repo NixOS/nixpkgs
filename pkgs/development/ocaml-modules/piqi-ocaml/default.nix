@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims, num }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  piqi,
+  stdlib-shims,
+  num,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.7.8";
@@ -12,10 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6Luq49sbo+AqLSq57mc6fLhrRx0K6G5LCUIzkGPfqYo=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ piqi stdlib-shims ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
+  buildInputs = [
+    piqi
+    stdlib-shims
+  ];
 
-  checkInputs  = [ num ];
+  checkInputs = [ num ];
 
   strictDeps = true;
 
@@ -27,11 +42,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
     homepage = "https://piqi.org";
-    license = licenses.asl20;
-    maintainers = [ maintainers.maurer ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.maurer ];
     mainProgram = "piqic-ocaml";
   };
 }

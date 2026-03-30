@@ -1,24 +1,27 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  requests,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "apc-temp-fetch";
-  version = "0.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "APC-Temp-fetch";
     inherit version;
-    hash = "sha256-2hNrTrYQadNJWzj7/dDou+a6uI+Ksyrbru9rBqIHXaM=";
+    hash = "sha256-lXGj/xrOkdMMYvuyVVSCojjQlzISFUT14VTn//iOARo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     requests
   ];
 
@@ -26,10 +29,10 @@ buildPythonApplication rec {
     "APC_Temp_fetch"
   ];
 
-  meta = with lib; {
-    description = "unified temperature fetcher interface to several UPS network adapters";
+  meta = {
+    description = "Unified temperature fetcher interface to several UPS network adapters";
     homepage = "https://github.com/YZITE/APC_Temp_fetch";
-    license = licenses.asl20;
-    maintainers = [ maintainers.zseri ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

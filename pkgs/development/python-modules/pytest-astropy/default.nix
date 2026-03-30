@@ -1,41 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, hypothesis
-, pytest
-, pytest-arraydiff
-, pytest-astropy-header
-, pytest-cov
-, pytest-doctestplus
-, pytest-filter-subpackage
-, pytest-mock
-, pytest-openfiles
-, pytest-remotedata
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pytest,
+  pytest-arraydiff,
+  pytest-astropy-header,
+  pytest-cov,
+  pytest-doctestplus,
+  pytest-filter-subpackage,
+  pytest-mock,
+  pytest-remotedata,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.10.0";
-  disabled = pythonOlder "3.7";
+  version = "0.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hePGbO7eTOZo9HOzzzd/yyqjxI4k8oqqN3roYATM4hE=";
+    hash = "sha256-Tq6qme2RFj7Y+arBMscKgfJbxMEvPNVNujKfwmxnObU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     hypothesis
     pytest-arraydiff
     pytest-astropy-header
@@ -43,17 +40,17 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-filter-subpackage
     pytest-mock
-    pytest-openfiles
     pytest-remotedata
   ];
 
   # pytest-astropy is a meta package that only propagates requirements
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/astropy/pytest-astropy/releases/tag/v${version}";
     description = "Meta-package containing dependencies for testing";
-    homepage = "https://astropy.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    homepage = "https://github.com/astropy/pytest-astropy";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,11 +42,11 @@ stdenv.mkDerivation rec {
     cp unicorn.png "$out/public/img/unicorn.png"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicorn theme for IcingaWeb 2";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-unicorn";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

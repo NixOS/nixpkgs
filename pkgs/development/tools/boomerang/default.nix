@@ -1,6 +1,17 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, qtbase, capstone, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qtbase,
+  capstone,
+  bison,
+  flex,
+  wrapQtAppsHook,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "boomerang";
   version = "0.5.2";
   # NOTE: When bumping version beyond 0.5.2, you likely need to remove
@@ -14,8 +25,21 @@ mkDerivation rec {
     sha256 = "0xncdp0z8ry4lkzmvbj5d7hlzikivghpwicgywlv47spgh8ny0ix";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
-  buildInputs = [ qtbase capstone ];
+  # Boomerang usually compiles with -Werror but has not been updated for newer
+  # compilers. Disable -Werror for now. Consider trying to remove this when
+  # updating this derivation.
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
+
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    capstone
+  ];
   patches = [
     (fetchpatch {
       name = "include-missing-cstdint.patch";
@@ -24,10 +48,10 @@ mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BoomerangDecompiler/boomerang";
-    license = licenses.bsd3;
-    description = "A general, open source, retargetable decompiler";
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.bsd3;
+    description = "General, open source, retargetable decompiler";
+    maintainers = [ ];
   };
 }

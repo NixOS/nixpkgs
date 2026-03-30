@@ -1,42 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pytest-asyncio
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-asyncio_0,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "backoff";
-  version = "2.1.2";
-  format = "pyproject";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litl";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-eKd1g3UxXlpSlNlik80RKXRaw4mZyvAWl3i2GNuZ3hI=";
+    repo = "backoff";
+    tag = "v${version}";
+    hash = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  patches = [
+    # https://github.com/litl/backoff/pull/220
+    ./python314-compat.patch
   ];
 
-  checkInputs = [
-    pytest-asyncio
+  nativeBuildInputs = [ poetry-core ];
+
+  nativeCheckInputs = [
+    pytest-asyncio_0
     pytestCheckHook
     responses
   ];
 
-  pythonImportsCheck = [
-    "backoff"
-  ];
+  pythonImportsCheck = [ "backoff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Function decoration for backoff and retry";
     homepage = "https://github.com/litl/backoff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }

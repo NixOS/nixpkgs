@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,34 +10,39 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  image = (import ../lib/eval-config.nix {
-    inherit system;
-    modules = [
-      ../maintainers/scripts/openstack/openstack-image.nix
-      ../modules/testing/test-instrumentation.nix
-      ../modules/profiles/qemu-guest.nix
-      {
-        # Needed by nixos-rebuild due to lack of network access.
-        system.extraDependencies = with pkgs; [
-          stdenv
-        ];
-      }
-    ];
-  }).config.system.build.openstackImage + "/nixos.qcow2";
+  imageCfg =
+    (import ../lib/eval-config.nix {
+      system = null;
+      modules = [
+        ../maintainers/scripts/openstack/openstack-image.nix
+        ../modules/testing/test-instrumentation.nix
+        ../modules/profiles/qemu-guest.nix
+        {
+          # Needed by nixos-rebuild due to lack of network access.
+          system.extraDependencies = with pkgs; [
+            stdenv
+          ];
+
+          nixpkgs.pkgs = pkgs;
+        }
+      ];
+    }).config;
+  image = "${imageCfg.system.build.openstackImage}/${imageCfg.image.fileName}";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
   snakeOilPrivateKeyFile = pkgs.writeText "private-key" snakeOilPrivateKey;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
-in {
+in
+{
   metadata = makeEc2Test {
     name = "openstack-ec2-metadata";
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
-      SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
+      SSH_HOST_ED25519_KEY:${replaceStrings [ "\n" ] [ "|" ] snakeOilPrivateKey}
     '';
     script = ''
       machine.start()
@@ -74,6 +80,7 @@ in {
 
   userdata = makeEc2Test {
     name = "openstack-ec2-metadata";
+    meta.broken = true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''

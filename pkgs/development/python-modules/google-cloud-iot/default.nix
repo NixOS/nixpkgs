@@ -1,40 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc-google-iam-v1
-, google-api-core
-, libcst
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "2.6.4";
+  version = "2.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d3RRVqgetOS3sAT6UkV5DB/NZMjeZd5tBtd9ME8Wvs4=";
+    hash = "sha256-pLQgcwR89F+9jcSDtW/5+6Gy+Wk7XQf4iD49vDPkN9U=";
   };
 
   propagatedBuildInputs = [
-    grpc-google-iam-v1
     google-api-core
+    grpc-google-iam-v1
     libcst
     proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  # including_default_value_fields was deprecated, the new version is called
+  # always_print_fields_with_no_presence
+  postPatch = ''
+    substituteInPlace "tests/unit/gapic/iot_v1/test_device_manager.py" \
+      --replace-fail "including_default_value_fields" "always_print_fields_with_no_presence"
+    substituteInPlace "google/cloud/iot_v1/services/device_manager/transports/rest.py" \
+      --replace-fail "including_default_value_fields" "always_print_fields_with_no_presence"
+  '';
 
   disabledTests = [
     # requires credentials
@@ -46,10 +56,11 @@ buildPythonPackage rec {
     "google.cloud.iot_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud IoT API API client library";
     homepage = "https://github.com/googleapis/python-iot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/googleapis/python-iot/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

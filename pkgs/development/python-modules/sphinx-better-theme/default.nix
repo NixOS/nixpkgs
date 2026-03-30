@@ -1,22 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinxHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinxHook,
+}:
 
 buildPythonPackage rec {
   pname = "sphinx-better-theme";
-  version = "0.1.5";
-  outputs = [ "out" "doc" ];
+  version = "0.13";
+  format = "setuptools";
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "irskep";
     repo = "sphinx-better-theme";
-    rev = "v${version}";
-    sha256 = "07lhfmsjcfzcchsjzh6kxdq5s47j2a6lb5wv3m1kmv2hcm3gvddh";
+    tag = "v${version}";
+    sha256 = "sha256-eFA1U2jMeOH7xabonYg/bV6eTAFBew6+WaK2uKWlsUc=";
   };
 
   nativeBuildInputs = [ sphinxHook ];
 
   pythonImportsCheck = [ "better" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/irskep/sphinx-better-theme";
     description = "Better Sphinx Theme";
     longDescription = ''
@@ -39,7 +48,7 @@ buildPythonPackage rec {
           html_theme_path = [better_theme_path]
           html_theme = 'better'
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

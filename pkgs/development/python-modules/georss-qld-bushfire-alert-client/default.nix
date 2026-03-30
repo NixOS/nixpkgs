@@ -1,41 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, georss-client
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  georss-client,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "georss-qld-bushfire-alert-client";
-  version = "0.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-qld-bushfire-alert-client";
-    rev = "v${version}";
-    hash = "sha256-7KVR0hdLwyCj7MYJoRvQ6wTeJQAmCUarYxJXEFaN8Pc=";
+    tag = "v${version}";
+    hash = "sha256-/MyjYLu29PANe17KxJCkmHPjvjlPfswn7ZBAKFSwohc=";
   };
 
-  propagatedBuildInputs = [
-    georss-client
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ georss-client ];
 
-  pythonImportsCheck = [
-    "georss_qld_bushfire_alert_client"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "georss_qld_bushfire_alert_client" ];
+
+  meta = {
     description = "Python library for accessing Queensland Bushfire Alert feed";
     homepage = "https://github.com/exxamalte/python-georss-qld-bushfire-alert-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/exxamalte/python-georss-qld-bushfire-alert-client/releases/tag/v${version}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

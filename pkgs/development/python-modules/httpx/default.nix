@@ -1,96 +1,91 @@
-{ lib
-, stdenv
-, brotli
-, brotlicffi
-, buildPythonPackage
-, certifi
-, chardet
-, click
-, fetchFromGitHub
-, h2
-, httpcore
-, isPyPy
-, pygments
-, python
-, pythonOlder
-, rfc3986
-, rich
-, sniffio
-, socksio
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, trustme
-, uvicorn
+{
+  lib,
+  stdenv,
+  anyio,
+  brotli,
+  brotlicffi,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  click,
+  fetchFromGitHub,
+  h2,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpcore,
+  idna,
+  isPyPy,
+  multipart,
+  pygments,
+  python,
+  rich,
+  socksio,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-trio,
+  trustme,
+  uvicorn,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.23.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.28.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    hash = "sha256-s11Yeizm3y3w5D6ACQ2wp/KJ0+1ALY/R71IlTP2pMC4=";
+    repo = "httpx";
+    tag = version;
+    hash = "sha256-tB8uZm0kPRnmeOvsDdrkrHcMVIYfGanB4l/xHsTKpgE=";
   };
 
-  propagatedBuildInputs = [
-    certifi
-    httpcore
-    rfc3986
-    sniffio
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatchling
   ];
 
-  passthru.optional-dependencies = {
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
-    brotli = if isPyPy then [
-      brotlicffi
-    ] else [
-      brotli
-    ];
+  dependencies = [
+    anyio
+    certifi
+    httpcore
+    idna
+  ];
+
+  optional-dependencies = {
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
     cli = [
       click
       rich
       pygments
     ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    zstd = [ zstandard ];
   };
 
   # trustme uses pyopenssl
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  checkInputs = [
+  nativeCheckInputs = [
     chardet
+    multipart
     pytestCheckHook
     pytest-asyncio
     pytest-trio
     trustme
     uvicorn
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.socks;
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
-  '';
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -99,22 +94,26 @@ buildPythonPackage rec {
     # httpcore.ConnectError: [Errno -2] Name or service not known
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # ResourceWarning: Async generator 'httpx._content.ByteStream.__aiter__' was garbage collected before it had been exhausted. Surround its use in 'async with aclosing(...):' to ensure that it gets cleaned up as soon as you're done using it.
+    "test_write_timeout" # trio variant
   ];
 
-  disabledTestPaths = [
-    "tests/test_main.py"
-  ];
+  disabledTestPaths = [ "tests/test_main.py" ];
 
-  pythonImportsCheck = [
-    "httpx"
-  ];
+  pythonImportsCheck = [ "httpx" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    description = "The next generation HTTP client";
+  # stdenv's fake SSL_CERT_FILE breaks default http transport constructor with:
+  # FileNotFoundError: [Errno 2] No such file or directory
+  setupHook = ./setup-hook.sh;
+
+  meta = {
+    changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
+    description = "Next generation HTTP client";
+    mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

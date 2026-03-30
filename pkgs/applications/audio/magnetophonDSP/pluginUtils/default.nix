@@ -1,16 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "pluginUtils";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "pluginUtils";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "1hnr5sp7k6ypf4ks61lnyqx44dkv35yllf3a3xcbrw7yqzagwr1c";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [
+    faust2jaqt
+    faust2lv2
+  ];
+
+  dontWrapQtApps = true;
 
   buildPhase = ''
     for f in *.dsp
@@ -28,7 +39,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
-    cp * $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
   '';
 
   meta = {
@@ -37,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

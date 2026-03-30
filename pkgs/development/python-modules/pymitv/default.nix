@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pymitv";
   version = "1.5.0";
-  disabled = pythonOlder "3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0n4IS5W3nvYwKdl6FVf4upRrFDGdYHohsaXadFy8d8w=";
+    hash = "sha256-0n4IS5W3nvYwKdl6FVf4upRrFDGdYHohsaXadFy8d8w=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
   pythonImportsCheck = [ "pymitv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client the Mi Tv 3";
     homepage = "https://github.com/simse/pymitv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

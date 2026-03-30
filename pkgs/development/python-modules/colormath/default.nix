@@ -1,9 +1,11 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, networkx
-, nose
-, numpy
-, lib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  pytest8_3CheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -11,27 +13,32 @@ buildPythonPackage rec {
   # Switch to unstable which fixes an deprecation issue with newer numpy
   # versions, should be included in versions > 3.0
   # https://github.com/gtaylor/python-colormath/issues/104
-  version = "unstable-2021-04-17";
+  version = "3.0.0-unstable-2021-04-17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtaylor";
     repo = "python-colormath";
     rev = "4a076831fd5136f685aa7143db81eba27b2cd19a";
-    sha256 = "sha256-eACVPIQFgiGiVmQ/PjUxP/UH/hBOsCywz5PlgpA4dk4=";
+    hash = "sha256-eACVPIQFgiGiVmQ/PjUxP/UH/hBOsCywz5PlgpA4dk4=";
   };
 
-  propagatedBuildInputs = [ networkx numpy ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ nose ];
+  dependencies = [
+    networkx
+    numpy
+  ];
 
-  checkPhase = "nosetests";
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pythonImportsCheck = [ "colormath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Color math and conversion library";
     homepage = "https://github.com/gtaylor/python-colormath";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jonathanreeve ];
+    changelog = "https://github.com/gtaylor/python-colormath/releases/tag/${version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jonathanreeve ];
   };
 }

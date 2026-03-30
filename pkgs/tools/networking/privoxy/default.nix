@@ -1,24 +1,39 @@
-{ lib, stdenv
-, nixosTests
-, fetchurl, autoreconfHook
-, zlib, pcre, w3m, man
-, openssl, brotli
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchpatch,
+  fetchurl,
+  autoreconfHook,
+  zlib,
+  pcre,
+  w3m,
+  man,
+  openssl,
+  brotli,
 }:
 
 stdenv.mkDerivation rec {
 
   pname = "privoxy";
-  version = "3.0.33";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
-    sha256 = "sha256-BLEE5w2sYVYbndEQaEslD6/IwT2+Q3pg+uGN3ZqIH64=";
+    sha256 = "sha256-wI4roASTBwF7+dimPdKg37lqoM3rNK4Ad3bmPrpiom8=";
   };
 
-  hardeningEnable = [ "pie" ];
-
-  nativeBuildInputs = [ autoreconfHook w3m man ];
-  buildInputs = [ zlib pcre openssl brotli ];
+  nativeBuildInputs = [
+    autoreconfHook
+    w3m
+    man
+  ];
+  buildInputs = [
+    zlib
+    pcre
+    openssl
+    brotli
+  ];
 
   makeFlags = [ "STRIP=" ];
   configureFlags = [
@@ -34,14 +49,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests.privoxy = nixosTests.privoxy;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.privoxy.org/";
     description = "Non-caching web proxy with advanced filtering capabilities";
     # When linked with mbedtls, the license becomes GPLv3 (or later), otherwise
     # GPLv2 (or later). See https://www.privoxy.org/user-manual/copyright.html
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
+    mainProgram = "privoxy";
   };
 
 }

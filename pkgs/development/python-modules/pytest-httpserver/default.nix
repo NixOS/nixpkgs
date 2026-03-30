@@ -1,36 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-cov
-, pytestCheckHook
-, requests
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  requests,
+  toml,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.0.6";
+  version = "1.1.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "pytest_httpserver";
-    inherit version;
-    sha256 = "sha256-kEDQe/WaxF2N49sdRGj9LR1geXXk2kyHLswEAs2/ez4=";
+  src = fetchFromGitHub {
+    owner = "csernazs";
+    repo = "pytest-httpserver";
+    tag = version;
+    hash = "sha256-5pyCDzt9nCwYcUdCjWlJiAkyNmf6oWBqSHQL7kJJluA=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ werkzeug ];
 
-  checkInputs = [
-    pytest-cov
+  nativeCheckInputs = [
     pytestCheckHook
     requests
+    toml
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    "test_wait_raise_assertion_false" # racy
   ];
 
   pythonImportsCheck = [ "pytest_httpserver" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP server for pytest to test HTTP clients";
     homepage = "https://www.github.com/csernazs/pytest-httpserver";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/csernazs/pytest-httpserver/blob/${src.tag}/CHANGES.rst";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

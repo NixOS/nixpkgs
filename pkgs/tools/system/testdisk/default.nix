@@ -1,15 +1,22 @@
-{ mkDerivation
-, lib, stdenv
-, fetchurl
-, ncurses
-, libuuid
-, pkg-config
-, libjpeg
-, zlib
-, libewf
-, enableNtfs ? !stdenv.isDarwin, ntfs3g ? null
-, enableExtFs ? !stdenv.isDarwin, e2fsprogs ? null
-, enableQt ? false, qtbase ? null, qttools ? null, qwt ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libuuid,
+  pkg-config,
+  wrapQtAppsHook,
+  libjpeg,
+  zlib,
+  libewf-legacy,
+  enableNtfs ? !stdenv.hostPlatform.isDarwin,
+  ntfs3g ? null,
+  enableExtFs ? !stdenv.hostPlatform.isDarwin,
+  e2fsprogs ? null,
+  enableQt ? false,
+  qtbase ? null,
+  qttools ? null,
+  qwt ? null,
 }:
 
 assert enableNtfs -> ntfs3g != null;
@@ -18,13 +25,18 @@ assert enableQt -> qtbase != null;
 assert enableQt -> qttools != null;
 assert enableQt -> qwt != null;
 
-(if enableQt then mkDerivation else stdenv.mkDerivation) rec {
+stdenv.mkDerivation rec {
   pname = "testdisk";
-  version = "7.1";
+  version = "7.2";
   src = fetchurl {
     url = "https://www.cgsecurity.org/testdisk-${version}.tar.bz2";
-    sha256 = "1zlh44w67py416hkvw6nrfmjickc2d43v51vcli5p374d5sw84ql";
+    hash = "sha256-+DQ74gy0ABxdkaLjvNkYOY8Arm2DEIlKWp8v64E8KD8=";
   };
+
+  postPatch = ''
+    substituteInPlace linux/qphotorec.desktop \
+      --replace "/usr" "$out"
+  '';
 
   enableParallelBuilding = true;
 
@@ -33,17 +45,30 @@ assert enableQt -> qwt != null;
     libuuid
     libjpeg
     zlib
-    libewf
+    libewf-legacy
   ]
   ++ lib.optional enableNtfs ntfs3g
   ++ lib.optional enableExtFs e2fsprogs
-  ++ lib.optionals enableQt [ qtbase qttools qwt ];
+  ++ lib.optionals enableQt [
+    qtbase
+    qttools
+    qwt
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optional enableQt wrapQtAppsHook;
 
-  NIX_CFLAGS_COMPILE="-Wno-unused";
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused";
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
+  meta = {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";
     downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";
     description = "Data recovery utilities";
@@ -63,6 +88,9 @@ assert enableQt -> qwt != null;
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with maintainers; [ fgaz eelco ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      ryand56
+    ];
   };
 }

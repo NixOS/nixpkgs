@@ -1,45 +1,46 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pydantic
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huum";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.8.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-PYOjfLPa/vZZP0IZuUZnQ74IrTRvizgYhKOmhd83aMQ=";
+  src = fetchFromGitHub {
+    owner = "frwickst";
+    repo = "pyhuum";
+    tag = finalAttrs.version;
+    hash = "sha256-PM1At/AqKZ0QIJWlQeeTYqnQqK1wOnd4eRLyd7MvFLk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    pydantic
+    mashumaro
+  ]
+  ++ aiohttp.optional-dependencies.speedups;
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  # Tests are not shipped and source not tagged
-  # https://github.com/frwickst/pyhuum/issues/2
-  doCheck = false;
+  pythonImportsCheck = [ "huum" ];
 
-  pythonImportsCheck = [
-    "huum"
-  ];
-
-  meta = with lib; {
-    description = "Library for for Huum saunas";
+  meta = {
+    description = "Library for Huum saunas";
     homepage = "https://github.com/frwickst/pyhuum";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frwickst/pyhuum/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

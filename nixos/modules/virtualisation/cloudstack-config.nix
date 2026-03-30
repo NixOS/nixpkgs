@@ -1,16 +1,15 @@
 { lib, pkgs, ... }:
 
-with lib;
-
 {
   imports = [
     ../profiles/qemu-guest.nix
   ];
 
   config = {
-    fileSystems."/" = {
+    fileSystems."/" = lib.mkImageMediaOverride {
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
+      fsType = "ext4";
     };
 
     boot.growPartition = true;
@@ -21,7 +20,7 @@ with lib;
     # Allow root logins
     services.openssh = {
       enable = true;
-      permitRootLogin = "prohibit-password";
+      settings.PermitRootLogin = "prohibit-password";
     };
 
     # Cloud-init configuration.

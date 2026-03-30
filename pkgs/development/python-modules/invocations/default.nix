@@ -1,35 +1,42 @@
-{ lib
-, buildPythonPackage
-, blessings
-, fetchFromGitHub
-, invoke
-, releases
-, semantic-version
-, tabulate
-, tqdm
-, twine
+{
+  lib,
+  buildPythonPackage,
+  blessed,
+  fetchFromGitHub,
+  invoke,
+  releases,
+  semantic-version,
+  tabulate,
+  tqdm,
+  twine,
+  pytestCheckHook,
+  pytest-relaxed,
+  pytest-mock,
+  icecream,
+  pip,
 }:
 
 buildPythonPackage rec {
   pname = "invocations";
-  version = "2.6.0";
+  version = "4.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyinvoke";
-    repo = pname;
-    rev = version;
-    hash = "sha256-eyOJKVRfn7elyEkERl7hvRTNFmq7O9Pr03lBS6xp0wE=";
+    repo = "invocations";
+    tag = version;
+    hash = "sha256-G6EKypqP2/coPChLwwEKZ2WIEay0qfyM8M5jKb0oS2c=";
   };
+
+  patches = [ ./replace-blessings-with-blessed.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "semantic_version>=2.4,<2.7" "semantic_version" \
-      --replace "tabulate==0.7.5" "tabulate"
+      --replace "semantic_version>=2.4,<2.7" "semantic_version"
   '';
 
   propagatedBuildInputs = [
-    blessings
+    blessed
     invoke
     releases
     semantic-version
@@ -38,17 +45,32 @@ buildPythonPackage rec {
     twine
   ];
 
-  # There's an error loading the test suite. See https://github.com/pyinvoke/invocations/issues/29.
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "invocations"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-relaxed
+    pytest-mock
+    icecream
+    pip
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "invocations" ];
+
+  disabledTests = [
+    # invoke.exceptions.UnexpectedExit
+    "autodoc_"
+
+    # ValueError: Call either Version('1.2.3') or Version(major=1, ...)
+    "component_state_enums_contain_human_readable_values"
+    "load_version_"
+    "prepare_"
+    "status_"
+  ];
+
+  meta = {
     description = "Common/best-practice Invoke tasks and collections";
     homepage = "https://invocations.readthedocs.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ samuela ];
+    changelog = "https://github.com/pyinvoke/invocations/blob/${src.tag}/docs/changelog.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -1,33 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cpp-utilities
-, qttools
-, qtbase
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  cpp-utilities,
+  qtbase,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtutilities";
-  version = "6.10.0";
+  version = "6.20.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xMuiizhOeS2UtD5OprLZb1MsjGyLd85SHcfW9Wja7tg=";
+    repo = "qtutilities";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vbflnFA8fmRDzWm0Zjzh4KcYEIsv7OtdKPJiIL07j8s=";
   };
 
-  buildInputs = [ qtbase cpp-utilities ];
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    cpp-utilities
+  ];
+
+  cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Martchus/qtutilities";
     description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

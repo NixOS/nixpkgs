@@ -1,10 +1,14 @@
-{ lib, qtModule, qtbase }:
+{
+  lib,
+  qtModule,
+  qtbase,
+}:
 
 qtModule {
   pname = "qtmacextras";
-  qtInputs = [ qtbase ];
-  meta = with lib; {
-    maintainers = with maintainers; [ periklis ];
-    platforms = platforms.darwin;
+  propagatedBuildInputs = [ qtbase ];
+  meta = {
+    maintainers = [ ];
+    platforms = lib.platforms.darwin;
   };
 }

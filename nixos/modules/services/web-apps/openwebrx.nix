@@ -1,17 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.openwebrx;
 in
 {
   options.services.openwebrx = with lib; {
-    enable = mkEnableOption (lib.mdDoc "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073");
+    enable = mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.openwebrx;
-      defaultText = literalExpression "pkgs.openwebrx";
-      description = lib.mdDoc "OpenWebRX package to use for the service";
-    };
+    package = mkPackageOption pkgs "openwebrx" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -23,7 +23,7 @@ in
         codec2
         js8call
         m17-cxx-demod
-        alsaUtils
+        alsa-utils
         netcat
       ];
       serviceConfig = {

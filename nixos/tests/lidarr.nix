@@ -1,14 +1,14 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
+{ lib, ... }:
 
 {
   name = "lidarr";
-  meta.maintainers = with maintainers; [ etu ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:
-    { services.lidarr.enable = true; };
+    {
+      services.lidarr.enable = true;
+    };
 
   testScript = ''
     start_all()
@@ -17,4 +17,4 @@ with lib;
     machine.wait_for_open_port(8686)
     machine.succeed("curl --fail http://localhost:8686/")
   '';
-})
+}

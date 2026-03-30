@@ -1,53 +1,146 @@
-{ callPackage, fetchurl, dart }:
-let
-  mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
-  getPatches = dir:
-    let files = builtins.attrNames (builtins.readDir dir);
-    in map (f: dir + ("/" + f)) files;
-  flutterDrv = { version, pname, dartVersion, hash, dartHash, patches }: mkFlutter {
-    inherit version pname patches;
-    dart = dart.override {
-      version = dartVersion;
-      sources = {
-        "${dartVersion}-x86_64-linux" = fetchurl {
-          url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-          sha256 = dartHash.x86_64-linux;
-        };
-        "${dartVersion}-aarch64-linux" = fetchurl {
-          url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-          sha256 = dartHash.aarch64-linux;
-        };
-      };
-    };
-    src = fetchurl {
-      url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
-      sha256 = hash;
-    };
-  };
-in
 {
-  inherit mkFlutter;
-  stable = flutterDrv {
-    pname = "flutter";
-    version = "3.3.3";
-    dartVersion = "2.18.2";
-    hash = "sha256-MTZeWQUp4/TcPzYIT6eqIKSPUPvn2Mp/thOQzNgpTXg=";
-    dartHash = {
-      x86_64-linux = "sha256-C3+YjecXLvSmJrLwi9H7TgD9Np0AArRWx3EdBrfQpTU";
-      aarch64-linux = "sha256-zyIK1i5/9P2C+sjzdArhFwpVO4P+It+/X50l+n9gekI=";
-    };
-    patches = getPatches ./patches/flutter3;
-  };
+  useNixpkgsEngine ? false,
+  callPackage,
+  fetchzip,
+  fetchFromGitHub,
+  dart,
+  dart-bin,
+  lib,
+  stdenv,
+  runCommand,
+}:
+let
+  mkCustomFlutter = args: callPackage ./flutter.nix args;
+  wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
+  getPatches =
+    dir:
+    let
+      files = builtins.attrNames (builtins.readDir dir);
+    in
+    if (builtins.pathExists dir) then map (f: dir + ("/" + f)) files else [ ];
+  mkFlutter =
+    {
+      version,
+      engineVersion,
+      engineSwiftShaderHash,
+      engineSwiftShaderRev,
+      engineHashes,
+      enginePatches,
+      dartVersion,
+      flutterHash,
+      dartHash,
+      patches,
+      pubspecLock,
+      artifactHashes,
+      channel,
+    }:
+    let
+      args = {
+        inherit
+          version
+          engineVersion
+          engineSwiftShaderRev
+          engineSwiftShaderHash
+          engineHashes
+          enginePatches
+          patches
+          pubspecLock
+          artifactHashes
+          useNixpkgsEngine
+          channel
+          ;
 
-  v2 = flutterDrv {
-    pname = "flutter";
-    version = "2.10.5";
-    dartVersion = "2.16.2";
-    hash = "sha256-DTZwxlMUYk8NS1SaWUJolXjD+JnRW73Ps5CdRHDGnt0=";
-    dartHash = {
-      x86_64-linux = "sha256-egrYd7B4XhkBiHPIFE2zopxKtQ58GqlogAKA/UeiXnI=";
-      aarch64-linux = "sha256-vmerjXkUAUnI8FjK+62qLqgETmA+BLPEZXFxwYpI+KY=";
-    };
-    patches = getPatches ./patches/flutter2;
-  };
+        dart =
+          let
+            hash =
+              dartHash.${stdenv.hostPlatform.system}
+                or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          in
+          (
+            if lib.versionAtLeast version "3.41" then
+              (dart-bin.overrideAttrs (oldAttrs: {
+                version = dartVersion;
+                src = oldAttrs.src.overrideAttrs (_: {
+                  inherit hash;
+                });
+              }))
+            else
+              (dart-bin.overrideAttrs (_: {
+                # This overrideAttrs is used to replace the version in src.url
+                version = dartVersion;
+                __intentionallyOverridingVersion = true;
+              })).overrideAttrs
+                (oldAttrs: {
+                  src = fetchzip {
+                    inherit (oldAttrs.src) url;
+                    inherit hash;
+                  };
+                })
+          );
+        src =
+          let
+            source = fetchFromGitHub {
+              owner = "flutter";
+              repo = "flutter";
+              tag = version;
+              hash = flutterHash;
+            };
+          in
+          (
+            if lib.versionAtLeast version "3.32" then
+              # # Could not determine engine revision
+              (runCommand source.name { } ''
+                cp --recursive ${source} $out
+                chmod +w $out/bin
+                mkdir $out/bin/cache
+                cp $out/bin/internal/engine.version $out/bin/cache/engine.stamp
+                touch $out/bin/cache/engine.realm
+              '')
+            else
+              source
+          );
+      };
+    in
+    (mkCustomFlutter args).overrideAttrs (
+      prev: next: {
+        passthru = next.passthru // {
+          inherit wrapFlutter mkCustomFlutter mkFlutter;
+          buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
+            flutter = wrapFlutter (mkCustomFlutter args);
+          };
+        };
+      }
+    );
+
+  flutterVersions = lib.mapAttrs' (
+    version: _:
+    let
+      versionDir = ./versions + "/${version}";
+      data = lib.importJSON (versionDir + "/data.json");
+    in
+    lib.nameValuePair "v${version}" (
+      wrapFlutter (
+        mkFlutter (
+          {
+            patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+            enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
+          }
+          // data
+        )
+      )
+    )
+  ) (builtins.readDir ./versions);
+
+  stableFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "stable") flutterVersions;
+  betaFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "beta") flutterVersions;
+in
+flutterVersions
+// {
+  inherit wrapFlutter mkFlutter;
+}
+// lib.optionalAttrs (betaFlutterVersions != { }) {
+  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
+}
+// lib.optionalAttrs (stableFlutterVersions != { }) {
+  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
 }

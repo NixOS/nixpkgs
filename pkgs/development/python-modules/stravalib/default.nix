@@ -1,43 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, arrow
-, requests
-, units
-, pytz
-, six
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pint,
+  pydantic,
+  pytz,
+  requests,
+  responses,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "0.10.4";
+  version = "2.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "451817c68a11e0c77db9cb628e3c4df0f4806c5a481536598ab3baa1d1c21215";
+  src = fetchFromGitHub {
+    owner = "stravalib";
+    repo = "stravalib";
+    tag = "v${version}";
+    hash = "sha256-RMvahoUOy4RnSu0O7dBpYylaQ8nPfMiivx8k1XBeEGA=";
   };
 
-  checkInputs = [
-    nose
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arrow
-    requests
-    units
+    pint
+    pydantic
     pytz
-    six
+    requests
+    responses
   ];
 
-  # tests require network access
-  # testing strava api
+  # Tests require network access, testing strava API
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "stravalib" ];
+
+  meta = {
     description = "Python library for interacting with Strava v3 REST API";
-    homepage = "https://github.com/hozn/stravalib";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    homepage = "https://github.com/stravalib/stravalib";
+    changelog = "https://github.com/stravalib/stravalib/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

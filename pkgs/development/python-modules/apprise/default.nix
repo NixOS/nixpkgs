@@ -1,40 +1,49 @@
-{ lib
-, babel
-, buildPythonPackage
-, click
-, cryptography
-, fetchPypi
-, gntp
-, installShellFiles
-, markdown
-, mock
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests-oauthlib
-, slixmpp
+{
+  lib,
+  apprise,
+  babel,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchPypi,
+  gntp,
+  installShellFiles,
+  markdown,
+  paho-mqtt,
+  pytest-mock,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  requests-oauthlib,
+  setuptools,
+  stdenv,
+  terminal-notifier,
+  testers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apprise";
-  version = "1.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.9.9";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-92eoBwp3fcKb9zCBeeC2ndLeZeZpM+2JsZmef/5yO2A=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-/WIsDfFr3HntOFU5c1VzSIyv4kBdJXR+h+69awmyYBI=";
   };
 
-  nativeBuildInputs = [
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace apprise/plugins/macosx.py \
+    --replace-fail "/opt/homebrew/bin/terminal-notifier" "${lib.getExe' terminal-notifier "terminal-notifier"}"
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [
     babel
-    installShellFiles
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     markdown
@@ -43,36 +52,32 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gntp
-    mock
     paho-mqtt
+    pytest-mock
     pytestCheckHook
-    slixmpp
-  ];
-
-  disabledTests = [
-    "test_apprise_cli_nux_env"
-    "test_plugin_mqtt_general"
-  ];
-
-  disabledTestPaths = [
-    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
-    "test/test_plugin_bulksms.py"
   ];
 
   postInstall = ''
     installManPage packaging/man/apprise.1
   '';
 
-  pythonImportsCheck = [
-    "apprise"
-  ];
+  pythonImportsCheck = [ "apprise" ];
 
-  meta = with lib; {
-    description = "Push Notifications that work with just about every platform";
-    homepage = "https://github.com/caronc/apprise";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+  passthru = {
+    tests.version = testers.testVersion {
+      package = apprise;
+      version = "v${finalAttrs.version}";
+    };
   };
-}
+
+  meta = {
+    description = "Push Notifications that work with just about every platform";
+    homepage = "https://appriseit.com/";
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "apprise";
+  };
+})

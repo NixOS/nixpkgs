@@ -16,6 +16,8 @@ fi
 
 source @out@/nix-support/utils.bash
 
+source @out@/nix-support/darwin-sdk-setup.bash
+
 if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
@@ -42,9 +44,9 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
     while (( "$n" < "$nParams" )); do
         p=${params[n]}
         p2=${params[n+1]:-} # handle `p` being last one
-        if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
+        if [ "${p:0:3}" = -L/ ] && badPathWithDarwinSdk "${p:2}"; then
             skip "${p:2}"
-        elif [ "$p" = -L ] && badPath "$p2"; then
+        elif [ "$p" = -L ] && badPathWithDarwinSdk "$p2"; then
             n+=1; skip "$p2"
         elif [ "$p" = -rpath ] && badPath "$p2"; then
             n+=1; skip "$p2"
@@ -55,10 +57,12 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             # produces '-syslibroot //' linker flag. It's a no-op,
             # which does not introduce impurities.
             n+=1; skip "$p2"
-        elif [ "${p:0:1}" = / ] && badPath "$p"; then
-            # We cannot skip this; barf.
-            echo "impure path \`$p' used in link" >&2
-            exit 1
+        elif [ "${p:0:10}" = /LIBPATH:/ ] && badPath "${p:9}"; then
+            reject "${p:9}"
+        # We need to not match LINK.EXE-style flags like
+        # /NOLOGO or /LIBPATH:/nix/store/foo
+        elif [[ $p =~ ^/[^:]*/ ]] && badPath "$p"; then
+            reject "$p"
         elif [ "${p:0:9}" = --sysroot ]; then
             # Our ld is not built with sysroot support (Can we fix that?)
             :
@@ -198,13 +202,32 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
     # the link time chosen objects will be those of runtime linking.
     declare -A rpaths
     for dir in ${libDirs+"${libDirs[@]}"}; do
-        if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
+        # If the path is in the store, do not resolve any symlinks and add it to the rpath.
+        # Resolving symlinks in the store breaks bootstrapping, see issue #454199.
+        # If it is outside the store, resolve symlinks step by step until it falls
+        # into the store or it becomes not a symlink.
+        # Always canonicalize the path before checking it is in the store or not.
+        if dir2=$(realpath -s "$dir"); then
             dir="$dir2"
+        else
+            continue
         fi
+        while [ -z "${rpaths[$dir]:-}" ] && [[ "$dir" != "${NIX_STORE:-}"/* ]] && [ -L "$dir" ]; do
+            if dir2=$(readlink "$dir"); then
+                dir="dir2"
+            else
+                break
+            fi
+            if dir2=$(realpath -s "$dir"); then
+                dir="dir2"
+            else
+                break
+            fi
+        done
+        # If the path turns out to be outside the store, we do not add it to rpath.
+        # This typically happens for libraries in /tmp that are later
+        # copied to $out/lib. If not, we're screwed.
         if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "${NIX_STORE:-}"/* ]]; then
-            # If the path is not in the store, don't add it to the rpath.
-            # This typically happens for libraries in /tmp that are later
-            # copied to $out/lib.  If not, we're screwed.
             continue
         fi
         for path in "$dir"/*; do
@@ -224,18 +247,20 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
 
 fi
 
-# This is outside the DONT_SET_RPATH branch because it's more targeted and we
-# usually want it (on Darwin) even if DONT_SET_RPATH is set.
-if [ -n "${NIX_COREFOUNDATION_RPATH:-}" ]; then
-  extraAfter+=(-rpath $NIX_COREFOUNDATION_RPATH)
-fi
-
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
+#
+# Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
+# to SHA1.
 if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
-    extraAfter+=(--build-id)
+    extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
+# if a ld-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/ld-wrapper-hook ]]; then
+    linker=@prog@
+    source @out@/nix-support/ld-wrapper-hook
+fi
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
@@ -250,10 +275,21 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-@prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/ld-params.XXXXXX")
+    trap '@rm@ -f -- "$responseFile"' EXIT
+    printf "%q\n" \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
+    @prog@ "@$responseFile"
+else
+    @prog@ \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+fi
 
 if [ -e "@out@/nix-support/post-link-hook" ]; then
     source @out@/nix-support/post-link-hook

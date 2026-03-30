@@ -1,42 +1,44 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, eth-utils
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  setuptools,
+  buildPythonPackage,
+  eth-utils,
+  hypothesis,
+  pytestCheckHook,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "3.0.0";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "pyrlp";
     rev = "v${version}";
-    sha256 = "sha256-GRCq4FU38e08fREg5fweig5Y60jLT2k3Yj1Jk8OA6XY=";
+    hash = "sha256-moerdcAJXqhlzDnTlvxL3Nzz485tOzJVCPlGrof80eQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'setuptools-markdown'" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    eth-utils
-  ];
+  propagatedBuildInputs = [ eth-utils ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    pydantic
   ];
 
   pythonImportsCheck = [ "rlp" ];
 
-  meta = with lib; {
+  disabledTests = [ "test_install_local_wheel" ];
+
+  meta = {
     description = "RLP serialization library";
     homepage = "https://github.com/ethereum/pyrlp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

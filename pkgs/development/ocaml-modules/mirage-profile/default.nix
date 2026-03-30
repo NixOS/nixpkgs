@@ -1,13 +1,18 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_cstruct, stdlib-shims
-, cstruct, lwt
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppx_cstruct,
+  stdlib-shims,
+  cstruct,
+  lwt,
 }:
 
 buildDunePackage rec {
   pname = "mirage-profile";
   version = "0.9.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-profile/releases/download/v${version}/mirage-profile-v${version}.tbz";
@@ -15,12 +20,16 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppx_cstruct ];
-  propagatedBuildInputs = [ cstruct lwt stdlib-shims ];
+  propagatedBuildInputs = [
+    cstruct
+    lwt
+    stdlib-shims
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Collect runtime profiling information in CTF format";
     homepage = "https://github.com/mirage/mirage-profile";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

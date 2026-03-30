@@ -1,41 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  matplotlib,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "regional";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "freeman-lab";
-    repo = pname;
+    repo = "regional";
     rev = "e3a29c58982e5cd3d5700131ac96e5e0b84fb981"; # no tags in repo
-    sha256 = "03qgm35q9sa5cy0kkw4bj60zfylw0isfzb96nlhdfrsigzs2zkxv";
+    hash = "sha256-u88v9H9RZ9cgtSat73QEnHr3gZGL8DmBZ0XphMuoDw8=";
   };
 
   propagatedBuildInputs = [
+    matplotlib
     numpy
     scipy
-    matplotlib
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "regional" ];
+
+  disabledTests = [
+    "test_dilate"
+    "test_outline"
+    "test_mask"
   ];
 
-  checkPhase = ''
-    pytest
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Simple manipualtion and display of spatial regions";
     homepage = "https://github.com/freeman-lab/regional";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

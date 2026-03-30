@@ -1,45 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "2.6.0";
-
-  disabled = pythonOlder "3.7";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrivet";
     repo = "python-asn1";
-    rev = "v${version}";
-    sha256 = "sha256-oz9xZhFU4himXttVtfW6tTn7lfB0c7MlgxtbKxdJtUA=";
+    tag = "v${version}";
+    hash = "sha256-Ge4ffqew/cfYUoKSudCz4S3+In6nEUPOK6Zes//R4Ls=";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  pythonRemoveDeps = [ "enum-compat" ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "enum-compat" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/test_asn1.py" ];
+  enabledTestPaths = [ "tests/test_asn1.py" ];
 
   pythonImportsCheck = [ "asn1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/andrivet/python-asn1";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/andrivet/python-asn1/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

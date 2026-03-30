@@ -1,45 +1,77 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fiona
-, packaging
-, pandas
-, pyproj
-, pytestCheckHook
-, pythonOlder
-, Rtree
-, shapely
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  setuptools,
+
+  packaging,
+  pandas,
+  pyogrio,
+  pyproj,
+  rtree,
+  shapely,
+
+  # optional-dependencies
+  folium,
+  geoalchemy2,
+  geopy,
+  mapclassify,
+  matplotlib,
+  psycopg,
+  pyarrow,
+  sqlalchemy,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.12.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aLERNVojPgZ3Y7+CnirGvC4RfuQf+K3Oj2/0BqdorwI=";
+    tag = "v${version}";
+    hash = "sha256-TBb9Bb12OZ9RWiwAGU6JKqiumw1C11USycpKM8mJVdU=";
   };
 
-  propagatedBuildInputs = [
-    fiona
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     pandas
+    pyogrio
     pyproj
     shapely
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    Rtree
-  ];
+  optional-dependencies = {
+    all = [
+      # prevent infinite recursion
+      (folium.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      geoalchemy2
+      geopy
+      # prevent infinite recursion
+      (mapclassify.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      matplotlib
+      psycopg
+      pyarrow
+      sqlalchemy
+      xyzservices
+    ];
+  };
 
-  doCheck = !stdenv.isDarwin;
+  nativeCheckInputs = [
+    pytestCheckHook
+    rtree
+  ]
+  ++ optional-dependencies.all;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -47,22 +79,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Requires network access
-    "test_read_file_remote_geojson_url"
-    "test_read_file_remote_zipfile_url"
+    "test_read_file_url"
   ];
 
-  pytestFlagsArray = [
-    "geopandas"
-  ];
+  enabledTestPaths = [ "geopandas" ];
 
-  pythonImportsCheck = [
-    "geopandas"
-  ];
+  pythonImportsCheck = [ "geopandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

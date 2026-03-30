@@ -1,35 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, duckdb
-, hypothesis
-, ipython-sql
-, poetry-core
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  duckdb,
+  sqlalchemy,
+
+  # testing
+  fsspec,
+  hypothesis,
+  pandas,
+  pyarrow,
+  pytest-remotedata,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  snapshottest,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.6.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.17.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "v${version}";
-    hash = "sha256-7PfrI4bNz0XtBa/cb8T43j06BJ3B2S5zIyBZsEusyXc=";
+    tag = "v${version}";
+    hash = "sha256-AhYCiIhi7jMWKIdDwZZ8MgfDg3F02/jooGLOp6E+E5g=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     duckdb
     sqlalchemy
   ];
@@ -38,26 +46,58 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  # this test tries to download the httpfs extension
-  disabledTests = [
-    "test_preload_extension"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
-    pytestCheckHook
+    fsspec
     hypothesis
-    ipython-sql
+    pandas
+    pyarrow
+    pytest-remotedata
     typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
-  pythonImportsCheck = [
-    "duckdb_engine"
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # requires snapshottest
+    "duckdb_engine/tests/test_datatypes.py"
   ];
 
-  meta = with lib; {
+  disabledTestMarks = [
+    "remote_data"
+  ];
+
+  disabledTests = [
+    # user agent not available in nixpkgs
+    "test_user_agent"
+    "test_user_agent_with_custom_user_agent"
+
+    # Fail under nixpkgs-review in the sandbox due to "missing tables"
+    "test_get_columns"
+    "test_get_foreign_keys"
+    "test_get_check_constraints"
+    "test_get_unique_constraints"
+    # https://github.com/Mause/duckdb_engine/issues/1379
+    "test_reflect"
+    "test_get_multi_columns"
+    "test_table_reflect"
+    "test_comment_support"
+    "test_361"
+    "test_reflection"
+    "test_fetch_arrow"
+  ];
+
+  pythonImportsCheck = [ "duckdb_engine" ];
+
+  meta = {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/Mause/duckdb_engine/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

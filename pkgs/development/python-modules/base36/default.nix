@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "base36";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tonyseek";
@@ -21,15 +23,15 @@ buildPythonPackage rec {
       --replace "--pep8 --cov" ""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_base36.py" ];
+  enabledTestPaths = [ "test_base36.py" ];
   pythonImportsCheck = [ "base36" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation for the positional numeral system using 36 as the radix";
     homepage = "https://github.com/tonyseek/python-base36";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

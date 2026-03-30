@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-dateutil";
-  version = "2.8.19.2";
-  format = "setuptools";
+  version = "2.9.0.20241003";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "types-python-dateutil";
     inherit version;
-    hash = "sha256-5uMs4Y83dlsIxGYiKHvI2BNtwMVi2a1bj9FYxZlj16c=";
+    hash = "sha256-WMuFRJsqVtZoTkGu77TEKAYxJGoNoacZvb5vP7AxdEY=";
   };
 
-  pythonImportsCheck = [
-    "dateutil-stubs"
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "dateutil-stubs" ];
+
+  meta = {
     description = "Typing stubs for python-dateutil";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
 }

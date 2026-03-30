@@ -1,63 +1,58 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
-# Based on the work of Hauleth
-# None of this would have happened without him
+{
+  lib,
+  elixir,
+  fetchFromGitHub,
+  makeWrapper,
+  stdenv,
+  nix-update-script,
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "elixir-ls";
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = "0.30.0";
+
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = pinData.sha256;
-    fetchSubmodules = true;
-  };
-in
-mixRelease  {
-  inherit pname version src elixir;
-
-  mixFodDeps = fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version elixir;
-    sha256 = pinData.depsSha256;
+    hash = "sha256-GtkFuof60cOTlHuhcwCnIVtGx6KlHrcazTa/UjAIGAQ=";
   };
 
-  # elixir_ls is an umbrella app
-  # override configurePhase to not skip umbrella children
-  configurePhase = ''
-    runHook preConfigure
-    mix deps.compile --no-deps-check
-    runHook postConfigure
-  '';
+  patches = [
+    # patch wrapper script to remove elixir detection and inject necessary paths
+    ./launch.sh.patch
+  ];
 
-  # elixir_ls require a special step for release
-  # compile and release need to be performed together because
-  # of the no-deps-check requirement
-  buildPhase = ''
-    runHook preBuild
-    mix do compile --no-deps-check, elixir_ls.release
-    runHook postBuild
-  '';
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  # for substitution
+  env.elixir = elixir;
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
-    runHook preInstall
+    cp -R . $out
+    ln -s $out/VERSION $out/scripts/VERSION
+
+    substituteAllInPlace $out/scripts/launch.sh
+
     mkdir -p $out/bin
-    cp -Rv release $out/lib
-    # Prepare the wrapper script
-    substitute release/language_server.sh $out/bin/elixir-ls \
-      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
-    chmod +x $out/bin/elixir-ls
-    # prepare the launcher
-    substituteInPlace $out/lib/launch.sh \
-      --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
-                "ERL_LIBS=$out/lib:\$ERL_LIBS" \
-      --replace "exec elixir" "exec ${elixir}/bin/elixir"
+
+    makeWrapper $out/scripts/language_server.sh $out/bin/elixir-ls \
+      --set ELS_LOCAL "1"
+
+    makeWrapper $out/scripts/debug_adapter.sh $out/bin/elixir-debug-adapter \
+      --set ELS_LOCAL "1"
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lsp/elixir-ls";
+    changelog = "https://github.com/elixir-lsp/elixir-ls/releases/tag/v${version}";
     description = ''
       A frontend-independent IDE "smartness" server for Elixir.
       Implements the "Language Server Protocol" standard and provides debugger support via the "Debug Adapter Protocol"
@@ -67,9 +62,10 @@ mixRelease  {
       It adheres to the Language Server Protocol, a standard for frontend-independent IDE support.
       Debugger integration is accomplished through the similar VS Code Debug Protocol.
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = teams.beam.members;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    mainProgram = "elixir-ls";
+    teams = [ lib.teams.beam ];
   };
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 }

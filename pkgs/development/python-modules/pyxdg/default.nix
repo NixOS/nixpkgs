@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
 }:
 
 buildPythonPackage rec {
   pname = "pyxdg";
   version = "0.28";
+  format = "setuptools";
 
-  src =  fetchFromGitLab {
+  src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
-    repo = pname;
+    repo = "pyxdg";
     rev = "rel-${version}";
-    sha256 = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
+    hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };
 
   # Tests failed (errors=4, failures=4) on NixOS
@@ -20,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://freedesktop.org/wiki/Software/pyxdg";
     description = "Contains implementations of freedesktop.org standards";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.lgpl2;
+    maintainers = [ ];
   };
 }

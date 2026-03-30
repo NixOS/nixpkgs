@@ -1,73 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, curtsies
-, cwcwidth
-, dataclasses
-, greenlet
-, jedi
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pyperclip
-, pyxdg
-, requests
-, substituteAll
-, typing-extensions
-, urwid
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  curtsies,
+  cwcwidth,
+  greenlet,
+  jedi,
+  pygments,
+  pytestCheckHook,
+  pyperclip,
+  pyxdg,
+  requests,
+  setuptools,
+  urwid,
+  watchdog,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.23";
-  format = "setuptools";
+  version = "0.26";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nwB4q8iHxIrwiGkeL2R5fWyplKwPS8A8ONBvZX18BSo=";
+  src = fetchFromGitHub {
+    owner = "bpython";
+    repo = "bpython";
+    tag = "${version}-release";
+    hash = "sha256-NmWM0fdzS9n5FSnNJOCdS1JE5ZHrmJXqCuHa54rT8GU=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version = "unknown"' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     curtsies
     cwcwidth
     greenlet
-    jedi
     pygments
-    pyperclip
     pyxdg
     requests
-    typing-extensions
-    urwid
-    watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
+
+  optional-dependencies = {
+    clipboard = [ pyperclip ];
+    jedi = [ jedi ];
+    urwid = [ urwid ];
+    watch = [ watchdog ];
+  };
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
-      --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
+      --replace "Exec=/usr/bin/bpython" "Exec=bpython"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "bpython"
-  ];
+  pythonImportsCheck = [ "bpython" ];
 
-  disabledTests = [
-    # Check for syntax error ends with an AssertionError
-    "test_syntaxerror"
-  ];
+  passthru.updateScript = gitUpdater {
+    rev-suffix = "-release";
+  };
 
-  meta = with lib; {
-    description = "A fancy curses interface to the Python interactive interpreter";
+  meta = {
+    changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
+    description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      flokli
+      dotlambda
+    ];
   };
 }

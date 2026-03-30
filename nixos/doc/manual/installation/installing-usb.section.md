@@ -35,7 +35,7 @@ select the image, select the USB flash drive and click "Write".
 4. Then use the `dd` utility to write the image to the USB flash drive.
 
   ```ShellSession
-  sudo dd if=<path-to-image> of=/dev/sdX bs=4M conv=fsync
+  sudo dd bs=4M conv=fsync oflag=direct status=progress if=<path-to-image> of=/dev/sdX
   ```
 
 ## Creating bootable USB flash drive from a Terminal on macOS {#sec-booting-from-usb-macos}
@@ -56,12 +56,12 @@ select the image, select the USB flash drive and click "Write".
   sudo dd if=<path-to-image> of=/dev/rdiskX bs=4m
   ```
 
-  After `dd` completes, a GUI dialog \"The disk
-  you inserted was not readable by this computer\" will pop up, which can
+  After `dd` completes, a GUI dialog "The disk
+  you inserted was not readable by this computer" will pop up, which can
   be ignored.
 
   ::: {.note}
-  Using the \'raw\' `rdiskX` device instead of `diskX` with dd completes in
+  Using the 'raw' `rdiskX` device instead of `diskX` with dd completes in
   minutes instead of hours.
   :::
 

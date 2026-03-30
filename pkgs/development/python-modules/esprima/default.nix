@@ -1,16 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "esprima";
   version = "4.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Kronuz";
@@ -19,22 +17,17 @@ buildPythonPackage rec {
     sha256 = "WtkPCReXhxyr6pOzE9gsdIeBlLk+nSnbxkS3OowEaHo=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
-  pytestFlagsArray = [
-    "test/__main__.py::TestEsprima"
-  ];
+  enabledTestPaths = [ "test/__main__.py::TestEsprima" ];
 
-  pythonImportsCheck = [
-    "esprima"
-  ];
+  pythonImportsCheck = [ "esprima" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python parser for standard-compliant ECMAScript";
+    mainProgram = "esprima";
     homepage = "https://github.com/Kronuz/esprima-python";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,46 +1,56 @@
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy37
-, lib
+  # build-system
+  setuptools,
 
-# Python Dependencies
-, mock
-, pytest
-, six
+  # dependencies
+  asgiref,
+  httpx,
+  pydantic,
+  requests,
+
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
+  responses,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "mixpanel";
-  version = "4.5.0";
-  disabled = !isPy37;
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mixpanel";
     repo = "mixpanel-python";
-    rev = version;
-    sha256 = "1hlc717wcn71i37ngsfb3c605rlyjhsn3v6b5bplq00373r4d39z";
+    tag = "v${version}";
+    hash = "sha256-Q8Kn2dyID1hYjKmEv0e+R/y5dsp/JEkqCdNqQHJsOrI=";
   };
 
-  propagatedBuildInputs = [
-    six
+  build-system = [ setuptools ];
+
+  dependencies = [
+    asgiref
+    httpx
+    pydantic
+    requests
   ];
 
-  checkInputs = [
-    mock
-    pytest
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    responses
+    respx
   ];
 
-  checkPhase = ''
-    py.test
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mixpanel/mixpanel-python";
     description = "Official Mixpanel Python library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

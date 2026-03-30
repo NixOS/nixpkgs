@@ -1,76 +1,160 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, glibcLocales
-, matplotlib
-, monty
-, networkx
-, numpy
-, palettable
-, pandas
-, plotly
-, pybtex
-, pydispatcher
-, pythonOlder
-, requests
-, ruamel-yaml
-, scipy
-, spglib
-, sympy
-, tabulate
-, uncertainties
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
+  cython,
+  glibcLocales,
+
+  # dependencies
+  bibtexparser,
+  joblib,
+  matplotlib,
+  monty,
+  networkx,
+  numpy,
+  orjson,
+  palettable,
+  pandas,
+  plotly,
+  pybtex,
+  requests,
+  ruamel-yaml,
+  scipy,
+  spglib,
+  sympy,
+  tabulate,
+  tqdm,
+  uncertainties,
+
+  # optional-dependencies
+  netcdf4,
+  ase,
+  numba,
+  vtk,
+
+  # tests
+  addBinToPathHook,
+  moyopy,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.3.29";
-  format = "setuptools";
+  version = "2025.10.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev= "v${version}";
-    hash = "sha256-B2piRWx9TfKlGTPOAAGsq2GxyfHIRBVFpk6dxES0WF0=";
+    tag = "v${version}";
+    hash = "sha256-pbnWSmU2rtqUbjZBmzJz3HE1t5zZTJv7HSfrcVUFxmU=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cython
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    bibtexparser
+    joblib
     matplotlib
     monty
     networkx
     numpy
+    orjson
     palettable
     pandas
     plotly
     pybtex
-    pydispatcher
     requests
     ruamel-yaml
     scipy
     spglib
     sympy
     tabulate
+    tqdm
     uncertainties
   ];
 
-  # Tests are not detected by pytest
-  doCheck = false;
+  optional-dependencies = {
+    abinit = [ netcdf4 ];
+    ase = [ ase ];
+    electronic_structure = [
+      # fdint
+    ];
+    mlp = [
+      # chgnet
+      # matgl
+    ];
+    numba = [ numba ];
+    vis = [ vtk ];
+  };
 
-  pythonImportsCheck = [
-    "pymatgen"
+  pythonImportsCheck = [ "pymatgen" ];
+
+  nativeCheckInputs = [
+    addBinToPathHook
+    moyopy
+    pytestCheckHook
+    pytest-xdist
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  preCheck =
+    # ensure tests can find these
+    ''
+      export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    ''
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
+    '';
+
+  disabledTests = [
+    # Flaky
+    "test_numerical_eos_values"
+    "test_pca"
+    "test_static_si_no_kgrid"
+    "test_thermal_conductivity"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AttributeError: 'NoneType' object has no attribute 'items'
+    "test_mean_field"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # attempt to insert nil object from objects[1]
+    "test_timer_10_2_7"
+    "test_timer"
   ];
 
-  meta = with lib; {
-    description = "A robust materials analysis code that defines core object representations for structures and molecules";
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Crash when running the pmg command
+    # Critical error: required built-in appearance SystemAppearance not found
+    "tests/cli/test_pmg_plot.py"
+
+    # attempt to insert nil object from objects[1]
+    # https://github.com/materialsproject/pymatgen/issues/4452
+    "tests/io/abinit/test_abitimer.py"
+  ];
+
+  meta = {
+    description = "Robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    changelog = "https://github.com/materialsproject/pymatgen/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

@@ -1,43 +1,63 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytest
-, pysha3
-, pycryptodome
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  isPyPy,
+  # nativeCheckInputs
+  pytest,
+  pytest-xdist,
+  # optional dependencies
+  pycryptodome,
+  safe-pysha3,
 }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.3.2";
-  disabled = pythonOlder "3.5";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
-    rev = "v${version}";
-    sha256 = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
+    tag = "v${version}";
+    hash = "sha256-91jWZDqrd7ZZlM0D/3sDokJ26NiAQ3gdeBebTV1Lq8s=";
   };
 
-  checkInputs = [
-    pytest
-  ] ++ passthru.optional-dependencies.pycryptodome
-  ++ passthru.optional-dependencies.pysha3;
+  build-system = [ setuptools ];
 
+  nativeCheckInputs = [
+    pytest
+    pytest-xdist
+  ]
+  ++ optional-dependencies.pycryptodome
+  # safe-pysha3 is not available on pypy
+  ++ lib.optionals (!isPyPy) optional-dependencies.pysha3;
+
+  # Backends need to be tested separately and can not use hook
   checkPhase = ''
-    pytest tests/backends/pycryptodome/
-    pytest tests/backends/pysha3/
+    runHook preCheck
+    pytest tests/core tests/backends/pycryptodome
+  ''
+  + lib.optionalString (!isPyPy) ''
+    pytest tests/backends/pysha3
+  ''
+  + ''
+    runHook postCheck
   '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pycryptodome = [ pycryptodome ];
-    pysha3 = [ pysha3 ];
+    pysha3 = [ safe-pysha3 ];
   };
 
-  meta = with lib; {
-    description = "The Ethereum hashing function keccak256";
+  __structuredAttrs = true;
+
+  meta = {
+    description = "Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/ethereum/eth-hash/blob/v${version}/docs/release_notes.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }

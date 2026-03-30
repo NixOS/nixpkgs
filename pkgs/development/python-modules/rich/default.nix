@@ -1,65 +1,75 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, CommonMark
-, dataclasses
-, poetry-core
-, pygments
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# for passthru.tests
-, enrich
-, httpie
-, rich-rst
-, textual
+  # build-system
+  poetry-core,
+
+  # dependencies
+  markdown-it-py,
+  pygments,
+
+  # optional-dependencies
+  ipywidgets,
+
+  # tests
+  attrs,
+  pytestCheckHook,
+  which,
+
+  # for passthru.tests
+  enrich,
+  httpie,
+  rich-rst,
+  textual,
 }:
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.5.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "14.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-FjzvFx+A4DS2XeKBZ2DGRqudvH22AUSQJnIxKs2O0AU=";
+    repo = "rich";
+    tag = "v${version}";
+    hash = "sha256-6udVO7N17ineQozlCG/tI9jJob811gqb4GtY50JZFb0=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    CommonMark
+  dependencies = [
+    markdown-it-py
     pygments
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    jupyter = [ ipywidgets ];
+  };
+
+  nativeCheckInputs = [
+    attrs
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # darwin console duplicates 3 of 4 lines
-    "test_rich_console_ex"
+    which
   ];
 
   pythonImportsCheck = [ "rich" ];
 
   passthru.tests = {
-    inherit enrich httpie rich-rst textual;
+    inherit
+      enrich
+      httpie
+      rich-rst
+      textual
+      ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris jyooru ];
+    changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

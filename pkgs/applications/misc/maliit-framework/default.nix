@@ -1,46 +1,43 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 
-, at-spi2-atk
-, at-spi2-core
-, libepoxy
-, gtk3
-, libdatrie
-, libselinux
-, libsepol
-, libthai
-, pcre
-, util-linux
-, wayland
-, xorg
+  qtbase,
 
-, cmake
-, doxygen
-, pkg-config
-, wayland-protocols
+  at-spi2-atk,
+  at-spi2-core,
+  libepoxy,
+  gtk3,
+  libdatrie,
+  libselinux,
+  libsepol,
+  libthai,
+  pcre,
+  util-linux,
+  wayland,
+  libxtst,
+  libxdmcp,
+
+  cmake,
+  doxygen,
+  pkg-config,
+  wayland-protocols,
+  wayland-scanner,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "maliit-framework";
-  version = "2.0.0";
+  version = "2.3.0-unstable-2024-06-24";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = version;
-    sha256 = "138jyvw130kmrldksbk4l38gvvahh3x51zi4vyplad0z5nxmbazb";
+    rev = "ba6f7eda338a913f2c339eada3f0382e04f7dd67";
+    hash = "sha256-iwWLnstQMG8F6uE5rKF6t2X43sXQuR/rIho2RN/D9jE=";
   };
-
-  # in master post 2.2.1, see https://github.com/maliit/framework/issues/106
-  patches = [
-    (fetchpatch {
-      name = "fix-pkg-config.patch";
-      url = "https://github.com/maliit/framework/commit/1e20a4a5113f1c092295f5a5f04ab6e584f6fcff.patch";
-      sha256 = "0h7jfqnqvjka626wx2z2g150rch4air7q3zbq59gcb12g7x6gfyn";
-    })
-  ];
 
   buildInputs = [
     at-spi2-atk
@@ -54,8 +51,8 @@ mkDerivation rec {
     pcre
     util-linux
     wayland
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ];
 
   nativeBuildInputs = [
@@ -63,16 +60,19 @@ mkDerivation rec {
     doxygen
     pkg-config
     wayland-protocols
+    wayland-scanner
+    wrapQtAppsHook
   ];
 
-  preConfigure = ''
-    cmakeFlags+="-DQT5_PLUGINS_INSTALL_DIR=$out/$qtPluginPrefix"
-  '';
+  cmakeFlags = [
+    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Core libraries of Maliit and server";
+    mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
 }

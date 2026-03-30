@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.syslog-ng;
@@ -17,60 +19,56 @@ let
 
   syslogngOptions = [
     "--foreground"
-    "--module-path=${concatStringsSep ":" (["${cfg.package}/lib/syslog-ng"] ++ cfg.extraModulePaths)}"
+    "--module-path=${
+      lib.concatStringsSep ":" ([ "${cfg.package}/lib/syslog-ng" ] ++ cfg.extraModulePaths)
+    }"
     "--cfgfile=${syslogngConfig}"
     "--control=${ctrlSocket}"
     "--persist-file=${persistFile}"
     "--pidfile=${pidFile}"
   ];
 
-in {
+in
+{
   imports = [
-    (mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
-    (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
+    (lib.mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
+    (lib.mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
   ];
 
   options = {
 
     services.syslog-ng = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the syslog-ng daemon.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.syslogng;
-        defaultText = literalExpression "pkgs.syslogng";
-        description = lib.mdDoc ''
-          The package providing syslog-ng binaries.
-        '';
-      };
-      extraModulePaths = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
+      package = lib.mkPackageOption pkgs "syslogng" { };
+      extraModulePaths = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
           A list of paths that should be included in syslog-ng's
           `--module-path` option. They should usually
           end in `/lib/syslog-ng`
         '';
       };
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration added to the end of `syslog-ng.conf`.
         '';
       };
-      configHeader = mkOption {
-        type = types.lines;
+      configHeader = lib.mkOption {
+        type = lib.types.lines;
         default = ''
-          @version: 3.6
+          @version: 4.4
           @include "scl.conf"
         '';
-        description = lib.mdDoc ''
+        description = ''
           The very first lines of the configuration file. Should usually contain
           the syslog-ng version header.
         '';
@@ -78,10 +76,9 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.syslog-ng = {
       description = "syslog-ng daemon";
-      preStart = "mkdir -p /{var,run}/syslog-ng";
       wantedBy = [ "multi-user.target" ];
       after = [ "multi-user.target" ]; # makes sure hostname etc is set
       serviceConfig = {
@@ -89,7 +86,8 @@ in {
         PIDFile = pidFile;
         StandardOutput = "null";
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p /var/syslog-ng /run/syslog-ng";
+        ExecStart = "${cfg.package}/sbin/syslog-ng ${lib.concatStringsSep " " syslogngOptions}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

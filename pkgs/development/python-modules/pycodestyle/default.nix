@@ -1,39 +1,47 @@
-{ buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lib
-, python
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  python,
+  pytestCheckHook,
+  setuptools,
+  isPyPy,
 }:
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.9.1";
+  version = "2.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2c9607871d58c76354b697b42f5d57e1ada7d261c261efac224b664affdc5785";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "pycodestyle";
+    tag = version;
+    hash = "sha256-1EEQp/QEulrdU9tTe28NerQ33IWlAiSlicpmNYciW88=";
   };
 
-  # https://github.com/PyCQA/pycodestyle/blob/2.9.1/tox.ini#L13
-  checkPhase = ''
-    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
-    ${python.interpreter} -m pycodestyle --max-doc-length=72 --testsuite testsuite
-    ${python.interpreter} -m pycodestyle --max-doc-length=72 --doctest
-    ${python.interpreter} -m unittest discover testsuite -vv
-  '';
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pycodestyle" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # https://github.com/PyCQA/pycodestyle/blob/2.14.0/tox.ini#L16
+  postCheck = ''
+    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
+  '';
+
+  disabledTests = lib.optionals isPyPy [
+    # PyPy reports a SyntaxError instead of ValueError
+    "test_check_nullbytes"
+  ];
+
+  meta = {
+    changelog = "https://github.com/PyCQA/pycodestyle/blob/${src.tag}/CHANGES.txt";
     description = "Python style guide checker";
+    mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

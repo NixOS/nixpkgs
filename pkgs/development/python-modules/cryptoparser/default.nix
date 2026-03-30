@@ -1,34 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, six
-, asn1crypto
-, python-dateutil
+{
+  lib,
+  asn1crypto,
+  attrs,
+  buildPythonPackage,
+  cryptodatahub,
+  fetchFromGitLab,
+  fetchpatch2,
+  pyfakefs,
+  setuptools,
+  setuptools-scm,
+  unittestCheckHook,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.8.0";
+  version = "1.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-kJg8d1PoGIC0feefbJM8oyXcRyMGdg1wWkQUl/nSNCo=";
+  src = fetchFromGitLab {
+    owner = "coroner";
+    repo = "cryptoparser";
+    tag = "v${version}";
+    hash = "sha256-CsG4hfA3pfE7FwxNfaUTLMS8RV0tv1czoHdIlolUX34=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-    six
-    asn1crypto
-    python-dateutil
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.com/coroner/cryptoparser/-/merge_requests/2.diff";
+      hash = "sha256-T8dK6OMR41XUMrZ6B7ZybEtljZJOR2QbCiZl04dT3wA=";
+    })
   ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    asn1crypto
+    attrs
+    cryptodatahub
+    urllib3
+  ];
+
+  env.PYTHONDONTWRITEBYTECODE = 1;
+
+  nativeCheckInputs = [
+    pyfakefs
+    unittestCheckHook
+  ];
+
+  postInstall = ''
+    find $out -name __pycache__ -type d | xargs rm -rv
+  '';
 
   pythonImportsCheck = [ "cryptoparser" ];
 
-  meta = with lib; {
-    description = "Fast and flexible security protocol parser and generator";
+  meta = {
+    description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
   };
 }

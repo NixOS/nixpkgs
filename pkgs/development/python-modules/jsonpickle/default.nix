@@ -1,41 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, setuptools-scm
-, toml
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # tests
+  pytestCheckHook,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "2.2.0";
+  version = "4.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eycpGLBVQYLlPcNA3dYtm3+QL+x+ewViDATzzO9Hmg4=";
+    hash = "sha256-+G4Y8T4rlsHB7t4Le5AJW7th2Z/twUgTxE3C82HbuuE=";
   };
 
-  checkInputs = [ pytest ];
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
-    toml
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ];
-
-  checkPhase = ''
+  preCheck = ''
     rm pytest.ini
-    pytest tests/jsonpickle_test.py
   '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    simplejson
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # imports distutils
+    "test_thing_with_submodule"
+  ];
 
   meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
+    downloadPage = "https://github.com/jsonpickle/jsonpickle";
     homepage = "http://jsonpickle.github.io/";
     license = lib.licenses.bsd3;
   };
-
 }

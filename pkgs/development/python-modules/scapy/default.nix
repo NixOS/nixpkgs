@@ -1,37 +1,45 @@
-{ buildPythonPackage, fetchFromGitHub, stdenv, lib, isPyPy
-, pycrypto, ecdsa # TODO
-, tox, mock, coverage, can, brotli
-, withOptionalDeps ? true, tcpdump, ipython
-, withCryptography ? true, cryptography
-, withVoipSupport ? true, sox
-, withPlottingSupport ? true, matplotlib
-, withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
-, withManufDb ? false, wireshark
-, libpcap
-# 2D/3D graphics and graphs TODO: VPython
-# TODO: nmap, numpy
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  isPyPy,
+  mock,
+  python-can,
+  brotli,
+  ipython,
+  cryptography,
+  withVoipSupport ? true,
+  sox,
+  matplotlib,
+  pyx,
+  withManufDb ? false,
+  wireshark,
+  libpcap,
+  # 2D/3D graphics and graphs TODO: VPython
+  # TODO: nmap, numpy
 }:
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.5";
+  version = "2.7.0";
+  format = "setuptools";
 
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "secdev";
     repo = "scapy";
-    rev = "v${version}";
-    sha256 = "0nxci1v32h5517gl9ic6zjq8gc8drwr0n5pz04c91yl97xznnw94";
+    tag = "v${version}";
+    hash = "sha256-Pp7pPfaWyzJGf+soENfOPynN8logc5FM848hyVCcdKk=";
   };
 
-  patches = [
-    ./find-library.patch
-  ];
+  patches = lib.optional (!stdenv.hostPlatform.isStatic) ./find-library.patch;
 
   postPatch = ''
     printf "${version}" > scapy/VERSION
-
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     libpcap_file="${lib.getLib libpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}"
     if ! [ -e "$libpcap_file" ]; then
         echo "error: $libpcap_file not found" >&2
@@ -39,28 +47,40 @@ buildPythonPackage rec {
     fi
     substituteInPlace "scapy/libs/winpcapy.py" \
         --replace "@libpcap_file@" "$libpcap_file"
-  '' + lib.optionalString withManufDb ''
+  ''
+  + lib.optionalString withManufDb ''
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
-  propagatedBuildInputs = [ pycrypto ecdsa ]
-    ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
-    ++ lib.optional withCryptography cryptography
-    ++ lib.optional withVoipSupport sox
-    ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ];
+  buildInputs = lib.optional withVoipSupport sox;
+
+  optional-dependencies = {
+    all = [
+      cryptography
+      ipython
+      matplotlib
+      pyx
+    ];
+    cli = [ ipython ];
+  };
 
   # Running the tests seems too complicated:
   doCheck = false;
-  checkInputs = [ tox mock coverage can brotli ];
+  nativeCheckInputs = [
+    mock
+    python-can
+    brotli
+  ];
   checkPhase = ''
+    # TODO: be more specific about files
     patchShebangs .
     .config/ci/test.sh
   '';
   pythonImportsCheck = [ "scapy" ];
 
-  meta = with lib; {
-    description = "A Python-based network packet manipulation program and library";
+  meta = {
+    description = "Python-based network packet manipulation program and library";
+    mainProgram = "scapy";
     longDescription = ''
       Scapy is a powerful Python-based interactive packet manipulation program
       and library.
@@ -84,8 +104,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://scapy.net/";
     changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      bjornfor
+    ];
   };
 }

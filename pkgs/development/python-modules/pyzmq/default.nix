@@ -1,45 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, py
-, pytestCheckHook
-, python
-, pythonOlder
-, tornado
-, zeromq
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+
+  # build-system
+  cffi,
+  cython,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  scikit-build-core,
+
+  # checks
+  pytestCheckHook,
+  tornado,
+  libsodium,
+  zeromq,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "23.2.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "27.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KzgaqGfs59CoLzCgx/PUOHt88uBpfjPvqlvtbFeEq80=";
+    hash = "sha256-rAdl49REVa223b9EF9zORg/ECgWXjAjv3ylIBy9ttUA=";
   };
 
+  build-system = [
+    cmake
+    ninja
+    packaging
+    pathspec
+    scikit-build-core
+  ]
+  ++ (if isPyPy then [ cffi ] else [ cython ]);
+
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
+    libsodium
     zeromq
   ];
 
-  propagatedBuildInputs = [
-    py
-  ];
+  dependencies = lib.optionals isPyPy [ cffi ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tornado
+    pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "zmq"
-  ];
+  pythonImportsCheck = [ "zmq" ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
+  preCheck = ''
+    rm -r zmq
+  '';
+
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [
@@ -59,10 +82,13 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
-    maintainers = with maintainers; [ ];
+    license = with lib.licenses; [
+      bsd3 # or
+      lgpl3Only
+    ];
+    maintainers = [ ];
   };
 }

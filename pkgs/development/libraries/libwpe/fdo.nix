@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, ninja
-, wayland
-, libepoxy
-, glib
-, libwpe
-, libxkbcommon
-, libGL
-, libX11
-, webkitgtk
- }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  wayland,
+  libepoxy,
+  glib,
+  libwpe,
+  libxkbcommon,
+  libGL,
+  libx11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.14.0";
+  version = "1.16.1";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
-    sha256 = "51sMsscUVEhBboaWAT2Ig/Z1xmwR7XUOBoZe/sWAkVU=";
+    sha256 = "sha256-VErhQBL45+QmuMtSLrCqqsgxrXw1YB0c8x03Zw4Ouzs=";
   };
 
   depsBuildBuild = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -41,14 +42,14 @@ stdenv.mkDerivation rec {
     libwpe
     libxkbcommon
     libGL
-    libX11
+    libx11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Freedesktop.org backend for WPE WebKit";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = webkitgtk.meta.maintainers ++ (with maintainers; [ matthewbauer ]);
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

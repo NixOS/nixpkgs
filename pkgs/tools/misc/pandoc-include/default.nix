@@ -1,35 +1,48 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, lib
-, natsort
-, panflute
-, setuptools
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  lib,
+  natsort,
+  panflute,
+  lxml,
+  setuptools,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
   pname = "pandoc-include";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCsunset";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kuxud7m+sWcNqE8A+Fwb8ATgiUwxQvHeYBTyw1UzX4U=";
+    repo = "pandoc-include";
+    tag = "v${version}";
+    hash = "sha256-8ldIywvCExnbMNs9m7iLwM1HrTRHl7j4t3JQuBt0Z7U=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [ natsort panflute ];
+  passthru.updateScript = nix-update-script { };
+
+  propagatedBuildInputs = [
+    natsort
+    panflute
+    lxml
+  ];
 
   pythonImportsCheck = [ "pandoc_include.main" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandoc filter to allow file and header includes";
     homepage = "https://github.com/DCsunset/pandoc-include";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ppenguin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ppenguin
+      DCsunset
+    ];
+    mainProgram = "pandoc-include";
   };
 }

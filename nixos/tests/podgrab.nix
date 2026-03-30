@@ -2,20 +2,25 @@ let
   defaultPort = 8080;
   customPort = 4242;
 in
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "podgrab";
 
   nodes = {
-    default = { ... }: {
-      services.podgrab.enable = true;
-    };
-
-    customized = { ... }: {
-      services.podgrab = {
-        enable = true;
-        port = customPort;
+    default =
+      { ... }:
+      {
+        services.podgrab.enable = true;
       };
-    };
+
+    customized =
+      { ... }:
+      {
+        services.podgrab = {
+          enable = true;
+          port = customPort;
+        };
+      };
   };
 
   testScript = ''
@@ -31,4 +36,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   '';
 
   meta.maintainers = with pkgs.lib.maintainers; [ ambroisie ];
-})
+}

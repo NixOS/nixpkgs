@@ -1,46 +1,54 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, cairo
-, expat
-, flex
-, fontconfig
-, gd
-, gts
-, libdevil
-, libjpeg
-, libpng
-, libtool
-, pango
-, bash
-, bison
-, xorg
-, ApplicationServices
-, python3
-, fltk
-, exiv2
-, withXorg ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  cairo,
+  expat,
+  flex,
+  fontconfig,
+  gd,
+  gts,
+  libjpeg,
+  libpng,
+  libtool,
+  makeWrapper,
+  pango,
+  bash,
+  bison,
+  libxrender,
+  python3,
+  withXorg ? true,
+
+  # for passthru.tests
+  exiv2,
+  fltk,
+  graphicsmagick,
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    optional
+    optionals
+    optionalString
+    optionalAttrs
+    ;
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "7.0.0";
+  version = "12.2.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-n+g4XNTSbCXOoL7JIE6uP9AZJj3YDfTG9EcmUA+r8hY=";
+    hash = "sha256-Uxqg/7+LpSGX4lGH12uRBxukVw0IswFPfpb2EkLsaiI=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
     pkg-config
     python3
     bison
@@ -54,56 +62,63 @@ stdenv.mkDerivation rec {
     fontconfig
     gd
     gts
-    libdevil
     pango
     bash
-  ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices ];
+  ]
+  ++ optionals withXorg [ libxrender ];
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ lib.optional (xorg == null) "--without-x";
+  ]
+  # TODO: this should probably be !withXorg instead of false, however it causes 17k rebuilds
+  ++ optional false "--without-x";
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = lib.optionalString (withXorg && stdenv.isDarwin)
-    "-I${cairo.dev}/include/cairo";
-
-  # ''
-  #   substituteInPlace rtest/rtest.sh \
-  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
-  # '';
+  env = optionalAttrs (withXorg && stdenv.hostPlatform.isDarwin) {
+    CPPFLAGS = "-I${cairo.dev}/include/cairo";
+  };
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
-  postPatch = ''
-    for f in $(find . -name Makefile.in); do
-      substituteInPlace $f --replace "-lstdc++" "-lc++"
-    done
+  preAutoreconf = ''
+    ./autogen.sh
   '';
-
-  preAutoreconf = "./autogen.sh";
 
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/vimdot \
-      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
-      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
-      --replace /usr/bin/vimdot $out/bin/vimdot \
+      --replace-warn '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace-warn '"/usr/bin/vim"' '"$(command -v vim)"' \
+      --replace-warn /usr/bin/vimdot $out/bin/vimdot
+
+    wrapProgram $out/bin/vimdot --prefix PATH : "$out/bin"
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) pygraphviz;
-    inherit fltk exiv2;
+    inherit (python3.pkgs)
+      graphviz
+      pydot
+      pygraphviz
+      xdot
+      ;
+    inherit
+      exiv2
+      fltk
+      graphicsmagick
+      ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor raskin ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      bjornfor
+      raskin
+    ];
   };
 }

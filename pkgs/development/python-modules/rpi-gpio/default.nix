@@ -1,24 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "rpi-gpio";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "RPi.GPIO";
     inherit version;
-    sha256 = "sha256-zWHEsDw3tiu6SlrP6phidJwzxhjgKV5+kKpHE/s3O3A=";
+    hash = "sha256-zWHEsDw3tiu6SlrP6phidJwzxhjgKV5+kKpHE/s3O3A=";
   };
 
   # Tests disable because they do a platform check which requires running on a
   # Raspberry Pi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/p/raspberry-gpio-python";
     description = "Python module to control the GPIO on a Raspberry Pi";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -1,62 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, execnet
-, glob2
-, Mako
-, mock
-, parse
-, parse-type
-, py
-, pytest
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mako,
+  parse,
+  parse-type,
+  poetry-core,
+  pytest,
+  pytest7CheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "6.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "7.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-1dyAhvEw8gUe78qDpgrcwl6grWKiwPgSe/QeFAjBzZg=";
+    repo = "pytest-bdd";
+    tag = version;
+    hash = "sha256-PC4VSsUU5qEFp/C/7OTgHINo8wmOo0w2d1Hpe0EnFzE=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    glob2
-    Mako
+  buildInputs = [ pytest ];
+
+  dependencies = [
+    mako
     parse
     parse-type
-    py
+    typing-extensions
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    execnet
-    mock
-  ];
+  # requires an update for pytest 8.4 compat
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin
   '';
 
-  pythonImportsCheck = [
-    "pytest_bdd"
-  ];
+  pythonImportsCheck = [ "pytest_bdd" ];
 
-  meta = with lib; {
+  meta = {
     description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jm2dev ];
+    changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${version}/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jm2dev ];
+    mainProgram = "pytest-bdd";
   };
 }

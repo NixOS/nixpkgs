@@ -1,34 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
   pname = "pyfreedompro";
   version = "1.1.0";
-
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "92812070a0c74761fa0c8cac98ddbe0bca781c8de80e2b08dbd04492e831c172";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # upstream has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "aiohttp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Freedompro API";
     homepage = "https://github.com/stefano055415/pyfreedompro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

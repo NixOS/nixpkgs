@@ -1,20 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, asks
-, trio
-, xdg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  asks,
+  trio,
+  xdg,
 }:
 
 buildPythonPackage rec {
   pname = "rmcl";
   version = "0.4.2";
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,9 +24,7 @@ buildPythonPackage rec {
       --replace '= "^' '= ">='
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     asks

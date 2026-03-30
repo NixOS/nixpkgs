@@ -1,27 +1,60 @@
-{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  asciidoc,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  libxslt,
+  libtraceevent,
+  libtracefs,
+  zstd,
+  sourceHighlight,
+  gitUpdater,
+}:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.1.2";
+  version = "3.4";
 
-  src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-    rev    = "trace-cmd-v${version}";
-    sha256 = "sha256-wxrMEE7ZgMHM59Rv6Gk3f0zdpULuXLnY0UY797YF1a0=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
+    hash = "sha256-7IMInvVLIjGcHZvnSzhcne+4ieFa85ep7KMn2Oy9pF8=";
   };
 
   # Don't build and install html documentation
   postPatch = ''
     sed -i -e '/^all:/ s/html//' -e '/^install:/ s/install-html//' \
        Documentation{,/trace-cmd,/libtracecmd}/Makefile
+    patchShebangs check-manpages.sh
   '';
 
-  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto docbook_xsl docbook_xml_dtd_45 sourceHighlight ];
+  nativeBuildInputs = [
+    asciidoc
+    libxslt
+    pkg-config
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    sourceHighlight
+  ];
 
-  buildInputs = [ libtraceevent libtracefs zstd ];
+  buildInputs = [
+    libtraceevent
+    libtracefs
+    zstd
+  ];
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "devman"
+  ];
 
-  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  env.MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 
@@ -50,14 +83,28 @@ stdenv.mkDerivation rec {
     "libdir=${placeholder "lib"}/lib"
     "pkgconfig_dir=${placeholder "dev"}/lib/pkgconfig"
     "includedir=${placeholder "dev"}/include"
-    "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
+    "completion_dir=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git";
+    rev-prefix = "trace-cmd-v";
+  };
+
+  meta = {
     description = "User-space tools for the Linux kernel ftrace subsystem";
-    homepage    = "https://www.trace-cmd.org/";
-    license     = with licenses; [ lgpl21Only gpl2Only ];
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk ];
+    mainProgram = "trace-cmd";
+    homepage = "https://www.trace-cmd.org/";
+    license = with lib.licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      basvandijk
+      wentasah
+    ];
   };
 }

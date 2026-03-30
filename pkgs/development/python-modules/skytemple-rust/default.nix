@@ -1,41 +1,67 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, libiconv
-, Foundation
-, rustPlatform
-, setuptools-rust }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-buildPythonPackage rec {
+  # build-system
+  setuptools-rust,
+
+  # nativeBuildInputs
+  cargo,
+  rustPlatform,
+  rustc,
+
+  # dependencies
+  range-typed-integers,
+}:
+
+buildPythonPackage (finalAttrs: {
   pname = "skytemple-rust";
-  version = "1.3.7";
+  version = "1.8.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-rC7KA79va8gZpMKJQ7s3xYdbopNqmWdRYDCbaWaxsR0=";
+    repo = "skytemple-rust";
+    tag = finalAttrs.version;
+    hash = "sha256-yJ78P00h4SITVuDnIh5IIlWkoed/VtIw3NB8ETB95bk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "sha256-lXPCxRbaqUC5EfyeBPtJDuGADYOA+DWMaOZRwXppP8E=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-9OgUuuMuo2l4YsZMhBZJBqKqbNwj1W4yidoogjcNgm8=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
+  env = {
+    GETTEXT_SYSTEM = true;
 
-  GETTEXT_SYSTEM = true;
+    # Python 3.14 compatibility
+    # error: the configured Python interpreter version (3.14) is newer than PyO3's maximum supported
+    # version (3.13)
+    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
+  };
 
-  doCheck = false; # there are no tests
+  build-system = [
+    setuptools-rust
+  ];
+
+  nativeBuildInputs = [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+  ];
+
+  dependencies = [
+    range-typed-integers
+  ];
+
+  doCheck = false; # tests for this package are in skytemple-files package
   pythonImportsCheck = [ "skytemple_rust" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/SkyTemple/skytemple-rust";
+  meta = {
     description = "Binary Rust extensions for SkyTemple";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    homepage = "https://github.com/SkyTemple/skytemple-rust";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

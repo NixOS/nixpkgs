@@ -1,57 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, numba
-, numpy
-, pandas
-, cramjam
-, fsspec
-, thrift
-, python-lzo
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  gitMinimal,
+
+  # dependencies
+  cramjam,
+  fsspec,
+  numpy,
+  packaging,
+  pandas,
+
+  # optional-dependencies
+  python-lzo,
+
+  # tests
+  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.8.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2025.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    hash = "sha256-rWrbHHcJMahaUV8+YuKkZUhdboNFUK9btjvdg74lCxc=";
+    repo = "fastparquet";
+    tag = version;
+    hash = "sha256-cebu3E2sbVWRUYbSeuslCZhaF+zWV7E56iSwB7Ms3ts=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    cython
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    gitMinimal
+  ];
+
+  dependencies = [
     cramjam
     fsspec
-    numba
     numpy
+    packaging
     pandas
-    thrift
   ];
 
-  passthru.optional-dependencies = {
-    lzo = [
-      python-lzo
-    ];
+  optional-dependencies = {
+    lzo = [ python-lzo ];
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "oldest-supported-numpy" "numpy"
-  '';
-
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
@@ -65,14 +74,13 @@ buildPythonPackage rec {
     rm "$fastparquet_test"
   '';
 
-  pythonImportsCheck = [
-    "fastparquet"
-  ];
+  pythonImportsCheck = [ "fastparquet" ];
 
-  meta = with lib; {
-    description = "A python implementation of the parquet format";
+  meta = {
+    description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

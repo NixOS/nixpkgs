@@ -1,76 +1,132 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, spake2
-, pynacl
-, six
-, attrs
-, twisted
-, autobahn
-, automat
-, hkdf
-, tqdm
-, click
-, humanize
-, txtorcon
-, nettools
-, mock
-, magic-wormhole-transit-relay
-, magic-wormhole-mailbox-server
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  installShellFiles,
+
+  # build-system
+  setuptools,
+  versioneer,
+
+  # dependencies
+  attrs,
+  autobahn,
+  automat,
+  click,
+  cryptography,
+  humanize,
+  iterable-io,
+  pynacl,
+  qrcode,
+  spake2,
+  tqdm,
+  twisted,
+  txtorcon,
+  zipstream-ng,
+
+  # optional-dependencies
+  noiseprotocol,
+
+  # tests
+  net-tools,
+  unixtools,
+  hypothesis,
+  magic-wormhole-mailbox-server,
+  magic-wormhole-transit-relay,
+  pytestCheckHook,
+  pytest-twisted,
+
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole";
-  version = "0.12.0";
+  version = "0.23.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0q41j99718y7m95zg1vaybnsp31lp6lhyqkbv4yqz5ys6jixh3qv";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole";
+    tag = finalAttrs.version;
+    hash = "sha256-knvQwdPfe9uHpSNqaEz4w2LY6LjCPVoUcFG0bhHQl+g=";
   };
 
-  propagatedBuildInputs = [
-    spake2
-    pynacl
-    six
+  postPatch =
+    # enable tests by fixing the location of the wormhole binary
+    ''
+      substituteInPlace src/wormhole/test/test_cli.py --replace-fail \
+        'locations = procutils.which("wormhole")' \
+        'return "${placeholder "out"}/bin/wormhole"'
+    ''
+    # fix the location of the ifconfig binary
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      sed -i -e "s|'ifconfig'|'${net-tools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
+    '';
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     attrs
-    twisted
     autobahn
     automat
-    hkdf
-    tqdm
     click
+    cryptography
     humanize
+    iterable-io
+    pynacl
+    qrcode
+    spake2
+    tqdm
+    twisted
     txtorcon
-  ] ++ autobahn.optional-dependencies.twisted
+    zipstream-ng
+  ]
+  ++ autobahn.optional-dependencies.twisted
   ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
-    mock
-    magic-wormhole-transit-relay
+  optional-dependencies = {
+    dilation = [ noiseprotocol ];
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
     magic-wormhole-mailbox-server
+    magic-wormhole-transit-relay
     pytestCheckHook
-  ];
+    pytest-twisted
+  ]
+  ++ finalAttrs.finalPackage.optional-dependencies.dilation
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
-  disabledTests = [
-    # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
-    "test_welcome"
-  ];
-
-  postPatch = lib.optionalString stdenv.isLinux ''
-    sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
-  '';
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+
+    # https://github.com/magic-wormhole/magic-wormhole/issues/619
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash wormhole_complete.bash \
+      --fish wormhole_complete.fish \
+      --zsh wormhole_complete.zsh
+    rm $out/wormhole_complete.*
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
+    changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${finalAttrs.src.rev}/NEWS.md";
     description = "Securely transfer data between computers";
-    homepage = "https://github.com/magic-wormhole/magic-wormhole";
-    license = licenses.mit;
-    maintainers = with maintainers; [ asymmetric SuperSandro2000 ];
+    homepage = "https://magic-wormhole.readthedocs.io/";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";
   };
-}
+})

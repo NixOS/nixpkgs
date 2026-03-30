@@ -1,95 +1,130 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, setuptools
-, setuptools-scm
-, idna
-, sniffio
-, typing-extensions
-, curio
-, hypothesis
-, mock
-, pytest-mock
-, pytestCheckHook
-, trio
-, trustme
-, uvloop
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
+  exceptiongroup,
+  idna,
+  typing-extensions,
+
+  # optionals
+  trio,
+
+  # tests
+  hypothesis,
+  psutil,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  trustme,
+  uvloop,
+
+  # smoke tests
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.5.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "4.12.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-AZ9M/NBCBlMIUpRJgKbJRL/oReZDUh2Jhwtoxoo0tMs=";
+    repo = "anyio";
+    tag = version;
+    hash = "sha256-7rfQ6mwB2sNKc28ZPMZNgVs7TFgBUBzH6xGXmtfzX9k=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Pytest 7.0 compatibility
-      url = "https://github.com/agronholm/anyio/commit/fed7cc4f95e196f68251bcb9253da3b143ea8e7e.patch";
-      sha256 = "sha256-VmZmiQEmWJ4aPz0Wx+GTMZo7jXRDScnRYf2Hu2hiRVw=";
-    })
-  ];
+  build-system = [ setuptools-scm ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     idna
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
   ];
 
-  # trustme uses pyopenssl
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  optional-dependencies = {
+    trio = [ trio ];
+  };
 
-  checkInputs = [
-    curio
+  nativeCheckInputs = [
+    exceptiongroup
     hypothesis
+    psutil
     pytest-mock
+    pytest-xdist
     pytestCheckHook
-    trio
     trustme
     uvloop
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    mock
+  ]
+  ++ optional-dependencies.trio;
+
+  pytestFlags = [
+    "-Wignore::trio.TrioDeprecationWarning"
+    # DeprecationWarning for asyncio.iscoroutinefunction is propagated from uvloop used internally
+    # https://github.com/agronholm/anyio/commit/e7bb0bd496b1ae0d1a81b86de72312d52e8135ed
+    "-Wignore::DeprecationWarning"
   ];
 
+  disabledTestMarks = [
+    "network"
+  ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
+
   disabledTests = [
-    # block devices access
+    # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
+    "test_py39_arguments"
+    # AttributeError: 'module' object at __main__ has no attribute '__file__'
+    "test_nonexistent_main_module"
+    #  3 second timeout expired
+    "test_keyboardinterrupt_during_test"
+    # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
+    "test_multiple_threads"
+
+    # These tests become flaky under heavy load
+    "test_asyncio_run_sync_called"
+    "test_handshake_fail"
+    "test_run_in_custom_limiter"
+    "test_cancel_from_shielded_scope"
+    "test_start_task_soon_cancel_later"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
     "test_is_block_device"
+
+    # AssertionError: assert 'wheel' == 'nixbld'
+    "test_group"
   ];
 
   disabledTestPaths = [
     # lots of DNS lookups
     "tests/test_sockets.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin sandboxing limitations
-    "tests/streams/test_tls.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "anyio" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit starlette;
+  };
+
+  meta = {
+    changelog = "https://github.com/agronholm/anyio/blob/${src.tag}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

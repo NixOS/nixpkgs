@@ -1,51 +1,52 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  async-interrupt,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.5.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vincegio";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5moJ/Pu1Ixy4s7mCbjxQYROafjHVDM2cmpg0imDznl0=";
+    repo = "airthings-ble";
+    tag = version;
+    hash = "sha256-y6vpkq3u5JKImwxevMupUVVAclUcsyrqxoIOYRK0YGQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'bleak-retry-connector = "^0.15.1"' 'bleak = "*"'
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    bleak
+  dependencies = [
+    async-interrupt
     bleak-retry-connector
+    cbor2
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    bleak
   ];
 
-  # Module has no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "airthings_ble"
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "airthings_ble" ];
+
+  meta = {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "random2";
   version = "1.0.1";
+  format = "setuptools";
   doCheck = !isPyPy;
 
   src = fetchPypi {
@@ -24,10 +26,9 @@ buildPythonPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pypi.python.org/pypi/random2";
     description = "Python 3 compatible Python 2 `random` Module";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
   };
-
 }

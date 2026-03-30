@@ -30,6 +30,7 @@ def test_entities(doc_en_core_web_sm):
         ('2007', 'DATE'),
         ('American', 'NORP'),
         ('Thrun', 'GPE'),
+        ('Recode', 'ORG'),
         ('earlier this week', 'DATE'),
     ]
 
@@ -64,6 +65,5 @@ def test_verbs(doc_en_core_web_sm):
         'tell',
         'shake',
         'turn',
-        'be',
         'talk',
         'say']

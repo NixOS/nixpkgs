@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "oset";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,9 +16,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Ordered set";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
   };
-
 }

@@ -1,41 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, bluez
-, switchboard
-, wingpanel-indicator-bluetooth
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  granite7,
+  gtk4,
+  bluez,
+  elementary-bluetooth-daemon,
+  switchboard,
+  wingpanel-indicator-bluetooth,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "2.3.6";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-bluetooth";
     rev = version;
-    sha256 = "0n9fhi9g0ww341bjk6lpc5ppnl7qj9b3d63j9a7iqnap57bgks9y";
+    hash = "sha256-D2kigdGdmDtFWt/hldzHm+QqlGl6RBExhcdurLtCM1Q=";
   };
 
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-bluetooth/pull/182
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-bluetooth/commit/031dd5660b4bcb0bb4e82ebe6d8bcdaa1791c385.patch";
-      sha256 = "1g01ad6md7pqp1fx00avbra8yfnr8ipg8y6zhfg35fgjakj4aags";
-    })
-  ];
-
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -44,25 +39,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez
-    granite
-    gtk3
+    elementary-bluetooth-daemon # settings schema
+    granite7
+    gtk4
+    libadwaita
     libgee
     switchboard
     wingpanel-indicator-bluetooth # settings schema
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Bluetooth Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-bluetooth";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-bluetooth";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 
 }

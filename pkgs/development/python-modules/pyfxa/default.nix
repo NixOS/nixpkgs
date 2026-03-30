@@ -1,53 +1,49 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, grequests
-, hawkauthlib
-, mock
-, pybrowserid
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  grequests,
+  hawkauthlib,
+  mock,
+  pybrowserid,
+  pyjwt,
+  pytestCheckHook,
+  requests,
+  responses,
+  hatchling,
+  parameterized,
 }:
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.7.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "PyFxA";
-    inherit version;
-    hash = "sha256-bIXNCM8F9xON7hzyqKHWj9Qot7WtSIkXxwoqdj1lHNs=";
+    inherit pname version;
+    hash = "sha256-3zxXWzFOjWcnX8hAQpRzGlzTmnXjZjn9jF+MdsHuGkw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     cryptography
     hawkauthlib
     pybrowserid
     pyjwt
     requests
-    setuptools # imports pkg_resources
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     grequests
     mock
     responses
     pytestCheckHook
+    parameterized
   ];
 
-  pythonImportsCheck = [
-    "fxa"
-  ];
+  pythonImportsCheck = [ "fxa" ];
 
   disabledTestPaths = [
     # Requires network access
@@ -55,10 +51,11 @@ buildPythonPackage rec {
     "fxa/tests/test_oauth.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Firefox Accounts client library";
+    mainProgram = "fxa-client";
     homepage = "https://github.com/mozilla/PyFxA";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

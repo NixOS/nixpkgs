@@ -1,41 +1,48 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, chardet
-, cssselect
-, lxml
-, timeout-decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  chardet,
+  cssselect,
+  lxml,
+  lxml-html-clean,
+  timeout-decorator,
 }:
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.1";
+  version = "0.8.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
-    rev = "v${version}";
-    hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
+    rev = "${version}";
+    hash = "sha256-tL0OnvCrbrpBvcy+6RJ+u/BDdra+MnVT51DSAeYxJbc=";
   };
 
-  propagatedBuildInputs = [ chardet cssselect lxml ];
+  build-system = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'sys.platform == "darwin"' "False"
-  '';
+  pythonRelaxDeps = [ "lxml" ];
 
-  checkInputs = [
+  dependencies = [
+    chardet
+    cssselect
+    lxml
+    lxml-html-clean
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     timeout-decorator
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
-    license = licenses.apsl20;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

@@ -1,7 +1,5 @@
 set -e
 
-source $stdenv/setup
-
 mkdir -p $out/bin
 
 cat > $out/bin/control <<EOF

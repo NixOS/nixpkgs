@@ -1,41 +1,45 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, click
-, configparser
-, fetchFromGitHub
-, fetchpatch
-, fido2
-, lxml
-, poetry-core
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-kerberos
-, toml
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  click,
+  configparser,
+  fetchFromGitHub,
+  fido2,
+  lxml,
+  poetry-core,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
+  requests-kerberos,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.12.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "venth";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-REJYuOGq22onMj4WcfA7i4/cG99UGZA9D99ESIKY1A8=";
+    repo = "aws-adfs";
+    tag = "v${version}";
+    hash = "sha256-U1ptI/VynHArJ1SwX4LanHB0f4U38YZO9XDCXcLBu+s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "configparser"
+    "fido2"
+    "lxml"
+    "requests-kerberos"
+  ];
+
+  dependencies = [
     boto3
     botocore
     click
@@ -47,21 +51,7 @@ buildPythonPackage rec {
     requests-kerberos
   ];
 
-  patches = [
-    # Apply new fido2 api (See: venth/aws-adfs#243)
-    (fetchpatch {
-      url = "https://github.com/venth/aws-adfs/commit/09836d89256f3537270d760d8aa30ab9284725a8.diff";
-      hash = "sha256-pAAJvOa43BXtyWvV8hsLe2xqd5oI+vzndckRTRol61s=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'boto3 = "^1.20.50"' 'boto3 = "*"' \
-      --replace 'botocore = ">=1.12.6"' 'botocore = "*"'
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     toml
   ];
@@ -70,14 +60,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "aws_adfs"
-  ];
+  pythonImportsCheck = [ "aws_adfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ bhipple ];
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
+    license = lib.licenses.psfl;
+    mainProgram = "aws-adfs";
   };
 }

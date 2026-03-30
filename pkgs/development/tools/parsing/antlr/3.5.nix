@@ -1,4 +1,11 @@
-{lib, stdenv, fetchpatch, fetchurl, fetchFromGitHub, jre}:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  fetchFromGitHub,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
 
   inherit jre;
 
-  meta = with lib; {
+  meta = {
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -45,9 +52,9 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = "https://www.antlr.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ lib.maintainers.farlion ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.workflow ];
   };
 }

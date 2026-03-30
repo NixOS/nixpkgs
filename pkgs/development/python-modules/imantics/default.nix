@@ -1,16 +1,19 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, numpy
-, opencv3
-, sphinx-rtd-theme
-, lxml
-, xmljson
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  setuptools,
+  numpy,
+  opencv-python,
+  lxml,
+  xmljson,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "imantics";
   version = "0.1.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsbroks";
@@ -19,28 +22,23 @@ buildPythonPackage rec {
     sha256 = "1zv2gj8cbakhh2fyr2611cbqhfk37a56x973ny9n43y70n26pzm8";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
-    opencv3
-    sphinx-rtd-theme
+    opencv-python
     lxml
     xmljson
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'opencv-python>=3'," ""
-  '';
-
-  # failing on NixOS
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "imantics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert and visualize many annotation formats for object dectection and localization";
     homepage = "https://github.com/jsbroks/imantics";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.rakesh4g ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.rakesh4g ];
   };
 }

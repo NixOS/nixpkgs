@@ -1,29 +1,70 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pillow
-, pymaging_png
-, mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  pillow,
+  pypng,
+
+  # tests
+  mock,
+  pytestCheckHook,
+  qrcode,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "7.3.1";
+  version = "8.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578";
+  src = fetchFromGitHub {
+    owner = "lincolnloop";
+    repo = "python-qrcode";
+    tag = "v${version}";
+    hash = "sha256-qLIYUFnBJQGidnfC0bQAkO/aUmT94uXFMeMhnUgUnfQ=";
   };
 
-  propagatedBuildInputs = [ six pillow pymaging_png setuptools ];
-  checkInputs = [ mock ];
+  build-system = [ poetry-core ];
 
-  meta = with lib; {
-    description = "Quick Response code generation for Python";
-    homepage = "https://pypi.python.org/pypi/qrcode";
-    license = licenses.bsd3;
+  optional-dependencies = {
+    pil = [ pillow ];
+    png = [ pypng ];
+    all = [
+      pypng
+      pillow
+    ];
   };
 
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = qrcode;
+      command = "qr --version";
+    };
+  };
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [ "test_change" ] ++ [
+    # Attempts to open a file which doesn't exist in sandbox
+    "test_piped"
+  ];
+
+  meta = {
+    description = "Python QR Code image generator";
+    mainProgram = "qr";
+    homepage = "https://github.com/lincolnloop/python-qrcode";
+    changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ attila ];
+  };
 }

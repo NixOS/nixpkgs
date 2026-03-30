@@ -1,33 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, smmap
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools,
+  smmap,
 }:
 
 buildPythonPackage rec {
   pname = "gitdb";
-  version = "4.0.9";
-  disabled = !isPy3k;
+  version = "4.0.12";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bac2fd45c0a1c9cf619e63a90d62bdc63892ef92387424b855792a6cabe789aa";
+    hash = "sha256-XvcfhV0ZGjMm/PvA1dqDXyaxP7y6YMMsIQkcNJ/9tXE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [ "smmap" ];
 
   propagatedBuildInputs = [ smmap ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace ",<4" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  # Bunch of tests fail because they need an actual git repo
-  doCheck = false;
+  pythonImportsCheck = [ "gitdb" ];
+
+  disabledTests = [
+    # Tests need part which are not shipped with PyPI releases
+    "test_base"
+    "test_reading"
+    "test_writing"
+    "test_correctness"
+    "test_loose_correctness"
+    "test_pack_random_access"
+    "test_pack_writing"
+    "test_stream_reading"
+  ];
 
   meta = {
     description = "Git Object Database";
-    maintainers = [ ];
     homepage = "https://github.com/gitpython-developers/gitdb";
+    changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${version}";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

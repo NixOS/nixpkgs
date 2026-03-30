@@ -1,15 +1,16 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools
-, gviz-api
-, protobuf
-, werkzeug
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  gviz-api,
+  protobuf,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "tensorboard_plugin_profile";
-  version = "2.8.0";
+  version = "2.11.1";
   format = "wheel";
 
   src = fetchPypi {
@@ -17,12 +18,10 @@ buildPythonPackage rec {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-2LzXSdPrzS5G63ONvchdEL4aJD75eU9dF1pMqLcfbto=";
+    hash = "sha256-t9AZg0BGjDcOxtoRBHZO0joIgLHpoKqEUY4pxmw8sjg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     gviz-api
@@ -30,10 +29,10 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  meta = with lib; {
-    description = "Profile Tensorboard Plugin.";
+  meta = {
+    description = "Profile Tensorboard Plugin";
     homepage = "http://tensorflow.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

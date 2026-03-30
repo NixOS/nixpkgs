@@ -1,64 +1,57 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, stdiomask
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  stdiomask,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "subarulink";
-  version = "0.6.1";
-  format = "setuptools";
+  version = "0.7.19";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "G-Two";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-esZ+nIHIXKfilb8dBFbAbQQFI6fFRUcoFVCPdnqGXYw=";
+    repo = "subarulink";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+huEDrcMjCMUKnzL0wfqnpVjIm8zebV3qAq4OWLZ+GU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     stdiomask
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     cryptography
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=subarulink" ""
-  '';
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  pythonImportsCheck = [ "subarulink" ];
 
-  pythonImportsCheck = [
-    "subarulink"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with STARLINK-enabled vehicle";
     homepage = "https://github.com/G-Two/subarulink";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/G-Two/subarulink/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "subarulink";
   };
-}
+})

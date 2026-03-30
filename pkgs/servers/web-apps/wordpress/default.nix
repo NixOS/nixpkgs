@@ -1,36 +1,16 @@
-{ lib, stdenv, fetchurl, nixosTests, writeScript }:
-
-stdenv.mkDerivation rec {
-  pname = "wordpress";
-  version = "6.0.3";
-
-  src = fetchurl {
-    url = "https://wordpress.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eSi0qwzXoJ1wYUzi34s7QbBbwRm2hfXoyGFivhPBq5o=";
+{ callPackage }:
+builtins.mapAttrs (_: callPackage ./generic.nix) rec {
+  wordpress = wordpress_6_9;
+  wordpress_6_7 = {
+    version = "6.7.5";
+    hash = "sha256-IS9B6kwjWLYLybmWG2Ym5+JAgFExMqhcEQsJJF2puXg=";
   };
-
-  installPhase = ''
-    mkdir -p $out/share/wordpress
-    cp -r . $out/share/wordpress
-  '';
-
-  passthru.tests = {
-    inherit (nixosTests) wordpress;
+  wordpress_6_8 = {
+    version = "6.8.5";
+    hash = "sha256-N/WVUQxI0W3t4L+lr6KcuK8S2/Dj00WyXElMFfjIHYE=";
   };
-
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts jq
-    set -eu -o pipefail
-    version=$(curl --globoff "https://api.wordpress.org/core/version-check/1.7/" | jq -r '.offers[0].version')
-    update-source-version wordpress $version
-  '';
-
-  meta = with lib; {
-    homepage = "https://wordpress.org";
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
-    license = [ licenses.gpl2 ];
-    maintainers = [ maintainers.basvandijk ];
-    platforms = platforms.all;
+  wordpress_6_9 = {
+    version = "6.9.4";
+    hash = "sha256-22EK2fVJ4Ku1rz49XGcpxY2HRDllTN8K/qQlsuqJXzU=";
   };
 }

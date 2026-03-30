@@ -1,55 +1,49 @@
-{ lib
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "thermopro-ble";
-  version = "0.4.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "1.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-y8Uh1REZqfrS3Y/L/uCmHYkdPQzwzdx7eSz003oz05o=";
+    repo = "thermopro-ble";
+    tag = "v${version}";
+    hash = "sha256-LyFA/O7nsmbg8KxT07Z0l+GEnTWF/IG0ykIN/8FK8Es=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     sensor-state-data
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=thermopro_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonImportsCheck = [ "thermopro_ble" ];
 
-  pythonImportsCheck = [
-    "thermopro_ble"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library for Thermopro BLE devices";
     homepage = "https://github.com/bluetooth-devices/thermopro-ble";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/thermopro-ble/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

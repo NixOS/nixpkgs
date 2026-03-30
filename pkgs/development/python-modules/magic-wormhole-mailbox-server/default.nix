@@ -1,46 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, attrs
-, twisted
-, pyopenssl
-, service-identity
-, autobahn
-, treq
-, mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  attrs,
+  twisted,
+  autobahn,
+  treq,
+  nixosTests,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  version = "0.4.1";
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-mailbox-server";
+  version = "0.6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1af10592909caaf519c00e706eac842c5e77f8d4356215fe9c61c7b2258a88fb";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole-mailbox-server";
+    tag = finalAttrs.version;
+    hash = "sha256-Ckwkvw4pMEGUTarfzg1GOodHMwM5hVix2bPCZTI6hxU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
-    six
-    twisted
     autobahn
-  ] ++ autobahn.optional-dependencies.twisted
+    twisted
+  ]
+  ++ autobahn.optional-dependencies.twisted
   ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
-    treq
-    mock
-    twisted
-  ];
-  checkPhase = ''
-    trial -j$NIX_BUILD_CORES wormhole_mailbox_server
-  '';
+  pythonImportsCheck = [ "wormhole_mailbox_server" ];
 
-  meta = with lib; {
-    description = "Securely transfer data between computers";
-    homepage = "https://github.com/warner/magic-wormhole-mailbox-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    treq
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # these tests fail in Darwin's sandbox
+    "src/wormhole_mailbox_server/test/test_web.py"
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests) magic-wormhole-mailbox-server;
   };
-}
+
+  meta = {
+    description = "Securely transfer data between computers";
+    homepage = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${finalAttrs.src.rev}/NEWS.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
+  };
+})

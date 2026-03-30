@@ -1,13 +1,30 @@
-/* This file defines the composition for CRAN (R) packages. */
-
-{ R, pkgs, overrides }:
+# This file defines the composition for R packages.
 
 let
-  inherit (pkgs) cacert fetchurl stdenv lib;
+  importJSON = f: builtins.fromJSON (builtins.readFile f);
+
+  biocPackagesGenerated = importJSON ./bioc-packages.json;
+  biocAnnotationPackagesGenerated = importJSON ./bioc-annotation-packages.json;
+  biocExperimentPackagesGenerated = importJSON ./bioc-experiment-packages.json;
+  cranPackagesGenerated = importJSON ./cran-packages.json;
+in
+
+{
+  R,
+  pkgs,
+  overrides,
+}:
+
+let
+  inherit (pkgs)
+    cacert
+    fetchurl
+    stdenv
+    lib
+    ;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation;
     inherit (pkgs) gettext gfortran;
   };
 
@@ -15,63 +32,103 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  mkDerive = {mkHomepage, mkUrls, hydraPlatforms ? null}: args:
-    let hydraPlatforms' = hydraPlatforms; in
-      lib.makeOverridable ({
-        name, version, sha256,
-        depends ? [],
+  mkDerive =
+    {
+      mkHomepage,
+      mkUrls,
+      hydraPlatforms ? null,
+    }:
+    args:
+    let
+      hydraPlatforms' = hydraPlatforms;
+    in
+    lib.makeOverridable (
+      {
+        name,
+        version,
+        sha256,
+        depends ? [ ],
         doCheck ? true,
         requireX ? false,
         broken ? false,
         platforms ? R.meta.platforms,
         hydraPlatforms ? if hydraPlatforms' != null then hydraPlatforms' else platforms,
-        maintainers ? []
-      }: buildRPackage {
-    name = "${name}-${version}";
-    src = fetchurl {
-      inherit sha256;
-      urls = mkUrls (args // { inherit name version; });
-    };
-    inherit doCheck requireX;
-    propagatedBuildInputs = depends;
-    nativeBuildInputs = depends;
-    meta.homepage = mkHomepage (args // { inherit name; });
-    meta.platforms = platforms;
-    meta.hydraPlatforms = hydraPlatforms;
-    meta.broken = broken;
-    meta.maintainers = maintainers;
-  });
+        maintainers ? [ ],
+      }:
+      buildRPackage {
+        pname = name;
+        inherit version;
+        src = fetchurl {
+          inherit sha256;
+          urls = mkUrls (args // { inherit name version; });
+        };
+        inherit doCheck requireX;
+        propagatedBuildInputs = depends;
+        nativeBuildInputs = depends;
+        meta.homepage = mkHomepage (args // { inherit name; });
+        meta.platforms = platforms;
+        meta.hydraPlatforms = hydraPlatforms;
+        meta.broken = broken;
+        meta.maintainers = maintainers;
+      }
+    );
 
   # Templates for generating Bioconductor and CRAN packages
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
-    mkUrls = {name, version, biocVersion}: [
-      "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
-      "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
-      "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz"
-    ];
+    mkHomepage =
+      { name, biocVersion }: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkUrls =
+      {
+        name,
+        version,
+        biocVersion,
+      }:
+      [
+        "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
+        "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+        "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz"
+      ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, biocVersion}: [
-      "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz"
-    ];
-    hydraPlatforms = [];
+    mkHomepage =
+      { name, biocVersion }:
+      "https://www.bioconductor.org/packages/${biocVersion}/data/annotation/html/${name}.html";
+    mkUrls =
+      {
+        name,
+        version,
+        biocVersion,
+      }:
+      [
+        "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz"
+      ];
+    hydraPlatforms = [ ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, biocVersion}: [
-      "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz"
-    ];
-    hydraPlatforms = [];
+    mkHomepage =
+      { name, biocVersion }:
+      "https://www.bioconductor.org/packages/${biocVersion}/data/experiment/html/${name}.html";
+    mkUrls =
+      {
+        name,
+        version,
+        biocVersion,
+      }:
+      [
+        "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz"
+      ];
+    hydraPlatforms = [ ];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
-    mkUrls = {name, version, snapshot}: [
-      "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz"
-    ];
+    mkHomepage = { name }: "https://cran.r-project.org/web/packages/${name}/";
+    mkUrls =
+      { name, version }:
+      [
+        "mirror://cran/${name}_${version}.tar.gz"
+        "mirror://cran/Archive/${name}/${name}_${version}.tar.gz"
+      ];
   };
 
   # Overrides package definitions with nativeBuildInputs.
@@ -84,13 +141,15 @@ let
   # results in
   #
   # {
-  #   foo = old.foo.overrideDerivation (attrs: {
+  #   foo = old.foo.overrideAttrs (attrs: {
   #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ pkgs.bar ];
   #   });
   # }
-  overrideNativeBuildInputs = overrides: old:
-    lib.mapAttrs (name: value:
-      (builtins.getAttr name old).overrideDerivation (attrs: {
+  overrideNativeBuildInputs =
+    overrides: old:
+    lib.mapAttrs (
+      name: value:
+      (builtins.getAttr name old).overrideAttrs (attrs: {
         nativeBuildInputs = attrs.nativeBuildInputs ++ value;
       })
     ) overrides;
@@ -105,13 +164,15 @@ let
   # results in
   #
   # {
-  #   foo = old.foo.overrideDerivation (attrs: {
+  #   foo = old.foo.overrideAttrs (attrs: {
   #     buildInputs = attrs.buildInputs ++ [ pkgs.bar ];
   #   });
   # }
-  overrideBuildInputs = overrides: old:
-    lib.mapAttrs (name: value:
-      (builtins.getAttr name old).overrideDerivation (attrs: {
+  overrideBuildInputs =
+    overrides: old:
+    lib.mapAttrs (
+      name: value:
+      (builtins.getAttr name old).overrideAttrs (attrs: {
         buildInputs = attrs.buildInputs ++ value;
       })
     ) overrides;
@@ -130,11 +191,14 @@ let
   #     maintainers = [ lib.maintainers.jsmith ];
   #   };
   # }
-  overrideMaintainers = overrides: old:
-    lib.mapAttrs (name: value:
+  overrideMaintainers =
+    overrides: old:
+    lib.mapAttrs (
+      name: value:
       (builtins.getAttr name old).override {
         maintainers = value;
-      }) overrides;
+      }
+    ) overrides;
 
   # Overrides package definitions with new R dependencies.
   # For example,
@@ -146,16 +210,18 @@ let
   # results in
   #
   # {
-  #   foo = old.foo.overrideDerivation (attrs: {
+  #   foo = old.foo.overrideAttrs (attrs: {
   #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
   #     propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ [ self.bar ];
   #   });
   # }
-  overrideRDepends = overrides: old:
-    lib.mapAttrs (name: value:
-      (builtins.getAttr name old).overrideDerivation (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
-        propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
+  overrideRDepends =
+    overrides: old:
+    lib.mapAttrs (
+      name: value:
+      (builtins.getAttr name old).overrideAttrs (attrs: {
+        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
+        propagatedNativeBuildInputs = (attrs.propagatedNativeBuildInputs or [ ]) ++ value;
       })
     ) overrides;
 
@@ -173,7 +239,8 @@ let
   #     requireX = true;
   #   };
   # }
-  overrideRequireX = packageNames: old:
+  overrideRequireX =
+    packageNames: old:
     let
       nameValuePairs = map (name: {
         inherit name;
@@ -182,7 +249,7 @@ let
         };
       }) packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
   # Overrides package definition requiring a home directory to install or to
   # run tests.
@@ -202,7 +269,8 @@ let
   #     '';
   #   });
   # }
-  overrideRequireHome = packageNames: old:
+  overrideRequireHome =
+    packageNames: old:
     let
       nameValuePairs = map (name: {
         inherit name;
@@ -214,7 +282,7 @@ let
         });
       }) packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
   # Overrides package definition to skip check.
   # For example,
@@ -230,7 +298,8 @@ let
   #     doCheck = false;
   #   };
   # }
-  overrideSkipCheck = packageNames: old:
+  overrideSkipCheck =
+    packageNames: old:
     let
       nameValuePairs = map (name: {
         inherit name;
@@ -239,7 +308,7 @@ let
         };
       }) packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
   # Overrides package definition to mark it broken.
   # For example,
@@ -255,7 +324,8 @@ let
   #     broken = true;
   #   };
   # }
-  overrideBroken = packageNames: old:
+  overrideBroken =
+    packageNames: old:
     let
       nameValuePairs = map (name: {
         inherit name;
@@ -264,10 +334,13 @@ let
         };
       }) packageNames;
     in
-      builtins.listToAttrs nameValuePairs;
+    builtins.listToAttrs nameValuePairs;
 
-  defaultOverrides = old: new:
-    let old0 = old; in
+  defaultOverrides =
+    old: new:
+    let
+      old0 = old;
+    in
     let
       old1 = old0 // (overrideRequireX packagesRequiringX old0);
       old2 = old1 // (overrideRequireHome packagesRequiringHome old1);
@@ -278,18 +351,33 @@ let
       old7 = old6 // (overrideBroken brokenPackages old6);
       old8 = old7 // (overrideMaintainers packagesWithMaintainers old7);
       old = old8;
-    in old // (otherOverrides old new);
+    in
+    old // (otherOverrides old new);
 
   # Recursive override pattern.
   # `_self` is a collection of packages;
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self = { inherit buildRPackage; } //
-          import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
-          import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
-          import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
-          import ./cran-packages.nix { inherit self; derive = deriveCran; };
+  _self = {
+    inherit buildRPackage;
+  }
+  // mkPackageSet deriveBioc biocPackagesGenerated
+  // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
+  // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
+  // mkPackageSet deriveCran cranPackagesGenerated;
+
+  # Takes in a generated JSON file's imported contents
+  # and transforms it by swapping each element of the depends array with the dependency's derivation
+  # and passing this new object to the provided derive function
+  mkPackageSet =
+    derive: packagesJSON:
+    lib.mapAttrs (
+      k: v:
+      derive packagesJSON.extraArgs (
+        v // { depends = lib.map (name: builtins.getAttr name self) v.depends; }
+      )
+    ) packagesJSON.packages;
 
   # tweaks for the individual packages and "in self" follow
 
@@ -297,166 +385,657 @@ let
     data_table = [ jbedo ];
     BiocManager = [ jbedo ];
     ggplot2 = [ jbedo ];
+    iscream = [ jamespeapen ];
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
+    RQuantLib = [ kupac ];
+    XLConnect = [ b-rodrigues ];
   };
 
   packagesWithRDepends = {
+    bayesdfa = [ self.rstantools ];
+    spectralGraphTopology = [ self.CVXR ];
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
+    pliman = [ self.EBImage ];
+    rmsb = [ self.rstantools ];
+    gastempt = [ self.rstantools ];
+    interactiveDisplay = [ self.BiocManager ];
+    disbayes = [ self.rstantools ];
+    survextrap = [ self.rstantools ];
+    tipsae = [ self.rstantools ];
+    TriDimRegression = [ self.rstantools ];
+    bbmix = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
-    arrow = [ pkgs.pkg-config pkgs.arrow-cpp ];
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
+    Apollonius = with pkgs; [
+      pkg-config
+      gmp.dev
+      mpfr.dev
+    ];
+    arrow =
+      with pkgs;
+      [
+        pkg-config
+        cmake
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ intltool ];
+    alcyon = with pkgs; [
+      cmake
+      which
+    ];
+    astgrepr = with pkgs; [
+      cargo
+      rustc
+    ];
+    b32 = with pkgs; [
+      cargo
+      rustc
+    ];
+    RPesto = with pkgs; [
+      cargo
+      rustc
+    ];
+    fru = with pkgs; [
+      cargo
+      rustc
+    ];
+    fastgeojson = with pkgs; [
+      cargo
+      rustc
+    ];
     audio = [ pkgs.portaudio ];
+    BayesChange = [ pkgs.gsl ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
-    BayesXsrc = with pkgs; [ readline.dev ncurses gsl ];
+    BayesXsrc = with pkgs; [
+      readline.dev
+      ncurses
+      gsl
+    ];
+    bioacoustics = [
+      pkgs.fftw.dev
+      pkgs.cmake
+    ];
     bigGP = [ pkgs.mpi ];
+    bigrquerystorage = with pkgs; [
+      grpc
+      protobuf
+      which
+    ];
     bio3d = [ pkgs.zlib ];
+    BigDataStatMeth = [ pkgs.pkg-config ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
+    blosc = [ pkgs.pkg-config ];
+    CellBarcode = [ pkgs.zlib ];
+    cld3 = [ pkgs.protobuf ];
+    cpp11qpdf = with pkgs; [
+      zlib.dev
+      libjpeg
+    ];
     bnpmr = [ pkgs.gsl ];
+    caviarpd = with pkgs; [
+      cargo
+      rustc
+    ];
     cairoDevice = [ pkgs.gtk2.dev ];
-    Cairo = with pkgs; [ libtiff libjpeg cairo.dev xlibsWrapper fontconfig.lib ];
+    Cairo = with pkgs; [
+      libtiff
+      libjpeg
+      cairo.dev
+      libxt.dev
+      fontconfig.lib
+    ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
-    ChemmineOB = with pkgs; [ openbabel pkg-config ];
+    ChemmineOB = [ pkgs.pkg-config ];
+    ciflyr = with pkgs; [
+      cargo
+      rustc
+    ];
+    interpolation = [ pkgs.pkg-config ];
+    clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
-    data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
-    devEMF = with pkgs; [ xorg.libXft.dev xlibsWrapper ];
-    diversitree = with pkgs; [ gsl fftw ];
+    CytoML = [ pkgs.libxml2.dev ];
+    data_table =
+      with pkgs;
+      [
+        pkg-config
+        zlib.dev
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
+    datefixR = with pkgs; [
+      cargo
+      rustc
+    ];
+    devEMF = with pkgs; [ libxft.dev ];
+    DEploid = [ pkgs.zlib.dev ];
+    DEploid_utils = [ pkgs.zlib.dev ];
+    diversitree = with pkgs; [
+      gsl
+      fftw
+    ];
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
+    fangs = with pkgs; [
+      cargo
+      rustc
+    ];
+    fastpng = [ pkgs.zlib.dev ];
+    fcl = with pkgs; [
+      cargo
+      rustc
+    ];
+    waysign = with pkgs; [
+      cargo
+      rustc
+    ];
     fftw = [ pkgs.fftw.dev ];
-    fftwtools = with pkgs; [ fftw.dev pkg-config ];
+    fftwtools = with pkgs; [
+      fftw.dev
+      pkg-config
+    ];
+    flint = with pkgs; [
+      pkg-config
+      gmp.dev
+      mpfr.dev
+      flint
+    ];
+    fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
-    gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
-    ggiraph = with pkgs; [ pkgs.libpng.dev ];
-    git2r = with pkgs; [ zlib.dev openssl.dev libssh2.dev libgit2 pkg-config ];
+    frailtyMMpen = [ pkgs.gsl ];
+    gadjid = with pkgs; [
+      cargo
+      rustc
+    ];
+    gamstransfer = [ pkgs.zlib ];
+    gdalraster = [ pkgs.pkg-config ];
+    gdtools =
+      with pkgs;
+      [
+        cairo.dev
+        fontconfig.lib
+        freetype.dev
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        expat
+        libxdmcp
+      ];
+    GeneralizedWendland = [ pkgs.gsl ];
+    ggiraph = [ pkgs.libpng.dev ];
+    git2r = with pkgs; [
+      zlib.dev
+      openssl.dev
+      libssh2.dev
+      libgit2
+      pkg-config
+    ];
     GLAD = [ pkgs.gsl ];
-    glpkAPI = with pkgs; [ gmp glpk ];
+    glpkAPI = with pkgs; [
+      gmp
+      glpk
+    ];
     gmp = [ pkgs.gmp.dev ];
+    GPBayes = [ pkgs.gsl ];
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
+    gslnls = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
-    haven = with pkgs; [ libiconv zlib.dev ];
-    h5vc = [ pkgs.zlib.dev ];
+    h3o = with pkgs; [
+      cargo
+      rustc
+    ];
+    harbinger = [ pkgs.glibcLocales ];
+    haven = with pkgs; [ zlib.dev ];
+    hellorust = [ pkgs.cargo ];
+    hgwrr = [ pkgs.gsl ];
+    h5vc = with pkgs; [
+      zlib.dev
+      bzip2.dev
+      xz.dev
+    ];
+    HiCParser = [ pkgs.zlib ];
+    yyjsonr = with pkgs; [ zlib.dev ];
+    RNifti = with pkgs; [ zlib.dev ];
+    RNiftyReg = with pkgs; [ zlib.dev ];
+    highs = [
+      pkgs.which
+      pkgs.cmake
+    ];
+    crc32c = [
+      pkgs.which
+      pkgs.cmake
+    ];
+    cpp11bigwig = with pkgs; [
+      zlib.dev
+      curl.dev
+    ];
+    rbedrock = [
+      pkgs.zlib.dev
+      pkgs.which
+      pkgs.cmake
+    ];
+    Rigraphlib = [ pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
-    imager = [ pkgs.xlibsWrapper ];
+    hypergeo2 = with pkgs; [
+      gmp.dev
+      mpfr.dev
+      pkg-config
+    ];
+    imager = [ pkgs.libx11.dev ];
+    imbibe = [ pkgs.zlib.dev ];
+    image_CannyEdges = with pkgs; [
+      fftw.dev
+      libpng.dev
+    ];
     iBMQ = [ pkgs.gsl ];
-    igraph = with pkgs; [ gmp libxml2.dev ];
+    iscream = with pkgs; [
+      pkg-config
+      which
+    ];
+    jack = [ pkgs.pkg-config ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl ];
+    KSgeneral = with pkgs; [ pkg-config ];
     kza = [ pkgs.fftw.dev ];
-    lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
-    lwgeom = with pkgs; [ proj geos gdal ];
+    leidenAlg = [ pkgs.gmp.dev ];
+    Libra = [ pkgs.gsl ];
+    libstable4u = [ pkgs.gsl ];
+    heck = with pkgs; [
+      cargo
+      rustc
+    ];
+    libdeflate = [ pkgs.cmake ];
+    LOMAR = [ pkgs.gmp.dev ];
+    littler = [ pkgs.libdeflate ];
+    lpsymphony = with pkgs; [
+      pkg-config
+      gfortran
+      gettext
+    ];
+    lwgeom = with pkgs; [
+      proj
+      geos
+      gdal
+    ];
+    otelsdk = with pkgs; [
+      cmake
+      which
+      curl.dev
+    ];
+    roxigraph = with pkgs; [
+      cargo
+      rustc
+    ];
+    rsbml = [ pkgs.pkg-config ];
+    rvg = [ pkgs.libpng.dev ];
+    MAGEE = [
+      pkgs.zlib.dev
+      pkgs.bzip2.dev
+    ];
     magick = [ pkgs.imagemagick.dev ];
-    ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
+    mcrPioda = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
-    mzR = with pkgs; [ zlib netcdf ];
+    mzR = with pkgs; [
+      zlib
+      netcdf
+    ];
+    nanonext = with pkgs; [
+      mbedtls
+      nng
+    ];
     ncdf4 = [ pkgs.netcdf ];
-    nloptr = with pkgs; [ nlopt pkg-config libiconv ];
+    neojags = [ pkgs.jags ];
+    nloptr = with pkgs; [
+      nlopt
+      pkg-config
+    ];
     n1qn1 = [ pkgs.gfortran ];
-    odbc = [ pkgs.unixODBC ];
-    pander = with pkgs; [ pandoc which ];
+    odbc = [ pkgs.unixodbc ];
+    opencv = [ pkgs.pkg-config ];
+    pak = [ pkgs.curl.dev ];
+    pander = with pkgs; [
+      pandoc
+      which
+    ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
+    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
+    pcaL1 = [
+      pkgs.pkg-config
+      pkgs.clp
+    ];
     pdftools = [ pkgs.poppler.dev ];
+    PEPBVS = [ pkgs.gsl ];
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     protolite = [ pkgs.protobuf ];
-    R2SWF = with pkgs; [ zlib libpng freetype.dev ];
+    prqlr = with pkgs; [
+      cargo
+      rustc
+    ];
+    R2SWF = with pkgs; [
+      zlib
+      libpng
+      freetype.dev
+    ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
-    readxl = [ pkgs.libiconv ];
+    rbm25 = with pkgs; [
+      cargo
+      rustc
+    ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
+    RcppDPR = [ pkgs.gsl ];
     RcppGSL = [ pkgs.gsl ];
     RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
-    rgdal = with pkgs; [ proj.dev gdal ];
+    resultant = with pkgs; [
+      gmp.dev
+      mpfr.dev
+      pkg-config
+    ];
+    rgdal = with pkgs; [
+      proj.dev
+      gdal
+    ];
+    Rhisat2 = [
+      pkgs.which
+      pkgs.hostname
+    ];
+    gdalcubes = [ pkgs.pkg-config ];
     rgeos = [ pkgs.geos ];
     Rglpk = [ pkgs.glpk ];
+    RcppPlanc = with pkgs; [
+      which
+      cmake
+      pkg-config
+    ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = with pkgs; [ zlib.dev hdf5.dev ];
-    Rhpc = with pkgs; [ zlib bzip2.dev icu xz.dev mpi pcre.dev ];
-    Rhtslib = with pkgs; [ zlib.dev automake autoconf bzip2.dev xz.dev curl.dev ];
+    Rhdf5lib = with pkgs; [ zlib.dev ];
+    Rhpc = with pkgs; [
+      zlib
+      bzip2.dev
+      icu
+      xz.dev
+      mpi
+      pcre.dev
+    ];
+    Rhtslib = with pkgs; [
+      zlib.dev
+      automake
+      autoconf
+      bzip2.dev
+      xz.dev
+      curl.dev
+    ];
     rjags = [ pkgs.jags ];
-    rJava = with pkgs; [ zlib bzip2.dev icu xz.dev pcre.dev jdk libzip ];
+    rJava = with pkgs; [
+      stripJavaArchivesHook
+      zlib
+      bzip2.dev
+      icu
+      xz.dev
+      zstd.dev
+      pcre.dev
+      jdk
+      libzip
+      libdeflate
+    ];
     Rlibeemd = [ pkgs.gsl ];
-    rmatio = [ pkgs.zlib.dev ];
-    Rmpfr = with pkgs; [ gmp mpfr.dev ];
-    Rmpi = [ pkgs.mpi ];
-    RMySQL = with pkgs; [ zlib libmysqlclient openssl.dev ];
-    RNetCDF = with pkgs; [ netcdf udunits ];
+    rmatio = [
+      pkgs.zlib.dev
+      pkgs.pkg-config
+    ];
+    Rmpfr = with pkgs; [
+      gmp
+      mpfr.dev
+    ];
+    Rmpi = with pkgs; [
+      mpi.dev
+      prrte.dev
+    ];
+    RMySQL = with pkgs; [
+      zlib
+      libmysqlclient
+      openssl.dev
+    ];
+    RNetCDF = with pkgs; [
+      netcdf
+      udunits
+    ];
     RODBC = [ pkgs.libiodbc ];
-    rpanel = [ pkgs.bwidget ];
+    rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
-    RPostgreSQL = with pkgs; [ postgresql postgresql ];
+    RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.protobuf ];
+    rsamplr = with pkgs; [
+      cargo
+      rustc
+    ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
     rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
-    RVowpalWabbit = with pkgs; [ zlib.dev boost ];
-    rzmq = with pkgs; [ zeromq pkg-config ];
+    tomledit = with pkgs; [
+      cargo
+      rustc
+    ];
+    xslt = [ pkgs.pkg-config ];
+    RVowpalWabbit = with pkgs; [
+      zlib.dev
+      boost
+    ];
+    rzmq = with pkgs; [
+      zeromq
+      pkg-config
+    ];
     httpuv = [ pkgs.zlib.dev ];
     clustermq = [ pkgs.zeromq ];
-    SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
-    sdcTable = with pkgs; [ gmp glpk ];
-    seewave = with pkgs; [ fftw.dev libsndfile.dev ];
+    SAVE = with pkgs; [
+      zlib
+      bzip2
+      icu
+      xz
+      pcre
+    ];
+    salso = with pkgs; [
+      cargo
+      rustc
+    ];
+    ymd = with pkgs; [
+      cargo
+      rustc
+    ];
+    arcpbf = with pkgs; [
+      cargo
+      rustc
+    ];
+    caugi = with pkgs; [
+      cargo
+      rustc
+    ];
+    sdcTable = with pkgs; [
+      gmp
+      glpk
+    ];
+    seewave = with pkgs; [
+      fftw.dev
+      libsndfile.dev
+    ];
     seqinr = [ pkgs.zlib.dev ];
-    seqminer = with pkgs; [ zlib.dev bzip2 ];
-    sf = with pkgs; [ gdal proj geos ];
-    terra = with pkgs; [ gdal proj geos ];
-    showtext = with pkgs; [ zlib libpng icu freetype.dev ];
+    smcryptoR = with pkgs; [
+      cargo
+      rustc
+      which
+    ];
+    webp = [ pkgs.pkg-config ];
+    seqminer = with pkgs; [
+      zlib.dev
+      bzip2
+    ];
+    sf = with pkgs; [
+      gdal
+      proj
+      geos
+      libtiff
+      curl
+    ];
+    fio = with pkgs; [
+      cargo
+      rustc
+    ];
+    socratadata = with pkgs; [
+      cargo
+      rustc
+    ];
+    SQLFormatteR = with pkgs; [
+      cargo
+      rustc
+    ];
+    strawr = with pkgs; [ curl.dev ];
+    string2path = [ pkgs.cargo ];
+    terra = with pkgs; [
+      gdal
+      proj
+      geos
+      netcdf
+    ];
+    tok = with pkgs; [
+      cargo
+      rustc
+    ];
+    rshift = with pkgs; [
+      cargo
+      rustc
+    ];
+    arcgisutils = with pkgs; [
+      cargo
+      rustc
+    ];
+    arcgisgeocode = with pkgs; [
+      cargo
+      rustc
+    ];
+    arcgisplaces = with pkgs; [
+      pkg-config
+      openssl.dev
+      cargo
+      rustc
+    ];
+    awdb = with pkgs; [
+      cargo
+      rustc
+    ];
+    apcf = with pkgs; [ geos ];
+    SemiCompRisks = [ pkgs.gsl ];
+    showtext = with pkgs; [
+      zlib
+      libpng
+      icu
+      freetype.dev
+    ];
     simplexreg = [ pkgs.gsl ];
     spate = [ pkgs.fftw.dev ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
     stringi = [ pkgs.icu.dev ];
+    parseLatex = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
-    sysfonts = with pkgs; [ zlib libpng freetype.dev ];
-    systemfonts = with pkgs; [ fontconfig.dev freetype.dev ];
+    sysfonts = with pkgs; [
+      zlib
+      libpng
+      freetype.dev
+    ];
+    systemfonts = with pkgs; [
+      fontconfig.dev
+      freetype.dev
+    ];
     TAQMNGR = [ pkgs.zlib.dev ];
-    tesseract = with pkgs; [ tesseract leptonica ];
+    TDA = [ pkgs.gmp ];
+    tesseract = with pkgs; [
+      tesseract
+      leptonica
+    ];
     tiff = [ pkgs.libtiff.dev ];
-    tkrplot = with pkgs; [ xorg.libX11 tk.dev ];
+    tkrplot = with pkgs; [
+      libx11
+      tk.dev
+    ];
     topicmodels = [ pkgs.gsl ];
-    udunits2 = with pkgs; [ udunits expat ];
+    udunits2 = with pkgs; [
+      udunits
+      expat
+    ];
     units = [ pkgs.udunits ];
-    V8 = [ pkgs.v8 ];
-    XBRL = with pkgs; [ zlib libxml2.dev ];
-    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
-    XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
+    unigd = [ pkgs.pkg-config ];
+    unsum = with pkgs; [
+      cargo
+      rustc
+    ];
+    vdiffr = [ pkgs.libpng.dev ];
+    V8 = [ pkgs.nodejs-slim_22.libv8 ]; # when unpinning the version, don't forget about the other usages later
+    xactonomial = with pkgs; [
+      cargo
+      rustc
+    ];
+    XBRL = with pkgs; [
+      zlib
+      libxml2.dev
+    ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
+    XML = with pkgs; [
+      libtool
+      libxml2.dev
+      xmlsec
+      libxslt
+    ];
     affyPLM = [ pkgs.zlib.dev ];
-    bamsignals = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
-    DiffBind = [ pkgs.zlib ];
+    DiffBind = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2.dev
+    ];
     ShortRead = [ pkgs.zlib.dev ];
     oligo = [ pkgs.zlib.dev ];
     gmapR = [ pkgs.zlib.dev ];
     Rsubread = [ pkgs.zlib.dev ];
+    Rsubbotools = [ pkgs.gsl ];
     XVector = [ pkgs.zlib.dev ];
-    Rsamtools = with pkgs; [ zlib.dev curl.dev ];
-    rtracklayer = [ pkgs.zlib.dev ];
+    Rsamtools = with pkgs; [
+      zlib.dev
+      curl.dev
+      bzip2
+      xz
+    ];
+    rtracklayer = with pkgs; [
+      zlib.dev
+      curl.dev
+    ];
     affyio = [ pkgs.zlib.dev ];
-    VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
-    hdf5r = [ pkgs.hdf5.dev ];
+    vcfppR = [
+      pkgs.curl.dev
+      pkgs.bzip2
+      pkgs.zlib.dev
+      pkgs.xz
+    ];
     httpgd = with pkgs; [ cairo.dev ];
     SymTS = [ pkgs.gsl ];
     VBLPCM = [ pkgs.gsl ];
@@ -484,148 +1063,455 @@ let
     RDieHarder = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
-    RcppCWB = [ pkgs.pkg-config ];
+    RationalMatrix = [
+      pkgs.pkg-config
+      pkgs.gmp.dev
+    ];
+    RcppCWB = [
+      pkgs.pkg-config
+      pkgs.pcre2
+    ];
+    redux = [ pkgs.pkg-config ];
+    s2 = [ pkgs.pkg-config ];
+    rswipl = with pkgs; [
+      cmake
+      pkg-config
+    ];
+    scorematchingad = [ pkgs.cmake ];
     rrd = [ pkgs.pkg-config ];
+    surveyvoi = [ pkgs.pkg-config ];
+    Rbwa = [ pkgs.zlib.dev ];
+    tergo = with pkgs; [
+      cargo
+      rustc
+    ];
+    gglinedensity = [ pkgs.cargo ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
+    Rsymphony = [ pkgs.pkg-config ];
     NanoMethViz = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.pkg-config ];
-    HilbertVisGUI = with pkgs; [ pkg-config which ];
+    HilbertVisGUI = with pkgs; [
+      pkg-config
+      which
+    ];
     textshaping = [ pkgs.pkg-config ];
     ragg = [ pkgs.pkg-config ];
     qqconf = [ pkgs.pkg-config ];
+    qspray = [ pkgs.pkg-config ];
+    ratioOfQsprays = [ pkgs.pkg-config ];
+    watcher = with pkgs; [
+      cmake
+      which
+    ];
+    symbolicQspray = [ pkgs.pkg-config ];
+    sphereTessellation = [ pkgs.pkg-config ];
+    vapour = [ pkgs.pkg-config ];
+    xdvir = [ pkgs.freetype.dev ];
   };
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
-    deldir = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    gam = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    interp = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    RcppArmadillo = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    quantreg = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    SparseM = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
-    hexbin = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    abn = [ pkgs.jags ];
+    adbcpostgresql = with pkgs; [
+      readline.dev
+      zlib.dev
+      openssl.dev
+      libkrb5.dev
+      openpam
+      libpq
+    ];
+    asciicast = with pkgs; [
+      bzip2.dev
+      icu.dev
+      libdeflate
+      xz.dev
+      zlib.dev
+      zstd.dev
+    ];
+    blosc = [ pkgs.c-blosc ];
+    EHRmuse = [ pkgs.gsl.dev ];
+    island = [ pkgs.gsl.dev ];
+    knowYourCG = with pkgs; [
+      zlib.dev
+      ncurses.dev
+    ];
+    lnmixsurv = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
+    transmogR = [ pkgs.zlib.dev ];
+    ulid = [ pkgs.zlib.dev ];
+    unrtf = with pkgs; [
+      bzip2.dev
+      icu.dev
+      libdeflate
+      xz.dev
+      zlib.dev
+      zstd.dev
+    ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
-    bigmemory = [ pkgs.libuuid.dev ];
-    clustermq = [  pkgs.pkg-config ];
+    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
+    pqsfinder = [ pkgs.boost ];
+    bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
+    bayesWatch = [ pkgs.boost.dev ];
+    clustermq = [ pkgs.pkg-config ];
+    coga = [ pkgs.gsl.dev ];
+    mBvs = [ pkgs.gsl.dev ];
+    milorGWAS = [ pkgs.zlib.dev ];
+    pliman = with pkgs; [
+      fftw.dev
+      libpng.dev
+    ];
+    rcontroll = [ pkgs.gsl.dev ];
+    deepSNV = with pkgs; [
+      xz.dev
+      bzip2.dev
+      zlib.dev
+    ];
+    epialleleR = with pkgs; [
+      xz.dev
+      bzip2.dev
+      zlib.dev
+    ];
+    gdalraster = with pkgs; [
+      gdal
+      proj.dev
+      sqlite.dev
+    ];
+    GeoFIS = with pkgs; [
+      mpfr.dev
+      gmp.dev
+    ];
+    mitoClone2 = with pkgs; [
+      xz.dev
+      bzip2.dev
+      zlib.dev
+    ];
+    gpg = [ pkgs.gpgme ];
+    mutscan = [ pkgs.zlib.dev ];
+    webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
-    RcppEigen = [ pkgs.libiconv ];
+    stpphawkes = [ pkgs.gsl ];
+    registr = with pkgs; [
+      icu.dev
+      zlib.dev
+      bzip2.dev
+      xz.dev
+      libdeflate
+      zstd.dev
+    ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
-    rgl = with pkgs; [ libGLU libGLU.dev libGL xlibsWrapper ];
+    rDEA = [ pkgs.glpk ];
+    rgl = with pkgs; [
+      libGLU
+      libGL
+      libx11.dev
+      freetype.dev
+      libpng.dev
+    ];
     RGtk2 = [ pkgs.pkg-config ];
     RProtoBuf = [ pkgs.pkg-config ];
     Rpoppler = [ pkgs.pkg-config ];
+    RPostgres = with pkgs; [ libpq ];
     XML = [ pkgs.pkg-config ];
+    apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
+    CBN2Path = [ pkgs.gsl ];
     chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
+    eds = [ pkgs.zlib.dev ];
+    iscream = with pkgs; [
+      bzip2.dev
+      xz.dev
+      zlib.dev
+    ];
+    pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
-    jqr = [ pkgs.jq.lib ];
+    archive = [ pkgs.libarchive ];
+    gdalcubes = with pkgs; [
+      proj.dev
+      gdal
+      sqlite.dev
+      netcdf
+    ];
+    rsbml = [ pkgs.libsbml ];
+    SuperGauss = [
+      pkgs.pkg-config
+      pkgs.fftw.dev
+    ];
+    ravetools = with pkgs; [
+      pkg-config
+      fftw.dev
+    ];
+    specklestar = [ pkgs.fftw.dev ];
+    cartogramR = with pkgs; [
+      fftw.dev
+      pkg-config
+    ];
+    GRAB = [ pkgs.zlib.dev ];
+    jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
-    lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
+    igraph = with pkgs; [
+      gmp
+      libxml2.dev
+      glpk
+    ];
+    interpolation = with pkgs; [
+      gmp
+      mpfr
+    ];
+    image_textlinedetector = with pkgs; [
+      pkg-config
+      opencv
+    ];
+    lwgeom = with pkgs; [
+      pkg-config
+      proj.dev
+      sqlite.dev
+    ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
     openssl = [ pkgs.pkg-config ];
+    otelsdk = with pkgs; [
+      protobuf
+      zlib.dev
+    ];
     pdftools = [ pkgs.pkg-config ];
-    sf = with pkgs; [ pkg-config sqlite.dev proj.dev ];
-    terra = with pkgs; [ pkg-config sqlite.dev proj.dev ];
+    qckitfastq = [ pkgs.zlib.dev ];
+    raer = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2.dev
+    ];
+    RQuantLib = with pkgs; [
+      quantlib.dev
+      boost.dev
+    ];
+    saeMSPE = [ pkgs.gsl.dev ];
+    sf = with pkgs; [
+      pkg-config
+      sqlite.dev
+      proj.dev
+    ];
+    terra = with pkgs; [
+      pkg-config
+      sqlite.dev
+      proj.dev
+    ];
     showtext = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
+    SynExtend = [ pkgs.zlib.dev ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
+    excursions = [ pkgs.gsl ];
+    OpenCL = with pkgs; [
+      opencl-clhpp
+      ocl-icd
+    ];
+    gpuMagic = [ pkgs.ocl-icd ];
     JMcmprsk = [ pkgs.gsl ];
+    KSgeneral = [ pkgs.fftw.dev ];
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
     AMOUNTAIN = [ pkgs.gsl ];
-    Rsymphony = with pkgs; [ pkg-config doxygen graphviz subversion ];
-    tcltk2 = with pkgs; [ tcl tk ];
-    tikzDevice = with pkgs; [ which texlive.combined.scheme-medium ];
+    Rsymphony = with pkgs; [
+      symphony
+      doxygen
+      graphviz
+      subversion
+      cgl
+      clp
+    ];
+    tcltk2 = with pkgs; [
+      tcl
+      tk
+    ];
+    rswipl = with pkgs; [
+      ncurses.dev
+      libxcrypt
+      zlib.dev
+    ];
+    GrafGen = [ pkgs.zlib ];
+    SLmetrics = [ pkgs.zlib.dev ];
+    tidypopgen = [ pkgs.zlib.dev ];
+    tikzDevice = with pkgs; [
+      which
+      texliveMedium
+    ];
     gridGraphics = [ pkgs.which ];
-    adimpro = with pkgs; [ which xorg.xdpyinfo ];
-    cluster = [ pkgs.libiconv ];
-    KernSmooth = [ pkgs.libiconv ];
-    nlme = [ pkgs.libiconv ];
-    Matrix = [ pkgs.libiconv ];
-    mgcv = [ pkgs.libiconv ];
-    minqa = [ pkgs.libiconv ];
-    igraph = [ pkgs.libiconv ];
-    ape = [ pkgs.libiconv ];
-    expm = [ pkgs.libiconv ];
-    mnormt = [ pkgs.libiconv ];
-    pan = [ pkgs.libiconv ];
-    phangorn = [ pkgs.libiconv ];
-    quadprog = [ pkgs.libiconv ];
-    randomForest = [ pkgs.libiconv ];
-    sundialr = [ pkgs.libiconv ];
-    ucminf = [ pkgs.libiconv ];
-    glmnet = [ pkgs.libiconv ];
-    mvtnorm = [ pkgs.libiconv ];
-    statmod = [ pkgs.libiconv ];
+    adimpro = with pkgs; [
+      which
+      xdpyinfo
+    ];
+    tfevents = [ pkgs.protobuf ];
     rsvg = [ pkgs.librsvg.dev ];
     ssh = with pkgs; [ libssh ];
-    s2 = [ pkgs.openssl.dev ];
-    ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
+    s2 = with pkgs; [
+      abseil-cpp
+      openssl.dev
+    ];
+    ArrayExpressHTS = with pkgs; [
+      zlib.dev
+      curl.dev
+      which
+    ];
     bbl = with pkgs; [ gsl ];
+    diffHic = with pkgs; [
+      xz.dev
+      bzip2.dev
+    ];
     writexl = with pkgs; [ zlib.dev ];
-    qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
+    xslt =
+      with pkgs;
+      [
+        libxslt
+        libxml2
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ xz ];
+    qpdf = with pkgs; [
+      libjpeg.dev
+      zlib.dev
+    ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
     arrangements = with pkgs; [ gmp.dev ];
+    gfilogisreg = [ pkgs.gmp.dev ];
     spp = with pkgs; [ zlib.dev ];
+    bamsignals = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2
+    ];
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
-    csaw = with pkgs; [ zlib.dev curl ];
+    csaw = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2.dev
+      curl
+    ];
     DirichletMultinomial = with pkgs; [ gsl ];
     DiffBind = with pkgs; [ zlib.dev ];
     CNEr = with pkgs; [ zlib ];
-    GMMAT = with pkgs; [ zlib.dev bzip2.dev ];
+    GMMAT = with pkgs; [
+      zlib.dev
+      bzip2.dev
+    ];
+    rmumps = with pkgs; [ zlib.dev ];
     HiCDCPlus = [ pkgs.zlib.dev ];
     PopGenome = [ pkgs.zlib.dev ];
-    QuasR = [ pkgs.zlib.dev ];
+    QuasR = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2.dev
+    ];
+    Rarr = [ pkgs.zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
+    Rfastp = with pkgs; [
+      xz.dev
+      bzip2.dev
+      zlib.dev
+    ];
+    maftools = with pkgs; [
+      zlib.dev
+      bzip2
+      xz.dev
+    ];
     Rmmquant = [ pkgs.zlib.dev ];
-    SICtools = with pkgs; [ zlib.dev ncurses.dev ];
+    SICtools = with pkgs; [
+      zlib.dev
+      ncurses.dev
+    ];
     Signac = [ pkgs.zlib.dev ];
-    TransView = [ pkgs.zlib.dev ];
+    TransView = with pkgs; [
+      xz.dev
+      bzip2.dev
+      zlib.dev
+    ];
     bigsnpr = [ pkgs.zlib.dev ];
+    zlib = [ pkgs.zlib.dev ];
     divest = [ pkgs.zlib.dev ];
     hipread = [ pkgs.zlib.dev ];
-    jackalope = with pkgs; [ zlib.dev xz.dev ];
+    jack = with pkgs; [
+      gmp.dev
+      mpfr.dev
+    ];
+    jackalope = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2.dev
+    ];
     largeList = [ pkgs.zlib.dev ];
     mappoly = [ pkgs.zlib.dev ];
+    VariantAnnotation = with pkgs; [
+      zlib.dev
+      curl.dev
+      bzip2.dev
+      xz.dev
+    ];
     matchingMarkets = [ pkgs.zlib.dev ];
-    methylKit = [ pkgs.zlib.dev ];
+    methylKit = with pkgs; [
+      zlib.dev
+      bzip2.dev
+      xz.dev
+    ];
     ndjson = [ pkgs.zlib.dev ];
-    podkat = [ pkgs.zlib.dev ];
+    podkat = with pkgs; [
+      zlib.dev
+      xz.dev
+      bzip2.dev
+    ];
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
-    rhdf5filters = [ pkgs.zlib.dev ];
+    rhdf5filters = with pkgs; [
+      zlib.dev
+      bzip2.dev
+    ];
+    symengine = with pkgs; [
+      mpfr
+      symengine
+      flint
+    ];
     rtk = [ pkgs.zlib.dev ];
-    scPipe = [ pkgs.zlib.dev ];
+    scPipe = with pkgs; [
+      bzip2.dev
+      xz.dev
+      zlib.dev
+    ];
     seqTools = [ pkgs.zlib.dev ];
-    seqbias = [ pkgs.zlib.dev ];
+    seqbias = with pkgs; [
+      zlib.dev
+      bzip2.dev
+      xz.dev
+    ];
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
-    rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
+    RoBSA = [ pkgs.jags ];
+    pexm = [ pkgs.jags ];
+    rGEDI = with pkgs; [
+      libgeotiff.dev
+      libaec
+      zlib.dev
+      hdf5.dev
+    ];
     rawrr = [ pkgs.mono ];
     HDF5Array = [ pkgs.zlib.dev ];
-    FLAMES = [ pkgs.zlib.dev ];
+    FLAMES = with pkgs; [
+      zlib.dev
+      bzip2.dev
+      xz.dev
+    ];
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
     rtmpt = [ pkgs.gsl ];
-    rmarkdown = [ pkgs.pandoc ];
     mixcat = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     landsepi = [ pkgs.gsl ];
@@ -634,256 +1520,269 @@ let
     crandep = [ pkgs.gsl ];
     catSurv = [ pkgs.gsl ];
     ccfindR = [ pkgs.gsl ];
+    RcppPlanc = with pkgs; [
+      hwloc
+      hdf5.dev
+    ];
+    screenCounter = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
     RKHSMetaMod = [ pkgs.gsl ];
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
-    multibridge = [ pkgs.mpfr.dev ];
-    RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    multibridge = with pkgs; [
+      pkg-config
+      mpfr.dev
+    ];
+    RcppCWB = with pkgs; [
+      pcre.dev
+      glib.dev
+    ];
+    redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
+    markets = [ pkgs.gsl ];
+    rlas = [ pkgs.boost ];
+    bgx = [ pkgs.boost ];
     PoissonBinomial = [ pkgs.fftw.dev ];
+    poisbinom = [ pkgs.fftw.dev ];
+    PoissonMultinomial = [ pkgs.fftw.dev ];
+    psbcGroup = [ pkgs.gsl.dev ];
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
+    MethScope = with pkgs; [
+      ncurses
+      zlib.dev
+    ];
+    RITCH = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.mecab ];
     PING = [ pkgs.gsl ];
+    Rwbo = [ pkgs.zlib.dev ];
+    PROJ = [ pkgs.proj.dev ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
+    BigDataStatMeth = [ pkgs.zlib ];
+    spaMM = [ pkgs.gsl ];
+    shrinkTVP = [ pkgs.gsl ];
+    sbrl = with pkgs; [
+      gsl
+      gmp.dev
+    ];
+    surveyvoi = with pkgs; [
+      gmp.dev
+      mpfr.dev
+    ];
+    unigd =
+      with pkgs;
+      [
+        cairo.dev
+        libpng.dev
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        expat
+        libxdmcp
+      ];
+    XYomics = [ pkgs.boost ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
-    textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
+    textshaping = with pkgs; [
+      harfbuzz.dev
+      freetype.dev
+      fribidi
+      libpng
+    ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
-    ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
+    ijtiff = with pkgs; [
+      libtiff
+      libjpeg
+      zlib
+    ];
+    ragg =
+      with pkgs;
+      [
+        freetype.dev
+        libpng.dev
+        libtiff.dev
+        zlib.dev
+        libjpeg.dev
+        bzip2.dev
+        libwebp
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
+    spFW = [ pkgs.fftw.dev ];
+    qspray = with pkgs; [
+      gmp.dev
+      mpfr.dev
+    ];
+    ratioOfQsprays = with pkgs; [
+      gmp.dev
+      mpfr.dev
+    ];
+    symbolicQspray = with pkgs; [
+      gmp.dev
+      mpfr.dev
+    ];
+    sphereTessellation = with pkgs; [
+      gmp.dev
+      mpfr.dev
+    ];
+    vapour = with pkgs; [
+      proj.dev
+      gdal
+    ];
+    MedianaDesigner = [ pkgs.zlib.dev ];
+    ChemmineOB = with pkgs; [
+      eigen
+      openbabel
+      zlib.dev
+    ];
+    DGP4LCF = [
+      pkgs.lapack
+      pkgs.blas
+    ];
   };
 
   packagesRequiringX = [
-    "accrual"
-    "ade4TkGUI"
-    "analogue"
     "analogueExtra"
     "AnalyzeFMRI"
     "AnnotLists"
-    "AnthropMMD"
-    "aplpack"
     "asbio"
-    "BAT"
     "BCA"
-    "betapart"
-    "BiodiversityR"
-    "bio_infer"
-    "bipartite"
     "biplotbootGUI"
-    "blender"
     "cairoDevice"
-    "canceR"
-    "CCTpack"
     "cncaGUI"
-    "cocorresp"
     "CommunityCorrelogram"
-    "confidence"
-    "constrainedKriging"
-    "ConvergenceConcepts"
-    "cpa"
-    "DALY"
     "dave"
-    "Deducer"
     "DeducerPlugInExample"
     "DeducerPlugInScaling"
     "DeducerSpatial"
     "DeducerSurvival"
     "DeducerText"
     "Demerelate"
-    "detrendeR"
+    "diveR"
     "dpa"
     "dynamicGraph"
-    "dynBiplotGUI"
     "EasyqpcR"
-    "EcoVirtual"
     "exactLoglinTest"
-    "fat2Lpoly"
-    "fbati"
-    "FD"
-    "feature"
-    "FeedbackTS"
-    "FFD"
-    "fgui"
     "fisheyeR"
     "forams"
     "forensim"
-    "FreeSortR"
-    "fscaret"
-    "gcmr"
-    "geomorph"
-    "geoR"
-    "georob"
     "GGEBiplotGUI"
-    "gnm"
-    "GrapheR"
-    "GroupSeq"
     "gsubfn"
-    "GUniFrac"
     "gWidgets2RGtk2"
     "gWidgets2tcltk"
-    "HH"
     "HiveR"
     "ic50"
+    "iClick"
     "iDynoR"
-    "in2extRemes"
     "iplots"
-    "isopam"
-    "IsotopeR"
-    "JGR"
-    "KappaGUI"
     "likeLTD"
-    "logmult"
     "loon"
-    "LS2Wstat"
-    "MareyMap"
-    "memgene"
-    "metacom"
+    "loon_ggplot"
+    "loon_shiny"
+    "loon_tourr"
     "Meth27QC"
-    "migui"
-    "miniGUI"
     "mixsep"
-    "MplusAutomation"
-    "mpmcorrelogram"
-    "mritc"
-    "multgee"
     "multibiplotGUI"
     "OligoSpecificitySystem"
-    "onemap"
-    "OpenRepGrid"
+    "optbdmaeAT"
+    "optrcdmaeAT"
     "paleoMAS"
-    "pbatR"
-    "PBSadmb"
-    "PBSmodelling"
-    "PCPS"
-    "pez"
-    "phylotools"
-    "picante"
-    "plotSEMM"
-    "plsRbeta"
-    "plsRglm"
-    "PopGenReport"
-    "poppr"
-    "powerpkg"
-    "PredictABEL"
-    "prefmod"
-    "PrevMap"
-    "r4ss"
     "RandomFields"
-    "rareNMtests"
-    "rAverage"
+    "rfviz"
     "RclusTool"
-    "Rcmdr"
     "RcmdrPlugin_coin"
-    "RcmdrPlugin_depthTools"
-    "RcmdrPlugin_DoE"
-    "RcmdrPlugin_EACSPIR"
-    "RcmdrPlugin_EBM"
-    "RcmdrPlugin_EcoVirtual"
-    "RcmdrPlugin_EZR"
-    "RcmdrPlugin_FactoMineR"
     "RcmdrPlugin_FuzzyClust"
-    "RcmdrPlugin_HH"
     "RcmdrPlugin_IPSUR"
-    "RcmdrPlugin_KMggplot2"
     "RcmdrPlugin_lfstat"
-    "RcmdrPlugin_MA"
-    "RcmdrPlugin_MPAStats"
-    "RcmdrPlugin_orloca"
     "RcmdrPlugin_PcaRobust"
     "RcmdrPlugin_plotByGroup"
     "RcmdrPlugin_pointG"
-    "RcmdrPlugin_ROC"
     "RcmdrPlugin_sampling"
     "RcmdrPlugin_SCDA"
     "RcmdrPlugin_SLC"
-    "RcmdrPlugin_sos"
     "RcmdrPlugin_steepness"
-    "RcmdrPlugin_survival"
-    "RcmdrPlugin_TeachingDemos"
-    "RcmdrPlugin_temis"
-    "RcmdrPlugin_UCA"
-    "recluster"
-    "relimp"
-    "RHRV"
     "rich"
-    "RNCEP"
-    "RSDA"
     "RSurvey"
     "simba"
-    "Simile"
     "SimpleTable"
     "SOLOMON"
-    "soundecology"
-    "spatsurv"
-    "sqldf"
-    "SSDforR"
-    "statcheck"
-    "StatDA"
-    "STEPCAM"
-    "stosim"
+    "soptdmaeA"
     "strvalidator"
     "stylo"
-    "svDialogstcltk"
-    "svIDE"
-    "svSocket"
-    "svWidgets"
-    "SYNCSA"
     "SyNet"
-    "tcltk2"
-    "TestScorer"
-    "TIMP"
-    "tkrplot"
-    "tmap"
-    "tspmeta"
+    "switchboard"
+    "tkImgR"
     "TTAinterfaceTrendAnalysis"
     "twiddler"
     "uHMM"
-    "vcdExtra"
     "VecStatGraphs3D"
-    "vegan"
-    "vegan3d"
-    "vegclust"
-    "x12GUI"
   ];
 
   packagesRequiringHome = [
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
+    "avotrex"
+    "beer"
+    "ceramic"
+    "connections"
+    "covidmx"
+    "ggiraph"
     "csodata"
     "DiceView"
+    "facmodTS"
+    "fwtraits"
+    "gasanalyzer"
+    "margaret"
     "MSnID"
     "OmnipathR"
+    "orthGS"
+    "pannotator"
     "precommit"
+    "protGear"
+    "PCRA"
     "PSCBS"
+    "iemisc"
+    "ready4"
+    "red"
     "repmis"
     "R_cache"
     "R_filesets"
     "RKorAPClient"
     "R_rsp"
+    "salso"
     "scholar"
+    "SpatialDecon"
     "stepR"
     "styler"
+    "tabs"
+    "teal_code"
     "TreeTools"
+    "TreeSearch"
+    "PKbioanalysis"
     "ACNE"
     "APAlyzer"
+    "BAT"
     "EstMix"
+    "Patterns"
     "PECA"
     "Quartet"
     "ShinyQuickStarter"
     "TIN"
+    "cfdnakit"
+    "CaDrA"
+    "GNOSIS"
     "TotalCopheneticIndex"
     "TreeDist"
     "biocthis"
     "calmate"
     "fgga"
     "fulltext"
+    "dataverse"
     "immuneSIM"
     "mastif"
+    "rdss"
     "shinymeta"
     "shinyobjects"
     "wppi"
@@ -894,12 +1793,22 @@ let
     "fixest"
     "paxtoolsr"
     "systemPipeShiny"
+    "matlab2r"
+    "GNOSIS"
   ];
 
   packagesToSkipCheck = [
-    "Rmpi"     # tries to run MPI processes
-    "pbdMPI"   # tries to run MPI processes
+    "MsDataHub" # tries to connect to ExperimentHub
+    "Rmpi" # tries to run MPI processes
+    "ReactomeContentService4R" # tries to connect to Reactome
+    "PhIPData" # tries to download something from a DB
+    "pbdMPI" # tries to run MPI processes
+    "CTdata" # tries to connect to ExperimentHub
+    "rfaRm" # tries to connect to Ebi
     "data_table" # fails to rename shared library before check
+    "coMethDMR" # tries to connect to ExperimentHub
+    "multiMiR" # tries to connect to DB
+    "snapcount" # tries to connect to snaptron.cs.jhu.edu
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
@@ -910,17 +1819,19 @@ let
     "HierO"
     "HIBAG"
     "HiveR"
+    "minired" # deprecated on CRAN
 
     # Impure network access during build
+    "BulkSignalR"
     "waddR"
     "tiledb"
-    "x13binary"
     "switchr"
 
     # ExperimentHub dependents, require net access during build
     "DuoClustering2018"
     "FieldEffectCrc"
     "GenomicDistributionsData"
+    "hpar"
     "HDCytoData"
     "HMP16SData"
     "PANTHER_db"
@@ -931,6 +1842,7 @@ let
     "benchmarkfdrData2019"
     "bodymapRat"
     "clustifyrdatahub"
+    "CTexploreR"
     "depmap"
     "emtdata"
     "metaboliteIDmapping"
@@ -938,15 +1850,48 @@ let
     "muscData"
     "org_Mxanthus_db"
     "scpdata"
+    "signatureSearch"
     "nullrangesData"
   ];
 
   otherOverrides = old: new: {
-    gifski = old.gifski.overrideDerivation (attrs: {
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+    ACME = old.ACME.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # Avoid incompatible pointer type error
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-incompatible-pointer-types";
+      };
+    });
+
+    vegan3d = old.vegan3d.overrideAttrs (attrs: {
+      RGL_USE_NULL = "true";
+    });
+
+    # it can happen that the major version of arrow-cpp is ahead of the
+    # rPackages.arrow that would be built from CRAN sources; therefore, to avoid
+    # build failures and manual updates of the hash, we use the R source at
+    # the GitHub release state of libarrow (arrow-cpp) in Nixpkgs. This may
+    # not exactly represent the CRAN sources, but because patching of the
+    # CRAN R package is mostly done to meet special CRAN build requirements,
+    # this is a straightforward approach. Example where patching was necessary
+    # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
+    #   https://github.com/apache/arrow/issues/39698 )
+    arrow = old.arrow.overrideAttrs (attrs: {
+      src = pkgs.arrow-cpp.src;
+      name = "r-arrow-${pkgs.arrow-cpp.version}";
+      prePatch = "cd r";
+      postPatch = ''
+        patchShebangs configure
+      '';
+      buildInputs = attrs.buildInputs ++ [
+        pkgs.arrow-cpp
+      ];
+    });
+
+    gifski = old.gifski.overrideAttrs (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-vBrTQ+5JZA8554Aasbqw7mbaOfJNQjrOpG00IXAcamI=";
+        hash = "sha256-yz6M3qDQPfT0HJHyK2wgzgl5sBh7EmdJ5zW8SJkk+wY=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -958,122 +1903,629 @@ let
       ];
     });
 
-    stringi = old.stringi.overrideDerivation (attrs: {
-      postInstall = let
-        icuName = "icudt52l";
-        icuSrc = pkgs.fetchzip {
-          url = "http://static.rexamine.com/packages/${icuName}.zip";
-          sha256 = "0hvazpizziq5ibc9017i1bb45yryfl26wzfsv05vk9mc1575r6xj";
-          stripRoot = false;
-        };
-        in ''
-          ${attrs.postInstall or ""}
-          cp ${icuSrc}/${icuName}.dat $out/library/stringi/libs
-        '';
+    gmapR = old.gmapR.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # Avoid incompatible pointer type error
+        NIX_CFLAGS_COMPILE =
+          attrs.env.NIX_CFLAGS_COMPILE
+          + " -Wno-implicit-function-declaration -Wno-incompatible-pointer-types";
+      };
     });
 
-    xml2 = old.xml2.overrideDerivation (attrs: {
+    rvisidata = old.rvisidata.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace R/main.r --replace-fail \
+          "system(\"vd" "system(\"${lib.getBin pkgs.visidata}/bin/vd"
+        substituteInPlace R/tmux.r --replace-fail \
+          "return(\"vd\")" "return(\"${lib.getBin pkgs.visidata}/bin/vd\")"
+      '';
+    });
+
+    timeless = old.timeless.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+        src = attrs.src;
+        sourceRoot = "timeless/src/rust";
+        hash = "sha256-5TV7iCzaaFwROfJNO6pvSUbJBzV+wZlU5+ZK4AMT6X0=";
+      };
+
+      cargoRoot = "src/rust";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
+      ];
+    });
+
+    trajeR = old.trajeR.overrideAttrs (attrs: {
+      patches = [ ./patches/trajeR.patch ];
+    });
+
+    arcpbf = old.arcpbf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    astgrepr = old.astgrepr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    cartogramR = old.cartogramR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    caugi = old.caugi.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    enderecobr = old.enderecobr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
+    h3o = old.h3o.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    ironseed = old.ironseed.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    roxigraph = old.roxigraph.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        LIBCLANG_PATH = "${lib.getLib pkgs.libclang}/lib";
+      };
+      postPatch = "patchShebangs configure";
+    });
+
+    rshift = old.rshift.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    tomledit = old.tomledit.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    ymd = old.ymd.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    yaml12 = old.yaml12.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
+    SynExtend = old.SynExtend.overrideAttrs (attrs: {
+      # build might fail due to race condition
+      enableParallelBuilding = false;
+    });
+
+    orbweaver = old.orbweaver.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
+    xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
-        '';
+      '';
     });
 
-    rzmq = old.rzmq.overrideDerivation (attrs: {
+    findpython = old.findpython.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/find_python_cmd.r" \
+          --replace-fail 'python_cmds[which(python_cmds != "")]' \
+          'python_cmds <- c(python_cmds, file.path("${lib.getBin pkgs.python3}", "bin", "python3"))
+           python_cmds[which(python_cmds != "")]'
+      '';
+    });
+
+    fcl = old.fcl.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    fio = old.fio.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    alcyon = old.alcyon.overrideAttrs (attrs: {
+      configureFlags = [
+        "--enable-force-openmp"
+      ];
+    });
+
+    awdb = old.awdb.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
+    });
+
+    ciflyr = old.ciflyr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    clarabel = old.clarabel.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
+    });
+
+    cn_farms = old.cn_farms.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/sparse_farms.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    datefixR = old.datefixR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    PICS = old.PICS.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/segment.c" \
+        --replace-fail "Calloc" "R_Calloc"
+      '';
+    });
+
+    gadjid = old.gadjid.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    genoCN = old.genoCN.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/xCNV.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    RBioFormats = old.RBioFormats.overrideAttrs (attrs: {
+      # 1. Never download the jar file
+      # 2. Use jar from pkgs.bftools instead
+      # 3. Break the build if versions don't match
+      propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ [ pkgs.bftools ];
+
+      postPatch = ''
+        substituteInPlace "R/zzz.R" \
+          --replace-fail '!file.exists(bf_jar)' 'FALSE' \
+          --replace-fail \
+          '.jpackage(pkg, lib.loc = lib, morePaths = c(jars, bf_jar))' \
+          '.jpackage(pkg, lib.loc = lib, morePaths = union(jars, "${lib.getBin pkgs.bftools}/share/java/bioformats_package.jar"))' \
+          --replace-fail 'bf_jar <-' 'stopifnot(bf_ver == "${pkgs.bftools.version}");bf_jar <-'
+      '';
+
+      # Ensure that bftools version matches that in the package DESCRIPTION
+      preInstall = ''
+        rbf_version="$(sed  -n 's/^BioFormats: //p' DESCRIPTION)"
+        bf_version="${pkgs.bftools.version}"
+        if [ "$rbf_version" != "$bf_version" ]; then
+           echo "BioFormats version mismatch detected!"
+           echo "RBioformats needs: $rbf_version"
+           echo "bftools provides: $bf_version"
+           exit 1
+        fi
+      '';
+    });
+
+    rbm25 = old.rbm25.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    socratadata = old.socratadata.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    SQLFormatteR = old.SQLFormatteR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    tok = old.tok.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    trigger = old.trigger.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
+        substituteInPlace "src/trigger.c" \
+        --replace-fail "Calloc" "R_Calloc" \
+        --replace-fail "Free" "R_Free"
+      '';
+    });
+
+    lwgeom = old.lwgeom.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    sf = old.sf.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    terra = old.terra.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    unsum = old.unsum.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    vapour = old.vapour.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    rzmq = old.rzmq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
 
-    clustermq = old.clustermq.overrideDerivation (attrs: {
+    nanoparquet = old.nanoparquet.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    nanonext = old.nanonext.overrideAttrs (attrs: {
+      NIX_LDFLAGS = "-lnng -lmbedtls -lmbedx509 -lmbedcrypto";
+    });
+
+    clustermq = old.clustermq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
 
-    Cairo = old.Cairo.overrideDerivation (attrs: {
+    Cairo = old.Cairo.overrideAttrs (attrs: {
       NIX_LDFLAGS = "-lfontconfig";
     });
 
-    curl = old.curl.overrideDerivation (attrs: {
+    curl = old.curl.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
 
-    RcppParallel = old.RcppParallel.overrideDerivation (attrs: {
+    Cyclops = old.Cyclops.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
 
-    RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
+    RcppParallel = old.RcppParallel.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    Colossus = old.Colossus.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    arcgisutils = old.arcgisutils.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    arcgisgeocode = old.arcgisgeocode.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    prqlr = old.prqlr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    pingr = old.pingr.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    heck = old.heck.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    surtvep = old.surtvep.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    rtiktoken = old.rtiktoken.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
+    waysign = old.waysign.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    purrr = old.purrr.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
 
-    data_table = old.data_table.overrideDerivation (attrs: {
-      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE + " -fopenmp";
+    tergo = old.tergo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
 
-    ModelMetrics = old.ModelMetrics.overrideDerivation (attrs: {
-      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
-        + lib.optionalString stdenv.isDarwin " -fopenmp";
+    luajr = old.luajr.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+      postPatch = "patchShebangs configure";
     });
 
-    rpf = old.rpf.overrideDerivation (attrs: {
+    otelsdk = old.otelsdk.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
 
-    rJava = old.rJava.overrideDerivation (attrs: {
-      preConfigure = ''
-        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
-        export JAVA_HOME=${pkgs.jdk}
+    RcppGetconf = old.RcppGetconf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    xactonomial = old.xactonomial.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
+      nativeBuildInputs = [
+        pkgs.cargo
+        pkgs.rustc
+      ]
+      ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
+    });
+
+    AneuFinder = old.AneuFinder.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace src/utility.cpp src/densities.cpp src/loghmm.cpp src/scalehmm.cpp \
+          --replace-fail "Calloc(" "R_Calloc(" \
+          --replace-fail "Free(" "R_Free("
       '';
     });
 
-    JavaGD = old.JavaGD.overrideDerivation (attrs: {
-      preConfigure = ''
-        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
-        export JAVA_HOME=${pkgs.jdk}
-      '';
+    b64 = old.b64.overrideAttrs (attrs: {
+      nativeBuildInputs =
+        with pkgs;
+        [
+          cargo
+          rustc
+        ]
+        ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
     });
 
-    jqr = old.jqr.overrideDerivation (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-        '';
+    ocf = old.ocf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
-    pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
-      postPatch = lib.optionalString stdenv.isDarwin ''
-        for file in R/*.{r,r.in}; do
-            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
+    data_table = old.data_table.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
+      };
+      patchPhase = "patchShebangs configure";
+    });
+
+    cisPath = old.cisPath.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    harbinger = old.harbinger.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        LC_ALL = "en_US.UTF-8";
+      };
+    });
+
+    HilbertVis = old.HilbertVis.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    HilbertVisGUI = old.HilbertVisGUI.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    libdeflate = old.libdeflate.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    MANOR = old.MANOR.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    rGADEM = old.rGADEM.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    rsgeo = old.rsgeo.overrideAttrs (attrs: {
+      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
+    });
+
+    instantiate = old.instantiate.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    exifr = old.exifr.overrideAttrs (attrs: {
+      postPatch = ''
+        for f in .onLoad .onAttach ; do
+          substituteInPlace R/load_hook.R \
+            --replace-fail \
+            "$f <- function(libname, pkgname) {" \
+            "$f <- function(libname, pkgname) {
+                 options(
+                     exifr.perlpath = \"${lib.getBin pkgs.perl}/bin/perl\",
+                     exifr.exiftoolcommand = \"${lib.getBin pkgs.exiftool}/bin/exiftool\"
+                 )"
         done
       '';
     });
 
-    s2 = old.s2.overrideDerivation (attrs: {
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+    NGCHM = old.NGCHM.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "inst/base.config/conf.d/01-server-protocol-scl.R" \
+          --replace-fail \
+          "/bin/hostname" "${lib.getBin pkgs.hostname}/bin/hostname"
+      '';
     });
 
-    Rmpi = old.Rmpi.overrideDerivation (attrs: {
+    metahdep = old.metahdep.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # Avoid incompatible pointer type error
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-int-conversion";
+      };
+    });
+
+    ModelMetrics = old.ModelMetrics.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE =
+          attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
+      };
+    });
+
+    rawrr = old.rawrr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/zzz.R" "R/dotNetAssembly.R" --replace-warn \
+          "Sys.which('mono')" "'${lib.getBin pkgs.mono}/bin/mono'"
+
+        substituteInPlace "R/dotNetAssembly.R" --replace-warn \
+          "Sys.which(\"xbuild\")" "\"${lib.getBin pkgs.mono}/bin/xbuild\""
+
+        substituteInPlace "R/dotNetAssembly.R" --replace-warn \
+          "cmd <- ifelse(Sys.which(\"msbuild\") != \"\", \"msbuild\", \"xbuild\")" \
+          "cmd <- \"${lib.getBin pkgs.mono}/bin/xbuild\""
+
+        substituteInPlace "R/rawrr.R" --replace-warn \
+          "Sys.which(\"mono\")" "\"${lib.getBin pkgs.mono}/bin/mono\""
+      '';
+    });
+
+    rpf = old.rpf.overrideAttrs (attrs: {
+      patchPhase = "patchShebangs configure";
+    });
+
+    rJava = old.rJava.overrideAttrs (attrs: {
+      preConfigure = ''
+        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
+        export JAVA_HOME=${pkgs.jdk}
+        substituteInPlace R/zzz.R.in \
+          --replace-fail ".onLoad <- function(libname, pkgname) {" \
+            ".onLoad <- function(libname, pkgname) {
+             Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
+      '';
+    });
+
+    JavaGD = old.JavaGD.overrideAttrs (attrs: {
+      preConfigure = ''
+        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
+        export JAVA_HOME=${pkgs.jdk}
+      '';
+    });
+
+    jqr = old.jqr.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    pathfindR = old.pathfindR.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/zzz.R" \
+          --replace-fail "    check_java_version()" "    Sys.setenv(JAVA_HOME = \"${lib.getBin pkgs.jre_minimal}\"); check_java_version()"
+        substituteInPlace "R/active_snw_search.R" \
+          --replace-fail "system(paste0(\"java" "system(paste0(\"${lib.getBin pkgs.jre_minimal}/bin/java"
+      '';
+    });
+
+    pbdZMQ = old.pbdZMQ.overrideAttrs (attrs: {
+      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        for file in R/*.{r,r.in}; do
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.cctools}/bin/\1"#g' $file
+        done
+      '';
+    });
+
+    quarto = old.quarto.overrideAttrs (attrs: {
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.quarto ];
+      postPatch = ''
+        substituteInPlace "R/quarto.R" \
+          --replace-fail "Sys.getenv(\"QUARTO_PATH\", unset = NA_character_)" "Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
+      '';
+    });
+
+    Rhisat2 = old.Rhisat2.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
+    });
+
+    s2 = old.s2.overrideAttrs (attrs: {
+      preConfigure = ''
+        substituteInPlace "configure" \
+          --replace-fail "absl_s2" "absl_flags absl_check"
+      '';
+    });
+
+    Rmpi = old.Rmpi.overrideAttrs (attrs: {
       configureFlags = [
         "--with-Rmpi-type=OPENMPI"
       ];
     });
 
-    Rmpfr = old.Rmpfr.overrideDerivation (attrs: {
+    Rmpfr = old.Rmpfr.overrideAttrs (attrs: {
       configureFlags = [
         "--with-mpfr-include=${pkgs.mpfr.dev}/include"
       ];
     });
 
-    RVowpalWabbit = old.RVowpalWabbit.overrideDerivation (attrs: {
+    covidsymptom = old.covidsymptom.overrideAttrs (attrs: {
+      preConfigure = "rm R/covidsymptomdata.R";
+    });
+
+    cubature = old.cubature.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
+    });
+
+    RVowpalWabbit = old.RVowpalWabbit.overrideAttrs (attrs: {
       configureFlags = [
-        "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.out}/lib"
+        "--with-boost=${pkgs.boost.dev}"
+        "--with-boost-libdir=${pkgs.boost.out}/lib"
       ];
     });
 
-    RAppArmor = old.RAppArmor.overrideDerivation (attrs: {
-      patches = [ ./patches/RAppArmor.patch ];
+    RAppArmor = old.RAppArmor.overrideAttrs (attrs: {
       LIBAPPARMOR_HOME = pkgs.libapparmor;
     });
 
-    RMySQL = old.RMySQL.overrideDerivation (attrs: {
+    # Append cargo path to path variable
+    # This will provide cargo in case it's not set by the user
+    rextendr = old.rextendr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace R/zzz.R --replace-fail \
+          ".onLoad <- function(...) {" \
+          '.onLoad <- function(...) {
+           Sys.setenv(PATH = paste0(Sys.getenv("PATH"), ":${lib.getBin pkgs.cargo}/bin"))'
+      '';
+    });
+
+    RMySQL = old.RMySQL.overrideAttrs (attrs: {
       MYSQL_DIR = "${pkgs.libmysqlclient}";
       PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
       NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
@@ -1082,24 +2534,28 @@ let
       '';
     });
 
-    devEMF = old.devEMF.overrideDerivation (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
+    devEMF = old.devEMF.overrideAttrs (attrs: {
+      NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
       NIX_LDFLAGS = "-lX11";
     });
 
-    slfm = old.slfm.overrideDerivation (attrs: {
+    hdf5r = old.hdf5r.overrideAttrs (attrs: {
+      buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
+    });
+
+    slfm = old.slfm.overrideAttrs (attrs: {
       PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
-    SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
+    SamplerCompare = old.SamplerCompare.overrideAttrs (attrs: {
       PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
-    spMC = old.spMC.overrideDerivation (attrs: {
-      patches = [ ./patches/spMC.patch ];
+    FLAMES = old.FLAMES.overrideAttrs (attrs: {
+      patches = [ ./patches/FLAMES.patch ];
     });
 
-    openssl = old.openssl.overrideDerivation (attrs: {
+    openssl = old.openssl.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
       '';
@@ -1107,223 +2563,627 @@ let
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
-    websocket = old.websocket.overrideDerivation (attrs: {
+    websocket = old.websocket.overrideAttrs (attrs: {
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
-    Rserve = old.Rserve.overrideDerivation (attrs: {
+    Rserve = old.Rserve.overrideAttrs (attrs: {
       patches = [ ./patches/Rserve.patch ];
       configureFlags = [
-        "--with-server" "--with-client"
+        "--with-server"
+        "--with-client"
       ];
     });
 
-    V8 = old.V8.overrideDerivation (attrs: {
+    universalmotif = old.universalmotif.overrideAttrs (attrs: {
+      patches = [ ./patches/universalmotif.patch ];
+    });
+
+    V8 = old.V8.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace configure \
-          --replace " -lv8_libplatform" ""
+          --replace-fail " -lv8_libplatform" ""
+        # Bypass the test checking if pointer compression is needed
+        substituteInPlace configure \
+          --replace-fail "./pctest1" "true"
       '';
 
       preConfigure = ''
-        export INCLUDE_DIR=${pkgs.v8}/include
-        export LIB_DIR=${pkgs.v8}/lib
+        # when unpinning the version, don't forget about the other usage earlier
+        export INCLUDE_DIR=${pkgs.nodejs-slim_22.libv8}/include
+        export LIB_DIR=${pkgs.nodejs-slim_22.libv8}/lib
         patchShebangs configure
       '';
 
-      R_MAKEVARS_SITE = lib.optionalString (pkgs.stdenv.system == "aarch64-linux")
-        (pkgs.writeText "Makevars" ''
+      R_MAKEVARS_SITE = lib.optionalString (pkgs.stdenv.system == "aarch64-linux") (
+        pkgs.writeText "Makevars" ''
           CXX14PICFLAGS = -fPIC
-        '');
+        ''
+      );
     });
 
-    acs = old.acs.overrideDerivation (attrs: {
+    acs = old.acs.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
-    gdtools = old.gdtools.overrideDerivation (attrs: {
+    gdtools = old.gdtools.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
       NIX_LDFLAGS = "-lfontconfig -lfreetype";
     });
 
-    magick = old.magick.overrideDerivation (attrs: {
+    magick = old.magick.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
-    });
-
-    libgeos = old.libgeos.overrideDerivation (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-        '';
-    });
-
-    protolite = old.protolite.overrideDerivation (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-        '';
-    });
-
-    rpanel = old.rpanel.overrideDerivation (attrs: {
-      preConfigure = ''
-        export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
       '';
-      TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
     });
 
-    RPostgres = old.RPostgres.overrideDerivation (attrs: {
-      preConfigure = ''
-        export INCLUDE_DIR=${pkgs.postgresql}/include
-        export LIB_DIR=${pkgs.postgresql.lib}/lib
-        patchShebangs configure
-        '';
-    });
-
-    OpenMx = old.OpenMx.overrideDerivation (attrs: {
+    libgeos = old.libgeos.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
-    odbc = old.odbc.overrideDerivation (attrs: {
+    protolite = old.protolite.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
-    x13binary = old.x13binary.overrideDerivation (attrs: {
+    rgoslin = old.rgoslin.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
+    });
+
+    rpanel = old.rpanel.overrideAttrs (attrs: {
+      preConfigure = ''
+        export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
+      '';
+      TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
+    });
+
+    networkscaleup = old.networkscaleup.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
+
+      # consumes a lot of resources in parallel
+      enableParallelBuilding = false;
+    });
+
+    OpenMx = old.OpenMx.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
-    geojsonio = old.geojsonio.overrideDerivation (attrs: {
+    odbc = old.odbc.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    x13binary = old.x13binary.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    FlexReg = old.FlexReg.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
+
+      # consumes a lot of resources in parallel
+      enableParallelBuilding = false;
+    });
+
+    geojsonio = old.geojsonio.overrideAttrs (attrs: {
       buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
-    rstan = old.rstan.overrideDerivation (attrs: {
-      NIX_CFLAGS_COMPILE = "${attrs.NIX_CFLAGS_COMPILE} -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
+    float = old.float.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
     });
 
-    mongolite = old.mongolite.overrideDerivation (attrs: {
+    redatamx = old.redatamx.overrideAttrs (attrs: {
+      preConfigure =
+        let
+          redatam-core = pkgs.fetchzip {
+            url = "https://redatam-core.s3.us-west-2.amazonaws.com/core-dev/linux/redatamx-core-linux-20241222.zip";
+            hash = "sha256-CagDpv7v5fj/NgaC5fmYc5UuKuBVlT3gauH2ItVnIIY=";
+          };
+        in
+        ''
+          mkdir -p ./inst/redengine/
+          cp ${redatam-core}/lib/libredengine-1.0.0-rc2.so ./inst/redengine/libredengine-1.0.0-rc2.so
+        '';
+    });
+
+    XLConnect =
+      let
+        poi-ooxml-full = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/poi/poi-ooxml-full/5.4.1/poi-ooxml-full-5.4.1.jar";
+          hash = "sha256-xRsFFlXVjXTV64nn03NscFLCV09Dx52wyKg60hb23Tc=";
+        };
+        poi-ooxml = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/poi/poi-ooxml/5.4.1/poi-ooxml-5.4.1.jar";
+          hash = "sha256-/SAMnm901wQWCpfp1SBBmV7YdDlFRTAAHt2SBojxn1M=";
+        };
+        poi = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/poi/poi/5.4.1/poi-5.4.1.jar";
+          hash = "sha256-2lq/QtpGBMWnvKOJVq9unW8ZbZttTLfqvuT0gLWA1QU=";
+        };
+        commons-compress = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.27.1/commons-compress-1.27.1.jar";
+          hash = "sha256-KT2A9UtTa3QJXc1+o88KKbv8NAJRkoEzJJX0Qg03DRY=";
+        };
+        commons-lang3 = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.16.0/commons-lang3-3.16.0.jar";
+          hash = "sha256-CHCd101gK3Bc5AF9JlRCEAVqS6WD1bIMCTc0Bv56APg=";
+        };
+        xmlbeans = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/5.3.0/xmlbeans-5.3.0.jar";
+          hash = "sha256-bMado7TTW4PF5HfNTauiBORBCYM+NK8rmoosh4gomRc=";
+        };
+        commons-collections4 = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.jar";
+          hash = "sha256-Hfi5QwtcjtFD14FeQD4z71NxskAKrb6b2giDdi4IRtE=";
+        };
+        commons-math3 = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar";
+          hash = "sha256-HlbXsFjSi2Wr0la4RY44hbZ0wdWI+kPNfRy7nH7yswg=";
+        };
+        log4j-api = fetchurl {
+          url = "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.24.3/log4j-api-2.24.3.jar";
+          hash = "sha256-W0oKDNDnUd7UMcFiRCvb3VMyjR+Lsrrl/Bu+7g9m2A8=";
+        };
+        commons-codec = fetchurl {
+          url = "https://repo1.maven.org/maven2/commons-codec/commons-codec/1.18.0/commons-codec-1.18.0.jar";
+          hash = "sha256-ugBfMEzvkqPe3iSjitWsm4r8zw2PdYOdbBM4Y0z39uQ=";
+        };
+        commons-io = fetchurl {
+          url = "https://repo1.maven.org/maven2/commons-io/commons-io/2.18.0/commons-io-2.18.0.jar";
+          hash = "sha256-88oPjWPEDiOlbVQQHGDV7e4Ta0LYS/uFvHljCTEJz4s=";
+        };
+        SparseBitSet = fetchurl {
+          url = "https://repo1.maven.org/maven2/com/zaxxer/SparseBitSet/1.3/SparseBitSet-1.3.jar";
+          hash = "sha256-92uFrbDAByGuJnt8/eTaf3HTEhzCFgyfwAwMifjFPIo=";
+        };
+      in
+      old.XLConnect.overrideAttrs (attrs: {
+        preConfigure = ''
+          cp ${poi-ooxml-full} inst/java/poi-ooxml-full-5.4.1.jar
+          cp ${poi-ooxml} inst/java/poi-ooxml-5.4.1.jar
+          cp ${poi} inst/java/poi-5.4.1.jar
+          cp ${commons-compress} inst/java/commons-compress-1.27.1.jar
+          cp ${commons-lang3} inst/java/commons-lang3-3.16.0.jar
+          cp ${xmlbeans} inst/java/xmlbeans-5.3.0.jar
+          cp ${commons-collections4} inst/java/commons-collections4-4.4.jar
+          cp ${commons-math3} inst/java/commons-math3-3.6.1.jar
+          cp ${log4j-api} inst/java/log4j-api-2.24.3.jar
+          cp ${commons-codec} inst/java/commons-codec-1.18.0.jar
+          cp ${commons-io} inst/java/commons-io-2.18.0.jar
+          cp ${SparseBitSet} inst/java/SparseBitSet-1.3.jar
+        '';
+
+        postPatch = ''
+          substituteInPlace R/onLoad.R \
+            --replace-fail 'system2("java",' 'system2("${lib.getExe pkgs.jre_headless}",'
+
+          # Misleading startup message, JARs are downloaded at build-time
+          substituteInPlace R/onAttach.R \
+            --replace-fail 'if(file.exists(file.path(libname, pkgname, ".fail"))){' 'if(FALSE){'
+        '';
+      });
+
+    immunotation =
+      let
+        MHC41alleleList = fetchurl {
+          url = "https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/allele.list";
+          hash = "sha256-CRZ+0uHzcq5zK5eONucAChXIXO8tnq5sSEAS80Z7jhg=";
+        };
+
+        MHCII40alleleList = fetchurl {
+          url = "https://services.healthtech.dtu.dk/services/NetMHCIIpan-4.0/alleles_name.list";
+          hash = "sha256-K4Ic2NUs3P4IkvOODwZ0c4Yh8caex5Ih0uO5jXRHp40=";
+        };
+
+        # List of valid countries, regions and ethnic groups
+        # The original page is changing a bit every day, but the relevant
+        # content does not. Use archive.org to get a stable snapshot.
+        # It can be updated from time to time, or when the package becomes
+        # deficient. This may be difficult to know.
+        # Update the snapshot date, and add id_ after it, as described here:
+        # https://web.archive.org/web/20130806040521/http://faq.web.archive.org/page-without-wayback-code/
+        validGeographics = fetchurl {
+          url = "https://web.archive.org/web/20240418194005id_/http://www.allelefrequencies.net/hla6006a.asp";
+          hash = "sha256-m7Wkmh/cPxeqn94LwoznIh+fcFXskmSGErUYj6kTqak=";
+        };
+      in
+      old.immunotation.overrideAttrs (attrs: {
+        patches = [ ./patches/immunotation.patch ];
+        postPatch = ''
+          substituteInPlace "R/external_resources_input.R" --replace-fail \
+            "nix-NetMHCpan-4.1-allele-list" ${MHC41alleleList}
+
+          substituteInPlace "R/external_resources_input.R" --replace-fail \
+            "nix-NETMHCIIpan-4.0-alleles-name-list" ${MHCII40alleleList}
+
+          substituteInPlace "R/AFND_interface.R" --replace-fail \
+            "nix-valid-geographics" ${validGeographics}
+        '';
+      });
+
+    nearfar =
+      let
+        angrist = fetchurl {
+          url = "https://raw.githubusercontent.com/joerigdon/nearfar/master/angrist.csv";
+          hash = "sha256-lb+HMHnRGonc26merFGB0B7Vk1Lk+sIJlay+JtQC8m4=";
+        };
+      in
+      old.nearfar.overrideAttrs (attrs: {
+        postPatch = ''
+          substituteInPlace "R/nearfar.R" --replace-fail \
+           'url("https://raw.githubusercontent.com/joerigdon/nearfar/master/angrist.csv")'  '"${angrist}"'
+        '';
+      });
+
+    BiocParallel = old.BiocParallel.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE =
+          attrs.env.NIX_CFLAGS_COMPILE
+          + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=missing-template-arg-list-after-template-kw";
+      };
+    });
+
+    rstan = old.rstan.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
+      };
+    });
+
+    mongolite = old.mongolite.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
 
-    ps = old.ps.overrideDerivation (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    rlang = old.rlang.overrideDerivation (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    systemfonts = old.systemfonts.overrideDerivation (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    littler = old.littler.overrideAttrs (attrs: with pkgs; {
-      buildInputs = [ pcre xz zlib bzip2 icu which ] ++ attrs.buildInputs;
-      postInstall = ''
-        install -d $out/bin $out/share/man/man1
-        ln -s ../library/littler/bin/r $out/bin/r
-        ln -s ../library/littler/bin/r $out/bin/lr
-        ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
-        # these won't run without special provisions, so better remove them
-        rm -r $out/library/littler/script-tests
+    ChemmineOB = old.ChemmineOB.overrideAttrs (attrs: {
+      # pkg-config knows openbabel-3 without the .0
+      # Eigen3 is also looked for in the wrong location
+      # pointer was changed in newer version of openbabel:
+      #   https://github.com/openbabel/openbabel/commit/305a6fd3183540e4a8ae1d79d10bf1860e6aa373
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail openbabel-3.0 openbabel-3
+        substituteInPlace src/Makevars.in \
+          --replace-fail "-I/usr/include/eigen3" "-I${pkgs.eigen}/include/eigen3"
+        substituteInPlace src/ChemmineOB.cpp \
+          --replace-fail "obsharedptr<" "std::shared_ptr<"
       '';
+
+      # copied from fastnlo-toolkit:
+      # None of our currently packaged versions of swig are C++17-friendly
+      # Use a workaround from https://github.com/swig/swig/issues/1538
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE =
+          (attrs.env.NIX_CFLAGS_COMPILE or "")
+          + lib.optionalString stdenv.hostPlatform.isDarwin " -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+      };
     });
 
-    lpsymphony = old.lpsymphony.overrideDerivation (attrs: {
+    ps = old.ps.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    rlang = old.rlang.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    systemfonts = old.systemfonts.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    littler = old.littler.overrideAttrs (
+      attrs: with pkgs; {
+        buildInputs = [
+          pcre
+          xz
+          zlib
+          bzip2
+          icu
+          which
+          zstd.dev
+        ]
+        ++ attrs.buildInputs;
+        postInstall = ''
+          install -d $out/bin $out/share/man/man1
+          ln -s ../library/littler/bin/r $out/bin/r
+          ln -s ../library/littler/bin/r $out/bin/lr
+          ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
+          # these won't run without special provisions, so better remove them
+          rm -r $out/library/littler/script-tests
+        '';
+      }
+    );
+
+    lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
       '';
     });
 
-    sodium = old.sodium.overrideDerivation (attrs: with pkgs; {
+    sodium = old.sodium.overrideAttrs (
+      attrs: with pkgs; {
+        preConfigure = ''
+          patchShebangs configure
+        '';
+        nativeBuildInputs = [ pkg-config ] ++ attrs.nativeBuildInputs;
+        buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
+      }
+    );
+
+    keyring = old.keyring.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
       '';
-      nativeBuildInputs = [ pkg-config ] ++ attrs.nativeBuildInputs;
-      buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
     });
 
-    keyring = old.keyring.overrideDerivation (attrs: {
+    Rhtslib = old.Rhtslib.overrideAttrs (attrs: {
       preConfigure = ''
-        patchShebangs configure
+        substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
     });
 
-    Rhtslib = old.Rhtslib.overrideDerivation (attrs: {
-      preConfigure = ''
-        substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
-      '';
-    });
-
-    h2o = old.h2o.overrideDerivation (attrs: {
+    h2o = old.h2o.overrideAttrs (attrs: {
       preConfigure = ''
         # prevent download of jar file during install and postpone to first use
         sed -i '/downloadJar()/d' R/zzz.R
 
         # during runtime the package directory is not writable as it's in the
         # nix store, so store the jar in the user's cache directory instead
-        substituteInPlace R/connection.R --replace \
+        substituteInPlace R/connection.R --replace-fail \
           'dest_file <- file.path(dest_folder, "h2o.jar")' \
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
       '';
     });
 
-    SICtools = old.SICtools.overrideDerivation (attrs: {
-      preConfigure = ''
-        substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
+    SICtools = old.SICtools.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace src/Makefile --replace-fail "-lcurses" "-lncurses"
+      '';
+      hardeningDisable = [ "format" ];
+    });
+
+    Rbwa = old.Rbwa.overrideAttrs (attrs: {
+      # Parallel build cleans up *.o before they can be packed in a library
+      postPatch = ''
+        substituteInPlace src/Makefile --replace-fail \
+          "all:\$(PROG) ../inst/bwa clean" \
+          "all:\$(PROG) ../inst/bwa" \
       '';
     });
 
-    arrow = old.arrow.overrideDerivation (attrs: {
+    ROracle = old.ROracle.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-oci-lib=${pkgs.oracle-instantclient.lib}/lib"
+        "--with-oci-inc=${pkgs.oracle-instantclient.dev}/include"
+      ];
+    });
+
+    SAIGEgds = old.SAIGEgds.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+      };
+    });
+
+    xslt = old.xslt.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+      };
+    });
+
+    sparklyr = old.sparklyr.overrideAttrs (attrs: {
+      # Pyspark's spark is full featured and better maintained than pkgs.spark
+      preConfigure = ''
+        if grep "onLoad" R/zzz.R; then
+          echo "onLoad is already present, patch needs to be updated!"
+          exit 1
+        fi
+
+        cat >> R/zzz.R <<EOF
+        .onLoad <- function(...) {
+          Sys.setenv("SPARK_HOME" = Sys.getenv("SPARK_HOME", unset = "${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark"))
+          Sys.setenv("JAVA_HOME" = Sys.getenv("JAVA_HOME", unset = "${pkgs.jdk}"))
+        }
+        EOF
+      '';
+    });
+
+    rrd = old.rrd.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
       '';
     });
 
-    proj4 = old.proj4.overrideDerivation (attrs: {
-      preConfigure = ''
-        substituteInPlace configure \
-          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
-      '';
-    });
+    ChIPXpress = old.ChIPXpress.override { hydraPlatforms = [ ]; };
 
-    rrd = old.rrd.overrideDerivation (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    ChIPXpress = old.ChIPXpress.override { hydraPlatforms = []; };
-
-    rgl = old.rgl.overrideDerivation (attrs: {
+    rgl = old.rgl.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
-    RandomFieldsUtils = old.RandomFieldsUtils.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
+    symengine = old.symengine.overrideAttrs (_: {
+      preConfigure = ''
+        rm configure
+        cat > src/Makevars << EOF
+        PKG_LIBS=-lsymengine
+        all: $(SHLIB)
+        EOF
+      '';
+    });
+
+    RandomFieldsUtils = old.RandomFieldsUtils.override {
+      platforms = lib.platforms.x86_64 ++ lib.platforms.x86;
+    };
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
-    geomorph = old.geomorph.overrideDerivation (attrs: {
+    RcppCGAL = old.RcppCGAL.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    httr2 = old.httr2.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    dbarts = old.dbarts.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
+
+    geomorph = old.geomorph.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
     });
 
-    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
-      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev ];
+    gpuMagic = old.gpuMagic.overrideAttrs (_: {
+      hardeningDisable = [ "format" ];
+    });
+
+    Rdisop = old.Rdisop.overrideAttrs (_: {
+      hardeningDisable = [ "format" ];
+    });
+
+    opencv =
+      let
+        opencvGtk = pkgs.opencv.override (old: {
+          enableGtk2 = true;
+        });
+      in
+      old.opencv.overrideAttrs (attrs: {
+        buildInputs = attrs.buildInputs ++ [ opencvGtk ];
+      });
+
+    Rhdf5lib =
+      let
+        hdf5 = pkgs.hdf5_1_10;
+      in
+      old.Rhdf5lib.overrideAttrs (attrs: {
+        propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+          hdf5.dev
+          pkgs.libaec
+        ];
+        patches = [ ./patches/Rhdf5lib.patch ];
+        passthru.hdf5 = hdf5;
+      });
+
+    rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
+      patches = [ ./patches/rhdf5filters.patch ];
+    });
+
+    rhdf5 = old.rhdf5.overrideAttrs (attrs: {
+      patches = [ ./patches/rhdf5.patch ];
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    });
+
+    rmarkdown = old.rmarkdown.overrideAttrs (_: {
+      preConfigure = ''
+        substituteInPlace R/pandoc.R \
+          --replace-fail '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
+      '';
+    });
+
+    webfakes = old.webfakes.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    redland = old.redland.overrideAttrs (_: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.redland}/include -I${pkgs.librdf_raptor2}/include/raptor2 -I${pkgs.librdf_rasqal}/include/rasqal";
+      PKGCONFIG_LIBS = "-L${pkgs.redland}/lib -L${pkgs.librdf_raptor2}/lib -L${pkgs.librdf_rasqal}/lib -lrdf -lraptor2 -lrasqal";
+    });
+
+    textshaping = old.textshaping.overrideAttrs (attrs: {
+      env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
+    });
+
+    httpuv = old.httpuv.overrideAttrs (_: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    oligo = old.oligo.overrideAttrs (_: {
+      hardeningDisable = [ "format" ];
+    });
+
+    tesseract = old.tesseract.overrideAttrs (_: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace-fail 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
+      '';
+    });
+
+    ijtiff = old.ijtiff.overrideAttrs (_: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    iscream = old.iscream.overrideAttrs (attrs: {
+      # https://huishenlab.github.io/iscream/articles/htslib.html
+      # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
+      propagatedBuildInputs =
+        builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
+        ++ [ pkgs.htslib ];
+    });
+
+    torch = old.torch.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    pak = old.pak.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        patchShebangs src/library/curl/configure
+        patchShebangs src/library/keyring/configure
+        patchShebangs src/library/pkgdepends/configure
+        patchShebangs src/library/ps/configure
+      '';
+    });
+
+    b32 = old.b32.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    BigDataStatMeth = old.BigDataStatMeth.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    bigPLSR = old.bigPLSR.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    RPesto = old.RPesto.overrideAttrs (_: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    pkgdepends = old.pkgdepends.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
     });
   };
 in
-  self
+self

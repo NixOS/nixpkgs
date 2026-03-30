@@ -1,0 +1,662 @@
+From 5ce3538352b162cfaacca4a7e3c5e04fabf1d169 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 08/18] =?UTF-8?q?Provide=20mach=20compatibility=20headers?=
+ =?UTF-8?q?=20based=20on=20LLVM=E2=80=99s=20headers?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ include/mach-o/fat.h                     |  16 ++
+ include/mach-o/loader.h                  | 224 +++++++++++++++++++++++
+ include/mach-o/nlist.h                   |  61 ++++++
+ include/mach/machine.h                   | 200 ++++++++++++++++++++
+ include/mach/vm_prot.h                   |  13 ++
+ src/abstraction/MachOFileAbstraction.hpp |  32 ++--
+ 6 files changed, 530 insertions(+), 16 deletions(-)
+ create mode 100644 include/mach-o/fat.h
+ create mode 100644 include/mach-o/loader.h
+ create mode 100644 include/mach-o/nlist.h
+ create mode 100644 include/mach/machine.h
+ create mode 100644 include/mach/vm_prot.h
+
+diff --git a/include/mach-o/fat.h b/include/mach-o/fat.h
+new file mode 100644
+index 0000000..82f5dc1
+--- /dev/null
++++ b/include/mach-o/fat.h
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: APSL-2.0
++
++// Derive `fat.h` from LLVM to avoid macro conflicts.
++
++#pragma once
++
++#include <llvm/BinaryFormat/MachO.h>
++
++using llvm::MachO::fat_arch;
++using llvm::MachO::fat_arch_64;
++using llvm::MachO::fat_header;
++
++using llvm::MachO::FAT_CIGAM;
++using llvm::MachO::FAT_CIGAM_64;
++using llvm::MachO::FAT_MAGIC;
++using llvm::MachO::FAT_MAGIC_64;
+diff --git a/include/mach-o/loader.h b/include/mach-o/loader.h
+new file mode 100644
+index 0000000..5306a20
+--- /dev/null
++++ b/include/mach-o/loader.h
+@@ -0,0 +1,224 @@
++// SPDX-License-Identifier: APSL-2.0
++
++// Derive `loader.h` from LLVM to avoid macro conflicts.
++
++#pragma once
++
++#include <mach/vm_prot.h>
++
++#include <llvm/BinaryFormat/MachO.h>
++
++using llvm::MachO::mach_header;
++using llvm::MachO::mach_header_64;
++
++using llvm::MachO::data_in_code_entry;
++
++using llvm::MachO::dylib_table_of_contents;
++
++using llvm::MachO::dylib_module;
++using llvm::MachO::dylib_module_64;
++
++using llvm::MachO::section;
++using llvm::MachO::section_64;
++
++using llvm::MachO::build_tool_version;
++using llvm::MachO::build_version_command;
++using llvm::MachO::dyld_info_command;
++using llvm::MachO::dylib;
++using llvm::MachO::dylib_command;
++using llvm::MachO::dylinker_command;
++using llvm::MachO::dysymtab_command;
++using llvm::MachO::encryption_info_command;
++using llvm::MachO::encryption_info_command_64;
++using llvm::MachO::entry_point_command;
++using llvm::MachO::linkedit_data_command;
++using llvm::MachO::linker_option_command;
++using llvm::MachO::load_command;
++using llvm::MachO::routines_command;
++using llvm::MachO::routines_command_64;
++using llvm::MachO::rpath_command;
++using llvm::MachO::segment_command;
++using llvm::MachO::segment_command_64;
++using llvm::MachO::source_version_command;
++using llvm::MachO::sub_client_command;
++using llvm::MachO::sub_framework_command;
++using llvm::MachO::sub_library_command;
++using llvm::MachO::sub_umbrella_command;
++using llvm::MachO::symtab_command;
++using llvm::MachO::thread_command;
++using llvm::MachO::twolevel_hints_command;
++using llvm::MachO::uuid_command;
++using llvm::MachO::version_min_command;
++
++using llvm::MachO::LC_BUILD_VERSION;
++using llvm::MachO::LC_CODE_SIGNATURE;
++using llvm::MachO::LC_DATA_IN_CODE;
++using llvm::MachO::LC_DYLD_ENVIRONMENT;
++using llvm::MachO::LC_DYLD_INFO;
++using llvm::MachO::LC_DYLD_INFO_ONLY;
++using llvm::MachO::LC_DYSYMTAB;
++using llvm::MachO::LC_ENCRYPTION_INFO;
++using llvm::MachO::LC_ENCRYPTION_INFO_64;
++using llvm::MachO::LC_FUNCTION_STARTS;
++using llvm::MachO::LC_ID_DYLIB;
++using llvm::MachO::LC_ID_DYLINKER;
++using llvm::MachO::LC_LINKER_OPTION;
++using llvm::MachO::LC_LOAD_DYLIB;
++using llvm::MachO::LC_LOAD_DYLINKER;
++using llvm::MachO::LC_LOAD_UPWARD_DYLIB;
++using llvm::MachO::LC_LOAD_WEAK_DYLIB;
++using llvm::MachO::LC_MAIN;
++using llvm::MachO::LC_REEXPORT_DYLIB;
++using llvm::MachO::LC_REQ_DYLD;
++using llvm::MachO::LC_ROUTINES;
++using llvm::MachO::LC_ROUTINES_64;
++using llvm::MachO::LC_RPATH;
++using llvm::MachO::LC_SEGMENT;
++using llvm::MachO::LC_SEGMENT_64;
++using llvm::MachO::LC_SEGMENT_SPLIT_INFO;
++using llvm::MachO::LC_SOURCE_VERSION;
++using llvm::MachO::LC_SUB_CLIENT;
++using llvm::MachO::LC_SUB_FRAMEWORK;
++using llvm::MachO::LC_SUB_LIBRARY;
++using llvm::MachO::LC_SUB_UMBRELLA;
++using llvm::MachO::LC_SYMTAB;
++using llvm::MachO::LC_UNIXTHREAD;
++using llvm::MachO::LC_UUID;
++using llvm::MachO::LC_VERSION_MIN_IPHONEOS;
++using llvm::MachO::LC_VERSION_MIN_MACOSX;
++using llvm::MachO::LC_VERSION_MIN_TVOS;
++using llvm::MachO::LC_VERSION_MIN_WATCHOS;
++using llvm::MachO::LC_DYLIB_CODE_SIGN_DRS;
++using llvm::MachO::LC_NOTE;
++using llvm::MachO::LC_LAZY_LOAD_DYLIB;
++using llvm::MachO::LC_PREBIND_CKSUM;
++using llvm::MachO::LC_TWOLEVEL_HINTS;
++
++using llvm::MachO::MH_ALLOW_STACK_EXECUTION;
++using llvm::MachO::MH_APP_EXTENSION_SAFE;
++using llvm::MachO::MH_BINDS_TO_WEAK;
++using llvm::MachO::MH_BUNDLE;
++using llvm::MachO::MH_CIGAM;
++using llvm::MachO::MH_CIGAM_64;
++using llvm::MachO::MH_DEAD_STRIPPABLE_DYLIB;
++using llvm::MachO::MH_DYLDLINK;
++using llvm::MachO::MH_DYLIB;
++using llvm::MachO::MH_DYLIB_STUB;
++using llvm::MachO::MH_DYLINKER;
++using llvm::MachO::MH_EXECUTE;
++using llvm::MachO::MH_LAZY_INIT;
++using llvm::MachO::MH_INCRLINK;
++using llvm::MachO::MH_HAS_TLV_DESCRIPTORS;
++using llvm::MachO::MH_KEXT_BUNDLE;
++using llvm::MachO::MH_MAGIC;
++using llvm::MachO::MH_MAGIC_64;
++using llvm::MachO::MH_NOUNDEFS;
++using llvm::MachO::MH_NO_HEAP_EXECUTION;
++using llvm::MachO::MH_NO_REEXPORTED_DYLIBS;
++using llvm::MachO::MH_OBJECT;
++using llvm::MachO::MH_PIE;
++using llvm::MachO::MH_PREBOUND;
++using llvm::MachO::MH_PRELOAD;
++using llvm::MachO::MH_SPLIT_SEGS;
++using llvm::MachO::MH_SUBSECTIONS_VIA_SYMBOLS;
++using llvm::MachO::MH_TWOLEVEL;
++using llvm::MachO::MH_WEAK_DEFINES;
++
++using llvm::MachO::BIND_IMMEDIATE_MASK;
++
++using llvm::MachO::BIND_OPCODE_ADD_ADDR_ULEB;
++using llvm::MachO::BIND_OPCODE_DONE;
++using llvm::MachO::BIND_OPCODE_DO_BIND;
++using llvm::MachO::BIND_OPCODE_DO_BIND_ADD_ADDR_IMM_SCALED;
++using llvm::MachO::BIND_OPCODE_DO_BIND_ADD_ADDR_ULEB;
++using llvm::MachO::BIND_OPCODE_DO_BIND_ULEB_TIMES_SKIPPING_ULEB;
++using llvm::MachO::BIND_OPCODE_SET_ADDEND_SLEB;
++using llvm::MachO::BIND_OPCODE_SET_DYLIB_ORDINAL_IMM;
++using llvm::MachO::BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB;
++using llvm::MachO::BIND_OPCODE_SET_DYLIB_SPECIAL_IMM;
++using llvm::MachO::BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB;
++using llvm::MachO::BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM;
++using llvm::MachO::BIND_OPCODE_SET_TYPE_IMM;
++using llvm::MachO::BIND_OPCODE_MASK;
++
++using llvm::MachO::BIND_SPECIAL_DYLIB_FLAT_LOOKUP;
++using llvm::MachO::BIND_SPECIAL_DYLIB_MAIN_EXECUTABLE;
++using llvm::MachO::BIND_SPECIAL_DYLIB_SELF;
++
++using llvm::MachO::BIND_SYMBOL_FLAGS_NON_WEAK_DEFINITION;
++using llvm::MachO::BIND_SYMBOL_FLAGS_WEAK_IMPORT;
++
++using llvm::MachO::BIND_TYPE_POINTER;
++using llvm::MachO::BIND_TYPE_TEXT_ABSOLUTE32;
++using llvm::MachO::BIND_TYPE_TEXT_PCREL32;
++
++using llvm::MachO::DICE_KIND_ABS_JUMP_TABLE32;
++using llvm::MachO::DICE_KIND_DATA;
++using llvm::MachO::DICE_KIND_JUMP_TABLE16;
++using llvm::MachO::DICE_KIND_JUMP_TABLE32;
++using llvm::MachO::DICE_KIND_JUMP_TABLE8;
++
++using llvm::MachO::EXPORT_SYMBOL_FLAGS_KIND_MASK;
++using llvm::MachO::EXPORT_SYMBOL_FLAGS_KIND_REGULAR;
++using llvm::MachO::EXPORT_SYMBOL_FLAGS_KIND_THREAD_LOCAL;
++using llvm::MachO::EXPORT_SYMBOL_FLAGS_REEXPORT;
++using llvm::MachO::EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER;
++using llvm::MachO::EXPORT_SYMBOL_FLAGS_WEAK_DEFINITION;
++
++using llvm::MachO::REBASE_IMMEDIATE_MASK;
++
++using llvm::MachO::REBASE_OPCODE_MASK;
++using llvm::MachO::REBASE_OPCODE_ADD_ADDR_IMM_SCALED;
++using llvm::MachO::REBASE_OPCODE_ADD_ADDR_ULEB;
++using llvm::MachO::REBASE_OPCODE_DONE;
++using llvm::MachO::REBASE_OPCODE_DO_REBASE_ADD_ADDR_ULEB;
++using llvm::MachO::REBASE_OPCODE_DO_REBASE_IMM_TIMES;
++using llvm::MachO::REBASE_OPCODE_DO_REBASE_ULEB_TIMES;
++using llvm::MachO::REBASE_OPCODE_DO_REBASE_ULEB_TIMES_SKIPPING_ULEB;
++using llvm::MachO::REBASE_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB;
++using llvm::MachO::REBASE_OPCODE_SET_TYPE_IMM;
++
++using llvm::MachO::REBASE_TYPE_POINTER;
++using llvm::MachO::REBASE_TYPE_TEXT_ABSOLUTE32;
++using llvm::MachO::REBASE_TYPE_TEXT_PCREL32;
++
++using llvm::MachO::S_4BYTE_LITERALS;
++using llvm::MachO::S_8BYTE_LITERALS;
++using llvm::MachO::S_16BYTE_LITERALS;
++using llvm::MachO::S_ATTR_DEBUG;
++using llvm::MachO::S_ATTR_EXT_RELOC;
++using llvm::MachO::S_ATTR_LIVE_SUPPORT;
++using llvm::MachO::S_ATTR_LOC_RELOC;
++using llvm::MachO::S_ATTR_LOC_RELOC;
++using llvm::MachO::S_ATTR_NO_DEAD_STRIP;
++using llvm::MachO::S_ATTR_PURE_INSTRUCTIONS;
++using llvm::MachO::S_ATTR_SELF_MODIFYING_CODE;
++using llvm::MachO::S_ATTR_SOME_INSTRUCTIONS;
++using llvm::MachO::S_COALESCED;
++using llvm::MachO::S_CSTRING_LITERALS;
++using llvm::MachO::S_DTRACE_DOF;
++using llvm::MachO::S_INTERPOSING;
++using llvm::MachO::S_LAZY_DYLIB_SYMBOL_POINTERS;
++using llvm::MachO::S_LAZY_SYMBOL_POINTERS;
++using llvm::MachO::S_LITERAL_POINTERS;
++using llvm::MachO::S_MOD_INIT_FUNC_POINTERS;
++using llvm::MachO::S_MOD_TERM_FUNC_POINTERS;
++using llvm::MachO::S_NON_LAZY_SYMBOL_POINTERS;
++using llvm::MachO::S_REGULAR;
++using llvm::MachO::S_SYMBOL_STUBS;
++using llvm::MachO::S_THREAD_LOCAL_INIT_FUNCTION_POINTERS;
++using llvm::MachO::S_THREAD_LOCAL_REGULAR;
++using llvm::MachO::S_THREAD_LOCAL_VARIABLES;
++using llvm::MachO::S_THREAD_LOCAL_VARIABLE_POINTERS;
++using llvm::MachO::S_THREAD_LOCAL_ZEROFILL;
++using llvm::MachO::S_ZEROFILL;
++
++using llvm::MachO::SG_NORELOC;
++
++using llvm::MachO::INDIRECT_SYMBOL_ABS;
++using llvm::MachO::INDIRECT_SYMBOL_LOCAL;
++using llvm::MachO::SECTION_TYPE;
++using llvm::MachO::TOOL_LD;
++
++template<typename T>
++inline constexpr int operator| (llvm::MachO::SectionType lhs, T rhs) { return (int) lhs | (int) rhs; }
+diff --git a/include/mach-o/nlist.h b/include/mach-o/nlist.h
+new file mode 100644
+index 0000000..3c319a4
+--- /dev/null
++++ b/include/mach-o/nlist.h
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: APSL-2.0
++
++// Derive `nlist.h` from LLVM to avoid macro conflicts.
++
++#pragma once
++
++#include <llvm/BinaryFormat/MachO.h>
++
++using llvm::MachO::nlist;
++using llvm::MachO::nlist_64;
++
++using llvm::MachO::N_ARM_THUMB_DEF;
++
++using llvm::MachO::N_ABS;
++using llvm::MachO::N_EXT;
++using llvm::MachO::N_INDR;
++using llvm::MachO::N_PBUD;
++using llvm::MachO::N_PEXT;
++using llvm::MachO::N_SECT;
++using llvm::MachO::N_STAB;
++using llvm::MachO::N_TYPE;
++using llvm::MachO::N_UNDF;
++
++using llvm::MachO::N_ALT_ENTRY;
++using llvm::MachO::N_NO_DEAD_STRIP;
++using llvm::MachO::N_SYMBOL_RESOLVER;
++using llvm::MachO::N_WEAK_DEF;
++using llvm::MachO::N_WEAK_REF;
++
++#define N_REF_TO_WEAK 0x80 // Not defined in LLVM headers
++
++using llvm::MachO::DYNAMIC_LOOKUP_ORDINAL;
++
++using llvm::MachO::EXECUTABLE_ORDINAL;
++
++using llvm::MachO::GET_COMM_ALIGN;
++using llvm::MachO::SET_COMM_ALIGN;
++
++using llvm::MachO::GET_LIBRARY_ORDINAL;
++using llvm::MachO::SET_LIBRARY_ORDINAL;
++
++using llvm::MachO::REFERENCE_FLAG_DEFINED;
++using llvm::MachO::REFERENCE_FLAG_PRIVATE_DEFINED;
++using llvm::MachO::REFERENCE_FLAG_PRIVATE_UNDEFINED_LAZY;
++using llvm::MachO::REFERENCE_FLAG_PRIVATE_UNDEFINED_NON_LAZY;
++using llvm::MachO::REFERENCE_FLAG_UNDEFINED_LAZY;
++using llvm::MachO::REFERENCE_FLAG_UNDEFINED_NON_LAZY;
++using llvm::MachO::REFERENCE_TYPE;
++
++using llvm::MachO::REFERENCED_DYNAMICALLY;
++
++using llvm::MachO::MAX_SECT;
++using llvm::MachO::NO_SECT;
++
++using llvm::MachO::SELF_LIBRARY_ORDINAL;
++
++template<typename T>
++inline constexpr int operator| (llvm::MachO::NListType lhs, T rhs) { return (int) lhs | (int) rhs; }
++
++template<typename T>
++inline constexpr int operator| (T lhs, llvm::MachO::NListType rhs) { return (int) lhs | (int) rhs; }
+diff --git a/include/mach/machine.h b/include/mach/machine.h
+new file mode 100644
+index 0000000..9162c1d
+--- /dev/null
++++ b/include/mach/machine.h
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: APSL-2.0
++
++// Derive `machine.h` from LLVM to avoid macro conflicts.
++
++#pragma once
++
++#include_next <mach/machine.h>
++
++#undef CPU_ARCH_MASK
++
++#undef CPU_ARCH_ABI64_32
++#undef CPU_ARCH_ABI64
++
++#undef CPU_TYPE_ANY
++
++#undef CPU_TYPE_ARM
++#undef CPU_TYPE_ARM64
++#undef CPU_TYPE_ARM64_32
++#undef CPU_TYPE_I386
++#undef CPU_TYPE_X86
++#undef CPU_TYPE_X86_64
++#undef CPU_TYPE_MC98000
++#undef CPU_TYPE_SPARC
++#undef CPU_TYPE_POWERPC
++#undef CPU_TYPE_POWERPC64
++
++#undef CPU_SUBTYPE_MASK
++
++#undef CPU_SUBTYPE_ARM64E
++#undef CPU_SUBTYPE_ARM64_32_V8
++#undef CPU_SUBTYPE_ARM64_ALL
++#undef CPU_SUBTYPE_ARM64_V8
++#undef CPU_SUBTYPE_ARM_ALL
++#undef CPU_SUBTYPE_ARM_XSCALE
++#undef CPU_SUBTYPE_ARM_V4T
++#undef CPU_SUBTYPE_ARM_V5TEJ
++#undef CPU_SUBTYPE_ARM_V6
++#undef CPU_SUBTYPE_ARM_V6M
++#undef CPU_SUBTYPE_ARM_V7
++#undef CPU_SUBTYPE_ARM_V7EM
++#undef CPU_SUBTYPE_ARM_V7F
++#undef CPU_SUBTYPE_ARM_V7K
++#undef CPU_SUBTYPE_ARM_V7M
++#undef CPU_SUBTYPE_ARM_V7S
++#undef CPU_SUBTYPE_ARM_V8
++
++#undef CPU_SUBTYPE_I386_ALL
++#undef CPU_SUBTYPE_386
++#undef CPU_SUBTYPE_486
++#undef CPU_SUBTYPE_486SX
++#undef CPU_SUBTYPE_586
++#undef CPU_SUBTYPE_PENT
++#undef CPU_SUBTYPE_PENTPRO
++#undef CPU_SUBTYPE_PENTII_M3
++#undef CPU_SUBTYPE_PENTII_M5
++#undef CPU_SUBTYPE_CELERON
++#undef CPU_SUBTYPE_CELERON_MOBILE
++#undef CPU_SUBTYPE_PENTIUM_3
++#undef CPU_SUBTYPE_PENTIUM_3_M
++#undef CPU_SUBTYPE_PENTIUM_3_XEON
++#undef CPU_SUBTYPE_PENTIUM_M
++#undef CPU_SUBTYPE_PENTIUM_4
++#undef CPU_SUBTYPE_PENTIUM_4_M
++#undef CPU_SUBTYPE_ITANIUM
++#undef CPU_SUBTYPE_ITANIUM_2
++#undef CPU_SUBTYPE_XEON
++#undef CPU_SUBTYPE_XEON_MP
++
++#undef CPU_SUBTYPE_X86_ALL
++#undef CPU_SUBTYPE_X86_ARCH1
++
++#undef CPU_SUBTYPE_X86_64_ALL
++#undef CPU_SUBTYPE_X86_64_H
++
++#undef CPU_SUBTYPE_INTEL
++#undef CPU_SUBTYPE_INTEL_FAMILY
++#undef CPU_SUBTYPE_INTEL_FAMILY_MAX
++#undef CPU_SUBTYPE_INTEL_MODEL
++#undef CPU_SUBTYPE_INTEL_MODEL_ALL
++
++#undef CPU_SUBTYPE_POWERPC_ALL
++#undef CPU_SUBTYPE_POWERPC_601
++#undef CPU_SUBTYPE_POWERPC_602
++#undef CPU_SUBTYPE_POWERPC_603
++#undef CPU_SUBTYPE_POWERPC_603e
++#undef CPU_SUBTYPE_POWERPC_603ev
++#undef CPU_SUBTYPE_POWERPC_604
++#undef CPU_SUBTYPE_POWERPC_604e
++#undef CPU_SUBTYPE_POWERPC_620
++#undef CPU_SUBTYPE_POWERPC_750
++#undef CPU_SUBTYPE_POWERPC_7400
++#undef CPU_SUBTYPE_POWERPC_7450
++#undef CPU_SUBTYPE_POWERPC_970
++
++#undef CPU_SUBTYPE_MC98601
++
++#undef CPU_SUBTYPE_SPARC_ALL
++
++#undef CPU_SUBTYPE_LIB64
++#undef CPU_SUBTYPE_MULTIPLE
++
++#include <llvm/BinaryFormat/MachO.h>
++
++using llvm::MachO::CPU_ARCH_MASK;
++
++using llvm::MachO::CPU_ARCH_ABI64_32;
++using llvm::MachO::CPU_ARCH_ABI64;
++
++using llvm::MachO::CPU_TYPE_ANY;
++
++using llvm::MachO::CPU_TYPE_ARM;
++using llvm::MachO::CPU_TYPE_ARM64;
++using llvm::MachO::CPU_TYPE_ARM64_32;
++using llvm::MachO::CPU_TYPE_I386;
++using llvm::MachO::CPU_TYPE_X86;
++using llvm::MachO::CPU_TYPE_X86_64;
++using llvm::MachO::CPU_TYPE_MC98000;
++using llvm::MachO::CPU_TYPE_SPARC;
++using llvm::MachO::CPU_TYPE_POWERPC;
++using llvm::MachO::CPU_TYPE_POWERPC64;
++
++using llvm::MachO::CPU_SUBTYPE_MASK;
++
++using llvm::MachO::CPU_SUBTYPE_ARM64E;
++using llvm::MachO::CPU_SUBTYPE_ARM64_32_V8;
++using llvm::MachO::CPU_SUBTYPE_ARM64_ALL;
++using llvm::MachO::CPU_SUBTYPE_ARM64_V8;
++using llvm::MachO::CPU_SUBTYPE_ARM_ALL;
++using llvm::MachO::CPU_SUBTYPE_ARM_XSCALE;
++using llvm::MachO::CPU_SUBTYPE_ARM_V4T;
++using llvm::MachO::CPU_SUBTYPE_ARM_V5TEJ;
++using llvm::MachO::CPU_SUBTYPE_ARM_V6;
++using llvm::MachO::CPU_SUBTYPE_ARM_V6M;
++using llvm::MachO::CPU_SUBTYPE_ARM_V7;
++using llvm::MachO::CPU_SUBTYPE_ARM_V7EM;
++using llvm::MachO::CPU_SUBTYPE_ARM_V7K;
++using llvm::MachO::CPU_SUBTYPE_ARM_V7M;
++using llvm::MachO::CPU_SUBTYPE_ARM_V7S;
++
++using llvm::MachO::CPU_SUBTYPE_I386_ALL;
++using llvm::MachO::CPU_SUBTYPE_386;
++using llvm::MachO::CPU_SUBTYPE_486;
++using llvm::MachO::CPU_SUBTYPE_486SX;
++using llvm::MachO::CPU_SUBTYPE_586;
++using llvm::MachO::CPU_SUBTYPE_PENT;
++using llvm::MachO::CPU_SUBTYPE_PENTPRO;
++using llvm::MachO::CPU_SUBTYPE_PENTII_M3;
++using llvm::MachO::CPU_SUBTYPE_PENTII_M5;
++using llvm::MachO::CPU_SUBTYPE_CELERON;
++using llvm::MachO::CPU_SUBTYPE_CELERON_MOBILE;
++using llvm::MachO::CPU_SUBTYPE_PENTIUM_3;
++using llvm::MachO::CPU_SUBTYPE_PENTIUM_3_M;
++using llvm::MachO::CPU_SUBTYPE_PENTIUM_3_XEON;
++using llvm::MachO::CPU_SUBTYPE_PENTIUM_M;
++using llvm::MachO::CPU_SUBTYPE_PENTIUM_4;
++using llvm::MachO::CPU_SUBTYPE_PENTIUM_4_M;
++using llvm::MachO::CPU_SUBTYPE_ITANIUM;
++using llvm::MachO::CPU_SUBTYPE_ITANIUM_2;
++using llvm::MachO::CPU_SUBTYPE_XEON;
++using llvm::MachO::CPU_SUBTYPE_XEON_MP;
++
++using llvm::MachO::CPU_SUBTYPE_X86_ALL;
++using llvm::MachO::CPU_SUBTYPE_X86_ARCH1;
++
++using llvm::MachO::CPU_SUBTYPE_X86_64_ALL;
++using llvm::MachO::CPU_SUBTYPE_X86_64_H;
++
++using llvm::MachO::CPU_SUBTYPE_INTEL;
++using llvm::MachO::CPU_SUBTYPE_INTEL_FAMILY;
++using llvm::MachO::CPU_SUBTYPE_INTEL_FAMILY_MAX;
++using llvm::MachO::CPU_SUBTYPE_INTEL_MODEL;
++using llvm::MachO::CPU_SUBTYPE_INTEL_MODEL_ALL;
++
++using llvm::MachO::CPU_SUBTYPE_POWERPC_ALL;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_601;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_602;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_603;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_603e;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_603ev;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_604;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_604e;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_620;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_750;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_7400;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_7450;
++using llvm::MachO::CPU_SUBTYPE_POWERPC_970;
++
++using llvm::MachO::CPU_SUBTYPE_MC98601;
++
++using llvm::MachO::CPU_SUBTYPE_SPARC_ALL;
++
++using llvm::MachO::CPU_SUBTYPE_LIB64;
++using llvm::MachO::CPU_SUBTYPE_MULTIPLE;
++
++// These definitions aren’t in the LLVM headers.
++#define CPU_TYPE_RISCV32 24
++
++#define CPU_SUBTYPE_ARM_V7F 10
++#define CPU_SUBTYPE_ARM_V8 CPU_SUBTYPE_ARM64_V8
++#define CPU_SUBTYPE_RISCV32_ALL 0
+diff --git a/include/mach/vm_prot.h b/include/mach/vm_prot.h
+new file mode 100644
+index 0000000..e524808
+--- /dev/null
++++ b/include/mach/vm_prot.h
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: APSL-2.0
++
++// Derive `vm_prot.h` from LLVM to avoid macro conflicts.
++
++#pragma once
++
++#include <llvm/BinaryFormat/MachO.h>
++
++using llvm::MachO::VM_PROT_EXECUTE;
++using llvm::MachO::VM_PROT_READ;
++using llvm::MachO::VM_PROT_WRITE;
++
++#include_next <mach/vm_prot.h>
+diff --git a/src/abstraction/MachOFileAbstraction.hpp b/src/abstraction/MachOFileAbstraction.hpp
+index 71e7765..e8d9b5c 100644
+--- a/src/abstraction/MachOFileAbstraction.hpp
++++ b/src/abstraction/MachOFileAbstraction.hpp
+@@ -847,8 +847,8 @@ public:
+ 	uint32_t		cmdsize() const								INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)					INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		name_offset() const							INLINE { return E::get32(fields.dylib.name.offset); }
+-	void			set_name_offset(uint32_t value)				INLINE { E::set32(fields.dylib.name.offset, value);  }
++	uint32_t		name_offset() const							INLINE { return E::get32(fields.dylib.name); }
++	void			set_name_offset(uint32_t value)				INLINE { E::set32(fields.dylib.name, value);  }
+ 	
+ 	uint32_t		timestamp() const							INLINE { return E::get32(fields.dylib.timestamp); }
+ 	void			set_timestamp(uint32_t value)				INLINE { E::set32(fields.dylib.timestamp, value); }
+@@ -880,8 +880,8 @@ public:
+ 	uint32_t		cmdsize() const						INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)			INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		name_offset() const					INLINE { return E::get32(fields.name.offset); }
+-	void			set_name_offset(uint32_t value)		INLINE { E::set32(fields.name.offset, value);  }
++	uint32_t		name_offset() const					INLINE { return E::get32(fields.name); }
++	void			set_name_offset(uint32_t value)		INLINE { E::set32(fields.name, value);  }
+ 	
+ 	const char*		name() const						INLINE { return (const char*)&fields + name_offset(); }
+ 	void			set_name_offset()					INLINE { set_name_offset(sizeof(fields)); }
+@@ -904,8 +904,8 @@ public:
+ 	uint32_t		cmdsize() const						INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)			INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		umbrella_offset() const				INLINE { return E::get32(fields.umbrella.offset); }
+-	void			set_umbrella_offset(uint32_t value)	INLINE { E::set32(fields.umbrella.offset, value);  }
++	uint32_t		umbrella_offset() const				INLINE { return E::get32(fields.umbrella); }
++	void			set_umbrella_offset(uint32_t value)	INLINE { E::set32(fields.umbrella, value);  }
+ 	
+ 	const char*		umbrella() const					INLINE { return (const char*)&fields + umbrella_offset(); }
+ 	void			set_umbrella_offset()				INLINE { set_umbrella_offset(sizeof(fields)); }
+@@ -928,8 +928,8 @@ public:
+ 	uint32_t		cmdsize() const						INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)			INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		client_offset() const				INLINE { return E::get32(fields.client.offset); }
+-	void			set_client_offset(uint32_t value)	INLINE { E::set32(fields.client.offset, value);  }
++	uint32_t		client_offset() const				INLINE { return E::get32(fields.client); }
++	void			set_client_offset(uint32_t value)	INLINE { E::set32(fields.client, value);  }
+ 	
+ 	const char*		client() const						INLINE { return (const char*)&fields + client_offset(); }
+ 	void			set_client_offset()					INLINE { set_client_offset(sizeof(fields)); }
+@@ -952,8 +952,8 @@ public:
+ 	uint32_t		cmdsize() const							INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)				INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		sub_umbrella_offset() const				INLINE { return E::get32(fields.sub_umbrella.offset); }
+-	void			set_sub_umbrella_offset(uint32_t value)	INLINE { E::set32(fields.sub_umbrella.offset, value);  }
++	uint32_t		sub_umbrella_offset() const				INLINE { return E::get32(fields.sub_umbrella); }
++	void			set_sub_umbrella_offset(uint32_t value)	INLINE { E::set32(fields.sub_umbrella, value);  }
+ 	
+ 	const char*		sub_umbrella() const					INLINE { return (const char*)&fields + sub_umbrella_offset(); }
+ 	void			set_sub_umbrella_offset()				INLINE { set_sub_umbrella_offset(sizeof(fields)); }
+@@ -976,8 +976,8 @@ public:
+ 	uint32_t		cmdsize() const							INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)				INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		sub_library_offset() const				INLINE { return E::get32(fields.sub_library.offset); }
+-	void			set_sub_library_offset(uint32_t value)	INLINE { E::set32(fields.sub_library.offset, value);  }
++	uint32_t		sub_library_offset() const				INLINE { return E::get32(fields.sub_library); }
++	void			set_sub_library_offset(uint32_t value)	INLINE { E::set32(fields.sub_library, value);  }
+ 	
+ 	const char*		sub_library() const						INLINE { return (const char*)&fields + sub_library_offset(); }
+ 	void			set_sub_library_offset()				INLINE { set_sub_library_offset(sizeof(fields)); }
+@@ -1355,8 +1355,8 @@ public:
+ 	uint32_t		cmdsize() const					INLINE { return E::get32(fields.cmdsize); }
+ 	void			set_cmdsize(uint32_t value)		INLINE { E::set32(fields.cmdsize, value); }
+ 
+-	uint32_t		path_offset() const				INLINE { return E::get32(fields.path.offset); }
+-	void			set_path_offset(uint32_t value)	INLINE { E::set32(fields.path.offset, value);  }
++	uint32_t		path_offset() const				INLINE { return E::get32(fields.path); }
++	void			set_path_offset(uint32_t value)	INLINE { E::set32(fields.path, value);  }
+ 	
+ 	const char*		path() const					INLINE { return (const char*)&fields + path_offset(); }
+ 	void			set_path_offset()				INLINE { set_path_offset(sizeof(fields)); }
+@@ -1381,8 +1381,8 @@ template <> struct macho_nlist_content<Pointer64<LittleEndian> > { struct nlist_
+ template <typename P>
+ class macho_nlist {
+ public:
+-	uint32_t		n_strx() const					INLINE { return E::get32(entry.fields.n_un.n_strx); }
+-	void			set_n_strx(uint32_t value)		INLINE { E::set32((uint32_t&)entry.fields.n_un.n_strx, value); }
++	uint32_t		n_strx() const					INLINE { return E::get32(entry.fields.n_strx); }
++	void			set_n_strx(uint32_t value)		INLINE { E::set32((uint32_t&)entry.fields.n_strx, value); }
+ 
+ 	uint8_t			n_type() const					INLINE { return entry.fields.n_type; }
+ 	void			set_n_type(uint8_t value)		INLINE { entry.fields.n_type = value; }
+-- 
+2.47.2
+

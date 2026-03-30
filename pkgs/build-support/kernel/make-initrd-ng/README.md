@@ -38,6 +38,9 @@ object is copied depends on its type.
    - If it is *also* an ELF file, then all of its direct shared
      library dependencies are also listed as objects to be copied.
 
+   - If an unwrapped file exists as `.[filename]-wrapped`, then it is
+     also listed as an object to be copied.
+
 2. A directory's direct children are listed as objects to be copied,
    and a directory at the same absolute path in the initrd is created.
 
@@ -71,7 +74,7 @@ initrd to a minimum.
   in less than a second, and the code is substantially easier to work
   with.
 
-- This will not require end users to install a rust toolchain to use
+- This will not require end users to install a Rust toolchain to use
   NixOS, as long as this tool is cached by Hydra. And if you're
   bootstrapping NixOS from source, rustc is already required anyway.
 

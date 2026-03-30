@@ -1,36 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-fsutil";
-  version = "0.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-2T2C2bIOAdxppZxqI+QGE2R/+46LoqB7eNdlt4sVAd8=";
+    repo = "python-fsutil";
+    tag = finalAttrs.version;
+    hash = "sha256-1XYyfBuaUED+xnVrILEtB+fUpc8sk4BDzGp8Hln/rlc=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ requests ];
 
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests require network access
@@ -38,14 +31,13 @@ buildPythonPackage rec {
     "test_read_file_from_url"
   ];
 
-  pythonImportsCheck = [
-    "fsutil"
-  ];
+  pythonImportsCheck = [ "fsutil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with file-system utilities";
     homepage = "https://github.com/fabiocaccamo/python-fsutil";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fabiocaccamo/python-fsutil/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

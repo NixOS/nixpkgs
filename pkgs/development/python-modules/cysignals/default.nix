@@ -1,27 +1,39 @@
-{ lib
-, autoreconfHook
-, fetchPypi
-, buildPythonPackage
-, cython
-, pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
-}:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython,
+  meson-python,
+  ninja,
 
-assert pariSupport -> pari != null;
+  # Reverse dependency
+  sage,
+}:
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.11.2";
+  version = "1.12.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5858b1760fbe21848121b826b2463a67ac5a45caf3d73105497a68618c5a6fa6";
+  src = fetchFromGitHub {
+    owner = "sagemath";
+    repo = "cysignals";
+    tag = version;
+    hash = "sha256-uZNKmnn1Jf1pERdG4bywpAUClKMw3og+7Q5B0yPlqEY=";
   };
+
+  build-system = [
+    cython
+    meson-python
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
+  enableParallelBuilding = true;
 
   # explicit check:
   # build/src/cysignals/implementation.c:27:2: error: #error "cysignals must be compiled without _FORTIFY_SOURCE"
-  hardeningDisable = [
-    "fortify"
-  ];
+  hardeningDisable = [ "fortify" ];
 
   # known failure: https://github.com/sagemath/cysignals/blob/582dbf6a7b0f9ade0abe7a7b8720b7fb32435c3c/testgdb.py#L5
   doCheck = false;
@@ -32,23 +44,15 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  propagatedBuildInputs = [
-    cython
-  ] ++ lib.optionals pariSupport [
-    # When cysignals is built with pari, including cysignals into the
-    # buildInputs of another python package will cause cython to link against
-    # pari.
-    pari
-  ];
+  passthru.tests = {
+    inherit sage;
+  };
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  enableParallelBuilding = true;
-
-  meta = with lib; {
+  meta = {
     description = "Interrupt and signal handling for Cython";
+    mainProgram = "cysignals-CSI";
     homepage = "https://github.com/sagemath/cysignals/";
-    maintainers = teams.sage.members;
-    license = licenses.lgpl3Plus;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.lgpl3Plus;
   };
 }

@@ -1,45 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbkdf2
-, pytestCheckHook
-, pythonOlder
-, substituteAll
-, wirelesstools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pbkdf2,
+  pytestCheckHook,
+  wirelesstools,
 }:
 
 buildPythonPackage rec {
   pname = "wifi";
   version = "0.3.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rockymeza";
-    repo = pname;
+    repo = "wifi";
     rev = "v${version}";
-    sha256 = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
+    hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };
-
-  disabled = pythonOlder "2.6";
 
   postPatch = ''
     substituteInPlace wifi/scan.py \
       --replace "/sbin/iwlist" "${wirelesstools}/bin/iwlist"
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    pbkdf2
-  ];
+  propagatedBuildInputs = [ pbkdf2 ];
 
   pythonImportsCheck = [ "wifi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a command line wrapper for iwlist and /etc/network/interfaces";
+    mainProgram = "wifi";
     homepage = "https://github.com/rockymeza/wifi";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.bsd2;
   };
 }

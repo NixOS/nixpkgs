@@ -1,43 +1,42 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, attrs
-, pluggy
-, six
-, allure-python-commons-test
-, setuptools-scm
-, python
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  attrs,
+  pluggy,
+  six,
+  allure-python-commons-test,
+  setuptools-scm,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "allure-python-commons";
-  version = "2.10.0";
-
-  disabled = pythonOlder "3.7";
+  version = "2.15.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1NMTRLDwA3pKEeFrkbKM8O6yP/oOUMJ/z8aqvnIhLTw=";
+    pname = "allure_python_commons";
+    inherit version;
+    hash = "sha256-tCqW1gdvsyPJ5DZF37hMBXT2utCg4AXZJWQBXNFy1WQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    attrs
+    pluggy
   ];
 
-  propagatedBuildInputs = [ attrs pluggy six allure-python-commons-test ];
+  pythonImportsCheck = [
+    "allure"
+    "allure_commons"
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m doctest ./src/utils.py
-    ${python.interpreter} -m doctest ./src/mapping.py
-  '';
-
-  pythonImportsCheck = [ "allure" "allure_commons" ];
-
-  meta = with lib; {
+  meta = {
     description = "Common engine for all modules. It is useful for make integration with your homemade frameworks";
     homepage = "https://github.com/allure-framework/allure-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ evanjs ];
   };
 }

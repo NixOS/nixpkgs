@@ -1,37 +1,51 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, unittestCheckHook
-, redis
+{
+  lib,
+  aioboto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  redis,
+  setuptools,
+  unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-core";
-  version = "5.0.0";
+  version = "5.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0B2u2xnrGc3iQ8B9iAQ3fcovQQCPqdFsn5evgdDwg5M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b/wOkOk6LB8uTDsXJrNQ2iru2H6mgaMhIyWSU5y2mx0=";
   };
 
-  propagatedBuildInputs = [
-    boto3
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "aioboto3"
+    "boto3"
+  ];
+
+  dependencies = [
+    aioboto3
+    orjson
     redis
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "karton.core"
-  ];
+  pythonImportsCheck = [ "karton.core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed malware processing framework";
     homepage = "https://karton-core.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ chivay fab ];
+    changelog = "https://github.com/CERT-Polska/karton/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      chivay
+      fab
+    ];
   };
-}
+})

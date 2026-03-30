@@ -1,80 +1,84 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
-, click
-, docutils
-, jinja2
-, jsonschema
-, linkify-it-py
-, myst-nb
-, pyyaml
-, sphinx
-, sphinx-comments
-, sphinx-copybutton
-, sphinx-external-toc
-, sphinx-jupyterbook-latex
-, sphinx-design
-, sphinx-thebe
-, sphinx-book-theme
-, sphinx-togglebutton
-, sphinxcontrib-bibtex
-, sphinx-multitoc-numbering
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchNpmDeps,
+
+  # build-system
+  hatch-deps-selector,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+
+  # nativeBuildInputs
+  nodejs,
+  npmHooks,
+
+  # dependencies
+  jupyter-core,
+  jupyter-server,
+  ipykernel,
+  nodeenv,
+
+  # tests
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-book";
-  version = "0.13.1";
+  version = "2.1.3";
+  pyproject = true;
 
-  format = "flit";
-
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-RgpC/H4J3kbdZsKuwYu7EOKCqcgM2v4uUsm6PVFknQE=";
+  src = fetchFromGitHub {
+    owner = "jupyter-book";
+    repo = "jupyter-book";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RFISKdBziLHeyB+942PeBYR0kxrRFLgg3sn5laYk3qM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "jsonschema<4" "jsonschema" \
-      --replace "sphinx-external-toc~=0.2.3" "sphinx-external-toc" \
-      --replace "myst-nb~=0.13.1" "myst-nb" \
-      --replace "docutils>=0.15,<0.18" "docutils" \
-      --replace "sphinx-design~=0.1.0" "sphinx-design" \
-      --replace "linkify-it-py~=1.0.1" "linkify-it-py"
-  '';
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-5qVmVQ3k1LOjN4qsTxHzWmJmJWu2mv/a3s+7N7dZUxc=";
+  };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [
+    hatch-deps-selector
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+  ];
 
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  # jupyter-book requires node at runtime
   propagatedBuildInputs = [
-    click
-    docutils
-    jinja2
-    jsonschema
-    linkify-it-py
-    myst-nb
-    pyyaml
-    sphinx
-    sphinx-comments
-    sphinx-copybutton
-    sphinx-external-toc
-    sphinx-jupyterbook-latex
-    sphinx-design
-    sphinx-thebe
-    sphinx-book-theme
-    sphinx-togglebutton
-    sphinxcontrib-bibtex
-    sphinx-multitoc-numbering
+    nodejs
+  ];
+
+  dependencies = [
+    ipykernel
+    jupyter-core
+    jupyter-server
+    nodeenv
   ];
 
   pythonImportsCheck = [ "jupyter_book" ];
 
-  meta = with lib; {
+  # No python tests
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Build a book with Jupyter Notebooks and Sphinx";
-    homepage = "https://executablebooks.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    homepage = "https://jupyterbook.org/";
+    changelog = "https://github.com/jupyter-book/jupyter-book/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.jupyter ];
+    mainProgram = "jupyter-book";
   };
-}
+})

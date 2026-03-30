@@ -1,6 +1,9 @@
-{ pkgs, config, lib, ... }:
-
-with lib;
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.firefox;
@@ -15,32 +18,67 @@ let
     given control of your browser, unless of course they also control your
     NixOS configuration.
   '';
+in
+{
+  imports =
+    lib.mapAttrsToList
+      (
+        name: pkg:
+        lib.mkRemovedOptionModule [
+          "programs"
+          "firefox"
+          "nativeMessagingHosts"
+          name
+        ] "Use `programs.firefox.nativeMessagingHosts.packages = [ pkgs.${pkg} ]` instead"
+      )
+      {
+        browserpass = "browserpass";
+        bukubrow = "bukubrow";
+        euwebid = "web-eid-app";
+        ff2mpv = "ff2mpv";
+        fxCast = "fx-cast-bridge";
+        gsconnect = "gnomeExtensions.gsconnect";
+        jabref = "jabref";
+        passff = "passff-host";
+        tridactyl = "tridactyl-native";
+        ugetIntegrator = "uget-integrator";
+      };
 
-in {
   options.programs.firefox = {
-    enable = mkEnableOption (mdDoc "the Firefox web browser");
+    enable = lib.mkEnableOption "the Firefox web browser";
 
-    package = mkOption {
-      description = mdDoc "Firefox package to use.";
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.firefox;
-      defaultText = literalExpression "pkgs.firefox";
+      description = "Firefox package to use.";
+      defaultText = lib.literalExpression "pkgs.firefox";
       relatedPackages = [
         "firefox"
-        "firefox-beta-bin"
         "firefox-bin"
-        "firefox-devedition-bin"
         "firefox-esr"
-        "firefox-esr-wayland"
-        "firefox-wayland"
       ];
     };
 
-    policies = mkOption {
-      description = mdDoc ''
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      visible = false;
+      readOnly = true;
+      description = "Resulting customized Firefox package.";
+    };
+
+    wrapperConfig = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Arguments to pass to Firefox wrapper";
+    };
+
+    policies = lib.mkOption {
+      type = policyFormat.type;
+      default = { };
+      description = ''
         Group policies to install.
 
-        See [Mozilla's documentation](https://github.com/mozilla/policy-templates/blob/master/README.md")
+        See [Mozilla's documentation](https://mozilla.github.io/policy-templates/)
         for a list of available options.
 
         This can be used to install extensions declaratively! Check out the
@@ -48,44 +86,248 @@ in {
 
         ${organisationInfo}
       '';
-      type = policyFormat.type;
-      default = {};
     };
 
-    preferences = mkOption {
-      description = mdDoc ''
-        Preferences to set from `about://config`.
+    preferences = lib.mkOption {
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          bool
+          int
+          str
+        ]);
+      default = { };
+      description = ''
+        Preferences to set from `about:config`.
 
         Some of these might be able to be configured more ergonomically
         using policies.
 
+        See [here](https://mozilla.github.io/policy-templates/#preferences) for allowed preferences.
+
         ${organisationInfo}
       '';
-      type = with types; attrsOf (oneOf [ bool int string ]);
-      default = {};
+      example = lib.literalExpression ''
+        {
+          "browser.tabs.tabmanager.enabled" = false;
+        }
+      '';
+    };
+
+    preferencesStatus = lib.mkOption {
+      type = lib.types.enum [
+        "default"
+        "locked"
+        "user"
+        "clear"
+      ];
+      default = "locked";
+      description = ''
+        The status of `firefox.preferences`.
+
+        `status` can assume the following values:
+        - `"default"`: Preferences appear as default.
+        - `"locked"`: Preferences appear as default and can't be changed.
+        - `"user"`: Preferences appear as changed.
+        - `"clear"`: Value has no effect. Resets to factory defaults on each startup.
+      '';
+    };
+
+    languagePacks = lib.mkOption {
+      # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
+      type = lib.types.listOf (
+        lib.types.enum [
+          "ach"
+          "af"
+          "an"
+          "ar"
+          "ast"
+          "az"
+          "be"
+          "bg"
+          "bn"
+          "br"
+          "bs"
+          "ca-valencia"
+          "ca"
+          "cak"
+          "cs"
+          "cy"
+          "da"
+          "de"
+          "dsb"
+          "el"
+          "en-CA"
+          "en-GB"
+          "en-US"
+          "eo"
+          "es-AR"
+          "es-CL"
+          "es-ES"
+          "es-MX"
+          "et"
+          "eu"
+          "fa"
+          "ff"
+          "fi"
+          "fr"
+          "fur"
+          "fy-NL"
+          "ga-IE"
+          "gd"
+          "gl"
+          "gn"
+          "gu-IN"
+          "he"
+          "hi-IN"
+          "hr"
+          "hsb"
+          "hu"
+          "hy-AM"
+          "ia"
+          "id"
+          "is"
+          "it"
+          "ja"
+          "ka"
+          "kab"
+          "kk"
+          "km"
+          "kn"
+          "ko"
+          "lij"
+          "lt"
+          "lv"
+          "mk"
+          "mr"
+          "ms"
+          "my"
+          "nb-NO"
+          "ne-NP"
+          "nl"
+          "nn-NO"
+          "oc"
+          "pa-IN"
+          "pl"
+          "pt-BR"
+          "pt-PT"
+          "rm"
+          "ro"
+          "ru"
+          "sat"
+          "sc"
+          "sco"
+          "si"
+          "sk"
+          "skr"
+          "sl"
+          "son"
+          "sq"
+          "sr"
+          "sv-SE"
+          "szl"
+          "ta"
+          "te"
+          "tg"
+          "th"
+          "tl"
+          "tr"
+          "trs"
+          "uk"
+          "ur"
+          "uz"
+          "vi"
+          "xh"
+          "zh-CN"
+          "zh-TW"
+        ]
+      );
+      default = [ ];
+      description = ''
+        The language packs to install.
+      '';
+    };
+
+    autoConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        AutoConfig files can be used to set and lock preferences that are not covered
+        by the policies.json for Mac and Linux. This method can be used to automatically
+        change user preferences or prevent the end user from modifying specific
+        preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
+      '';
+    };
+
+    autoConfigFiles = lib.mkOption {
+      type = with lib.types; listOf path;
+      default = [ ];
+      description = ''
+        AutoConfig files can be used to set and lock preferences that are not covered
+        by the policies.json for Mac and Linux. This method can be used to automatically
+        change user preferences or prevent the end user from modifying specific
+        preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
+
+        Files are concatenated and autoConfig is appended.
+      '';
+    };
+
+    nativeMessagingHosts.packages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      description = ''
+        Additional packages containing native messaging hosts that should be made available to Firefox extensions.
+      '';
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.finalPackage
+    ];
 
-    environment.etc."firefox/policies/policies.json".source =
-      let policiesJSON =
-        policyFormat.generate
-        "firefox-policies.json"
-        { inherit (cfg) policies; };
-      in mkIf (cfg.policies != {}) "${policiesJSON}";
+    environment.etc =
+      let
+        policiesJSON = policyFormat.generate "firefox-policies.json" { inherit (cfg) policies; };
+      in
+      lib.mkIf (cfg.policies != { }) {
+        "firefox/policies/policies.json".source = "${policiesJSON}";
+      };
 
     # Preferences are converted into a policy
-    programs.firefox.policies =
-      mkIf (cfg.preferences != {})
-      {
-        Preferences = (mapAttrs (name: value: {
-          Value = value;
-          Status = "locked";
-        }) cfg.preferences);
+    programs.firefox = {
+      policies = {
+        DisableAppUpdate = true;
+        Preferences = (
+          builtins.mapAttrs (_: value: {
+            Value = value;
+            Status = cfg.preferencesStatus;
+          }) cfg.preferences
+        );
+        ExtensionSettings = builtins.listToAttrs (
+          map (
+            lang:
+            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
+              installation_mode = "normal_installed";
+              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+            }
+          ) cfg.languagePacks
+        );
       };
+
+      finalPackage = cfg.package.override (old: {
+        extraPrefsFiles =
+          (old.extraPrefsFiles or [ ])
+          ++ cfg.autoConfigFiles
+          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+        nativeMessagingHosts = (old.nativeMessagingHosts or [ ]) ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or { }) // cfg.wrapperConfig;
+      });
+    };
   };
 
-  meta.maintainers = with maintainers; [ danth ];
+  meta.maintainers = with lib.maintainers; [
+    danth
+    linsui
+  ];
 }

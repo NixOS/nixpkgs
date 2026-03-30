@@ -1,18 +1,34 @@
-{ skawarePackages }:
+{
+  lib,
+  skawarePackages,
+  skalibs,
+  execline,
+}:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6";
-  version = "2.11.1.2";
-  sha256 = "sha256-bBR0vj6Inaw5LO4wer4BXNS+DIXHJchOp/GE8ONFA6I=";
+  version = "2.14.0.1";
+  sha256 = "sha256-wlr+gXy8P1lO/FBQNR+LkQG6eGFtDOkVZY83Dn7i4lg=";
+
+  manpages = skawarePackages.buildManPages {
+    pname = "s6-man-pages";
+    version = "2.14.0.1.4";
+    sha256 = "sha256-c77NwS4x5L1nLmtWVz64izzanTfc0hohvFMOi77uMh4=";
+    description = "Port of the documentation for the s6 supervision suite to mdoc";
+    maintainers = [ lib.maintainers.sternenseemann ];
+  };
 
   description = "skarnet.org's small & secure supervision software suite";
 
   # NOTE lib: cannot split lib from bin at the moment,
   # since some parts of lib depend on executables in bin.
   # (the `*_startf` functions in `libs6`)
-  outputs = [ /*"bin" "lib"*/ "out" "dev" "doc" ];
+  outputs = [
+    # "bin" "lib"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   # TODO: nsss support
   configureFlags = [
@@ -34,7 +50,7 @@ buildPackage {
     # remove all s6 executables from build directory
     rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
     rm libs6.*
-    rm ./libs6lockd.a.xyzzy
+    rm ./libs6auto.a.xyzzy
 
     mv doc $doc/share/doc/s6/html
     mv examples $doc/share/doc/s6/examples

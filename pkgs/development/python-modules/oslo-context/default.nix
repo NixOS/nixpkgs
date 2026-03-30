@@ -1,12 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestr, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oslotest,
+  stestr,
+  pbr,
+  setuptools,
+  typing-extensions,
+}:
 
 buildPythonPackage rec {
-  pname = "oslo.context";
-  version = "5.0.0";
+  pname = "oslo-context";
+  version = "6.3.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-iMDG0HZoHGDVYPfWZWXkKsEWxaqKKKBNt8CsACUTMiQ=";
+    inherit version;
+    pname = "oslo_context";
+    hash = "sha256-5QT43wLFzOf8mE+Gf736qh1NS5uIl44pH25cuJ31o+A=";
   };
 
   postPatch = ''
@@ -15,26 +26,30 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    debtcollector
+  build-system = [ setuptools ];
+
+  dependencies = [
     pbr
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     oslotest
     stestr
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "oslo_context" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Context library";
     homepage = "https://github.com/openstack/oslo.context";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

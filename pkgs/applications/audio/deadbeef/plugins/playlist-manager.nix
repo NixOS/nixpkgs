@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, deadbeef
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  deadbeef,
+  gtk3,
 }:
 
 stdenv.mkDerivation {
@@ -40,11 +41,11 @@ stdenv.mkDerivation {
     "gtk3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Removes duplicate and vanished files from the current playlist";
     homepage = "https://github.com/kpcee/deadbeef-playlist-manager";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.cmm ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.cmm ];
+    platforms = lib.platforms.linux;
   };
 }

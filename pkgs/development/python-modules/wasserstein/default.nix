@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, llvmPackages
-, wurlitzer
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  llvmPackages,
+  wurlitzer,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Wasserstein";
+  pname = "wasserstein";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pkomiske";
-    repo = pname;
-    rev = "89c2d6279a7e0aa3b56bcc8fb7b6009420f2563e"; # https://github.com/pkomiske/Wasserstein/issues/1
+    repo = "Wasserstein";
+    rev = "v${version}";
     hash = "sha256-s9en6XwvO/WPsF7/+SEmGePHZQgl7zLgu5sEn4nD9YE=";
   };
 
-  buildInputs = [
-    llvmPackages.openmp
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/thaler-lab/Wasserstein/commit/8667d59dfdf89eabf01f3ae93b23a30a27c21c58.patch";
+      hash = "sha256-jp5updB3E1MYgLhBJwmBMTwBiFXtABMwTxt0G6xhoyA=";
+    })
   ];
+
+  buildInputs = [ llvmPackages.openmp ];
   propagatedBuildInputs = [
     numpy
     wurlitzer
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-  pytestFlagsArray = [
-    "wasserstein/tests"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  enabledTestPaths = [ "wasserstein/tests" ];
   disabledTestPaths = [
     "wasserstein/tests/test_emd.py" # requires "ot"
     # cyclic dependency on energyflow
@@ -41,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wasserstein" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python/C++ library for computing Wasserstein distances efficiently";
     homepage = "https://github.com/pkomiske/Wasserstein";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "fishtape";
@@ -16,10 +20,10 @@ buildFishPlugin rec {
     fishtape tests/*.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "100% pure-Fish test runner";
     homepage = "https://github.com/jorgebucaran/fishtape";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

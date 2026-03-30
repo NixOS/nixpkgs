@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
-  name = "nvidiabl-${version}-${kernel.version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "nvidiabl";
   version = "2020-10-01";
 
   # We use a fork which adds support for newer kernels -- upstream has been abandoned.
@@ -26,12 +32,15 @@ stdenv.mkDerivation rec {
     "KVER=${kernel.modDirVersion}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
     homepage = "https://github.com/yorickvP/nvidiabl";
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ yorickvp ];
+    license = lib.licenses.gpl2Plus;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
+    maintainers = with lib.maintainers; [ yorickvp ];
     broken = kernel.kernelAtLeast "5.18";
   };
 }

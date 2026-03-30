@@ -1,4 +1,8 @@
-{ lib, stdenv, aflplusplus}:
+{
+  lib,
+  stdenv,
+  aflplusplus,
+}:
 
 stdenv.mkDerivation {
   version = lib.getVersion aflplusplus;
@@ -6,9 +10,9 @@ stdenv.mkDerivation {
 
   src = aflplusplus.src;
   postUnpack = "chmod -R +w ${aflplusplus.src.name}";
-  sourceRoot = "${aflplusplus.src.name}/libtokencap";
+  sourceRoot = "${aflplusplus.src.name}/utils/libtokencap";
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   preInstall = ''
     mkdir -p $out/lib/afl
@@ -23,10 +27,13 @@ stdenv.mkDerivation {
     chmod +x $out/bin/get-libtokencap-so
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/vanhauser-thc/AFLplusplus";
+  meta = {
+    homepage = "https://github.com/AFLplusplus/AFLplusplus";
     description = "strcmp & memcmp token capture library";
     license = lib.licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      ris
+      msanft
+    ];
   };
 }

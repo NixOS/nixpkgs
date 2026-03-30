@@ -1,73 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, six
-, pytestCheckHook
-, django-debug-toolbar
-, django-extensions
-, django-taggit
-, django_tagging
-, mock
-, pytest-django
-, selenium
-, splinter
-, sqlparse
-, tenacity
-, whitenoise
+{
+  lib,
+  buildPythonPackage,
+  django-taggit,
+  django,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-autocomplete-light";
-  version = "3.9.4";
+  version = "3.12.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yourlabs";
     repo = "django-autocomplete-light";
-    rev = version;
-    sha256 = "sha256-YUiGN6q7ARM/rg7d+ykeDEYZDYjB+DHxMCmdme6QccU=";
+    tag = finalAttrs.version;
+    hash = "sha256-ctNbbmTUgrkLGCo7tgPIJpLn7RmkZSuj54/5RBe/sdA=";
   };
 
-  propagatedBuildInputs = [
-    django
-    six
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
+
+  optional-dependencies = {
+    tags = [ django-taggit ];
+    # nested = [ django-nested-admin ];
+    # genericm2m = [ django-generic-m2m ];
+    # gfk = [ django-querysetsequence ];
+  };
 
   # Too many un-packaged dependencies
   doCheck = false;
 
-  checkInputs = [
-    pytestCheckHook
-    django-debug-toolbar
-    django-extensions
-    django-taggit
-    django_tagging
-    mock
-    pytest-django
-    selenium
-    splinter
-    sqlparse
-    tenacity
-    whitenoise
-
-    # FIXME: not packaged
-    # django-generic-m2m
-    # django-gm2m
-    # django-querysetsequence
-    # pytest-splinter
-    # dango-nested-admin
-    # djhacker
-  ];
-
-  # Taken from tox.ini
-  preCheck = "cd test_project";
-
   pythonImportsCheck = [ "dal" ];
 
-  meta = with lib; {
-    description = "A fresh approach to autocomplete implementations, specially for Django";
+  meta = {
+    description = "Fresh approach to autocomplete implementations, specially for Django";
     homepage = "https://django-autocomplete-light.readthedocs.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ambroisie ];
+    changelog = "https://github.com/yourlabs/django-autocomplete-light/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

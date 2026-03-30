@@ -1,54 +1,57 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, expects
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  expects,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
-  version = "0.6.3";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vn8S2/kRW5C2Hbes9oLM4LGm1jWWK0zeLdujR14y6EI=";
+    repo = "aiosyncthing";
+    tag = "v${version}";
+    hash = "sha256-0jx61zs6yQqAIwSOO1zCUOkoZES+K/POtIGoWzr29bI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
+    deprecated
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     expects
     pytestCheckHook
+    pytest-cov-stub
     pytest-asyncio
     pytest-mock
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiosyncthing --cov-report=html" ""
-  '';
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "aiosyncthing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Syncthing REST API";
     homepage = "https://github.com/zhulik/aiosyncthing";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/zhulik/aiosyncthing/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

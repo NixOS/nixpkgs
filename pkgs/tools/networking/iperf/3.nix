@@ -1,20 +1,30 @@
-{ lib, stdenv, fetchurl, openssl, fetchpatch, lksctp-tools }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  fetchpatch,
+  lksctp-tools,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iperf";
-  version = "3.12";
+  version = "3.20";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
-    sha256 = "sha256-cgNOz7an1tZ+OE4Z+27/8yNspPftTFGNfbZJxEfh/9Y=";
+    hash = "sha256-OsxXLR7MpOCyA1nHvwEy3cgNmC7+7iDIb2cmqaYJQ4g=";
   };
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];
-  configureFlags = [
-    "--with-openssl=${openssl.dev}"
-  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isLinux [ lksctp-tools ];
+  configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -29,11 +39,12 @@ stdenv.mkDerivation rec {
     ln -s $man/share/man/man1/iperf3.1 $man/share/man/man1/iperf.1
   '';
 
-  meta = with lib; {
-    homepage = "http://software.es.net/iperf/";
+  meta = {
+    homepage = "https://software.es.net/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    mainProgram = "iperf3";
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

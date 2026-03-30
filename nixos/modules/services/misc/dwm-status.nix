@@ -1,73 +1,86 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.dwm-status;
 
-  order = concatMapStringsSep "," (feature: ''"${feature}"'') cfg.order;
+  format = pkgs.formats.toml { };
 
-  configFile = pkgs.writeText "dwm-status.toml" ''
-    order = [${order}]
-
-    ${cfg.extraConfig}
-  '';
+  configFile = format.generate "dwm-status.toml" cfg.settings;
 in
 
 {
-
-  ###### interface
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "dwm-status" "order" ]
+      [ "services" "dwm-status" "settings" "order" ]
+    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "dwm-status"
+      "extraConfig"
+    ] "Use services.dwm-status.settings instead.")
+  ];
 
   options = {
-
     services.dwm-status = {
+      enable = lib.mkEnableOption "dwm-status user service";
 
-      enable = mkEnableOption (lib.mdDoc "dwm-status user service");
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.dwm-status;
-        defaultText = literalExpression "pkgs.dwm-status";
-        example = literalExpression "pkgs.dwm-status.override { enableAlsaUtils = false; }";
-        description = lib.mdDoc ''
-          Which dwm-status package to use.
-        '';
+      package = lib.mkPackageOption pkgs "dwm-status" {
+        example = "dwm-status.override { enableAlsaUtils = false; }";
       };
 
-      order = mkOption {
-        type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
-        description = lib.mdDoc ''
-          List of enabled features in order.
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = format.type;
+          options.order = lib.mkOption {
+            type = lib.types.listOf (
+              lib.types.enum [
+                "audio"
+                "backlight"
+                "battery"
+                "cpu_load"
+                "network"
+                "time"
+              ]
+            );
+            default = [ ];
+            description = ''
+              List of enabled features in order.
+            '';
+          };
+        };
+        default = { };
+        example = {
+          order = [
+            "battery"
+            "cpu_load"
+            "time"
+          ];
+          time = {
+            format = "%F %a %r";
+            update_seconds = true;
+          };
+        };
+        description = ''
+          Config options for dwm-status, see <https://github.com/Gerschtli/dwm-status#configuration>
+          for available options.
         '';
       };
-
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = lib.mdDoc ''
-          Extra config in TOML format.
-        '';
-      };
-
     };
-
   };
 
-
-  ###### implementation
-
-  config = mkIf cfg.enable {
-
-    services.upower.enable = elem "battery" cfg.order;
+  config = lib.mkIf cfg.enable {
+    services.upower.enable = lib.mkIf (lib.elem "battery" cfg.settings.order) true;
 
     systemd.user.services.dwm-status = {
       description = "Highly performant and configurable DWM status service";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-
-      serviceConfig.ExecStart = "${cfg.package}/bin/dwm-status ${configFile}";
+      serviceConfig.ExecStart = "${cfg.package}/bin/dwm-status ${configFile} --quiet";
     };
-
   };
-
 }

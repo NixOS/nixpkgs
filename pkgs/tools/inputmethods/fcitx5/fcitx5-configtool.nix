@@ -1,66 +1,96 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, fcitx5-qt
-, qtx11extras
-, qtquickcontrols2
-, kwidgetsaddons
-, kdeclarative
-, kirigami2
-, isocodes
-, xkeyboardconfig
-, libxkbfile
-, libXdmcp
-, plasma5Packages
-, plasma-framework
-, kcmSupport ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  fcitx5,
+  fcitx5-qt,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  qtdeclarative,
+  qtx11extras ? null,
+  kitemviews,
+  kwidgetsaddons,
+  qtquickcontrols2 ? null,
+  kcmutils,
+  kcoreaddons,
+  kdeclarative,
+  kirigami ? null,
+  kirigami2 ? null,
+  isocodes,
+  xkeyboard-config,
+  libxkbfile,
+  libplasma ? null,
+  plasma-framework ? null,
+  wrapQtAppsHook,
+  kcmSupport ? true,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.0.15";
+  version = "5.1.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VTvJpQrACZ6xoXkfTqhVK2MUy9i7Snn9zVCK3dayVz0=";
+    hash = "sha256-STx2S5fuaZCsGoM8nsihYoW+C1GdkD3K7pT84aMRI9c=";
   };
 
   cmakeFlags = [
-    "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
+    (lib.cmakeBool "KDE_INSTALL_USE_QT_SYS_PATHS" true)
+    (lib.cmakeBool "ENABLE_KCM" kcmSupport)
   ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     fcitx5
     fcitx5-qt
-    qtx11extras
-    qtquickcontrols2
-    kirigami2
-    isocodes
-    xkeyboardconfig
-    libxkbfile
-    libXdmcp
-  ] ++ lib.optionals kcmSupport [
-    kdeclarative
+    qtbase
+    qtsvg
+    qtwayland
+    kitemviews
     kwidgetsaddons
-    plasma5Packages.kiconthemes
-    plasma-framework
-  ];
+    isocodes
+    xkeyboard-config
+    libxkbfile
+  ]
+  ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+    qtx11extras
+  ]
+  ++ lib.optionals kcmSupport (
+    [
+      qtdeclarative
+      kcoreaddons
+      kdeclarative
+    ]
+    ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+      qtquickcontrols2
+      plasma-framework
+      kirigami2
+    ]
+    ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+      kcmutils
+      libplasma
+      kirigami
+    ]
+  );
 
-  meta = with lib; {
+  meta = {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
+    mainProgram = "fcitx5-config-qt";
   };
 }

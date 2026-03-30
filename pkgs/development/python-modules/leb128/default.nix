@@ -1,24 +1,35 @@
-{ buildPythonPackage, fetchFromGitHub, pytestCheckHook, lib }:
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "leb128";
-  version = "1.0.4";
+  version = "1.0.9";
+  pyproject = true;
 
   # fetchPypi doesn't include files required for tests
   src = fetchFromGitHub {
     owner = "mohanson";
     repo = "leb128";
-    rev = "v${version}";
-    sha256 = "040l6fxyzqal841kirf783kk1840gcy1gjd374jfr46v96qc8scm";
+    tag = "v${version}";
+    hash = "sha256-X3iBYiANzM97M91dCyjEU/Onhqcid3MMsNzzKtcRcyA=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ hatchling ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "leb128" ];
 
-  meta = with lib; {
-    description = "A utility to encode and decode Little Endian Base 128";
+  meta = {
+    changelog = "https://github.com/mohanson/leb128/releases/tag/${src.tag}";
+    description = "Utility to encode and decode Little Endian Base 128";
     homepage = "https://github.com/mohanson/leb128";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

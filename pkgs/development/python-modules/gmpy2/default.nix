@@ -1,36 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPyPy
-, gmp
-, mpfr
-, libmpc
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+  setuptools,
+  gmp,
+  mpfr,
+  libmpc,
+  pytestCheckHook,
+  hypothesis,
+  cython,
+  mpmath,
+  # Reverse dependency
+  sage,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "gmpy2";
-  version = "2.1.2";
-in
-
-buildPythonPackage {
-  inherit pname version;
+  version = "2.2.2";
+  pyproject = true;
 
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    rev = "gmpy2-${version}";
-    sha256 = "sha256-ARCttNzRA+Ji2j2NYaSCDXgvoEg01T9BnYadyqON2o0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
 
-  buildInputs = [ gmp mpfr libmpc ];
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    gmp
+    mpfr
+    libmpc
+  ];
+
+  # make relative imports in tests work properly
+  preCheck = ''
+    rm gmpy2 -r
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    cython
+    mpmath
+  ];
 
   pythonImportsCheck = [ "gmpy2" ];
 
-  meta = with lib; {
-    description = "GMP/MPIR, MPFR, and MPC interface to Python 2.6+ and 3.x";
-    homepage = "https://github.com/aleaxit/gmpy/";
-    license = licenses.gpl3Plus;
+  passthru.tests = {
+    inherit sage;
   };
-}
+
+  meta = {
+    changelog = "https://github.com/aleaxit/gmpy/blob/${finalAttrs.src.rev}/docs/history.rst";
+    description = "Interface to GMP, MPFR, and MPC for Python 3.7+";
+    homepage = "https://github.com/aleaxit/gmpy/";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ tomasajt ];
+  };
+})

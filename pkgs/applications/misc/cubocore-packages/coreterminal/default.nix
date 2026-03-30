@@ -1,44 +1,46 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, qtbase
-, qtserialport
-, qtermwidget
-, cmake
-, ninja
-, libcprime
-, libcsys
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  qt6,
+  qtermwidget,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreterminal";
-  version = "4.3.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-0gxcbfDD43BnkxYWSdViK3hjzfgPGFruwzF4hCxFZ7c=";
+    repo = "coreterminal";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CSPZ1mbZ5ylfMQAwzj+hNodhEuyC7klvlKU5bj+HiyE=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtserialport
+    qt6.qtbase
+    qt6.qtserialport
     qtermwidget
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
-    description = "A terminal emulator from the C Suite";
+  meta = {
+    description = "Terminal emulator from the C Suite";
+    mainProgram = "coreterminal";
     homepage = "https://gitlab.com/cubocore/coreapps/coreterminal";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

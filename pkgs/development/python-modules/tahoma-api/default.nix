@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "tahoma-api";
   version = "0.0.17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "philklei";
-    repo = pname;
+    repo = "tahoma-api";
     rev = "v${version}";
-    sha256 = "sha256-YwOKSBlN4lNyS+hfdbQDUq1gc14FBof463ofxtUVLC4=";
+    hash = "sha256-YwOKSBlN4lNyS+hfdbQDUq1gc14FBof463ofxtUVLC4=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -21,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tahoma_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interface with Tahoma REST API";
     homepage = "https://github.com/philklei/tahoma-api/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

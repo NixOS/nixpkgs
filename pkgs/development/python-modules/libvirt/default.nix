@@ -1,28 +1,48 @@
-{ lib, buildPythonPackage, fetchFromGitLab, pkg-config, lxml, libvirt, nose }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  setuptools,
+  pkg-config,
+  lxml,
+  libvirt,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "8.8.0";
+  version = "12.1.0";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
-    rev = "v${version}";
-    sha256 = "sha256-UguqUsIfrql1UZeBoHLKXvLYuWicbJWamglkvqS++FI=";
+    tag = "v${version}";
+    hash = "sha256-1WxrDg3aJJ7lwIZXj3IXsyi3zSnxmknsVMmNQ8T+oHY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libvirt lxml ];
-
-  checkInputs = [ nose ];
-  checkPhase = ''
-    nosetests
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'pkg-config' "${stdenv.cc.targetPrefix}pkg-config"
   '';
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libvirt
+    lxml
+  ];
+
+  pythonImportsCheck = [ "libvirt" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     homepage = "https://libvirt.org/python.html";
-    description = "libvirt Python bindings";
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.fpletz ];
+    description = "Libvirt Python bindings";
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.fpletz ];
   };
 }

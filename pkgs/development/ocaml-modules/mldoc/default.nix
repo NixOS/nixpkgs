@@ -1,18 +1,20 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, angstrom
-, cmdliner
-, core
-, core_bench
-, js_of_ocaml
-, js_of_ocaml-ppx
-, ppx_deriving_yojson
-, uri
-, yojson
-, lwt
-, xmlm
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  angstrom,
+  cmdliner,
+  core,
+  core_bench,
+  core_unix ? null,
+  js_of_ocaml,
+  js_of_ocaml-ppx,
+  ppx_deriving_yojson,
+  uri,
+  yojson,
+  lwt,
+  xmlm,
 }:
 let
   angstrom' = angstrom.overrideAttrs (attrs: {
@@ -28,21 +30,24 @@ let
 in
 buildDunePackage rec {
   pname = "mldoc";
-  version = "1.4.9";
+  version = "1.5.8";
 
   minimalOCamlVersion = "4.10";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "mldoc";
     rev = "v${version}";
-    sha256 = "sha256-jKZ4ejskngXb03EnHBlqRKC5xeNHJ32n73y1zQP9CiM=";
+    hash = "sha256-7uuNUFMSQEgakTKfpYixp43gnfpQSW++snBzgr0Ni0Y=";
   };
 
   buildInputs = [
     cmdliner
     core
     core_bench
+    core_unix
     js_of_ocaml
     js_of_ocaml-ppx
     lwt
@@ -56,10 +61,10 @@ buildDunePackage rec {
     xmlm
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/logseq/mldoc";
     description = "Another Emacs Org-mode and Markdown parser";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ marsam ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ ];
   };
 }

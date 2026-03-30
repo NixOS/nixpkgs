@@ -1,56 +1,77 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytest
-, setuptools
-, six
-, testtools
-, zope_interface
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  boltons,
+  orjson,
+  pyrsistent,
+  zope-interface,
+
+  # tests
+  addBinToPathHook,
+  dask,
+  distributed,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  testtools,
+  twisted,
+  daemontools,
 }:
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.14.0";
-  disabled = pythonOlder "3.6";
+  version = "1.17.5";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c2f099a3e8d5ecfc22745766e7cc664a48db64b6b89d986dff270491d8683149";
+  src = fetchFromGitHub {
+    owner = "itamarst";
+    repo = "eliot";
+    tag = version;
+    hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
   };
 
-  checkInputs = [
-    hypothesis
-    testtools
-    pytest
-   ];
-
-  propagatedBuildInputs = [
-    aiocontextvars
-    boltons
-    pyrsistent
-    setuptools
-    six
-    zope_interface
+  patches = [
+    # Upstream PR: https://github.com/itamarst/eliot/pull/520
+    ./python-3.14.patch
   ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    boltons
+    orjson
+    pyrsistent
+    zope-interface
+  ];
+
+  nativeCheckInputs = [
+    addBinToPathHook
+    dask
+    distributed
+    hypothesis
+    pandas
+    pytestCheckHook
+    testtools
+    twisted
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "eliot" ];
 
-  # Tests run eliot-prettyprint in out/bin.
-  # test_parse_stream is broken, skip it.
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    pytest -k 'not test_parse_stream'
-  '';
-
-  meta = with lib; {
-    homepage = "https://eliot.readthedocs.io";
+  meta = {
     description = "Logging library that tells you why it happened";
-    license = licenses.asl20;
-    maintainers = [ maintainers.dpausp ];
+    homepage = "https://eliot.readthedocs.io";
+    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
+    mainProgram = "eliot-prettyprint";
+    license = lib.licenses.asl20;
   };
 }

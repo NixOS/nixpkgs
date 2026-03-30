@@ -1,51 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pillow
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pillow,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-barcode";
-  version = "0.14.0";
-  format = "setuptools";
+  version = "0.16.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-JBs0qlxctqmImIL5QJsBgpA6LF0ZtCGL42Cc271f/fk=";
+  src = fetchFromGitHub {
+    owner = "WhyNotHugo";
+    repo = "python-barcode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a/w2JxFBm/jqIRnqIB7ZtkdiLnBNjbR0V5SNuau/YxY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  passthru.optional-dependencies = {
-    images = [
-      pillow
-    ];
+  optional-dependencies = {
+    images = [ pillow ];
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=barcode" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.images;
+    pytest-cov-stub
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create standard barcodes with Python";
+    mainProgram = "python-barcode";
     homepage = "https://github.com/WhyNotHugo/python-barcode";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    changelog = "https://github.com/WhyNotHugo/python-barcode/blob/${finalAttrs.src.tag}/docs/changelog.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

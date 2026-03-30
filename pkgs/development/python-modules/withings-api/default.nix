@@ -1,56 +1,57 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, arrow
-, requests-oauthlib
-, typing-extensions
-, pydantic
-, responses
-, pytestCheckHook
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytest-cov-stub,
+  pytestCheckHook,
+  requests-oauthlib,
+  responses,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "withings-api";
   version = "2.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vangorra";
     repo = "python_withings_api";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
+    tag = version;
+    hash = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'requests-oauth = ">=0.4.1"' ''' \
-      --replace 'addopts = "--capture no --cov ./withings_api --cov-report html:build/coverage_report --cov-report term --cov-report xml:build/coverage.xml"' '''
+      --replace-fail 'requests-oauth = ">=0.4.1"' '''
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arrow
     requests-oauthlib
     typing-extensions
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "withings_api" ];
+
+  meta = {
     description = "Library for the Withings Health API";
     homepage = "https://github.com/vangorra/python_withings_api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kittywitch ];
+    changelog = "https://github.com/vangorra/python_withings_api/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kittywitch ];
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

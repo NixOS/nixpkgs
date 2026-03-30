@@ -1,25 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  nix-update-script,
+}:
 
 buildPythonPackage rec {
   pname = "python-nomad";
-  version = "1.4.1";
+  version = "2.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "087a7d5d2af9fd8ce5da70d29e4b456c6b8b0ea3cd16613ed50f6eb8ad6cdba6";
+  src = fetchFromGitHub {
+    owner = "jrxfive";
+    repo = "python-nomad";
+    tag = version;
+    hash = "sha256-tLS463sYVlOr2iZSgSkd4pHUVCtiIPJ3L8+9omlX4NY=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Tests require nomad agent
   doCheck = false;
 
   pythonImportsCheck = [ "nomad" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xbreak ];
+    changelog = "https://github.com/jrxFive/python-nomad/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xbreak ];
   };
 }

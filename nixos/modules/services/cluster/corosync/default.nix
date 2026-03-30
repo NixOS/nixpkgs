@@ -1,57 +1,57 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.corosync;
 in
 {
   # interface
   options.services.corosync = {
-    enable = mkEnableOption (lib.mdDoc "corosync");
+    enable = lib.mkEnableOption "corosync";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.corosync;
-      defaultText = literalExpression "pkgs.corosync";
-      description = lib.mdDoc "Package that should be used for corosync.";
-    };
+    package = lib.mkPackageOption pkgs "corosync" { };
 
-    clusterName = mkOption {
-      type = types.str;
+    clusterName = lib.mkOption {
+      type = lib.types.str;
       default = "nixcluster";
-      description = lib.mdDoc "Name of the corosync cluster.";
+      description = "Name of the corosync cluster.";
     };
 
-    extraOptions = mkOption {
-      type = with types; listOf str;
-      default = [];
-      description = lib.mdDoc "Additional options with which to start corosync.";
+    extraOptions = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      description = "Additional options with which to start corosync.";
     };
 
-    nodelist = mkOption {
-      description = lib.mdDoc "Corosync nodelist: all cluster members.";
-      default = [];
-      type = with types; listOf (submodule {
-        options = {
-          nodeid = mkOption {
-            type = int;
-            description = lib.mdDoc "Node ID number";
+    nodelist = lib.mkOption {
+      description = "Corosync nodelist: all cluster members.";
+      default = [ ];
+      type =
+        with lib.types;
+        listOf (submodule {
+          options = {
+            nodeid = lib.mkOption {
+              type = int;
+              description = "Node ID number";
+            };
+            name = lib.mkOption {
+              type = str;
+              description = "Node name";
+            };
+            ring_addrs = lib.mkOption {
+              type = listOf str;
+              description = "List of addresses, one for each ring.";
+            };
           };
-          name = mkOption {
-            type = str;
-            description = lib.mdDoc "Node name";
-          };
-          ring_addrs = mkOption {
-            type = listOf str;
-            description = lib.mdDoc "List of addresses, one for each ring.";
-          };
-        };
-      });
+        });
     };
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     environment.etc."corosync/corosync.conf".text = ''
@@ -63,22 +63,31 @@ in
       }
 
       nodelist {
-        ${concatMapStrings ({ nodeid, name, ring_addrs }: ''
-          node {
-            nodeid: ${toString nodeid}
-            name: ${name}
-            ${concatStrings (imap0 (i: addr: ''
-              ring${toString i}_addr: ${addr}
-            '') ring_addrs)}
-          }
-        '') cfg.nodelist}
+        ${lib.concatMapStrings (
+          {
+            nodeid,
+            name,
+            ring_addrs,
+          }:
+          ''
+            node {
+              nodeid: ${toString nodeid}
+              name: ${name}
+              ${lib.concatStrings (
+                lib.imap0 (i: addr: ''
+                  ring${toString i}_addr: ${addr}
+                '') ring_addrs
+              )}
+            }
+          ''
+        ) cfg.nodelist}
       }
 
       quorum {
         # only corosync_votequorum is supported
         provider: corosync_votequorum
         wait_for_all: 0
-        ${optionalString (builtins.length cfg.nodelist < 3) ''
+        ${lib.optionalString (builtins.length cfg.nodelist < 3) ''
           two_node: 1
         ''}
       }
@@ -105,7 +114,7 @@ in
       };
     };
 
-    environment.etc."sysconfig/corosync".text = lib.optionalString (cfg.extraOptions != []) ''
+    environment.etc."sysconfig/corosync".text = lib.optionalString (cfg.extraOptions != [ ]) ''
       COROSYNC_OPTIONS="${lib.escapeShellArgs cfg.extraOptions}"
     '';
   };

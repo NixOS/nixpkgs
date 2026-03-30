@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 doSub() {
     local src=$1
     local dst=$2

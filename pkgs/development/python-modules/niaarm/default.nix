@@ -1,50 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, niapy
-, nltk
-, pandas
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  niapy,
+  nltk,
+  numpy,
+  pandas,
+  plotly,
+  scikit-learn,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "NiaARM";
-  version = "0.2.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pname = "niaarm";
+  # nixpkgs-update: no auto update
+  version = "0.13.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
-    repo = pname;
-    rev = version;
-    hash = "sha256-IY72hDklPkGjb2zo7Wf0MBiPn/jHtyUKW9D0jxA0P54=";
+    repo = "NiaARM";
+    tag = version;
+    hash = "sha256-524rJ5b9e0U1rqu1iCGMA3Tgnn9bO4biCC1FMoGNqms=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "numpy"
+    "plotly"
+    "scikit-learn"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     niapy
     nltk
+    numpy
     pandas
+    plotly
+    scikit-learn
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    MPLBACKEND = "Agg";
+  };
+
+  disabledTests = [
+    # Test requires extra nltk data dependency
+    "test_text_mining"
   ];
 
-  pythonImportsCheck = [
-    "niaarm"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "A minimalistic framework for Numerical Association Rule Mining";
+  pythonImportsCheck = [ "niaarm" ];
+
+  meta = {
+    description = "Minimalistic framework for Numerical Association Rule Mining";
+    mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    changelog = "https://github.com/firefly-cpp/NiaARM/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

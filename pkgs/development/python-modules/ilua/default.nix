@@ -1,26 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyter_console
-, jupyter_core
-, pygments
-, termcolor
-, txzmq
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter-console,
+  jupyter-core,
+  pygments,
+  setuptools,
+  termcolor,
+  txzmq,
 }:
 
 buildPythonPackage rec {
   pname = "ilua";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
+    hash = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    jupyter_console
-    jupyter_core
+    jupyter-console
+    jupyter-core
     pygments
     termcolor
     txzmq
@@ -31,10 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ilua" ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable Lua kernel for Jupyter";
+    mainProgram = "ilua";
     homepage = "https://github.com/guysv/ilua";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
   };
 }

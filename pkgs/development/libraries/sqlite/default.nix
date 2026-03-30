@@ -1,44 +1,95 @@
-{ lib, stdenv, fetchurl, zlib, readline, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  tcl,
+  zlib,
+  readline,
+  ncurses,
 
-# for tests
-, python3Packages, sqldiff, sqlite-analyzer
+  # for tests
+  python3Packages,
+  sqldiff,
+  sqlite-analyzer,
+  sqlite-rsync,
+  tinysparql,
 
-# uses readline & ncurses for a better interactive experience if set to true
-, interactive ? false
-# TODO: can be removed since 3.36 since it is the default now.
-, enableDeserialize ? false
+  # uses readline & ncurses for a better interactive experience if set to true
+  interactive ? false,
+
+  gitUpdater,
+  buildPackages,
 }:
-
-with lib;
 
 let
   archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite${optionalString interactive "-interactive"}";
-  version = "3.39.4";
+  pname = "sqlite${lib.optionalString interactive "-interactive"}";
+  version = "3.51.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "sha256-8x1EW0jmfihM8gZxfMFwq2PL5P1/eagnk7dyKF54/bs=";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+    hash = "sha256-hREPdi1QeUFNmd1deRe8P/fgWHbmzL0T2ElqOBfyCCk=";
+  };
+  docsrc = fetchurl {
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-xuMNB8XpwSaQHFTY18kKnBo3B4JFUX8GCzxpxN5Dv10=";
   };
 
-  outputs = [ "bin" "dev" "out" ];
-  separateDebugInfo = stdenv.isLinux;
+  outputs = [
+    "bin"
+    "dev"
+    "man"
+    "doc"
+    "out"
+  ];
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
-  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  nativeBuildInputs = [
+    unzip
+    tcl
+  ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals interactive [
+    readline
+    ncurses
+  ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  # sqlite relies on autosetup now; so many of the
+  # previously-understood flags are gone. They should instead be set
+  # on a per-output basis.
+  setOutputFlags = false;
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.TCLLIBDIR = "${placeholder "out"}/lib";
+
+  configureFlags = [
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--libdir=${placeholder "out"}/lib"
+    (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
+  ]
+  ++ lib.optional (!interactive) "--disable-readline"
+  # autosetup only looks up readline.h in predefined set of directories.
+  ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
+  ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
+
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -47,35 +98,25 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS3_TOKENIZER"
     "-DSQLITE_ENABLE_FTS4"
     "-DSQLITE_ENABLE_FTS5"
+    "-DSQLITE_ENABLE_GEOPOLY"
+    "-DSQLITE_ENABLE_MATH_FUNCTIONS"
+    "-DSQLITE_ENABLE_PERCENTILE"
+    "-DSQLITE_ENABLE_PREUPDATE_HOOK"
+    "-DSQLITE_ENABLE_RBU"
     "-DSQLITE_ENABLE_RTREE"
+    "-DSQLITE_ENABLE_SESSION"
     "-DSQLITE_ENABLE_STMT_SCANSTATUS"
     "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
     "-DSQLITE_SOUNDEX"
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ] ++ lib.optionals enableDeserialize [
-    # Can be removed in v3.36+, as this will become the default
-    "-DSQLITE_ENABLE_DESERIALIZE"
-  ]);
+  ];
 
   # Test for features which may not be available at compile time
   preBuild = ''
-    # Use pread(), pread64(), pwrite(), pwrite64() functions for better performance if they are available.
-    if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread_pwrite_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread(0, NULL, 0, 0);\n  pwrite(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD"
-    fi
-    if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64"
-    elif cc -D_LARGEFILE64_SOURCE -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64 -D_LARGEFILE64_SOURCE"
-    fi
-
     # Necessary for FTS5 on Linux
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lm"
+    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lm"
 
     echo ""
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
@@ -83,24 +124,46 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # Do not contaminate dependent libtool-based projects with sqlite dependencies.
-    sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
+    mkdir -p $doc/share/doc
+    unzip $docsrc
+    mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
   '';
 
-  doCheck = false; # fails to link against tcl
+  # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  # When tcl is not available, only run test targets that don't need it.
+  checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
 
-  passthru.tests = {
-    inherit (python3Packages) sqlalchemy;
-    inherit sqldiff sqlite-analyzer;
+  passthru = {
+    tests = {
+      inherit (python3Packages) sqlalchemy;
+      inherit
+        sqldiff
+        sqlite-analyzer
+        sqlite-rsync
+        tinysparql
+        ;
+    };
+
+    updateScript = gitUpdater {
+      # No nicer place to look for latest version.
+      url = "https://github.com/sqlite/sqlite.git";
+      # Expect tags like "version-3.43.0".
+      rev-prefix = "version-";
+    };
   };
 
   meta = {
-    description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
+    changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
+    description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ eelco np ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ np ];
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    pkgConfigModules = [ "sqlite3" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
   };
 }

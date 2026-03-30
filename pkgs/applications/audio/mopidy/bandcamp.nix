@@ -1,19 +1,36 @@
-{ lib, python3Packages, mopidy }:
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  mopidy,
+}:
 
-python3Packages.buildPythonApplication rec {
-  pname = "Mopidy-Bandcamp";
+pythonPackages.buildPythonApplication (finalAttrs: {
+  pname = "mopidy-bandcamp";
   version = "1.1.5";
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-wg9zcOKfZQRhpyA1Cu5wvdwKpmrlcr2m9mrqBHgUXAQ=";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit (finalAttrs) version;
+    pname = "Mopidy-Bandcamp";
+    hash = "sha256-wg9zcOKfZQRhpyA1Cu5wvdwKpmrlcr2m9mrqBHgUXAQ=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ mopidy pykka ];
+  build-system = [
+    pythonPackages.setuptools
+  ];
 
-  meta = with lib; {
+  dependencies = [
+    mopidy
+    pythonPackages.pykka
+  ];
+
+  pythonImportsCheck = [ "mopidy_bandcamp" ];
+
+  meta = {
     description = "Mopidy extension for playing music from bandcamp";
     homepage = "https://github.com/impliedchaos/mopidy-bandcamp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ desttinghim ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ desttinghim ];
   };
-}
+})

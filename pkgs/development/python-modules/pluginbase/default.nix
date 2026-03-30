@@ -1,25 +1,32 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-  version = "1.0.1";
   pname = "pluginbase";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff6c33a98fce232e9c73841d787a643de574937069f0d18147028d70d7dee287";
+    hash = "sha256-/2wzqY/OIy6cc4QdeHpkPeV0k3Bp8NGBRwKNcNfe4oc=";
   };
 
-  checkInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    cd tests
-    PYTHONPATH=.. pytest
-  '';
+  # https://github.com/mitsuhiko/pluginbase/issues/24
+  doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pluginbase" ];
+
+  meta = {
+    description = "Support library for building plugins systems in Python";
     homepage = "https://github.com/mitsuhiko/pluginbase";
-    description = "A support library for building plugins sytems in Python";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    changelog = "https://github.com/mitsuhiko/pluginbase/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

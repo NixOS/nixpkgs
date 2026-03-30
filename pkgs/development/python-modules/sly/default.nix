@@ -1,29 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sly";
-  version = "0.4";
-  disabled = pythonOlder "3.6";
+  version = "0.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0an31bm5m8wqwphanmcsbbnmycy6l4xkmg4za4bwq8hk4dm2dwp5";
+    hash = "sha256-JR1CAV6FBxWK7CFk8GA130qCsDFM5kUPRX1xJedkkCQ=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  postPatch = ''
+    # imperative dev dependency installation
+    rm Makefile
+  '';
 
-  meta = with lib; {
-    description = "An improved PLY implementation of lex and yacc for Python 3";
+  pythonImportsCheck = [ "sly" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
+    description = "Improved PLY implementation of lex and yacc for Python 3";
     homepage = "https://github.com/dabeaz/sly";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

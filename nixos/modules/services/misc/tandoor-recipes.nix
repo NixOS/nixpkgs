@@ -1,38 +1,48 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
+  useNewMediaRoot = lib.versionAtLeast config.system.stateVersion "26.05";
 
   # SECRET_KEY through an env file
   env = {
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
     DEBUG = "0";
-    MEDIA_ROOT = "/var/lib/tandoor-recipes";
-  } // optionalAttrs (config.time.timeZone != null) {
-    TIMEZONE = config.time.timeZone;
-  } // (
-    lib.mapAttrs (_: toString) cfg.extraConfig
-  );
+    DEBUG_TOOLBAR = "0";
+    MEDIA_ROOT = "${stateDir}${lib.optionalString useNewMediaRoot "/media"}";
+  }
+  // lib.optionalAttrs (config.time.timeZone != null) {
+    TZ = config.time.timeZone;
+  }
+  // (lib.mapAttrs (_: toString) cfg.extraConfig);
 
-  manage =
-    let
-      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-    in
-    pkgs.writeShellScript "manage" ''
-      ${setupEnv}
-      exec ${pkg}/bin/tandoor-recipes "$@"
-    '';
+  manage = pkgs.writeShellScript "manage" ''
+    set -o allexport # Export the following env vars
+    ${lib.toShellVars env}
+    # UID is a read-only shell variable
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service | tr '[:upper:]' '[:lower:]')"
+    exec ${pkgs.util-linux}/bin/nsenter \
+      -t $mainpid -m -S $uid -G $gid --wdns=${stateDir} \
+      ${pkg}/bin/tandoor-recipes "$@"
+  '';
 in
 {
-  meta.maintainers = with maintainers; [ ambroisie ];
+  meta = {
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+    doc = ./tandoor-recipes.md;
+  };
 
   options.services.tandoor-recipes = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable Tandoor Recipes.
 
         When started, the Tandoor Recipes database is automatically created if
@@ -44,22 +54,22 @@ in
       '';
     };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
-      description = lib.mdDoc "Web interface address.";
+      description = "Web interface address.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
-      description = lib.mdDoc "Web interface port.";
+      description = "Web interface port.";
     };
 
-    extraConfig = mkOption {
-      type = types.attrs;
+    extraConfig = lib.mkOption {
+      type = lib.types.attrs;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Extra tandoor recipes config options.
 
         See [the example dot-env file](https://raw.githubusercontent.com/vabene1111/recipes/master/.env.template)
@@ -70,17 +80,52 @@ in
       };
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tandoor-recipes;
-      defaultText = literalExpression "pkgs.tandoor-recipes";
-      description = lib.mdDoc "The Tandoor Recipes package to use.";
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "tandoor_recipes";
+      description = "User account under which Tandoor runs.";
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "tandoor_recipes";
+      description = "Group under which Tandoor runs.";
+    };
+
+    package = lib.mkPackageOption pkgs "tandoor-recipes" { };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Tandoor Recipes.
+        '';
+      };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf (!useNewMediaRoot && !(cfg.extraConfig ? MEDIA_ROOT)) [
+      "`services.tandoor-recipes.extraConfig.MEDIA_ROOT` is unset. This is considered insecure for `system.stateVersion` < 26.05. See https://nixos.org/manual/nixos/unstable/#module-services-tandoor-recipes-migrating-media for migration instructions."
+    ];
+
+    users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
+      tandoor_recipes = {
+        inherit (cfg) group;
+        isSystemUser = true;
+      };
+    };
+
+    users.groups = lib.mkIf (cfg.group == "tandoor_recipes") {
+      tandoor_recipes = { };
+    };
+
     systemd.services.tandoor-recipes = {
       description = "Tandoor Recipes server";
+
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = lib.optional cfg.database.createLocally "postgresql.target";
 
       serviceConfig = {
         ExecStart = ''
@@ -88,14 +133,17 @@ in
         '';
         Restart = "on-failure";
 
-        User = "tandoor_recipes";
-        DynamicUser = true;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = "/var/lib/tandoor-recipes";
+        User = cfg.user;
+        Group = cfg.group;
+        StateDirectory = [
+          "tandoor-recipes"
+        ]
+        ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
-          "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"
@@ -115,16 +163,23 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         # gunicorn needs setuid
-        SystemCallFilter = [ "@system-service" "~@privileged" "@resources" "@setuid" "@keyring" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "@resources"
+          "@setuid"
+          "@keyring"
+        ];
         UMask = "0066";
-      } // lib.optionalAttrs (cfg.port < 1024) {
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       wantedBy = [ "multi-user.target" ];
@@ -139,6 +194,24 @@ in
       environment = env // {
         PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/tandoor-recipes";
       };
+    };
+
+    services.tandoor-recipes.extraConfig = lib.mkIf cfg.database.createLocally {
+      DB_ENGINE = "django.db.backends.postgresql";
+      POSTGRES_HOST = "/run/postgresql";
+      POSTGRES_USER = "tandoor_recipes";
+      POSTGRES_DB = "tandoor_recipes";
+    };
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "tandoor_recipes" ];
+      ensureUsers = [
+        {
+          name = "tandoor_recipes";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }

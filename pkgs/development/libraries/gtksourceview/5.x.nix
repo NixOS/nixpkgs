@@ -1,35 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, pcre2
-, gtk4
-, pango
-, fribidi
-, vala
-, gi-docgen
-, libxml2
-, perl
-, gettext
-, gnome
-, gobject-introspection
-, dbus
-, xvfb-run
-, shared-mime-info
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  pcre2,
+  gtk4,
+  pango,
+  fribidi,
+  vala,
+  gi-docgen,
+  libxml2,
+  perl,
+  gettext,
+  gnome,
+  gobject-introspection,
+  dbus,
+  xvfb-run,
+  shared-mime-info,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.6.1";
+  version = "5.18.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZZ2cydA0oRTwfn4TTugNd97ASXyxUWrlNpEZwvy52hY=";
+    url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
+    hash = "sha256-BRp4/jj3kzKAR+W81thVxkJcC0gMINlDIXnjVnQsasA=";
   };
 
   patches = [
@@ -48,6 +54,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     vala
     gi-docgen
+    gtk4 # for gtk4-update-icon-cache checked during configure
   ];
 
   buildInputs = [
@@ -65,24 +72,26 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Ddocumentation=true"
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     runHook preCheck
 
-    XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --no-rebuild --print-errorlogs
+    env \
+      XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
+      GTK_A11Y=none \
+      xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
   '';
@@ -100,11 +109,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
     description = "Source code editing widget for GTK";
-    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
-    platforms = platforms.unix;
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
+    pkgConfigModules = [ "gtksourceview-5" ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
   };
-}
+})

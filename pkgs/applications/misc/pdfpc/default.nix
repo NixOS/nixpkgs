@@ -1,45 +1,85 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, librsvg, pcre, gobject-introspection, wrapGAppsHook
-, webkitgtk, discount, json-glib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  vala,
+  gtk3,
+  libgee,
+  poppler,
+  libpthread-stubs,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-libav,
+  gobject-introspection,
+  wrapGAppsHook3,
+  qrencode,
+  webkitgtk_4_1,
+  discount,
+  json-glib,
+  nix-update-script,
+  libsoup_3,
+  librsvg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdfpc";
-  version = "4.5.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
     rev = "v${version}";
-    sha256 = "0bmy51w6ypz927hxwp5g7wapqvzqmsi3w32rch6i3f94kg1152ck";
+    hash = "sha256-fPhCrn1ELC03/II+e021BUNJr1OKCBIcFCM7z+2Oo+s=";
   };
 
   nativeBuildInputs = [
-    cmake pkg-config vala
+    cmake
+    pkg-config
+    vala
     # For setup hook
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3 libgee poppler
-    libpthreadstubs librsvg pcre
-    gstreamer
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-libav
-    webkitgtk
-    discount
-    json-glib
-  ];
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "MDVIEW" false);
+  buildInputs =
+    let
+      platformBuildInputs =
+        if stdenv.hostPlatform.isDarwin then
+          [ librsvg ]
+        else
+          [
+            libpthread-stubs
+            webkitgtk_4_1
+          ];
+    in
+    [
+      (gst-plugins-good.override { gtkSupport = true; })
+      discount
+      gst-libav
+      gst-plugins-base
+      gstreamer
+      gtk3
+      json-glib
+      libgee
+      libsoup_3
+      poppler
+      qrencode
+    ]
+    ++ platformBuildInputs;
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DMOVIES=OFF";
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "A presenter console with multi-monitor support for PDF files";
+  meta = {
+    description = "Presenter console with multi-monitor support for PDF files";
+    mainProgram = "pdfpc";
     homepage = "https://pdfpc.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
   };
 
 }

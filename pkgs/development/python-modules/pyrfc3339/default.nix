@@ -1,26 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytz
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  pytz,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "pyRFC3339";
-  version = "1.1";
+  pname = "pyrfc3339";
+  version = "2.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06jv7ar7lpvvk0dixzwdr3wgm0g1lipxs429s2z7knwwa7hwpf41";
+  src = fetchFromGitHub {
+    owner = "kurtraschke";
+    repo = "pyRFC3339";
+    tag = "v${version}";
+    hash = "sha256-pNtv60ecJ7kceS+dDMuKVCQGARf0SbNVBLqqTIzHDj0=";
   };
 
-  propagatedBuildInputs = [ pytz ];
-  buildInputs = [ nose ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  meta = with lib; {
+  dependencies = [ pytz ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pyrfc3339"
+  ];
+
+  meta = {
+    changelog = "https://github.com/kurtraschke/pyRFC3339/blob/${src.tag}/CHANGES.rst";
     description = "Generate and parse RFC 3339 timestamps";
     homepage = "https://github.com/kurtraschke/pyRFC3339";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-
 }

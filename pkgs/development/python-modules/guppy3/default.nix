@@ -1,32 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, tkinter
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tkinter,
 }:
 
 buildPythonPackage rec {
   pname = "guppy3";
-  version = "3.1.2";
-  disabled = pythonOlder "3.6";
+  version = "3.1.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-f7YpaZ85PU/CSsDwSm2IJ/x2ZxzHoMOVbdbzT1i8y/w=";
+    repo = "guppy3";
+    tag = "v${version}";
+    hash = "sha256-9pswuHLCxb/zLtyWfIRDmNPLFPamF4Ybb+7TbLf38fU=";
   };
 
-  propagatedBuildInputs = [ tkinter ];
+  build-system = [ setuptools ];
+
+  dependencies = [ tkinter ];
 
   # Tests are starting a Tkinter GUI
   doCheck = false;
+
   pythonImportsCheck = [ "guppy" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/zhuyifei1999/guppy3/blob/${src.tag}/ChangeLog";
     description = "Python Programming Environment & Heap analysis toolset";
     homepage = "https://zhuyifei1999.github.io/guppy3/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,55 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, setuptools-scm
-, attrs
-, deprecated
-, hepunits
-, pytestCheckHook
-, tabulate
-, pandas
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  deprecated,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  hepunits,
+  pandas,
+  pytestCheckHook,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.20.1";
+  version = "0.26.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HoWWwoGMrkRqlYzrF2apGsxsZAHwHbHSO5TCSCelxUc=";
+    hash = "sha256-EHaY0K2NVtZWjvlzZ/Qk5dZyoUCHpd4xU51iGCV1kMc=";
   };
-  nativeBuildInputs = [
-    setuptools-scm
+
+  postPatch = ''
+    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
+    # as dependencies
+    substituteInPlace pyproject.toml \
+      --replace '"--benchmark-disable",' ""
+  '';
+
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     deprecated
     hepunits
   ];
 
-  pythonImportsCheck = [
-    "particle"
-  ];
-
-  preCheck = ''
-    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
-    # as dependencies
-    substituteInPlace pyproject.toml \
-      --replace '"--benchmark-disable", ' ""
-    rm tests/particle/test_performance.py
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tabulate
     pandas
   ];
 
+  pythonImportsCheck = [ "particle" ];
+
+  disabledTestPaths = [
+    # Requires pytest-benchmark and pytest-cov which we want to avoid using, as
+    # it doesn't really test functionality.
+    "tests/particle/test_performance.py"
+  ];
+
   meta = {
-    description = "Package to deal with particles, the PDG particle data table, PDGIDs, etc.";
+    description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
+    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

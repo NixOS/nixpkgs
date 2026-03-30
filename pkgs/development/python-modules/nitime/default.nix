@@ -1,39 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, cython
-, numpy
-, scipy
-, matplotlib
-, networkx
-, nibabel
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  cython,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  numpy,
+  scipy,
+  matplotlib,
+  networkx,
+  nibabel,
 }:
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.9";
-  disabled = isPy27;
+  version = "0.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bn2QrbsfqUJim84vH5tt5T6h3YsGAlgu9GCMiNQ0OHQ=";
+    hash = "sha256-Esv0iLBlXcBaoYoMpZgt6XAwJgTkYfyS6H69m3U5tv8=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  buildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
-
-  disabledTests = [
-    # https://github.com/nipy/nitime/issues/197
-    "test_FilterAnalyzer"
+  nativeBuildInputs = [
+    cython
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  meta = with lib; {
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    matplotlib
+    networkx
+    nibabel
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin; # tests hang indefinitely
+
+  pythonImportsCheck = [ "nitime" ];
+
+  meta = {
     homepage = "https://nipy.org/nitime";
     description = "Algorithms and containers for time-series analysis in time and spectral domains";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

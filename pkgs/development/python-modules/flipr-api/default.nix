@@ -1,52 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, requests-mock
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  requests-mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "flipr-api";
-  version = "1.4.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "1.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cnico";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-LcxLJQ2MAif4yC+/SvO7IEa1lNOV67FgJU1UWT4ope4=";
+    repo = "flipr-api";
+    tag = version;
+    hash = "sha256-/px8NuBwukAPMxdXvHdyfO/j/a9UatKbdrjDNuT0f4k=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "flipr_api"
-  ];
+  env = {
+    # used in test_session
+    FLIPR_USERNAME = "foobar";
+    FLIPR_PASSWORD = "secret";
+  };
 
-  meta = with lib; {
+  pythonImportsCheck = [ "flipr_api" ];
+
+  meta = {
     description = "Python client for Flipr API";
+    mainProgram = "flipr-api";
     homepage = "https://github.com/cnico/flipr-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cnico/flipr-api/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

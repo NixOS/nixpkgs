@@ -1,22 +1,22 @@
-{ lib, fetchFromGitLab, buildDunePackage }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "ringo";
-  version = "0.9";
-
+  version = "1.1.0";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ringo";
     rev = "v${version}";
-    sha256 = "sha256-lPb+WrRsmtOow9BX9FW4HoILlsTuuMrVlK0XPcXWZ9U=";
+    hash = "sha256-8dThhY7TIjd0lLdCt6kxr0yhgVGDyN6ZMSx0Skfbcwk=";
   };
 
-  minimalOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.08";
 
   doCheck = true;
-
-  # If we just run the test as is it will try to test ringo-lwt
-  checkPhase = "dune build @test/runtest";
 
   meta = {
     description = "Caches (bounded-size key-value stores) and other bounded-size stores";

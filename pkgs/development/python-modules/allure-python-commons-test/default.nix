@@ -1,31 +1,34 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, attrs
-, pluggy
-, six
-, pyhamcrest
-, setuptools-scm
-, python
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  attrs,
+  pluggy,
+  six,
+  pyhamcrest,
+  setuptools-scm,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.11.0";
-
-  disabled = pythonOlder "3.4";
+  version = "2.15.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-69iSW5pUbYQpA/dgpCr088CUaa1BGIwlijltmFZnEa0=";
+    pname = "allure_python_commons_test";
+    inherit version;
+    hash = "sha256-eRjjsxiXm/7nMyaJS5pXhpNmrjOhnd1o7+F9ZwGzI/I=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ attrs pluggy six pyhamcrest ];
+  dependencies = [
+    attrs
+    pluggy
+    six
+    pyhamcrest
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m doctest ./src/container.py
@@ -36,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allure_commons_test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Just pack of hamcrest matchers for validation result in allure2 json format";
     homepage = "https://github.com/allure-framework/allure-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ evanjs ];
   };
 }

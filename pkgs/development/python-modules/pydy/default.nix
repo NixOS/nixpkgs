@@ -1,48 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, cython
-, numpy
-, scipy
-, sympy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  sympy,
+  setuptools,
+  pytestCheckHook,
+  cython,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydy";
-  version = "0.6.0";
-  format = "setuptools";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-e/Ssfd5llioA7ccLULlRdHR113IbR4AJ4/HmzQuU7vI=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-G3iqMzy/W3ctz/c4T3LqYyTTMVbly1GMkmMLi96mzMc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
     sympy
   ];
 
-  checkInputs = [
-    nose
-    cython
+  nativeCheckInputs = [
     pytestCheckHook
+    cython
   ];
 
-  disabledTests = [
-    # Tests not fixed yet. Check https://github.com/pydy/pydy/issues/465
-    "test_generate_cse"
-    "test_generate_code_blocks"
-    "test_doprint"
-    "test_OctaveMatrixGenerator"
-  ];
+  pythonImportsCheck = [ "pydy" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Python tool kit for multi-body dynamics";
     homepage = "http://pydy.org";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

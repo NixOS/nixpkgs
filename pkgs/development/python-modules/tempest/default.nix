@@ -1,66 +1,82 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, cliff
-, jsonschema
-, testtools
-, paramiko
-, netaddr
-, oslo-concurrency
-, oslo-config
-, oslo-log
-, stestr
-, oslo-serialization
-, oslo-utils
-, fixtures
-, pyyaml
-, subunit
-, stevedore
-, prettytable
-, urllib3
-, debtcollector
-, hacking
-, oslotest
-, bash
-, python
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  cliff,
+  debtcollector,
+  defusedxml,
+  fetchPypi,
+  fixtures,
+  hacking,
+  jsonschema,
+  netaddr,
+  oslo-concurrency,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  oslotest,
+  paramiko,
+  pbr,
+  prettytable,
+  python,
+  pyyaml,
+  setuptools,
+  stestr,
+  stevedore,
+  subunit,
+  testscenarios,
+  testtools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "32.0.0";
+  version = "46.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MPaGhT2H8Hzk29qylQru9Z6QaRrHM+9I7N5qhe9Wts4=";
+    hash = "sha256-F/K0X4wHZOR4dvicGwQ9JOeh25iyqfKkgjiIZc6qWLY=";
   };
 
-  propagatedBuildInputs = [
-    pbr
+  postPatch = ''
+    substituteInPlace tempest/lib/common/http.py \
+      --replace-fail 'getheaders()' 'headers'
+  '';
+
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     cliff
+    debtcollector
+    defusedxml
+    fixtures
     jsonschema
-    testtools
-    paramiko
     netaddr
     oslo-concurrency
     oslo-config
     oslo-log
-    stestr
     oslo-serialization
     oslo-utils
-    fixtures
-    pyyaml
-    subunit
-    stevedore
+    paramiko
+    pbr
     prettytable
+    pyyaml
+    stestr
+    stevedore
+    subunit
+    testscenarios
+    testtools
     urllib3
-    debtcollector
   ];
 
-  checkInputs = [
-    stestr
+  nativeCheckInputs = [
     hacking
     oslotest
+    stestr
   ];
 
   checkPhase = ''
@@ -72,16 +88,22 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_dict_return_values
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_multiple_workers
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_single_process
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
   '';
 
   pythonImportsCheck = [ "tempest" ];
 
-  meta = with lib; {
-    description = "An OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
+  meta = {
+    description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    mainProgram = "tempest";
+    teams = [ lib.teams.openstack ];
   };
 }

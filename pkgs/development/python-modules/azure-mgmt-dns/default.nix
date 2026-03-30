@@ -1,39 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
-  version = "8.0.0";
+  version = "9.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "407c2dacb33513ffbe9ca4be5addb5e9d4bae0cb7efa613c3f7d531ef7bf8de8";
+    pname = "azure_mgmt_dns";
+    inherit version;
+    hash = "sha256-ifjE5GepQiS5e/Ft121b1ha/Ec7+cn93ZhilfMVIbjc=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
+    isodate
+    typing-extensions
   ];
 
   # this is still needed for when the version is overrided
   pythonNamespaces = [ "azure.mgmt" ];
 
-  # has no tests
+  # Tests are only available in the mono-repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure DNS Management Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer maxwilson ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-dns";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-dns_${version}/sdk/network/azure-mgmt-dns/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

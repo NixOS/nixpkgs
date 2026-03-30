@@ -1,15 +1,23 @@
-{ skawarePackages, pkgs }:
+{
+  lib,
+  stdenv,
+  skawarePackages,
+  pkgs,
+}:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "skalibs";
-  version = "2.12.0.1";
-  sha256 = "sha256-PiKPcvGNiMF/bE4KZogdbTd5Qnt+foifMUK28m2jAoU=";
+  version = "2.14.5.1";
+  sha256 = "sha256-+jWccEObSAQAoKLvaAJqJzazFQJanZXfadNGAfuTjw8=";
 
-  description = "A set of general-purpose C programming libraries";
+  description = "Set of general-purpose C programming libraries";
 
-  outputs = [ "lib" "dev" "doc" "out" ];
+  outputs = [
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   configureFlags = [
     # assume /dev/random works
@@ -21,6 +29,27 @@ buildPackage {
     # Empty the default path, which would be "/usr/bin:bin".
     # It would be set when PATH is empty. This hurts hermeticity.
     "--with-default-path="
+
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+    # There's a fallback path for BSDs.
+    "--with-sysdep-procselfexe=${
+      if stdenv.hostPlatform.isLinux then
+        "/proc/self/exe"
+      else if stdenv.hostPlatform.isSunOS then
+        "/proc/self/path/a.out"
+      else
+        "none"
+    }"
+    # ./configure: sysdep posixspawnearlyreturn cannot be autodetected
+    # when cross-compiling. Please manually provide a value with the
+    # --with-sysdep-posixspawnearlyreturn=yes|no|... option.
+    #
+    # posixspawnearlyreturn: `yes` if the target has a broken
+    # `posix_spawn()` implementation that can return before the
+    # child has successfully exec'ed. That happens with old glibcs
+    # and some virtual platforms.
+    "--with-sysdep-posixspawnearlyreturn=no"
   ];
 
   postInstall = ''

@@ -1,51 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, cairocffi
-, cssselect2
-, defusedxml
-, pillow
-, tinycss2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  cairocffi,
+  cssselect2,
+  defusedxml,
+  pillow,
+  tinycss2,
+
+  # testing
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "CairoSVG";
-  version = "2.5.2";
-  disabled = !isPy3k;
+  pname = "cairosvg";
+  version = "2.8.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-sLmSnPXboAUXjXRqgDb88AJVUPSYylTbYYczIjhHg7w=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "CairoSVG";
+    tag = version;
+    hash = "sha256-KWUZA8pcHMnDEkAYZt3zDzPNynhGBuLZuagNPfHF8EA=";
   };
 
-  propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
+  build-system = [ setuptools ];
 
-  propagatedNativeBuildInputs = [ cairocffi ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" "" \
-      --replace "pytest-cov" "" \
-      --replace "--flake8" "" \
-      --replace "--isort" ""
-  '';
-
-  pytestFlagsArray = [
-    "cairosvg/test_api.py"
+  dependencies = [
+    cairocffi
+    cssselect2
+    defusedxml
+    pillow
+    tinycss2
   ];
+
+  nativeBuildInputs = [ cairocffi ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "cairosvg/test_api.py" ];
 
   pythonImportsCheck = [ "cairosvg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cairosvg.org";
-    license = licenses.lgpl3Plus;
+    changelog = "https://github.com/Kozea/CairoSVG/releases/tag/${version}";
+    license = lib.licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "cairosvg";
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

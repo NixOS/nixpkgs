@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "class-registry";
-  version = "3.0.5";
-  disabled = pythonOlder "3.5";
+  version = "5.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "todofixthis";
-    repo = pname;
-    rev = version;
-    sha256 = "0gpvq4a6qrr2iki6b4vxarjr1jrsw560m2qzm5bb43ix8c8b7y3q";
+    repo = "class-registry";
+    tag = version;
+    hash = "sha256-MI63b77ydmhQSbtKovla7BCEUjLF43DW80VABjAVEI0=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "class_registry"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "class_registry" ];
+
+  meta = {
     description = "Factory and registry pattern for Python classes";
     homepage = "https://class-registry.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kevincox SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

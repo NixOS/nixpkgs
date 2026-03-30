@@ -1,66 +1,93 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
-  gtest, lit, nodejs, filecheck, fetchpatch
+{
+  lib,
+  stdenv,
+  cmake,
+  python3,
+  fetchFromGitHub,
+  emscripten,
+  gtest,
+  lit,
+  nodejs,
+  filecheck,
 }:
-
+let
+  testsuite = fetchFromGitHub {
+    owner = "WebAssembly";
+    repo = "testsuite";
+    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
+    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "109";
+  version = "126";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    sha256 = "sha256-HMPoiuTvYhTDaBUfSOfh/Dt4FdO9jGqUaFpi92pnscI=";
+    hash = "sha256-6KnPVIEtguuMHopm2vf6s+KZ3Ymf2rjFE/aXy1Kbn5E=";
   };
 
-  patches = [
-    # https://github.com/WebAssembly/binaryen/pull/4321
-    (fetchpatch {
-      url = "https://github.com/WebAssembly/binaryen/commit/93b8849d9f98ef7ed812938ff0b3219819c2be77.patch";
-      sha256 = "sha256-Duan/B9A+occ5Lj2SbRX793xIfhzHbdYPI5PyTNCZoU=";
-    })
-    # https://github.com/WebAssembly/binaryen/pull/4913
-    (fetchpatch {
-      url = "https://github.com/WebAssembly/binaryen/commit/b70fe755aa4c90727edfd91dc0a9a51febf0239d.patch";
-      sha256 = "sha256-kjPLbdiMVQepSJ7J1gK6dRSMI/2SsH39k7W5AMOIrkM=";
-    })
+  nativeBuildInputs = [
+    cmake
+    python3
   ];
 
-  nativeBuildInputs = [ cmake python3 ];
+  strictDeps = true;
 
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
-      sed -i '/googletest/d' third_party/CMakeLists.txt
+      sed -i '/gtest/d' third_party/CMakeLists.txt
+      rmdir test/spec/testsuite
+      ln -s ${testsuite} test/spec/testsuite
     else
       cmakeFlagsArray=($cmakeFlagsArray -DBUILD_TESTS=0)
     fi
   '';
 
-  checkInputs = [ gtest lit nodejs filecheck ];
+  nativeCheckInputs = [
+    lit
+    nodejs
+    filecheck
+  ];
+  checkInputs = [ gtest ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';
 
   tests = [
-    "version" "wasm-opt" "wasm-dis"
-    "crash" "dylink" "ctor-eval"
-    "wasm-metadce" "wasm-reduce" "spec"
-    "lld" "wasm2js" "validator"
-    "example" "unit"
+    "version"
+    "wasm-opt"
+    "wasm-dis"
+    "crash"
+    "dylink"
+    "ctor-eval"
+    "wasm-metadce"
+    "wasm-reduce"
+    "spec"
+    "lld"
+    "wasm2js"
+    # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
     # "binaryenjs" "binaryenjs_wasm" # not building this
-    "lit" "gtest"
+    # "lit" # fails on d8/fuzz_shell*
+    "gtest"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "example"
+    "validator"
   ];
-  doCheck = stdenv.isLinux;
 
-  meta = with lib; {
+  doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
+
+  meta = {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ asppsa ];
-    license = licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      willcohen
+    ];
+    license = lib.licenses.asl20;
   };
-
-  passthru.tests = {
-    inherit emscripten;
-  };
+  passthru.tests = { inherit emscripten; };
 }

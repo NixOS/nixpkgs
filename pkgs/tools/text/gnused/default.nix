@@ -1,21 +1,35 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchurl {
     url = "mirror://gnu/sed/sed-${version}.tar.xz";
-    sha256 = "0cznxw73fzv1n3nj2zsq6nf73rvsbxndp444xkpahdqvlzz0r6zp";
+    sha256 = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
   };
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+    perl
+  ];
   preConfigure = "patchShebangs ./build-aux/help2man";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
-  PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
+  env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    PERL = "missing";
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/sed/";

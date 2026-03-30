@@ -1,41 +1,78 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certvalidator
-, attrs
-, six
-, urllib3
-, cryptoparser
-, requests
+{
+  lib,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  certvalidator,
+  colorama,
+  cryptoparser,
+  dnspython,
+  fetchPypi,
+  pathlib2,
+  pyfakefs,
+  python-dateutil,
+  requests,
+  setuptools,
+  setuptools-scm,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.8.1";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "CryptoLyzer";
-    inherit version;
-    sha256 = "sha256-FbxSjKxhzlpj3IezuLCQvoeZMG1q+OE/yn5vB/XE1rI=";
+    inherit pname version;
+    hash = "sha256-c/cBOrvqyvdGfDKPRUhIu9FqtQUERb/fJBGmncZpbSM=";
   };
 
-  propagatedBuildInputs = [
-    certvalidator
-    attrs
-    six
-    urllib3
-    cryptoparser
-    requests
+  patches = [
+    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
+    ./fix-dirs-exclude.patch
   ];
 
-  doCheck = false; # Tests require networking
+  pythonRemoveDeps = [ "bs4" ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    attrs
+    beautifulsoup4
+    certvalidator
+    colorama
+    cryptoparser
+    dnspython
+    pathlib2
+    pyfakefs
+    python-dateutil
+    requests
+    urllib3
+  ];
+
+  # Tests require networking
+  doCheck = false;
+
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
 
   pythonImportsCheck = [ "cryptolyzer" ];
 
-  meta = with lib; {
-    description = "Fast and flexible cryptographic protocol analyzer";
+  meta = {
+    description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    mainProgram = "cryptolyze";
+    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
   };
 }

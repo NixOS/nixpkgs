@@ -1,74 +1,69 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, installShellFiles
-, astroid
-, dill
-, isort
-, mccabe
-, platformdirs
-, tomli
-, tomlkit
-, typing-extensions
-, GitPython
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  astroid,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  gitpython,
+  isort,
+  mccabe,
+  platformdirs,
+  py,
+  pytest-timeout,
+  pytest-xdist,
+  pytest7CheckHook,
+  pythonAtLeast,
+  requests,
+  setuptools,
+  tomlkit,
+  typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "2.14.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7.2";
+  version = "4.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JTFGplqIA6WavwzKOkrm1rHBKNRrplBPvAdEkb/fTlI=";
+    owner = "pylint-dev";
+    repo = "pylint";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mKI/sRYl2ZwZ3JklmqBTs7vRG9EA4zDHaW61d/Xozb4=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astroid
     dill
     isort
     mccabe
     platformdirs
     tomlkit
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp -v "elisp/"*.el $out/share/emacs/site-lisp/
-    installManPage man/*.1
-  '';
-
-  checkInputs = [
-    GitPython
+  nativeCheckInputs = [
+    gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
+    py
     pytest-timeout
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
+    requests
     typing-extensions
+    writableTmpDirAsHomeHook
   ];
 
-  dontUseSetuptoolsCheck = true;
-
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
+  pytestFlags = [
+    # DeprecationWarning: pyreverse will drop support for resolving and
+    # displaying implemented interfaces in pylint 3.0. The
+    # implementation relies on the '__implements__'  attribute proposed
+    # in PEP 245, which was rejected in 2006.
+    "-Wignore::DeprecationWarning"
+    "-v"
+  ];
 
   disabledTestPaths = [
     "tests/benchmark"
@@ -87,14 +82,26 @@ buildPythonPackage rec {
     "test_output_of_callback_options"
     # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted. The list of emitted warnings is: [].
     "test_save_and_load_not_a_linter_stats"
-  ] ++ lib.optionals stdenv.isDarwin [
+    # Truncated string expectation mismatch
+    "test_truncated_compare"
+    # Probably related to pytest versions, see pylint-dev/pylint#9477 and pylint-dev/pylint#9483
+    "test_functional"
+    # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
+    "test_functional_relation_extraction"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ModuleNotFoundError: No module named 'completely_unknown'
+    "test_do_not_import_files_from_local_directory"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_parallel_execution"
     "test_py3k_jobs_option"
   ];
 
-  meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
-    description = "A bug and style checker for Python";
+  meta = {
+    description = "Bug and style checker for Python";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -104,7 +111,8 @@ buildPythonPackage rec {
       - symilar: an independent similarities checker
       - epylint: Emacs and Flymake compatible Pylint
     '';
-    license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    mainProgram = "pylint";
   };
-}
+})

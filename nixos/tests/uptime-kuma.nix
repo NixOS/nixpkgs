@@ -1,14 +1,14 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
+{ lib, ... }:
 
 {
   name = "uptime-kuma";
-  meta.maintainers = with maintainers; [ julienmalka ];
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   nodes.machine =
     { pkgs, ... }:
-    { services.uptime-kuma.enable = true; };
+    {
+      services.uptime-kuma.enable = true;
+    };
 
   testScript = ''
     machine.start()
@@ -16,4 +16,4 @@ with lib;
     machine.wait_for_open_port(3001)
     machine.succeed("curl --fail http://localhost:3001/")
   '';
-})
+}

@@ -1,47 +1,50 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-aiohttp
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-aiohttp,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-retry";
-  version = "2.8.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inyutin";
     repo = "aiohttp_retry";
-    rev = "v${version}";
-    hash = "sha256-Zr68gx8ZR9jKrogmqaFLvpBAIHE9ptHm0zZ/b49cCLw=";
+    tag = "v${version}";
+    hash = "sha256-8S4gjeN8ktdDNd8GUsejaZdCaG/VXYPo0RJpwrrttGQ=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="2.9.0"' 'version="${version}"'
+  '';
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiohttp_retry"
-  ];
+  pythonImportsCheck = [ "aiohttp_retry" ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retry client for aiohttp";
     homepage = "https://github.com/inyutin/aiohttp_retry";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/inyutin/aiohttp_retry/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

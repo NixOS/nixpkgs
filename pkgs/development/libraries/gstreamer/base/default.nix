@@ -1,53 +1,67 @@
-{ stdenv
-, fetchurl
-, lib
-, pkg-config
-, meson
-, ninja
-, gettext
-, python3
-, gstreamer
-, orc
-, pango
-, libtheora
-, libintl
-, libopus
-, isocodes
-, libjpeg
-, libpng
-, libvisual
-, tremor # provides 'virbisidec'
-, libGL
-, gobject-introspection
-, enableX11 ? stdenv.isLinux
-, libXv
-, libXext
-, enableWayland ? stdenv.isLinux
-, wayland
-, wayland-protocols
-, enableAlsa ? stdenv.isLinux
-, alsa-lib
-# Enabling Cocoa seems to currently not work, giving compile
-# errors. Suspected is that a newer version than clang
-# is needed than 5.0 but it is not clear.
-, enableCocoa ? false
-, Cocoa
-, OpenGL
-, enableGl ? (enableX11 || enableWayland || enableCocoa)
-, enableCdparanoia ? (!stdenv.isDarwin)
-, cdparanoia
-, glib
+{
+  stdenv,
+  fetchurl,
+  lib,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  gstreamer,
+  graphene,
+  orc,
+  pango,
+  libtheora,
+  libintl,
+  libopus,
+  isocodes,
+  libjpeg,
+  libpng,
+  tremor, # provides 'virbisidec'
+  libGL,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  enableX11 ? stdenv.hostPlatform.isLinux,
+  libxext,
+  libxi,
+  libxv,
+  libdrm,
+  enableWayland ? stdenv.hostPlatform.isLinux,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  enableAlsa ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  enableCocoa ? stdenv.hostPlatform.isDarwin,
+  enableGl ? (enableX11 || enableWayland || enableCocoa),
+  enableCdparanoia ? (!stdenv.hostPlatform.isDarwin),
+  cdparanoia,
+  glib,
+  testers,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.20.3";
+  version = "1.26.5";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  separateDebugInfo = true;
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-fjCz3YGnA4D/dVT5mEcdaZb/drvm/FRHCW+FHiRHPJ8=";
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8MDibL7apXcyy2pXjozBOhFkvxjXN9VcMzBhxS8MSNc=";
   };
 
   strictDeps = true;
@@ -63,13 +77,19 @@ stdenv.mkDerivation rec {
     orc
     glib
     gstreamer
-    # docs
-    # TODO add hotdoc here
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optional enableWayland wayland;
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ]
+  ++ lib.optionals enableWayland [
+    wayland-scanner
+  ];
 
   buildInputs = [
-    gobject-introspection
+    graphene
     orc
     libtheora
     libintl
@@ -78,45 +98,65 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     tremor
+    pango
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libdrm
     libGL
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    libvisual
-  ] ++ lib.optionals stdenv.isDarwin [
-    pango
-    OpenGL
-  ] ++ lib.optionals enableAlsa [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ]
+  ++ lib.optionals enableAlsa [
     alsa-lib
-  ] ++ lib.optionals enableX11 [
-    libXext
-    libXv
-    pango
-  ] ++ lib.optionals enableWayland [
+  ]
+  ++ lib.optionals enableX11 [
+    libxext
+    libxi
+    libxv
+  ]
+  ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
-  ] ++ lib.optional enableCocoa Cocoa
-    ++ lib.optional enableCdparanoia cdparanoia;
+  ]
+  ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [
     gstreamer
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libdrm
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
-    "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dgl_winsys=${
+      lib.concatStringsSep "," (
+        lib.optional enableX11 "x11"
+        ++ lib.optional enableWayland "wayland"
+        ++ lib.optional enableCocoa "cocoa"
+      )
+    }"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "libvisual" false)
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dtests=disabled"
   ]
-  ++ lib.optional (!enableX11) "-Dx11=disabled"
+  ++ lib.optionals (!enableX11) [
+    "-Dx11=disabled"
+    "-Dxi=disabled"
+    "-Dxshm=disabled"
+    "-Dxvideo=disabled"
+  ]
   # TODO How to disable Wayland?
   ++ lib.optional (!enableGl) "-Dgl=disabled"
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
-  ++ lib.optionals stdenv.isDarwin [
-    "-Dlibvisual=disabled"
-  ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
 
   postPatch = ''
     patchShebangs \
@@ -129,6 +169,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   doCheck = false; # fails, wants DRI access for OpenGL
+
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
 
   passthru = {
     # Downstream `gst-*` packages depending on `gst-plugins-base`
@@ -145,13 +189,23 @@ stdenv.mkDerivation rec {
     # vs what was built) and to make them easier to search for.
     glEnabled = enableGl;
     waylandEnabled = enableWayland;
+
+    updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = lib.licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-audio-1.0"
+      "gstreamer-base-1.0"
+      "gstreamer-net-1.0"
+      "gstreamer-video-1.0"
+    ];
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

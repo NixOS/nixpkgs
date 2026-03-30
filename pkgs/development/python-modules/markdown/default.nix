@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, pyyaml
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.4.1";
+  version = "3.10.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "setuptools";
-
-  src = fetchPypi {
-    pname = "Markdown";
-    inherit version;
-    sha256 = "3b809086bb6efad416156e00a0da66fe47618a5d6918dd688f53f40c8e4cfeff";
+  src = fetchFromGitHub {
+    owner = "Python-Markdown";
+    repo = "markdown";
+    tag = version;
+    hash = "sha256-iZ+52xXtpn59HIcG2LTHHV0AMAz5N72np6s8+EOy8MQ=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ unittestCheckHook pyyaml ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "markdown" ];
 
-  meta = with lib; {
-    description = "A Python implementation of John Gruber's Markdown with Extension support";
+  meta = {
+    changelog = "https://github.com/Python-Markdown/markdown/blob/${src.tag}/docs/changelog.md";
+    description = "Python implementation of John Gruber's Markdown";
+    mainProgram = "markdown_py";
     homepage = "https://github.com/Python-Markdown/markdown";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

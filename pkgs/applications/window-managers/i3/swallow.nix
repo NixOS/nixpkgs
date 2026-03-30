@@ -1,17 +1,18 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, poetry-core
-, i3ipc
-, xlib
-, six
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  poetry-core,
+  i3ipc,
+  xlib,
+  six,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "i3-swallow";
   version = "unstable-2022-02-19";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jamesofarrell";
@@ -33,12 +34,12 @@ buildPythonApplication rec {
   # No tests available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jamesofarrell/i3-swallow";
     description = "Swallow a terminal window in i3wm";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "swallow";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

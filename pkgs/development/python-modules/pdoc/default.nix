@@ -1,56 +1,69 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchFromGitHub
-, jinja2
-, pygments
-, markupsafe
-, astunparse
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  jinja2,
+  pdoc-pyo3-sample-library,
+  pygments,
+  markupsafe,
+  pytestCheckHook,
+  hypothesis,
+  nix-update-script,
+  markdown2,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "12.0.2";
-  disabled = pythonOlder "3.7";
+  version = "16.0.0";
 
-  # the Pypi version does not include tests
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
-    rev = "v${version}";
-    sha256 = "FVfPO/QoHQQqg7QU05GMrrad0CbRR5AQVYUpBhZoRi0=";
+    tag = "v${version}";
+    hash = "sha256-9amp6CWYIcniVfdlmPKYuRFR7B5JJtuMlOoDxpfvvJA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jinja2
     pygments
     markupsafe
-  ] ++ lib.optional (pythonOlder "3.9") astunparse;
+    markdown2
+    pydantic
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+    pdoc-pyo3-sample-library
   ];
-  disabledTests = [
-    # Failing "test_snapshots" parametrization: Output does not match the stored snapshot
-    # This test seems to be sensitive to ordering of dictionary items and the version of dependencies.
-    # the only difference between the stored snapshot and the produced documentation is a debug javascript comment
-    "html-demopackage_dir"
+  disabledTestPaths = [
+    # "test_snapshots" tries to match generated output against stored snapshots,
+    # which are highly sensitive to dep versions.
+    "test/test_snapshot.py"
   ];
-  pytestFlagsArray = [
-    ''-m "not slow"'' # skip tests marked slow
+
+  disabledTestMarks = [
+    "slow" # skip slow tests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pdoc" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ pbsds ];
+    mainProgram = "pdoc";
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

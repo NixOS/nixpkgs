@@ -1,17 +1,17 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 
-# Python dependencies
-, uvloop
-, pytest
+  # Python dependencies
+  uvloop,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "aioextensions";
   version = "21.7.2261349";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,16 +20,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ uvloop ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     cd test/
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High performance functions to work with the async IO";
     homepage = "https://kamadorueda.github.io/aioextensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

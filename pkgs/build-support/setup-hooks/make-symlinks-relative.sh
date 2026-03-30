@@ -1,28 +1,35 @@
-fixupOutputHooks+=(_makeSymlinksRelative)
+# symlinks are often created in postFixup
+# don't use fixupOutputHooks, it is before postFixup
+if [[ -z "${dontRewriteSymlinks-}" ]]; then
+  postFixupHooks+=(_makeSymlinksRelative)
+fi
+
 
 # For every symlink in $output that refers to another file in $output
-# ensure that the symlink is relative. This removes references to the output
-# has from the resulting store paths and thus the NAR files.
+# ensure that the symlink is relative.
+# This increases the chance that NAR files can be deduplicated.
 _makeSymlinksRelative() {
-    local symlinkTarget
+  local prefixes
+  prefixes=()
+  for output in $(getAllOutputNames); do
+    [ ! -e "${!output}" ] && continue
+    prefixes+=( "${!output}" )
+  done
+  find "${prefixes[@]}" -type l -printf '%H\0%p\0' \
+    | xargs -0 -n2 -r -P "$NIX_BUILD_CORES" sh -c '
+      output="$1"
+      link="$2"
 
-    if [ -n "${dontRewriteSymlinks-}" ]; then
-        return 0
-    fi
+      linkTarget=$(readlink "$link")
 
-    while IFS= read -r -d $'\0' f; do
-        symlinkTarget=$(readlink "$f")
-        if [[ "$symlinkTarget"/ != "$prefix"/* ]]; then
-            # skip this symlink as it doesn't point to $prefix
-            continue
-        fi
+      # only touch links that point inside the same output tree
+      [[ $linkTarget == "$output"/* ]] || exit 0
 
-        if [ ! -e "$symlinkTarget" ]; then
-            echo "the symlink $f is broken, it points to $symlinkTarget (which is missing)"
-        fi
+      if [ ! -e "$linkTarget" ]; then
+        echo "the symlink $link is broken, it points to $linkTarget (which is missing)"
+      fi
 
-        echo "rewriting symlink $f to be relative to $prefix"
-        ln -snrf "$symlinkTarget" "$f"
-
-    done < <(find $prefix -type l -print0)
+      echo "making symlink relative: $link"
+      ln -snrf "$linkTarget" "$link"
+    ' _
 }

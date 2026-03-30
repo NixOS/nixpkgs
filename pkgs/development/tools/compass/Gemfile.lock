@@ -25,7 +25,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  compass!
+  compass
 
 BUNDLED WITH
-   2.2.24
+   2.4.22

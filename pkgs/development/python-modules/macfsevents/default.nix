@@ -1,24 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, CoreFoundation, CoreServices }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-  pname = "MacFSEvents";
-  version = "0.8.1";
+  pname = "macfsevents";
+  version = "0.8.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1324b66b356051de662ba87d84f73ada062acd42b047ed1246e60a449f833e10";
+    pname = "MacFSEvents";
+    inherit version;
+    hash = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
-  buildInputs = [ CoreFoundation CoreServices ];
+  patches = [ ./fix-packaging.patch ];
+
+  build-system = [ setuptools ];
+
+  # PyEval_InitThreads is deprecated in Python 3.9, to be removed in Python 3.14
+  # and breaks the build under clang 16.
+  # https://github.com/malthe/macfsevents/issues/49
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   # Some tests fail under nix build directory
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/malthe/macfsevents";
+  pythonImportsCheck = [ "fsevents" ];
+
+  meta = {
     description = "Thread-based interface to file system observation primitives";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
-    platforms = platforms.darwin;
+    homepage = "https://github.com/malthe/macfsevents";
+    changelog = "https://github.com/malthe/macfsevents/blob/${version}/CHANGES.rst";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+    platforms = lib.platforms.darwin;
   };
 }

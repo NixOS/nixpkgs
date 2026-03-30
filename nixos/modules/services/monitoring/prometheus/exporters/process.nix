@@ -1,9 +1,19 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.process;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
   configFile = pkgs.writeText "process-exporter.yaml" (builtins.toJSON cfg.settings);
 in
 {
@@ -11,14 +21,14 @@ in
   extraOpts = {
     settings.process_names = mkOption {
       type = types.listOf types.anything;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [
           # Remove nix store path from process name
           { name = "{{.Matches.Wrapped}} {{ .Matches.Args }}"; cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ]; }
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML

@@ -1,20 +1,39 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.calibre-web;
+  dataDir = if lib.hasPrefix "/" cfg.dataDir then cfg.dataDir else "/var/lib/${cfg.dataDir}";
 
-  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionalString types;
+  inherit (lib)
+    concatStringsSep
+    mkEnableOption
+    mkIf
+    mkOption
+    optional
+    optionals
+    optionalString
+    types
+    ;
 in
 {
   options = {
     services.calibre-web = {
-      enable = mkEnableOption (lib.mdDoc "Calibre-Web");
+      enable = mkEnableOption "Calibre-Web";
+
+      package = lib.mkPackageOption pkgs "calibre-web" { };
+
+      calibrePackage = lib.mkPackageOption pkgs "calibre" { };
 
       listen = {
         ip = mkOption {
           type = types.str;
           default = "::1";
-          description = lib.mdDoc ''
+          description = ''
             IP address that Calibre-Web should listen on.
           '';
         };
@@ -22,7 +41,7 @@ in
         port = mkOption {
           type = types.port;
           default = 8083;
-          description = lib.mdDoc ''
+          description = ''
             Listen port for Calibre-Web.
           '';
         };
@@ -31,27 +50,28 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = lib.mdDoc ''
-          The directory below {file}`/var/lib` where Calibre-Web stores its data.
+        description = ''
+          Where Calibre-Web stores its data.
+          Either an absolute path, or the directory name below {file}`/var/lib`.
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = lib.mdDoc "User account under which Calibre-Web runs.";
+        description = "User account under which Calibre-Web runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = lib.mdDoc "Group account under which Calibre-Web runs.";
+        description = "Group account under which Calibre-Web runs.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the server.
         '';
       };
@@ -60,7 +80,7 @@ in
         calibreLibrary = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to Calibre library.
           '';
         };
@@ -68,15 +88,17 @@ in
         enableBookConversion = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Configure path to the Calibre's ebook-convert in the DB.
           '';
         };
 
+        enableKepubify = mkEnableOption "kepub conversion support";
+
         enableBookUploading = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Allow books to be uploaded via Calibre-Web UI.
           '';
         };
@@ -85,7 +107,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Enable authorization using auth proxy.
             '';
           };
@@ -93,7 +115,7 @@ in
           header = mkOption {
             type = types.str;
             default = "";
-            description = lib.mdDoc ''
+            description = ''
               Auth proxy header name.
             '';
           };
@@ -103,45 +125,112 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.services.calibre-web = let
-      appDb = "/var/lib/${cfg.dataDir}/app.db";
-      gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
-      calibreWebCmd = "${pkgs.calibre-web}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+    systemd.tmpfiles.settings = lib.optionalAttrs (lib.hasPrefix "/" cfg.dataDir) {
+      "10-calibre-web".${dataDir}.d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
+    };
 
-      settings = concatStringsSep ", " (
-        [
-          "config_port = ${toString cfg.listen.port}"
-          "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"
-          "config_allow_reverse_proxy_header_login = ${if cfg.options.reverseProxyAuth.enable then "1" else "0"}"
-          "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
-        ]
-        ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
-        ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-      );
-    in
+    systemd.services.calibre-web =
+      let
+        appDb = "${dataDir}/app.db";
+        gdriveDb = "${dataDir}/gdrive.db";
+        calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+
+        settings = concatStringsSep ", " (
+          [
+            "config_port = ${toString cfg.listen.port}"
+            "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"
+            "config_allow_reverse_proxy_header_login = ${
+              if cfg.options.reverseProxyAuth.enable then "1" else "0"
+            }"
+            "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
+          ]
+          ++ optional (
+            cfg.options.calibreLibrary != null
+          ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+          ++ optionals cfg.options.enableBookConversion [
+            "config_converterpath = '${cfg.calibrePackage}/bin/ebook-convert'"
+            "config_binariesdir = '${cfg.calibrePackage}/bin/'"
+          ]
+          ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
+        );
+      in
       {
         description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        # fix book cover cache directory defaults to a path under /nix/store/
+        environment.CACHE_DIR = "/var/cache/calibre-web";
 
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
 
-          StateDirectory = cfg.dataDir;
           ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
             ''
               __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
               ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-            '' + optionalString (cfg.options.calibreLibrary != null) ''
+            ''
+            + optionalString (cfg.options.calibreLibrary != null) ''
               test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
             ''
           );
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
           Restart = "on-failure";
+
+          CacheDirectory = "calibre-web";
+          CacheDirectoryMode = "0750";
+
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ReadWritePaths =
+            lib.optional (lib.hasPrefix "/" cfg.dataDir) cfg.dataDir
+            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHome = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RemoveIPC = true;
+          CapabilityBoundingSet = "";
+          AmbientCapabilities = "";
+          ProtectKernelModules = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
+          SystemCallFilter = [
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@resources"
+            "~@mount"
+            "~@debug"
+            "~@cpu-emulation"
+          ];
+        }
+        // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
         };
       };
 
@@ -157,7 +246,7 @@ in
     };
 
     users.groups = mkIf (cfg.group == "calibre-web") {
-      calibre-web = {};
+      calibre-web = { };
     };
   };
 

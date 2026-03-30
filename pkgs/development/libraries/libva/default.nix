@@ -1,36 +1,97 @@
-{ stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
-, libdrm
-, minimal ? false, libva-minimal
-, libX11, libXext, libXfixes, wayland, libffi, libGL
-, mesa
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  libdrm,
+  minimal ? false,
+  libx11,
+  libxcb,
+  libxext,
+  libxfixes,
+  wayland,
+  libffi,
+  libGL,
+  mesa,
+  # for passthru.tests
+  intel-compute-runtime,
+  intel-media-driver,
+  mpv,
+  intel-vaapi-driver,
+  vlc,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.15.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "libva";
-    rev    = version;
-    sha256 = "sha256-NJA2FTPrhLj9+vmkBy+GcTiH57gBEQnYhZzYk3sEOBo=";
+    owner = "intel";
+    repo = "libva";
+    rev = finalAttrs.version;
+    sha256 = "sha256-ePtzZPzBnkhV0cV3Nw/pgOnKnzDkk7U2Svzo0e1YMbc=";
   };
 
-  outputs = [ "dev" "out" ];
-
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
-
-  buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
-  # TODO: share libs between minimal and !minimal - perhaps just symlink them
-
-  mesonFlags = [
-    # Add FHS and Debian paths for non-NixOS applications
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
+  outputs = [
+    "dev"
+    "out"
   ];
 
-  meta = with lib; {
-    description = "An implementation for VA-API (Video Acceleration API)";
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ]
+  ++ lib.optional (!minimal) wayland-scanner;
+
+  buildInputs = [
+    libdrm
+  ]
+  ++ lib.optionals (!minimal) [
+    libx11
+    libxcb
+    libxext
+    libxfixes
+    wayland
+    libffi
+    libGL
+  ];
+
+  mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
+    # Add FHS and Debian paths for non-NixOS applications
+    "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
+  ];
+
+  env =
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        NIX_LDFLAGS = "--undefined-version";
+      }
+    // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+      NIX_CFLAGS_COMPILE = "-DHAVE_SECURE_GETENV";
+    };
+
+  passthru.tests = {
+    # other drivers depending on libva and selected application users.
+    # Please get a confirmation from the maintainer before adding more applications.
+    inherit
+      intel-compute-runtime
+      intel-media-driver
+      intel-vaapi-driver
+      mpv
+      vlc
+      ;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
+  meta = {
+    description = "Implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides
       access to graphics hardware acceleration capabilities for video
@@ -38,9 +99,22 @@ stdenv.mkDerivation rec {
       driver-specific acceleration backends for each supported hardware vendor.
     '';
     homepage = "https://01.org/linuxmedia/vaapi";
-    changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
+    changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    pkgConfigModules = [
+      "libva"
+      "libva-drm"
+    ]
+    ++ lib.optionals (!minimal) [
+      "libva-glx"
+      "libva-wayland"
+      "libva-x11"
+    ];
+    platforms = lib.platforms.unix;
+    badPlatforms = [
+      # Mandatory libva shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
-}
+})

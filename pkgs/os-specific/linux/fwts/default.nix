@@ -1,33 +1,69 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  pcre,
+  json_c,
+  flex,
+  bison,
+  dtc,
+  pciutils,
+  dmidecode,
+  acpica-tools,
+  libbsd,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "22.09.00";
+  version = "25.09.00";
 
   src = fetchzip {
-    url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "sha256-BaaUvRbon8V8RvAgw+AC9MCHC65Y/NFT1iFZ+B8P2Hk=";
+    url = "https://fwts.ubuntu.com/release/fwts-V${finalAttrs.version}.tar.gz";
+    hash = "sha256-OJI2O9MptckmGj4rTrh9haIGaXJOO3er59yIorbgSVw=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd ];
+  sourceRoot = "${finalAttrs.src.name}/fwts-${finalAttrs.version}";
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    glib
+    pcre
+    json_c
+    flex
+    bison
+    dtc
+    pciutils
+    dmidecode
+    acpica-tools
+    libbsd
+  ];
 
   postPatch = ''
     substituteInPlace src/lib/include/fwts_binpaths.h \
-      --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
-      --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
-      --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
+      --replace-fail "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
+      --replace-fail "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
+      --replace-fail "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
+
+    substituteInPlace src/lib/src/fwts_devicetree.c \
+                      src/devicetree/dt_base/dt_base.c \
+      --replace-fail "dtc -I" "${dtc}/bin/dtc -I"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
     description = "Firmware Test Suite";
-    platforms = platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ tadfisher ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tadfisher ];
   };
-}
+})

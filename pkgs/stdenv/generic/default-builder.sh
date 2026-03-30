@@ -1,2 +1,1 @@
-source $stdenv/setup
 genericBuild

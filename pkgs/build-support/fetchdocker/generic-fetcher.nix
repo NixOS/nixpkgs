@@ -1,42 +1,49 @@
-{ stdenv, lib, haskellPackages, writeText, gawk }:
+{
+  stdenv,
+  lib,
+  haskellPackages,
+  writeText,
+  gawk,
+}:
 let
-  awk                   = "${gawk}/bin/awk";
-  dockerCredentialsFile = import ./credentials.nix;
+  awk = "${gawk}/bin/awk";
+  dockerCredentialsFile = import ./credentials.nix { inherit lib; };
 in
-{ fetcher
-, name
- , registry    ? "https://registry-1.docker.io/v2/"
- , repository  ? "library"
- , imageName
- , sha256
- , tag         ? ""
- , layerDigest ? ""
+{
+  fetcher,
+  name,
+  registry ? "https://registry-1.docker.io/v2/",
+  repository ? "library",
+  imageName,
+  sha256,
+  tag ? "",
+  layerDigest ? "",
 }:
 
 # There must be no slashes in the repository or container names since
 # we use these to make the output derivation name for the nix store
 # path
-assert null == lib.findFirst (c: "/"==c) null (lib.stringToCharacters repository);
-assert null == lib.findFirst (c: "/"==c) null (lib.stringToCharacters imageName);
+assert null == lib.findFirst (c: "/" == c) null (lib.stringToCharacters repository);
+assert null == lib.findFirst (c: "/" == c) null (lib.stringToCharacters imageName);
 
 # Only allow hocker-config and hocker-layer as fetchers for now
-assert (builtins.elem fetcher ["hocker-config" "hocker-layer"]);
+assert (
+  builtins.elem fetcher [
+    "hocker-config"
+    "hocker-layer"
+  ]
+);
 
 # If layerDigest is non-empty then it must not have a 'sha256:' prefix!
-assert
-  (if layerDigest != ""
-   then !lib.hasPrefix "sha256:" layerDigest
-   else true);
+assert (if layerDigest != "" then !lib.hasPrefix "sha256:" layerDigest else true);
 
 let
-  layerDigestFlag =
-    lib.optionalString (layerDigest != "") "--layer ${layerDigest}";
+  layerDigestFlag = lib.optionalString (layerDigest != "") "--layer ${layerDigest}";
 in
 stdenv.mkDerivation {
   inherit name;
   builder = writeText "${fetcher}-builder.sh" ''
-    source "$stdenv/setup"
-    header "${fetcher} exporting to $out"
+    echo "${fetcher} exporting to $out"
 
     declare -A creds
 
@@ -49,7 +56,7 @@ stdenv.mkDerivation {
     fi
 
     if [ -f "$dockerCredentialsFile" ]; then
-      header "using credentials from $dockerCredentialsFile"
+      echo "using credentials from $dockerCredentialsFile"
 
       CREDSFILE=$(cat "$dockerCredentialsFile")
       creds[token]=$(${awk} -F'=' '/DOCKER_TOKEN/ {print $2}' <<< "$CREDSFILE" | head -n1)
@@ -77,8 +84,6 @@ stdenv.mkDerivation {
       ${layerDigestFlag} \
       "${repository}/${imageName}" \
       "${tag}"
-
-    stopNest
   '';
 
   buildInputs = [ haskellPackages.hocker ];
@@ -89,7 +94,11 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  impureEnvVars = [ "DOCKER_USER" "DOCKER_PASS" "DOCKER_TOKEN" ];
+  impureEnvVars = [
+    "DOCKER_USER"
+    "DOCKER_PASS"
+    "DOCKER_TOKEN"
+  ];
 
   inherit registry dockerCredentialsFile;
 }

@@ -1,53 +1,83 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  setuptools,
+  mpi,
+  toPythonModule,
+  pytest,
+  mpiCheckPhaseHook,
+  mpi4py,
+  mpich,
+}:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.1.4";
+  version = "4.1.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-F4WPLrxiMiDQEg0fqNQo0DPd50nEvDWzPYGmatf5NIA=";
+  src = fetchFromGitHub {
+    repo = "mpi4py";
+    owner = "mpi4py";
+    tag = version;
+    hash = "sha256-I7b4x3pxtfbmlbno5OIxo4HutRX3/RjdsoNtBRKgE5w=";
   };
+
+  build-system = [
+    cython
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    mpi
+  ];
+
+  dependencies = [
+    # Use toPythonModule so that also the mpi executables will be propagated to
+    # generated Python environment.
+    (toPythonModule mpi)
+  ];
+
+  pythonImportsCheck = [ "mpi4py" ];
+
+  nativeCheckInputs = [
+    pytest
+    mpiCheckPhaseHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  # skip spawn related tests for openmpi implemention
+  # see https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
+  env.MPI4PY_TEST_SPAWN = if mpi.pname == "openmpi" then 0 else 1;
+
+  # follow upstream's checkPhase
+  # see https://github.com/mpi4py/mpi4py/blob/4.1.0/.github/workflows/ci-test.yml#L92-L95
+  checkPhase = ''
+    runHook preCheck
+
+    echo 'Testing mpi4py (np=1)'
+    mpiexec -n 1 python test/main.py -v
+    echo 'Testing mpi4py (np=2)'
+    mpiexec -n 2 python test/main.py -v -f -e spawn
+
+    runHook postCheck
+  '';
 
   passthru = {
     inherit mpi;
+
+    tests = {
+      mpich = mpi4py.override { mpi = mpich; };
+    };
   };
 
-  postPatch = ''
-    substituteInPlace test/test_spawn.py --replace \
-                      "unittest.skipMPI('openmpi(<3.0.0)')" \
-                      "unittest.skipMPI('openmpi')"
-  '';
-
-  configurePhase = "";
-
-  installPhase = ''
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --prefix="$out"
-
-    # --install-lib:
-    # sometimes packages specify where files should be installed outside the usual
-    # python lib prefix, we override that back so all infrastructure (setup hooks)
-    # work as expected
-
-    # Needed to run the tests reliably. See:
-    # https://bitbucket.org/mpi4py/mpi4py/issues/87/multiple-test-errors-with-openmpi-30
-    export OMPI_MCA_rmaps_base_oversubscribe=yes
-  '';
-
-  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
-
-  nativeBuildInputs = [ mpi ];
-
-  checkInputs = [ openssh ];
-
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    license = licenses.bsd2;
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

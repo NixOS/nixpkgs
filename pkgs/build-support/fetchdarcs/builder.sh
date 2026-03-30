@@ -1,19 +1,38 @@
-source $stdenv/setup
+runHook preFetch
 
 tagtext=""
 tagflags=""
-if test -n "$rev"; then
-    tagtext="(tag $rev) "
+# Darcs hashes are sha1 (120 bits, 40-character hex)
+if [[ "$rev" =~ [a-fA-F0-9]{40} ]]; then
+    tagtext="(hash $rev)"
+    tagflags="--to-hash=$rev"
+elif test -n "$rev"; then
+    tagtext="(tag $rev)"
     tagflags="--tag=$rev"
 elif test -n "$context"; then
-    tagtext="(context) "
+    tagtext="(context)"
     tagflags="--context=$context"
 fi
 
-header "getting $url $partial ${tagtext} into $out"
+# Repository list may contain ?. No glob expansion for that.
+set -o noglob
 
-darcs get --lazy $tagflags "$url" "$out"
-# remove metadata, because it can change
-rm -rf "$out/_darcs"
+success=
+for repository in $repositories; do
+    echo "Trying to clone $repository $tagtext into $out …"
+    if darcs clone --lazy --no-cache $tagflags "$repository" "$out"; then
+        # remove metadata, because it can change
+        rm -rf "$out/_darcs"
+        success=1
+        break
+    fi
+done
 
-stopNest
+set +o noglob
+
+if [ -z "$success" ]; then
+    echo "Error: couldn’t clone repository from any mirror" 1>&2
+    exit 1
+fi
+
+runHook postFetch

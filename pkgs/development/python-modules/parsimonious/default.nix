@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, regex
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  regex,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "parsimonious";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-goFgDaGA7IrjVCekq097gr/sHj0eUvgMtg6oK5USUBw=";
+    hash = "sha256-4IA3fZiVe+7AU1gNOK5U/N98Rw+3hnC6S/i1+dXK0qk=";
   };
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # test_benchmarks.py tests are actually benchmarks and may fail due to
+    # something being unexpectedly slow on a heavily loaded build machine
+    "test_lists_vs_dicts"
+    "test_call_vs_inline"
+    "test_startswith_vs_regex"
   ];
 
   postPatch = ''
@@ -37,10 +39,10 @@ buildPythonPackage rec {
     "parsimonious.nodes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Arbitrary-lookahead parser";
     homepage = "https://github.com/erikrose/parsimonious";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

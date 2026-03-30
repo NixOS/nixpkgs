@@ -1,28 +1,78 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, python-dateutil
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  hatch-vcs,
+  hatchling,
+  python-dateutil,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-copybutton,
+  pydata-sphinx-theme,
 }:
 
 buildPythonPackage rec {
-  version = "4.1.0";
+  version = "6.3.2";
   pname = "icalendar";
+  pyproject = true;
+  outputs = [
+    "out"
+    "doc"
+  ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-l0i3wC78xD5Y0GFa4JdqxPJl6Q2t7ptPiE3imQXBs5U=";
+  src = fetchFromGitHub {
+    owner = "collective";
+    repo = "icalendar";
+    tag = "v${version}";
+    hash = "sha256-EnG6zPaKKTgLw2DxWOyBkxlFuqtURpBlxy1aoZjX/TQ=";
   };
 
-  buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ python-dateutil pytz ];
+  patches = [
+    (replaceVars ./no-dynamic-version.patch {
+      inherit version;
+    })
+  ];
 
-  meta = with lib; {
-    description = "A parser/generator of iCalendar files";
-    homepage = "https://icalendar.readthedocs.org/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ olcai ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
+    python-dateutil
+    tzdata
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-copybutton
+    pydata-sphinx-theme
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
+    "test_dateutil_timezone_is_matched_with_tzname"
+    "test_docstring_of_python_file"
+    # AssertionError: assert $TZ not in set()
+    "test_add_missing_timezones_to_example"
+  ];
+
+  enabledTestPaths = [ "src/icalendar" ];
+
+  meta = {
+    changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
+    description = "Parser/generator of iCalendar files";
+    mainProgram = "icalendar";
+    homepage = "https://github.com/collective/icalendar";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ olcai ];
   };
-
 }

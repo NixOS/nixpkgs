@@ -1,47 +1,80 @@
-{ callPackage, lib, fetchFromSourcehut }:
+{
+  lib,
+  iosevka,
+  fetchFromGitHub,
+  buildNpmPackage,
+}:
 
 let
   sets = [
-    # The compact, sans-serif set:
-    "comfy"
-    "comfy-fixed"
-    "comfy-duo"
-    # The compact, serif set:
-    "comfy-motion"
-    "comfy-motion-fixed"
-    "comfy-motion-duo"
-    # The wide, sans-serif set:
-    "comfy-wide"
-    "comfy-wide-fixed"
-    "comfy-wide-duo"
+    # Family                  | Shapes | Spacing | Style      | Ligatures |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy" # | Sans   | Compact | Monospaced | Yes       |
+    "comfy-fixed" # | Sans   | Compact | Monospaced | No        |
+    "comfy-duo" # | Sans   | Compact | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-motion" # | Slab   | Compact | Monospaced | Yes       |
+    "comfy-motion-fixed" # | Slab   | Compact | Monospaced | No        |
+    "comfy-motion-duo" # | Slab   | Compact | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-wide" # | Sans   | Wide    | Monospaced | Yes       |
+    "comfy-wide-fixed" # | Sans   | Wide    | Monospaced | No        |
+    "comfy-wide-duo" # | Sans   | Wide    | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-wide-motion" # | Slab   | Wide    | Monospaced | Yes       |
+    "comfy-wide-motion-fixed" # Slab   | Wide    | Monospaced | No        |
+    "comfy-wide-motion-duo" # | Slab   | Wide    | Duospaced  | Yes       |
   ];
-  version = "1.1.0";
-  src = fetchFromSourcehut {
-    owner = "~protesilaos";
+  version = "2.1.0";
+  src = fetchFromGitHub {
+    owner = "protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "1h72my1s9pvxww6yijrvhy7hj9dspnshya60i60p1wlzr6d18v3p";
+    sha256 = "sha256-z9OlxeD88HuPJF88CsAy3vd1SFpJF1qh5c/0AIeMA7o=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
-  overrideAttrs = (attrs: {
-    inherit version;
+  makeIosevkaFont =
+    set:
+    let
+      superBuildNpmPackage = buildNpmPackage;
+    in
+    (iosevka.override {
+      inherit set privateBuildPlan;
+      buildNpmPackage =
+        args:
+        superBuildNpmPackage (
+          args
+          // {
+            pname = "iosevka-${set}";
+            inherit version;
 
-    meta = with lib; {
-      inherit (src.meta) homepage;
-      description = ''
-        Customised build of the Iosevka typeface, with a consistent
-        rounded style and overrides for almost all individual glyphs
-        in both roman (upright) and italic (slanted) variants.
-      '';
-      license = licenses.ofl;
-      platforms = attrs.meta.platforms;
-      maintainers = [ maintainers.DamienCassou ];
-    };
-  });
-  makeIosevkaFont = set:
-    (callPackage ./. { inherit set privateBuildPlan; }).overrideAttrs
-    overrideAttrs;
-in builtins.listToAttrs (builtins.map (set: {
-  name = set;
-  value = makeIosevkaFont set;
-}) sets)
+            src = fetchFromGitHub {
+              owner = "be5invis";
+              repo = "iosevka";
+              rev = "v31.9.1";
+              hash = "sha256-eAC4afBfHfiteYCzBNGFG2U/oCA7C5CdUlQVSO9Dg6E=";
+            };
+
+            npmDepsHash = "sha256-xwGR21+CpZRFdZYz8SQrSf1tkp3fjGudoMmP5TGgEe8=";
+
+            meta = {
+              inherit (src.meta) homepage;
+              description = ''
+                Customised build of the Iosevka typeface, with a consistent
+                rounded style and overrides for almost all individual glyphs
+                in both roman (upright) and italic (slanted) variants.
+              '';
+              license = lib.licenses.ofl;
+              platforms = iosevka.meta.platforms;
+              maintainers = [ lib.maintainers.DamienCassou ];
+            };
+          }
+        );
+    });
+in
+builtins.listToAttrs (
+  map (set: {
+    name = set;
+    value = makeIosevkaFont set;
+  }) sets
+)

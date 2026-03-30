@@ -1,41 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libcec
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libcec,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycec";
-  version = "0.5.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "konikvranik";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-H18petSiUdftZN8Q3fPmfSJA3OZks+gI+FAq9LwkRsk=";
+    repo = "pycec";
+    tag = "v${version}";
+    hash = "sha256-5KQyHjAvHWeHFqcFHFJxDOPwWuVcFAN2wVdz9a77dzU=";
   };
 
-  propagatedBuildInputs = [
-    libcec
+  patches = [
+    # https://github.com/konikvranik/pyCEC/pull/84
+    ./python-3.14-compat.patch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "pycec"
-  ];
+  dependencies = [ libcec ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pycec" ];
+
+  meta = {
     description = "Python modules to access HDMI CEC devices";
+    mainProgram = "pycec";
     homepage = "https://github.com/konikvranik/pycec/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

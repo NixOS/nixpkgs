@@ -1,34 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, cryptography
-, mock
-, pyfakefs
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  poetry-core,
+  pyscard,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.0";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-K0tOYgwhAEQsIGeODpUa1tHvs7pcqOu3IMTI1UMpNnQ=";
+    hash = "sha256-8TefhFhwzH/GTH8HMjw85B6MlsNwVOeeCs1WMLP+xaw=";
   };
 
-  propagatedBuildInputs = [ six cryptography ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [ unittestCheckHook mock pyfakefs ];
+  pythonRelaxDeps = [ "cryptography" ];
 
-  unittestFlagsArray = [ "-v" ];
+  dependencies = [ cryptography ];
+
+  optional-dependencies = {
+    pcsc = [ pyscard ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-v"
+    "--no-device"
+  ];
 
   pythonImportsCheck = [ "fido2" ];
 
-  meta = with lib; {
-    description = "Provides library functionality for FIDO 2.0, including communication with a device over USB.";
+  meta = {
+    description = "Provides library functionality for FIDO 2.0, including communication with a device over USB";
     homepage = "https://github.com/Yubico/python-fido2";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prusnak ];
+    changelog = "https://github.com/Yubico/python-fido2/releases/tag/${version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

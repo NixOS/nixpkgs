@@ -1,14 +1,16 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "plikd";
-  meta = with lib.maintainers; {
-    maintainers = [ freezeboy ];
+  meta = {
+    maintainers = [ ];
   };
 
-  nodes.machine = { pkgs, ... }: let
-  in {
-    services.plikd.enable = true;
-    environment.systemPackages = [ pkgs.plik ];
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.plikd.enable = true;
+      environment.systemPackages = [ pkgs.plik ];
+    };
 
   testScript = ''
     # Service basic test
@@ -24,4 +26,4 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     machine.succeed("diff data.txt /tmp/data.txt")
   '';
-})
+}

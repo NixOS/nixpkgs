@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pybind11
-, pytestCheckHook
-, python-dateutil
-, doxygen
-, python
-, pelican
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pybind11,
+  pytestCheckHook,
+  python-dateutil,
+  doxygen,
+  python,
+  pelican,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "pytomlpp";
-  version = "1.0.6";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bobfang1992";
-    repo = pname;
+    repo = "pytomlpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-QyjIJCSgiSKjqMBvCbOlWYx6rBbKIoDvXez2YnYaPUo=";
+    hash = "sha256-RRsjnZK0FJiSkpWxurs9vJFyo2SUAKyFKXoJ8bcsHKI=";
   };
+
+  # The latest setuptools has deprecated `setup_requires` and will attempt to automatically invoke `pip` to install dependencies during the build.
+  patches = [ ./0001-remove-setup_requires.patch ];
 
   buildInputs = [ pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
 
     python-dateutil
@@ -35,8 +39,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  # pelican requires > 2.7
-  doCheck = !pythonOlder "3.6";
+  doCheck = true;
 
   disabledTests = [
     # incompatible with pytest7
@@ -52,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytomlpp" ];
 
-  meta = with lib; {
-    description = "A python wrapper for tomlplusplus";
+  meta = {
+    description = "Python wrapper for tomlplusplus";
     homepage = "https://github.com/bobfang1992/pytomlpp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

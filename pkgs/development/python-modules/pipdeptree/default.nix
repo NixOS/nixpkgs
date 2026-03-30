@@ -1,64 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, diff-cover
-, graphviz
-, hatchling
-, hatch-vcs
-, pytest-mock
-, pytestCheckHook
-, pip
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  diff-cover,
+  graphviz,
+  hatchling,
+  hatch-vcs,
+  packaging,
+  pytest-mock,
+  pytestCheckHook,
+  pip,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.3.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.30.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ivqu9b+4FhGa5y+WnKRk4nF6MR4Vj62pSs2d7ycIZMc=";
+    tag = version;
+    hash = "sha256-nDCd4Bk5P65+fnFM/kC3cbfPanj5P35/bta86/E65i0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInput = [
+  dependencies = [
     pip
+    packaging
   ];
 
-  passthru.optional-dependencies = {
-    graphviz = [
-      graphviz
-    ];
+  optional-dependencies = {
+    graphviz = [ graphviz ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     diff-cover
     pytest-mock
     pytestCheckHook
     virtualenv
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "pipdeptree"
+  pythonImportsCheck = [ "pipdeptree" ];
+
+  disabledTests = [
+    # Don't run console tests
+    "test_console"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
-    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ charlesbaynham ];
+    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      charlesbaynham
+      mdaniels5757
+    ];
+    mainProgram = "pipdeptree";
   };
 }

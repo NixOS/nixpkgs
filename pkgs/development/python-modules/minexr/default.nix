@@ -1,31 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, numpy
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  numpy,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "minexr";
-  version = "1.0.1";
+  version = "1.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-minexr";
-    rev = "v${version}";
-    sha256 = "sha256-Om67ttAHxu7C3IwPB+JHYi78E9qBi1E6layMVg4+S3M=";
+    tag = version;
+    hash = "sha256-p42rlhaHq0A9+zk6c0evRDjNR1H/ruWJqPF5+nCTR8o=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "minexr" ];
-  checkInputs = [ pytestCheckHook pillow ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pillow
+  ];
 
-  meta = with lib; {
-    description = "Minimal, standalone OpenEXR reader for single-part, uncompressed scan line files.";
+  meta = {
+    description = "Minimal, standalone OpenEXR reader for single-part, uncompressed scan line files";
     homepage = "https://github.com/cheind/py-minexr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

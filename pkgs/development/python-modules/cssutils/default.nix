@@ -1,66 +1,53 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchpatch
-, fetchPypi
-, setuptools
-, setuptools-scm
-, importlib-metadata
-, cssselect
-, jaraco-test
-, lxml
-, mock
-, pytestCheckHook
-, importlib-resources
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  more-itertools,
+  cssselect,
+  jaraco-test,
+  lxml,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.6.0";
+  version = "2.11.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-99zSPBzskJ/fNjDeNG4UE7eyVVk23sFLouu5kTvwgY4=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "cssutils";
+    tag = "v${version}";
+    hash = "sha256-U9myMfKz1HpYVJXp85izRBpm2wjLHYZj8bUVt3ROTEg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  dependencies = [ more-itertools ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     jaraco-test
     lxml
     mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   disabledTests = [
     # access network
-    "test_parseUrl"
     "encutils"
     "website.logging"
   ];
 
   pythonImportsCheck = [ "cssutils" ];
 
-  meta = with lib; {
-    description = "A CSS Cascading Style Sheets library for Python";
+  meta = {
+    description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

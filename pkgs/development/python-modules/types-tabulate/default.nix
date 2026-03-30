@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-tabulate";
-  version = "0.9.0.0";
+  version = "0.10.0.20260308";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SnlHRxTOoVa80hhbub3dj7nT1SJ8jQp/Ib8hyvX2Dmc=";
+    pname = "types_tabulate";
+    inherit version;
+    hash = "sha256-ck3LEzD/ul9G089uKfRQifzLjoWAHm56ye+xGVv3vqE=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tabulate-stubs"
-  ];
+  pythonImportsCheck = [ "tabulate-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for tabulate";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

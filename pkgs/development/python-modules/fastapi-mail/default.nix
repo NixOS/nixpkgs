@@ -1,60 +1,65 @@
-{ lib
-, aioredis
-, aiosmtplib
-, blinker
-, buildPythonPackage
-, email-validator
-, fakeredis
-, fastapi
-, fetchFromGitHub
-, httpx
-, jinja2
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, python-multipart
-, pythonOlder
+{
+  lib,
+  aiosmtplib,
+  blinker,
+  buildPythonPackage,
+  cryptography,
+  email-validator,
+  fakeredis,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  poetry-core,
+  pydantic-settings,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  redis,
+  regex,
+  starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastapi-mail";
-  version = "1.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sabuhish";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-RAUxc7spJL1QECAO0uZcCVAR/LaFIxFu61LD4RV9nEI=";
+    repo = "fastapi-mail";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oWm2FvXCyz+0QRvClcJoKF17rWggAtQasa5h1pZ6N4Y=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'fastapi = "^0.75.0"' 'fastapi = "*"' \
-      --replace 'httpx = "^0.22.0"' 'httpx = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "cryptography"
+    "email-validator"
+    "regex"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
-    aioredis
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiosmtplib
     blinker
+    cryptography
     email-validator
     fakeredis
-    fastapi
-    httpx
     jinja2
     pydantic
-    python-multipart
+    pydantic-settings
+    regex
+    starlette
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    httpx = [ httpx ];
+    redis = [ redis ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -63,16 +68,16 @@ buildPythonPackage rec {
     # Tests require access to /etc/resolv.conf
     "test_default_checker"
     "test_redis_checker"
+    "test_local_hostname_resolving"
   ];
 
-  pythonImportsCheck = [
-    "fastapi_mail"
-  ];
+  pythonImportsCheck = [ "fastapi_mail" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for sending emails and attachments";
     homepage = "https://github.com/sabuhish/fastapi-mail";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

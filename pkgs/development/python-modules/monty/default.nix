@@ -1,49 +1,109 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, msgpack
-, pytestCheckHook
-, numpy
-, pandas
-, pydantic
-, pymongo
-, ruamel-yaml
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  msgpack,
+  ruamel-yaml,
+
+  # optional-dependencies
+  coverage,
+  pymongo,
+  pytest,
+  pytest-cov,
+  types-requests,
+  sphinx,
+  sphinx-rtd-theme,
+  orjson,
+  pandas,
+  pydantic,
+  pint,
+  torch,
+  tqdm,
+  invoke,
+  requests,
+
+  # tests
+  ipython,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2022.9.8";
-  disabled = pythonOlder "3.5"; # uses type annotations
+  version = "2025.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-3C5L7nKokuxtYlw13AKSrNVsvKH9okmBNyLXt7Vmjqk=";
+    repo = "monty";
+    tag = "v${version}";
+    hash = "sha256-3UoACKJtPm2BrkJP8z7BFrh3baRyL/S3VwCG3K8AQn0=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_os.py \
-      --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
-  '';
-
-  propagatedBuildInputs = [
-    ruamel-yaml
-    tqdm
-    msgpack
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  dependencies = [
+    msgpack
+    ruamel-yaml
+  ];
+
+  optional-dependencies = rec {
+    ci = [
+      coverage
+      pymongo
+      pytest
+      pytest-cov
+      types-requests
+    ]
+    ++ optional;
+    dev = [ ipython ];
+    docs = [
+      sphinx
+      sphinx-rtd-theme
+    ];
+    json = [
+      orjson
+      pandas
+      pydantic
+      pymongo
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      pint
+      torch
+    ];
+    multiprocessing = [ tqdm ];
+    optional = dev ++ json ++ multiprocessing ++ serialization;
+    serialization = [ msgpack ];
+    task = [
+      invoke
+      requests
+    ];
+  };
+
+  nativeCheckInputs = [
+    ipython
     numpy
     pandas
     pydantic
     pymongo
+    pytestCheckHook
+    torch
+    tqdm
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "monty" ];
+
+  meta = {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
     longDescription = "
       Monty implements supplementary useful functions for Python that are not part of the
@@ -51,7 +111,8 @@ buildPythonPackage rec {
       patterns such as singleton and cached_class, and many more.
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

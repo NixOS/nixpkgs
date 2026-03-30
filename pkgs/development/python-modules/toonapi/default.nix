@@ -1,23 +1,38 @@
-{ lib
-, aiohttp
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, yarl
+{
+  lib,
+  aiohttp,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  yarl,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "toonapi";
-  version = "0.2.1";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-toonapi";
-    rev = "v${version}";
-    sha256 = "10jh6p0ww51cb9f8amd9jq3lmvby6n2k08qwcr2n8ijbbgyp0ibf";
+    tag = "v${version}";
+    hash = "sha256-RaN9ppqJbTik1/vNX0/YLoBawrqjyQWU6+FLTspIxug=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # https://github.com/frenck/python-toonapi/pull/15
+    (fetchpatch {
+      name = "replace-async-timeout-with-asyncio.timeout.patch";
+      url = "https://github.com/frenck/python-toonapi/commit/a04f1d8bcbcf48889dae49219d2edadbeb2dfa01.patch";
+      hash = "sha256-EMK11M+2OTnIB7oWavpQKNQq0ZLuSxYQlC6On7ob1xU=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     backoff
     yarl
@@ -25,12 +40,14 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "toonapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Quby ToonAPI";
     homepage = "https://github.com/frenck/python-toonapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frenck/python-toonapi/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

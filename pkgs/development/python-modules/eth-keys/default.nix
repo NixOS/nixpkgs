@@ -1,67 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asn1tools
-, coincurve
-, eth-hash
-, eth-typing
-, eth-utils
-, factory_boy
-, hypothesis
-, isPyPy
-, pyasn1
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  # dependencies
+  eth-typing,
+  eth-utils,
+  # nativeCheckInputs
+  asn1tools,
+  factory-boy,
+  hypothesis,
+  pyasn1,
+  pytestCheckHook,
+  coincurve,
+  eth-hash,
+  isPyPy,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "eth-keys";
-  version = "0.4.0";
-  disabled = pythonOlder "3.6";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-keys";
-    rev = "v${version}";
-    sha256 = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
+    tag = "v${version}";
+    hash = "sha256-H/s/D4f4tqP/WTil9uLmFw2Do9sEjMWwEreQEooeszQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     eth-typing
     eth-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asn1tools
-    factory_boy
+    factory-boy
     hypothesis
     pyasn1
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.coincurve
+    pydantic
+  ]
+  ++ optional-dependencies.coincurve
   ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
   ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
 
-  disabledTests = [
-    # tests are broken
-    "test_compress_decompress_inversion"
-    "test_public_key_generation_is_equal"
-    "test_signing_is_equal"
-    "test_native_to_coincurve_recover"
-    "test_public_key_compression_is_equal"
-    "test_public_key_decompression_is_equal"
-    "test_signatures_with_high_s"
-  ];
-
   pythonImportsCheck = [ "eth_keys" ];
 
-  passthru.optional-dependencies = {
+  disabledTests = [ "test_install_local_wheel" ];
+
+  optional-dependencies = {
     coincurve = [ coincurve ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common API for Ethereum key operations";
     homepage = "https://github.com/ethereum/eth-keys";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/ethereum/eth-keys/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }

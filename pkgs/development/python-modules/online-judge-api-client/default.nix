@@ -1,32 +1,41 @@
-{ lib
-, appdirs
-, beautifulsoup4
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, git
-, jsonschema
-, lxml
-, markdown
-, python
-, requests
-, substituteAll
-, toml
+{
+  lib,
+  appdirs,
+  beautifulsoup4,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  git,
+  jsonschema,
+  lxml,
+  markdown,
+  python,
+  requests,
+  toml,
 }:
 
 let
   # NOTE This is needed to download & run another Python program internally in
   #      order to generate test cases for library-checker problems.
-  pythonEnv = python.withPackages (ps: with ps; [ colorlog jinja2 markdown toml ]);
-in buildPythonPackage rec {
+  pythonEnv = python.withPackages (
+    ps: with ps; [
+      colorlog
+      jinja2
+      markdown
+      toml
+    ]
+  );
+in
+buildPythonPackage rec {
   pname = "online-judge-api-client";
   version = "10.10.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "api-client";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
+    tag = "v${version}";
+    hash = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -49,12 +58,16 @@ in buildPythonPackage rec {
   # Requires internet access
   doCheck = false;
 
-  pythonImportsCheck = [ "onlinejudge" "onlinejudge_api" ];
+  pythonImportsCheck = [
+    "onlinejudge"
+    "onlinejudge_api"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "API client to develop tools for competitive programming";
+    mainProgram = "oj-api";
     homepage = "https://github.com/online-judge-tools/api-client";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sei40kr ];
   };
 }

@@ -1,29 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pygments,
 }:
 
 buildPythonPackage rec {
   pname = "colored-traceback";
-  version = "0.3.0";
+  version = "0.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bafOKx2oafa7VMkntBW5VyfEu22ahMRhXqd9mHKRGwU=";
+    hash = "sha256-7LyOQfBxLqgZMdfNQ2uL658+/xWV0kmPGD4O9ptW/oQ=";
   };
 
-  buildInputs = [ pygments ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pygments ];
 
   # No setuptools tests for the package.
   doCheck = false;
 
   pythonImportsCheck = [ "colored_traceback" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/staticshock/colored-traceback.py";
     description = "Automatically color Python's uncaught exception tracebacks";
-    license = licenses.isc;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

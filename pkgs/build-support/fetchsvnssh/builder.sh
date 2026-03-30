@@ -1,6 +1,4 @@
-source $stdenv/setup
-
-header "exporting $url (r$rev) into $out"
+echo "exporting $url (r$rev) into $out"
 
 if test "$sshSupport"; then
     export SVN_SSH="$openssh/bin/ssh"
@@ -11,5 +9,3 @@ fi
 # whether the server is being spoofed --- only the cryptographic
 # hash of the output matters.
 expect -f $sshSubversion "$username" "$password" "$rev" "$url" $out
-
-stopNest

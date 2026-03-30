@@ -1,80 +1,141 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rPackages
-, buildPythonPackage
-, biopython
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, matplotlib
-, reportlab
-, pysam
-, future
-, pillow
-, pomegranate
-, pyfaidx
-, python
-, R
-}:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  python,
+  makeWrapper,
+  # dependencies
+  biopython,
+  matplotlib,
+  numpy,
+  pandas,
+  pomegranate,
+  pyfaidx,
+  pysam,
+  reportlab,
+  rPackages,
+  scikit-learn,
+  scipy,
+  R,
+  # tests
+  pytestCheckHook,
 
+}:
 buildPythonPackage rec {
-  pname = "CNVkit";
-  version = "0.9.9";
+  pname = "cnvkit";
+  version = "0.9.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "etal";
     repo = "cnvkit";
-    rev = "v${version}";
-    sha256 = "1q4l7jhr1k135an3n9aa9wsid5lk6fwxb0hcldrr6v6y76zi4gj1";
+    tag = "v${version}";
+    hash = "sha256-ZdE3EUNZpEXRHTRKwVhuj3BWQWczpdFbg4pVr0+AHiQ=";
   };
 
-  postPatch = ''
-    # see https://github.com/etal/cnvkit/issues/589
-    substituteInPlace setup.py \
-      --replace 'joblib < 1.0' 'joblib'
-    # see https://github.com/etal/cnvkit/issues/680
-    substituteInPlace test/test_io.py \
-      --replace 'test_read_vcf' 'dont_test_read_vcf'
-  '';
+  patches = [
+    (fetchpatch {
+      name = "fix-numpy2-compat";
+      url = "https://github.com/etal/cnvkit/commit/5cb6aeaf40ea5572063cf9914c456c307b7ddf7a.patch";
+      hash = "sha256-VwGAMGKuX2Kx9xL9GX/PB94/7LkT0dSLbWIfVO8F9NI=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    # https://github.com/etal/cnvkit/issues/815
+    "pomegranate"
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    R
+  ];
+
+  postPatch =
+    let
+      rscript = lib.getExe' R "Rscript";
+    in
+    # Numpy 2 compatibility
+    ''
+      substituteInPlace skgenome/intersect.py \
+        --replace-fail "np.string_" "np.bytes_"
+    ''
+    # Patch shebang lines in R scripts
+    + ''
+      substituteInPlace cnvlib/segmentation/flasso.py \
+        --replace-fail "#!/usr/bin/env Rscript" "#!${rscript}"
+
+      substituteInPlace cnvlib/segmentation/cbs.py \
+        --replace-fail "#!/usr/bin/env Rscript" "#!${rscript}"
+
+      substituteInPlace cnvlib/segmentation/__init__.py \
+        --replace-fail 'rscript_path="Rscript"' 'rscript_path="${rscript}"'
+
+      substituteInPlace cnvlib/commands.py \
+        --replace-fail 'default="Rscript"' 'default="${rscript}"'
+
+    '';
+
+  dependencies = [
     biopython
-    numpy
-    scipy
-    scikit-learn
-    pandas
     matplotlib
-    reportlab
+    numpy
+    pandas
+    pomegranate
     pyfaidx
     pysam
-    future
-    pillow
-    pomegranate
+    reportlab
     rPackages.DNAcopy
+    scikit-learn
+    scipy
   ];
 
-  checkInputs = [ R ];
-
-  checkPhase = ''
-    pushd test/
-    ${python.interpreter} test_io.py
-    ${python.interpreter} test_genome.py
-    ${python.interpreter} test_cnvlib.py
-    ${python.interpreter} test_commands.py
-    ${python.interpreter} test_r.py
-    popd # test/
+  # Make sure R can find the DNAcopy package
+  postInstall = ''
+    wrapProgram $out/bin/cnvkit.py \
+      --set R_LIBS_SITE "${rPackages.DNAcopy}/library" \
+       --set MPLCONFIGDIR "/tmp/matplotlib-config"
   '';
 
-  pythonImportsCheck = [
-    "cnvlib"
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ${python.executable} -m pytest --deselect=test/test_commands.py::CommandTests::test_batch \
+      --deselect=test/test_commands.py::CommandTests::test_segment_hmm
+
+      cd test
+      # Set matplotlib config directory for the tests
+      export MPLCONFIGDIR="/tmp/matplotlib-config"
+      export HOME="/tmp"
+      mkdir -p "$MPLCONFIGDIR"
+
+      # Use the installed binary - it's already wrapped with R_LIBS_SITE
+      make cnvkit="$out/bin/cnvkit.py" || {
+        echo "Make tests failed"
+        exit 1
+      }
+
+    runHook postInstallCheck
+  '';
+
+  doInstallCheck = true;
+
+  pythonImportsCheck = [ "cnvlib" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    R
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cnvkit.readthedocs.io";
-    description = "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
-    license = licenses.asl20;
-    maintainers = [ maintainers.jbedo ];
+    description = "Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
+    changelog = "https://github.com/etal/cnvkit/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.jbedo ];
   };
 }

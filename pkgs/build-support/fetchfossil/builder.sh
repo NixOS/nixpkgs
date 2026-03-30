@@ -1,5 +1,4 @@
-source $stdenv/setup
-header "Cloning Fossil $url [$rev] into $out"
+echo "Cloning Fossil $url [$rev] into $out"
 
 # Fossil, bless its adorable little heart, wants to write global configuration
 # to $HOME/.fossil. AFAICT, there is no way to disable this functionality.
@@ -18,5 +17,3 @@ popd
 
 # Just nuke the checkout file.
 rm $out/.fslckout
-
-stopNest

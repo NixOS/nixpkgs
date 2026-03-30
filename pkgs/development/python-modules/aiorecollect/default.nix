@@ -1,38 +1,39 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "2022.10.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2023.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-JIh6jr4pFXGZTUi6K7VsymaCxCrTNBevk9xo9TsrFnM=";
+    repo = "aiorecollect";
+    tag = version;
+    hash = "sha256-Rj0+r7eERLY5VzmuDQH/TeVLfmvmKwPqcvd1b/To0Ts=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    # this is not used directly by the project
+    sed -i '/certifi =/d' pyproject.toml
+  '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ aiohttp ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     freezegun
     pytest-asyncio
@@ -44,11 +45,9 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "aiorecollect"
-  ];
+  pythonImportsCheck = [ "aiorecollect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Recollect Waste API";
     longDescription = ''
       aiorecollect is a Python asyncio-based library for the ReCollect
@@ -57,7 +56,8 @@ buildPythonPackage rec {
       and more.
     '';
     homepage = "https://github.com/bachya/aiorecollect";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

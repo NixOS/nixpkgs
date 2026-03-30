@@ -1,42 +1,57 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
 
-# docs
-, python
-, sphinx
-, sphinx-rtd-theme
+  # build-system
+  setuptools,
 
-# tests
-, hypothesis
-, pytestCheckHook
+  # docs
+  python,
+  sphinx,
+  sphinx-rtd-theme,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.46.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.47.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bl+LqEg2uZ/mC+X7J/hL5K2Rm7trScqmroHnBYS1Xlg=";
+    hash = "sha256-cZ+t7wqXjDG0zzyVYmGzxYtpSLMgIweKIRex3gnw/Jk=";
   };
 
-  outputs = [ "out" "doc" ];
+  patches = [
+    # fix compatibility with hypothesis CI profile
+    # (remove on next release)
+    (fetchpatch {
+      url = "https://github.com/quodlibet/mutagen/commit/967212631719de1aeccbd6855c5b6d03f271fdfe.patch";
+      hash = "sha256-jfCz8qTGZpnP6ICMB9K/Dgyp9TQeMuDq+V6kPFA3Q44=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [
+    setuptools
     sphinx
     sphinx-rtd-theme
   ];
 
   postInstall = ''
-    ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_sphinx --build-dir=$doc
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
@@ -49,11 +64,9 @@ buildPythonPackage rec {
     "test_mock_fileobj"
   ];
 
-  pythonImportsCheck = [
-    "mutagen"
-  ];
+  pythonImportsCheck = [ "mutagen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for handling audio metadata";
     longDescription = ''
       Mutagen is a Python module to handle audio metadata. It supports
@@ -66,8 +79,10 @@ buildPythonPackage rec {
       manipulate Ogg streams on an individual packet/page level.
     '';
     homepage = "https://mutagen.readthedocs.io";
-    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   dbUser = "nixos_auth";
@@ -13,32 +13,32 @@ let
   localPassword = "topsecretlocaluserpassword123";
 
   mysqlInit = pkgs.writeText "mysqlInit" ''
-      CREATE USER '${dbUser}'@'localhost' IDENTIFIED BY '${dbPassword}';
-      CREATE DATABASE ${dbName};
-      GRANT ALL PRIVILEGES ON ${dbName}.* TO '${dbUser}'@'localhost';
-      FLUSH PRIVILEGES;
+    CREATE USER '${dbUser}'@'localhost' IDENTIFIED BY '${dbPassword}';
+    CREATE DATABASE ${dbName};
+    GRANT ALL PRIVILEGES ON ${dbName}.* TO '${dbUser}'@'localhost';
+    FLUSH PRIVILEGES;
 
-      USE ${dbName};
-      CREATE TABLE `groups` (
-        rowid int(11) NOT NULL auto_increment,
-        gid int(11) NOT NULL,
-        name char(255) NOT NULL,
-        PRIMARY KEY (rowid)
-      );
+    USE ${dbName};
+    CREATE TABLE `groups` (
+      rowid int(11) NOT NULL auto_increment,
+      gid int(11) NOT NULL,
+      name char(255) NOT NULL,
+      PRIMARY KEY (rowid)
+    );
 
-      CREATE TABLE `users` (
-        name varchar(255) NOT NULL,
-        uid int(11) NOT NULL auto_increment,
-        gid int(11) NOT NULL,
-        password varchar(255) NOT NULL,
-        PRIMARY KEY (uid),
-        UNIQUE (name)
-      ) AUTO_INCREMENT=5000;
+    CREATE TABLE `users` (
+      name varchar(255) NOT NULL,
+      uid int(11) NOT NULL auto_increment,
+      gid int(11) NOT NULL,
+      password varchar(255) NOT NULL,
+      PRIMARY KEY (uid),
+      UNIQUE (name)
+    ) AUTO_INCREMENT=5000;
 
-      INSERT INTO `users` (name, uid, gid, password) VALUES
-      ('${mysqlUsername}', 5000, 5000, SHA2('${mysqlPassword}', 256));
-      INSERT INTO `groups` (name, gid) VALUES ('${mysqlGroup}', 5000);
-    '';
+    INSERT INTO `users` (name, uid, gid, password) VALUES
+    ('${mysqlUsername}', 5000, 5000, SHA2('${mysqlPassword}', 256));
+    INSERT INTO `groups` (name, gid) VALUES ('${mysqlGroup}', 5000);
+  '';
 in
 {
   name = "auth-mysql";
@@ -84,7 +84,7 @@ in
           getpwuid = ''
             SELECT name, 'x', uid, gid, name, CONCAT('/home/', name), "/run/current-system/sw/bin/bash" \
             FROM users \
-            WHERE id=%1$u \
+            WHERE uid=%1$u \
             LIMIT 1
           '';
           getspnam = ''
@@ -140,6 +140,7 @@ in
 
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("mysql.service")
+    machine.wait_until_succeeds("cat /etc/security/pam_mysql.conf | grep users.db_passwd")
     machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
 
     with subtest("Local login"):
@@ -173,5 +174,5 @@ in
 
         machine.wait_until_tty_matches("5", "Login incorrect")
         machine.wait_until_tty_matches("5", "login:")
-    '';
-})
+  '';
+}

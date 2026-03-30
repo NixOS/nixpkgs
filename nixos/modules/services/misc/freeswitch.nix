@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ...}:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.freeswitch;
   pkg = cfg.package;
@@ -7,43 +11,44 @@ let
     mkdir -p $out
     cp -rT ${cfg.configTemplate} $out
     chmod -R +w $out
-    ${concatStringsSep "\n" (mapAttrsToList (fileName: filePath: ''
-      mkdir -p $out/$(dirname ${fileName})
-      cp ${filePath} $out/${fileName}
-    '') cfg.configDir)}
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (fileName: filePath: ''
+        mkdir -p $out/$(dirname ${fileName})
+        cp ${filePath} $out/${fileName}
+      '') cfg.configDir
+    )}
   '';
-  configPath = if cfg.enableReload
-    then "/etc/freeswitch"
-    else configDirectory;
-in {
+  configPath = if cfg.enableReload then "/etc/freeswitch" else configDirectory;
+in
+{
   options = {
     services.freeswitch = {
-      enable = mkEnableOption (lib.mdDoc "FreeSWITCH");
-      enableReload = mkOption {
+      enable = lib.mkEnableOption "FreeSWITCH";
+      enableReload = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Issue the `reloadxml` command to FreeSWITCH when configuration directory changes (instead of restart).
           See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Reloading) for more info.
           The configuration directory is exposed at {file}`/etc/freeswitch`.
           See also `systemd.services.*.restartIfChanged`.
         '';
       };
-      configTemplate = mkOption {
-        type = types.path;
+      configTemplate = lib.mkOption {
+        type = lib.types.path;
         default = "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
-        defaultText = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
-        example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
+        example = lib.literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
+        description = ''
           Configuration template to use.
           See available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
           You can also set your own configuration directory.
         '';
       };
-      configDir = mkOption {
-        type = with types; attrsOf path;
+      configDir = lib.mkOption {
+        type = with lib.types; attrsOf path;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "freeswitch.xml" = ./freeswitch.xml;
             "dialplan/default.xml" = pkgs.writeText "dialplan-default.xml" '''
@@ -51,28 +56,21 @@ in {
             ''';
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Override file in FreeSWITCH config template directory.
           Each top-level attribute denotes a file path in the configuration directory, its value is the file path.
           See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration) for more info.
           Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.freeswitch;
-        defaultText = literalExpression "pkgs.freeswitch";
-        description = lib.mdDoc ''
-          FreeSWITCH package.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "freeswitch" { };
     };
   };
-  config = mkIf cfg.enable {
-    environment.etc.freeswitch = mkIf cfg.enableReload {
+  config = lib.mkIf cfg.enable {
+    environment.etc.freeswitch = lib.mkIf cfg.enableReload {
       source = configDirectory;
     };
-    systemd.services.freeswitch-config-reload = mkIf cfg.enableReload {
+    systemd.services.freeswitch-config-reload = lib.mkIf cfg.enableReload {
       before = [ "freeswitch.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configDirectory ];

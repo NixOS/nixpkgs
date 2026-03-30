@@ -1,38 +1,43 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi
-, appdirs
-, black
-, importlib-metadata
-, isPy3k
-, jedi
-, prompt-toolkit
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  appdirs,
+  jedi,
+  prompt-toolkit,
+  pygments,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.20";
-  disabled = !isPy3k;
+  version = "3.0.32";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eafd4ced27ca5dc370881d4358d1ab5041b32d88d31af8e3c24167fe4af64ed6";
+    hash = "sha256-EWUXeCNt6VxYK0JzcpTlCma6SiH6AcAJDqcIFa9Hj+A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
-    black # yes, this is in install_requires
     jedi
     prompt-toolkit
     pygments
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # no tests to run
   doCheck = false;
 
-  meta = with lib; {
-    description = "An advanced Python REPL";
+  pythonImportsCheck = [ "ptpython" ];
+
+  meta = {
+    description = "Advanced Python REPL";
     homepage = "https://github.com/prompt-toolkit/ptpython";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mlieberman85 ];
+    changelog = "https://github.com/prompt-toolkit/ptpython/blob/${version}/CHANGELOG";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

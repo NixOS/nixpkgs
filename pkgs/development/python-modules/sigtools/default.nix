@@ -1,45 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, mock
-, coverage
-, unittest2
-, attrs
-, funcsigs
-, six
-, setuptools-scm
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  repeated-test,
+  setuptools-scm,
+  sphinx,
+  unittestCheckHook,
+  pythonAtLeast,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sigtools";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-S44TWpzU0uoA2mcMCTNy105nK6OruH9MmNjnPepURFw=";
+  src = fetchFromGitHub {
+    owner = "epsy";
+    repo = "sigtools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q5Bzc6fgDJCqt0SA/C/mg2fbUFyXLcsRU+tSl8FdZdI=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ attrs ];
+
+  nativeCheckInputs = [
+    mock
+    repeated-test
+    sphinx
+    unittestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    attrs
+  unittestFlags = lib.optionals (pythonAtLeast "3.14") [
+    "-s sigtools/tests"
+    # python314 only: NameError: name 'o' is not defined
+    "-k [!RoundTripTests.test_locals]"
   ];
 
-  patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
+  pythonImportsCheck = [ "sigtools" ];
 
-  # repeated_test no longer exists in nixpkgs
-  # Also see: https://github.com/epsy/sigtools/issues/26
-  doCheck = false;
-  checkInputs = [ sphinx mock coverage unittest2 ];
-
-  meta = with lib; {
-    description = "Utilities for working with 3.3's inspect.Signature objects.";
-    homepage = "https://pypi.python.org/pypi/sigtools";
-    license = licenses.mit;
+  meta = {
+    description = "Utilities for working with inspect.Signature objects";
+    homepage = "https://sigtools.readthedocs.io/";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-
-}
+})

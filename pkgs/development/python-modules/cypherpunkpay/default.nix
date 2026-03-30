@@ -1,52 +1,61 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, APScheduler
-, bitstring
-, cffi
-, ecdsa
-, monero
-, pypng
-, pyqrcode
-, pyramid
-, pyramid_jinja2
-, pysocks
-, requests
-, tzlocal
-, waitress
-, yoyo-migrations
-, pytestCheckHook
-, pytest-cov
-, webtest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  apscheduler,
+  bitstring,
+  cffi,
+  ecdsa,
+  monero,
+  pypng,
+  pyqrcode,
+  pyramid,
+  pyramid-jinja2,
+  pysocks,
+  pytz,
+  requests,
+  tzlocal,
+  waitress,
+  yoyo-migrations,
+
+  # tests
+  pytestCheckHook,
+  webtest,
 }:
 
 buildPythonPackage rec {
   pname = "cypherpunkpay";
   version = "1.0.16";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
+    tag = "v${version}";
+    hash = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'monero = "^0.99"' 'monero = ">=0.99"' \
-      --replace 'pypng = "^0.0.20"' 'pypng = ">=0.0.20"' \
-      --replace 'tzlocal = "2.1"' 'tzlocal = ">=2.1"'
-  '';
+  pythonRelaxDeps = [
+    "bitstring"
+    "cffi"
+    "ecdsa"
+    "pypng"
+    "tzlocal"
+    "yoyo-migrations"
+    "waitress"
+  ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    APScheduler
+  dependencies = [
+    apscheduler
     bitstring
     cffi
     ecdsa
@@ -54,44 +63,59 @@ buildPythonPackage rec {
     pypng
     pyqrcode
     pyramid
-    pyramid_jinja2
+    pyramid-jinja2
     pysocks
+    pytz
     requests
     tzlocal
     waitress
     yoyo-migrations
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
     webtest
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::UserWarning"
   ];
 
   disabledTestPaths = [
     # performance test
-    "test/unit/tools/pbkdf2_test.py"
+    "tests/unit/tools/pbkdf2_test.py"
     # tests require network connection
-    "test/network/explorers/bitcoin"
-    "test/network/net/http_client"
-    "test/network/prices"
+    "tests/network/explorers/bitcoin"
+    "tests/network/monero/monero_address_transactions_db_test.py"
+    "tests/network/net/http_client"
+    "tests/network/prices"
     # tests require bitcoind running
-    "test/network/full_node_clients"
+    "tests/network/full_node_clients"
     # tests require lnd running
-    "test/network/ln"
+    "tests/network/ln"
     # tests require tor running
-    "test/network/net/tor_client"
+    "tests/network/monero/monero_test.py"
+    "tests/network/net/tor_client"
+    "tests/network/usecases/calc_monero_address_credits_uc_test.py"
+    "tests/network/usecases/fetch_monero_txs_from_open_node_uc_test.py"
     # tests require the full environment running
-    "test/acceptance/views"
-    "test/acceptance/views_admin"
-    "test/acceptance/views_donations"
-    "test/acceptance/views_dummystore"
+    "tests/acceptance/views"
+    "tests/acceptance/views_admin"
+    "tests/acceptance/views_donations"
+    "tests/acceptance/views_dummystore"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "cypherpunkpay" ];
+
+  meta = {
     description = "Modern self-hosted software for accepting Bitcoin";
-    homepage = "https://cypherpunkpay.org";
-    license = with licenses; [ mit /* or */ unlicense ];
-    maintainers = with maintainers; [ prusnak ];
+    homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
+    changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
+    license = with lib.licenses; [
+      mit # or
+      unlicense
+    ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

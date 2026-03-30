@@ -1,44 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, makePythonPath
-, pythonOlder
-, python
-, click
-, dbus-python
-, desktop-notifier
-, dropbox
-, fasteners
-, keyring
-, keyrings-alt
-, packaging
-, pathspec
-, Pyro5
-, requests
-, setuptools
-, sdnotify
-, survey
-, watchdog
-, importlib-metadata
-, pytestCheckHook
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  makePythonPath,
+  python,
+  click,
+  dbus-python,
+  desktop-notifier,
+  dropbox,
+  fasteners,
+  importlib-metadata,
+  keyring,
+  keyrings-alt,
+  packaging,
+  pathspec,
+  pyro5,
+  requests,
+  rich,
+  rubicon-objc,
+  setuptools,
+  survey,
+  typing-extensions,
+  watchdog,
+  xattr,
+  pytestCheckHook,
+  nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maestral";
-  version = "1.6.3";
-  disabled = pythonOlder "3.6";
+  version = "1.9.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-JVzaWwdHAn5JOruLEN9Z2/5eV1oh3J2NQffNI3RqYfA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
   };
 
-  format = "pyproject";
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     desktop-notifier
     dbus-python
@@ -48,25 +52,33 @@ buildPythonPackage rec {
     keyrings-alt
     packaging
     pathspec
-    Pyro5
+    pyro5
     requests
+    rich
     setuptools
-    sdnotify
     survey
+    typing-extensions
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+    xattr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
-    "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (makePythonPath finalAttrs.finalPackage.dependencies)
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/${python.sitePackages}"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # ModuleNotFoundError: No module named '_watchdog_fsevents'
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -83,17 +95,40 @@ buildPythonPackage rec {
     "test_filestatus"
     "test_path_exists_case_insensitive"
     "test_cased_path_candidates"
+    # AssertionError
+    "test_locking_multiprocess"
+    # OSError: [Errno 95] Operation not supported
+    "test_move_preserves_xattrs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # maetral daemon does not start but worked in real environment
+    "test_catching_non_ignored_events"
+    "test_connection"
+    "test_event_handler"
+    "test_fs_ignore_tree_creation"
+    "test_lifecycle"
+    "test_notify_level"
+    "test_notify_snooze"
+    "test_receiving_events"
+    "test_remote_exceptions"
+    "test_start_already_running"
+    "test_stop"
   ];
 
   pythonImportsCheck = [ "maestral" ];
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Dropbox client for macOS and Linux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg sfrijters ];
-    platforms = platforms.unix;
+    mainProgram = "maestral";
     homepage = "https://maestral.app";
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      natsukium
+      peterhoeg
+      sfrijters
+    ];
   };
-}
+})

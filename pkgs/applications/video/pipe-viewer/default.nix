@@ -1,57 +1,64 @@
-{ lib
-, fetchFromGitHub
-, perl
-, buildPerlModule
-, makeWrapper
-, wrapGAppsHook
-, withGtk3 ? false
-, ffmpeg
-, wget
-, xdg-utils
-, youtube-dl
-, yt-dlp
-, TestPod
-, Gtk3
+{
+  lib,
+  fetchFromGitHub,
+  perl,
+  buildPerlModule,
+  makeWrapper,
+  wrapGAppsHook3,
+  withGtk3 ? false,
+  ffmpeg,
+  mpv,
+  wget,
+  xdg-utils,
+  yt-dlp,
+  TestPod,
+  Gtk3,
 }:
 let
-  perlEnv = perl.withPackages (ps: with ps; [
-    AnyURIEscape
-    DataDump
-    Encode
-    FilePath
-    GetoptLong
-    HTTPMessage
-    JSON
-    JSONXS
-    LWPProtocolHttps
-    LWPUserAgentCached
-    Memoize
-    PathTools
-    ScalarListUtils
-    TermReadLineGnu
-    TextParsewords
-    UnicodeLineBreak
-  ] ++ lib.optionals withGtk3 [
-    FileShareDir
-  ]);
+  perlEnv = perl.withPackages (
+    ps:
+    with ps;
+    [
+      AnyURIEscape
+      DataDump
+      Encode
+      FilePath
+      GetoptLong
+      HTTPMessage
+      JSON
+      JSONXS
+      LWPProtocolHttps
+      LWPUserAgentCached
+      Memoize
+      PathTools
+      ScalarListUtils
+      TermReadLineGnu
+      TextParsewords
+      UnicodeLineBreak
+    ]
+    ++ lib.optionals withGtk3 [
+      FileShareDir
+    ]
+  );
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.3.0";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-2Kzo7NYxARPFuOijwf2a3WQxnNumtKRiRhMhjrWA4GY=";
+    hash = "sha256-ZcO07zDMXSFOWIC0XHqeqjgPJXzWWh8G2szTkvF8OjM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals withGtk3 [ wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
-  buildInputs = [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook to work correctly
-    ++ lib.optional withGtk3 Gtk3;
+  buildInputs = [
+    perlEnv
+  ]
+  # Can't be in perlEnv for wrapGAppsHook3 to work correctly
+  ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule
   # and the Perl code fails anyway
@@ -62,26 +69,47 @@ buildPerlModule rec {
     substituteInPlace Build.PL --replace 'my $gtk ' 'my $gtk = 1;#'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     TestPod
   ];
 
   dontWrapGApps = true;
+
+  postInstall = ''
+    cp -r share/* $out/share
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/pipe-viewer" \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}"
-  '' + lib.optionalString withGtk3 ''
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ffmpeg
+          mpv
+          wget
+          yt-dlp
+        ]
+      }"
+  ''
+  + lib.optionalString withGtk3 ''
     # make xdg-open overrideable at runtime
     wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ffmpeg
+          mpv
+          wget
+          yt-dlp
+        ]
+      }" \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trizen/pipe-viewer";
     description = "CLI+GUI YouTube Client";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [ julm ];
-    platforms = platforms.all;
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ julm ];
+    platforms = lib.platforms.all;
+    mainProgram = "pipe-viewer";
   };
 }

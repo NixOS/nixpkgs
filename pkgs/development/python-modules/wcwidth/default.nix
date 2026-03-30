@@ -1,28 +1,34 @@
-{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
-, isPy3k
-, backports_functools_lru_cache
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wcwidth";
-  version = "0.2.5";
+  version = "0.4.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83";
+  src = fetchFromGitHub {
+    owner = "jquast";
+    repo = "wcwidth";
+    tag = version;
+    hash = "sha256-TQFvXmYkcsDojZSPAR76Dyq2vRUO41sII0nhC78Fd7Y=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
-    backports_functools_lru_cache
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
-  # To prevent infinite recursion with pytest
-  doCheck = false;
+  pythonImportsCheck = [ "wcwidth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Measures number of Terminal column cells of wide-character codes";
     longDescription = ''
       This API is mainly for Terminal Emulator implementors -- any Python
@@ -31,6 +37,8 @@ buildPythonPackage rec {
       no 3rd-party dependencies.
     '';
     homepage = "https://github.com/jquast/wcwidth";
-    license = licenses.mit;
+    changelog = "https://github.com/jquast/wcwidth/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

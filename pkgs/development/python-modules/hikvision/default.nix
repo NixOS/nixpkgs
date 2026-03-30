@@ -1,35 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hikvision";
   version = "2.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fbradyirl";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1l0zvir4hf1pcwwcmrhkspbdljzmi4lknxar5bkipdanpsm588mn";
+    repo = "hikvision";
+    tag = "v${version}";
+    hash = "sha256-tiJUqr5WtRvnKll1OymJ9Uva1tUT5so4Zzc4SHLcH9A=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hikvision.api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with Hikvision IP Cameras";
     homepage = "https://github.com/fbradyirl/hikvision";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fbradyirl/hikvision/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

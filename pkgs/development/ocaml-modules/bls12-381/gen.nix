@@ -1,17 +1,23 @@
-{ lib, fetchFromGitLab, buildDunePackage, ff-sig, zarith }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ff-sig,
+  zarith,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bls12-381-gen";
   version = "0.4.4";
 
   src = fetchFromGitLab {
     owner = "dannywillems";
     repo = "ocaml-bls12-381";
-    rev = "${version}-legacy";
+    rev = "${finalAttrs.version}-legacy";
     sha256 = "qocIfQdv9rniOUykRulu2zWsqkzT0OrsGczgVKALRuk=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 
@@ -28,4 +34,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

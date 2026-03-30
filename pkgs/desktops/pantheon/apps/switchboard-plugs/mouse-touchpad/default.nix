@@ -1,42 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libxml2
-, granite
-, gtk3
-, switchboard
-, gnome-settings-daemon
-, glib
-, gala # needed for gestures support
-, touchegg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  libxml2,
+  granite7,
+  gtk4,
+  switchboard,
+  gettext,
+  gnome-settings-daemon,
+  glib,
+  gala, # needed for gestures support
+  touchegg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "6.1.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "0nqgbpk1knvbj5xa078i0ka6lzqmaaa873gwj3mhjr5q2gzkw7y5";
+    repo = "settings-mouse-touchpad";
+    tag = version;
+    hash = "sha256-KfaC1yfsL3GowcjqqwPpYQ6DJIoO7ejl0y3IQ4Gtdj8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       touchegg = touchegg;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -46,8 +48,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gala
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
     libgee
     libxml2
     gnome-settings-daemon
@@ -56,16 +58,14 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Mouse & Touchpad Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-mouse-touchpad";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

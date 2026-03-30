@@ -1,24 +1,22 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.spice-webdavd;
 in
 {
   options = {
     services.spice-webdavd = {
-      enable = mkEnableOption (lib.mdDoc "the spice guest webdav proxy daemon");
+      enable = lib.mkEnableOption "the spice guest webdav proxy daemon";
 
-      package = mkOption {
-        default = pkgs.phodav;
-        defaultText = literalExpression "pkgs.phodav";
-        type = types.package;
-        description = lib.mdDoc "spice-webdavd provider package to use.";
-      };
+      package = lib.mkPackageOption pkgs "phodav" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # ensure the webdav fs this exposes can actually be mounted
     services.davfs2.enable = true;
 

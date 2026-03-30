@@ -1,49 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, h5py
-, pytestCheckHook
-, netcdf4
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  h5py,
+  netcdf,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.0.2";
-  format = "setuptools";
+  version = "1.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-iAih4JXwEitPtAjMmMYK3zmb1X/vSNHKfN9M2h0Ka0o=";
+  src = fetchFromGitHub {
+    owner = "h5netcdf";
+    repo = "h5netcdf";
+    tag = "v${version}";
+    hash = "sha256-m+8vdWOQb9aIg/mPeTrN20EzTj229Cit3nYgrkPlfGA=";
   };
 
- nativeBuildInputs = [
-   setuptools-scm
- ];
-
-  propagatedBuildInputs = [
-    h5py
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
+  dependencies = [ h5py ];
+
+  nativeCheckInputs = [
+    netcdf
     pytestCheckHook
-    netcdf4
   ];
 
-  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "h5netcdf" ];
 
-  pythonImportsCheck = [
-    "h5netcdf"
-  ];
-
-  meta = with lib; {
-    description = "netCDF4 via h5py";
+  meta = {
+    description = "Pythonic interface to netCDF4 via h5py";
     homepage = "https://github.com/shoyer/h5netcdf";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/h5netcdf/h5netcdf/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

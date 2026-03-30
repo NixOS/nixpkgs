@@ -1,48 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, pytestCheckHook
-, pytest-aiohttp
-, pygments
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "1.0.0";
-  format = "flit";
-
-  disabled = pythonOlder "3.6";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "EQwD0b2B9qFVd/8thKInaio0hpPzvVIjvCN0TcARu2w=";
+    repo = "aiojobs";
+    tag = "v${version}";
+    hash = "sha256-MgGUmDG0b0V/k+mCeiVRnBxa+ChK3URnGv6P8QP7RzQ=";
   };
 
-  nativeBuildInputs = [
-    pygments
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+  };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
+    pytest-cov-stub
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pythonImportsCheck = [ "aiojobs" ];
+
+  disabledTests = [
+    # RuntimeWarning: coroutine 'Scheduler._wait_failed' was never awaited
+    "test_scheduler_must_be_created_within_running_loop"
   ];
 
-  pythonImportsCheck = [
-    "aiojobs"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jobs scheduler for managing background task (asyncio)";
     homepage = "https://github.com/aio-libs/aiojobs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    changelog = "https://github.com/aio-libs/aiojobs/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

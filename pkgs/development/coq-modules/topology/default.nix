@@ -1,11 +1,17 @@
-{ lib, mkCoqDerivation, coq, mathcomp, zorns-lemma, version ? null }:
-with lib;
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  zorns-lemma,
+  version ? null,
+}:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "topology";
 
   releaseRev = v: "v${v}";
 
+  release."10.2.0".sha256 = "sha256-xLi3uRQBKL9KiLd4FBnbTPxh8TjdN8IEW/1D7n2B+xY=";
   release."9.0.0".sha256 = "sha256:03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
   release."8.12.0".sha256 = "sha256-ypHmHwzwZ6MQPYwuS3QyZmVOEPUCSbO2lhVaA6TypgQ=";
   release."8.10.0".sha256 = "sha256-mCLF3JYIiO3AEW9yvlcLeF7zN4SjW3LG+Y5vYB0l55A=";
@@ -15,17 +21,38 @@ mkCoqDerivation rec {
   release."8.6.0".sha256 = "sha256-eu/dBEFo3y6vnXlJljUD4hds6+qgAPQVvsuspyGHcj8=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.10"; out = "9.0.0"; }
-    { case = "8.9"; out = "8.9.0"; }
-    { case = "8.8"; out = "8.8.0"; }
-    { case = "8.7"; out = "8.7.0"; }
-    { case = "8.6"; out = "8.6.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.12" "8.18";
+        out = "10.2.0";
+      }
+      {
+        case = range "8.10" "8.16";
+        out = "9.0.0";
+      }
+      {
+        case = "8.9";
+        out = "8.9.0";
+      }
+      {
+        case = "8.8";
+        out = "8.8.0";
+      }
+      {
+        case = "8.7";
+        out = "8.7.0";
+      }
+      {
+        case = "8.6";
+        out = "8.6.0";
+      }
+    ] null;
 
   propagatedBuildInputs = [ zorns-lemma ];
 
-  useDuneifVersion = versions.isGe "9.0";
+  useDuneifVersion = lib.versions.isGe "9.0";
 
   meta = {
     description = "General topology in Coq";
@@ -33,7 +60,7 @@ mkCoqDerivation rec {
       This library develops some of the basic concepts and results of
       general topology in Coq.
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.lgpl21Plus;
   };
 }

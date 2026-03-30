@@ -1,30 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, coverage
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "isbnlib";
-  version = "3.10.12";
-  format = "setuptools";
+  version = "3.10.14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # Several tests fail and suggest that the package is incompatible with python >= 3.14
+  disabled = pythonAtLeast "3.14";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FOZNsZK8PTPJhK0BvGQiPqCr8au3rwHsjE3dCKWGtDM=";
+  src = fetchFromGitHub {
+    owner = "xlcnd";
+    repo = "isbnlib";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d6p0wv7kj+NOZJRE2rzQgb7PXv+E3tASIibYCjzCdx8=";
   };
 
-  checkInputs = [
-    nose
-    coverage
+  build-system = [ setuptools ];
+
+  dependencies = [
+    setuptools # needed for 'pkg_resources'
   ];
 
-  # requires network connection
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  enabledTestPaths = [ "isbnlib/test/" ];
+
+  disabledTests = [
+    # Require a network connection
+    "test_cache"
+    "test_editions_any"
+    "test_editions_merge"
+    "test_editions_thingl"
+    "test_editions_wiki"
+    "test_isbn_from_words"
+    "test_desc"
+    "test_cover"
+  ];
+
+  disabledTestPaths = [
+    "isbnlib/test/test_cache_decorator.py"
+    "isbnlib/test/test_goom.py"
+    "isbnlib/test/test_metadata.py"
+    "isbnlib/test/test_openl.py"
+    "isbnlib/test/test_rename.py"
+    "isbnlib/test/test_webservice.py"
+    "isbnlib/test/test_wiki.py"
+    "isbnlib/test/test_words.py"
+  ];
 
   pythonImportsCheck = [
     "isbnlib"
@@ -34,10 +71,11 @@ buildPythonPackage rec {
     "isbnlib.registry"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
     homepage = "https://github.com/xlcnd/isbnlib";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/xlcnd/isbnlib/blob/${finalAttrs.src.tag}/CHANGES.txt";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

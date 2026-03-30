@@ -1,28 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "siobrultech-protocols";
-  version = "0.7.0";
-
-  disabled = pythonOlder "3.8";
+  version = "0.14.0";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-t8is68WrvLj57tNeM5AKuuvpn7kWbhbvoRnCI3+q4uE=";
+    tag = "v${version}";
+    hash = "sha256-8tls2wlLA3wQ78gK4JvvhSWZS5oHRzzsKE73M4i1eyg=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pyyaml
@@ -34,8 +32,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Sans-I/O Python client library for Brultech Devices";
+    description = "Sans-I/O Python client library for Brultech Devices";
     homepage = "https://github.com/sdwilsh/siobrultech-protocols";
+    changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

@@ -1,19 +1,31 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  zeroconf,
+}:
 
 buildPythonPackage rec {
   pname = "netdisco";
   version = "3.0.0";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TbtZBILzd8zEYeAXQnB8y+jx0tGyhXivkdybf+vNy9I=";
+    hash = "sha256-TbtZBILzd8zEYeAXQnB8y+jx0tGyhXivkdybf+vNy9I=";
   };
 
-  propagatedBuildInputs = [ requests zeroconf ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [
+    requests
+    zeroconf
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Broken due to removed discoverables in https://github.com/home-assistant-libs/netdisco/commit/477db5a1dc93919a6c5bd61b4b1d3c80e75785bd
@@ -25,10 +37,10 @@ buildPythonPackage rec {
     "netdisco.discovery"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to scan local network for services and devices";
     homepage = "https://github.com/home-assistant/netdisco";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

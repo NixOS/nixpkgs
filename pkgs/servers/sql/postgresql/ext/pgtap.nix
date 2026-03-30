@@ -1,33 +1,69 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, perl, perlPackages, which }:
+{
+  fetchFromGitHub,
+  lib,
+  perl,
+  perlPackages,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestHook,
+  stdenv,
+  which,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgtap";
-  version = "1.2.0";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pgtap";
-    rev = "v${version}";
-    sha256 = "sha256-lb0PRffwo6J5a6Hqw1ggvn0cW7gPZ02OEcLPi9ineI8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SKac6JJmH/z7G1GmQYATMNfywsDIHjNdskzn2MT3kBg=";
   };
 
-  nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
+  nativeBuildInputs = [
+    perl
+    perlPackages.TAPParserSourceHandlerpgTAP
+    which
+  ];
 
-  installPhase = ''
-    install -D {sql/pgtap--${version}.sql,pgtap.control} -t $out/share/postgresql/extension
-  '';
+  passthru.tests.extension = stdenv.mkDerivation {
+    name = "pgtap-test";
+    dontUnpack = true;
+    doCheck = true;
+    nativeCheckInputs = [
+      postgresqlTestHook
+      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
+    ];
+    passAsFile = [ "sql" ];
+    sql = ''
+      CREATE EXTENSION pgtap;
 
-  meta = with lib; {
-    description = "A unit testing framework for PostgreSQL";
+      BEGIN;
+      SELECT plan(1);
+      SELECT pass('Test passed');
+      SELECT * FROM finish();
+      ROLLBACK;
+    '';
+    checkPhase = ''
+      runHook preCheck
+      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
+      runHook postCheck
+    '';
+    installPhase = "touch $out";
+  };
+
+  meta = {
+    description = "Unit testing framework for PostgreSQL";
     longDescription = ''
       pgTAP is a unit testing framework for PostgreSQL written in PL/pgSQL and PL/SQL.
       It includes a comprehensive collection of TAP-emitting assertion functions,
       as well as the ability to integrate with other TAP-emitting test frameworks.
       It can also be used in the xUnit testing style.
     '';
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = [ ];
     homepage = "https://pgtap.org";
     inherit (postgresql.meta) platforms;
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

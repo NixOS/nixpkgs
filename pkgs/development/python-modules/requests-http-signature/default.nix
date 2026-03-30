@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, http-message-signatures
-, http-sfv
-, requests
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  http-message-signatures,
+  http-sfv,
+  requests,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -14,20 +14,14 @@ buildPythonPackage rec {
   version = "0.7.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pyauth";
-    repo = pname;
+    repo = "requests-http-signature";
     rev = "v${version}";
     hash = "sha256-sW2vYqT/nY27DvEKHdptc3dUpuqKmD7PLMs+Xp+cpeU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     http-message-signatures
@@ -35,27 +29,21 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "test/test.py"
-  ];
+  enabledTestPaths = [ "test/test.py" ];
 
   disabledTests = [
     # Test require network access
     "test_readme_example"
   ];
 
-  pythonImportsCheck = [
-    "requests_http_signature"
-  ];
+  pythonImportsCheck = [ "requests_http_signature" ];
 
-  meta = with lib; {
+  meta = {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

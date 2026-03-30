@@ -1,17 +1,15 @@
-{ lib
-, requests
-, buildPythonPackage
-, fetchPypi
-, prometheus-client
-, pythonOlder
+{
+  lib,
+  requests,
+  buildPythonPackage,
+  fetchPypi,
+  prometheus-client,
 }:
 
 buildPythonPackage rec {
   pname = "uptime-kuma-monitor";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "uptime_kuma_monitor";
@@ -27,14 +25,12 @@ buildPythonPackage rec {
   # Project has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "uptime_kuma_monitor"
-  ];
+  pythonImportsCheck = [ "uptime_kuma_monitor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around UptimeKuma /metrics endpoint";
     homepage = "https://github.com/meichthys/utptime_kuma_monitor";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

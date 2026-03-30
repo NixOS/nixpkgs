@@ -1,38 +1,50 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, openssl
-, pylsqpack
-, certifi
-, pytestCheckHook
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchPypi,
+  openssl,
+  pylsqpack,
+  pyopenssl,
+  pytestCheckHook,
+  setuptools,
+  service-identity,
 }:
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "0.9.20";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7ENqqs6Ze4RrAeUgDtv34+VrkYJqFE77l0j9jd0zK74=";
+    hash = "sha256-KNBwshg+PnmvqdTnvVWJYNDVOuuYvAzwo1iyebp5fJI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
+    cryptography
     pylsqpack
     pyopenssl
+    service-identity
   ];
 
   buildInputs = [ openssl ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aioquic" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Implementation of QUIC and HTTP/3";
     homepage = "https://github.com/aiortc/aioquic";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/aiortc/aioquic/blob/${version}/docs/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

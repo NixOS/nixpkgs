@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.icecream.daemon;
-in {
+in
+{
 
   ###### interface
 
@@ -12,18 +18,18 @@ in {
 
     services.icecream.daemon = {
 
-     enable = mkEnableOption (lib.mdDoc "Icecream Daemon");
+      enable = mkEnableOption "Icecream Daemon";
 
       openFirewall = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically open receive port in the firewall.
         '';
       };
 
       openBroadcast = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically open the firewall for scheduler discovery.
         '';
       };
@@ -31,7 +37,7 @@ in {
       cacheLimit = mkOption {
         type = types.ints.u16;
         default = 256;
-        description = lib.mdDoc ''
+        description = ''
           Maximum size in Megabytes of cache used to store compile environments of compile clients.
         '';
       };
@@ -39,7 +45,7 @@ in {
       netName = mkOption {
         type = types.str;
         default = "ICECREAM";
-        description = lib.mdDoc ''
+        description = ''
           Network name to connect to. A scheduler with the same name needs to be running.
         '';
       };
@@ -47,7 +53,7 @@ in {
       noRemote = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Prevent jobs from other nodes being scheduled on this daemon.
         '';
       };
@@ -55,7 +61,7 @@ in {
       schedulerHost = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Explicit scheduler hostname, useful in firewalled environments.
 
           Uses scheduler autodiscovery via broadcast if set to null.
@@ -65,7 +71,7 @@ in {
       maxProcesses = mkOption {
         type = types.nullOr types.ints.u16;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of compile jobs started in parallel for this daemon.
 
           Uses the number of CPUs if set to null.
@@ -73,9 +79,9 @@ in {
       };
 
       nice = mkOption {
-        type = types.int;
+        type = types.ints.between (-20) 19;
         default = 5;
-        description = lib.mdDoc ''
+        description = ''
           The level of niceness to use.
         '';
       };
@@ -83,7 +89,7 @@ in {
       hostname = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Hostname of the daemon in the icecream infrastructure.
 
           Uses the hostname retrieved via uname if set to null.
@@ -93,23 +99,18 @@ in {
       user = mkOption {
         type = types.str;
         default = "icecc";
-        description = lib.mdDoc ''
+        description = ''
           User to run the icecream daemon as. Set to root to enable receive of
           remote compile environments.
         '';
       };
 
-      package = mkOption {
-        default = pkgs.icecream;
-        defaultText = literalExpression "pkgs.icecream";
-        type = types.package;
-        description = lib.mdDoc "Icecream package to use.";
-      };
+      package = mkPackageOption pkgs "icecream" { };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc "Additional command line parameters.";
+        default = [ ];
+        description = "Additional command line parameters.";
         example = [ "-v" ];
       };
     };
@@ -127,19 +128,38 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeShellArgs ([
-          "${getBin cfg.package}/bin/iceccd"
-          "-b" "$STATE_DIRECTORY"
-          "-u" "icecc"
-          (toString cfg.nice)
-        ]
-        ++ optionals (cfg.schedulerHost != null) ["-s" cfg.schedulerHost]
-        ++ optionals (cfg.netName != null) [ "-n" cfg.netName ]
-        ++ optionals (cfg.cacheLimit != null) [ "--cache-limit" (toString cfg.cacheLimit) ]
-        ++ optionals (cfg.maxProcesses != null) [ "-m" (toString cfg.maxProcesses) ]
-        ++ optionals (cfg.hostname != null) [ "-N" (cfg.hostname) ]
-        ++ optional  cfg.noRemote "--no-remote"
-        ++ cfg.extraArgs);
+        ExecStart = escapeShellArgs (
+          [
+            "${getBin cfg.package}/bin/iceccd"
+            "-b"
+            "$STATE_DIRECTORY"
+            "-u"
+            "icecc"
+            (toString cfg.nice)
+          ]
+          ++ optionals (cfg.schedulerHost != null) [
+            "-s"
+            cfg.schedulerHost
+          ]
+          ++ optionals (cfg.netName != null) [
+            "-n"
+            cfg.netName
+          ]
+          ++ optionals (cfg.cacheLimit != null) [
+            "--cache-limit"
+            (toString cfg.cacheLimit)
+          ]
+          ++ optionals (cfg.maxProcesses != null) [
+            "-m"
+            (toString cfg.maxProcesses)
+          ]
+          ++ optionals (cfg.hostname != null) [
+            "-N"
+            (cfg.hostname)
+          ]
+          ++ optional cfg.noRemote "--no-remote"
+          ++ cfg.extraArgs
+        );
         DynamicUser = true;
         User = "icecc";
         Group = "icecc";

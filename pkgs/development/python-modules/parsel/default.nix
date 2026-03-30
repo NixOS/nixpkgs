@@ -1,52 +1,56 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, lxml
-, packaging
-, psutil
-, pytestCheckHook
-, pythonOlder
-, w3lib
+{
+  lib,
+  buildPythonPackage,
+  cssselect,
+  fetchPypi,
+  hatchling,
+  jmespath,
+  lxml,
+  packaging,
+  psutil,
+  pytestCheckHook,
+  sybil,
+  w3lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parsel";
-  version = "1.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.11.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AlQTPLAwTeE/zEhXu4IU/3DWmIcnYfpr6DdOG7vVgZI=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-WSX+CH6xb8QEp+2R4x4sHiqbIw2ktk802BNYwNDifog=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cssselect
+    jmespath
     lxml
     packaging
     w3lib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     pytestCheckHook
+    sybil
   ];
 
-  pythonImportsCheck = [
-    "parsel"
+  pythonImportsCheck = [ "parsel" ];
+
+  disabledTests = [
+    # asserts on the exact output format of an error message
+    "test_set_xpathfunc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to extract data from HTML and XML using XPath and CSS selectors";
     homepage = "https://github.com/scrapy/parsel";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/scrapy/parsel/blob/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

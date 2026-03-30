@@ -1,50 +1,60 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, requests
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  python-dotenv,
+  fetchFromGitHub,
+  setuptools,
+  httpx,
+  microsoft-kiota-abstractions,
+  microsoft-kiota-authentication-azure,
+  microsoft-kiota-http,
+  microsoft-kiota-serialization-json,
+  azure-identity,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "0.2.2";
-
-  disabled = pythonOlder "3.5";
-
-  format = "pyproject";
+  version = "1.3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
-    rev = "v${version}";
-    hash = "sha256-eRRlG3GJX3WeKTNJVWgNTTHY56qiUGOlxtvEZ2xObLA=";
+    tag = "v${version}";
+    hash = "sha256-6M1C2Y0jYec/yKjigtbaaZiEL23csQAFtuUVMTlaiXk=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  dependencies = [
+    httpx
+    microsoft-kiota-abstractions
+    microsoft-kiota-authentication-azure
+    microsoft-kiota-http
+  ]
+  ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    azure-identity
+    microsoft-kiota-serialization-json
     pytestCheckHook
+    python-dotenv
     responses
   ];
 
-  disabledTestPaths = [
-    "tests/integration"
-  ];
+  pythonImportsCheck = [ "msgraph_core" ];
 
-  pythonImportsCheck = [ "msgraph.core" ];
+  disabledTestPaths = [
+    # client_id should be the id of a Microsoft Entra application
+    "tests/tasks/test_page_iterator.py"
+  ];
 
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python-core";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

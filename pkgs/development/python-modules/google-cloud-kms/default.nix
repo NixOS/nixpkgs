@@ -1,40 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, grpc-google-iam-v1
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "2.12.3";
+  version = "3.9.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ooWxYH4B8HY9ybWj0GQqUnfiFXzLCqyXGGZsocV9Od0=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-kms-v${version}";
+    hash = "sha256-JR3fcwCuMZkHyJHnMt4EGvTZZ7MLgQrgxCaTlJZ1zYE=";
   };
 
-  propagatedBuildInputs = [ grpc-google-iam-v1 google-api-core libcst proto-plus ];
+  sourceRoot = "${src.name}/packages/google-cloud-kms";
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  build-system = [ setuptools ];
 
-  # Disable tests that need credentials
-  disabledTests = [ "test_list_global_key_rings" ];
+  dependencies = [
+    grpc-google-iam-v1
+    google-api-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
+
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Disable tests that need credentials
+    "test_list_global_key_rings"
+    # Tests require PROJECT_ID
+    "test_list_ekm_connections"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.kms"
     "google.cloud.kms_v1"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-cloud-kms-v";
+  };
+
+  # picks the wrong tag
+  passthru.skipBulkUpdate = true;
+
+  meta = {
     description = "Cloud Key Management Service (KMS) API API client library";
-    homepage = "https://github.com/googleapis/python-kms";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-kms/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

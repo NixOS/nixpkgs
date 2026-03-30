@@ -1,26 +1,32 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cexprtk";
-  version = "0.4.0";
+  version = "0.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c7QXB+oXzkRveiPpNrW/HY8pMtpZx/RtDpJMVE7fY/A=";
+    hash = "sha256-sBLkHco0u2iEsdUxmPW2ONP/Fe08p0fOVJLmzz3t4os=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cexprtk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mathematical expression parser, cython wrapper";
     homepage = "https://github.com/mjdrushton/cexprtk";
-    license = licenses.cpl10;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/mjdrushton/cexprtk/blob/${version}/CHANGES.md";
+    license = lib.licenses.cpl10;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

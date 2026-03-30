@@ -1,50 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, extruct
-, language-tags
-, regex
-, requests
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  extruct,
+  isodate,
+  language-tags,
+  regex,
+  requests,
+  pytestCheckHook,
+  responses,
+  setuptools,
+  nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "recipe-scrapers";
-  version = "14.14.0";
+  version = "15.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
-    rev = version;
-    sha256 = "sha256-3qrjNd1jX4JP3qG9YX8MQqwPh8cvfkZa1tEk0uCwego=";
+    tag = finalAttrs.version;
+    hash = "sha256-S0/RPVeEr/lAPJZSUwCippuXyirYnmaAuesWGYwg6kE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     extruct
+    isodate
     language-tags
     regex
-    requests
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    online = [ requests ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
 
-  disabledTestPaths = [
-    # This is not actual code, just some pre-written boiler-plate template
-    "templates/test_scraper.py"
+  disabledTests = [
+    # Fixture is broken
+    "test_instructions"
   ];
 
   pythonImportsCheck = [ "recipe_scrapers" ];
 
-  meta = with lib; {
-    description = "Python package for scraping recipes data ";
-    homepage = "https://github.com/hhursev/recipe-scrapers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+  passthru = {
+    tests = {
+      inherit (nixosTests) mealie tandoor-recipes;
+    };
   };
-}
+
+  meta = {
+    description = "Python package for scraping recipes data";
+    homepage = "https://github.com/hhursev/recipe-scrapers";
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
+  };
+})

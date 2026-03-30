@@ -1,24 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi
-, flake8, mock, nose, pytest
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  mock,
+  pytestCheckHook,
+  cryptography,
 }:
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.8.2";
+  version = "1.9.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "874f21910f2103c56228cded941d6e733dd8f1eb12876137919533bfacb65a48";
+    pname = "py_vapid";
+    inherit version;
+    hash = "sha256-oAQCNWDLxU40/AY4CgWA8E/8x4joT7bRnpM57rZVGig=";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ hatchling ];
 
-  checkInputs = [ flake8 mock nose pytest ];
+  dependencies = [ cryptography ];
 
-  meta = with lib; {
-    description = "VAPID is a voluntary standard for WebPush subscription providers";
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  meta = {
+    description = "Library for VAPID header generation";
+    mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

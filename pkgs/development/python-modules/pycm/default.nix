@@ -1,60 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pytest-cov-stub,
+  seaborn,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  version = "4.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-96M/QKt4AdiZoZ7L9AHocSyZPkwEb2iuRJKW3rVP3hc=";
+    repo = "pycm";
+    tag = "v${version}";
+    hash = "sha256-qskLY0Ru0Ex7RfbsgXSTsi/UekvDyAKdJEBH6XakQp8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     numpy
     seaborn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
+    matplotlib
+  ];
+
+  disabledTests = [
+    "plot_error_test" # broken doctest (expects matplotlib import exception)
   ];
 
   postPatch = ''
     # Remove a trivial dependency on the author's `art` Python ASCII art library
     rm pycm/__main__.py
-    # Also depends on python3Packages.notebook
-    rm Otherfiles/notebook_check.py
     substituteInPlace setup.py \
-      --replace '=get_requires()' '=[]'
+      --replace-fail '=get_requires()' '=[]'
   '';
 
-  disabledTests = [
-    # Output formatting error
-    "pycm.pycm_compare.Compare"
-    "plot_test"
-  ];
+  pythonImportsCheck = [ "pycm" ];
 
-  pythonImportsCheck = [
-    "pycm"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Multiclass confusion matrix library";
-    homepage = "https://pycm.ir";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    homepage = "https://pycm.io";
+    changelog = "https://github.com/sepandhaghighi/pycm/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -1,23 +1,28 @@
-{ buildPythonPackage
-, lib
-, stdenv
-, cmake
-, cppe
-, eigen
-, python
-, pybind11
-, numpy
-, h5py
-, numba
-, scipy
-, pandas
-, polarizationsolver
-, pytest
-, llvmPackages
+{
+  buildPythonPackage,
+  lib,
+  stdenv,
+  cmake,
+  cppe,
+  eigen,
+  pybind11,
+  numpy,
+  h5py,
+  numba,
+  scipy,
+  pandas,
+  polarizationsolver,
+  pytest,
+  llvmPackages,
 }:
 
-buildPythonPackage rec {
-  inherit (cppe) pname version src meta;
+buildPythonPackage {
+  inherit (cppe)
+    pname
+    version
+    src
+    meta
+    ;
 
   # The python interface requires eigen3, but builds from a checkout in tree.
   # Using the nixpkgs version instead.
@@ -33,14 +38,17 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ pybind11 ]
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  format = "setuptools";
 
-  NIX_CFLAGS_LINK = lib.optional stdenv.cc.isClang "-lomp";
+  buildInputs = [ pybind11 ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_LINK = "-lomp";
+  };
 
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     h5py
     numba

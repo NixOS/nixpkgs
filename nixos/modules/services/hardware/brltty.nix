@@ -1,13 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.brltty;
 
   targets = [
-    "default.target" "multi-user.target"
-    "rescue.target" "emergency.target"
+    "default.target"
+    "multi-user.target"
+    "rescue.target"
+    "emergency.target"
   ];
 
   genApiKey = pkgs.writers.writeDash "generate-brlapi-key" ''
@@ -18,30 +22,33 @@ let
     fi
   '';
 
-in {
+in
+{
 
   options = {
 
-    services.brltty.enable = mkOption {
-      type = types.bool;
+    services.brltty.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc "Whether to enable the BRLTTY daemon.";
+      description = "Whether to enable the BRLTTY daemon.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.brltty = {
       description = "BRLTTY daemon user";
       group = "brltty";
+      isSystemUser = true;
     };
     users.groups = {
       brltty = { };
       brlapi = { };
     };
 
-    systemd.services."brltty@".serviceConfig =
-      { ExecStartPre = "!${genApiKey}"; };
+    systemd.services."brltty@".serviceConfig = {
+      ExecStartPre = "!${genApiKey}";
+    };
 
     # Install all upstream-provided files
     systemd.packages = [ pkgs.brltty ];

@@ -1,28 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, regex
-, pytest-runner, pytestCheckHook, pytest-mypy
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pytestCheckHook,
+  regex,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.8.3";
-  # upstream only supports 3.10+
-  disabled = pythonOlder "3.10";
+  version = "5.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-cKEMRbH/xNtYM0lmNVazv3i0Q1tmVrVPrB6F2s02Sro=";
+    tag = "v${version}";
+    hash = "sha256-YFNoA81J8x4OO7lLUjeN/NzQfCTEeosaWZg9UKy8C50=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ colorama regex ];
-  checkInputs = [ pytestCheckHook pytest-mypy ];
+  nativeBuildInputs = [ hatchling ];
+
+  propagatedBuildInputs = [
+    colorama
+    regex
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tatsu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generates Python parsers from grammars in a variation of EBNF";
     longDescription = ''
       TatSu (the successor to Grako) is a tool that takes grammars in a
@@ -30,8 +39,8 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://tatsu.readthedocs.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/neogeny/TatSu/releases/tag/${src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
-
 }

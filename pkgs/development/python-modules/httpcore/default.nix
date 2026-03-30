@@ -1,76 +1,73 @@
-{ lib
-, anyio
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytest-httpbin
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, sniffio
-, socksio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  h11,
+  h2,
+  pytest-httpbin,
+  pytest-trio,
+  pytestCheckHook,
+  socksio,
+  trio,
+  # for passthru.tests
+  httpx,
+  httpx-socks,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.15.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    hash = "sha256-FF3Yzac9nkVcA5bHVOz2ymvOelSfJ0K6oU8UWpBDcmo=";
+    repo = "httpcore";
+    tag = version;
+    hash = "sha256-YtAbx0iXN7u8pMBXQBUydvAH6ilH+veklvxSh5EVFXo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11>=0.11,<0.13" "h11>=0.11,<0.14"
-  '';
-
-  propagatedBuildInputs = [
-    anyio
-    certifi
-    h11
-    sniffio
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  passthru.optional-dependencies = {
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
+  dependencies = [
+    certifi
+    h11
+  ];
+
+  optional-dependencies = {
+    asyncio = [ anyio ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    trio = [ trio ];
   };
 
-  checkInputs = [
-    pproxy
-    pytest-asyncio
+  nativeCheckInputs = [
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.socks;
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "httpcore"
-  ];
+  pythonImportsCheck = [ "httpcore" ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=strict"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    description = "A minimal low-level HTTP client";
+  passthru.tests = {
+    inherit httpx httpx-socks respx;
+  };
+
+  meta = {
+    changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

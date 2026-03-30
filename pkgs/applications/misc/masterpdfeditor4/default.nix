@@ -1,4 +1,13 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, autoPatchelfHook, lib, wrapQtAppsHook }:
+{
+  stdenv,
+  fetchurl,
+  sane-backends,
+  qtbase,
+  qtsvg,
+  autoPatchelfHook,
+  lib,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor4";
@@ -9,9 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "0k5bzlhqglskiiq86nmy18mnh5bf2w3mr9cq3pibrwn5pisxnxxc";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase qtsvg sane-backends stdenv.cc.cc ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    sane-backends
+    stdenv.cc.cc
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -22,9 +39,9 @@ stdenv.mkDerivation rec {
     substituteInPlace masterpdfeditor4.desktop \
       --replace 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
       --replace 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
-      --replace 'Icon=/opt/master-pdf-editor-4' "Icon=$out/share/pixmaps"
+      --replace 'Icon=/opt/master-pdf-editor-4' "Icon=masterpdfeditor4"
 
-    install -Dm644 -t $out/share/pixmaps      masterpdfeditor4.png
+    install -Dm644 -t $out/share/icons/hicolor/128x128/apps masterpdfeditor4.png
     install -Dm644 -t $out/share/applications masterpdfeditor4.desktop
     install -Dm755 -t $app_dir                masterpdfeditor4
     install -Dm644 license.txt $out/share/$name/LICENSE
@@ -34,11 +51,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Master PDF Editor - version 4, without watermark";
     homepage = "https://code-industry.net/free-pdf-editor/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
   };
 }

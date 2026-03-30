@@ -1,76 +1,125 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-# install_requires
-, attrs
-, charset-normalizer
-, multidict
-, async-timeout
-, yarl
-, frozenlist
-, aiosignal
-, aiodns
-, brotli
-, cchardet
-, asynctest
-, typing-extensions
-, idna-ssl
-# tests_require
-, async_generator
-, freezegun
-, gunicorn
-, pytest-mock
-, pytestCheckHook
-, re-assert
-, trustme
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  isPyPy,
+  pythonOlder,
+
+  # build-system
+  cython,
+  pkgconfig,
+  setuptools,
+
+  # native dependencies
+  llhttp,
+
+  # dependencies
+  aiohappyeyeballs,
+  aiosignal,
+  async-timeout,
+  attrs,
+  backports-zstd,
+  frozenlist,
+  multidict,
+  propcache,
+  yarl,
+
+  # optional dependencies
+  aiodns,
+  brotli,
+  brotlicffi,
+
+  # tests
+  blockbuster,
+  freezegun,
+  gunicorn,
+  isa-l,
+  isal,
+  proxy-py,
+  pytest-codspeed,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  re-assert,
+  trustme,
+  zlib-ng,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.3";
-  disabled = pythonOlder "3.6";
+  version = "3.13.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3828fb41b7203176b82fe5d699e0d845435f2374750a44b480ea6b930f6be269";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiohttp";
+    tag = "v${version}";
+    hash = "sha256-V+digrfigdA3hwd2xW47BACh3r07j6pGE8WFAGivZnA=";
   };
 
   postPatch = ''
-    sed -i '/--cov/d' setup.cfg
+    rm -r vendor
+    patchShebangs tools
+    touch .git  # tools/gen.py uses .git to find the project root
+
+    # don't install Cython using pip
+    substituteInPlace Makefile \
+      --replace-fail "cythonize: .install-cython" "cythonize:"
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    charset-normalizer
-    multidict
-    async-timeout
-    yarl
-    typing-extensions
-    frozenlist
-    aiosignal
-    aiodns
-    brotli
-    cchardet
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    idna-ssl
+  build-system = [
+    cython
+    pkgconfig
+    setuptools
   ];
 
-  checkInputs = [
-    async_generator
+  preBuild = ''
+    make cythonize
+  '';
+
+  buildInputs = [
+    llhttp
+  ];
+
+  env.AIOHTTP_USE_SYSTEM_DEPS = true;
+
+  dependencies = [
+    aiohappyeyeballs
+    aiosignal
+    attrs
+    frozenlist
+    multidict
+    propcache
+    yarl
+  ]
+  ++ optional-dependencies.speedups;
+
+  optional-dependencies.speedups = [
+    aiodns
+    (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
+  ];
+
+  nativeCheckInputs = [
+    blockbuster
     freezegun
     gunicorn
+    # broken on aarch64-darwin
+    (if lib.meta.availableOn stdenv.hostPlatform isa-l then isal else null)
+    proxy-py
+    pytest-codspeed
+    pytest-cov-stub
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     re-assert
-  ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
-    # Optional test dependency. Depends indirectly on pyopenssl, which is
-    # broken on aarch64-darwin.
     trustme
+    zlib-ng
   ];
 
   disabledTests = [
@@ -78,36 +127,44 @@ buildPythonPackage rec {
     "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
     "test_requote_redirect_url_default"
-    # Disable tests that trigger deprecation warnings in pytest
-    "test_async_with_session"
-    "test_session_close_awaitable"
-    "test_close_run_until_complete_not_deprecated"
-  ] ++ lib.optionals stdenv.is32bit [
-    "test_cookiejar"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_tcp_connector_ssl_shutdown_timeout_nonzero_passed"
+    "test_tcp_connector_ssl_shutdown_timeout_zero_not_passed"
+    "test_invalid_idna"
+    # don't run benchmarks
+    "test_import_time"
+    "test_cookie_pattern_performance"
+    "test_forwarded_re_performance"
+    "test_regex_performance"
+    # racy
+    "test_uvloop_secure_https_proxy"
+    # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
+    "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
     "test_close"
-  ];
-
-  disabledTestPaths = [
-    "test_proxy_functional.py" # FIXME package proxy.py
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  # aiohttp in current folder shadows installed version
-  # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
-    cd tests
-  '' + lib.optionalString stdenv.isDarwin ''
+    # aiohttp in current folder shadows installed version
+    rm -r aiohttp
+    touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
+
+    export HOME=$(mktemp -d)
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

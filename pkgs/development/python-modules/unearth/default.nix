@@ -1,54 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-
-, cached-property
-, packaging
-, pdm-pep517
-, requests
-
-, flask
-, pytest-httpserver
-, pytestCheckHook
-, requests-wsgi-adapter
-, trustme
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  pdm-backend,
+  httpx,
+  flask,
+  pytest-httpserver,
+  pytest-mock,
+  pytestCheckHook,
+  requests-wsgi-adapter,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.6.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "0.18.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S3v719NKEWc9gN+uf6u/khwTmqx4OD+wyhapDTtTpm4=";
+    hash = "sha256-HlPX9S9G3V+HXnf/HFWxJHfiFaCS5LZsl2SnffSptSA=";
   };
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
+    httpx
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     flask
     pytest-httpserver
+    pytest-mock
     pytestCheckHook
     requests-wsgi-adapter
     trustme
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "unearth" ];
+
+  meta = {
+    description = "Utility to fetch and download Python packages";
+    mainProgram = "unearth";
     homepage = "https://github.com/frostming/unearth";
-    description = "A utility to fetch and download python packages";
-    license = licenses.mit;
-    maintainers = with maintainers; [ betaboon ];
+    changelog = "https://github.com/frostming/unearth/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ betaboon ];
   };
 }

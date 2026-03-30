@@ -1,9 +1,18 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool
-, gtk2, halibut, ncurses, perl, darwin
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
+  pkg-config,
+  gtk3,
+  ncurses,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.76";
+  version = "0.83";
   pname = "putty";
 
   src = fetchurl {
@@ -11,45 +20,64 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "0gvi8phabszqksj2by5jrjmshm7bpirhgavz0dqyz1xaimxdjz2l";
+    hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
   };
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  patches = [
+    # Fix EdDSA signature verification accepting out-of-range s values
+    # https://git.tartarus.org/?p=simon/putty.git;a=commit;h=af996b5ec27ab79bae3882071b9d6acf16044549
+    ./eddsa-verify-check-out-of-range-s.patch
+  ];
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
-    perl mkfiles.pl
-    ( cd doc ; make );
-    ./mkauto.sh
-    cd unix
-  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
-    cd windows
-  '';
-
-  TOOLPATH = stdenv.cc.targetPrefix;
-  makefile = if stdenv.hostPlatform.isWindows then "Makefile.mgw" else null;
-
-  installPhase = if stdenv.hostPlatform.isWindows then ''
-    for exe in *.exe; do
-       install -D $exe $out/bin/$exe
-    done
-  '' else null;
-
-  nativeBuildInputs = [ autoconf automake halibut libtool perl pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
-    gtk2 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+    gtk3
+    ncurses
+  ];
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "A Free Telnet/SSH Client";
+  desktopItems = [
+    (makeDesktopItem {
+      name = "PuTTY SSH Client";
+      exec = "putty";
+      icon = "putty";
+      desktopName = "PuTTY";
+      comment = "Connect to an SSH server with PuTTY";
+      categories = [
+        "GTK"
+        "Network"
+      ];
+    })
+    (makeDesktopItem {
+      name = "PuTTY Terminal Emulator";
+      exec = "pterm";
+      icon = "pterm";
+      desktopName = "Pterm";
+      comment = "Start a PuTTY terminal session";
+      categories = [
+        "GTK"
+        "System"
+        "Utility"
+        "TerminalEmulator"
+      ];
+    })
+  ];
+
+  meta = {
+    maintainers = with lib.maintainers; [ aprl ];
+    description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
       platforms, along with an xterm terminal emulator.
       It is written and maintained primarily by Simon Tatham.
     '';
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
-    license = licenses.mit;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

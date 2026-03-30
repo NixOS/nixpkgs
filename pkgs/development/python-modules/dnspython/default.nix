@@ -1,55 +1,62 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, cacert
+{
+  lib,
+  aioquic,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  h2,
+  httpcore,
+  httpx,
+  idna,
+  hatchling,
+  pytestCheckHook,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.2.1";
-  disabled = pythonOlder "3.6";
+  version = "2.8.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.gz";
-    sha256 = "0gk00m8zxjghxnzafhars51k5ahd6wfhf123nrc1j5gzlsj6jx8g";
+    hash = "sha256-GB08aZZFLLEYnEBGxhWZuEpahuCZVi/9530mmE/ybQ8=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    cacert
-  ];
+  build-system = [ hatchling ];
+
+  optional-dependencies = {
+    doh = [
+      httpx
+      h2
+      httpcore
+    ];
+    idna = [ idna ];
+    dnssec = [ cryptography ];
+    trio = [ trio ];
+    doq = [ aioquic ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
-    # fails if IPv6 isn't available
-    "test_resolver_override"
-
-  # Tests that run inconsistently on darwin systems
-  ] ++ lib.optionals stdenv.isDarwin [
-    # 9 tests fail with: BlockingIOError: [Errno 35] Resource temporarily unavailable
-    "testQueryUDP"
-    # 6 tests fail with: dns.resolver.LifetimeTimeout: The resolution lifetime expired after ...
-    "testResolveCacheHit"
-    "testResolveTCP"
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  # disable network on all builds (including darwin)
+  # see https://github.com/NixOS/nixpkgs/issues/356803
+  preCheck = ''
+    export NO_INTERNET=1
+  '';
 
   pythonImportsCheck = [ "dns" ];
 
-  meta = with lib; {
-    description = "A DNS toolkit for Python";
+  meta = {
+    description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ gador ];
+    changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

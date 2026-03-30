@@ -1,52 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, textfsm
-, pytestCheckHook
-, ruamel-yaml
-, yamllint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  textfsm,
+  invoke,
+  pytestCheckHook,
+  ruamel-yaml,
+  toml,
+  yamllint,
 }:
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "3.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "8.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0kijzmmvq2rw7ima19w7lyb2p26a5w52k70fzbkaqqw78qzw8178";
+    repo = "ntc-templates";
+    tag = "v${version}";
+    hash = "sha256-J1Icf9UG5IMYBH90Mfxd+p+rk57z2OXQENnoRAaepN4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    textfsm
-  ];
+  pythonRelaxDeps = [ "textfsm" ];
 
-  checkInputs = [
+  dependencies = [ textfsm ];
+
+  nativeCheckInputs = [
+    invoke
     pytestCheckHook
     ruamel-yaml
+    toml
     yamllint
   ];
 
-  # https://github.com/networktocode/ntc-templates/issues/743
-  disabledTests = [
-    "test_raw_data_against_mock"
-    "test_verify_parsed_and_reference_data_exists"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

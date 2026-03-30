@@ -1,40 +1,56 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, gnutls
-, cunit, ncurses, knot-dns
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gnutls,
+  cunit,
+  ncurses,
+  knot-dns,
+  curlWithGnuTls,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.10.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
-    sha256 = "sha256-zDiJlwcDTLCU+WpJ6Jz6tve4oV+XMRYOtppC2fj/HgU=";
+    hash = "sha256-8dfktmiiwJ0CVB5BCNBLmTYuUG9Y9Ik2esJNmynJvCU=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ gnutls ];
 
   configureFlags = [ "--with-gnutls=yes" ];
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ cunit ]
-    ++ lib.optional stdenv.isDarwin ncurses;
+  nativeCheckInputs = [ cunit ] ++ lib.optional stdenv.hostPlatform.isDarwin ncurses;
 
-  passthru.tests = knot-dns.passthru.tests; # the only consumer so far
+  passthru.tests = knot-dns.passthru.tests // {
+    inherit curlWithGnuTls;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
-    description = "an effort to implement RFC9000 QUIC protocol.";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vcunat/* for knot-dns */ ];
+    description = "Effort to implement RFC9000 QUIC protocol";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      vcunat # for knot-dns
+    ];
   };
 }
 
@@ -50,4 +66,3 @@ stdenv.mkDerivation rec {
   on a single version might be hard sometimes.  That's why it seemed simpler
   to completely separate the nix expressions, too.
 */
-

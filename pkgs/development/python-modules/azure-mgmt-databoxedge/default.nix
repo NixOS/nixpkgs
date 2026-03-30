@@ -1,23 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
-  version = "1.0.0";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "04090062bc1e8f00c2f45315a3bceb0fb3b3479ec1474d71b88342e13499b087";
+    pname = "azure_mgmt_databoxedge";
+    inherit version;
+    hash = "sha256-8Y8GbQJ8maIkmY08R0CBJoIVmr44z1joewl3DKssrMA=";
   };
 
-  propagatedBuildInputs = [
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
+    isodate
+    typing-extensions
   ];
 
   # no tests in pypi tarball
@@ -25,10 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.databoxedge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Databoxedge Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/databox/azure-mgmt-databox";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-databoxedge_${version}/sdk/databox/azure-mgmt-databox/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

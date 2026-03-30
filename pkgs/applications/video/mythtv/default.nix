@@ -1,42 +1,116 @@
-{ lib, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
-, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsa-lib, freetype
-, perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
-, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  qtbase,
+  qtwebkit,
+  qtscript,
+  libpulseaudio,
+  fftwSinglePrec,
+  lame,
+  zlib,
+  libGLU,
+  libGL,
+  alsa-lib,
+  freetype,
+  perl,
+  pkg-config,
+  libsamplerate,
+  libbluray,
+  lzo,
+  libx11,
+  libxv,
+  libxrandr,
+  libxvmc,
+  libxinerama,
+  libxxf86vm,
+  libxmu,
+  yasm,
+  libuuid,
+  taglib,
+  libtool,
+  autoconf,
+  automake,
+  file,
+  wrapQtAppsHook,
+  exiv2,
+  linuxHeaders,
+  soundtouch,
+  libzip,
+  libhdhomerun,
+  withWebKit ? false,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mythtv";
-  version = "31.0";
+  version = "35.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
-    rev = "v${version}";
-    sha256 = "092w5kvc1gjz6jd2lk2jhcazasz2h3xh0i5iq80k8x3znyp4i6v5";
+    tag = "v${version}";
+    hash = "sha256-4mWtPJi2CBoek8LWEfdFxe1ybomAOCTWBTKExMm7nLU=";
   };
 
   patches = [
-    # Disables OS detection used while checking if enforce_wshadow should be disabled.
-    ./disable-os-detection.patch
+    # Disable sourcing /etc/os-release
+    ./dont-source-os-release.patch
   ];
 
   setSourceRoot = "sourceRoot=$(echo */mythtv)";
 
   buildInputs = [
-    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL
-    perl libsamplerate libbluray lzo alsa-lib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
-    libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
+    freetype
+    qtbase
+    qtscript
+    lame
+    zlib
+    libGLU
+    libGL
+    perl
+    libsamplerate
+    libbluray
+    lzo
+    alsa-lib
+    libpulseaudio
+    fftwSinglePrec
+    libx11
+    libxv
+    libxrandr
+    libxvmc
+    libxmu
+    libxinerama
+    libxxf86vm
+    libxmu
+    libuuid
+    taglib
+    exiv2
+    soundtouch
+    libzip
+    libhdhomerun
+  ]
+  ++ lib.optional withWebKit qtwebkit;
+  nativeBuildInputs = [
+    pkg-config
+    which
+    yasm
+    libtool
+    autoconf
+    automake
+    file
+    wrapQtAppsHook
   ];
-  nativeBuildInputs = [ pkg-config which yasm libtool autoconf automake file ];
 
-  configureFlags =
-    [ "--dvb-path=${linuxHeaders}/include" ];
+  configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  meta = {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.titanous ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

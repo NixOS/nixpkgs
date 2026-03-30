@@ -1,23 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi
-, udev }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  udev,
+}:
 
 buildPythonPackage rec {
   pname = "python-uinput";
-  version = "0.11.2";
+  version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "033zqiypjz0nigav6vz0s57pbzikvds55mxphrdpkdbpdikjnfcr";
+    hash = "sha256-hTaXNEtk31U31K4yum+88FFdUakBCRD11QGZWQOLbro=";
   };
 
   buildInputs = [ udev ];
 
-  NIX_CFLAGS_LINK = "-ludev";
+  env.NIX_CFLAGS_LINK = "-ludev";
 
-  meta = with lib; {
+  doCheck = false; # no tests
+
+  meta = {
     description = "Pythonic API to Linux uinput kernel module";
     homepage = "https://tjjr.fi/sw/python-uinput/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

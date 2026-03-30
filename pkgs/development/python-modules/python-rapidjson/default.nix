@@ -1,58 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, fetchPypi
-, pythonOlder
-, rapidjson
-, pytestCheckHook
-, pytz
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rapidjson,
+  pytestCheckHook,
+  pytz,
+  setuptools,
+  replaceVars,
 }:
 
-let
-  rapidjson' = rapidjson.overrideAttrs (old: {
-    version = "unstable-2022-05-24";
-    src = fetchFromGitHub {
-      owner = "Tencent";
-      repo = "rapidjson";
-      rev = "232389d4f1012dddec4ef84861face2d2ba85709";
-      hash = "sha256-RLvDcInUa8E8DRA4U/oXEE8+TZ0SDXXDU/oWvpfDWjw=";
-    };
-    patches = [
-      (fetchpatch {
-        url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch";
-        hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
-      })
-    ];
-  });
-in buildPythonPackage rec {
-  version = "1.9";
+buildPythonPackage rec {
+  version = "1.23";
   pname = "python-rapidjson";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vn01HHES2sYIEzoj9g6VOVZo0JgaB/QDf2Pg6Ir88Bo=";
+  src = fetchFromGitHub {
+    owner = "python-rapidjson";
+    repo = "python-rapidjson";
+    tag = "v${version}";
+    hash = "sha256-BlEmEvwGAm3Ix2YwJSwrxgqqANqmgiWRiRWP91JITio=";
   };
 
-  setupPyBuildFlags = [
-    "--rj-include-dir=${lib.getDev rapidjson'}/include"
+  patches = [
+    (replaceVars ./rapidjson-include-dir.patch {
+      rapidjson = lib.getDev rapidjson;
+    })
   ];
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];
 
-  disabledTestPaths = [
-    "benchmarks"
-  ];
+  disabledTestPaths = [ "benchmarks" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

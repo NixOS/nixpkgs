@@ -1,48 +1,53 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, libjpeg_turbo
-, numpy
-, python
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libjpeg_turbo,
+  setuptools,
+  numpy,
+  python,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "1.6.7";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "PyTurboJPEG";
-    inherit version;
-    hash = "sha256-e++Dl7khHWLXo+G9Gd8RQiF458OtYn+X7JU6HF6WzYA=";
+  src = fetchFromGitHub {
+    owner = "lilohuang";
+    repo = "PyTurboJPEG";
+    tag = "v${version}";
+    hash = "sha256-Sue8S/2/dY3aF7fihHuqpHXotcXcijcqAXGCJn8Z5VE=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./lib-path.patch;
-      libturbojpeg = "${libjpeg_turbo.out}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (replaceVars ./lib-path.patch {
+      libturbojpeg = "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   # upstream has no tests, but we want to test whether the library is found
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -c 'from turbojpeg import TurboJPEG; TurboJPEG()'
+
+    runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "turbojpeg"
-  ];
+  pythonImportsCheck = [ "turbojpeg" ];
 
-  meta = with lib; {
-    description = "A Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
+  meta = {
+    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${src.tag}";
+    description = "Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
     homepage = "https://github.com/lilohuang/PyTurboJPEG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

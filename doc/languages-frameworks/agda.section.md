@@ -48,11 +48,11 @@ You can also reference a GitHub repository
 agda.withPackages (p: [
   (p.standard-library.overrideAttrs (oldAttrs: {
     version = "1.5";
-    src =  fetchFromGitHub {
+    src = fetchFromGitHub {
       repo = "agda-stdlib";
       owner = "agda";
       rev = "v1.5";
-      sha256 = "16fcb7ssj6kj687a042afaa2gq48rc8abihpm14k684ncihb2k4w";
+      hash = "sha256-nEyxYGSWIDNJqBfGpRDLiOAnlHJKEKAOMnIaqfVZzJk=";
     };
   }))
 ])
@@ -83,7 +83,7 @@ agda.withPackages (p: [
       owner = "owner";
       version = "...";
       rev = "...";
-      sha256 = "...";
+      hash = "...";
     };
   })
 ])
@@ -114,41 +114,44 @@ This can be overridden by a different version of `ghc` as follows:
 
 ```nix
 agda.withPackages {
-  pkgs = [ ... ];
+  pkgs = [
+    # ...
+  ];
   ghc = haskell.compiler.ghcHEAD;
 }
 ```
 
+To install Agda without GHC, use `ghc = null;`.
+
 ## Writing Agda packages {#writing-agda-packages}
 
-To write a nix derivation for an Agda library, first check that the library has a `*.agda-lib` file.
+To write a nix derivation for an Agda library, first check that the library has a (single) `*.agda-lib` file.
 
 A derivation can then be written using `agdaPackages.mkDerivation`. This has similar arguments to `stdenv.mkDerivation` with the following additions:
 
-* `everythingFile` can be used to specify the location of the `Everything.agda` file, defaulting to `./Everything.agda`. If this file does not exist then either it should be patched in or the `buildPhase` should be overridden (see below).
 * `libraryName` should be the name that appears in the `*.agda-lib` file, defaulting to `pname`.
 * `libraryFile` should be the file name of the `*.agda-lib` file, defaulting to `${libraryName}.agda-lib`.
 
 Here is an example `default.nix`
 
 ```nix
-{ nixpkgs ?  <nixpkgs> }:
-with (import nixpkgs {});
+{
+  nixpkgs ? <nixpkgs>,
+}:
+with (import nixpkgs { });
 agdaPackages.mkDerivation {
   version = "1.0";
   pname = "my-agda-lib";
   src = ./.;
-  buildInputs = [
-    agdaPackages.standard-library
-  ];
+  buildInputs = [ agdaPackages.standard-library ];
 }
 ```
 
 ### Building Agda packages {#building-agda-packages}
 
-The default build phase for `agdaPackages.mkDerivation` simply runs `agda` on the `Everything.agda` file.
+The default build phase for `agdaPackages.mkDerivation` runs `agda --build-library`.
 If something else is needed to build the package (e.g. `make`) then the `buildPhase` should be overridden.
-Additionally, a `preBuild` or `configurePhase` can be used if there are steps that need to be done prior to checking the `Everything.agda` file.
+Additionally, a `preBuild` or `configurePhase` can be used if there are steps that need to be done prior to checking the library.
 `agda` and the Agda libraries contained in `buildInputs` are made available during the build phase.
 
 ### Installing Agda packages {#installing-agda-packages}
@@ -171,16 +174,30 @@ It is a curated set of libraries that:
 1. Always work together.
 2. Are as up-to-date as possible.
 
-While the Haskell ecosystem is huge, and Stackage is highly automatised,
+While the Haskell ecosystem is huge, and Stackage is highly automated,
 the Agda package set is small and can (still) be maintained by hand.
 
 ### Adding Agda packages to Nixpkgs {#adding-agda-packages-to-nixpkgs}
 
-To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other Agda libraries, so the top line of the `default.nix` can look like:
+To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/default.nix` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other Agda libraries, so the derivation could look like:
 
 ```nix
-{ mkDerivation, standard-library, fetchFromGitHub }:
+{
+  mkDerivation,
+  standard-library,
+  fetchFromGitHub,
+}:
+
+mkDerivation {
+  pname = "my-library";
+  version = "1.0";
+  src = <...>;
+  buildInputs = [ standard-library ];
+  meta = <...>;
+}
 ```
+
+You can look at other files under `pkgs/development/libraries/agda/` for more inspiration.
 
 Note that the derivation function is called with `mkDerivation` set to `agdaPackages.mkDerivation`, therefore you
 could use a similar set as in your `default.nix` from [Writing Agda Packages](#writing-agda-packages) with
@@ -193,30 +210,34 @@ mkDerivation {
   version = "1.5.0";
   pname = "iowa-stdlib";
 
-  src = ...
+  src = <...>;
 
   libraryFile = "";
   libraryName = "IAL-1.3";
 
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs find-deps.sh
     make
+
+    runHook postBuild
   '';
 }
 ```
 
 This library has a file called `.agda-lib`, and so we give an empty string to `libraryFile` as nothing precedes `.agda-lib` in the filename. This file contains `name: IAL-1.3`, and so we let `libraryName =  "IAL-1.3"`. This library does not use an `Everything.agda` file and instead has a Makefile, so there is no need to set `everythingFile` and we set a custom `buildPhase`.
 
-When writing an Agda package it is essential to make sure that no `.agda-lib` file gets added to the store as a single file (for example by using `writeText`). This causes Agda to think that the nix store is a Agda library and it will attempt to write to it whenever it typechecks something. See [https://github.com/agda/agda/issues/4613](https://github.com/agda/agda/issues/4613).
+When writing an Agda package, it is essential to make sure that no `.agda-lib` file gets added to the store as a single file (for example by using `writeText`). This causes Agda to think that the nix store is a Agda library and it will attempt to write to it whenever it typechecks something. See [https://github.com/agda/agda/issues/4613](https://githcub.com/agda/agda/issues/4613).
 
 In the pull request adding this library,
 you can test whether it builds correctly by writing in a comment:
 
 ```
-@ofborg build agdaPackages.iowa-stdlib
+@ofborg build agdaPackages.my-library
 ```
 
-### Maintaining Agda packages
+### Maintaining Agda packages {#agda-maintaining-packages}
 
 As mentioned before, the aim is to have a compatible, and up-to-date package set.
 These two conditions sometimes exclude each other:
@@ -233,7 +254,7 @@ In a pull request updating e.g. the standard library, you should write the follo
 ```
 
 This will build all reverse dependencies of the standard library,
-for example `agdaPackages.agda-categories`, or `agdaPackages.generic`.
+for example `agdaPackages.agda-categories`.
 
 In some cases it is useful to build _all_ Agda packages.
 This can be done with the following Github comment:
@@ -250,7 +271,7 @@ Usually, the maintainers will answer within a week or two with a new release.
 Bumping the version of that reverse dependency should be a further commit on your PR.
 
 In the rare case that a new release is not to be expected within an acceptable time,
-simply mark the broken package as broken by setting `meta.broken = true;`.
+mark the broken package as broken by setting `meta.broken = true;`.
 This will exclude it from the build test.
 It can be added later when it is fixed,
 and does not hinder the advancement of the whole package set in the meantime.

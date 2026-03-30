@@ -1,19 +1,23 @@
-{ lib, bundlerEnv, bundlerUpdateScript, ruby }:
+{
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  ruby,
+}:
 
 bundlerEnv {
   pname = "license_finder";
-  version = "7.0.1";
 
   inherit ruby;
   gemdir = ./.;
 
   passthru.updateScript = bundlerUpdateScript "license_finder";
 
-  meta = with lib; {
+  meta = {
     description = "Find licenses for your project's dependencies";
     homepage = "https://github.com/pivotal/licensefinder";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

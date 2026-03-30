@@ -1,71 +1,83 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, asn1crypto
-, click
-, oscrypto
-, pyyaml
-, python-dateutil
-, tzlocal
-, pytest-aiohttp
-, pytz
-, freezegun
-, jinja2
-, pyhanko-certvalidator
-, requests
-, requests-mock
-, werkzeug
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # build-system
+  setuptools,
+  wheel,
+  # dependencies
+  asn1crypto,
+  click,
+  cryptography,
+  python-dateutil,
+  pyyaml,
+  tzlocal,
+  # optional-dependencies
+  requests-mock,
+  jinja2,
+  werkzeug,
+  python-pkcs11,
+  # nativeCheckInputs
+  freezegun,
+  pyhanko-certvalidator,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pytz,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.8.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "0.13.0";
+  pyproject = true;
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
-    rev = version;
-    sha256 = "sha256-H43NlFNTwZtedHsB7c62MocwQVOi5JjVJxRcZY+Wn7Y=";
+    tag = "v${version}";
+    hash = "sha256-2/qTTN/UuSMHjkSsOs/KbfzKLBjJSLHY51XtgQ6x1Wo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    wheel
+  ];
+
+  dependencies = [
     asn1crypto
     click
-    oscrypto
-    pyyaml
+    cryptography
     python-dateutil
+    pyyaml
     tzlocal
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-runner'" "" \
-      --replace "pyhanko-certvalidator==0.19.2" "pyhanko-certvalidator==0.19.5"
-  '';
+  optional-dependencies = {
+    requests-mocker = [ requests-mock ];
+    web-api = [
+      jinja2
+      werkzeug
+    ];
+    pkcs11 = [ python-pkcs11 ];
+  };
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
-    jinja2
     pyhanko-certvalidator
     pytest-aiohttp
+    pytestCheckHook
     pytz
     requests
-    requests-mock
-    werkzeug
-    pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "certomancer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly construct, mock & deploy PKI test configurations using simple declarative configuration";
+    mainProgram = "certomancer";
     homepage = "https://github.com/MatthiasValvekens/certomancer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

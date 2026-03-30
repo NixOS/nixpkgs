@@ -1,36 +1,82 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
-, python-dateutil
-, importlib-metadata
-, poetry-core
-, pytzdata
-, typing
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+
+  # build-system
+  poetry-core,
+  rustPlatform,
+
+  # native dependencies
+  iconv,
+
+  # dependencies
+  python-dateutil,
+  time-machine,
+  tzdata,
+
+  # tests
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "2.1.2";
-  format = "pyproject";
+  version = "3.1.0-unstable-2025-10-28";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b06a0ca1bfe41c990bbf0c029f0b6501a7f2ec4e38bfec730712015e8860f207";
+  src = fetchFromGitHub {
+    owner = "sdispater";
+    repo = "pendulum";
+    rev = "2982f25feaad2e58ad1530d3b53cc30fc1c82bd6";
+    hash = "sha256-1ULvlWLZx3z5eGmWJfrN46x0ohJ+mAxipm6l6rykGPY=";
   };
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+  cargoRoot = "rust";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    sourceRoot = "${src.name}/rust";
+    hash = "sha256-Ozg+TW/woJsqmbmyDsgdMua3Lmnn+KBvBhd9kVik3XY=";
+  };
 
-  nativeBuildInputs = [ poetry-core ];
-  propagatedBuildInputs = [ python-dateutil pytzdata ]
-  ++ lib.optional (pythonOlder "3.5") typing
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  nativeBuildInputs = [
+    poetry-core
+    rustPlatform.maturinBuildHook
+    rustPlatform.cargoSetupHook
+  ];
 
-  # No tests
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  meta = with lib; {
+  propagatedBuildInputs = [
+    python-dateutil
+    tzdata
+  ]
+  ++ lib.optionals (!isPyPy) [
+    time-machine
+  ];
+
+  pythonImportsCheck = [ "pendulum" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytz
+  ];
+
+  disabledTestPaths = [
+    "tests/benchmarks"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
+    "tests/testing/test_time_travel.py"
+  ];
+
+  meta = {
     description = "Python datetimes made easy";
     homepage = "https://github.com/sdispater/pendulum";
-    license = licenses.mit;
+    changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

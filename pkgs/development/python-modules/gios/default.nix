@@ -1,46 +1,46 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "2.1.0";
+  version = "7.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-WjuDsu0EA+KtErusw5VADyvleVegXHCTEkuQ1lU/SRU=";
+    repo = "gios";
+    tag = version;
+    hash = "sha256-ZQjDL6BG075nvhKGSYNy2O8Fu8hizTmKwit6fvdopxg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     dacite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   disabledTests = [
     # Test requires network access
@@ -49,10 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gios" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for getting air quality data from GIOS";
     homepage = "https://github.com/bieniu/gios";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bieniu/gios/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

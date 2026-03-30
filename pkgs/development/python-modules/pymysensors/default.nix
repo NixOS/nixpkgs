@@ -1,66 +1,65 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, click
-, crcmod
-, fetchFromGitHub
-, getmac
-, intelhex
-, paho-mqtt
-, pyserial
-, pyserial-asyncio
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  click,
+  crcmod,
+  fetchFromGitHub,
+  getmac,
+  intelhex,
+  paho-mqtt,
+  pyserial-asyncio-fast,
+  pyserial,
+  pytest-sugar,
+  pytest-timeout,
+  pytestCheckHook,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pymysensors";
-  version = "0.24.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.26.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theolind";
-    repo = pname;
-    rev = version;
-    hash = "sha256-3t9YrSJf02kc5CuTqPBc/qNJV7yy7Vke4WqhtuOaAYo=";
+    repo = "pymysensors";
+    tag = version;
+    hash = "sha256-iND3MEKEruqCdsqJJExm+SA4Z2e87I45fsI4wbnIPRc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     awesomeversion
     click
     crcmod
     getmac
     intelhex
     pyserial
-    pyserial-asyncio
+    pyserial-asyncio-fast
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
-    mqtt-client = [
-      paho-mqtt
-    ];
+  optional-dependencies = {
+    mqtt-client = [ paho-mqtt ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-sugar
     pytest-timeout
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mysensors"
-  ];
+  pythonImportsCheck = [ "mysensors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for talking to a MySensors gateway";
     homepage = "https://github.com/theolind/pymysensors";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/theolind/pymysensors/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pymysensors";
   };
 }

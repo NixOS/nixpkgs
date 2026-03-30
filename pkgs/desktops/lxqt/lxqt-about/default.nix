@@ -1,49 +1,53 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtx11extras
-, qttools
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-about";
-  version = "1.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-about";
     rev = version;
-    sha256 = "aOGbT8DwDAfp8odcOkNsZkuI/guSRbQnETii5o24jcU=";
+    hash = "sha256-EP0Sd/VvLufqtn/7ZQwdI/h+BJhkGks7jTlEoEqYWgk=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtx11extras
-    qttools
-    qtsvg
     kwindowsystem
     liblxqt
     libqtxdg
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-about";
     description = "Dialogue window providing information about LXQt and the system it's running on";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    mainProgram = "lxqt-about";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

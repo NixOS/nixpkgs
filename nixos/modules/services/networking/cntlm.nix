@@ -1,31 +1,34 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.cntlm;
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "cntlm.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "cntlm.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "lighttpd.conf" ''
-      # Cntlm Authentication Proxy Configuration
-      Username ${cfg.username}
-      Domain ${cfg.domain}
-      Password ${cfg.password}
-      ${optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
-      ${concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
-      ${optionalString (cfg.noproxy != []) "NoProxy ${concatStringsSep ", " cfg.noproxy}"}
+      pkgs.writeText "lighttpd.conf" ''
+        # Cntlm Authentication Proxy Configuration
+        Username ${cfg.username}
+        Domain ${cfg.domain}
+        Password ${cfg.password}
+        ${lib.optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
+        ${lib.concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
+        ${lib.optionalString (cfg.noproxy != [ ]) "NoProxy ${lib.concatStringsSep ", " cfg.noproxy}"}
 
-      ${concatMapStrings (port: ''
-        Listen ${toString port}
-      '') cfg.port}
+        ${lib.concatMapStrings (port: ''
+          Listen ${toString port}
+        '') cfg.port}
 
-      ${cfg.extraConfig}
-    '';
+        ${cfg.extraConfig}
+      '';
 
 in
 
@@ -33,37 +36,37 @@ in
 
   options.services.cntlm = {
 
-    enable = mkEnableOption (lib.mdDoc "cntlm, which starts a local proxy");
+    enable = lib.mkEnableOption "cntlm, which starts a local proxy";
 
-    username = mkOption {
-      type = types.str;
-      description = lib.mdDoc ''
+    username = lib.mkOption {
+      type = lib.types.str;
+      description = ''
         Proxy account name, without the possibility to include domain name ('at' sign is interpreted literally).
       '';
     };
 
-    domain = mkOption {
-      type = types.str;
-      description = lib.mdDoc "Proxy account domain/workgroup name.";
+    domain = lib.mkOption {
+      type = lib.types.str;
+      description = "Proxy account domain/workgroup name.";
     };
 
-    password = mkOption {
+    password = lib.mkOption {
       default = "/etc/cntlm.password";
-      type = types.str;
-      description = lib.mdDoc "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
+      type = lib.types.str;
+      description = "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
     };
 
-    netbios_hostname = mkOption {
-      type = types.str;
+    netbios_hostname = lib.mkOption {
+      type = lib.types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         The hostname of your machine.
       '';
     };
 
-    proxy = mkOption {
-      type = types.listOf types.str;
-      description = lib.mdDoc ''
+    proxy = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = ''
         A list of NTLM/NTLMv2 authenticating HTTP proxies.
 
         Parent proxy, which requires authentication. The same as proxy on the command-line, can be used more than  once  to  specify  unlimited
@@ -73,38 +76,41 @@ in
       example = [ "proxy.example.com:81" ];
     };
 
-    noproxy = mkOption {
-      description = lib.mdDoc ''
+    noproxy = lib.mkOption {
+      description = ''
         A list of domains where the proxy is skipped.
       '';
-      default = [];
-      type = types.listOf types.str;
-      example = [ "*.example.com" "example.com" ];
+      default = [ ];
+      type = lib.types.listOf lib.types.str;
+      example = [
+        "*.example.com"
+        "example.com"
+      ];
     };
 
-    port = mkOption {
-      default = [3128];
-      type = types.listOf types.port;
-      description = lib.mdDoc "Specifies on which ports the cntlm daemon listens.";
+    port = lib.mkOption {
+      default = [ 3128 ];
+      type = lib.types.listOf lib.types.port;
+      description = "Specifies on which ports the cntlm daemon listens.";
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
-      description = lib.mdDoc "Additional config appended to the end of the generated {file}`cntlm.conf`.";
+      description = "Additional config appended to the end of the generated {file}`cntlm.conf`.";
     };
 
-    configText = mkOption {
-       type = types.lines;
-       default = "";
-       description = lib.mdDoc "Verbatim contents of {file}`cntlm.conf`.";
+    configText = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = "Verbatim contents of {file}`cntlm.conf`.";
     };
 
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.cntlm = {
       description = "CNTLM is an NTLM / NTLM Session Response / NTLMv2 authenticating HTTP proxy";
       after = [ "network.target" ];

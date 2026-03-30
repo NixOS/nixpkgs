@@ -1,55 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, openssl
-, rsa
-, pyaes
-, pythonOlder
-, setuptools
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromCodeberg,
+  pythonAtLeast,
+  openssl,
+  rsa,
+  pyaes,
+  cryptg,
+  setuptools,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "telethon";
-  version = "1.25.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.5";
+  version = "1.42.0";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "LonamiWebs";
+  src = fetchFromCodeberg {
+    owner = "Lonami";
     repo = "Telethon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xmFoCUqYo600RH72KWG/aM7hKGiTYdCBsbPOFipxIzA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NMHJkSTGR3/tck0k97EfVN9f85PAWst+EZ6G7Tgrt5s=";
   };
 
-  patchPhase = ''
-    substituteInPlace telethon/crypto/libssl.py --replace \
+  disabled = pythonAtLeast "3.14";
+
+  postPatch = ''
+    substituteInPlace telethon/crypto/libssl.py --replace-fail \
       "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    rsa
+  dependencies = [
     pyaes
+    rsa
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    cryptg = [ cryptg ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  pytestFlagsArray = [
-    "tests/telethon"
-  ];
-
-  meta = with lib; {
-    homepage = "https://github.com/LonamiWebs/Telethon";
+  meta = {
+    homepage = "https://codeberg.org/Lonami/Telethon";
     description = "Full-featured Telegram client library for Python 3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.mit;
+    changelog = "https://codeberg.org/Lonami/Telethon/blob/${finalAttrs.src.tag}/readthedocs/misc/changelog.rst";
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

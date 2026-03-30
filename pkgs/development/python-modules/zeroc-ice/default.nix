@@ -1,23 +1,43 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, openssl, bzip2 }:
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchPypi,
+  setuptools,
+  bzip2,
+  openssl,
+}:
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
-  version = "3.7.8";
+  version = "3.8.0.post1";
+  pyproject = true;
+
+  # Upstream PR: https://github.com/zeroc-ice/ice/pull/2910
+  # But this hasn't been merged into the 3.7 branch, and the patch doesn't
+  # apply cleanly.
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
-    inherit version pname;
-    sha256 = "sha256-kodRHIkMXdFUBGNVRtSyjbVqGQRxPaHqgp6ddFT5ZIY=";
+    pname = "zeroc_ice";
+    inherit version;
+    hash = "sha256-SwR/4BSH/8+cYWVKA7aE3bnFOL52fWzynFehZr5VC9c=";
   };
 
-  buildInputs = [ openssl bzip2 ];
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    bzip2
+    openssl
+  ];
 
   pythonImportsCheck = [ "Ice" ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     homepage = "https://zeroc.com/";
-    license = licenses.gpl2;
-    description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more.";
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2;
+    description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more";
+    mainProgram = "slice2py";
+    maintainers = [ ];
   };
 }

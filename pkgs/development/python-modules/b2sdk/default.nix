@@ -1,78 +1,75 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, logfury
-, pyfakefs
-, pytestCheckHook
-, pytest-lazy-fixture
-, pytest-mock
-, pythonOlder
-, requests
-, setuptools-scm
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  logfury,
+  annotated-types,
+  hatchling,
+  hatch-vcs,
+  pytest-lazy-fixtures,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  responses,
+  tenacity,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.18.0";
-  format = "setuptools";
+  version = "2.10.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-knLyjRjUmLZtM9dJoPBeSdm7GpE0+UJhwLi/obVvPuw=";
+  src = fetchFromGitHub {
+    owner = "Backblaze";
+    repo = "b2-sdk-python";
+    tag = "v${version}";
+    hash = "sha256-hgTQRVOgQmCA5RuwKATAev8y+S5R6xXnpmgprJ+bUYY=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    arrow
+  dependencies = [
+    annotated-types
     logfury
     requests
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-lazy-fixture
+  nativeCheckInputs = [
+    pytest-lazy-fixtures
     pytest-mock
-    pyfakefs
+    pytest-timeout
+    pytestCheckHook
+    responses
+    tenacity
+    tqdm
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'setuptools_scm<6.0' 'setuptools_scm'
-    substituteInPlace requirements.txt \
-      --replace 'arrow>=0.8.0,<1.0.0' 'arrow'
-  '';
-
-  disabledTestPaths = [
-    # requires aws s3 auth
-    "test/integration/test_download.py"
+  enabledTestPaths = [
+    "test/unit"
   ];
 
-  disabledTests = [
-    # Test requires an API key
-    "test_raw_api"
-    "test_files_headers"
-    "test_large_file"
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # -     'could not be accessed (no permissions to read?)',
+    # +     'could not be accessed (broken symlink?)',
+    "test_dir_without_exec_permission"
   ];
 
-  pythonImportsCheck = [
-    "b2sdk"
-  ];
+  pythonImportsCheck = [ "b2sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pmw ];
   };
 }

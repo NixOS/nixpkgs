@@ -1,36 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-zabbix";
   version = "1.1.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adubkov";
     repo = "py-zabbix";
-    rev = version;
-    sha256 = "aPQc188pszfDQvNtsGYlRLHS5CG5VyqptSoe4/GJVvE=";
+    tag = version;
+    hash = "sha256-aPQc188pszfDQvNtsGYlRLHS5CG5VyqptSoe4/GJVvE=";
   };
 
-  checkInputs = [
-    pytestCheckHook
+  patches = [
+    # Remove Python2 comp, https://github.com/adubkov/py-zabbix/pull/154
+    (fetchpatch {
+      name = "no-more-py2.patch";
+      url = "https://github.com/adubkov/py-zabbix/commit/8deedb860f52870fbeacc54a40341520702341e2.patch";
+      hash = "sha256-Af7pnCZIObC0ZQLaamBK1pTAVAFs/Mh7+og5jAKqk4s=";
+    })
   ];
 
-  pythonImportsCheck = [
-    "pyzabbix"
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pyzabbix" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'RawConfigParser' object has no attribute 'readfp'
+    "config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with Zabbix";
     homepage = "https://github.com/adubkov/py-zabbix";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/adubkov/py-zabbix/releases/tag/${version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, googleapis-common-protos
-, grpcio
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-status";
-  version = "1.50.0";
+  version = "1.78.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "69be81c4317ec77983fb0eab80221a01e86e833e0fcf2f6acea0a62597c84b93";
+    pname = "grpcio_status";
+    inherit version;
+    hash = "sha256-o0z9KBAb/qhLWqD5NrS0IwGekhOIKQcWavazvdxZ4Yk=";
   };
 
   postPatch = ''
@@ -30,17 +32,15 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "grpc_status"
-  ];
+  pythonImportsCheck = [ "grpc_status" ];
 
-  meta = with lib; {
+  meta = {
     description = "GRPC Python status proto mapping";
     homepage = "https://github.com/grpc/grpc/tree/master/src/python/grpcio_status";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

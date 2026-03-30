@@ -1,0 +1,32 @@
+From cea75ece3eaecb17922feda81a4ee81718536d1a Mon Sep 17 00:00:00 2001
+From: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
+Date: Fri, 14 Mar 2025 07:14:43 +0300
+Subject: [PATCH] Fix routing with pppd 2.5
+
+Tested on ROSA 13 with pppd-2.5.2 and openfortivpn-1.23.1.
+Without this change, routes are not set up correctly and connection does not work properly.
+
+Solution is from https://aur.archlinux.org/packages/networkmanager-fortisslvpn (see PKGBLUILD and comments).
+---
+ src/nm-fortisslvpn-service.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/nm-fortisslvpn-service.c b/src/nm-fortisslvpn-service.c
+index 8796ace..8f69333 100644
+--- a/src/nm-fortisslvpn-service.c
++++ b/src/nm-fortisslvpn-service.c
+@@ -225,7 +225,11 @@ run_openfortivpn (NMFortisslvpnPlugin *plugin, NMSettingVpn *s_vpn, GError **err
+ 	g_ptr_array_add (argv, (gpointer) g_strdup ("-c"));
+ 	g_ptr_array_add (argv, (gpointer) g_strdup (priv->config_file));
+ 
++#if WITH_PPP_VERSION >= PPP_VERSION(2,5,0)
++	g_ptr_array_add (argv, (gpointer) g_strdup ("--pppd-accept-remote"));
++#else
+ 	g_ptr_array_add (argv, (gpointer) g_strdup ("--no-routes"));
++#endif
+ 	g_ptr_array_add (argv, (gpointer) g_strdup ("--no-dns"));
+ 	ip4_config = nm_connection_get_setting_ip4_config (priv->connection);
+ 	if (!nm_setting_ip_config_get_ignore_auto_dns (ip4_config)) {
+-- 
+GitLab
+

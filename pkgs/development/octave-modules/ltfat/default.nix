@@ -1,29 +1,25 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, fftw
-, fftwSinglePrec
-, fftwFloat
-, fftwLongDouble
-, lapack
-, blas
-, portaudio
-, jdk
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  fftw,
+  fftwSinglePrec,
+  fftwFloat,
+  fftwLongDouble,
+  lapack,
+  blas,
+  portaudio,
+  jdk,
 }:
 
 buildOctavePackage rec {
   pname = "ltfat";
-  version = "2.3.1";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0gghh5a4w649ff776wvidfvqas87m0n7rqs960pid1d11bnyqqrh";
+    url = "https://github.com/ltfat/ltfat/releases/download/v${version}/${pname}-${version}-of.tar.gz";
+    sha256 = "sha256-FMDZ8XFhLG7KDoUjtXvafekg6tSltwBaO0+//jMzJj4=";
   };
-
-  patches = [
-    # Fixes a syntax error with performing multiplication.
-    ./syntax-error.patch
-  ];
 
   buildInputs = [
     fftw
@@ -36,11 +32,11 @@ buildOctavePackage rec {
     jdk
   ];
 
-  meta = with lib; {
+  meta = {
     name = "The Large Time-Frequency Analysis Toolbox";
-    homepage = "https://octave.sourceforge.io/ltfat/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    homepage = "https://gnu-octave.github.io/packages/ltfat/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Toolbox for working with time-frequency analysis, wavelets and signal processing";
     longDescription = ''
       The Large Time/Frequency Analysis Toolbox (LTFAT) is a Matlab/Octave
@@ -50,5 +46,7 @@ buildOctavePackage rec {
       Gabor and wavelet transforms along with routines for constructing windows
       (filter prototypes) and routines for manipulating coefficients.
     '';
+    # https://github.com/ltfat/ltfat/issues/203
+    broken = true;
   };
 }

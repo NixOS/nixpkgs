@@ -1,71 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, graphviz
-, python
-, pytestCheckHook
-, chardet
-, pythonOlder
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  replaceVars,
+  graphviz,
+  pytestCheckHook,
+  chardet,
+  parameterized,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "1.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  version = "4.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "248081a39bcb56784deb018977e428605c1c758f10897a339fce1dd728ff007d";
+    hash = "sha256-whSPaBxKM+CL8OJqnl+OQJmoLg4qBoCY8yzoZXc2StU=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
+  build-system = [
+    setuptools
   ];
 
-  checkInputs = [
+  dependencies = [ pyparsing ];
+
+  nativeCheckInputs = [
     chardet
+    parameterized
     pytestCheckHook
   ];
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+    (replaceVars ./hardcode-graphviz-path.patch {
       inherit graphviz;
     })
   ];
 
-  postPatch = ''
-    # test_graphviz_regression_tests also fails upstream: https://github.com/pydot/pydot/pull/198
-    substituteInPlace test/pydot_unittest.py \
-      --replace "test_graphviz_regression_tests" "no_test_graphviz_regression_tests" \
-    # Patch path for pytestCheckHook
-    substituteInPlace test/pydot_unittest.py \
-      --replace "shapefile_dir = os.path.join(test_dir, 'from-past-to-future')" "shapefile_dir = 'test/from-past-to-future'" \
-      --replace "path = os.path.join(test_dir, TESTS_DIR_1)" "path = os.path.join('test/', TESTS_DIR_1)"
-  '';
+  enabledTestPaths = [ "test/test_pydot.py" ];
 
-  pytestFlagsArray = [
-    "test/pydot_unittest.py"
-  ];
+  pythonImportsCheck = [ "pydot" ];
 
-  disabledTests = [
-    "test_exception_msg"
-    # Hash mismatch
-    "test_my_regression_tests"
-  ];
-
-  pythonImportsCheck = [
-    "pydot"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Allows to create both directed and non directed graphs from Python";
     homepage = "https://github.com/erocarrera/pydot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/pydot/pydot/blob/v${version}/ChangeLog";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

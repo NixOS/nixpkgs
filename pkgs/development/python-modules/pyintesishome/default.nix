@@ -1,32 +1,34 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "pyintesishome";
-  version = "1.8.4";
+  version = "1.8.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jnimmo";
     repo = "pyIntesisHome";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-+pXGB7mQszbBp4KhOYzDKoGFoUHATWLbOU6QwMIpGWU=";
+    tag = version;
+    hash = "sha256-QgIvIn8I5EtJSNj1FdOI+DPgG7/y2ToQ62dhk7flieo=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "pyintesishome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for IntesisHome devices";
     homepage = "https://github.com/jnimmo/pyIntesisHome";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jnimmo/pyIntesisHome/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

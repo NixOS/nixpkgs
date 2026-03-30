@@ -1,37 +1,52 @@
-{ lib
-, stdenv
-, async-timeout
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytest-codspeed,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.31.0";
+  version = "0.45.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Ehafb35H462Ffn6omGh/MDJKQX5qJJZeiIBO3n0IGlA=";
+    repo = "snitun";
+    tag = version;
+    hash = "sha256-luXv5J0PUvW+AGTecwkEq+qkG1N5Ja5NbBKJ3M6HC0I=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    attrs
+  patches = [
+    # https://github.com/NabuCasa/snitun/pull/459
+    ./fix-python-3.14-compatibility.diff
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiohttp
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
+    pytest-codspeed
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61
     # port binding conflicts
     "test_snitun_single_runner_timeout"
@@ -42,11 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snitun" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/nabucasa/snitun";
+  meta = {
     description = "SNI proxy with TCP multiplexer";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${src.tag}";
+    homepage = "https://github.com/nabucasa/snitun";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    platforms = lib.platforms.linux;
   };
 }

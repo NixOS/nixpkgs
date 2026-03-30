@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
 }:
 
 buildPythonPackage rec {
   pname = "python-pidfile";
-  version = "3.0.0";
+  version = "3.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HhCX30G8dfV0WZ/++J6LIO/xvfyRkdPtJkzC2ulUKdA=";
+    hash = "sha256-pgQBL2iagsHMRFEKI85ZwyaIL7kcIftAy6s+lX958M0=";
   };
 
-  propagatedBuildInputs = [
-    psutil
-  ];
+  propagatedBuildInputs = [ psutil ];
 
   pythonImportsCheck = [ "pidfile" ];
 
@@ -23,10 +23,10 @@ buildPythonPackage rec {
   # see this: https://github.com/mosquito/python-pidfile/issues/7
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python context manager for managing pid files";
     homepage = "https://github.com/mosquito/python-pidfile";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lom ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ ];
   };
 }

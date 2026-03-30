@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.bind;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9119;
@@ -11,28 +16,41 @@ in
     bindURI = mkOption {
       type = types.str;
       default = "http://localhost:8053/";
-      description = lib.mdDoc ''
+      description = ''
         HTTP XML API address of an Bind server.
       '';
     };
     bindTimeout = mkOption {
       type = types.str;
       default = "10s";
-      description = lib.mdDoc ''
+      description = ''
         Timeout for trying to get stats from Bind.
       '';
     };
     bindVersion = mkOption {
-      type = types.enum [ "xml.v2" "xml.v3" "auto" ];
+      type = types.enum [
+        "xml.v2"
+        "xml.v3"
+        "auto"
+      ];
       default = "auto";
-      description = lib.mdDoc ''
+      description = ''
         BIND statistics version. Can be detected automatically.
       '';
     };
     bindGroups = mkOption {
-      type = types.listOf (types.enum [ "server" "view" "tasks" ]);
-      default = [ "server" "view" ];
-      description = lib.mdDoc ''
+      type = types.listOf (
+        types.enum [
+          "server"
+          "view"
+          "tasks"
+        ]
+      );
+      default = [
+        "server"
+        "view"
+      ];
+      description = ''
         List of statistics to collect. Available: [server, view, tasks]
       '';
     };

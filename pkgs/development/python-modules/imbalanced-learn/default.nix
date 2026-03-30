@@ -1,43 +1,93 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pandas
-, pytestCheckHook
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  joblib,
+  keras,
+  numpy,
+  pandas,
+  scikit-learn,
+  scipy,
+  tensorflow,
+  threadpoolctl,
+  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.9.1";
-  disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
+  version = "0.14.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ThT3rmB4tauEO3PDebKsULIHRGQV2cJDjIhdbLWv2WI=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn-contrib";
+    repo = "imbalanced-learn";
+    tag = version;
+    hash = "sha256-nY8Hn+EsKOXqAQV9TtuZaQY+XnxNNzIaHYM2n0gD5rY=";
   };
 
-  propagatedBuildInputs = [ scikit-learn ];
-  checkInputs = [ pytestCheckHook pandas ];
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-  disabledTests = [
-    "estimator"
-    "classification"
-    "_generator"
-    "show_versions"
-    "test_make_imbalanced_iris"
-    "test_rusboost[SAMME.R]"
-
-    # https://github.com/scikit-learn-contrib/imbalanced-learn/issues/824
-    "ValueDifferenceMetric"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  meta = with lib; {
+  dependencies = [
+    joblib
+    numpy
+    scikit-learn
+    scipy
+    threadpoolctl
+  ];
+
+  optional-dependencies = {
+    optional = [
+      keras
+      pandas
+      tensorflow
+    ];
+  };
+
+  pythonImportsCheck = [ "imblearn" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pandas
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+    # The GitHub source contains too many files picked up by pytest like
+    # examples and documentation files which can't pass.
+    cd $out/${python.sitePackages}
+  '';
+
+  disabledTestPaths = [
+    # require tensorflow and keras, but we don't want to
+    # add them to nativeCheckInputs just for this tests
+    "imblearn/keras"
+    "imblearn/tensorflow"
+    # even with precheck directory change, pytest still tries to test docstrings
+    "imblearn/tests/test_docstring_parameters.py"
+    # Skip dependencies test - pythonImportsCheck already does this
+    "imblearn/utils/tests/test_min_dependencies.py"
+  ];
+
+  disabledTests = [
+    # Broken upstream test https://github.com/scikit-learn-contrib/imbalanced-learn/issues/1131
+    "test_estimators_compatibility_sklearn"
+    "test_balanced_bagging_classifier_with_function_sampler"
+  ];
+
+  meta = {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
-    license = licenses.mit;
-    maintainers = [ maintainers.rmcgibbo ];
+    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      rmcgibbo
+      philipwilk
+    ];
   };
 }

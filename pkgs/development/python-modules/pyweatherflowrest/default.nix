@@ -1,50 +1,37 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
-  version = "1.0.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "briis";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1swyqdnvhwaigqhjn5a22gi8if4bl8alfrigln4qa0jl9z03kg09";
+    repo = "pyweatherflowrest";
+    tag = "v${version}";
+    hash = "sha256-l1V3HgzqnnoY6sWHwfgBtcIR782RwKhekY2qOLrUMNY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-
-  propagatedBuildInputs = [
-    aiohttp
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=pyweatherflowrest --cov-append" ""
-  '';
+  dependencies = [ aiohttp ];
 
   # Module has no tests. test.py is a demo script
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyweatherflowrest"
-  ];
+  pythonImportsCheck = [ "pyweatherflowrest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get data from WeatherFlow Weather Stations";
     homepage = "https://github.com/briis/pyweatherflowrest";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/briis/pyweatherflowrest/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

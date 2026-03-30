@@ -1,32 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, glibcLocales
-, importlib-resources
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "netaddr";
-  version = "0.8.0";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hx2npi0wnhwlcybilgwlddw6qffx1mb7a3sj4p9s7bvl33mgk6n";
+    hash = "sha256-XDw9mJW1Ubdjd5un23oDSH3B+OOzha+BmvNBrp725Io=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  # Test suite uses internal packaging._musllinux module to detect libc flavor. The module assumes
+  # the python executable is dynamically linked - it then attempts to parse linked library name to
+  # detect musl. It won't work on a static build.
+  postPatch =
+    if (stdenv.targetPlatform.isMusl && stdenv.targetPlatform.isStatic) then
+      ''
+        substituteInPlace netaddr/tests/__init__.py \
+          --replace-fail "IS_MUSL = _get_musl_version(sys.executable) is not None" "IS_MUSL = True"
+      ''
+    else
+      null;
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    homepage = "https://netaddr.readthedocs.io/en/latest/";
+  pythonImportsCheck = [ "netaddr" ];
+
+  meta = {
+    description = "Network address manipulation library for Python";
+    mainProgram = "netaddr";
+    homepage = "https://netaddr.readthedocs.io/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";
-    changelog = "https://netaddr.readthedocs.io/en/latest/changes.html";
-    description = "A network address manipulation library for Python";
-    license = licenses.mit;
+    changelog = "https://github.com/netaddr/netaddr/blob/${version}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

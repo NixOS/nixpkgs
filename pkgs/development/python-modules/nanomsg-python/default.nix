@@ -1,25 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nanomsg }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nanomsg,
+  setuptools,
+}:
 
 buildPythonPackage {
   pname = "nanomsg-python";
   version = "1.0.20190114";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tonysimpson";
     repo = "nanomsg-python";
     rev = "3acd9160f90f91034d4a43ce603aaa19fbaf1f2e";
-    sha256 = "1qgybcpmm9xxrn39alcgdcpvwphgm1glkbnwx0ljpz4nd1jsnyrl";
+    hash = "sha256-NHurZWiW/Csp6NyuSV+oD16+L2uPUZWGzb2nWi9b/uE=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ nanomsg ];
 
   # Tests requires network connections
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "nanomsg" ];
+
+  meta = {
     description = "Bindings for nanomsg";
     homepage = "https://github.com/tonysimpson/nanomsg-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bgamari ];
   };
 }

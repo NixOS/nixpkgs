@@ -1,37 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydantic,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
+  cached-property,
 }:
 
 buildPythonPackage rec {
   pname = "datauri";
-  version = "1.1.0";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
-    rev = "v${version}";
-    sha256 = "sha256-Eevd/xxKgxvvsAfI/L/KShH+PfxffBGyVwKewLgyEu0=";
+    tag = "v${version}";
+    hash = "sha256-WrOQPUZ9vaLSR0hxIvCK8kBnARiOLh6qqWBw/h6XpaY=";
   };
 
-  pythonImportsCheck = [
-    "datauri"
+  build-system = [ setuptools ];
+
+  dependencies = [
+    typing-extensions
+    cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pydantic
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # UnicodeDecodeError: 'utf-8' codec can't decode
-    "tests/test_file_ebcdic.txt"
-  ];
+  pythonImportsCheck = [ "datauri" ];
 
-  meta = with lib; {
-    description = "Data URI manipulation made easy.";
+  meta = {
+    description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ yuu ];
+    changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
+    license = lib.licenses.unlicense;
+    maintainers = [ ];
   };
 }

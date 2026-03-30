@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit
-, pytestCheckHook
-, numpy
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  numpy,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "3.1.0";
+  version = "3.6.0";
 
-  disabled = pythonOlder "3.6";
-  format = "flit";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joblib";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
+    repo = "threadpoolctl";
+    tag = version;
+    hash = "sha256-yICErKIHc9XKiWg9C9EH0il9zhbbkGntw6mlYDibr9g=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [ flit-core ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     numpy
     scipy
@@ -43,15 +44,12 @@ buildPythonPackage rec {
     "test_threadpool_limits_manual_restore"
   ];
 
-  pythonImportsCheck = [
-    "threadpoolctl"
-  ];
+  pythonImportsCheck = [ "threadpoolctl" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joblib/threadpoolctl";
     description = "Helpers to limit number of threads used in native libraries";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-
 }

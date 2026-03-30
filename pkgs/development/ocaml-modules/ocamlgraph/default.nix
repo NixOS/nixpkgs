@@ -1,26 +1,24 @@
-{ lib, fetchurl, buildDunePackage, stdlib-shims }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "ocamlgraph";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/backtracking/ocamlgraph/releases/download/${version}/ocamlgraph-${version}.tbz";
-    sha256 = "029692bvdz3hxpva9a2jg5w5381fkcw55ysdi8424lyyjxvjdzi0";
+    hash = "sha256-sJViEIY8wk9IAgO6PC7wbfrlV5U2oFdENk595YgisjA=";
   };
 
-  minimalOCamlVersion = "4.03";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [
-    stdlib-shims
-  ];
-
-  meta = with lib; {
-      homepage = "http://ocamlgraph.lri.fr/";
-      downloadPage = "https://github.com/backtracking/ocamlgraph";
-      description = "Graph library for OCaml";
-      license = licenses.gpl2Oss;
-      maintainers = with maintainers; [ ];
+  meta = {
+    homepage = "https://github.com/backtracking/ocamlgraph";
+    description = "Graph library for OCaml";
+    license = lib.licenses.lgpl21Only;
+    maintainers = [ ];
   };
 }

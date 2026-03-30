@@ -1,18 +1,31 @@
 # The wrapper script ensures variables like PKG_CONFIG_PATH and
 # PKG_CONFIG_PATH_FOR_BUILD work properly.
 
-{ stdenvNoCC
-, lib
-, buildPackages
-, pkg-config
-, baseBinName ? "pkg-config"
-, propagateDoc ? pkg-config != null && pkg-config ? man
-, extraPackages ? [], extraBuildCommands ? ""
+{
+  stdenvNoCC,
+  lib,
+  buildPackages,
+  replaceVars,
+  makeSetupHook,
+  expand-response-params,
+  pkg-config,
+  baseBinName ? "pkg-config",
+  propagateDoc ? pkg-config != null && pkg-config ? man,
+  extraPackages ? [ ],
+  extraBuildCommands ? "",
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    attrByPath
+    getBin
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    replaceStrings
+    ;
+
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -20,12 +33,13 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
-                                        (targetPlatform.config + "-");
+  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
 
+  wrapperName = "PKG_CONFIG_WRAPPER";
+  wrapperBinName = "${targetPrefix}${baseBinName}";
 in
 
 stdenv.mkDerivation {
@@ -36,61 +50,92 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
-
-  inherit targetPrefix suffixSalt baseBinName;
-
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
-
-  passthru = {
-    inherit pkg-config;
-  };
 
   strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
-
-  # Additional flags passed to pkg-config.
-  addFlags = lib.optional stdenv.targetPlatform.isStatic "--static";
-
-  unpackPhase = ''
-    src=$PWD
-  '';
+  dontUnpack = true;
 
   installPhase =
+    let
+      addFlags = optionalString stdenv.targetPlatform.isStatic "--static";
+      shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
+      prog = "${getBin pkg-config}/bin/${baseBinName}";
+    in
     ''
       mkdir -p $out/bin $out/nix-support
-
       wrap() {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
-        substituteAll "$wrapper" "$out/bin/$dst"
+        # Do not take variables from env but substitute them explicitly
+        # to prepare for structuredAttrs
+        # Avoid using a nested derivation since we need to substitute $out
+        substitute "$wrapper" "$out/bin/$dst" \
+          --replace-fail "@suffixSalt@" "${suffixSalt}" \
+          --replace-fail "@shell@" "${shell}" \
+          --replace-fail "@prog@" "$prog" \
+          --replace-fail "@out@" "$out" \
+          --replace-fail "@addFlags@" "${addFlags}"
+
         chmod +x "$out/bin/$dst"
       }
 
       echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+      wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
     ''
     # symlink in share for autoconf to find macros
 
     # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
-    # propagated dep once we can rely on downstream deps comming first in
+    # propagated dep once we can rely on downstream deps coming first in
     # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
     # at this.)
     + ''
       ln -s ${pkg-config}/share $out/share
     '';
 
-  wrapperName = "PKG_CONFIG_WRAPPER";
-
-  setupHooks = [
-    ../setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  setupHooks =
+    let
+      roleHook = makeSetupHook rec {
+        name = "pkg-config-role-hook";
+        substitutions = {
+          inherit
+            name
+            suffixSalt
+            wrapperName
+            ;
+        };
+      } ../setup-hooks/role.bash;
+      setupHook = makeSetupHook {
+        name = "pkgs-config-setup-hook";
+        substitutions = {
+          inherit
+            targetPrefix
+            baseBinName
+            ;
+        };
+      } ./setup-hook.sh;
+    in
+    [
+      "${roleHook}/nix-support/setup-hook"
+      "${setupHook}/nix-support/setup-hook"
+    ];
 
   postFixup =
+    let
+      addFlags = replaceVars ./add-flags.sh { inherit suffixSalt; };
+      utils = replaceVars ../wrapper-common/utils.bash {
+        inherit
+          suffixSalt
+          wrapperName
+          ;
+        inherit (targetPlatform) darwinMinVersion;
+        expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+      };
+
+    in
     ##
     ## User env support
     ##
@@ -104,15 +149,18 @@ stdenv.mkDerivation {
     ##
     ## Man page and doc support
     ##
-    + optionalString propagateDoc (''
-      ln -s ${pkg-config.man} $man
-    '' + optionalString (pkg-config ? doc) ''
-      ln -s ${pkg-config.doc} $doc
-    '')
+    + optionalString propagateDoc (
+      ''
+        ln -s ${pkg-config.man} $man
+      ''
+      + optionalString (pkg-config ? doc) ''
+        ln -s ${pkg-config.doc} $doc
+      ''
+    )
 
     + ''
-      substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
-      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      install -m444 -T ${addFlags} $out/nix-support/add-flags.sh
+      install -m444 -T ${utils} $out/nix-support/utils.bash
     ''
 
     ##
@@ -120,12 +168,29 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
-  meta =
-    let pkg-config_ = if pkg-config != null then pkg-config else {}; in
-    (if pkg-config_ ? meta then removeAttrs pkg-config.meta ["priority"] else {}) //
-    { description =
-        lib.attrByPath ["meta" "description"] "pkg-config" pkg-config_
-        + " (wrapper script)";
-      priority = 10;
+  passthru = {
+    inherit
+      targetPrefix
+      suffixSalt
+      pkg-config
+      baseBinName
+      wrapperName
+      ;
   };
+
+  meta =
+    let
+      pkg-config_ = optionalAttrs (pkg-config != null) pkg-config;
+    in
+    (optionalAttrs (pkg-config_ ? meta) (
+      removeAttrs pkg-config.meta [
+        "priority"
+        "mainProgram"
+      ]
+    ))
+    // {
+      description = attrByPath [ "meta" "description" ] "pkg-config" pkg-config_ + " (wrapper script)";
+      priority = 10;
+      mainProgram = wrapperBinName;
+    };
 }

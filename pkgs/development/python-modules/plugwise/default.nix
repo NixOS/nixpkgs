@@ -1,69 +1,64 @@
- { lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, jsonpickle
-, munch
-, mypy
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, semver
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  jsonpickle,
+  munch,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugwise";
-  version = "0.26.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.11.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "plugwise";
     repo = "python-plugwise";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-WDjZZFl64tYZ7cy7xcLEX2/87TJSOw71QSro6cgE98s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tIV1h5V+a1ERr5uGH68pMDK6C55qGgJpegPRvXwZ7bM=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # setuptools and wheel
+    sed -i -e "s/~=[0-9.]*//g" pyproject.toml
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiofiles
     aiohttp
-    async-timeout
-    crcmod
     defusedxml
     munch
-    pyserial
     python-dateutil
-    pytz
-    semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     jsonpickle
-    mypy
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plugwise"
-  ];
+  pythonImportsCheck = [ "plugwise" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
     homepage = "https://github.com/plugwise/python-plugwise";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

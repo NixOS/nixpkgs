@@ -1,23 +1,32 @@
-{ fetchFromGitHub, fetchgit, fetchHex, rebar3WithPlugins, rebar3-nix, rebar3Relx
-, buildRebar3, writeScript, lib }:
+{
+  buildRebar3,
+  fetchFromGitHub,
+  fetchHex,
+  fetchgit,
+  lib,
+  rebar3Relx,
+  writeScript,
+}:
 
-let
-  owner = "inaka";
-  repo = "elvis";
-in rebar3Relx rec {
+rebar3Relx rec {
   releaseType = "escript";
-  # The package name "elvis" is already taken
   pname = "elvis-erlang";
-  version = "1.1.0";
+  version = "4.2.3";
+
   src = fetchFromGitHub {
-    inherit owner repo;
-    sha256 = "6vNxr3AYpFuXaIVH9bWw7K5KiF1swfI+CSI43RoMQEA=";
-    rev = version;
+    owner = "inaka";
+    repo = "elvis";
+    hash = "sha256-4hStLm76HZmO3vk/RdeRGJPJ3gevUkjVO2jGpVff32Q=";
+    tag = version;
   };
-  beamDeps = builtins.attrValues (import ./rebar-deps.nix {
-    inherit fetchHex fetchgit fetchFromGitHub;
-    builder = buildRebar3;
-  });
+
+  beamDeps = builtins.attrValues (
+    import ./rebar-deps.nix {
+      inherit fetchHex fetchgit fetchFromGitHub;
+      builder = buildRebar3;
+    }
+  );
+
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p bash common-updater-scripts git nix-prefetch-git gnutar gzip "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}"
@@ -32,15 +41,17 @@ in rebar3Relx rec {
       tmpdir=$(mktemp -d)
       cp -R $(nix-build $nixpkgs --no-out-link -A elvis-erlang.src)/* "$tmpdir"
       (cd "$tmpdir" && HOME=. rebar3 nix lock -o "$nix_path/rebar-deps.nix")
+      nixfmt "$nix_path/rebar-deps.nix"
     else
-      echo "${repo} is already up-to-date"
+      echo "elvis-erlang is already up-to-date"
     fi
   '';
-  meta = with lib; {
+
+  meta = {
     homepage = "https://github.com/inaka/elvis";
     description = "Erlang Style Reviewer";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dlesl ];
     mainProgram = "elvis";
   };

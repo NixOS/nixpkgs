@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "hsaudiotag3k";
   version = "1.1.3.post1";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -17,10 +19,9 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "A pure Python library that lets one to read metadata from media files";
+  meta = {
+    description = "Pure Python library that lets one to read metadata from media files";
     homepage = "http://hg.hardcoded.net/hsaudiotag/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
-
 }

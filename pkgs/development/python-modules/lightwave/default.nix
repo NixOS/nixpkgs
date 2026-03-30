@@ -1,32 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "lightwave";
-  version = "0.20";
+  version = "0.24";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jhffMDhgQ257ZQxvidiRgBSnZvzLJFKNU2NZ8AyGTGc=";
+    hash = "sha256-l9hwdAKrpdXj/pkrgyiuhbPaGgT6tjfoOw/TBpR+k1I=";
   };
 
-  pythonImportsCheck = [
-    "lightwave"
-  ];
+  pythonImportsCheck = [ "lightwave" ];
 
-  # Requires phyiscal hardware
+  # Requires physical hardware
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with LightwaveRF hubs";
     homepage = "https://github.com/GeoffAtHome/lightwave";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

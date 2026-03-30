@@ -1,37 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textfsm";
-  version = "1.1.3";
-  format = "setuptools";
-
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-IHgKG8v0X+LSK6purWBdwDnI/BCs5XA12ZJixuqqXWg=";
+    repo = "textfsm";
+    tag = "v${version}";
+    hash = "sha256-ygVcDdT85mRN+qYfTZqraRVyp2JlLwwujBW1e/pPJNc=";
   };
 
-  propagatedBuildInputs = [
-    six
-    future
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/google/textfsm/releases/tag/${src.tag}";
     description = "Python module for parsing semi-structured text into python tables";
+    mainProgram = "textfsm";
     homepage = "https://github.com/google/textfsm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

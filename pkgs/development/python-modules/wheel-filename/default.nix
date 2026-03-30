@@ -1,46 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wheel-filename";
-  version = "1.4.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwodder";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-M3XGHG733X5qKuMS6mvFSFHYOwWPaBMXw+w0eYo6ByE=";
+    repo = "wheel-filename";
+    tag = "v${version}";
+    hash = "sha256-YlJ3mQoaNY7wiLzADLZuTET5i37e/zn2S7n9dOdcE0E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=wheel_filename --no-cov-on-fail" ""
-  '';
+  pythonImportsCheck = [ "wheel_filename" ];
 
-  pythonImportsCheck = [
-    "wheel_filename"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Parse wheel filenames";
     homepage = "https://github.com/jwodder/wheel-filename";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/wheelodex/wheel-filename/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];
+    mainProgram = "wheel-filename";
   };
 }

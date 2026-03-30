@@ -1,121 +1,55 @@
-# Extension with Python 2 packages that is overlayed on top
+# Extension with Python 2 packages that is overlaid on top
 # of the Python 3 packages set. This way, Python 2+3 compatible
 # packages can still be used.
 
 self: super:
 
-with self; with super; {
-  attrs = callPackage ../development/python2-modules/attrs { };
+with self;
+with super;
+{
+  attrs = disabled super.attrs;
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  boto3 = callPackage ../development/python2-modules/boto3 {};
+  cffi = disabled super.cffi;
 
-  botocore = callPackage ../development/python2-modules/botocore {};
+  configparser = disabled super.configparser;
 
-  certifi = callPackage ../development/python2-modules/certifi { };
+  contextlib2 = disabled super.contextlib2;
 
-  chardet = callPackage ../development/python2-modules/chardet { };
+  coverage = disabled super.coverage;
 
-  cheetah = callPackage ../development/python2-modules/cheetah { };
+  filelock = disabled super.filelock;
 
-  configparser = callPackage ../development/python2-modules/configparser { };
+  hypothesis = disabled super.hypothesis;
 
-  construct = callPackage ../development/python2-modules/construct { };
+  importlib-metadata = disabled super.importlib-metadata;
 
-  contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
+  jinja2 = disabled super.jinja2;
 
-  coverage = callPackage ../development/python2-modules/coverage { };
+  markupsafe = disabled super.markupsafe;
 
-  enum = callPackage ../development/python2-modules/enum { };
+  mock = disabled super.mock;
 
-  filelock =  callPackage ../development/python2-modules/filelock { };
+  more-itertools = disabled super.more-itertools;
 
-  futures = callPackage ../development/python2-modules/futures { };
+  ninja = disabled super.ninja;
 
-  google-apputils = callPackage ../development/python2-modules/google-apputils { };
-
-  gtkme = callPackage ../development/python2-modules/gtkme { };
-
-  httpretty = callPackage ../development/python2-modules/httpretty { };
-
-  hypothesis = callPackage ../development/python2-modules/hypothesis { };
-
-  idna = callPackage ../development/python2-modules/idna { };
-
-  importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
-
-  jinja2 = callPackage ../development/python2-modules/jinja2 { };
-
-  marisa = callPackage ../development/python2-modules/marisa {
-    inherit (pkgs) marisa;
-  };
-
-  markdown = callPackage ../development/python2-modules/markdown { };
-
-  markupsafe = callPackage ../development/python2-modules/markupsafe { };
-
-  mock = callPackage ../development/python2-modules/mock { };
-
-  more-itertools = callPackage ../development/python2-modules/more-itertools { };
-
-  mutagen = callPackage ../development/python2-modules/mutagen { };
-
-  numpy = callPackage ../development/python2-modules/numpy { };
-
-  packaging = callPackage ../development/python2-modules/packaging { };
-
-  pillow = callPackage ../development/python2-modules/pillow {
-    inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
-    inherit (pkgs.xorg) libX11;
-  };
+  packaging = disabled super.packaging;
 
   pip = callPackage ../development/python2-modules/pip { };
 
-  pluggy = callPackage ../development/python2-modules/pluggy { };
+  pluggy = disabled super.pluggy;
 
-  prettytable = callPackage ../development/python2-modules/prettytable { };
+  pycairo = disabled super.pycairo;
 
-  protobuf = callPackage ../development/python2-modules/protobuf {
-    disabled = isPyPy;
-    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
-  };
+  pyparsing = disabled super.pyparsing;
 
-  pycairo = callPackage ../development/python2-modules/pycairo {
-    inherit (pkgs.buildPackages) meson;
-  };
+  pytest = disabled super.pytest;
 
-  pygments = callPackage ../development/python2-modules/Pygments { };
+  pytest_4 = disabled super.pytest;
 
-  pygobject3 = callPackage ../development/python2-modules/pygobject {
-    inherit (pkgs) meson;
-  };
-
-  pygtk = callPackage ../development/python2-modules/pygtk { };
-
-  pyparsing = callPackage ../development/python2-modules/pyparsing { };
-
-  pyroma = callPackage ../development/python2-modules/pyroma { };
-
-  pysqlite = callPackage ../development/python2-modules/pysqlite { };
-
-  pytest = pytest_4;
-
-  pytest_4 = callPackage
-    ../development/python2-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override {
-        doCheck = false;
-      };
-    };
-
-  pytest-runner = callPackage ../development/python2-modules/pytest-runner { };
-
-  pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
-
-  pyyaml = callPackage ../development/python2-modules/pyyaml { };
-
-  qpid-python = callPackage ../development/python2-modules/qpid-python { };
+  pytest-xdist = disabled super.pytest-xdist;
 
   recoll = disabled super.recoll;
 
@@ -123,26 +57,15 @@ with self; with super; {
 
   rpm = disabled super.rpm;
 
-  s3transfer = callPackage ../development/python2-modules/s3transfer { };
-
-  scandir = callPackage ../development/python2-modules/scandir { };
-
-  sequoia = disabled super.sequoia;
-
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
-  setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
+  six = disabled super.six;
 
-  sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
+  wcwidth = disabled super.wcwitch;
 
-  sphinx = callPackage ../development/python2-modules/sphinx { };
-
-  TurboCheetah = callPackage ../development/python2-modules/TurboCheetah { };
-
-  typing = callPackage ../development/python2-modules/typing { };
+  wheel = callPackage ../development/python2-modules/wheel { };
 
   zeek = disabled super.zeek;
 
-  zipp = callPackage ../development/python2-modules/zipp { };
-
+  zipp = disabled super.zipp;
 }

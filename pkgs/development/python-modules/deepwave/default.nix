@@ -1,69 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, torch
-, ninja
-, scipy
-, which
-, pybind11
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  scikit-build-core,
+  torch,
+  pytestCheckHook,
+  scipy,
 }:
 
-let
-  linePatch = ''
-    import os
-    os.environ['PATH'] = os.environ['PATH'] + ':${ninja}/bin'
-  '';
-in
 buildPythonPackage rec {
   pname = "deepwave";
-  version = "0.0.17";
-  format = "pyproject";
+  version = "0.0.26";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ar4";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4B3V87/voYs61pXhqmydLe48JsnRGuJlUYOOdmJlroA=";
+    repo = "deepwave";
+    tag = "v${version}";
+    hash = "sha256-gjFbBn7fJiLZUm+97xf6xd7C+OkEoeFe3061tFkJhFk=";
   };
 
-  # unable to find ninja although it is available, most likely because it looks for its pip version
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "ninja" ""
-
-    # Adding ninja to the path forcibly
-    mv src/deepwave/__init__.py tmp
-    echo "${linePatch}" > src/deepwave/__init__.py
-    cat tmp >> src/deepwave/__init__.py
-    rm tmp
-  '';
-
-  # The source files are compiled at runtime and cached at the
-  # $HOME/.cache folder, so for the check phase it is needed to
-  # have a temporary home. This is also the reason ninja is not
-  # needed at the nativeBuildInputs, since it will only be used
-  # at runtime.
+  # Return to project root to locate `pyproject.toml` for build
   preBuild = ''
-    export HOME=$(mktemp -d)
+    cd ..
   '';
 
-  propagatedBuildInputs = [ torch pybind11 ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  checkInputs = [
-    which
-    scipy
-    pytest-xdist
+  build-system = [
+    scikit-build-core
+  ];
+
+  dependencies = [
+    torch
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ];
 
   pythonImportsCheck = [ "deepwave" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wave propagation modules for PyTorch";
     homepage = "https://github.com/ar4/deepwave";
-    license = licenses.mit;
-    platforms = intersectLists platforms.x86_64 platforms.linux;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    maintainers = [ ];
   };
 }

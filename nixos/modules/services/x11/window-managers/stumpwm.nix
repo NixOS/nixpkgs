@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,17 +13,18 @@ in
 
 {
   options = {
-    services.xserver.windowManager.stumpwm.enable = mkEnableOption (lib.mdDoc "stumpwm");
+    services.xserver.windowManager.stumpwm.enable = mkEnableOption "stumpwm";
+    services.xserver.windowManager.stumpwm.package = mkPackageOption pkgs "stumpwm" { };
   };
 
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton {
       name = "stumpwm";
       start = ''
-        ${pkgs.lispPackages.stumpwm}/bin/stumpwm &
+        ${cfg.package}/bin/stumpwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.lispPackages.stumpwm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

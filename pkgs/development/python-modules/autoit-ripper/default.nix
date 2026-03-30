@@ -1,42 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pefile
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pefile,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "autoit-ripper";
-  version = "1.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fluG/2XlUh3kPtYtSotrP02c7kdmem92Hy1R93SaTzk=";
+    hash = "sha256-+BHWDkeVewoRUgaHln5TyoajpCvJiowCiC2dFYyp1MA=";
   };
 
-  propagatedBuildInputs = [
-    pefile
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "pefile==2019.4.18" "pefile>=2019.4.18"
-  '';
+  propagatedBuildInputs = [ pefile ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "autoit_ripper"
-  ];
+  pythonImportsCheck = [ "autoit_ripper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to extract AutoIt scripts embedded in PE binaries";
+    mainProgram = "autoit-ripper";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nazywam/AutoIt-Ripper/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

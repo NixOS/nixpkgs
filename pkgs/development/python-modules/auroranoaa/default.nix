@@ -1,32 +1,37 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "auroranoaa";
-  version = "0.0.2";
-  disabled = pythonOlder "3.6";
+  version = "0.0.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "aurora-api";
-    rev = version;
-    sha256 = "0bh8amixkg3xigwh3ryra22x6kzhbdassmf1iqv20lhbvzmsqjv0";
+    tag = version;
+    hash = "sha256-bQDFSbYFsGtvPuJNMykynOpBTIeloUoCVRtIuHXR4n0=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "auroranoaa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Aurora API";
     homepage = "https://github.com/djtimca/aurora-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/djtimca/aurora-api/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

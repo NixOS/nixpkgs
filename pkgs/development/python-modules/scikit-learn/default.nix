@@ -1,83 +1,116 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, gfortran
-, glibcLocales
-, numpy
-, scipy
-, pytestCheckHook
-, pytest-xdist
-, pillow
-, cython
-, joblib
-, llvmPackages
-, threadpoolctl
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  cython,
+  gfortran,
+  meson-python,
+  numpy,
+  scipy,
+
+  # native dependencies
+  glibcLocales,
+  llvmPackages,
+  pytestCheckHook,
+  pytest-xdist,
+  pillow,
+  joblib,
+  threadpoolctl,
 }:
 
 buildPythonPackage rec {
+  __structuredAttrs = true;
+
   pname = "scikit-learn";
-  version = "1.1.3";
-  disabled = pythonOlder "3.6";
+  version = "1.8.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-vvUZeKUewZl3cA/nuGrs6knIJYhPOBF1a3SjsVK7TjU=";
+    pname = "scikit_learn";
+    inherit version;
+    hash = "sha256-m8y7O0Dj3hA1H49QaOEF0PQIOxpl+ge2Y0+8QBpih/0=";
   };
 
+  postPatch = ''
+    substituteInPlace meson.build --replace-fail \
+      "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
+      "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "meson-python>=0.17.1,<0.19.0" meson-python \
+      --replace-fail "numpy>=2,<2.4.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.17.0" scipy
+  '';
+
   buildInputs = [
+    numpy.blas
     pillow
     glibcLocales
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
-    cython
     gfortran
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    cython
+    meson-python
     numpy
     scipy
-    numpy.blas
+  ];
+
+  dependencies = [
     joblib
+    numpy
+    scipy
     threadpoolctl
   ];
 
-  checkInputs = [ pytestCheckHook pytest-xdist ];
+  pythonRelaxDeps = [
+    "numpy"
+    "scipy"
+  ];
 
-  LC_ALL="en_US.UTF-8";
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
-  preBuild = ''
-    export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
-  '';
+  env.LC_ALL = "en_US.UTF-8";
 
-  doCheck = !stdenv.isAarch64;
+  # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
 
-    # failing on macos
-    "check_regressors_train"
-    "check_classifiers_train"
-    "xfail_ignored_in_check_estimator"
-  ];
-
-  pytestFlagsArray = [
-    # verbose build outputs needed to debug hard-to-reproduce hydra failures
-    "-v"
-    "--pyargs" "sklearn"
+    # Fail due to new deprecation warnings in scipy
+    # FIXME: reenable when fixed upstream
+    "test_logistic_regression_path_convergence_fail"
+    "test_linalg_warning_with_newton_solver"
+    "test_newton_cholesky_fallback_to_lbfgs"
 
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
     # (https://github.com/joblib/joblib/issues/563). See also:
     # https://github.com/scikit-learn/scikit-learn/issues/17582
-    # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
-    "-k" "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
+    "NuSVC and memmap"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # doesn't seem to produce correct results?
+    # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
+    "test_sparse_input"
+  ];
+
+  pytestFlags = [
+    # verbose build outputs needed to debug hard-to-reproduce hydra failures
+    "-v"
+    "--pyargs"
+    "sklearn"
   ];
 
   preCheck = ''
@@ -88,16 +121,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sklearn" ];
 
-  meta = with lib; {
-    description = "A set of python modules for machine learning and data mining";
-    changelog = let
-      major = versions.major version;
-      minor = versions.minor version;
-      dashVer = replaceChars ["."] ["-"] version;
-    in
+  meta = {
+    description = "Set of python modules for machine learning and data mining";
+    changelog =
+      let
+        major = lib.versions.major version;
+        minor = lib.versions.minor version;
+        dashVer = lib.replaceStrings [ "." ] [ "-" ] version;
+      in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ davhau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ davhau ];
   };
 }

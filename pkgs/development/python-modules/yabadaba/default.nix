@@ -1,59 +1,65 @@
-{ lib
-, buildPythonPackage
-, cdcs
-, datamodeldict
-, fetchFromGitHub
-, ipython
-, lxml
-, numpy
-, pandas
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  cdcs,
+  datamodeldict,
+  ipython,
+  lxml,
+  numpy,
+  pandas,
+  pillow,
+  pymongo,
+  tqdm,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "yabadaba";
-  version = "0.1.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0Rwo2d3vEfXmeZvZA1udbGKxUERymeVhvyu+okqQDJk=";
+    repo = "yabadaba";
+    tag = "v${version}";
+    hash = "sha256-ZVV/2/RyDj707OEWcwFgQjJImgoiv91ZEutT3RBuWus=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cdcs
     datamodeldict
     ipython
     lxml
     numpy
     pandas
+    pillow
     pymongo
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [
-    "yabadaba"
-  ];
+  pythonImportsCheck = [ "yabadaba" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer allowing for common interactions with databases and records";
     homepage = "https://github.com/usnistgov/yabadaba";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

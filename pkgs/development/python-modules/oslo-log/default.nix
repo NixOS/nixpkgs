@@ -1,45 +1,58 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, eventlet
-, oslo-config
-, oslo-context
-, oslo-serialization
-, oslo-utils
-, oslotest
-, pbr
-, pyinotify
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  debtcollector,
+  oslo-config,
+  oslo-context,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  python-dateutil,
+  pyinotify,
+
+  # tests
+  eventlet,
+  oslotest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.0.1";
-  format = "setuptools";
+  version = "8.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    pname = "oslo.log";
-    inherit version;
-    hash = "sha256-+2Xy+dJEI/pt1urY7NIfZlxi4P2fkL8xHkwVO1+Kt+o=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.log";
+    tag = version;
+    hash = "sha256-ThRJ2rfVStnVOwcu8ZaKDjqb4jT6YE+n+iOFtmR8rwQ=";
   };
 
-  propagatedBuildInputs = [
+  # Manually set version because prb wants to get it from the git upstream repository (and we are
+  # installing from tarball instead)
+  env.PBR_VERSION = version;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    debtcollector
     oslo-config
     oslo-context
     oslo-serialization
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.isLinux [
-    pyinotify
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     oslotest
     pytestCheckHook
@@ -48,17 +61,20 @@ buildPythonPackage rec {
   disabledTests = [
     # not compatible with sandbox
     "test_logging_handle_error"
+    # Incompatible Exception Representation, displaying natively
+    "test_rate_limit"
+    "test_rate_limit_except_level"
   ];
 
-  pythonImportsCheck = [
-    "oslo_log"
-  ];
+  pythonImportsCheck = [ "oslo_log" ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "oslo.log library";
+    mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

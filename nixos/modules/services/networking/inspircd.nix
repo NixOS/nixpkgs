@@ -1,25 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.inspircd;
 
   configFile = pkgs.writeText "inspircd.conf" cfg.config;
 
-in {
+in
+{
   meta = {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
   options = {
     services.inspircd = {
-      enable = lib.mkEnableOption (lib.mdDoc "InspIRCd");
+      enable = lib.mkEnableOption "InspIRCd";
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.inspircd;
         defaultText = lib.literalExpression "pkgs.inspircd";
         example = lib.literalExpression "pkgs.inspircdMinimal";
-        description = lib.mdDoc ''
+        description = ''
           The InspIRCd package to use. This is mainly useful
           to specify an overridden version of the
           `pkgs.inspircd` dervivation, for
@@ -32,8 +38,8 @@ in {
 
       config = lib.mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
-          Verbatim `inspircd.conf` file.
+        description = ''
+          Verbatim {file}`inspircd.conf` file.
           For a list of options, consult the
           [InspIRCd documentation](https://docs.inspircd.org/3/configuration/), the
           [Module documentation](https://docs.inspircd.org/3/modules/)
@@ -47,14 +53,22 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.inspircd = {
       description = "InspIRCd - the stable, high-performance and modular Internet Relay Chat Daemon";
+      unitConfig.Documentation = "https://docs.inspircd.org";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "network.target" ];
+
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${lib.getBin cfg.package}/bin/inspircd start --config ${configFile} --nofork --nopid
+          ${lib.getBin cfg.package}/bin/inspircd --config ${configFile} --nofork --nopid
         '';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Restart = "on-failure";
         DynamicUser = true;
       };
     };

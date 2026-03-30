@@ -1,55 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
-, click
-, click-default-group
-, python-dateutil
-, sqlite-fts4
-, tabulate
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  click-default-group,
+  python-dateutil,
+  sqlite-fts4,
+  tabulate,
+  pip,
+  pluggy,
+  pytestCheckHook,
+  hypothesis,
+  testers,
+  sqlite-utils,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.30";
-  format = "setuptools";
+  version = "3.39";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MABcEtXxNEVln3kXZr62qZAMJfRCvqH5gPIdOLdfbjM=";
+    inherit version;
+    pname = "sqlite_utils";
+    hash = "sha256-v6Lqwps+PrXJZHKDeXUn/rz079Spu7Mdl5oUoR75280=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click-default-group-wheel" "click-default-group"
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     click
     click-default-group
+    pip
+    pluggy
     python-dateutil
     sqlite-fts4
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];
 
-  pythonImportsCheck = [
-    "sqlite_utils"
-  ];
+  pythonImportsCheck = [ "sqlite_utils" ];
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion { package = sqlite-utils; };
+
+  meta = {
     description = "Python CLI utility and library for manipulating SQLite databases";
+    mainProgram = "sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-utils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ meatcar techknowlogick ];
+    changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      meatcar
+      techknowlogick
+    ];
   };
 }

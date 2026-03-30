@@ -1,49 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pydantic,
+  pytest-examples,
+  pytestCheckHook,
+  pytz,
 }:
 
-buildPythonPackage rec {
-  pname = "dirty-equals";
-  version = "0.4";
-  format = "pyproject";
+let
+  dirty-equals = buildPythonPackage rec {
+    pname = "dirty-equals";
+    version = "0.11.0";
+    pyproject = true;
 
-  disabled = pythonOlder "3.7";
+    src = fetchFromGitHub {
+      owner = "samuelcolvin";
+      repo = "dirty-equals";
+      tag = "v${version}";
+      hash = "sha256-JFKWrbMdxhvSBbjQ+S9HPW87CK+5ZZiXHg8Wltlv2YY=";
+    };
 
-  src = fetchFromGitHub {
-    owner = "samuelcolvin";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rh7N/VRx4sv/MhhGPkaYCn2d19Sv5er2CkG6/fJuXX4=";
+    build-system = [ hatchling ];
+
+    dependencies = [ pytz ];
+
+    doCheck = false;
+
+    passthru.tests.pytest = dirty-equals.overrideAttrs { doCheck = true; };
+
+    nativeCheckInputs = [
+      pydantic
+      pytest-examples
+      pytestCheckHook
+    ];
+
+    pythonImportsCheck = [ "dirty_equals" ];
+
+    meta = {
+      description = "Module for doing dirty (but extremely useful) things with equals";
+      homepage = "https://github.com/samuelcolvin/dirty-equals";
+      changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/${src.tag}";
+      license = with lib.licenses; [ mit ];
+      maintainers = with lib.maintainers; [ fab ];
+    };
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    pytz
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "dirty_equals"
-  ];
-
-  meta = with lib; {
-    description = "Module for doing dirty (but extremely useful) things with equals";
-    homepage = "https://github.com/samuelcolvin/dirty-equals";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
-  };
-}
+in
+dirty-equals

@@ -1,55 +1,85 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPyPy
-, python
-, libev
-, greenlet
-, setuptools
-, zope_event
-, zope_interface
-, pythonOlder
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPyPy,
+  python,
+  libev,
+  cffi,
+  cython,
+  greenlet,
+  importlib-metadata,
+  setuptools,
+  zope-event,
+  zope-interface,
+  c-ares,
+  libuv,
+
+  # for passthru.tests
+  dulwich,
+  gunicorn,
+  pika,
 }:
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "21.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "25.9.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ItkV4w2e5H6eTv46qr0mVy5PIvEWGDkc7+GgHCtCU4=";
+    hash = "sha256-rfnNVS3kSk5nVMUf8ueNkZO3+m6rEj25V4ohDmVyNd0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    cython
     setuptools
-  ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [
     libev
+    libuv
+    c-ares
   ];
 
-  propagatedBuildInputs = [
-    zope_event
-    zope_interface
-  ] ++ lib.optionals (!isPyPy) [
-    greenlet
-  ];
+  dependencies = [
+    importlib-metadata
+    zope-event
+    zope-interface
+  ]
+  ++ lib.optionals (!isPyPy) [ greenlet ];
+
+  env = {
+    GEVENTSETUP_EMBED = "0";
+  }
+  // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   # Bunch of failures.
   doCheck = false;
 
   pythonImportsCheck = [
     "gevent"
+    "gevent.events"
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit
+      dulwich
+      gunicorn
+      pika
+      ;
+  }
+  // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
+
+  meta = {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
   };
 }

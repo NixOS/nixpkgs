@@ -1,48 +1,52 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, invoke
-, mock
-, pytestCheckHook
-, pythonOlder
-, sphinx-rtd-theme
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  invoke,
+  mock,
+  pytest7CheckHook,
+  pytest-cov-stub,
+  setuptools,
+  sphinx-rtd-theme,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "5.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "8.0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgilland";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VbuRzKwPMh5S4GZQYnh0sZOBi4LNFjMuol95tMC43b0=";
+    repo = "pydash";
+    tag = "v${version}";
+    hash = "sha256-8DPeM9Q9NrlVF9a6vIfJLGyyB2SrWpZZRHZKqU/DT2w=";
   };
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [
     invoke
     mock
+    pytest7CheckHook
+    pytest-cov-stub
     sphinx-rtd-theme
-    pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov/d" setup.cfg
-  '';
+  pythonImportsCheck = [ "pydash" ];
 
-  pythonImportsCheck = [
-    "pydash"
+  disabledTestPaths = [
+    # Disable mypy testing
+    "tests/pytest_mypy_testing/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utility libraries for doing stuff in a functional way";
     homepage = "https://pydash.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,22 +1,20 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, editorconfig
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  editorconfig,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "jsbeautifier";
-  version = "1.14.7";
+  version = "1.15.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d5kyVNsf9vhOtuHXXjtrcsui7yCBOlhbLYHo5ePHE8Y=";
+    hash = "sha256-W7GNnvuTMdglc1+8U2DujxqsXlJ4AEKAOUOqf4VPdZI=";
   };
 
   propagatedBuildInputs = [
@@ -24,22 +22,18 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsbeautifier"
-  ];
+  pythonImportsCheck = [ "jsbeautifier" ];
 
-  pytestFlagsArray = [
-    "jsbeautifier/tests/testindentation.py"
-  ];
+  enabledTestPaths = [ "jsbeautifier/tests/testindentation.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript unobfuscator and beautifier";
+    mainProgram = "js-beautify";
     homepage = "http://jsbeautifier.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    changelog = "https://github.com/beautify-web/js-beautify/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ apeyroux ];
   };
 }

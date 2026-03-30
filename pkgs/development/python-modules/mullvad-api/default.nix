@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "mullvad-api";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "mullvad_api";
@@ -20,10 +22,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "mullvad_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Mullvad API";
     homepage = "https://github.com/meichthys/mullvad-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,41 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, pydantic
-, toml
-, typeguard
-, mock
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  attrs,
+  cattrs,
+  lsprotocol,
+  websockets,
+  pytest-asyncio,
+  pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.12.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-RtoRIfPIbERQFx0GzQqsxnKAMsIK5Zbf2sNtHhC2fmo=";
+    tag = "v${version}";
+    hash = "sha256-VXLPtZDbTs59DRvrB9xv1EJshV02K+7983BHR7QKTaE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    pydantic
-    toml
-    typeguard
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  checkInputs = [
-    mock
+  propagatedBuildInputs = [
+    attrs
+    cattrs
+    lsprotocol
+  ];
+
+  optional-dependencies = {
+    ws = [ websockets ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -43,12 +47,26 @@ buildPythonPackage rec {
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Darwin issue: OSError: [Errno 24] Too many open files
+    ulimit -n 1024
+  '';
+
   pythonImportsCheck = [ "pygls" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # Skips pre-releases
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
+  meta = {
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kira-bruneau ];
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

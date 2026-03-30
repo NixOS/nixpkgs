@@ -1,14 +1,19 @@
-{ lib, buildFishPlugin, fetchFromGitHub, fishtape }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  fishtape,
+}:
 
 buildFishPlugin rec {
   pname = "done";
-  version = "1.16.5";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "franciscolourenco";
     repo = "done";
     rev = version;
-    sha256 = "E0wveeDw1VzEH2kzn63q9hy1xkccfxQHBV2gVpu2IdQ=";
+    hash = "sha256-GZ1ZpcaEfbcex6XvxOFJDJqoD9C5out0W4bkkn768r0=";
   };
 
   checkPlugins = [ fishtape ];
@@ -20,6 +25,6 @@ buildFishPlugin rec {
     description = "Automatically receive notifications when long processes finish";
     homepage = "https://github.com/franciscolourenco/done";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malo ];
+    maintainers = [ lib.maintainers.malo ];
   };
 }

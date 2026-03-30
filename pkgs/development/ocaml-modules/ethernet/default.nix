@@ -1,42 +1,37 @@
-{ lib, buildDunePackage, fetchurl
-, rresult, cstruct, ppx_cstruct, mirage-net, mirage-protocols
-, mirage-profile, macaddr, fmt, lwt, logs
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  logs,
+  lwt,
+  macaddr,
+  mirage-net,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ethernet";
-  version = "3.0.0";
+  version = "3.2.0";
 
-  minimumOCamlVersion = "4.08";
-
-  # necessary due to cstruct
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0a898vp9dw42majsvzzvs8pc6x4ns01wlwhwbacixliv6vv78ng9";
+    url = "https://github.com/mirage/ethernet/releases/download/v${finalAttrs.version}/ethernet-${finalAttrs.version}.tbz";
+    hash = "sha256-TB2nAhQiHZ1Dk6n/3i49s9HKNH92yNUl3xl94hByrAk=";
   };
 
-  nativeBuildInputs = [
-    ppx_cstruct
-  ];
-
   propagatedBuildInputs = [
-    rresult
     cstruct
     mirage-net
-    mirage-protocols
     macaddr
-    mirage-profile
-    fmt
     lwt
     logs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml Ethernet (IEEE 802.3) layer, used in MirageOS";
     homepage = "https://github.com/mirage/ethernet";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

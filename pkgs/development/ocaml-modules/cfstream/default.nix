@@ -1,35 +1,44 @@
-{ lib, buildDunePackage, fetchFromGitHub, m4, core_kernel, ounit }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  m4,
+  camlp-streams,
+  core_kernel,
+  ounit,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cfstream";
-  version = "1.3.1";
+  version = "1.3.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.04.1";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = version;
-    sha256 = "0qnxfp6y294gjsccx7ksvwn9x5q20hi8sg24rjypzsdkmlphgdnd";
+    repo = "cfstream";
+    rev = finalAttrs.version;
+    hash = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
   };
 
-  patches = [ ./git_commit.patch ];
-
-  # This currently fails with dune
-  strictDeps = false;
+  patches = [
+    ./git_commit.patch
+    ./janestreet-0.17.patch
+  ];
 
   nativeBuildInputs = [ m4 ];
   checkInputs = [ ounit ];
-  propagatedBuildInputs = [ core_kernel ];
+  propagatedBuildInputs = [
+    camlp-streams
+    core_kernel
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Simple Core-inspired wrapper for standard library Stream module";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.lgpl21;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.lgpl21;
   };
-}
+})

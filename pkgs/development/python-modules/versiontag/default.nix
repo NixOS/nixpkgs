@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, git }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  git,
+}:
 
 buildPythonPackage rec {
   pname = "versiontag";
   version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thelabnyc";
@@ -13,17 +20,19 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "get_version(pypi=True)" '"${version}"'
+      --replace-fail "get_version(pypi=True)" '"${version}"'
   '';
 
-  checkInputs = [ git ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ git ];
 
   pythonImportsCheck = [ "versiontag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library designed to make accessing the current version number of your software easy";
     homepage = "https://github.com/thelabnyc/python-versiontag";
-    license = licenses.isc;
-    maintainers = with maintainers; [ MaskedBelgian ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ MaskedBelgian ];
   };
 }

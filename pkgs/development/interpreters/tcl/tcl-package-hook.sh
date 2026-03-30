@@ -23,7 +23,7 @@ _addToTclLibPath() {
     if [[ -z "${TCLLIBPATH-}" ]]; then
         export TCLLIBPATH="$tclPkg"
     else
-        if [[ "$TCLLIBPATH" != *"$tclPkg "* && "$TCLLIBPATH" != *"$tclPkg" ]]; then
+        if [[ "$TCLLIBPATH " != *"$tclPkg "* ]]; then
             export TCLLIBPATH="${TCLLIBPATH} $tclPkg"
         fi
     fi
@@ -41,6 +41,8 @@ findInstalledTclPkgs() {
 
 # Wrap any freshly-installed binaries and set up their TCLLIBPATH
 wrapTclBins() {
+    if [ "$dontWrapTclBinaries" ]; then return; fi
+
     if [[ -z "${TCLLIBPATH-}" ]]; then
         echo "skipping automatic Tcl binary wrapping (nothing to do)"
         return

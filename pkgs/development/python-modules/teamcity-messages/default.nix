@@ -1,40 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "teamcity-messages";
-  version = "1.32";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.33";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JetBrains";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9az7kD7nKqMF2b3/eFgF+pOKKIYLvTy2sf4TSJfHRnA=";
+    repo = "teamcity-messages";
+    tag = "v${version}";
+    hash = "sha256-BAwAfe54J+gbbiz03Yiu3eC/9RnI7P0mfR3nfM1oKZw=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pytestFlagsArray = [
-    "tests/unit-tests/"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "teamcity"
-  ];
+  enabledTestPaths = [ "tests/unit-tests/" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "teamcity" ];
+
+  meta = {
     description = "Python unit test reporting to TeamCity";
     homepage = "https://github.com/JetBrains/teamcity-messages";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/JetBrains/teamcity-messages/releases/tag/v${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

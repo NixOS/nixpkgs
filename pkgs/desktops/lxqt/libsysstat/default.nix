@@ -1,27 +1,29 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, lxqt-build-tools
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  lxqt-build-tools,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libsysstat";
-  version = "0.4.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "libsysstat";
     rev = version;
-    sha256 = "0z2r8041vqssm59lkb3ka7qis9br4wvavxzd45m3pnqlp7wwhkbn";
+    hash = "sha256-CwQz0vaBhMe32xBoSgFkxSwx3tnIHutp9Vs32FvTNVU=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -30,12 +32,12 @@ mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library used to query system info and statistics";
     homepage = "https://github.com/lxqt/libsysstat";
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

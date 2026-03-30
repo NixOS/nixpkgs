@@ -1,15 +1,20 @@
-{ stdenv, lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
-, debug ? false
-, useXdgDir ? false
-, version ? "2022-08-20"
-, rev ? "f65b2bc4c6dea24bd9a993b8df146e5698e7e36f"
-, sha256 ? "sha256-00Tp9OmsM39PYwAJXKKRS9zmn7KsGQ9s1eVmEqghkpw="
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  pkgs,
+  attachPkgs,
+  tiles ? true,
+  debug ? false,
+  useXdgDir ? false,
+  version ? "2024-12-11",
+  rev ? "b871679a2d54dbc6bf3e6566033fadd2dc651592",
+  sha256 ? "sha256-t9R0QPky7zvjgGMq4kV8DdQFToJ/qngbJCw+8FlQztM=",
 }:
 
 let
   common = callPackage ./common.nix {
-    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+    inherit tiles debug useXdgDir;
   };
 
   self = common.overrideAttrs (common: rec {
@@ -32,8 +37,7 @@ let
     ];
 
     meta = common.meta // {
-      maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ rardiol ];
+      maintainers = with lib.maintainers; common.meta.maintainers ++ [ rardiol ];
     };
   });
 in

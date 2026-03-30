@@ -1,44 +1,37 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyprusalink";
-  version = "1.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
+    repo = "pyprusalink";
+    tag = version;
+    hash = "sha256-Opip696hXV1gqFC1cWfrSCkrsldl7M7XZAqUaVkDy7M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyprusalink"
-  ];
+  pythonImportsCheck = [ "pyprusalink" ];
 
-  meta = with lib; {
-    description = "Library to communicate with PrusaLink ";
+  meta = {
+    description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

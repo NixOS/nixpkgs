@@ -1,46 +1,68 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, zigpy
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  time-machine,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.86";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gKYpjen5JLMiZITLGZbcgqDZedsxeofZyMhRR2ti3Ew=";
+    tag = version;
+    hash = "sha256-u57Bv3oK0yAQLijlEG18brCfJXZghaA9OhbcGJ+GtCk=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     zigpy
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
+    time-machine
   ];
 
-  pythonImportsCheck = [
-    "zhaquirks"
+  disabledTests = [
+    # AssertionError: expected call not found
+    "test_moes"
+    "test_tuya_mcu_set_time"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # TypeError: unhashable type: 'dict'
+    "tests/test_quirks_v2.py"
+  ];
+
+  pythonImportsCheck = [ "zhaquirks" ];
+
+  meta = {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";
     homepage = "https://github.com/dmulcahey/zha-device-handlers";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zigpy/zha-device-handlers/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

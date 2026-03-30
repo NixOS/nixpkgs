@@ -1,52 +1,56 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-vmfs";
-  version = "3.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.vmfs";
-    rev = version;
-    hash = "sha256-JVJvuH+ZTlGOnmTSB/nnBuMrc/VtkKVrLDRYnukDXBA=";
+    tag = version;
+    hash = "sha256-4c3JVbQidGvXurWaO+/E0OehGgiY5shE5BiIBwMrCWM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "dissect.vmfs" ];
+
+  disabledTests = [
+    # Archive not present
+    "test_huge"
+    "test_lvm_basic"
+    "test_lvm_span"
+    "test_sparse"
+    "test_vmfs_basic"
+    "test_vmfs_content"
+    "test_vmfs_jbosf"
   ];
 
-  pythonImportsCheck = [
-    "dissect.vmfs"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the VMFS file system";
     homepage = "https://github.com/fox-it/dissect.vmfs";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.vmfs/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

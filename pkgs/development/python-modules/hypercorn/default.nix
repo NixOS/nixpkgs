@@ -1,59 +1,70 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, typing-extensions
-, wsproto
-, toml
-, h2
-, priority
-, mock
-, poetry-core
-, pytest-asyncio
-, pytest-cov
-, pytest-sugar
-, pytest-trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aioquic,
+  h11,
+  h2,
+  httpx,
+  priority,
+  trio,
+  uvloop,
+  wsproto,
+  pdm-backend,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Hypercorn";
-  version = "0.13.2";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pname = "hypercorn";
+  version = "0.18.0";
+  pyproject = true;
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "pgjones";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-fIjw5A6SvFUv8cU7xunVlPYphv+glypY4pzvHNifYLQ=";
+    repo = "Hypercorn";
+    tag = version;
+    hash = "sha256-RNurpDq5Z3N9Wv9Hq/l6A3yKUriCCKx9BrbrWGwBsUk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  postPatch = ''
+    sed -i "/^addopts/d" pyproject.toml
+  '';
+
+  build-system = [ pdm-backend ];
+
+  dependencies = [
+    h11
+    h2
+    priority
+    wsproto
   ];
 
-  propagatedBuildInputs = [ wsproto toml h2 priority ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  optional-dependencies = {
+    h3 = [ aioquic ];
+    trio = [ trio ];
+    uvloop = [ uvloop ];
+  };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    httpx
     pytest-asyncio
-    pytest-cov
-    pytest-sugar
     pytest-trio
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [ mock ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];
 
-  meta = with lib; {
-    homepage = "https://pgjones.gitlab.io/hypercorn/";
-    description = "The ASGI web server inspired by Gunicorn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dgliwka ];
+  meta = {
+    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
+    homepage = "https://github.com/pgjones/hypercorn";
+    description = "ASGI web server inspired by Gunicorn";
+    mainProgram = "hypercorn";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dgliwka ];
   };
 }

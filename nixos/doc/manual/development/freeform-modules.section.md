@@ -13,9 +13,8 @@ checking for entire option trees, it is only recommended for use in
 submodules.
 
 ::: {#ex-freeform-module .example}
-::: {.title}
-**Example: Freeform submodule**
-:::
+### Freeform submodule
+
 The following shows a submodule assigning a freeform type that allows
 arbitrary attributes with `str` values below `settings`, but also
 declares an option for the `settings.port` attribute to have it
@@ -24,7 +23,8 @@ type-checked and assign a default value. See
 for a more complete example.
 
 ```nix
-{ lib, config, ... }: {
+{ lib, config, ... }:
+{
 
   options.settings = lib.mkOption {
     type = lib.types.submodule {
@@ -50,7 +50,7 @@ And the following shows what such a module then allows
   # Not a declared option, but the freeform type allows this
   settings.logLevel = "debug";
 
-  # Not allowed because the the freeform type only allows strings
+  # Not allowed because the freeform type only allows strings
   # settings.enable = true;
 
   # Allowed because there is a port option declared

@@ -1,79 +1,67 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, parameterized
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, responses
-, rich
+{
+  lib,
+  argcomplete,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  parameterized,
+  poetry-core,
+  pytest-mock,
+  pytest-cov-stub,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  responses,
+  rich,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.1.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.19";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BB/pLpPK2qh5902bZp9QM3Wiu/l48pzq7HcjaAtM4D0=";
+    tag = "v${version}";
+    hash = "sha256-3eQtGCIKtjpDWfyrIEPZnA6xLMNl0cg61wh0nuwNwh4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    argcomplete
     backoff
     requests
     rich
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
     responses
+    writableTmpDirAsHomeHook
   ];
-
-  pythonRelaxDeps = [
-    "backoff"
-    "requests"
-    "rich"
-  ];
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov" ""
-  '';
 
   # The tests want to write a configuration file
   preCheck = ''
-    export HOME=$(mktemp -d)
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [
-    "censys"
-  ];
+  pythonImportsCheck = [ "censys" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/censys/censys-python/releases/tag/v${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "censys";
   };
 }

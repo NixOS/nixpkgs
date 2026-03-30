@@ -1,32 +1,34 @@
-{ lib
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, libnotify
-, pango
-, python3Packages
-, wrapGAppsHook
-, youtube-dl
-, glib
-, ffmpeg
-, aria
+{
+  lib,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  pango,
+  python3Packages,
+  wrapGAppsHook3,
+  youtube-dl,
+  glib,
+  ffmpeg,
+  aria2,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.4.093";
+  version = "2.5.164";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-l8jB+3vY9jOlCaLDHAvDm1Ko7viHbnRBIMEXLb/k2z0=";
+    tag = "v${version}";
+    sha256 = "sha256-PPvbdxxGUYUKL+5exO5+iO5ObJgjzFejZIIDA17hvYo=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   strictDeps = false;
@@ -40,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     playsound
     ffmpeg
     matplotlib
-    aria
+    aria2
   ];
 
   buildInputs = [
@@ -68,11 +70,12 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
   ];
 
-  meta = with lib; {
-    description = "A GUI front-end for youtube-dl";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mkg20001 luc65r ];
+  meta = {
+    description = "GUI front-end for youtube-dl";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     homepage = "https://tartube.sourceforge.io/";
+    mainProgram = "tartube";
   };
 }

@@ -1,41 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "smbus2";
-  version = "0.4.2";
-
-  disabled = pythonOlder "3.6";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kplindegaard";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-6JzFbhUq8XR1nYkadPeYqItcLZDIFAwTe3BriEW2nVI=";
+    repo = "smbus2";
+    tag = version;
+    hash = "sha256-GoXSDUmMnrJAfQ8EfCP5bdkq5g0nKLRHcvou5c6vZGU=";
   };
 
-  checkInputs = [
-    nose
-  ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "smbus2"
-  ];
+  pythonImportsCheck = [ "smbus2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for smbus-cffi/smbus-python";
     homepage = "https://smbus2.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/kplindegaard/smbus2/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,45 +1,66 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, appdirs
-, cryptography
-, dogpile-cache
-, jmespath
-, jsonpatch
-, keystoneauth1
-, munch
-, netifaces
-, os-service-types
-, pbr
-, pythonOlder
-, pyyaml
-, requestsexceptions
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  platformdirs,
+  cryptography,
+  dogpile-cache,
+  jmespath,
+  jsonpatch,
+  keystoneauth1,
+  munch,
+  openstackdocstheme,
+  os-service-types,
+  pbr,
+  psutil,
+  pyyaml,
+  requestsexceptions,
+  setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "0.102.0";
-  format = "setuptools";
+  version = "4.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sqGP66eerCrDRpyNr+AdQAjIrDC+OkxrUydbTxxroq0=";
+    hash = "sha256-Xd6a4/HiQRqH/1ey142lP6yOrp5brI5YcJJ8ti3fwDM=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
+  postPatch = ''
+    # Disable rsvgconverter not needed to build manpage
+    substituteInPlace doc/source/conf.py \
+      --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
+  '';
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    platformdirs
     cryptography
     dogpile-cache
     jmespath
     jsonpatch
     keystoneauth1
     munch
-    netifaces
     os-service-types
     pbr
+    psutil
     requestsexceptions
     pyyaml
   ];
@@ -51,14 +72,13 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [
-    "openstack"
-  ];
+  pythonImportsCheck = [ "openstack" ];
 
-  meta = with lib; {
-    description = "An SDK for building applications to work with OpenStack";
+  meta = {
+    description = "SDK for building applications to work with OpenStack";
+    mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "pycocotools";
-  version = "2.0.6";
+  version = "2.0.11";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-f+CJsFzBjoBtzzvXZHCNhtq5IqEA83NOt3+3enCh0Yw=";
+    hash = "sha256-NCVNdtqFV2/K9cHzqpquFrjLFUGDNLpCg7gAeWvRmT0=";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +29,10 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Official APIs for the MS-COCO dataset";
     homepage = "https://github.com/cocodataset/cocoapi/tree/master/PythonAPI";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ piegames ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ piegames ];
   };
 }

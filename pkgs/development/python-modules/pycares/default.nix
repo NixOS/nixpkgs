@@ -1,42 +1,54 @@
-{ lib
-, buildPythonPackage
-, c-ares
-, cffi
-, fetchPypi
-, idna
+{
+  lib,
+  aiodns,
+  buildPythonPackage,
+  c-ares,
+  cffi,
+  cmake,
+  fetchPypi,
+  idna,
+  setuptools,
+  tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycares";
-  version = "4.2.2";
+  version = "5.0.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4fV6gAQ3AIBpS9b7lpof/JFxpZxoJNVPeRwbLk0pg4U=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-WjwknIMEMmMUOYFfmoGEY0FvKoy9semI54dX3prnUIE=";
   };
 
-  buildInputs = [
-    c-ares
-  ];
+  nativeBuildInputs = [ cmake ];
+  dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  buildInputs = [ c-ares ];
+
+  dependencies = [
     cffi
     idna
   ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
   # Requires network access
   doCheck = false;
 
+  passthru.tests = {
+    inherit aiodns tornado;
+  };
+
   pythonImportsCheck = [ "pycares" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for c-ares";
     homepage = "https://github.com/saghul/pycares";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/saghul/pycares/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

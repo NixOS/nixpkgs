@@ -1,49 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blas
-, lapack
-, numpy
-, scipy
+{
+  lib,
+  stdenv,
+  pkgs,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  meson-python,
+  numpy,
+  pkg-config,
+
+  blas,
+  lapack,
+
+  # dependencies
+  scipy,
+
   # check inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scs";
-  version = "3.0.0";
+  inherit (pkgs.scs) version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
-    rev = version;
-    sha256 = "sha256-7OgqCo21S0FDev8xv6/8iGFXg8naVi93zd8v1f9iaWw=";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
+    hash = "sha256-ZB1A6613ZgwGsZ97MpK9c1vUfNe+0RkUULtzQxGKd88=";
   };
 
-  buildInputs = [
-    lapack
-    blas
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
+  '';
+
+  build-system = [
+    meson-python
+    numpy
+    pkg-config
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    blas
+    lapack
+  ];
+
+  dependencies = [
     numpy
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for SCS: Splitting Conic Solver";
     longDescription = ''
       Solves convex cone programs via operator splitting.
       Can solve: linear programs (LPs), second-order cone programs (SOCPs), semidefinite programs (SDPs),
       exponential cone programs (ECPs), and power cone programs (PCPs), or problems with any combination of those cones.
     '';
-    homepage = "https://github.com/cvxgrp/scs"; # upstream C package
+    inherit (pkgs.scs.meta) homepage;
     downloadPage = "https://github.com/bodono/scs-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/bodono/scs-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

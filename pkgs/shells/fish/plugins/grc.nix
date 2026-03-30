@@ -1,8 +1,12 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin {
   pname = "grc";
-  version = "unstable-2022-05-24";
+  version = "0-unstable-2022-05-24";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
@@ -11,10 +15,14 @@ buildFishPlugin {
     sha256 = "sha256-NQa12L0zlEz2EJjMDhWUhw5cz/zcFokjuCK5ZofTn+Q=";
   };
 
-  meta = with lib; {
-    description = "grc Colourizer for some commands on Fish shell";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
-    platforms = with platforms; unix;
+  postInstall = ''
+    cp conf.d/executables $out/share/fish/vendor_conf.d/
+  '';
+
+  meta = {
+    description = "Grc Colourizer for some commands on Fish shell";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = with lib.platforms; unix;
   };
 }

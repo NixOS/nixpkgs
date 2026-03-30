@@ -1,131 +1,87 @@
 /*
+  # Updating
 
-# Updating
+  To update the list of packages from ELPA,
 
-To update the list of packages from ELPA,
+  1. Run `./update-elpa`.
+  2. Check for evaluation errors:
+       # "../../../../../" points to the default.nix from root of Nixpkgs tree
+       env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
+  3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
 
-1. Run `./update-elpa`.
-2. Check for evaluation errors:
-     # "../../../../../" points to the default.nix from root of Nixpkgs tree
-     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
-3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
+  ## Update from overlay
 
-## Update from overlay
+  Alternatively, run the following command:
 
-Alternatively, run the following command:
+  ./update-from-overlay
 
-./update-from-overlay
-
-It will update both melpa and elpa packages using
-https://github.com/nix-community/emacs-overlay. It's almost instantenous and
-formats commits for you.
-
+  It will update both melpa and elpa packages using
+  https://github.com/nix-community/emacs-overlay. It's almost instantaneous and
+  formats commits for you.
 */
 
-{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
+{
+  lib,
+  pkgs,
+  buildPackages,
+}:
 
-self: let
+self:
+let
 
-  markBroken = pkg: pkg.override {
-    elpaBuild = args: self.elpaBuild (args // {
-      meta = (args.meta or {}) // { broken = true; };
-    });
-  };
-
-  elpaBuild = import ../../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo writeText gcc;
-    inherit (self) emacs;
-  };
+  inherit (import ./lib-override-helper.nix pkgs lib)
+    ignoreCompilationError
+    markBroken
+    ;
 
   # Use custom elpa url fetcher with fallback/uncompress
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
 
-  generateElpa = lib.makeOverridable ({
-    generated ? ./elpa-generated.nix
-  }: let
+  generateElpa = lib.makeOverridable (
+    {
+      generated ? ./elpa-generated.nix,
+    }:
+    let
 
-    imported = import generated {
-      callPackage = pkgs: args: self.callPackage pkgs (args // {
-        inherit fetchurl;
-      });
-    };
+      imported = import generated {
+        callPackage =
+          pkgs: args:
+          self.callPackage pkgs (
+            args
+            // {
+              inherit fetchurl;
+            }
+          );
+      };
 
-    super = removeAttrs imported [ "dash" ];
+      super = imported;
 
-    overrides = {
-      # upstream issue: Wrong type argument: arrayp, nil
-      org-transclusion =
-        if super.org-transclusion.version == "1.2.0"
-        then markBroken super.org-transclusion
-        else super.org-transclusion;
-      rcirc-menu = markBroken super.rcirc-menu; # Missing file header
-      cl-lib = null; # builtin
-      tle = null; # builtin
-      advice = null; # builtin
-      seq = if lib.versionAtLeast self.emacs.version "27"
-            then null
-            else super.seq;
-      project = if lib.versionAtLeast self.emacs.version "28"
-                then null
-                else super.project;
-      # Compilation instructions for the Ada executables:
-      # https://www.nongnu.org/ada-mode/
-      ada-mode = super.ada-mode.overrideAttrs (old: {
-        # actually unpack source of ada-mode and wisi
-        # which are both needed to compile the tools
-        # we need at runtime
-        dontUnpack = false;
-        srcs = [
-          super.ada-mode.src
-          self.wisi.src
-        ];
+      commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
-        sourceRoot = "ada-mode-${self.ada-mode.version}";
+      overrides = self: super: {
+        # keep-sorted start block=yes newline_separated=yes
+        # upstream issue: Wrong type argument: arrayp, nil
+        org-transclusion =
+          if super.org-transclusion.version == "1.2.0" then
+            markBroken super.org-transclusion
+          else
+            super.org-transclusion;
 
-        nativeBuildInputs = [
-          buildPackages.gnat
-          buildPackages.gprbuild
-          buildPackages.dos2unix
-          buildPackages.re2c
-        ];
+        rcirc-menu = markBroken super.rcirc-menu; # Missing file header
 
-        buildInputs = [
-          pkgs.gnatcoll-xref
-        ];
+        vc-jj = ignoreCompilationError super.vc-jj; # native-ice
+        # keep-sorted end
+      };
 
-        buildPhase = ''
-          runHook preBuild
-          ./build.sh -j$NIX_BUILD_CORES
-          runHook postBuild
-        '';
+      elpaPackages =
+        let
+          super' = super // (commonOverrides self super);
+        in
+        super' // (overrides self super');
 
-        postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh --prefix=$out
-        '';
+    in
+    elpaPackages
+  );
 
-        meta = old.meta // {
-          maintainers = [ lib.maintainers.sternenseemann ];
-        };
-      });
-
-      plz = super.plz.overrideAttrs (
-        old: {
-          dontUnpack = false;
-          postPatch = old.postPatch or "" + ''
-            substituteInPlace ./plz.el \
-              --replace 'plz-curl-program "curl"' 'plz-curl-program "${pkgs.curl}/bin/curl"'
-          '';
-          preInstall = ''
-            tar -cf "$pname-$version.tar" --transform "s,^,$pname-$version/," * .[!.]*
-            src="$pname-$version.tar"
-          '';
-        }
-      );
-
-    };
-
-    elpaPackages = super // overrides;
-
-  in elpaPackages // { inherit elpaBuild; });
-
-in generateElpa { }
+in
+generateElpa { }

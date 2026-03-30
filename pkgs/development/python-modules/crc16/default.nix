@@ -1,18 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "crc16";
   version = "0.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15nkx0pa4lskwin84flpk8fsw3jqg6wic6v3s83syjqg76h6my61";
+    hash = "sha256-wfhqoDkPS68H0mMbFrl5WA6uHZqXOoJs5FNToi7o05Y=";
   };
 
-  meta = with lib; {
-    homepage = "https://code.google.com/archive/p/pycrc16/";
+  build-system = [ setuptools ];
+
+  # Tests are outdated
+  doCheck = false;
+
+  pythonImportsCheck = [ "crc16" ];
+
+  meta = {
     description = "Python library for calculating CRC16";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ abbradar ];
+    homepage = "https://code.google.com/archive/p/pycrc16/";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

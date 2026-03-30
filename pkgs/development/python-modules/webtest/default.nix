@@ -1,38 +1,38 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, pastedeploy
-, pyquery
-, pytestCheckHook
-, pythonOlder
-, six
-, waitress
-, webob
-, wsgiproxy2
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pastedeploy,
+  pyquery,
+  pytestCheckHook,
+  six,
+  waitress,
+  webob,
+  wsgiproxy2,
 }:
 
 buildPythonPackage rec {
   pname = "webtest";
-  version = "3.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.0.7";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "WebTest";
-    inherit version;
-    hash = "sha256-VL2WlyWDjZhhqfon+Nlx950nXZSuJV9cUB9Tu22ZKes=";
+    inherit pname version;
+    hash = "sha256-euq1D5cNRsBo56Nt0WLLJCWR7fcqHQTv0hN0dyuTF0E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     six
     waitress
     webob
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pastedeploy
     pyquery
     pytestCheckHook
@@ -41,14 +41,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "webtest"
-  ];
+  pythonImportsCheck = [ "webtest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper to test WSGI applications";
     homepage = "https://webtest.readthedocs.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

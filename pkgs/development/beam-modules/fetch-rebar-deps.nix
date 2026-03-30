@@ -1,15 +1,18 @@
-{ lib, stdenv, rebar3 }:
-
-{ name
-, version
-, sha256
-, src
-, meta ? { }
+{
+  lib,
+  stdenv,
+  rebar3,
 }:
 
-with lib;
+{
+  name,
+  version,
+  sha256,
+  src,
+  meta ? { },
+}:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = "rebar-deps-${name}";
   inherit version;
 
@@ -40,4 +43,4 @@ stdenv.mkDerivation ({
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit meta;
-})
+}

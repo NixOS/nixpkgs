@@ -1,35 +1,50 @@
-{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
-, pandoc, texlive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandoc,
+  pandocfilters,
+  poetry-core,
+  replaceVars,
+  texliveSmall,
 }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.8.1";
+  version = "1.16.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "NicklasTegner";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-1vQmONQFJrjptwVVjw25Wyt59loatjScsdnSax+q/f8=";
+    owner = "JessicaTegner";
+    repo = "pypandoc";
+    tag = "v${version}";
+    hash = "sha256-h0Ur5kWyKz1NCEMdnE0eNCYMAEqjx3g/tnfXs1h9zCs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./static-pandoc-path.patch;
+    (replaceVars ./static-pandoc-path.patch {
       pandoc = "${lib.getBin pandoc}/bin/pandoc";
       pandocVersion = pandoc.version;
     })
     ./skip-tests.patch
   ];
 
-  checkInputs = [
-    texlive.combined.scheme-small
+  nativeBuildInputs = [ poetry-core ];
+
+  nativeCheckInputs = [
+    texliveSmall
+    pandocfilters
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pypandoc" ];
+
+  meta = {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/NicklasTegner/pypandoc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann bennofs ];
+    homepage = "https://github.com/JessicaTegner/pypandoc";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      bennofs
+    ];
   };
 }

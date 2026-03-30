@@ -1,32 +1,28 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-mock,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "cert-chain-resolver";
-  version = "1.0.1";
+  version = "1.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rkoopmans";
     repo = "python-certificate-chain-resolver";
-    rev = version;
-    hash = "sha256-NLTRx6J6pjs7lyschHN5KtgrnpQpEyvZ2zz0pSd5sc4=";
+    tag = version;
+    hash = "sha256-DWE+mR7EO5ohuRAR0WC40GBY7HpwXIpU0hhVUnWNRno=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     six
@@ -38,14 +34,14 @@ buildPythonPackage rec {
     "test_display_flag_is_properly_formatted"
   ];
 
-  pythonImportsCheck = [
-    "cert_chain_resolver"
-  ];
+  pythonImportsCheck = [ "cert_chain_resolver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Resolve / obtain the certificate intermediates of a x509 certificate";
+    mainProgram = "cert-chain-resolver";
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
+    changelog = "https://github.com/rkoopmans/python-certificate-chain-resolver/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

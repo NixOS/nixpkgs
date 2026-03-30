@@ -1,47 +1,42 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.script;
-  configFile = pkgs.writeText "script-exporter.yaml" (builtins.toJSON cfg.settings);
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
+  settingsFormat = pkgs.formats.yaml { };
+  configFile = settingsFormat.generate "script-exporter.yaml" cfg.settings;
 in
 {
   port = 9172;
   extraOpts = {
-    settings.scripts = mkOption {
-      type = with types; listOf (submodule {
-        options = {
-          name = mkOption {
-            type = str;
-            example = "sleep";
-            description = lib.mdDoc "Name of the script.";
-          };
-          script = mkOption {
-            type = str;
-            example = "sleep 5";
-            description = lib.mdDoc "Shell script to execute when metrics are requested.";
-          };
-          timeout = mkOption {
-            type = nullOr int;
-            default = null;
-            example = 60;
-            description = lib.mdDoc "Optional timeout for the script in seconds.";
-          };
-        };
-      });
+    settings = mkOption {
+      type = (pkgs.formats.yaml { }).type;
+      default = { };
       example = literalExpression ''
         {
           scripts = [
-            { name = "sleep"; script = "sleep 5"; }
+            { name = "sleep"; command = [ "sleep" ]; args = [ "5" ]; }
           ];
         }
       '';
-      description = lib.mdDoc ''
-        All settings expressed as an Nix attrset.
+      description = ''
+        Free-form configuration for script_exporter, expressed as a Nix attrset and rendered to YAML.
 
-        Check the official documentation for the corresponding YAML
-        settings that can all be used here: <https://github.com/adhocteam/script_exporter#sample-configuration>
+        **Migration note:**
+        The previous format using `script = "sleep 5"` is no longer supported. You must use `command` (list) and `args` (list), e.g. `{ command = [ "sleep" ]; args = [ "5" ]; }`.
+
+        See the official documentation for all available options: <https://github.com/ricoberger/script_exporter#configuration-file>
       '';
     };
   };
@@ -50,7 +45,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-script-exporter}/bin/script_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          --config.file ${configFile} \
+          --config.files ${configFile} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       NoNewPrivileges = true;

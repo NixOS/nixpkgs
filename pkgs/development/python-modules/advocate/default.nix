@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ndg-httpsclient
-, netifaces
-, pyasn1
-, pyopenssl
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ndg-httpsclient,
+  netifaces,
+  pyasn1,
+  pyopenssl,
+  requests,
+  six,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "advocate";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JordanMilne";
-    repo = pname;
+    repo = "advocate";
     rev = "v${version}";
-    sha256 = "sha256-opObkjkad+yrLE2b7DULHjGuNeVhu4fEmSavgA39YPw=";
+    hash = "sha256-opObkjkad+yrLE2b7DULHjGuNeVhu4fEmSavgA39YPw=";
   };
 
   propagatedBuildInputs = [
@@ -36,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "advocate" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JordanMilne/Advocate";
-    description = "An SSRF-preventing wrapper around Python's requests library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pborzenkov ];
+    description = "SSRF-preventing wrapper around Python's requests library";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pborzenkov ];
   };
 }

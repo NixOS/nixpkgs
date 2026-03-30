@@ -1,47 +1,62 @@
-{ lib
-, aiofiles
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-freezegun,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioskybell";
-  version = "22.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "23.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkdrob";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
+    repo = "aioskybell";
+    tag = version;
+    hash = "sha256-5F0B5z0pJLKJPzKIowE07vEgmNXnDVEeGFbPGnJ6H9I=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'version="master",' 'version="${version}",'
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
     aiofiles
+    ciso8601
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-freezegun
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioskybell"
+  disabledTests = [
+    # aiohttp compat issues
+    "test_get_devices"
+    "test_errors"
+    "test_async_change_setting"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "aioskybell" ];
+
+  meta = {
     description = "API client for Skybell doorbells";
     homepage = "https://github.com/tkdrob/aioskybell";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

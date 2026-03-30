@@ -1,57 +1,70 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, ezyrb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-git-versioning,
+
+  # dependencies
+  ezyrb,
+  future,
+  h5netcdf,
+  matplotlib,
+  numpy,
+  scipy,
+  xarray,
+
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4.0.post2211";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2025.08.01";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mathLab";
+    owner = "PyDMD";
     repo = "PyDMD";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-DTKw7Gy2w+zas9u62SN6QDhoeMEjSk/Ej09do38yfNY=";
+    tag = version;
+    hash = "sha256-u8dW90FZSZaVbPNeILeZyOwAU0WOAeTAMCHpe7n4Bi4=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-git-versioning>=2.0,<3" "setuptools-git-versioning"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-git-versioning
+  ];
+
+  dependencies = [
+    ezyrb
     future
+    h5netcdf
     matplotlib
     numpy
     scipy
-    ezyrb
+    xarray
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "pydmd" ];
+
+  nativeCheckInputs = [
+    pytest-mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # test suite takes over 100 vCPU hours, just run small subset of it.
-    # TODO: Add a passthru.tests with all tests
-    "tests/test_dmdbase.py"
-  ];
-
-  pythonImportsCheck = [
-    "pydmd"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python Dynamic Mode Decomposition";
-    homepage = "https://mathlab.github.io/PyDMD/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
-    broken = stdenv.hostPlatform.isAarch64;
+    homepage = "https://pydmd.github.io/PyDMD/";
+    changelog = "https://github.com/PyDMD/PyDMD/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

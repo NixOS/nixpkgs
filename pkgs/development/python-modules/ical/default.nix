@@ -1,56 +1,55 @@
-{ lib
-, python-dateutil
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, tzdata
-, pyparsing
-, pydantic
-, pytest-asyncio
-, pytest-benchmark
-, pytest-golden
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  freezegun,
+  tzdata,
+  pydantic,
+  pytest-benchmark,
+  pytestCheckHook,
+  python-dateutil,
+  setuptools,
+  syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "4.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "13.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-yPFFOhAscLvhKo7sgXtH1HwcDYq8kWKHzrr3ep857Io=";
+    repo = "ical";
+    tag = finalAttrs.version;
+    hash = "sha256-7EKnwfXRU7hzFVre5EVil8/HN+XnCh2qz0BF69sLDHc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     tzdata
     pydantic
-    pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    emoji
     freezegun
-    pytest-asyncio
     pytest-benchmark
-    pytest-golden
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "ical"
-  ];
+  pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "ical" ];
+
+  meta = {
     description = "Library for handling iCalendar";
     homepage = "https://github.com/allenporter/ical";
-    changelog = "https://github.com/allenporter/ical/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/allenporter/ical/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

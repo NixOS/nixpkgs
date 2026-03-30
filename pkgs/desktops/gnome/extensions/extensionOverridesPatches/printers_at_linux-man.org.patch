@@ -1,0 +1,42 @@
+diff --git a/extension.js b/extension.js
+index 91b81dc..e4a2552 100755
+--- a/extension.js
++++ b/extension.js
+@@ -122,8 +122,8 @@ const PrintersManager = GObject.registerClass(class PrintersManager extends Pane
+         this.menu.addMenuItem(printers);
+ //Add Printers
+         this.printers = [];
+-        let p_list = await exec_async(['/usr/bin/lpstat', '-a']);
+-        let p_default = await exec_async(['/usr/bin/lpstat', '-d']);
++        let p_list = await exec_async(['@cups@/bin/lpstat', '-a']);
++        let p_default = await exec_async(['@cups@/bin/lpstat', '-d']);
+         if(p_default.split(': ')[1] != undefined) p_default = p_default.split(': ')[1].trim();
+         else p_default = 'no default';
+         p_list = p_list.split('\n');
+@@ -143,7 +143,7 @@ const PrintersManager = GObject.registerClass(class PrintersManager extends Pane
+             }
+         }
+ //Jobs
+-        let p_jobs = await exec_async(['/usr/bin/lpstat', '-o']);
++        let p_jobs = await exec_async(['@cups@/bin/lpstat', '-o']);
+ //Cancel all Jobs
+         if(p_jobs.length > 0) {
+             this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+@@ -154,7 +154,7 @@ const PrintersManager = GObject.registerClass(class PrintersManager extends Pane
+ //Add Jobs
+         p_jobs = p_jobs.split(/\n/);
+         this.jobsCount = p_jobs.length - 1
+-        let p_jobs2 = await exec_async(['/usr/bin/lpq', '-a']);
++        let p_jobs2 = await exec_async(['@cups@/bin/lpq', '-a']);
+         p_jobs2 = p_jobs2.replace(/\n/g, ' ').split(/\s+/);
+         let sendJobs = [];
+         for(var n = 0; n < p_jobs.length - 1; n++) {
+@@ -194,7 +194,7 @@ const PrintersManager = GObject.registerClass(class PrintersManager extends Pane
+         this.show();
+         if(this.show_icon == 0 || (this.show_icon == 1 && this.printersCount > 0) || (this.show_icon == 2 && this.jobsCount > 0)) {
+ 			this.show();
+-			let p_error = await exec_async(['/usr/bin/lpstat', '-l']);
++			let p_error = await exec_async(['@cups@/bin/lpstat', '-l']);
+ 			this.printError = p_error.indexOf('Unable') >= 0 || p_error.indexOf(' not ') >= 0 || p_error.indexOf(' failed') >= 0;
+ 			if(this.printWarning) this._icon.icon_name = warningIcon;
+ 			else if(this.show_error && this.printError) this._icon.icon_name = errorIcon;

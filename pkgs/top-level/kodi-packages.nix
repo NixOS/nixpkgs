@@ -1,164 +1,275 @@
-{ config, lib, newScope, kodi, libretro }:
-
-with lib;
+{
+  config,
+  lib,
+  newScope,
+  kodi,
+  libretro,
+}:
 
 let
-  inherit (libretro) genesis-plus-gx mgba snes9x;
-in
+  inherit (lib)
+    catAttrs
+    concatLists
+    filter
+    optionalAttrs
+    unique
+    ;
 
-let self = rec {
-
-  addonDir = "/share/kodi/addons";
-  rel = "Matrix";
+  inherit (libretro)
+    fuse
+    genesis-plus-gx
+    gw
+    mgba
+    nestopia
+    snes9x
+    twenty-fortyeight
+    ;
 
   callPackage = newScope self;
-
-  inherit kodi;
-
-  # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
-  toKodiAddon = drv: drv.overrideAttrs (oldAttrs: {
-    # Use passthru in order to prevent rebuilds when possible.
-    passthru = (oldAttrs.passthru or {}) // {
-      kodiAddonFor = kodi;
-      requiredKodiAddons = requiredKodiAddons drv.propagatedBuildInputs;
-    };
-  });
 
   # Check whether a derivation provides a Kodi addon.
   hasKodiAddon = drv: drv ? kodiAddonFor && drv.kodiAddonFor == kodi;
 
   # Get list of required Kodi addons given a list of derivations.
-  requiredKodiAddons = drvs:
+  requiredKodiAddons =
+    drvs:
     let
       modules = filter hasKodiAddon drvs;
     in
-      unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
+    unique (modules ++ concatLists (catAttrs "requiredKodiAddons" modules));
 
-  # package update scripts
+  self = {
+    addonDir = "/share/kodi/addons";
 
-  addonUpdateScript = callPackage ../applications/video/kodi/addons/addon-update-script { };
+    rel = kodi.kodiReleaseName;
 
-  # package builders
+    inherit
+      callPackage
+      kodi
+      hasKodiAddon
+      requiredKodiAddons
+      ;
 
-  buildKodiAddon = callPackage ../applications/video/kodi/build-kodi-addon.nix { };
+    # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
+    toKodiAddon =
+      drv:
+      drv.overrideAttrs (oldAttrs: {
+        # Use passthru in order to prevent rebuilds when possible.
+        passthru = (oldAttrs.passthru or { }) // {
+          kodiAddonFor = kodi;
+          requiredKodiAddons = requiredKodiAddons drv.propagatedBuildInputs;
+        };
+      });
 
-  buildKodiBinaryAddon = callPackage ../applications/video/kodi/build-kodi-binary-addon.nix { };
+    # package update scripts
 
-  # regular packages
+    addonUpdateScript = callPackage ../applications/video/kodi/addons/addon-update-script { };
 
-  kodi-platform = callPackage ../applications/video/kodi/addons/kodi-platform { };
+    # package builders
 
-  # addon packages
+    buildKodiAddon = callPackage ../applications/video/kodi/build-kodi-addon.nix { };
 
-  a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
+    buildKodiBinaryAddon = callPackage ../applications/video/kodi/build-kodi-binary-addon.nix { };
 
-  arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
+    # regular packages
 
-  controller-topology-project = callPackage ../applications/video/kodi/addons/controller-topology-project { };
+    kodi-platform = callPackage ../applications/video/kodi/addons/kodi-platform { };
 
-  iagl = callPackage ../applications/video/kodi/addons/iagl { };
+    # addon packages
 
-  invidious = callPackage ../applications/video/kodi/addons/invidious { };
+    a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
 
-  libretro = callPackage ../applications/video/kodi/addons/libretro { };
+    arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
 
-  libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus { inherit genesis-plus-gx; };
+    bluetooth-manager = callPackage ../applications/video/kodi/addons/bluetooth-manager { };
 
-  libretro-mgba = callPackage ../applications/video/kodi/addons/libretro-mgba { inherit mgba; };
+    controller-topology-project =
+      callPackage ../applications/video/kodi/addons/controller-topology-project
+        { };
 
-  libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
+    formula1 = callPackage ../applications/video/kodi/addons/formula1 { };
 
-  jellyfin = callPackage ../applications/video/kodi/addons/jellyfin { };
+    iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
-  joystick = callPackage ../applications/video/kodi/addons/joystick { };
+    invidious = callPackage ../applications/video/kodi/addons/invidious { };
 
-  keymap = callPackage ../applications/video/kodi/addons/keymap { };
+    libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
-  netflix = callPackage ../applications/video/kodi/addons/netflix { };
+    libretro-2048 = callPackage ../applications/video/kodi/addons/libretro-2048 {
+      inherit twenty-fortyeight;
+    };
 
-  orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
+    libretro-fuse = callPackage ../applications/video/kodi/addons/libretro-fuse { inherit fuse; };
 
-  svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
+    libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus {
+      inherit genesis-plus-gx;
+    };
 
-  steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
+    libretro-gw = callPackage ../applications/video/kodi/addons/libretro-gw { inherit gw; };
 
-  steam-launcher = callPackage ../applications/video/kodi/addons/steam-launcher { };
+    libretro-mgba = callPackage ../applications/video/kodi/addons/libretro-mgba { inherit mgba; };
 
-  steam-library = callPackage ../applications/video/kodi/addons/steam-library { };
+    libretro-nestopia = callPackage ../applications/video/kodi/addons/libretro-nestopia {
+      inherit nestopia;
+    };
 
-  pdfreader = callPackage ../applications/video/kodi/addons/pdfreader { };
+    libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
-  pvr-hts = callPackage ../applications/video/kodi/addons/pvr-hts { };
+    jellycon = callPackage ../applications/video/kodi/addons/jellycon { };
 
-  pvr-hdhomerun = callPackage ../applications/video/kodi/addons/pvr-hdhomerun { };
+    jellyfin = callPackage ../applications/video/kodi/addons/jellyfin { };
 
-  pvr-iptvsimple = callPackage ../applications/video/kodi/addons/pvr-iptvsimple { };
+    joystick = callPackage ../applications/video/kodi/addons/joystick { };
 
-  osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
+    keymap = callPackage ../applications/video/kodi/addons/keymap { };
 
-  vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
+    mediacccde = callPackage ../applications/video/kodi/addons/mediacccde { };
 
-  vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+    mediathekview = callPackage ../applications/video/kodi/addons/mediathekview { };
 
-  visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
+    netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
-  youtube = callPackage ../applications/video/kodi/addons/youtube { };
+    plex-for-kodi = callPackage ../applications/video/kodi/addons/plex-for-kodi { };
 
-  # addon packages (dependencies)
+    orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
-  archive_tool = callPackage ../applications/video/kodi/addons/archive_tool { };
+    radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
 
-  certifi = callPackage ../applications/video/kodi/addons/certifi { };
+    raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
 
-  chardet = callPackage ../applications/video/kodi/addons/chardet { };
+    robotocjksc = callPackage ../applications/video/kodi/addons/robotocjksc { };
 
-  dateutil = callPackage ../applications/video/kodi/addons/dateutil { };
+    screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
 
-  defusedxml = callPackage ../applications/video/kodi/addons/defusedxml { };
+    skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 
-  future = callPackage ../applications/video/kodi/addons/future { };
+    steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
 
-  idna = callPackage ../applications/video/kodi/addons/idna { };
+    steam-launcher = callPackage ../applications/video/kodi/addons/steam-launcher { };
 
-  inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
+    steam-library = callPackage ../applications/video/kodi/addons/steam-library { };
 
-  inputstream-ffmpegdirect = callPackage ../applications/video/kodi/addons/inputstream-ffmpegdirect { };
+    somafm = callPackage ../applications/video/kodi/addons/somafm { };
 
-  inputstream-rtmp = callPackage ../applications/video/kodi/addons/inputstream-rtmp { };
+    pdfreader = callPackage ../applications/video/kodi/addons/pdfreader { };
 
-  inputstreamhelper = callPackage ../applications/video/kodi/addons/inputstreamhelper { };
+    pvr-hts = callPackage ../applications/video/kodi/addons/pvr-hts { };
 
-  kodi-six = callPackage ../applications/video/kodi/addons/kodi-six { };
+    pvr-hdhomerun = callPackage ../applications/video/kodi/addons/pvr-hdhomerun { };
 
-  myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
+    pvr-iptvsimple = callPackage ../applications/video/kodi/addons/pvr-iptvsimple { };
 
-  requests = callPackage ../applications/video/kodi/addons/requests { };
+    pvr-vdr-vnsi = callPackage ../applications/video/kodi/addons/pvr-vdr-vnsi { };
 
-  requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
+    osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
-  routing = callPackage ../applications/video/kodi/addons/routing { };
+    texturemaker = callPackage ../applications/video/kodi/addons/texturemaker { };
 
-  signals = callPackage ../applications/video/kodi/addons/signals { };
+    upnext = callPackage ../applications/video/kodi/addons/upnext { };
 
-  simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
+    vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
-  six = callPackage ../applications/video/kodi/addons/six { };
+    vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
 
-  urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
+    vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
 
-  websocket = callPackage ../applications/video/kodi/addons/websocket { };
+    visualization-fishbmc = callPackage ../applications/video/kodi/addons/visualization-fishbmc { };
 
-  xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
+    visualization-goom = callPackage ../applications/video/kodi/addons/visualization-goom { };
 
-  typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+    visualization-matrix = callPackage ../applications/video/kodi/addons/visualization-matrix { };
 
-  arrow = callPackage ../applications/video/kodi/addons/arrow { };
+    visualization-pictureit = callPackage ../applications/video/kodi/addons/visualization-pictureit { };
 
-  trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
+    visualization-projectm = callPackage ../applications/video/kodi/addons/visualization-projectm { };
 
-  trakt = callPackage ../applications/video/kodi/addons/trakt { };
-}; in self // lib.optionalAttrs config.allowAliases {
+    visualization-shadertoy = callPackage ../applications/video/kodi/addons/visualization-shadertoy { };
+
+    visualization-spectrum = callPackage ../applications/video/kodi/addons/visualization-spectrum { };
+
+    visualization-starburst = callPackage ../applications/video/kodi/addons/visualization-starburst { };
+
+    visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
+
+    youtube = callPackage ../applications/video/kodi/addons/youtube { };
+
+    # addon packages (dependencies)
+
+    archive_tool = callPackage ../applications/video/kodi/addons/archive_tool { };
+
+    certifi = callPackage ../applications/video/kodi/addons/certifi { };
+
+    chardet = callPackage ../applications/video/kodi/addons/chardet { };
+
+    dateutil = callPackage ../applications/video/kodi/addons/dateutil { };
+
+    defusedxml = callPackage ../applications/video/kodi/addons/defusedxml { };
+
+    future = callPackage ../applications/video/kodi/addons/future { };
+
+    idna = callPackage ../applications/video/kodi/addons/idna { };
+
+    infotagger = callPackage ../applications/video/kodi/addons/infotagger { };
+
+    inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
+
+    inputstream-ffmpegdirect =
+      callPackage ../applications/video/kodi/addons/inputstream-ffmpegdirect
+        { };
+
+    inputstream-rtmp = callPackage ../applications/video/kodi/addons/inputstream-rtmp { };
+
+    inputstreamhelper = callPackage ../applications/video/kodi/addons/inputstreamhelper { };
+
+    jurialmunkey = callPackage ../applications/video/kodi/addons/jurialmunkey { };
+
+    kodi-six = callPackage ../applications/video/kodi/addons/kodi-six { };
+
+    myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
+
+    plugin-cache = callPackage ../applications/video/kodi/addons/plugin-cache { };
+
+    requests = callPackage ../applications/video/kodi/addons/requests { };
+
+    requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
+
+    routing = callPackage ../applications/video/kodi/addons/routing { };
+
+    sendtokodi = callPackage ../applications/video/kodi/addons/sendtokodi { };
+
+    signals = callPackage ../applications/video/kodi/addons/signals { };
+
+    simplecache = callPackage ../applications/video/kodi/addons/simplecache { };
+
+    simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
+
+    six = callPackage ../applications/video/kodi/addons/six { };
+
+    sponsorblock = callPackage ../applications/video/kodi/addons/sponsorblock { };
+
+    urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
+
+    websocket = callPackage ../applications/video/kodi/addons/websocket { };
+
+    xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
+
+    typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+
+    arrow = callPackage ../applications/video/kodi/addons/arrow { };
+
+    trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
+
+    trakt = callPackage ../applications/video/kodi/addons/trakt { };
+  };
+in
+self
+// optionalAttrs config.allowAliases {
   # deprecated or renamed packages
 
-  controllers = throw "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles." { };
+  controllers =
+    throw
+      "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles."
+      { };
+
+  svtplay = throw "kodiPackages.svtplay has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-12
 }

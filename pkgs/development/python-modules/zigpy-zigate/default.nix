@@ -1,59 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gpiozero
-, mock
-, pyserial
-, pyserial-asyncio
-, pyusb
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpiozero,
+  mock,
+  pyusb,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  voluptuous,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.10.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.13.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zO20ySRO9XFcDB8TkUJW2MxkhDIBpHp9Z24gupssOaY=";
+    tag = version;
+    hash = "sha256-pVDqb2/7Pe9zvhNNTVQfl5EphEjOPdJwvCIoTdZm7S0=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     gpiozero
-    pyserial
-    pyserial-asyncio
     pyusb
+    voluptuous
     zigpy
   ];
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "zigpy_zigate"
-  ];
+  pythonImportsCheck = [ "zigpy_zigate" ];
 
-  disabledTestPaths = [
-    # Fails in sandbox
-    "tests/test_application.py "
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library which communicates with ZiGate radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-zigate";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zigpy/zigpy-zigate/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

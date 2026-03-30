@@ -1,51 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, mock
-, pytestCheckHook
-, requests
-, requests_ntlm
-, six
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pykerberos,
+  pytestCheckHook,
+  requests-credssp,
+  requests-ntlm,
+  requests,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pywinrm";
-  version = "0.4.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mVZ0v1rGSyViycVlQEcxCeUw02veEMJi1aUpYSGtVWU=";
+    hash = "sha256-VCjrHklK95VFRs1P8Vye8aMKdeBbJaOf1gbO8iIB6fE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
-    requests_ntlm
-    six
+    requests-ntlm
     xmltodict
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    credssp = [ requests-credssp ];
+    kerberos = [ pykerberos ];
+  };
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "winrm"
-  ];
+  pythonImportsCheck = [ "winrm" ];
 
-  pytestFlagsArray = [
-    "winrm/tests/"
-  ];
+  enabledTestPaths = [ "winrm/tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Windows Remote Management";
     homepage = "https://github.com/diyan/pywinrm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ elasticdog kamadorueda ];
+    changelog = "https://github.com/diyan/pywinrm/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      elasticdog
+      kamadorueda
+    ];
   };
 }

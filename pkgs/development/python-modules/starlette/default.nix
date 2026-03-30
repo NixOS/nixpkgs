@@ -1,90 +1,79 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, aiofiles
-, anyio
-, contextlib2
-, itsdangerous
-, jinja2
-, python-multipart
-, pyyaml
-, requests
-, aiosqlite
-, databases
-, pytestCheckHook
-, pythonOlder
-, trio
-, typing-extensions
-, ApplicationServices
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  anyio,
+  typing-extensions,
+
+  # optional dependencies
+  itsdangerous,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  httpx,
+
+  # tests
+  pytestCheckHook,
+  trio,
+
+  # reverse dependencies
+  fastapi,
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.20.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.52.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-vP2TJPn9lRGnLGkO8lUmnsoT6rSnhuWDD3WqNk76SM0=";
+    repo = "starlette";
+    tag = version;
+    hash = "sha256-XPAeRnh9a0A1/5VGZzzGQBhlBsih1VR8QmFdkxG5cQE=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/encode/starlette/commit/ab70211f0e1fb7390668bf4891eeceda8d9723a0.diff";
-      excludes = [ "requirements.txt" ]; # conflicts
-      hash = "sha256-UHf4c4YUWp/1I1vD8J0hMewdlfkmluA+FyGf9ZsSv3Y=";
-    })
-  ];
+  build-system = [ hatchling ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
+  dependencies = [ anyio ];
 
-  propagatedBuildInputs = [
-    aiofiles
-    anyio
+  optional-dependencies.full = [
     itsdangerous
     jinja2
     python-multipart
     pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
+    httpx
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
+  nativeCheckInputs = [
     pytestCheckHook
     trio
     typing-extensions
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::trio.TrioDeprecationWarning"
+    "-Wignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
   ];
 
-  disabledTests = [
-    # asserts fail due to inclusion of br in Accept-Encoding
-    "test_websocket_headers"
-    "test_request_headers"
-  ];
+  pythonImportsCheck = [ "starlette" ];
 
-  pythonImportsCheck = [
-    "starlette"
-  ];
+  passthru.tests = {
+    inherit fastapi;
+  };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
+    downloadPage = "https://github.com/encode/starlette";
     homepage = "https://www.starlette.io/";
-    description = "The little ASGI framework that shines";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    description = "Little ASGI framework that shines";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

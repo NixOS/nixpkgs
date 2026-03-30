@@ -1,29 +1,64 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, geopandas, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, folium, scikit-learn, scipy, gdal, rasterio}:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  folium,
+  gdal,
+  geopandas,
+  matplotlib,
+  networkx,
+  numpy,
+  pandas,
+  rasterio,
+  requests,
+  rtree,
+  scikit-learn,
+  scipy,
+  shapely,
+  uv-build,
+}:
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.2.2";
-  disabled = pythonOlder "3.8";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner  = "gboeing";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-+dUv1QrUmCIOCyUyjYX1kJtZrPuSp3t9xz/sRV7ppgA=";
+    owner = "gboeing";
+    repo = "osmnx";
+    tag = "v${version}";
+    hash = "sha256-3uLgc6zptmXlPg93qtsWbqNxXiBD/SEnXBL/IM/1m2c=";
   };
 
-  propagatedBuildInputs = [ geopandas matplotlib networkx numpy pandas requests Rtree shapely folium scikit-learn scipy gdal rasterio ];
+  build-system = [ uv-build ];
 
-  # requires network
+  dependencies = [
+    geopandas
+    matplotlib
+    networkx
+    numpy
+    pandas
+    requests
+    rtree
+    shapely
+    folium
+    scikit-learn
+    scipy
+    gdal
+    rasterio
+  ];
+
+  # Tests require network
   doCheck = false;
+
   pythonImportsCheck = [ "osmnx" ];
 
-  meta = with lib; {
-    description = "A package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX.";
+  meta = {
+    description = "Package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX";
     homepage = "https://github.com/gboeing/osmnx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    changelog = "https://github.com/gboeing/osmnx/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
+    teams = [ lib.teams.geospatial ];
   };
 }
-

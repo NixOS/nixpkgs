@@ -1,44 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, packaging
-, pytestCheckHook
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  packaging,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-metadata";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "0.10.0";
+  pyproject = true;
 
-  src = fetchPypi rec {
-    inherit pname version;
-    hash = "sha256-6YN9I3V8XJ//+19/N8+be8LZc30OlZt/XV8YmVFulww=";
+  src = fetchPypi {
+    pname = "pyproject_metadata";
+    inherit version;
+    hash = "sha256-f1vQ7zmLYBaVVssX6iYdcVyvf4VhI4FR9RsjBQhLqNQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  dependencies = [ packaging ];
 
-  checkInputs = [
-    pytestCheckHook
-    tomli
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Many broken tests, and missing test files
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pyproject_metadata" ];
+
+  meta = {
     description = "PEP 621 metadata parsing";
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fridh ];
+    changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
   };
 }

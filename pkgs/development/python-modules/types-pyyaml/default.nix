@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-pyyaml";
-  version = "6.0.12.1";
-  format = "setuptools";
+  version = "6.0.12.20250915";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "types-PyYAML";
+    pname = "types_pyyaml";
     inherit version;
-    sha256 = "sha256-cMyq/PP7QE1Xv/wVKf3YahPotPLPn8PugaZAjOCtWdI=";
+    hash = "sha256-D4tUpSjDA/Dm9xZWh90z+vqByAf8rCP2MrY6piTO0dM=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yaml-stubs"
-  ];
+  pythonImportsCheck = [ "yaml-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for PyYAML";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dnr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

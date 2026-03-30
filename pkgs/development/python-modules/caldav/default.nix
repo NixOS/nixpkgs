@@ -1,59 +1,87 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, icalendar
-, lxml
-, nose
-, pytz
-, requests
-, six
-, tzlocal
-, vobject
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  icalendar,
+  icalendar-searcher,
+  lxml,
+  manuel,
+  pytestCheckHook,
+  python,
+  radicale,
+  recurring-ical-events,
+  niquests,
+  hatchling,
+  hatch-vcs,
+  proxy-py,
+  pyfakefs,
+  python-dateutil,
+  pyyaml,
+  toPythonModule,
+  tzlocal,
+  vobject,
+  xandikos,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.9.1";
+  version = "2.2.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Gil0v4pGyp5+TnYPjb8Vk0xTqnQKaeD8Ko/ZWhvkbUk=";
+    repo = "caldav";
+    tag = "v${version}";
+    hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
   };
 
-  propagatedBuildInputs = [
-    vobject
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
+    dnspython
     lxml
-    requests
-    six
-  ];
-
-  checkInputs = [
+    niquests
     icalendar
-    nose
-    tzlocal
-    pytz
+    icalendar-searcher
+    recurring-ical-events
+    python-dateutil
+    pyyaml
   ];
 
-  checkPhase = ''
-    nosetests tests
-  '';
+  nativeCheckInputs = [
+    manuel
+    proxy-py
+    pyfakefs
+    pytestCheckHook
+    (toPythonModule (radicale.override { python3 = python; }))
+    tzlocal
+    vobject
+    writableTmpDirAsHomeHook
+    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+  ];
 
-  # xandikos and radicale is only a optional test dependency, not available for python3
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'xandikos<0.2.4'" "" \
-      --replace ", 'radicale'" ""
-  '';
+  disabledTests = [
+    # test contacts CalDAV servers on the internet
+    "test_rfc8764_test_conf"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "caldav" ];
 
-  meta = with lib; {
-    description = "This project is a CalDAV (RFC4791) client library for Python.";
+  meta = {
+    description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ marenz dotlambda ];
+    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      marenz
+      dotlambda
+    ];
   };
 }

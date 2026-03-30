@@ -1,79 +1,74 @@
-{ lib
-, buildPythonPackage
-, rustPlatform
-, setuptools
-, setuptools-rust
-, isPyPy
-, fetchPypi
-, pythonOlder
-, cffi
-, pytestCheckHook
-, libiconv
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  setuptools,
+  setuptools-rust,
+  fetchFromGitHub,
+  pytestCheckHook,
   # for passthru.tests
-, asyncssh
-, django_4
-, fastapi
-, paramiko
-, twisted
+  asyncssh,
+  django_4,
+  fastapi,
+  paramiko,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.0.0";
-  format = "pyproject";
+  version = "5.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xZwXD8kiX6rQTd4bph2FtBOUbozi5fX1/zDf1nKD8xk=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "bcrypt";
+    tag = version;
+    hash = "sha256-7Dp07xoq6h+fiP7d7/TRRoYszWsyQF1c4vuFUpZ7u6U=";
   };
 
   cargoRoot = "src/_bcrypt";
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-HvfRLyUhlXVuvxWrtSDKx3rMKJbjvuiMcDY6g+pYFS0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-hYMJlwxnXA0ZOJiyZ8rDp9govVcc1SGkDfqUVngnUPQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
-
-  # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
-
-  propagatedBuildInputs = [
-    cffi
   ];
 
-  propagatedNativeBuildInputs = [
-    cffi
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bcrypt"
-  ];
+  pythonImportsCheck = [ "bcrypt" ];
 
   passthru.tests = {
-    inherit asyncssh django_4 fastapi paramiko twisted;
+    inherit
+      asyncssh
+      django_4
+      fastapi
+      paramiko
+      twisted
+      ;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pyca/bcrypt/blob/${src.tag}/CHANGELOG.rst";
     description = "Modern password hashing for your software and your servers";
     homepage = "https://github.com/pyca/bcrypt/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

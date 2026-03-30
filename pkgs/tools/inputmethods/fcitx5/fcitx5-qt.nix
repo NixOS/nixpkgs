@@ -1,58 +1,64 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, qtx11extras
-, libxcb
-, libXdmcp
-, qtbase
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  gettext,
+  qtbase,
+  qtwayland,
+  wrapQtAppsHook,
+  wayland,
 }:
-
-mkDerivation rec {
-  pname = "fcitx5-qt";
-  version = "5.0.15";
+let
+  majorVersion = lib.versions.major qtbase.version;
+in
+stdenv.mkDerivation rec {
+  pname = "fcitx5-qt${majorVersion}";
+  version = "5.1.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = pname;
+    repo = "fcitx5-qt";
     rev = version;
-    sha256 = "sha256-yQFYol4rEXmQBJWoc96yWJkJc3RVP6U964tdJdkGelU=";
+    hash = "sha256-CrrQQPtWQwE6eZOJB+uLVUjPJMKW/sz/tij41dyEe0U=";
   };
 
-  preConfigure = ''
-    substituteInPlace qt5/platforminputcontext/CMakeLists.txt \
-      --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
-    substituteInPlace qt6/platforminputcontext/CMakeLists.txt \
-      --replace \$"{CMAKE_INSTALL_QT6PLUGINDIR}" $out/${qt6.qtbase.qtPluginPrefix}
+  postPatch = ''
+    substituteInPlace qt${majorVersion}/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT${majorVersion}PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [
-    # adding qt6 to buildInputs would result in error: detected mismatched Qt dependencies
-    "-DCMAKE_PREFIX_PATH=${qt6.qtbase.dev}"
-    "-DENABLE_QT4=0"
-    "-DENABLE_QT6=1"
+    "-DENABLE_QT4=OFF"
+    "-DENABLE_QT5=OFF"
+    "-DENABLE_QT6=OFF"
+    "-DENABLE_QT${majorVersion}=ON"
   ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    qtbase
+    qtwayland
     fcitx5
-    qtx11extras
-    libxcb
-    libXdmcp
+    wayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 Qt Library";
     homepage = "https://github.com/fcitx/fcitx5-qt";
-    license = with licenses; [ lgpl21Plus bsd3 ];
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl21Plus
+      bsd3
+    ];
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

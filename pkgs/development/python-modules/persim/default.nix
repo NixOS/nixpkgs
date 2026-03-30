@@ -1,29 +1,25 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, deprecated
-, hopcroftkarp
-, joblib
-, matplotlib
-, numpy
-, scikit-learn
-, scipy
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  deprecated,
+  hopcroftkarp,
+  joblib,
+  matplotlib,
+  numpy,
+  scikit-learn,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.3.1";
+  version = "0.3.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7w8KJHrc9hBOysFBF9sLJFgXEOqKjZZIFoBTlXALSXU=";
+    hash = "sha256-4T0YWEF2uKdk0W1+Vt8I3Mi6ZsazJXoHI0W+O9WbpA0=";
   };
 
   propagatedBuildInputs = [
@@ -36,9 +32,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # specifically needed for darwin
@@ -47,11 +41,9 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pythonImportsCheck = [
-    "persim"
-  ];
+  pythonImportsCheck = [ "persim" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # AttributeError: module 'collections' has no attribute 'Iterable'
     "test_empyt_diagram_list"
     "test_empty_diagram_list"
@@ -61,13 +53,17 @@ buildPythonPackage rec {
     "test_mixed_pairs"
     "test_multiple_diagrams"
     "test_n_pixels"
+    # https://github.com/scikit-tda/persim/issues/67
+    "test_persistenceimager"
+    # ValueError: setting an array element with a sequence
+    "test_exact_critical_pairs"
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

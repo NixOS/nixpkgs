@@ -1,17 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "verboselogs";
   version = "1.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -20,24 +18,22 @@ buildPythonPackage rec {
     hash = "sha256-hcIdbn0gdkdJ33KcOx6uv0iMXW0x+i880SoROi+qX4I=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
   ];
 
-  pythonImportsCheck = [
-    "verboselogs"
-  ];
+  pythonImportsCheck = [ "verboselogs" ];
 
   disabledTests = [
     # Do not run pylint plugin test
     "test_pylint_plugin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Verbose logging for Python's logging module";
     homepage = "https://github.com/xolox/python-verboselogs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

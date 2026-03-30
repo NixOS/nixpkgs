@@ -1,9 +1,13 @@
-{ qtModule
-, qtbase
-, qtwebsockets
+{
+  qtModule,
+  qtbase,
+  qtwebsockets,
 }:
 
 qtModule {
   pname = "qthttpserver";
-  qtInputs = [ qtbase qtwebsockets ];
+  propagatedBuildInputs = [
+    qtbase
+    qtwebsockets
+  ];
 }

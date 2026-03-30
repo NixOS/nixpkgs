@@ -1,40 +1,58 @@
-{ stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, bison
-, flex
-, python3
-, glib
-, makeWrapper
-, libcap
-, libunwind
-, darwin
-, elfutils # for libdw
-, bash-completion
-, lib
-, CoreServices
-, gobject-introspection
+{
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  bison,
+  flex,
+  python3,
+  glib,
+  makeWrapper,
+  libcap,
+  elfutils, # for libdw
+  bash-completion,
+  lib,
+  testers,
+  rustc,
+  withRust ?
+    lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms
+    && lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  libunwind,
+  withLibunwind ?
+    lib.meta.availableOn stdenv.hostPlatform libunwind
+    && lib.elem "libunwind" libunwind.meta.pkgConfigModules or [ ],
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+let
+  hasElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.20.3";
+  version = "1.26.5";
 
   outputs = [
     "bin"
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs, see:
-    # - https://github.com/NixOS/nixpkgs/pull/98767
-    # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
   ];
 
+  separateDebugInfo = true;
+
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YH2vZLu9X7GK+dF+IcDSLE1wL//oOyPLItGxryyiOio=";
+    url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Cn7bDntC2+a1dfzmGkgIo/ayDghaHq7LwCXQ7CHx53Q=";
   };
 
   depsBuildBuild = [
@@ -53,23 +71,34 @@ stdenv.mkDerivation rec {
     makeWrapper
     glib
     bash-completion
-    gobject-introspection
-
-    # documentation
-    # TODO add hotdoc here
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap # for setcap binary
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withRust [
+    rustc
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     bash-completion
-    gobject-introspection
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-    libunwind
+  ]
+  ++ lib.optionals hasElfutils [
     elfutils
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
+  ]
+  ++ lib.optionals withLibunwind [
+    libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   propagatedBuildInputs = [
@@ -77,13 +106,14 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
-    "-Dlibdw=disabled"
+    (lib.mesonEnable "ptp-helper" withRust)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "libunwind" withLibunwind)
+    (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
 
   postPatch = ''
@@ -92,7 +122,8 @@ stdenv.mkDerivation rec {
       gst/parse/gen_grammar.py.in \
       gst/parse/gen_lex.py.in \
       libs/gst/helpers/ptp_helper_post_install.sh \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      docs/gst-plugins-doc-cache-generator.py
   '';
 
   postInstall = ''
@@ -103,16 +134,29 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
     moveToOutput "share/bash-completion" "$bin"
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib ;{
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+    updateScript = directoryListingUpdater { };
+  };
+
+  meta = {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel matthewbauer ];
+    license = lib.licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-controller-1.0"
+    ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      ttuegel
+    ];
   };
-}
+})

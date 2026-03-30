@@ -1,79 +1,162 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, imagemagickBig
-, pkg-config
-, libX11
-, libv4l
-, qtbase
-, qtx11extras
-, wrapQtAppsHook
-, wrapGAppsHook
-, gtk3
-, xmlto
-, docbook_xsl
-, autoreconfHook
-, dbus
-, enableVideo ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  imagemagickBig,
+  pkg-config,
+  withXorg ? true,
+  libx11,
+  libv4l,
+  qtbase,
+  qtwayland,
+  qtx11extras,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  gtk3,
+  xmlto,
+  docbook_xsl,
+  autoreconfHook,
+  dbus,
+  enableVideo ? stdenv.hostPlatform.isLinux,
   # The implementation is buggy and produces an error like
   # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
   # for every scanned code.
   # see https://github.com/mchehab/zbar/issues/104
-, enableDbus ? false
-, libintl
+  enableDbus ? false,
+  libintl,
+  libiconv,
+  bash,
+  python3,
+  argp-standalone,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.23.90";
+  version = "0.23.93";
 
-  outputs = [ "out" "lib" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
+    sha256 = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
+
+  patches = [
+    # Fix build, remove these two patches on a release beyond 0.23.93.
+    (fetchpatch {
+      name = "variable-pkg-config-path.patch";
+      url = "https://github.com/mchehab/zbar/commit/368571ffa1a0f6cc41f708dd0d27f9b6e9409df8.patch";
+      hash = "sha256-4VEuGAyR7rcIijPLlh4pzL82ESm99Wb35PV/FbY9H6Y=";
+    })
+    (fetchpatch {
+      name = "qt5-detection-fix.patch";
+      url = "https://github.com/mchehab/zbar/commit/a549566ea11eb03622bd4458a1728ffe3f589163.patch";
+      hash = "sha256-NY3bAElwNvGP9IR6JxUf62vbjx3hONrqu9pMSqaZcLY=";
+    })
+    # PR from fork not yet merged into upstream
+    # See PR: https://github.com/mchehab/zbar/pull/299
+    # Remove this patch if the PR is merged or if the issue is solved another way.
+    # See https://github.com/NixOS/nixpkgs/issues/456461 for discussion of the root issue
+    ./darwin-segfault-optimized-pointer-assignment.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
     xmlto
     autoreconfHook
     docbook_xsl
+  ]
+  ++ lib.optionals enableVideo [
+    wrapGAppsHook3
     wrapQtAppsHook
-    wrapGAppsHook
+    qtbase
   ];
 
   buildInputs = [
     imagemagickBig
-    libX11
     libintl
-  ] ++ lib.optionals enableDbus [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals enableDbus [
     dbus
-  ] ++ lib.optionals enableVideo [
+  ]
+  ++ lib.optionals withXorg [
+    libx11
+  ]
+  ++ lib.optionals enableVideo [
     libv4l
     gtk3
     qtbase
+    qtwayland
     qtx11extras
   ];
 
+  nativeCheckInputs = [
+    bash
+    python3
+  ];
+
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ];
+
+  # fix iconv linking on macOS
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export LDFLAGS="-liconv"
+  '';
+
+  # Note: postConfigure instead of postPatch in order to include some
+  # autoconf-generated files. The template files for the autogen'd scripts are
+  # not chmod +x, so patchShebangs misses them.
+  postConfigure = ''
+    patchShebangs test
+  '';
+
   # Disable assertions which include -dev QtBase file paths.
-  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
+  env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   configureFlags = [
     "--without-python"
-  ] ++ (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/share"
-  ] else [
-    "--without-dbus"
-  ]) ++ (if enableVideo then [
-    "--with-gtk=gtk3"
-  ] else [
-    "--disable-video"
-    "--without-gtk"
-    "--without-qt"
-  ]);
+  ]
+  ++ (
+    if enableDbus then
+      [
+        "--with-dbusconfdir=${placeholder "out"}/share"
+      ]
+    else
+      [
+        "--without-dbus"
+      ]
+  )
+  ++ (
+    if enableVideo then
+      [
+        "--with-gtk=gtk3"
+      ]
+    else
+      [
+        "--disable-video"
+        "--without-gtk"
+        "--without-qt"
+      ]
+  );
+
+  doCheck = true;
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -largp"
+  '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
@@ -85,7 +168,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Bar code reader";
     longDescription = ''
       ZBar is an open source software suite for reading bar codes from various
@@ -94,9 +177,9 @@ stdenv.mkDerivation rec {
       EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
       Code.
     '';
-    maintainers = with maintainers; [ delroth raskin ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";
     mainProgram = "zbarimg";
   };

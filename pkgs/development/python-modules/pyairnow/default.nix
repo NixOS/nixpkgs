@@ -1,45 +1,47 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, poetry
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asymworks";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1hkpfl8rdwyzqrr1drqlmcw3xpv3pi1jf19h1divspbzwarqxs1c";
+    repo = "pyairnow";
+    tag = "v${version}";
+    hash = "sha256-BGTtDMq5SnYrk1qT6OkGa1tkxYH5umbMC5Udmffyf+g=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-aiohttp
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pyairnow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for EPA AirNow Air Quality API";
     homepage = "https://github.com/asymworks/pyairnow";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/asymworks/pyairnow/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

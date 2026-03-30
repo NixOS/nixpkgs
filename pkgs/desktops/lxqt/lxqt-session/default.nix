@@ -1,62 +1,68 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, qtx11extras
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, qtxdg-tools
-, procps
-, xorg
-, xdg-user-dirs
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  layer-shell-qt,
+  libxdmcp,
+  liblxqt,
+  libpthread-stubs,
+  libqtxdg,
+  lxqt-build-tools,
+  pkg-config,
+  procps,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  qtxdg-tools,
+  wrapQtAppsHook,
+  xdg-user-dirs,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-session";
-  version = "1.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-session";
     rev = version;
-    sha256 = "EmaMIoVouC1/B/WrLwynynx3F9A1Ae5kT3uhl5HVQg8=";
+    hash = "sha256-5VJxRho6qdPvBFr0RkYaajvVZRwhc1emzqpII+lUyOQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtsvg
-    qtx11extras
     kwindowsystem
+    layer-shell-qt
+    libxdmcp
     liblxqt
+    libpthread-stubs
     libqtxdg
-    qtxdg-tools
     procps
-    xorg.libpthreadstubs
-    xorg.libXdmcp
+    qtbase
+    qtsvg
+    qtwayland
+    qtxdg-tools
     xdg-user-dirs
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-session";
-    description = "An alternative session manager ported from the original razor-session";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    description = "Alternative session manager ported from the original razor-session";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

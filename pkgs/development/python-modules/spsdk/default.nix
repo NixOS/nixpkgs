@@ -1,116 +1,155 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, dos2unix
-, pythonRelaxDepsHook
-, asn1crypto
-, astunparse
-, bincopy
-, bitstring
-, click
-, click-option-group
-, cmsis-pack-manager
-, commentjson
-, crcmod
-, cryptography
-, deepmerge
-, fastjsonschema
-, hexdump
-, jinja2
-, libusbsio
-, oscrypto
-, pycryptodome
-, pylink-square
-, pyocd
-, pypemicro
-, pyserial
-, ruamel-yaml
-, sly
-, pytestCheckHook
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  asn1crypto,
+  bincopy,
+  bitstring,
+  click,
+  click-command-tree,
+  click-option-group,
+  colorama,
+  crcmod,
+  cryptography,
+  deepmerge,
+  fastjsonschema,
+  filelock,
+  hexdump,
+  libusbsio,
+  libuuu,
+  oscrypto,
+  packaging,
+  platformdirs,
+  prettytable,
+  pyasn1,
+  pyocd,
+  pyserial,
+  requests,
+  ruamel-yaml,
+  sly,
+  spsdk-mcu-link,
+  spsdk-pyocd,
+  typing-extensions,
+  x690,
+
+  # tests
+  cookiecutter,
+  ipykernel,
+  pytest-notebook,
+  pytestCheckHook,
+  voluptuous,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.6.3";
+  version = "3.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "NXPmicro";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-JMhd2XdbjEN6SUzFgcBHd/dStiuYeXXis6pfijSfUso=";
+    owner = "nxp-mcuxpresso";
+    repo = "spsdk";
+    tag = "v${version}";
+    hash = "sha256-eylowyX4ERXSYuhc/Gy4UEqRSG1GjmeRMJdR0mY5E9I=";
   };
 
-  patches = [
-    # https://github.com/NXPmicro/spsdk/pull/43
-    (fetchpatch {
-      name = "cryptography-37-compat.patch";
-      url = "https://github.com/NXPmicro/spsdk/commit/a85b854de1093de593d27fa64de442224ab2e0fd.patch";
-      sha256 = "sha256-4pXV/8RaNuGl7KNdoGD/8YnPQ2ZmUQOjXWA/Yy0Kxu8=";
-    })
-    # https://github.com/NXPmicro/spsdk/pull/41
-    (fetchpatch {
-      name = "blhost-click-8-1-compat.patch";
-      url = "https://github.com/NXPmicro/spsdk/commit/5112b1b69aa681d265035475e73d28ea0c8cb6ab.patch";
-      sha256 = "sha256-Okz6Er6OVuAA5IlB5IabSa/gUSLa+E2Ltd+J3uoIg6o=";
-    })
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.1,<74" "setuptools" \
+      --replace-fail "setuptools_scm<8.2" "setuptools_scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [
-    "cmsis-pack-manager"
     "cryptography"
-    "deepmerge"
-    "jinja2"
-    "pylink-square"
-    "pyocd"
+    "filelock"
+    "importlib-metadata"
+    "packaging"
+    "prettytable"
+    "requests"
+    "setuptools_scm"
+    "typing-extensions"
   ];
-  pythonRemoveDeps = [ "pyocd-pemicro" ];
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    # Remove unneeded unfree package. pyocd-pemicro is only used when
+    # generating a pyinstaller package, which we don't do.
+    "pyocd-pemicro"
+  ];
+
+  dependencies = [
     asn1crypto
-    astunparse
     bincopy
     bitstring
     click
+    click-command-tree
     click-option-group
-    cmsis-pack-manager
-    commentjson
+    colorama
+    cookiecutter
     crcmod
     cryptography
     deepmerge
     fastjsonschema
+    filelock
     hexdump
-    jinja2
     libusbsio
+    libuuu
     oscrypto
-    pycryptodome
-    pylink-square
+    packaging
+    platformdirs
+    prettytable
+    pyasn1
     pyocd
-    pypemicro
     pyserial
+    requests
     ruamel-yaml
     sly
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-    voluptuous
-  ];
-
-  disabledTests = [
-    # tests also fail on debian, so presumable they are broken
-    "test_elftosb_mbi_signed"
-    "test_elftosb_sb31"
+    spsdk-mcu-link
+    spsdk-pyocd
+    typing-extensions
+    x690
   ];
 
   pythonImportsCheck = [ "spsdk" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    cookiecutter
+    ipykernel
+    pytest-notebook
+    pytestCheckHook
+    voluptuous
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = [
+    # Missing rotk private key
+    "test_general_notebooks"
+
+    # Attempts to access /run
+    "test_nxpimage_famode_export_cli"
+  ];
+
+  meta = {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
-    homepage = "https://github.com/NXPmicro/spsdk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    homepage = "https://github.com/nxp-mcuxpresso/spsdk";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      frogamic
+      sbruder
+    ];
+    mainProgram = "spsdk";
   };
 }

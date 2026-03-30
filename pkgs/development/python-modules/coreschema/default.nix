@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "coreschema";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "python-coreschema";
@@ -19,16 +20,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jinja2 ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     cd ./tests
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Core Schema";
     homepage = "https://github.com/ivegotasthma/python-coreschema";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

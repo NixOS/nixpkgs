@@ -1,67 +1,73 @@
-{ lib
-, async-timeout
-, asynctest
-, buildPythonPackage
-, coloredlogs
-, fetchFromGitHub
-, jsonschema
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
-, zigpy
+{
+  lib,
+  buildPythonPackage,
+  coloredlogs,
+  fetchFromGitHub,
+  jsonschema,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  setuptools,
+  voluptuous,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.9.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.14.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-32QSFBzYg+E++5euCWKgbF3/uLEn1uObenmR/Wv9XZc=";
+    repo = "zigpy-znp";
+    tag = "v${version}";
+    hash = "sha256-XH/nStEGI7jmhwT5JhII4Mc+uO7B9Ur3s5MLvUOFl9c=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout = 20" "timeout = 300" \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     coloredlogs
     jsonschema
-    pyserial
-    pyserial-asyncio
     voluptuous
     zigpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+    pytest-rerunfailures
     pytest-timeout
+    pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+  pytestFlags = [ "--reruns=3" ];
+
+  disabledTests = [
+    # broken by https://github.com/zigpy/zigpy/pull/1635
+    "test_concurrency_auto_config"
+    "test_request_concurrency"
   ];
 
-  pythonImportsCheck = [
-    "zigpy_znp"
-  ];
+  pythonImportsCheck = [ "zigpy_znp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/v${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

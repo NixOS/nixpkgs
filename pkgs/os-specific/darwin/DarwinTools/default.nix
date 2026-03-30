@@ -1,22 +1,21 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "DarwinTools";
   version = "1";
 
   src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/DarwinTools/DarwinTools-${version}.tar.gz";
-    sha256 = "0hh4jl590jv3v830p77r3jcrnpndy7p2b8ajai3ldpnx2913jfhp";
+    url = "https://web.archive.org/web/20180408044816/https://opensource.apple.com/tarballs/DarwinTools/DarwinTools-${version}.tar.gz";
+    hash = "sha256-Fzo5QhLd3kZHVFKhJe7xzV6bmRz5nAsG2mNLkAqVBEI=";
   };
 
   patches = [
     ./sw_vers-CFPriv.patch
   ];
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace gcc cc
-  '';
 
   configurePhase = ''
     export SRCROOT=.
@@ -24,13 +23,18 @@ stdenv.mkDerivation rec {
     export DSTROOT=$out
   '';
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
+  ];
+
   postInstall = ''
     mv $out/usr/* $out
     rmdir $out/usr
   '';
 
   meta = {
-    maintainers = [ lib.maintainers.matthewbauer ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
   };
 }

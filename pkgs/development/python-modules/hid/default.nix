@@ -1,33 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hidapi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  hidapi,
 }:
 
 buildPythonPackage rec {
   pname = "hid";
-  version = "1.0.5";
+  version = "1.0.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HpVOf3q5t8nfx421lQRpLBfbO3EklJK5drFSW5fbsOg=";
+    hash = "sha256-9EcfEfDhdtGwyxskPlVJjMkDR6Ou3nNWVTBDlWlKwYI=";
   };
 
-  propagatedBuildInputs = [ hidapi ];
-
-  checkInputs = [ nose ];
-
- postPatch = ''
+  postPatch = ''
     hidapi=${hidapi}/lib/
     test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
     sed -i -e "s|libhidapi|$hidapi/libhidapi|" hid/__init__.py
   '';
 
-  meta = with lib; {
-    description = "hidapi bindings in ctypes";
+  build-system = [ setuptools ];
+
+  dependencies = [ hidapi ];
+
+  doCheck = false; # no tests
+
+  pythonImportsCheck = [ "hid" ];
+
+  meta = {
+    description = "Hidapi bindings in ctypes";
     homepage = "https://github.com/apmorton/pyhidapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ ];
   };
 }

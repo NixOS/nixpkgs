@@ -1,22 +1,22 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pythonAtLeast
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pythonAtLeast,
 
-# runtime
-, six
+  # runtime
+  six,
 
-# tests
-, freezegun
-, pytest-mock
-, pytestCheckHook
-, tornado_4
+  # tests
+  freezegun,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "lomond";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wildfoundry";
@@ -30,33 +30,33 @@ buildPythonPackage rec {
       --replace "'pytest-runner'" ""
   '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    tornado_4
   ];
 
   disabledTests = [
     # Makes HTTP requests
     "test_proxy"
     "test_live"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/wildfoundry/dataplicity-lomond/issues/91
+    "test_that_on_ping_responds_with_pong"
   ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+  disabledTestPaths = [
     # requires tornado_4, which is not compatible with python3.10
     "tests/test_integration.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Websocket Client Library";
     homepage = "https://github.com/wildfoundry/dataplicity-lomond";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

@@ -1,73 +1,65 @@
-{ lib
-, babel
-, buildPythonPackage
-, cssselect
-, fetchFromGitHub
-, glibcLocales
-, isodate
-, leather
-, lxml
-, nose
-, parsedatetime
-, PyICU
-, python-slugify
-, pytimeparse
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  stdenv,
+  babel,
+  buildPythonPackage,
+  cssselect,
+  fetchFromGitHub,
+  glibcLocales,
+  isodate,
+  leather,
+  lxml,
+  parsedatetime,
+  pyicu,
+  pytestCheckHook,
+  python-slugify,
+  pytimeparse,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "agate";
-  version = "1.6.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wireservice";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
+    repo = "agate";
+    tag = finalAttrs.version;
+    hash = "sha256-REo26vSWFzWsvJzmqlc5A5xEYA2TebQFW6jFRIbH53I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     babel
     isodate
     leather
     parsedatetime
     python-slugify
     pytimeparse
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     glibcLocales
     lxml
-    nose
-    PyICU
-    pytz
+    pyicu
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    # No Python 2 support, thus constraint is not needed
-    substituteInPlace setup.py \
-      --replace "'parsedatetime>=2.1,!=2.5,!=2.6'," "'parsedatetime>=2.1',"
-  '';
-
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests tests
-  '';
-
-  pythonImportsCheck = [
-    "agate"
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Output is slightly different on macOS
+    "test_cast_format_locale"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "agate" ];
+
+  meta = {
     description = "Python data analysis library that is optimized for humans instead of machines";
     homepage = "https://github.com/wireservice/agate";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    changelog = "https://github.com/wireservice/agate/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

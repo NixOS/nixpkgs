@@ -1,24 +1,22 @@
-{ buildDunePackage, ocsipersist-lib
-, lwt_log
-, ocsigen_server
-, pgocaml
-, xml-light
+{
+  buildDunePackage,
+  ocsipersist,
+  logs,
+  pgocaml,
+  xml-light,
 }:
 
 buildDunePackage {
   pname = "ocsipersist-pgsql";
-  inherit (ocsipersist-lib) version src useDune2;
+  inherit (ocsipersist) version src;
 
   propagatedBuildInputs = [
-    lwt_log
-    ocsigen_server
-    ocsipersist-lib
+    logs
+    ocsipersist
     pgocaml
-    xml-light
   ];
 
-  meta = ocsipersist-lib.meta // {
-    description = "Persistent key/value storage (for Ocsigen) using PostgreSQL";
+  meta = ocsipersist.meta // {
+    description = "Persistent key/value storage for OCaml using PostgreSQL";
   };
 }
-

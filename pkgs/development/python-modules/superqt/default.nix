@@ -1,47 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pyqt5
-, qtpy
-, typing-extensions
-, pytestCheckHook
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pint,
+  pygments,
+  pyqt5,
+  pyqt6,
+  pyside2,
+  pyside6,
+  pytestCheckHook,
+  qtpy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.3.8";
-  format = "pyproject";
+  version = "0.7.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "napari";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-zEMG2zscGDlRxtLn/lUTEjZBPabcwzMcj/kMcy3yOs8=";
+    owner = "pyapp-kit";
+    repo = "superqt";
+    tag = "v${version}";
+    hash = "sha256-ipDtwymKocCRwcW/eYpM6jrmrjkYQJlaEyaSV4SinMM=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    pyqt5
-    qtpy
-    typing-extensions
-    pygments
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [
+    pygments
+    qtpy
+    typing-extensions
+  ];
 
-  doCheck = false; # Segfaults...
+  optional-dependencies = {
+    quantity = [ pint ];
+    pyside2 = [ pyside2 ];
+    pyside6 = [ pyside6 ];
+    pyqt6 = [ pyqt6 ];
+    pyqt5 = [ pyqt5 ];
+  };
 
-  pythonImportsCheck = [ "superqt" ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  # Segmentation fault
+  doCheck = false;
 
-  meta = with lib; {
+  # Segmentation fault
+  # pythonImportsCheck = [ "superqt" ];
+
+  meta = {
     description = "Missing widgets and components for Qt-python (napari/superqt)";
     homepage = "https://github.com/napari/superqt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    changelog = "https://github.com/pyapp-kit/superqt/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

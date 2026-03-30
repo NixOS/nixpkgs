@@ -1,45 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, mock
-, httpretty
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  defusedxml,
+  requests,
+  httpretty,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
-  version = "0.5.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdepoix";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oTKvJt6tyv/ESJ5+Io8M8/KnuW4hN2P7w14sldsKwzw=";
+    repo = "youtube-transcript-api";
+    tag = "v${version}";
+    hash = "sha256-FFLbDiZJR+xqaMMjcBQFYgrdJEofTiBdSNmmlMlrNfY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "defusedxml"
+  ];
+
+  dependencies = [
+    defusedxml
     requests
   ];
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     httpretty
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "youtube_transcript_api"
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  disabledTests = [
+    # network access
+    "test_fetch__create_consent_cookie_if_needed"
+    "test_fetch__with_generic_proxy_reraise_when_blocked"
+    "test_fetch__with_proxy_retry_when_blocked"
+    "test_fetch__with_webshare_proxy_reraise_when_blocked"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "youtube_transcript_api" ];
+
+  meta = {
     description = "Python API which allows you to get the transcripts/subtitles for a given YouTube video";
+    mainProgram = "youtube_transcript_api";
     homepage = "https://github.com/jdepoix/youtube-transcript-api";
-    license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/jdepoix/youtube-transcript-api/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

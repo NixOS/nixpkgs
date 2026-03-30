@@ -1,25 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+}:
 
 buildPythonPackage rec {
   pname = "babelfish";
-  version = "0.6.0";
+  version = "0.6.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2dadfadd1b205ca5fa5dc9fa637f5b7933160a0418684c7c46a7a664033208a2";
+    hash = "sha256-3stnpGYIiNSEgKtpmDCYNxdBWNDxqmO+uxwuEaq5eqs=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ poetry-core ];
 
   # no tests executed
   doCheck = false;
 
   pythonImportsCheck = [ "babelfish" ];
 
-  meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/babelfish";
-    description = "A module to work with countries and languages";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+  meta = {
+    homepage = "https://github.com/Diaoul/babelfish";
+    description = "Module to work with countries and languages";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

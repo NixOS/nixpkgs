@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   name = "incron";
@@ -6,16 +6,17 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
   nodes.machine =
     { ... }:
-    { services.incron.enable = true;
+    {
+      services.incron.enable = true;
       services.incron.extraPackages = [ pkgs.coreutils ];
       services.incron.systab = ''
         /test IN_CREATE,IN_MODIFY,IN_CLOSE_WRITE,IN_MOVED_FROM,IN_MOVED_TO echo "$@/$# $%" >> /root/incron.log
       '';
 
       # ensure the directory to be monitored exists before incron is started
-      system.activationScripts.incronTest = ''
-        mkdir /test
-      '';
+      systemd.tmpfiles.settings.incron-test = {
+        "/test".d = { };
+      };
     };
 
   testScript = ''
@@ -49,4 +50,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     # ensure something unexpected is not present
     machine.fail("grep 'IN_OPEN' /root/incron.log")
   '';
-})
+}

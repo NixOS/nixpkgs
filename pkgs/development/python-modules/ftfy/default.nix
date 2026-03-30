@@ -1,27 +1,39 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, wcwidth
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  wcwidth,
+
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.1.1";
+  version = "6.3.1";
+  pyproject = true;
 
-  disabled = !isPy3k;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-v8IBn4T82FFBkVIyCmN1YEoPFFnCgbWxmbLNDS5yf48=";
+  src = fetchFromGitHub {
+    owner = "rspeer";
+    repo = "python-ftfy";
+    tag = "v${version}";
+    hash = "sha256-TmwDJeUDcF+uOB2X5tMmnf9liCI9rP6dYJVmJoaqszo=";
   };
 
-  propagatedBuildInputs = [
-    wcwidth
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
+  dependencies = [ wcwidth ];
+
+  pythonImportsCheck = [ "ftfy" ];
+
+  nativeCheckInputs = [
+    versionCheckHook
     pytestCheckHook
   ];
 
@@ -29,16 +41,17 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTestPaths = [
-    # Calls poetry and fails to match output exactly
-    "tests/test_cli.py"
+  disabledTests = [
+    # https://github.com/rspeer/python-ftfy/issues/226
+    "ftfy.formatting.monospaced_width"
   ];
 
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";
+    mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

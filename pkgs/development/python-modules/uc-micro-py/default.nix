@@ -1,31 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "uc-micro-py";
-  version = "1.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsutsu3";
     repo = "uc.micro-py";
-    rev = "v${version}";
-    hash = "sha256-23mKwoRGjtxpCOC26V8bAN5QEHLDOoSqPeTlUuIrxZ0=";
+    tag = "v${version}";
+    hash = "sha256-Z7XHWeV5I/y19EKg4lzcl9pwRexWnSQ7d8CpQu5xdnI=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [ setuptools ];
+
   pythonImportsCheck = [ "uc_micro" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Micro subset of unicode data files for linkify-it-py";
     homepage = "https://github.com/tsutsu3/uc.micro-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

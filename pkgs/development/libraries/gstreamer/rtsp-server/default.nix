@@ -1,30 +1,35 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gettext
-, gobject-introspection
-, gst-plugins-base
-, gst-plugins-bad
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gettext,
+  gobject-introspection,
+  gst-plugins-base,
+  gst-plugins-bad,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-rtsp-server";
-  version = "1.20.3";
-
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7kAnGL6bEn8OXmbKTBtPQuSSbsk7owe3zMpdxsyXlMo=";
-  };
+  version = "1.26.5";
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
+
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Mo3/JFdBloPypPBsoRnP0ivrYyzuGtaDBZEhMyU1PEQ=";
+  };
 
   nativeBuildInputs = [
     meson
@@ -33,20 +38,23 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3
-
-    # documentation
-    # TODO add hotdoc here
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     gst-plugins-base
     gst-plugins-bad
-    gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
@@ -54,14 +62,22 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with lib; {
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
+  passthru = {
+    updateScript = directoryListingUpdater { };
+  };
+
+  meta = {
     description = "GStreamer RTSP server";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
       A library on top of GStreamer for building an RTSP server.
     '';
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bkchr ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bkchr ];
   };
-}
+})

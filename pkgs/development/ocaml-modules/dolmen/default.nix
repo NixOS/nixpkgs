@@ -1,33 +1,39 @@
-{ lib, fetchurl, buildDunePackage
-, menhir, menhirLib
-, fmt
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  menhir,
+  menhirLib,
+  fmt,
+  hmap,
+  qcheck,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dolmen";
-  version = "0.6";
-
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.08";
+  version = "0.10";
 
   src = fetchurl {
-    url = "https://github.com/Gbury/dolmen/releases/download/v${version}/dolmen-v${version}.tbz";
-    sha256 = "133l23mwxa9xy340izvk4zp5jqjz2cwsm2innsgs2kg85pd39c41";
+    url = "https://github.com/Gbury/dolmen/releases/download/v${finalAttrs.version}/dolmen-${finalAttrs.version}.tbz";
+    hash = "sha256-xchfd+OSTzeOjYLxZu7+QTG04EG/nN7KRnQQ8zxx+mE=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [ menhir ];
-  propagatedBuildInputs = [ menhirLib fmt ];
+  propagatedBuildInputs = [
+    menhirLib
+    fmt
+    hmap
+  ];
 
-  # Testr are not compatible with menhir 20211128
+  # Tests fail with menhir ≥ 20260122
   doCheck = false;
 
+  checkInputs = [ qcheck ];
+
   meta = {
-    description = "An OCaml library providing clean and flexible parsers for input languages";
+    description = "OCaml library providing clean and flexible parsers for input languages";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Gbury/dolmen";
   };
-}
+})

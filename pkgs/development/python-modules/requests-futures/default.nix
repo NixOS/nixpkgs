@@ -1,25 +1,47 @@
-{ buildPythonPackage, fetchPypi, requests, lib }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  greenlet,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-httpbin,
+  werkzeug,
+}:
 
 buildPythonPackage rec {
   pname = "requests-futures";
-  version = "1.0.0";
+  version = "1.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "35547502bf1958044716a03a2f47092a89efe8f9789ab0c4c528d9c9c30bc148";
+  src = fetchFromGitHub {
+    owner = "ross";
+    repo = "requests-futures";
+    tag = "v${version}";
+    hash = "sha256-eUu+M9rPyvc7OaOCCnUvGliK4gicYh6hfB0Jo19Yy1g=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  # tests are disabled because they require being online
-  doCheck = false;
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [
+    greenlet
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-httpbin
+    werkzeug
+  ];
 
   pythonImportsCheck = [ "requests_futures" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python HTTP Requests for Humans using Futures";
     homepage = "https://github.com/ross/requests-futures";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ applePrincess ];
+    changelog = "https://github.com/ross/requests-futures/blob/${src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ applePrincess ];
   };
 }

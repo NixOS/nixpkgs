@@ -1,28 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pytest-runner
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
-  version = "0.6.4";
+  version = "0.7.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-kr7JUorjTScok8yvK1J9+FwxT/KM+7MFY0BGewldg0w=";
+  src = fetchFromGitHub {
+    owner = "earwig";
+    repo = "mwparserfromhell";
+    tag = "v${version}";
+    hash = "sha256-yPj272bMh/pLapc7lDgP4+AnDBpE2FrDICRUxizIcSA=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-runner
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  meta = with lib; {
-    description = "MWParserFromHell is a parser for MediaWiki wikicode";
-    homepage = "https://mwparserfromhell.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ melling ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "mwparserfromhell" ];
+
+  meta = {
+    description = "Parser for MediaWiki wikicode";
+    homepage = "https://mwparserfromhell.readthedocs.io/";
+    changelog = "https://github.com/earwig/mwparserfromhell/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

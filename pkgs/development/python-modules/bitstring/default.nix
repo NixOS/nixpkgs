@@ -1,40 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bitarray,
+  setuptools,
+  pytest-benchmark,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "3.1.9";
+  version = "4.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
-    repo = pname;
-    rev = "bitstring-${version}";
-    sha256 = "0y2kcq58psvl038r6dhahhlhp1wjgr5zsms45wyz1naq6ri8x9qa";
+    repo = "bitstring";
+    tag = "bitstring-${version}";
+    hash = "sha256-ZABAd42h+BqcpKTFV5PxcBN3F8FKV6Qw3rhP13eX57k=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-running-unit-tests-using-unittest-hook.patch";
-      url = "https://github.com/scott-griffiths/bitstring/commit/e5ee3fd41cad2ea761f4450b13b0424ae7262331.patch";
-      hash = "sha256-+ZGywIfQQcYXJlYZBi402ONnysYm66G5zE4duJE40h8=";
-    })
+  pythonRelaxDeps = [ "bitarray" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ bitarray ];
+
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  pytestFlags = [
+    "--benchmark-disable"
+  ];
 
-  unittestFlagsArray = [ "-s" "test" ];
+  disabledTestPaths = [
+    "tests/test_bits.py"
+    "tests/test_fp8.py"
+    "tests/test_mxfp.py"
+  ];
 
   pythonImportsCheck = [ "bitstring" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

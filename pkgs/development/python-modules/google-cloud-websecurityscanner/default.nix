@@ -1,36 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, libcst
-, mock
-, protobuf
-, proto-plus
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.9.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.19.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fUnoV5I9kMwC9zUdsHit6MbIYFV+3E+GT76vwEmzNNs=";
+    pname = "google_cloud_websecurityscanner";
+    inherit version;
+    hash = "sha256-ZNPoAbzhytetU1XauosOQ4jpjJd+AkEZC70gPfnZ6OY=";
   };
 
-  propagatedBuildInputs = [
-    google-api-core
-    libcst
-    protobuf
-    proto-plus
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  checkInputs = [
+  dependencies = [
+    google-api-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
@@ -41,10 +46,11 @@ buildPythonPackage rec {
     "google.cloud.websecurityscanner_v1beta"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Web Security Scanner API client library";
-    homepage = "https://github.com/googleapis/python-websecurityscanner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-websecurityscanner";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-websecurityscanner-v${version}/packages/google-cloud-websecurityscanner";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

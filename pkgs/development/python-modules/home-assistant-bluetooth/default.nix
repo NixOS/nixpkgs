@@ -1,51 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, bleak
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+  setuptools,
+
+  # dependencies
+  habluetooth,
+
+  # tests
+  bleak,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.6.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.9";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6w940Yn0WgVC0Rn9OX40+6hO4maPSC7VrT3ARD8CIjQ=";
+    repo = "home-assistant-bluetooth";
+    tag = "v${version}";
+    hash = "sha256-A29Jezj9kQ/v4irvpcpCiZlrNQBQwByrSJOx4HaXTdc=";
   };
 
-  postPatch = ''
-    # drop pytest parametrization (coverage, etc.)
-    sed -i '/addopts/d' pyproject.toml
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [ habluetooth ];
+
+  doCheck = false; # broken with habluetooth>=4.0
+
+  nativeCheckInputs = [
     bleak
-  ];
-
-  pythonImportsCheck = [
-    "home_assistant_bluetooth"
-  ];
-
-  checkInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "home_assistant_bluetooth" ];
+
+  meta = {
     description = "Basic bluetooth models used by Home Assistant";
-    changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/home-assistant-libs/home-assistant-bluetooth";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

@@ -1,69 +1,86 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  replaceVars,
 
-# runtime
-, ffmpeg
+  # build-system
+  setuptools,
 
-# propagates
-, numpy
-, torch
-, tqdm
-, more-itertools
-, transformers
-, ffmpeg-python
+  # runtime
+  ffmpeg-headless,
 
-# tests
-, pytestCheckHook
+  # dependencies
+  more-itertools,
+  numba,
+  numpy,
+  triton,
+  tiktoken,
+  torch,
+  tqdm,
+
+  # tests
+  pytestCheckHook,
+  scipy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "unstable-2022-09-30";
-  format = "setuptools";
+  version = "20250625";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
-    rev = "60132ade70e00b843d93542fcb37b58c0d8bf9e7";
-    hash = "sha256-4mhlCvewA0bVo5bq2sbSEKHq99TQ6jUauiCUkdRSdas=";
+    repo = "whisper";
+    rev = "v${version}";
+    hash = "sha256-Zn2HUCor1eCJBP7q0vpffqhw5SNguz8zCGoPgdt6P+c=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
-      inherit ffmpeg;
+    (replaceVars ./ffmpeg-path.patch {
+      ffmpeg = ffmpeg-headless;
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    more-itertools
+    numba
     numpy
+    tiktoken
     torch
     tqdm
-    more-itertools
-    transformers
-    ffmpeg-python
-  ];
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    scipy
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
     # requires network access to download models
     "test_transcribe"
+
+    # requires NVIDIA drivers
+    "test_dtw_cuda_equivalence"
+    "test_median_filter_equivalence"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "test_dtw"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
+    mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MayNiklas ];
   };
 }
-

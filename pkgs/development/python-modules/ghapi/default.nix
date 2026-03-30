@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, fastcore
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fastcore,
+  packaging,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ghapi";
-  version = "1.0.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.0.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "ghapi";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-nH3OciLhet4620WAEmm8mUAmlnpniyIsF2oIzqbZ7FI=";
+    tag = finalAttrs.version;
+    hash = "sha256-2x9uiULYniFVpUNgRie4i49xEqtYfq/9u/07eozw0WQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fastcore
     packaging
   ];
@@ -29,14 +29,13 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ghapi"
-  ];
+  pythonImportsCheck = [ "ghapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to GitHub's API";
     homepage = "https://github.com/fastai/ghapi";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fastai/ghapi/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

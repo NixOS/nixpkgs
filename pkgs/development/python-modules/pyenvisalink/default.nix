@@ -1,25 +1,26 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  colorlog,
+  fetchPypi,
+  pyserial,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyenvisalink";
-  version = "4.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.9";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-CQvomHYNMrf0oQjNCcLyisxIV2+3TOgEPzA9seZYsOs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-WtBopLUCArWM4JwA517bnYidfOwqU3v7ApZCbsMuY/o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     colorlog
     pyserial
@@ -28,14 +29,13 @@ buildPythonPackage rec {
   # Tests require an Envisalink device
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyenvisalink"
-  ];
+  pythonImportsCheck = [ "pyenvisalink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for Envisalink 2DS/3 Alarm API";
     homepage = "https://github.com/Cinntax/pyenvisalink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ufodone/pyenvisalink/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

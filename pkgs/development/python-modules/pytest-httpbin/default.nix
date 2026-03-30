@@ -1,56 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpbin
-, pytest
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpbin,
+  pytest,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpbin";
-  version = "1.0.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "pytest-httpbin";
-    rev = "v${version}";
-    hash = "sha256-S4ThQx4H3UlKhunJo35esPClZiEn7gX/Qwo4kE1QMTI=";
+    tag = "v${version}";
+    hash = "sha256-gESU1SDpqSQs8GRcGJclWM0WpS4DZicfdtwxk2sQubQ=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    httpbin
-    six
-  ];
+  buildInputs = [ pytest ];
 
-  preCheck = ''
-    # Remove assertion that doesn't hold for Flask 2.1.0
-    substituteInPlace tests/test_server.py \
-      --replace "assert response.headers['Location'].startswith('https://')" ""
-  '';
+  propagatedBuildInputs = [ httpbin ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];
 
-  pythonImportsCheck = [
-    "pytest_httpbin"
+  disabledTests = [
+    # incompatible with flask 2.3
+    "test_redirect_location_is_https_for_secure_server"
+    # Timeout on Hydra
+    "test_dont_crash_on_handshake_timeout"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "pytest_httpbin" ];
+
+  meta = {
     description = "Test your HTTP library against a local copy of httpbin.org";
     homepage = "https://github.com/kevin1024/pytest-httpbin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/kevin1024/pytest-httpbin/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

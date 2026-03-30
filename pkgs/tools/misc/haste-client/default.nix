@@ -1,19 +1,18 @@
-{ lib
-, bundlerApp
-, buildRubyGem
-, ruby
+{
+  lib,
+  bundlerApp,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "haste";
   gemdir = ./.;
   exes = [ "haste" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to the AnyStyle Parser and Finder";
-    homepage    = "https://rubygems.org/gems/haste";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ shamilton ];
-    platforms   = platforms.unix;
+    homepage = "https://rubygems.org/gems/haste";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    mainProgram = "haste";
   };
 }

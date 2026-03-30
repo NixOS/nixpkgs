@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, libX11
-, libXext
-, libXrandr
-, libXinerama
-, libglvnd
-, openal
-, glibc
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  libx11,
+  libxext,
+  libxrandr,
+  libxinerama,
+  libglvnd,
+  openal,
+  glibc,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
 }:
 let
   version = "1.3";
@@ -77,21 +78,24 @@ stdenv.mkDerivation {
 
   buildInputs = [
     stdenv.cc.cc
-    libX11
-    libXext
-    libXrandr
-    libXinerama
+    libx11
+    libxext
+    libxrandr
+    libxinerama
   ];
 
   dontUnpack = true;
 
   meta = {
-    description = "The Unigine Heaven GPU benchmarking tool";
+    description = "Unigine Heaven GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/tropics";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = [ ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     mainProgram = "Tropics";
   };
 }

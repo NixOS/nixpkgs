@@ -1,9 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi
-, pygments, dominate, beautifulsoup4, docutils, sphinx }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
+  dominate,
+  beautifulsoup4,
+  docutils,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "alectryon";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,10 +29,11 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cpitclaudel/alectryon";
-    description = "A collection of tools for writing technical documents that mix Coq code and prose";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 ];
+    description = "Collection of tools for writing technical documents that mix Coq code and prose";
+    mainProgram = "alectryon";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
   };
 }

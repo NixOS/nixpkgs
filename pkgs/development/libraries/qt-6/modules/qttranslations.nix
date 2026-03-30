@@ -1,8 +1,12 @@
-{ qtModule
-, qttools
+{
+  qtModule,
+  qttools,
 }:
 
 qtModule {
   pname = "qttranslations";
-  qtInputs = [ qttools ];
+  nativeBuildInputs = [ qttools ];
+  separateDebugInfo = false;
+  outputs = [ "out" ];
+  allowedReferences = [ "out" ];
 }

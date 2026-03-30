@@ -1,15 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "pyvolumio";
   version = "0.1.5";
-
-  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "OnFreund";
@@ -25,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvolumio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to control Volumio";
     homepage = "https://github.com/OnFreund/PyVolumio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,21 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "lima";
   version = "0.5";
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qqj0053r77ppkcyyk2fhpaxjzsl1h98nf9clpny6cs66sdl241v";
+    hash = "sha256-OxBBmzZGM+PtpSw5ixIMVH/Z1YVOTO/ZvPecPAoAEmM=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
-    description = "Lightweight Marshalling of Python 3 Objects.";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "lima" ];
+
+  meta = {
+    description = "Lightweight Marshalling of Python Objects";
     homepage = "https://github.com/b6d/lima";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    changelog = "https://github.com/b6d/lima/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

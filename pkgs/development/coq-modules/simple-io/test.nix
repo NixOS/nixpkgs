@@ -1,16 +1,23 @@
-{ stdenv, coq, simple-io }:
+{
+  stdenv,
+  coq,
+  simple-io,
+}:
 
 stdenv.mkDerivation {
   pname = "coq-simple-io-test";
   inherit (simple-io) src version;
-  checkInputs = [ coq simple-io ];
+  nativeCheckInputs = [
+    coq
+    simple-io
+  ];
   dontConfigure = true;
   dontBuild = true;
   doCheck = true;
 
   checkPhase = ''
     cd test
-    for p in Argv.v Example.v HelloWorld.v TestExtraction.v TestPervasives.v
+    for p in Argv.v Example.v HelloWorld.v TestExtraction.v TestOcamlbuild.v TestPervasives.v
     do
       [ -f $p ] && echo $p && coqc $p
     done

@@ -1,13 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  six,
 }:
 
 buildPythonPackage rec {
   version = "0.12.0";
+  format = "setuptools";
   pname = "pyfribidi";
   disabled = isPyPy;
 
@@ -21,10 +23,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  meta = with lib; {
-    description = "A simple wrapper around fribidi";
+  meta = {
+    description = "Simple wrapper around fribidi";
     homepage = "https://github.com/pediapress/pyfribidi";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
-
 }

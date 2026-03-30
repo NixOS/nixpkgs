@@ -1,39 +1,35 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.0.21";
-  format = "setuptools";
+  version = "1.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchFromGitHub {
-    owner = "andrey-git";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-YvriIG2G0NVlpzT91Ev13OJq8lNluqdEOTIQFQeWekI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Otk5W3VTbOAeZOVnXvW8VSxU1nHa8zUvmvduRTdlwVs=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  build-system = [ poetry-core ];
 
-  # no tests implemented
+  dependencies = [ aiohttp ];
+
+  # No tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysensibo"
-  ];
+  pythonImportsCheck = [ "pysensibo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Sensibo";
     homepage = "https://github.com/andrey-git/pysensibo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/andrey-git/pysensibo/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,56 +1,57 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, confluent-kafka
-, distributed
-, fetchpatch
-, fetchPypi
-, flaky
-, graphviz
-, networkx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
-, toolz
-, tornado
-, zict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  toolz,
+  tornado,
+  zict,
+
+  # tests
+  dask,
+  distributed,
+  flaky,
+  pandas,
+  pyarrow,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamz";
-  version = "0.6.4";
-  format = "setuptools";
+  version = "0.6.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
+  src = fetchFromGitHub {
+    owner = "python-streamz";
+    repo = "streamz";
+    tag = finalAttrs.version;
+    hash = "sha256-OoWFOACrJ8zXJJ1bmRukj04zx+s1Zgg9KqlJooLDRW0=";
   };
 
-  propagatedBuildInputs = [
-    networkx
-    six
+  build-system = [ setuptools ];
+
+  dependencies = [
     toolz
     tornado
     zict
   ];
 
-  checkInputs = [
-    confluent-kafka
+  nativeCheckInputs = [
+    dask
     distributed
     flaky
-    graphviz
+    pandas
+    pyarrow
     pytest-asyncio
     pytestCheckHook
-    requests
   ];
 
-  pythonImportsCheck = [
-    "streamz"
-  ];
+  pythonImportsCheck = [ "streamz" ];
 
   disabledTests = [
     # Error with distutils version: fixture 'cleanup' not found
@@ -59,25 +60,18 @@ buildPythonPackage rec {
     "test_partition_then_scatter_sync"
     "test_sync"
     "test_sync_2"
-    # Test fail in the sandbox
-    "test_tcp_async"
-    "test_tcp"
-    "test_partition_timeout"
+
     # Tests are flaky
-    "test_from_iterable"
     "test_buffer"
+    "test_partition_timeout_cancel"
   ];
 
-  disabledTestPaths = [
-    # Disable kafka tests
-    "streamz/tests/test_kafka.py"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

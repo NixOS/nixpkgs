@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "linode";
   version = "0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ghickman/linode";
-    description = "A thin python wrapper around Linode's API";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    description = "Thin python wrapper around Linode's API";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

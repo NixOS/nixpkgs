@@ -1,38 +1,40 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mame;
-  mame = "mame${lib.optionalString pkgs.stdenv.is64bit "64"}";
+  mame = "mame${lib.optionalString pkgs.stdenv.hostPlatform.is64bit "64"}";
 in
 {
   options = {
     services.mame = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to setup TUN/TAP Ethernet interface for MAME emulator.
         '';
       };
-      user = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
+      user = lib.mkOption {
+        type = lib.types.str;
+        description = ''
           User from which you run MAME binary.
         '';
       };
-      hostAddr = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
+      hostAddr = lib.mkOption {
+        type = lib.types.str;
+        description = ''
           IP address of the host system. Usually an address of the main network
           adapter or the adapter through which you get an internet connection.
         '';
         example = "192.168.31.156";
       };
-      emuAddr = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
+      emuAddr = lib.mkOption {
+        type = lib.types.str;
+        description = ''
           IP address of the guest system. The same you set inside guest OS under
           MAME. Should be on the same subnet as {option}`services.mame.hostAddr`.
         '';
@@ -41,7 +43,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.mame ];
 
     security.wrappers."${mame}" = {
@@ -65,5 +67,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 }

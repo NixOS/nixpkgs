@@ -1,65 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchurl
-, importlib-resources
-, pytestCheckHook
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+  pytestCheckHook,
+  python,
+  setuptools,
 }:
 let
   table = fetchurl {
     # See https://github.com/dahlia/iso4217/blob/main/setup.py#L19
-    url = "http://www.currency-iso.org/dam/downloads/lists/list_one.xml";
-    hash = "sha256-bp8uTMR1YRaI2cJLo0kdt9xD4nNaWK+LdlheWQ26qy0=";
+    url = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml";
+    hash = "sha256-r1mRvI/qcOYOGKVzXHJGFdYxc+YlzpcdnWJExaF0Mp0=";
   };
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.11";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zJYtEIrsuHKPwnSoRjyZC/0rgAZoNMZ0Oh8gQcIb20Q=";
+    repo = "iso4217";
+    tag = version;
+    hash = "sha256-C7TwGlbTwpcJ0rE7notWzZHthWzXKMPbHq00zMhfHeA=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     # The table is already downloaded
     export ISO4217_DOWNLOAD=0
     # Copy the table file to satifiy the build process
-    cp -r ${table} $pname/table.xml
+    cp -r ${table} iso4217/table.xml
   '';
 
   postInstall = ''
     # Copy the table file
-    cp -r ${table} $out/${python.sitePackages}/$pname/table.xml
+    cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  pytestFlagsArray = [
-    "$pname/test.py"
-  ];
+  enabledTestPaths = [ "iso4217/test.py" ];
 
-  pythonImportsCheck = [
-    "iso4217"
-  ];
+  pythonImportsCheck = [ "iso4217" ];
 
-  meta = with lib; {
+  meta = {
     description = "ISO 4217 currency data package for Python";
     homepage = "https://github.com/dahlia/iso4217";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

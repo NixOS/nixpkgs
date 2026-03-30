@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, samba
-, pkg-config
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  samba,
+  pkg-config,
 }:
 
 buildPythonPackage rec {
   pname = "pysmbc";
-  version = "1.0.23";
+  version = "1.0.25.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y0n1n6jkzf4mr5lqfc73l2m0qp56gvxwfjnx2vj8c0hh5i1gnq8";
+    hash = "sha256-IvFxXfglif2cxCU/6rOQtO8Lq/FPZFE82NB7N4mWMiY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,12 +22,13 @@ buildPythonPackage rec {
 
   # Tests would require a local SMB server
   doCheck = false;
+
   pythonImportsCheck = [ "smbc" ];
 
-  meta = with lib; {
-    description = "libsmbclient binding for Python";
+  meta = {
+    description = "Libsmbclient binding for Python";
     homepage = "https://github.com/hamano/pysmbc";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,56 +1,55 @@
-{ lib, stdenv, fetchFromGitHub, faust2jack, faust2lv2, helmholtz, mrpeach, puredata-with-plugins }:
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jack,
+  faust2lv2,
+  helmholtz,
+  puredata-with-plugins,
+  jack-example-tools,
+}:
+let
+  plugins = [
+    helmholtz
+  ];
+  pitchTracker = puredata-with-plugins plugins;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "VoiceOfFaust";
-  version = "1.1.4";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "VoiceOfFaust";
-    rev = "V${version}";
-    sha256 = "0la9b806qwrlsxgbir7n1db8v3w24wmd6k43p6qpr1fjjpkhrrgw";
+    tag = "V${finalAttrs.version}";
+    sha256 = "sha256-wsc4yzytK2hPVBQwMhdhjnH1pDtpkNCFJnItyzszEs0=";
   };
 
-  plugins = [ helmholtz mrpeach ];
+  nativeBuildInputs = [
+    faust2jack
+    faust2lv2
+  ];
 
-  pitchTracker = puredata-with-plugins plugins;
+  enableParallelBuilding = true;
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  dontWrapQtApps = true;
 
-  runtimeInputs = [ pitchTracker ];
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
 
   patchPhase = ''
-    sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/synthWrapper
-    sed -i "s@../PureData/OscSendVoc.pd@$out/PureData/OscSendVoc.pd@g" launchers/pitchTracker
-  '';
-
-  buildPhase = ''
-    sh install.sh
-    # so it doesn;t end up in /bin/ :
-    rm -f install.sh
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-
-    for file in ./*; do
-      if test -x "$file" && test -f "$file"; then
-        cp "$file" "$out/bin"
-      fi
-    done
-
-    cp launchers/* $out/bin/
-    mkdir $out/PureData/
-    # cp PureData/OscSendVoc.pd $out/PureData/OscSendVoc.pd
-    cp PureData/* $out/PureData/
-
-    mkdir -p $out/lib/lv2
-    cp -r *.lv2/ $out/lib/lv2
+    sed -i "s@jack_connect@${jack-example-tools}/bin/jack_connect@g" launchers/synthWrapper
+    sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/pitchTracker
+    sed -i "s@../PureData/OscSendVoc.pd@$out/bin/PureData/OscSendVoc.pd@g" launchers/pitchTracker
+    sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/pitchTrackerGUI
+    sed -i "s@../PureData/OscSendVoc.pd@$out/bin/PureData/OscSendVoc.pd@g" launchers/pitchTrackerGUI
   '';
 
   meta = {
     description = "Turn your voice into a synthesizer";
     homepage = "https://github.com/magnetophon/VoiceOfFaust";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

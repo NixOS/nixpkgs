@@ -1,0 +1,28 @@
+Rebase of 2 upstream commits:
+https://github.com/llvm/llvm-project/commit/41eb186fbb024898bacc2577fa3b88db0510ba1f
+https://github.com/llvm/llvm-project/commit/101109fc5460d5bb9bb597c6ec77f998093a6687
+
+diff --git a/include/mlir/Dialect/Affine/IR/ValueBoundsOpInterfaceImpl.h b/include/mlir/Dialect/Affine/IR/ValueBoundsOpInterfaceImpl.h
+index 451c466fa0c95..642e99d963ef6 100644
+--- a/include/mlir/Dialect/Affine/IR/ValueBoundsOpInterfaceImpl.h
++++ b/include/mlir/Dialect/Affine/IR/ValueBoundsOpInterfaceImpl.h
+@@ -10,6 +10,7 @@
+ #define MLIR_DIALECT_AFFINE_IR_VALUEBOUNDSOPINTERFACEIMPL_H
+ 
+ #include "mlir/Support/LogicalResult.h"
++#include <cstdint>
+ 
+ namespace mlir {
+ class DialectRegistry;
+diff --git a/include/mlir/Target/SPIRV/Deserialization.h b/include/mlir/Target/SPIRV/Deserialization.h
+index e39258beeaac8..a346a7fd1e5f7 100644
+--- a/include/mlir/Target/SPIRV/Deserialization.h
++++ b/include/mlir/Target/SPIRV/Deserialization.h
+@@ -15,6 +15,7 @@
+ 
+ #include "mlir/IR/OwningOpRef.h"
+ #include "mlir/Support/LLVM.h"
++#include <cstdint>
+ 
+ namespace mlir {
+ class MLIRContext;

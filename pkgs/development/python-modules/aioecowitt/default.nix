@@ -1,46 +1,45 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, meteocalc
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  meteocalc,
+  pytest-aiohttp,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioecowitt";
-  version = "2022.09.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "2025.9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-aYnRHr4YrYmO3a1V8HFac1T37WIC0Abp3Dhy9vDrQfE=";
+    repo = "aioecowitt";
+    tag = version;
+    hash = "sha256-lQ2t8u3+sk8wnNfCZs2yhe9nsZwiGBHXPDz95egacsI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     meteocalc
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioecowitt"
-  ];
+  pythonImportsCheck = [ "aioecowitt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for the EcoWitt protocol";
     homepage = "https://github.com/home-assistant-libs/aioecowitt";
     changelog = "https://github.com/home-assistant-libs/aioecowitt/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,39 +1,31 @@
-{ lib
-, buildPythonPackage
-, django
-, netaddr
-, six
-, fetchFromGitHub
-# required for tests
-#, djangorestframework
-#, psycopg2
-#, unittest2
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  django,
+  netaddr,
+  six,
+  fetchFromGitHub,
+  djangorestframework,
+  # required for tests
+  postgresql,
+  postgresqlTestHook,
+  psycopg2,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
-  version = "1.2.2";
   pname = "django-postgresql-netfields";
+  version = "1.3.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jimfunk";
-    repo = pname;
+    repo = "django-postgresql-netfields";
     rev = "v${version}";
-    sha256 = "1rrh38f3zl3jk5ijs6g75dxxvxygf4lczbgc7ahrgzf58g4a48lm";
+    hash = "sha256-iZ6KmbVlp2nf3T0Pj4XD1einhoK0kmUmUXOZBmmrzZw=";
   };
-
-  # tests need a postgres database
-  doCheck = false;
-
-  # keeping the dependencies below as comment for reference
-  # checkPhase = ''
-    # python manage.py test
-  # '';
-
-  # buildInputs = [
-    # djangorestframework
-    # psycopg2
-    # unittest2
-  # ];
 
   propagatedBuildInputs = [
     django
@@ -41,9 +33,25 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with lib; {
+  doCheck = !stdenv.hostPlatform.isDarwin; # could not create shared memory segment: Operation not permitted
+
+  nativeCheckInputs = [
+    djangorestframework
+    postgresql
+    postgresqlTestHook
+    psycopg2
+    pytestCheckHook
+    pytest-django
+  ];
+
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
+  env.DJANGO_SETTINGS_MODULE = "testsettings";
+
+  meta = {
     description = "Django PostgreSQL netfields implementation";
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
-    license = licenses.bsd2;
+    changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${version}/CHANGELOG";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

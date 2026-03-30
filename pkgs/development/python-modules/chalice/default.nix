@@ -1,65 +1,59 @@
-{ lib
-, attrs
-, botocore
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, hypothesis
-, inquirer
-, jmespath
-, mock
-, mypy-extensions
-, pip
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, six
-, typing
-, watchdog
-, websocket-client
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
+  click,
+  inquirer,
+  jmespath,
+  pip,
+  pyyaml,
+  six,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+  requests,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.27.1";
+  version = "1.32.0";
+  pyproject = true;
+
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Qz8kYXu2NmcgtW8GbmLPfB4BOearEycE6EMmQRXmWeI=";
+    repo = "chalice";
+    tag = version;
+    hash = "sha256-7qmE78aFfq9XCl2zcx1dAVKZZb96Bu47tSW1Qp2vFl4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "attrs>=19.3.0,<21.5.0" "attrs" \
-      --replace "pip>=9,<22.2" "pip" \
-      --replace "typing==3.6.4" "typing"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     botocore
     click
     inquirer
     jmespath
-    mypy-extensions
     pip
     pyyaml
-    setuptools
+    # setuptools
     six
-    wheel
-    watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
-  checkInputs = [
+  pythonRelaxDeps = [ "pip" ];
+
+  nativeCheckInputs = [
     hypothesis
-    mock
     pytestCheckHook
     requests
     websocket-client
@@ -86,17 +80,22 @@ buildPythonPackage rec {
     # Don't build
     "test_can_generate_pipeline_for_all"
     "test_build_wheel"
-    # https://github.com/aws/chalice/issues/1850
-    "test_resolve_endpoint"
-    "test_endpoint_from_arn"
+    # Tests require dist
+    "test_setup_tar_gz_hyphens_in_name"
+    "test_both_tar_gz"
+    "test_both_tar_bz2"
+    # AssertionError
+    "test_no_error_message_printed_on_empty_reqs_file"
   ];
 
   pythonImportsCheck = [ "chalice" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Serverless Microframework for AWS";
+    mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/aws/chalice/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

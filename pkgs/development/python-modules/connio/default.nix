@@ -1,10 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, serialio
-, sockio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  serialio,
+  sockio,
 }:
 
 buildPythonPackage rec {
@@ -12,12 +11,10 @@ buildPythonPackage rec {
   version = "0.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "connio";
+    tag = "v${version}";
     hash = "sha256-fPM7Ya69t0jpZhKM2MTk6BwjvoW3a8SV3k000LB9Ypo=";
   };
 
@@ -29,14 +26,12 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "connio"
-  ];
+  pythonImportsCheck = [ "connio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for concurrency agnostic communication";
     homepage = "https://github.com/tiagocoutinho/connio";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

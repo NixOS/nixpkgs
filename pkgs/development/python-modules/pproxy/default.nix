@@ -1,32 +1,49 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, uvloop
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  uvloop,
+  asyncssh,
+  aioquic,
+  python-daemon,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pproxy";
-  version = "2.3.7";
+  version = "2.7.9";
+  pyproject = true;
 
-  disabled = isPy27;
-
-  # doesn't use tagged releases. Tests not in PyPi versioned releases
   src = fetchFromGitHub {
     owner = "qwj";
     repo = "python-proxy";
-    rev = "7fccf8dd62204f34b0aa3a70fc568fd6ddff7728";
-    sha256 = "1sl2i0kymnbsk49ina81yjnkxjy09541f7pmic8r6rwsv1s87skc";
+    tag = version;
+    hash = "sha256-DWxbU2LtXzec1T175cMVJuWuhnxWYhe0FH67stMyOTM=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodome
-    uvloop
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  optional-dependencies = {
+    accelerated = [
+      pycryptodome
+      uvloop
+    ];
+    sshtunnel = [ asyncssh ];
+    quic = [ aioquic ];
+    daemon = [ python-daemon ];
+  };
+
+  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pproxy" ];
-  disabledTests = [ "api_server" "api_client" ];  # try to connect to outside Internet, so disabled
+
+  disabledTests = [
+    # Tests try to connect to outside Internet, so disabled
+    "api_server"
+    "api_client"
+  ];
+
   # test suite doesn't use test runner. so need to run ``python ./tests/*``
   checkPhase = ''
     shopt -s extglob
@@ -36,10 +53,11 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proxy server that can tunnel among remote servers by regex rules";
+    mainProgram = "pproxy";
     homepage = "https://github.com/qwj/python-proxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ryand56 ];
   };
 }

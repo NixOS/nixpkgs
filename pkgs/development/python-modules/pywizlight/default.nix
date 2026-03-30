@@ -1,38 +1,32 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.5.14";
+  version = "0.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sbidy";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-IkuAYEg5nuUT6zxmuJe6afp4MVWf0+HAnEoAdOrdTvQ=";
+    repo = "pywizlight";
+    tag = "v${version}";
+    hash = "sha256-rCoWdqvFLSLNBAHeFJ6f9kZpIg4WyE8VJLpmsYl+gJM=";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = [
     # Tests requires network features (e. g., discovery testing)
@@ -43,15 +37,14 @@ buildPythonPackage rec {
     "test_error_PilotBuilder_cold_white_lower"
   ];
 
-  pythonImportsCheck = [
-    "pywizlight"
-  ];
+  pythonImportsCheck = [ "pywizlight" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python connector for WiZ light bulbs";
+    mainProgram = "wizlight";
     homepage = "https://github.com/sbidy/pywizlight";
-    changelog = "https://github.com/sbidy/pywizlight/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sbidy/pywizlight/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

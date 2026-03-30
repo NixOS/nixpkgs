@@ -1,7 +1,11 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
-with lib;
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "semantics";
   owner = "coq-community";
   releaseRev = v: "v${v}";
@@ -15,13 +19,30 @@ mkCoqDerivation rec {
   release."8.6.0".sha256 = "sha256-GltkGQ3tJqUPAbdDkqqvKLLhMOap50XvGaCkjshiNdY=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.16"; out = "8.14.0"; }
-    { case = "8.9"; out = "8.9.0"; }
-    { case = "8.8"; out = "8.8.0"; }
-    { case = "8.7"; out = "8.7.0"; }
-    { case = "8.6"; out = "8.6.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.10" "8.18";
+        out = "8.14.0";
+      }
+      {
+        case = "8.9";
+        out = "8.9.0";
+      }
+      {
+        case = "8.8";
+        out = "8.8.0";
+      }
+      {
+        case = "8.7";
+        out = "8.7.0";
+      }
+      {
+        case = "8.6";
+        out = "8.6.0";
+      }
+    ] null;
 
   mlPlugin = true;
   nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
@@ -35,13 +56,13 @@ mkCoqDerivation rec {
   '';
 
   meta = {
-    description = "A survey of programming language semantics styles in Coq";
+    description = "Survey of programming language semantics styles in Coq";
     longDescription = ''
       A survey of semantics styles in Coq, from natural semantics through
       structural operational, axiomatic, and denotational semantics, to
       abstract interpretation
     '';
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.mit;
   };
 }

@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 (echo "#!$SHELL"; \
  echo 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$@"') > ssh
 chmod +x ssh
@@ -23,5 +21,3 @@ else
 fi
 (cd export && cvs -f -z0 -d "$cvsRoot" export $tag "$module")
 mv export/* $out
-
-stopNest

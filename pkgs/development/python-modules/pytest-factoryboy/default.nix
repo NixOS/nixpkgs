@@ -1,47 +1,55 @@
-{ lib
-, buildPythonPackage
-, factory_boy
-, fetchFromGitHub
-, inflection
-, mock
-, pytest
-, pytestcache
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # unpropagated
+  pytest,
+
+  # propagated
+  inflection,
+  factory-boy,
+  typing-extensions,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-factoryboy";
-  version = "2.1.0";
+  version = "2.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-factoryboy";
     rev = version;
-    sha256 = "0v6b4ly0p8nknpnp3f4dbslfsifzzjx2vv27rfylx04kzdhg4m9p";
+    sha256 = "sha256-9dMsUujMCk89Ze4H9VJRS+ihjk0PAxKb8xqlw0+ROEI=";
   };
+
+  build-system = [ poetry-core ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    factory_boy
+  dependencies = [
+    factory-boy
     inflection
+    typing-extensions
   ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-    pytestcache
-    pytest-cov
-  ];
-
-  pytestFlagsArray = [ "--ignore=docs" ];
   pythonImportsCheck = [ "pytest_factoryboy" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [ "docs" ];
+
+  meta = {
     description = "Integration of factory_boy into the pytest runner";
     homepage = "https://pytest-factoryboy.readthedocs.io/en/latest/";
-    maintainers = with maintainers; [ winpat ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ winpat ];
+    license = lib.licenses.mit;
   };
 }

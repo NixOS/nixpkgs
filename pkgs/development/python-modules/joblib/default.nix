@@ -1,44 +1,62 @@
-{ lib
-, pythonAtLeast
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, stdenv
-, numpydoc
-, pytestCheckHook
-, lz4
-, setuptools
-, sphinx
-, psutil
-}:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  stdenv,
 
+  # build-system
+  setuptools,
+
+  # propagates (optional, but unspecified)
+  # https://github.com/joblib/joblib#dependencies
+  lz4,
+  psutil,
+
+  # tests
+  pytestCheckHook,
+  threadpoolctl,
+}:
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.2.0";
-  disabled = pythonOlder "3.7";
+  version = "1.5.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4c7kp55K8iiBFk8hjUMR9gB0GX+3B+CC6AO2H20TcBg=";
+    hash = "sha256-hWGjJp5oARBoY/0NbYS7c3vp52MeM6rtP7nOWVNojaM=";
   };
 
-  checkInputs = [ sphinx numpydoc pytestCheckHook psutil ];
-  propagatedBuildInputs = [ lz4 setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  pytestFlagsArray = [ "joblib/test" ];
+  propagatedBuildInputs = [
+    lz4
+    psutil
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    threadpoolctl
+  ];
+
+  enabledTestPaths = [ "joblib/test" ];
+
   disabledTests = [
     "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
     "test_parallel_call_cached_function_defined_in_jupyter" # jupyter not available during tests
     "test_nested_parallel_warnings" # tests is flaky under load
-  ] ++ lib.optionals stdenv.isDarwin [
+    "test_memory" # tests - and the module itself - assume strictatime mount for build directory
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/joblib/joblib/releases/tag/${version}";
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

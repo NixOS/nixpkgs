@@ -1,40 +1,71 @@
-{ lib, stdenv, buildFishPlugin, fetchFromGitHub, fd, fzf, util-linux, clownfish, fishtape_3 }:
-
+{
+  lib,
+  stdenv,
+  pkgs,
+  buildFishPlugin,
+  fetchFromGitHub,
+  fd,
+  unixtools,
+  procps,
+  clownfish,
+  fishtape_3,
+}:
+let
+  # we want `pkgs.fzf`, not `fishPlugins.fzf`
+  inherit (pkgs) fzf;
+in
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "9.2";
+  version = "11.0";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    sha256 = "sha256-XmRGe39O3xXmTvfawwT2mCwLIyXOlQm7f40mH5tzz+s=";
+    hash = "sha256-H7HgYT+okuVXo2SinrSs+hxAKCn4Q4su7oMbebKd/7s=";
   };
 
-  checkInputs = [ fzf fd util-linux ];
-  checkPlugins = [ clownfish fishtape_3 ];
+  nativeCheckInputs = [
+    fzf
+    fd
+    unixtools.script
+    procps
+  ];
+  checkPlugins = [
+    clownfish
+    fishtape_3
+  ];
   checkFunctionDirs = [ "./functions" ];
   checkPhase = ''
     # Disable git tests which inspect the project's git repo, which isn't
     # possible since we strip the impure .git from our build input
     rm -r tests/*git*
+    rm -r tests/preview_changed_file/modified_path_with_spaces.fish
+    rm -r tests/preview_changed_file/renamed_path_modifications.fish
 
     # Disable tests that are failing, probably because of our wrappers
     rm -r tests/configure_bindings
-    rm -r tests/search_shell_variables
+    rm -r tests/search_variables
 
     # Disable tests that are failing, because there is not 'rev' command
     rm tests/preview_file/custom_file_preview.fish
-
-  '' + (
-    if stdenv.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
-    else ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''script /dev/null fish -c "fishtape tests/*/*.fish"''
+    else
+      ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
   );
 
-  meta = with lib; {
+  meta = {
     description = "Augment your fish command line with fzf key bindings";
     homepage = "https://github.com/PatrickF1/fzf.fish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      euxane
+      natsukium
+    ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

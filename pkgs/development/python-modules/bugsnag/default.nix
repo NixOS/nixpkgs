@@ -1,46 +1,66 @@
-{ lib
-, blinker
-, buildPythonPackage
-, fetchPypi
-, flask
-, pythonOlder
-, webob
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  setuptools,
+  webob,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.3.0";
-  format = "setuptools";
+  version = "4.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9q6Cp/reUJJ3XGMT9BV+4z5AxJdP8izfzgjOpS84/Tc=";
+  src = fetchFromGitHub {
+    owner = "bugsnag";
+    repo = "bugsnag-python";
+    tag = "v${version}";
+    hash = "sha256-WXBdlgUoWdptv1weJf82qyH8TTqNCC1rYFEa972TqDY=";
   };
 
-  propagatedBuildInputs = [
-    webob
-  ];
+  postPatch = ''
+    substituteInPlace tox.ini --replace-fail \
+      "--cov=bugsnag --cov-report html --cov-append --cov-report term" ""
+  '';
 
-  passthru.optional-dependencies = {
+  build-system = [ setuptools ];
+
+  dependencies = [ webob ];
+
+  optional-dependencies = {
     flask = [
       blinker
       flask
     ];
   };
 
-  pythonImportsCheck = [
-    "bugsnag"
+  pythonImportsCheck = [ "bugsnag" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Extra dependencies
+    "tests/integrations"
+    # Flaky due to timeout
+    "tests/test_client.py::ClientTest::test_flush_waits_for_outstanding_events_before_returning"
+    # Flaky due to timeout
+    "tests/test_client.py::ClientTest::test_flush_waits_for_outstanding_sessions_before_returning"
+    # Flaky failure due to AssertionError: assert 0 == 3
+    "tests/test_client.py::ClientTest::test_aws_lambda_handler_decorator_warns_of_potential_timeout"
+    # Flaky failure due to AssertionError: assert 0 == 1
+    "tests/test_client.py::ClientTest::test_exception_hook_does_not_leave_a_breadcrumb_if_errors_are_disabled"
   ];
 
-  # Module ha no tests
-  doCheck = false;
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Automatic error monitoring for Python applications";
     homepage = "https://github.com/bugsnag/bugsnag-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

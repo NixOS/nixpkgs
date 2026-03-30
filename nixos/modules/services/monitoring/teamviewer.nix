@@ -1,36 +1,36 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-
   cfg = config.services.teamviewer;
-
 in
-
 {
-
-  ###### interface
-
   options = {
-
-    services.teamviewer.enable = mkEnableOption (lib.mdDoc "TeamViewer daemon");
-
+    services.teamviewer = {
+      enable = lib.mkEnableOption "TeamViewer daemon & system package";
+      package = lib.mkPackageOption pkgs "teamviewer" { };
+    };
   };
 
-  ###### implementation
+  config = lib.mkIf (cfg.enable) {
+    environment.systemPackages = [ cfg.package ];
 
-  config = mkIf (cfg.enable) {
-
-    environment.systemPackages = [ pkgs.teamviewer ];
-
-    services.dbus.packages = [ pkgs.teamviewer ];
+    services.dbus.packages = [ cfg.package ];
 
     systemd.services.teamviewerd = {
       description = "TeamViewer remote control daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "network.target" "dbus.service" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+        "network.target"
+        "dbus.service"
+      ];
       requires = [ "dbus.service" ];
       preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 
@@ -38,12 +38,11 @@ in
       startLimitBurst = 10;
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.teamviewer}/bin/teamviewerd -f";
+        ExecStart = "${cfg.package}/bin/teamviewerd -f";
         PIDFile = "/run/teamviewerd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-abort";
       };
     };
   };
-
 }

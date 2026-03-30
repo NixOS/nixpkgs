@@ -28,7 +28,8 @@ NixOS modules:
 ```nix
 { config, pkgs, ... }:
 
-{ option definitions
+{
+  # option definitions
 }
 ```
 
@@ -37,23 +38,21 @@ options, but does not declare any. The structure of full NixOS modules
 is shown in [Example: Structure of NixOS Modules](#ex-module-syntax).
 
 ::: {#ex-module-syntax .example}
-::: {.title}
-**Example: Structure of NixOS Modules**
-:::
+### Structure of NixOS Modules
 ```nix
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ paths of other modules
-    ];
+  imports = [
+    # paths of other modules
+  ];
 
   options = {
-    option declarations
+    # option declarations
   };
 
   config = {
-    option definitions
+    # option definitions
   };
 }
 ```
@@ -71,7 +70,7 @@ The meaning of each part is as follows.
 -   This `imports` list enumerates the paths to other NixOS modules that
     should be included in the evaluation of the system configuration. A
     default set of modules is defined in the file `modules/module-list.nix`.
-    These don\'t need to be added in the import list.
+    These don't need to be added in the import list.
 
 -   The attribute `options` is a nested set of *option declarations*
     (described below).
@@ -102,17 +101,26 @@ Exec directives](#exec-escaping-example) for an example. When using these
 functions system environment substitution should *not* be disabled explicitly.
 
 ::: {#locate-example .example}
-::: {.title}
-**Example: NixOS Module for the "locate" Service**
-:::
+### NixOS Module for the "locate" Service
 ```nix
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  inherit (lib)
+    concatStringsSep
+    mkIf
+    mkOption
+    optionalString
+    types
+    ;
   cfg = config.services.locate;
-in {
+in
+{
   options.services.locate = {
     enable = mkOption {
       type = types.bool;
@@ -140,38 +148,39 @@ in {
   };
 
   config = {
-    systemd.services.update-locatedb =
-      { description = "Update Locate Database";
-        path  = [ pkgs.su ];
-        script =
-          ''
-            mkdir -m 0755 -p $(dirname ${toString cfg.output})
-            exec updatedb \
-              --localuser=${cfg.localuser} \
-              ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
-              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
-          '';
-      };
+    systemd.services.update-locatedb = {
+      description = "Update Locate Database";
+      path = [ pkgs.su ];
+      script = ''
+        mkdir -p $(dirname ${toString cfg.output})
+        chmod 0755 $(dirname ${toString cfg.output})
+        exec updatedb \
+          --localuser=${cfg.localuser} \
+          ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
+          --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+      '';
+    };
 
-    systemd.timers.update-locatedb = mkIf cfg.enable
-      { description = "Update timer for locate database";
-        partOf      = [ "update-locatedb.service" ];
-        wantedBy    = [ "timers.target" ];
-        timerConfig.OnCalendar = cfg.interval;
-      };
+    systemd.timers.update-locatedb = mkIf cfg.enable {
+      description = "Update timer for locate database";
+      partOf = [ "update-locatedb.service" ];
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = cfg.interval;
+    };
   };
 }
 ```
 :::
 
 ::: {#exec-escaping-example .example}
-::: {.title}
-**Example: Escaping in Exec directives**
-:::
+### Escaping in Exec directives
 ```nix
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.echo;
@@ -181,28 +190,34 @@ let
       printf '%s\n' "$s"
     done
   '';
-  args = [ "a%Nything" "lang=\${LANG}" ";" "/bin/sh -c date" ];
-in {
-  systemd.services.echo =
-    { description = "Echo to the journal";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "oneshot";
-      serviceConfig.ExecStart = ''
-        ${echoAll} ${utils.escapeSystemdExecArgs args}
-      '';
-    };
+  args = [
+    "a%Nything"
+    "lang=\${LANG}"
+    ";"
+    "/bin/sh -c date"
+  ];
+in
+{
+  systemd.services.echo = {
+    description = "Echo to the journal";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "oneshot";
+    serviceConfig.ExecStart = ''
+      ${echoAll} ${utils.escapeSystemdExecArgs args}
+    '';
+  };
 }
 ```
 :::
 
-```{=docbook}
-<xi:include href="option-declarations.section.xml" />
-<xi:include href="option-types.section.xml" />
-<xi:include href="option-def.section.xml" />
-<xi:include href="assertions.section.xml" />
-<xi:include href="meta-attributes.section.xml" />
-<xi:include href="importing-modules.section.xml" />
-<xi:include href="replace-modules.section.xml" />
-<xi:include href="freeform-modules.section.xml" />
-<xi:include href="settings-options.section.xml" />
+```{=include=} sections
+option-declarations.section.md
+option-types.section.md
+option-def.section.md
+assertions.section.md
+meta-attributes.section.md
+importing-modules.section.md
+replace-modules.section.md
+freeform-modules.section.md
+settings-options.section.md
 ```

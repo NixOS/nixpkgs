@@ -1,30 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, keystoneauth1
-, oslo-i18n
-, oslo-serialization
-, oslo-utils
-, pbr
-, requests
-, prettytable
-, requests-mock
-, simplejson
-, stestr
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  keystoneauth1,
+  openstackdocstheme,
+  oslo-i18n,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  requests,
+  prettytable,
+  reno,
+  requests-mock,
+  setuptools,
+  simplejson,
+  sphinxHook,
+  stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.1.0";
+  version = "9.9.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+bMK8ubm5aEmwsgfNRRcWu5wwglV5t1AmRm+TRuHs0M=";
+    pname = "python_cinderclient";
+    inherit version;
+    hash = "sha256-aX5NEsJJ85tB7PT6b8uMOMvy1rLYTW9RXtVnuC3NC9E=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    openstackdocstheme
+    reno
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     simplejson
     keystoneauth1
     oslo-i18n
@@ -35,7 +52,7 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     oslo-serialization
     requests-mock
@@ -43,15 +60,32 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    stestr run
+    runHook preCheck
+
+    #   File "/build/python-cinderclient-9.6.0/cinderclient/client.py", line 196, in request
+    # if raise_exc and resp.status_code >= 400:
+    #                  ^^^^^^^^^^^^^^^^^^^^^^^
+    #
+    # TypeError: '>=' not supported between instances of 'Mock' and 'int'
+    stestr run -e <(echo "
+      cinderclient.tests.unit.test_client.ClientTest.test_keystone_request_raises_auth_failure_exception
+      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method
+      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_badrequest
+      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_overlimit
+      cinderclient.tests.unit.test_shell.ShellTest.test_password_prompted
+      cinderclient.tests.unit.test_shell.TestLoadVersionedActions.test_load_versioned_actions_with_help
+    ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "cinderclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Block Storage API Client Library";
+    mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

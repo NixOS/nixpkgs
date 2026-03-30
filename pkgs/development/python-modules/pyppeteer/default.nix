@@ -1,37 +1,33 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pyee
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, syncer
-, tqdm
-, urllib3
-, websockets
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
+  pyee,
+  pytest-xdist,
+  pytestCheckHook,
+  syncer,
+  tqdm,
+  urllib3,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "1.0.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
+    owner = "pyppeteer";
+    repo = "pyppeteer";
+    tag = version;
+    hash = "sha256-LYyV4Wzz4faewSsGjNe0i/9BLbCHzzEns2ZL2MYkGWw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -43,17 +39,17 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  pythonRelaxDeps = [
+    "pyee"
+    "urllib3"
+    "websockets"
+  ];
+
+  nativeCheckInputs = [
     syncer
     pytest-xdist
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
-      --replace 'websockets = "^9.1"' 'websockets = "*"'
-  '';
 
   disabledTestPaths = [
     # Requires network access
@@ -82,14 +78,14 @@ buildPythonPackage rec {
     "TestPDF"
   ];
 
-  pythonImportsCheck = [
-    "pyppeteer"
-  ];
+  pythonImportsCheck = [ "pyppeteer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
+    mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    changelog = "https://github.com/pyppeteer/pyppeteer/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

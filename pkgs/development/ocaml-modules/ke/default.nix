@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, fetchurl
-, bigarray-compat, fmt
-, alcotest, bigstringaf
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fmt,
+  alcotest,
+  bigstringaf,
 }:
 
 buildDunePackage rec {
@@ -14,10 +18,14 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ fmt ];
 
-  checkInputs = [ alcotest bigstringaf ];
+  checkInputs = [
+    alcotest
+    bigstringaf
+  ];
   doCheck = true;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   meta = {
     description = "Fast implementation of queue in OCaml";

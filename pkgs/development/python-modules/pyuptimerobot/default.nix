@@ -1,51 +1,52 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
-  version = "22.2.0";
-  format = "setuptools";
+  version = "24.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-QZm8FlUm17Vv80hB3iai54QcVlhSrq2AvbdBaRWDyok=";
+    repo = "pyuptimerobot";
+    tag = version;
+    hash = "sha256-vlEXUwGCmscasdWyCxF1bFjA3weR74Zf3RCk5W5ljFg=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  postPatch = ''
+    # Upstream doesn't set version in the repo
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0"' 'version = "${version}"'
+  '';
 
-  checkInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [ aiohttp ];
+
+  nativeCheckInputs = [
     aresponses
     pytestCheckHook
     pytest-asyncio
   ];
 
-  postPatch = ''
-    # Upstream doesn't set version in the repo
-    substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
-  '';
+  pythonImportsCheck = [ "pyuptimerobot" ];
 
-  pythonImportsCheck = [
-    "pyuptimerobot"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python API wrapper for Uptime Robot";
     homepage = "https://github.com/ludeeus/pyuptimerobot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ludeeus/pyuptimerobot/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

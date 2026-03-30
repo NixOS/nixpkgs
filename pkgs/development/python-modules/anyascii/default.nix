@@ -1,29 +1,27 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "anyascii";
-  version = "0.3.1";
+  version = "0.3.3";
   format = "setuptools";
-  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3t9XcoIG4obJHu18dZUFpeRcjNATZ91Awvcki7FcEfY=";
+    hash = "sha256-yU6d2dR7PZSU7KMF/vlEfQC0vxoyr/hap0b6Psf7lcM=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/anyascii/anyascii/blob/${version}/CHANGELOG.md";
     description = "Unicode to ASCII transliteration";
     homepage = "https://github.com/anyascii/anyascii";
-    license = licenses.isc;
-    maintainers = teams.tts.members;
+    license = lib.licenses.isc;
+    teams = [ lib.teams.tts ];
   };
 }

@@ -1,33 +1,60 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  objgraph,
+  psutil,
+  pytestCheckHook,
+  pytest-codspeed,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.0.2";
+  version = "6.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-X/O9dfOOTEPx9HDy33pNQwuCHEziK+OE4UWctX1rsBM=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "multidict";
+    tag = "v${version}";
+    hash = "sha256-HOQRfSxf0+HeXsV4ShwfUDjNVyg2SjNuE157JLRlAL0=";
   };
 
   postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
+    # `python3 -I -c "import multidict"` fails with ModuleNotFoundError
+    substituteInPlace tests/test_circular_imports.py \
+      --replace-fail '"-I",' ""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
+
+  nativeCheckInputs = [
+    objgraph
+    psutil
+    pytestCheckHook
+    pytest-codspeed
+    pytest-cov-stub
+  ];
+
+  preCheck = ''
+    # import from $out
+    rm -r multidict
+  '';
 
   pythonImportsCheck = [ "multidict" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/aio-libs/multidict/blob/${src.tag}/CHANGES.rst";
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

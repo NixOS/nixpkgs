@@ -1,58 +1,47 @@
-{ lib
-, stdenv
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, click
-, fetchPypi
-, intbitset
-, pytest-xdist
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, requests
-, saneyaml
-, setuptools-scm
-, text-unidecode
-, typing
+{
+  lib,
+  stdenv,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
+  saneyaml,
+  setuptools-scm,
+  text-unidecode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "commoncode";
-  version = "31.0.0";
-  format = "pyproject";
+  version = "32.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-iX7HjsbW9rUgG35XalqfXh2+89vEiwish90FGOpkzRo=";
+  src = fetchFromGitHub {
+    owner = "nexB";
+    repo = "commoncode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A2FE+qhLQahuAtptP3hCnIUgh7j61Wf02avO6DM0b5E=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "intbitset >= 2.3.0, < 3.0" "intbitset >= 2.3.0"
-  '';
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "beautifulsoup4" ];
+
+  dependencies = [
     attrs
     beautifulsoup4
     click
-    intbitset
     requests
     saneyaml
     text-unidecode
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];
@@ -65,25 +54,20 @@ buildPythonPackage rec {
     "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
     "test_walk_can_walk_non_utf8_path_from_unicode_path"
     "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # expected result is tailored towards the quirks of upstream's
     # CI environment on darwin
     "test_searchable_paths"
   ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/nexB/commoncode/issues/36
-    "src/commoncode/fetch.py"
-  ];
+  pythonImportsCheck = [ "commoncode" ];
 
-  pythonImportsCheck = [
-    "commoncode"
-  ];
-
-  meta = with lib; {
-    description = "A set of common utilities, originally split from ScanCode";
+  meta = {
+    description = "Set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
-    license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    changelog = "https://github.com/nexB/commoncode/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

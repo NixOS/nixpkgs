@@ -1,60 +1,62 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "open-meteo";
-  version = "0.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-open-meteo";
     rev = "v${version}";
-    sha256 = "0i8jmhd29vvkpfxs9l5wy8525ngs79mnc7si2j9b1nc41xrv91f6";
+    hash = "sha256-J106XeSglyqrFfP1ckbnDwfE7IikaNiBQ+m14PE2SBc=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    aresponses
-    pydantic
-  ];
-
-  checkInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" "" \
-      --replace 'aiohttp = "^3.8.1"' 'aiohttp = "^3.8.0"'
+      --replace-fail "0.0.0" "${version}" \
   '';
 
-  pythonImportsCheck = [
-    "open_meteo"
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [
+    aiohttp
+    mashumaro
+    orjson
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # aiohttp api breakage
+    "test_timeout"
+  ];
+
+  pythonImportsCheck = [ "open_meteo" ];
+
+  meta = {
+    changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
     description = "Python client for the Open-Meteo API";
     homepage = "https://github.com/frenck/python-open-meteo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

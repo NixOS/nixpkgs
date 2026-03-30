@@ -1,7 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, cffi }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cffi,
+}:
 buildPythonPackage rec {
   pname = "misaka";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,10 +21,11 @@ buildPythonPackage rec {
   # The tests require write access to $out
   doCheck = false;
 
-  meta = with lib; {
-    description = "A CFFI binding for Hoedown, a markdown parsing library";
+  meta = {
+    description = "CFFI binding for Hoedown, a markdown parsing library";
+    mainProgram = "misaka";
     homepage = "https://misaka.61924.nl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

@@ -1,47 +1,49 @@
-{ lib
-, ase
-, buildPythonPackage
-, cython
-, datamodeldict
-, fetchFromGitHub
-, matplotlib
-, numericalunits
-, numpy
-, pandas
-, phonopy
-, potentials
-, pymatgen
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
-, requests
-, scipy
-, setuptools
-, toolz
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython,
+  numpy,
+  setuptools,
+
+  # dependencies
+  datamodeldict,
+  matplotlib,
+  numericalunits,
+  pandas,
+  potentials,
+  requests,
+  scipy,
+  toolz,
+  xmltodict,
+
+  # tests
+  phonopy,
+  pytestCheckHook,
+
 }:
 
-buildPythonPackage rec {
-  version = "1.4.6";
+buildPythonPackage (finalAttrs: {
   pname = "atomman";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.5.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
-    rev = "v${version}";
-    hash = "sha256-tcsxtFbBdMC6+ixzqhnR+5UNwcQmnPQSvuyNA2IYelI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UmvMYVM1YmLvSaVLzWHdxYpRU+Z3z65cy7mfmDZfDG0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    cython
+    numpy
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    cython
+  dependencies = [
     datamodeldict
     matplotlib
     numericalunits
@@ -54,6 +56,8 @@ buildPythonPackage rec {
     xmltodict
   ];
 
+  pythonRelaxDeps = [ "atomman" ];
+
   preCheck = ''
     # By default, pytestCheckHook imports atomman from the current directory
     # instead of from where `pip` installs it and fails due to missing Cython
@@ -62,26 +66,23 @@ buildPythonPackage rec {
     rm -r atomman
   '';
 
-  checkInputs = [
-    ase
+  nativeCheckInputs = [
     phonopy
-    pymatgen
-    pytest
     pytestCheckHook
   ];
 
   disabledTests = [
-    "test_unique_shifts_prototype" # needs network access to download database files
+    # needs network access to download database files
+    "test_unique_shifts_prototype"
   ];
 
-  pythonImportsCheck = [
-    "atomman"
-  ];
+  pythonImportsCheck = [ "atomman" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/usnistgov/atomman/blob/${finalAttrs.src.tag}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

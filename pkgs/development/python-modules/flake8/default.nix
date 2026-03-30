@@ -1,49 +1,49 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, mccabe
-, pycodestyle
-, pyflakes
-, importlib-metadata
-, pythonAtLeast
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  fetchFromGitHub,
+  setuptools,
+  mccabe,
+  pycodestyle,
+  pyflakes,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "5.0.4";
-
-  disabled = pythonOlder "3.6";
-
-  format = "setuptools";
+  version = "7.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8";
-    rev = version;
-    hash = "sha256-Os8HIoM07/iOBMm+0WxdQj32pJJOJ8mkh+yLHpqkLXg=";
+    tag = version;
+    hash = "sha256-dZFIGyjqkd+MRz9NoOEcMuR9ZshFb/h+zO2OJZsQajc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     mccabe
     pycodestyle
     pyflakes
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  # Tests fail on Python 3.7 due to importlib using a deprecated interface
-  doCheck = pythonAtLeast "3.7";
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    pytestCheckHook
+  disabledTests = lib.optionals isPyPy [
+    # tests fail due to slightly different error position
+    "test_tokenization_error_is_a_syntax_error"
+    "test_tokenization_error_but_not_syntax_error"
   ];
 
-  meta = with lib; {
-    description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
-    homepage = "https://github.com/pycqa/flake8";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+  meta = {
+    changelog = "https://github.com/PyCQA/flake8/blob/${src.tag}/docs/source/release-notes/${version}.rst";
+    description = "Modular source code checker: pep8, pyflakes and co";
+    homepage = "https://github.com/PyCQA/flake8";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    mainProgram = "flake8";
   };
 }

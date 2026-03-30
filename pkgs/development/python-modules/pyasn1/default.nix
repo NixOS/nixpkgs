@@ -1,20 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "pyasn1";
-  version = "0.4.8";
+  version = "0.6.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba";
+    hash = "sha256-m1mislun5PgZfbdobAn7M+ZYuYM5+tuCbpUSYpAXgzs=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "pyasn1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic ASN.1 library for Python";
-    homepage = "https://github.com/etingof/pyasn1";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://pyasn1.readthedocs.io";
+    changelog = "https://github.com/etingof/pyasn1/blob/master/CHANGES.rst";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

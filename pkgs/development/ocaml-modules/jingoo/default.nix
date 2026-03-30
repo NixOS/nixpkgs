@@ -1,31 +1,43 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, menhir, ppxlib, ppx_deriving, re, uutf, uucp, ounit2 }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  menhir,
+  ppxlib,
+  ppx_deriving,
+  re,
+  uutf,
+  uucp,
+  ounit2,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "jingoo";
-  version = "1.4.4";
-
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.04";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "tategakibunko";
     repo = "jingoo";
-    rev = "v${version}";
-    sha256 = "sha256-qIw69OE7wYyZYKnIc9QrmF8MzY5Fg5pBFyIpexmaYxA=";
+    tag = finalAttrs.version;
+    hash = "sha256-1357XOYZseItCrIm/qNP46aL8tQyX8CFh77CBycL1ew=";
   };
 
-  buildInputs = [ menhir ];
-  propagatedBuildInputs = [ ppxlib ppx_deriving re uutf uucp ];
+  nativeBuildInputs = [ menhir ];
+  propagatedBuildInputs = [
+    ppxlib
+    ppx_deriving
+    re
+    uutf
+    uucp
+  ];
   checkInputs = [ ounit2 ];
   doCheck = true;
 
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tategakibunko/jingoo";
     description = "OCaml template engine almost compatible with jinja2";
-    license = licenses.mit;
-    maintainers = [ maintainers.ericbmerritt ];
+    mainProgram = "jingoo";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ericbmerritt ];
   };
-}
+})

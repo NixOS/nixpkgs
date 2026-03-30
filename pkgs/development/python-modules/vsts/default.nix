@@ -1,12 +1,14 @@
-{ buildPythonPackage
-, lib
-, python
-, fetchPypi
-, msrest
+{
+  buildPythonPackage,
+  lib,
+  python,
+  fetchPypi,
+  msrest,
 }:
 
 buildPythonPackage rec {
   version = "0.1.25";
+  format = "setuptools";
   pname = "vsts";
 
   src = fetchPypi {
@@ -25,10 +27,10 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import vsts.version; print(vsts.version.VERSION)'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python APIs for interacting with and managing Azure DevOps";
     homepage = "https://github.com/microsoft/azure-devops-python-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

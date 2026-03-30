@@ -1,41 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, evolution-data-server
-, glib
-, granite
-, gtk3
-, libhandy
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  evolution-data-server-gtk4,
+  glib,
+  granite7,
+  gtk4,
+  libadwaita,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.5.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-onlineaccounts";
     rev = version;
-    sha256 = "sha256-7eKbOf5lD2zwmZc0k9PWGwnqaqXmwgJPmij0WtMT7Qk=";
+    sha256 = "sha256-0dt4E2g1nX78s2WK2HO6P/fKjXcsR61KJSpulgsZHPI=";
   };
 
-  patches = [
-    # build: support evolution-data-server 3.45
-    # https://github.com/elementary/switchboard-plug-onlineaccounts/pull/244
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-onlineaccounts/commit/b60f0458a23a2f76ad14d399f145e150e1ab82d3.patch";
-      sha256 = "sha256-C7woN4shPrVlSWZeW0Fz+xFi5CTQd2K5BsF5YeI9x0Y=";
-    })
-  ];
-
   nativeBuildInputs = [
+    glib # glib-compile-resources
+    gtk4 # gtk-update-icon-cache
     meson
     ninja
     pkg-config
@@ -43,25 +36,23 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
-    granite
-    gtk3
-    libhandy
+    granite7
+    gtk4
+    libadwaita
     switchboard
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Online Accounts Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-onlineaccounts";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

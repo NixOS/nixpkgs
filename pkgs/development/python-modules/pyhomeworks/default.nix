@@ -1,33 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomeworks";
-  version = "0.0.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "Eqbm8274B2hBuF+mREe8lqGhpzZExPJ29jzvwB5RNR8=";
+    hash = "sha256-Jq+rjhjmnPFNaEuCHyi+8i20RgLf1rpZg6QqwE7ax7M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=69.2.0" "setuptools" \
+      --replace-fail ', "wheel~=0.43.0"' ""
+  '';
+
+  build-system = [ setuptools ];
 
   # Project has no real tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyhomeworks"
-  ];
+  pythonImportsCheck = [ "pyhomeworks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Lutron Homeworks Series 4/8";
     homepage = "https://github.com/dubnom/pyhomeworks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

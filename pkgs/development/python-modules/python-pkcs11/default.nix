@@ -1,32 +1,30 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, cached-property
-, cython
-, fetchFromGitHub
-, setuptools-scm
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "python-pkcs11";
-  version = "0.7.0";
+  version = "0.9.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danni";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0kncbipfpsb7m7mhv5s5b9wk604h1j08i2j26fn90pklgqll0xhv";
+    repo = "python-pkcs11";
+    tag = "v${version}";
+    sha256 = "sha256-ursQHwyTUz4kCg66+Rnvo8bI3fzA3k9FsmbnUvpq/aY=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    cached-property
+  dependencies = [
     asn1crypto
   ];
 
@@ -35,10 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkcs11" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pyauth/python-pkcs11/releases/tag/${src.tag}";
     description = "PKCS#11/Cryptoki support for Python";
     homepage = "https://github.com/danni/python-pkcs11";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

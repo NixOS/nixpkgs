@@ -1,39 +1,71 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
-, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
-, pcre, python3, qtbase, qtsvg, qttools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  glib,
+  boost,
+  libsigrok,
+  libsigrokdecode,
+  libserialport,
+  libzip,
+  libftdi1,
+  hidapi,
+  glibmm,
+  pcre,
+  python3,
+  qtsvg,
+  qttools,
+  bluez,
+  wrapQtAppsHook,
+  desktopToDarwinBundle,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pulseview";
-  version = "0.4.2";
+  version = "0.5.0-unstable-2025-11-10";
 
-  src = fetchurl {
-    url = "https://sigrok.org/download/source/pulseview/${pname}-${version}.tar.gz";
-    sha256 = "1jxbpz1h3m1mgrxw74rnihj8vawgqdpf6c33cqqbyd8v7rxgfhph";
+  src = fetchFromGitHub {
+    owner = "sigrokproject";
+    repo = "pulseview";
+    rev = "af02198741b4e57c9f9b796bd5e6c0f2ae9f2f2b";
+    hash = "sha256-4K3sMCTlFnu8iiokMYc1O7jNVQ7vTtSiT2dCpLRC44s=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
-    pcre python3
-    qtbase qtsvg qttools
-  ];
+    glib
+    boost
+    libsigrok
+    libsigrokdecode
+    libserialport
+    libzip
+    libftdi1
+    hidapi
+    glibmm
+    pcre
+    python3
+    qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
-  patches = [
-    # Allow building with glib 2.68
-    # PR at https://github.com/sigrokproject/pulseview/pull/39
-    (fetchpatch {
-      url = "https://github.com/sigrokproject/pulseview/commit/fb89dd11f2a4a08b73c498869789e38677181a8d.patch";
-      sha256 = "07ifsis9jlc0jjp2d11f7hvw9kaxcbk0a57h2m4xsv1d7vzl9yfh";
-    })
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";
+    mainProgram = "pulseview";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      bjornfor
+      vifino
+    ];
+    platforms = lib.platforms.unix;
   };
 }

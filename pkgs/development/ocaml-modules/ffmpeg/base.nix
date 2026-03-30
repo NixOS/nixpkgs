@@ -1,21 +1,24 @@
 { lib, fetchFromGitHub }:
 
 rec {
-  version = "1.1.6";
-
-  useDune2 = true;
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ffmpeg";
-    rev = "v${version}";
-    sha256 = "sha256-NlWmt98QwuGFNP8FHnAR3C0DIiSfJ1ZJXeVFFZiOSXs=";
+    tag = "v${version}";
+    hash = "sha256-wQvpbvAAg4tybAFdGq0O9vfCc0v2iPFk04Q3zgTwa7Y=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-ffmpeg";
     description = "Bindings for the ffmpeg libraries";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    changelog = "https://raw.githubusercontent.com/savonet/ocaml-ffmpeg/refs/tags/${src.tag}/CHANGES";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
+      dandellion
+      momeemt
+      juaningan
+    ];
   };
 }

@@ -1,40 +1,41 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, demjson3
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  demjson3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.7.10";
+  version = "0.10.1";
 
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pysyncthru";
-    rev = "release-${version}";
-    sha256 = "1c29w2ldrnq0vxr9cfa2pjhwdvrpw393c84khgg2y56jrkbidq53";
+    tag = version;
+    hash = "sha256-IJfj65p80Q4LwWkGV0A0QPtK2+FPkNVz9/WaNGzgTy8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     demjson3
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pysyncthru" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated JSON API based communication with Samsung SyncThru Web Service";
     homepage = "https://github.com/nielstron/pysyncthru";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

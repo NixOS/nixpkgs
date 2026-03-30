@@ -1,28 +1,30 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cirq-core,
+  requests,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-aqt";
+  pyproject = true;
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "requests~=2.18" "requests"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "requests"
+  ];
+
+  dependencies = [
     cirq-core
     requests
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_aqt" ];

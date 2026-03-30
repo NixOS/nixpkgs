@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.confd;
 
@@ -9,67 +11,71 @@ let
     backend = "${cfg.backend}"
     confdir = "${cfg.confDir}"
     interval = ${toString cfg.interval}
-    nodes = [ ${concatMapStringsSep "," (s: ''"${s}"'') cfg.nodes}, ]
+    nodes = [ ${lib.concatMapStringsSep "," (s: ''"${s}"'') cfg.nodes}, ]
     prefix = "${cfg.prefix}"
     log-level = "${cfg.logLevel}"
-    watch = ${boolToString cfg.watch}
+    watch = ${lib.boolToString cfg.watch}
   '';
 
-in {
+in
+{
   options.services.confd = {
-    enable = mkEnableOption (lib.mdDoc "confd service");
+    enable = lib.mkEnableOption "confd, a service to manage local application configuration files using templates and data from etcd/consul/redis/zookeeper";
 
-    backend = mkOption {
-      description = lib.mdDoc "Confd config storage backend to use.";
+    backend = lib.mkOption {
+      description = "Confd config storage backend to use.";
       default = "etcd";
-      type = types.enum ["etcd" "consul" "redis" "zookeeper"];
+      type = lib.types.enum [
+        "etcd"
+        "consul"
+        "redis"
+        "zookeeper"
+      ];
     };
 
-    interval = mkOption {
-      description = lib.mdDoc "Confd check interval.";
+    interval = lib.mkOption {
+      description = "Confd check interval.";
       default = 10;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    nodes = mkOption {
-      description = lib.mdDoc "Confd list of nodes to connect to.";
+    nodes = lib.mkOption {
+      description = "Confd list of nodes to connect to.";
       default = [ "http://127.0.0.1:2379" ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
     };
 
-    watch = mkOption {
-      description = lib.mdDoc "Confd, whether to watch etcd config for changes.";
+    watch = lib.mkOption {
+      description = "Confd, whether to watch etcd config for changes.";
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    prefix = mkOption {
-      description = lib.mdDoc "The string to prefix to keys.";
+    prefix = lib.mkOption {
+      description = "The string to prefix to keys.";
       default = "/";
-      type = types.path;
+      type = lib.types.path;
     };
 
-    logLevel = mkOption {
-      description = lib.mdDoc "Confd log level.";
+    logLevel = lib.mkOption {
+      description = "Confd log level.";
       default = "info";
-      type = types.enum ["info" "debug"];
+      type = lib.types.enum [
+        "info"
+        "debug"
+      ];
     };
 
-    confDir = mkOption {
-      description = lib.mdDoc "The path to the confd configs.";
+    confDir = lib.mkOption {
+      description = "The path to the confd configs.";
       default = "/etc/confd";
-      type = types.path;
+      type = lib.types.path;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Confd package to use.";
-      default = pkgs.confd;
-      defaultText = literalExpression "pkgs.confd";
-      type = types.package;
-    };
+    package = lib.mkPackageOption pkgs "confd" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.confd = {
       description = "Confd Service.";
       wantedBy = [ "multi-user.target" ];
@@ -85,6 +91,6 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    services.etcd.enable = mkIf (cfg.backend == "etcd") (mkDefault true);
+    services.etcd.enable = lib.mkIf (cfg.backend == "etcd") (lib.mkDefault true);
   };
 }

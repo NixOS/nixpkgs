@@ -1,47 +1,83 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pathlib
-, py-cpuinfo
-, pytest
-, pythonOlder
-, statistics
+{
+  lib,
+  aspectlib,
+  buildPythonPackage,
+  elasticsearch,
+  fetchFromGitHub,
+  freezegun,
+  gitMinimal,
+  mercurial,
+  nbmake,
+  py-cpuinfo,
+  pygal,
+  pytest,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "3.4.1";
-  format = "setuptools";
+  version = "5.2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qc/8Epax5bPUZvhq42xSj6NUq0T4gbO5dDDS6omWBOU=";
+    repo = "pytest-benchmark";
+    tag = "v${version}";
+    hash = "sha256-qjgP9H3WUYFm1xamOqhGk5YJQv94QfyJvrRoltHJHHc=";
   };
 
-  buildInputs = [
-    pytest
+  build-system = [ setuptools ];
+
+  buildInputs = [ pytest ];
+
+  dependencies = [ py-cpuinfo ];
+
+  optional-dependencies = {
+    aspect = [ aspectlib ];
+    histogram = [
+      pygal
+      # FIXME package pygaljs
+      setuptools
+    ];
+    elasticsearch = [ elasticsearch ];
+  };
+
+  pythonImportsCheck = [ "pytest_benchmark" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    freezegun
+    gitMinimal
+    mercurial
+    nbmake
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
+
+  disabledTests = lib.optionals (pythonOlder "3.12") [
+    # AttributeError: 'PluginImportFixer' object has no attribute 'find_spec'
+    "test_compare_1"
+    "test_compare_2"
+    "test_regression_checks"
+    "test_regression_checks_inf"
+    "test_rendering"
   ];
 
-  propagatedBuildInputs = [
-    py-cpuinfo
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    pathlib
-    statistics
-  ];
-
-  # Circular dependency
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "pytest_benchmark"
-  ];
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ionelmc/pytest-benchmark/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixture for benchmarking code";
     homepage = "https://github.com/ionelmc/pytest-benchmark";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -10,20 +10,14 @@ buildPythonPackage rec {
   version = "1.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ZrVs1kdL9B2MVGYDR9N6/MP30ZcGSN42XBAu93VIqts=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "filetype"
-  ];
+  pythonImportsCheck = [ "filetype" ];
 
   disabledTests = [
     # https://github.com/h2non/filetype.py/issues/119
@@ -39,10 +33,11 @@ buildPythonPackage rec {
     "tests/test_benchmark.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Infer file type and MIME type of any file/buffer";
+    mainProgram = "filetype";
     homepage = "https://github.com/h2non/filetype.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

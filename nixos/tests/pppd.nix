@@ -1,14 +1,21 @@
-import ./make-test-python.nix (
-  let
-    chap-secrets = {
-      text = ''"flynn" * "reindeerflotilla" *'';
-      mode = "0640";
-    };
-  in {
-    name = "pppd";
+let
+  chap-secrets = {
+    text = ''"flynn" * "reindeerflotilla" *'';
+    mode = "0640";
+  };
+in
+{ pkgs, ... }:
+{
+  name = "pppd";
 
-    nodes = {
-      server = {config, pkgs, ...}: {
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ stv0g ];
+  };
+
+  nodes = {
+    server =
+      { config, pkgs, ... }:
+      {
         config = {
           # Run a PPPoE access concentrator server. It will spawn an
           # appropriate PPP server process when a PPPoE client sets up a
@@ -18,17 +25,17 @@ import ./make-test-python.nix (
               config.environment.etc."ppp/pppoe-server-options".source
               config.environment.etc."ppp/chap-secrets".source
             ];
-            after = ["network.target"];
+            after = [ "network.target" ];
             serviceConfig = {
-              ExecStart = "${pkgs.rpPPPoE}/sbin/pppoe-server -F -O /etc/ppp/pppoe-server-options -q ${pkgs.ppp}/sbin/pppd -I eth1 -L 192.0.2.1 -R 192.0.2.2";
+              ExecStart = "${pkgs.rp-pppoe}/sbin/pppoe-server -F -O /etc/ppp/pppoe-server-options -q ${pkgs.ppp}/sbin/pppd -I eth1 -L 192.0.2.1 -R 192.0.2.2";
             };
-            wantedBy = ["multi-user.target"];
+            wantedBy = [ "multi-user.target" ];
           };
           environment.etc = {
             "ppp/pppoe-server-options".text = ''
               lcp-echo-interval 10
               lcp-echo-failure 2
-              plugin rp-pppoe.so
+              plugin pppoe.so
               require-chap
               nobsdcomp
               noccp
@@ -38,12 +45,14 @@ import ./make-test-python.nix (
           };
         };
       };
-      client = {config, pkgs, ...}: {
+    client =
+      { config, pkgs, ... }:
+      {
         services.pppd = {
           enable = true;
           peers.test = {
             config = ''
-              plugin rp-pppoe.so eth1
+              plugin pppoe.so eth1
               name "flynn"
               noipdefault
               persist
@@ -54,11 +63,11 @@ import ./make-test-python.nix (
         };
         environment.etc."ppp/chap-secrets" = chap-secrets;
       };
-    };
+  };
 
-    testScript = ''
-      start_all()
-      client.wait_until_succeeds("ping -c1 -W1 192.0.2.1")
-      server.wait_until_succeeds("ping -c1 -W1 192.0.2.2")
-    '';
-  })
+  testScript = ''
+    start_all()
+    client.wait_until_succeeds("ping -c1 -W1 192.0.2.1")
+    server.wait_until_succeeds("ping -c1 -W1 192.0.2.2")
+  '';
+}

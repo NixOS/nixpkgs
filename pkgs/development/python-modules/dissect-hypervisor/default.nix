@@ -1,61 +1,54 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, rich
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  pycryptodome,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.hypervisor";
-    rev = version;
-    hash = "sha256-yc9QfzvWX8jsRVZYglZZuMfxsYUoPr5gf407DABjQcU=";
+    tag = version;
+    hash = "sha256-/b/7u3b0G3XRqXxjyhHn5dYzueQOPoacYGeDYv21I0w=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    defusedxml
     dissect-cstruct
     dissect-util
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       pycryptodome
-      rich
     ];
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.hypervisor"
-  ];
+  pythonImportsCheck = [ "dissect.hypervisor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing parsers for various hypervisor disk, backup and configuration files";
     homepage = "https://github.com/fox-it/dissect.hypervisor";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.hypervisor/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

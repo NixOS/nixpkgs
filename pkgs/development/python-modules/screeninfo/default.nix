@@ -1,50 +1,46 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, dataclasses
-, fetchFromGitHub
-, libX11
-, libXinerama
-, libXrandr
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libx11,
+  libxinerama,
+  libxrandr,
+  poetry-core,
+  pyobjc-framework-Cocoa,
+  cython,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "screeninfo";
   version = "0.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "screeninfo";
+    tag = version;
     hash = "sha256-TEy4wff0eRRkX98yK9054d33Tm6G6qWrd9Iv+ITcFmA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = lib.optionals (stdenv.isDarwin) [
+    pyobjc-framework-Cocoa
+    cython
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
-
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.isLinux) ''
     substituteInPlace screeninfo/enumerators/xinerama.py \
-      --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libX11}/lib/libX11.so")' \
-      --replace 'load_library("Xinerama")' 'ctypes.cdll.LoadLibrary("${libXinerama}/lib/libXinerama.so")'
+      --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libx11}/lib/libX11.so")' \
+      --replace 'load_library("Xinerama")' 'ctypes.cdll.LoadLibrary("${libxinerama}/lib/libXinerama.so")'
     substituteInPlace screeninfo/enumerators/xrandr.py \
-      --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libX11}/lib/libX11.so")' \
-      --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libXrandr}/lib/libXrandr.so")'
+      --replace 'load_library("X11")' 'ctypes.cdll.LoadLibrary("${libx11}/lib/libX11.so")' \
+      --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libxrandr}/lib/libXrandr.so")'
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # We don't have a screen
@@ -53,11 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "screeninfo" ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

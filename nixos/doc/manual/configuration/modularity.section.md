@@ -13,10 +13,14 @@ including them from `configuration.nix`, e.g.:
 ```nix
 { config, pkgs, ... }:
 
-{ imports = [ ./vpn.nix ./kde.nix ];
+{
+  imports = [
+    ./vpn.nix
+    ./kde.nix
+  ];
   services.httpd.enable = true;
   environment.systemPackages = [ pkgs.emacs ];
-  ...
+  # ...
 }
 ```
 
@@ -26,9 +30,10 @@ Here, we include two modules from the same directory, `vpn.nix` and
 ```nix
 { config, pkgs, ... }:
 
-{ services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+{
+  services.xserver.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
   environment.systemPackages = [ pkgs.vim ];
 }
 ```
@@ -36,13 +41,13 @@ Here, we include two modules from the same directory, `vpn.nix` and
 Note that both `configuration.nix` and `kde.nix` define the option
 [](#opt-environment.systemPackages). When multiple modules define an
 option, NixOS will try to *merge* the definitions. In the case of
-[](#opt-environment.systemPackages), that's easy: the lists of
-packages can simply be concatenated. The value in `configuration.nix` is
+[](#opt-environment.systemPackages) the lists of packages will be
+concatenated. The value in `configuration.nix` is
 merged last, so for list-type options, it will appear at the end of the
 merged list. If you want it to appear first, you can use `mkBefore`:
 
 ```nix
-boot.kernelModules = mkBefore [ "kvm-intel" ];
+{ boot.kernelModules = mkBefore [ "kvm-intel" ]; }
 ```
 
 This causes the `kvm-intel` kernel module to be loaded before any other
@@ -60,23 +65,31 @@ When that happens, it's possible to force one definition take precedence
 over the others:
 
 ```nix
-services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
+{ services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org"; }
 ```
 
 When using multiple modules, you may need to access configuration values
 defined in other modules. This is what the `config` function argument is
 for: it contains the complete, merged system configuration. That is,
 `config` is the result of combining the configurations returned by every
-module [^1] . For example, here is a module that adds some packages to
+module. (If you're wondering how it's possible that the (indirect) *result*
+of a function is passed as an *input* to that same function: that's
+because Nix is a "lazy" language --- it only computes values when
+they are needed. This works as long as no individual configuration
+value depends on itself.)
+
+For example, here is a module that adds some packages to
 [](#opt-environment.systemPackages) only if
 [](#opt-services.xserver.enable) is set to `true` somewhere else:
 
 ```nix
 { config, pkgs, ... }:
 
-{ environment.systemPackages =
+{
+  environment.systemPackages =
     if config.services.xserver.enable then
-      [ pkgs.firefox
+      [
+        pkgs.firefox
         pkgs.thunderbird
       ]
     else
@@ -116,18 +129,14 @@ have the same effect as importing a file which sets those options.
 ```nix
 { config, pkgs, ... }:
 
-let netConfig = hostName: {
-  networking.hostName = hostName;
-  networking.useDHCP = false;
-};
+let
+  netConfig = hostName: {
+    networking.hostName = hostName;
+    networking.useDHCP = false;
+  };
 
 in
-
-{ imports = [ (netConfig "nixos.localdomain") ]; }
+{
+  imports = [ (netConfig "nixos.localdomain") ];
+}
 ```
-
-[^1]: If you're wondering how it's possible that the (indirect) *result*
-    of a function is passed as an *input* to that same function: that's
-    because Nix is a "lazy" language --- it only computes values when
-    they are needed. This works as long as no individual configuration
-    value depends on itself.

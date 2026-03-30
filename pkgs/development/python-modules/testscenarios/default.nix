@@ -1,12 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  pbr,
+  setuptools,
+
+  # dependencies
+  testtools,
+
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "testscenarios";
   version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,12 +30,29 @@ buildPythonPackage rec {
       --replace "catch = 1" ""
   '';
 
-  propagatedBuildInputs = [ testtools ];
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
 
-  meta = with lib; {
-    description = "A pyunit extension for dependency injection";
-    homepage = "https://pypi.python.org/pypi/testscenarios";
-    license = licenses.asl20;
+  propagatedBuildInputs = [
+    pbr
+    testtools
+  ];
+
+  doCheck = false; # tests not compatible with teststools 2.8
+
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} -m testtools.run testscenarios.tests.test_suite
+
+    runHook postCheck
+  '';
+
+  meta = {
+    description = "Pyunit extension for dependency injection";
+    homepage = "https://github.com/testing-cabal/testscenarios";
+    license = lib.licenses.asl20;
   };
-
 }

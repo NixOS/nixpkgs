@@ -1,11 +1,11 @@
-
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+{ pkgs, lib, ... }:
+let
   manImplementations = [
     "mandoc"
     "man-db"
   ];
 
-  machineNames = builtins.map machineSafe manImplementations;
+  machineNames = map machineSafe manImplementations;
 
   makeConfig = useImpl: {
     # Note: mandoc currently can't index symlinked section directories.
@@ -24,24 +24,30 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       man = {
         enable = true;
         generateCaches = true;
-      } // lib.listToAttrs (builtins.map (impl: {
-        name = impl;
-        value = {
-          enable = useImpl == impl;
-        };
-      }) manImplementations);
+      }
+      // lib.listToAttrs (
+        map (impl: {
+          name = impl;
+          value = {
+            enable = useImpl == impl;
+          };
+        }) manImplementations
+      );
     };
   };
 
   machineSafe = builtins.replaceStrings [ "-" ] [ "_" ];
-in {
+in
+{
   name = "man";
   meta.maintainers = [ lib.maintainers.sternenseemann ];
 
-  nodes = lib.listToAttrs (builtins.map (i: {
-    name = machineSafe i;
-    value = makeConfig i;
-  }) manImplementations);
+  nodes = lib.listToAttrs (
+    map (i: {
+      name = machineSafe i;
+      value = makeConfig i;
+    }) manImplementations
+  );
 
   testScript = ''
     import re
@@ -73,7 +79,8 @@ in {
 
       return False
 
-  '' + lib.concatMapStrings (machine: ''
+  ''
+  + lib.concatMapStrings (machine: ''
     with subtest("Test direct man page lookups in ${machine}"):
       # man works
       ${machine}.succeed("man man > /dev/null")
@@ -81,6 +88,8 @@ in {
       ${machine}.succeed("man 3 libunwind > /dev/null")
       # NixOS configuration man page is installed
       ${machine}.succeed("man configuration.nix > /dev/null")
+      # Linux `man-pages` work
+      ${machine}.succeed("man 5 proc_vmstat > /dev/null")
 
     with subtest("Test generateCaches via man -k in ${machine}"):
       expected = [
@@ -90,6 +99,7 @@ in {
         ("user", "userdel", 8),
         ("mem", "free", 3),
         ("mem", "free", 1),
+        ("statistics", "proc_vmstat", 5),
       ]
 
       for (keyword, page, section) in expected:
@@ -97,4 +107,4 @@ in {
         if not match_man_k(page, section, matches):
           raise Exception(f"{page}({section}) missing in matches: {matches}")
   '') machineNames;
-})
+}

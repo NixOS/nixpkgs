@@ -1,30 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, openems
-, csxcad
-, boost
-, python-csxcad
-, numpy
-, h5py
+{
+  lib,
+  buildPythonPackage,
+  cython_0,
+  openems,
+  csxcad,
+  boost,
+  python-csxcad,
+  numpy,
+  h5py,
 }:
 
 buildPythonPackage rec {
   pname = "python-openems";
-  version = "unstable-2020-02-15";
+  version = openems.version;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "thliebig";
-    repo = "openEMS";
-    rev = "ba793ac84e2f78f254d6d690bb5a4c626326bbfd";
-    sha256 = "1dca6b6ccy771irxzsj075zvpa3dlzv4mjb8xyg9d889dqlgyl45";
-  };
+  src = openems.src;
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
-    cython
+    cython_0
     boost
   ];
 
@@ -36,14 +32,18 @@ buildPythonPackage rec {
     h5py
   ];
 
-  setupPyBuildFlags = [ "-I${openems}/include" "-L${openems}/lib" "-R${openems}/lib" ];
+  setupPyBuildFlags = [
+    "-I${openems}/include"
+    "-L${openems}/lib"
+    "-R${openems}/lib"
+  ];
   pythonImportsCheck = [ "openEMS" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to OpenEMS";
     homepage = "http://openems.de/index.php/Main_Page.html";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
 }

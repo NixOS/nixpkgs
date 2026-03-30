@@ -1,7 +1,17 @@
-{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages }:
+{
+  stdenv,
+  texinfo,
+  flex,
+  bison,
+  fetchFromGitHub,
+  stdenvNoLibc,
+  buildPackages,
+}:
 
-crossLibcStdenv.mkDerivation {
-  name = "newlib";
+stdenvNoLibc.mkDerivation {
+  pname = "vc4-newlib";
+  version = "0-unstable-2017-01-08";
+
   src = fetchFromGitHub {
     owner = "itszor";
     repo = "newlib-vc4";
@@ -12,7 +22,11 @@ crossLibcStdenv.mkDerivation {
   configurePlatforms = [ "target" ];
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ texinfo flex bison ];
+  nativeBuildInputs = [
+    texinfo
+    flex
+    bison
+  ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # newlib expects CC to build for build platform, not host platform
   preConfigure = ''

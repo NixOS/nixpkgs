@@ -1,23 +1,28 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, flit-core
-, polib
-, click }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  flit-core,
+  polib,
+  click,
+}:
 
 buildPythonPackage rec {
   pname = "lingua";
   version = "4.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DhqUZ0HbKIpANhrQT/OP4EvwgZg0uKu4TEtTX+2bpO8=";
+    hash = "sha256-DhqUZ0HbKIpANhrQT/OP4EvwgZg0uKu4TEtTX+2bpO8=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  postPatch = ''
+    substituteInPlace src/lingua/extract.py \
+      --replace-fail SafeConfigParser ConfigParser
+  '';
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     click
@@ -26,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lingua" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translation toolset";
     homepage = "https://github.com/wichert/lingua";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

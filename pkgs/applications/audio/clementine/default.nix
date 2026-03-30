@@ -1,46 +1,44 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, boost
-, cmake
-, chromaprint
-, gettext
-, gst_all_1
-, liblastfm
-, qtbase
-, qtx11extras
-, qttools
-, taglib
-, fftw
-, glew
-, qjson
-, sqlite
-, libgpod
-, libplist
-, usbmuxd
-, libmtp
-, libpulseaudio
-, gvfs
-, libcdio
-, pcre
-, projectm
-, protobuf
-, qca-qt5
-, pkg-config
-, sparsehash
-, config
-, makeWrapper
-, gst_plugins
-
-, util-linux
-, libunwind
-, libselinux
-, elfutils
-, libsepol
-, orc
-
-, alsa-lib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  chromaprint,
+  gettext,
+  gst_all_1,
+  liblastfm,
+  qtbase,
+  qtx11extras,
+  qttools,
+  taglib_1,
+  fftw,
+  glew,
+  qjson,
+  sqlite,
+  libgpod,
+  libplist,
+  usbmuxd,
+  libmtp,
+  libpulseaudio,
+  gvfs,
+  libcdio,
+  pcre,
+  projectm_3,
+  protobuf,
+  qca-qt5,
+  pkg-config,
+  sparsehash,
+  config,
+  wrapQtAppsHook,
+  gst_plugins,
+  util-linuxMinimal,
+  libunwind,
+  libselinux,
+  elfutils,
+  libsepol,
+  orc,
+  alsa-lib,
 }:
 
 let
@@ -48,23 +46,23 @@ let
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
-in mkDerivation {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "unstable-2022-04-11";
+  version = "1.4.1-60-g1a3e8b56f";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
-    rev = "250024e117fbe5fae7c62b9c8e655d66412a6ed7";
-    sha256 = "06fcbs3wig3mh711iypyj49qm5246f7qhvgvv8brqfrd8cqyh6qf";
+    tag = finalAttrs.version;
+    hash = "sha256-FRgTi1Qxzp0vJASNpyANqh4rJX4caxEr0CZOnTHA3Kw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
-
-    util-linux
+    wrapQtAppsHook
+    util-linuxMinimal
     libunwind
     libselinux
     elfutils
@@ -85,7 +83,7 @@ in mkDerivation {
     liblastfm
     libpulseaudio
     pcre
-    projectm
+    projectm_3
     protobuf
     qca-qt5
     qjson
@@ -93,16 +91,19 @@ in mkDerivation {
     qtx11extras
     qttools
     sqlite
-    taglib
-
+    taglib_1
     alsa-lib
   ]
   # gst_plugins needed for setup-hooks
   ++ gst_plugins
-  ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+  ++ lib.optionals withIpod [
+    libgpod
+    libplist
+    usbmuxd
+  ]
+  ++ lib.optionals withMTP [ libmtp ]
+  ++ lib.optionals withCD [ libcdio ]
+  ++ lib.optionals withCloud [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \
@@ -111,6 +112,21 @@ in mkDerivation {
       -e 's,-Wno-unused-private-field,,g'
     sed -i CMakeLists.txt \
       -e 's,libprotobuf.a,protobuf,g'
+
+    # CMake 3.0.0 is deprecated and no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace 3rdparty/{qsqlite,qtsingleapplication,qtiocompressor,qxt}/CMakeLists.txt \
+      cmake/{ParseArguments.cmake,Translations.cmake}                                          \
+      tests/CMakeLists.txt gst/moodbar/CMakeLists.txt                                          \
+      --replace-fail                                                                           \
+        "cmake_minimum_required(VERSION 3.0.0)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace 3rdparty/libmygpo-qt5/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required( VERSION 3.0.0 FATAL_ERROR )" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_policy(SET CMP0053 OLD)" \
+        ""
   '';
 
   preConfigure = ''
@@ -118,20 +134,24 @@ in mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_PROJECTM=ON"
-    "-DSPOTIFY_BLOB=OFF"
+    (lib.cmakeFeature "FORCE_GIT_REVISION" "1.3.1")
+    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
+    (lib.cmakeBool "SPOTIFY_BLOB" false)
   ];
 
+  dontWrapQtApps = true;
+
   postInstall = ''
-    wrapProgram $out/bin/clementine \
+    wrapQtApp $out/bin/clementine \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.clementine-player.org";
-    description = "A multiplatform music player";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ttuegel ];
+    description = "Multiplatform music player";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    mainProgram = "clementine";
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})

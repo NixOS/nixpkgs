@@ -1,25 +1,36 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, idna
-, pyasn1
-, pyasn1-modules
-, six
-, pytestCheckHook
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  idna,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
+  pyopenssl,
 }:
 
 buildPythonPackage rec {
   pname = "service-identity";
-  version = "21.1.0";
+  version = "24.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-pWc2rU3ULqEukMhd1ySY58lTm3s8f/ayQ7CY4nG24AQ=";
+    repo = "service-identity";
+    tag = version;
+    hash = "sha256-onxCUWqGVeenLqB5lpUpj3jjxTM61ogXCQOGnDnClT4=";
   };
+
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -27,19 +38,19 @@ buildPythonPackage rec {
     idna
     pyasn1
     pyasn1-modules
-    six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pyopenssl ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "service_identity" ];
 
-  meta = with lib; {
+  meta = {
     description = "Service identity verification for pyOpenSSL";
     homepage = "https://service-identity.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyca/service-identity/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

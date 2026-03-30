@@ -1,33 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, locket
-, numpy
-, pandas
-, pyzmq
-, toolz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  versioneer,
+
+  # dependencies
+  locket,
+  toolz,
+
+  # optional-dependencies
+  blosc2,
+  numpy,
+  pandas,
+  pyzmq,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "partd";
-  version = "1.3.0";
-  disabled = isPy27;
+  version = "1.4.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-zpGrzcYXjWaLyqQxeRpakX2QI0HLGT9UP+RF1JRmBIU=";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "partd";
+    tag = version;
+    hash = "sha256-GtIo6n87TmM5aRgtRyxhhXXAINpPCFbjZ/sQz/vkcoA=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
-  propagatedBuildInputs = [ locket numpy pandas pyzmq toolz ];
+  propagatedBuildInputs = [
+    locket
+    toolz
+  ];
 
-  checkPhase = ''
-    rm partd/tests/test_zmq.py # requires network & fails
-    py.test -k "not test_serialize"
-  '';
+  optional-dependencies = {
+    complete = [
+      blosc2
+      numpy
+      pandas
+      pyzmq
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Appendable key-value storage";

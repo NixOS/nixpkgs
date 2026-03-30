@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, menhirLib, yojson, ulex, pprint, fix, functory }:
-
-if lib.versionAtLeast ocaml.version "4.06"
-then throw "mezzo is not available for OCaml ${ocaml.version}"
-else
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  camlp4,
+  menhir,
+  menhirLib,
+  yojson,
+  ulex,
+  pprint,
+  fix,
+  functory,
+}:
 
 let
-  check-ocaml-version = with lib; versionAtLeast (getVersion ocaml);
+  check-ocaml-version = lib.versionAtLeast (lib.getVersion ocaml);
 in
 
 assert check-ocaml-version "4";
@@ -22,17 +33,35 @@ stdenv.mkDerivation {
     sha256 = "0yck5r6di0935s3iy2mm9538jkf77ssr789qb06ms7sivd7g3ip6";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild yojson menhir menhirLib ulex pprint fix functory ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    camlp4
+    menhir
+  ];
+  buildInputs = [
+    yojson
+    menhirLib
+    ulex
+    pprint
+    fix
+    functory
+    ocamlbuild
+  ];
 
   # Sets warning 3 as non-fatal
-  prePatch = lib.optionalString (check-ocaml-version "4.02") ''
-    substituteInPlace myocamlbuild.pre.ml \
-    --replace '@1..3' '@1..2+3'
-  ''
-  # Compatibility with PPrint ≥ 20220103
-  + ''
-    substituteInPlace typing/Fact.ml --replace PPrintOCaml PPrint.OCaml
-  '';
+  prePatch =
+    lib.optionalString (check-ocaml-version "4.02") ''
+      substituteInPlace myocamlbuild.pre.ml \
+      --replace '@1..3' '@1..2+3'
+    ''
+    # Compatibility with PPrint ≥ 20220103
+    + ''
+      substituteInPlace typing/Fact.ml --replace PPrintOCaml PPrint.OCaml
+    '';
 
   createFindlibDestdir = true;
 
@@ -41,12 +70,11 @@ stdenv.mkDerivation {
     cp mezzo $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://protz.github.io/mezzo/";
-    description = "A programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
-    license = licenses.gpl2;
-    platforms = ocaml.meta.platforms or [];
+    description = "Programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
+    license = lib.licenses.gpl2;
+    broken = lib.versionAtLeast ocaml.version "4.06";
+    platforms = ocaml.meta.platforms or [ ];
   };
 }
-
-

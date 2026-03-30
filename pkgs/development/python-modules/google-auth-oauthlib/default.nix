@@ -1,50 +1,67 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, click
-, mock
-, pytestCheckHook
-, google-auth
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  google-auth,
+  requests-oauthlib,
+  click,
+  mock,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-auth-oauthlib";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "1.2.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-2xG85LPv/Jm1GOwiopA0cOCFPAySvldpTjaE5zjSJRM=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-auth-library-python-oauthlib";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-itnkKMHTpJNjMVvpXYq9V/ybaE/Ekt3uED1IoVebRcg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     requests-oauthlib
   ];
 
-  checkInputs = [
-    click
+  optional-dependencies = {
+    tool = [ click ];
+  };
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  disabledTests = [
+    # Flaky test. See https://github.com/NixOS/nixpkgs/issues/288424#issuecomment-1941609973.
+    "test_run_local_server_occupied_port"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
+    "test_run_local_server_bind_addr"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_run_local_server"
-  ];
+  pythonImportsCheck = [ "google_auth_oauthlib" ];
 
-  pythonImportsCheck = [
-    "google_auth_oauthlib"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 terlar ];
+    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      sarahec
+      terlar
+    ];
+    mainProgram = "google-oauthlib-tool";
   };
-}
+})

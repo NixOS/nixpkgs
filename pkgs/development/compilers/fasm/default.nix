@@ -1,4 +1,9 @@
-{ stdenv, lib, fasm-bin, isx86_64 }:
+{
+  stdenv,
+  lib,
+  fasm-bin,
+  isx86_64,
+}:
 
 stdenv.mkDerivation {
   inherit (fasm-bin) version src meta;
@@ -8,14 +13,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ fasm-bin ];
 
   buildPhase = ''
-    fasm source/Linux${lib.optionalString isx86_64 "/x64"}/fasm.asm fasm
+    fasm source/linux${lib.optionalString isx86_64 "/x64"}/fasm.asm fasm
     for tool in listing prepsrc symbols; do
       fasm tools/libc/$tool.asm
       cc -o tools/libc/fasm-$tool tools/libc/$tool.o
     done
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     install -Dt $out/bin fasm tools/libc/fasm-*
@@ -25,4 +33,6 @@ stdenv.mkDerivation {
     cp -r examples/ *.txt tools/fas.txt $docs
     cp tools/readme.txt $docs/tools.txt
   '';
+
+  passthru.updateScript = fasm-bin.updateScript;
 }

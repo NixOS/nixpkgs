@@ -1,66 +1,57 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyjwt
-, pytest-aiohttp
-, pytest-freezegun
-, pytestCheckHook
-, pythonOlder
-, deepdiff
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  deepdiff,
+  fetchFromGitHub,
+  hatchling,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-freezegun,
+  pytestCheckHook,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2022.11.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "2025.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-GEKLkFzQV8xI3c8061fO1p66WKj3eDXmx7VaRYDu7kw=";
+    repo = "pylitterbot";
+    tag = version;
+    hash = "sha256-pQnrmH/mfh7cwEnL/qoG3dN638HsP9w5zK0CgarGstE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     deepdiff
+    pycognito
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytest-freezegun
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/natekspencer/pylitterbot/issues/73
-    substituteInPlace pyproject.toml \
-      --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
-  '';
+  pythonImportsCheck = [ "pylitterbot" ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
-  pythonImportsCheck = [
-    "pylitterbot"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

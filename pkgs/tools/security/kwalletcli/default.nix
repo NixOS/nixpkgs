@@ -1,7 +1,18 @@
-{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkg-config
-, kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  makeWrapper,
+  pkg-config,
+  wrapQtAppsHook,
+  kcoreaddons,
+  ki18n,
+  kwallet,
+  mksh,
+  pinentry-qt,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kwalletcli";
   version = "3.03";
 
@@ -29,9 +40,17 @@ mkDerivation rec {
 
   makeFlags = [ "KDE_VER=5" ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    wrapQtAppsHook
+  ];
   # if using just kwallet, cmake will be added as a buildInput and fail the build
-  propagatedBuildInputs = [ kcoreaddons ki18n (lib.getLib kwallet) ];
+  propagatedBuildInputs = [
+    kcoreaddons
+    ki18n
+    (lib.getLib kwallet)
+  ];
 
   preInstall = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -45,10 +64,10 @@ mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-Line Interface to the KDE Wallet";
     homepage = "https://www.mirbsd.org/kwalletcli.htm";
-    license = licenses.miros;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.miros;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

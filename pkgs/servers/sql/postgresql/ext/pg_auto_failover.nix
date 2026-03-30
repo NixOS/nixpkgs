@@ -1,32 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline, libkrb5 }:
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_auto_failover";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "citusdata";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-CLtLOzKRB9p6+SytMvWCYo7m7s/d+clAGOa2sWi6uZ0=";
+    repo = "pg_auto_failover";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lsnVry+5n08kLOun8u0B7XFvI5ijTKJtFJ84fixMHe4=";
   };
 
-  buildInputs = [ postgresql openssl zlib readline libkrb5 ];
+  buildInputs = postgresql.buildInputs;
 
-  installPhase = ''
-    install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
-    install -D -t $out/lib src/monitor/pgautofailover.so
-    install -D -t $out/share/postgresql/extension src/monitor/*.sql
-    install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
-  '';
-
-  meta = with lib; {
+  meta = {
+    # PostgreSQL 18 support issue upstream: https://github.com/hapostgres/pg_auto_failover/issues/1083
+    # Check after next package update.
+    broken =
+      lib.warnIf (finalAttrs.version != "2.2") "Is postgresql18Packages.pg_auto_failover still broken?"
+        (lib.versionAtLeast postgresql.version "18");
     description = "PostgreSQL extension and service for automated failover and high-availability";
+    mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
-    changelog = "https://github.com/citusdata/pg_auto_failover/raw/v${version}/CHANGELOG.md";
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
-    broken = versionOlder postgresql.version "10";
+    license = lib.licenses.postgresql;
   };
-}
+})

@@ -1,17 +1,25 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub
-, fetchpatch
-, cmake, sip_4, protobuf, pythonOlder }:
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  sip4,
+  protobuf,
+  distutils,
+}:
 
 buildPythonPackage rec {
   pname = "libarcus";
   version = "4.12.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
+    hash = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
   };
 
   patches = [
@@ -23,21 +31,29 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = pythonOlder "3.4";
+  propagatedBuildInputs = [
+    sip4
+    distutils
+  ];
 
-  propagatedBuildInputs = [ sip_4 ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    sip4
+  ];
+
   buildInputs = [ protobuf ];
+
+  strictDeps = true;
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://github.com/Ultimaker/libArcus";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar gebner ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

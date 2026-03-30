@@ -1,46 +1,50 @@
-{ lib
-, asynctest
-, aiohttp
-, blinker
-, buildPythonPackage
-, certifi
-, ecs-logging
-, fetchFromGitHub
-, httpx
-, jinja2
-, jsonschema
-, Logbook
-, mock
-, pytest-asyncio
-, pytest-bdd
-, pytest-localserver
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, sanic
-, sanic-testing
-, starlette
-, structlog
-, tornado
-, urllib3
-, webob
+{
+  lib,
+  stdenv,
+  aiohttp,
+  blinker,
+  buildPythonPackage,
+  certifi,
+  ecs-logging,
+  fetchFromGitHub,
+  fetchpatch,
+  httpx,
+  jinja2,
+  jsonschema,
+  logbook,
+  mock,
+  pytest-asyncio,
+  pytest-bdd,
+  pytest-localserver,
+  pytest-mock,
+  pytest-random-order,
+  pytestCheckHook,
+  sanic,
+  sanic-testing,
+  setuptools,
+  starlette,
+  structlog,
+  tornado,
+  urllib3,
+  webob,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.12.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "6.25.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tAX96aOPuwtchLk5A1ANuZI5w5H9/yX3Zj9bRSyHv90=";
+    tag = "v${version}";
+    hash = "sha256-0RNZqQqXVI7CkzcKE0qA+iOBkjkH0s7Tre/a38LPW7c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     blinker
     certifi
@@ -48,43 +52,51 @@ buildPythonPackage rec {
     starlette
     tornado
     urllib3
+    wrapt
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     ecs-logging
+    httpx
     jinja2
     jsonschema
-    Logbook
+    logbook
     mock
-    httpx
     pytest-asyncio
     pytest-bdd
-    pytest-mock
     pytest-localserver
-    sanic-testing
+    pytest-mock
+    pytest-random-order
     pytestCheckHook
+    sanic-testing
     structlog
     webob
   ];
 
   disabledTests = [
     "elasticapm_client"
+    "test_get_name_from_func_partialmethod_unbound"
   ];
 
   disabledTestPaths = [
     # Exclude tornado tests
     "tests/contrib/asyncio/tornado/tornado_tests.py"
+    # Exclude client tests
+    "tests/instrumentation/asyncio_tests/aiohttp_client_tests.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky tests on Darwin
+    "tests/utils/threading_tests.py"
   ];
 
-  pythonImportsCheck = [
-    "elasticapm"
-  ];
+  pythonImportsCheck = [ "elasticapm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "elasticapm-run";
   };
 }

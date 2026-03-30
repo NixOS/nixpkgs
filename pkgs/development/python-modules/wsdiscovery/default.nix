@@ -1,45 +1,44 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, netifaces
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  netifaces,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "wsdiscovery";
-  version = "2.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreikop";
     repo = "python-ws-discovery";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-6LGZogNRCnmCrRXvHq9jmHwqW13KQPpaGaao/52JPtk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     netifaces
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "wsdiscovery"
-  ];
+  pythonImportsCheck = [ "wsdiscovery" ];
 
-  meta = with lib; {
+  meta = {
     description = "WS-Discovery implementation for Python";
     homepage = "https://github.com/andreikop/python-ws-discovery";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

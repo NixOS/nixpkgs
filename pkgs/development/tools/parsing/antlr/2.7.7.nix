@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, jdk, python2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -9,9 +14,12 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./2.7.7-fixes.patch ];
   buildInputs = [ jdk ];
-  nativeBuildInputs = [ python2 ];
 
-  meta = with lib; {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CXXFLAGS = "-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION";
+  };
+
+  meta = {
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -21,7 +29,7 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = "https://www.antlr.org/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

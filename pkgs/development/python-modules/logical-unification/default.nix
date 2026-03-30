@@ -1,36 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, toolz
-, multipledispatch
-, pytestCheckHook
-, pytest-html
-, pytest-benchmark
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  toolz,
+  multipledispatch,
+  py,
+  pytestCheckHook,
+  pytest-html,
+  pytest-benchmark,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "logical-unification";
-  version = "0.4.5";
+  version = "0.4.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
-    rev = "707cf4a39e27a4a8bf06b7e7dce7223085574e65";
-    sha256 = "sha256-3wqO0pWWFRQeoGNvbSDdLNYFyjNnv+O++F7+vTBUJoI=";
+    tag = "v${version}";
+    hash = "sha256-m1wB7WOGb/io4Z7Zfl/rckh08j6IKSiiwFKMvl5UzHg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     toolz
     multipledispatch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
     pytest-html
-    pytest-benchmark  # Needed for the `--benchmark-skip` flag
+    pytest-benchmark # Needed for the `--benchmark-skip` flag
   ];
 
-  pytestFlagsArray = [
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # Failed: DID NOT RAISE <class 'RecursionError'>
+    "test_reify_recursion_limit"
+  ];
+
+  pytestFlags = [
     "--benchmark-skip"
     "--html=testing-report.html"
     "--self-contained-html"
@@ -38,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unification" ];
 
-  meta = with lib; {
+  meta = {
     description = "Straightforward unification in Python that's extensible via generic functions";
     homepage = "https://github.com/pythological/unification";
     changelog = "https://github.com/pythological/unification/releases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Etjean ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Etjean ];
   };
 }

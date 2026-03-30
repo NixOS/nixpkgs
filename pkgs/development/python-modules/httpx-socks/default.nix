@@ -1,61 +1,64 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, flask
-, httpcore
-, httpx
-, hypercorn
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, python-socks
-, pythonOlder
-, sniffio
-, starlette
-, trio
-, yarl
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  httpcore,
+  httpx,
+  hypercorn,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  python-socks,
+  setuptools,
+  starlette,
+  tiny-proxy,
+  trio,
+  trustme,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.7.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romis2012";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-+eWGmCHkXQA+JaEgofqUeFyGyMxSctal+jsqsShFM58=";
+    repo = "httpx-socks";
+    tag = "v${version}";
+    hash = "sha256-/8nz/5LqEuSr8A8/BWzJM9vHuum6fOYIS2rozr4Omi4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     httpx
     httpcore
     python-socks
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ async-timeout ];
     trio = [ trio ];
   };
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     flask
     hypercorn
     pytest-asyncio
     pytest-trio
     pytestCheckHook
     starlette
+    tiny-proxy
+    trustme
     yarl
   ];
 
-  pythonImportsCheck = [
-    "httpx_socks"
-  ];
+  pythonImportsCheck = [ "httpx_socks" ];
 
   disabledTests = [
     # Tests don't work in the sandbox
@@ -63,10 +66,11 @@ buildPythonPackage rec {
     "test_secure_proxy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,13 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, boost, zlib, botan2, libidn
-, lua, pcre, sqlite, perl, pkg-config, expect, less
-, bzip2, gmp, openssl
-, autoreconfHook, texinfo
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  zlib,
+  libidn,
+  lua,
+  pcre,
+  sqlite,
+  perl,
+  pkg-config,
+  expect,
+  less,
+  bzip2,
+  gmp,
+  openssl,
+  autoreconfHook,
+  texinfo,
+  fetchpatch,
+  callPackage,
 }:
 
 let
   version = "1.1-unstable-2021-05-01";
   perlVersion = lib.getVersion perl;
+
+  botan = callPackage ./botan2.nix { enableForMonotone = true; };
 in
 
 assert perlVersion != "";
@@ -40,17 +58,40 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "0fzjdv49dx5lzvqhkvk50lkccagwx8h0bfha4a0k6l4qh36f9j7c";
     })
+    ./monotone-1.1-gcc-14.patch
   ];
 
   postPatch = ''
     sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
+  ''
+  + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
+    find . -type f -exec sed -i \
+      -e 's/ E(/ internal_E(/g' \
+      -e 's/{E(/{internal_E(/g' \
+      {} +
   '';
 
-  CXXFLAGS=" --std=c++11 ";
+  env.CXXFLAGS = " --std=c++11 ";
 
-  nativeBuildInputs = [ pkg-config autoreconfHook texinfo ];
-  buildInputs = [ boost zlib botan2 libidn lua pcre sqlite expect
-    openssl gmp bzip2 perl ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    texinfo
+  ];
+  buildInputs = [
+    boost
+    zlib
+    botan
+    libidn
+    lua
+    pcre
+    sqlite
+    expect
+    openssl
+    gmp
+    bzip2
+    perl
+  ];
 
   postInstall = ''
     mkdir -p $out/share/${pname}-${version}
@@ -66,10 +107,10 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; # some tests fail (and they take VERY long)
 
-  meta = with lib; {
-    description = "A free distributed version control system";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+  meta = {
+    description = "Free distributed version control system";
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

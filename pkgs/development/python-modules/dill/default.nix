@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  setuptools,
 
-# passthru tests
-, apache-beam
-, datasets
+  # passthru tests
+  apache-beam,
+  datasets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dill";
-  version = "0.3.6";
-  format = "pyproject";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
-    rev = "refs/tags/dill-${version}";
-    hash = "sha256-lh1o/TqnqtYN9xTZom33y1/7ZhMEAFpheLdtalwgObQ=";
+    repo = "dill";
+    tag = finalAttrs.version;
+    hash = "sha256-Yh9WvescLgV7DmxGBTGKsb29+eRzF9qjZMg0DQQyLyY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck
@@ -37,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dill" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tjni ];
+    changelog = "https://github.com/uqfoundation/dill/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
   };
-}
+})

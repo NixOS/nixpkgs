@@ -1,29 +1,55 @@
-{ lib, stdenv, fetchurl
-, pkg-config
-, meson, ninja, wayland-scanner
-, python3, wayland
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  python3,
+  wayland,
+  gitUpdater,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
-  version = "1.27";
+  version = "1.47";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck =
+    stdenv.hostPlatform == stdenv.buildPlatform
+    &&
+      # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
+      stdenv.hostPlatform.linker == "bfd"
+    &&
+      # Even with bfd linker, the above issue occurs on platforms with stricter linker requirements
+      # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48#note_1453201
+      !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
+    && lib.meta.availableOn stdenv.hostPlatform wayland;
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/${pname}/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-kEbxCkJdTioAlloDrPtrP7V1pWUDrHLCuGghxpZTN1w=";
+    url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-X9Q0m8vJurmkb4z3fR9DQpanoFLIdECglPY/z2KljiA=";
   };
 
-  postPatch = lib.optionalString doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/
   '';
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja wayland-scanner ];
-  checkInputs = [ python3 wayland ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    wayland-scanner
+  ];
+  nativeCheckInputs = [
+    python3
+    wayland
+  ];
+  checkInputs = [ wayland ];
+  strictDeps = true;
 
-  mesonFlags = [ "-Dtests=${lib.boolToString doCheck}" ];
+  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}" ];
 
   meta = {
     description = "Wayland protocol extensions";
@@ -34,11 +60,18 @@ stdenv.mkDerivation rec {
       protocol either in Wayland core, or some other protocol in
       wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ primeos ];
+    homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ wineee ];
+    pkgConfigModules = [ "wayland-protocols" ];
   };
 
-  passthru.version = version;
-}
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.freedesktop.org/wayland/wayland-protocols.git";
+  };
+  passthru.version = finalAttrs.version;
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+})

@@ -1,35 +1,88 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  exceptiongroup,
+  fetchFromGitHub,
+  glibcLocales,
+  pygobject3,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  pyzmq,
+  setuptools,
+  setuptools-scm,
+  tornado,
+  trio,
+  twisted,
+  typing-extensions,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.1.2";
-  format = "setuptools";
+  version = "3.0.5";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae";
+  src = fetchFromGitHub {
+    owner = "urwid";
+    repo = "urwid";
+    tag = version;
+    hash = "sha256-9ajcpyQTSASz8A4eM78vPjL+9Rk07Q30JmIrSx0Crpo=";
   };
 
-  # tests need to be able to set locale
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  postPatch = ''
+    sed -i '/addopts =/d' pyproject.toml
+  '';
 
-  # tests which assert on strings don't decode results correctly
-  doCheck = isPy3k;
-
-  pythonImportsCheck = [
-    "urwid"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  meta = with lib; {
-    description = "A full-featured console (xterm et al.) user interface library";
+  dependencies = [
+    typing-extensions
+    wcwidth
+  ];
+
+  optional-dependencies = {
+    curses = [ ];
+    glib = [ pygobject3 ];
+    tornado = [ tornado ];
+    trio = [ trio ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+    twisted = [ twisted ];
+    zmq = [ pyzmq ];
+    serial = [ pyserial ];
+    lcd = [ pyserial ];
+  };
+
+  nativeCheckInputs = [
+    glibcLocales
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  env.LC_ALL = "en_US.UTF8";
+
+  enabledTestPaths = [ "tests" ];
+
+  disabledTests = [
+    # Flaky tests
+    "TwistedEventLoopTest"
+  ];
+
+  disabledTestPaths = [
+    # expect call hangs
+    "tests/test_vterm.py"
+  ];
+
+  pythonImportsCheck = [ "urwid" ];
+
+  meta = {
+    description = "Full-featured console (xterm et al.) user interface library";
+    changelog = "https://github.com/urwid/urwid/releases/tag/${src.tag}";
+    downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
 }

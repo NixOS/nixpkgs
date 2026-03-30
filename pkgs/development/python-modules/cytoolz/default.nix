@@ -1,41 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, cython
-, toolz
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  cython,
+  setuptools,
+  toolz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cytoolz";
-  version = "0.12.0";
-  disabled = isPy27 || isPyPy;
+  version = "1.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-wQWwX4XgP7zWAkQ3WWjmLkT+eYwVo1Mcki1TEBjSJBI=";
+  src = fetchFromGitHub {
+    owner = "pytoolz";
+    repo = "cytoolz";
+    tag = finalAttrs.version;
+    hash = "sha256-beOEhm7+Nq7oA7iDcdORz03D1InHmypqsYUDUXEUPC0=";
   };
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [ toolz ];
-
-  # tests are located in cytoolz/tests, however we can't import cytoolz
-  # from $PWD, as it will break relative imports
-  preCheck = ''
-    cd cytoolz
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  postPatch = ''
+    sed -i "/setuptools-git-versioning >=/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [
+    cython
+    setuptools
+  ];
+
+  dependencies = [ toolz ];
+
+  # tests are located in cytoolz/tests, but we need to prevent import from the cytoolz source
+  preCheck = ''
+    mv cytoolz/tests tests
+    rm -rf cytoolz
+    sed -i "/testpaths/d" pyproject.toml
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";
+    changelog = "https://github.com/pytoolz/cytoolz/releases/tag/${finalAttrs.src.tag}";
     description = "Cython implementation of Toolz: High performance functional utilities";
-    license = "licenses.bsd3";
-    maintainers = with lib.maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

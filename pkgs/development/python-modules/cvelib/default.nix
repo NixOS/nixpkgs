@@ -1,32 +1,48 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, requests
-, click
-, lib
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cve,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  requests,
+  hatchling,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "cvelib";
-  version = "1.0.0";
+  version = "1.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
-    rev = "tags/${version}";
-    sha256 = "sha256-KUj9Cnvl7r8NMmZvVj5CB0uZvLNK5aHcLc+NzxFrv0I=";
+    tag = version;
+    hash = "sha256-lbwrZSzJaP+nKFwt7xiq/LTzgOuf8aELxjrxEKkYpfc=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
-  propagatedBuildInputs = [ requests click ];
+  build-system = [ hatchling ];
 
-  pythonImportsCheck = [
-    "cvelib"
+  dependencies = [
+    click
+    jsonschema
+    requests
   ];
 
-  meta = with lib; {
-    description = "A library and a command line interface for the CVE Services API";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "cvelib" ];
+
+  passthru.tests.version = testers.testVersion { package = cve; };
+
+  meta = {
+    description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
+    mainProgram = "cve";
   };
 }

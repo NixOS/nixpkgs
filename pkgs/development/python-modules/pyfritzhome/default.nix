@@ -1,47 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, nose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfritzhome";
-  version = "0.6.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.6.20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
-    rev = version;
-    hash = "sha256-cRG+Dm3KG6no3/OQCZkvISW1yE5azdDVTa5oTV1sRpk=";
+    tag = finalAttrs.version;
+    hash = "sha256-d79SS4zHsMD5aGuMNFnxwDV1IgU+0bwva/jUcfds9Hw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cryptography
     requests
   ];
 
-  checkInputs = [
-    mock
-    nose
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  pythonImportsCheck = [ "pyfritzhome" ];
 
-  pythonImportsCheck = [
-    "pyfritzhome"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python Library to access AVM FRITZ!Box homeautomation";
+    mainProgram = "fritzhome";
     homepage = "https://github.com/hthiery/python-fritzhome";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/hthiery/python-fritzhome/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

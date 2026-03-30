@@ -1,43 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pyjwt
-, pythonOlder
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  httpx,
+  pyjwt,
+  websockets,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "elmax-api";
-  version = "0.0.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.0.6.4rc0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "albertogeniola";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-YUnLi8+ibUgWoMFMgZPSPbpr286bnWBefxjOV7JfCuY=";
+    repo = "elmax-api";
+    tag = "v${version}";
+    hash = "sha256-BYVfP8B+p4J4gW+64xh9bT9sDcu/lk0R+MvLsYLwRfQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     httpx
     pyjwt
+    websockets
     yarl
   ];
 
   # Test require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "elmax_api"
-  ];
+  pythonImportsCheck = [ "elmax_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the Elmax cloud";
     homepage = "https://github.com/albertogeniola/elmax-api";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/albertogeniola/elmax-api/releases/tag/v${version}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

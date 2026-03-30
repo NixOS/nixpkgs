@@ -1,42 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-
-# native inputs
-, pkgconfig
-, setuptools-scm
-
-# tests
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgconfig,
+  psutil,
+  pytest-cov-stub,
+  pytestCheckHook,
+  python,
+  setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
-  pname = "python-lz4";
-  version = "4.0.1";
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
+  pname = "lz4";
+  version = "4.4.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  # get full repository in order to run tests
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-hQuZkstsB37pFDWmA0W6qGd7rAer1mun7Z6MxMp0ZmE=";
+    owner = "python-lz4";
+    repo = "python-lz4";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2D30n5j5r4+gcrjEXPu+WpZ4QsugCPyC1xCZuJIPcI0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  postPatch = ''
-    sed -i '/pytest-cov/d' setup.py
-  '';
-
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
     pkgconfig
+    setuptools-scm
+    setuptools
   ];
 
   pythonImportsCheck = [
@@ -46,13 +36,14 @@ buildPythonPackage rec {
     "lz4.stream"
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
     psutil
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
   # for lz4.steam
-  PYLZ4_EXPERIMENTAL = true;
+  env.PYLZ4_EXPERIMENTAL = true;
 
   # prevent local lz4 directory from getting imported as it lacks native extensions
   preCheck = ''
@@ -60,10 +51,11 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/${finalAttrs.src.tag}";
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})

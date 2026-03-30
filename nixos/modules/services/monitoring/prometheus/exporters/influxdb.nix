@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.influxdb;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9122;
@@ -12,13 +17,13 @@ in
       type = types.str;
       default = "5m";
       example = "10m";
-      description = lib.mdDoc "How long a sample is valid for";
+      description = "How long a sample is valid for";
     };
     udpBindAddress = mkOption {
       type = types.str;
       default = ":9122";
       example = "192.0.2.1:9122";
-      description = lib.mdDoc "Address on which to listen for udp packets";
+      description = "Address on which to listen for udp packets";
     };
   };
   serviceOpts = {

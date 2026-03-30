@@ -1,48 +1,53 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
   # Python Inputs
-, fastdtw
-, numpy
-, pandas
-, psutil
-, qiskit-terra
-, qiskit-optimization
-, scikit-learn
-, scipy
-, quandl
-, yfinance
+  fastdtw,
+  numpy,
+  pandas,
+  psutil,
+  qiskit,
+  qiskit-optimization,
+  scikit-learn,
+  scipy,
+  quandl,
+  yfinance,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
+  pytestCheckHook,
+  ddt,
+  pytest-timeout,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-finance";
-  version = "0.3.3";
-
-  disabled = pythonOlder "3.6";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-1XM4gBuMsvjwU4GSdQJobMyyDFZOOTbwvnUPG0nXFoc=";
+    tag = version;
+    hash = "sha256-zYhYhojCzlENzgYSenwewjeVHUBX2X6eQbbzc9znBsk=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
   '';
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
     fastdtw
     numpy
     pandas
     psutil
-    qiskit-terra
+    qiskit
     qiskit-optimization
     quandl
     scikit-learn
@@ -50,7 +55,7 @@ buildPythonPackage rec {
     yfinance
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt
@@ -67,16 +72,16 @@ buildPythonPackage rec {
     "test_yahoo"
     "test_wikipedia"
   ];
-  pytestFlagsArray = [
-    "--durations=10"
-  ];
+  pytestFlags = [ "--durations=10" ];
 
-  meta = with lib; {
+  meta = {
+    # broken because it depends on qiskit-algorithms which is not yet packaged in nixpkgs
+    broken = true;
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

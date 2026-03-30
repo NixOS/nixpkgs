@@ -1,11 +1,35 @@
-{ lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
-, makeWrapper, perl, ... }:
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  freetype,
+  fontconfig,
+  libx11,
+  libxrender,
+  zlib,
+  jdk,
+  glib,
+  glib-networking,
+  gtk,
+  libxtst,
+  libsecret,
+  gsettings-desktop-schemas,
+  webkitgtk_4_1,
+  makeWrapper,
+  perl,
+  ...
+}:
 
-{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
+{
+  pname,
+  src ? builtins.getAttr stdenv.hostPlatform.system sources,
+  sources ? null,
+  description,
+  version,
+}:
 
-stdenv.mkDerivation rec {
-  inherit name src;
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version src;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";
@@ -17,11 +41,24 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
   buildInputs = [
-    fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
-    libXrender libXtst libsecret zlib
-  ] ++ lib.optional (webkitgtk != null) webkitgtk;
+    fontconfig
+    freetype
+    glib
+    gsettings-desktop-schemas
+    gtk
+    jdk
+    libx11
+    libxrender
+    libxtst
+    libsecret
+    zlib
+  ]
+  ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1;
 
   buildCommand = ''
     # Unpack tarball.
@@ -29,10 +66,18 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
+    interpreter="$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)"
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-    [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
+    [ -f $libCairo ] && patchelf --set-rpath ${
+      lib.makeLibraryPath [
+        freetype
+        fontconfig
+        libx11
+        libxrender
+        zlib
+      ]
+    } $libCairo
 
     # Create wrapper script.  Pass -configuration to store
     # settings in ~/.eclipse/org.eclipse.platform_<version> rather
@@ -41,26 +86,41 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (
+          [
+            glib
+            gtk
+            libxtst
+            libsecret
+          ]
+          ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
+        )
+      } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
-    ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin\n||' $out/eclipse/eclipse.ini
+    perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    homepage = "http://www.eclipse.org/";
+    homepage = "https://www.eclipse.org/";
     inherit description;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = [ lib.maintainers.jerith666 ];
   };
-
-}
+})

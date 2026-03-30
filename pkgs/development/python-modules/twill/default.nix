@@ -1,41 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, requests
-, pyparsing
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  httpx,
+  lxml,
+  pyparsing,
+  pytestCheckHook,
+  quixote,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "twill";
-  version = "3.0.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dWtrdkiR1+IBfeF9jwbOjKE2UMXDJji0iOb+USbY7zk=";
+    hash = "sha256-/ZT5ntn7YMafrD9/rWaOvROKo+CGFKSldG9jjH/eR0Q=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "lxml" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    httpx
     lxml
-    requests
     pyparsing
   ];
 
-  pythonImportsCheck = [
-    "twill"
+  nativeCheckInputs = [
+    flask
+    pytestCheckHook
+    quixote
   ];
 
-  # pypi package comes without tests, other homepage does not provide all verisons
-  doCheck = false;
+  disabledTestPaths = [
+    # pytidylib is abandoned
+    "tests/test_tidy.py"
+  ];
 
-  meta = with lib; {
-    description = "A simple scripting language for Web browsing";
+  pythonImportsCheck = [ "twill" ];
+
+  meta = {
+    description = "Simple scripting language for Web browsing";
     homepage = "https://twill-tools.github.io/twill/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/twill-tools/twill/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

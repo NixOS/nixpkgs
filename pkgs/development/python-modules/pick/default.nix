@@ -1,41 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pick";
-  version = "2.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wong2";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-rpUcWMVshlAhprvySqJJjVXpq92ITuhlV+DNwTXSfMc=";
+    repo = "pick";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/cvnDTRS3V9mk1T0zHAqdrDeRuOrnco9UF7luy687BM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pick"
-  ];
+  pythonImportsCheck = [ "pick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to create curses-based interactive selection list in the terminal";
     homepage = "https://github.com/wong2/pick";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/wong2/pick/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

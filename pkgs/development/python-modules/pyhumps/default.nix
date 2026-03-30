@@ -1,41 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.8.0";
-  format = "pyproject";
+  version = "3.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  patches = [
+    (fetchpatch2 {
+      name = "revert_decamelize_ignore_numeric_characters.patch";
+      revert = true;
+      url = "https://github.com/nficano/humps/commit/661828b8b3e6fac15236b14ffbdf038aef516d4c.patch";
+      hash = "sha256-5+ZKEqydN+SF2ihWUf7B8TBY2DK7xFIU/WRDS3+pD0k=";
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "nficano";
     repo = "humps";
-    rev = "v${version}";
-    hash = "sha256-ElL/LY2V2Z3efdV5FnDy9dSoBltULrzxsjaOx+7W9Oo=";
+    tag = "v${version}";
+    hash = "sha256-PvfjW56UVCcjd2jJiQW/goVJ1BC8xQ973xuZ6izwclw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "humps"
-  ];
+  pythonImportsCheck = [ "humps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to convert strings (and dictionary keys) between snake case, camel case and pascal case";
     homepage = "https://github.com/nficano/humps";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ unlicense ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,60 +1,62 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.cachix-agent;
-in {
-  meta.maintainers = [ lib.maintainers.domenkozar ];
+in
+{
+  meta.maintainers = with lib.maintainers; [
+    domenkozar
+    sandydoo
+  ];
 
   options.services.cachix-agent = {
-    enable = mkEnableOption (lib.mdDoc "Cachix Deploy Agent: https://docs.cachix.org/deploy/");
+    enable = lib.mkEnableOption "Cachix Deploy Agent: <https://docs.cachix.org/deploy/>";
 
-    name = mkOption {
-      type = types.str;
-      description = lib.mdDoc "Agent name, usually same as the hostname";
+    name = lib.mkOption {
+      type = lib.types.str;
+      description = "Agent name, usually same as the hostname";
       default = config.networking.hostName;
       defaultText = "config.networking.hostName";
     };
 
-    verbose = mkOption {
-      type = types.bool;
-      description = lib.mdDoc "Enable verbose output";
+    verbose = lib.mkOption {
+      type = lib.types.bool;
+      description = "Enable verbose output";
       default = false;
     };
 
-    profile = mkOption {
-      type = types.nullOr types.str;
+    profile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc "Profile name, defaults to 'system' (NixOS).";
+      description = "Profile name, defaults to 'system' (NixOS).";
     };
 
-    host = mkOption {
-      type = types.nullOr types.str;
+    host = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc "Cachix uri to use.";
+      description = "Cachix uri to use.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cachix;
-      defaultText = literalExpression "pkgs.cachix";
-      description = lib.mdDoc "Cachix Client package to use.";
-    };
+    package = lib.mkPackageOption pkgs "cachix" { };
 
-    credentialsFile = mkOption {
-      type = types.path;
+    credentialsFile = lib.mkOption {
+      type = lib.types.path;
       default = "/etc/cachix-agent.token";
-      description = lib.mdDoc ''
+      description = ''
         Required file that needs to contain CACHIX_AGENT_TOKEN=...
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.cachix-agent = {
       description = "Cachix Deploy Agent";
-      after = ["network-online.target"];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
 
@@ -67,11 +69,14 @@ in {
       serviceConfig = {
         # we don't want to kill children processes as those are deployments
         KillMode = "process";
-        Restart = "on-failure";
+        Restart = "always";
+        RestartSec = 5;
         EnvironmentFile = cfg.credentialsFile;
         ExecStart = ''
-          ${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} ${lib.optionalString (cfg.host != null) "--host ${cfg.host}"} \
-            deploy agent ${cfg.name} ${if cfg.profile != null then cfg.profile else ""}
+          ${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} ${
+            lib.optionalString (cfg.host != null) "--host ${cfg.host}"
+          } \
+            deploy agent ${cfg.name} ${lib.optionalString (cfg.profile != null) cfg.profile}
         '';
       };
     };

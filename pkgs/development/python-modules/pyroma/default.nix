@@ -1,43 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, docutils
-, python
-, pygments
-, setuptools
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  build,
+  docutils,
+  flit-core,
+  packaging,
+  pygments,
+  requests,
+  trove-classifiers,
+
+  # test
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "3.2";
+  version = "5.0.1";
+  pyproject = true;
+
+  # https://github.com/regebro/pyroma/issues/104
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "regebro";
-    repo = pname;
-    rev = version;
-    sha256 = "0ln9w984n48nyxwzd1y48l6b18lnv52radcyizaw56lapcgxrzdr";
+    repo = "pyroma";
+    tag = version;
+    sha256 = "sha256-J5+/1jc/Dvh7aPV9FgG/uhxWG4DbQISgx+kX4Ayd1cU=";
   };
 
   propagatedBuildInputs = [
+    build
     docutils
+    flit-core
+    packaging
     pygments
     setuptools
     requests
+    trove-classifiers
   ];
 
-  # https://github.com/regebro/pyroma/blob/3.2/Makefile#L23
-  # PyPITest requires network access
-  checkPhase = ''
-    ${python.interpreter} -m unittest -k 'not PyPITest' pyroma.tests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # tries to reach pypi
+    "test_complete"
+    "test_distribute"
+  ];
 
   pythonImportsCheck = [ "pyroma" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test your project's packaging friendliness";
+    mainProgram = "pyroma";
     homepage = "https://github.com/regebro/pyroma";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

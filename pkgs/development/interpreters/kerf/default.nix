@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, libedit, zlib, ncurses, expect
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libedit,
+  zlib,
+  ncurses,
+  expect,
 
-# darwin only below
-, Accelerate, CoreGraphics, CoreVideo
 }:
 
 stdenv.mkDerivation rec {
@@ -11,32 +15,37 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kevinlawler";
-    repo  = "kerf1";
-    rev   = "4ec5b592b310b96d33654d20d6a511e6fffc0f9d";
-    hash  = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
+    repo = "kerf1";
+    rev = "4ec5b592b310b96d33654d20d6a511e6fffc0f9d";
+    hash = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
   };
 
-  sourceRoot = "source/src";
-  buildInputs = [ libedit zlib ncurses ]
-    ++ lib.optionals stdenv.isDarwin ([
-      Accelerate
-    ] ++ lib.optionals stdenv.isx86_64 /* && isDarwin */ [
-      CoreGraphics CoreVideo
-    ]);
+  sourceRoot = "${src.name}/src";
+  buildInputs = [
+    libedit
+    zlib
+    ncurses
+  ];
 
-  checkInputs = [ expect ];
+  nativeCheckInputs = [ expect ];
   doCheck = true;
 
-  makeFlags = [ "kerf" "kerf_test" ];
+  makeFlags = [
+    "kerf"
+    "kerf_test"
+  ];
 
   # avoid a huge amount of warnings to make failures clearer
-  NIX_CFLAGS_COMPILE = map (x: "-Wno-${x}") [
-    "void-pointer-to-int-cast"
-    "format"
-    "implicit-function-declaration"
-    "gnu-variable-sized-type-not-at-end"
-    "unused-result"
-  ] ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    map (x: "-Wno-${x}") [
+      "void-pointer-to-int-cast"
+      "format"
+      "implicit-function-declaration"
+      "gnu-variable-sized-type-not-at-end"
+      "unused-result"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-fcommon" ]
+  );
 
   patchPhase = ''
     substituteInPlace ./Makefile \
@@ -72,21 +81,22 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D kerf $out/bin/kerf";
 
-  meta = with lib; {
+  meta = {
     description = "Columnar tick database and time-series language";
+    mainProgram = "kerf";
     longDescription = ''
       Kerf is a columnar tick database and small programming
       language that is a superset of JSON and SQL. It can be
       used for local analytics, timeseries, logfile processing,
       and more.
     '';
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
     homepage = "https://github.com/kevinlawler/kerf1";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
 
     # aarch64-linux seems hopeless, with over 2,000 warnings
     # generated?
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

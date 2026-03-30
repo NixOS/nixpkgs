@@ -1,12 +1,13 @@
-{ lib
-, substituteAll
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, exdown
-, numpy
-, gnuplot
-, setuptools
+{
+  lib,
+  replaceVars,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  exdown,
+  numpy,
+  gnuplot,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,17 +16,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
+    repo = "termplotlib";
     rev = "v${version}";
     sha256 = "1qfrv2w7vb2bbjvd5lqfq57c23iqkry0pwmif1ha3asmz330rja1";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  format = "pyproject";
-  checkInputs = [
+  pyproject = true;
+  nativeCheckInputs = [
     pytestCheckHook
     exdown
   ];
@@ -34,8 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   patches = [
-    (substituteAll {
-      src = ./gnuplot-subprocess.patch;
+    (replaceVars ./gnuplot-subprocess.patch {
       gnuplot = "${gnuplot.out}/bin/gnuplot";
     })
   ];
@@ -48,10 +46,10 @@ buildPythonPackage rec {
     "test_nolabel"
   ];
 
-  meta = with lib; {
-    description = "matplotlib for your terminal";
+  meta = {
+    description = "Matplotlib for your terminal";
     homepage = "https://github.com/nschloe/termplotlib";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -1,41 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyopenssl
-, pytestCheckHook
-, service-identity
-, twisted
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  setuptools,
+  six,
+  twisted,
+  txi2p-tahoe,
+  txtorcon,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "21.7.0";
+  version = "24.9.0";
+
+  pyproject = true;
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6dGFU4YNk1joXXZi2c2L84JtUbTs1ICgXfv0/EU2P4Q=";
+    hash = "sha256-vWsAdUDbWQuG3e0oAtLq8rA4Ys2wg38fD/h+E1ViQQg=";
   };
 
-  propagatedBuildInputs = [
-    mock
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  dependencies = [
+    six
     twisted
     pyopenssl
-    service-identity
-  ];
+  ]
+  ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
+  optional-dependencies = {
+    i2p = [ txi2p-tahoe ];
+    tor = [ txtorcon ];
+  };
+
+  nativeCheckInputs = [
+    mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # Not all dependencies are present
-    "src/foolscap/test/test_connection.py"
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "foolscap" ];
 
-  meta = with lib; {
+  meta = {
     description = "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol, intended to
@@ -43,7 +61,7 @@ buildPythonPackage rec {
       implement a distributed object-capabilities model in Python.
     '';
     homepage = "https://github.com/warner/foolscap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

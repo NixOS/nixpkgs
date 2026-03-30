@@ -1,24 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-devhelp";
-  version = "1.0.2";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "ff7f1afa7b9642e7060379360a67e9c41e8f3121f2ce9164266f61b9f4b338e4";
+    pname = "sphinxcontrib_devhelp";
+    inherit version;
+    hash = "sha256-QR9dltRF0dc7tdUhMzd7QkjsedtceTzn2+WeB0tN0a0=";
   };
 
+  nativeBuildInputs = [ flit-core ];
+
   # Check is disabled due to circular dependency of sphinx
+  dontCheckRuntimeDeps = true;
   doCheck = false;
 
-  meta = with lib; {
-    description = "sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document.";
+  pythonNamespaces = [ "sphinxcontrib" ];
+
+  meta = {
+    description = "Sphinx extension which outputs Devhelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
-    license = licenses.bsd0;
-    maintainers = teams.sphinx.members;
+    license = lib.licenses.bsd2;
   };
 }

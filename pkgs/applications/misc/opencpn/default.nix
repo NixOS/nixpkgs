@@ -1,78 +1,84 @@
-{ stdenv
-, lib
-, alsa-utils
-, at-spi2-core
-, cmake
-, curl
-, dbus
-, fetchFromGitHub
-, fetchpatch
-, flac
-, gtk3
-, jasper
-, libGLU
-, libarchive
-, libdatrie
-, libelf
-, libepoxy
-, libexif
-, libogg
-, libopus
-, libselinux
-, libsepol
-, libsndfile
-, libthai
-, libunarr
-, libusb1
-, libvorbis
-, libxkbcommon
-, lsb-release
-, lz4
-, makeWrapper
-, pcre
-, pkg-config
-, portaudio
-, sqlite
-, tinyxml
-, udev
-, util-linux
-, wxGTK32
-, xorg
+{
+  stdenv,
+  lib,
+  DarwinTools,
+  alsa-utils,
+  at-spi2-core,
+  cmake,
+  curl,
+  dbus,
+  elfutils,
+  fetchFromGitHub,
+  flac,
+  gitMinimal,
+  wrapGAppsHook3,
+  glew,
+  gtest,
+  jasper,
+  lame,
+  libGLU,
+  libarchive,
+  libdatrie,
+  libepoxy,
+  libexif,
+  libogg,
+  libopus,
+  libselinux,
+  libsepol,
+  libsndfile,
+  libthai,
+  libunarr,
+  libusb1,
+  libvorbis,
+  libxkbcommon,
+  lsb-release,
+  lz4,
+  libmpg123,
+  makeWrapper,
+  pkg-config,
+  portaudio,
+  rapidjson,
+  shapelib,
+  sqlite,
+  tinyxml,
+  util-linux,
+  wxwidgets_3_2,
+  libxtst,
+  libxdmcp,
+  xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.6.2";
+  version = "5.12.4";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
-    rev = "Release_${version}";
-    hash = "sha256-sNZYf/2gtjRrrGPuazVnKTgcuIQpKPazhexqlK21T4g=";
+    rev = "Release_${finalAttrs.version}";
+    hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/OpenCPN/OpenCPN/commit/30fa16850ba97d3df0622273947e3e3975b8e6c0.patch";
-      sha256 = "sha256-Sb4FE9QJA5kMJi52/x1Az6rMTS3WSURPx4QAhcv2j9E=";
-    })
+    # https://github.com/OpenCPN/OpenCPN/pull/4900
+    ./fix-clang20.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/TargetSetup.cmake \
-      --replace '"sw_vers" "-productVersion"' '"echo" "1"'
-    sed -i '/fixup_bundle/d' CMakeLists.txt
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'DARWIN_VERSION LESS 16' 'TRUE'
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+    gtest
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
     makeWrapper
   ];
 
@@ -81,12 +87,15 @@ stdenv.mkDerivation rec {
     curl
     dbus
     flac
-    gtk3
+    gitMinimal
+    shapelib
+  ]
+  ++ [
+    glew
     jasper
     libGLU
     libarchive
     libdatrie
-    libelf
     libepoxy
     libexif
     libogg
@@ -98,28 +107,44 @@ stdenv.mkDerivation rec {
     libvorbis
     libxkbcommon
     lz4
-    pcre
+    libmpg123
     portaudio
+    rapidjson
     sqlite
     tinyxml
-    wxGTK32
-  ] ++ lib.optionals stdenv.isLinux [
+    wxwidgets_3_2
+    xz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-utils
     libselinux
     libsepol
-    udev
     util-linux
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lame
   ];
 
-  cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
-
-  NIX_CFLAGS_COMPILE = lib.optionals (!stdenv.hostPlatform.isx86) [
-    "-DSQUISH_USE_SSE=0"
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
   ];
 
-  postInstall = lib.optionals stdenv.isDarwin ''
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (!stdenv.hostPlatform.isx86) [
+      "-DSQUISH_USE_SSE=0"
+    ]
+  );
+
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/OpenCPN.app $out/Applications
     makeWrapper $out/Applications/OpenCPN.app/Contents/MacOS/OpenCPN $out/bin/opencpn
@@ -127,11 +152,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    description = "A concise ChartPlotter/Navigator";
-    maintainers = with maintainers; [ kragniz lovesegfault ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+  meta = {
+    description = "Concise ChartPlotter/Navigator";
+    maintainers = with lib.maintainers; [
+      kragniz
+      lovesegfault
+    ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
-}
+})

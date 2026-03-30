@@ -1,50 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, pkg-config
-, vala
-, which
-, gtk3
-, json-glib
-, libgee
-, util-linux
-, vte
-, xapp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  help2man,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk3,
+  json-glib,
+  libgee,
+  util-linuxMinimal,
+  vte,
+  xapp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timeshift";
-  version = "22.06.5";
+  version = "25.12.4";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
-    rev = version;
-    sha256 = "IHX/F3tnl3ckX20mnPHmuK/W4pRTFHzBUfaJg2sMpqc=";
+    tag = finalAttrs.version;
+    hash = "sha256-4iK9RngcqwR0sYo9AXcTwEQ1eoPQPbAmwM5k/rcgU9s=";
   };
 
-  patches = [
-    ./timeshift-launcher.patch
-  ];
-
   postPatch = ''
-    while IFS="" read -r -d $'\0' FILE; do
+    for FILE in src/Core/Main.vala src/Utility/Device.vala; do
       substituteInPlace "$FILE" \
-        --replace "/sbin/blkid" "${util-linux}/bin/blkid"
-    done < <(find ./src -mindepth 1 -name "*.vala" -type f -print0)
+        --replace-fail "/sbin/blkid" "${lib.getExe' util-linuxMinimal "blkid"}"
+    done
+
     substituteInPlace ./src/Utility/IconManager.vala \
-      --replace "/usr/share" "$out/share"
-    substituteInPlace ./src/Core/Main.vala \
-      --replace "/etc/timeshift/default.json" "$out/etc/timeshift/default.json" \
-      --replace "file_copy(app_conf_path_default, app_conf_path);" "if (!dir_exists(file_parent(app_conf_path))){dir_create(file_parent(app_conf_path));};file_copy(app_conf_path_default, app_conf_path);"
+      --replace-fail "/usr/share" "$out/share"
+
+    # Substitute app_command to look for the `timeshift-gtk` in $out.
+    substituteInPlace ./src/timeshift-launcher \
+      --replace-fail "app_command='timeshift-gtk'" "app_command=$out/bin/timeshift-gtk"
   '';
 
   nativeBuildInputs = [
     gettext
+    help2man
+    meson
+    ninja
     pkg-config
     vala
-    which
   ];
 
   buildInputs = [
@@ -55,23 +62,22 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
-  preBuild = ''
-    makeFlagsArray+=( \
-      "-C" "src" \
-      "prefix=$out" \
-      "sysconfdir=$out/etc" \
-    )
-  '';
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
-  meta = with lib; {
-    description = "A system restore tool for Linux";
+  meta = {
+    description = "System restore tool for Linux";
     longDescription = ''
       TimeShift creates filesystem snapshots using rsync+hardlinks or BTRFS snapshots.
       Snapshots can be restored using TimeShift installed on the system or from Live CD or USB.
     '';
     homepage = "https://github.com/linuxmint/timeshift";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ShamrockLee bobby285271 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      ShamrockLee
+      bobby285271
+    ];
   };
-}
+})

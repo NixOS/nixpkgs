@@ -1,87 +1,99 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, hypothesis
-, setuptools-scm
-, six
-, attrs
-, py
-, setuptools
-, pytest-timeout
-, pytest-tornado
-, mock
-, tabulate
-, nbformat
-, jsonschema
-, pytestCheckHook
-, colorama
-, pygments
-, tornado
-, requests
-, GitPython
-, jupyter-server-mathjax
-, notebook
-, jinja2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  hatch-jupyter-builder,
+  hatchling,
+  jupyterlab,
+
+  # dependencies
+  colorama,
+  gitpython,
+  jinja2,
+  jupyter-server,
+  jupyter-server-mathjax,
+  nbformat,
+  pygments,
+  requests,
+  tornado,
+
+  # tests
+  gitMinimal,
+  pytest-tornado,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "3.1.1";
-  disabled = !isPy3k;
+  version = "4.0.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "67767320e971374f701a175aa59abd3a554723039d39fae908e72d16330d648b";
+    hash = "sha256-YqtQp1goJSPEUBFEufMUIh27rtBAPBL9cPak/MUy7CQ=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    attrs
-    py
-    setuptools
-    six
-    jupyter-server-mathjax
-    nbformat
-    colorama
-    pygments
-    tornado
-    requests
-    GitPython
-    notebook
-    jinja2
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
+    jupyterlab
   ];
 
-  checkInputs = [
-    hypothesis
-    pytest-timeout
+  dependencies = [
+    colorama
+    gitpython
+    jinja2
+    jupyter-server
+    jupyter-server-mathjax
+    nbformat
+    pygments
+    requests
+    tornado
+  ];
+
+  nativeCheckInputs = [
+    gitMinimal
     pytest-tornado
-    jsonschema
-    mock
-    tabulate
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
-    "test_apply_filter_no_repo"
-    "test_diff_api_checkpoint"
-    "test_filter_cmd_invalid_filter"
-    "test_inline_merge_source_add"
-    "test_inline_merge_source_patches"
-    "test_inline_merge_source_replace"
-    "test_inline_merge_cells_insertion"
-    "test_inline_merge_cells_replacement"
-    "test_interrogate_filter_no_repo"
-    "test_merge_input_strategy_inline"
+    # subprocess.CalledProcessError: Command '['git', 'diff', 'base', 'diff.ipynb']' returned non-zero exit status 128.
+    # git-nbdiffdriver diff: line 1: git-nbdiffdriver: command not found
+    # fatal: external diff died, stopping at diff.ipynb
+    "test_git_diffdriver"
+
+    # subprocess.CalledProcessError: Command '['git', 'merge', 'remote-no-conflict']' returned non-zero exit status 1.
+    "test_git_mergedriver"
+
+    # Require network access
+    "test_git_difftool"
+    "test_git_mergetool"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: Could not find system gitattributes location!
+    "test_locate_gitattributes_syste"
   ];
+
+  preCheck = ''
+    git config --global user.email "janedoe@example.com"
+    git config --global user.name "Jane Doe"
+  '';
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "nbdime" ];
+
+  meta = {
     homepage = "https://github.com/jupyter/nbdime";
-    description = "Tools for diffing and merging of Jupyter notebooks.";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tbenst ];
+    changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
+    description = "Tools for diffing and merging of Jupyter notebooks";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

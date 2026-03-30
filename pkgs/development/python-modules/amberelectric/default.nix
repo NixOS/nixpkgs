@@ -1,41 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, urllib3
+{
+  lib,
+  aenum,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "amberelectric";
-  version = "1.0.4";
-  format = "setuptools";
+  version = "2.0.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5SWJnTxRm6mzP0RxrgA+jnV+Gp23WjqQA57wbT2V9Dk=";
+  src = fetchFromGitHub {
+    owner = "madpilot";
+    repo = "amberelectric.py";
+    tag = "v${version}";
+    hash = "sha256-HTelfgOucyQINz34hT3kGxhJf68pxKbiO3L54nt5New=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aenum
     urllib3
+    pydantic
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "amberelectric" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Amber Electric API interface";
     homepage = "https://github.com/madpilot/amberelectric.py";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,43 +1,44 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.heapster;
-in {
+in
+{
   options.services.heapster = {
-    enable = mkEnableOption (lib.mdDoc "Heapster monitoring");
+    enable = lib.mkEnableOption "Heapster monitoring";
 
-    source = mkOption {
-      description = lib.mdDoc "Heapster metric source";
+    source = lib.mkOption {
+      description = "Heapster metric source";
       example = "kubernetes:https://kubernetes.default";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    sink = mkOption {
-      description = lib.mdDoc "Heapster metic sink";
+    sink = lib.mkOption {
+      description = "Heapster metic sink";
       example = "influxdb:http://localhost:8086";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    extraOpts = mkOption {
-      description = lib.mdDoc "Heapster extra options";
+    extraOpts = lib.mkOption {
+      description = "Heapster extra options";
       default = "";
-      type = types.separatedString " ";
+      type = lib.types.separatedString " ";
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use by heapster";
-      default = pkgs.heapster;
-      defaultText = literalExpression "pkgs.heapster";
-      type = types.package;
-    };
+    package = lib.mkPackageOption pkgs "heapster" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.heapster = {
-      wantedBy = ["multi-user.target"];
-      after = ["cadvisor.service" "kube-apiserver.service"];
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "cadvisor.service"
+        "kube-apiserver.service"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/heapster --source=${cfg.source} --sink=${cfg.sink} ${cfg.extraOpts}";
@@ -50,6 +51,6 @@ in {
       group = "heapster";
       description = "Heapster user";
     };
-    users.groups.heapster = {};
+    users.groups.heapster = { };
   };
 }

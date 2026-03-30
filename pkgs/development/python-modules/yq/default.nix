@@ -1,55 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, argcomplete
-, pyyaml
-, toml
-, xmltodict
-, jq
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchPypi,
+  jq,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  replaceVars,
+  tomlkit,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "3.1.0";
+  version = "3.4.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MKhKoiSGx0m6JpJWvVhsC803C34qcedsOSTq1IZ+dPI=";
+    hash = "sha256-ulhqGm8wz3BbL5IgZxLfIoHNMgKAIQ57e4Cty48lbjs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./jq-path.patch;
+    (replaceVars ./jq-path.patch {
       jq = "${lib.getBin jq}/bin/jq";
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    pyyaml
-    xmltodict
-    toml
+  dependencies = [
     argcomplete
+    pyyaml
+    tomlkit
+    xmltodict
   ];
 
-  checkInputs = [
-   pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "yq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line YAML/XML/TOML processor - jq wrapper for YAML, XML, TOML documents";
     homepage = "https://github.com/kislyuk/yq";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ womfoo SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+    ];
+    mainProgram = "yq";
   };
 }

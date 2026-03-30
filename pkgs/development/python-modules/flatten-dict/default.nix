@@ -1,46 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "flatten-dict";
   version = "0.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ianlini";
-    repo = pname;
+    repo = "flatten-dict";
     rev = version;
     hash = "sha256-uHenKoD4eLm9sMREVuV0BB/oUgh4NMiuj+IWd0hlxNQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flatten_dict"
-  ];
+  pythonImportsCheck = [ "flatten_dict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for flattening and unflattening dict-like objects";
     homepage = "https://github.com/ianlini/flatten-dict";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

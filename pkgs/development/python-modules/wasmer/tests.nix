@@ -1,12 +1,14 @@
-{ buildPythonPackage
-, wasmer
-, pytestCheckHook
-, wasmer-compiler-cranelift
-, wasmer-compiler-llvm
-, wasmer-compiler-singlepass
+{
+  buildPythonPackage,
+  wasmer,
+  pytestCheckHook,
+  wasmer-compiler-cranelift,
+  wasmer-compiler-llvm,
+  wasmer-compiler-singlepass,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  format = "setuptools";
   pname = "wasmer-tests";
   inherit (wasmer) version;
 
@@ -15,7 +17,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     wasmer
     wasmer-compiler-cranelift

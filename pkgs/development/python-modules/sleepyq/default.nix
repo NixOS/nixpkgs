@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inflection
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  inflection,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "sleepyq";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sleepyq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for SleepIQ API";
     homepage = "https://github.com/technicalpickles/sleepyq";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

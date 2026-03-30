@@ -1,26 +1,55 @@
-{ lib, fetchFromGitHub, cmake, pkg-config, alsa-lib ? null, fftwFloat, fltk13
-, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
-, libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  alsa-lib ? null,
+  carla ? null,
+  fftwFloat,
+  fltk_1_3,
+  fluidsynth ? null,
+  lame ? null,
+  libgig ? null,
+  libjack2 ? null,
+  libpulseaudio ? null,
+  libsamplerate,
+  libsoundio ? null,
+  libsndfile,
+  libvorbis ? null,
+  portaudio ? null,
+  qtbase,
+  qtx11extras,
+  qttools,
+  SDL ? null,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lmms";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qttools pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
+    carla
     alsa-lib
     fftwFloat
-    fltk13
+    fltk_1_3
     fluidsynth
     lame
     libgig
@@ -36,13 +65,35 @@ mkDerivation rec {
     SDL # TODO: switch to SDL2 in the next version
   ];
 
-  cmakeFlags = [ "-DWANT_QT5=ON" ];
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/cf64acc45e3264c6923885867e2dbf8b7586a36b/trunk/lmms-carla-export.patch";
+      sha256 = "sha256-wlSewo93DYBN2PvrcV58dC9kpoo9Y587eCeya5OX+j4=";
+    })
+  ];
 
-  meta = with lib; {
+  prePatch = ''
+    # Update CMake minimum required version and policies
+    substituteInPlace CMakeLists.txt --replace 'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)' 'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+    substituteInPlace CMakeLists.txt --replace 'CMAKE_POLICY(SET CMP0026 OLD)' 'CMAKE_POLICY(SET CMP0026 NEW)'
+    substituteInPlace CMakeLists.txt --replace 'CMAKE_POLICY(SET CMP0050 OLD)' 'CMAKE_POLICY(SET CMP0050 NEW)'
+    substituteInPlace CMakeLists.txt --replace 'GET_TARGET_PROPERTY(BIN2RES bin2res LOCATION)' 'SET(BIN2RES $<TARGET_FILE:bin2res>)'
+  '';
+
+  cmakeFlags = [
+    "-DWANT_QT5=ON"
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "11.4") [
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
+  meta = {
     description = "DAW similar to FL Studio (music production software)";
+    mainProgram = "lmms";
     homepage = "https://lmms.io";
-    license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ goibhniu yana ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

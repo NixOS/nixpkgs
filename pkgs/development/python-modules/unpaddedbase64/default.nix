@@ -1,29 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "unpaddedbase64";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1n6har8pxv0mqb96lanzihp1xf76aa17jw3977drb1fgz947pnmz";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/matrix-org/python-unpaddedbase64";
     description = "Unpadded Base64";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-
 }

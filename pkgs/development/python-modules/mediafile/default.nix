@@ -1,48 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mutagen
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  filetype,
+  mutagen,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mediafile";
-  version = "0.10.1";
-  format = "flit";
-
-  disabled = pythonOlder "3.6";
+  version = "0.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-2h17FA0GTY4R+WhZiQtPFYf6gH7XLbI3aOB/nUXFtJI=";
+    repo = "mediafile";
+    tag = "v${version}";
+    hash = "sha256-D5LRGncdeGcmJkrHVvI2cevov4SFO0wuhLxMqP+Ryb8=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    filetype
     mutagen
-    six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mediafile"
-  ];
+  pythonImportsCheck = [ "mediafile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the metadata tags for many audio file formats";
     homepage = "https://github.com/beetbox/mediafile";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    changelog = "https://github.com/beetbox/mediafile/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

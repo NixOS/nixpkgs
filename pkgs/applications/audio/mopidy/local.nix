@@ -1,32 +1,40 @@
-{ stdenv
-, lib
-, mopidy
-, python3Packages
+{
+  lib,
+  mopidy,
+  pythonPackages,
+  fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "Mopidy-Local";
-  version = "3.2.1";
+pythonPackages.buildPythonApplication (finalAttrs: {
+  pname = "mopidy-local";
+  version = "3.3.0";
+  pyproject = true;
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "18w39mxpv8p17whd6zfw5653d21q138f8xd6ili6ks2g2dbm25i9";
+  src = fetchPypi {
+    inherit (finalAttrs) version;
+    pname = "mopidy_local";
+    hash = "sha256-y6btbGk5UiVan178x7d9jq5OTnKMbuliHv0aRxuZK3o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
-    python3Packages.uritools
+    pythonPackages.uritools
   ];
 
-  checkInputs = [
-    python3Packages.pytestCheckHook
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  pythonImportsCheck = [ "mopidy_local" ];
+
+  meta = {
     homepage = "https://github.com/mopidy/mopidy-local";
     description = "Mopidy extension for playing music from your local music archive";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ruuda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ruuda ];
   };
-}
+})

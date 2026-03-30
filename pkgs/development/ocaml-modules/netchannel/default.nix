@@ -1,34 +1,36 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_sexp_conv
-, ppx_cstruct
-, lwt
-, mirage-net
-, io-page
-, mirage-xen
-, ipaddr
-, mirage-profile
-, shared-memory-ring
-, sexplib
-, logs
-, macaddr
-, lwt-dllist
-, result
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_sexp_conv,
+  ppx_cstruct,
+  lwt,
+  mirage-net,
+  io-page,
+  mirage-xen,
+  ipaddr,
+  mirage-profile,
+  shared-memory-ring,
+  sexplib,
+  logs,
+  macaddr,
+  lwt-dllist,
+  result,
 }:
 
 buildDunePackage rec {
   pname = "netchannel";
-  version = "2.1.1";
+  version = "2.1.3";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-${version}.tbz";
-    sha256 = "sha256-kYsAf6ntwWKUp26dMcp5BScdUOaGpM46050jVZe6gfs=";
+    hash = "sha256-gOpzY4bn9L8wkbeViXy/XQmxKqqJfd99bcHQFitYFOE=";
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     ppx_cstruct
   ];
 
@@ -48,10 +50,10 @@ buildDunePackage rec {
     result
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network device for reading and writing Ethernet frames via then Xen netfront/netback protocol";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/mirage-net-xen";
   };
 }

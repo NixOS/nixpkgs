@@ -1,35 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyftdi
-, pyopenssl
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pyftdi,
+  pyopenssl,
+  pyserial,
+  pytestCheckHook,
+  pyusb,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "alarmdecoder";
-  version = "1.13.11";
-  disabled = pythonOlder "3.6";
+  version = "1.13.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
     rev = version;
-    sha256 = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
+    hash = "sha256-qjn6OY8N1Miuou2aCHGhAQJtOEH1kE6XM8k1TPAibGU=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace test/test_{ad2,devices,messages}.py \
+      --replace-fail assertEquals assertEqual
+  '';
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     pyftdi
     pyopenssl
     pyserial
     pyusb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -42,10 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "alarmdecoder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for the Alarm Decoder (AD2USB, AD2SERIAL and AD2PI) devices";
     homepage = "https://github.com/nutechsoftware/alarmdecoder";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nutechsoftware/alarmdecoder/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   version = "0.14.1";
+  format = "setuptools";
   pname = "unicodecsv";
 
   src = fetchPypi {
@@ -15,10 +17,9 @@ buildPythonPackage rec {
   # ImportError: No module named runtests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
     homepage = "https://github.com/jdunck/python-unicodecsv";
-    maintainers = with maintainers; [ koral ];
+    maintainers = with lib.maintainers; [ koral ];
   };
-
 }

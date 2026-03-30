@@ -1,30 +1,33 @@
-{ lib
-, python3
-, mopidy
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  mopidy,
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
-        version = "0.22.0";
-        format = "setuptools";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-CZ4uoW4UHn5C+MckQXysTdydaApn99b0UCnF5RPb7DI=";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+  python = python3;
+in
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mopidy-ytmusic";
-  version = "0.3.7";
+  version = "0.3.9";
+  pyproject = true;
 
-  src = python.pkgs.fetchPypi {
-    inherit version;
-    pname = "Mopidy-YTMusic";
-    sha256 = "0gqjvi3nfzkqvbdhihzai241p1h5p037bj2475cc93xwzyyqxcrq";
+  src = fetchFromGitHub {
+    owner = "jmcdo29";
+    repo = "mopidy-ytmusic";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2o4fDtaIxRDvIiAGV/9qK/00BmYXasBUwW03fxFcDAU=";
   };
+
+  postPatch = ''
+    # only setup.py has up to date dependencies
+    rm pyproject.toml
+  '';
+
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     (mopidy.override { pythonPackages = python.pkgs; })
@@ -37,10 +40,11 @@ in python.pkgs.buildPythonApplication rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/jmcdo29/mopidy-ytmusic/releases/tag/${finalAttrs.src.rev}";
     description = "Mopidy extension for playing music from YouTube Music";
-    homepage = "https://github.com/OzymandiasTheGreat/mopidy-ytmusic";
-    license = licenses.asl20;
-    maintainers = [ maintainers.nickhu ];
+    homepage = "https://github.com/jmcdo29/mopidy-ytmusic";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.nickhu ];
   };
-}
+})

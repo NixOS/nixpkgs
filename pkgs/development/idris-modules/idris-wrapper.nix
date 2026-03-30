@@ -1,7 +1,19 @@
-{ stdenv, lib, symlinkJoin, makeWrapper, idris-no-deps, gmp }:
+{
+  stdenv,
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  idris-no-deps,
+  gmp,
+}:
 
 symlinkJoin {
-  inherit (idris-no-deps) name src meta;
+  inherit (idris-no-deps)
+    pname
+    version
+    src
+    meta
+    ;
   paths = [ idris-no-deps ];
   nativeBuildInputs = [ makeWrapper ];
   postBuild = ''

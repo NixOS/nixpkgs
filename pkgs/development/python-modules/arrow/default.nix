@@ -1,52 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python-dateutil
-, typing-extensions
-, pytestCheckHook
-, pytest-mock
-, pytz
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  python-dateutil,
+  types-python-dateutil,
+  tzdata,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-mock,
+  pytz,
+  simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arrow";
-  version = "1.2.3";
+  version = "1.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-OTSzDKG58pI3bZ2xWxlEYIjRLsWGKbw/DaKP1V+2M6E=";
+  src = fetchFromGitHub {
+    owner = "crsmithdev";
+    repo = "arrow";
+    tag = finalAttrs.version;
+    hash = "sha256-nK78Lo+7eitB+RS7BZkM+BNudviirAowc4a1uQdLC0w=";
   };
 
-  postPatch = ''
-    # no coverage reports
-    sed -i "/addopts/d" tox.ini
-  '';
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  dependencies = [
+    python-dateutil
+    types-python-dateutil
+    tzdata
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     pytz
     simplejson
   ];
 
   # ParserError: Could not parse timezone expression "America/Nuuk"
-  disabledTests = [
-    "test_parse_tz_name_zzz"
-  ];
+  #disabledTests = [ "test_parse_tz_name_zzz" ];
 
   pythonImportsCheck = [ "arrow" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/arrow-py/arrow/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for date manipulation";
     homepage = "https://github.com/crsmithdev/arrow";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

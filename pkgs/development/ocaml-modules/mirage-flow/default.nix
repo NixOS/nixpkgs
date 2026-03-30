@@ -1,18 +1,26 @@
-{ lib, buildDunePackage, fetchurl, cstruct, fmt, ocaml_lwt }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  fmt,
+  lwt,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-flow";
-  version = "3.0.0";
-
-  useDune2 = true;
-  minimumOCamlVersion = "4.05";
+  version = "5.0.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-flow/releases/download/v${version}/mirage-flow-v${version}.tbz";
-    sha256 = "sha256-1wvabIXsJ0e+2IvE2V8mnSgQUDuSkT8IB75SkWlhOPw=";
+    url = "https://github.com/mirage/mirage-flow/releases/download/v${finalAttrs.version}/mirage-flow-${finalAttrs.version}.tbz";
+    hash = "sha256-N8p5yuDtmycLh3Eu3LOXpd7Eqzk1eygQfgDapshVMyM=";
   };
 
-  propagatedBuildInputs = [ cstruct fmt ocaml_lwt ];
+  propagatedBuildInputs = [
+    cstruct
+    fmt
+    lwt
+  ];
 
   meta = {
     description = "Flow implementations and combinators for MirageOS";
@@ -20,6 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
-
-
+})

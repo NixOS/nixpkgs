@@ -1,16 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.xbanish;
+let
+  cfg = config.services.xbanish;
 
-in {
+in
+{
   options.services.xbanish = {
 
-    enable = mkEnableOption (lib.mdDoc "xbanish");
+    enable = mkEnableOption "xbanish";
 
     arguments = mkOption {
-      description = lib.mdDoc "Arguments to pass to xbanish command";
+      description = "Arguments to pass to xbanish command";
       default = "";
       example = "-d -i shift";
       type = types.str;

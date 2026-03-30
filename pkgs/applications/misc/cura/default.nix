@@ -1,14 +1,25 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
- qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  wrapQtAppsHook,
+  qtbase,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  curaengine,
+  plugins ? [ ],
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cura";
   version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xk=";
   };
 
@@ -19,16 +30,35 @@ mkDerivation rec {
     sha256 = "sha256-7y4OcbeQHv+loJ4cMgPU0e818Zsv90EwARdztNWS8zM=";
   };
 
-  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
-  propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring
-  ] ++ plugins;
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
+  buildInputs = [
+    qtbase
+    qtquickcontrols2
+    qtgraphicaleffects
+  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      libsavitar
+      numpy-stl
+      pyserial
+      requests
+      uranium
+      zeroconf
+      pynest2d
+      sentry-sdk
+      trimesh
+      keyring
+    ]
+    ++ plugins;
+  nativeBuildInputs = [
+    cmake
+    python3.pkgs.wrapPython
+    wrapQtAppsHook
+  ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
-    "-DCURA_VERSION=${version}"
+    "-DCURA_VERSION=${finalAttrs.version}"
   ];
 
   makeWrapperArgs = [
@@ -43,7 +73,7 @@ mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/cura/resources/materials
-    cp ${materials}/*.fdm_material $out/share/cura/resources/materials/
+    cp ${finalAttrs.materials}/*.fdm_material $out/share/cura/resources/materials/
     mkdir -p $out/lib/cura/plugins
     for plugin in ${toString plugins}; do
       ln -s $plugin/lib/cura/plugins/* $out/lib/cura/plugins
@@ -55,11 +85,12 @@ mkDerivation rec {
     wrapQtApp $out/bin/cura
   '';
 
-  meta = with lib; {
+  meta = {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
+    mainProgram = "cura";
     homepage = "https://github.com/Ultimaker/Cura";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar gebner ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

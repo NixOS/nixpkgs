@@ -1,15 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "sabyenc3";
   version = "5.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,14 +17,12 @@ buildPythonPackage rec {
   # Tests are not included in pypi distribution
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sabyenc3"
-  ];
+  pythonImportsCheck = [ "sabyenc3" ];
 
-  meta = with lib; {
+  meta = {
     description = "yEnc Decoding for Python 3";
     homepage = "https://github.com/sabnzbd/sabyenc/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

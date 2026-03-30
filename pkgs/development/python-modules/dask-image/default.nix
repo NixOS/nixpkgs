@@ -1,54 +1,87 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, dask
-, fetchPypi
-, numpy
-, pims
-, pytestCheckHook
-, pythonOlder
-, scikitimage
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  dask,
+  numpy,
+  scipy,
+  pandas,
+  pims,
+
+  # tests
+  pyarrow,
+  pytestCheckHook,
+  scikit-image,
 }:
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2022.9.0";
-  format = "setuptools";
+  version = "2025.11.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8SPf0Wp9FcdmYqasFHeFCe1e7ZtJT0Mi5ZRemxWSNUc=";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "dask-image";
+    tag = "v${version}";
+    hash = "sha256-+nzYthnobcemunMcAWwRpHOQy6yFtjdib/7VZqWEiqc=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i "/--flake8/d" pyproject.toml
+
+    # https://numpy.org/doc/stable//release/2.4.0-notes.html#removed-numpy-in1d
+    substituteInPlace tests/test_dask_image/test_ndmeasure/test_core.py \
+      --replace-fail "np.in1d" "np.isin"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     dask
     numpy
     scipy
+    pandas
     pims
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pyarrow
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--flake8" ""
-  '';
+  pythonImportsCheck = [ "dask_image" ];
 
-  pythonImportsCheck = [
-    "dask_image"
+  disabledTests = [
+    # The following tests are from 'tests/test_dask_image/test_ndmeasure/test_find_objects.py' and
+    # fail because of errors on numpy slices
+    # AttributeError: 'str' object has no attribute 'start'
+    "test_find_objects"
+    "test_3d_find_objects"
+
+    # AssertionError (comparing slices)
+    "test_find_objects_with_empty_chunks"
+
+    # scipy compat issue
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_generic_filter_identity"
+    "test_generic_filter_comprehensions"
   ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+  meta = {
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/dask/dask-image/releases/tag/v${version}";
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

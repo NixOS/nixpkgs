@@ -1,19 +1,50 @@
-{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsa-lib, libSM, libX11, gdk-pixbuf, pango, libXinerama, mpg123, runtimeShell }:
+{
+  stdenv,
+  lib,
+  writeText,
+  fetchurl,
+  upx,
+  libGL,
+  libGLU,
+  glib,
+  gtk2,
+  alsa-lib,
+  libsm,
+  libx11,
+  gdk-pixbuf,
+  pango,
+  libxinerama,
+  mpg123,
+  runtimeShell,
+}:
 
 let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsa-lib libSM libX11 gdk-pixbuf pango libXinerama ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    libGL
+    libGLU
+    glib
+    gtk2
+    alsa-lib
+    libsm
+    libx11
+    gdk-pixbuf
+    pango
+    libxinerama
+  ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "kega-fusion";
   version = "3.63x";
 
   src = fetchurl {
-    url = "http://www.carpeludum.com/download/Fusion363x.tar.gz";
+    url = "https://www.carpeludum.com/download/Fusion363x.tar.gz";
     sha256 = "14s6czy20h5khyy7q95hd7k77v17ssafv9l6lafkiysvj2nmw94g";
   };
 
   plugins = fetchurl {
-    url = "http://www.carpeludum.com/download/PluginsLinux.tar.gz";
+    url = "https://www.carpeludum.com/download/PluginsLinux.tar.gz";
     sha256 = "0d623cvh6n5ijj3wb64g93mxx2xbichsn7hj7brbb0ndw5cs70qj";
   };
 
@@ -68,12 +99,13 @@ in stdenv.mkDerivation {
     chmod +x "$out/bin/kega-fusion"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
     homepage = "https://www.carpeludum.com/kega-fusion/";
-    maintainers = with maintainers; [ abbradar ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
+    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
     platforms = [ "i686-linux" ];
+    mainProgram = "kega-fusion";
   };
 }

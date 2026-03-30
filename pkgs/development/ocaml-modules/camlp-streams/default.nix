@@ -1,13 +1,17 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "camlp-streams";
   version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "ocaml";
-    repo = pname;
-    rev = "v${version}";
+    repo = "camlp-streams";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kHuFBqu0mjFv53sOtmFZcX2reo5ToaOpItP7P53bfGQ=";
   };
 
@@ -17,4 +21,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

@@ -1,47 +1,66 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, selenium
-, cssselect
-, django
-, flask
-, lxml
-, pytestCheckHook
-, zope-testbrowser
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  urllib3,
+  selenium,
+  cssselect,
+  django,
+  flask,
+  lxml,
+  pytestCheckHook,
+  zope-testbrowser,
 }:
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.18.1";
-
-  disabled = isPy27;
-
-  format = "setuptools";
+  version = "0.21.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5d39e9omc223ugBfVMIsMZh8+NPVxc6q7p2gwZ0fF0o=";
+    tag = version;
+    hash = "sha256-PGGql8yI1YosoUBAyDoI/8k7s4sVYnXEV7eow3GHH88=";
   };
 
-  propagatedBuildInputs = [
-    selenium
+  patches = [
+    ./lxml-6.patch
   ];
 
-  checkInputs = [
-    cssselect
-    django
-    flask
-    lxml
+  build-system = [ setuptools ];
+
+  dependencies = [ urllib3 ];
+
+  optional-dependencies = {
+    "zope.testbrowser" = [
+      zope-testbrowser
+      lxml
+      cssselect
+    ];
+    django = [
+      django
+      lxml
+      cssselect
+    ];
+    flask = [
+      flask
+      lxml
+      cssselect
+    ];
+    selenium = [ selenium ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-    zope-testbrowser
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # driver is present and fails with a different error during loading
     "test_browser_local_driver_not_present"
+    "test_browser_log_missing_drivers"
     "test_local_driver_not_present"
   ];
 
@@ -49,6 +68,7 @@ buildPythonPackage rec {
     "samples"
     # We run neither Chromium nor Firefox nor ...
     "tests/test_async_finder.py"
+    "tests/test_element_is_visible.py"
     "tests/test_html_snapshot.py"
     "tests/test_iframes.py"
     "tests/test_mouse_interaction.py"
@@ -64,10 +84,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "splinter" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://splinter.readthedocs.io/en/latest/news.html";
     description = "Browser abstraction for web acceptance testing";
     homepage = "https://github.com/cobrateam/splinter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,41 +1,48 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, asciidoctor
-, buildah
-, buildah-unwrapped
-, libiconv
-, libkrun
-, makeWrapper
-, sigtool
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  asciidoctor,
+  buildah,
+  buildah-unwrapped,
+  cargo,
+  libiconv,
+  libkrun,
+  makeWrapper,
+  rustc,
+  sigtool,
 }:
 
 stdenv.mkDerivation rec {
   pname = "krunvm";
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "krunvm";
     rev = "v${version}";
-    sha256 = "sha256-rR762L8P+7ebE0u4MVCJoXc5mmqXlDFfSas+lFBMVFQ=";
+    hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-3WiXm90XiQHpCbhlkigg/ZATQeDdUKTstN7hwcsKm4o=";
+    hash = "sha256-TMV9xCcqBQgPsUSzsTJAi4qsplTOSm3ilaUmtmdaGnE=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
     asciidoctor
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [ sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  buildInputs = [ libkrun ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    libkrun
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -55,17 +62,19 @@ stdenv.mkDerivation rec {
 
   # It attaches entitlements with codesign and strip removes those,
   # voiding the entitlements and making it non-operational.
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     wrapProgram $out/bin/krunvm \
       --prefix PATH : ${lib.makeBinPath [ buildah ]} \
   '';
 
-  meta = with lib; {
-    description = "A CLI-based utility for creating microVMs from OCI images";
+  meta = {
+    description = "CLI-based utility for creating microVMs from OCI images";
     homepage = "https://github.com/containers/krunvm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = libkrun.meta.platforms;
+    mainProgram = "krunvm";
   };
 }

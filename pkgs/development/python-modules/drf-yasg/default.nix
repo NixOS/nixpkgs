@@ -1,58 +1,75 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inflection
-, ruamel-yaml
-, setuptools-scm
-, six
-, coreapi
-, djangorestframework
-, pytestCheckHook
-, pytest-django
-, datadiff
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  django,
+  djangorestframework,
+  inflection,
+  packaging,
+  pytz,
+  pyyaml,
+  uritemplate,
+  datadiff,
+  dj-database-url,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.4";
+  version = "1.21.15";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-iHyfeeZPRqpIl0I05hApsb6msS6mKKj8ijaXWJrdHT4=";
+    inherit version;
+    pname = "drf_yasg";
+    hash = "sha256-74aDjE7xDc06wevyvmAcvgKXi5mWccqkNmf3yduWFGg=";
   };
 
   postPatch = ''
-    # https://github.com/axnsan12/drf-yasg/pull/710
-    sed -i "/packaging/d" requirements/base.txt
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm ~= 7.0" "setuptools-scm >= 7.0"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    six
-    inflection
-    ruamel-yaml
-    coreapi
+  dependencies = [
+    django
     djangorestframework
+    inflection
+    packaging
+    pytz
+    pyyaml
+    uritemplate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     datadiff
+    dj-database-url
   ];
 
-  # ImportError: No module named 'testproj.settings'
+  env.DJANGO_SETTINGS_MODULE = "testproj.settings.local";
+
+  preCheck = ''
+    cd testproj
+  '';
+
+  # a lot of libraries are missing
   doCheck = false;
 
   pythonImportsCheck = [ "drf_yasg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
-    maintainers = with maintainers; [ ];
-    license = licenses.bsd3;
+    maintainers = [ ];
+    license = lib.licenses.bsd3;
   };
 }

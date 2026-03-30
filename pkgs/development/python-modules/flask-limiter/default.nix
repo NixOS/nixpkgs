@@ -1,55 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-, flask
-, limits
-, rich
-, typing-extensions
-
-, asgiref
-, hiro
-, pymemcache
-, pytest-mock
-, pytestCheckHook
-, redis
-, pymongo
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  hatchling,
+  hatch-vcs,
+  hiro,
+  limits,
+  ordered-set,
+  pymemcache,
+  pymongo,
+  pytest-check,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  redis,
+  rich,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Limiter";
-  version = "2.6.2";
+  pname = "flask-limiter";
+  version = "4.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
-    rev = version;
-    sha256 = "sha256-JjksKwSMWzcslXCs977/Wlq1wDMaACxm8e6Ub+r3wPg=";
+    tag = version;
+    hash = "sha256-lrq4WCc2gxm039nXW6tiDt7laJFEICO0x9jw71UUwaI=";
   };
 
-  propagatedBuildInputs = [
-    flask
-    limits
-    rich
-    typing-extensions
+  postPatch = ''
+    # flask-restful is unmaintained and breaks regularly, don't depend on it
+    substituteInPlace tests/test_views.py \
+      --replace-fail "import flask_restful" ""
+  '';
+
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [
+  dependencies = [
+    flask
+    limits
+    ordered-set
+  ];
+
+  optional-dependencies = {
+    cli = [ rich ];
+    redis = limits.optional-dependencies.redis;
+    memcached = limits.optional-dependencies.memcached;
+    mongodb = limits.optional-dependencies.mongodb;
+  };
+
+  nativeCheckInputs = [
     asgiref
+    pytest-check
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     hiro
     redis
     pymemcache
     pymongo
-  ];
-
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-
-    # flask-restful is unmaintained and breaks regularly, don't depend on it
-    sed -i "/import flask_restful/d" tests/test_views.py
-  '';
+  ]
+  ++ optional-dependencies.cli;
 
   disabledTests = [
     # flask-restful is unmaintained and breaks regularly
@@ -78,9 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_limiter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
-    license = licenses.mit;
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

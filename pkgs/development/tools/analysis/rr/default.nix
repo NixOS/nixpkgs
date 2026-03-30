@@ -1,30 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bash,
+  capnproto,
+  cmake,
+  gdb,
+  libpfm,
+  makeWrapper,
+  nix-update-script,
+  pkg-config,
+  procps,
+  python3,
+  which,
+  zlib,
+  zstd,
 }:
 
-stdenv.mkDerivation rec {
-  version = "5.6.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.9.0";
   pname = "rr";
 
   src = fetchFromGitHub {
-    owner = "mozilla";
+    owner = "rr-debugger";
     repo = "rr";
-    rev = version;
-    sha256 = "H39HPkAQGubXVQV3jCpH4Pz+7Q9n03PrS70utk7Tt2k=";
+    rev = finalAttrs.version;
+    hash = "sha256-o+HXrgGXdsvjlNh70qsXRtp2yXOiZIT30ejfs1KEaqE=";
   };
 
   patches = [
+    # fix build w/ glibc-2.42
     (fetchpatch {
-      name = "fix-flexible-array-member.patch";
-      url = "https://github.com/rr-debugger/rr/commit/2979c60ef8bbf7c940afd90172ddc5d8863f766e.diff";
-      sha256 = "cmdCJetQr3ELPOyWl37h1fGfG/xvaiJpywxIAnqb5YY=";
+      url = "https://github.com/rr-debugger/rr/commit/6251648873b9e1ed23536beebbaa5d6fead3d5be.patch";
+      hash = "sha256-k+jeGUJyybYq3GF2zIhpDF8NT66Buq6nztUbh28qVD8=";
     })
   ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
-    sed '7i#include <math.h>' -i src/Scheduler.cc
-    patchShebangs .
+    patchShebangs src
   '';
 
   # With LTO enabled, linking fails with the following message:
@@ -35,28 +50,54 @@ stdenv.mkDerivation rec {
   # collect2: error: ld returned 1 exit status
   #
   # See also https://github.com/NixOS/nixpkgs/pull/110846
-  preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "-flto" ""
+  '';
 
-  nativeBuildInputs = [ cmake pkg-config which ];
-  buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    capnproto
+    cmake
+    makeWrapper
+    pkg-config
+    python3.pythonOnBuildForHost
+    which
   ];
-  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
+
+  buildInputs = [
+    bash
+    capnproto
+    gdb
+    libpfm
+    procps
+    python3
+    zlib
+    zstd
+  ];
+
   cmakeFlags = [
-    "-DCMAKE_C_FLAGS_RELEASE:STRING="
-    "-DCMAKE_CXX_FLAGS_RELEASE:STRING="
-    "-Ddisable32bit=ON"
+    (lib.cmakeBool "disable32bit" true)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # we turn on additional warnings due to hardening
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "fortify" ];
 
   # FIXME
-  #doCheck = true;
+  doCheck = false;
 
   preCheck = "export HOME=$TMPDIR";
+
+  # needs GDB to replay programs at runtime
+  preFixup = ''
+    wrapProgram "$out/bin/rr" \
+      --prefix PATH ":" "${lib.makeBinPath [ gdb ]}";
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://rr-project.org/";
@@ -68,8 +109,19 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = with lib.licenses; [ mit bsd2 ];
-    maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    license = with lib.licenses; [
+      mit
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [
+      pierron
+      thoughtpolice
+      lf-
+    ];
+    platforms = [
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
-}
+})

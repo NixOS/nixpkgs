@@ -1,42 +1,41 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct, ppx_tools
-, cstruct, ounit, mmap, stdlib-shims
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_cstruct,
+  cstruct,
+  ounit,
 }:
 
 buildDunePackage rec {
   pname = "pcap-format";
-  version = "0.5.2";
+  version = "0.6.0";
 
-  minimumOCamlVersion = "4.03";
-
-  # due to cstruct
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-pcap/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "14c5rpgglyz41jic0fg0xa22d2w1syb86kva22y9fi7aqj9vm31f";
+    url = "https://github.com/mirage/ocaml-pcap/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-LUjy8Xm6VsnMq1FHKzmJg7uorkTv7cOTsoLwmtNHkaY=";
   };
 
-  nativeBuildInputs = [
-    ppx_tools
+  buildInputs = [
     ppx_cstruct
   ];
 
   propagatedBuildInputs = [
     cstruct
-    stdlib-shims
   ];
 
   doCheck = true;
   checkInputs = [
     ounit
-    mmap
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decode and encode PCAP (packet capture) files";
     homepage = "https://mirage.github.io/ocaml-pcap";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

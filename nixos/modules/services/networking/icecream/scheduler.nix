@@ -1,22 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.icecream.scheduler;
-in {
+in
+{
 
   ###### interface
 
   options = {
 
     services.icecream.scheduler = {
-      enable = mkEnableOption (lib.mdDoc "Icecream Scheduler");
+      enable = mkEnableOption "Icecream Scheduler";
 
       netName = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Network name for the icecream scheduler.
 
           Uses the default ICECREAM if null.
@@ -26,14 +32,14 @@ in {
       port = mkOption {
         type = types.port;
         default = 8765;
-        description = lib.mdDoc ''
+        description = ''
           Server port to listen for icecream daemon requests.
         '';
       };
 
       openFirewall = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically open the daemon port in the firewall.
         '';
       };
@@ -41,7 +47,7 @@ in {
       openTelnet = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the telnet TCP port on 8766.
         '';
       };
@@ -49,22 +55,17 @@ in {
       persistentClientConnection = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to prevent clients from connecting to a better scheduler.
         '';
       };
 
-      package = mkOption {
-        default = pkgs.icecream;
-        defaultText = literalExpression "pkgs.icecream";
-        type = types.package;
-        description = lib.mdDoc "Icecream package to use.";
-      };
+      package = mkPackageOption pkgs "icecream" { };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc "Additional command line parameters";
+        default = [ ];
+        description = "Additional command line parameters";
         example = [ "-v" ];
       };
     };
@@ -84,13 +85,19 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeShellArgs ([
-          "${getBin cfg.package}/bin/icecc-scheduler"
-          "-p" (toString cfg.port)
-        ]
-        ++ optionals (cfg.netName != null) [ "-n" (toString cfg.netName) ]
-        ++ optional cfg.persistentClientConnection "-r"
-        ++ cfg.extraArgs);
+        ExecStart = escapeShellArgs (
+          [
+            "${getBin cfg.package}/bin/icecc-scheduler"
+            "-p"
+            (toString cfg.port)
+          ]
+          ++ optionals (cfg.netName != null) [
+            "-n"
+            (toString cfg.netName)
+          ]
+          ++ optional cfg.persistentClientConnection "-r"
+          ++ cfg.extraArgs
+        );
 
         DynamicUser = true;
       };

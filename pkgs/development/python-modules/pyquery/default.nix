@@ -1,35 +1,67 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, lxml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cssselect,
+  fetchPypi,
+  lxml,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  webob,
+  webtest,
 }:
 
 buildPythonPackage rec {
   pname = "pyquery";
-  version = "1.4.3";
-  disabled = pythonOlder "3.5";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
+    hash = "sha256-AZS7JwaxLQN9sSxRko/p67NrctnnGVZdq6WmxZUyL68=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cssselect
     lxml
   ];
 
-  # circular dependency on webtest
-  doCheck = false;
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pyquery" ];
 
-  meta = with lib; {
-    description = "A jquery-like library for Python";
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+    webob
+    (webtest.overridePythonAttrs (_: {
+      # circular dependency
+      doCheck = false;
+    }))
+  ];
+
+  disabledTestPaths = [
+    # requires network
+    "tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+  ];
+
+  disabledTests = [
+    # broken in libxml 2.14 update
+    # https://github.com/gawel/pyquery/issues/257
+    "test_val_for_textarea"
+    "test_replaceWith"
+    "test_replaceWith_with_function"
+    "test_get"
+    "test_post"
+    "test_session"
+  ];
+
+  meta = {
+    description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd3;
   };
 }

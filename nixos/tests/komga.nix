@@ -1,16 +1,15 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
+{ lib, ... }:
 
 {
   name = "komga";
-  meta.maintainers = with maintainers; [ govanify ];
+  meta.maintainers = with lib.maintainers; [ govanify ];
 
   nodes.machine =
     { pkgs, ... }:
-    { services.komga = {
+    {
+      services.komga = {
         enable = true;
-        port = 1234;
+        settings.server.port = 1234;
       };
     };
 
@@ -19,4 +18,4 @@ with lib;
     machine.wait_for_open_port(1234)
     machine.succeed("curl --fail http://localhost:1234/")
   '';
-})
+}

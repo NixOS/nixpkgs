@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
+#!nix-shell -i bash -p nix wget jq nix-prefetch-github nurl
 
 # shellcheck shell=bash
 
@@ -13,38 +13,37 @@ if [[ $# -gt 1 || $1 == -* ]]; then
     exit 1
 fi
 
-set -x
-
-cd "$(dirname "$0")"
 version="$1"
 
 set -euo pipefail
 
+NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"
+
 if [ -z "$version" ]; then
-    version="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/woodpecker-ci/woodpecker/releases?per_page=1" | jq -r '.[0].tag_name')"
+    version="$(wget -q -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/woodpecker-ci/woodpecker/releases?per_page=10" | jq -r '[.[] | select(.prerelease == false)][0].tag_name')"
 fi
 
 # strip leading "v"
 version="${version#v}"
+rev="v$version"
 
-# Woodpecker repository
-src_hash=$(nix-prefetch-github woodpecker-ci woodpecker --rev "v${version}" | jq -r .sha256)
+cd "$(dirname "$0")"
 
-# Front-end dependencies
-woodpecker_src="https://raw.githubusercontent.com/woodpecker-ci/woodpecker/v$version"
-wget "${TOKEN_ARGS[@]}" "$woodpecker_src/web/package.json" -O woodpecker-package.json
-
-web_tmpdir=$(mktemp -d)
-trap 'rm -rf "$web_tmpdir"' EXIT
-pushd "$web_tmpdir"
-wget "${TOKEN_ARGS[@]}" "$woodpecker_src/web/yarn.lock"
-yarn_hash=$(prefetch-yarn-deps yarn.lock)
-popd
-
-# Use friendlier hashes
-src_hash=$(nix hash to-sri --type sha256 "$src_hash")
-yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
-
+# Woodpecker repository source hash
+src_hash=$(nix-prefetch-github woodpecker-ci woodpecker --rev "$rev" | jq -r .hash)
+sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" common.nix
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
-sed -i -E -e "s#srcSha256 = \".*\"#srcSha256 = \"$src_hash\"#" common.nix
-sed -i -E -e "s#yarnSha256 = \".*\"#yarnSha256 = \"$yarn_hash\"#" common.nix
+
+# Go modules vendor hash
+vendor_hash=$(nurl -e "(import $NIXPKGS_ROOT/. { }).woodpecker-server.goModules")
+sed -i -E -e "s#vendorHash = \".*\"#vendorHash = \"$vendor_hash\"#" common.nix
+
+# pnpm dependencies hash for web UI
+pnpm_hash=$(nurl -e "(import $NIXPKGS_ROOT/. { }).woodpecker-server.pnpmDeps")
+sed -i -E -e "s#nodeModulesHash = \".*\"#nodeModulesHash = \"$pnpm_hash\"#" common.nix
+
+echo "Update complete!"
+echo "Version: $version"
+echo "Source hash: $src_hash"
+echo "go vendor hash: $vendor_hash"
+echo "pnpm dependencies hash: $pnpm_hash"

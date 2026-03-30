@@ -1,50 +1,70 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, setuptools-scm
-, attrs
-, packaging
-, pyparsing
-, semantic-version
-, semver
-, commoncode
-, pytestCheckHook
-, saneyaml
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  commoncode,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  saneyaml,
+  semantic-version,
+  semver,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "univers";
-  version = "30.7.0";
+  version = "31.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yM0SDBpkiZEbaZ0ugjiMwwUFKqZGbmh1JNlv5qvPAYo=";
+    hash = "sha256-XGF+3QNlfwLdqoTbC2ahETSqYE/gSwbnyChIPwicnaY=";
   };
 
-  patches = [
-    # Make tests work when not using virtualenv, can be dropped with the next version
-    # Upstream PR (already merged): https://github.com/nexB/univers/pull/77
-    (fetchpatch {
-      url = "https://github.com/nexB/univers/commit/b74229cc1c8790287633cd7220d6b2e97c508302.patch";
-      sha256 = "sha256-i6zWv9rAlwCMghd9g5FP6WIQLLDLYvp+6qJ1E7nfTSY=";
-    })
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ attrs packaging pyparsing semantic-version semver ];
-  checkInputs = [ commoncode pytestCheckHook saneyaml ];
+  dependencies = [
+    attrs
+    packaging
+    semantic-version
+    semver
+  ];
+
+  nativeCheckInputs = [
+    commoncode
+    pytestCheckHook
+    saneyaml
+  ];
 
   dontConfigure = true; # ./configure tries to setup virtualenv and downloads dependencies
 
-  disabledTests = [ "test_codestyle" ];
-
   pythonImportsCheck = [ "univers" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # No value for us
+    "test_codestyle"
+    # AssertionError starting with 30.10.0
+    "test_enhanced_semantic_version"
+    "test_semver_version"
+  ];
+
+  meta = {
     description = "Library for parsing version ranges and expressions";
-    homepage = "https://github.com/nexB/univers";
-    license = with licenses; [ asl20 bsd3 mit ];
-    maintainers = with maintainers; [ armijnhemel sbruder ];
+    homepage = "https://github.com/aboutcode-org/univers";
+    changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
+    license = with lib.licenses; [
+      asl20
+      bsd3
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      armijnhemel
+      sbruder
+    ];
   };
 }

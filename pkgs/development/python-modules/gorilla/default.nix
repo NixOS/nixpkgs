@@ -1,18 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi}:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "gorilla";
   version = "0.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "005ab8853b037162a7c77bb824604c6e081878ee03c09ad01ef41744856019d3";
+    hash = "sha256-AFq4hTsDcWKnx3u4JGBMbggYeO4DwJrQHvQXRIVgGdM=";
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/christophercrouzet/gorilla";
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "gorilla" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [ "test_find_patches_2" ];
+
+  meta = {
     description = "Convenient approach to monkey patching";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tbenst ];
+    homepage = "https://github.com/christophercrouzet/gorilla";
+    changelog = "https://github.com/christophercrouzet/gorilla/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

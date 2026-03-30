@@ -1,85 +1,106 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, isPy3k
-, decorator
-, http-parser
-, python-magic
-, urllib3
-, pytestCheckHook
-, pytest-mock
-, aiohttp
-, fastapi
-, gevent
-, httpx
-, redis
-, requests
-, sure
-, pook
+{
+  lib,
+  buildPythonPackage,
+  stdenv,
+  fetchPypi,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  decorator,
+  h11,
+  puremagic,
+  urllib3,
+
+  # optional-dependencies
+  xxhash,
+  pook,
+
+  # tests
+  aiohttp,
+  asgiref,
+  fastapi,
+  gevent,
+  httpx,
+  psutil,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  redis,
+  redisTestHook,
+  requests,
+  sure,
+
 }:
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.10.8";
-  disabled = !isPy3k;
+  version = "3.14.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aiofKFE9CPLMVJm+IT6VmtJSsVuH7ucpv5Kp1w7d2FE=";
+    hash = "sha256-MLlh0CRtlUsg+Bvvdvedzk0RVLCm+zzt8TWie6yHTkU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     decorator
-    http-parser
-    python-magic
+    h11
+    puremagic
     urllib3
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
+  optional-dependencies = {
+    pook = [ pook ];
+    speedups = [ xxhash ];
+  };
+
+  nativeCheckInputs = [
     aiohttp
+    asgiref
     fastapi
     gevent
     httpx
+    psutil
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
     redis
+    redisTestHook
     requests
     sure
-    pook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  # skip http tests
-  SKIP_TRUE_HTTP = true;
-  pytestFlagsArray = [
-    # Requires a live Redis instance
-    "--ignore=tests/main/test_redis.py"
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    # Uses IsolatedAsyncioTestCase which is only available >= 3.8
-    "--ignore=tests/tests38/test_http_aiohttp.py"
-  ];
+  # Skip http tests, they require network access
+  env.SKIP_TRUE_HTTP = true;
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # tests that require network access (like DNS lookups)
-    "test_truesendall"
-    "test_truesendall_with_chunk_recording"
-    "test_truesendall_with_gzip_recording"
-    "test_truesendall_with_recording"
-    "test_wrongpath_truesendall"
     "test_truesendall_with_dump_from_recording"
-    "test_truesendall_with_recording_https"
-    "test_truesendall_after_mocket_session"
-    "test_real_request_session"
+    "test_aiohttp"
     "test_asyncio_record_replay"
     "test_gethostbyname"
+    # httpx read failure
+    "test_no_dangling_fds"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287
+    "test_httprettish_httpx_session"
   ];
 
   pythonImportsCheck = [ "mocket" ];
 
-  meta = with lib; {
-    description = "A socket mock framework - for all kinds of socket animals, web-clients included";
+  meta = {
+    changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
+    description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

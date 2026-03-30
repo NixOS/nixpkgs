@@ -1,13 +1,25 @@
-{ symlinkJoin, R, makeWrapper, recommendedPackages, packages }:
+{
+  lib,
+  symlinkJoin,
+  R,
+  makeBinaryWrapper,
+  recommendedPackages,
+  packages,
+}:
 symlinkJoin {
   name = R.name + "-wrapper";
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  buildInputs = [R] ++ recommendedPackages ++ packages;
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  buildInputs = [ R ] ++ recommendedPackages ++ packages;
   paths = [ R ];
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = ''
     cd ${R}/bin
@@ -17,15 +29,17 @@ symlinkJoin {
       makeWrapper "${R}/bin/$exe" "$out/bin/$exe" \
         --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
     done
+
+    ln -s ${R.man} $man
   '';
 
   # Make the list of recommended R packages accessible to other packages such as rpy2
   passthru = { inherit recommendedPackages; };
 
-    meta = R.meta // {
-      # To prevent builds on hydra
-      hydraPlatforms = [];
-      # prefer wrapper over the package
-      priority = (R.meta.priority or 0) - 1;
-    };
+  meta = R.meta // {
+    # To prevent builds on hydra
+    hydraPlatforms = [ ];
+    # prefer wrapper over the package
+    priority = (R.meta.priority or lib.meta.defaultPriority) - 1;
+  };
 }

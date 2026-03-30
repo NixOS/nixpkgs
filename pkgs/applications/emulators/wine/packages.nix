@@ -1,46 +1,136 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, moltenvk,
-  wineRelease ? "stable",
-  supportFlags
-}:
+{
+  stdenv_32bit,
+  lib,
+  pkgs,
+  pkgsi686Linux,
+  pkgsCross,
+  callPackage,
+  replaceVars,
+  moltenvk,
+  src,
+  pnameSuffix ? "",
+  useStaging ? false,
+  # Staging native build deps
+  autoconf,
+  hexdump,
+  perl,
+  python3,
+  gitMinimal,
+  ...
+}@args:
 
 let
-  src = lib.getAttr wineRelease (callPackage ./sources.nix {});
-  vkd3d = pkgs.callPackage ./vkd3d.nix { inherit moltenvk; };
-  vkd3d_i686 = pkgsi686Linux.callPackage ./vkd3d.nix { inherit moltenvk; };
-in with src; {
-  wine32 = pkgsi686Linux.callPackage ./base.nix {
-    pname = "wine";
-    inherit src version supportFlags patches moltenvk;
-    pkgArches = [ pkgsi686Linux ];
-    vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d_i686 ];
-    geckos = [ gecko32 ];
-    mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc ];
-    monos =  [ mono ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-  };
-  wine64 = callPackage ./base.nix {
-    pname = "wine64";
-    inherit src version supportFlags patches moltenvk;
-    pkgArches = [ pkgs ];
-    vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d ];
-    mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
-    geckos = [ gecko64 ];
-    monos =  [ mono ];
-    configureFlags = [ "--enable-win64" ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    mainProgram = "wine64";
-  };
-  wineWow = callPackage ./base.nix {
-    pname = "wine-wow";
-    inherit src version supportFlags patches moltenvk;
-    stdenv = stdenv_32bit;
-    pkgArches = [ pkgs pkgsi686Linux ];
-    vkd3dArches = lib.optionals supportFlags.vkd3dSupport [ vkd3d vkd3d_i686 ];
-    geckos = [ gecko32 gecko64 ];
-    mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
-    monos =  [ mono ];
-    buildScript = ./builder-wow.sh;
-    platforms = [ "x86_64-linux" ];
-    mainProgram = "wine64";
-  };
+  inherit (src)
+    version
+    patches
+    gecko32
+    gecko64
+    mono
+    ;
+
+  # Args to pass through to base.nix (support flags, etc.)
+  baseArgs = removeAttrs args [
+    "stdenv_32bit"
+    "lib"
+    "pkgs"
+    "pkgsi686Linux"
+    "pkgsCross"
+    "callPackage"
+    "replaceVars"
+  ];
+in
+{
+  wine32 = pkgsi686Linux.callPackage ./base.nix (
+    baseArgs
+    // {
+      pname = "wine";
+      inherit version patches;
+      # Forcing these `nativeBuildInputs` used in the `staging` to come
+      # from ambient `pkgs`, rather than being provided by
+      # `pkgsi686Linux.callPackage` for that platform.
+      inherit
+        autoconf
+        hexdump
+        perl
+        python3
+        gitMinimal
+        ;
+      pkgArches = [ pkgsi686Linux ];
+      geckos = [ gecko32 ];
+      mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc ];
+      monos = [ mono ];
+      platforms = [
+        "i686-linux"
+        "x86_64-linux"
+      ];
+    }
+  );
+  wine64 = callPackage ./base.nix (
+    baseArgs
+    // {
+      pname = "wine64";
+      inherit version patches;
+      pkgArches = [ pkgs ];
+      mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
+      geckos = [ gecko64 ];
+      monos = [ mono ];
+      configureFlags = [ "--enable-win64" ];
+      platforms = [
+        "x86_64-linux"
+        "x86_64-darwin"
+      ];
+      mainProgram = "wine";
+    }
+  );
+  wineWow = callPackage ./base.nix (
+    baseArgs
+    // {
+      pname = "wine-wow";
+      inherit version patches;
+      stdenv = stdenv_32bit;
+      pkgArches = [
+        pkgs
+        pkgsi686Linux
+      ];
+      geckos = [
+        gecko32
+        gecko64
+      ];
+      mingwGccs = with pkgsCross; [
+        mingw32.buildPackages.gcc
+        mingwW64.buildPackages.gcc
+      ];
+      monos = [ mono ];
+      buildScript = replaceVars ./builder-wow.sh {
+        # pkgconfig has trouble picking the right architecture
+        pkgconfig64remove = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
+          pkgs.glib
+          pkgs.gst_all_1.gstreamer
+        ];
+      };
+      platforms = [ "x86_64-linux" ];
+      mainProgram = "wine";
+    }
+  );
+  wineWow64 = callPackage ./base.nix (
+    baseArgs
+    // {
+      pname = "wine-wow64";
+      inherit version patches;
+      mingwSupport = true; # Required because we request "--enable-archs=x86_64"
+      pkgArches = [ pkgs ];
+      mingwGccs = with pkgsCross; [
+        mingw32.buildPackages.gcc
+        mingwW64.buildPackages.gcc
+      ];
+      geckos = [ gecko64 ];
+      monos = [ mono ];
+      configureFlags = [ "--enable-archs=x86_64,i386" ];
+      platforms = [
+        "x86_64-linux"
+        "x86_64-darwin"
+      ];
+      mainProgram = "wine";
+    }
+  );
 }

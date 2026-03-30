@@ -1,9 +1,8 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,31 +10,23 @@ buildPythonPackage rec {
   version = "0.1.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "cblopez";
-    repo = pname;
+    repo = "nmapthon2";
     rev = "v${version}";
     hash = "sha256-4Na75TdKDywUomJF4tDWUWwCCtcOSxBUMOF7+FDhbpY=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/scanner_tests.py"
-  ];
+  enabledTestPaths = [ "tests/scanner_tests.py" ];
 
-  pythonImportsCheck = [
-    "nmapthon2"
-  ];
+  pythonImportsCheck = [ "nmapthon2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to automate nmap";
     homepage = "https://github.com/cblopez/nmapthon2";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

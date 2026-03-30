@@ -1,49 +1,46 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, jsonrpc-base
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonrpc-base,
+  pytest-aiohttp,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
-  version = "2.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emlove";
-    repo = pname;
-    rev = version;
-    hash = "sha256-HhesXzxVjhWJkubiBi6sMoXi/zicqn99dqT5bilycS8=";
+    repo = "jsonrpc-async";
+    tag = version;
+    hash = "sha256-WcO2mj5QYZTMnFTNo1ABgpJPxM+GREVIf+z9viFDJHM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     jsonrpc-base
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  enabledTestPaths = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "jsonrpc_async"
-  ];
+  pythonImportsCheck = [ "jsonrpc_async" ];
 
-  meta = with lib; {
-    description = "A JSON-RPC client library for asyncio";
+  meta = {
+    description = "JSON-RPC client library for asyncio";
     homepage = "https://github.com/emlove/jsonrpc-async";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

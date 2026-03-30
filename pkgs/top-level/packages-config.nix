@@ -2,48 +2,30 @@
 {
   # Ensures no aliases are in the results.
   allowAliases = false;
+  allowVariants = false;
 
   # Enable recursion into attribute sets that nix-env normally doesn't look into
   # so that we can get a more complete picture of the available packages for the
   # purposes of the index.
-  packageOverrides = super: with super; lib.mapAttrs (_: set: recurseIntoAttrs set) {
-    inherit (super)
-      apacheHttpdPackages
-      atomPackages
-      fdbPackages
-      fusePackages
-      gns3Packages
-      idrisPackages
-      nodePackages
-      nodePackages_latest
-      platformioPackages
-      quicklispPackagesClisp
-      quicklispPackagesSBCL
-      rPackages
-      roundcubePlugins
-      sconsPackages
-      sourceHanPackages
-      steamPackages
-      ut2004Packages
-      zabbix40
-      zabbix50
-      zeroadPackages
-    ;
+  packageOverrides =
+    super:
+    with super;
+    lib.mapAttrs (_: set: lib.recurseIntoAttrs set) {
+      inherit (super)
+        rPackages
+        ;
 
-    haskellPackages = super.haskellPackages // {
-      # mesos, which this depends on, has been removed from nixpkgs. We are keeping
-      # the error message for now, so users will get an error message they can make
-      # sense of, but need to work around it here.
-      # TODO(@sternenseemann): remove this after branch-off of 22.05, along with the
-      # override in configuration-nix.nix
-      hs-mesos = null;
-    };
+      # emacsPackages is an alias for emacs.pkgs
+      # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
+      emacsPackages = emacs.pkgs;
 
-    # Make sure haskell.compiler is included, so alternative GHC versions show up,
-    # but don't add haskell.packages.* since they contain the same packages (at
-    # least by name) as haskellPackages.
-    haskell = super.haskell // {
-      compiler = recurseIntoAttrs super.haskell.compiler;
+      # minimal-bootstrap packages aren't used for anything but bootstrapping our
+      # stdenv. They should not be used for any other purpose and therefore not
+      # show up in search results or repository tracking services that consume our
+      # packages.json https://github.com/NixOS/nixpkgs/issues/244966
+      minimal-bootstrap = { };
+
+      # This makes it so that tests are not appering on search.nixos.org
+      tests = { };
     };
-  };
 }

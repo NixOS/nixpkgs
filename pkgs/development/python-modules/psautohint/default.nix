@@ -1,20 +1,26 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools
-, lxml, fs # for fonttools extras
-, setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
-, runAllTests ? false, psautohint # for passthru.tests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  lxml,
+  fs, # for fonttools extras
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-xdist,
+  runAllTests ? false,
+  psautohint, # for passthru.tests
 }:
 
 buildPythonPackage rec {
   pname = "psautohint";
   version = "2.4.0";
-
-  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
-    repo = pname;
+    repo = "psautohint";
     rev = "v${version}";
     sha256 = "125nx7accvbk626qlfar90va1995kp9qfrz6a978q4kv2kk37xai";
     fetchSubmodules = true; # data dir for tests
@@ -28,11 +34,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ fonttools lxml fs ];
+  propagatedBuildInputs = [
+    fonttools
+    lxml
+    fs
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
   ];
   disabledTests = lib.optionals (!runAllTests) [
@@ -44,16 +54,19 @@ buildPythonPackage rec {
     "test_multi_outpath"
     "test_mmhint"
     "test_otf"
+    # flaky tests (see https://github.com/adobe-type-tools/psautohint/issues/385)
+    "test_hashmap_old_version"
+    "test_hashmap_no_version"
   ];
 
   passthru.tests = {
     fullTestsuite = psautohint.override { runAllTests = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
     homepage = "https://github.com/adobe-type-tools/psautohint";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

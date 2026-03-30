@@ -1,54 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, lxml
-, poetry-core
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  hypothesis,
+  ifaddr,
+  lxml,
+  poetry-core,
+  pytest-vcr,
+  pytestCheckHook,
+  requests,
+  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywemo";
-  version = "0.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-RgG2bKA7ifuOPX0ZDKv92S4Gpp9zaansKiEpYrYfPt4=";
+    owner = "pywemo";
+    repo = "pywemo";
+    tag = finalAttrs.version;
+    hash = "sha256-/F9MhPmWSLT/ieI21rzJXvjEkH8xBttJYPaQ1wcVWOk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    cryptography
     ifaddr
+    lxml
     requests
     urllib3
-    lxml
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    hypothesis
     pytest-vcr
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pywemo"
-  ];
+  pythonImportsCheck = [ "pywemo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover and control WeMo devices";
     homepage = "https://github.com/pywemo/pywemo";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pywemo/pywemo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

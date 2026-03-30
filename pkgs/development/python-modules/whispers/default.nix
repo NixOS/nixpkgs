@@ -1,67 +1,89 @@
-{ lib
-, astroid
-, beautifulsoup4
-, buildPythonPackage
-, crossplane
-, fetchFromGitHub
-, jellyfish
-, jproperties
-, luhn
-, lxml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  crossplane,
+  fetchFromGitHub,
+  jellyfish,
+  jproperties,
+  jsonschema-specifications,
+  jsonschema,
+  luhn,
+  lxml,
+  pytest-mock,
+  pytestCheckHook,
+  pyyaml,
+  semgrep,
+  setuptools,
+  six,
+  soupsieve,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "whispers";
-  version = "2.1.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adeptex";
-    repo = pname;
-    rev = version;
-    hash = "sha256-vY8ruemRYJ05YtJAYX3TFlp+pRwF7Tkp7eft9e+HrgA=";
+    repo = "whispers";
+    tag = version;
+    hash = "sha256-hmFz6RI52CylsBIqO14hFX+2bvrPjpUBnfoDyVh9TbU=";
   };
 
-  propagatedBuildInputs = [
-    astroid
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"pytest-runner"' ""
+  '';
+
+  pythonRelaxDeps = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     crossplane
     jellyfish
     jproperties
+    jsonschema
+    jsonschema-specifications
     luhn
     lxml
     pyyaml
+    semgrep
+    six
+    soupsieve
+    wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-  '';
+  disabledTestPaths = [
+    # Pinning tests highly sensitive to semgrep version
+    "tests/unit/plugins/test_semgrep.py"
+  ];
 
   preCheck = ''
+    # Pinning test highly sensitive to semgrep version
+    substituteInPlace tests/unit/test_main.py \
+      --replace-fail '("--ast", 434),' ""
+
     # Some tests need the binary available in PATH
     export PATH=$out/bin:$PATH
   '';
 
-  pythonImportsCheck = [
-    "whispers"
-  ];
+  pythonImportsCheck = [ "whispers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to identify hardcoded secrets in static structured text";
-    homepage = "https://github.com/Skyscanner/whispers";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/adeptex/whispers";
+    changelog = "https://github.com/adeptex/whispers/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "whispers";
   };
 }

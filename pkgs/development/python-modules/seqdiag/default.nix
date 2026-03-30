@@ -1,55 +1,42 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "seqdiag";
   version = "3.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blockdiag";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Dh9JMx50Nexi0q39rYr9MpkKmQRAfT7lzsNOXoTuphg=";
+    repo = "seqdiag";
+    tag = version;
+    hash = "sha256-Dh9JMx50Nexi0q39rYr9MpkKmQRAfT7lzsNOXoTuphg=";
   };
 
-  propagatedBuildInputs = [
-    blockdiag
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  dependencies = [ blockdiag ];
 
-  pytestFlagsArray = [
-    "src/seqdiag/tests/"
-  ];
+  patches = [ ./fix_test_generate.patch ];
 
-  disabledTests = [
-    # UnicodeEncodeError: 'latin-1' codec can't encode...
-    "test_setup_inline_svg_is_true_with_multibytes"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  enabledTestPaths = [ "src/seqdiag/tests/" ];
 
-  pythonImportsCheck = [
-    "seqdiag"
-  ];
+  pythonImportsCheck = [ "seqdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    changelog = "https://github.com/blockdiag/seqdiag/blob/${version}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    mainProgram = "seqdiag";
+    platforms = lib.platforms.unix;
   };
 }

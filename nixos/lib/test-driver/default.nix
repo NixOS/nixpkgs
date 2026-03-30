@@ -1,44 +1,87 @@
-{ lib
-, python3Packages
-, enableOCR ? false
-, qemu_pkg ? qemu_test
-, coreutils
-, imagemagick_light
-, libtiff
-, netpbm
-, qemu_test
-, socat
-, tesseract4
-, vde2
-, extraPythonPackages ? (_ : [])
+{
+  lib,
+
+  buildPythonApplication,
+  colorama,
+  coreutils,
+  imagemagick_light,
+  ipython,
+  junit-xml,
+  mypy,
+  ptpython,
+  python,
+  ruff,
+  remote-pdb,
+
+  netpbm,
+  nixosTests,
+  qemu_pkg ? qemu_test,
+  qemu_test,
+  setuptools,
+  socat,
+  systemd,
+  tesseract4,
+  util-linux,
+  vde2,
+
+  enableNspawn ? false,
+  enableOCR ? false,
+  extraPythonPackages ? (_: [ ]),
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
-  src = ./.;
+  pyproject = true;
+
+  src = ./src;
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    colorama
+    ipython
+    junit-xml
+    ptpython
+    remote-pdb
+  ]
+  ++ extraPythonPackages python.pkgs;
 
   propagatedBuildInputs = [
     coreutils
     netpbm
-    python3Packages.colorama
-    python3Packages.ptpython
     qemu_pkg
     socat
+    util-linux
     vde2
   ]
-    ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ])
-    ++ extraPythonPackages python3Packages;
+  ++ lib.optionals enableNspawn [
+    systemd
+  ]
+  ++ lib.optionals enableOCR [
+    imagemagick_light
+    tesseract4
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests.nixos-test-driver) driver-timeout;
+  };
 
   doCheck = true;
-  checkInputs = with python3Packages; [ mypy pylint black ];
+
+  nativeCheckInputs = [
+    mypy
+    ruff
+  ];
+
   checkPhase = ''
-    mypy --disallow-untyped-defs \
-          --no-implicit-optional \
-          --pretty \
-          --no-color-output \
-          --ignore-missing-imports ${src}/test_driver
-    pylint --errors-only --enable=unused-import ${src}/test_driver
-    black --check --diff ${src}/test_driver
+    echo -e "\x1b[32m## run mypy\x1b[0m"
+    mypy test_driver extract-docstrings.py
+    echo -e "\x1b[32m## run ruff check\x1b[0m"
+    ruff check .
+    echo -e "\x1b[32m## run ruff format\x1b[0m"
+    ruff format --check --diff .
   '';
 }

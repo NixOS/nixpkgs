@@ -1,61 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-VcX3pCczZQUYZaD7xrrkOcj0QPJt28cYTwpZm5D/X3c=";
+    owner = "tensorly";
+    repo = "tensorly";
+    tag = version;
+    hash = "sha256-A6Zlp8fa7XFgf4qpg7SEtNLlYSNtDGLuRUEfzD+crQc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
-    sparse
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    # nose is not actually required for anything
-    # (including testing with the minimal dependencies)
-    substituteInPlace setup.py \
-      --replace ", 'nose'" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "tensorly"
+    "tensorly.base"
+    "tensorly.cp_tensor"
+    "tensorly.tucker_tensor"
+    "tensorly.tt_tensor"
+    "tensorly.tt_matrix"
+    "tensorly.parafac2_tensor"
+    "tensorly.tenalg"
+    "tensorly.decomposition"
+    "tensorly.regression"
+    "tensorly.solvers"
+    "tensorly.metrics"
+    "tensorly.random"
+    "tensorly.datasets"
+    "tensorly.plugins"
+    "tensorly.contrib"
   ];
 
-  pytestFlagsArray = [
-    "tensorly"
-  ];
+  enabledTestPaths = [ "tensorly" ];
 
   disabledTests = [
+    # this can fail on hydra and other peoples machines, check with others before re-enabling
     # AssertionError: Partial_SVD took too long, maybe full_matrices set wrongly
     "test_svd_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/tensorly/tensorly/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

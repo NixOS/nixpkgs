@@ -1,25 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "queuelib";
-  version = "1.6.2";
+  version = "1.9.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b207267f2642a8699a1f806045c56eb7ad1a85a10c0e249884580d139c2fcd2";
+    hash = "sha256-sS/qef2MHdI+ISsfPbWAA7dzlJgB1PTm802IJGfUoZI=";
   };
 
-  buildInputs = [ pytest ];
+  build-system = [ hatchling ];
 
-  meta = with lib; {
-    description = "A collection of persistent (disk-based) queues for Python";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "queuelib" ];
+
+  meta = {
+    description = "Collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/scrapy/queuelib/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-
 }

@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  ncurses,
+}:
 
-stdenv.mkDerivation rec {
-  version = "3.2.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "3.3.6";
   pname = "scala-bare";
 
   src = fetchurl {
-    url = "https://github.com/lampepfl/dotty/releases/download/${version}/scala3-${version}.tar.gz";
-    sha256 = "sha256-GUvQMICPb8feCDv9fHUjDXGa7cIPPLdWLcZdGLShcng=";
+    url = "https://github.com/scala/scala3/releases/download/${finalAttrs.version}/scala3-${finalAttrs.version}.tar.gz";
+    hash = "sha256-cmdSQkDuKJl2/tG4vAjABF1dKQ0/ruB8a3E3pCUrW5c=";
   };
 
-  propagatedBuildInputs = [ jre ncurses.dev ] ;
+  propagatedBuildInputs = [
+    jre
+    ncurses.dev
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -17,24 +27,27 @@ stdenv.mkDerivation rec {
     mv * $out
   '';
 
-  fixupPhase = ''
-        bin_files=$(find $out/bin -type f ! -name common)
-        for f in $bin_files ; do
-          wrapProgram $f --set JAVA_HOME ${jre} --prefix PATH : '${ncurses.dev}/bin'
-        done
+  # Use preFixup instead of fixupPhase
+  # because we want the default fixupPhase as well
+  preFixup = ''
+    bin_files=$(find $out/bin -type f ! -name "*common*" ! -name "scala-cli.jar")
+    for f in $bin_files ; do
+      wrapProgram $f --set JAVA_HOME ${jre} --prefix PATH : '${ncurses.dev}/bin'
+    done
   '';
 
-  meta = with lib; {
-    description = "Research platform for new language concepts and compiler technologies for Scala";
-    longDescription = ''
-       Dotty is a platform to try out new language concepts and compiler technologies for Scala.
-       The focus is mainly on simplification. We remove extraneous syntax (e.g. no XML literals),
-       and try to boil down Scala’s types into a smaller set of more fundamental constructs.
-       The theory behind these constructs is researched in DOT, a calculus for dependent object types.
-    '';
-    homepage = "http://dotty.epfl.ch/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [maintainers.karolchmist maintainers.virusdave];
+  meta = {
+    description = "Scala 3 compiler, also known as Dotty";
+    homepage = "https://scala-lang.org/";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    mainProgram = "scala";
+    maintainers = with lib.maintainers; [
+      virusdave
+      kashw2
+      natsukagami
+      hamzaremmal
+      dottybot
+    ];
   };
-}
+})

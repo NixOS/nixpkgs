@@ -1,20 +1,21 @@
-{ buildPythonPackage
-, build
-, git
-, gnupg
-, pbr
-, sphinx
-, stestr
-, testresources
-, testscenarios
-, virtualenv
+{
+  buildPythonPackage,
+  build,
+  git,
+  gnupg,
+  pbr,
+  sphinx,
+  stestr,
+  testresources,
+  testscenarios,
+  virtualenv,
+  wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pbr";
-  inherit (pbr) version;
-
-  src = pbr.src;
+  inherit (pbr) version src;
+  pyproject = false;
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -24,8 +25,11 @@ buildPythonPackage rec {
 
   dontBuild = true;
   dontInstall = true;
+  preConfigure = ''
+    pythonOutputDistPhase() { touch $dist; }
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pbr
     build
     git
@@ -35,14 +39,18 @@ buildPythonPackage rec {
     testresources
     testscenarios
     virtualenv
+    wheel
   ];
 
   checkPhase = ''
     stestr run -e <(echo "
     pbr.tests.test_core.TestCore.test_console_script_develop
-    pbr.tests.test_core.TestCore.test_console_script_install
-    pbr.tests.test_wsgi.TestWsgiScripts.test_with_argument
-    pbr.tests.test_wsgi.TestWsgiScripts.test_wsgi_script_run
+    pbr.tests.functional.test_console_scripts.TestConsoleScripts.test_console_script_install
+    pbr.tests.functional.test_wsgi_scripts.TestWsgiScripts.test_with_argument
+    pbr.tests.functional.test_wsgi_scripts.TestWsgiScripts.test_wsgi_script_run
+    # Tests are failing because of fixture timeouts
+    pbr.tests.functional.test_pep517.TestPEP517Support.test_pep_517_support
+    pbr.tests.functional.test_requirements.TestRequirementParsing.test_requirement_parsing
     ")
   '';
 }

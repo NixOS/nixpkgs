@@ -1,27 +1,56 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, google-api-core, mock, proto-plus, protobuf, pytest-asyncio }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-org-policy";
-  version = "1.4.1";
+  version = "1.16.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-KYZvlpPqGy0zGDSZF3y6MsFZyb9M+88HGYp4NpPCiSY=";
+    pname = "google_cloud_org_policy";
+    inherit (finalAttrs) version;
+    hash = "sha256-KleKj6JhG4pi/XAM82C/VndJED2nvK1+NzvT1lm7zpE=";
   };
 
-  propagatedBuildInputs = [ google-api-core proto-plus ];
+  build-system = [ setuptools ];
 
-  # prevent google directory from shadowing google imports
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
+    google-api-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  # Prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';
-  checkInputs = [ mock protobuf pytest-asyncio pytestCheckHook ];
+
   pythonImportsCheck = [ "google.cloud.orgpolicy" ];
 
-  meta = with lib; {
-    description = "Protobufs for Google Cloud Organization Policy.";
-    homepage = "https://github.com/googleapis/python-org-policy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+  meta = {
+    description = "Python Client for Organization Policy";
+    homepage = "https://github.com/googleapis/google-cloud-python/blob/main/packages/${finalAttrs.pname}";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.pname}-v${finalAttrs.version}/packages/${finalAttrs.pname}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
-}
+})

@@ -1,38 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  msrest,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-maps";
-  version = "2.0.0";
+  version = "2.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "384e17f76a68b700a4f988478945c3a9721711c0400725afdfcb63cf84e85f0e";
+    hash = "sha256-XVaml4UuVBanYYHxjB1YT/PvExzgAPbD4gI3Hbc0dI0=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
+    msrest
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "azure.mgmt.maps" ];
+
+  meta = {
     description = "This is the Microsoft Azure Maps Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/v${version}/sdk/maps/azure-mgmt-maps/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

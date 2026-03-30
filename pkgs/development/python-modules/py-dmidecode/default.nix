@@ -1,25 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, dmidecode }:
+{
+  lib,
+  buildPythonPackage,
+  dmidecode,
+  fetchPypi,
+  poetry-core,
+}:
 
 buildPythonPackage rec {
   pname = "py-dmidecode";
-  version = "0.1.0";
+  version = "0.1.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1bv1vmhj8h520kj6slwpz16xfmgp117yjjkfyihkl5ix6mn5zkpa";
+    pname = "py_dmidecode";
+    inherit version;
+    hash = "sha256-pS1fRWuWLnXuNEGYXU/j1njC8THWQOHbnVOF9+c13Cw=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ dmidecode ];
 
-  # Project has no tests.
+  # Module has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "dmidecode" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/zaibon/py-dmidecode/";
+  meta = {
     description = "Python library that parses the output of dmidecode";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/zaibon/py-dmidecode/";
+    changelog = "https://github.com/zaibon/py-dmidecode/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

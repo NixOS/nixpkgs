@@ -1,17 +1,46 @@
-{ lib, fetchurl, buildDunePackage
-, repr, ppx_repr, fmt, logs, mtime, stdlib-shims
-, cmdliner, progress, semaphore-compat, optint
-, alcotest, crowbar, re, lru
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildDunePackage,
+  repr,
+  ppx_repr,
+  fmt,
+  logs,
+  mtime,
+  stdlib-shims,
+  cmdliner,
+  progress,
+  semaphore-compat,
+  optint,
+  alcotest,
+  crowbar,
+  re,
+  lru,
 }:
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "sha256-rPwNzqkWqDak2mDTDIBqIvachY1vfOIzFmwaXjZea+4=";
+    hash = "sha256-k4iDUJik7UTuztBw7YaFXASd8SqYMR1JgLm3JOyriGA=";
   };
+
+  patches = [
+    # Compatibility with cmdliner 2.0
+    (fetchpatch {
+      url = "https://github.com/mirage/index/commit/aa7aa4734213f74a246f66719a1085b522f431d4.patch";
+      hash = "sha256-Vc4r/I3TeIy/D4FcYzj4vRrH87vI2JRagqAXhD9BUxc=";
+      includes = [ "*.ml" ];
+    })
+  ];
+
+  # Compatibility with logs 0.8.0
+  postPatch = ''
+    substituteInPlace test/unix/dune --replace-warn logs.fmt 'logs.fmt logs.threaded'
+  '';
 
   minimalOCamlVersion = "4.08";
 
@@ -38,10 +67,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
-    description = "A platform-agnostic multi-level index";
+  meta = {
+    description = "Platform-agnostic multi-level index";
     homepage = "https://github.com/mirage/index";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

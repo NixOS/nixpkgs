@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, removeReferencesTo
-, zlibSupport ? true
-, zlib
-, enableShared ? !stdenv.hostPlatform.isStatic
-, javaSupport ? false
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  removeReferencesTo,
+  cppSupport ? true,
+  zlibSupport ? true,
+  zlib,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  javaSupport ? false,
+  jdk,
 }:
 
-let inherit (lib) optional optionals; in
+let
+  inherit (lib) optional;
+in
 
 stdenv.mkDerivation rec {
-  version = "1.10.9";
+  version = "1.10.11";
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AMS+cJbzb9yvpPl04SbGwUEkKOOOvHsYHZB0WeeB8ZE=";
+    sha256 = "sha256-Cvx32lxGIXcJR1u++8qRwMtvHqYozNjDYZbPbFpN4wQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = optional javaSupport jdk;
 
@@ -27,8 +34,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional zlibSupport zlib;
 
-  configureFlags = optional enableShared "--enable-shared"
-    ++ optional javaSupport "--enable-java";
+  configureFlags =
+    optional enableShared "--enable-shared"
+    ++ optional javaSupport "--enable-java"
+    ++ optional cppSupport "--enable-cxx";
 
   patches = [ ];
 
@@ -49,6 +58,7 @@ stdenv.mkDerivation rec {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = with lib.maintainers; [ stephen-huan ];
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };

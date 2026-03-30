@@ -1,49 +1,48 @@
-{ lib
-, amply
-, buildPythonPackage
-, fetchFromGitHub
-, pyparsing
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  cbc,
+  amply,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pulp";
-  version = "2.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coin-or";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-j0f6OiscJyTqPNyLp0qWRjCGLWuT3HdU1S/sxpnsiMo=";
+    repo = "pulp";
+    tag = version;
+    hash = "sha256-b9qTJqSC8G3jxcqS4mkQ1gOLLab+YzYaNClRwD6I/hk=";
   };
 
-  propagatedBuildInputs = [
+  patches = [ ./cbc_path_fixes.patch ];
+
+  postPatch = ''
+    substituteInPlace pulp/apis/coin_api.py --subst-var-by "cbc" "${lib.getExe' cbc "cbc"}"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     amply
     pyparsing
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pulp"
-  ];
+  pythonImportsCheck = [ "pulp" ];
 
-  disabledTests = [
-    # The solver is not available
-    "PULP_CBC_CMDTest"
-    "test_examples"
-  ];
-
-  meta = with lib; {
-    description = "Module to generate  generate MPS or LP files";
+  meta = {
+    description = "Module to generate MPS or LP files";
+    mainProgram = "pulptest";
     homepage = "https://github.com/coin-or/pulp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

@@ -1,29 +1,54 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
+{
+  lib,
+  fetchFromGitHub,
+  elk7Version,
+  buildGoModule,
+  libpcap,
+  nixosTests,
+  systemd,
+  config,
+}:
 
-let beat = package: extraArgs: buildGoModule (rec {
-  pname = package;
-  version = elk7Version;
+let
+  beat =
+    package: extraArgs:
+    buildGoModule (
+      finalAttrs:
+      {
+        pname = package;
+        version = elk7Version;
 
-  src = fetchFromGitHub {
-    owner = "elastic";
-    repo = "beats";
-    rev = "v${version}";
-    sha256 = "sha256-DE7XpzVBu9qL7fMXXYRYLdVXrr0WB0IL0KAG0Zc3TVo=";
-  };
+        src = fetchFromGitHub {
+          owner = "elastic";
+          repo = "beats";
+          tag = "v${finalAttrs.version}";
+          hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
+        };
 
-  vendorSha256 = "sha256-TQrXUcLv7rFo3PP3bVx0wEC1WbtkJDsCm+/izHAxqBc=";
+        vendorHash = "sha256-JOCcceYYutC5MI+/lXBqcqiET+mcrG1e3kWySo3+NIk=";
 
-  subPackages = [ package ];
+        subPackages = [ package ];
 
-  meta = with lib; {
-    homepage = "https://www.elastic.co/products/beats";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk dfithian ];
-    platforms = platforms.linux;
-  };
-} // extraArgs);
+        meta = {
+          homepage = "https://www.elastic.co/products/beats";
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
+            basvandijk
+            dfithian
+          ];
+          platforms = lib.platforms.linux;
+        }
+        // (extraArgs.meta or { });
+      }
+      // removeAttrs extraArgs [
+        "meta"
+      ]
+    );
 in
 rec {
+  auditbeat7 = beat "auditbeat" {
+    meta.description = "Lightweight shipper for audit data";
+  };
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
     buildInputs = [ systemd ];
@@ -32,14 +57,17 @@ rec {
       patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
     '';
   };
-  heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
+  heartbeat7 = beat "heartbeat" {
+    meta.description = "Lightweight shipper for uptime monitoring";
+  };
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
-    passthru.tests =
-      assert metricbeat7.drvPath == nixosTests.elk.ELK-7.elkPackages.metricbeat.drvPath;
+    passthru.tests = lib.optionalAttrs config.allowUnfree (
+      assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
       {
-        elk = nixosTests.elk.ELK-7;
-      };
+        elk = nixosTests.elk.unfree.ELK-7;
+      }
+    );
   };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];

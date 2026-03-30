@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, azure-common
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  azure-common,
 }:
 
 buildPythonPackage rec {
   version = "0.1.1";
+  format = "setuptools";
   pname = "azure-loganalytics";
 
   src = fetchPypi {
@@ -25,10 +27,12 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Log Analytics Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson jonringer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      maxwilson
+    ];
   };
 }

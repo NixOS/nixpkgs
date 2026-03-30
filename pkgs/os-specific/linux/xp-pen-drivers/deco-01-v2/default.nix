@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchzip
-, libusb1
-, glibc
-, libGL
-, xorg
-, qtx11extras
-, wrapQtAppsHook
-, autoPatchelfHook
-, libX11
-, libXtst
-, libXi
-, libXrandr
-, libXinerama
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libusb1,
+  glibc,
+  libGL,
+  makeWrapper,
+  qtx11extras,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  libx11,
+  libxtst,
+  libxi,
+  libxrandr,
+  libxinerama,
 }:
 
 let
@@ -20,17 +21,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xp-pen-deco-01-v2-driver";
-  version = "3.2.3.220323-1";
+  version = "3.4.9-231023";
 
   src = fetchzip {
     url = "https://www.xp-pen.com/download/file/id/1936/pid/440/ext/gz.html#.tar.gz";
     name = "xp-pen-deco-01-v2-driver-${version}.tar.gz";
-    sha256 = "sha256-n/yutkRsjcIRRhB4q1yqEmaa03/1SO8RigJi/ZkfLbk=";
+    sha256 = "sha256-A/dv6DpelH0NHjlGj32tKv37S+9q3F8cYByiYlMuqLg=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
     autoPatchelfHook
+    makeWrapper
   ];
 
   dontBuild = true;
@@ -39,14 +41,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
-    libX11
-    libXtst
-    libXi
-    libXrandr
-    libXinerama
+    libx11
+    libxtst
+    libxi
+    libxrandr
+    libxinerama
     glibc
     libGL
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     qtx11extras
   ];
 
@@ -54,28 +56,27 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/{opt,bin}
-    cp -r App/usr/lib/pentablet/{pentablet,resource.rcc,conf} $out/opt
-    chmod +x $out/opt/pentablet
+    cp -r App/usr/lib/pentablet/{PenTablet,resource.rcc,conf} $out/opt
+    chmod +x $out/opt/PenTablet
     cp -r App/lib $out/lib
-    sed -i 's#usr/lib/pentablet#${dataDir}#g' $out/opt/pentablet
+    sed -i 's#usr/lib/pentablet#${dataDir}#g' $out/opt/PenTablet
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper $out/opt/pentablet $out/bin/xp-pen-deco-01-v2-driver \
+    makeWrapper $out/opt/PenTablet $out/bin/xp-pen-deco-01-v2-driver \
       "''${qtWrapperArgs[@]}" \
       --run 'if [ "$EUID" -ne 0 ]; then echo "Please run as root."; exit 1; fi' \
       --run 'if [ ! -d /${dataDir} ]; then mkdir -p /${dataDir}; cp -r '$out'/opt/conf /${dataDir}; chmod u+w -R /${dataDir}; fi'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.xp-pen.com/product/461.html";
     description = "Drivers for the XP-PEN Deco 01 v2 drawing tablet";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ virchau13 ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ virchau13 ];
+    license = lib.licenses.unfree;
   };
 }
-

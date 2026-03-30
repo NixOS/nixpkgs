@@ -1,13 +1,26 @@
-{ buildPerlPackage, stdenv, lib, fetchFromGitHub, which, bzip2, PodMarkdown, JSONXS
-, TextCSV }:
+{
+  buildPerlPackage,
+  bzip2,
+  fetchFromGitHub,
+  JSONXS,
+  lib,
+  nix-update-script,
+  pgbadger,
+  PodMarkdown,
+  testers,
+  TextCSV_XS,
+  which,
+}:
+
 buildPerlPackage rec {
   pname = "pgbadger";
-  version = "11.5";
+  version = "12.4";
+
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgbadger";
-    rev = "98b38161ba99faae77c81d5fa47bd769c1dd750b";
-    sha256 = "0r01mx1922g1m56x4958cihk491zjlaijvap0i32grjmnv4s5v88";
+    tag = "v${version}";
+    hash = "sha256-an/BOkQsMkTXS0HywV1JWerS16HRbO1MHVleYhVqmBM=";
   };
 
   postPatch = ''
@@ -16,17 +29,33 @@ buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
+  env.PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
 
-  buildInputs = [ PodMarkdown JSONXS TextCSV ];
+  buildInputs = [
+    JSONXS
+    PodMarkdown
+    TextCSV_XS
+  ];
 
-  checkInputs = [ which bzip2 ];
+  nativeCheckInputs = [
+    bzip2
+    which
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe pgbadger} --version";
+      package = pgbadger;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/darold/pgbadger";
-    description = "A fast PostgreSQL Log Analyzer";
+    description = "Fast PostgreSQL Log Analyzer";
+    changelog = "https://github.com/darold/pgbadger/raw/v${version}/ChangeLog";
     license = lib.licenses.postgresql;
-    maintainers = lib.teams.determinatesystems.members;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/pgbadger.x86_64-darwin
+    mainProgram = "pgbadger";
   };
 }

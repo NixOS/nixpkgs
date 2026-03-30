@@ -1,32 +1,38 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, bash-completion
-, gst-plugins-base
-, gst-plugins-bad
-, gst-devtools
-, libxml2
-, flex
-, gettext
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  bash-completion,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-devtools,
+  libxml2,
+  flex,
+  gettext,
+  gobject-introspection,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-editing-services";
-  version = "1.20.3";
+  version = "1.26.5";
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-X9iW3mn74kQh62sP+NL4tMPLo/MCXOrNMCFy85qKuqI=";
+    url = "https://gstreamer.freedesktop.org/src/gst-editing-services/gst-editing-services-${finalAttrs.version}.tar.xz";
+    hash = "sha256-c0kAlE+Q7OXi85g8M1F4/aUAI/40KqdezZ2KnDi2TZ4=";
   };
 
   nativeBuildInputs = [
@@ -35,18 +41,21 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     gobject-introspection
-    gst-devtools
     python3
     flex
-
-    # documentation
-    # TODO add hotdoc here
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     bash-completion
     libxml2
-    gobject-introspection
+    gst-devtools
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   propagatedBuildInputs = [
@@ -55,7 +64,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   postPatch = ''
@@ -63,10 +73,20 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with lib; {
-    description = "Library for creation of audio/video non-linear editors";
-    homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
+  passthru = {
+    updateScript = directoryListingUpdater { };
   };
-}
+
+  meta = {
+    description = "Library for creation of audio/video non-linear editors";
+    mainProgram = "ges-launch-1.0";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
+  };
+})

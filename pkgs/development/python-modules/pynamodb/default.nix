@@ -1,51 +1,45 @@
-{ lib
-, blinker
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, typing-extensions
+{
+  lib,
+  blinker,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  pytest-env,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "5.2.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "6.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pynamodb";
     repo = "PynamoDB";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-3Si0BCMofr38OuXoX8Tj9n3ITv3rH5hNfDQZvZWk79o=";
+    tag = version;
+    hash = "sha256-i4oxZO3gBVc2PMFSISeytaO8YrzYR9YuUMxrEqrg2c4=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-    botocore
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    signal = [
-      blinker
-    ];
+  dependencies = [ botocore ];
+
+  optional-dependencies = {
+    signal = [ blinker ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
+    pytest-env
     pytest-mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.signal;
+  ]
+  ++ optional-dependencies.signal;
 
-  pythonImportsCheck = [
-    "pynamodb"
-  ];
+  pythonImportsCheck = [ "pynamodb" ];
 
   disabledTests = [
     # Tests requires credentials or network access
@@ -57,16 +51,22 @@ buildPythonPackage rec {
     "test_sign_request"
     "test_table_integration"
     "test_transact"
+    # require a local dynamodb instance
+    "test_create_table"
+    "test_create_table__incompatible_indexes"
+    # https://github.com/pynamodb/PynamoDB/issues/1265
+    "test_connection_make_api_call__binary_attributes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface for Amazon’s DynamoDB";
     longDescription = ''
       DynamoDB is a great NoSQL service provided by Amazon, but the API is
       verbose. PynamoDB presents you with a simple, elegant API.
     '';
     homepage = "http://jlafon.io/pynamodb.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

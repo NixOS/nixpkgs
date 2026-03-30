@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, networkx
-, python-dateutil
-, rdflib
-, pydot
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  networkx,
+  python-dateutil,
+  rdflib,
+  pydot,
 }:
 
 buildPythonPackage rec {
   pname = "prov";
-  version = "2.0.0";
+  version = "2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b6438f2195ecb9f6e8279b58971e02bc51814599b5d5383366eef91d867422ee";
+    hash = "sha256-fQErFk9bu0LhGO2dJXiKsBLQkIK3Iryd1OgRownqV/U=";
   };
 
   propagatedBuildInputs = [
@@ -24,21 +26,17 @@ buildPythonPackage rec {
     rdflib
   ];
 
-  checkInputs = [
-    pydot
-  ];
+  nativeCheckInputs = [ pydot ];
 
   # Multiple tests are out-dated and failing
   doCheck = false;
 
-  pythonImportsCheck = [
-    "prov"
-  ];
+  pythonImportsCheck = [ "prov" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

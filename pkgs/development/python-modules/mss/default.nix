@@ -1,35 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  stdenv,
+  replaceVars,
+
+  # build-system
+  hatchling,
+
+  # native dependencies
+  libxrandr,
+  libxfixes,
+  libx11,
+
+  # tests
+  lsof,
+  pillow,
+  pytest-cov-stub,
+  pytest-rerunfailures,
+  pytest,
+  pyvirtualdisplay,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "7.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "10.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8UzuUokDw7AdO48SCc1JhCL3Hj0NLZLFuTPt07l3ICI=";
+    hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
   };
 
-  # By default it attempts to build Windows-only functionality
-  prePatch = ''
-    rm mss/windows.py
-  '';
-
-  # Skipping tests due to most relying on DISPLAY being set
-  pythonImportsCheck = [
-    "mss"
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    (replaceVars ./linux-paths.patch {
+      x11 = "${libx11}/lib/libX11.so";
+      xfixes = "${libxfixes}/lib/libXfixes.so";
+      xrandr = "${libxrandr}/lib/libXrandr.so";
+    })
   ];
 
-  meta = with lib; {
+  build-system = [ hatchling ];
+
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = [
+    lsof
+    pillow
+    pytest-cov-stub
+    pytest-rerunfailures
+    pytest
+    pyvirtualdisplay
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run pytest -v -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "mss" ];
+
+  meta = {
     description = "Cross-platform multiple screenshots module";
+    mainProgram = "mss";
     homepage = "https://github.com/BoboTiG/python-mss";
-    license = licenses.mit;
-    maintainers = with maintainers; [ austinbutler ];
+    changelog = "https://github.com/BoboTiG/python-mss/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
 }

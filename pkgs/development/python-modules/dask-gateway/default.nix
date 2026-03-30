@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, dask
-, distributed
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  dask,
+  distributed,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
-  version = "2022.6.1";
-  format = "pyproject";
+  version = "2025.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PsagZdEPpeuZH9hFL98xB5z6zOdd4Cx/skGQ0eOYkCA=";
+    tag = version;
+    hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
   };
 
-  sourceRoot = "source/dask-gateway";
+  sourceRoot = "${src.name}/dask-gateway";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dask
     distributed
@@ -35,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway" ];
 
-  meta = with lib; {
-    description = "A client library for interacting with a dask-gateway server";
+  meta = {
+    description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1,55 +1,36 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, python
-, unittestCheckHook
-, google-api-core
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  google-api-core,
+  opencensus-context,
 }:
 
-let
-  opencensus-context = buildPythonPackage rec {
-    pname = "opencensus-context";
-    version = "0.1.3";
-
-    checkInputs = [ unittestCheckHook ];
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-oDEIw8ENjIC7Xd9cih8DMWH6YZcqmRf5ubOhhRfwCIw=";
-    };
-  };
-in
 buildPythonPackage rec {
   pname = "opencensus";
-  version = "0.11.0";
+  version = "0.11.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AmIWq6uJ2U2FBJLz3GWVAFXsT4QRX6bHvq/7pEo0bkI=";
+    hash = "sha256-y++H2Lh3MGSrYOXCoc7Vi7qjim0FLEGuwiSVjOVE7/I=";
   };
-
-  buildInputs = [
-    # opencensus-context is embedded in opencensus
-    opencensus-context
-  ];
 
   propagatedBuildInputs = [
     google-api-core
+    opencensus-context
   ];
 
-  postInstall = ''
-    ln -sf ${opencensus-context}/${python.sitePackages}/opencensus/common/runtime_context \
-      $out/${python.sitePackages}/opencensus/common/
-  '';
+  pythonNamespaces = [ "opencensus.common" ];
 
-  checkInputs = [ unittestCheckHook ];
+  doCheck = false; # No tests in sdist
 
-  pythonImportsCheck = [ "opencensus" ];
+  pythonImportsCheck = [ "opencensus.common" ];
 
-  meta = with lib; {
-    description = "A stats collection and distributed tracing framework";
+  meta = {
+    description = "Stats collection and distributed tracing framework";
     homepage = "https://github.com/census-instrumentation/opencensus-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ billhuang ];
   };
 }

@@ -1,16 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pysvg-py3";
   version = "0.2.2-post3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alorence";
-    repo = pname;
+    repo = "pysvg-py3";
     rev = version;
     sha256 = "1slync0knpcjgl4xpym8w4249iy6vmrwbarpnbjzn9xca8g1h2f0";
   };

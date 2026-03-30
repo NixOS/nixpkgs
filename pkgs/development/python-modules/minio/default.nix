@@ -1,46 +1,54 @@
-{ lib
-, buildPythonPackage
-, certifi
-, configparser
-, faker
-, fetchFromGitHub
-, future
-, mock
-, nose
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  argon2-cffi,
+  certifi,
+  urllib3,
+  pycryptodome,
+  typing-extensions,
+
+  # test
+  faker,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.1.12";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "7.2.20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9BjKoBQdkqkNK6StsiP0L3S5Dn8y53K5VghUIpIt46k=";
+    tag = version;
+    hash = "sha256-k7bMXEwRNqx5a6qz4+Yxs/zMANReHFKU2Ks/GSD4JKo=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace tests/unit/crypto_test.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    argon2-cffi
     certifi
-    configparser
-    future
-    python-dateutil
-    pytz
     urllib3
+    pycryptodome
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     faker
     mock
-    nose
     pytestCheckHook
   ];
 
@@ -49,14 +57,12 @@ buildPythonPackage rec {
     "tests/unit/credentials_test.py"
   ];
 
-  pythonImportsCheck = [
-    "minio"
-  ];
+  pythonImportsCheck = [ "minio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
     homepage = "https://github.com/minio/minio-py";
-    maintainers = with maintainers; [ peterromfeldhk ];
-    license = licenses.asl20;
+    changelog = "https://github.com/minio/minio-py/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
   };
 }

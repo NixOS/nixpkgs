@@ -1,72 +1,71 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cheroot
-, fetchPypi
-, jaraco_collections
-, more-itertools
-, objgraph
-, path
-, portend
-, pytest-forked
-, pytest-services
-, pytestCheckHook
-, python-memcached
-, pythonAtLeast
-, pythonOlder
-, requests-toolbelt
-, routes
-, setuptools-scm
-, simplejson
-, zc_lockfile
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cheroot,
+  fetchPypi,
+  jaraco-collections,
+  more-itertools,
+  objgraph,
+  path,
+  portend,
+  pyopenssl,
+  pytest-cov-stub,
+  pytest-forked,
+  pytest-services,
+  pytestCheckHook,
+  python-memcached,
+  pythonAtLeast,
+  requests-toolbelt,
+  routes,
+  setuptools-scm,
+  simplejson,
+  zc-lockfile,
 }:
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.8.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "18.10.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "CherryPy";
-    inherit version;
-    hash = "sha256-m0jPuoovFtW2QZzGV+bVHbAFujXF44JORyi7A7vH75s=";
+    inherit pname version;
+    hash = "sha256-bHDnjuETAOiyHAdnxUKuaxAqScrFz9Tj4xPXu5B8WJE=";
   };
 
   postPatch = ''
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
-      --replace "--doctest-modules" "-vvv" \
-      --replace "-p pytest_cov" "" \
-      --replace "--no-cov-on-fail" ""
-    sed -i "/--cov/d" pytest.ini
+      --replace-fail "--doctest-modules" "-vvv"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cheroot
-    portend
+    jaraco-collections
     more-itertools
-    zc_lockfile
-    jaraco_collections
+    portend
+    zc-lockfile
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     objgraph
     path
+    pytest-cov-stub
     pytest-forked
     pytest-services
     pytestCheckHook
     requests-toolbelt
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  preCheck = ''
+    export CI=true
+  '';
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [
@@ -78,32 +77,54 @@ buildPythonPackage rec {
 
     "test_antistampede"
     "test_file_stream"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_block"
-  ];
+    "test_basic_request"
+    "test_3_Redirect"
+    "test_4_File_deletion"
+    # excepts a tcp reset for the 16th connection, but doesn't get it
+    "test_queue_full"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [
+    "testErrorHandling"
+    "testHookErrors"
+    "test_HTTP10_KeepAlive"
+    "test_No_Message_Body"
+    "test_HTTP11_Timeout"
+    "testGzip"
+    "test_malformed_header"
+    "test_no_content_length"
+    "test_post_filename_with_special_characters"
+    "test_post_multipart"
+    "test_iterator"
+    "test_1_Ram_Concurrency"
+    "test_2_File_Concurrency"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "cherrypy/test/test_config_server.py"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "cherrypy"
-  ];
+  pythonImportsCheck = [ "cherrypy" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];
+    ssl = [ pyopenssl ];
     # not packaged yet
-    xcgi = [ /* flup */ ];
+    xcgi = [
+      # flup
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Object-oriented HTTP framework";
-    homepage = "https://www.cherrypy.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    mainProgram = "cherryd";
+    homepage = "https://cherrypy.dev/";
+    changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

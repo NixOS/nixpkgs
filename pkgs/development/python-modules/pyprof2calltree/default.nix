@@ -1,22 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "pyprof2calltree";
   version = "1.4.5";
+  pyproject = true;
 
   # Fetch from GitHub because the PyPi packaged version does not
   # include all test files.
   src = fetchFromGitHub {
     owner = "pwaller";
     repo = "pyprof2calltree";
-    rev = "v" + version;
-    sha256 = "0akighssiswfhi5285rrj37am6flg3ip17c34bayq3r8yyk1iciy";
+    tag = "v${version}";
+    hash = "sha256-PrIYpvcoD+zVIoOdcON41JmqzpA5FyRKhI7rqDV8cSo=";
   };
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  meta = {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
-    homepage = "https://pypi.python.org/pypi/pyprof2calltree/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    mainProgram = "pyprof2calltree";
+    homepage = "https://github.com/pwaller/pyprof2calltree";
+    changelog = "https://github.com/pwaller/pyprof2calltree/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

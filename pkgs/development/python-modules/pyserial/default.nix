@@ -1,19 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, unittestCheckHook
-, pythonOlder
-, isPy3k
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyserial";
   version = "3.5";
   format = "setuptools";
-
-  # Supports Python 2.7 and 3.4+
-  disabled = isPy3k && pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,18 +23,19 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" ];
-
-  pythonImportsCheck = [
-    "serial"
+  unittestFlagsArray = [
+    "-s"
+    "test"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "serial" ];
+
+  meta = {
     description = "Python serial port extension";
     homepage = "https://github.com/pyserial/pyserial";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

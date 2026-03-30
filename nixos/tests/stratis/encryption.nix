@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix (
+  { pkgs, ... }:
   {
     name = "stratis";
 
@@ -6,10 +7,12 @@ import ../make-test-python.nix ({ pkgs, ... }:
       maintainers = [ nickcao ];
     };
 
-    nodes.machine = { pkgs, ... }: {
-      services.stratis.enable = true;
-      virtualisation.emptyDiskImages = [ 2048 ];
-    };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.stratis.enable = true;
+        virtualisation.emptyDiskImages = [ 2048 ];
+      };
 
     testScript =
       let
@@ -26,8 +29,8 @@ import ../make-test-python.nix ({ pkgs, ... }:
         # test rebinding encrypted pool
         machine.succeed("stratis pool rebind keyring  testpool testkey2")
         # test restarting encrypted pool
-        uuid = machine.succeed("stratis pool list | grep -oE '[0-9a-fA-F-]{36}'").rstrip('\n')
-        machine.succeed(" stratis pool stop   testpool")
-        machine.succeed(f"stratis pool start  {uuid}   --unlock-method keyring")
+        machine.succeed("stratis pool stop  --name testpool")
+        machine.succeed("stratis pool start --name testpool --unlock-method any")
       '';
-  })
+  }
+)

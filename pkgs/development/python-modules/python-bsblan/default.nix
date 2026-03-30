@@ -1,64 +1,70 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  packaging,
+  pydantic,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  yarl,
+  zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "0.5.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "5.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eavARej+R8SPNuwX6LOGr43SJi1AuZszThJVG00vKhQ=";
+    repo = "python-bsblan";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P7c+5x5wQaWfNeeYKkylhV2AQESp40duSQfwsTDVW6M=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "async-timeout" ];
+
+  dependencies = [
     aiohttp
+    backoff
     packaging
     pydantic
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
+    pytest-xdist
     pytestCheckHook
+    zeroconf
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "bsblan"
-  ];
+  pythonImportsCheck = [ "bsblan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to control and monitor an BSBLan device programmatically";
     homepage = "https://github.com/liudger/python-bsblan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/liudger/python-bsblan/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,15 +1,35 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pygments }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  pygments,
+}:
 
 buildPythonPackage rec {
-  pname = "jupyterlab_pygments";
-  version = "0.1.2";
+  pname = "jupyterlab-pygments";
+  version = "0.3.0";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = version;
-    sha256 = "02lv63qalw4x6xs70n2w2p3c2cnhk91sr961wlbi77xs0g8fcman";
+  src = fetchPypi {
+    pname = "jupyterlab_pygments";
+    inherit version;
+    hash = "sha256-chrKTZApJSsRz6nRheW1r01Udyu4By+bcDb0FwBU010=";
   };
+
+  # jupyterlab is not necessary since we get the source from pypi
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"jupyterlab>=4.0.0,<5",' ""
+  '';
+
+  nativeBuildInputs = [
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+  ];
 
   # no tests exist on upstream repo
   doCheck = false;
@@ -18,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_pygments" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyterlab syntax coloring theme for pygments";
     homepage = "https://github.com/jupyterlab/jupyterlab_pygments";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

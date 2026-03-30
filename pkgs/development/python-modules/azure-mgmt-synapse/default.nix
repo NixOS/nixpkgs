@@ -1,22 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
   version = "2.0.0";
-  disabled = pythonOlder "3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bec6bdfaeb55b4fdd159f2055e8875bf50a720bb0fce80a816e92a2359b898c8";
+    hash = "sha256-vsa9+utVtP3RWfIFXoh1v1CnILsPzoCoFukqI1m4mMg=";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
@@ -25,10 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.synapse" ];
 
-  meta = with lib; {
-    description = "Azure python SDK";
-    homepage = "https://github.com/Azure/azure-sdk-for-python/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+  meta = {
+    description = "Microsoft Azure Synapse Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-mgmt-synapse";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-synapse_${version}/sdk/synapse/azure-mgmt-synapse/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

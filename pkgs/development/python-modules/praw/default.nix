@@ -1,40 +1,51 @@
-{ lib
-, betamax
-, betamax-matchers
-, betamax-serializers
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, prawcore
-, pytestCheckHook
-, pythonOlder
-, requests-toolbelt
-, update_checker
-, websocket-client
+{
+  lib,
+  betamax-matchers,
+  betamax-serializers,
+  betamax,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  mock,
+  prawcore,
+  pytestCheckHook,
+  requests-toolbelt,
+  update-checker,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.6.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "7.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ZGPtgpVTiGkInWDjsIcK7geu+TxAwDxbh2oyf2D65bo=";
+    repo = "praw";
+    tag = "v${version}";
+    hash = "sha256-jxF7rlMwKIKwyYv35vYWAdtClsVhnIkywoyMQeggGBc=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # fix tests under python 3.14
+    (fetchpatch {
+      url = "https://github.com/praw-dev/praw/commit/9edc0bfa62c1878c395d8bc225edfe87e4fc4cd4.patch";
+      includes = [ "tests/unit/test_reddit.py" ];
+      hash = "sha256-QozdHz8WPCsuBgFgx1j0NwFsPFBmq9KhKiW7B5/QmfE=";
+    })
+  ];
+
+  build-system = [ flit-core ];
+
+  dependencies = [
     mock
     prawcore
-    update_checker
+    update-checker
     websocket-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     betamax-serializers
     betamax-matchers
@@ -42,14 +53,18 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  pythonImportsCheck = [
-    "praw"
+  disabledTestPaths = [
+    # tests requiring network
+    "tests/integration"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "praw" ];
+
+  meta = {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/praw-dev/praw/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

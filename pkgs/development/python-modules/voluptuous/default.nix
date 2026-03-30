@@ -1,36 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.13.1";
+  version = "0.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alecthomas";
-    repo = pname;
-    rev = version;
-    hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
+    repo = "voluptuous";
+    tag = version;
+    hash = "sha256-Lph+vNsMm69Oqqk3mX27+BR1PsZNxqiI5Uu8nY8hCBc=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "voluptuous"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "voluptuous/tests/"
-  ];
+  pythonImportsCheck = [ "voluptuous" ];
 
-  meta = with lib; {
+  enabledTestPaths = [ "voluptuous/tests/" ];
+
+  meta = {
     description = "Python data validation library";
+    downloadPage = "https://github.com/alecthomas/voluptuous";
     homepage = "http://alecthomas.github.io/voluptuous/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/alecthomas/voluptuous/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

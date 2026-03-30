@@ -1,45 +1,39 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, dataclasses-json
-, pycryptodome
-, setuptools-scm
-, pytest-asyncio
-, pytest-cases
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dataclasses-json,
+  pycryptodome,
+  setuptools-scm,
+  pytest-asyncio,
+  pytest-cases,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysiaalarm";
-  version = "3.0.2";
-
-  disabled = pythonOlder "3.8";
+  version = "3.2.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-hS0OaafYjRdPVSCOHfb2zKp0tEOl1LyMJpwnpvsvALs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-9icZnEpSaezVj9EH5s1u2mB2h9jP/oZcpkVE0WFM4W8=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "==" ">="
-    substituteInPlace pytest.ini \
-      --replace "--cov pysiaalarm --cov-report term-missing" ""
-  '';
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     dataclasses-json
     pycryptodome
+    pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-cases
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -48,10 +42,11 @@ buildPythonPackage rec {
     "pysiaalarm.aio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/eavanvalkenburg/pysiaalarm/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

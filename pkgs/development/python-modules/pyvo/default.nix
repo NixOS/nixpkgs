@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, astropy
-, pillow
-, pythonOlder
-, pytestCheckHook
-, pytest-astropy
-, requests
-, requests-mock
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  astropy,
+  pillow,
+  pytestCheckHook,
+  pytest-astropy,
+  requests,
+  requests-mock,
+  setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvo";
-  version = "1.4";
-
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  version = "1.8.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-R2ttLoFd6Ic0KZl49dzN5NtWAqPpXRaeki6X8CRGsCw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-08xgqj00FtIsieRloE36n1IQhf3VIozOLP/S/uOp5wk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     pytestCheckHook
     pytest-astropy
@@ -47,10 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Astropy affiliated package for accessing Virtual Observatory data and services";
     homepage = "https://github.com/astropy/pyvo";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smaret ];
+    changelog = "https://github.com/astropy/pyvo/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

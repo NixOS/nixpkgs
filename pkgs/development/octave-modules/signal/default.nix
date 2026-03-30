@@ -1,26 +1,30 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, control
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
+  control,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "signal";
-  version = "1.4.2";
+  version = "1.4.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "YqTgYRfcxDw2FpkF+CVdAVSBypgq6ukBOw2d8+SOcGI=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-signal";
+    tag = "${version}";
+    sha256 = "sha256-4E57x2hweO1TfpjBRRvsyQA/o83XJLrRKa5vqUA0t3s=";
   };
 
   requiredOctavePackages = [
     control
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/signal/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/signal/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Signal processing tools, including filtering, windowing and display functions";
   };
 }

@@ -1,45 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-polyfield";
-  version = "5.10";
-
-  disabled = pythonOlder "3.6";
+  version = "5.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bachmann1234";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-oF5LBuDK4kqsAcKwidju+wFjigjy4CNbJ6bfWpGO1yQ=";
+    repo = "marshmallow-polyfield";
+    tag = "v${version}";
+    hash = "sha256-jbpeyih2Ccw1Rk+QcXRO9AfN5B/DhZmxa/M6FzXHqqs=";
   };
 
-  propagatedBuildInputs = [
-    marshmallow
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ marshmallow ];
+
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=marshmallow_polyfield" ""
-  '';
+  pythonImportsCheck = [ "marshmallow" ];
 
-  pythonImportsCheck = [
-    "marshmallow"
-  ];
-
-  meta = with lib; {
+  meta = {
+    # https://github.com/Bachmann1234/marshmallow-polyfield/issues/45
+    broken = true;
     description = "Extension to Marshmallow to allow for polymorphic fields";
     homepage = "https://github.com/Bachmann1234/marshmallow-polyfield";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,48 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "21.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "25.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = version;
-    hash = "sha256-8HO7X2PQEbQIQsCa2cMHQI3rlofVT22GYrWNXY34MLk=";
+    tag = version;
+    hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  patches = lib.optionals (pythonAtLeast "3.10") [
-    # pprint has no attribute _safe_repr, https://github.com/mahmoud/boltons/issues/294
+  patches = [
     (fetchpatch {
-      name = "fix-pprint-attribute.patch";
-      url = "https://github.com/mahmoud/boltons/commit/270e974975984f662f998c8f6eb0ebebd964de82.patch";
-      sha256 = "sha256-pZLfr6SRCw2aLwZeYaX7bzfJeZC4cFUILEmnVsKR6zc=";
+      name = "pytest9-compat.patch";
+      url = "https://github.com/mahmoud/boltons/commit/a2af58548936c51a3d859f780e54ba170a6829bb.patch";
+      hash = "sha256-NRjfEKb0doJEtS5GyrF0dJYYr2u+ukogfUmmVnsHAwM=";
     })
   ];
+
+  build-system = [ flit-core ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests bind to localhost
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "boltons"
-  ];
+  pythonImportsCheck = [ "boltons" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/mahmoud/boltons";
+  meta = {
     description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
       Boltons is a set of over 200 BSD-licensed, pure-Python utilities
@@ -59,7 +53,9 @@ buildPythonPackage rec {
       - A full-featured TracebackInfo type, for representing stack
       traces, in tbutils
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    homepage = "https://github.com/mahmoud/boltons";
+    changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

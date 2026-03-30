@@ -1,47 +1,63 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gst-plugins-base
-, bzip2
-, libva
-, wayland
-, libdrm
-, udev
-, xorg
-, libGLU
-, libGL
-, gstreamer
-, gst-plugins-bad
-, nasm
-, libvpx
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gst-plugins-base,
+  bzip2,
+  libva,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libdrm,
+  udev,
+  libxv,
+  libxrandr,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
+  libGLU,
+  libGL,
+  gstreamer,
+  gst-plugins-bad,
+  nasm,
+  libvpx,
+  python3,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer-vaapi";
-  version = "1.20.3";
-
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bumesxar3emtNwApFb2MOGeRj2/cdLfPKsTBrg1pC0U=";
-  };
+  version = "1.26.5";
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
+
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${finalAttrs.version}.tar.xz";
+    hash = "sha256-tC1E22PzGVpvMyluHq0ywU0B7ydFK3Bo8aLYZiT1Xqk=";
+  };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    python3
     bzip2
-
-    # documentation
-    # TODO add hotdoc here
+    wayland-scanner
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -50,24 +66,32 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     libva
     wayland
+    wayland-protocols
     libdrm
     udev
-    xorg.libX11
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
-    libGL
-    libGLU
+    libx11
+    libxcb
+    libxext
+    libxv
+    libxrandr
+    libsm
+    libice
     nasm
     libvpx
-    python3
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
@@ -75,11 +99,19 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with lib; {
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
+  passthru = {
+    updateScript = directoryListingUpdater { };
+  };
+
+  meta = {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

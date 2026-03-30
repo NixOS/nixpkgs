@@ -1,36 +1,39 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtmultimedia
-, qtimageformats
-, qtx11extras
-, qttools
-, libidn
-, qca-qt5
-, libXScrnSaver
-, hunspell
-, libsecret
-, libgcrypt
-, libotr
-, html-tidy
-, libgpg-error
-, libsignal-protocol-c
-, usrsctp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  wrapQtAppsHook,
+  qtbase,
+  qtmultimedia,
+  qtimageformats,
+  qtx11extras,
+  qttools,
+  libidn,
+  qca-qt5,
+  libxscrnsaver,
+  hunspell,
+  libsecret,
+  libgcrypt,
+  libgpg-error,
+  usrsctp,
+  qtkeychain,
 
-, chatType ? "basic" # See the assertion below for available options
-, qtwebkit
-, qtwebengine
+  chatType ? "basic", # See the assertion below for available options
+  qtwebkit,
+  qtwebengine,
 
-, enablePlugins ? true
+  enablePlugins ? true,
+  html-tidy,
+  http-parser,
+  libotr,
+  libomemo-c,
 
   # Voice messages
-, voiceMessagesSupport ? true
-, gst_all_1
-
-, enablePsiMedia ? false
-, pkg-config
+  voiceMessagesSupport ? true,
+  gst_all_1,
+  enablePsiMedia ? false,
+  pkg-config,
 }:
 
 assert builtins.elem (lib.toLower chatType) [
@@ -41,15 +44,15 @@ assert builtins.elem (lib.toLower chatType) [
 
 assert enablePsiMedia -> enablePlugins;
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "psi-plus";
-  version = "1.5.1642";
 
+  version = "1.5.2115";
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-voaGYYt1CZTxiumKvIVupMxdrLKACnfxvtnYfGuya1I=";
+    sha256 = "sha256-4is3ksl6IsYP1L0WhTT/56QUtR+EC1X6Lftre2BO6pM=";
   };
 
   cmakeFlags = [
@@ -61,7 +64,9 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
-  ] ++ lib.optionals enablePsiMedia [
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals enablePsiMedia [
     pkg-config
   ];
 
@@ -72,21 +77,28 @@ mkDerivation rec {
     qtx11extras
     libidn
     qca-qt5
-    libXScrnSaver
+    libxscrnsaver
     hunspell
     libsecret
     libgcrypt
-    libotr
-    html-tidy
     libgpg-error
-    libsignal-protocol-c
     usrsctp
-  ] ++ lib.optionals voiceMessagesSupport [
+    qtkeychain
+  ]
+  ++ lib.optionals voiceMessagesSupport [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals (chatType == "webkit") [
+  ]
+  ++ lib.optionals enablePlugins [
+    html-tidy
+    http-parser
+    libotr
+    libomemo-c
+  ]
+  ++ lib.optionals (chatType == "webkit") [
     qtwebkit
-  ] ++ lib.optionals (chatType == "webengine") [
+  ]
+  ++ lib.optionals (chatType == "webengine") [
     qtwebengine
   ];
 
@@ -96,11 +108,14 @@ mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://psi-plus.com";
     description = "XMPP (Jabber) client based on Qt5";
-    maintainers = with maintainers; [ orivej misuzu unclechu ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    mainProgram = "psi-plus";
+    maintainers = with lib.maintainers; [
+      unclechu
+    ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

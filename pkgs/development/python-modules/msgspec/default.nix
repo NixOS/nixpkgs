@@ -1,36 +1,83 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  attrs,
+  coverage,
+  furo,
+  ipython,
+  msgpack,
+  mypy,
+  pre-commit,
+  pyright,
+  pytest,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  sphinx,
+  sphinx-copybutton,
+  sphinx-design,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.9.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.20.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jcrist";
-    repo = pname;
-    rev = version;
-    hash = "sha256-q7WNVnkvK7MTleHEuClOFJ0Wv6EWu/3ztMi6TYdKgKU=";
+    repo = "msgspec";
+    tag = version;
+    # Note that this hash changes after some time after release because they
+    # use `$Format:%d$` in msgspec/_version.py, and GitHub produces different
+    # tarballs depending on whether tagged commit is the last commit, see
+    # https://github.com/NixOS/nixpkgs/issues/84312
+    hash = "sha256-DWDmnSuo12oXl9NVfNhIOtWrQeJ9DMmHxOyHY33Datk=";
+  };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  optional-dependencies = {
+    dev = [
+      coverage
+      mypy
+      pre-commit
+      pyright
+    ]
+    ++ optional-dependencies.doc
+    ++ optional-dependencies.test;
+    doc = [
+      furo
+      ipython
+      sphinx
+      sphinx-copybutton
+      sphinx-design
+    ];
+    test = [
+      attrs
+      msgpack
+      pytest
+    ]
+    ++ optional-dependencies.yaml
+    ++ optional-dependencies.toml;
+    toml = [ tomli-w ];
+    yaml = [ pyyaml ];
   };
 
   # Requires libasan to be accessible
   doCheck = false;
 
-  pythonImportsCheck = [
-    "msgspec"
-  ];
+  pythonImportsCheck = [ "msgspec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle JSON/MessagePack";
     homepage = "https://github.com/jcrist/msgspec";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jcrist/msgspec/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,25 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPythonApplication
-, appstream-glib
-, dbus-python
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gtk3
-, hicolor-icon-theme
-, libappindicator
-, libhandy
-, meson
-, ninja
-, pkg-config
-, pygobject3
-, pyxdg
-, systemd
-, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonApplication,
+  appstream-glib,
+  dbus-python,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  gtk3,
+  hicolor-icon-theme,
+  libappindicator,
+  libhandy,
+  meson,
+  ninja,
+  pkg-config,
+  pygobject3,
+  pyxdg,
+  wrapGAppsHook3,
 }:
 
 buildPythonApplication rec {
@@ -27,12 +26,12 @@ buildPythonApplication rec {
   version = "1.0.0";
 
   # This packages doesn't have a setup.py
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "vagnum08";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cpupower-gui";
+    tag = "v${version}";
     sha256 = "05lvpi3wgyi741sd8lgcslj8i7yi3wz7jwl7ca3y539y50hwrdas";
   };
 
@@ -42,6 +41,11 @@ buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/vagnum08/cpupower-gui/commit/97f8ac02fe33e412b59d3f3968c16a217753e74b.patch";
       sha256 = "XYnpm03kq8JLMjAT73BMCJWlzz40IAuHESm715VV6G0=";
+    })
+    # Fixes https://github.com/vagnum08/cpupower-gui/issues/86
+    (fetchpatch {
+      url = "https://github.com/vagnum08/cpupower-gui/commit/22ea668aa4ecf848149ea4c150aa840a25dc6ff8.patch";
+      sha256 = "sha256-Mri7Af1Y79lt2pvZl4DQSvrqSLIJLIjzyXwMPFEbGVI=";
     })
   ];
 
@@ -55,7 +59,7 @@ buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
 
     # Python packages
     dbus-python
@@ -94,10 +98,11 @@ buildPythonApplication rec {
     wrapPythonProgramsIn $out/lib "$out $propagatedBuildInputs"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Change the frequency limits of your cpu and its governor";
+    mainProgram = "cpupower-gui";
     homepage = "https://github.com/vagnum08/cpupower-gui/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ unode ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ unode ];
   };
 }

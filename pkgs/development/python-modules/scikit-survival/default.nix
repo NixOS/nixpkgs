@@ -1,35 +1,60 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, ecos
-, joblib
-, numexpr
-, numpy
-, osqp
-, pandas
-, setuptools-scm
-, scikit-learn
-, scipy
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  eigen,
+
+  # build-system
+  cython,
+  numpy,
+  packaging,
+  scikit-learn,
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  ecos,
+  joblib,
+  numexpr,
+  osqp,
+  pandas,
+  scipy,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-survival";
-  version = "0.18.0";
+  version = "0.27.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-LfQESmKxSJ4tWlp3EZTBajOxZC3IEOUtJmX8A5ROpmU=";
+  src = fetchFromGitHub {
+    owner = "sebp";
+    repo = "scikit-survival";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BP4kfYt4W9QCklkJ5DDE6Zquca2LhRZGFsKmD9qb7vk=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    ln -s ${lib.getInclude eigen}/include/eigen3/Eigen \
+      sksurv/linear_model/src/eigen
+  '';
+
+  build-system = [
     cython
+    numpy
+    packaging
+    scikit-learn
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "osqp"
+  ];
+  dependencies = [
     ecos
     joblib
     numexpr
@@ -42,19 +67,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sksurv" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
   preCheck = ''
-    export HOME=$(mktemp -d)
-    cp -r $TMP/$sourceRoot/tests $HOME
-    pushd $HOME
+    rm -rf sksurv
   '';
-  postCheck = "popd";
 
-  # very long tests, unnecessary for a leaf package
   disabledTests = [
+    # very long tests, unnecessary for a leaf package
     "test_coxph"
     "test_datasets"
     "test_ensemble_selection"
@@ -62,13 +84,22 @@ buildPythonPackage rec {
     "test_pandas_inputs"
     "test_survival_svm"
     "test_tree"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky numerical assertion (AssertionError)
+    "test_baseline_predict"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # floating point mismatch on aarch64
+    # 27079905.88052468 to far from 27079905.880496684
+    "test_coxnet"
   ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+  meta = {
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    changelog = "https://github.com/sebp/scikit-survival/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
-}
+})

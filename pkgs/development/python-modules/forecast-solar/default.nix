@@ -1,41 +1,70 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiodns
-, aiohttp
-, backports-zoneinfo
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiodns,
+  aiohttp,
+  aresponses,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezer,
+  pytestCheckHook,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "2.3.0";
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-1xRbTOeBHzLmf0FJwsrg/4+Z2Fs7uwbQwS2Tm41mNRk=";
+    tag = "v${version}";
+    hash = "sha256-gFa1jq4Dq6fWqL/3eY+OGcJU+T+R6TZs8CX1ynnW+pU=";
   };
 
-  PACKAGE_VERSION = version;
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  env.PACKAGE_VERSION = version;
+
+  dependencies = [
     aiodns
     aiohttp
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
+    yarl
   ];
-
-  # no unit tests implemented
-  doCheck = false;
 
   pythonImportsCheck = [ "forecast_solar" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-freezer
+    pytestCheckHook
+    syrupy
+  ];
+
+  disabledTests = [
+    # "Error while resolving Forecast.Solar API address"
+    "test_api_key_validation"
+    "test_estimated_forecast"
+    "test_internal_session"
+    "test_json_request"
+    "test_plane_validation"
+    "test_status_400"
+    "test_status_401"
+    "test_status_422"
+    "test_status_429"
+  ];
+
+  meta = {
+    changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

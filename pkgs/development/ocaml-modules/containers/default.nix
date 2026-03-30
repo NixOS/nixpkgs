@@ -1,30 +1,56 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, dune-configurator
-, either, seq
-, gen, iter, qcheck-core, uutf, yojson
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildDunePackage,
+  dune-configurator,
+  either,
+  seq,
+  gen,
+  iter,
+  qcheck-core,
+  uutf,
+  yojson,
 }:
 
-buildDunePackage rec {
-  version = "3.9";
+buildDunePackage (finalAttrs: {
+  version = "3.16";
   pname = "containers";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
-    rev = "v${version}";
-    sha256 = "sha256-uQyKBSXgf3kGx5HvS2VQrrkh0WqNZfxr5j8tTRjeTX4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WaHAZRLjaEJUba/I2r3Yof/iUqA3PFUuVbzm88izG1k=";
   };
 
+  patches = [
+    # Compatibility with qcheck ≥ 0.26
+    (fetchpatch {
+      url = "https://github.com/c-cube/ocaml-containers/commit/3b49ad2a4e8cfe366d0588e1940d626f0e1b8a2d.patch";
+      hash = "sha256-LFe+LtpBBrf82SX57b4iQSvfd9tSXmnfhffjvjcfLpg=";
+    })
+  ];
+
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ either seq ];
+  propagatedBuildInputs = [
+    either
+    seq
+  ];
 
-  checkInputs = [ gen iter qcheck-core uutf yojson ];
+  checkInputs = [
+    gen
+    iter
+    qcheck-core
+    uutf
+    yojson
+  ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/c-cube/ocaml-containers";
-    description = "A modular standard library focused on data structures";
+    description = "Modular standard library focused on data structures";
     longDescription = ''
       Containers is a standard library (BSD license) focused on data structures,
       combinators and iterators, without dependencies on unix. Every module is
@@ -37,4 +63,4 @@ buildDunePackage rec {
     '';
     license = lib.licenses.bsd2;
   };
-}
+})

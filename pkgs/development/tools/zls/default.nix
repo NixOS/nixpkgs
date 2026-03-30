@@ -1,33 +1,65 @@
-{ stdenv, lib, fetchFromGitHub, zig }:
+{
+  lib,
+  stdenv,
+  zig_0_14,
+  zig_0_15,
+  fetchFromGitHub,
+  callPackage,
+}:
 
-stdenv.mkDerivation rec {
-  pname = "zls";
-  version = "0.9.0";
+let
+  common = finalAttrs: _: {
+    pname = "zls";
 
-  src = fetchFromGitHub {
-    owner = "zigtools";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-MVo21qNCZop/HXBqrPcosGbRY+W69KNCc1DfnH47GsI=";
-    fetchSubmodules = true;
+    meta = {
+      description = "Zig LSP implementation + Zig Language Server";
+      mainProgram = "zls";
+      changelog = "https://github.com/zigtools/zls/releases/tag/${finalAttrs.version}";
+      homepage = "https://github.com/zigtools/zls";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        moni
+        _0x5a4
+        jmbaur
+      ];
+      platforms = lib.platforms.unix;
+    };
+  };
+in
+lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) {
+  zls_0_14 = finalAttrs: {
+    version = "0.14.0";
+
+    src = fetchFromGitHub {
+      owner = "zigtools";
+      repo = "zls";
+      tag = finalAttrs.version;
+      fetchSubmodules = true;
+      hash = "sha256-A5Mn+mfIefOsX+eNBRHrDVkqFDVrD3iXDNsUL4TPhKo=";
+    };
+
+    nativeBuildInputs = [ zig_0_14 ];
+
+    postConfigure = ''
+      ln -s ${callPackage ./deps_0_14.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    '';
   };
 
-  nativeBuildInputs = [ zig ];
+  zls_0_15 = finalAttrs: {
+    version = "0.15.1";
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+    src = fetchFromGitHub {
+      owner = "zigtools";
+      repo = "zls";
+      tag = finalAttrs.version;
+      fetchSubmodules = true;
+      hash = "sha256-6IkRtQkn+qUHDz00QvCV/rb2yuF6xWEXug41CD8LLw8=";
+    };
 
-  installPhase = ''
-    zig build -Drelease-safe -Dcpu=baseline --prefix $out install
-  '';
+    nativeBuildInputs = [ zig_0_15 ];
 
-  meta = with lib; {
-    description = "Zig LSP implementation + Zig Language Server";
-    changelog = "https://github.com/zigtools/zls/releases/tag/${version}";
-    homepage = "https://github.com/zigtools/zls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fortuneteller2k ];
-    platforms = platforms.unix;
+    postConfigure = ''
+      ln -s ${callPackage ./deps_0_15.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    '';
   };
 }

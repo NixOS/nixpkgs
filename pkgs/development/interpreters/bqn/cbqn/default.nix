@@ -1,81 +1,143 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, genBytecode ? false
-, bqn-path ? null
-, mbqn-source ? null
-, libffi
+{
+  lib,
+  callPackage,
+  fixDarwinDylibNames,
+  libffi,
+  mbqn-source,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  enableReplxx ? false,
+  enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx),
+  generateBytecode ? false,
+  # "Configurable" options
+  bqn-interpreter,
 }:
 
 let
-  cbqn-bytecode-files = fetchFromGitHub {
-    name = "cbqn-bytecode-files";
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "3df8ae563a626ff7ae0683643092f0c3bc2481e5";
-    hash = "sha256:0rh9qp1bdm9aa77l0kn9n4jdy08gl6l7898lncskxiq9id6xvyb8";
-  };
+  sources = callPackage ./sources.nix { };
 in
-assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
+stdenv.mkDerivation {
+  pname = "cbqn" + lib.optionalString (!generateBytecode) "-standalone";
+  inherit (sources.cbqn) version src;
 
-stdenv.mkDerivation rec {
-  pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2022-10-04";
-
-  src = fetchFromGitHub {
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "abcb575a537712763e9e53b6cb0eb415346b00e6";
-    hash = "sha256:05gqw2ppcykv36ji8mkp8mq502q84vk9algp9c2d3z495xqy8rn6";
-  };
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     libffi
   ];
 
-  dontConfigure = true;
-
-  postPatch = ''
-    sed -i '/SHELL =.*/ d' makefile
-  '';
-
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+  buildFlags = [
+    # interpreter binary
+    "o3"
+    "notui=1" # display build progress in a plain-text format
+    "REPLXX=${if enableReplxx then "1" else "0"}"
+    "version=${sources.cbqn.version}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.avx2Support [
+    "has=avx2"
+  ]
+  ++ lib.optionals enableLibcbqn [
+    # embeddable interpreter as a shared lib
+    "shared-o3"
+  ];
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals enableLibcbqn [
+    "lib"
+    "dev"
+  ];
+
+  dontConfigure = true;
+
+  doInstallCheck = true;
+
+  strictDeps = true;
+
+  postPatch = ''
+    sed -i '/SHELL =.*/ d' makefile
+    patchShebangs build/build
+  '';
+
   preBuild = ''
-    # Purity: avoids git downloading bytecode files
-    touch src/gen/customRuntime
-  '' + (if genBytecode then ''
-    ${bqn-path} genRuntime ${mbqn-source}
-  '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} src/gen/
-  '')
-  # Need to adjust ld flags for darwin manually
-  # https://github.com/dzaima/CBQN/issues/26
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeFlagsArray+=(LD_LIBS="-ldl -lffi")
+    mkdir -p build/singeliLocal/
+    cp -r ${sources.singeli.src}/* build/singeliLocal/
+  ''
+  + (
+    if generateBytecode then
+      ''
+        mkdir -p build/bytecodeLocal/gen
+        ${bqn-interpreter} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
+      ''
+    else
+      ''
+        mkdir -p build/bytecodeLocal/gen
+        cp -r ${sources.cbqn-bytecode.src}/* build/bytecodeLocal/
+      ''
+  )
+  + lib.optionalString enableReplxx ''
+    mkdir -p build/replxxLocal/
+    cp -r ${sources.replxx.src}/* build/replxxLocal/
   '';
 
   installPhase = ''
-     runHook preInstall
+    runHook preInstall
 
-     mkdir -p $out/bin/
-     cp BQN -t $out/bin/
-     # note guard condition for case-insensitive filesystems
-     [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
-     [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
-
-     runHook postInstall
+    mkdir -p $out/bin/
+    cp BQN -t $out/bin/
+    # note guard condition for case-insensitive filesystems
+    [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
+    [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
+  ''
+  + lib.optionalString enableLibcbqn ''
+    install -Dm644 include/bqnffi.h -t "$dev/include"
+    install -Dm755 libcbqn${stdenv.hostPlatform.extensions.sharedLibrary} -t "$lib/lib"
+  ''
+  + ''
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # main test suite from mlochbaum/BQN
+    $out/bin/BQN ${mbqn-source}/test/this.bqn
+
+    # run tests in test/cases/
+    $out/bin/BQN test/run.bqn lint
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      # https://github.com/dzaima/CBQN?tab=readme-ov-file#licensing
+      asl20
+      boost
+      gpl3Only
+      lgpl3Only
+      mit
+      mpl20
+    ];
+    mainProgram = "cbqn";
+    maintainers = with lib.maintainers; [
+      detegr
+      shnarazk
+      sternenseemann
+    ];
+    platforms = lib.platforms.all;
   };
 }
-# TODO: version cbqn-bytecode-files
-# TODO: test suite

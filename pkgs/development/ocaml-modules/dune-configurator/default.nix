@@ -1,21 +1,24 @@
-{ lib, buildDunePackage, dune_2, csexp, result }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  csexp,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-configurator";
 
-  useDune2 = true;
+  inherit (dune_3) src version patches;
 
-  inherit (dune_2) src version patches;
-
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.05";
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ csexp result ];
+  propagatedBuildInputs = [ csexp ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper library for gathering system configuration";
-    maintainers = [ maintainers.marsam ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

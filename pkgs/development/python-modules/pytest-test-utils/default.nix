@@ -1,46 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-test-utils";
-  version = "0.0.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-5gB+hnJR2+NQd/n7RGrX1bzfKt8Np7IbWw61SZgNVJY=";
+    repo = "pytest-test-utils";
+    tag = version;
+    hash = "sha256-19oNAFff++7ntMdlnMXYc2w5I+EzGwWJh+rB1IjNZGk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_test_utils"
-  ];
+  pythonImportsCheck = [ "pytest_test_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest utilities for tests";
     homepage = "https://github.com/iterative/pytest-test-utils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/pytest-test-utils/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

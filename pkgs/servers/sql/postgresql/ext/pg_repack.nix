@@ -1,25 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{
+  fetchFromGitHub,
+  gitUpdater,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+  testers,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_repack";
-  version = "1.4.8";
+  version = "1.5.3";
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = postgresql.buildInputs;
 
   src = fetchFromGitHub {
-    owner  = "reorg";
-    repo   = "pg_repack";
-    rev    = "f42c1bd707bd5d69a9eb33494133db2e47a2c05a"; # no release tag
-    sha256 = "sha256-pZjspnmPTXS/SbyLAd7vcoF01cbC6PnxZjuto4lUuQA=";
+    owner = "reorg";
+    repo = "pg_repack";
+    tag = "ver_${finalAttrs.version}";
+    hash = "sha256-Ufh/dKrKumRKeQ/CpwvxbjAmgILAn04BduPZMRvS+nU=";
   };
 
-  installPhase = ''
-    install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack.so -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
-  '';
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "ver_";
+  };
 
-  meta = with lib; {
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    extension = postgresqlTestExtension {
+      inherit (finalAttrs) finalPackage;
+      sql = "CREATE EXTENSION pg_repack;";
+    };
+  };
+
+  meta = {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
     longDescription = ''
       pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore
@@ -27,9 +43,10 @@ stdenv.mkDerivation rec {
       exclusive lock on the processed tables during processing. pg_repack is efficient to boot,
       with performance comparable to using CLUSTER directly.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danbst ];
+    homepage = "https://github.com/reorg/pg_repack";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
-    inherit (src.meta) homepage;
+    mainProgram = "pg_repack";
   };
-}
+})

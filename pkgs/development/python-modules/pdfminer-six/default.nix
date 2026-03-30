@@ -1,44 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, cryptography
-, charset-normalizer
-, pythonOlder
-, typing-extensions
-, pytestCheckHook
-, ocrmypdf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  charset-normalizer,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  ocrmypdf,
 }:
 
 buildPythonPackage rec {
   pname = "pdfminer-six";
-  version = "20221105";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  version = "20260107";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = version;
-    sha256 = "sha256-OyEeQBuYfj4iEcRt2/daSaUfTOjCVSCyHW2qffal+Bk=";
+    tag = version;
+    hash = "sha256-spWDwPoBLdySysYblCWABIWtokOMoJdpYQ6qxX94wIE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     charset-normalizer
     cryptography
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   postInstall = ''
-    for file in $out/bin/*.py; do
-      ln $file ''${file//.py/}
+    for file in "$out/bin/"*.py; do
+      mv "$file" "''${file%.py}"
     done
-  '';
-
-  postPatch = ''
-    # Version is not stored in repo, gets added by a GitHub action after tag is created
-    # https://github.com/pdfminer/pdfminer.six/pull/727
-    substituteInPlace pdfminer/__init__.py --replace "__VERSION__" ${version}
   '';
 
   pythonImportsCheck = [
@@ -46,8 +43,12 @@ buildPythonPackage rec {
     "pdfminer.high_level"
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # The binary file samples/contrib/issue-1004-indirect-mediabox.pdf is
+    # stripped from fix-dereference-MediaBox.patch.
+    "test_contrib_issue_1004_mediabox"
   ];
 
   passthru = {
@@ -56,10 +57,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pdfminer/pdfminer.six/blob/${src.tag}/CHANGELOG.md";
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy marsam ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

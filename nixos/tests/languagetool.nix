@@ -1,10 +1,15 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-let port = 8082;
-in {
+{ pkgs, lib, ... }:
+let
+  port = 8082;
+in
+{
   name = "languagetool";
-  meta = with lib.maintainers; { maintainers = [ fbeffa ]; };
+  meta = with lib.maintainers; {
+    maintainers = [ fbeffa ];
+  };
 
-  nodes.machine = { ... }:
+  nodes.machine =
+    { ... }:
     {
       services.languagetool.enable = true;
       services.languagetool.port = port;
@@ -16,4 +21,4 @@ in {
     machine.wait_for_open_port(${toString port})
     machine.wait_until_succeeds('curl -d "language=en-US" -d "text=a simple test" http://localhost:${toString port}/v2/check')
   '';
-})
+}

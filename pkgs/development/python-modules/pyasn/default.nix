@@ -1,19 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, python, }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "pyasn";
-  version = "1.6.1";
+  version = "1.6.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
+    hash = "sha256-otVfs+5HlHYJ9QIRylsLrEEahvPJNfuSyksLirfGaP8=";
   };
 
   datasrc = fetchFromGitHub {
     owner = "hadiasghari";
     repo = "pyasn";
-    rev = "${version}";
-    sha256 = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
+    rev = version;
+    hash = "sha256-7zpaxDe5qHUy/ekOJLxKawjaPQnByrOVj+m2bsUqfdg=";
   };
 
   postInstall = ''
@@ -25,10 +32,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Offline IP address to Autonomous System Number lookup module";
     homepage = "https://github.com/hadiasghari/pyasn";
-    license = with licenses; [ bsdOriginal mit ];
-    maintainers = with maintainers; [ onny ];
+    license = with lib.licenses; [
+      bsdOriginal
+      mit
+    ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

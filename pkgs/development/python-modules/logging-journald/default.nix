@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "logging-journald";
-  version = "0.6.2";
-  format = "setuptools";
+  version = "0.6.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U6kqAvMSyLDbThc6wAN/ri0vmt/vAxgFFZT65Csbpss=";
+  src = fetchFromGitHub {
+    owner = "mosquito";
+    repo = "logging-journald";
+    tag = version;
+    hash = "sha256-RQ9opkAOZfhYuqOXJ2Mtnig8soL+lCveYH2YdXL1AGM=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   # Circular dependency with aiomisc
   doCheck = false;
 
-  pythonImportsCheck = [
-    "logging_journald"
-  ];
+  pythonImportsCheck = [ "logging_journald" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging handler for writing logs to the journald";
     homepage = "https://github.com/mosquito/logging-journald";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

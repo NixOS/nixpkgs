@@ -1,29 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.19.1.1";
-  format = "setuptools";
+  version = "0.22.3.20260223";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vgpRuhx90hXZ0t9m1oReY8EAm0u/TFvrh6DZdFzbqWI=";
+    pname = "types_docutils";
+    inherit version;
+    hash = "sha256-6Q6Gjagt9hXqIhfPNt/zHwlmDaoV/A+VavU/icE2RQE=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "docutils-stubs"
-  ];
+  pythonImportsCheck = [ "docutils-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for docutils";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  requests,
+}:
 
 let
 
@@ -15,16 +21,16 @@ let
     rev = "aceeaf224b64d6880189d795bd99c3ffadb5d79e";
     sha256 = "125q5rllfm8vg9mz8hn7bhvhv2vqpd86kx2kxlk84smh33l8kbyl";
   };
-
 in
 
 buildPythonPackage rec {
   pname = "pyld";
   version = "1.0.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
-    repo = pname;
+    repo = "pyld";
     rev = version;
     sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
   };
@@ -48,10 +54,10 @@ buildPythonPackage rec {
     ${python.interpreter} tests/runtests.py -d ${normalization}/tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the JSON-LD API";
     homepage = "https://github.com/digitalbazaar/pyld";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ apeschar ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

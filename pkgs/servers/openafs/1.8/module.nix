@@ -1,30 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, which
-, autoconf
-, automake
-, flex
-, bison
-, kernel
-, glibc
-, perl
-, libtool_2
-, libkrb5
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  which,
+  autoconf,
+  automake,
+  flex,
+  bison,
+  kernel,
+  glibc,
+  perl,
+  libtool_2,
+  libkrb5,
 }:
 
-with (import ./srcs.nix {
-  inherit fetchurl;
-});
-
 let
+  inherit (import ./srcs.nix { inherit fetchurl; }) src version;
+
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
-    postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
-  });
 
 in
 stdenv.mkDerivation {
@@ -32,68 +27,84 @@ stdenv.mkDerivation {
   version = "${version}-${kernel.modDirVersion}";
   inherit src;
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
-    ++ kernel.moduleBuildDependencies;
-
-  buildInputs = [ libkrb5 ];
-
   patches = [
-    # Import of code from autoconf-archive
+    # Linux: Use get_tree_nodev
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=d8205bbb482554812fbe66afa3c337d991a247b6";
-      hash = "sha256-ohkjSux+S3+6slh6uZIw5UJXlvhy9UUDpDlP0YFRwmw=";
+      url = "https://github.com/openafs/openafs/commit/c02a8f451b48766aa163e729abe40d145751b2dc.patch";
+      hash = "sha256-9okSQLV4tW1wjoffQXPneZbu6tTRqrqVPbEOwZmaD+E=";
     })
-    # Use autoconf-archive m4 from src/external
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14944/revisions/ea2a0e128d71802f61b8da2e44de3c6325c5f328/patch";
-      hash = "sha256-PAUk/MXL5p8xwhn40/UGmo3UIhvl1PB2FwgqhmqsjJ4=";
-    })
-    # cf: Use common macro to test compiler flags
+    # LINUX: Re-dirty folio on writepages recursion
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=790824ff749b6ee01c4d7101493cbe8773ef41c6";
-      hash = "sha256-Zc7AjCsH7eTmZJWCrx7ci1tBjEAgcFXS9lY1YBeboLA=";
+      url = "https://github.com/openafs/openafs/commit/11849e96820eca64d91742a8c521614e1e99d9fa.patch";
+      hash = "sha256-F2MOqEDaj4e0Xj1mvs7v61cutZY3cO22p9iIp2bLiRQ=";
     })
-    # Linux-5.17: kernel func complete_and_exit renamed
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14945/revisions/a714e865efe41aa1112f6f9c8479112660dacd6f/patch";
-      hash = "sha256-zvyR/GOPJeAbG6ySRRMp44oT5tPujUwybyU0XR/5Xyc=";
-    })
-    # Linux-5.17: Kernel build uses -Wcast-function-type
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14946/revisions/449d1faf87e2841e80be38cf2b4a5cf5ff4df2d8/patch";
-      hash = "sha256-3bRTHYeMRIleLhob56m2Xt0dWzIMDo3QrytY0K1/q7c=";
-    })
-    # afs: Introduce afs_IsDCacheFresh
+    # Linux: Introduce LINUX_WRITE_CACHE_PAGES_USES_FOLIOS
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=0d8ce846ab2e6c45166a61f04eb3af271cbd27db";
-      hash = "sha256-+xgRYVXz8XpT5c4Essc4VEn9Fj53vasAYhcFkK0oCBc=";
+      url = "https://github.com/openafs/openafs/commit/63a3503240c06187fa87514e5ea421cece483422.patch";
+      hash = "sha256-ZWV8IZ8CeFQaEOamqKfkXuUccSxCRFNkZ7/kxKbEuis=";
     })
-    # LINUX: Don't panic on some file open errors
+    # Linux: Avoid write_cache_pages() for ->writepages()
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=af73b9a3b1fc625694807287c0897391feaad52d";
-      hash = "sha256-k0d+Gav1LApU24SaMI0pmR3gGfWyicqdCpTpVJLcx7U=";
+      url = "https://gerrit.openafs.org/changes/16704/revisions/d465a07a98c2b0b2c23780571a8fe70c2584473a/patch";
+      decode = "base64 -d";
+      hash = "sha256-2FOf+o36gbTHm90RxtOI7iXcgb6rv9nh9rSjZzL5O7A=";
     })
-    # Linux-5.18 replace set_page_dirty with dirty_folio
+    # LINUX: Log warning on recursive folio writeback
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=6aa129e743e882cf30c35afd67eabf82274c5fca";
-      hash = "sha256-8R0rdKYs7+Zl1sdizOZzpBjy6e9J+42R9HzsNUa/PQ4=";
+      url = "https://gerrit.openafs.org/changes/16705/revisions/d66ca6372461840c6ecaaa46ec293640c8f22573/patch";
+      decode = "base64 -d";
+      hash = "sha256-A383wDMkwnGFatBDHUGV8FVqPMjzvhqUnIWrP2C+ym4=";
     })
-    # afs: introduce afs_alloc_ncr/afs_free_ncr
+    # Linux: Move afs_root()/afs_fill_super() in osi_vfsops
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=209eb92448001e59525413610356070d8e4f10a0";
-      hash = "sha256-t455gTaK5U+m0qcyKjTqnWTOb4qz6VN/JYZzRAAV8kM=";
+      url = "https://gerrit.openafs.org/changes/16706/revisions/988c70859f1d402022e9342e28f0c5a954760a72/patch";
+      decode = "base64 -d";
+      hash = "sha256-JsZwGGa7dRT43RIUUY3hYCbbqPObd5bkDOHl9QK/MhE=";
     })
-    # afs: introduce get_dcache_readahead
+    # Linux: Use sockaddr_unsized for socket->ops->bind
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=44e24ae5d7dc41e54d23638d5f64ab2e81e43ad0";
-      hash = "sha256-gtUNDSHAq+RY1Rm17YcxcUALy7FEBQf9k8/ELQlPORU=";
+      url = "https://gerrit.openafs.org/changes/16707/revisions/e6069d6c35e848b5b388f4c47a2ecf0d72420198/patch";
+      decode = "base64 -d";
+      hash = "sha256-hTRaTqOc0njW/RIsNTrFZ5uWTrQq04Fuh/Sk7K2Q5e4=";
     })
-    # Linux-5.18: replace readpages with readahead
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14953/revisions/0497b0cd7bffb6335ab9bcbf5a1310b8c6a4b299/patch";
-      hash = "sha256-a5pd+CHHPr1mGxsF7tSlaBqoiKw2IGr1mJ7EaDHDJSw=";
+    # Linux: Pass 3rd parameter to filemap_alloc_folio()
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16708/revisions/48d2184ec95418cada68b70919b0afd9888bb945/patch";
+      decode = "base64 -d";
+      hash = "sha256-CSGlXYkkLSHQoWK2xLpUYJDOUP/mlsxkTru2qdmbeQo=";
+    })
+    # Linux: implement aops->migrate_folio
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16709/revisions/2c51471aea08cc495a5d59fee6e651ba58c9d772/patch";
+      decode = "base64 -d";
+      hash = "sha256-TtcblVczSp8b1bfd0ajWjK2LffAkgYr2+KUL2nEe8hs=";
+    })
+    # Linux: Use set_default_d_op() to set dentry ops
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16729/revisions/6d0a2107fcab28fc4ba64d365133d171b75bd3dc/patch";
+      decode = "base64 -d";
+      hash = "sha256-OKxR5zzVKSXPzudPl5jc7koObisQMMqq/d9kfrMem/M=";
+    })
+    # Linux: Use __getname()/__putname() to alloc name
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16738/revisions/a1754489f382aabd087f14c325d13a36faa5bf5c/patch";
+      decode = "base64 -d";
+      hash = "sha256-JizLrwnujybCkcbDIltGfgVtCc5fL3ZxWvgVbI1kKto=";
     })
   ];
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    libtool_2
+    perl
+    which
+    bison
+  ]
+  ++ kernel.moduleBuildDependencies;
+
+  buildInputs = [ libkrb5 ];
 
   hardeningDisable = [ "pic" ];
 
@@ -102,7 +113,6 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-gssapi"
-    "--disable-linux-d_splice-alias-extra-iput"
   ];
 
   preConfigure = ''
@@ -127,12 +137,15 @@ stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ andersk maggesi spacefrogg ];
-    broken = kernel.isHardened || kernel.kernelAtLeast "5.19";
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      andersk
+      spacefrogg
+    ];
+    broken = kernel.isHardened;
   };
 }

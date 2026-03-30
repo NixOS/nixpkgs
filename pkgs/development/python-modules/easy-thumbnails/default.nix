@@ -1,44 +1,65 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pillow
-, pytestCheckHook
-, pythonOlder
-, reportlab
-, svglib
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  pillow,
+  reportlab,
+  svglib,
+  pytestCheckHook,
+  pytest-django,
+  setuptools,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";
-  version = "2.8.3";
-  format = "setuptools";
+  version = "2.10.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ij7GG7jHL6x/degRqW4815QqyJyrVasWVJ1tLOnN6qU=";
+  src = fetchFromGitHub {
+    owner = "SmileyChris";
+    repo = "easy-thumbnails";
+    tag = version;
+    hash = "sha256-GPZ99OaQRSogS8gJXz8rVUjUeNkEk019TYx0VWa0Q6I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     pillow
-    svglib
+  ];
+
+  optional-dependencies.svg = [
     reportlab
+    svglib
   ];
 
-  # Tests require a Django instance which is setup
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "easy_thumbnails"
+  checkInputs = [ testfixtures ];
+
+  disabledTests = [
+    # AssertionError: 'ERROR' != 'INFO'
+    "test_postprocessor"
   ];
 
-  meta = with lib; {
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="easy_thumbnails.tests.settings"
+  '';
+
+  pythonImportsCheck = [ "easy_thumbnails" ];
+
+  meta = {
     description = "Easy thumbnails for Django";
     homepage = "https://github.com/SmileyChris/easy-thumbnails";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/SmileyChris/easy-thumbnails/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.onny ];
   };
 }

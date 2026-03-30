@@ -1,43 +1,128 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gfortran
-, fftw
-, blas
-, lapack
-, useMpi ? false
-, mpi
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  git,
+  cmake,
+  gfortran,
+  pkg-config,
+  fftw,
+  blas,
+  lapack,
+  scalapack,
+  wannier90,
+  hdf5,
+  libmbd,
+  libxc,
+  enableMpi ? true,
+  mpi,
 }:
 
+assert !blas.isILP64;
+assert !lapack.isILP64;
+
+let
+  # "rev"s must exactly match the git submodule commits in the QE repo
+  gitSubmodules = {
+    devxlib = fetchFromGitLab {
+      group = "max-centre";
+      owner = "components";
+      repo = "devicexlib";
+      rev = "a6b89ef77b1ceda48e967921f1f5488d2df9226d";
+      hash = "sha256-p3fRplVG4YSN6ILNlOwf+aSEhpTJPXqiS1+wnzWVA2U=";
+    };
+
+    pw2qmcpack = fetchFromGitHub {
+      owner = "QMCPACK";
+      repo = "pw2qmcpack";
+      rev = "f72ab25fa4ea755c1b4b230ae8074b47d5509c70";
+      hash = "sha256-K1Z90xexsUvk4SdEb8FGryRal0GAFoLz3j1h/RT2nYw=";
+    };
+  };
+
+in
 stdenv.mkDerivation rec {
-  version = "6.6";
+  version = "7.5";
   pname = "quantum-espresso";
 
   src = fetchFromGitLab {
     owner = "QEF";
     repo = "q-e";
     rev = "qe-${version}";
-    sha256 = "1mkfmw0fq1dabplzdn6v1abhw0ds55gzlvbx3a9brv493whk21yp";
+    hash = "sha256-8/7++v53VDfn2P/QcrFRjUSygik3gintVMQwLU4nE24=";
   };
 
-  passthru = {
-    inherit mpi;
-  };
+  # add git submodules manually and fix pkg-config file
+  prePatch = ''
+    chmod -R +rwx external/
 
-  preConfigure = ''
-    patchShebangs configure
+    substituteInPlace external/devxlib.cmake \
+      --replace "qe_git_submodule_update(external/devxlib)" ""
+    substituteInPlace external/CMakeLists.txt \
+      --replace "qe_git_submodule_update(external/pw2qmcpack)" "" \
+      --replace "qe_git_submodule_update(external/d3q)" "" \
+      --replace "qe_git_submodule_update(external/qe-gipaw)" ""
+
+    ${toString (
+      builtins.attrValues (
+        builtins.mapAttrs (name: val: ''
+          cp -r ${val}/* external/${name}/.
+          chmod -R +rwx external/${name}
+        '') gitSubmodules
+      )
+    )}
+
+    substituteInPlace cmake/quantum_espresso.pc.in \
+      --replace 'libdir="''${prefix}/@CMAKE_INSTALL_LIBDIR@"' 'libdir="@CMAKE_INSTALL_FULL_LIBDIR@"' \
+      --replace 'includedir="''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/qe"' 'includedir="@CMAKE_INSTALL_FULL_INCLUDEDIR@/qe"' \
+      --replace 'moduledir="''${prefix}/@QE_INSTALL_Fortran_MODULES@/qe"' 'moduledir="@CMAKE_INSTALL_FULL_INCLUDEDIR@/qe"'
   '';
 
-  nativeBuildInputs = [ gfortran ];
+  patches = [
+    # this patch reverts commit 5fb5a679, which enforced static library builds.
+    ./findLibxc.patch
+  ];
 
-  buildInputs = [ fftw blas lapack ]
-    ++ (lib.optionals useMpi [ mpi ]);
+  passthru = { inherit mpi; };
 
-  configureFlags = if useMpi then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    git
+    pkg-config
+  ];
 
-  makeFlags = [ "all" ];
+  buildInputs = [
+    fftw
+    blas
+    lapack
+    wannier90
+    libmbd
+    libxc
+    hdf5
+  ]
+  ++ lib.optional enableMpi scalapack;
 
-  meta = with lib; {
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DWANNIER90_ROOT=${wannier90}"
+    "-DMBD_ROOT=${libmbd}"
+    "-DQE_ENABLE_OPENMP=ON"
+    "-DQE_ENABLE_LIBXC=ON"
+    "-DQE_ENABLE_HDF5=ON"
+    "-DQE_ENABLE_PLUGINS=pw2qmcpack"
+  ]
+  ++ lib.optionals enableMpi [
+    "-DQE_ENABLE_MPI=ON"
+    "-DQE_ENABLE_MPI_MODULE=ON"
+    "-DQE_ENABLE_SCALAPACK=ON"
+  ];
+
+  meta = {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";
     longDescription = ''
       Quantum ESPRESSO is an integrated suite of Open-Source computer codes for
@@ -46,8 +131,11 @@ stdenv.mkDerivation rec {
       pseudopotentials.
     '';
     homepage = "https://www.quantum-espresso.org/";
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.gpl2;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

@@ -1,15 +1,15 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, xmltodict
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pymediaroom";
   version = "0.6.5.4";
-  disabled = pythonOlder "3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pymediaroom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Remote Control for Mediaroom STB";
     homepage = "https://github.com/dgomes/pymediaroom";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

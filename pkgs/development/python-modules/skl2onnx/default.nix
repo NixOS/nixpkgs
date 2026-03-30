@@ -1,26 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, protobuf
-, onnx
-, scikit-learn
-, onnxconverter-common
-, onnxruntime
-, pandas
-, unittestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  setuptools,
+  protobuf,
+  onnx,
+  scikit-learn,
+  onnxconverter-common,
+  onnxruntime,
+  pandas,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "skl2onnx";
-  version = "1.13";
+  version = "1.19.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XzUva5uFX/rGMFpwfwLH1Db0Nok47pBJCSqVo1ZcJz0=";
+    hash = "sha256-DBBfKjuHpiTdIY0fuY/dGc8b9iFxkNJc5+FUhBJ9Dl0=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -31,26 +35,24 @@ buildPythonPackage rec {
     onnxconverter-common
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [ "scikit-learn" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     onnxruntime
     pandas
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   # Core dump
   doCheck = false;
 
   meta = {
     description = "Convert scikit-learn models to ONNX";
-    maintainers = with lib.maintainers; [ fridh ];
     license = with lib.licenses; [ asl20 ];
   };
 }

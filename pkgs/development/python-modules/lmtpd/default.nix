@@ -1,20 +1,32 @@
-{ buildPythonPackage, fetchPypi, isPy3k, lib }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "lmtpd";
   version = "6.2.0";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  # smtpd will be removed in version 3.12
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c6825d2ffa1de099440411a742f58e1b3e8deeb3345adcfd4c2c38d4baf62b3";
+    hash = "sha256-LGgl0v+h3gmUQEEadC9Y4bPo3uszRa3P1MLDjUuvYrM=";
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/moggers87/lmtpd";
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "lmtpd" ];
+
+  meta = {
     description = "LMTP counterpart to smtpd in the Python standard library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    homepage = "https://github.com/moggers87/lmtpd";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

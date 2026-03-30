@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, ua-parser }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ua-parser,
+}:
 
 buildPythonPackage rec {
   pname = "user-agents";
   version = "2.2.0";
+  format = "setuptools";
 
   # PyPI is missing devices.json
   src = fetchFromGitHub {
@@ -14,11 +20,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ua-parser ];
 
-  meta = with lib; {
-    description = "A Python library to identify devices by parsing user agent strings";
+  meta = {
+    description = "Python library to identify devices by parsing user agent strings";
     homepage = "https://github.com/selwin/python-user-agents";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,40 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pygments
-, gitMinimal, mercurial, subversion, patchutils, less
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygments,
+  gitMinimal,
+  mercurial,
+  subversion,
+  p4,
+  less,
 }:
 
 buildPythonPackage rec {
   pname = "ydiff";
-  version = "1.2";
+  version = "1.5";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f5430577ecd30974d766ee9b8333e06dc76a947b4aae36d39612a0787865a121";
+  src = fetchFromGitHub {
+    owner = "ymattw";
+    repo = "ydiff";
+    tag = version;
+    hash = "sha256-9a7M6+CqGRvO1yainImN2RQVH3XMxE9PTLXJGKekXLg=";
   };
 
   patchPhase = ''
     substituteInPlace ydiff.py \
-      --replace "['git'" "['${gitMinimal}/bin/git'" \
-      --replace "['hg'" "['${mercurial}/bin/hg'" \
-      --replace "['svn'" "['${subversion}/bin/svn'" \
-      --replace "['filterdiff'" "['${patchutils}/bin/filterdiff'" \
-      --replace "['less'" "['${less}/bin/less'" # doesn't support PAGER from env
+      --replace-fail "['git'" "['${lib.getExe gitMinimal}'" \
+      --replace-fail "['hg'" "['${lib.getExe mercurial}'" \
+      --replace-fail "['svn'" "['${lib.getExe subversion}'" \
+      --replace-fail "['p4'" "['${lib.getExe p4}'" \
+      --replace-fail "['less'" "['${lib.getExe less}'" # doesn't support PAGER from env
     substituteInPlace tests/test_ydiff.py \
-      --replace /bin/rm rm \
-      --replace /bin/sh sh
+      --replace-fail /bin/rm rm \
+      --replace-fail /bin/sh sh
     patchShebangs setup.py
     patchShebangs tests/*.sh
   '';
 
-  checkInputs = [ docutils pygments ];
+  nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
     runHook preCheck
-    make doc-check reg # We don't want the linter or coverage check.
+    make reg # We don't want the linter or coverage check.
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
+    mainProgram = "ydiff";
     longDescription = ''
       Term based tool to view colored, incremental diff in a version
       controlled workspace (supports Git, Mercurial, Perforce and Svn
@@ -42,7 +54,10 @@ buildPythonPackage rec {
       and auto pager support.
     '';
     homepage = "https://github.com/ymattw/ydiff";
-    license = licenses.bsd3;
-    maintainers = (with maintainers; [ leenaars ]) ++ teams.deshaw.members;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
 }

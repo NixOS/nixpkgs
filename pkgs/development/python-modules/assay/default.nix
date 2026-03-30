@@ -1,22 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  setuptools,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "assay";
-  version = "unstable-2022-01-19";
+  version = "0-unstable-2024-05-09";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brandon-rhodes";
-    repo = pname;
-    rev = "bb62d1f7d51d798b05a88045fff3a2ff92c299c3";
-    sha256 = "sha256-FuAD74mFJ9F9AMgB3vPmODAlZKgPR7FQ4yn7HEBS5Rw=";
+    repo = "assay";
+    rev = "74617d70e77afa09f58b3169cf496679ac5d5621";
+    hash = "sha256-zYpLtcXZ16EJWKSCqxFkSz/G9PwIZEQGBrYiJKuqnc4=";
   };
+
+  build-system = [ setuptools ];
+
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace assay/assertion.py \
+      --replace-fail "op.load_assertion_error" "op.load_common_constant"
+  '';
 
   pythonImportsCheck = [ "assay" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brandon-rhodes/assay";
     description = "Attempt to write a Python testing framework I can actually stand";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zane ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zane ];
   };
 }

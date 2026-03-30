@@ -1,33 +1,39 @@
-{ lib
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, fetchFromGitHub
-, idna
-, lxml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  certifi,
+  charset-normalizer,
+  fetchFromGitHub,
+  idna,
+  lxml,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
+  responses,
+  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qualysclient";
-  version = "0.0.4.8.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.0.4.8.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0hrbp5ci1l06j709k5y3z3ad9dryvrkvmc2wyb4a01gw7qzry7ys";
+    repo = "qualysclient";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2m/WHxkomHBudWpFpsgXHN8n+hfLU+lf9fvxhh/3HjA=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=__version__," 'version="${finalAttrs.version}",'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     charset-normalizer
     idna
@@ -36,20 +42,19 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     responses
   ];
 
-  pythonImportsCheck = [
-    "qualysclient"
-  ];
+  pythonImportsCheck = [ "qualysclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

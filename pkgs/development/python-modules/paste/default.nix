@@ -1,42 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.5.0";
+  version = "3.10.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "cdent";
+    owner = "pasteorg";
     repo = "paste";
-    rev = version;
-    sha256 = "sha256-yaOxbfQ8rdViepxhdF0UzlelC/ozdsP1lOdU5w4OPEQ=";
+    tag = version;
+    hash = "sha256-NY/h6hbpluEu1XAv3o4mqoG+l0LXfM1dw7+G0Rm1E4o=";
   };
 
   postPatch = ''
     patchShebangs tests/cgiapp_data/
   '';
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [
+    setuptools
+    six
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    # needs to be modified after Sat, 1 Jan 2005 12:00:00 GMT
+    touch tests/urlparser_data/secured.txt
+  '';
 
   disabledTests = [
-    # broken test
-    "test_file_cache"
-    # requires network connection
-    "test_proxy_to_website"
+    # pkg_resources deprecation warning
+    "test_form"
   ];
 
   pythonNamespaces = [ "paste" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for using a Web Server Gateway Interface stack";
-    homepage = "http://pythonpaste.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    homepage = "https://pythonpaste.readthedocs.io/";
+    changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

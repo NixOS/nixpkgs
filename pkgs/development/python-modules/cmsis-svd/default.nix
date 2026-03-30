@@ -1,28 +1,45 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  six,
+  lxml,
+}:
 
 buildPythonPackage rec {
   pname = "cmsis-svd";
-  version = "0.4";
+  version = "0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "posborne";
-    repo = pname;
-    rev = "python-${version}";
-    sha256 = "01f2z01gqgx0risqnbrlaqj49fmly30zbwsf7rr465ggnl2c04r0";
+    owner = "cmsis-svd";
+    repo = "cmsis-svd";
+    tag = "python-${version}";
+    hash = "sha256-fx9eR9/Nw/oxPaP9rm1G6sjGI7iU4bhkmTS7f8i2RrQ=";
   };
 
-  preConfigure = ''
+  preBuild = ''
     cd python
   '';
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [ "cmsis_svd" ];
+  dependencies = [
+    six
+    lxml
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "cmsis_svd"
+    "cmsis_svd.parser"
+  ];
+
+  meta = {
     description = "CMSIS SVD parser";
-    homepage = "https://github.com/posborne/cmsis-svd";
-    maintainers = with maintainers; [ dump_stack ];
-    license = licenses.asl20;
+    homepage = "https://github.com/cmsis-svd/cmsis-svd";
+    changelog = "https://github.com/cmsis-svd/cmsis-svd/blob/${src.rev}/CHANGELOG";
+    maintainers = [ lib.maintainers.dump_stack ];
+    license = lib.licenses.asl20;
   };
 }

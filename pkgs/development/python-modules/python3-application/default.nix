@@ -1,28 +1,50 @@
-{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, zope_interface, twisted }:
+{
+  lib,
+  isPy3k,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  setuptools,
+  zope-interface,
+  twisted,
+}:
 
 buildPythonPackage rec {
   pname = "python3-application";
-  version = "3.0.4";
+  version = "3.0.10";
+  pyproject = true;
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
-    repo = pname;
+    repo = "python3-application";
     rev = "release-${version}";
-    sha256 = "sha256-XXAKp/RlBVs3KmcnuiexdYfxf0zt2A/DrsJzdC9I4vA=";
+    hash = "sha256-ZVy5zfZPOYt6gxIGayeCMpcCG9GXCECDHM1S8SmODMY=";
   };
 
-  propagatedBuildInputs = [ zope_interface twisted ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    zope-interface
+    twisted
+  ];
 
   pythonImportsCheck = [ "application" ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    description = "A collection of modules that are useful when building python applications";
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
+    description = "Collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chanley yureien ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
+      chanley
+      yureien
+    ];
+    teams = [ lib.teams.ngi ];
     longDescription = ''
       This package is a collection of modules that are useful when building python applications. Their purpose is to eliminate the need to divert resources into implementing the small tasks that every application needs to do in order to run successfully and focus instead on the application logic itself.
       The modules that the application package provides are:

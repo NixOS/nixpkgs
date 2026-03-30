@@ -1,56 +1,57 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.rmfakecloud;
   serviceDataDir = "/var/lib/rmfakecloud";
 
-in {
+in
+{
   options = {
     services.rmfakecloud = {
-      enable = mkEnableOption (lib.mdDoc "rmfakecloud remarkable self-hosted cloud");
+      enable = lib.mkEnableOption "rmfakecloud remarkable self-hosted cloud";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.rmfakecloud;
-        defaultText = literalExpression "pkgs.rmfakecloud";
-        description = lib.mdDoc ''
-          rmfakecloud package to use.
+      package = lib.mkPackageOption pkgs "rmfakecloud" { };
 
-          The default does not include the web user interface.
-        '';
-      };
-
-      storageUrl = mkOption {
-        type = types.str;
+      storageUrl = lib.mkOption {
+        type = lib.types.str;
         example = "https://local.appspot.com";
-        description = lib.mdDoc ''
+        description = ''
           URL used by the tablet to access the rmfakecloud service.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3000;
-        description = lib.mdDoc ''
+        description = ''
           Listening port number.
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "info" "debug" "warn" "error" ];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [
+          "info"
+          "debug"
+          "warn"
+          "error"
+        ];
         default = "info";
-        description = lib.mdDoc ''
+        description = ''
           Logging level.
         '';
       };
 
-      extraSettings = mkOption {
-        type = with types; attrsOf str;
+      extraSettings = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = { };
-        example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
-        description = lib.mdDoc ''
+        example = {
+          DATADIR = "/custom/path/for/rmfakecloud/data";
+        };
+        description = ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
 
@@ -59,11 +60,11 @@ in {
         '';
       };
 
-      environmentFile = mkOption {
-        type = with types; nullOr path;
+      environmentFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/etc/secrets/rmfakecloud.env";
-        description = lib.mdDoc ''
+        description = ''
           Path to an environment file loaded for the rmfakecloud service.
 
           This can be used to securely store tokens and secrets outside of the
@@ -74,7 +75,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.rmfakecloud = {
       description = "rmfakecloud remarkable self-hosted cloud";
 
@@ -82,7 +83,8 @@ in {
         STORAGE_URL = cfg.storageUrl;
         PORT = toString cfg.port;
         LOGLEVEL = cfg.logLevel;
-      } // cfg.extraSettings;
+      }
+      // cfg.extraSettings;
 
       preStart = ''
         # Generate the secret key used to sign client session tokens.
@@ -109,11 +111,9 @@ in {
         Type = "simple";
         Restart = "always";
 
-        EnvironmentFile =
-          mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
 
-        AmbientCapabilities =
-          mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
 
         DynamicUser = true;
         PrivateDevices = true;
@@ -131,7 +131,10 @@ in {
         ProtectProc = "invisible";
         ProcSubset = "pid";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -143,5 +146,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ euxane ];
 }

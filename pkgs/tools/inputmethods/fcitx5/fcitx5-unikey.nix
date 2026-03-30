@@ -1,34 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, fcitx5-qt
-, gettext
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  fcitx5-qt,
+  gettext,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-unikey";
-  version = "5.0.11";
+  version = "5.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-unikey";
     rev = version;
-    sha256 = "sha256-pFFxTk97m/ThSrJglY+tSjjKCzXbj2EukdPg8fckoDU=";
+    hash = "sha256-g4RK1OCRQJoLv5fLR/O2GghgBIWOKzhRbkuijIgpr7U=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    gettext # msgfmt
+  ];
 
-  buildInputs = [ fcitx5 fcitx5-qt gettext ];
+  buildInputs = [
+    qtbase
+    fcitx5
+    fcitx5-qt
+  ];
 
-  meta = with lib; {
+  dontWrapQtApps = true;
+
+  meta = {
     description = "Unikey engine support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-unikey";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ berberman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ berberman ];
+    platforms = lib.platforms.linux;
   };
 }

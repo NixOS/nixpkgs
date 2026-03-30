@@ -1,26 +1,81 @@
-{deployAndroidPackage, requireFile, lib, packages, toolsVersion, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
+{
+  deployAndroidPackage,
+  lib,
+  stdenv,
+  package,
+  os,
+  arch,
+  autoPatchelfHook,
+  makeWrapper,
+  pkgs,
+  pkgsi686Linux,
+  postInstall,
+  meta,
+}:
 
-if toolsVersion == "26.0.1" then import ./tools/26.nix {
-  inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
-  package = {
-    name = "tools";
-    path = "tools";
-    revision = "26.0.1";
-    archives = {
-      linux = requireFile {
-        url = "https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip";
-        sha256 = "185yq7qwxflw24ccm5d6zziwlc9pxmsm3f54pm9p7xm0ik724kj4";
-      };
-      macosx = requireFile {
-        url = "https://dl.google.com/android/repository/sdk-tools-darwin-3859397.zip";
-        sha256 = "1ycx9gzdaqaw6n19yvxjawywacavn1jc6sadlz5qikhgfr57b0aa";
-      };
-    };
-  };
-} else if toolsVersion == "26.1.1" then import ./tools/26.nix {
-  inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
-  package = packages.tools.${toolsVersion};
-} else import ./tools/25.nix {
-  inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
-  package = packages.tools.${toolsVersion};
+deployAndroidPackage {
+  name = "androidsdk-tools";
+  inherit package os arch;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optional (os == "linux") (
+    (with pkgs; [
+      glibc
+      freetype
+      fontconfig
+      fontconfig.lib
+      stdenv.cc.cc.libgcc or null # fix for https://github.com/NixOS/nixpkgs/issues/226357
+      libx11
+      libxrender
+      libxext
+    ])
+    ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
+      with pkgsi686Linux;
+      [
+        glibc
+        libx11
+        libxrender
+        libxext
+        fontconfig.lib
+        freetype
+        zlib
+      ]
+    )
+  );
+
+  patchInstructions = ''
+    ${lib.optionalString (os == "linux") ''
+      # Auto patch all binaries
+      autoPatchelf .
+    ''}
+
+    # Wrap all scripts that require JAVA_HOME
+    for i in bin; do
+      find $i -maxdepth 1 -type f -executable | while read program; do
+        if grep -q "JAVA_HOME" $program; then
+          wrapProgram $PWD/$program --prefix PATH : ${pkgs.jdk8}/bin
+        fi
+      done
+    done
+
+    # Wrap monitor script
+    wrapProgram $PWD/monitor \
+      --prefix PATH : ${pkgs.jdk8}/bin \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (
+          with pkgs;
+          [
+            libx11
+            libxtst
+          ]
+        )
+      }
+
+    # Patch all script shebangs
+    patchShebangs .
+
+    cd $out/libexec/android-sdk
+    ${postInstall}
+  '';
+
+  inherit meta;
 }

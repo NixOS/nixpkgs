@@ -1,17 +1,21 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, instrument-control
-, arduino-core-unwrapped
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
+  instrument-control,
+  arduino-core-unwrapped,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "arduino";
-  version = "0.7.0";
+  version = "0.12.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0r0bcq2zkwba6ab6yi6czbhrj4adm9m9ggxmzzcd9h40ckqg6wjv";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-arduino";
+    tag = "release-${version}";
+    sha256 = "sha256-gYoYXJwkuoI1S2SdOu6qpemlSjgAAx7N5LYwJq9ZrU8=";
   };
 
   requiredOctavePackages = [
@@ -22,11 +26,18 @@ buildOctavePackage rec {
     arduino-core-unwrapped
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
+
+  meta = {
     name = "Octave Arduino Toolkit";
-    homepage = "https://octave.sourceforge.io/arduino/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    homepage = "https://gnu-octave.github.io/packages/arduino/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Basic Octave implementation of the matlab arduino extension, allowing communication to a programmed arduino board to control its hardware";
   };
 }

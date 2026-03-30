@@ -1,33 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, asn1crypto
-, cryptography
-, oscrypto
-, requests
-, uritools
-, openssl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+
+  asn1crypto,
+  cryptography,
+  oscrypto,
+  requests,
+  uritools,
+
+  aiohttp,
+  freezegun,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.19.5";
-  format = "setuptools";
+  version = "0.29.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
-    repo = "certvalidator";
-    rev = version;
-    sha256 = "sha256-UxlBggKgqvbKioG98UaKvhW0YgEa6PqV913nqYvTx1I=";
+    repo = "pyhanko";
+    tag = "pyhanko-certvalidator/v${version}";
+    hash = "sha256-+576MAbtWFGaPu/HqhdeeRNHi84pLnDaMDa0e/J/CUs=";
   };
 
-  propagatedBuildInputs = [
+  sourceRoot = "${src.name}/pkgs/pyhanko-certvalidator";
+
+  postPatch = ''
+    substituteInPlace src/pyhanko_certvalidator/version.py \
+      --replace-fail "0.0.0.dev1" "${version}" \
+      --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${version}\".split(\".\"))"
+    substituteInPlace pyproject.toml --replace-fail "0.0.0.dev1" "${version}"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     cryptography
     oscrypto
@@ -35,41 +48,26 @@ buildPythonPackage rec {
     uritools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
+    freezegun
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Test looks for libcrypto.so.1.1
-    "dev/stress_test.py"
-    # Requests
-    "tests/test_crl_client.py"
-  ];
+  pythonImportsCheck = [ "pyhanko_certvalidator" ];
 
-  disabledTests = [
-    # Look for nonexisting certificates
-    "test_basic_certificate_validator_tls"
-    # Failed to fetch OCSP response from http://ocsp.digicert.com
-    "test_fetch_ocsp_aiohttp"
-    "test_fetch_ocsp_requests"
-    "test_fetch_ocsp_err_requests"
-    # Unable to build a validation path for the certificate "%s" - no issuer matching "%s" was found
-    "test_revocation_mode_hard_aiohttp_autofetch"
-    # The path could not be validated because no revocation information could be found for intermediate certificate 1
-    "test_revocation_mode_hard"
-    # certificate expired 2022-09-17
-    "test_revocation_mode_soft"
-  ];
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=pyhanko-certvalidator/v(.*)"
+    ];
+  };
 
-  pythonImportsCheck = [
-    "pyhanko_certvalidator"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python library for validating X.509 certificates and paths";
-    homepage = "https://github.com/MatthiasValvekens/certvalidator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-certvalidator";
+    changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/pyhanko-certvalidator/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.antonmosich ];
   };
 }

@@ -1,13 +1,20 @@
-{ stdenv, lib, ocaml, findlib, zarith, z3 }:
+{
+  stdenv,
+  lib,
+  ocaml,
+  findlib,
+  zarith,
+  z3,
+}:
 
-if lib.versionOlder ocaml.version "4.07"
-then throw "z3 is not available for OCaml ${ocaml.version}"
-else
-
-let z3-with-ocaml = (z3.override {
-  ocamlBindings = true;
-  inherit ocaml findlib zarith;
-}); in
+let
+  z3-with-ocaml = (
+    z3.override {
+      ocamlBindings = true;
+      inherit ocaml findlib zarith;
+    }
+  );
+in
 
 stdenv.mkDerivation {
 
@@ -25,11 +32,15 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ findlib ];
-  propagatedBuildInputs = [ zarith ];
+  propagatedBuildInputs = [
+    z3-with-ocaml.lib
+    zarith
+  ];
 
   strictDeps = true;
 
   meta = z3.meta // {
     description = "Z3 Theorem Prover (OCaml API)";
+    broken = lib.versionOlder ocaml.version "4.08";
   };
 }

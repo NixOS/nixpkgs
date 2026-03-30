@@ -1,18 +1,21 @@
-{ lib, fetchFromGitHub, buildDunePackage, result }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  result,
+}:
 
 buildDunePackage rec {
   pname = "linenoise";
-  version = "1.3.1";
+  version = "1.5.1";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "fxfactorial";
     repo = "ocaml-${pname}";
     rev = "v${version}";
-    sha256 = "sha256-5DlF56reh52Tvbi3wGK8ZrPBAYK0ZTBV3jz8qUsyKGk=";
+    sha256 = "sha256-yWBWMbk1anXaF4hIakTOcRZFCYmxI0xG3bHFFOAyEDA=";
   };
 
   propagatedBuildInputs = [ result ];

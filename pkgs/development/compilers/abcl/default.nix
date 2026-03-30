@@ -1,43 +1,74 @@
-{lib, stdenv, fetchurl, ant, jre, jdk}:
-stdenv.mkDerivation rec {
-  pname = "abcl";
-  version = "1.9.0";
-  # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
-  src = fetchurl {
-    url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-oStchPKINL2Yjjra4K0q1MxsRR2eRPPAhT0AcVjBmGk=";
-  };
-  configurePhase = ''
-    mkdir nix-tools
-    export PATH="$PWD/nix-tools:$PATH"
-    echo "echo nix-builder.localdomain" > nix-tools/hostname
-    chmod a+x nix-tools/*
+{
+  lib,
+  stdenv,
+  writeShellScriptBin,
+  fetchurl,
+  ant,
+  openjdk17,
+  makeWrapper,
+  stripJavaArchivesHook,
+}:
 
-    hostname
+let
+  # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
+  # supported JDK.
+  jdk = openjdk17;
+
+  fakeHostname = writeShellScriptBin "hostname" ''
+    echo nix-builder.localdomain
   '';
-  buildPhase = ''
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "abcl";
+  version = "1.9.3";
+
+  src = fetchurl {
+    url = "https://common-lisp.net/project/armedbear/releases/${finalAttrs.version}/abcl-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-uwShIj06mGCS4BD/2tE69QQp1VwagYdL8wIvlDa/sv8=";
+  };
+
+  # note for the future:
+  # if you use makeBinaryWrapper, you will trade bash for glibc, the closure will be slightly larger
+  nativeBuildInputs = [
     ant
+    jdk
+    fakeHostname
+    makeWrapper
+    stripJavaArchivesHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    ant \
+      -Dabcl.runtime.jar.path="$out/lib/abcl/abcl.jar" \
+      -Dadditional.jars="$out/lib/abcl/abcl-contrib.jar"
+
+    runHook postBuild
   '';
-  # Fix for https://github.com/armedbear/abcl/issues/484
-  javaOpts =
-    lib.optionalString
-      (lib.versionAtLeast jre.version "17")
-      "--add-opens=java.base/java.util.jar=ALL-UNNAMED";
+
   installPhase = ''
-    mkdir -p "$out"/{bin,share/doc/abcl,lib/abcl}
+    runHook preInstall
+
+    mkdir -p "$out"/{share/doc/abcl,lib/abcl}
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
+    install -Dm555 abcl -t $out/bin
 
-    echo "#! ${stdenv.shell}" >> "$out/bin/abcl"
-    echo "${jre}/bin/java $javaOpts -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
-    chmod a+x "$out"/bin/*
+    runHook postInstall
   '';
-  buildInputs = [jre ant jdk jre];
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "A JVM-based Common Lisp implementation";
-    license = lib.licenses.gpl3 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    description = "JVM-based Common Lisp implementation";
     homepage = "https://common-lisp.net/project/armedbear/";
+    license = with lib.licenses; [
+      gpl2
+      classpathException20
+    ];
+    mainProgram = "abcl";
+    teams = [ lib.teams.lisp ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

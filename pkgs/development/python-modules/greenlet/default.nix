@@ -1,31 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, unittestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # tests
+  objgraph,
+  psutil,
+  python,
+  unittestCheckHook,
 }:
 
+let
+  greenlet = buildPythonPackage rec {
+    pname = "greenlet";
+    version = "3.3.0";
+    pyproject = true;
 
-buildPythonPackage rec {
-  pname = "greenlet";
-  version = "1.1.3";
-  disabled = isPyPy; # builtin for pypy
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-qCuyJaTp5NZT3S+3uLLTbk+yW8AWVCKhHki4jp5vePs=";
+    };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-vLbG3R1r5tONbbKDdH0H/aCJ/4xVmoNSNlYKRBA0BFU=";
-  };
+    build-system = [ setuptools ];
 
-  checkInputs = [ unittestCheckHook ];
+    # tests in passthru, infinite recursion via objgraph/graphviz
+    doCheck = false;
 
-  unittestFlagsArray = [ "-v" "greenlet.tests" ];
-
-  meta = with lib; {
-    homepage = "https://github.com/python-greenlet/greenlet";
-    description = "Module for lightweight in-process concurrent programming";
-    license = with licenses; [
-      psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
-      mit
+    nativeCheckInputs = [
+      objgraph
+      psutil
+      unittestCheckHook
     ];
+
+    # https://github.com/python-greenlet/greenlet/issues/395
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (
+      stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isLoongArch64
+    ) "-fomit-frame-pointer";
+
+    preCheck = ''
+      pushd ${placeholder "out"}/${python.sitePackages}
+    '';
+
+    unittestFlagsArray = [ "greenlet.tests" ];
+
+    postCheck = ''
+      popd
+    '';
+
+    passthru.tests.pytest = greenlet.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    meta = {
+      changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
+      homepage = "https://github.com/python-greenlet/greenlet";
+      description = "Module for lightweight in-process concurrent programming";
+      license = with lib.licenses; [
+        psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+        mit
+      ];
+    };
   };
-}
+in
+greenlet

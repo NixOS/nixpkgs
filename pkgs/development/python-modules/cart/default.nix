@@ -1,45 +1,37 @@
-{ lib
-, pycryptodome
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  pycryptodome,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cart";
-  version = "1.2.1";
+  version = "1.2.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-PsdDlNhX0FbuwS5ZXk9P98DjnzDGdigfnRwrdwYa4qY=";
+    repo = "cart";
+    tag = "v${version}";
+    hash = "sha256-oeWeay1Pr9T4oR3XSrwv9hRr/sLTel1Bt6BG6jHXxIA=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ pycryptodome ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "unittests"
-  ];
+  enabledTestPaths = [ "unittests" ];
 
-  pythonImportsCheck = [
-    "cart"
-  ];
+  pythonImportsCheck = [ "cart" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the CaRT Neutering format";
+    mainProgram = "cart";
     homepage = "https://github.com/CybercentreCanada/cart";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CybercentreCanada/cart/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

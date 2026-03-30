@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -10,29 +10,23 @@ buildPythonPackage rec {
   version = "0.9.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "DataModelDict";
     inherit version;
     hash = "sha256-DadBRsc8qEu9PWgMNllGS2ESKL7kgBLDhg4yDr87WRk=";
   };
 
-  propagatedBuildInputs = [
-    xmltodict
-  ];
+  propagatedBuildInputs = [ xmltodict ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "DataModelDict"
-  ];
+  pythonImportsCheck = [ "DataModelDict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

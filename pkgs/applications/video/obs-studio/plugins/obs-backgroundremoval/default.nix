@@ -1,51 +1,63 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
-, onnxruntime
-, opencv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  obs-studio,
+  onnxruntime,
+  opencv,
+  qt6,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-backgroundremoval";
-  version = "unstable-2022-05-02";
+  version = "1.1.13";
 
   src = fetchFromGitHub {
-    owner = "royshil";
+    owner = "occ-ai";
     repo = "obs-backgroundremoval";
-    rev = "cc9d4a5711f9388ed110230f9f793bb071577a23";
-    hash = "sha256-xkVZ4cB642p4DvZAPwI2EVhkfVl5lJhgOQobjNMqpec=";
+    rev = version;
+    hash = "sha256-QoC9/HkwOXMoFNvcOxQkGCLLAJmsja801LKCNT9O9T0=";
   };
 
-  patches = [
-    # Fix c++ include directives
-    ./includes.patch
-
-    # Use CPU backend instead of CUDA/DirectML
-    ./use-cpu-backend.patch
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio onnxruntime opencv ];
+  buildInputs = [
+    obs-studio
+    onnxruntime
+    opencv.cxxdev
+    qt6.qtbase
+    curl
+  ];
 
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
-    "-DOnnxruntime_INCLUDE_DIRS=${onnxruntime.dev}/include/onnxruntime/core/session"
+    "--preset linux-x86_64"
+    "-DCMAKE_MODULE_PATH:PATH=${src}/cmake"
+    "-DUSE_SYSTEM_ONNXRUNTIME=ON"
+    "-DUSE_SYSTEM_OPENCV=ON"
+    "-DDISABLE_ONNXRUNTIME_GPU=ON"
   ];
 
-
-  prePatch = ''
-    sed -i 's/version_from_git()/set(VERSION "0.4.0")/' CMakeLists.txt
+  buildPhase = ''
+    cd ..
+    cmake --build build_x86_64 --parallel
   '';
 
-  meta = with lib; {
+  installPhase = ''
+    cmake --install build_x86_64 --prefix "$out"
+  '';
+
+  meta = {
     description = "OBS plugin to replace the background in portrait images and video";
     homepage = "https://github.com/royshil/obs-backgroundremoval";
-    maintainers = with maintainers; [ puffnfresh ];
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with lib.maintainers; [ zahrun ];
+    license = lib.licenses.mit;
+    inherit (obs-studio.meta) platforms;
   };
 }

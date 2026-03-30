@@ -1,38 +1,71 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, nose
-, numpy
-, scipy
-, pandas
-, patsy
-, cython
-, matplotlib
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython,
+  numpy,
+  scipy,
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  packaging,
+  pandas,
+  patsy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "statsmodels";
-  version = "0.13.2";
-  disabled = isPy27;
+  version = "0.14.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-d9wpLJk5wDakdvF3D50Il2sFQ32qIpko2nMjEUfN59Q=";
+  src = fetchFromGitHub {
+    owner = "statsmodels";
+    repo = "statsmodels";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Rr+7vQ+nx8XihoQQECqHlDKvk7xRTdCpQTzs5pBbqmk=";
   };
 
-  nativeBuildInputs = [ cython ];
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy scipy pandas patsy matplotlib ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools_scm[toml]>=8,<9' 'setuptools_scm[toml]'
+  '';
+
+  build-system = [
+    cython
+    numpy
+    scipy
+    setuptools
+    setuptools-scm
+  ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
+  dependencies = [
+    numpy
+    packaging
+    pandas
+    patsy
+    scipy
+  ];
 
   # Huge test suites with several test failures
   doCheck = false;
+
   pythonImportsCheck = [ "statsmodels" ];
 
   meta = {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
+    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
-}
+})

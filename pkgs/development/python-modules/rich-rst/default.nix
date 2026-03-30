@@ -1,38 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, docutils
-, rich
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  docutils,
+  rich,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rich-rst";
-  version = "1.1.7";
-  format = "pyproject";
+  version = "1.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wasi-master";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
+    repo = "rich-rst";
+    tag = "v${version}";
+    hash = "sha256-NL5Y3m8KcAiZIH6IvuPp75Tbxh/X9Ob5qUWtYfuq8Bc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [ docutils rich ];
+  dependencies = [
+    docutils
+    rich
+  ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rich_rst" ];
 
-  meta = with lib; {
-    description = "A beautiful reStructuredText renderer for rich";
+  meta = {
+    description = "Beautiful reStructuredText renderer for rich";
     homepage = "https://github.com/wasi-master/rich-rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jyooru ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

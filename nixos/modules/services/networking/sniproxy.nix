@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -14,28 +19,32 @@ let
 
 in
 {
-  imports = [ (mkRemovedOptionModule [ "services" "sniproxy" "logDir" ] "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config.") ];
+  imports = [
+    (mkRemovedOptionModule [ "services" "sniproxy" "logDir" ]
+      "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config."
+    )
+  ];
 
   options = {
     services.sniproxy = {
-      enable = mkEnableOption (lib.mdDoc "sniproxy server");
+      enable = mkEnableOption "sniproxy server";
 
       user = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = lib.mdDoc "User account under which sniproxy runs.";
+        description = "User account under which sniproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = lib.mdDoc "Group under which sniproxy runs.";
+        description = "Group under which sniproxy runs.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "sniproxy.conf configuration excluding the daemon username and pid file.";
+        description = "sniproxy.conf configuration excluding the daemon username and pid file.";
         example = ''
           error_log {
             filename /var/log/sniproxy/error.log

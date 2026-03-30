@@ -1,51 +1,49 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypck";
-  version = "0.7.15";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.9.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alengwenus";
-    repo = pname;
-    rev = version;
-    hash = "sha256-OuM/r9rxIl4niY87cEcbZ73x2ZIQbaPZqbMrQ7hZE/g=";
+    repo = "pypck";
+    tag = finalAttrs.version;
+    hash = "sha256-XULSgnVp7uIob/tL8zqszTBTdxMY4QIeIBruO2Augnc=";
   };
 
-  checkInputs = [
+  postPatch = ''
+    echo "${finalAttrs.version}" > VERSION
+  '';
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_connection_lost"
-  ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_connection_lost" ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pypck"
-  ];
+  pythonImportsCheck = [ "pypck" ];
 
-  meta = with lib; {
+  meta = {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
-    license = with licenses; [ epl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/alengwenus/pypck/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

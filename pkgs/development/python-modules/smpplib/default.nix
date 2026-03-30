@@ -1,29 +1,41 @@
-{ buildPythonPackage, fetchPypi, lib, python, six, tox, mock, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
+  mock,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "smpplib";
-  version = "2.2.1";
+  version = "2.2.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0b01947b47e404f42ccb59e906b6e4eb507963c971d59b44350db0f29c76166";
+    hash = "sha256-bzsDb8smQ8G3oyibtaxMmnIK8b9z5XLicp22tdgAwnM=";
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ tox mock pytest ];
 
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   postInstall = ''
     rm -rf $out/${python.sitePackages}/tests
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "smpplib" ];
+
+  meta = {
     description = "SMPP library for Python";
     homepage = "https://github.com/python-smpplib/python-smpplib";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.globin ];
+    changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

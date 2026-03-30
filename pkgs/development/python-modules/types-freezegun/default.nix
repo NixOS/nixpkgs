@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -16,14 +17,12 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "freezegun-stubs"
-  ];
+  pythonImportsCheck = [ "freezegun-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for freezegun";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

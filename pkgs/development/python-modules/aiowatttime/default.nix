@@ -1,38 +1,40 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiowatttime";
-  version = "2021.10.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2024.06.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-cWXhQMgRYBzOVgUQWONIwWFB5n/f0lqkSjUb9IoPwtI=";
+    repo = "aiowatttime";
+    tag = version;
+    hash = "sha256-c5L+Nx+CoWEc6Bs61GOHPBelExe5I7EOlMQ+QV6nktI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
+    yarl
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
@@ -44,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiowatttime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with WattTime";
     homepage = "https://github.com/bachya/aiowatttime";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

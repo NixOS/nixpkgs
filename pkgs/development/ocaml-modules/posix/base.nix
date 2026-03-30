@@ -1,21 +1,26 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, ctypes, integers
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ctypes,
+  integers,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "posix-base";
-  version = "2.0.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-posix";
-    rev = "v${version}";
-    sha256 = "18px8hfqcfy2lk8105ki3hrxxigs44gs046ba0fqda6wzd0hr82b";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nBSIuz4WEnESlECdKujEcSxFOcSBFxW1zo7J/lT/lCY=";
   };
 
-  useDune2 = true;
-
-  propagatedBuildInputs = [ ctypes integers ];
+  propagatedBuildInputs = [
+    ctypes
+    integers
+  ];
 
   meta = {
     homepage = "https://www.liquidsoap.info/ocaml-posix/";
@@ -23,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

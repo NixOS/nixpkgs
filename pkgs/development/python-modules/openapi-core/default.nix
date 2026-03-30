@@ -1,101 +1,88 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, falcon
-, fetchFromGitHub
-, flask
-, httpx
-, isodate
-, jsonschema-spec
-, mock
-, more-itertools
-, openapi-schema-validator
-, openapi-spec-validator
-, parse
-, pathable
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, responses
-, requests
-, starlette
-, typing-extensions
-, webob
-, werkzeug
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  buildPythonPackage,
+  django,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  isodate,
+  jsonschema,
+  jsonschema-path,
+  more-itertools,
+  multidict,
+  openapi-schema-validator,
+  openapi-spec-validator,
+  parse,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
+  responses,
+  requests,
+  starlette,
+  webob,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.16.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.22.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = version;
-    hash = "sha256-J3n34HR5lfMM0ik5HAZ2JCr75fX5FTqBWrZ7E3/6XSE=";
+    tag = version;
+    hash = "sha256-fdONzFde9k2NAd5Rd8vTLt/lQX72JdNSFJhPVWryRQw=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     isodate
     more-itertools
-    pathable
-    more-itertools
-    openapi-schema-validator
-    jsonschema-spec
-    openapi-spec-validator
-    typing-extensions
     parse
+    openapi-schema-validator
+    openapi-spec-validator
     werkzeug
+    jsonschema-path
+    jsonschema
   ];
 
-  passthru.optional-dependencies = {
-    django = [
-      django
+  optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      multidict
     ];
-    falcon = [
-      falcon
-    ];
-    flask = [
-      flask
-    ];
-    requests = [
-      requests
-    ];
+    django = [ django ];
+    falcon = [ falcon ];
+    fastapi = [ fastapi ];
+    flask = [ flask ];
+    requests = [ requests ];
     starlette = [
-      httpx
+      aioitertools
       starlette
     ];
   };
 
-  checkInputs = [
-    mock
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    httpx
+    pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
     responses
     webob
-  ] ++ passthru.optional-dependencies.flask
-  ++ passthru.optional-dependencies.falcon
-  ++ passthru.optional-dependencies.django
-  ++ passthru.optional-dependencies.starlette
-  ++ passthru.optional-dependencies.requests;
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
-    # AttributeError: 'str' object has no attribute '__name__'
-    #"tests/integration/validation"
     # Requires secrets and additional configuration
-    "tests/integration/contrib/django/"
-    # Unable to detect SECRET_KEY and ROOT_URLCONF
     "tests/integration/contrib/django/"
   ];
 
@@ -105,10 +92,11 @@ buildPythonPackage rec {
     "openapi_core.validation.response.validators"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
-    homepage = "https://github.com/p1c2u/openapi-core";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    homepage = "https://github.com/python-openapi/openapi-core";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

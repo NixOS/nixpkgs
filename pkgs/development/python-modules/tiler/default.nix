@@ -1,41 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, numpy
-, tqdm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  numpy,
+  tqdm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tiler";
-  version = "0.5.7";
-  format = "pyproject";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2HWO/iJ9RCWNVmw2slu9F/+Mchk3evB5/F8EfbuMI/Y=";
+    hash = "sha256-ps0uHgzPa+ZoXXrB+0gfuVIEBUNmym/ym6xCxiyHhxA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     tqdm
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tiler" ];
 
-  meta = with lib; {
+  meta = {
     description = "N-dimensional NumPy array tiling and merging with overlapping, padding and tapering";
     homepage = "https://the-lay.github.io/tiler/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

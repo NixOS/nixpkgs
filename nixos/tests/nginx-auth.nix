@@ -1,30 +1,35 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "nginx-auth";
 
   nodes = {
-    webserver = { pkgs, lib, ... }: {
-      services.nginx = let
-        root = pkgs.runCommand "testdir" {} ''
-          mkdir "$out"
-          echo hello world > "$out/index.html"
-        '';
-      in {
-        enable = true;
+    webserver =
+      { pkgs, lib, ... }:
+      {
+        services.nginx =
+          let
+            root = pkgs.runCommand "testdir" { } ''
+              mkdir "$out"
+              echo hello world > "$out/index.html"
+            '';
+          in
+          {
+            enable = true;
 
-        virtualHosts.lockedroot = {
-          inherit root;
-          basicAuth.alice = "pwofa";
-        };
+            virtualHosts.lockedroot = {
+              inherit root;
+              basicAuth.alice = "pwofa";
+            };
 
-        virtualHosts.lockedsubdir = {
-          inherit root;
-          locations."/sublocation/" = {
-            alias = "${root}/";
-            basicAuth.bob = "pwofb";
+            virtualHosts.lockedsubdir = {
+              inherit root;
+              locations."/sublocation/" = {
+                alias = "${root}/";
+                basicAuth.bob = "pwofb";
+              };
+            };
           };
-        };
       };
-    };
   };
 
   testScript = ''
@@ -44,4 +49,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "curl --fail --resolve lockedsubdir:80:127.0.0.1 http://bob:pwofb@lockedsubdir/sublocation/index.html"
     )
   '';
-})
+}

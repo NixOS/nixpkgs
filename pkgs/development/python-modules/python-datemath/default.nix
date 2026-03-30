@@ -1,47 +1,45 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, unittest2
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  pytestCheckHook,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-datemath";
-  version = "1.5.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "3.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nickmaccarthy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
+    repo = "python-datemath";
+    tag = "v${version}";
+    hash = "sha256-VwdY6Gmbmoy7EKZjUlWj56uSiE0OdegPiQv+rmigkq8=";
   };
 
-  propagatedBuildInputs = [
-    arrow
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ arrow ];
+
+  nativeCheckInputs = [
+    freezegun
     pytestCheckHook
-    unittest2
+    pytz
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  enabledTestPaths = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "datemath"
-  ];
+  pythonImportsCheck = [ "datemath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to emulate the date math used in SOLR and Elasticsearch";
     homepage = "https://github.com/nickmaccarthy/python-datemath";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nickmaccarthy/python-datemath/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

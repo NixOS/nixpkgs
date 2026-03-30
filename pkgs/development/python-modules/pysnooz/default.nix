@@ -1,45 +1,47 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, events
-, fetchFromGitHub
-, freezegun
-, home-assistant-bluetooth
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, transitions
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  events,
+  fetchFromGitHub,
+  freezegun,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytest-asyncio_0,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  transitions,
 }:
 
 buildPythonPackage rec {
   pname = "pysnooz";
-  version = "0.8.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "0.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-K99sE9vxJo6grkp04DmTKOVqdfpQI0kUzJjSR6gnSew=";
+    repo = "pysnooz";
+    tag = "v${version}";
+    hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
   };
+
+  patches = [
+    # https://github.com/AustinBrunkhorst/pysnooz/pull/20
+    ./bleak-compat.patch
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'transitions = "^0.8.11"' 'transitions = ">0.8.11"' \
-      --replace " --cov=pysnooz --cov-report=term-missing:skip-covered" ""
+      --replace-fail 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
+      --replace-fail 'Events = "^0.4"' 'Events = ">=0.4"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-sensor-state-data
@@ -48,21 +50,21 @@ buildPythonPackage rec {
     transitions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysnooz"
-  ];
+  pythonImportsCheck = [ "pysnooz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control SNOOZ white noise machines";
     homepage = "https://github.com/AustinBrunkhorst/pysnooz";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/AustinBrunkhorst/pysnooz/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

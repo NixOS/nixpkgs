@@ -1,18 +1,37 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, lwt_ppx, lwt
+{
+  lib,
+  buildDunePackage,
+  applyPatches,
+  fetchpatch,
+  fetchFromGitHub,
+  lwt_ppx,
+  lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocsipersist-lib";
-  version = "1.1.0";
+  version = "2.0.0";
 
-  useDune2 = true;
+  src = applyPatches {
 
-  src = fetchFromGitHub {
-    owner = "ocsigen";
-    repo = "ocsipersist";
-    rev = version;
-    sha256 = "sha256:1d6kdcfjvrz0dl764mnyxc477aa57rvmzkg154qc915w2y1nbz9a";
+    src = fetchFromGitHub {
+      owner = "ocsigen";
+      repo = "ocsipersist";
+      tag = finalAttrs.version;
+      hash = "sha256-7CKKwJxqxUpCMNs4xGbsMZ6Qud9AnczBStTXS+N21DU=";
+    };
+
+    patches = [
+      # Migrate to logs
+      (fetchpatch {
+        url = "https://github.com/ocsigen/ocsipersist/commit/1fc0088b4dc2226f01863dd25f8ed56528c5543d.patch";
+        hash = "sha256-WR7SW8jAAo47AIQ7UMQNF8FTXgj6FbxIqFjrLhu7wFs=";
+        excludes = [
+          "*.opam"
+          "dune-project"
+        ];
+      })
+    ];
   };
 
   buildInputs = [ lwt_ppx ];
@@ -22,6 +41,6 @@ buildDunePackage rec {
     description = "Persistent key/value storage (for Ocsigen) - support library";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocsigen/ocsipersist/";
   };
-}
+})

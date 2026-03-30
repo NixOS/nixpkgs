@@ -1,9 +1,13 @@
-{ qtModule
-, qtbase
-, qtdeclarative
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
 }:
 
 qtModule {
   pname = "qtquicktimeline";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
 }

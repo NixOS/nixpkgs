@@ -1,37 +1,38 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pythonOlder
-, h2
-, multidict
-, pytestCheckHook
-, pytest-asyncio
-, async-timeout
-, faker
-, googleapis-common-protos
-, certifi
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  certifi,
+  faker,
+  fetchFromGitHub,
+  googleapis-common-protos,
+  h2,
+  multidict,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
-let
+
+buildPythonPackage rec {
   pname = "grpclib";
-  version = "0.4.3";
-in
-buildPythonPackage {
-  inherit pname version;
-  disabled = pythonOlder "3.7";
+  version = "0.4.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vmagamedov";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-zjctvsuX5yJl1EXIAaiukWGYJbdgU7OZllgOYAmp1b4=";
+    repo = "grpclib";
+    tag = "v${version}";
+    hash = "sha256-9ElCIL084B+KihV1AXYJejBletj8y6LnoWRGEj4E1tQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     h2
     multidict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     async-timeout
@@ -40,12 +41,14 @@ buildPythonPackage {
     certifi
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "grpclib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python gRPC implementation for asyncio";
     homepage = "https://github.com/vmagamedov/grpclib";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nikstur ];
+    changelog = "https://github.com/vmagamedov/grpclib/blob/v${version}/docs/changelog/index.rst";
+    license = lib.licenses.bsd3;
   };
 }

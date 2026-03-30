@@ -1,19 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  ci-info,
+  ci-py,
+  requests,
+  setuptools,
+}:
 
-buildPythonPackage rec {
-  version = "0.2.1";
+buildPythonPackage (finalAttrs: {
   pname = "etelemetry";
-  disabled = isPy27;
+  version = "0.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1rw8im09ppnb7z7p7rx658rp5ib8zca8byxg1kiflqwgx5c8zddz";
+  src = fetchFromGitHub {
+    owner = "sensein";
+    repo = "etelemetry-client";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UaE5JQhv2AtzXKY7YD2/g6Kj1igKhmnY3zlf1P9B/iQ=";
   };
 
-  propagatedBuildInputs = [ ci-info ci-py requests ];
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "versioneer.get_version()" "'${finalAttrs.version}'"
+  '';
 
-  # all 2 of the tests both try to pull down from a url
-  doCheck = false;
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    ci-info
+    ci-py
+    requests
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "etelemetry"
@@ -21,10 +43,19 @@ buildPythonPackage rec {
     "etelemetry.config"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # RuntimeError: Connection to server could not be made
+    # due to external network access
+    "test_etrequest"
+    "test_get_project"
+    "test_check_available"
+  ];
+
+  meta = {
     description = "Lightweight python client to communicate with the etelemetry server";
-    homepage = "https://github.com/mgxd/etelemetry-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/sensein/etelemetry-client";
+    changelog = "https://github.com/sensein/etelemetry-client/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

@@ -1,9 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 # This package provides a binary "apython" which sometimes invokes
@@ -16,27 +19,30 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.5.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-PSXYXIWb2zTVC6kwMgkDovF+BVtEnqQh8NFPb96tFRY=";
+    repo = "aioconsole";
+    tag = "v${version}";
+    hash = "sha256-j4nzt8mvn+AYObh1lvgxS8wWK662KN+OxjJ2b5ZNAcQ=";
   };
 
-  checkInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --strict-markers --count 2 -vv" ""
+  '';
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov aioconsole --count 2" ""
-  '';
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     "test_interact_syntax_error"
@@ -44,14 +50,18 @@ buildPythonPackage rec {
     "test_interact_multiple_indented_lines"
   ];
 
-  pythonImportsCheck = [
-    "aioconsole"
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: AF_UNIX path too long
+    "tests/test_server.py::test_uds_server[default]"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "aioconsole" ];
+
+  meta = {
     description = "Asynchronous console and interfaces for asyncio";
+    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ catern ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "apython";
   };
 }

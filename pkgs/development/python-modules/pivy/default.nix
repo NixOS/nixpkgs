@@ -1,49 +1,53 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonRecompileBytecodeHook,
+  swig,
+  cmake,
+  coin3d,
+  soqt,
+  libGLU,
+}:
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.8";
+  version = "0.6.10";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-y72nzZAelyRDR2JS73/0jo2x/XiDZpsERPZV3gzIhAI=";
+    tag = version;
+    hash = "sha256-DRA4NTAHg2iB/D1CU9pJEpsZwX9GW3X5gpxbIwP54Ko=";
   };
 
-  dontUseCmakeConfigure = true;
-
-  nativeBuildInputs = with pkgs; [
-    swig qmake cmake
+  nativeBuildInputs = [
+    swig
+    cmake
+    pythonRecompileBytecodeHook
   ];
 
-  buildInputs = with pkgs; with xorg; [
-    coin3d soqt qtbase
-    libGLU libGL
-    libXi libXext libSM libICE libX11
+  buildInputs = [
+    coin3d
+    soqt
+    libGLU # dummy buildInput that provides missing header <GL/glu.h>
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
-    "-I${qtbase.dev}/include/QtCore"
-    "-I${qtbase.dev}/include/QtGui"
-    "-I${qtbase.dev}/include/QtOpenGL"
-    "-I${qtbase.dev}/include/QtWidgets"
+  cmakeFlags = [
+    (lib.cmakeBool "PIVY_USE_QT6" true)
+    (lib.cmakeFeature "PIVY_Python_SITEARCH" "${placeholder "out"}/${python.sitePackages}")
   ];
 
-  dontUseQmakeConfigure = true;
-  dontWrapQtApps =true;
-  doCheck = false;
+  dontWrapQtApps = true;
 
-  postPatch = ''
-    substituteInPlace distutils_cmake/CMakeLists.txt --replace \$'{SoQt_INCLUDE_DIRS}' \
-      \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
-  '';
+  pythonImportsCheck = [ "pivy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coin3d/pivy/";
-    description = "A Python binding for Coin";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ gebner ];
+    description = "Python binding for Coin";
+    license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
-
 }

@@ -1,11 +1,10 @@
-{ lib, eggDerivation, fetchFromGitHub, chickenEggs }:
+{
+  lib,
+  eggDerivation,
+  fetchFromGitHub,
+  chickenEggs,
+}:
 
-# Note: This mostly reimplements the default.nix already contained in
-# the tarball. Is there a nicer way than duplicating code?
-
-let
-  version = "c5-git";
-in
 eggDerivation {
   src = fetchFromGitHub {
     owner = "corngood";
@@ -14,13 +13,16 @@ eggDerivation {
     sha256 = "1vfnhbcnyakywgjafhs0k5kpsdnrinzvdjxpz3fkwas1jsvxq3d1";
   };
 
-  name = "egg2nix-${version}";
+  pname = "egg2nix";
+  version = "c5-git";
   buildInputs = with chickenEggs; [
-    args matchable
+    args
+    matchable
   ];
 
   meta = {
     description = "Generate nix-expression from CHICKEN scheme eggs";
+    mainProgram = "egg2nix";
     homepage = "https://github.com/the-kenny/egg2nix";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

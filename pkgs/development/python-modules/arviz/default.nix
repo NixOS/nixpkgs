@@ -1,65 +1,87 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bokeh
-, emcee
-, matplotlib
-, netcdf4
-, numba
-, numpy
-, pandas
-, pytest
-, setuptools
-, cloudpickle
-, pytestCheckHook
-, scipy
-, packaging
-, typing-extensions
-, pythonOlder
-, xarray
-, xarray-einstats
-, zarr
-, h5py
-, jaxlib
-, torchvision
-, jax
-  # , pymc3 (circular dependency)
-, pyro-ppl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  writableTmpDirAsHomeHook,
+
+  # build-system
+  packaging,
+  setuptools,
+
+  # dependencies
+  h5netcdf,
+  matplotlib,
+  numpy,
+  pandas,
+  platformdirs,
+  scipy,
+  typing-extensions,
+  xarray,
+  xarray-einstats,
+
+  # tests
+  bokeh,
+  cloudpickle,
+  emcee,
+  ffmpeg,
+  h5py,
+  jax,
+  jaxlib,
+  numba,
+  numpyro,
+  #, pymc3 (circular dependency)
+  pyro-ppl,
   #, pystan (not packaged)
-, numpyro
+  pytestCheckHook,
+  torchvision,
+  zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arviz";
-  version = "0.13.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.23.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DGTGUMnkEQcwGR44WhmBpTBMcRcAtVIpM4YVnnlakE8=";
+    repo = "arviz";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YQ5i+CSuznbWAQ29jgqrOs+zgOAS5U4wSNEIquJQkvY=";
   };
 
-  propagatedBuildInputs = [
-    matplotlib
-    netcdf4
-    numpy
+  nativeBuildInputs = [
+    # Arviz wants to write a stamp file to the homedir at import time.
+    # Without $HOME being writable, `pythonImportsCheck` fails.
+    # https://github.com/arviz-devs/arviz/commit/4db612908f588d89bb5bfb6b83a08ada3d54fd02
+    writableTmpDirAsHomeHook
+  ];
+
+  build-system = [
     packaging
-    pandas
-    scipy
     setuptools
+  ];
+
+  dependencies = [
+    h5netcdf
+    h5py
+    matplotlib
+    numpy
+    pandas
+    platformdirs
+    scipy
+    typing-extensions
     xarray
     xarray-einstats
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bokeh
     cloudpickle
     emcee
-    h5py
+    ffmpeg
     jax
     jaxlib
     numba
@@ -72,38 +94,49 @@ buildPythonPackage rec {
     zarr
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "arviz/tests/base_tests/"
   ];
 
   disabledTestPaths = [
-    # Remove tests as dependency creates a circular dependency
-    "arviz/tests/external_tests/test_data_pymc.py"
+    # AttributeError: module 'zarr.storage' has no attribute 'DirectoryStore'
+    # https://github.com/arviz-devs/arviz/issues/2357
+    "arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
+    "arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
   ];
 
   disabledTests = [
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_deterministic"
+    "test_mcse_array"
+    "test_mcse_dataset"
+    "test_mcse_nan"
+    "test_multichain_summary_array"
+    "test_numba_mcse"
+    "test_plot_mcse"
+
     # Tests require network access
+    "test_plot_ppc_transposed"
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
+
     # countourpy is not available at the moment
     "test_plot_kde"
     "test_plot_kde_2d"
     "test_plot_pair"
   ];
 
-  pythonImportsCheck = [
-    "arviz"
-  ];
+  # Tests segfault on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "arviz" ];
+
+  meta = {
     description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ omnipotententity ];
+    changelog = "https://github.com/arviz-devs/arviz/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ omnipotententity ];
   };
-}
+})

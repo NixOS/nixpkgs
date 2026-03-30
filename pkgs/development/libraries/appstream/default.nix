@@ -1,50 +1,65 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gettext
-, xmlto
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, libxslt
-, libstemmer
-, glib
-, xapian
-, libxml2
-, libxmlb
-, libyaml
-, gobject-introspection
-, pcre
-, itstool
-, gperf
-, vala
-, curl
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPackages,
+  replaceVars,
+  fetchFromGitHub,
+  meson,
+  mesonEmulatorHook,
+  appstream,
+  ninja,
+  pkg-config,
+  cmake,
+  gettext,
+  xmlto,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  libxslt,
+  libstemmer,
+  glib,
+  xapian,
+  libxml2,
+  libxmlb,
+  libfyaml,
+  gobject-introspection,
+  itstool,
+  gperf,
+  vala,
+  curl,
+  cairo,
+  gdk-pixbuf,
+  pango,
+  librsvg,
+  bash-completion,
+  systemd,
+  nixosTests,
+  testers,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "0.15.5";
-  # When bumping this package, please also check whether
-  # fix-build-for-qt-olderthan-514.patch still applies by
-  # building libsForQt512.appstream-qt.
+  version = "1.1.2";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "ximion";
     repo = "appstream";
-    rev = "v${version}";
-    sha256 = "sha256-KVZCtu1w5FMgXZMiSW55rbrI6W/A9zWWKKvACtk/jjk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-tvdWWdL6PthffAZZnNZ3+17/eJdZFx8xFkqm7IvyPWE=";
   };
 
   patches = [
     # Fix hardcoded paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libstemmer_includedir = "${lib.getDev libstemmer}/include";
     })
 
@@ -52,46 +67,76 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    cmake
     gettext
     libxslt
     xmlto
     docbook-xsl-nons
     docbook_xml_dtd_45
-    gobject-introspection
+    glib
     itstool
+    gperf
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ]
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    appstream
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
     vala
   ];
 
   buildInputs = [
     libstemmer
-    pcre
     glib
     xapian
     libxml2
     libxmlb
-    libyaml
-    gperf
+    libfyaml
     curl
+    cairo
+    gdk-pixbuf
+    pango
+    librsvg
+    bash-completion
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
   ];
 
   mesonFlags = [
     "-Dapidocs=false"
+    "-Dc_args=-Wno-error=missing-include-dirs"
     "-Ddocs=false"
     "-Dvapi=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dcompose=true"
+    (lib.mesonBool "gir" withIntrospection)
+  ]
+  ++ lib.optionals (!withSystemd) [
+    "-Dsystemd=false"
   ];
 
-  passthru = {
-    tests = {
-      installed-tests = nixosTests.installed-tests.appstream;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.appstream;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software metadata handling library";
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
@@ -100,8 +145,9 @@ stdenv.mkDerivation rec {
       can be consumed by other software.
     '';
     homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "appstreamcli";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    pkgConfigModules = [ "appstream" ];
   };
-}
+})

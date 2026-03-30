@@ -1,15 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "py-sneakers";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,14 +17,13 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "py_sneakers"
-  ];
+  pythonImportsCheck = [ "py_sneakers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to emulate the Sneakers movie effect";
+    mainProgram = "py-sneakers";
     homepage = "https://github.com/aenima-x/py-sneakers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

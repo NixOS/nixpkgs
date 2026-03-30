@@ -1,36 +1,42 @@
-{ lib
-, buildPythonPackage
-, chardet
-, docker
-, entrypoints
-, escapism
-, fetchFromGitHub
-, iso8601
-, jinja2
-, pkgs-docker
-, python-json-logger
-, pythonOlder
-, ruamel-yaml
-, semver
-, toml
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  docker,
+  entrypoints,
+  escapism,
+  fetchFromGitHub,
+  iso8601,
+  jinja2,
+  pkgs-docker,
+  python-json-logger,
+  requests,
+  ruamel-yaml,
+  semver,
+  setuptools,
+  setuptools-scm,
+  toml,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2022.10.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2025.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
-    rev = "refs/tags/${version}";
-    hash = "sha256-n1Yhl3QC1YqdsCl6pI5NjzTiSEs6NrGq9jwT0uyS/p0=";
+    tag = version;
+    hash = "sha256-9ZRew9DspRENxhqpWFTSdP8KcQQHA4vMMECLikt+nsw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     chardet
     docker
     entrypoints
@@ -39,6 +45,7 @@ buildPythonPackage rec {
     jinja2
     pkgs-docker
     python-json-logger
+    requests
     ruamel-yaml
     semver
     toml
@@ -55,10 +62,11 @@ buildPythonPackage rec {
     "repo2docker.contentproviders.base"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn code repositories into Jupyter enabled Docker Images";
     homepage = "https://repo2docker.readthedocs.io/";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.tag}/docs/source/changelog.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

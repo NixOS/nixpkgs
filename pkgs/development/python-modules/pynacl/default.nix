@@ -1,54 +1,61 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, libsodium
-, cffi
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  hypothesis,
+  libsodium,
+  pytestCheckHook,
+  pytest-xdist,
+  setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "pynacl";
-  version = "1.5.0";
-  format = "setuptools";
+  version = "1.6.2";
+  outputs = [
+    "out"
+    "doc"
+  ];
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "PyNaCl";
-    sha256 = "8ac7448f09ab85811607bdd21ec2464495ac8b7c66d146bf545b0f08fb9220ba";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "pynacl";
+    tag = version;
+    hash = "sha256-EzzJVRDgYQO6T8YIQjad/Eb9O+BXT4IpOpa48fpBPnc=";
   };
 
-  buildInputs = [
-    libsodium
-  ];
-
-  propagatedNativeBuildInputs = [
+  build-system = [
     cffi
+    setuptools
   ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  # cffi is listed in both build-system.requires and project.dependencies,
+  # and is indeed needed in both when cross-compiling
+  dependencies = [ cffi ];
 
-  checkInputs = [
+  nativeBuildInputs = [ sphinxHook ];
+
+  buildInputs = [ libsodium ];
+
+  propagatedNativeBuildInputs = [ cffi ];
+
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    pytest-xdist
   ];
 
-  SODIUM_INSTALL = "system";
+  env.SODIUM_INSTALL = "system";
 
-  pythonImportsCheck = [
-    "nacl"
-  ];
+  pythonImportsCheck = [ "nacl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding to the Networking and Cryptography (NaCl) library";
     homepage = "https://github.com/pyca/pynacl/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

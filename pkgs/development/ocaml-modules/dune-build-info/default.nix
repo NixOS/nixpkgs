@@ -1,17 +1,21 @@
-{ lib, buildDunePackage, dune_2 }:
+{
+  lib,
+  buildDunePackage,
+  dune-action-plugin,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-build-info";
-  inherit (dune_2) src version patches;
-
-  useDune2 = true;
+  inherit (dune-action-plugin) src version;
 
   dontAddPrefix = true;
 
-  meta = with lib; {
-    inherit (dune_2.meta) homepage;
+  buildInputs = [ dune-action-plugin ];
+
+  meta = {
+    inherit (dune-action-plugin.meta) homepage;
     description = "Embed build information inside executables";
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    license = lib.licenses.mit;
   };
 }

@@ -15,22 +15,23 @@ To begin the installation, you have to boot your computer from the install drive
 
      ::: {.note}
      The key to open the boot menu is different across computer brands and even
-     models. It can be <kbd>F12</kbd>, but also <kbd>F1</kbd>,
-     <kbd>F9</kbd>, <kbd>F10</kbd>, <kbd>Enter</kbd>, <kbd>Del</kbd>,
-     <kbd>Esc</kbd> or another function key. If you are unsure and don't see
+     models. It can be [F12]{.keycap}, but also [F1]{.keycap},
+     [F9]{.keycap}, [F10]{.keycap}, [Enter]{.keycap}, [Del]{.keycap},
+     [Esc]{.keycap} or another function key. If you are unsure and don't see
      it on the early boot screen, you can search online for your computers
      brand, model followed by "boot from usb".
      The computer might not even have that feature, so you have to go into the
      BIOS/UEFI settings to change the boot order. Again, search online for
      details about your specific computer model.
 
-     For Apple computers with Intel processors press and hold the <kbd>⌥</kbd>
+     For Apple computers with Intel processors press and hold the [⌥]{.keycap}
      (Option or Alt) key until you see the boot menu. On Apple silicon press
      and hold the power button.
      :::
 
      ::: {.note}
      If your computer supports both BIOS and UEFI boot, choose the UEFI option.
+     You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
      :::
 
      ::: {.note}
@@ -41,7 +42,7 @@ To begin the installation, you have to boot your computer from the install drive
 
 3.   Shortly after selecting the appropriate boot drive, you should be
      presented with a menu with different installer options. Leave the default
-     and wait (or press <kbd>Enter</kbd> to speed up).
+     and wait (or press [Enter]{.keycap} to speed up).
 
 4.   The graphical images will start their corresponding desktop environment
      and the graphical installer, which can take some time. The minimal images
@@ -153,57 +154,12 @@ The boot process should have brought up networking (check `ip
 a`). Networking is necessary for the installer, since it will
 download lots of stuff (such as source tarballs or Nixpkgs channel
 binaries). It's best if you have a DHCP server on your network.
-Otherwise configure networking manually using `ifconfig`.
+Otherwise configure networking manually using `ip`.
 
-On the graphical installer, you can configure the network, wifi
-included, through NetworkManager. Using the `nmtui` program, you can do
-so even in a non-graphical session. If you prefer to configure the
-network manually, disable NetworkManager with
+You can configure the network, Wi-Fi included, through NetworkManager.
+Using the `nmtui` program, you can do so even in a non-graphical session.
+ If you prefer to configure the network manually, disable NetworkManager with
 `systemctl stop NetworkManager`.
-
-On the minimal installer, NetworkManager is not available, so
-configuration must be perfomed manually. To configure the wifi, first
-start wpa_supplicant with `sudo systemctl start wpa_supplicant`, then
-run `wpa_cli`. For most home networks, you need to type in the following
-commands:
-
-```plain
-> add_network
-0
-> set_network 0 ssid "myhomenetwork"
-OK
-> set_network 0 psk "mypassword"
-OK
-> set_network 0 key_mgmt WPA-PSK
-OK
-> enable_network 0
-OK
-```
-
-For enterprise networks, for example *eduroam*, instead do:
-
-```plain
-> add_network
-0
-> set_network 0 ssid "eduroam"
-OK
-> set_network 0 identity "myname@example.com"
-OK
-> set_network 0 password "mypassword"
-OK
-> set_network 0 key_mgmt WPA-EAP
-OK
-> enable_network 0
-OK
-```
-
-When successfully connected, you should see a line such as this one
-
-```plain
-<3>CTRL-EVENT-CONNECTED - Connection to 32:85:ab:ef:24:5c completed [id=0 id_str=]
-```
-
-you can now leave `wpa_cli` by typing `quit`.
 
 If you would like to continue the installation from a different machine
 you can use activated SSH daemon. You need to copy your ssh key to
@@ -224,17 +180,19 @@ The NixOS installer ships with multiple partitioning tools. The examples
 below use `parted`, but also provides `fdisk`, `gdisk`, `cfdisk`, and
 `cgdisk`.
 
+Use the command 'lsblk' to find the name of your 'disk' device.
+
 The recommended partition scheme differs depending if the computer uses
 *Legacy Boot* or *UEFI*.
 
 #### UEFI (GPT) {#sec-installation-manual-partitioning-UEFI}
 []{#sec-installation-partitioning-UEFI} <!-- legacy anchor -->
 
-Here\'s an example partition scheme for UEFI, using `/dev/sda` as the
+Here's an example partition scheme for UEFI, using `/dev/sda` as the
 device.
 
 ::: {.note}
-You can safely ignore `parted`\'s informational message about needing to
+You can safely ignore `parted`'s informational message about needing to
 update /etc/fstab.
 :::
 
@@ -249,14 +207,14 @@ update /etc/fstab.
     which will be used by the boot partition.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary 512MB -8GB
+    # parted /dev/sda -- mkpart root ext4 512MB -8GB
     ```
 
 3.  Next, add a *swap* partition. The size required will vary according
     to needs, here a 8GB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+    # parted /dev/sda -- mkpart swap linux-swap -8GB 100%
     ```
 
     ::: {.note}
@@ -272,6 +230,9 @@ update /etc/fstab.
     # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
     # parted /dev/sda -- set 3 esp on
     ```
+    ::: {.note}
+    In case you decided to not create a swap partition, replace `3` by `2`. To be sure of the id number of ESP, run `parted --list`.
+    :::
 
 Once complete, you can follow with
 [](#sec-installation-manual-partitioning-formatting).
@@ -279,11 +240,11 @@ Once complete, you can follow with
 #### Legacy Boot (MBR) {#sec-installation-manual-partitioning-MBR}
 []{#sec-installation-partitioning-MBR} <!-- legacy anchor -->
 
-Here\'s an example partition scheme for Legacy Boot, using `/dev/sda` as
+Here's an example partition scheme for Legacy Boot, using `/dev/sda` as
 the device.
 
 ::: {.note}
-You can safely ignore `parted`\'s informational message about needing to
+You can safely ignore `parted`'s informational message about needing to
 update /etc/fstab.
 :::
 
@@ -293,7 +254,7 @@ update /etc/fstab.
     # parted /dev/sda -- mklabel msdos
     ```
 
-2.  Add the *root* partition. This will fill the the disk except for the
+2.  Add the *root* partition. This will fill the disk except for the
     end part, where the swap will live.
 
     ```ShellSession
@@ -307,7 +268,7 @@ update /etc/fstab.
     ```
 
 4.  Finally, add a *swap* partition. The size required will vary
-    according to needs, here a 8GiB one is created.
+    according to needs, here a 8GB one is created.
 
     ```ShellSession
     # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
@@ -373,7 +334,7 @@ Use the following commands:
 
     ```ShellSession
     # mkdir -p /mnt/boot
-    # mount /dev/disk/by-label/boot /mnt/boot
+    # mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
     ```
 
 3.  If your machine has a limited amount of memory, you may want to
@@ -395,6 +356,9 @@ Use the following commands:
     while a list of available configuration options appears in
     [](#ch-options). A minimal example is shown in
     [Example: NixOS Configuration](#ex-config).
+
+    This command accepts an optional `--flake` option, to also generate a
+    `flake.nix` file, if you want to set up a flake-based configuration.
 
     The command `nixos-generate-config` can generate an initial
     configuration file for you:
@@ -421,14 +385,14 @@ Use the following commands:
         specify on which disk the GRUB boot loader is to be installed.
         Without it, NixOS cannot boot.
 
-    :   If there are other operating systems running on the machine before
+        If there are other operating systems running on the machine before
         installing NixOS, the [](#opt-boot.loader.grub.useOSProber)
         option can be set to `true` to automatically add them to the grub
         menu.
 
     UEFI systems
 
-    :   You must select a boot-loader, either system-boot or GRUB. The recommended
+    :   You must select a boot-loader, either systemd-boot or GRUB. The recommended
         option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
         to `true`. `nixos-generate-config` should do this automatically
         for new configurations when booted in UEFI mode.
@@ -438,13 +402,13 @@ Use the following commands:
         [`boot.loader.systemd-boot`](#opt-boot.loader.systemd-boot.enable)
         as well.
 
-    :   If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
+        If you want to use GRUB, set [](#opt-boot.loader.grub.device) to `nodev` and
         [](#opt-boot.loader.grub.efiSupport) to `true`.
 
-    :   With system-boot, you should not need any special configuration to detect
+        With systemd-boot, you should not need any special configuration to detect
         other installed systems. With GRUB, set [](#opt-boot.loader.grub.useOSProber)
-        to `true`, but this will only detect windows partitions, not other linux
-        distributions. If you dual boot another linux distribution, use system-boot
+        to `true`, but this will only detect windows partitions, not other Linux
+        distributions. If you dual boot another Linux distribution, use systemd-boot
         instead.
 
     If you need to configure networking for your machine the
@@ -488,6 +452,14 @@ Use the following commands:
     from the NixOS binary cache), you can re-run `nixos-install` after
     fixing your `configuration.nix`.
 
+    If you opted for a flake-based configuration, you will need to pass the
+    `--flake` here as well and specify the name of the configuration as used in
+    the `flake.nix` file. For the default generated flake, this is `nixos`.
+
+    ```ShellSession
+    # nixos-install --flake 'path/to/flake.nix#nixos'
+    ```
+
     As the last step, `nixos-install` will ask you to set the password
     for the `root` user, e.g.
 
@@ -495,6 +467,12 @@ Use the following commands:
     setting root password...
     New password: ***
     Retype new password: ***
+    ```
+
+    If you have a user account declared in your `configuration.nix` and plan to log in using this user, set a password before rebooting, e.g. for the `alice` user:
+
+    ```ShellSession
+    # nixos-enter --root /mnt -c 'passwd alice'
     ```
 
     ::: {.note}
@@ -516,15 +494,13 @@ Use the following commands:
     menu. This allows you to easily roll back to a previous
     configuration if something goes wrong.
 
-    You should log in and change the `root` password with `passwd`.
+    Use your declared user account to log in.
+    If you didn’t declare one, you should still be able to log in using the `root` user.
 
-    You'll probably want to create some user accounts as well, which can
-    be done with `useradd`:
-
-    ```ShellSession
-    $ useradd -c 'Eelco Dolstra' -m eelco
-    $ passwd eelco
-    ```
+    ::: {.note}
+    Some graphical display managers such as SDDM do not allow `root` login by default, so you might need to switch to TTY.
+    Refer to [](#sec-user-management) for details on declaring user accounts.
+    :::
 
     You may also want to install some software. This will be covered in
     [](#sec-package-management).
@@ -538,33 +514,28 @@ drive (here `/dev/sda`). [Example: NixOS Configuration](#ex-config) shows a
 corresponding configuration Nix expression.
 
 ::: {#ex-partition-scheme-MBR .example}
-::: {.title}
-**Example: Example partition schemes for NixOS on `/dev/sda` (MBR)**
-:::
+### Example partition schemes for NixOS on `/dev/sda` (MBR)
 ```ShellSession
 # parted /dev/sda -- mklabel msdos
-# parted /dev/sda -- mkpart primary 1MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary 1MB -8GB
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 ```
 :::
 
 ::: {#ex-partition-scheme-UEFI .example}
-::: {.title}
-**Example: Example partition schemes for NixOS on `/dev/sda` (UEFI)**
-:::
+### Example partition schemes for NixOS on `/dev/sda` (UEFI)
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
-# parted /dev/sda -- mkpart primary 512MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
-# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+# parted /dev/sda -- mkpart root ext4 512MB -8GB
+# parted /dev/sda -- mkpart swap linux-swap -8GB 100%
+# parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 ```
 :::
 
 ::: {#ex-install-sequence .example}
-::: {.title}
-**Example: Commands for Installing NixOS on `/dev/sda`**
-:::
+### Commands for Installing NixOS on `/dev/sda`
+
 With a partitioned disk.
 
 ```ShellSession
@@ -574,7 +545,7 @@ With a partitioned disk.
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
 # mount /dev/disk/by-label/nixos /mnt
 # mkdir -p /mnt/boot                      # (for UEFI systems only)
-# mount /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
+# mount -o umask=077 /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
 # nixos-generate-config --root /mnt
 # nano /mnt/etc/nixos/configuration.nix
 # nixos-install
@@ -583,9 +554,7 @@ With a partitioned disk.
 :::
 
 ::: {#ex-config .example}
-::: {.title}
-**Example: NixOS Configuration**
-:::
+### Example: NixOS Configuration
 ```ShellSession
 { config, pkgs, ... }: {
   imports = [
@@ -609,11 +578,11 @@ With a partitioned disk.
 
 ## Additional installation notes {#sec-installation-additional-notes}
 
-```{=docbook}
-<xi:include href="installing-usb.section.xml" />
-<xi:include href="installing-pxe.section.xml" />
-<xi:include href="installing-kexec.section.xml" />
-<xi:include href="installing-virtualbox-guest.section.xml" />
-<xi:include href="installing-from-other-distro.section.xml" />
-<xi:include href="installing-behind-a-proxy.section.xml" />
+```{=include=} sections
+installing-usb.section.md
+installing-pxe.section.md
+installing-kexec.section.md
+installing-virtualbox-guest.section.md
+installing-from-other-distro.section.md
+installing-behind-a-proxy.section.md
 ```

@@ -1,28 +1,30 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, freetype
-, glibcLocales
-, libjpeg
-, pillow
-, pocket
-, pyfiglet
-, pysocks
-, python
-, python-dateutil
-, requests
-, twitter
-, zlib
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freetype,
+  glibcLocales,
+  libjpeg,
+  pillow,
+  pocket,
+  pyfiglet,
+  pysocks,
+  python,
+  python-dateutil,
+  requests,
+  twitter,
+  zlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rainbowstream";
   version = "1.5.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "orakaro";
-    repo = pname;
+    repo = "rainbowstream";
     # Request for tagging, https://github.com/orakaro/rainbowstream/issues/314
     rev = "96141fac10675e0775d703f65a59c4477a48c57e";
     sha256 = "0j0qcc428lk9b3l0cr2j418gd6wd5k4160ham2zn2mmdmxn5bldg";
@@ -55,7 +57,7 @@ buildPythonPackage rec {
     sed -i 's/requests.*"/requests"/' setup.py
   '';
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p $out/lib
@@ -71,10 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rainbowstream" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming command-line twitter client";
+    mainProgram = "rainbowstream";
     homepage = "https://github.com/orakaro/rainbowstream";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

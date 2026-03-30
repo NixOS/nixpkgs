@@ -1,40 +1,42 @@
-{ lib
-, buildPythonPackage
-, aiohttp
-, aresponses
-, backoff
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  aiohttp,
+  aresponses,
+  backoff,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "2022.10.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2023.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-4xoK/SwpcsjIpGUertWoSlRsKIpgpV1XmuIzDJcZMZg=";
+    repo = "pyiqvia";
+    tag = version;
+    hash = "sha256-qq6UQUz60WkmWqdmExlSQT3wapaHJr8DeH1eVrTOnpQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     backoff
+    certifi
+    yarl
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
@@ -46,11 +48,9 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyiqvia"
-  ];
+  pythonImportsCheck = [ "pyiqvia" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for working with IQVIA data";
     longDescription = ''
       pyiqvia is an async-focused Python library for allergen, asthma, and
@@ -58,7 +58,8 @@ buildPythonPackage rec {
       https://flustar.com and more).
     '';
     homepage = "https://github.com/bachya/pyiqvia";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bachya/pyiqvia/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

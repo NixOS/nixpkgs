@@ -1,20 +1,41 @@
-{stdenvNoCC, subversion, sshSupport ? true, openssh ? null, expect}:
-{username, password, url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
+{
+  lib,
+  stdenvNoCC,
+  subversion,
+  sshSupport ? true,
+  openssh ? null,
+  expect,
+}:
+{
+  username,
+  password,
+  url,
+  rev ? "HEAD",
+  outputHash ? lib.fakeHash,
+  outputHashAlgo ? null,
+}:
 
+lib.fetchers.withNormalizedHash { } (
+  stdenvNoCC.mkDerivation {
+    name = "svn-export-ssh";
+    builder = ./builder.sh;
+    nativeBuildInputs = [
+      subversion
+      expect
+    ];
 
-if md5 != "" then
-  throw "fetchsvnssh does not support md5 anymore, please use sha256"
-else
-stdenvNoCC.mkDerivation {
-  name = "svn-export-ssh";
-  builder = ./builder.sh;
-  nativeBuildInputs = [subversion expect];
+    inherit outputHash outputHashAlgo;
+    outputHashMode = "recursive";
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = sha256;
+    sshSubversion = ./sshsubversion.exp;
 
-  sshSubversion = ./sshsubversion.exp;
-
-  inherit username password url rev sshSupport openssh;
-}
+    inherit
+      username
+      password
+      url
+      rev
+      sshSupport
+      openssh
+      ;
+  }
+)

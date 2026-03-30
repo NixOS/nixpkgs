@@ -1,13 +1,13 @@
-{ rustPlatform }:
+{ lib, rustPlatform }:
 
 rustPlatform.buildRustPackage {
   pname = "basic";
   version = "0.1.0";
 
-  src = ./.;
+  src = ./package;
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = ./package/Cargo.lock;
   };
 
   doInstallCheck = true;

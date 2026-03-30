@@ -1,46 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, pbr
-, pytestCheckHook
-, pythonOlder
-, sentinels
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  packaging,
+  pytestCheckHook,
+  pytz,
+  sentinels,
 }:
 
 buildPythonPackage rec {
   pname = "mongomock";
-  version = "4.1.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "4.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8GzWKvuK4+9jujE0mr0iCmV+8N1PAkOilYfFIT+TG30=";
+    hash = "sha256-MmZ7eQZvq8EtTxfxao/XNhtfRDUgizujLCJuUiEqjDA=";
   };
 
-  nativeBuildInputs = [
-    pbr
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
+    pytz
     sentinels
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mongomock"
-  ];
+  pythonImportsCheck = [ "mongomock" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/mongomock/mongomock";
+  meta = {
     description = "Fake pymongo stub for testing simple MongoDB-dependent code";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gador ];
+    homepage = "https://github.com/mongomock/mongomock";
+    changelog = "https://github.com/mongomock/mongomock/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

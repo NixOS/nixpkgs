@@ -1,24 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodome
-, pycryptodomex
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pycryptodomex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "unicrypto";
-  version = "0.0.9";
-  format = "setuptools";
+  version = "0.0.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nV3YWK1a1gj6UkmHsX6IVdZNbSRQygyhFjj02S/GyAs=";
+  src = fetchFromGitHub {
+    owner = "skelsec";
+    repo = "unicrypto";
+    tag = version;
+    hash = "sha256-RYwovFMalBNDPDEVjQ/8/N7DkOMiyeEQ5ESdgCK8RW8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodome
     pycryptodomex
   ];
@@ -26,14 +29,13 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "unicrypto"
-  ];
+  pythonImportsCheck = [ "unicrypto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified interface for cryptographic libraries";
     homepage = "https://github.com/skelsec/unicrypto";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/skelsec/unicrypto/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

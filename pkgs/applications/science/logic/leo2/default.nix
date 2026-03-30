@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, eprover, ocaml, camlp4, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  makeWrapper,
+  eprover,
+  ocaml,
+  camlp4,
+  perl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "leo2";
@@ -9,10 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1b2q7vsz6s9ighypsigqjm1mzjiq3xgnz5id5ssb4rh9zm190r82";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ eprover ocaml camlp4 perl zlib ];
+  strictDeps = true;
 
-  patches = [ (fetchpatch {
+  nativeBuildInputs = [
+    makeWrapper
+    eprover
+    ocaml
+    camlp4
+    perl
+  ];
+  buildInputs = [ zlib ];
+
+  patches = [
+    (fetchpatch {
       url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";
       stripLen = 1;
       extraPrefix = "lib/";
@@ -29,6 +49,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "opt" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-reserved-user-defined-literal";
+
   preInstall = "mkdir -p $out/bin";
 
   postInstall = ''
@@ -39,11 +61,12 @@ stdenv.mkDerivation rec {
       --add-flags "--atprc $out/etc/leoatprc"
   '';
 
-  meta = with lib; {
-    description = "A high-performance typed higher order prover";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+  meta = {
+    description = "High-performance typed higher order prover";
+    mainProgram = "leo";
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
     homepage = "http://www.leoprover.org/";
   };
 }

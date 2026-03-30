@@ -1,38 +1,26 @@
-{ buildDunePackage
-, fetchurl
-, findlib
-, lib
-, ocaml
-, re
+{
+  buildDunePackage,
+  fetchurl,
+  lib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "coin";
-  version = "0.1.4";
-  minimalOCamlVersion = "4.03";
+  version = "0.1.5";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/mirage/coin/releases/download/v${version}/coin-${version}.tbz";
-    sha256 = "sha256:0069qqswd1ik5ay3d5q1v1pz0ql31kblfsnv0ax0z8jwvacp3ack";
+    url = "https://github.com/mirage/coin/releases/download/v${finalAttrs.version}/coin-${finalAttrs.version}.tbz";
+    hash = "sha256-z2WzQ7zUFmZJTUqygTHguud6+NAcp36WubHbILXGR9g=";
   };
-
-  postPatch = ''
-    substituteInPlace src/dune --replace 'ocaml} ' \
-      'ocaml} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib '
-  '';
-
-  nativeBuildInputs = [ findlib ];
-  buildInputs = [ re ];
-
-  strictDeps = true;
 
   doCheck = true;
 
   meta = {
-    description = "A library to normalize an KOI8-{U,R} input to Unicode";
+    description = "Library to normalize an KOI8-{U,R} input to Unicode";
     homepage = "https://github.com/mirage/coin";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "coin.generate";
   };
-}
+})

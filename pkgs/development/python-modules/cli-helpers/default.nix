@@ -1,39 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, backports_csv
-, configobj
-, mock
-, pytest
-, tabulate
-, terminaltables
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  configobj,
+  mock,
+  pytestCheckHook,
+  pygments,
+  tabulate,
 }:
 
 buildPythonPackage rec {
-  pname = "cli_helpers";
-  version = "2.3.0";
+  pname = "cli-helpers";
+  version = "2.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5xdNADorWP0+Mac/u8RdWqUT3mLL1C1Df3i5ZYvV+Wc=";
+    pname = "cli_helpers";
+    inherit version;
+    hash = "sha256-Dgk2F5t4bADGtzhjtbklKIn3pUUl8UAU7HJ+Qf8iryg=";
   };
 
   propagatedBuildInputs = [
     configobj
-    terminaltables
     tabulate
-    wcwidth
-  ] ++ (lib.optionals isPy27 [ backports_csv ]);
+  ]
+  ++ tabulate.optional-dependencies.widechars;
 
-  # namespace collision between backport.csv and backports.configparser
-  doCheck = !isPy27;
+  optional-dependencies = {
+    styles = [ pygments ];
+  };
 
-  checkInputs = [ pytest mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  checkPhase = ''
-    py.test
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Python helpers for common CLI tasks";
     longDescription = ''
       CLI Helpers is a Python package that makes it easy to perform common
@@ -56,7 +59,7 @@ buildPythonPackage rec {
       Read the documentation at http://cli-helpers.rtfd.io
     '';
     homepage = "https://cli-helpers.readthedocs.io/en/stable/";
-    license = licenses.bsd3 ;
-    maintainers = [ maintainers.kalbasit ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.kalbasit ];
   };
 }

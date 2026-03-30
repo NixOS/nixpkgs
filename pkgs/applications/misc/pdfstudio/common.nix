@@ -1,21 +1,23 @@
-{ pname
-, program
-, src
-, year
-, version
-, desktopName
-, longDescription
-, buildFHSUserEnv
-, extraBuildInputs ? [ ]
-, jdk
-, stdenv
-, lib
-, dpkg
-, makeDesktopItem
-, copyDesktopItems
-, autoPatchelfHook
-, sane-backends
-, cups
+{
+  pname,
+  program,
+  src,
+  year,
+  version,
+  desktopName,
+  longDescription,
+  broken ? false,
+  buildFHSEnv,
+  extraBuildInputs ? [ ],
+  jdk,
+  stdenv,
+  lib,
+  dpkg,
+  makeDesktopItem,
+  copyDesktopItems,
+  autoPatchelfHook,
+  sane-backends,
+  cups,
 }:
 let
   thisPackage = stdenv.mkDerivation rec {
@@ -23,8 +25,9 @@ let
     strictDeps = true;
 
     buildInputs = [
-      sane-backends #for libsane.so.1
-    ] ++ extraBuildInputs;
+      sane-backends # for libsane.so.1
+    ]
+    ++ extraBuildInputs;
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -45,7 +48,6 @@ let
       })
     ];
 
-    unpackCmd = "dpkg-deb -x $src ./${program}-${version}";
     dontBuild = true;
 
     postPatch = ''
@@ -68,12 +70,14 @@ let
 
 in
 # Package with cups in FHS sandbox, because JAVA bin expects "/usr/bin/lpr" for printing.
-buildFHSUserEnv {
-  name = pname;
+buildFHSEnv {
+  inherit pname version;
+
   targetPkgs = pkgs: [
     cups
     thisPackage
   ];
+
   runScript = "${program}${year}";
 
   # link desktop item and icon into FHS user environment
@@ -84,17 +88,18 @@ buildFHSUserEnv {
     ln -s ${thisPackage}/share/pixmaps/*.png "$out/share/pixmaps/"
   '';
 
-  meta = with lib; {
+  meta = {
+    inherit broken;
     homepage = "https://www.qoppa.com/${pname}/";
-    description = "An easy to use, full-featured PDF editing software";
+    description = "Easy to use, full-featured PDF editing software";
     longDescription = longDescription;
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     mainProgram = pname;
-    maintainers = [ maintainers.pwoelfel ];
+    maintainers = with lib.maintainers; [ pwoelfel ];
   };
 }

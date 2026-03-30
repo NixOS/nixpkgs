@@ -1,13 +1,15 @@
-{ lib
-, fetchurl
-, intltool
-, libtorrent-rasterbar
-, python3Packages
-, gtk3
-, glib
-, gobject-introspection
-, librsvg
-, wrapGAppsHook
+{
+  lib,
+  fetchurl,
+  intltool,
+  libtorrent-rasterbar,
+  python3Packages,
+  gtk3,
+  glib,
+  gobject-introspection,
+  librsvg,
+  wrapGAppsHook3,
+  nixosTests,
 }:
 
 let
@@ -15,52 +17,58 @@ let
 
   pypkgs = python3Packages;
 
-  generic = { pname, withGUI }:
+  generic =
+    { pname, withGUI }:
     pypkgs.buildPythonPackage rec {
       inherit pname;
-      version = "2.1.1";
+      version = "2.2.0";
+      format = "setuptools";
 
       src = fetchurl {
         url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";
-        hash = "sha256-do3TGYAuQkN6s3lOvnW0lxQuCO1bD7JQO61izvRC3/c=";
+        hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
-      propagatedBuildInputs = with pypkgs; [
-        twisted
-        Mako
-        chardet
-        pyxdg
-        pyopenssl
-        service-identity
-        libtorrent-rasterbar.dev
-        libtorrent-rasterbar.python
-        setuptools
-        setproctitle
-        pillow
-        rencode
-        six
-        zope_interface
-        dbus-python
-        pycairo
-        librsvg
-      ] ++ optionals withGUI [
-        gtk3
-        gobject-introspection
-        pygobject3
-      ];
+      propagatedBuildInputs =
+        with pypkgs;
+        [
+          twisted
+          mako
+          chardet
+          pyxdg
+          pyopenssl
+          service-identity
+          libtorrent-rasterbar.dev
+          libtorrent-rasterbar.python
+          setuptools
+          setproctitle
+          pillow
+          rencode
+          six
+          zope-interface
+          dbus-python
+          pycairo
+          librsvg
+        ]
+        ++ optionals withGUI [
+          gtk3
+          gobject-introspection
+          pygobject3
+        ];
 
       nativeBuildInputs = [
         intltool
         glib
-      ] ++ optionals withGUI [
+      ]
+      ++ optionals withGUI [
         gobject-introspection
-        wrapGAppsHook
+        wrapGAppsHook3
       ];
 
-      checkInputs = with pypkgs; [
+      nativeCheckInputs = with pypkgs; [
         pytestCheckHook
         pytest-twisted
-        pytest-cov
+        pytest-cov-stub
         mock
         mccabe
         pylint
@@ -70,16 +78,21 @@ let
 
       postInstall = ''
         install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
-      '' + (if withGUI
-      then ''
-        mkdir -p $out/share
-        cp -R deluge/ui/data/{icons,pixmaps} $out/share/
-        install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
-      '' else ''
-        rm -r $out/bin/deluge-gtk
-        rm -r $out/lib/${python3Packages.python.libPrefix}/site-packages/deluge/ui/gtk3
-        rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
-      '');
+      ''
+      + (
+        if withGUI then
+          ''
+            mkdir -p $out/share
+            cp -R deluge/ui/data/{icons,pixmaps} $out/share/
+            install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
+          ''
+        else
+          ''
+            rm -r $out/bin/deluge-gtk
+            rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
+            rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
+          ''
+      );
 
       postFixup = ''
         for f in $out/lib/systemd/system/*; do
@@ -87,18 +100,26 @@ let
         done
       '';
 
-      meta = with lib; {
+      passthru.tests = { inherit (nixosTests) deluge; };
+
+      meta = {
         description = "Torrent client";
         homepage = "https://deluge-torrent.org";
-        license = licenses.gpl3Plus;
-        maintainers = with maintainers; [ domenkozar ebzzry ];
-        platforms = platforms.all;
+        license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [ a-peirogon ];
+        platforms = lib.platforms.all;
       };
     };
 
 in
 rec {
-  deluge-gtk = generic { pname = "deluge-gtk"; withGUI = true; };
-  deluged = generic { pname = "deluged"; withGUI = false; };
+  deluge-gtk = generic {
+    pname = "deluge-gtk";
+    withGUI = true;
+  };
+  deluged = generic {
+    pname = "deluged";
+    withGUI = false;
+  };
   deluge = deluge-gtk;
 }

@@ -1,27 +1,32 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, tldextract
-, urllib3
-, validators
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
+  tldextract,
+  urllib3,
+  validators,
 }:
 
 buildPythonPackage rec {
   pname = "corsair-scan";
   version = "0.2.0";
-  disabled = pythonOlder "3.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";
     repo = "corsair_scan";
-    rev = "v${version}";
-    sha256 = "09jsv5bag7mjy0rxsxjzmg73rjl7qknzr0d7a7himd7v6a4ikpmk";
+    tag = "v${version}";
+    hash = "sha256-s94ZiTL7tBrhUaeB/O3Eh8o8zqtfdt0z8LKep1bZWiY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
+  '';
 
   propagatedBuildInputs = [
     validators
@@ -31,22 +36,25 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
-  '';
-
   pythonImportsCheck = [ "corsair_scan" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests want to download Public Suffix List
+    "test_corsair_scan_401"
+    "test_corsair_scan_origin"
+  ];
+
+  meta = {
     description = "Python module to check for Cross-Origin Resource Sharing (CORS) misconfigurations";
+    mainProgram = "corsair";
     homepage = "https://github.com/Santandersecurityresearch/corsair_scan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

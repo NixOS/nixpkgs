@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, colorclass
-, easygui
-, fetchFromGitHub
-, msoffcrypto-tool
-, olefile
-, pcodedmp
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  colorclass,
+  easygui,
+  fetchFromGitHub,
+  msoffcrypto-tool,
+  olefile,
+  pcodedmp,
+  pyparsing,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "oletools";
-  version = "0.60.1";
+  version = "0.60.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "decalage2";
-    repo = pname;
+    repo = "oletools";
     rev = "v${version}";
-    hash = "sha256-H3oL8sk2r267wV0hoHOq9r9DY2Atxs+hZUVb6tmHy0w=";
+    hash = "sha256-ons1VeWStxUZw2CPpnX9p5I3Q7cMhi34JU8TeuUDt+Y=";
   };
 
   propagatedBuildInputs = [
@@ -35,9 +32,7 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -50,14 +45,15 @@ buildPythonPackage rec {
     "test_xlm"
   ];
 
-  pythonImportsCheck = [
-    "oletools"
-  ];
+  pythonImportsCheck = [ "oletools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to analyze MS OLE2 files and MS Office documents";
     homepage = "https://github.com/decalage2/oletools";
-    license = with licenses; [ bsd2 /* and */ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [
+      bsd2 # and
+      mit
+    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

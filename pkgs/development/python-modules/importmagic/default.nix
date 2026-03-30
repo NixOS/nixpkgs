@@ -1,30 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "importmagic";
-  version = "0.1.7";
+  version = "0.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3f7757a5b74c9a291e20e12023bb3bf71bc2fa3adfb15a08570648ab83eaf8d8";
+  src = fetchFromGitHub {
+    owner = "alecthomas";
+    repo = "importmagic";
+    tag = finalAttrs.version;
+    hash = "sha256-776HbSRl5hIrSyIyIF7jnNAJF41QzdjXe0vDaKwlCnc=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ hatchling ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "importmagic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Import Magic - automagically add, remove and manage imports";
     homepage = "https://github.com/alecthomas/importmagic";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/alecthomas/importmagic/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ onny ];
   };
-
-}
+})

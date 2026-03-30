@@ -1,23 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "strenum";
-  version = "0.4.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.15";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irgeek";
     repo = "StrEnum";
-    rev = "v${version}";
-    hash = "sha256-S64YfF+cbefXRWoeJK99ZPTiO9DUcDaT77hVQd7pKDk=";
+    tag = "v${version}";
+    hash = "sha256-LrDLIWiV/zIbl7CwKh7DAy4LoLyY7+hfUu8nqduclnA=";
   };
+
+  patches = [
+    # Replace SafeConfigParser and readfp, https://github.com/milanmeu/aioaseko/pull/6
+    (fetchpatch {
+      name = "replace-safeconfigparser.patch";
+      url = "https://github.com/irgeek/StrEnum/commit/896bef1b7e4a50c8b53d90c8d2fb5c0164f08ecd.patch";
+      hash = "sha256-dmmEzhy17huclo1wOubpBUDc2L7vqEU5b/6a5loM47A=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -26,18 +35,17 @@ buildPythonPackage rec {
       --replace " --cov=strenum --cov-report term-missing --black --pylint" ""
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "strenum"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "MOdule for enum that inherits from str";
+  pythonImportsCheck = [ "strenum" ];
+
+  meta = {
+    description = "Module for enum that inherits from str";
     homepage = "https://github.com/irgeek/StrEnum";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

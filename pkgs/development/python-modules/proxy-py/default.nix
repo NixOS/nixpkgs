@@ -1,65 +1,92 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, openssl
-, paramiko
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, typing-extensions
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gnumake,
+  h2,
+  hpack,
+  httpx,
+  hyperframe,
+  openssl,
+  paramiko,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.4.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abhinavsingh";
     repo = "proxy.py";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
+    tag = "v${version}";
+    hash = "sha256-47Qt8J60QFfHUSquD17xMfl+wBTsSimaPSRvS/sSPMI=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace Makefile \
+    --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     paramiko
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    gnumake
+    h2
+    hpack
+    httpx
+    hyperframe
     openssl
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
+    pytest-xdist
     pytestCheckHook
+    requests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "typing-extensions==3.7.4.3" "typing-extensions"
-  '';
-
-  pythonImportsCheck = [
+  disabledTests = [
+    # Test requires network access
+    "http"
+    "http2"
     "proxy"
+    "web_server"
+    # Location is not writable
+    "test_gen_csr"
+    "test_gen_public_key"
+    # Tests run into a timeout
+    "integration"
+    # Crashes
+    "test_grout"
   ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+  pythonImportsCheck = [ "proxy" ];
+
+  meta = {
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${src.tag}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

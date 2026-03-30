@@ -9,7 +9,7 @@ as comments in the expressions themselves.
 [julia]: https://julialang.org
 
 For Nixpkgs, the manual is as always your primary reference, and for the Julia
-side of things you probably want to familiarise yourself with the [README
+side of things, you probably want to familiarise yourself with the [README
 ][readme], [build instructions][build], and [release process][release_process].
 Remember that these can change between Julia releases, especially if the LTS and
 release branches have deviated greatly. A lot of the build process is
@@ -20,5 +20,5 @@ minimal set of broken or incompatible tests you think you have a good reason to
 disable, is your best bet at arriving at a solid derivation.
 
 [readme]: https://github.com/JuliaLang/julia/blob/master/README.md
-[build]: https://github.com/JuliaLang/julia/blob/master/doc/build/build.md
+[build]: https://github.com/JuliaLang/julia/tree/master/doc/src/devdocs/build
 [release_process]: https://julialang.org/blog/2019/08/release-process

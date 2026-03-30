@@ -1,4 +1,11 @@
-{ buildDunePackage, dns, ipaddr, lwt, tcpip }:
+{
+  buildDunePackage,
+  dns,
+  cstruct,
+  ipaddr,
+  lwt,
+  tcpip,
+}:
 
 buildDunePackage {
   pname = "dns-mirage";
@@ -6,6 +13,7 @@ buildDunePackage {
   inherit (dns) version src;
 
   propagatedBuildInputs = [
+    cstruct
     dns
     ipaddr
     lwt
@@ -13,6 +21,6 @@ buildDunePackage {
   ];
 
   meta = dns.meta // {
-    description = "An opinionated Domain Name System (DNS) library";
+    description = "Opinionated Domain Name System (DNS) library";
   };
 }

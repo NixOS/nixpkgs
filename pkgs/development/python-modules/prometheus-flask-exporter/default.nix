@@ -1,31 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, prometheus-client
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  prometheus-client,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-flask-exporter";
-  version = "0.20.3";
+  version = "0.23.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rycus86";
     repo = "prometheus_flask_exporter";
-    rev = version;
-    sha256 = "sha256-l9Iw9fvXQMXzq1y/4Dml8uLPJWyqX6SDIXptJVw3cVQ=";
+    tag = version;
+    hash = "sha256-fWCIthtBiPJwn/Mbbwdv2+1cr9nlpUsPE2mDkaSsfpM=";
   };
 
-  propagatedBuildInputs = [ flask prometheus-client ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" ];
+  dependencies = [
+    flask
+    prometheus-client
+  ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "tests/" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_group_by_lambda_is_not_supported"
+  ];
+
+  meta = {
     description = "Prometheus exporter for Flask applications";
     homepage = "https://github.com/rycus86/prometheus_flask_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lbpdt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lbpdt ];
   };
 }

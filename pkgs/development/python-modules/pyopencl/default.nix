@@ -1,64 +1,100 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, appdirs
-, cffi
-, decorator
-, Mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytools
-, six
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cmake,
+  nanobind,
+  ninja,
+  numpy,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
+  ocl-icd,
+
+  # dependencies
+  platformdirs,
+  pytools,
+  typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  mako,
+  pocl,
 }:
 
-let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopencl";
-  version = "2022.2.4";
+  version = "2026.1.2";
+  pyproject = true;
 
-  checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pyopencl";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-n1xdJbq+RPW2p8MNc6YA9+GlYokSbW8llbCFFv1wCcE=";
+  };
 
-  propagatedBuildInputs = [
-    appdirs
-    cffi
-    decorator
-    Mako
+  build-system = [
+    cmake
+    nanobind
+    ninja
+    numpy
+    scikit-build-core
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    opencl-headers
+    ocl-icd
+    pybind11
+  ];
+
+  dependencies = [
     numpy
     platformdirs
     pytools
-    six
+    typing-extensions
   ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-tXye+L2ObbB+iRBvMJG6I2sk+Vo4/UDfsX0u1/9r5K0=";
+  nativeCheckInputs = [
+    pocl
+    mako
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  env = {
+    CL_INC_DIR = "${opencl-headers}/include";
+    CL_LIB_DIR = "${ocl-icd}/lib";
+    CL_LIBNAME = "${ocl-icd}/lib/libOpenCL${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
-  # py.test is not needed during runtime, so remove it from `install_requires`
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=2" ""
+  preCheck = ''
+    rm -rf pyopencl
   '';
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.compyte"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -1,33 +1,76 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyterlab_server
-, notebook
-, pythonOlder
-, jupyter-packaging
-, nbclassic
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
+  hatch-jupyter-builder,
+  hatchling,
+  async-lru,
+  httpx,
+  ipykernel,
+  jinja2,
+  jupyter-core,
+  jupyter-lsp,
+  jupyter-server,
+  jupyterlab-server,
+  notebook-shim,
+  packaging,
+  setuptools,
+  tornado,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.5.0";
-  format = "setuptools";
+  version = "4.5.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4CVWyOobOGljxLRk5GGK7hU8VBawerSBQlyBegMzI6I=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab";
+    tag = "v${version}";
+    hash = "sha256-QQ8g1+nB5aeXSrjwuL22L49S84cm2oiiNCqWj+dk7XI=";
   };
 
   nativeBuildInputs = [
-    jupyter-packaging
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
   ];
 
-  propagatedBuildInputs = [
-    jupyterlab_server
-    notebook
-    nbclassic
+  preConfigure = ''
+    pushd jupyterlab/staging
+  '';
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src;
+    sourceRoot = "${src.name}/jupyterlab/staging";
+    hash = "sha256-a+pTp1IqY/RLCjClKbb7LMvUblYULChtT/knGgTlI7U=";
+  };
+
+  preBuild = ''
+    popd
+  '';
+
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
+  ];
+
+  dependencies = [
+    async-lru
+    httpx
+    ipykernel
+    jinja2
+    jupyter-core
+    jupyter-lsp
+    jupyter-server
+    jupyterlab-server
+    notebook-shim
+    packaging
+    setuptools
+    tornado
+    traitlets
   ];
 
   makeWrapperArgs = [
@@ -39,14 +82,14 @@ buildPythonPackage rec {
   # Depends on npm
   doCheck = false;
 
-  pythonImportsCheck = [
-    "jupyterlab"
-  ];
+  pythonImportsCheck = [ "jupyterlab" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${src.tag}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
-    license = with licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm costrouc ];
+    teams = [ lib.teams.jupyter ];
+    mainProgram = "jupyter-lab";
   };
 }

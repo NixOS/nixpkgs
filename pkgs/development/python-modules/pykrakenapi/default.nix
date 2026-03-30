@@ -1,16 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, krakenex
-, pandas
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  krakenex,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "pykrakenapi";
-  version = "0.3.1";
-
-  disabled = pythonOlder "3.3";
+  version = "0.3.2";
 
   format = "setuptools";
 
@@ -18,7 +16,7 @@ buildPythonPackage rec {
     owner = "dominiktraxl";
     repo = "pykrakenapi";
     rev = "v${version}";
-    hash = "sha256-gG0kbB3yaFU4DcBKupnBS7UFuU1hIMThdUHCuqufKzc=";
+    hash = "sha256-sMtNdXM+47iCnDgo33DCD1nx/I+jVX/oG/9aN80LfRg=";
   };
 
   propagatedBuildInputs = [
@@ -31,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykrakenapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Kraken API";
     homepage = "https://github.com/dominiktraxl/pykrakenapi";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

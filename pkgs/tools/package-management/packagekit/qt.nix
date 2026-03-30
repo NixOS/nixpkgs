@@ -1,20 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
-, qttools, packagekit }:
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  packagekit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "packagekit-qt";
-  version = "1.0.2";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
-    owner  = "hughsie";
-    repo   = "PackageKit-Qt";
-    rev    = "v${version}";
-    sha256 = "1d20r503msw1vix3nb6a8bmdqld7fj8k9jk33bkqsc610a2zsms6";
+    owner = "hughsie";
+    repo = "PackageKit-Qt";
+    tag = "v${version}";
+    hash = "sha256-D1LsEaxc6lA0ULmYQ9n2KEs6NpoHeTgOJsKzdEnImUM=";
   };
 
   buildInputs = [ packagekit ];
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+  ];
 
   dontWrapQtApps = true;
 

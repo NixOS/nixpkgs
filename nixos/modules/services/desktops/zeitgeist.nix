@@ -1,26 +1,27 @@
 # Zeitgeist
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
-  meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  meta = {
+    teams = [ lib.teams.pantheon ];
   };
 
   ###### interface
 
   options = {
     services.zeitgeist = {
-      enable = mkEnableOption (lib.mdDoc "zeitgeist");
+      enable = lib.mkEnableOption "zeitgeist, a service which logs the users' activities and events";
     };
   };
 
   ###### implementation
 
-  config = mkIf config.services.zeitgeist.enable {
+  config = lib.mkIf config.services.zeitgeist.enable {
 
     environment.systemPackages = [ pkgs.zeitgeist ];
 

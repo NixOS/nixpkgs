@@ -1,9 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi
-, docopt, requests, pygments }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docopt,
+  requests,
+  pygments,
+}:
 
 buildPythonPackage rec {
   pname = "clf";
   version = "0.5.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,16 +21,21 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' requirements.txt
   '';
 
-  propagatedBuildInputs = [ docopt requests pygments ];
+  propagatedBuildInputs = [
+    docopt
+    requests
+    pygments
+  ];
 
   # Error when running tests:
   # No local packages or download links found for requests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ncrocfer/clf";
     description = "Command line tool to search snippets on Commandlinefu.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    mainProgram = "clf";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

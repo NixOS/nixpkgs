@@ -1,34 +1,43 @@
-{ lib
-, btrfs-progs
-, buildGoModule
-, fetchFromGitHub
-, glibc
-, gpgme
-, installShellFiles
-, libapparmor
-, libseccomp
-, libselinux
-, lvm2
-, pkg-config
-, nixosTests
+{
+  lib,
+  btrfs-progs,
+  buildGoModule,
+  fetchFromGitHub,
+  glibc,
+  gpgme,
+  installShellFiles,
+  libapparmor,
+  libseccomp,
+  libselinux,
+  lvm2,
+  pkg-config,
+  nixosTests,
+  go-md2man,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cri-o";
-  version = "1.25.1";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
-    rev = "v${version}";
-    sha256 = "sha256-MFqCRHsIpc8ianyNW+PsDINQavbTZs2rZ2k6q/6wTkY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aP3qhD2d1x+VPDifkg9lXgVD38UcongyN6vHkn8oYos=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  outputs = [ "out" "man" ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  outputs = [
+    "out"
+    "man"
+  ];
+  nativeBuildInputs = [
+    installShellFiles
+    go-md2man
+    pkg-config
+  ];
 
   buildInputs = [
     btrfs-progs
@@ -37,11 +46,23 @@ buildGoModule rec {
     libseccomp
     libselinux
     lvm2
-  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
+  ]
+  ++ lib.optionals (glibc != null) [
+    glibc
+    glibc.static
+  ];
 
-  BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
+  env.BUILDTAGS = toString [
+    "apparmor"
+    "seccomp"
+    "selinux"
+    "containers_image_openpgp"
+    "containers_image_ostree_stub"
+  ];
+
   buildPhase = ''
     runHook preBuild
+    sed -i 's;\thack/;\tbash ./hack/;g' Makefile
     make binaries docs BUILDTAGS="$BUILDTAGS"
     runHook postBuild
   '';
@@ -54,20 +75,23 @@ buildGoModule rec {
       installShellCompletion --$shell completions/$shell/*
     done
 
+    install contrib/cni/*.conflist -Dt $out/etc/cni/net.d
+    install crictl.yaml -Dt $out/etc
+
     installManPage docs/*.[1-9]
     runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the
       Kubernetes Container Runtime Interface
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
-}
+})

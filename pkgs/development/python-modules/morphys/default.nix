@@ -1,10 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "morphys";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkalinski";
@@ -15,10 +17,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "morphys" ];
 
-  meta = with lib; {
+  meta = {
     description = "Smart conversions between unicode and bytes types";
     homepage = "https://github.com/mkalinski/morphys";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

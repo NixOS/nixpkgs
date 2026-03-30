@@ -1,73 +1,88 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, jxmlease
-, ncclient
-, netaddr
-, paramiko
-, pynetbox
-, scp
-, textfsm
-, ttp
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  jmespath,
+  jsonschema,
+  jxmlease,
+  ncclient,
+  netaddr,
+  paramiko,
+  ansible-pylibssh,
+  pynetbox,
+  scp,
+  textfsm,
+  ttp,
+  xmltodict,
+  passlib,
 
-# optionals
-, withJunos ? false
-, withNetbox ? false
+  # optionals
+  withJunos ? false,
+  withNetbox ? false,
 }:
 
 let
   pname = "ansible";
-  version = "6.5.0";
+  version = "13.3.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fAzc0RIaXxKrLaS90uFMLBU+ASFL/GprwVa2G9dAHFs=";
+    hash = "sha256-fn7QUsjuexRJ+yhdDh2sACn2RAxwzp9HOvbBoxiHu4Q=";
   };
 
-  postPatch = ''
-    # we make ansible-core depend on ansible, not the other way around
-    sed -Ei '/ansible-core/d' setup.py
-  '';
+  # we make ansible-core depend on ansible, not the other way around,
+  # since when you install ansible-core you will not have ansible
+  # executables installed in the PATH variable
+  pythonRemoveDeps = [ "ansible-core" ];
 
-  propagatedBuildInputs = lib.unique ([
-    # Support ansible collections by default, make all others optional
-    # ansible.netcommon
-    jxmlease
-    ncclient
-    netaddr
-    paramiko
-    xmltodict
-    # ansible.posix
-    # ansible.utils
-    jsonschema
-    textfsm
-    ttp
-    xmltodict
-    # ansible.windows
+  build-system = [ setuptools ];
 
-    # lots of collections with dedicated requirements.txt and pyproject.toml files,
-    # add the dependencies for the collections you need conditionally and install
-    # ansible using overrides to enable the collections you need.
-  ] ++ lib.optionals (withJunos) [
-    # ansible_collections/junipernetworks/junos/requirements.txt
-    jxmlease
-    ncclient
-    paramiko
-    scp
-    xmltodict
-  ] ++ lib.optionals (withNetbox) [
-    # ansible_collections/netbox/netbox/pyproject.toml
-    pynetbox
-  ]);
+  dependencies = lib.unique (
+    [
+      # Support ansible collections by default, make all others optional
+      # ansible.netcommon
+      passlib
+      jxmlease
+      ncclient
+      netaddr
+      paramiko
+      ansible-pylibssh
+      xmltodict
+      # ansible.posix
+      # ansible.utils
+      jsonschema
+      textfsm
+      ttp
+      xmltodict
+      # ansible.windows
+
+      # Default ansible collections dependencies
+      # community.general
+      jmespath
+
+      # lots of collections with dedicated requirements.txt and pyproject.toml files,
+      # add the dependencies for the collections you need conditionally and install
+      # ansible using overrides to enable the collections you need.
+    ]
+    ++ lib.optionals withJunos [
+      # ansible_collections/junipernetworks/junos/requirements.txt
+      jxmlease
+      ncclient
+      paramiko
+      ansible-pylibssh
+      scp
+      xmltodict
+    ]
+    ++ lib.optionals withNetbox [
+      # ansible_collections/netbox/netbox/pyproject.toml
+      pynetbox
+    ]
+  );
 
   # don't try and fail to strip 48000+ non strippable files, it takes >5 minutes!
   dontStrip = true;
@@ -75,11 +90,15 @@ buildPythonPackage {
   # difficult to test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Radically simple IT automation";
+    mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

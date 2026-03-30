@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "hlk-sw16";
   version = "0.0.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jameshilliard";
@@ -19,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hlk_sw16" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for HLK-SW16";
     homepage = "https://github.com/jameshilliard/hlk-sw16";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,27 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-core
-, msrest
-, msrestazure
-, requests
+{
+  lib,
+  azure-common,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  msrest,
+  requests,
+  setuptools,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
   pname = "azure-multiapi-storage";
-  disabled = isPy27;
+  version = "1.6.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-QhC2s/onnlbFVxMmK6SJg2hatxp4WTrYWtMV0pXtAZ8=";
+    pname = "azure_multiapi_storage";
+    inherit version;
+    hash = "sha256-iULj9O2+3dI82hms7nlgdvvNGkDkb5qhEQ/9oxTjHFU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-core
+    cryptography
     msrest
-    msrestazure
     requests
+    python-dateutil
   ];
 
   # fix namespace
@@ -30,12 +39,14 @@ buildPythonPackage rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.multiapi.storage" ];
+  pythonImportsCheck = [
+    "azure.multiapi.storagev2"
+  ];
 
-  meta = with lib; {
-    description = "Microsoft Azure Storage Client Library for Python with multi API version support.";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+  meta = {
+    description = "Microsoft Azure Storage Client Library for Python with multi API version support";
+    homepage = "https://github.com/Azure/azure-multiapi-storage-python";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

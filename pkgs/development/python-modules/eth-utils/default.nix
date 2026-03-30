@@ -1,46 +1,59 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, eth-hash
-, eth-typing
-, cytoolz
-, hypothesis
-, isPyPy
-, pytestCheckHook
-, pythonOlder
-, toolz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  isPyPy,
+  # dependencies
+  eth-hash,
+  eth-typing,
+  cytoolz,
+  toolz,
+  pydantic,
+  # nativeCheckInputs
+  hypothesis,
+  mypy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "2.0.0";
-  disabled = pythonOlder "3.6";
+  version = "5.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-E2vUROc2FcAv00k50YpdxaaYIRDk1yGSPB8cHHw+7Yw=";
+    repo = "eth-utils";
+    tag = "v${version}";
+    hash = "sha256-uyUsX9jX2KumrERrIc6nXloH0G+rQeKzFMwex+Mh3eM=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     eth-hash
     eth-typing
-  ] ++ lib.optional (!isPyPy) cytoolz
+  ]
+  ++ lib.optional (!isPyPy) cytoolz
   ++ lib.optional isPyPy toolz;
 
-
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
+    mypy
     pytestCheckHook
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+    pydantic
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_utils" ];
 
+  disabledTests = [ "test_install_local_wheel" ];
+
   meta = {
+    changelog = "https://github.com/ethereum/eth-utils/blob/${src.rev}/docs/release_notes.rst";
     description = "Common utility functions for codebases which interact with ethereum";
     homepage = "https://github.com/ethereum/eth-utils";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  fetchPypi,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.77";
-
-  disabled = !isPy3k;
+  version = "0.1.78";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00d95c21b95a17bc07586f69c976fb343a103adc0954d7b2d56c7160665625cb";
+    hash = "sha256-uB9aDa1urIwL2DBdBwPi0sHWPW7SUZ3EaAjuMLSOudc=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "pyhomematic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 Interface to interact with Homematic devices";
     homepage = "https://github.com/danielperna84/pyhomematic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/danielperna84/pyhomematic/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,19 +1,28 @@
-{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
-, python, util-linux, pygit2, gitMinimal, git-annex, cacert
+{
+  lib,
+  buildPythonPackage,
+  cacert,
+  fetchFromGitHub,
+  fetchpatch,
+  git-annex,
+  gitMinimal,
+  pygit2,
+  pytestCheckHook,
+  setuptools,
+  replaceVars,
+  util-linux,
 }:
 
 buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.2";
+  pyproject = true;
 
-  disabled = !isPy3k;
-
-  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "alpernebbi";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0666vqspgnvmfs6j3kifwyxr6zmxjs0wlwis7br4zcq0gk32zgdx";
+    repo = "git-annex-adapter";
+    tag = "v${version}";
+    hash = "sha256-vb0vxnwAs0/yOjpyyoGWvX6Tu+cuziGNdnXbdzXexhg=";
   };
 
   patches = [
@@ -26,28 +35,43 @@ buildPythonPackage rec {
       url = "https://github.com/alpernebbi/git-annex-adapter/commit/b78a8f445f1fb5cf34b28512fc61898ef166b5a1.patch";
       hash = "sha256-BSVoOPWsgY1btvn68bco4yb90FAC7ay2kYZ+q9qDHHw=";
     })
-    (substituteAll {
-      src = ./git-annex-path.patch;
+    (fetchpatch {
+      url = "https://github.com/alpernebbi/git-annex-adapter/commit/d0d8905965a3659ce95cbd8f8b1e8598f0faf76b.patch";
+      hash = "sha256-UcRTKzD3sbXGIuxj4JzZDnvjTYyWVkfeWgKiZ1rAlus=";
+    })
+    (replaceVars ./git-annex-path.patch {
       gitAnnex = "${git-annex}/bin/git-annex";
     })
   ];
 
-  checkInputs = [
-    gitMinimal
-    util-linux # `rev` is needed in tests/test_process.py
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    pygit2
+    cacert
   ];
 
-  propagatedBuildInputs = [ pygit2 cacert ];
+  nativeCheckInputs = [
+    gitMinimal
+    util-linux # `rev` is needed in tests/test_process.py
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
   pythonImportsCheck = [ "git_annex_adapter" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # KeyError and AssertionError
+    "test_annex_keys"
+    "test_batchjson_metadata"
+    "test_file_tree"
+    "test_jsonprocess_annex_metadata_batch"
+    "test_process_annex_metadata_batch"
+  ];
+
+  meta = {
     homepage = "https://github.com/alpernebbi/git-annex-adapter";
     description = "Call git-annex commands from Python";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

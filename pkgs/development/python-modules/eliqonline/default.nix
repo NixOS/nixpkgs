@@ -1,18 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, docopt
-, fetchPypi
-, pythonOlder
-, pyyaml
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "eliqonline";
   version = "1.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,14 +26,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "eliqonline"
-  ];
+  pythonImportsCheck = [ "eliqonline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to the Eliq Online API";
+    mainProgram = "eliqonline";
     homepage = "https://github.com/molobrakos/eliqonline";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

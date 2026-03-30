@@ -1,33 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytoolconfig,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "0.18.0";
+  version = "1.14.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "786b5c38c530d4846aa68a42604f61b4e69a493390e3ca11b88df0fbfdc3ed04";
+  src = fetchFromGitHub {
+    owner = "python-rope";
+    repo = "rope";
+    tag = version;
+    hash = "sha256-LcxpJhMtyk0kT759ape9zQzdwmL1321Spdbg9zuuXtI=";
   };
 
-  patches = [
-    # Python 3.9 ast changes
-    (fetchpatch {
-      url = "https://github.com/python-rope/rope/pull/333.patch";
-      excludes = [ ".github/workflows/main.yml" ];
-      sha256 = "1gq7n1zs18ndmv0p8jg1h5pawabi1m9m9z2w5hgidvqmpmcziky0";
-    })
+  build-system = [ setuptools ];
+
+  dependencies = [ pytoolconfig ] ++ pytoolconfig.optional-dependencies.global;
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest-timeout
+    pytestCheckHook
   ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    # tracked upstream here https://github.com/python-rope/rope/issues/247
-    NOSE_IGNORE_FILES=type_hinting_test.py nosetests ropetest
-  '';
+  disabledTests = [
+    "test_search_submodule"
+    "test_get_package_source_pytest"
+    "test_get_modname_folder"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/python-rope/rope/issues/801
+    "test_skipping_directories_not_accessible_because_of_permission_error"
+    "test_hint_parametrized_iterable"
+    "test_hint_parametrized_iterator"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
-    maintainers = with maintainers; [ goibhniu ];
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/python-rope/rope/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

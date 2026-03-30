@@ -1,25 +1,55 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pytz, pytestCheckHook, freezegun }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+
+  # build-system
+  setuptools,
+
+  # tests
+  freezegun,
+  glibcLocales,
+  pytestCheckHook,
+  pytz,
+  tzdata,
+}:
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.10.3";
+  version = "2.17.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "Babel";
-    inherit version;
-    sha256 = "sha256-dhRVNxHul0kPcyEm3Ad/jQrghOvGqW4j2xSCr6vbLFE=";
+    inherit pname version;
+    hash = "sha256-DFTP+xn2kM3MUqO1C8v3HgeoCNHIDVSfJFm50s8K+50=";
   };
 
-  propagatedBuildInputs = [ pytz ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook freezegun ];
+  nativeCheckInputs = [
+    freezegun
+    glibcLocales
+    pytestCheckHook
+    # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
+    pytz
+  ]
+  ++ lib.optionals isPyPy [ tzdata ];
 
-  doCheck = !stdenv.isDarwin;
+  disabledTests = [
+    # fails on days switching from and to daylight saving time in EST
+    # https://github.com/python-babel/babel/issues/988
+    "test_format_time"
+  ];
 
-  meta = with lib; {
-    homepage = "https://babel.pocoo.org/";
+  pythonImportsCheck = [ "babel" ];
+
+  meta = {
     description = "Collection of internationalizing tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://babel.pocoo.org/";
+    changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "pybabel";
   };
 }

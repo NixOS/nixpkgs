@@ -1,50 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ecdsa
-, rsa
-, pycrypto
-, pyasn1
-, pycryptodome
-, cryptography
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  fetchpatch,
+  pycrypto,
+  pycryptodome,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.3.0";
+  version = "3.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpdavis";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-6VGC6M5oyGCOiXcYp6mpyhL+JlcYZKIqOQU9Sm/TkKM=";
+    repo = "python-jose";
+    tag = version;
+    hash = "sha256-8DQ0RBQ4ZgEIwcosgX3dzr928cYIQoH0obIOgk0+Ozs=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # https://github.com/mpdavis/python-jose/pull/393
+    (fetchpatch {
+      name = "fix-test_incorrect_public_key_hmac_signing.patch";
+      url = "https://github.com/mpdavis/python-jose/commit/7c0e4c6640bdc9cd60ac66d96d5d90f4377873db.patch";
+      hash = "sha256-bCzxZEWKYD20TLqzVv6neZlpU41otbVqaXc7C0Ky9BQ=";
+    })
+  ];
+
+  pythonRemoveDeps = [
+    # These aren't needed if the cryptography backend is used:
+    # https://github.com/mpdavis/python-jose/blob/3.5.0/README.rst#cryptographic-backends
+    "ecdsa"
+    "pyasn1"
+    "rsa"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    ecdsa
-    pyasn1
-    pycrypto
-    pycryptodome
-    rsa
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    cryptography = [ cryptography ];
+    pycrypto = [ pycrypto ];
+    pycryptodome = [ pycryptodome ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "jose" ];
 
-  meta = with lib; {
+  meta = {
+    description = "JOSE implementation in Python";
     homepage = "https://github.com/mpdavis/python-jose";
-    description = "A JOSE implementation in Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jhhuh ];
+    changelog = "https://github.com/mpdavis/python-jose/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

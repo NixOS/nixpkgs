@@ -1,18 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, libGLU
-, libGL
-, pkg-config
-, libpulseaudio
-, extra-cmake-modules
-, qtbase
-, qttools
-, debug ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  libGLU,
+  libGL,
+  pkg-config,
+  libpulseaudio,
+  extra-cmake-modules,
+  qtbase,
+  qttools,
+  debug ? false,
 }:
-
-with lib;
 
 let
   soname = "phonon4qt5";
@@ -26,8 +25,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
+    mainProgram = "phononsettings";
     license = lib.licenses.lgpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 
@@ -50,20 +50,28 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
   ];
 
-  outputs = [ "out" "dev" ];
-
-  NIX_CFLAGS_COMPILE = "-fPIC";
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-fPIC"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=enum-constexpr-conversion"
+    ]
+  );
+
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   dontWrapQtApps = true;
 
   preConfigure = ''
-    cmakeFlags+=" -DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
-    cmakeFlags+=" -DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"
-    cmakeFlags+=" -DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer"
+    appendToVar cmakeFlags "-DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
+    appendToVar cmakeFlags "-DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"
+    appendToVar cmakeFlags "-DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer"
   '';
 
   postPatch = ''

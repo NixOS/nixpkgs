@@ -1,56 +1,86 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, jaxlib
-, jax
-, keras
-, lib
-, matplotlib
-, msgpack
-, numpy
-, optax
-, pytest-xdist
-, pytestCheckHook
-, tensorflow
-, fetchpatch
-, rich
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  jax,
+  msgpack,
+  numpy,
+  optax,
+  orbax-checkpoint,
+  orbax-export,
+  pyyaml,
+  rich,
+  tensorstore,
+  typing-extensions,
+
+  # tests
+  cloudpickle,
+  keras,
+  einops,
+  flaxlib,
+  pytestCheckHook,
+  pytest-xdist,
+  sphinx,
+  tensorflow,
+  treescope,
+
+  writeScript,
+  tomlq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.6.1";
+  version = "0.12.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-fZiODo+izOwGjCCTvi11GvUG/VQL1DV9bNXKjvIIw4A=";
+    repo = "flax";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rIDfF9W8cxF0njH4e4uhqURQ0C4N8Boe76u6meMgC34=";
   };
 
-  buildInputs = [ jaxlib ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    flaxlib
     jax
-    matplotlib
     msgpack
     numpy
     optax
+    orbax-checkpoint
+    orbax-export
+    pyyaml
     rich
+    tensorstore
+    treescope
+    typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "flax"
-  ];
+  pythonImportsCheck = [ "flax" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    cloudpickle
     keras
-    pytest-xdist
+    einops
     pytestCheckHook
+    pytest-xdist
+    sphinx
     tensorflow
   ];
 
-  pytestFlagsArray = [
-    "-W ignore::FutureWarning"
-    "-W ignore::DeprecationWarning"
+  pytestFlags = [
+    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+    "-Wignore::FutureWarning"
   ];
 
   disabledTestPaths = [
@@ -67,25 +97,38 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # See https://github.com/google/flax/issues/2554.
-    "test_async_save_checkpoints"
-    "test_jax_array0"
-    "test_jax_array1"
-    "test_keep0"
-    "test_keep1"
-    "test_optimized_lstm_cell_matches_regular"
-    "test_overwrite_checkpoints"
-    "test_save_restore_checkpoints_target_empty"
-    "test_save_restore_checkpoints_target_none"
-    "test_save_restore_checkpoints_target_singular"
-    "test_save_restore_checkpoints_w_float_steps"
-    "test_save_restore_checkpoints"
+    # AssertionError: [Chex] Function 'add' is traced > 1 times!
+    "PadShardUnpadTest"
+
+    # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
+    "test_linen_to_nnx_metadata"
+
+    # AssertionError: 'Linear_0' not found in State({})
+    "test_compact_basic"
+    # KeyError: 'intermediates'
+    "test_linen_submodule"
+    "test_pure_nnx_submodule"
+    # KeyError: 'counts
+    "test_mutable_state"
+    # AttributeError: 'Top' object has no attribute '_pytree__state'. Did you mean: '_pytree__flatten'?
+    "test_shared_modules"
+    # AttributeError: 'MLP' object has no attribute 'scope
+    "test_transforms"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      nix-update flax # does not --build by default
+      nix-build . -A flax.src # src is essentially a passthru
+      nix-update flaxlib --version="$(${lib.getExe tomlq} <result/Cargo.toml .something.version)" --commit
+    '';
+  };
+
+  meta = {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    changelog = "https://github.com/google/flax/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

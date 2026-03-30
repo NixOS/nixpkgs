@@ -1,32 +1,33 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, cacert
-, setuptools
-, matrix-nio
-, python-magic
-, markdown
-, pillow
-, urllib3
-, aiofiles
-, notify2
-, dbus-python
-, pyxdg
-, python-olm
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  cacert,
+  setuptools,
+  matrix-nio,
+  python-magic,
+  markdown,
+  pillow,
+  aiofiles,
+  notify2,
+  dbus-python,
+  pyxdg,
+  python-olm,
+  emoji,
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "3.5.0";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-/hNTaajZTyeIcGILIXqUVbBvZ8AUNZKBDsZ4Gr5RL2o=";
+    hash = "sha256-eNgnjErPi5q9yA/2iEg3+CoN2xbopmFOpbgU/7GhoAQ=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   postPatch = ''
     # Dependencies already bundled with Python
@@ -41,23 +42,24 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     cacert
     setuptools
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     python-magic
     markdown
     pillow
-    urllib3
     aiofiles
     notify2
     dbus-python
     pyxdg
     python-olm
+    emoji
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
+    mainProgram = "matrix-commander";
     homepage = "https://github.com/8go/matrix-commander";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.seb314 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.seb314 ];
   };
 }

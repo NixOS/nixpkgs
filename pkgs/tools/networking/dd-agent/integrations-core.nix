@@ -33,37 +33,55 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? {} }:
-
-with pkgs.lib;
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  extraIntegrations ? { },
+}:
 
 let
-  src = pkgs.fetchFromGitHub {
+  inherit (lib) attrValues mapAttrs;
+  version = "7.70.2";
+
+  src = fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
-    rev = version;
-    sha256 = "sha256-CIzuJ97KwsG1k65Y+8IUSka/3JX1pmQKN3hPHzZnGhQ=";
+    tag = version;
+    hash = "sha256-3H8nQpy/m53ZjtDfe6s89yowBXnPt+1ARfWxcx+JwQM=";
   };
-  version = "7.38.0";
 
   # Build helper to build a single datadog integration package.
-  buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
-    inherit src version;
-    name = "datadog-integration-${pname}-${version}";
+  buildIntegration =
+    { pname, ... }@args:
+    python3Packages.buildPythonPackage (
+      args
+      // {
+        inherit src version;
+        name = "datadog-integration-${pname}-${version}";
+        pyproject = true;
 
-    sourceRoot = "source/${args.sourceRoot or pname}";
-    doCheck = false;
-  });
+        sourceRoot = "${src.name}/${args.sourceRoot or pname}";
+        buildInputs = with python3Packages; [
+          hatchling
+          setuptools
+        ];
+        doCheck = false;
+      }
+    );
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
-    propagatedBuildInputs = with python.pkgs; [
+
+    dependencies = with python3Packages; [
+      binary
       cachetools
       cryptography
       immutables
       jellyfish
+      lazy-loader
       prometheus-client
       protobuf
       pydantic
@@ -76,26 +94,43 @@ let
       uptime
       wrapt
     ];
+
+    pythonImportsCheck = [
+      "datadog_checks.base"
+      "datadog_checks.base.checks"
+      "datadog_checks.checks"
+    ];
   };
 
   # Default integrations that should be built:
   defaultIntegrations = {
-    disk     = (ps: [ ps.psutil ]);
-    mongo    = (ps: [ ps.pymongo ]);
-    network  = (ps: [ ps.psutil ]);
-    nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000 psycopg2 semver ]);
-    process  = (ps: [ ps.psutil]);
+    disk = (ps: [ ps.psutil ]);
+    mongo = (ps: [ ps.pymongo ]);
+    network = (ps: [ ps.psutil ]);
+    nginx = (ps: [ ]);
+    postgres = (
+      ps: with ps; [
+        pg8000
+        psycopg2
+        semver
+      ]
+    );
+    process = (ps: [ ps.psutil ]);
   };
 
   # All integrations (default + extra):
   integrations = defaultIntegrations // extraIntegrations;
-  builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
-    inherit pname;
-    propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
-  }) integrations;
+  builtIntegrations = mapAttrs (
+    pname: fdeps:
+    buildIntegration {
+      inherit pname;
+      propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
+    }
+  ) integrations;
 
-in builtIntegrations // {
+in
+builtIntegrations
+// {
   inherit datadog_checks_base;
-  python = python.withPackages (_: (attrValues builtIntegrations));
+  python = python3Packages.python.withPackages (_: (attrValues builtIntegrations));
 }

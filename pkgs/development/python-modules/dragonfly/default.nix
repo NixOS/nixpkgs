@@ -1,66 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, decorator
-, packaging
-, pynput
-, regex
-, lark
-, enum34
-, pyperclip
-, six
-, requests
-, psutil
-, json-rpc
-, werkzeug
-, kaldi-active-grammar
-, sounddevice
-, webrtcvad
-, setuptools
-, xdotool
-, wmctrl
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchFromGitHub,
+  json-rpc,
+  kaldi-active-grammar,
+  lark,
+  packaging,
+  psutil,
+  pynput,
+  pyperclip,
+  regex,
+  requests,
+  setuptools,
+  six,
+  sounddevice,
+  webrtcvad,
+  werkzeug,
+  wmctrl,
+  xdotool,
+  xprop,
 }:
 
 buildPythonPackage rec {
   pname = "dragonfly";
   version = "0.35.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dictation-toolbox";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-sqEEEr5/KG3cn4rmOGJt9zMNAjeLO6h3NJgg0EyewrM=";
+    repo = "dragonfly";
+    tag = version;
+    hash = "sha256-sqEEEr5/KG3cn4rmOGJt9zMNAjeLO6h3NJgg0EyewrM=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'lark-parser == 0.8.*' 'lark'
     substituteInPlace dragonfly/actions/keyboard/_x11_xdotool.py \
-      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
+      --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
     substituteInPlace dragonfly/windows/x11_window.py \
-      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
-      --replace 'xprop = "xprop"'${" "}'xprop = "${xorg.xprop}/bin/xprop"' \
-      --replace 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
+      --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
+      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${xprop}/bin/xprop"' \
+      --replace-fail 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
   '';
+
+  pythonRemoveDeps = [ "lark-parser" ];
 
   propagatedBuildInputs = [
     decorator
-    packaging
-    pynput
-    regex
-    lark
-    enum34
-    pyperclip
-    six
-    requests
-    psutil
     json-rpc
-    werkzeug
-    kaldi-active-grammar # for the Kaldi engine
-    sounddevice
-    webrtcvad
+    lark
+    packaging
+    psutil
+    pynput
+    pyperclip
+    regex
+    requests
     setuptools # needs pkg_resources at runtime
+    six
+    werkzeug
   ];
+
+  optional-dependencies = {
+    kaldi = [
+      kaldi-active-grammar
+      sounddevice
+      webrtcvad
+    ];
+  };
 
   # Too many tests fail because of the unusual environment or
   # because of the missing dependencies for some of the engines.
@@ -68,10 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dragonfly" ];
 
-  meta = with lib; {
+  meta = {
     description = "Speech recognition framework allowing powerful Python-based scripting";
     homepage = "https://github.com/dictation-toolbox/dragonfly";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ckie ];
+    changelog = "https://github.com/dictation-toolbox/dragonfly/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

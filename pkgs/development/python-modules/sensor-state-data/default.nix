@@ -1,48 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "sensor-state-data";
-  version = "2.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "2.20.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-u17vtw3yu8ibi/omTriy6s33/243WjxM03Nss3pFAYk=";
+    repo = "sensor-state-data";
+    tag = "v${version}";
+    hash = "sha256-ONAM1WxKnzRCJsuJa+4zDaOXPkTj+zcTH54SgktpMR8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonImportsCheck = [ "sensor_state_data" ];
 
-  pythonImportsCheck = [
-    "sensor_state_data"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Models for storing and converting Sensor Data state";
     homepage = "https://github.com/bluetooth-devices/sensor-state-data";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/sensor-state-data/releases/tag/${src.tag}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,41 +1,55 @@
-{ lib, stdenv
-, installShellFiles
-, tcl
-, libiconv
-, fetchurl
-, zlib
-, openssl
-, readline
-, withInternalSqlite ? true
-, sqlite
-, ed
-, which
-, tcllib
-, withJson ? true
+{
+  lib,
+  stdenv,
+  installShellFiles,
+  tcl,
+  libiconv,
+  fetchurl,
+  buildPackages,
+  zlib,
+  openssl,
+  readline,
+  withInternalSqlite ? true,
+  sqlite,
+  ed,
+  which,
+  tclPackages,
+  withJson ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fossil";
-  version = "2.19";
+  version = "2.28";
 
   src = fetchurl {
-    url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
-    sha256 = "sha256-RZ9/7b4lRJqFVyfXwzutO8C/Pa6XPyxtvpp7gmEGoj4=";
+    url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
+    hash = "sha256-y5joXR+QZAyYniRSHpD+vJjtjuPyZj2Lg6RFsVvMg9M=";
   };
 
-  nativeBuildInputs = [ installShellFiles tcl tcllib ];
+  # required for build time tool `./tools/translate.c`
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = [ zlib openssl readline which ed ]
-    ++ lib.optional stdenv.isDarwin libiconv
-    ++ lib.optional (!withInternalSqlite) sqlite;
+  nativeBuildInputs = [
+    installShellFiles
+    tcl
+  ];
+
+  buildInputs = [
+    zlib
+    openssl
+    readline
+    which
+    ed
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional (!withInternalSqlite) sqlite;
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   configureFlags =
-    lib.optional (!withInternalSqlite) "--disable-internal-sqlite"
-    ++ lib.optional withJson "--json";
+    lib.optional (!withInternalSqlite) "--disable-internal-sqlite" ++ lib.optional withJson "--json";
 
   preBuild = ''
     export USER=nonexistent-but-specified-user
@@ -49,7 +63,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is
@@ -59,8 +73,8 @@ stdenv.mkDerivation rec {
       from the others by being extremely simple to setup and operate.
     '';
     homepage = "https://www.fossil-scm.org/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ maggesi viric ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    mainProgram = "fossil";
   };
-}
+})

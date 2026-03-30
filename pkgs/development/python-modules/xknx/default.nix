@@ -1,59 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, ifaddr
-, voluptuous
-, pyyaml
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  ifaddr,
+  freezegun,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xknx";
-  version = "1.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "3.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XKNX";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-IHZvmVloBSLcK3GZV9urFeqRxOG76O9O/3ZDNTz4wjQ=";
+    repo = "xknx";
+    tag = finalAttrs.version;
+    hash = "sha256-EA6F4Wkji495uVfFyN1M+jZsXFkKbfK7POie3qbuqBY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     ifaddr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xknx"
-  ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
+
+  pythonImportsCheck = [ "xknx" ];
 
   disabledTests = [
     # Test requires network access
+    "test_routing_indication_multicast"
     "test_scan_timeout"
+    "test_start_secure_routing_explicit_keyring"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KNX Library Written in Python";
     longDescription = ''
       XKNX is an asynchronous Python library for reading and writing KNX/IP
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/XKNX/xknx";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/XKNX/xknx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
-}
+})

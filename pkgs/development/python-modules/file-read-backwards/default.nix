@@ -1,22 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytest-mock,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "file-read-backwards";
-  version = "2.0.0";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "file_read_backwards";
     inherit version;
-    sha256 = "fd50d9089b412147ea3c6027e2ad905f977002db2918cf315d64eed23d6d6eb8";
+    hash = "sha256-VHjTBeuuquj+PGWFok38MmIXAiRFCsyTITmPDSbN0Qk=";
   };
 
-  checkInputs = [ mock ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "file_read_backwards" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/RobinNil/file_read_backwards";
+  meta = {
     description = "Memory efficient way of reading files line-by-line from the end of file";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    homepage = "https://github.com/RobinNil/file_read_backwards";
+    changelog = "https://github.com/RobinNil/file_read_backwards/blob/v${version}/HISTORY.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
   };
 }

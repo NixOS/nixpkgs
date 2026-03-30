@@ -1,23 +1,31 @@
 #
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.irqbalance;
 
 in
 {
-  options.services.irqbalance.enable = mkEnableOption (lib.mdDoc "irqbalance daemon");
+  options.services.irqbalance = {
 
-  config = mkIf cfg.enable {
+    enable = lib.mkEnableOption "irqbalance daemon";
 
-    environment.systemPackages = [ pkgs.irqbalance ];
+    package = lib.mkPackageOption pkgs "irqbalance" { };
 
-    systemd.services.irqbalance.wantedBy = ["multi-user.target"];
+  };
 
-    systemd.packages = [ pkgs.irqbalance ];
+  config = lib.mkIf cfg.enable {
+
+    environment.systemPackages = [ cfg.package ];
+
+    systemd.services.irqbalance.wantedBy = [ "multi-user.target" ];
+
+    systemd.packages = [ cfg.package ];
 
   };
 

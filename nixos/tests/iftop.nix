@@ -1,10 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-with lib;
+{ pkgs, lib, ... }:
 
 {
   name = "iftop";
-  meta.maintainers = with pkgs.lib.maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ma27 ];
 
   nodes = {
     withIftop = {
@@ -30,4 +28,4 @@ with lib;
         withoutIftop.succeed("iftop -t -s 1 -n -i eth1")
         withoutIftop.fail("su -l alice -c 'iftop -t -s 1 -n -i eth1'")
   '';
-})
+}

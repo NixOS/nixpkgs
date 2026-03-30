@@ -1,40 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, automake
-, fftw
-, ladspaH
-, libxml2
-, pkg-config
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  automake,
+  fftw,
+  ladspa-header,
+  libxml2,
+  pkg-config,
+  perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swh-plugins";
   version = "0.4.17";
 
   src = fetchFromGitHub {
     owner = "swh";
     repo = "ladspa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fftw ladspaH libxml2 perlPackages.perl perlPackages.XMLParser ];
+  preBuild = ''
+    shopt -s globstar
+    for f in **/Makefile; do
+      substituteInPlace "$f" \
+        --replace-quiet 'ranlib' '${stdenv.cc.targetPrefix}ranlib'
+    done
+    shopt -u globstar
+  '';
 
-  patchPhase = ''
-    patchShebangs .
-    patchShebangs ./metadata/
+  nativeBuildInputs = [
+    autoreconfHook
+    perlPackages.perl
+    perlPackages.XMLParser
+    pkg-config
+    perlPackages.perl
+    perlPackages.XMLParser
+  ];
+  buildInputs = [
+    fftw
+    ladspa-header
+    libxml2
+  ];
+
+  postPatch = ''
+    patchShebangs --build . ./metadata/ makestub.pl
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,30 +1,49 @@
-{ lib, buildPythonPackage, fetchPypi, requests, rx, pytestCheckHook, responses, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  requests,
+  rx,
+  pytestCheckHook,
+  responses,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "twitch-python";
   version = "0.0.20";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bgnXIQuOCrtoknZ9ciB56zWxTCnncM2032TVaey6oXw=";
+    hash = "sha256-bgnXIQuOCrtoknZ9ciB56zWxTCnncM2032TVaey6oXw=";
   };
 
   disabled = !isPy3k;
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pipenv'," ""
+    substituteInPlace setup.py --replace-fail "'pipenv'," ""
   '';
 
-  propagatedBuildInputs = [ requests rx ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook responses ];
+  dependencies = [
+    requests
+    rx
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
 
   pythonImportsCheck = [ "twitch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitch module for Python";
     homepage = "https://github.com/PetterKraabol/Twitch-Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

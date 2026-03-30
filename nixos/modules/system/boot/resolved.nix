@@ -1,152 +1,260 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  utils,
+  ...
+}:
 let
+  inherit (utils.systemdUtils.lib) settingsToSections;
+  inherit (utils.systemdUtils.unitOptions) unitOption;
+
+  inherit (lib)
+    concatStringsSep
+    elem
+    isList
+    literalExpression
+    mapAttrs'
+    mapAttrsToList
+    mkIf
+    mkMerge
+    mkOption
+    mkOrder
+    mkRenamedOptionModule
+    mkRemovedOptionModule
+    nameValuePair
+    optionalAttrs
+    types
+    ;
+
   cfg = config.services.resolved;
 
-  dnsmasqResolve = config.services.dnsmasq.enable &&
-                   config.services.dnsmasq.resolveLocalQueries;
+  dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
+  transformSettings =
+    settings:
+    lib.mapAttrs (
+      key: value:
+      # concat lists for options that should result in space-separated values
+      if
+        elem key [
+          "DNS"
+          "Domains"
+          "FallbackDNS"
+        ]
+        && isList value
+      then
+        concatStringsSep " " value
+      else
+        value
+    ) settings;
+
+  resolvedConf = settingsToSections (transformSettings cfg.settings);
 in
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "resolved" "fallbackDns" ]
+      [ "services" "resolved" "settings" "Resolve" "FallbackDNS" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "resolved" "domains" ]
+      [ "services" "resolved" "settings" "Resolve" "Domains" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "resolved" "llmnr" ]
+      [ "services" "resolved" "settings" "Resolve" "LLMNR" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "resolved" "dnssec" ]
+      [ "services" "resolved" "settings" "Resolve" "DNSSEC" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "resolved" "dnsovertls" ]
+      [ "services" "resolved" "settings" "Resolve" "DNSOverTLS" ]
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "resolved"
+      "extraConfig"
+    ] "Use services.resolved.settings instead")
+  ];
 
   options = {
+    services.resolved = {
+      enable = lib.mkEnableOption "the Systemd DNS resolver daemon (systemd-resolved)";
 
-    services.resolved.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = lib.mdDoc ''
-        Whether to enable the systemd DNS resolver daemon.
-      '';
+      settings.Resolve = mkOption {
+        description = ''
+          Settings option for systemd-resolved.
+          See {manpage}`resolved.conf(5)` for all available options.
+        '';
+        default = { };
+        type = types.submodule {
+          freeformType = types.attrsOf unitOption;
+          options = {
+            DNS = mkOption {
+              type = unitOption;
+              default = config.networking.nameservers;
+              defaultText = literalExpression "config.networking.nameservers";
+              description = ''
+                List of IP addresses to query as recursive DNS resolvers.
+              '';
+            };
+
+            DNSOverTLS = mkOption {
+              type = unitOption;
+              default = false;
+              description = ''
+                Whether to use TLS encryption for DNS queries. Requires
+                nameservers that support DNS-over-TLS.
+              '';
+            };
+
+            DNSSEC = mkOption {
+              type = unitOption;
+              default = false;
+              description = ''
+                Whether to validate DNSSEC for DNS lookups.
+              '';
+            };
+
+            Domains = mkOption {
+              type = unitOption;
+              default = config.networking.search;
+              defaultText = literalExpression "config.networking.search";
+              example = [
+                "scope.example.com"
+                "example.com"
+              ];
+              description = ''
+                List of search domains used to complete unqualified name lookups.
+              '';
+            };
+          };
+        };
+      };
+
+      dnsDelegates = mkOption {
+        description = ''
+          dns-delegate files to be created.
+          See {manpage}`systemd.dns-delegate(5)` for more info.
+        '';
+        default = { };
+        type = types.attrsOf (
+          types.submodule {
+            options.Delegate = mkOption {
+              description = ''
+                Settings option for systemd dns-delegate files.
+                See {manpage}`systemd.dns-delegate(5)` for all available options.
+              '';
+              type = types.submodule {
+                freeformType = types.attrsOf unitOption;
+              };
+            };
+          }
+        );
+      };
+
     };
 
-    services.resolved.fallbackDns = mkOption {
-      default = [ ];
-      example = [ "8.8.8.8" "2001:4860:4860::8844" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc ''
-        A list of IPv4 and IPv6 addresses to use as the fallback DNS servers.
-        If this option is empty, a compiled-in list of DNS servers is used instead.
-      '';
-    };
-
-    services.resolved.domains = mkOption {
-      default = config.networking.search;
-      defaultText = literalExpression "config.networking.search";
-      example = [ "example.com" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc ''
-        A list of domains. These domains are used as search suffixes
-        when resolving single-label host names (domain names which
-        contain no dot), in order to qualify them into fully-qualified
-        domain names (FQDNs).
-
-        For compatibility reasons, if this setting is not specified,
-        the search domains listed in
-        {file}`/etc/resolv.conf` are used instead, if
-        that file exists and any domains are configured in it.
-      '';
-    };
-
-    services.resolved.llmnr = mkOption {
-      default = "true";
-      example = "false";
-      type = types.enum [ "true" "resolve" "false" ];
-      description = lib.mdDoc ''
-        Controls Link-Local Multicast Name Resolution support
-        (RFC 4795) on the local host.
-
-        If set to
-        - `"true"`: Enables full LLMNR responder and resolver support.
-        - `"false"`: Disables both.
-        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
-      '';
-    };
-
-    services.resolved.dnssec = mkOption {
-      default = "allow-downgrade";
-      example = "true";
-      type = types.enum [ "true" "allow-downgrade" "false" ];
-      description = lib.mdDoc ''
-        If set to
-        - `"true"`:
-            all DNS lookups are DNSSEC-validated locally (excluding
-            LLMNR and Multicast DNS). Note that this mode requires a
-            DNS server that supports DNSSEC. If the DNS server does
-            not properly support DNSSEC all validations will fail.
-        - `"allow-downgrade"`:
-            DNSSEC validation is attempted, but if the server does not
-            support DNSSEC properly, DNSSEC mode is automatically
-            disabled. Note that this mode makes DNSSEC validation
-            vulnerable to "downgrade" attacks, where an attacker might
-            be able to trigger a downgrade to non-DNSSEC mode by
-            synthesizing a DNS response that suggests DNSSEC was not
-            supported.
-        - `"false"`: DNS lookups are not DNSSEC validated.
-      '';
-    };
-
-    services.resolved.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      description = lib.mdDoc ''
-        Extra config to append to resolved.conf.
+    boot.initrd.services.resolved.enable = mkOption {
+      default = config.boot.initrd.systemd.network.enable;
+      defaultText = "config.boot.initrd.systemd.network.enable";
+      description = ''
+        Whether to enable resolved for stage 1 networking.
+        Uses the toplevel 'services.resolved' options for 'resolved.conf'
       '';
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
+    (mkIf cfg.enable {
 
-    assertions = [
-      { assertion = !config.networking.useHostResolvConf;
-        message = "Using host resolv.conf is not supported with systemd-resolved";
+      assertions = [
+        {
+          assertion = !config.networking.useHostResolvConf;
+          message = "Using host resolv.conf is not supported with systemd-resolved";
+        }
+      ];
+
+      users.users.systemd-resolve.group = "systemd-resolve";
+
+      # add resolve to nss hosts database if enabled and nscd enabled
+      # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
+      # added with order 501 to allow modules to go before with mkBefore
+      system.nssDatabases.hosts = (mkOrder 501 [ "resolve [!UNAVAIL=return]" ]);
+
+      systemd.additionalUpstreamSystemUnits = [ "systemd-resolved.service" ];
+
+      systemd.services.systemd-resolved = {
+        wantedBy = [ "sysinit.target" ];
+        aliases = [ "dbus-org.freedesktop.resolve1.service" ];
+        reloadTriggers = [
+          config.environment.etc."systemd/resolved.conf".source
+        ]
+        ++ mapAttrsToList (
+          name: _: config.environment.etc."systemd/dns-delegate.d/${name}.dns-delegate".source
+        ) cfg.dnsDelegates;
+        stopIfChanged = false;
+      };
+
+      environment.etc = {
+        "systemd/resolved.conf".text = resolvedConf;
+
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
       }
-    ];
+      // optionalAttrs dnsmasqResolve {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      }
+      // mapAttrs' (
+        name: value:
+        nameValuePair "systemd/dns-delegate.d/${name}.dns-delegate" {
+          text = settingsToSections (transformSettings value);
+        }
+      ) cfg.dnsDelegates;
 
-    users.users.systemd-resolve.group = "systemd-resolve";
+      # If networkmanager is enabled, ask it to interface with resolved.
+      networking.networkmanager.dns = "systemd-resolved";
 
-    # add resolve to nss hosts database if enabled and nscd enabled
-    # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
-    # added with order 501 to allow modules to go before with mkBefore
-    system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);
+      networking.resolvconf.package = config.systemd.package;
 
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-resolved.service"
-    ];
+      nix.firewall.extraNftablesRules = [
+        "ip daddr { 127.0.0.53, 127.0.0.54 } udp dport 53 accept comment \"systemd-resolved listening IPs\""
+      ];
 
-    systemd.services.systemd-resolved = {
-      wantedBy = [ "multi-user.target" ];
-      aliases = [ "dbus-org.freedesktop.resolve1.service" ];
-      restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
-    };
+    })
 
-    environment.etc = {
-      "systemd/resolved.conf".text = ''
-        [Resolve]
-        ${optionalString (config.networking.nameservers != [])
-          "DNS=${concatStringsSep " " config.networking.nameservers}"}
-        ${optionalString (cfg.fallbackDns != [])
-          "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-        ${optionalString (cfg.domains != [])
-          "Domains=${concatStringsSep " " cfg.domains}"}
-        LLMNR=${cfg.llmnr}
-        DNSSEC=${cfg.dnssec}
-        ${config.services.resolved.extraConfig}
-      '';
+    (mkIf config.boot.initrd.services.resolved.enable {
 
-      # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
-      # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-      "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
-    } // optionalAttrs dnsmasqResolve {
-      "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-    };
+      assertions = [
+        {
+          assertion = config.boot.initrd.systemd.enable;
+          message = "'boot.initrd.services.resolved.enable' can only be enabled with systemd stage 1.";
+        }
+      ];
 
-    # If networkmanager is enabled, ask it to interface with resolved.
-    networking.networkmanager.dns = "systemd-resolved";
+      boot.initrd.systemd = {
+        contents = {
+          "/etc/systemd/resolved.conf".text = resolvedConf;
+        };
 
-    networking.resolvconf.package = pkgs.systemd;
+        tmpfiles.settings.systemd-resolved-stub."/etc/resolv.conf".L.argument =
+          "/run/systemd/resolve/stub-resolv.conf";
 
-  };
+        additionalUpstreamUnits = [ "systemd-resolved.service" ];
+        users.systemd-resolve = { };
+        groups.systemd-resolve = { };
+        storePaths = [ "${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved" ];
+        services.systemd-resolved = {
+          wantedBy = [ "sysinit.target" ];
+          aliases = [ "dbus-org.freedesktop.resolve1.service" ];
+        };
+      };
+
+    })
+  ];
 
 }

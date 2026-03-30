@@ -1,40 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
-, elementary-notifications
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  glib,
+  granite7,
+  gtk4,
+  switchboard,
+  elementary-notifications,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.2.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "0zzhgs8m1y7ab31hbn7v8g8k7rx51gqajl243zmysn86lfqk8iay";
+    repo = "settings-notifications";
+    tag = version;
+    hash = "sha256-MYvSru/78jMhc1Rk8YuztajEdmRRssCFN7IMUHWzW78=";
   };
 
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-notifications/pull/83
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-notifications/commit/2e0320aab62b6932e8ef5f941d02e244de381957.patch";
-      sha256 = "0rcamasq837grck0i2yx6psggzrhv7p7m3mra5l0k9zsjxgar92v";
-    })
-  ];
-
   nativeBuildInputs = [
+    gettext # msgfmt
+    glib # glib-compile-resources
     meson
     ninja
     pkg-config
@@ -43,23 +39,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     elementary-notifications
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     switchboard
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Notifications Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-notifications";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-notifications";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

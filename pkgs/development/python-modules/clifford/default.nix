@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, ipython
-, numba
-, numpy
-, pytestCheckHook
-, scipy
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  h5py,
+  ipython,
+  numba,
+  numpy,
+  pytestCheckHook,
+  setuptools,
+  scipy,
+  sparse,
 }:
 
 buildPythonPackage rec {
   pname = "clifford";
-  version = "1.4.0";
-
-  disabled = pythonOlder "3.5";
+  version = "1.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eVE8FrD0YHoRreY9CrNb8v4v4KrG83ZU0oFz+V+p+Q0=";
+    hash = "sha256-NISzEs/w4tXhT7mUCbgkIZPDWN+qave8bqIwxGBuZvM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     h5py
     numba
     numpy
@@ -30,7 +32,7 @@ buildPythonPackage rec {
     sparse
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ipython
   ];
@@ -58,10 +60,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clifford" ];
 
-  meta = with lib; {
+  meta = {
     description = "Numerical Geometric Algebra Module";
     homepage = "https://clifford.readthedocs.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/pygae/clifford/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    # Broken with numba >= 0.54
+    # see https://github.com/pygae/clifford/issues/430
+    broken = lib.versionAtLeast numba.version "0.58";
   };
 }

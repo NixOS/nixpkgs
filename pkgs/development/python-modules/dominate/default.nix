@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "dominate";
-  version = "2.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.9.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UgEBNgiS6/nQVT9n0341n/kkA9ih4zgUAwUDCIoF2kk=";
+    hash = "sha256-VYKEaH2biq4ZBOPWBRrRMt1KjAz1UbN+pOfkKjHRncQ=";
   };
 
-  checkInputs = [
-    pytestCheckHook
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "dominate" ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    # Tests are failing, https://github.com/Knio/dominate/issues/213
+    "tests/test_svg.py"
   ];
 
-  pythonImportsCheck = [
-    "dominate"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library for creating and manipulating HTML documents using an elegant DOM API";
     homepage = "https://github.com/Knio/dominate/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/Knio/dominate/releases/tag/${version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

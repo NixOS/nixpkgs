@@ -1,55 +1,101 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, filelock
-, importlib-metadata
-, packaging
-, pyyaml
-, requests
-, ruamel-yaml
-, tqdm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  filelock,
+  fsspec,
+  hf-xet,
+  httpx,
+  packaging,
+  pyyaml,
+  tqdm,
+  typer,
+  typing-extensions,
+
+  # optional-dependencies
+  # torch
+  torch,
+  safetensors,
+  # fastai
+  toml,
+  fastai,
+  fastcore,
+  # mcp
+  mcp,
+
+  # tests
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "0.10.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iQ8c48lDn9jLZ8GPzJ5b+9OaRRLte/md5UuwxgYtWVo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XuqZvTu3DuncGpRWXipxtDLY2alY7QVm89ZmpgTdfVo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     filelock
+    fsspec
+    hf-xet
+    httpx
     packaging
     pyyaml
-    requests
-    ruamel-yaml
     tqdm
+    typer
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  # Tests require network access.
-  doCheck = false;
+  optional-dependencies = {
+    all = [
 
-  pythonImportsCheck = [
-    "huggingface_hub"
-  ];
-
-   meta = with lib; {
-    description = "Download and publish models and other files on the huggingface.co hub";
-    homepage = "https://github.com/huggingface/huggingface_hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
+    fastai = [
+      toml
+      fastai
+      fastcore
+    ];
+    hf_xet = [
+      hf-xet
+    ];
+    mcp = [
+      mcp
+    ];
   };
-}
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+
+  pythonImportsCheck = [ "huggingface_hub" ];
+
+  meta = {
+    description = "Download and publish models and other files on the huggingface.co hub";
+    mainProgram = "hf";
+    homepage = "https://github.com/huggingface/huggingface_hub";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      osbm
+    ];
+  };
+})

@@ -1,33 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  twisted,
+  unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-mpd2";
-  version = "3.0.5";
+  version = "3.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-bxv/2TuaMvwBipu/NIdQW1Lg11fsNAZpBcYKkS1JI4Q=";
+  src = fetchFromGitHub {
+    owner = "Mic92";
+    repo = "python-mpd2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3isX3e4Fu1orxuRsC3u8RxoFDQcE4XxQhf8PIHdo/e4=";
   };
 
-  buildInputs = [ mock ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest mpd.tests
-  '';
+  optional-dependencies = {
+    twisted = [ twisted ];
+  };
 
-  meta = with lib; {
-    description = "A Python client module for the Music Player Daemon";
+  nativeCheckInputs = [ unittestCheckHook ] ++ finalAttrs.passthru.optional-dependencies.twisted;
+
+  meta = {
+    changelog = "https://github.com/Mic92/python-mpd2/blob/${finalAttrs.src.tag}/doc/changes.rst";
+    description = "Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ rvl mic92 hexa ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      mic92
+      hexa
+    ];
   };
-
-}
+})

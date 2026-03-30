@@ -1,27 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "colorful";
-  version = "0.5.4";
+  version = "0.5.8";
+  format = "setuptools";
 
-  # No tests in the Pypi package.
   src = fetchFromGitHub {
     owner = "timofurrer";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1fcz5v8b318a3dsdha4c874jsf3wmcw3f25bv2csixclyzacli98";
+    repo = "colorful";
+    tag = "v${version}";
+    hash = "sha256-nztVTfBimRDXwPYk3LNMZKa1ItbgqM2ukgZs8hI8TwE=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "Terminal string styling done right, in Python.";
+  pythonImportsCheck = [ "colorful" ];
+
+  meta = {
+    description = "Library for terminal string styling";
     homepage = "https://github.com/timofurrer/colorful";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    changelog = "https://github.com/timofurrer/colorful/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      kalbasit
+      l33tname
+    ];
   };
 }

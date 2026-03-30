@@ -1,56 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parameterized
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests-mock
-, responses
+{
+  lib,
+  aiohttp-retry,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  ical,
+  mashumaro,
+  parameterized,
+  pycryptodome,
+  pytest-aiohttp,
+  pytest-asyncio_0,
+  pytest-cov-stub,
+  pytest-golden,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pyyaml,
+  requests,
+  requests-mock,
+  responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "0.6.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "6.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jbarrancos";
-    repo = pname;
-    rev = version;
-    hash = "sha256-MikJDW5Fo2DNpn9/Hyc1ecIIMEwE8GD5LKpka2t7aCk=";
+    owner = "allenporter";
+    repo = "pyrainbird";
+    tag = version;
+    hash = "sha256-ac/QzhdfvOpqKi8tjz2Udge2+AIg/yEQBmbYCu0i/0A=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=pyrainbird --cov-report=term-missing" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp-retry
+    ical
+    mashumaro
     pycryptodome
+    python-dateutil
     pyyaml
     requests
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    freezegun
     parameterized
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-asyncio_0
+    pytest-cov-stub
+    pytest-golden
+    pytest-mock
     pytestCheckHook
     requests-mock
     responses
   ];
 
-  pythonImportsCheck = [
-    "pyrainbird"
-  ];
+  pythonImportsCheck = [ "pyrainbird" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Rainbird controllers";
-    homepage = "https://github.com/jbarrancos/pyrainbird/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/allenporter/pyrainbird";
+    changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

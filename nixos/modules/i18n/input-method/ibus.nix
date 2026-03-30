@@ -1,19 +1,20 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  cfg = config.i18n.inputMethod.ibus;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
-  ibusEngine = types.package // {
-    name  = "ibus-engine";
-    check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
+  ibusEngine = lib.types.mkOptionType {
+    name = "ibus-engine";
+    inherit (lib.types.package) descriptionClass merge;
+    check = x: (lib.types.package.check x) && (lib.attrByPath [ "meta" "isIbusEngine" ] false x);
   };
 
-  impanel =
-    if cfg.panel != null
-    then "--panel=${cfg.panel}"
-    else "";
+  impanel = lib.optionalString (cfg.panel != null) "--panel=${cfg.panel}";
 
   ibusAutostart = pkgs.writeTextFile {
     name = "autostart-ibus-daemon";
@@ -24,39 +25,52 @@ let
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
       # GNOME will launch ibus using systemd
-      NotShowIn=GNOME;
+      # ibus complains loudly when launched from this autoStart file under KDE
+      # KDE will launch ibus from kwin if enabled in keyboard -> virtual keyboard
+      NotShowIn=GNOME;KDE;
     '';
   };
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "ibus" "plugins" ]
+      [ "i18n" "inputMethod" "ibus" "engines" ]
+    )
   ];
 
   options = {
     i18n.inputMethod.ibus = {
-      engines = mkOption {
-        type    = with types; listOf ibusEngine;
-        default = [];
-        example = literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
+      engines = lib.mkOption {
+        type = with lib.types; listOf ibusEngine;
+        default = [ ];
+        example = lib.literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
-            enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
-            engines = concatStringsSep ", "
-              (map (name: "`${name}`") (attrNames enginesDrv));
+            enginesDrv = lib.filterAttrs (lib.const lib.isDerivation) pkgs.ibus-engines;
+            engines = lib.concatStringsSep ", " (map (name: "`${name}`") (lib.attrNames enginesDrv));
           in
-            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
+          "Enabled IBus engines. Available engines are: ${engines}.";
       };
-      panel = mkOption {
-        type = with types; nullOr path;
+      panel = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
-        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel"'';
-        description = lib.mdDoc "Replace the IBus panel with another panel.";
+        example = lib.literalExpression ''"''${pkgs.kdePackages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
+        description = "Replace the IBus panel with another panel.";
+      };
+      waylandFrontend = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Use the Wayland input method frontend.
+          This doesn't set `GTK_IM_MODULE` and `QT_IM_MODULE` environment variables.
+          See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#GTK_IM_MODULE).
+        '';
       };
     };
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
+  config = lib.mkIf (imcfg.enable && imcfg.type == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
     environment.systemPackages = [
@@ -73,12 +87,14 @@ in
     ];
 
     environment.variables = {
+      XMODIFIERS = "@im=ibus";
+    }
+    // lib.optionalAttrs (!cfg.waylandFrontend) {
       GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
-      XMODIFIERS = "@im=ibus";
     };
 
-    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
+    xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [
       ibusPackage
     ];
   };

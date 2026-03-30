@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, commentjson
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  commentjson,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "resolvelib";
-  # Currently this package is only used by Ansible and breaking changes
-  # are frequently introduced, so when upgrading ensure the new version
-  # is compatible with Ansible
-  # https://github.com/NixOS/nixpkgs/pull/128636
-  # https://github.com/ansible/ansible/blob/devel/requirements.txt
-  version = "0.5.5";
+  version = "1.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
-    rev = version;
-    sha256 = "198vfv78hilpg0d0mjzchzp9zk6239wnra61vlsgwpcgz66d2bgv";
+    tag = version;
+    hash = "sha256-AxxW6z51fZGqs5UwY3NEBQL8894uQDuRyVrKzol3ny0=";
   };
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     commentjson
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "resolvelib"
-  ];
+  pythonImportsCheck = [ "resolvelib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
-    license = licenses.isc;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.isc;
+    maintainers = [ ];
   };
 }

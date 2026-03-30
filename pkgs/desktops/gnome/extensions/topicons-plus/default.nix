@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, glib, gettext }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-topicons-plus";
@@ -19,10 +25,10 @@ stdenv.mkDerivation rec {
 
   passthru.extensionUuid = "TopIcons@phocean.net";
 
-  meta = with lib; {
+  meta = {
     description = "Brings all icons back to the top panel, so that it's easier to keep track of apps running in the backround";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ eperuffo ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ eperuffo ];
     homepage = "https://github.com/phocean/TopIcons-plus";
   };
 }

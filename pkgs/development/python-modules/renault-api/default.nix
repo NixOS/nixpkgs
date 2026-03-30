@@ -1,64 +1,68 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, click
-, dateparser
-, fetchFromGitHub
-, marshmallow-dataclass
-, poetry-core
-, pyjwt
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, tabulate
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  click,
+  cryptography,
+  dateparser,
+  fetchFromGitHub,
+  marshmallow-dataclass,
+  poetry-core,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  syrupy,
+  tabulate,
+  typeguard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.1.11";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.5.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-71UFVXfww3wgSO2qoRCuV80+33B91Bjl2+nuuCbQRLg=";
+    repo = "renault-api";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-12xeTaGwKRELbMVmzjhlPm0xnkmVTHUJC2zE0Xkne9s=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    click
-    dateparser
+    cryptography
     marshmallow-dataclass
     pyjwt
-    tabulate
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    cli = [
+      click
+      dateparser
+      tabulate
+    ];
+  };
+
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
-  ];
+    syrupy
+    typeguard
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
+  pythonImportsCheck = [ "renault_api" ];
 
-  pythonImportsCheck = [
-    "renault_api"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with the Renault API";
     homepage = "https://github.com/hacf-fr/renault-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hacf-fr/renault-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "renault-api";
   };
-}
+})

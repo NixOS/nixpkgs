@@ -1,9 +1,13 @@
-{ buildDunePackage, mirage-clock, dune-configurator }:
+{
+  buildDunePackage,
+  mirage-clock,
+  dune-configurator,
+}:
 
 buildDunePackage {
   pname = "mirage-clock-unix";
 
-  inherit (mirage-clock) version useDune2 src;
+  inherit (mirage-clock) version src;
 
   buildInputs = [ dune-configurator ];
 

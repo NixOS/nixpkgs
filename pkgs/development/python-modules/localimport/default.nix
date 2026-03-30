@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "localimport";
   version = "1.7.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "localimport" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NiklasRosenstein/py-localimport";
     description = "Isolated import of Python modules";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

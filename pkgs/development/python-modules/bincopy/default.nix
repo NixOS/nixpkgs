@@ -1,12 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, argparse-addons, humanfriendly, pyelftools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  argparse-addons,
+  humanfriendly,
+  pyelftools,
+}:
 
 buildPythonPackage rec {
   pname = "bincopy";
-  version = "17.11.0";
+  version = "20.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rk7jYr9jUz7TUckoYkv74rr5D9fJLD3h7UFBH0XeleE=";
+    hash = "sha256-2KToy4Ltr7vjZ0FTN9GSbH2MRVYX5DvUsUVlN3K5uWU=";
   };
 
   propagatedBuildInputs = [
@@ -17,10 +25,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bincopy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mangling of various file formats that conveys binary information (Motorola S-Record, Intel HEX, TI-TXT, ELF and binary files)";
+    mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      frogamic
+      sbruder
+    ];
   };
 }

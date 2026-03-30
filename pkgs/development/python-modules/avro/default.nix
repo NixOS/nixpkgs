@@ -1,44 +1,40 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  fetchPypi,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.11.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8SNiPsxkjQ4gzhT47YUWIUDBPMSxCIZdGyUp+/oGwAg=";
+    hash = "sha256-xbjdLdTBCBbw3BJ8wpz9Q7XkBc9+aEDolGCgJL89CY0=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   disabledTests = [
     # Requires network access
     "test_server_with_path"
+    # AssertionError: 'reader type: null not compatible with writer type: int'
+    "test_schema_compatibility_type_mismatch"
   ];
 
-  pythonImportsCheck = [
-    "avro"
-  ];
+  pythonImportsCheck = [ "avro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python serialization and RPC framework";
     homepage = "https://github.com/apache/avro";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm ];
+    changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    mainProgram = "avro";
   };
 }

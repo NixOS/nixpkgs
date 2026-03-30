@@ -1,98 +1,141 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build time
-, cython
-, gdal
+  # build-system
+  cython,
+  numpy,
+  setuptools,
 
-# runtime
-, affine
-, attrs
-, boto3
-, click
-, click-plugins
-, cligj
-, matplotlib
-, numpy
-, snuggs
-, setuptools
+  # non-Python dependencies
+  gdal-cpp,
 
-# tests
-, hypothesis
-, packaging
-, pytest-randomly
-, pytestCheckHook
-, shapely
+  # dependencies
+  affine,
+  attrs,
+  certifi,
+  click,
+  click-plugins,
+  cligj,
+  snuggs,
+
+  # optional-dependencies
+  ipython,
+  matplotlib,
+  boto3,
+
+  # tests
+  fsspec,
+  hypothesis,
+  packaging,
+  pytestCheckHook,
+  pytest-randomly,
+  shapely,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.0"; # not x.y[ab]z, those are alpha/beta versions
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "1.5.0";
+  pyproject = true;
 
-  # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CBnG1zNMOL3rAmnErv7XZZ2Cu9W+DnRPcjtKdmYXHUA=";
+    tag = version;
+    hash = "sha256-Jg9GNw93uA+Lg7/kiQb+tfXXuoggQI0Nkz7cwRqq8FQ=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cython>=3.1,<=3.2" cython
+  '';
+
+  build-system = [
     cython
-    gdal
+    numpy
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    gdal-cpp # for gdal-config
+  ];
+
+  buildInputs = [
+    gdal-cpp
+  ];
+
+  pythonRelaxDeps = [
+    "click"
+  ];
+
+  dependencies = [
     affine
     attrs
-    boto3
+    certifi
     click
     click-plugins
     cligj
-    matplotlib
     numpy
     snuggs
-    setuptools # needs pkg_resources at runtime
+  ];
+
+  optional-dependencies = {
+    ipython = [ ipython ];
+    plot = [ matplotlib ];
+    s3 = [ boto3 ];
+  };
+
+  nativeCheckInputs = [
+    boto3
+    fsspec
+    hypothesis
+    packaging
+    pytestCheckHook
+    pytest-randomly
+    shapely
+    versionCheckHook
   ];
 
   preCheck = ''
-    rm -rf rasterio
+    rm -r rasterio # prevent importing local rasterio
   '';
 
-  checkInputs = [
-    pytest-randomly
-    pytestCheckHook
-    packaging
-    hypothesis
-    shapely
-  ];
+  disabledTestMarks = [ "network" ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  disabledTests = [
+    # flaky
+    "test_outer_boundless_pixel_fidelity"
+    # network access
+    "test_issue1982"
+    "test_opener_fsspec_http_fs"
+    "test_fsspec_http_msk_sidecar"
+    # expect specific magic numbers that our version of GDAL does not produce
+    "test_warp"
+    "test_warpedvrt"
+    "test_rio_warp"
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_reproject_error_propagation"
-  ];
+    # AssertionError CLI exists with non-zero error code
+    # This is a regression introduced by https://github.com/NixOS/nixpkgs/pull/448189
+    "test_sample_stdin"
+    "test_transform"
+    "test_transform_point"
+    "test_transform_point_dst_file"
+    "test_transform_point_multi"
+    "test_transform_point_src_file"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
-  pythonImportsCheck = [
-    "rasterio"
-  ];
+  pythonImportsCheck = [ "rasterio" ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/rio --version | grep ${version} > /dev/null
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Python package to read and write geospatial raster data";
-    homepage = "https://rasterio.readthedocs.io/en/latest/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mredaelli ];
+    mainProgram = "rio";
+    homepage = "https://rasterio.readthedocs.io/";
+    changelog = "https://github.com/rasterio/rasterio/blob/${src.tag}/CHANGES.txt";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

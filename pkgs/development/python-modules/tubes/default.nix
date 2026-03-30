@@ -1,18 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, characteristic, six, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  six,
+  twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tubes";
-  version = "0.2.1";
+  version = "0.2.1-unstable-2023-11-06";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "Tubes";
-    inherit version;
-    sha256 = "sha256-WbkZfy+m9/xrwygd5VeXrccpu3XJxhO09tbEFZnw14s=";
+  src = fetchFromGitHub {
+    owner = "twisted";
+    repo = "tubes";
+    rev = "b74680b8e7bcfe64362865356bb9461b77bbd5c0";
+    hash = "sha256-E8brnt8CtTEEP1KQTsTsgnl54H4zRGp+1IuoI/Qf5NA=";
   };
 
-  propagatedBuildInputs = [ characteristic six twisted ];
+  propagatedBuildInputs = [
+    six
+    twisted
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tubes
@@ -20,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tubes" ];
 
-  meta = with lib; {
-    description = "a data-processing and flow-control engine for event-driven programs";
-    homepage    = "https://github.com/twisted/tubes";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ exarkun ];
+  meta = {
+    description = "Data-processing and flow-control engine for event-driven programs";
+    homepage = "https://github.com/twisted/tubes";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ exarkun ];
   };
 }

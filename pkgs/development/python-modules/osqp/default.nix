@@ -1,86 +1,103 @@
-{ lib
-, buildPythonPackage
-, cmake
-, cvxopt
-, fetchPypi
-, future
-, numpy
-, pytestCheckHook
-, pythonOlder
-, qdldl
-, scipy
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  applyPatches,
+
+  # build-system
+  cmake,
+  ninja,
+  scikit-build-core,
+  pybind11,
+  setuptools-scm,
+
+  # dependencies
+  jinja2,
+  joblib,
+  numpy,
+  scipy,
+
+  # tests
+  cvxopt,
+  pytestCheckHook,
+  torch,
 }:
 
-buildPythonPackage rec {
-  pname = "osqp";
-  version = "0.6.2.post5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-svoXquQqftSY7CYbM/Jiu0s2BefoRkBiFZ2froF/DWE=";
+let
+  qdldl_src = fetchFromGitHub {
+    owner = "osqp";
+    repo = "qdldl";
+    tag = "v0.1.8";
+    hash = "sha256-qCeOs4UjZLuqlbiLgp6BMxvw4niduCPDOOqFt05zi2E=";
   };
 
-  postPatch = ''
-    sed -i 's/sp.random/np.random/g' src/osqp/tests/*.py
-  '';
+  osqp_src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "osqp";
+      repo = "osqp";
+      tag = "v1.0.0";
+      hash = "sha256-BOAytzJzHcggncQzeDrXwJOq8B3doWERJ6CKIVg1yJY=";
+    };
+    patches = [
+      (replaceVars ./dont-fetch-qdldl.patch {
+        inherit qdldl_src;
+      })
+    ];
+  };
+in
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+buildPythonPackage (finalAttrs: {
+  pname = "osqp";
+  version = "1.1.1";
+  pyproject = true;
 
-  dontUseCmakeConfigure = true;
+  src = fetchFromGitHub {
+    owner = "osqp";
+    repo = "osqp-python";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v7Kyiu5L9/GvnJFx2e6G38hkQvFQeecZNy09NJRjuA0=";
+  };
 
-  nativeBuildInputs = [
-    cmake
-    setuptools-scm
+  patches = [
+    (replaceVars ./dont-fetch-osqp.patch {
+      inherit osqp_src;
+    })
   ];
 
-  propagatedBuildInputs = [
-    future
+  build-system = [
+    cmake
+    ninja
+    pybind11
+    scikit-build-core
+    setuptools-scm
+  ];
+  dontUseCmakeConfigure = true;
+
+  dependencies = [
+    jinja2
+    joblib
     numpy
-    qdldl
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cvxopt
     pytestCheckHook
+    torch
   ];
 
-  pythonImportsCheck = [
-    "osqp"
+  pythonImportsCheck = [ "osqp" ];
+
+  disabledTestPaths = [
+    # CalledProcessError
+    # Try to invoke `python setup.py build_ext --inplace`
+    "src/osqp/tests/codegen_matrices_test.py"
+    "src/osqp/tests/codegen_vectors_test.py"
   ];
 
-  disabledTests = [
-    # Test are failing due to scipy update (removal of scipy.random in 1.9.0)
-    # Is fixed upstream but requires a new release
-    "test_feasibility_problem"
-    "test_issue14"
-    "test_polish_random"
-    "test_polish_unconstrained"
-    "test_primal_and_dual_infeasible_problem"
-    "test_primal_infeasible_problem"
-    "test_solve"
-    "test_unconstrained_problem"
-    "test_update_A_allind"
-    "test_update_A"
-    "test_update_bounds"
-    "test_update_l"
-    "test_update_P_A_allind"
-    "test_update_P_A_indA"
-    "test_update_P_A_indP_indA"
-    "test_update_P_A_indP"
-    "test_update_P_allind"
-    "test_update_P"
-    "test_update_q"
-    "test_update_u"
-    "test_warm_start"
-  ];
-
-  meta = with lib; {
-    description = "The Operator Splitting QP Solver";
+  meta = {
+    description = "Operator Splitting QP Solver";
     longDescription = ''
       Numerical optimization package for solving problems in the form
         minimize        0.5 x' P x + q' x
@@ -90,7 +107,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://osqp.org/";
     downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/osqp/osqp-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
-}
+})

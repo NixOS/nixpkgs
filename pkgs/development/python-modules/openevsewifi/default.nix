@@ -1,39 +1,35 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytestCheckHook,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miniconfig";
     repo = "python-openevse-wifi";
     rev = "v${version}";
-    sha256 = "sha256-7+BC5WG0JoyHNjgsoJBQRVDpmdXMJCV4bMf6pIaS5qo=";
+    hash = "sha256-7+BC5WG0JoyHNjgsoJBQRVDpmdXMJCV4bMf6pIaS5qo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     deprecated
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     pytestCheckHook
   ];
@@ -43,7 +39,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/miniconfig/python-openevse-wifi/commit/1083868dd9f39a8ad7bb17f02cea1b8458e5b82d.patch";
-      sha256 = "sha256-XGeyi/PchBju1ICgL/ZCDGCbWwIJmLAcHuKaj+kDsI0=";
+      hash = "sha256-XGeyi/PchBju1ICgL/ZCDGCbWwIJmLAcHuKaj+kDsI0=";
     })
   ];
 
@@ -52,14 +48,12 @@ buildPythonPackage rec {
       --replace 'pytest-cov = "^2.8.1"' ""
   '';
 
-  pythonImportsCheck = [
-    "openevsewifi"
-  ];
+  pythonImportsCheck = [ "openevsewifi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for communicating with the wifi module from OpenEVSE";
     homepage = "https://github.com/miniconfig/python-openevse-wifi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

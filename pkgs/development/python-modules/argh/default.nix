@@ -1,31 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, iocapture
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  iocapture,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "argh";
-  version = "0.26.2";
+  version = "0.31.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65";
+    hash = "sha256-8wAj2L4Uyl7msbPuq4KRUde72kZK4H3E3VNHkZxYkvk=";
   };
 
   patches = [
-    # https://github.com/neithere/argh/issues/148
-    (fetchpatch {
-      name = "argh-0.26.2-fix-py3.9-msgs.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-python/argh/files/argh-0.26.2-fix-py3.9-msgs.patch?id=6f194f12a2e30aad7da347848f7b0187e188f983";
-      sha256 = "nBmhF2PXVeS7cBNujzip6Bb601LRHrjmhlGKFr/++Oo=";
-    })
+    # python3.14 introduced a breaking change which caused a test to fail. A
+    # fix has been commited upstream in a pull request by the author, but has
+    # since been kept unmerged
+    # https://github.com/neithere/argh/pull/240
+    ./pr240-699568ad-06-01-2025-test_integration.patch
   ];
 
-  checkInputs = [
+  nativeBuildInputs = [ flit-core ];
+
+  nativeCheckInputs = [
     iocapture
     mock
     pytestCheckHook
@@ -33,10 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argh" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGES";
     homepage = "https://github.com/neithere/argh";
-    description = "An unobtrusive argparse wrapper with natural syntax";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    description = "Unobtrusive argparse wrapper with natural syntax";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

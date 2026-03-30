@@ -1,45 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, openssh
-, ps
-, psutil
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  paramiko,
+  psutil,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.7.2";
+  version = "1.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
-    rev = "v${version}";
-    sha256 = "sha256-bCCcNFz+ZsbKSF7aCfy47lBHb873tDYN0qFuSCxJp1w=";
+    tag = "v${version}";
+    hash = "sha256-ca9avbBJnMecuKljIrx3mYIGA50QXmhC/LP3hM9Uvcs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-config=setup.cfg" ""
-  '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [
-    openssh
-    ps
+  optional-dependencies = {
+    ssh = [ paramiko ];
+  };
+
+  nativeCheckInputs = [
     psutil
+    pytest-cov-stub
     pytest-mock
     pytest-timeout
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMP
@@ -60,10 +61,11 @@ buildPythonPackage rec {
     "tests/test_remote.py"
   ];
 
-  meta = with lib; {
-    description = " Plumbum: Shell Combinators ";
-    homepage = " https://github.com/tomerfiliba/plumbum ";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+  meta = {
+    description = "Module Shell Combinators";
+    changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
+    homepage = "https://github.com/tomerfiliba/plumbum";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,54 +1,72 @@
-{ lib
-, stdenv
-, botocore
-, buildPythonPackage
-, cryptography
-, cssselect
-, fetchPypi
-, fetchpatch
-, glibcLocales
-, installShellFiles
-, itemadapter
-, itemloaders
-, jmespath
-, lxml
-, packaging
-, parsel
-, protego
-, pydispatcher
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, queuelib
-, service-identity
-, sybil
-, testfixtures
-, tldextract
-, twisted
-, w3lib
-, zope_interface
+{
+  lib,
+  stdenv,
+  botocore,
+  buildPythonPackage,
+  cryptography,
+  cssselect,
+  defusedxml,
+  fetchFromGitHub,
+  glibcLocales,
+  hatchling,
+  installShellFiles,
+  itemadapter,
+  itemloaders,
+  jmespath,
+  lxml,
+  packaging,
+  parsel,
+  pexpect,
+  protego,
+  pydispatcher,
+  pyftpdlib,
+  pyopenssl,
+  pytest-asyncio,
+  pytest-twisted,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonAtLeast,
+  queuelib,
+  service-identity,
+  setuptools,
+  sybil,
+  testfixtures,
+  tldextract,
+  twisted,
+  uvloop,
+  w3lib,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.7.1";
-  format = "setuptools";
+  version = "2.14.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "Scrapy";
-    hash = "sha256-MPpAg1PSSx35ed8upK+9GbSuAvsiB/IY0kYzLx4c8U4=";
+  src = fetchFromGitHub {
+    owner = "scrapy";
+    repo = "scrapy";
+    tag = version;
+    hash = "sha256-KDci1Z5TZ+3svotYXkEG1s+bPWtxzIfQQwOgvI0k8w0=";
   };
+
+  pythonRelaxDeps = [
+    "defusedxml"
+  ];
+
+  build-system = [
+    hatchling
+  ];
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     cssselect
+    defusedxml
     itemadapter
     itemloaders
     lxml
@@ -62,39 +80,55 @@ buildPythonPackage rec {
     tldextract
     twisted
     w3lib
-    zope_interface
+    zope-interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
+    pexpect
+    pytest-asyncio
+    pytest-twisted
+    pytest-xdist
+    pyftpdlib
     pytestCheckHook
     sybil
     testfixtures
+    uvloop
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
-  preCheck = ''
-    # Disable doctest plugin because it causes pytest to hang
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" ""
-  '';
+  pytestFlags = [
+    # DeprecationWarning: There is no current event loop
+    "-Wignore::DeprecationWarning"
+  ];
 
   disabledTestPaths = [
     "tests/test_proxy_connect.py"
     "tests/test_utils_display.py"
     "tests/test_command_check.py"
+
+    # ConnectionRefusedError: [Errno 111] Connection refused
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_append"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_append_active_mode"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_overwrite"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_overwrite_active_mode"
+
+    # this test is testing that the *first* deprecation warning is a specific one
+    # but for some reason we get other deprecation warnings appearing first
+    # but this isn't a material issue and the deprecation warning is still raised
+    "tests/test_spider_start.py::MainTestCase::test_start_deprecated_super"
+
     # Don't test the documentation
     "docs"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "tests/test_feedexport.py"
   ];
 
   disabledTests = [
-    # It's unclear if the failures are related to libxml2, https://github.com/NixOS/nixpkgs/pull/123890
-    "test_nested_css"
-    "test_nested_xpath"
-    "test_flavor_detection"
     # Requires network access
     "AnonymousFTPTestCase"
     "FTPFeedStorageTest"
@@ -102,46 +136,57 @@ buildPythonPackage rec {
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
-    "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    # "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
+    "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
-    # Depends on uvloop
-    "test_asyncio_enabled_reactor_different_loop"
+    "test_unbounded_response"
+    "CookiesMiddlewareTest"
     "test_asyncio_enabled_reactor_same_loop"
-    # Fails with AssertionError
-    "test_peek_fifo"
-    "test_peek_one_element"
-    "test_peek_lifo"
-    "test_callback_kwargs"
-  ] ++ lib.optionals stdenv.isDarwin [
+    "test_response_ip_address"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
+
+    # Fails due to different path structure on NixOS
+    "test_start_deprecated_super"
+    "test_file_path"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_xmliter_encoding"
     "test_download"
     "test_reactor_default_twisted_reactor_select"
+    "URIParamsSettingTest"
+    "URIParamsFeedOptionTest"
+    # flaky on darwin-aarch64
+    "test_fixed_delay"
+    "test_start_requests_laziness"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_non_pickable_object"
   ];
 
   postInstall = ''
     installManPage extras/scrapy.1
-    install -m 644 -D extras/scrapy_bash_completion $out/share/bash-completion/completions/scrapy
-    install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
+    installShellCompletion --cmd scrapy \
+      --zsh extras/scrapy_zsh_completion \
+      --bash extras/scrapy_bash_completion
   '';
 
-  pythonImportsCheck = [
-    "scrapy"
-  ];
+  pythonImportsCheck = [ "scrapy" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-level web crawling and web scraping framework";
+    mainProgram = "scrapy";
     longDescription = ''
       Scrapy is a fast high-level web crawling and web scraping framework, used to crawl
       websites and extract structured data from their pages. It can be used for a wide
       range of purposes, from data mining to monitoring and automated testing.
     '';
     homepage = "https://scrapy.org/";
-    changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/scrapy/scrapy/raw/${src.tag}/docs/news.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vinnymeller ];
   };
 }

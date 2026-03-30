@@ -1,28 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtcharts, qtbase, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gdb,
+  kdePackages,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "seer";
-  version = "1.11";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "epasveer";
     repo = "seer";
     rev = "v${version}";
-    sha256 = "sha256-HIRNCcE1EhxsiJ5/MQZgR7IXaeM4rWoepPhALXoW7Hw=";
+    sha256 = "sha256-QXVsjTJYGE/7nTKldlOGN6AnW8OthrBJruVbb/HiPdg=";
   };
 
   preConfigure = ''
     cd src
   '';
 
-  buildInputs = [ qtbase qtcharts ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  patchPhase = ''
+    substituteInPlace src/{SeerGdbConfigPage,SeerMainWindow,SeerGdbWidget}.cpp \
+      --replace-fail "/usr/bin/gdb" "${gdb}/bin/gdb"
+  '';
 
-  meta = with lib; {
-    description = "A Qt gui frontend for GDB";
+  buildInputs = with kdePackages; [
+    qtbase
+    qtcharts
+    qtsvg
+  ];
+  nativeBuildInputs = [
+    cmake
+    kdePackages.wrapQtAppsHook
+  ];
+
+  meta = {
+    description = "Qt gui frontend for GDB";
+    mainProgram = "seergdb";
     homepage = "https://github.com/epasveer/seer";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ foolnotion ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ foolnotion ];
   };
 }

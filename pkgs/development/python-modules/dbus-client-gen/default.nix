@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "dbus-client-gen";
-  version = "0.5";
+  version = "0.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DrpIeB6kMXPP6PfCjyx7Lsi8yyvwSl9k1nnUGtvVGKg=";
+    hash = "sha256-vRXo72aWoreH/VwzdEAOgoGSRzRf7vy8Z/IA+lnLoWw=";
   };
 
-  meta = with lib; {
-    description = "A Python Library for Generating D-Bus Client Code";
+  meta = {
+    description = "Python Library for Generating D-Bus Client Code";
     homepage = "https://github.com/stratis-storage/dbus-client-gen";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

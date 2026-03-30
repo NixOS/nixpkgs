@@ -1,96 +1,96 @@
 {
   # If you copy this example out of nixpkgs, use these lines instead of the next.
-  # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
-  /*nixpkgsSource ? (builtins.fetchTarball {
-    name = "nixpkgs-20.09";
-    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
-    sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
-  }),
-  pkgs ? import nixpkgsSource {},
-  pkgs_i686 ? import nixpkgsSource { system = "i686-linux"; },*/
+  # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
+  /*
+    nixpkgsSource ? (fetchTarball {
+      name = "nixpkgs-20.09";
+      url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
+      sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+    }),
+    pkgs ? import nixpkgsSource {
+      config.allowUnfree = true;
+    },
+  */
 
   # If you want to use the in-tree version of nixpkgs:
-  pkgs ? import ../../../../.. {},
-  pkgs_i686 ? import ../../../../.. { system = "i686-linux"; },
+  pkgs ? import ../../../../.. {
+    config.allowUnfree = true;
+  },
 
-  config ? pkgs.config
+  # You probably need to set it to true to express consent.
+  licenseAccepted ? pkgs.callPackage ../license.nix { },
 }:
 
 # Copy this file to your Android project.
 let
-  # Declaration of versions for everything. This is useful since these
-  # versions may be used in multiple places in this Nix expression.
-  android = {
-    versions = {
-      tools = "26.1.1";
-      platformTools = "31.0.2";
-      buildTools = "30.0.3";
-      ndk = [
-        "22.1.7171670"
-        "21.3.6528147" # LTS NDK
-      ];
-      cmake = "3.18.1";
-      emulator = "30.6.3";
+  # If you copy this example out of nixpkgs, something like this will work:
+  /*
+    androidEnvNixpkgs = fetchTarball {
+      name = "androidenv";
+      url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
+      sha256 = "<fill me in with nix-prefetch-url --unpack>";
     };
 
-    platforms = ["23" "24" "25" "26" "27" "28" "29" "30"];
-    abis = ["armeabi-v7a" "arm64-v8a"];
-    extras = ["extras;google;gcm"];
-  };
+    androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
+      inherit pkgs;
+      licenseAccepted = true;
+    };
+  */
 
-  # If you copy this example out of nixpkgs, something like this will work:
-  /*androidEnvNixpkgs = fetchTarball {
-    name = "androidenv";
-    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
-    sha256 = "<fill me in with nix-prefetch-url --unpack>";
-  };
-
-  androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-    inherit config pkgs pkgs_i686;
-    licenseAccepted = true;
-  };*/
+  inherit (pkgs) lib;
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs pkgs_i686;
-    licenseAccepted = true;
+    inherit pkgs licenseAccepted;
   };
 
+  # The head unit only works on these platforms
+  includeAuto = pkgs.stdenv.hostPlatform.isx86_64 || pkgs.stdenv.hostPlatform.isDarwin;
+
+  ndkVersions = [
+    "23.1.7779620"
+    "25.1.8937393"
+    "26.1.10909125"
+    "latest"
+  ];
+
   androidComposition = androidEnv.composeAndroidPackages {
-    toolsVersion = android.versions.tools;
-    platformToolsVersion = android.versions.platformTools;
-    buildToolsVersions = [android.versions.buildTools];
-    platformVersions = android.platforms;
-    abiVersions = android.abis;
-
     includeSources = true;
-    includeSystemImages = true;
-    includeEmulator = true;
-    emulatorVersion = android.versions.emulator;
-
-    includeNDK = true;
-    ndkVersions = android.versions.ndk;
-    cmakeVersions = [android.versions.cmake];
-
+    includeSystemImages = false;
+    includeEmulator = "if-supported";
+    includeNDK = "if-supported";
+    inherit ndkVersions;
     useGoogleAPIs = true;
-    includeExtras = android.extras;
+    useGoogleTVAddOns = true;
+
+    # Make sure everything from the last decade works since we are not using system images.
+    numLatestPlatformVersions = 10;
 
     # If you want to use a custom repo JSON:
     # repoJson = ../repo.json;
 
     # If you want to use custom repo XMLs:
-    /*repoXmls = {
-      packages = [ ../xml/repository2-1.xml ];
-      images = [
-        ../xml/android-sys-img2-1.xml
-        ../xml/android-tv-sys-img2-1.xml
-        ../xml/android-wear-sys-img2-1.xml
-        ../xml/android-wear-cn-sys-img2-1.xml
-        ../xml/google_apis-sys-img2-1.xml
-        ../xml/google_apis_playstore-sys-img2-1.xml
-      ];
-      addons = [ ../xml/addon2-1.xml ];
-    };*/
+    /*
+      repoXmls = {
+        packages = [ ../xml/repository2-1.xml ];
+        images = [
+          ../xml/android-sys-img2-1.xml
+          ../xml/android-tv-sys-img2-1.xml
+          ../xml/android-wear-sys-img2-1.xml
+          ../xml/android-wear-cn-sys-img2-1.xml
+          ../xml/google_apis-sys-img2-1.xml
+          ../xml/google_apis_playstore-sys-img2-1.xml
+        ];
+        addons = [ ../xml/addon2-1.xml ];
+      };
+    */
+
+    includeExtras = [
+      "extras;google;gcm"
+    ]
+    ++ pkgs.lib.optionals includeAuto [
+      "extras;google;auto"
+    ];
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -111,11 +111,21 @@ let
 
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+  firstSdkVersion = lib.foldl' (
+    s: x: if lib.strings.compareVersions (toString x) s < 0 then toString x else s
+  ) "100" androidComposition.platformVersions;
+  latestSdkVersion = lib.foldl' (
+    s: x: if lib.strings.compareVersions (toString x) s > 0 then toString x else s
+  ) "0" androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";
-  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [
+    androidSdk
+    platformTools
+    jdk
+  ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";
@@ -125,21 +135,78 @@ pkgs.mkShell rec {
   ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
   ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
 
-  # Ensures that we don't have to use a FHS env by using the nix store's aapt2.
-  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${android.versions.buildTools}/aapt2";
-
   shellHook = ''
+    # Ensures that we don't have to use a FHS env by using the nix store's aapt2.
+    export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=$(echo "$ANDROID_SDK_ROOT/build-tools/"*"/aapt2")"
+
     # Add cmake to the path.
-    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}"*/)"
+    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/"*/)"
     export PATH="$cmake_root/bin:$PATH"
 
     # Write out local.properties for Android Studio.
     cat <<EOF > local.properties
-# This file was automatically generated by nix-shell.
-sdk.dir=$ANDROID_SDK_ROOT
-ndk.dir=$ANDROID_NDK_ROOT
-cmake.dir=$cmake_root
-EOF
+    # This file was automatically generated by nix-shell.
+    sdk.dir=$ANDROID_SDK_ROOT
+    ndk.dir=$ANDROID_NDK_ROOT
+    cmake.dir=$cmake_root
+    EOF
   '';
-}
 
+  passthru.tests = {
+
+    shell-sdkmanager-licenses-test =
+      pkgs.runCommand "shell-sdkmanager-licenses-test"
+        {
+          nativeBuildInputs = [
+            androidSdk
+            jdk
+          ];
+        }
+        ''
+          if [[ ! "$(sdkmanager --licenses)" =~ "All SDK package licenses accepted." ]]; then
+            echo "At least one of SDK package licenses are not accepted."
+            exit 1
+          fi
+          touch $out
+        '';
+
+    shell-sdkmanager-packages-test =
+      pkgs.runCommand "shell-sdkmanager-packages-test"
+        {
+          nativeBuildInputs = [
+            androidSdk
+            jdk
+          ];
+        }
+        ''
+          output="$(sdkmanager --list)"
+          installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
+
+          packages=(
+            "build-tools" "platform-tools" \
+            "extras;google;gcm"
+          )
+
+          for x in $(seq ${toString firstSdkVersion} ${toString latestSdkVersion}); do
+            packages+=("sources;android-$x")
+          done
+
+          ${lib.optionalString includeAuto ''packages+=("extras;google;auto")''}
+
+          for package in "''${packages[@]}"; do
+            if [[ ! $installed_packages_section =~ "$package" ]]; then
+              echo "$package package was not installed."
+              exit 1
+            fi
+          done
+
+          num_ndk_packages="$(echo "$installed_packages_section" | grep '^ndk;' | wc -l)"
+          if [ $num_ndk_packages -ne ${toString (pkgs.lib.length ndkVersions)} ]; then
+            echo "Invalid NDK package count: $num_ndk_packages"
+            exit 1
+          fi
+
+          touch "$out"
+        '';
+  };
+}

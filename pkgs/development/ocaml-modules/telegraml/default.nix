@@ -1,13 +1,14 @@
-{ batteries
-, buildDunePackage
-, cohttp-lwt-unix
-, fetchFromGitHub
-, lib
-, logs
-, yojson
+{
+  batteries,
+  buildDunePackage,
+  cohttp-lwt-unix,
+  fetchFromGitHub,
+  lib,
+  logs,
+  yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "telegraml";
   version = "unstable-2021-06-17";
 
@@ -18,6 +19,10 @@ buildDunePackage rec {
     sha256 = "sha256-2bMHARatwl8Zl/fWppvwbH6Ut+igJVKzwyQb8Q4gem4=";
   };
 
+  postPatch = ''
+    substituteInPlace src/dune --replace batteries batteries.unthreaded
+  '';
+
   propagatedBuildInputs = [
     batteries
     cohttp-lwt-unix
@@ -25,10 +30,10 @@ buildDunePackage rec {
     yojson
   ];
 
-  meta = with lib; {
-    description = "An OCaml library implementing the Telegram bot API";
+  meta = {
+    description = "OCaml library implementing the Telegram bot API";
     homepage = "https://github.com/nv-vn/TelegraML/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

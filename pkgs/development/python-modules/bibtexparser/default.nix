@@ -1,41 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyparsing
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "1.4.0";
+  version = "1.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dP3ETzgVPI4NsxFI6Hv+nUInrjF+I1FwdqmeAetzL38=";
+    tag = "v${version}";
+    hash = "sha256-9zLJZAk2IBYTL7lACh6erY7A44XFZGJCr8dcpYlwKRI=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  propagatedBuildInputs = [ pyparsing ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bibtexparser"
-  ];
+  pythonImportsCheck = [ "bibtexparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
-    license = with licenses; [ lgpl3Only /* or */ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
+    license = with lib.licenses; [
+      lgpl3Only # or
+      bsd3
+    ];
   };
 }

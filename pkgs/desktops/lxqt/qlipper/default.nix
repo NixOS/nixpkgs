@@ -1,39 +1,45 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kguiaddons,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qlipper";
-  version = "5.1.2";
+  version = "5.1.2-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "pvanek";
-    repo = pname;
-    rev = version;
-    sha256 = "0zpkcqfylcfwvadp1bidcrr64d8ls5c7bdnkfqwjjd32sd35ly60";
+    repo = "qlipper";
+    rev = "4e9fcfe6684c465944baa153aeb7603ec27728b1";
+    hash = "sha256-7qaLY3F67uBtX1wI667MaqtrKLDfeG9jKwlC1pUOteQ=";
   };
 
   nativeBuildInputs = [
     cmake
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    kguiaddons
     qtbase
-    qttools
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform clipboard history applet";
+    mainProgram = "qlipper";
     homepage = "https://github.com/pvanek/qlipper";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

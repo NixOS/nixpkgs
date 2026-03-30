@@ -1,61 +1,86 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blurhash
-, cryptography
-, decorator
-, http-ece
-, python-dateutil
-, python-magic
-, pytz
-, requests
-, six
-, pytestCheckHook
-, pytest-mock
-, pytest-vcr
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  blurhash,
+  cryptography,
+  decorator,
+  fetchpatch,
+  graphemeu,
+  http-ece,
+  python-dateutil,
+  python-magic,
+  requests,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-vcr,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "1.5.2";
+  version = "2.1.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-C1xkdM47WS31Eh8VXHd49x2QeizZAuvAcSnHGiZPLCE=";
+    tag = "v${version}";
+    hash = "sha256-i3HMT8cabSl664UK3eopJQ9bDBpGCgbHTvBJkgeoxd8=";
   };
 
-  postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
-  '';
-
-  propagatedBuildInputs = [
-    blurhash
-    cryptography
-    decorator
-    http-ece
-    python-dateutil
-    python-magic
-    pytz
-    requests
-    six
+  patches = [
+    # Switch dependency from unmaintained `grapheme` to `graphemeu`
+    (fetchpatch {
+      url = "https://github.com/halcy/Mastodon.py/commit/939c7508414e950922c518260a9ba5a5853aeef2.patch";
+      hash = "sha256-XBiAFxYUBNyynld++UwPGIIg9j+3/EF2jGqiysVqYRM=";
+    })
   ];
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    blurhash
+    decorator
+    python-dateutil
+    python-magic
+    requests
+  ];
+
+  optional-dependencies = {
+    blurhash = [ blurhash ];
+    grapheme = [ graphemeu ];
+    webpush = [
+      http-ece
+      cryptography
+    ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     pytest-vcr
     requests-mock
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  # disabledTests = [
+  #   "test_notifications_dismiss_pre_2_9_2"
+  #   "test_status_card_pre_2_9_2"
+  #   "test_stream_user_direct"
+  #   "test_stream_user_local"
+  # ];
 
   pythonImportsCheck = [ "mastodon" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

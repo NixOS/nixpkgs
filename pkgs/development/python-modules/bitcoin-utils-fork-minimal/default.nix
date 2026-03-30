@@ -1,9 +1,10 @@
-{ lib
-, base58
-, buildPythonPackage
-, ecdsa
-, fetchPypi
-, sympy
+{
+  lib,
+  base58,
+  buildPythonPackage,
+  ecdsa,
+  fetchPypi,
+  sympy,
 }:
 
 buildPythonPackage rec {
@@ -32,14 +33,12 @@ buildPythonPackage rec {
   # Project doesn't ship tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bitcoinutils"
-  ];
+  pythonImportsCheck = [ "bitcoinutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin utility functions";
     homepage = "https://github.com/doersf/python-bitcoin-utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

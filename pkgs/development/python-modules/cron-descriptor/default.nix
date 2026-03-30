@@ -1,36 +1,37 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  pname = "cron_descriptor";
-  version = "1.2.30";
+  pname = "cron-descriptor";
+  version = "2.0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-Qei9f0HlIu5sautMEASvxdUqZyXKvHDWJgd3oST1gJo=";
+    tag = version;
+    hash = "sha256-apU+5RMyO6QQ5+i+wgLJtIni6dJoq4oxCqkCo5w9uLo=";
   };
 
-  # remove tests_require, as we don't do linting anyways
-  postPatch = ''
-    sed -i "/'pep8\|flake8\|pep8-naming',/d" setup.py
-  '';
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cron_descriptor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that converts cron expressions into human readable strings";
     homepage = "https://github.com/Salamek/cron-descriptor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ phaer ];
+    changelog = "https://github.com/Salamek/cron-descriptor/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

@@ -1,57 +1,51 @@
-{ lib
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pytz,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "2.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "3.20.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-IaDnQCZJZipiPW6lOLrdxw7QfPx/zlwaizkBxv8I2V8=";
+    repo = "bthome-ble";
+    tag = "v${version}";
+    hash = "sha256-xfDnjDs+2v6Up7VR5RV4A3Jbjb0evzOkaj7yIWf0Lhk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
+    cryptography
     sensor-state-data
-    pycryptodomex
+    pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonImportsCheck = [ "bthome_ble" ];
 
-  pythonImportsCheck = [
-    "bthome_ble"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library for BThome BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bthome-ble";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

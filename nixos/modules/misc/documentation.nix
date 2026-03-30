@@ -1,43 +1,85 @@
-{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, specialArgs, ... }:
-
-with lib;
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  utils,
+  modules,
+  baseModules,
+  extraModules,
+  modulesPath,
+  specialArgs,
+  ...
+}:
 
 let
+  inherit (lib)
+    cleanSourceFilter
+    concatMapStringsSep
+    evalModules
+    filter
+    functionArgs
+    hasSuffix
+    isAttrs
+    isDerivation
+    isFunction
+    isPath
+    literalExpression
+    mapAttrs
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionalAttrs
+    optionals
+    partition
+    removePrefix
+    types
+    warn
+    ;
 
   cfg = config.documentation;
   allOpts = options;
 
-  canCacheDocs = m:
+  canCacheDocs =
+    m:
     let
       f = import m;
       instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
     in
-      cfg.nixos.options.splitBuild
-        && builtins.isPath m
-        && isFunction f
-        && instance ? options
-        && instance.meta.buildDocsInSandbox or true;
+    cfg.nixos.options.splitBuild
+    && isPath m
+    && isFunction f
+    && instance ? options
+    && instance.meta.buildDocsInSandbox or true;
 
   docModules =
     let
       p = partition canCacheDocs (baseModules ++ cfg.nixos.extraModules);
     in
-      {
-        lazy = p.right;
-        eager = p.wrong ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
-      };
+    {
+      lazy = p.right;
+      eager = p.wrong ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+    };
 
   manual = import ../../doc/manual rec {
     inherit pkgs config;
     version = config.system.nixos.release;
     revision = "release-${version}";
     extraSources = cfg.nixos.extraModuleSources;
+    checkRedirects = cfg.nixos.checkRedirects;
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ {
-            _module.check = false;
-          } ] ++ docModules.eager;
+          modules = [
+            {
+              _module.check = false;
+            }
+          ]
+          ++ docModules.eager;
+          class = "nixos";
           specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
             # allow access to arbitrary options for eager modules, eg for getting
@@ -46,33 +88,64 @@ let
             inherit modulesPath utils;
           };
         };
-        scrubDerivations = namePrefix: pkgSet: mapAttrs
-          (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
+        scrubDerivations =
+          namePrefix: pkgSet:
+          mapAttrs (
+            name: value:
+            let
+              wholeName = "${namePrefix}.${name}";
+              guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+            in
             if isAttrs value then
               scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
-            else value
-          )
-          pkgSet;
-      in scrubbedEval.options;
+              // optionalAttrs (isDerivation value) {
+                outPath = guard "\${${wholeName}}";
+                drvPath = guard value.drvPath;
+              }
+            else
+              value
+          ) pkgSet;
+      in
+      scrubbedEval.options;
 
     baseOptionsJSON =
       let
-        filter =
-          builtins.filterSource
-            (n: t:
-              cleanSourceFilter n t
-              && (t == "directory" -> baseNameOf n != "tests")
-              && (t == "file" -> hasSuffix ".nix" n)
-            );
+        filter = builtins.filterSource (
+          n: t:
+          cleanSourceFilter n t
+          && (t == "directory" -> baseNameOf n != "tests")
+          && (t == "file" -> hasSuffix ".nix" n)
+        );
+        prefixRegex = "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos)($|/.*))";
+        filteredModules = builtins.path {
+          name = "source";
+          inherit (pkgs) path;
+          filter =
+            n: t:
+            builtins.match prefixRegex n != null
+            && cleanSourceFilter n t
+            && (t == "directory" -> baseNameOf n != "tests")
+            && (t == "file" -> hasSuffix ".nix" n);
+        };
       in
-        pkgs.runCommand "lazy-options.json" {
+      pkgs.runCommand "lazy-options.json"
+        rec {
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
-          nixosPath = filter (pkgs.path + "/nixos");
-          modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
-        } ''
+          nixosPath = filteredModules + "/nixos";
+          NIX_ABORT_ON_WARN = warningsAreErrors;
+          modules =
+            "[ "
+            + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
+            + " ]";
+          passAsFile = [ "modules" ];
+          disallowedReferences = [
+            filteredModules
+            libPath
+            pkgsLibPath
+          ];
+        }
+        ''
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
           ${pkgs.buildPackages.nix}/bin/nix-instantiate \
@@ -81,7 +154,7 @@ let
             --argstr libPath "$libPath" \
             --argstr pkgsLibPath "$pkgsLibPath" \
             --argstr nixosPath "$nixosPath" \
-            --arg modules "[ $modules ]" \
+            --arg modules "import $modulesPath" \
             --argstr stateVersion "${options.system.stateVersion.default}" \
             --argstr release "${config.system.nixos.release}" \
             $nixosPath/lib/eval-cacheable-options.nix > $out \
@@ -101,38 +174,40 @@ let
             } >&2
         '';
 
-    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
+    inherit (cfg.nixos.options) warningsAreErrors;
   };
 
-
-  nixos-help = let
-    helpScript = pkgs.writeShellScriptBin "nixos-help" ''
-      # Finds first executable browser in a colon-separated list.
-      # (see how xdg-open defines BROWSER)
-      browser="$(
-        IFS=: ; for b in $BROWSER; do
-          [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
-        done
-      )"
-      if [ -z "$browser" ]; then
-        browser="$(type -P xdg-open || true)"
+  nixos-help =
+    let
+      helpScript = pkgs.writeShellScriptBin "nixos-help" ''
+        # Finds first executable browser in a colon-separated list.
+        # (see how xdg-open defines BROWSER)
+        browser="$(
+          IFS=: ; for b in $BROWSER; do
+            [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
+          done
+        )"
         if [ -z "$browser" ]; then
-          browser="${pkgs.w3m-nographics}/bin/w3m"
+          browser="$(type -P xdg-open || true)"
+          if [ -z "$browser" ]; then
+            browser="${pkgs.w3m-nographics}/bin/w3m"
+          fi
         fi
-      fi
-      exec "$browser" ${manual.manualHTMLIndex}
-    '';
+        exec "$browser" ${manual.manualHTMLIndex}
+      '';
 
-    desktopItem = pkgs.makeDesktopItem {
-      name = "nixos-manual";
-      desktopName = "NixOS Manual";
-      genericName = "View NixOS documentation in a web browser";
-      icon = "nix-snowflake";
-      exec = "nixos-help";
-      categories = ["System"];
-    };
+      desktopItem = pkgs.makeDesktopItem {
+        name = "nixos-manual";
+        desktopName = "NixOS Manual";
+        genericName = "System Manual";
+        comment = "View NixOS documentation in a web browser";
+        icon = "nix-snowflake";
+        exec = "nixos-help";
+        categories = [ "System" ];
+      };
 
-    in pkgs.symlinkJoin {
+    in
+    pkgs.symlinkJoin {
       name = "nixos-help";
       paths = [
         helpScript
@@ -151,8 +226,18 @@ in
     ../config/system-path.nix
     ../system/etc/etc.nix
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRenamedOptionModule
+      [ "documentation" "man" "generateCaches" ]
+      [ "documentation" "man" "cache" "enable" ]
+    )
+    (mkRemovedOptionModule [
+      "documentation"
+      "nixos"
+      "options"
+      "allowDocBook"
+    ] "DocBook option documentation is no longer supported")
   ];
 
   options = {
@@ -162,7 +247,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install documentation of packages from
           {option}`environment.systemPackages` into the generated system path.
 
@@ -174,16 +259,16 @@ in
       man.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install manual pages.
           This also includes `man` outputs.
         '';
       };
 
-      man.generateCaches = mkOption {
+      man.cache.enable = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to generate the manual page index caches.
           This allows searching for a page or
           keyword using utilities like {manpage}`apropos(1)`
@@ -192,10 +277,23 @@ in
         '';
       };
 
+      man.cache.generateAtRuntime = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate the manual page index caches at runtime using
+          a systemd service.
+
+          ::: {.note}
+          This is currently only supported by the man-db module.
+          :::
+        '';
+      };
+
       info.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install info pages and the {command}`info` command.
           This also includes "info" outputs.
         '';
@@ -204,7 +302,7 @@ in
       doc.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install documentation distributed in packages' `/share/doc`.
           Usually plain text and/or HTML.
           This also includes "doc" outputs.
@@ -214,7 +312,7 @@ in
       dev.enable = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to install documentation targeted at developers.
           * This includes man pages targeted at developers if {option}`documentation.man.enable` is
             set (this also includes "devman" outputs).
@@ -228,7 +326,7 @@ in
       nixos.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install NixOS's own documentation.
 
           - This includes man pages like
@@ -241,8 +339,8 @@ in
 
       nixos.extraModules = mkOption {
         type = types.listOf types.raw;
-        default = [];
-        description = lib.mdDoc ''
+        default = [ ];
+        description = ''
           Modules for which to show options even when not imported.
         '';
       };
@@ -250,34 +348,17 @@ in
       nixos.options.splitBuild = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
         '';
       };
 
-      nixos.options.allowDocBook = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Whether to allow DocBook option docs. When set to `false` all option using
-          DocBook documentation will cause a manual build error; additionally a new
-          renderer may be used.
-
-          ::: {.note}
-          The `false` setting for this option is not yet fully supported. While it
-          should work fine and produce the same output as the previous toolchain
-          using DocBook it may not work in all circumstances. Whether markdown option
-          documentation is allowed is independent of this option.
-          :::
-        '';
-      };
-
       nixos.options.warningsAreErrors = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Treat warning emitted during the option documentation build (eg for missing option
           descriptions) as errors.
         '';
@@ -286,7 +367,7 @@ in
       nixos.includeAllModules = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether the generated NixOS's documentation should include documentation for all
           the options from all the NixOS modules included in the current
           `configuration.nix`. Disabling this will make the manual
@@ -297,13 +378,21 @@ in
       nixos.extraModuleSources = mkOption {
         type = types.listOf (types.either types.path types.str);
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';
         example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
+        '';
+      };
+
+      nixos.checkRedirects = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Check redirects for manualHTML.
         '';
       };
 
@@ -345,16 +434,26 @@ in
     })
 
     (mkIf cfg.doc.enable {
-      environment.pathsToLink = [ "/share/doc" ];
+      environment.pathsToLink = [
+        "/share/doc"
+
+        # Legacy paths used by gtk-doc & adjacent tools.
+        "/share/gtk-doc"
+        "/share/devhelp"
+      ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })
 
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
-        ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
+      environment.systemPackages =
+        [ ]
+        ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
+        ++ optionals cfg.doc.enable [
+          manual.manualHTML
+          nixos-help
+        ];
     })
 
   ]);

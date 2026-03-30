@@ -1,21 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, dbus-python
-, fetchFromGitHub
-, flask
-, flask-cors
-, poetry-core
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  dbus-python,
+  fetchFromGitHub,
+  flask,
+  flask-cors,
+  poetry-core,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "swspotify";
   version = "1.2.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";
@@ -24,28 +21,29 @@ buildPythonPackage rec {
     hash = "sha256-xGLvc154xnje45Akf7H1qqQRUc03gGVt8AhGlkcP3kY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dbus-python
     flask
     flask-cors
     requests
   ];
 
+  pythonRelaxDeps = [
+    "flask-cors"
+    "flask"
+  ];
+
   # Tests want to use Dbus
   doCheck = false;
 
-  pythonImportsCheck = [
-    "SwSpotify"
-  ];
+  pythonImportsCheck = [ "SwSpotify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to get the currently playing song and artist from Spotify";
     homepage = "https://github.com/SwagLyrics/SwSpotify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

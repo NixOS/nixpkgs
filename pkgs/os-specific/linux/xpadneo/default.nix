@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, bluez
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpadneo";
-  version = "0.9.5";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = "xpadneo";
-    rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-rT2Mq40fE055FemDG7PBjt+cxgIHJG9tTjtw2nW6B98=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C4hBVr/8KM3uw5RF9PyN2uQvsWnb1thXDF5VMVD2SCQ=";
   };
 
   setSourceRoot = ''
-    export sourceRoot=$(pwd)/source/hid-xpadneo/src
+    export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  buildInputs = [ bluez ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"
@@ -39,11 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     xpadneo = nixosTests.xpadneo;
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Advanced Linux driver for Xbox One wireless controllers";
     homepage = "https://atar-axis.github.io/xpadneo";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/atar-axis/xpadneo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.linux;
   };
 })

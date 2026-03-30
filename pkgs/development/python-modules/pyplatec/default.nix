@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
-  pname = "PyPlatec";
-  version = "1.4.0";
+  pname = "pyplatec";
+  version = "1.4.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kqx33flcrrlipccmqs78d14pj5749bp85b6k5fgaq2c7yzz02jg";
+    sha256 = "sha256-PXQlJtC4Z0ifphqTelOuBQS5wubxCH/f0PSWnE7OeNg=";
   };
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = "-std=c++11";
+
+  meta = {
     description = "Library to simulate plate tectonics with Python bindings";
-    homepage    = "https://github.com/Mindwerks/plate-tectonics";
-    license     = licenses.lgpl3;
-    broken      = stdenv.isLinux;
+    homepage = "https://github.com/Mindwerks/plate-tectonics";
+    license = lib.licenses.lgpl3;
   };
-
 }

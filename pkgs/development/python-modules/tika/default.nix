@@ -1,29 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "tika";
-  version = "1.24";
+  version = "3.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "wsUPQFYi90UxhBEE+ehcF1Ea7eEd6OU4XqsaKaMfGRs=";
+    hash = "sha256-TDpATD2EZDfJQtam/Xtx1QKFaQ+uVImqim8A/5zND8c=";
   };
 
-  propagatedBuildInputs = [ pyyaml requests ];
+  propagatedBuildInputs = [
+    pyyaml
+    requests
+  ];
 
   # Requires network
   doCheck = false;
   pythonImportsCheck = [ pname ];
 
-  meta = with lib; {
-    description = "A Python binding to the Apache Tika™ REST services";
+  meta = {
+    description = "Python binding to the Apache Tika™ REST services";
+    mainProgram = "tika-python";
     homepage = "https://github.com/chrismattmann/tika-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 }

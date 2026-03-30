@@ -1,12 +1,13 @@
-{ lib, stdenv
-, buildPythonPackage
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pkgs,
 }:
 
 buildPythonPackage {
-  name = pkgs.file.name;
-
-  src = pkgs.file.src;
+  format = "setuptools";
+  inherit (pkgs.file) pname version src;
 
   patchPhase = ''
     substituteInPlace python/magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
@@ -19,10 +20,9 @@ buildPythonPackage {
   # No test suite
   doCheck = false;
 
-  meta = with lib; {
-    description = "A Python wrapper around libmagic";
+  meta = {
+    description = "Python wrapper around libmagic";
     homepage = "http://www.darwinsys.com/file/";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
   };
-
 }

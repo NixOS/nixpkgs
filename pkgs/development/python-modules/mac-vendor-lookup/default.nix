@@ -1,41 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiofiles,
+  aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mac-vendor-lookup";
-  version = "0.1.12";
-  format = "setuptools";
+  version = "0.1.15";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bauerj";
     repo = "mac_vendor_lookup";
-    rev = "5b57faac0c5a701a7e18085e331853397b68c07c";
-    hash = "sha256-F/aiMs+J4bAesr6mKy+tYVjAjZ3l9vyHxV7zaaB6KbA=";
+    tag = finalAttrs.version;
+    hash = "sha256-RLCEyDalwQUVmcZdVPN1cyKLIPbWcZfjzIkClUZCeJU=";
   };
 
   postPatch = ''
     sed -i '/mac-vendors.txt/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiohttp
   ];
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "mac_vendor_lookup"
-  ];
+  pythonImportsCheck = [ "mac_vendor_lookup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Find the vendor for a given MAC address";
+    mainProgram = "mac_vendor_lookup";
     homepage = "https://github.com/bauerj/mac_vendor_lookup";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

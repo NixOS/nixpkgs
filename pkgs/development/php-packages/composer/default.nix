@@ -1,35 +1,68 @@
-{ mkDerivation, fetchurl, makeWrapper, unzip, lib, php }:
-let
+{
+  lib,
+  fetchFromGitHub,
+  callPackage,
+  php,
+  makeBinaryWrapper,
+  _7zz,
+  curl,
+  gitMinimal,
+  unzip,
+  xz,
+  versionCheckHook,
+}:
+php.buildComposerProject2 (finalAttrs: {
   pname = "composer";
-  version = "2.4.4";
-in
-mkDerivation {
-  inherit pname version;
+  version = "2.9.5";
 
-  src = fetchurl {
-    url = "https://getcomposer.org/download/${version}/composer.phar";
-    sha256 = "sha256-wlLCoiGZVviAif/CQrQsjLkwCjaP04kNY5QOT8llI0U=";
+  src = fetchFromGitHub {
+    owner = "composer";
+    repo = "composer";
+    tag = finalAttrs.version;
+    hash = "sha256-e9z0H6Bw3yIaLjgEbspgi6skIpUJs1s0KNkcgFqoy34=";
   };
 
-  dontUnpack = true;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  # Bootstrapping Composer (source) with Composer (PHAR distribution).
+  # Override the default `composer` attribute to prevent infinite recursion.
+  composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
+    inherit (finalAttrs) version;
+    inherit (finalAttrs.passthru) pharHash;
+  };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/composer/composer.phar
-    makeWrapper ${php}/bin/php $out/bin/composer \
-      --add-flags "$out/libexec/composer/composer.phar" \
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
-    runHook postInstall
+  vendorHash = "sha256-Tqtpz/IV4PGOaye0doWZgY9u7SuvS94eH22wM2+myqU=";
+
+  postInstall = ''
+    wrapProgram $out/bin/composer \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          _7zz
+          curl
+          gitMinimal
+          unzip
+          xz
+        ]
+      }
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
+  # use together with the version from this package to keep the
+  # bootstrap phar file up-to-date together with the end user composer
+  # package.
+  passthru.pharHash = "sha256-yGzmA/6Da/CGGjjJOsVmyPHmmsRLJEXZt6ahfqLplyo=";
+
+  meta = {
+    changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
     description = "Dependency Manager for PHP";
-    license = licenses.mit;
     homepage = "https://getcomposer.org/";
-    changelog = "https://github.com/composer/composer/releases/tag/${version}";
-    maintainers = with maintainers; [ offline ] ++ teams.php.members;
+    license = lib.licenses.mit;
+    mainProgram = "composer";
+    teams = [ lib.teams.php ];
   };
-}
+})

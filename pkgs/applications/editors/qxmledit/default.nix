@@ -1,14 +1,42 @@
-{ lib, stdenv, fetchFromGitHub,
-  qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml, qtquick1, libGLU }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtxmlpatterns,
+  qtsvg,
+  qtscxml,
+  libGLU,
+}:
 
-stdenv.mkDerivation rec {
-  pname = "qxmledit" ;
-  version = "0.9.15" ;
-  src = fetchFromGitHub ( lib.importJSON ./qxmledit.json ) ;
-  nativeBuildInputs = [ qmake ] ;
-  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ] ;
-  qmakeFlags = [ "CONFIG+=release" ] ;
-  outputs = [ "out" "doc" ] ;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "qxmledit";
+  version = "0.9.17";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "lbellonda";
+    repo = "qxmledit";
+    rev = finalAttrs.version;
+    hash = "sha256-UzN5U+aC/uKokSdeUG2zv8+mkaH4ndYZ0sfzkpQ3l1M=";
+  };
+
+  nativeBuildInputs = [ qmake ];
+
+  buildInputs = [
+    qtbase
+    qtxmlpatterns
+    qtsvg
+    qtscxml
+    libGLU
+  ];
+
+  qmakeFlags = [ "CONFIG+=release" ];
 
   preConfigure = ''
     export QXMLEDIT_INST_DATA_DIR="$out/share/data"
@@ -21,11 +49,13 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "Simple XML editor based on qt libraries" ;
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Simple XML editor based on qt libraries";
     homepage = "https://sourceforge.net/projects/qxmledit";
-    license = licenses.lgpl2;
-    platforms = platforms.all;
-  } ;
-}
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/lbellonda/qxmledit/blob/${finalAttrs.version}/NEWS";
+    mainProgram = "qxmledit";
+  };
+})

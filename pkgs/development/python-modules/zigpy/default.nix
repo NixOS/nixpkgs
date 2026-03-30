@@ -1,51 +1,80 @@
-{ lib
-, aiohttp
-, aiosqlite
-, asynctest
-, buildPythonPackage
-, crccheck
-, cryptography
-, freezegun
-, fetchFromGitHub
-, pycryptodome
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  aiosqlite,
+  attrs,
+  buildPythonPackage,
+  crccheck,
+  cryptography,
+  fetchFromGitHub,
+  filelock,
+  freezegun,
+  frozendict,
+  jsonschema,
+  pyserial-asyncio-fast,
+  pytest-asyncio_0,
+  pytest-timeout,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.51.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6OSP23lEdl15IjSqGYLCW5+F6rki+rzmXm82QRzabwU=";
+    tag = version;
+    hash = "sha256-/KbWpXo+IsK2AdPN18aNorVtvcFHFx/Igg/0Mn8NsRM=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    attrs
     aiohttp
     aiosqlite
     crccheck
     cryptography
-    pyserial-asyncio
-    pycryptodome
+    frozendict
+    jsonschema
+    pyserial-asyncio-fast
+    typing-extensions
     voluptuous
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    aioresponses
+    filelock
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+    "test_quirks_v2"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/ota/test_ota_image.py"
+    "tests/ota/test_ota_providers.py"
+    # All tests fail to shutdown thread during teardown
+    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [
@@ -56,11 +85,12 @@ buildPythonPackage rec {
     "zigpy.zcl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

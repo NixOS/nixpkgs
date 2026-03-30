@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "vpk";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ValvePython";
@@ -15,14 +17,13 @@ buildPythonPackage rec {
     hash = "sha256-SPkPb8kveAR2cN9kd2plS+TjmBYBCfa6pJ0c22l69M0=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with Valve Pak files";
+    mainProgram = "vpk";
     homepage = "https://github.com/ValvePython/vpk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ joshuafern ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ joshuafern ];
   };
 }

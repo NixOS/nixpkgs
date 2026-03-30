@@ -1,39 +1,40 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Send2Trash";
-  version = "1.8.1b0";
-  format = "pyproject";
+  pname = "send2trash";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
+    tag = version;
+    hash = "sha256-dBILb1tz3/X3/MnhSKujVX9pMFrTAyntQ+GQsscklQU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Send file to trash natively under macOS, Windows and Linux";
+    mainProgram = "send2trash";
     homepage = "https://github.com/hsoft/send2trash";
-    license = licenses.bsd3;
+    changelog = "https://github.com/arsenetar/send2trash/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,7 +16,19 @@ let
     echo "attempting to fetch configuration from EC2 user data..."
 
     export HOME=/root
-    export PATH=${pkgs.lib.makeBinPath [ config.nix.package config.systemd.package pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused pkgs.xz config.system.build.nixos-rebuild]}:$PATH
+    export PATH=${
+      pkgs.lib.makeBinPath [
+        config.nix.package
+        config.systemd.package
+        pkgs.gnugrep
+        pkgs.git
+        pkgs.gnutar
+        pkgs.gzip
+        pkgs.gnused
+        pkgs.xz
+        config.system.build.nixos-rebuild
+      ]
+    }:$PATH
     export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData=/etc/ec2-metadata/user-data
@@ -54,13 +71,14 @@ let
 
     nixos-rebuild switch
   '';
-in {
+in
+{
 
   options.virtualisation.amazon-init = {
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable or disable the amazon-init service.
       '';
     };
@@ -75,6 +93,11 @@ in {
       after = [ "multi-user.target" ];
       requires = [ "network-online.target" ];
 
+      path = [
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
+
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
 
@@ -84,4 +107,5 @@ in {
       };
     };
   };
+  meta.maintainers = with maintainers; [ arianvp ];
 }

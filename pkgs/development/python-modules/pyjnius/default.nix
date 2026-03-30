@@ -1,31 +1,33 @@
-{ buildPythonPackage
-, cython
-, fetchPypi
-, jdk
-, lib
-, six
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  jdk,
 }:
 
 buildPythonPackage rec {
   pname = "pyjnius";
-  version = "1.4.2";
+  version = "1.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/AY3zaSuEo7EqWrDJ9NS6H6oZnZLAdliZyhwvlOana4=";
+    hash = "sha256-n4FwhISwqE6tPrC6hOU6xXnkxDyhDHRvmJip891Q9U0=";
   };
-  propagatedBuildInputs = [
-    six
-  ];
 
-  nativeBuildInputs = [ jdk cython ];
+  nativeBuildInputs = [
+    jdk
+    cython
+  ];
 
   pythonImportsCheck = [ "jnius" ];
 
-  meta = with lib; {
-    description = "A Python module to access Java classes as Python classes using the Java Native Interface (JNI)";
+  meta = {
+    description = "Python module to access Java classes as Python classes using the Java Native Interface (JNI)";
     homepage = "https://github.com/kivy/pyjnius";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ifurther ];
+    changelog = "https://github.com/kivy/pyjnius/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

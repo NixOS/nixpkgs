@@ -1,56 +1,55 @@
-{ lib
-, aenum
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aenum,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  aioresponses,
+  hatchling,
+  pydantic,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "intellifire4py";
-  version = "2.2.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeeftor";
-    repo = pname;
-    rev = version;
-    hash = "sha256-dn5814eRZ9456Fn7blf1UzXPii4dXu3sjoXBV7CmwSs=";
+    repo = "intellifire4py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MBuKYBKV0376j048tfbqMD9p2Gh1wlC188SGOMSMSm8=";
   };
 
-  propagatedBuildInputs = [
-    aenum
+  build-system = [ hatchling ];
+
+  dependencies = [
     aiohttp
+    aenum
     pydantic
-    requests
+    rich
   ];
 
-  checkInputs = [
-    asynctest
-    pytest-mock
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-httpx
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Test file is missing
-    "test_json_files"
-  ];
+  pythonImportsCheck = [ "intellifire4py" ];
 
-  pythonImportsCheck = [
-    "intellifire4py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "intellifire4py";
+
   };
-}
+})

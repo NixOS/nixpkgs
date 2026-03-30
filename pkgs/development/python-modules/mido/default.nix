@@ -1,45 +1,70 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, portmidi
-, python-rtmidi
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  replaceVars,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  packaging,
+
+  # native dependencies
+  portmidi,
+
+  # optional-dependencies
+  pygame,
+  python-rtmidi,
+  rtmidi-python,
+
+  # tests
+  pytestCheckHook,
+
 }:
 
 buildPythonPackage rec {
   pname = "mido";
-  version = "1.2.10";
+  version = "1.3.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17b38a8e4594497b850ec6e78b848eac3661706bfc49d484a36d91335a373499";
+    hash = "sha256-GuyzC38oJATxfkN2jL90pqMb8is7eDvdEXoc6dIst0w=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./libportmidi-cdll.patch;
-      libportmidi = "${portmidi.out}/lib/libportmidi${stdenv.targetPlatform.extensions.sharedLibrary}";
+    (replaceVars ./libportmidi-cdll.patch {
+      libportmidi = "${portmidi.out}/lib/libportmidi${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  propagatedBuildInputs = [
-    python-rtmidi
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
-  pythonImportsCheck = [
-    "mido"
-  ];
+  dependencies = [ packaging ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    ports-pygame = [ pygame ];
+    ports-rtmidi = [ python-rtmidi ];
+    ports-rtmidi-python = [ rtmidi-python ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "mido" ];
+
+  meta = {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/mido/mido/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

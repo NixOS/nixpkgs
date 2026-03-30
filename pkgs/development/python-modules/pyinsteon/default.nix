@@ -1,58 +1,52 @@
-{ lib
-, aiofiles
-, aiohttp
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  async-timeout,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pypubsub,
+  pyserial,
+  pyserial-asyncio-fast,
+  pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.6.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-PMjvic+K/m7beavlZvGhJcizSNCzLPZYLm3P2V9EPLs=";
+    owner = "pyinsteon";
+    repo = "pyinsteon";
+    tag = version;
+    hash = "sha256-iC0qeiTHtrdzQtJ3R01nJDCfdBKBg0jw1v49ZII24/4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiohttp
+    async-timeout
     pypubsub
     pyserial
-    pyserial-asyncio
-    pyyaml
+    pyserial-asyncio-fast
+    voluptuous
   ];
 
-  checkInputs = [
-    async_generator
-    pytest-asyncio
-    pytest-timeout
+  nativeCheckInputs = [
+    async-generator
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_results"
-  ];
+  pythonImportsCheck = [ "pyinsteon" ];
 
-  pythonImportsCheck = [
-    "pyinsteon"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python library to support Insteon home automation projects";
     longDescription = ''
       This is a Python package to interface with an Insteon Modem. It has been
@@ -60,7 +54,9 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "insteon_tools";
   };
 }

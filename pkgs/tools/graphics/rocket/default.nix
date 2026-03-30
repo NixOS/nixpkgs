@@ -1,6 +1,13 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  qtbase,
+}:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "rocket";
   version = "2018-06-09";
 
@@ -11,7 +18,10 @@ mkDerivation {
     sha256 = "13bdg2dc6ypk17sz39spqdlb3wai2y085bdb36pls2as2nf22drp";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [ qtbase ];
 
   dontConfigure = true;
@@ -21,11 +31,12 @@ mkDerivation {
     cp -r editor/editor $out/bin/
   '';
 
-  meta = with lib; {
-    description = "A tool for synchronizing music and visuals in demoscene productions";
+  meta = {
+    description = "Tool for synchronizing music and visuals in demoscene productions";
+    mainProgram = "editor";
     homepage = "https://github.com/rocket/rocket";
-    license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.dezgeg ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

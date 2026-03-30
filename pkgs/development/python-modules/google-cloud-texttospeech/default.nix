@@ -1,41 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-texttospeech";
-  version = "2.12.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "2.34.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gnSl/W0mTv6It//+xV5ti0Rd6io1Gh4yxd0arrbEPtQ=";
+    pname = "google_cloud_texttospeech";
+    inherit (finalAttrs) version;
+    hash = "sha256-ZYN8O8co83KQAJ2++JLfh+rkWtgJBVWQltEQeCIHT2I=";
   };
 
-  propagatedBuildInputs = [
-    libcst
-    google-api-core
-    proto-plus
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
-  checkInputs = [
+  dependencies = [
+    google-api-core
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
-    # Disable tests that require credentials
+    # Tests that require credentials
     "test_list_voices"
     "test_synthesize_speech"
   ];
@@ -46,10 +53,11 @@ buildPythonPackage rec {
     "google.cloud.texttospeech_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Text-to-Speech API client library";
-    homepage = "https://github.com/googleapis/python-texttospeech";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-texttospeech";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-texttospeech-v${finalAttrs.version}/packages/google-cloud-texttospeech/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

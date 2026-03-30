@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, faust2jaqt, faust2lv2 }:
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  faust2jaqt,
+  faust2lv2,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "MBdistortion";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "MBdistortion";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "0mdzaqmxzgspfgx9w1hdip18y17hwpdcgjyq1rrfm843vkascwip";
   };
 
@@ -17,7 +24,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [
+    faust2jaqt
+    faust2lv2
+  ];
+
+  dontWrapQtApps = true;
 
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 MBdistortion.dsp
@@ -26,7 +38,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp MBdistortion $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
     mkdir -p $out/lib/lv2
     cp -r MBdistortion.lv2/ $out/lib/lv2
   '';
@@ -37,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

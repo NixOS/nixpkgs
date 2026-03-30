@@ -1,22 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gmp
-, libffi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmp,
+  libffi,
 }:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
-  version = "5.9";
+  version = "5.9.2";
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.ac --replace stdc++ c++
+  src = fetchFromGitHub {
+    owner = "polyml";
+    repo = "polyml";
+    rev = "v${version}";
+    sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
+  };
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
+    AH_TEMPLATE([_Static_assert])
+    AC_DEFINE([_Static_assert], [static_assert])
+    "
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
-  buildInputs = [ libffi gmp ];
+  buildInputs = [
+    libffi
+    gmp
+  ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--enable-shared"
@@ -24,21 +42,24 @@ stdenv.mkDerivation rec {
     "--with-gmp"
   ];
 
-  src = fetchFromGitHub {
-    owner = "polyml";
-    repo = "polyml";
-    rev = "v${version}";
-    sha256 = "sha256-4oo4AB54CivhS99RuZVTP9+Ic0CDpsBb+OiHvOhmZnM=";
-  };
+  doCheck = true;
 
-  meta = with lib; {
+  checkPhase = ''
+    runHook preCheck
+    make check
+    runHook postCheck
+  '';
+
+  meta = {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
     homepage = "https://www.polyml.org/";
-    license = licenses.lgpl21;
-    platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi kovirobi ];
+    license = lib.licenses.lgpl21;
+    platforms = with lib.platforms; (linux ++ darwin);
+    maintainers = with lib.maintainers; [
+      kovirobi
+    ];
   };
 }

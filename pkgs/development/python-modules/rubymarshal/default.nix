@@ -1,26 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+}:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
-  version = "1.2.7";
-  disabled = !isPy3k;
+  version = "1.2.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "94aa84fa42393f773c8215fab679bd3b72bbdb9f7931643d3672184cde9981d9";
+    hash = "sha256-iZtG5khSANCHhY/1YpWIF2T/Umj2/fAbfsxOTgPT7Xw=";
   };
 
-  propagatedBuildInputs = [ hypothesis ];
+  build-system = [ hatchling ];
 
   # pypi doesn't distribute tests
   doCheck = false;
 
   pythonImportsCheck = [ "rubymarshal" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/d9pouces/RubyMarshal/";
+  meta = {
     description = "Read and write Ruby-marshalled data";
-    license = licenses.wtfpl;
-    maintainers = [ maintainers.ryantm ];
+    homepage = "https://github.com/d9pouces/RubyMarshal/";
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ ryantm ];
   };
 }

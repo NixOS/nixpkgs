@@ -1,16 +1,16 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
+{ lib, ... }:
 
 {
   name = "jirafeau";
-  meta.maintainers = with maintainers; [ davidtwco ];
+  meta.maintainers = [ ];
 
-  nodes.machine = { pkgs, ... }: {
-    services.jirafeau = {
-      enable = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.jirafeau = {
+        enable = true;
+      };
     };
-  };
 
   testScript = ''
     machine.start()
@@ -19,4 +19,4 @@ with lib;
     machine.wait_for_open_port(80)
     machine.succeed("curl -sSfL http://localhost/ | grep 'Jirafeau'")
   '';
-})
+}

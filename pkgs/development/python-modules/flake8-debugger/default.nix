@@ -1,18 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, pycodestyle
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flake8,
+  pycodestyle,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
   version = "4.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,18 +22,14 @@ buildPythonPackage rec {
     pycodestyle
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flake8_debugger"
-  ];
+  pythonImportsCheck = [ "flake8_debugger" ];
 
-  meta = with lib; {
+  meta = {
     description = "ipdb/pdb statement checker plugin for flake8";
     homepage = "https://github.com/jbkahn/flake8-debugger";
-    license = licenses.mit;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

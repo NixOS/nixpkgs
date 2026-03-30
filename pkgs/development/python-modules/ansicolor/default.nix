@@ -1,18 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "ansicolor";
-  version = "0.3.2";
+  version = "0.3.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3b840a6b1184b5f1568635b1adab28147947522707d41ceba02d5ed0a0877279";
+  src = fetchFromGitHub {
+    owner = "numerodix";
+    repo = "ansicolor";
+    tag = version;
+    hash = "sha256-ndChpcHjsGWmlw0uvPF0RvRvi99b3cnajHRXudmQXBw=";
   };
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "ansicolor" ];
+
+  meta = {
+    description = "Library to produce ansi color output and colored highlighting and diffing";
     homepage = "https://github.com/numerodix/ansicolor/";
-    description = "A library to produce ansi color output and colored highlighting and diffing";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andsild ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

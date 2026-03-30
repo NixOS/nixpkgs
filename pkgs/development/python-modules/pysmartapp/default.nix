@@ -1,44 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpsig
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpsig,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pysmartapp";
-  version = "0.3.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-zYjv7wRxQTS4PnNaY69bw9xE6I4DZMocwUzEICBfwqM=";
+    repo = "pysmartapp";
+    tag = version;
+    hash = "sha256-RiRGOO5l5hcHllyDDGLtQHr51JOTZhAa/wK8BfMqmAY=";
   };
 
-  propagatedBuildInputs = [
-    httpsig
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ httpsig ];
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysmartapp"
+  pythonImportsCheck = [ "pysmartapp" ];
+
+  disabledTestPaths = [
+    # These tests are outdated
+    "tests/test_smartapp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation to work with SmartApp lifecycle events";
     homepage = "https://github.com/andrewsayre/pysmartapp";
-    changelog = "https://github.com/andrewsayre/pysmartapp/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/andrewsayre/pysmartapp/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

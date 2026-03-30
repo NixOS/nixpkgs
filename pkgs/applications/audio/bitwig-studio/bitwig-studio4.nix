@@ -1,30 +1,73 @@
-{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
-, gdk-pixbuf, glib, gtk3, lib, xorg
-, libglvnd, libjack2, ffmpeg
-, libxkbcommon, xdg-utils, zlib, pipewire, pulseaudio
-, wrapGAppsHook, makeWrapper }:
+{
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  cairo,
+  dpkg,
+  ffmpeg,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libglvnd,
+  libjack2,
+  libjpeg,
+  libxkbcommon,
+  makeWrapper,
+  pipewire,
+  pulseaudio,
+  wrapGAppsHook3,
+  xdg-utils,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitwig-studio";
-  version = "4.4.2";
+  version = "4.4.10";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-nLXpf0Xi7yuz/Rm8Sfkr1PGLuazN+Lh6sIqkWFBmP3w=";
+    url = "https://downloads.bitwig.com/stable/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.deb";
+    sha256 = "sha256-gtQ1mhXk0AqGidZk5TCzSR58pD1JJoELMBmELtqyb4U=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pipewire pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+  buildInputs = [
+    alsa-lib
+    cairo
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libglvnd
+    libjack2
+    # libjpeg8 is required for converting jpeg's to colour palettes
+    libjpeg
+    libxcb
+    libxcursor
+    libx11
+    libxtst
+    libxkbcommon
+    pipewire
+    pulseaudio
+    (lib.getLib stdenv.cc.cc)
+    libxcb-util
+    libxcb-wm
+    zlib
   ];
 
   installPhase = ''
@@ -36,7 +79,7 @@ stdenv.mkDerivation rec {
     cp -r usr/share $out/share
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
 
       runHook postInstall
   '';
@@ -58,7 +101,7 @@ stdenv.mkDerivation rec {
         "''${gappsWrapperArgs[@]}" \
         --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
         --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
-        --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
+        --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath finalAttrs.buildInputs}"
     done
 
     find $out -type f -executable -name 'jspawnhelper' | \
@@ -67,16 +110,21 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
-    description = "A digital audio workstation";
+  meta = {
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    maintainers = with lib.maintainers; [
+      bfortz
+      michalrus
+      mrVanDalo
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

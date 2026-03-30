@@ -1,29 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, openems
-, csxcad
-, numpy
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  openems,
+  csxcad,
+  numpy,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "python-csxcad";
-  version = "unstable-2020-02-18";
+  version = csxcad.version;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "thliebig";
-    repo = "CSXCAD";
-    rev = "ef6e40931dbd80e0959f37c8e9614c437bf7e518";
-    sha256 = "072s765jyzpdq8qqysdy0dld17m6sr9zfcs0ip2zk8c4imxaysnb";
-  };
+  src = csxcad.src;
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = [
     openems
@@ -32,13 +26,17 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  setupPyBuildFlags = [ "-I${openems}/include" "-L${openems}/lib" "-R${openems}/lib" ];
+  setupPyBuildFlags = [
+    "-I${openems}/include"
+    "-L${openems}/lib"
+    "-R${openems}/lib"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to CSXCAD";
     homepage = "http://openems.de/index.php/Main_Page.html";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
 }

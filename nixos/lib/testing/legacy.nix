@@ -1,11 +1,17 @@
-{ config, options, lib, ... }:
+{
+  config,
+  options,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkIf mkOption types;
 in
 {
-  # This needs options.warnings, which we don't have (yet?).
+  # This needs options.warnings and options.assertions, which we don't have (yet?).
   # imports = [
   #   (lib.mkRenamedOptionModule [ "machine" ] [ "nodes" "machine" ])
+  #   (lib.mkRemovedOptionModule [ "minimal" ] "The minimal kernel module was removed as it was broken and not used any more in nixpkgs.")
   # ];
 
   options = {

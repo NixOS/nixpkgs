@@ -1,24 +1,50 @@
-{ lib, fetchPypi, buildPythonPackage, scrapy, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  pytest-twisted,
+  pytestCheckHook,
+  scrapy,
+  setuptools,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
-  version = "0.8.0";
+  version = "0.11.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a7c17735415151ae01f07b03c7624e7276a343779b3c5f4546f655f6133df42f";
+  src = fetchFromGitHub {
+    owner = "scrapy-plugins";
+    repo = "scrapy-splash";
+    tag = version;
+    hash = "sha256-eOWqSCuuZtUtaEuAew4g0P67N0zClaguHn2u4ZMT3FU=";
   };
 
-  propagatedBuildInputs = [ scrapy six ];
+  build-system = [ setuptools ];
 
-  # no tests
-  doCheck = false;
+  dependencies = [
+    scrapy
+    six
+  ];
+
   pythonImportsCheck = [ "scrapy_splash" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    hypothesis
+    pytest-twisted
+    pytestCheckHook
+  ];
+
+  meta = {
+    changelog = "https://github.com/scrapy-plugins/scrapy-splash/blob/${src.tag}/CHANGES.rst";
     description = "Scrapy+Splash for JavaScript integration";
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evanjs ];
+    # incompatible with scrapy >= 2.14
+    # also deprecated by scrapy committers, see https://github.com/scrapy-plugins/scrapy-splash/issues/327
+    broken = true;
   };
 }

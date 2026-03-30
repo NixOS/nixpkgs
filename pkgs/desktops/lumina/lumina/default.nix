@@ -1,19 +1,24 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fluxbox
-, hicolor-icon-theme
-, libarchive
-, numlockx
-, qmake
-, qtbase
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, xorg
-, xscreensaver
-, wrapGAppsHook
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fluxbox,
+  hicolor-icon-theme,
+  libarchive,
+  numlockx,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  libxcb-wm,
+  libxcb-image,
+  libxdamage,
+  libxcursor,
+  libxcb,
+  xscreensaver,
+  wrapGAppsHook3,
 }:
 
 mkDerivation rec {
@@ -22,7 +27,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
-    repo = pname;
+    repo = "lumina";
     rev = "v${version}";
     sha256 = "1llr65gilcf0k88f9mbwzlalqwdnjy4nv2jq7w154z0xmd6iarfq";
   };
@@ -30,7 +35,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,11 +47,11 @@ mkDerivation rec {
     qtmultimedia
     qtsvg
     qtx11extras
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libxcb
-    xorg.xcbutilimage
-    xorg.xcbutilwm
+    libxcursor
+    libxdamage
+    libxcb
+    libxcb-image
+    libxcb-wm
     xscreensaver
   ];
 
@@ -98,16 +103,16 @@ mkDerivation rec {
 
   passthru.providedSessions = [ "Lumina-DE" ];
 
-  meta = with lib; {
-    description = "A lightweight, portable desktop environment";
+  meta = {
+    description = "Lightweight, portable desktop environment";
     longDescription = ''
       The Lumina Desktop Environment is a lightweight system interface
       that is designed for use on any Unix-like operating system. It
       is based on QT5.
     '';
     homepage = "https://lumina-desktop.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = teams.lumina.members;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lumina ];
   };
 }

@@ -1,4 +1,4 @@
-#!@shell@
+#!@runtimeShell@
 # shellcheck shell=bash
 
 if [ -n "$DEBUG" ] ; then
@@ -7,6 +7,10 @@ fi
 
 PATH="@path@:$PATH"
 apprun_opt=true
+OWD=$(readlink -f .)
+# can be read by appimages: https://docs.appimage.org/packaging-guide/environment-variables.html
+export OWD
+export APPIMAGE
 
 # src : AppImage
 # dest : let's unpack() create the directory
@@ -69,6 +73,10 @@ apprun() {
     unpack "$APPIMAGE" "$APPDIR"
   else echo "$(basename "$APPIMAGE")" installed in "$APPDIR"
   fi
+
+  # Fix potential for the appimages to try to import libraries from QT
+  # installed on the system, causing a version mismatch
+  unset QT_PLUGIN_PATH
 
   export PATH="$PATH:$PWD/usr/bin"
 }

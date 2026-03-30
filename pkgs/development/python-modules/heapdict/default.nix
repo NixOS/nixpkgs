@@ -1,20 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
-  pname = "HeapDict";
+  pname = "heapdict";
   version = "1.0.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "8495f57b3e03d8e46d5f1b2cc62ca881aca392fd5cc048dc0aa2e1a6d23ecdb6";
+    pname = "HeapDict";
+    inherit version;
+    hash = "sha256-hJX1ez4D2ORtXxssxiyogayjkv1cwEjcCqLhptI+zbY=";
   };
 
-  doCheck = !isPy3k;
+  build-system = [ setuptools ];
 
-  meta = with lib; {
-    description = "a heap with decrease-key and increase-key operations.";
-    homepage = "http://stutzbachenterprises.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "heapdict" ];
+
+  meta = {
+    description = "Heap with decrease-key and increase-key operations";
+    homepage = "https://github.com/DanielStutzbach/heapdict";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

@@ -1,9 +1,12 @@
 { lib, callPackage }:
 
 lib.recurseIntoAttrs {
-  shellFor = callPackage ./shellFor { };
   cabalSdist = callPackage ./cabalSdist { };
   documentationTarball = callPackage ./documentationTarball { };
+  env = callPackage ./env { };
+  ghcWithPackages = callPackage ./ghcWithPackages { };
+  incremental = callPackage ./incremental { };
   setBuildTarget = callPackage ./setBuildTarget { };
-  writers = callPackage ./writers { };
+  shellFor = callPackage ./shellFor { };
+  upstreamStackHpackVersion = callPackage ./upstreamStackHpackVersion { };
 }

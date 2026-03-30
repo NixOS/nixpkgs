@@ -1,24 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "funcy";
-  version = "1.17";
+  version = "2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40b9b9a88141ae6a174df1a95861f2b82f2fdc17669080788b73a3ed9370e968";
+    hash = "sha256-OWMxXVnUHG8wwEvJEOEKtQo6xKIlhov6lv7tEz3wdcs=";
   };
 
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of fancy functional tools focused on practicality";
     homepage = "https://funcy.readthedocs.org/";
-    license = licenses.bsd3;
+    changelog = "https://github.com/Suor/funcy/blob/2.0/CHANGELOG";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-
 }

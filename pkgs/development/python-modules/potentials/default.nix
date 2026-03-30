@@ -1,37 +1,44 @@
-{ lib
-, bibtexparser
-, buildPythonPackage
-, cdcs
-, datamodeldict
-, fetchPypi
-, habanero
-, ipywidgets
-, lxml
-, matplotlib
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, requests
-, scipy
-, unidecode
-, xmltodict
-, yabadaba
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  bibtexparser,
+  cdcs,
+  datamodeldict,
+  habanero,
+  ipywidgets,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  requests,
+  scipy,
+  unidecode,
+  xmltodict,
+  yabadaba,
 }:
 
 buildPythonPackage rec {
-  version = "0.3.5";
   pname = "potentials";
-  format = "setuptools";
+  version = "0.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-e2+Yrgpj6Cy76qzw9/NhDq9ogsNQAJcKi9kvY2fZE+k=";
+  src = fetchFromGitHub {
+    owner = "usnistgov";
+    repo = "potentials";
+    tag = "v${version}";
+    hash = "sha256-R6LGRmi6xeNp81qylXBAVdL62/SN87TvuyRqueQD6DA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bibtexparser
     cdcs
     datamodeldict
@@ -51,14 +58,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "potentials"
-  ];
+  pythonImportsCheck = [ "potentials" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API database tools for accessing the NIST Interatomic Potentials Repository";
     homepage = "https://github.com/usnistgov/potentials";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/usnistgov/potentials/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

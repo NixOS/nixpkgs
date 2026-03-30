@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "pysingleton";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,10 +19,10 @@ buildPythonPackage rec {
   # No tests in the Pypi package.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Provides a decorator to create thread-safe singleton classes";
     homepage = "https://github.com/timofurrer/pysingleton";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

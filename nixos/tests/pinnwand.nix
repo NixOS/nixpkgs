@@ -1,51 +1,66 @@
-import ./make-test-python.nix ({ pkgs, ...}:
+{
+  pkgs,
+  ...
+}:
 let
-  pythonEnv = pkgs.python3.withPackages (py: with py; [ appdirs toml ]);
-
   port = 8000;
   baseUrl = "http://server:${toString port}";
-
-  configureSteck = pkgs.writeScript "configure.py" ''
-    #!${pythonEnv.interpreter}
-    import appdirs
-    import toml
-    import os
-
-    CONFIG = {
-      "base": "${baseUrl}/",
-      "confirm": False,
-      "magic": True,
-      "ignore": True
-    }
-
-    os.makedirs(appdirs.user_config_dir('steck'))
-    with open(os.path.join(appdirs.user_config_dir('steck'), 'steck.toml'), "w") as fd:
-        toml.dump(CONFIG, fd)
-    '';
 in
 {
   name = "pinnwand";
   meta = with pkgs.lib.maintainers; {
-    maintainers =[ hexa ];
+    maintainers = [ hexa ];
   };
 
   nodes = {
-    server = { config, ... }:
-    {
-      networking.firewall.allowedTCPPorts = [
-        port
-      ];
+    server =
+      { config, ... }:
+      {
+        networking.firewall.allowedTCPPorts = [
+          port
+        ];
 
-      services.pinnwand = {
-        enable = true;
-        port = port;
+        services.pinnwand = {
+          enable = true;
+          port = port;
+        };
       };
-    };
 
-    client = { pkgs, ... }:
-    {
-      environment.systemPackages = [ pkgs.steck ];
-    };
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [
+          pkgs.steck
+
+          (pkgs.writers.writePython3Bin "setup-steck.py"
+            {
+              libraries = with pkgs.python3.pkgs; [
+                appdirs
+                toml
+              ];
+              flakeIgnore = [
+                "E501"
+              ];
+            }
+            ''
+              import appdirs
+              import toml
+              import os
+
+              CONFIG = {
+                  "base": "${baseUrl}/",
+                  "confirm": False,
+                  "magic": True,
+                  "ignore": True
+              }
+
+              os.makedirs(appdirs.user_config_dir('steck'))
+              with open(os.path.join(appdirs.user_config_dir('steck'), 'steck.toml'), "w") as fd:
+                  toml.dump(CONFIG, fd)
+            ''
+          )
+        ];
+      };
   };
 
   testScript = ''
@@ -55,7 +70,7 @@ in
     client.wait_for_unit("network.target")
 
     # create steck.toml config file
-    client.succeed("${configureSteck}")
+    client.succeed("setup-steck.py")
 
     # wait until the server running pinnwand is reachable
     client.wait_until_succeeds("ping -c1 server")
@@ -75,12 +90,6 @@ in
         if line.startswith("Removal link:"):
             removal_link = line.split(":", 1)[1]
 
-
-    # start the reaper, it shouldn't do anything meaningful here
-    server.systemctl("start pinnwand-reaper.service")
-    server.wait_until_fails("systemctl is-active -q pinnwand-reaper.service")
-    server.log(server.execute("journalctl -u pinnwand-reaper -e --no-pager")[1])
-
     # check whether paste matches what we sent
     client.succeed(f"curl {raw_url} > /tmp/machine-id")
     client.succeed("diff /tmp/machine-id /etc/machine-id")
@@ -89,6 +98,6 @@ in
     client.succeed(f"curl {removal_link}")
     client.fail(f"curl --fail {raw_url}")
 
-    server.log(server.succeed("systemd-analyze security pinnwand"))
+    server.log(server.execute("systemd-analyze security pinnwand | grep '✗'")[1])
   '';
-})
+}

@@ -1,20 +1,30 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cry";
-  version = "0.6.7";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
-    rev = "v${version}";
-    sha256 = "sha256-1Omp3LBKGTPVwEBd530H0Djn3xiEjOHLqso6S8yIJSQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ea6f2xTVmYekPmzAKasA9mNG4Voxw2MCkfZ9LB9gwbo=";
   };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace src/dune --replace-warn bytes ""
+  '';
+
+  minimalOCamlVersion = "4.12";
+
+  meta = {
     homepage = "https://github.com/savonet/ocaml-cry";
     description = "OCaml client for the various icecast & shoutcast source protocols";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

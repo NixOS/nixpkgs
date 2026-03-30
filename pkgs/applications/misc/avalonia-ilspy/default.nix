@@ -1,99 +1,131 @@
-{ lib
-, stdenv
-, fetchzip
-, unzip
-, autoPatchelfHook
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, lttng-ust
-, libkrb5
-, zlib
-, fontconfig
-, openssl_1_1
-, libX11
-, libICE
-, libSM
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  libx11,
+  libice,
+  libsm,
+  libxi,
+  libxcursor,
+  libxext,
+  libxrandr,
+  fontconfig,
+  glew,
+  makeDesktopItem,
+  copyDesktopItems,
+  icoutils,
+  bintools,
+  fixDarwinDylibNames,
+  autoSignDarwinBinariesHook,
 }:
 
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "avalonia-ilspy";
   version = "7.2-rc";
 
-  src = fetchzip {
-    url = "https://github.com/icsharpcode/AvaloniaILSpy/releases/download/v${version}/Linux.x64.Release.zip";
-    sha256 = "1crf0ng4l6x70wjlz3r6qw8l166gd52ys11j7ilb4nyy3mkjxk11";
+  src = fetchFromGitHub {
+    owner = "icsharpcode";
+    repo = "AvaloniaILSpy";
+    rev = "v${version}";
+    hash = "sha256-cCQy5cSpJNiVZqgphURcnraEM0ZyXGhzJLb5AThNfPQ=";
   };
 
+  patches = [
+    # Remove dead nuget package source
+    ./remove-broken-sources.patch
+    # Upgrade project to .NET 8.0
+    ./dotnet-8-upgrade.patch
+  ];
+
   nativeBuildInputs = [
-    unzip
-    autoPatchelfHook
-    makeWrapper
     copyDesktopItems
+    icoutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    bintools
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
-    lttng-ust
-    libkrb5
-    zlib
+    # Dependencies of nuget packages w/ native binaries
+    (lib.getLib stdenv.cc.cc)
     fontconfig
   ];
 
-  libraryPath = lib.makeLibraryPath [
-    openssl_1_1
-    libX11
-    libICE
-    libSM
-    icu
+  runtimeDeps = [
+    # Avalonia UI
+    libx11
+    libice
+    libsm
+    libxi
+    libxcursor
+    libxext
+    libxrandr
+    fontconfig
+    glew
   ];
 
-  unpackPhase = ''
-    unzip -qq $src/ILSpy-linux-x64-Release.zip
+  postInstall = ''
+    icotool --icon -x ILSpy/ILSpy.ico
+    for i in 16 32 48 256; do
+      size=''${i}x''${i}
+      install -Dm444 *_''${size}x32.png $out/share/icons/hicolor/$size/apps/ILSpy.png
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm444 ILSpy/Info.plist $out/Applications/ILSpy.app/Contents/Info.plist
+    install -Dm444 ILSpy/ILSpy.icns $out/Applications/ILSpy.app/Contents/Resources/ILSpy.icns
+    mkdir -p $out/Applications/ILSpy.app/Contents/MacOS
+    ln -s $out/bin/ILSpy $out/Applications/ILSpy.app/Contents/MacOS/ILSpy
   '';
 
-  installPhase = ''
-    runHook preInstall
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
-    mkdir -p $out/bin $out/lib $out/share/icons/hicolor/scalable/apps
-    cp -r artifacts/linux-x64/* $out/lib
-    ln -s $out/lib/Images/ILSpy.png $out/share/icons/hicolor/scalable/apps/ILSpy.png
+  projectFile = "ILSpy/ILSpy.csproj";
+  nugetDeps = ./deps.json;
+  executables = [ "ILSpy" ];
 
-    chmod +x $out/lib/ILSpy
-    wrapProgram $out/lib/ILSpy --prefix LD_LIBRARY_PATH : ${libraryPath}
-    mv $out/lib/ILSpy $out/bin
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ILSpy";
+      desktopName = "ILSpy";
+      exec = "ILSpy";
+      icon = "ILSpy";
+      comment = ".NET assembly browser and decompiler";
+      categories = [
+        "Development"
+      ];
+      keywords = [
+        ".net"
+        "il"
+        "assembly"
+      ];
+    })
+  ];
 
-    runHook postInstall
-  '';
-
-  # dotnet runtime requirements
-  preFixup = ''
-    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
-  '';
-  dontStrip = true;
-
-  desktopItems = [ (makeDesktopItem {
-    name = "ILSpy";
-    desktopName = "ILSpy";
-    exec = "ILSpy";
-    icon = "ILSpy";
-    comment = ".NET assembly browser and decompiler";
-    categories = [
-      "Development"
-    ];
-    keywords = [
-      ".net"
-      "il"
-      "assembly"
-    ];
-  }) ];
-
-  meta = with lib; {
+  meta = {
     description = ".NET assembly browser and decompiler";
     homepage = "https://github.com/icsharpcode/AvaloniaILSpy";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ AngryAnt ];
+    license = with lib.licenses; [
+      mit
+      # third party dependencies
+      lgpl21Only
+      mspl
+    ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+      binaryNativeCode
+    ];
+    maintainers = with lib.maintainers; [
+      AngryAnt
+      emilytrau
+    ];
+    mainProgram = "ILSpy";
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -23,10 +24,10 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "The kivy garden installation script, split into its own package for convenient use in buildozer.";
+  meta = {
+    description = "Kivy garden installation script, split into its own package for convenient use in buildozer";
     homepage = "https://github.com/kivy-garden/garden";
-    license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ risson ];
   };
 }

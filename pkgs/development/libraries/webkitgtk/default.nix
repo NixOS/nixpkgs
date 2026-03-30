@@ -1,111 +1,131 @@
-{ lib
-, stdenv
-, runCommand
-, fetchurl
-, perl
-, python3
-, ruby
-, gi-docgen
-, bison
-, gperf
-, cmake
-, ninja
-, pkg-config
-, gettext
-, gobject-introspection
-, gnutls
-, libgcrypt
-, libgpg-error
-, gtk3
-, wayland
-, wayland-protocols
-, libwebp
-, libwpe
-, libwpe-fdo
-, enchant2
-, xorg
-, libxkbcommon
-, libepoxy
-, at-spi2-core
-, libxml2
-, libsoup
-, libsecret
-, libxslt
-, harfbuzz
-, libpthreadstubs
-, pcre
-, nettle
-, libtasn1
-, p11-kit
-, libidn
-, libedit
-, readline
-, apple_sdk
-, libGL
-, libGLU
-, mesa
-, libintl
-, lcms2
-, libmanette
-, openjpeg
-, geoclue2
-, sqlite
-, enableGLES ? true
-, gst-plugins-base
-, gst-plugins-bad
-, woff2
-, bubblewrap
-, libseccomp
-, systemd
-, xdg-dbus-proxy
-, substituteAll
-, glib
-, addOpenGLRunpath
-, enableGeoLocation ? true
-, withLibsecret ? true
-, systemdSupport ? stdenv.isLinux
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  perl,
+  python3,
+  ruby,
+  gi-docgen,
+  bison,
+  gperf,
+  cmake,
+  ninja,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  gnutls,
+  libgcrypt,
+  libgpg-error,
+  gtk4,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libwebp,
+  enchant,
+  libx11,
+  libxkbcommon,
+  libavif,
+  libepoxy,
+  libjxl,
+  at-spi2-core,
+  cairo,
+  expat,
+  libxml2,
+  libsoup_3,
+  libsecret,
+  libxslt,
+  harfbuzz,
+  hyphen,
+  icu,
+  libsysprof-capture,
+  libpthread-stubs,
+  nettle,
+  libtasn1,
+  p11-kit,
+  libidn,
+  libedit,
+  readline,
+  libGL,
+  libGLU,
+  libgbm,
+  libintl,
+  lcms2,
+  libmanette,
+  librice,
+  geoclue2,
+  flite,
+  fontconfig,
+  freetype,
+  openssl,
+  openxr-loader,
+  sqlite,
+  gst-plugins-base,
+  gst-plugins-bad,
+  bubblewrap,
+  libseccomp,
+  libbacktrace,
+  systemdLibs,
+  xdg-dbus-proxy,
+  replaceVars,
+  glib,
+  unifdef,
+  addDriverRunpath,
+  enableGeoLocation ? true,
+  enableExperimental ? false,
+  withLibsecret ? true,
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
+  testers,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "webkitgtk";
-  version = "2.38.2";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
+let
+  abiVersion = if lib.versionAtLeast gtk4.version "4.0" then "6.0" else "4.1";
+in
 
-  outputs = [ "out" "dev" "devdoc" ];
+# https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
+clangStdenv.mkDerivation (finalAttrs: {
+  pname = "webkitgtk";
+  version = "2.52.1";
+  name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
+
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/153528
   # Can't be linked within a 4GB address space.
-  separateDebugInfo = stdenv.isLinux && !stdenv.is32bit;
+  separateDebugInfo = clangStdenv.hostPlatform.isLinux && !clangStdenv.hostPlatform.is32bit;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8+uCiZZR9YO02Zys0Wr3hKGncQ/OnntoB71szekJ/j4=";
+    hash = "sha256-I459UyBbFABK3X7rQpPJTW+/cJez7+987lUZ5cEhqQQ=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
-    (substituteAll {
-      src = ./fix-bubblewrap-paths.patch;
+  patches = lib.optionals clangStdenv.hostPlatform.isLinux [
+    (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
 
-    ./libglvnd-headers.patch
+    # Workaround to fix cross-compilation for RiscV
+    # error: ‘toB3Type’ was not declared in this scope
+    # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+    (fetchpatch {
+      url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
+      hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
+      name = "fix_ftbfs_riscv64.patch";
+    })
 
-    # Hardcode path to WPE backend
-    # https://github.com/NixOS/nixpkgs/issues/110468
-    (substituteAll {
-      src = ./fdo-backend-path.patch;
-      wpebackend_fdo = libwpe-fdo;
+    # Fix webkitgtk_4_1 build
+    # WebKitDOMDOMWindow.cpp:1085:10: error: variable has incomplete type 'void'
+    # https://bugs.webkit.org/show_bug.cgi?id=310915
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/40c315ca7b3ad6ae5c98d72a6927b3a75b43cb46.patch";
+      hash = "sha256-xGPi5p2XhDxpd4NtZMrd1JbHvV2fey6V3eH0fgy6ifY=";
     })
   ];
-
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    # Ignore gettext in cmake_prefix_path so that find_program doesn't
-    # pick up the wrong gettext. TODO: Find a better solution for
-    # this, maybe make cmake not look up executables in
-    # CMAKE_PREFIX_PATH.
-    cmakeFlags+=" -DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin"
-  '';
 
   nativeBuildInputs = [
     bison
@@ -121,113 +141,121 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     gi-docgen
     glib # for gdbus-codegen
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland # for wayland-scanner
+    unifdef
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wayland-scanner
   ];
 
   buildInputs = [
     at-spi2-core
-    enchant2
+    cairo # required even when using skia
+    enchant
+    expat
+    flite
+    freetype
+    libavif
     libepoxy
+    libjxl
     gnutls
     gst-plugins-bad
     gst-plugins-base
     harfbuzz
+    hyphen
+    icu
     libGL
     libGLU
-    mesa # for libEGL headers
+    libgbm
     libgcrypt
     libgpg-error
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
+    libsysprof-capture
     libtasn1
     libwebp
     libxkbcommon
     libxml2
     libxslt
+    libbacktrace
     nettle
-    openjpeg
     p11-kit
-    pcre
     sqlite
-    woff2
-  ] ++ (with xorg; [
-    libXdamage
-    libXdmcp
-    libXt
-    libXtst
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
     readline
-  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
-    # Pull a header that contains a definition of proc_pid_rusage().
-    # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library. This header is already in
-    # the standard library on aarch64)
-    runCommand "webkitgtk_headers" { } ''
-      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
-    ''
-  ) ++ lib.optionals stdenv.isLinux [
-    bubblewrap
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     libseccomp
     libmanette
     wayland
-    libwpe
-    libwpe-fdo
-    xdg-dbus-proxy
-  ] ++ lib.optionals systemdSupport [
-    systemd
-  ] ++ lib.optionals enableGeoLocation [
+    libx11
+  ]
+  ++ lib.optionals systemdSupport [
+    systemdLibs
+  ]
+  ++ lib.optionals enableGeoLocation [
     geoclue2
-  ] ++ lib.optionals withLibsecret [
+  ]
+  ++ lib.optionals enableExperimental [
+    # For ENABLE_WEB_RTC
+    openssl
+    librice
+    # For ENABLE_WEBXR
+    openxr-loader
+  ]
+  ++ lib.optionals withLibsecret [
     libsecret
-  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    xorg.libXcomposite
+  ]
+  ++ lib.optionals (lib.versionAtLeast gtk4.version "4.0") [
     wayland-protocols
   ];
 
   propagatedBuildInputs = [
-    gtk3
-    libsoup
+    gtk4
+    libsoup_3
   ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
-    "-DENABLE_INTROSPECTION=ON"
-    "-DPORT=GTK"
-    "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
-    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DENABLE_GAMEPAD=OFF"
-    "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
-    "-DENABLE_QUARTZ_TARGET=ON"
-    "-DENABLE_VIDEO=ON"
-    "-DENABLE_WEBGL=OFF"
-    "-DENABLE_WEB_AUDIO=OFF"
-    "-DENABLE_X11_TARGET=OFF"
-    "-DUSE_APPLE_ICU=OFF"
-    "-DUSE_OPENGL_OR_ES=OFF"
-    "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    "-DUSE_GTK4=ON"
-  ] ++ lib.optionals (!systemdSupport) [
-    "-DENABLE_JOURNALD_LOG=OFF"
-  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
-    "-DENABLE_GLES2=ON"
-  ];
+  cmakeFlags =
+    let
+      cmakeBool = x: if x then "ON" else "OFF";
+    in
+    [
+      "-DENABLE_INTROSPECTION=ON"
+      "-DPORT=GTK"
+      "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+      "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+      # Have to be explicitly specified when cross.
+      # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
+      "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
+      "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+      "-DENABLE_GAMEPAD=OFF"
+      "-DENABLE_GTKDOC=OFF"
+      "-DENABLE_MINIBROWSER=OFF"
+      "-DENABLE_QUARTZ_TARGET=ON"
+      "-DENABLE_X11_TARGET=OFF"
+      "-DUSE_APPLE_ICU=OFF"
+      "-DUSE_OPENGL_OR_ES=OFF"
+    ]
+    ++ lib.optionals (lib.versionOlder gtk4.version "4.0") [
+      "-DUSE_GTK4=OFF"
+    ]
+    ++ lib.optionals (!systemdSupport) [
+      "-DENABLE_JOURNALD_LOG=OFF"
+    ];
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin ''
-    # It needs malloc_good_size.
-    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
-    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
-    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
   postFixup = ''
@@ -237,12 +265,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
     description = "Web content rendering engine, GTK port";
+    mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = teams.gnome.members;
-    broken = stdenv.isDarwin;
+    license = lib.licenses.bsd2;
+    pkgConfigModules =
+      if lib.versionAtLeast abiVersion "6.0" then
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkitgtk-${abiVersion}"
+          "webkitgtk-web-process-extension-${abiVersion}"
+        ]
+      else
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkit2gtk-${abiVersion}"
+          "webkit2gtk-web-extension-${abiVersion}"
+        ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome ];
+    broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

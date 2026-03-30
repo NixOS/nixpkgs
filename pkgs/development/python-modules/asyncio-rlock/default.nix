@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-rlock";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "asyncio_rlock";
@@ -19,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncio_rlock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rlock like in threading module but for asyncio";
     homepage = "https://gitlab.com/heckad/asyncio_rlock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

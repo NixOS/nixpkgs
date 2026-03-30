@@ -1,42 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
-, google-cloud-testutils
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.9.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.23.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8/gmeLpdheW7M9nhM0uTlxrpeRcODSgLVOVKPj9O870=";
+    pname = "google_cloud_datastore";
+    inherit version;
+    hash = "sha256-gASYg6Suko/cxmG6aAPsJnZl3A5vPOLakUQQeaa7Y4c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
     proto-plus
-  ];
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -50,6 +57,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
+    "tests/system/test_aggregation_query.py"
     "tests/system/test_allocate_reserve_ids.py"
     "tests/system/test_query.py"
     "tests/system/test_put.py"
@@ -63,10 +71,11 @@ buildPythonPackage rec {
     "google.cloud.datastore_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Datastore API client library";
     homepage = "https://github.com/googleapis/python-datastore";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,29 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cudatoolkit
+{
+  lib,
+  buildPythonPackage,
+  cudaPackages,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  nvidia-ml-py,
+  pynvml,
 }:
 
 buildPythonPackage rec {
   pname = "pynvml";
-  version = "11.4.1";
-  disabled = pythonOlder "3.6";
+  version = "13.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b2e4a33b80569d093b513f5804db0c7f40cfc86f15a013ae7a8e99c5e175d5dd";
+  src = fetchFromGitHub {
+    owner = "gpuopenanalytics";
+    repo = "pynvml";
+    tag = version;
+    hash = "sha256-Jwj3cm0l7qR/q5jzwKbD52L7ePYCdzXrYFOceMA776M=";
   };
 
-  propagatedBuildInputs = [ cudatoolkit ];
+  build-system = [
+    setuptools
+  ];
 
-  doCheck = false;  # no tests in PyPi dist
-  pythonImportsCheck = [ "pynvml" "pynvml.smi" ];
+  pythonRelaxDeps = [
+    "nvidia-ml-py"
+  ];
 
-  meta = with lib; {
-    description = "Python bindings for the NVIDIA Management Library";
-    homepage = "https://www.nvidia.com";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+  dependencies = [ nvidia-ml-py ];
+
+  pythonImportsCheck = [
+    "pynvml_utils"
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  doCheck = false;
+
+  passthru.tests.tester-nvmlInit = cudaPackages.writeGpuTestPython { libraries = [ pynvml ]; } ''
+    from pynvml_utils import nvidia_smi  # noqa: F401
+    nvsmi = nvidia_smi.getInstance()
+    print(nvsmi.DeviceQuery('memory.free, memory.total'))
+  '';
+
+  meta = {
+    description = "Unofficial Python bindings for the NVIDIA Management Library";
+    homepage = "https://github.com/gpuopenanalytics/pynvml";
+    changelog = "https://github.com/gpuopenanalytics/pynvml?tab=readme-ov-file#release-notes";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

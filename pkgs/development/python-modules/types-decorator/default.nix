@@ -1,29 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-decorator";
-  version = "5.1.8.1";
-  format = "setuptools";
+  version = "5.2.0.20251101";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+SkMviPSZ0uxii2V9ZPCdUdGPtRZ4OYEgAxCCZw8akQ=";
+    pname = "types_decorator";
+    inherit version;
+    hash = "sha256-Eg4r9HkuyKR2U9scs4DHqstoYqeXwUkKkQqswhVIKGw=";
   };
+
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "decorator-stubs"
-  ];
+  pythonImportsCheck = [ "decorator-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for decorator";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

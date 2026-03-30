@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "ciscomobilityexpress";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,14 +23,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest
   '';
 
-  pythonImportsCheck = [
-    "ciscomobilityexpress"
-  ];
+  pythonImportsCheck = [ "ciscomobilityexpress" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Cisco Mobility Express APIs to fetch connected devices";
     homepage = "https://github.com/fbradyirl/ciscomobilityexpress";
-    license = licenses.mit;
-    maintainers = with maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
   };
 }

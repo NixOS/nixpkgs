@@ -1,22 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "pyclimacell";
   version = "0.18.2";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "raman325";
-    repo = pname;
+    repo = "pyclimacell";
     rev = "v${version}";
-    sha256 = "sha256-jWHjnebg4Aar48gid7bB7XYXOQtSqbmVmASsZd0YoPc=";
+    hash = "sha256-jWHjnebg4Aar48gid7bB7XYXOQtSqbmVmASsZd0YoPc=";
   };
 
   propagatedBuildInputs = [
@@ -24,16 +24,14 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyclimacell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for ClimaCell API";
     homepage = "https://github.com/raman325/pyclimacell";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

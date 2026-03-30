@@ -1,41 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, mock
-, pep440
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  mock,
+  pep440,
+  pip,
+  pytestCheckHook,
+  setuptools,
+  six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setupmeta";
-  version = "3.3.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codrsquad";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kX7S5NSqO1LDRkfBHaNfTjzW+l0Pd+5KvQHiNF3eH/M=";
+    repo = "setupmeta";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ONl+hFvMkUmPbzbeduCrqidGrKZvbWE0wTvaZMhs64w=";
   };
 
   preBuild = ''
-    export PYGRADLE_PROJECT_VERSION=${version};
+    export PYGRADLE_PROJECT_VERSION=${finalAttrs.version};
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     mock
     pep440
+    pip
     pytestCheckHook
     six
   ];
@@ -50,16 +48,17 @@ buildPythonPackage rec {
     "test_clean"
     "test_scenario"
     "test_git_versioning"
+    # setuptools.installer and fetch_build_eggs are deprecated.
+    # Requirements should be satisfied by a PEP 517 installer.
+    "test_brand_new_project"
   ];
 
-  pythonImportsCheck = [
-    "setupmeta"
-  ];
+  pythonImportsCheck = [ "setupmeta" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to simplify setup.py files";
     homepage = "https://github.com/codrsquad/setupmeta";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

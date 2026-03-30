@@ -1,43 +1,101 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, fetchPypi
-, holoviews
-, pandas
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  bokeh,
+  colorcet,
+  holoviews,
+  pandas,
+
+  # tests
+  pytestCheckHook,
+  dask,
+  xarray,
+  bokeh-sampledata,
+  parameterized,
+  selenium,
+  matplotlib,
+  scipy,
+  plotly,
 }:
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "0.12.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-U93+BnQ8TVkk+x5ZdlW/oU6A/q9XpDi/0oRC02rHwrY=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "hvplot";
+    tag = "v${version}";
+    hash = "sha256-hJ9lgpM3AVyDeFxobUKDNYO39NKEejSDywOgnHPEm2c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     bokeh
     colorcet
     holoviews
     pandas
   ];
 
-  # Many tests require a network connection
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "hvplot.pandas"
+  nativeCheckInputs = [
+    pytestCheckHook
+    dask
+    xarray
+    bokeh-sampledata
+    parameterized
+    selenium
+    matplotlib
+    scipy
+    plotly
   ];
 
-  meta = with lib; {
-    description = "A high-level plotting API for the PyData ecosystem built on HoloViews";
+  disabledTests = [
+    # Legacy dask-expr implementation is deprecated
+    # NotImplementedError: The legacy implementation is no longer supported
+    "test_dask_dataframe_patched"
+    "test_dask_series_patched"
+  ];
+
+  disabledTestPaths = [
+    # Legacy dask-expr implementation is deprecated
+    # NotImplementedError: The legacy implementation is no longer supported
+    "hvplot/tests/plotting/testcore.py"
+    "hvplot/tests/testcharts.py"
+    "hvplot/tests/testgeowithoutgv.py"
+
+    # All of the following below require xarray.tutorial files that require
+    # downloading files from the internet (not possible in the sandbox).
+    "hvplot/tests/testgeo.py"
+    "hvplot/tests/testinteractive.py"
+    "hvplot/tests/testui.py"
+    "hvplot/tests/testutil.py"
+  ];
+
+  # need to set MPLBACKEND=agg for headless matplotlib for darwin
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  preCheck = ''
+    export MPLBACKEND=agg
+  '';
+
+  pythonImportsCheck = [ "hvplot.pandas" ];
+
+  meta = {
+    description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    changelog = "https://github.com/holoviz/hvplot/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ locnide ];
   };
 }

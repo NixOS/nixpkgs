@@ -1,49 +1,72 @@
-{ config, options, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  version = "1.7.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
     health = 10054;
     metrics = 10055;
   };
-in {
-  options.services.kubernetes.addons.dns = {
-    enable = mkEnableOption (lib.mdDoc "kubernetes dns addon");
+in
+{
+  imports = [
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2605;
+      from = [
+        "services"
+        "kubernetes"
+        "addons"
+        "dns"
+        "coredns"
+      ];
+      to = [
+        "services"
+        "kubernetes"
+        "addons"
+        "dns"
+        "corednsImage"
+      ];
+    })
+  ];
 
-    clusterIp = mkOption {
-      description = lib.mdDoc "Dns addon clusterIP";
+  options.services.kubernetes.addons.dns = {
+    enable = lib.mkEnableOption "kubernetes dns addon";
+
+    clusterIp = lib.mkOption {
+      description = "Dns addon clusterIP";
 
       # this default is also what kubernetes users
-      default = (
-        concatStringsSep "." (
-          take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
+      default =
+        (lib.concatStringsSep "." (
+          lib.take 3 (lib.splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange)
         ))
-      ) + ".254";
-      defaultText = literalMD ''
+        + ".254";
+      defaultText = lib.literalMD ''
         The `x.y.z.254` IP of
         `config.${options.services.kubernetes.apiserver.serviceClusterIpRange}`.
       '';
-      type = types.str;
+      type = lib.types.str;
     };
 
-    clusterDomain = mkOption {
-      description = lib.mdDoc "Dns cluster domain";
+    clusterDomain = lib.mkOption {
+      description = "Dns cluster domain";
       default = "cluster.local";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    replicas = mkOption {
-      description = lib.mdDoc "Number of DNS pod replicas to deploy in the cluster.";
+    replicas = lib.mkOption {
+      description = "Number of DNS pod replicas to deploy in the cluster.";
       default = 2;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    reconcileMode = mkOption {
-      description = lib.mdDoc ''
+    reconcileMode = lib.mkOption {
+      description = ''
         Controls the addon manager reconciliation mode for the DNS addon.
 
         Setting reconcile mode to EnsureExists makes it possible to tailor DNS behavior by editing the coredns ConfigMap.
@@ -51,27 +74,28 @@ in {
         See: <https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md>.
       '';
       default = "Reconcile";
-      type = types.enum [ "Reconcile" "EnsureExists" ];
+      type = lib.types.enum [
+        "Reconcile"
+        "EnsureExists"
+      ];
     };
 
-    coredns = mkOption {
-      description = lib.mdDoc "Docker image to seed for the CoreDNS container.";
-      type = types.attrs;
-      default = {
-        imageName = "coredns/coredns";
-        imageDigest = "sha256:4a6e0769130686518325b21b0c1d0688b54e7c79244d48e1b15634e98e40c6ef";
-        finalImageTag = version;
-        sha256 = "02r440xcdsgi137k5lmmvp0z5w5fmk8g9mysq5pnysq1wl8sj6mw";
+    corednsImage = lib.mkOption {
+      description = "Docker image to seed for the CoreDNS container.";
+      type = lib.types.package;
+      default = pkgs.dockerTools.buildImage {
+        name = "coredns";
+        config.Entrypoint = [ "${pkgs.coredns}/bin/coredns" ];
       };
     };
 
-    corefile = mkOption {
-      description = lib.mdDoc ''
+    corefile = lib.mkOption {
+      description = ''
         Custom coredns corefile configuration.
 
         See: <https://coredns.io/manual/toc/#configuration>.
       '';
-      type = types.str;
+      type = lib.types.str;
       default = ''
         .:${toString ports.dns} {
           errors
@@ -87,7 +111,7 @@ in {
           reload
           loadbalance
         }'';
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         '''
           .:${toString ports.dns} {
             errors
@@ -108,9 +132,8 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages =
-      singleton (pkgs.dockerTools.pullImage cfg.coredns);
+  config = lib.mkIf cfg.enable {
+    services.kubernetes.kubelet.seedDockerImages = lib.singleton (cfg.corednsImage);
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
@@ -128,13 +151,29 @@ in {
         rules = [
           {
             apiGroups = [ "" ];
-            resources = [ "endpoints" "services" "pods" "namespaces" ];
-            verbs = [ "list" "watch" ];
+            resources = [
+              "endpoints"
+              "services"
+              "pods"
+              "namespaces"
+            ];
+            verbs = [
+              "list"
+              "watch"
+            ];
           }
           {
             apiGroups = [ "" ];
             resources = [ "nodes" ];
             verbs = [ "get" ];
+          }
+          {
+            apiGroups = [ "discovery.k8s.io" ];
+            resources = [ "endpointslices" ];
+            verbs = [
+              "list"
+              "watch"
+            ];
           }
         ];
       };
@@ -217,10 +256,14 @@ in {
         spec = {
           replicas = cfg.replicas;
           selector = {
-            matchLabels = { k8s-app = "kube-dns"; };
+            matchLabels = {
+              k8s-app = "kube-dns";
+            };
           };
           strategy = {
-            rollingUpdate = { maxUnavailable = 1; };
+            rollingUpdate = {
+              maxUnavailable = 1;
+            };
             type = "RollingUpdate";
           };
           template = {
@@ -232,8 +275,11 @@ in {
             spec = {
               containers = [
                 {
-                  args = [ "-conf" "/etc/coredns/Corefile" ];
-                  image = with cfg.coredns; "${imageName}:${finalImageTag}";
+                  args = [
+                    "-conf"
+                    "/etc/coredns/Corefile"
+                  ];
+                  image = with cfg.corednsImage; "${imageName}:${imageTag}";
                   imagePullPolicy = "Never";
                   livenessProbe = {
                     failureThreshold = 5;
@@ -276,6 +322,7 @@ in {
                   securityContext = {
                     allowPrivilegeEscalation = false;
                     capabilities = {
+                      add = [ "NET_BIND_SERVICE" ];
                       drop = [ "all" ];
                     };
                     readOnlyRootFilesystem = true;
@@ -356,12 +403,14 @@ in {
               protocol = "TCP";
             }
           ];
-          selector = { k8s-app = "kube-dns"; };
+          selector = {
+            k8s-app = "kube-dns";
+          };
         };
       };
     };
 
-    services.kubernetes.kubelet.clusterDns = mkDefault cfg.clusterIp;
+    services.kubernetes.kubelet.clusterDns = lib.mkDefault [ cfg.clusterIp ];
   };
 
   meta.buildDocsInSandbox = false;

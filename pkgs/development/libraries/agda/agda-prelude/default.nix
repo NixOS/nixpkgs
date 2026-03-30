@@ -1,28 +1,32 @@
-{ lib, mkDerivation, fetchFromGitHub }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 
-mkDerivation rec {
-  version = "compat-2.6.2";
+mkDerivation {
+  version = "0-unstable-2024-08-22";
   pname = "agda-prelude";
 
   src = fetchFromGitHub {
     owner = "UlfNorell";
     repo = "agda-prelude";
-    rev = version;
-    sha256 = "0j2nip5fbn61fpkm3qz4dlazl4mzdv7qlgw9zm15bkcvaila0h14";
+    rev = "4230566d3ae229b6a00258587651ac7bfd38d088";
+    hash = "sha256-ab+KojzRbkUTAFNH5OA78s0F5SUuXTbliai6badveg4=";
   };
 
-  preConfigure = ''
-    cd test
-    make everything
-    mv Everything.agda ..
-    cd ..
-  '';
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/UlfNorell/agda-prelude";
     description = "Programming library for Agda";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ mudri alexarice turion ];
+    maintainers = with lib.maintainers; [
+      mudri
+      alexarice
+      turion
+    ];
   };
 }

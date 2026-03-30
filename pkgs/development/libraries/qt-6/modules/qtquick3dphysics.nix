@@ -1,9 +1,16 @@
-{ qtModule
-, qtbase
-, qtquick3d
+{
+  qtModule,
+  lib,
+  stdenv,
+  qtbase,
+  qtquick3d,
 }:
 
 qtModule {
   pname = "qtquick3dphysics";
-  qtInputs = [ qtbase qtquick3d ];
+  propagatedBuildInputs = [
+    qtbase
+    qtquick3d
+  ];
+  meta.mainProgram = "cooker";
 }

@@ -1,57 +1,50 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
-  version = "1.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fDul6sBgtpH05QU0ry15/KKnVxLr0rJeb8sSlYWfkQs=";
+    hash = "sha256-o6f/UmTlvKUuiuVHu/0HYbcklSMNQ40FtsCRW+YZsOI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=aiohttp_jinja2 --cov-report xml --cov-report html --cov-report term" ""
-  '';
+  __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
-  pythonImportsCheck = [
-    "aiohttp_jinja2"
-  ];
+  pythonImportsCheck = [ "aiohttp_jinja2" ];
 
-  # Tests are outdated (1.5)
-  # pytest.PytestUnhandledCoroutineWarning: async def functions...
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     description = "Jinja2 support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp_jinja2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

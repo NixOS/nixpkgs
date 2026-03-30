@@ -1,35 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, amaranth
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  amaranth,
+  pdm-backend,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "amaranth-soc";
-  version = "unstable-2021-12-10";
-  # python setup.py --version
-  realVersion = "0.1.dev49+g${lib.substring 0 7 src.rev}";
+  version = "0.1a-unstable-2026-03-03";
+  pyproject = true;
+  # from `pdm show`
+  realVersion =
+    let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in
+    "${tag}1.dev1+g${rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-soc";
-    rev = "217d4ea76ad3b3bbf146980d168bc7b3b9d95a18";
-    sha256 = "dMip82L7faUn16RDeG3NgMv0nougpwTwDWLX0doD2YA=";
+    rev = "99d0837fd44ddaeacd9d81db6a6c5087b41ea998";
+    hash = "sha256-eQqsshIyu70XkYqTREGQ/HnOOIMJSG6STHSLJTNUcfs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ setuptools amaranth ];
+  build-system = [ pdm-backend ];
+  dependencies = [ amaranth ];
 
   preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
+  meta = {
     description = "System on Chip toolkit for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-soc";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ emily thoughtpolice ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      pbsds
+    ];
   };
 }

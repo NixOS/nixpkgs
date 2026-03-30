@@ -1,44 +1,60 @@
-{ lib
-, buildPythonPackage
-, factory_boy
-, faker
-, fetchPypi
-, pytest-cov
-, pytestCheckHook
-, tox
+{
+  lib,
+  buildPythonPackage,
+  factory-boy,
+  faker,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.12.6";
+  version = "0.13.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69fed19d26bb3f715366fb4af66fdeace896c55c052b00e8aaba3a7b63f3e7f0";
+    hash = "sha256-2YP6krnXF0AHQvyoROKdXhgnEHnHvPq/ZtAbObShQ0U=";
   };
 
-  checkInputs = [
-    factory_boy
-    faker
-    pytest-cov
-    pytestCheckHook
-    tox
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  # these tests require network access, but disabledTestPaths doesn't work.
-  # the file needs to be `import`ed by another python test file, so it
+  nativeCheckInputs = [
+    factory-boy
+    faker
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  doCheck = false; # missing pytest-codeblock
+
+  # These tests require network access, but disabledTestPaths doesn't work.
+  # the file needs to be `import`ed by another Python test file, so it
   # can't simply be removed.
   preCheck = ''
     echo > src/tld/tests/test_commands.py
   '';
+
   pythonImportsCheck = [ "tld" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/barseghyanartur/tld";
+  meta = {
     description = "Extracts the top level domain (TLD) from the URL given";
+    homepage = "https://github.com/barseghyanartur/tld";
+    changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
     # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
-    license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [
+      lgpl21Plus
+      mpl11
+      gpl2Only
+    ];
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "update-tld-names";
   };
 }

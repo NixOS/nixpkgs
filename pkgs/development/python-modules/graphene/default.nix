@@ -1,62 +1,55 @@
-{ lib
-, aniso8601
-, buildPythonPackage
-, fetchFromGitHub
-, graphql-core
-, graphql-relay
-, promise
-, pytest-asyncio
-, pytest-benchmark
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pytz
-, snapshottest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  graphql-core,
+  graphql-relay,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytest-mock,
+  pytestCheckHook,
+  typing-extensions,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-04ocm/Q/CDi5dRNhReuvr5nAiowMZUJrZol/wJOjG50=";
+    tag = "v${version}";
+    hash = "sha256-K1IGKK3nTsRBe2D/cKJ/ahnAO5xxjf4gtollzTwt1zU=";
   };
 
-  propagatedBuildInputs = [
-    aniso8601
+  build-system = [ setuptools ];
+
+  dependencies = [
     graphql-core
     graphql-relay
+    python-dateutil
+    typing-extensions
   ];
 
-  checkInputs = [
-    promise
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-benchmark
     pytest-mock
-    pytz
-    snapshottest
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlags = [ "--benchmark-disable" ];
 
-  pythonImportsCheck = [
-    "graphene"
-  ];
+  pythonImportsCheck = [ "graphene" ];
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL Framework for Python";
     homepage = "https://github.com/graphql-python/graphene";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

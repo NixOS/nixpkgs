@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils, removeReferencesTo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  varnish,
+  docutils,
+  removeReferencesTo,
+}:
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common =
+    {
+      version,
+      hash,
+      extraNativeBuildInputs ? [ ],
+    }:
     stdenv.mkDerivation rec {
       pname = "${varnish.name}-modules";
       inherit version;
@@ -8,8 +22,8 @@ let
       src = fetchFromGitHub {
         owner = "varnish";
         repo = "varnish-modules";
-        rev = version;
-        inherit sha256;
+        tag = version;
+        inherit hash;
       };
 
       nativeBuildInputs = [
@@ -17,7 +31,7 @@ let
         docutils
         pkg-config
         removeReferencesTo
-        varnish.python  # use same python version as varnish server
+        varnish.python # use same python version as varnish server
       ];
 
       buildInputs = [ varnish ];
@@ -29,20 +43,24 @@ let
 
       postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages
 
-      meta = with lib; {
+      meta = {
         description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
         homepage = "https://github.com/varnish/varnish-modules";
-        inherit (varnish.meta) license platforms maintainers;
+        inherit (varnish.meta) license platforms;
       };
     };
 in
 {
   modules15 = common {
     version = "0.15.1";
-    sha256 = "1lwgjhgr5yw0d17kbqwlaj5pkn70wvaqqjpa1i0n459nx5cf5pqj";
+    hash = "sha256-Et/iWOk2FWJBDOpKjNXm4Nh5i1SU4zVPaID7kh+Uj9M=";
   };
-  modules20 = common {
-    version = "0.20.0";
-    sha256 = "sha256-3eH3qCa24rWqYXsTTDmm/9LjBMxcxUuozuRzZ3e8cUo=";
+  modules26 = common {
+    version = "0.26.0";
+    hash = "sha256-xKMOkqm6/GoBve0AhPqyVMQv/oh5Rtj6uCeg/yId7BU=";
+  };
+  modules27 = common {
+    version = "0.27.0";
+    hash = "sha256-1hE+AKsC6Td+Al7LFN6bgPicU8dtWd3A8PP7VKZLvYM=";
   };
 }

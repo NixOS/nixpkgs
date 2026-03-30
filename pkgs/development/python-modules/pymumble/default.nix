@@ -1,37 +1,36 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, lib
-, opuslib
-, protobuf
-, pytestCheckHook
-, pycrypto
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  opuslib,
+  protobuf,
+  pytestCheckHook,
+  pycrypto,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pymumble";
-  version = "1.6.1";
-  disabled = isPy27;
+  version = "unstable-2024-10-20";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "azlux";
+    owner = "tjni";
     repo = "pymumble";
-    rev = version;
-    sha256 = "1qbsd2zvwd9ksclgiyrl1z79ms0zximm4527mnmhvq36lykgki7s";
+    rev = "3241e84e5ce162a20597e4df6a9c443122357fec";
+    hash = "sha256-9lfWvfrS+vUFTf9jo4T+VHkm9u/hVjsDszLBQIEZVcQ=";
   };
 
-  postPatch = ''
-    # Changes all `library==x.y.z` statements to just `library`
-    # So that we aren't constrained to a specific version
-    sed -i 's/\(.*\)==.*/\1/' requirements.txt
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opuslib
     protobuf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pycrypto
     pytestCheckHook
   ];
@@ -41,10 +40,12 @@ buildPythonPackage rec {
     "pymumble_py3.constants"
   ];
 
-  meta = with lib; {
-    description = "Python 3 version of pymumble, Mumble library used for multiple uses like making mumble bot.";
-    homepage = "https://github.com/azlux/pymumble";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thelegy infinisil ];
+  meta = {
+    description = "Library to create mumble bots";
+    homepage = "https://github.com/tjni/pymumble";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      thelegy
+    ];
   };
 }

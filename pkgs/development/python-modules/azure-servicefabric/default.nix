@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  msrest,
 }:
 
 buildPythonPackage rec {
   pname = "azure-servicefabric";
   version = "8.2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,10 +25,10 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This project provides a client library in Python that makes it easy to consume Microsoft Azure Storage services";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

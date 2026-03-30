@@ -1,27 +1,41 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, robotframework }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  robotframework,
+  python,
+}:
 
 buildPythonPackage rec {
-  version = "2.1.0";
   pname = "robotstatuschecker";
+  version = "4.1.1";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "statuschecker";
-    rev = "refs/tags/v${version}";
-    sha256 = "0hy1390j3l4kkfna9x9xax4y5mqaa3hdndv3fiyg9wr5f7sx3wnz";
+    tag = "v${version}";
+    hash = "sha256-YyiGd3XSIe+4PEL2l9LYDGH3lt1iRAAJflcBGYXaBzY=";
   };
 
-  propagatedBuildInputs = [ robotframework ];
+  build-system = [ setuptools ];
+
+  dependencies = [ robotframework ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} test/run.py
+
+    runHook postCheck
   '';
 
-  meta = with lib; {
-    description = "A tool for checking that Robot Framework test cases have expected statuses and log messages";
+  meta = {
+    description = "Tool for checking that Robot Framework test cases have expected statuses and log messages";
     homepage = "https://github.com/robotframework/statuschecker";
-    license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,49 +1,62 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromBitbucket
-, freezegun
-, netifaces
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  netifaces,
+  pytest-asyncio,
+  pytestCheckHook,
+  urllib3,
+  setuptools,
+  tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydaikin";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.18.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchFromBitbucket {
-    owner = "mustang51";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-AZDwoq4lCThzwHI0WCzrV9Il2MHp0LKxWg/dscGw0q0=";
+  src = fetchFromGitHub {
+    owner = "fredrike";
+    repo = "pydaikin";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sTcdgbthDAyyWLxPtS344xR8a7UoN+zrfes6FXSo9g4=";
   };
 
-  propagatedBuildInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     netifaces
     urllib3
+    tenacity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    aresponses
     freezegun
-    pytest-aiohttp
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pydaikin"
+  disabledTests = [
+    # Failed: async def functions are not natively supported.
+    "test_power_sensors"
+    "test_device_factory"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pydaikin" ];
+
+  meta = {
     description = "Python Daikin HVAC appliances interface";
-    homepage = "https://bitbucket.org/mustang51/pydaikin";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/fredrike/pydaikin";
+    changelog = "https://github.com/fredrike/pydaikin/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pydaikin";
   };
-}
+})

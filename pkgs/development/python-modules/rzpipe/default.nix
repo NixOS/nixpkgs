@@ -1,31 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  rizin,
 }:
 
 buildPythonPackage rec {
   pname = "rzpipe";
-  version = "0.4.0";
-
-  disabled = pythonOlder "3.5";
+  version = "0.6.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RSgBwmtpI58caRWov+cDWLKhti+7r70VxJbCxJveEiM=";
+    hash = "sha256-KKqPFMGgsmiYZ0tXTIhhvhLDfm/iV8JcYeVc4akezYc=";
   };
+
+  postPatch = ''
+    substituteInPlace rzpipe/open_sync.py \
+      --replace-fail "cmd = [rze," "cmd = ['${lib.getExe rizin}',"
+  '';
+
+  build-system = [ setuptools ];
 
   # No native rz_core library
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rzpipe"
-  ];
+  pythonImportsCheck = [ "rzpipe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for rizin";
     homepage = "https://rizin.re";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/rizinorg/rizin/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

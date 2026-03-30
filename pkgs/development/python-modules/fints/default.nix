@@ -1,32 +1,56 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, bleach
-, mt-940
-, requests
-, sepaxml
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  fetchFromGitHub,
+  bleach,
+  lxml,
+  mt-940,
+  requests,
+  sepaxml,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "5.0.0";
   pname = "fints";
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
-    rev = "v${version}";
-    hash = "sha256-3frJIEZgVnZD2spWYIuEtUt7MVsU/Zj82HOB9fKYQWE=";
+    tag = "v${version}";
+    hash = "sha256-ll2+PtcGQiY5nbQTKVetd2ecDBVSXgzWP4Vzzri1Trs=";
   };
 
-  propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
+  pythonRemoveDeps = [ "enum-tools" ];
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [
+    bleach
+    lxml
+    mt-940
+    requests
+    sepaxml
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "fints" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  meta = {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ elohmeier dotlambda ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      dotlambda
+    ];
   };
 }

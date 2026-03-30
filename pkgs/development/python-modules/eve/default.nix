@@ -1,53 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flask
-, events
-, pymongo
-, simplejson
-, cerberus
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cerberus,
+  events,
+  fetchFromGitHub,
+  flask,
+  pymongo,
+  setuptools,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "eve";
-  version = "2.0.4";
-  format = "setuptools";
+  version = "2.2.5";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Eve";
-    sha256 = "sha256-RZ6dwekCKA+PomBp2Ht7/0elOLLUs/sO0KgdxxTOjtc=";
+  src = fetchFromGitHub {
+    owner = "pyeve";
+    repo = "eve";
+    tag = "v${version}";
+    hash = "sha256-l5dAHgau6LVROkNgFQcCJl2uiSh/2Jg/GtZgSHbUBug=";
   };
 
-  disabled = pythonOlder "3.7";
+  pythonRelaxDeps = [ "events" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cerberus
     events
     flask
     pymongo
     simplejson
-    setuptools
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "flask<2.2" "flask" \
-      --replace "events>=0.3,<0.4" "events>=0.3"
-  '';
 
   pythonImportsCheck = [ "eve" ];
 
-  # tests call a running mongodb instance
+  # Tests call a running mongodb instance
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://python-eve.org/";
+  meta = {
     description = "Open source Python REST API framework designed for human beings";
-    changelog = "https://github.com/pyeve/eve/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    homepage = "https://python-eve.org/";
+    changelog = "https://github.com/pyeve/eve/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

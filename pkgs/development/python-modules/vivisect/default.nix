@@ -1,51 +1,52 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, wrapQtAppsHook
-
-# propagates
-, pyasn1
-, pyasn1-modules
-, cxxfilt
-, msgpack
-, pycparser
-
-# extras: gui
-, pyqt5
-, pyqtwebengine
-
-# knobs
-, withGui ? false
+{
+  lib,
+  buildPythonPackage,
+  cxxfilt,
+  fetchPypi,
+  msgpack,
+  pyasn1,
+  pyasn1-modules,
+  pycparser,
+  pyqt5,
+  pyqtwebengine,
+  withGui ? false,
+  wrapQtAppsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.0.8";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y8y6sAQJa9baPPdhtuR9Jv1tJkNWJsS1hJ1lknkHWU4=";
+    hash = "sha256-sI/xlbodbud5GJ3s9atmDS1KOD7VYs7B3OdYCx1NgE4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'cxxfilt>=0.2.1,<0.3.0' 'cxxfilt'
-  '';
+  pythonRelaxDeps = [
+    "cxxfilt"
+    "msgpack"
+    "pyasn1"
+    "pyasn1-modules"
+  ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyasn1
     pyasn1-modules
     cxxfilt
     msgpack
     pycparser
-  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+  ]
+  ++ lib.optionals withGui optional-dependencies.gui;
 
-  passthru.optional-dependencies.gui = [
+  optional-dependencies.gui = [
     pyqt5
     pyqtwebengine
   ];
@@ -54,17 +55,16 @@ buildPythonPackage rec {
     wrapQtApp $out/bin/vivbin
   '';
 
-  # requires another repo for test files
+  # Tests requires another repo for test files
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vivisect"
-  ];
+  pythonImportsCheck = [ "vivisect" ];
 
-  meta = with lib; {
-    description = "Pure python disassembler, debugger, emulator, and static analysis framework";
+  meta = {
+    description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
-    license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

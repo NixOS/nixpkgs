@@ -1,29 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pynacl
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pynacl,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pynuki";
-  version = "1.6.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.6.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pschmitt";
-    repo = pname;
-    rev = version;
-    hash = "sha256-9WiPApesocE9wXyI/qH+TTfbsTgJTyifSW3tfNro7XI=";
+    repo = "pynuki";
+    tag = version;
+    hash = "sha256-PF5FmAuPcJXq8gQ8HyzdtL2HiiUjueT+LAS1lYRvrwM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pynacl
@@ -33,14 +29,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pynuki"
-  ];
+  pythonImportsCheck = [ "pynuki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for nuki.io bridges";
     homepage = "https://github.com/pschmitt/pynuki";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pschmitt/pynuki/releases/tag/${version}";
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

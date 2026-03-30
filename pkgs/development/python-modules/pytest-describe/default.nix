@@ -1,40 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build
-, pytest
+  # build-system
+  uv-build,
 
-# tests
-, pytestCheckHook
+  # dependencies
+  pytest,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
   pname = "pytest-describe";
-  version = "2.0.1";
+  version = "3.1.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5cuqMRafAGA0itXKAZECfl8fQfPyf97vIINl4JxV65o=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-describe";
+    tag = version;
+    hash = "sha256-ygrZwd1cO9arekdzqn5Axjz4i9Q0QKFA/OS6QSIvP9Y=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.4,<0.10.0" uv_build
+  '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ uv-build ];
 
-  meta = with lib; {
+  buildInputs = [ pytest ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Describe-style plugin for the pytest framework";
     homepage = "https://github.com/pytest-dev/pytest-describe";
     changelog = "https://github.com/pytest-dev/pytest-describe/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -1,9 +1,25 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake
-, qtbase, qtscript, qtwebkit, qtserialport, qtsvg, qtdeclarative, qtquickcontrols2
-, alsa-lib, libsndfile, flite, openssl, udev, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  qtbase,
+  qtscript,
+  qtwebkit,
+  qtserialport,
+  qtsvg,
+  qtdeclarative,
+  qtquickcontrols2,
+  alsa-lib,
+  libsndfile,
+  flite,
+  openssl,
+  udev,
+  SDL2,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "apmplanner2";
   version = "2.0.28";
 
@@ -14,12 +30,26 @@ mkDerivation rec {
     sha256 = "0wvbfjnnf7sh6fpgw8gimh5hgzywj3nwrgr80r782f5gayd3v2l1";
   };
 
-  buildInputs = [
-    alsa-lib libsndfile flite openssl udev SDL2
-    qtbase qtscript qtwebkit qtserialport qtsvg qtdeclarative qtquickcontrols2
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
   ];
 
-  nativeBuildInputs = [ qmake ];
+  buildInputs = [
+    alsa-lib
+    libsndfile
+    flite
+    openssl
+    udev
+    SDL2
+    qtbase
+    qtscript
+    qtwebkit
+    qtserialport
+    qtsvg
+    qtdeclarative
+    qtquickcontrols2
+  ];
 
   qmakeFlags = [ "apm_planner.pro" ];
 

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -10,28 +10,22 @@ buildPythonPackage rec {
   version = "0.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-A7tfY+aFzhfruCZ43usj1/CsTejbPMzHM8SYrY/TU1s=";
+    hash = "sha256-A7tfY+aFzhfruCZ43usj1/CsTejbPMzHM8SYrY/TU1s=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "goveelights"
-  ];
+  pythonImportsCheck = [ "goveelights" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with the Govee API";
     homepage = "https://github.com/arcanearronax/govee_lights";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,32 +1,42 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, python-i18n
-, pytestCheckHook
+{
+  lib,
+  pkgs,
+  stdenv,
+  buildPythonPackage,
+  nix-update-script,
+  fetchFromGitHub,
+  setuptools,
+  pygame-ce,
+  python-i18n,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "064";
+  version = "0614";
+  pyproject = true;
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    rev = "refs/tags/v_${version}";
-    sha256 = "sha256-13+fK1hYxiMh0T+xbbmHViZjyBoQfRyIDc05fIJ/46U=";
+    tag = "v_${version}";
+    hash = "sha256-wLvWaJuXMXk7zOaSZfIpsXhQt+eCjOtlh8IRuKbR75o=";
   };
 
-  propagatedBuildInputs = [ pygame python-i18n ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    pygame-ce
+    python-i18n
+  ];
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
-      --replace "xsel" "${pkgs.xsel}/bin/xsel"
+      --replace-fail "xsel" "${lib.getExe pkgs.xsel}"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -44,16 +54,29 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_v_select_range"
     "test_process_event_text_ctrl_a"
     "test_process_event_text_ctrl_x"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails to determine "/" as an existing path
+    # https://github.com/MyreMylar/pygame_gui/issues/644
+    "test_process_event"
   ];
 
-  disabledTestPaths = [
-    "tests/test_performance/test_text_performance.py"
-  ];
+  disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
-  meta = with lib; {
-    description = "A GUI system for pygame";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v_(.*)"
+    ];
+  };
+
+  meta = {
+    description = "GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      pbsds
+    ];
   };
 }

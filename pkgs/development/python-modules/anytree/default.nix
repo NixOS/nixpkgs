@@ -1,57 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, substituteAll
-, six
-, withGraphviz ? true
-, graphviz
-, fontconfig
-# Tests
-, pytestCheckHook
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+
+  # build-system
+  pdm-backend,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
+  pyyaml,
+  test2ref,
+  fontconfig,
 }:
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.8.0";
+  version = "2.13.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3f0f93f355a91bc3e6245319bf4c1d50e3416cc7a35cc1133c1ff38306bbccab";
+  src = fetchFromGitHub {
+    owner = "c0fec0de";
+    repo = "anytree";
+    tag = version;
+    hash = "sha256-kFNYJMWagpqixs84+AaNkh/28asLBJhibTP8LEEe4XY=";
   };
 
-  patches = lib.optionals withGraphviz [
-    (substituteAll {
-      src = ./graphviz.patch;
-      inherit graphviz;
-    })
+  postPatch = ''
+    substituteInPlace src/anytree/exporter/dotexporter.py \
+      --replace-fail \
+        'cmd = ["dot"' \
+        'cmd = ["${lib.getExe' graphviz "dot"}"'
+  '';
+
+  build-system = [ pdm-backend ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+    pyyaml
+    test2ref
   ];
 
-  propagatedBuildInputs = [
-    six
-  ];
-
-  # tests print “Fontconfig error: Cannot load default config file”
-  preCheck = lib.optionalString withGraphviz ''
+  # Tests print “Fontconfig error: Cannot load default config file”
+  preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
   '';
 
-  # circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
-  doCheck = withGraphviz;
+  pythonImportsCheck = [ "anytree" ];
 
-  checkInputs = [ pytestCheckHook nose ];
-
-  pytestFlagsArray = lib.optionals (pythonOlder "3.4") [
-    # Use enums, which aren't available pre-python3.4
-    "--ignore=tests/test_resolver.py"
-    "--ignore=tests/test_search.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Powerful and Lightweight Python Tree Data Structure";
     homepage = "https://github.com/c0fec0de/anytree";
-    license = licenses.asl20;
+    changelog = "https://github.com/c0fec0de/anytree/releases/tag/${version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

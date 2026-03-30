@@ -1,56 +1,59 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatchling
-, hatch-nodejs-version
-, fastjsonschema
-, jsonschema
-, jupyter_core
-, traitlets
-, pep440
-, pytestCheckHook
-, testpath
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchPypi,
+  hatchling,
+  hatch-nodejs-version,
+  fastjsonschema,
+  jsonschema,
+  jupyter-core,
+  traitlets,
+  pep440,
+  pytestCheckHook,
+  testpath,
 }:
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.7.0";
-
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  version = "5.10.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d4760c15c1a04269ef5caf375be8b98dd2f696e5eb9e603ec2bf091f9b0d3f3";
+    hash = "sha256-MiFosU+Tel0RNimI7KwqSVLT2OOiy+sjGVhGMSJtWzo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-nodejs-version
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastjsonschema
     jsonschema
-    jupyter_core
+    jupyter-core
     traitlets
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "nbformat" ];
+
+  nativeCheckInputs = [
     pep440
     pytestCheckHook
     testpath
   ];
 
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The Jupyter Notebook format";
+    description = "Jupyter Notebook format";
+    mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = [ ];
   };
 }

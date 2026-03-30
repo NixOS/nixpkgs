@@ -1,41 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nampa";
-  version = "1.0";
+  version = "1.0-unstable-2024-12-18";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thebabush";
-    repo = pname;
-    rev = version;
-    sha256 = "14b6xjm497wrfw4kv24zhsvz2l6zknvx36w8i754hfwz3s3fsl6a";
+    repo = "nampa";
+    rev = "cb6a63aae64324f57bdc296064bc6aa2b99ff99a";
+    hash = "sha256-4NEfrx5cR6Zk713oBRZBe52mrbHKhs1doJFAdjnobig=";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    # https://github.com/thebabush/nampa/pull/13
-    substituteInPlace setup.py \
-      --replace "0.1.1" "${version}"
-  '';
+  # Not used for binaryninja as plugin
+  doCheck = false;
 
   pythonImportsCheck = [ "nampa" ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Python implementation of the FLIRT technology";
     homepage = "https://github.com/thebabush/nampa";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/thebabush/nampa/commits/cb6a63aae64324f57bdc296064bc6aa2b99ff99a/";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

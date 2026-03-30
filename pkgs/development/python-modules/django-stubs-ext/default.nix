@@ -1,23 +1,69 @@
-{ buildPythonPackage, django, fetchPypi, lib, typing-extensions }:
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  uv-build,
+  oracledb,
+  pytest-mypy-plugins,
+  pytest-xdist,
+  pytestCheckHook,
+  redis,
+  typing-extensions,
+}:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "0.5.0";
+  version = "5.2.9";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-m9dBg3arALf4jW1Wvp/s6Fv6DHw0isYhFV+k16kRRvI=";
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "django-stubs";
+    tag = version;
+    hash = "sha256-42FluS2fmfgj4qk2u+Z/7TGhXY4WKUc0cI00go6rnGc=";
   };
 
-  # setup.cfg tries to pull in nonexistent LICENSE.txt file
-  postPatch = "rm setup.cfg";
+  postPatch = ''
+    cd ext
+    ln -s ../scripts
 
-  propagatedBuildInputs = [ django typing-extensions ];
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.9,<0.10.0" uv_build
+  '';
 
-  meta = with lib; {
+  build-system = [ uv-build ];
+
+  dependencies = [
+    django
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    redis = [ redis ];
+    oracle = [ oracledb ];
+  };
+
+  nativeCheckInputs = [
+    pytest-mypy-plugins
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # error: Skipping analyzing "django.db": module is installed, but missing library stubs or py.typed marker  [import-untyped] (diff)
+    "tests/typecheck"
+  ];
+
+  # Tests are not shipped with PyPI
+
+  pythonImportsCheck = [ "django_stubs_ext" ];
+
+  meta = {
     description = "Extensions and monkey-patching for django-stubs";
     homepage = "https://github.com/typeddjango/django-stubs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

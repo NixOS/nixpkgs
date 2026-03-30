@@ -1,46 +1,70 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, alcotest
-, dedukti
-, bindlib
-, camlp-streams
-, cmdliner
-, menhir
-, pratter
-, sedlex
-, stdlib-shims
-, timed
-, why3
-, yojson
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildDunePackage,
+  alcotest,
+  dedukti,
+  camlp-streams,
+  cmdliner,
+  dream,
+  lwt_ppx,
+  menhir,
+  pratter,
+  sedlex,
+  stdlib-shims,
+  timed,
+  why3,
+  yojson,
 }:
 
 buildDunePackage rec {
   pname = "lambdapi";
-  version = "2.2.1";
+  version = "3.0.0";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.14";
 
-  src = fetchFromGitHub {
-    owner = "Deducteam";
-    repo = pname;
-    rev = version;
-    hash = "sha256-p2ZjSfiZwkf8X4fSNJx7bAVpTFl4UBHIEANIWF7NGCs=";
+  src = fetchurl {
+    url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
+    hash = "sha256-EGau0mGP2OakAMUUfb9V6pd86NP+LlGKxnhcZ3WhuL4=";
   };
 
-  nativeBuildInputs = [ menhir ];
-  propagatedBuildInputs = [
-    bindlib camlp-streams cmdliner pratter sedlex stdlib-shims timed why3 yojson
+  patches = [
+    # Compatibility with cmdliner ≥ 2
+    (fetchpatch {
+      url = "https://github.com/Deducteam/lambdapi/commit/8e27c0f668915fbd49e32bdac246d6d515a64dd0.patch";
+      hash = "sha256-9CkvH1o81T9LP+IPogKGhoiIDP76/nRfq59ttU7r0fI=";
+    })
   ];
 
-  checkInputs = [ alcotest dedukti ];
-  doCheck = false;  # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
+  nativeBuildInputs = [
+    dream
+    menhir
+  ];
+  buildInputs = [ lwt_ppx ];
+  propagatedBuildInputs = [
+    camlp-streams
+    cmdliner
+    dream
+    pratter
+    sedlex
+    stdlib-shims
+    timed
+    why3
+    yojson
+  ];
 
-  meta = with lib; {
+  checkInputs = [
+    alcotest
+    dedukti
+  ];
+  doCheck = false; # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
+
+  meta = {
     homepage = "https://github.com/Deducteam/lambdapi";
     description = "Proof assistant based on the λΠ-calculus modulo rewriting";
-    license = licenses.cecill21;
+    license = lib.licenses.cecill21;
     changelog = "https://github.com/Deducteam/lambdapi/raw/${version}/CHANGES.md";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

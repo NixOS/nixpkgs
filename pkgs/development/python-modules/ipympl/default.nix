@@ -1,32 +1,88 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-, ipywidgets
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # frontend
+  nodejs,
+  yarn-berry_3,
+
+  # build-system
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  jupyterlab,
+
+  # dependencies
+  ipython,
+  ipywidgets,
+  matplotlib,
+  numpy,
+  pillow,
+  traitlets,
+
+  # tests
+  importlib-metadata,
+  nbval,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipympl";
-  version = "0.9.2";
-  format = "wheel";
+  version = "0.10.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version format;
-    sha256 = "sha256-ZVYE8L9tJkz1mXZpUKWybiktEHzCPhl1A2R+dUF5gcw=";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "ipympl";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IJ7tLUE0Ac4biQc9b87adgDcD8pa9XH1bo8rzDl9DCY=";
   };
 
+  yarnOfflineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-tdfrAf2BSz9n83ctWqRxDHZnhnfhKA3BFNhXVr9wvLY=";
+  };
 
-  propagatedBuildInputs = [ ipykernel ipywidgets matplotlib ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
 
-  # There are no unit tests in repository
-  doCheck = false;
-  pythonImportsCheck = [ "ipympl" "ipympl.backend_nbagg" ];
+  build-system = [
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+    jupyterlab
+  ];
 
-  meta = with lib; {
+  dependencies = [
+    ipython
+    ipywidgets
+    matplotlib
+    numpy
+    pillow
+    traitlets
+  ];
+
+  nativeCheckInputs = [
+    importlib-metadata
+    nbval
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ipympl"
+    "ipympl.backend_nbagg"
+  ];
+
+  meta = {
+    changelog = "https://github.com/matplotlib/ipympl/releases/tag/${finalAttrs.src.tag}";
     description = "Matplotlib Jupyter Extension";
     homepage = "https://github.com/matplotlib/jupyter-matplotlib";
-    maintainers = with maintainers; [ jluttine fabiangd ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      jluttine
+    ];
+    license = lib.licenses.bsd3;
   };
-}
+})

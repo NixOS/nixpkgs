@@ -1,50 +1,90 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, pytest
-, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cftime,
+  curl,
+  cython,
+  fetchFromGitHub,
+  hdf5,
+  isPyPy,
+  libjpeg,
+  netcdf,
+  numpy,
+  oldest-supported-numpy,
+  python,
+  setuptools-scm,
+  stdenv,
+  wheel,
+  zlib,
 }:
-buildPythonPackage rec {
-  pname = "netCDF4";
-  version = "1.6.1";
+
+let
+  version = "1.7.2";
+  suffix = lib.optionalString (lib.match ''.*\.post[0-9]+'' version == null) "rel";
+  tag = "v${version}${suffix}";
+in
+buildPythonPackage {
+  pname = "netcdf4";
+  inherit version;
+  pyproject = true;
 
   disabled = isPyPy;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-uo3F1lKTqZ8a+4wqz1iNkD/f3BljpiVFtnf6JzQmKng=";
+  src = fetchFromGitHub {
+    owner = "Unidata";
+    repo = "netcdf4-python";
+    inherit tag;
+    hash = "sha256-orwCHKOSam+2eRY/yAduFYWREOkJlWIJGIZPZwQZ/RI=";
   };
 
-  checkInputs = [ pytest ];
-
-  buildInputs = [
+  build-system = [
     cython
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    certifi
     cftime
     numpy
-    zlib
-    netcdf
-    hdf5
+  ];
+
+  buildInputs = [
     curl
+    hdf5
     libjpeg
+    netcdf
+    zlib
   ];
 
   checkPhase = ''
-    py.test test/tst_*.py
+    runHook preCheck
+
+    pushd test/
+    NO_NET=1 NO_CDL=1 ${python.interpreter} run_all.py
+
+    runHook postCheck
   '';
 
-  # Tests need fixing.
-  doCheck = false;
+  env = {
+    # Variables used to configure the build process
+    USE_NCCONFIG = "0";
+    HDF5_DIR = lib.getDev hdf5;
+    NETCDF4_DIR = netcdf;
+    CURL_DIR = curl.dev;
+    JPEG_DIR = libjpeg.dev;
+  }
+  // lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion"; };
 
-  # Variables used to configure the build process
-  USE_NCCONFIG="0";
-  HDF5_DIR = lib.getDev hdf5;
-  NETCDF4_DIR=netcdf;
-  CURL_DIR=curl.dev;
-  JPEG_DIR=libjpeg.dev;
+  pythonImportsCheck = [ "netCDF4" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to netCDF library (versions 3 and 4)";
-    homepage = "https://pypi.python.org/pypi/netCDF4";
-    license = licenses.free;  # Mix of license (all MIT* like)
+    homepage = "https://github.com/Unidata/netcdf4-python";
+    changelog = "https://github.com/Unidata/netcdf4-python/raw/${tag}/Changelog";
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

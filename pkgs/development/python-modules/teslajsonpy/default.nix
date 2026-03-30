@@ -1,58 +1,57 @@
-{ lib
-, aiohttp
-, authcaptureproxy
-, backoff
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, wrapt
+{
+  lib,
+  aiohttp,
+  authcaptureproxy,
+  backoff,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  tenacity,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "3.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.13.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zabuldon";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-y0HaHpdJdEUTVo/1xoCJdOtAohE4eaBGHdjMfbyGE2w=";
+    repo = "teslajsonpy";
+    tag = "v${version}";
+    hash = "sha256-tlw5m8RsBGwVx3h+JlY9rwINMDR6csAt2XefK6AaQWE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     authcaptureproxy
     aiohttp
     backoff
     beautifulsoup4
     httpx
+    orjson
+    tenacity
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "teslajsonpy"
-  ];
+  pythonImportsCheck = [ "teslajsonpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to work with Tesla API";
     homepage = "https://github.com/zabuldon/teslajsonpy";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/zabuldon/teslajsonpy/releases/tag/${src.tag}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

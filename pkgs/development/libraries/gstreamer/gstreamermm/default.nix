@@ -1,12 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, file
-, glibmm
-, gst_all_1
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  file,
+  glibmm,
+  gst_all_1,
+  gnome,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +28,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -48,12 +57,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface for GStreamer";
     homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 
 }

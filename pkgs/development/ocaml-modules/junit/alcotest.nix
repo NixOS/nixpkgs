@@ -1,14 +1,20 @@
-{ buildDunePackage, junit, alcotest }:
+{
+  buildDunePackage,
+  lib,
+  ocaml,
+  junit,
+  alcotest,
+}:
 
-buildDunePackage ({
+buildDunePackage {
   pname = "junit_alcotest";
 
-  inherit (junit) src version meta useDune2;
+  inherit (junit) src version meta;
 
   propagatedBuildInputs = [
     junit
     alcotest
   ];
 
-  doCheck = false; # 2 tests fail: 1) "Test with unexpected exception"; 2) "with wrong result";
-})
+  doCheck = lib.versionAtLeast ocaml.version "4.12";
+}

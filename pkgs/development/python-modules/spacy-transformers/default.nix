@@ -1,56 +1,78 @@
-{ lib
-, callPackage
-, fetchPypi
-, buildPythonPackage
-, dataclasses
-, torch
-, pythonOlder
-, spacy
-, spacy-alignments
-, srsly
-, transformers
+{
+  lib,
+  callPackage,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # dependencies
+  numpy,
+  spacy,
+  spacy-alignments,
+  srsly,
+  torch,
+  transformers,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spacy-transformers";
-  version = "1.1.8";
-  format = "setuptools";
+  version = "1.3.9";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-e7YuBEq2yggW5G2pJ0Rjw9z3c1jqgRKCifYSfnzblVs=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "spacy-transformers";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-06M/e8/+hMVQdZfqyI3qGaZY7iznMwMtblEkFR6Sro0=";
   };
 
-  propagatedBuildInputs = [
-    torch
+  # ImportError: cannot import name 'BatchEncoding' from 'transformers.tokenization_utils' (unknown location)
+  postPatch = ''
+    substituteInPlace \
+      spacy_transformers/data_classes.py \
+      spacy_transformers/layers/transformer_model.py \
+      spacy_transformers/util.py \
+      --replace-fail \
+        "from transformers.tokenization_utils import BatchEncoding" \
+        "from transformers import BatchEncoding"
+  '';
+
+  build-system = [
+    cython
+    setuptools
+  ];
+
+  dependencies = [
+    numpy
     spacy
     spacy-alignments
     srsly
+    torch
     transformers
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "transformers>=3.4.0,<4.22.0" "transformers>=3.4.0 # ,<4.22.0"
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonRelaxDeps = [ "transformers" ];
 
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spacy_transformers"
-  ];
+  pythonImportsCheck = [ "spacy_transformers" ];
 
   passthru.tests.annotation = callPackage ./annotation-test { };
 
-  meta = with lib; {
+  meta = {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/explosion/spacy-transformers/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -1,29 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, enum34
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  tensorflow,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "gin-config";
   version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c6ea5026ded927c8c93c990b01c695257c1df446e45e549a158cfbc79e19ed6";
-
+    hash = "sha256-DG6lAm3tknyMk8mQsBxpUlfB30RuReVJoVjPvHnhntY=";
   };
 
-  propagatedBuildInputs = [ six enum34 ];
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    tensorflow = [ tensorflow ];
+    torch = [ torch ];
+  };
 
   # PyPI archive does not ship with tests
-  doCheck= false;
+  doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "gin" ];
+
+  meta = {
+    description = "Gin provides a lightweight configuration framework for Python, based on dependency injection";
     homepage = "https://github.com/google/gin-config";
-    description = "Gin provides a lightweight configuration framework for Python, based on dependency injection.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jethro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jethro ];
   };
 }

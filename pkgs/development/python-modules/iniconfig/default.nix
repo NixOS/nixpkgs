@@ -1,23 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "iniconfig";
-  version = "1.1.1";
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32";
+    hash = "sha256-x2MVx32waGUNScW1YxR3SngE3xb+5EAsHxnW0V2MRzA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  doCheck = false; # avoid circular import with pytest
   pythonImportsCheck = [ "iniconfig" ];
 
-  meta = with lib; {
-    description = "brain-dead simple parsing of ini files";
+  # Requires pytest, which in turn requires this package - causes infinite
+  # recursion. See also: https://github.com/NixOS/nixpkgs/issues/63168
+  doCheck = false;
+
+  meta = {
+    description = "Brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

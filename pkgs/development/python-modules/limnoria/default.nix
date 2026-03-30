@@ -1,31 +1,37 @@
-{ lib
-, buildPythonPackage
-, chardet
-, cryptography
-, feedparser
-, fetchPypi
-, mock
-, pysocks
-, pytestCheckHook
-, python-dateutil
-, python-gnupg
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  chardet,
+  cryptography,
+  feedparser,
+  fetchPypi,
+  mock,
+  pysocks,
+  pytestCheckHook,
+  python-dateutil,
+  python-gnupg,
+  pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "limnoria";
-  version = "2022.9.20";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2026.1.16";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-db+JKQXDffMm5dcyMVtYNj1YFKHSlvYAoyZi86tqoiA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ZkEXZMjJsEgSwX2a8TwaQ/vtvskSOFwNBZg/Ru5q/bc=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=version" 'version="${finalAttrs.version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     cryptography
     feedparser
@@ -33,18 +39,9 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "version=version" 'version="${version}"'
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkPhase = ''
     runHook preCheck
@@ -58,10 +55,11 @@ buildPythonPackage rec {
     "supybot"
   ];
 
-  meta = with lib; {
-    description = "A modified version of Supybot, an IRC bot";
+  meta = {
+    description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu ];
+    changelog = "https://github.com/progval/Limnoria/releases/tag/master-${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})

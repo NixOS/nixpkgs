@@ -1,44 +1,55 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pytestCheckHook,
-  libffi, pkg-config, pycparser
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  libffi,
+  pkg-config,
+  pycparser,
+  pytestCheckHook,
+  setuptools,
+  stdenv,
 }:
 
-if isPyPy then null else buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "cffi";
-  version = "1.15.1";
+  version = "2.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1AC/uaN7E1ElPLQCZxzqfom97MKU6AFqcH9tHYrJNPk=";
+  src = fetchFromGitHub {
+    owner = "python-cffi";
+    repo = "cffi";
+    tag = "v${version}";
+    hash = "sha256-7Mzz3KmmmE2xQru1GA4aY0DZqn6vxykWiExQvnA1bjM=";
   };
-
-  buildInputs = [ libffi ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ pycparser ];
+  build-system = [ setuptools ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # Remove setup.py impurities
-    substituteInPlace setup.py \
-      --replace "'-iwithsysroot/usr/include/ffi'" "" \
-      --replace "'/usr/include/ffi'," "" \
-      --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
-  '';
+  buildInputs = [ libffi ];
 
-  # The tests use -Werror but with python3.6 clang detects some unreachable code.
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";
+  # Some dependent packages expect to have pycparser available when using cffi.
+  dependencies = [ pycparser ];
 
-  # Lots of tests fail on aarch64-darwin due to "Cannot allocate write+execute memory":
-  # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-  doCheck = !stdenv.hostPlatform.isMusl && !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isMusl || stdenv.hostPlatform.useLLVM or false);
 
-  checkInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # parse errror
+    "test_dont_remove_comment_in_line_directives"
+    "test_multiple_line_directives"
+    "test_commented_line_directive"
+    # exception mismatch
+    "test_unknown_name"
+  ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ domenkozar lnl7 ];
-    homepage = "https://cffi.readthedocs.org/";
-    license = licenses.mit;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
+    changelog = "https://github.com/python-cffi/cffi/releases/tag/v${version}";
     description = "Foreign Function Interface for Python calling C code";
+    downloadPage = "https://github.com/python-cffi/cffi";
+    homepage = "https://cffi.readthedocs.org/";
+    license = lib.licenses.mit0;
+    teams = [ lib.teams.python ];
   };
 }

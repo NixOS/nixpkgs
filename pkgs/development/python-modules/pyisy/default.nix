@@ -1,30 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, python-dateutil
-, aiohttp
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  python-dateutil,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.0.8";
+  version = "3.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "automicus";
     repo = "PyISY";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Q3KewvZJMq4YKrpS6ir5rqZkDhxGACDIhlbr3b6lDAs=";
+    tag = "v${version}";
+    hash = "sha256-9gGrrFh5xCuX4GjF6a6RRGkpF/rH07Zz0nyKvgwgEkU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setuptools-git-version" "" \
       --replace 'version_format="{tag}"' 'version="${version}"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     aiohttp
+    colorlog
     python-dateutil
     requests
   ];
@@ -34,10 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyisy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to talk to ISY994 from UDI";
     homepage = "https://github.com/automicus/PyISY";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/automicus/PyISY/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,28 +13,24 @@ buildPythonPackage rec {
   version = "0.0.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "imstevenxyz";
-    repo = pname;
+    repo = "pyversasense";
     rev = "v${version}";
     sha256 = "vTaDEwImWDMInwti0Jj+j+RFEtXOOKtiH5wOMD6ZmJk=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  doCheck = false; # asynctest unsupported on 3.11+
+
+  nativeCheckInputs = [
     asynctest
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   disabledTests = [
     # Tests are not properly mocking network requests
@@ -44,14 +40,12 @@ buildPythonPackage rec {
     "test_samples"
   ];
 
-  pythonImportsCheck = [
-    "pyversasense"
-  ];
+  pythonImportsCheck = [ "pyversasense" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with the VersaSense API";
     homepage = "https://github.com/imstevenxyz/pyversasense";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

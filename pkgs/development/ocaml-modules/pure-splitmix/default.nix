@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "pure-splitmix";
@@ -13,10 +17,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Lysxia/pure-splitmix";
     description = "Purely functional splittable PRNG";
-    license = licenses.mit;
-    maintainers = [ maintainers.ulrikstrid ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ulrikstrid ];
   };
 }

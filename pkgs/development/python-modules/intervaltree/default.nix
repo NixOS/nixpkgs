@@ -1,30 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi
-, python, pytest, sortedcontainers }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  uv-dynamic-versioning,
+  pytestCheckHook,
+  sortedcontainers,
+}:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.1";
   pname = "intervaltree";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d";
+    sha256 = "sha256-8/fouut911ufem0zzz7BACWYSo5m4wFtU35SEwxzz+I=";
   };
 
-  buildInputs = [ pytest ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  dependencies = [ sortedcontainers ];
 
-  checkPhase = ''
-    runHook preCheck
-    rm build -rf
-    ${python.interpreter} nix_run_setup test
-    runHook postCheck
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf build
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editable interval tree data structure for Python 2 and 3";
-    homepage =  "https://github.com/chaimleib/intervaltree";
-    license = [ licenses.asl20 ];
-    maintainers =  [ maintainers.bennofs ];
+    homepage = "https://github.com/chaimleib/intervaltree";
+    license = [ lib.licenses.asl20 ];
+    maintainers = [ lib.maintainers.bennofs ];
   };
 }

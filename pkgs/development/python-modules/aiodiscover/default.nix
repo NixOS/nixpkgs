@@ -1,46 +1,43 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, ifaddr
-, netifaces
-, pyroute2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiodns,
+  buildPythonPackage,
+  cached-ipaddress,
+  fetchFromGitHub,
+  ifaddr,
+  netifaces,
+  poetry-core,
+  pyroute2,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.13";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-tIbLb4Jk3vR1hVcdUPuYJrse7BcfE4Z/dXShs/uBDBo=";
+    repo = "aiodiscover";
+    tag = "v${version}";
+    hash = "sha256-q0HXANSfoDPlGdokfiQcsMHkt9ZmD604JRL/SDQx2hw=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-    dnspython
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiodns
+    cached-ipaddress
+    ifaddr
     netifaces
     pyroute2
-    ifaddr
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner>=5.2",' "" \
-      --replace "pyroute2>=0.5.18,!=0.6.1" "pyroute2"
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -49,14 +46,13 @@ buildPythonPackage rec {
     "test_async_discover_hosts"
   ];
 
-  pythonImportsCheck = [
-    "aiodiscover"
-  ];
+  pythonImportsCheck = [ "aiodiscover" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${src.tag}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

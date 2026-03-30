@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "speaklater3";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "speaklater" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implements a lazy string for python useful for use with gettext";
     homepage = "https://github.com/mitsuhiko/speaklater";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

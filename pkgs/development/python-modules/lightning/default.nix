@@ -1,30 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, jinja2
-, matplotlib
-, numpy
-, requests
-, six
+{
+  buildPythonPackage,
+
+  # dependencies
+  pytorch-lightning,
+
+  # tests
+  psutil,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  version = "1.2.1";
-  pname = "lightning-python";
+buildPythonPackage {
+  pname = "lightning";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3987d7d4a634bdb6db9bcf212cf4d2f72bab5bc039f4f6cbc02c9d01c4ade792";
-  };
+  inherit (pytorch-lightning)
+    version
+    src
+    build-system
+    meta
+    ;
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jinja2 matplotlib numpy requests six ];
+  dependencies = pytorch-lightning.dependencies ++ [ pytorch-lightning ];
 
-  meta = with lib; {
-    description = "A Python client library for the Lightning data visualization server";
-    homepage = "http://lightning-viz.org";
-    license = licenses.mit;
-  };
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+  ];
 
+  # Some packages are not in nixpkgs; other tests try to build distributed
+  # models, which doesn't work in the sandbox.
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "lightning"
+    "lightning.pytorch"
+  ];
 }

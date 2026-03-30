@@ -2,10 +2,12 @@
 # and callHackage
 { lib, fetchurl }:
 let
-  pin = builtins.fromJSON (builtins.readFile ./pin.json);
+  pin = lib.importJSON ./pin.json;
 in
-fetchurl {
+fetchurl (finalAttrs: {
   inherit (pin) url sha256;
-  name = "all-cabal-hashes-${lib.substring 0 7 pin.commit}.tar.gz";
+  name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+  pname = "all-cabal-hashes";
+  version = lib.substring 0 7 pin.commit;
   passthru.updateScript = ../../../../maintainers/scripts/haskell/update-hackage.sh;
-}
+})

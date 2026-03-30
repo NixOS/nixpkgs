@@ -1,38 +1,59 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, openssl
-, cryptography
-, pytestCheckHook
-, pretend
-, flaky
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  openssl,
+  setuptools,
+  cryptography,
+  typing-extensions,
+  pytestCheckHook,
+  pretend,
+  sphinxHook,
+  sphinx-rtd-theme,
+  pytest-rerunfailures,
 }:
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "22.0.0";
+  version = "25.3.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "pyOpenSSL";
-    inherit version;
-    sha256 = "sha256-ZgsbFCWqxKG+odlBaKhdmfCzFEyGndQ5DSdinQCH8b8=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "pyopenssl";
+    tag = version;
+    hash = "sha256-lNXS3lIGFPeM7DKMFTLBiOWn+AwZtenXF5KGN5DRwO4=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
-  # Seems to fail unpredictably on Darwin. See https://hydra.nixos.org/build/49877419/nixlog/1
-  # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
-  doCheck = !stdenv.isDarwin;
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ openssl ];
-  propagatedBuildInputs = [ cryptography ];
+  nativeBuildInputs = [
+    openssl
+    sphinxHook
+    sphinx-rtd-theme
+  ];
 
-  checkInputs = [ pytestCheckHook pretend flaky ];
+  pythonRelaxDeps = [ "cryptography" ];
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
+  dependencies = [
+    cryptography
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pretend
+    pytest-rerunfailures
+    pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # https://github.com/pyca/pyopenssl/issues/692
@@ -43,7 +64,10 @@ buildPythonPackage rec {
     "test_wantWriteError"
     # https://github.com/pyca/pyopenssl/issues/1043
     "test_alpn_call_failure"
-  ] ++ lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) [
+    # https://github.com/pyca/pyopenssl/issues/1455
+    "test_client_receives_servers_data"
+  ]
+  ++ lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) [
     # https://github.com/pyca/pyopenssl/issues/791
     # These tests, we disable in the case that libressl is passed in as openssl.
     "test_op_no_compression"
@@ -58,23 +82,24 @@ buildPythonPackage rec {
     "test_verify_with_revoked"
     "test_set_notAfter"
     "test_set_notBefore"
-  ] ++ lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1") [
+  ]
+  ++ lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1") [
     # these tests are extremely tightly wed to the exact output of the openssl cli tool, including exact punctuation.
     "test_dump_certificate"
     "test_dump_privatekey_text"
     "test_dump_certificate_request"
     "test_export_text"
-  ] ++ lib.optionals stdenv.is32bit [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
     # https://github.com/pyca/pyopenssl/issues/974
     "test_verify_with_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the OpenSSL library";
     homepage = "https://github.com/pyca/pyopenssl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    # https://github.com/pyca/pyopenssl/issues/873
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

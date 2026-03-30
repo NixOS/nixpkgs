@@ -1,14 +1,12 @@
-{ buildPythonApplication
-, drawio-headless
-, fetchFromGitHub
-, lib
-, pandoc
-, pandocfilters
-, runCommand
-, runtimeShell
-, texlive
-, writeScriptBin
-, xvfb-run
+{
+  buildPythonApplication,
+  drawio-headless,
+  fetchFromGitHub,
+  lib,
+  pandoc,
+  pandocfilters,
+  runCommand,
+  texliveTeTeX,
 }:
 
 let
@@ -22,6 +20,7 @@ let
   };
 
   pandoc-drawio-filter = buildPythonApplication {
+    format = "setuptools";
     pname = "pandoc-drawio-filter";
 
     inherit src version;
@@ -37,7 +36,7 @@ let
           nativeBuildInputs = [
             pandoc
             pandoc-drawio-filter
-            texlive.combined.scheme-tetex
+            texliveTeTeX
           ];
         };
       in
@@ -46,11 +45,12 @@ let
         pandoc -F pandoc-drawio example.md -T pdf -o $out
       '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/tfc/pandoc-drawio-filter";
       description = "Pandoc filter which converts draw.io diagrams to PDF";
-      license = licenses.mit;
-      maintainers = with maintainers; [ tfc ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ tfc ];
+      mainProgram = "pandoc-drawio";
     };
   };
 

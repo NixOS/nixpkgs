@@ -1,28 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, wheel
-, sphinx
-, docutils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  docutils,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-togglebutton";
-  version = "0.3.2";
+  version = "0.4.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-qwyLNmQnsB5MiYAtXQeEcsQn+m6dEtUhw0+gRCVZ3Ho=";
+    inherit version;
+    pname = "sphinx_togglebutton";
+    hash = "sha256-BMMyaS/V9TY60CoAHmkzaXZ9bB8OWCeXcKKutXG0cqE=";
   };
 
-  propagatedBuildInputs = [ wheel sphinx docutils ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    docutils
+    sphinx
+  ];
 
   pythonImportsCheck = [ "sphinx_togglebutton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toggle page content and collapse admonitions in Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-togglebutton";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

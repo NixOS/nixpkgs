@@ -1,36 +1,33 @@
-{ lib
-, buildPythonPackage
-, dill
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "multiprocess";
-  version = "0.70.13";
+  version = "0.70.19";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
-    rev = "refs/tags/multiprocess-${version}";
-    sha256 = "sha256-L/PesvaidavDEgJGqBxwcCYtG9TlKSwaxrUMJ+XVFOM=";
+    repo = "multiprocess";
+    tag = version;
+    hash = "sha256-dH6SWecBxBQYqLohCg1gPWu6cQ7iKtRmIet9UlDMkWs=";
   };
 
-  propagatedBuildInputs = [
-    dill
-  ];
+  propagatedBuildInputs = [ dill ];
 
   # Python-version dependent tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "multiprocess"
-  ];
+  pythonImportsCheck = [ "multiprocess" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiprocessing and multithreading in Python";
     homepage = "https://github.com/uqfoundation/multiprocess";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

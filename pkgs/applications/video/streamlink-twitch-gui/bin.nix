@@ -1,88 +1,102 @@
-{ autoPatchelfHook
-, fetchurl
-, lib
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, wrapGAppsHook
-, at-spi2-core
-, atk
-, alsa-lib
-, cairo
-, cups
-, dbus
-, expat
-, gcc-unwrapped
-, gdk-pixbuf
-, glib
-, pango
-, gtk3-x11
-, libudev0-shim
-, libuuid
-, mesa
-, nss
-, nspr
-, xorg
-, streamlink
+{
+  autoPatchelfHook,
+  fetchurl,
+  lib,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  wrapGAppsHook3,
+  at-spi2-core,
+  atk,
+  alsa-lib,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  gcc-unwrapped,
+  gdk-pixbuf,
+  glib,
+  pango,
+  gtk3-x11,
+  libudev0-shim,
+  libuuid,
+  libgbm,
+  nss,
+  nspr,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
+  streamlink,
 }:
 let
   basename = "streamlink-twitch-gui";
-  runtimeLibs = lib.makeLibraryPath [ gtk3-x11 libudev0-shim ];
+  runtimeLibs = lib.makeLibraryPath [
+    gtk3-x11
+    libudev0-shim
+  ];
   runtimeBins = lib.makeBinPath [ streamlink ];
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux"
-    then
-      "linux64"
-    else
-      "linux32";
 
 in
 stdenv.mkDerivation rec {
   pname = "${basename}-bin";
-  version = "2.1.0";
+  version = "2.5.3";
 
-  src = fetchurl {
-    url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-${arch}.tar.gz";
-    hash =
-      if arch == "linux64"
-      then
-        "sha256-kfCGhIgKMI0siDqnmIHSMk6RMHFlW6uwVsW48aiRua0="
-      else
-        "sha256-+jgTpIYb4BPM7Ixmo+YUeOX5OlQlMaRVEXf3WzS2lAI=";
-  };
+  src =
+    {
+      x86_64-linux = fetchurl {
+        url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-linux64.tar.gz";
+        hash = "sha256-ue5Ehj/dLOIJNJVq0Pd6EbA1hkVPz5m+3chVvEXaH6U=";
+      };
+      i686-linux = fetchurl {
+        url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-linux32.tar.gz";
+        hash = "sha256-y252QhVsRakngdApOHgegMMhs61KTxL9gfPjBjaSKOI=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = with xorg; [
+  nativeBuildInputs = [
     at-spi2-core
     atk
     alsa-lib
     autoPatchelfHook
     cairo
+    copyDesktopItems
     cups.lib
-    dbus.daemon.lib
+    dbus.lib
     expat
     gcc-unwrapped
     gdk-pixbuf
     glib
     pango
     gtk3-x11
-    mesa
+    libgbm
     nss
     nspr
     libuuid
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXScrnSaver
-    libXtst
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [ streamlink ];
@@ -97,8 +111,12 @@ stdenv.mkDerivation rec {
     # Install all files, remove unnecessary ones
     cp -a . $out/opt/${basename}/
     rm -r $out/opt/${basename}/{{add,remove}-menuitem.sh,credits.html,icons/}
-    ln -s "$out/opt/${basename}/${basename}" $out/bin/
-    cp -r "${desktopItem}/share/applications" $out/share/
+    ln -s $out/opt/${basename}/${basename} $out/bin/
+    for res in 16 32 48 64 128 256; do
+      install -Dm644 \
+        icons/icon-"$res".png \
+        $out/share/icons/hicolor/"$res"x"$res"/apps/${basename}.png
+    done
     runHook postInstall
   '';
 
@@ -110,23 +128,32 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  desktopItem = makeDesktopItem {
-    name = basename;
-    exec = basename;
-    icon = basename;
-    desktopName = "Streamlink Twitch GUI";
-    genericName = meta.description;
-    categories = [ "AudioVideo" "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = basename;
+      exec = basename;
+      icon = basename;
+      desktopName = "Streamlink Twitch GUI";
+      genericName = meta.description;
+      categories = [
+        "AudioVideo"
+        "Network"
+      ];
+    })
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitch.tv browser for Streamlink";
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";
     downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ rileyinman ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    mainProgram = "streamlink-twitch-gui";
+    maintainers = [ ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

@@ -1,35 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "hydrus-api";
-  version = "4.0.0";
-  format = "setuptools";
+  version = "5.1.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4by2TlZJIKElGgaof1w555ik2hUNbg16YekSWwICGmg=";
+    pname = "hydrus_api";
+    inherit version;
+    hash = "sha256-oA3DbdX+MRZiInCKXurBdKlUFQ4jeU+jHr9NxMEHQmI=";
   };
 
-  disabled = pythonOlder "3.9";
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "hydrus_api" ];
 
   # There are no unit tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python module implementing the Hydrus API";
     homepage = "https://gitlab.com/cryzed/hydrus-api";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

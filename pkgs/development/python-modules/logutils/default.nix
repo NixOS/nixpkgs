@@ -1,21 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  valkey,
+  redis,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "logutils";
   version = "0.3.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc058a25d5c209461f134e1f03cab637d66a7a5ccc12e593db56fbb279899a82";
+    hash = "sha256-vAWKJdXCCUYfE04fA8q2N9ZqelzMEuWT21b7snmJmoI=";
   };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace tests/test_dictconfig.py \
+      --replace-fail "assertEquals" "assertEqual"
+    substituteInPlace tests/test_redis.py \
+      --replace-fail "'redis-server'" "'${valkey}/bin/redis-server'"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    pytestCheckHook
+    redis
+  ];
+
+  disabledTests = [
+    # https://bitbucket.org/vinay.sajip/logutils/issues/4/035-pytest-test-suite-warnings-and-errors
+    "test_hashandlers"
+  ];
+
+  disabledTestPaths = [
+    # Disable redis tests on all systems for now
+    "tests/test_redis.py"
+  ]
+  # lib.optionals (stdenv.hostPlatform.isDarwin) [
+  #   # Exception: unable to connect to Redis server
+  #   "tests/test_redis.py"
+  # ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    "tests/test_dictconfig.py"
+  ];
+
+  pythonImportsCheck = [ "logutils" ];
+
+  meta = {
     description = "Logging utilities";
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
-
 }

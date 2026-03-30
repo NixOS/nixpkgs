@@ -1,48 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "goodwe";
-  version = "0.2.20";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.4.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcelblijleven";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-RDd0KR7NjBTlgeQ/E4mnLnB2n4NCPoAt2a62NGdzCZE=";
+    repo = "goodwe";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WHLvfAlwhcA0JFSWfwUPsJ9dWmadIjyonXEP3Bb6WKE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "'marcelblijleven@gmail.com" "marcelblijleven@gmail.com" \
-      --replace "version: file: VERSION" "version = ${version}"
-  '';
-
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/marcelblijleven/goodwe/commit/3a1e57109e61860f59a03626a7e21ee44bbb3639.patch";
+      hash = "sha256-ZYmEdWpOjrU61HAyhNG04oTrSH8F+LUEUskxKkoufu4=";
+    })
   ];
 
-  pythonImportsCheck = [
-    "goodwe"
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "goodwe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for connecting to GoodWe inverter";
     homepage = "https://github.com/marcelblijleven/goodwe";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/marcelblijleven/goodwe/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

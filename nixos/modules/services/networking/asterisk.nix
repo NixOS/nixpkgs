@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.asterisk;
 
@@ -13,7 +15,7 @@ let
   logdir = "/var/log/asterisk";
 
   # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
-  defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
+  defaultConfFiles = lib.subtractLists (lib.attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
   allConfFiles = {
     # Default asterisk.conf file
     "asterisk.conf".text = ''
@@ -47,91 +49,92 @@ let
       [logfiles]
       syslog.local0 => notice,warning,error
     '';
-  } //
-    mapAttrs (name: text: { inherit text; }) cfg.confFiles //
-    listToAttrs (map (x: nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles);
+  }
+  // lib.mapAttrs (name: text: { inherit text; }) cfg.confFiles
+  // lib.listToAttrs (
+    map (x: lib.nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles
+  );
 
 in
 
 {
   options = {
     services.asterisk = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Asterisk PBX server.
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example = ''
           [options]
           verbose=3
           debug=3
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options appended to the default
-          `asterisk.conf` file.
+          {file}`asterisk.conf` file.
         '';
       };
 
-      confFiles = mkOption {
-        default = {};
-        type = types.attrsOf types.str;
-        example = literalExpression
-          ''
-            {
-              "extensions.conf" = '''
-                [tests]
-                ; Dial 100 for "hello, world"
-                exten => 100,1,Answer()
-                same  =>     n,Wait(1)
-                same  =>     n,Playback(hello-world)
-                same  =>     n,Hangup()
+      confFiles = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf lib.types.str;
+        example = lib.literalExpression ''
+          {
+            "extensions.conf" = '''
+              [tests]
+              ; Dial 100 for "hello, world"
+              exten => 100,1,Answer()
+              same  =>     n,Wait(1)
+              same  =>     n,Playback(hello-world)
+              same  =>     n,Hangup()
 
-                [softphones]
-                include => tests
+              [softphones]
+              include => tests
 
-                [unauthorized]
-              ''';
-              "sip.conf" = '''
-                [general]
-                allowguest=no              ; Require authentication
-                context=unauthorized       ; Send unauthorized users to /dev/null
-                srvlookup=no               ; Don't do DNS lookup
-                udpbindaddr=0.0.0.0        ; Listen on all interfaces
-                nat=force_rport,comedia    ; Assume device is behind NAT
+              [unauthorized]
+            ''';
+            "sip.conf" = '''
+              [general]
+              allowguest=no              ; Require authentication
+              context=unauthorized       ; Send unauthorized users to /dev/null
+              srvlookup=no               ; Don't do DNS lookup
+              udpbindaddr=0.0.0.0        ; Listen on all interfaces
+              nat=force_rport,comedia    ; Assume device is behind NAT
 
-                [softphone](!)
-                type=friend                ; Match on username first, IP second
-                context=softphones         ; Send to softphones context in
-                                           ; extensions.conf file
-                host=dynamic               ; Device will register with asterisk
-                disallow=all               ; Manually specify codecs to allow
-                allow=g722
-                allow=ulaw
-                allow=alaw
+              [softphone](!)
+              type=friend                ; Match on username first, IP second
+              context=softphones         ; Send to softphones context in
+                                         ; extensions.conf file
+              host=dynamic               ; Device will register with asterisk
+              disallow=all               ; Manually specify codecs to allow
+              allow=g722
+              allow=ulaw
+              allow=alaw
 
-                [myphone](softphone)
-                secret=GhoshevFew          ; Change this password!
-              ''';
-              "logger.conf" = '''
-                [general]
+              [myphone](softphone)
+              secret=GhoshevFew          ; Change this password!
+            ''';
+            "logger.conf" = '''
+              [general]
 
-                [logfiles]
-                ; Add debug output to log
-                syslog.local0 => notice,warning,error,debug
-              ''';
-            }
+              [logfiles]
+              ; Add debug output to log
+              syslog.local0 => notice,warning,error,debug
+            ''';
+          }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Sets the content of config files (typically ending with
           `.conf`) in the Asterisk configuration directory.
 
-          Note that if you want to change `asterisk.conf`, it
+          Note that if you want to change {file}`asterisk.conf`, it
           is preferable to use the {option}`services.asterisk.extraConfig`
           option over this option. If `"asterisk.conf"` is
           specified with the {option}`confFiles` option (not recommended),
@@ -139,58 +142,87 @@ in
           path.
 
           See
-          <http://www.asterisk.org/community/documentation>
+          <https://www.asterisk.org/community/documentation/>
           for more examples of what is possible here.
         '';
       };
 
-      useTheseDefaultConfFiles = mkOption {
-        default = [ "ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf" ];
-        type = types.listOf types.str;
-        example = [ "sip.conf" "dundi.conf" ];
-        description = lib.mdDoc ''Sets these config files to the default content. The default value for
-          this option contains all necesscary files to avoid errors at startup.
-          This does not override settings via {option}`services.asterisk.confFiles`.
+      useTheseDefaultConfFiles = lib.mkOption {
+        default = [
+          "ari.conf"
+          "acl.conf"
+          "agents.conf"
+          "amd.conf"
+          "calendar.conf"
+          "cdr.conf"
+          "cdr_syslog.conf"
+          "cdr_custom.conf"
+          "cel.conf"
+          "cel_custom.conf"
+          "cli_aliases.conf"
+          "confbridge.conf"
+          "dundi.conf"
+          "features.conf"
+          "hep.conf"
+          "iax.conf"
+          "pjsip.conf"
+          "pjsip_wizard.conf"
+          "phone.conf"
+          "phoneprov.conf"
+          "queues.conf"
+          "res_config_sqlite3.conf"
+          "res_parking.conf"
+          "statsd.conf"
+          "udptl.conf"
+          "unistim.conf"
+        ];
+        type = lib.types.listOf lib.types.str;
+        example = [
+          "sip.conf"
+          "dundi.conf"
+        ];
+        description = ''
+          Sets these config files to the default content. The default value for
+                    this option contains all necesscary files to avoid errors at startup.
+                    This does not override settings via {option}`services.asterisk.confFiles`.
         '';
       };
 
-      extraArguments = mkOption {
-        default = [];
-        type = types.listOf types.str;
-        example =
-          [ "-vvvddd" "-e" "1024" ];
-        description = lib.mdDoc ''
+      extraArguments = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf lib.types.str;
+        example = [
+          "-vvvddd"
+          "-e"
+          "1024"
+        ];
+        description = ''
           Additional command line arguments to pass to Asterisk.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.asterisk;
-        defaultText = literalExpression "pkgs.asterisk";
-        description = lib.mdDoc "The Asterisk package to use.";
-      };
+      package = lib.mkPackageOption pkgs "asterisk" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = mapAttrs' (name: value:
-      nameValuePair "asterisk/${name}" value
+    environment.etc = lib.mapAttrs' (
+      name: value: lib.nameValuePair "asterisk/${name}" value
     ) allConfFiles;
 
-    users.users.asterisk =
-      { name = asteriskUser;
-        group = asteriskGroup;
-        uid = config.ids.uids.asterisk;
-        description = "Asterisk daemon user";
-        home = varlibdir;
-      };
+    users.users.asterisk = {
+      name = asteriskUser;
+      group = asteriskGroup;
+      uid = config.ids.uids.asterisk;
+      description = "Asterisk daemon user";
+      home = varlibdir;
+    };
 
-    users.groups.asterisk =
-      { name = asteriskGroup;
-        gid = config.ids.gids.asterisk;
-      };
+    users.groups.asterisk = {
+      name = asteriskGroup;
+      gid = config.ids.gids.asterisk;
+    };
 
     systemd.services.asterisk = {
       description = ''
@@ -219,11 +251,12 @@ in
         ExecStart =
           let
             # FIXME: This doesn't account for arguments with spaces
-            argString = concatStringsSep " " cfg.extraArguments;
+            argString = lib.concatStringsSep " " cfg.extraArguments;
           in
           "${cfg.package}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
-        ExecReload = ''${cfg.package}/bin/asterisk -x "core reload"
-          '';
+        ExecReload = ''
+          ${cfg.package}/bin/asterisk -C /etc/asterisk/asterisk.conf -x "core reload"
+        '';
         Type = "forking";
         PIDFile = "/run/asterisk/asterisk.pid";
       };

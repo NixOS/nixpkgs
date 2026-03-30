@@ -1,29 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "1.1.0";
   pname = "azure-mgmt-imagebuilder";
-  disabled = isPy27;
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2EWfTsl5y3Sw4P8d5X7TKxYmO4PagUTNv/SFKdjY2Ss=";
-    extension = "zip";
+    hash = "sha256-5sLVc6vvJiIvwUSRgD1MsB+G/GEpLUz3xHKetLrkiRw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
   ];
 
-  # no tests included
+  # No tests included
   doCheck = false;
 
   pythonImportsCheck = [
@@ -32,10 +35,11 @@ buildPythonPackage rec {
     "azure.mgmt.imagebuilder"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Image Builder Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/compute/azure-mgmt-imagebuilder";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-imagebuilder_${version}/sdk/compute/azure-mgmt-imagebuilder/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -1,44 +1,40 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+  apr,
+  aprutil,
+  bash,
+  gcc,
+  pycxx,
+  subversion,
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.18";
-  format = "other";
+  version = "1.9.25";
+  pyproject = false;
 
   src = fetchurl {
-    url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
-    hash = "sha256-lUPsNumMYwZoiR1Gt/hqdLLoHOZybRxwvu9+eU1CY78=";
+    url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
+    hash = "sha256-M9LzUr/6FZSUWFQdGM6Ew1/ySE5C/Q7cNXi+jGa+JdY=";
   };
 
-  patches = [
-    ./replace-python-first.patch
-  ];
+  patches = [ ./replace-python-first.patch ];
 
-  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  buildInputs = [
+    subversion
+    apr
+    aprutil
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
-    ${python.interpreter} setup.py backport
-    ${python.interpreter} setup.py configure \
+    ${python.pythonOnBuildForHost.interpreter} setup.py backport
+    ${python.pythonOnBuildForHost.interpreter} setup.py configure \
       --apr-inc-dir=${apr.dev}/include \
       --apu-inc-dir=${aprutil.dev}/include \
       --pycxx-dir=${pycxx.dev}/include \
@@ -49,21 +45,18 @@ buildPythonPackage rec {
       --svn-bin-dir=${subversion.out}/bin
   '';
 
-  checkInputs = [ glibcLocales ];
-
   checkPhase = ''
     runHook preCheck
 
     # It is not only shebangs, some tests also write scripts dynamically
     # so it is easier to simply search and replace
-    sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
+    sed -i "s|/bin/bash|${lib.getExe bash}|" ../Tests/test-*.sh
     make -C ../Tests
 
     runHook postCheck
   '';
 
-  # FIXME https://github.com/NixOS/nixpkgs/issues/175227
-  # pythonImportsCheck = [ "pysvn" ];
+  pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
@@ -75,12 +68,12 @@ buildPythonPackage rec {
     rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Subversion";
     homepage = "https://pysvn.sourceforge.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
     # g++: command not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

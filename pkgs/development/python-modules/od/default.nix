@@ -1,25 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, unittest2 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  repeated-test,
+}:
 
 buildPythonPackage rec {
   pname = "od";
   version = "2.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uGkj2Z8mLg51IV+FOqwZl1hT7zVyjmD1CcY/VbH4tKk=";
+    hash = "sha256-uGkj2Z8mLg51IV+FOqwZl1hT7zVyjmD1CcY/VbH4tKk=";
   };
 
-  # repeated_test no longer exists in nixpkgs
-  # also see: https://github.com/epsy/od/issues/1
-  doCheck = false;
-  checkInputs = [
-    unittest2
-  ];
+  nativeCheckInputs = [ repeated-test ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "od" ];
+
+  meta = {
     description = "Shorthand syntax for building OrderedDicts";
     homepage = "https://github.com/epsy/od";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-
 }

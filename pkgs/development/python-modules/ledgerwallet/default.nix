@@ -1,51 +1,72 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, cryptography
-, click
-, construct
-, ecdsa
-, hidapi
-, intelhex
-, pillow
-, protobuf
-, requests
-, tabulate
-, AppKit
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cryptography,
+  click,
+  construct,
+  ecdsa,
+  hidapi,
+  intelhex,
+  pillow,
+  protobuf,
+  requests,
+  setuptools,
+  setuptools-scm,
+  tabulate,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "ledgerwallet";
-  version = "0.1.2";
+  version = "0.5.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
     repo = "ledgerctl";
     rev = "v${version}";
-    sha256 = "0fb93h2wxm9as9rsywlgz2ng4wrlbjphn6mgbhj6nls2i86rrdxk";
+    hash = "sha256-roDfj+igDBS+sTJL4hwYNg5vZzaq+F8QvDA9NucnrMA=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fix removed function in construct library
-      url = "https://github.com/LedgerHQ/ledgerctl/commit/fd23d0e14721b93789071e80632e6bd9e47c1256.patch";
-      sha256 = "sha256-YNlENguPQW5FNFT7mqED+ghF3TJiKao4H+56Eu+j+Eo=";
-      excludes = [ "setup.py" ];
-    })
+  buildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+  propagatedBuildInputs = [
+    cryptography
+    click
+    construct
+    ecdsa
+    hidapi
+    intelhex
+    pillow
+    protobuf
+    requests
+    tabulate
+    toml
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
-  propagatedBuildInputs = [
-    cryptography click construct ecdsa hidapi intelhex pillow protobuf requests tabulate
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"protobuf >=3.20,<4"' '"protobuf >=3.20"'
+  '';
+
+  # Regenerate protobuf bindings to lift the version upper-bound and enable
+  # compatibility the current default protobuf library.
+  preBuild = ''
+    protoc --python_out=. --pyi_out=. ledgerwallet/proto/*.proto
+  '';
 
   pythonImportsCheck = [ "ledgerwallet" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
-    description = "A library to control Ledger devices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ d-xo ];
+    description = "Library to control Ledger devices";
+    mainProgram = "ledgerctl";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      erdnaxe
+    ];
   };
 }

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "cmdline";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,9 +19,9 @@ buildPythonPackage rec {
   doCheck = false;
   propagatedBuildInputs = [ pyyaml ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for consistent command line tools";
     homepage = "https://github.com/rca/cmdline";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ...} : rec {
+{ pkgs, ... }:
+{
   name = "jenkins-cli";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ pamplemousse ];
@@ -24,7 +25,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
     assert "http://0.0.0.0:8080" in machine.succeed("echo $JENKINS_URL")
 
     machine.succeed(
-        "jenkins-cli -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword)"
+        "jenkins-cli -http -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword)"
     )
   '';
-})
+}

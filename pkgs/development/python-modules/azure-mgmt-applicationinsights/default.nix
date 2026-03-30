@@ -1,31 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  azure-common,
+  azure-mgmt-core,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-applicationinsights";
-  version = "3.1.0";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "sha256-mFUKupq4IXywGs6aQQYFYSNNH9PCNxicS1mRneSdhHU=";
+    pname = "azure_mgmt_applicationinsights";
+    inherit version;
+    hash = "sha256-FVMTkPEs49dnzT8ZSa82qjkHfBRclS/sTYAwPIbse2w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
+    isodate
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];
@@ -33,10 +32,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Application Insights Management Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer maxwilson ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/applicationinsights/azure-mgmt-applicationinsights";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-applicationinsights_${version}/sdk/applicationinsights/azure-mgmt-applicationinsights/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

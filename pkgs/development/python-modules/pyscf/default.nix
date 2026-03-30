@@ -1,39 +1,41 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, blas
-, libcint
-, libxc
-, xcfun
-, cppe
-, h5py
-, numpy
-, scipy
-, nose
-, nose-exclude
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+
+  # build-sysetm
+  cmake,
+
+  # build inputs
+  blas,
+  libcint,
+  libxc,
+  xcfun,
+
+  # dependencies
+  cppe,
+  h5py,
+  numpy,
+  scipy,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyscf";
-  version = "2.1.1";
+  version = "2.12.1-unstable-2026-03-21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-KMxwyAK00Zc0i76zWTMznfXQCVCt+4HOH8SlwuOCORk=";
+    repo = "pyscf";
+    rev = "e8642fb7220248bd750c34ef6adf88a9744977ee";
+    hash = "sha256-RVv5vTmTtHDAbgOXHW1DUzYVsf+NvrYh9++WfNGJ07k=";
   };
 
-  patches = [ (fetchpatch {
-    name = "libxc-6";  # https://github.com/pyscf/pyscf/pull/1467
-    url = "https://github.com/pyscf/pyscf/commit/ebcfacc90e119cd7f9dcdbf0076a84660349fc79.patch";
-    sha256 = "sha256-O+eDlUKJeThxQcHrMGqxjDfRCmCNP+OCgv/L72jAF/o=";
-  })];
-
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  nativeBuildInputs = [ cmake ];
+  build-system = [ cmake ];
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -47,15 +49,14 @@ buildPythonPackage rec {
     xcfun
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cppe
     h5py
     numpy
     scipy
   ];
 
-  checkInputs = [ nose nose-exclude ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pyscf" ];
   preCheck = ''
     # Set config used by tests to ensure reproducibility
@@ -64,54 +65,56 @@ buildPythonPackage rec {
     ulimit -s 20000
     export PYSCF_CONFIG_FILE=$(pwd)/pyscf/pyscf_config.py
   '';
-  # As defined for the PySCF CI at https://github.com/pyscf/pyscf/blob/master/.github/workflows/run_tests.sh
-  # minus some additionally numerically instable tests, that are sensitive to BLAS, FFTW, etc.
-  checkPhase = ''
-    runHook preCheck
 
-    nosetests pyscf/ -v \
-      --exclude-dir=examples --exclude-dir=pyscf/pbc/grad \
-      --exclude-dir=pyscf/x2c \
-      --exclude-dir=pyscf/adc \
-      --exclude-dir=pyscf/pbc/tdscf \
-      -e test_bz \
-      -e h2o_vdz \
-      -e test_mc2step_4o4e \
-      -e test_ks_noimport \
-      -e test_jk_hermi0 \
-      -e test_j_kpts \
-      -e test_k_kpts \
-      -e test_lda \
-      -e high_cost \
-      -e skip \
-      -e call_in_background \
-      -e libxc_cam_beta_bug \
-      -e test_finite_diff_rks_eph \
-      -e test_finite_diff_uks_eph \
-      -e test_pipek \
-      -e test_n3_cis_ewald \
-      -I test_kuccsd_supercell_vs_kpts\.py \
-      -I test_kccsd_ghf\.py \
-      -I test_h_.*\.py \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow_supercell.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow_supercell.DiamondKSTestSupercell3 \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow.DiamondKSTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_krhf_slow_supercell.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_hf.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_ks.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_supercell_hf.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_supercell_ks.DiamondTestSupercell3 \
-      -I .*_slow.*py -I .*_kproxy_.*py -I test_proxy.py tdscf/*_slow.py gw/*_slow.py
+  # Numerically slightly off tests
+  disabledTests = [
+    "test_rdm_trace"
+    "test_tdhf_singlet"
+    "test_ab_hf"
+    "test_ea"
+    "test_bz"
+    "h2o_vdz"
+    "test_mc2step_4o4e"
+    "test_ks_noimport"
+    "test_jk_hermi0"
+    "test_j_kpts"
+    "test_k_kpts"
+    "test_lda"
+    "high_cost"
+    "skip"
+    "call_in_background"
+    "libxc_cam_beta_bug"
+    "test_finite_diff_rks_eph"
+    "test_finite_diff_uks_eph"
+    "test_finite_diff_roks_grad"
+    "test_finite_diff_df_roks_grad"
+    "test_frac_particles"
+    "test_nosymm_sa4_newton"
+    "test_pipek"
+    "test_n3_cis_ewald"
+    "test_veff"
+    "test_collinear_kgks_gga"
+    "test_libxc_gga_deriv4"
+    "test_sacasscf_grad"
+    "test_sparse_dot"
+  ];
 
-    runHook postCheck
-  '';
+  disabledTestPaths = [
+    "pyscf/pbc/tdscf"
+    "pyscf/pbc/gw"
+    "pyscf/nac/test/test_sacasscf.py"
+    "pyscf/grad/test/test_casscf.py"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
-    license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.asl20;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

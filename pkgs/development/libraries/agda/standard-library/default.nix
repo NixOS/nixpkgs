@@ -1,30 +1,32 @@
-{ lib, mkDerivation, fetchFromGitHub, ghcWithPackages, nixosTests }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 mkDerivation rec {
   pname = "standard-library";
-  version = "1.7.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    sha256 = "0khl12jvknsvjsq3l5cbp2b5qlw983qbymi1dcgfz9z0b92si3r0";
+    hash = "sha256-JOeoek6OfyIk9vwTj5QUJU6LnRzwfiG0e0ysW6zbhZ8=";
   };
 
-  nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
-  preConfigure = ''
-    runhaskell GenerateEverything.hs
-    # We will only build/consider Everything.agda, in particular we don't want Everything*.agda
-    # do be copied to the store.
-    rm EverythingSafe.agda
-  '';
-
   passthru.tests = { inherit (nixosTests) agda; };
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
-    description = "A standard library for use with the Agda compiler";
+    description = "Standard library for use with the Agda compiler";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ jwiegley mudri alexarice turion ];
+    maintainers = with lib.maintainers; [
+      jwiegley
+      mudri
+      alexarice
+      turion
+    ];
   };
 }

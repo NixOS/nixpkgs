@@ -1,21 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi
-, betamax, requests-toolbelt }:
+{
+  lib,
+  betamax,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests-toolbelt,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "betamax-matchers";
   version = "0.4.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "07qpwjyq2i2aqhz5iwghnj4pqr2ys5n45v1vmpcfx9r5mhwrsq43";
+  src = fetchFromGitHub {
+    owner = "betamaxpy";
+    repo = "betamax_matchers";
+    tag = version;
+    hash = "sha256-BV9DOfZLDAZIr2E75l988QxFWWvazBL9VttxGFIez1M=";
   };
 
-  buildInputs = [ betamax requests-toolbelt ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [
+    betamax
+    requests-toolbelt
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "betamax_matchers" ];
+
+  meta = {
+    description = "Group of experimental matchers for Betamax";
     homepage = "https://github.com/sigmavirus24/betamax_matchers";
-    description = "A group of experimental matchers for Betamax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pSub ];
+    changelog = "https://github.com/betamaxpy/betamax_matchers/blob/${version}/HISTORY.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

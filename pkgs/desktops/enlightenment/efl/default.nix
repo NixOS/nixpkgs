@@ -1,68 +1,83 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, SDL2
-, alsa-lib
-, bullet
-, check
-, curl
-, dbus
-, doxygen
-, expat
-, fontconfig
-, freetype
-, fribidi
-, ghostscript
-, giflib
-, glib
-, gst_all_1
-, gtk3
-, harfbuzz
-, hicolor-icon-theme
-, ibus
-, jbig2dec
-, libGL
-, libdrm
-, libinput
-, libjpeg
-, libpng
-, libpulseaudio
-, libraw
-, librsvg
-, libsndfile
-, libspectre
-, libtiff
-, libwebp
-, libxkbcommon
-, luajit
-, lz4
-, mesa
-, mint-x-icons
-, openjpeg
-, openssl
-, poppler
-, python3Packages
-, systemd
-, udev
-, util-linux
-, wayland
-, wayland-protocols
-, writeText
-, xorg
-, zlib
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  SDL2,
+  alsa-lib,
+  bullet,
+  check,
+  curl,
+  dbus,
+  doxygen,
+  expat,
+  fontconfig,
+  freetype,
+  fribidi,
+  ghostscript,
+  giflib,
+  glib,
+  gst_all_1,
+  gtk3,
+  harfbuzz,
+  hicolor-icon-theme,
+  ibus,
+  jbig2dec,
+  libGL,
+  libdrm,
+  libgbm,
+  libinput,
+  libjpeg,
+  libpng,
+  libpulseaudio,
+  libraw,
+  librsvg,
+  libsndfile,
+  libspectre,
+  libtiff,
+  libwebp,
+  libxkbcommon,
+  lua,
+  lz4,
+  mesa-gl-headers,
+  mint-x-icons,
+  openjpeg,
+  openssl,
+  poppler,
+  systemd,
+  udev,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  writeText,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xorgproto,
+  libxcb,
+  zlib,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.26.3";
+  version = "1.28.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2fg6oP2TNPRN7rTklS3A5RRGg6+seG/uvOYDCVFhfRU=";
+    url = "https://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +86,7 @@ stdenv.mkDerivation rec {
     gtk3
     pkg-config
     check
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -89,14 +105,14 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    mesa
+    mesa-gl-headers
     openssl
     systemd
     udev
     wayland-protocols
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
+    libx11
+    libxcursor
+    xorgproto
     zlib
     # still missing parent icon themes: RAVE-X, Faenza
   ];
@@ -116,6 +132,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme # for the icon theme
     jbig2dec
     libdrm
+    libgbm
     libinput
     libjpeg
     libraw
@@ -123,31 +140,34 @@ stdenv.mkDerivation rec {
     libspectre
     libwebp
     libxkbcommon
-    luajit
+    lua
     mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler
     util-linux
     wayland
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
   ];
 
   dontDropIconThemeCache = true;
 
+  # Fix build with gcc15 (-std=gnu23)
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+
   mesonFlags = [
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
-    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not availabe in nixpkgs
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not available in nixpkgs
     "-D embedded-lz4=false"
     "-D fb=true"
     "-D network-backend=connman"
@@ -207,11 +227,19 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    license = with lib.licenses; [
+      bsd2
+      lgpl2Only
+      lib.licenses.zlib
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

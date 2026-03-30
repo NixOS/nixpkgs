@@ -1,24 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, twisted }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  twisted,
+}:
 
 buildPythonPackage rec {
-  pname = "Nevow";
+  pname = "nevow";
   version = "0.14.5";
+  format = "setuptools";
   disabled = isPy3k;
 
   src = fetchPypi {
-    inherit version pname;
+    pname = "Nevow";
+    inherit version;
     sha256 = "afb6ba85a5351953578c018fcdb9dfbd62f29a8d46c58bc9652bc000a27223f3";
   };
 
   propagatedBuildInputs = [ twisted ];
 
-  checkInputs = [ twisted ];
+  nativeCheckInputs = [ twisted ];
 
   checkPhase = ''
     trial formless nevow
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nevow, a web application construction kit for Python";
     longDescription = ''
       Nevow - Pronounced as the French "nouveau", or "noo-voh", Nevow
@@ -38,6 +46,6 @@ buildPythonPackage rec {
       successfully, the method will be called with the coerced values.
     '';
     homepage = "https://github.com/twisted/nevow";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

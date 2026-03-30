@@ -1,34 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "lru-dict";
-  version = "1.1.8";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h4vI70Bz5c+5U9/Bz0WF20HouBTAEGq9400A7g0LMRU=";
+  src = fetchFromGitHub {
+    owner = "amitdev";
+    repo = "lru-dict";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pHjBTAXoOUyTSzzHzOBZeMFkJhzspylMhxwqXYLFOQg=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>="
+  '';
 
-  pythonImportsCheck = [
-    "lru"
-  ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "lru" ];
+
+  meta = {
     description = "Fast and memory efficient LRU cache for Python";
     homepage = "https://github.com/amitdev/lru-dict";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/amitdev/lru-dict/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

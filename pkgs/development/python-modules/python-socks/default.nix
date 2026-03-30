@@ -1,55 +1,67 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, flask
-, pytest-asyncio
-, pytest-trio
-, pythonOlder
-, pytestCheckHook
-, trio
-, yarl
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  anyio,
+  flask,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  setuptools,
+  tiny-proxy,
+  trio,
+  trustme,
+  yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-socks";
-  version = "2.0.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6.1";
+  version = "2.8.1";
+  pyproject = true;
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "romis2012";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-tVoBon9HF9MTOK+dN9g58fQO706ElNlCeULx//7hPWA=";
+    repo = "python-socks";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Eu4xeBZbZvAGfFArMiUlUQQa4yywKWj+azv+OHiKJfU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     trio
     curio
     async-timeout
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    trio = [ trio ];
+    curio = [ curio ];
+    anyio = [ anyio ];
+  };
+
+  nativeCheckInputs = [
+    anyio
     flask
     pytest-asyncio
     pytest-trio
     pytestCheckHook
+    tiny-proxy
+    trustme
     yarl
   ];
 
-  pythonImportsCheck = [
-    "python_socks"
-  ];
+  pythonImportsCheck = [ "python_socks" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/romis2012/python-socks/releases/tag/${finalAttrs.src.tag}";
     description = "Core proxy client (SOCKS4, SOCKS5, HTTP) functionality for Python";
     homepage = "https://github.com/romis2012/python-socks";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

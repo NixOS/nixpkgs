@@ -1,55 +1,65 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  mashumaro,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typer,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.3.1";
-  format = "pyproject";
+  version = "0.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DTFynPFf0NUBieXDiMKhCNwBqx3s/xzggNmnz/IKjbU=";
+    repo = "aiortm";
+    tag = "v${version}";
+    hash = "sha256-6idPxFW1h9kyeivBdZ8tEznPCmZLK7Uno+ZKP21WoeA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "typer" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    click
+    ciso8601
+    mashumaro
     yarl
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    cli = [ typer ];
+  };
+
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiortm --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonImportsCheck = [ "aiortm" ];
 
-  pythonImportsCheck = [
-    "aiortm"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library for the Remember the Milk API";
     homepage = "https://github.com/MartinHjelmare/aiortm";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/MartinHjelmare/aiortm/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "aiortm";
   };
 }

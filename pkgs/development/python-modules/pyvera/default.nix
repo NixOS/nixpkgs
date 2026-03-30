@@ -1,45 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
-, responses
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytest-asyncio,
+  pytest-timeout,
+  responses,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyvera";
-  version = "0.3.15";
-  format = "pyproject";
+  version = "0.3.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pavoni";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-1+xIqOogRUt+blX7AZSKIiU8lpR4AzKIIW/smCSft94=";
+    repo = "pyvera";
+    tag = version;
+    hash = "sha256-WLzVOQEykST2BsVRHmcBhrsd/am0jI/f7D0PmpCTbdQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];
 
   pythonImportsCheck = [ "pyvera" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control devices via the Vera hub";
     homepage = "https://github.com/pavoni/pyvera";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/maximvelichko/pyvera/releases/tag/${version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

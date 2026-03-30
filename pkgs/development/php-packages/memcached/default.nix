@@ -1,19 +1,26 @@
-{ buildPecl, lib, fetchFromGitHub, php, cyrus_sasl, zlib, pkg-config, libmemcached }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  php,
+  cyrus_sasl,
+  zlib,
+  pkg-config,
+  libmemcached,
+}:
 
 buildPecl rec {
   pname = "memcached";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "php-memcached-dev";
     repo = "php-memcached";
     rev = "v${version}";
-    sha256 = "sha256-g9IzGSZUxLlOE32o9ZJOa3erb5Qs1ntR8nzS3kRd/EU=";
+    sha256 = "sha256-sweEM4TVId+6ySffulmebZpz390dZXb+G3zFZvc45L8=";
   };
 
-  internalDeps = [
-    php.extensions.session
-  ];
+  internalDeps = [ php.extensions.session ];
 
   configureFlags = [
     "--with-zlib-dir=${zlib.dev}"
@@ -21,12 +28,15 @@ buildPecl rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cyrus_sasl zlib ];
+  buildInputs = [
+    cyrus_sasl
+    zlib
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "PHP extension for interfacing with memcached via libmemcached library";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://github.com/php-memcached-dev/php-memcached";
-    maintainers = teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

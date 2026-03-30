@@ -1,53 +1,51 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.0.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "6.1.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
-    rev = version;
-    hash = "sha256-CRZG898xCwukq+9YVkyXMP8HcuJ9GtvDhy96kxvRFks=";
+    tag = version;
+    hash = "sha256-sAL2D7Rg/iyob2nawXX/b5F/uOGCMsb1q0ZnPLIfh6o=";
   };
 
-  postPatch = ''
-    # Our Python release is not in the test matrix
-    substituteInPlace xdis/magics.py \
-      --replace "3.10.4" "3.10.5 3.10.6"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xdis"
-  ];
+  pythonImportsCheck = [ "xdis" ];
 
-  # import file mismatch:
-  # imported module 'test_disasm' has this __file__ attribute:
-  #   /build/source/pytest/test_disasm.py
-  # which is not the same as the test file we want to collect:
-  #   /build/source/test_unit/test_disasm.py
   disabledTestPaths = [
+    # import file mismatch:
+    # imported module 'test_disasm' has this __file__ attribute:
+    #   /build/source/pytest/test_disasm.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/test_unit/test_disasm.py
     "test_unit/test_disasm.py"
+
+    # Doesn't run on non-2.7 but has global-level mis-import
+    "test_unit/test_dis27.py"
+
+    # Has Python 2 style prints
+    "test/decompyle/test_nested_scopes.py"
   ];
 
   disabledTests = [
@@ -57,10 +55,14 @@ buildPythonPackage rec {
     "test_basic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${src.tag}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      onny
+      melvyn2
+    ];
   };
 }

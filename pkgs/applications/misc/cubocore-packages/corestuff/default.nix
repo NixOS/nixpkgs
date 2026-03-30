@@ -1,14 +1,24 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, kglobalaccel, xorg, cmake, ninja, libcprime, libcsys }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kdePackages,
+  libxcomposite,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corestuff";
-  version = "4.3.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-snzW6cqxIyiXJLOD5MoEqmzen1aZN4IALESaIWIOMro=";
+    repo = "corestuff";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/EI7oM7c7GKEQ+XQSiWwkJ7uNrJkxgLXEXZ6r5Jqh70=";
   };
 
   patches = [
@@ -19,22 +29,25 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    kglobalaccel
-    xorg.libXcomposite
+    kdePackages.qtbase
+    kdePackages.kglobalaccel
+    libxcomposite
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
-    description = "An activity viewer from the C Suite";
+  meta = {
+    description = "Activity viewer from the C Suite";
+    mainProgram = "corestuff";
     homepage = "https://gitlab.com/cubocore/coreapps/corestuff";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    # Address boundary error
+    broken = true;
   };
-}
+})

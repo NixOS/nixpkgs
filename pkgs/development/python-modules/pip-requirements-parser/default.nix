@@ -1,50 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pyparsing,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pip-requirements-parser";
-  version = "31.2.0";
+  version = "32.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-i4hw3tS4i2ek2JzcDiGo5aFFJ9J2JJ9MB5vxDhOilb0=";
+    repo = "pip-requirements-parser";
+    tag = "v${version}";
+    hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     packaging
+    pyparsing
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pip_requirements_parser" ];
+
+  disabledTests = [
+    "test_RequirementsFile_to_dict"
+    "test_RequirementsFile_dumps_unparse"
+    "test_legacy_version_is_deprecated"
   ];
 
-  pythonImportsCheck = [
-    "pip_requirements_parser"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Module to parse pip requirements";
     homepage = "https://github.com/nexB/pip-requirements-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nexB/pip-requirements-parser/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

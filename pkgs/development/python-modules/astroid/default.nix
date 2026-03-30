@@ -1,65 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, isPyPy
-, lazy-object-proxy
-, setuptools
-, setuptools-scm
-, typing-extensions
-, typed-ast
-, pylint
-, pytestCheckHook
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pip,
+  pylint,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "astroid";
-  version = "2.11.7"; # Check whether the version is compatible with pylint
-
-  disabled = pythonOlder "3.6.2";
+  version = "4.0.3"; # Check whether the version is compatible with pylint
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HpniGxKf+daMh/sxP9T9UriYRrUFWqk7kDa8r+EqtVI=";
+    repo = "astroid";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5p1xY6EWviSgmrLVOx3w7RcG/Vpx+sUtVndoxXrIFTQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    lazy-object-proxy
-    setuptools
-    wrapt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ] ++ lib.optionals (!isPyPy && pythonOlder "3.8") [
-    typed-ast
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
+    pip
     pytestCheckHook
   ];
 
   disabledTests = [
-    # AssertionError: Lists differ: ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'Protocol', 'object'] != ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'object']
-    "test_mro_typing_extensions"
+    # UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html.
+    "test_identify_old_namespace_package_protocol"
+  ];
+
+  disabledTestPaths = [
+    # requires mypy
+    "tests/test_raw_building.py"
   ];
 
   passthru.tests = {
     inherit pylint;
   };
 
-  meta = with lib; {
-    description = "An abstract syntax tree for Python with inference support";
+  meta = {
+    changelog = "https://github.com/PyCQA/astroid/blob/${finalAttrs.src.tag}/ChangeLog";
+    description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -1,23 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 let
-  version = "1.0.13";
-  sha256 = "162hhmnww8z9k0795ffs8v3f61hlfm375law156sk5l08if19a4r";
+  hash = "sha256-9/t+Mvfnq0KkPbe1mnrVy4mzNaK7vAgLuhUnOeEvBfI=";
 in
-stdenv.mkDerivation {
-  name = "system76-module-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "system76-module";
+  version = "1.0.17";
 
   passthru.moduleName = "system76";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-dkms";
-    rev = version;
-    inherit sha256;
+    rev = finalAttrs.version;
+    inherit hash;
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -29,11 +38,13 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.khumba ];
-    license = [ licenses.gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = versionOlder kernel.version "4.14";
+  meta = {
+    maintainers = with lib.maintainers; [ ahoneybun ];
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     description = "System76 DKMS driver";
     homepage = "https://github.com/pop-os/system76-dkms";
     longDescription = ''
@@ -41,4 +52,4 @@ stdenv.mkDerivation {
       some of the hotkeys and allows for custom fan control.
     '';
   };
-}
+})

@@ -1,22 +1,41 @@
-{ lib, fetchPypi, buildPythonPackage, lzo, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lzo,
+  pytestCheckHook,
+  setuptools,
+  wheel,
+}:
 
 buildPythonPackage rec {
   pname = "python-lzo";
-  version = "1.14";
+  version = "1.16";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "83cbd8ecaae284735250e31d6c0ecc18ac08763fab2a8c910dc5a6910db6250c";
+  src = fetchFromGitHub {
+    owner = "jd-boyd";
+    repo = "python-lzo";
+    tag = "v${version}";
+    hash = "sha256-iXAvOCzHPvNERMkE5y4QTHi4ZieW1wrYWYScs7zyb2c=";
   };
 
-  buildInputs = [ lzo ];
-  propagatedBuildInputs = [ ];
-  checkInputs = [ nose ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
-  meta = with lib; {
-    homepage = "https://github.com/jd-boyd/python-lzo";
+  buildInputs = [ lzo ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "lzo" ];
+
+  meta = {
     description = "Python bindings for the LZO data compression library";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.jbedo ];
+    homepage = "https://github.com/jd-boyd/python-lzo";
+    changelog = "https://github.com/jd-boyd/python-lzo/releases/tag/v${version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jbedo ];
   };
 }

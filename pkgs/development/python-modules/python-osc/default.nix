@@ -1,23 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-osc";
-  version = "1.8.0";
+  version = "1.9.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "2f8c187c68d239960fb2eddcb5346a62a9b35e64f2de045b3e5e509f475ca73d";
+    pname = "python_osc";
+    inherit version;
+    hash = "sha256-vQ+kDe9DzlCYlHCf6w4Y8CGSrKGSxebI/iumnljyF5Q=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pythonosc" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Open Sound Control server and client in pure python";
     homepage = "https://github.com/attwad/python-osc";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ anirrudh ];
+    changelog = "https://github.com/attwad/python-osc/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ anirrudh ];
   };
 }

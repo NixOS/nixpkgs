@@ -1,33 +1,33 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.vim;
-in {
+in
+{
   options.programs.vim = {
-    defaultEditor = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        When enabled, installs vim and configures vim to be the default editor
-        using the EDITOR environment variable.
-      '';
-    };
+    enable = lib.mkEnableOption "Vi IMproved, an advanced text editor";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vim;
-      defaultText = literalExpression "pkgs.vim";
-      example = literalExpression "pkgs.vimHugeX";
-      description = lib.mdDoc ''
-        vim package to use.
-      '';
-    };
+    defaultEditor = lib.mkEnableOption "vim as the default editor";
+
+    package = lib.mkPackageOption pkgs "vim" { example = [ "vim-full" ]; };
   };
 
-  config = mkIf cfg.defaultEditor {
-    environment.systemPackages = [ cfg.package ];
-    environment.variables = { EDITOR = mkOverride 900 "vim"; };
+  config = lib.mkIf (cfg.enable || cfg.defaultEditor) {
+    assertions = [
+      {
+        assertion = cfg.defaultEditor -> cfg.enable;
+        message = "{option}`programs.vim.defaultEditor` requires {option}`programs.vim.enable` to be set to true.";
+      }
+    ];
+    environment = {
+      systemPackages = [ cfg.package ];
+      sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "vim");
+      pathsToLink = [ "/share/vim-plugins" ];
+    };
   };
 }

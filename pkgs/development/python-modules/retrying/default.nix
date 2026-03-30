@@ -1,27 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "retrying";
-  version = "1.3.3";
+  version = "1.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fwp86xv0rvkncjdvy2mwcvbglw4w9k0fva25i7zx8kd19b3kh08";
+    hash = "sha256-0QLnXVPY0wuIVi1FNh1sbJNNoG+rMb2BwEIKy5eoujk=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # doesn't ship tests in tarball
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/rholder/retrying";
-    description = "General-purpose retrying library";
-    license = licenses.asl20;
-  };
+  pythonImportsCheck = [ "retrying" ];
 
+  meta = {
+    description = "General-purpose retrying library";
+    homepage = "https://github.com/rholder/retrying";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+  };
 }

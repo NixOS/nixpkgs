@@ -1,23 +1,126 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro ? null, futures ? null, enum34 ? null }:
+{
+  lib,
+  attrs,
+  authlib,
+  avro,
+  azure-identity,
+  azure-keyvault-keys,
+  boto3,
+  buildPythonPackage,
+  cachetools,
+  fastavro,
+  fetchFromGitHub,
+  google-auth,
+  google-api-core,
+  google-cloud-kms,
+  hvac,
+  httpx,
+  jsonschema,
+  orjson,
+  protobuf,
+  pyflakes,
+  pyrsistent,
+  pytest-asyncio,
+  pytestCheckHook,
+  pyyaml,
+  rdkafka,
+  requests,
+  requests-mock,
+  respx,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-  version = "1.9.2";
   pname = "confluent-kafka";
+  version = "2.13.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-L7l70l1Da9Wf4HmIWqd6Oi8jz6zpxjWdRwAFNmWEkmI=";
+  src = fetchFromGitHub {
+    owner = "confluentinc";
+    repo = "confluent-kafka-python";
+    tag = "v${version}";
+    hash = "sha256-VnZf6YvvpOs9/9uJHJvcmF56Ra9hhsoqrVisDuf+C6w=";
   };
 
-  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]) ;
+  buildInputs = [ rdkafka ];
 
-  # No tests in PyPi Tarball
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    avro = [
+      avro
+      fastavro
+      requests
+    ];
+    json = [
+      jsonschema
+      pyrsistent
+      requests
+    ];
+    protobuf = [
+      protobuf
+      requests
+    ];
+    rules = [
+      azure-identity
+      azure-keyvault-keys
+      boto3
+      # TODO: cel-python
+      google-auth
+      google-api-core
+      google-cloud-kms
+      # hkdf was removed
+      hvac
+      # TODO: jsonata-python
+      pyyaml
+      # TODO: tink
+    ];
+    schema-registry = [
+      attrs
+      authlib
+      cachetools
+      httpx
+      orjson
+    ];
+  };
+
+  nativeCheckInputs = [
+    cachetools
+    orjson
+    pyflakes
+    pytest-asyncio
+    pytestCheckHook
+    requests-mock
+    respx
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pythonImportsCheck = [ "confluent_kafka" ];
+
+  disabledTestPaths = [
+    "tests/integration/"
+    "tests/test_Admin.py"
+    "tests/test_misc.py"
+    # Failed: async def functions are not natively supported.
+    "tests/schema_registry/_async"
+    # missing cel-python dependency
+    "tests/schema_registry/_sync/test_avro_serdes.py"
+    "tests/schema_registry/_sync/test_json_serdes.py"
+    "tests/schema_registry/_sync/test_proto_serdes.py"
+    # missing tink dependency
+    "tests/schema_registry/_async/test_config.py"
+    "tests/schema_registry/_sync/test_config.py"
+    # crashes the test runner on shutdown
+    "tests/test_kafka_error.py"
+    # stats_cb can raise during consumer.close() causing race-condition
+    "tests/test_Consumer.py::test_callback_exception_no_system_error"
+  ];
+
+  meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mlieberman85 ];
+    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

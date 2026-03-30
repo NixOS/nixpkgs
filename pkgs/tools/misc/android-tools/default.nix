@@ -1,58 +1,79 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, cmake, perl, go, python3
-, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  pkg-config,
+  perl,
+  go,
+  python3,
+  protobuf,
+  zlib,
+  gtest,
+  brotli,
+  lz4,
+  zstd,
+  pcre2,
+  fetchpatch2,
+  fmt,
+  udev,
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
+  pythonEnv = python3.withPackages (ps: [ ps.protobuf ]);
 in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "33.0.3";
+  version = "35.0.2";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-jOF02reB1d69Ke0PllciMfd3vuGbjvPBZ+M9PqdnC8U=";
+    hash = "sha256-0sMiIoAxXzbYv6XALXYytH42W/4ud+maNWT7ZXbwQJc=";
   };
 
   patches = [
-    ./android-tools-kernel-headers-6.0.diff
+    (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/nmeum/android-tools/0c4d79943e23785589ce1881cbb5a9bc76d64d9b/patches/extras/0003-extras-libjsonpb-Fix-incompatibility-with-protobuf-v.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/extras/";
+      hash = "sha256-PO6ZKP54ri2ujVa/uFXgMy/zMQjjIo4e/EPW2Cu6a1Q=";
+    })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i 's/usb_linux/usb_osx/g' vendor/CMakeLists.{adb,fastboot}.txt
-    sed -i 's/libselinux libsepol/ /g;s#selinux/libselinux/include##g' vendor/CMakeLists.{fastboot,mke2fs}.txt
-    sed -z -i 's/add_library(libselinux.*selinux\/libsepol\/include)//g' vendor/CMakeLists.fastboot.txt
-    sed -i 's/e2fsdroid//g' vendor/CMakeLists.txt
-    sed -z -i 's/add_executable(e2fsdroid.*e2fsprogs\/misc)//g' vendor/CMakeLists.mke2fs.txt
-  '';
-
-  nativeBuildInputs = [ cmake perl go ];
-  buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    perl
+    go
+  ];
+  buildInputs = [
+    protobuf
+    zlib
+    gtest
+    brotli
+    lz4
+    zstd
+    pcre2
+    fmt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
   propagatedBuildInputs = [ pythonEnv ];
-
-  # Don't try to fetch any Go modules via the network:
-  GOFLAGS = [ "-mod=vendor" ];
-
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
-    "-D_DARWIN_C_SOURCE"
-  ];
-
-  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
-    "-framework CoreFoundation"
-    "-framework IOKit"
-  ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
   '';
 
-  postInstall = ''
-    install -Dm755 ../vendor/avb/avbtool.py -t $out/bin
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (lib.cmakeBool "protobuf_MODULE_COMPATIBLE" true)
+    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ANDROID_TOOLS_USE_BUNDLED_LIBUSB" true)
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Android SDK platform tools";
     longDescription = ''
       Android SDK Platform-Tools is a component for the Android SDK. It
@@ -66,13 +87,18 @@ stdenv.mkDerivation rec {
       - mke2fs.android (required by fastboot)
       - simg2img, img2simg, append2simg
       - lpdump, lpmake, lpadd, lpflash, lpunpack
-      - mkbootimg, unpack_bootimg, repack_bootimg
+      - mkbootimg, unpack_bootimg, repack_bootimg, avbtool
+      - mkdtboimg
     '';
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
-    license = with licenses; [ asl20 unicode-dfs-2015 ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    license = with lib.licenses; [
+      asl20
+      unicode-dfs-2015
+      mit
+    ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.android ];
   };
 }

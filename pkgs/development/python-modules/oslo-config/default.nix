@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, debtcollector
-, netaddr
-, oslo-i18n
-, pbr
-, pyyaml
-, requests
-, rfc3986
-, stevedore
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  netaddr,
+  oslo-i18n,
+  pbr,
+  pyyaml,
+  requests,
+  rfc3986,
+  setuptools,
+  stevedore,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "9.0.0";
+  version = "10.3.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.config";
+    pname = "oslo_config";
     inherit version;
-    sha256 = "sha256-O2tjxDzx4JNEuoULyxHW8rkgEIb76wqXqJUOfqw/JkU=";
+    hash = "sha256-xAWkCosFqpe7XCS7C4SZgaelt9VjBN9AYyciMSxY6so=";
   };
 
   postPatch = ''
@@ -28,8 +30,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    debtcollector
+  build-system = [ setuptools ];
+
+  dependencies = [
     netaddr
     oslo-i18n
     pbr
@@ -43,15 +46,15 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   pythonImportsCheck = [ "oslo_config" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Configuration API";
     homepage = "https://github.com/openstack/oslo.config";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

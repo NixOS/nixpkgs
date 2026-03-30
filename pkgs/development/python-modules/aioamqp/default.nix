@@ -1,39 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pamqp
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pamqp,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioamqp";
   version = "0.15.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Polyconseil";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "aioamqp";
+    rev = "aioamqp-${version}";
     hash = "sha256-fssPknJn1tLtzb+2SFyZjfdhUdD8jqkwlInoi5uaplk=";
   };
 
-  propagatedBuildInputs = [
-    pamqp
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pamqp ];
 
   # Tests assume rabbitmq server running
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aioamqp"
-  ];
+  pythonImportsCheck = [ "aioamqp" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP implementation using asyncio";
     homepage = "https://github.com/polyconseil/aioamqp";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

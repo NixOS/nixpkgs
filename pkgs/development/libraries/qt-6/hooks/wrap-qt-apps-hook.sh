@@ -1,5 +1,7 @@
 if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
-    __nix_wrapQtAppsHook=1 # Don't run this hook more than once.
+    __nix_wrapQtAppsHook=1
+    # wrap only once per output
+    declare -a qtWrapperDoneForOuputs
 
     # Inherit arguments given in mkDerivation
     qtWrapperArgs=(${qtWrapperArgs-})
@@ -31,7 +33,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
 
         local qmlDir="$1/${qtQmlPrefix:?}"
         if [ -d "$qmlDir" ]; then
-            qtWrapperArgs+=(--prefix QML2_IMPORT_PATH : "$qmlDir")
+            qtWrapperArgs+=(--prefix NIXPKGS_QT6_QML_IMPORT_PATH : "$qmlDir")
         fi
     }
     addEnvHooks "$targetOffset" qtHostPathHook
@@ -63,7 +65,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
         qtHostPathHook "${!outputBin}"
     }
 
-    preFixupPhases+=" qtOwnPathsHook"
+    appendToVar preFixupPhases qtOwnPathsHook
 
     # Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
     wrapQtAppsHook() {
@@ -71,24 +73,33 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
         [ -z "${dontWrapQtApps-}" ] || return 0
 
         # guard against running multiple times (e.g. due to propagation)
-        [ -z "$wrapQtAppsHookHasRun" ] || return 0
-        wrapQtAppsHookHasRun=1
+        local doneOutput
+        for doneOutput in "${qtWrapperDoneForOuputs[@]}"; do
+          if [ "$doneOutput" = "$prefix" ]; then
+            nixWarnLog "Warning: attempted to wrapQtAppsHook $prefix a second time"
+            return 0
+          fi
+        done
+        qtWrapperDoneForOuputs+=("$prefix")
 
         local targetDirs=("$prefix/bin" "$prefix/sbin" "$prefix/libexec" "$prefix/Applications" "$prefix/"*.app)
-        echo "wrapping Qt applications in ${targetDirs[@]}"
+        echo "wrapping Qt applications in ${targetDirs[*]}"
 
         for targetDir in "${targetDirs[@]}"; do
             [ -d "$targetDir" ] || continue
 
             find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file; do
-                if [ -f "$file" ]; then
-                    echo "wrapping $file"
-                    wrapQtApp "$file"
-                elif [ -h "$file" ]; then
+                # Skip the file if it is not a binary (ELF or Mach-O)
+                isELF "$file" || isMachO "$file" || continue
+
+                if [ -h "$file" ]; then
                     target="$(readlink -e "$file")"
                     echo "wrapping $file -> $target"
                     rm "$file"
                     makeQtWrapper "$target" "$file"
+                elif [ -f "$file" ]; then
+                    echo "wrapping $file"
+                    wrapQtApp "$file"
                 fi
             done
         done

@@ -1,34 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, async-timeout
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.4.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Wp8NUjRlO+6ASqIt3C0YJRh0EKcEukXVMp4I+TCTElo=";
+    hash = "sha256-DM/zDFoTYgaW+o2YYv4bDAja5iwabIBfFJ7Yep4Fywc=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  build-system = [ hatchling ];
 
-  # tests are not present
+  dependencies = [ async-timeout ];
+
+  # Tests are not present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiopulse"
-  ];
+  pythonImportsCheck = [ "aiopulse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Rollease Acmeda Automate Pulse hub protocol implementation";
     longDescription = ''
       The Rollease Acmeda Pulse Hub is a WiFi hub that communicates with
@@ -37,7 +34,8 @@ buildPythonPackage rec {
       binary protocol to issues commands to the Pulse Hub.
     '';
     homepage = "https://github.com/atmurray/aiopulse";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${version}";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

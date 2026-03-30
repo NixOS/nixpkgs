@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pathvalidate";
-  version = "2.5.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X/V9D6vl7Lek8eSVe/61rYq1q0wPpx95xrvCS9m30U0=";
+    hash = "sha256-sYwHISv+rWJDRbuOHWFBzc8Vo5c2mU6guUA1rSsboXc=";
   };
+
+  build-system = [ setuptools-scm ];
 
   # Requires `pytest-md-report`, causing infinite recursion.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pathvalidate"
-  ];
+  pythonImportsCheck = [ "pathvalidate" ];
 
-  meta = with lib; {
-    description = "A Python library to sanitize/validate a string such as filenames/file-paths/etc";
+  meta = {
+    description = "Library to sanitize/validate a string such as filenames/file-paths/etc";
     homepage = "https://github.com/thombashi/pathvalidate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oxalica ];
+    changelog = "https://github.com/thombashi/pathvalidate/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oxalica ];
   };
 }

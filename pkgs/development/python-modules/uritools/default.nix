@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "4.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "6.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "420d94c1ff4bf90c678fca9c17b8314243bbcaa992c400a95e327f7f622e1edf";
+    hash = "sha256-L56cuVTnh3Iysshj9ySkSgbrmNnH691pkUh26Uh7lPg=";
   };
 
-  pythonImportsCheck = [
-    "uritools"
-  ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "uritools" ];
+
+  meta = {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     homepage = "https://github.com/tkem/uritools/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    changelog = "https://github.com/tkem/uritools/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
   };
 }

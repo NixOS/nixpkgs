@@ -1,87 +1,98 @@
-{ lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
-, xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee
-, librsvg, libsignal-protocol-c
-, libgcrypt
-, libepoxy
-, at-spi2-core
-, sqlite
-, dbus
-, gpgme
-, pcre
-, qrencode
-, icu
-, gspell
-, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good, webrtc-audio-processing
- }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  ninja,
+  wrapGAppsHook4,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  glib,
+  gdk-pixbuf,
+  gtk4,
+  glib-networking,
+  libadwaita,
+  libcanberra,
+  libnotify,
+  libsoup_3,
+  libgee,
+  libomemo-c,
+  libgcrypt,
+  meson,
+  sqlite,
+  gpgme,
+  qrencode,
+  icu,
+  srtp,
+  libnice,
+  gnutls,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+  webrtc-audio-processing,
+}:
 
-stdenv.mkDerivation rec {
+# Upstream is very deliberate about which features are enabled per default or are automatically enabled.
+# Everything that is disabled per default has to been seen experimental and should not be enabled without strong reasoning.
+# see https://github.com/NixOS/nixpkgs/issues/469614#issuecomment-3649662176
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
-  version = "0.3.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "v${version}";
-    sha256 = "sha256-wjSgs1mUMV7j/8ZeXqWs8aOeWvJHwKziUfbtOC1HS3s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TgXPJP+Xm8LrO2d8yMu6aCCypuBRKNtYuZAb0dYfhng=";
   };
+
+  postPatch = ''
+    echo ${finalAttrs.version} > VERSION
+  '';
 
   nativeBuildInputs = [
     vala
-    cmake
+    meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
+    gobject-introspection
   ];
 
   buildInputs = [
     qrencode
-    gobject-introspection
-    glib-networking
     glib
+    glib-networking # required for TLS support
+    libadwaita
     libgee
-    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
-    gtk3
+    gtk4
     libnotify
     gpgme
     libgcrypt
-    libsoup
-    pcre
-    libepoxy
-    at-spi2-core
-    dbus
+    libsoup_3
     icu
-    libsignal-protocol-c
-    librsvg
-    gspell
+    libcanberra
+    libomemo-c
     srtp
     libnice
     gnutls
     gstreamer
     gst-plugins-base
-    gst-plugins-good
+    gst-plugins-good # contains rtpbin, required for VP9
     webrtc-audio-processing
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorg.libxcb
-    xorg.libpthreadstubs
-    libXdmcp
-    libxkbcommon
   ];
 
-  cmakeFlags = ["-DBUILD_TESTS=yes"];
-
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ./xmpp-vala-test
-    ./signal-protocol-vala-test
-    runHook postCheck
-  '';
+
+  # Undefined symbols for architecture arm64: "_gpg_strerror"
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lgpg-error";
+  };
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with
@@ -91,18 +102,19 @@ stdenv.mkDerivation rec {
   # will load
   #
   # See https://github.com/dino/dino/wiki/macOS
-  postFixup = lib.optionalString (stdenv.isDarwin) ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cd "$out/lib/dino/plugins/"
     for f in *.dylib; do
       mv "$f" "$(basename "$f" .dylib).so"
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
+    mainProgram = "dino";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss tomfitzhenry ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+})

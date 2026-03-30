@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, chmlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chmlib,
 }:
 
 buildPythonPackage rec {
   pname = "pychm";
   version = "0.8.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to manipulate Microsoft HTML Help (CHM) files";
     homepage = "https://github.com/dottedmag/pychm";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexshpilkin ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ alexshpilkin ];
   };
 }

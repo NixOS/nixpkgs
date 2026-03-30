@@ -1,23 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, typing-extensions
-, uri-template
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # build inputs
+  typing-extensions,
+  uri-template,
 }:
 
 buildPythonPackage rec {
   pname = "json-home-client";
   version = "1.1.1";
-
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "plinss";
     repo = "json_home_client";
     rev = "v${version}";
-    sha256 = "sha256-DhnvvY1nMe1sdRE+OgjBt4TsLmiqnD8If4rl700zW9E=";
+    hash = "sha256-DhnvvY1nMe1sdRE+OgjBt4TsLmiqnD8If4rl700zW9E=";
   };
 
   postPatch = ''
@@ -31,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json_home_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client class for calling http+json APIs in Python";
     homepage = "https://github.com/plinss/json_home_client";
-    license = licenses.mit;
-    maintainers = [];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

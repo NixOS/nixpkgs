@@ -1,45 +1,39 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, azure-common
-, azure-core
-, cryptography
-, msrest
-, pytestCheckHook
+{
+  lib,
+  azure-common,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
-  version = "4.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "4.11.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-9jdA9dwNmxQtitZZCfSoSe9UmiDobf8uwyLBPeBILYw=";
+    pname = "azure_keyvault_keys";
+    inherit version;
+    hash = "sha256-8lexkXosOoiYPj9WdaZBlEnrJiMYiI1bUeHLO+15d5o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-core
-    msrest
     cryptography
+    isodate
+    typing-extensions
   ];
 
-  checkInputs = [
-    aiohttp
-    pytestCheckHook
-  ];
+  pythonNamespaces = [ "azure.keyvault" ];
 
-  pythonNamespaces = [
-    "azure.keyvault"
-  ];
-
-  # requires relative paths to utilities in the mono-repo
+  # Tests require relative paths to utilities in the mono-repo
   doCheck = false;
 
   pythonImportsCheck = [
@@ -50,10 +44,11 @@ buildPythonPackage rec {
     "azure.keyvault.keys"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Keys Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-keys";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-keys_${version}/sdk/keyvault/azure-keyvault-keys";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

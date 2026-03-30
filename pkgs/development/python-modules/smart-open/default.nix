@@ -1,59 +1,92 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, azure-common
-, azure-core
-, azure-storage-blob
-, boto3
-, google-cloud-storage
-, requests
-, moto
-, paramiko
-, pytestCheckHook
+{
+  lib,
+  backports-zstd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  awscli2,
+  azure-common,
+  azure-core,
+  azure-storage-blob,
+  boto3,
+  google-cloud-storage,
+  requests,
+  moto,
+  numpy,
+  paramiko,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  pyopenssl,
+  responses,
+  setuptools,
+  setuptools-scm,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "7.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
-    rev = "v${version}";
-    sha256 = "sha256-AtFIluoI2QeHUX2dclEmOxsv/cEtusWq7GyViRBhL5g=";
+    tag = "v${version}";
+    hash = "sha256-MKQvvz75PBUZwQ9e/vR+XGdaT+pD2agZtdHOV0Gw9Kk=";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-core
-    azure-storage-blob
-    boto3
-    google-cloud-storage
-    requests
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
+  dependencies = [ wrapt ];
+
+  optional-dependencies = {
+    s3 = [ boto3 ];
+    gcs = [ google-cloud-storage ];
+    azure = [
+      azure-storage-blob
+      azure-common
+      azure-core
+    ];
+    http = [ requests ];
+    webhdfs = [ requests ];
+    ssh = [ paramiko ];
+    zst = [ backports-zstd ];
+  };
+
+  pythonImportsCheck = [ "smart_open" ];
+
+  nativeCheckInputs = [
+    awscli2
     moto
-    paramiko
+    numpy
+    pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
+    pyopenssl
+    responses
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.concatAttrValues optional-dependencies;
+
+  enabledTestPaths = [ "tests" ];
+
+  disabledTests = [
+    # https://github.com/RaRe-Technologies/smart_open/issues/784
+    "test_https_seek_forward"
+    "test_seek_from_current"
+    "test_seek_from_end"
+    "test_seek_from_start"
   ];
 
-  pytestFlagsArray = [
-    "smart_open"
-  ];
-
-  pythonImportsCheck = [
-    "smart_open"
-  ];
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
-    homepage = "https://github.com/RaRe-Technologies/smart_open";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
+    homepage = "https://github.com/piskvorky/smart_open";
+    license = lib.licenses.mit;
   };
 }

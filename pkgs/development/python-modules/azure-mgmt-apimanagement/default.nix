@@ -1,37 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "3.0.0";
   pname = "azure-mgmt-apimanagement";
-  disabled = isPy27;
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "9262f54ed387eb083d8dae66d32a8df35647319b902bd498cdc376f50a12d154";
-    extension = "zip";
+    pname = "azure_mgmt_apimanagement";
+    inherit version;
+    hash = "sha256-Crf+F+cP4xVM2ED/R9GdekYQIXAD6qfCGs81EableZk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
   ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.apimanagement" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.apimanagement"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure API Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/apimanagement/azure-mgmt-apimanagement";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-apimanagement_${version}/sdk/apimanagement/azure-mgmt-apimanagement/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

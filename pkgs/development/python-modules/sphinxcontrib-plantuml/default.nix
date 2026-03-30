@@ -1,28 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, plantuml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  sphinx,
+  plantuml,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.24";
+  version = "0.31";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-z2Xbc1j3haZJjuA+cZi2aAxiXSjlWzNHX8P2yUNRRR0=";
+    inherit version;
+    pname = "sphinxcontrib_plantuml";
+    hash = "sha256-/XR1L46gcOZBw/ikAvzPodSkBW4JZ7VgM9KnYoLZ+VY=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ sphinx ];
+
+  propagatedBuildInputs = [ plantuml ];
+
+  pythonImportsCheck = [ "sphinxcontrib.plantuml" ];
 
   # No tests included.
   doCheck = false;
 
-  propagatedBuildInputs = [ sphinx plantuml ];
+  pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
     homepage = "https://github.com/sphinx-contrib/plantuml/";
-    maintainers = with maintainers; [ ];
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = [ ];
   };
 }

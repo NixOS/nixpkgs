@@ -1,23 +1,20 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, lwt
-, ptime
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  lwt,
+  ptime,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwt-exit";
   version = "1.0";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
-    repo = pname;
-    rev = "${version}";
-    sha256 = "1k763bmj1asj9ijar39rh3h1d59rckmsf21h2y8966lgglsf42bd";
+    repo = "lwt-exit";
+    tag = finalAttrs.version;
+    hash = "sha256-bQniNH2PGpOQFzAIp+tkOZUW4IA5jaxkTFKrIOsa5sw=";
   };
-
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     lwt
@@ -28,8 +25,8 @@ buildDunePackage rec {
   doCheck = false;
 
   meta = {
-    description = "An opinionated clean-exit and signal-handling library for Lwt programs";
+    description = "Opinionated clean-exit and signal-handling library for Lwt programs";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

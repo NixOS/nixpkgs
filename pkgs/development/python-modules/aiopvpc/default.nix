@@ -1,69 +1,51 @@
-{ lib
-, aiohttp
-, async-timeout
-, backports-zoneinfo
-, buildPythonPackage
-, fetchFromGitHub
-, holidays
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, tzdata
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-cov-stub,
+  pytestCheckHook,
+  python-dotenv,
 }:
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "3.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "4.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "azogue";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-eTCQddoZIaCs7iKGNBC8aSq6ek4vwYXgIXx35UlME/k=";
+    repo = "aiopvpc";
+    tag = "v${version}";
+    hash = "sha256-1xeXfhoXRfJ7vrpRPeYmwcAGjL09iNCOm/f4pPvuZLU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    holidays
-    tzdata
     async-timeout
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
+    pytest-cov-stub
     pytestCheckHook
+    python-dotenv
   ];
 
-  disabledTests = [
-    # Failures seem related to changes in holidays-0.13, https://github.com/azogue/aiopvpc/issues/44
-    "test_number_of_national_holidays"
-  ];
+  pythonImportsCheck = [ "aiopvpc" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      " --cov --cov-report term --cov-report html" ""
-  '';
-
-  pythonImportsCheck = [
-    "aiopvpc"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python module to download Spanish electricity hourly prices (PVPC)";
     homepage = "https://github.com/azogue/aiopvpc";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/azogue/aiopvpc/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

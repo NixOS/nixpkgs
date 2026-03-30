@@ -1,77 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, libcanberra
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  glib,
+  granite,
+  gtk3,
+  libhandy,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "6.0.2";
+  # nixpkgs-update: no auto update
+  # We disabled x-d-p-pantheon due to https://github.com/elementary/portals/issues/157
+  # so hold back this before the issue is fixed since later versions enforce using portals.
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "screenshot";
     rev = version;
-    sha256 = "sha256-n+L08C/W5YnHZ5P3F1NGUYE2SH94sc4+kr1x+wXZ+cw=";
+    hash = "sha256-z7FP+OZYF/9YLXYCQF/ElihKjKHVfeHc38RHdPb2aIE=";
   };
 
-  patches = [
-    # Fix build with meson 0.61
-    # https://github.com/elementary/screenshot/pull/241
-    (fetchpatch {
-      url = "https://github.com/elementary/screenshot/commit/80a5d942e813dd098e1ef0f6629b81d2ccef05ae.patch";
-      sha256 = "sha256-jOQuzUJvsjqytplLcW9BeIxzi9+/k2GFa4hHVZ3+wts=";
-    })
-  ];
-
   nativeBuildInputs = [
-    desktop-file-utils
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    gdk-pixbuf
+    glib
     granite
     gtk3
-    libcanberra
-    libgee
     libhandy
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.screenshot";
   };
 }

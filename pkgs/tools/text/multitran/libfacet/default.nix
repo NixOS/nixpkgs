@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libmtsupport }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libmtsupport,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfacet";
@@ -18,9 +23,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://multitran.sourceforge.net/";
+    homepage = "https://multitran.sourceforge.net/";
     description = "Multitran lib: enchanced locale facets";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

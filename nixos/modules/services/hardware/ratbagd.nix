@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ratbagd;
 in
@@ -10,18 +12,20 @@ in
 
   options = {
     services.ratbagd = {
-      enable = mkEnableOption (lib.mdDoc "ratbagd for configuring gaming mice");
+      enable = lib.mkEnableOption "ratbagd for configuring gaming mice";
+
+      package = lib.mkPackageOption pkgs "libratbag" { };
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Give users access to the "ratbagctl" tool
-    environment.systemPackages = [ pkgs.libratbag ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.libratbag ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.libratbag ];
+    systemd.packages = [ cfg.package ];
   };
 }

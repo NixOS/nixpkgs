@@ -1,5 +1,11 @@
-{ lib, mkCoqDerivation, coq, equations, LibHyps, version ? null }:
-with lib;
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  equations,
+  LibHyps,
+  version ? null,
+}:
 
 (mkCoqDerivation {
   pname = "hydra-battles";
@@ -8,13 +14,19 @@ with lib;
   release."0.4".sha256 = "1f7pc4w3kir4c9p0fjx5l77401bx12y72nmqxrqs3qqd3iynvqlp";
   release."0.5".sha256 = "121pcbn6v59l0c165ha9n00whbddpy11npx2y9cn7g879sfk2nqk";
   release."0.6".sha256 = "1dri4sisa7mhclf8w4kw7ixs5zxm8xyjr034r1377p96rdk3jj0j";
+  release."0.9".sha256 = "sha256-wlK+154owQD/03FB669KCjyQlL2YOXLCi0KLSo0DOwc=";
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.13" "8.16"; out = "0.6"; }
-    { case = range "8.11" "8.12"; out = "0.4"; }
-  ] null;
+  defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
+    with lib.versions;
+    lib.switch coq.coq-version [
+      (case (range "8.13" "8.16") "0.9")
+      (case (range "8.11" "8.12") "0.4")
+    ] null;
 
   useDune = true;
 
@@ -27,11 +39,23 @@ with lib;
       ordinal numbers, and a part of the so-called Ketonen and Solovay
       machinery (combinatorial properties of epsilon0).
     '';
-    maintainers = with maintainers; [ siraben Zimmi48 ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      siraben
+      Zimmi48
+    ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}).overrideAttrs(o:
-  let inherit (o) version; in {
-    propagatedBuildInputs = [ equations ] ++ optional (versions.isGe "0.6" version || version == "dev") LibHyps;
-  })
+}).overrideAttrs
+  (
+    o:
+    let
+      inherit (o) version;
+    in
+    {
+      propagatedBuildInputs = [
+        equations
+      ]
+      ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
+    }
+  )

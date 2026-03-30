@@ -1,40 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, six
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  typing-extensions,
+  pytestCheckHook,
+  hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrsistent";
-  version = "0.18.1";
+  version = "0.21.0";
+  pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1NYfi5k6clW6cU3zrKUnAPgSUon4T3BM+AkWUXxG65Y=";
+  src = fetchFromGitHub {
+    owner = "tobgu";
+    repo = "pyrsistent";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8fLyz8ELOg5GCrBHLSl4iiCgEZ6MuFoBwNKns5AI5Ps=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'pytest<5' 'pytest' \
-      --replace 'hypothesis<5' 'hypothesis'
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "pyrsistent" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tobgu/pyrsistent/";
     description = "Persistent/Functional/Immutable data structures";
-    license = licenses.mit;
-    maintainers = with maintainers; [ desiderius ];
+    changelog = "https://github.com/tobgu/pyrsistent/blob/${finalAttrs.src.tag}/CHANGES.txt";
+    license = lib.licenses.mit;
   };
-
-}
+})

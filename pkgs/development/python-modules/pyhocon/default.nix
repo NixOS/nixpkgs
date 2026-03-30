@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyparsing
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mock,
+  pyparsing,
+  pytestCheckHook,
+  python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhocon";
-  version = "0.3.59";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.3.63";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chimpler";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-0BuDYheURFhtnWIh7Qw4LzZbk5tSqiNejo+08eglIvs=";
+    repo = "pyhocon";
+    tag = finalAttrs.version;
+    hash = "sha256-uguNvXBaccAUdQx1zcpn/i3jSa5Y4uWTqkFr6rI4fBc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyparsing
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace "pyparsing~=2.0" "pyparsing>=2.0"
   '';
 
-  pythonImportsCheck = [
-    "pyhocon"
-  ];
+  pythonImportsCheck = [ "pyhocon" ];
 
   disabledTestPaths = [
     # pyparsing.exceptions.ParseException: Expected end of text, found '='
@@ -54,14 +53,15 @@ buildPythonPackage rec {
     "test_include_dict"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HOCON parser for Python";
+    mainProgram = "pyhocon";
     homepage = "https://github.com/chimpler/pyhocon/";
     longDescription = ''
       A HOCON parser for Python. It additionally provides a tool (pyhocon) to convert
       any HOCON content into JSON, YAML and properties format.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chreekat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chreekat ];
   };
-}
+})

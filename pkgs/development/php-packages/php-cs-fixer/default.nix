@@ -1,33 +1,33 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
-let
+{
+  lib,
+  fetchFromGitHub,
+  php,
+  versionCheckHook,
+}:
+
+php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.11.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "3.94.2";
 
-  src = fetchurl {
-    url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-    sha256 = "sha256-hnSHR/tDX1w/4SV6fafvUHg4JwTQJxfwKaKvEbUWJjs=";
+  src = fetchFromGitHub {
+    owner = "PHP-CS-Fixer";
+    repo = "PHP-CS-Fixer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eX9awtJeOJSX0Q+687egTTRZFpj5qTjjAamGpJUMKzA=";
   };
 
-  dontUnpack = true;
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-b3K7Ed/gtqyyEDrivMX8SFXe0X2XeJJ+zM6Pp1jY+Ow=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
-    makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
-      --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "A tool to automatically fix PHP coding standards issues";
-    license = licenses.mit;
-    homepage = "http://cs.sensiolabs.org/";
-    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+  meta = {
+    changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
+    description = "Tool to automatically fix PHP coding standards issues";
+    homepage = "https://cs.symfony.com/";
+    license = lib.licenses.mit;
+    mainProgram = "php-cs-fixer";
+    maintainers = [ lib.maintainers.patka ];
   };
-}
+})

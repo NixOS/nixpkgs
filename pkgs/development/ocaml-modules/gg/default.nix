@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  topkg,
+  ocamlbuild,
+}:
 
 let
   homepage = "https://erratique.ch/software/gg";
   version = "1.0.0";
 in
-
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-  "gg is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation {
 
@@ -18,12 +23,19 @@ stdenv.mkDerivation {
     sha256 = "sha256:0j7bpj8k17csnz6v6frkz9aycywsb7xmznnb31g8rbfk3626f3ci";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "Basic types for computer graphics in OCaml";
     longDescription = ''
       Gg is an OCaml module providing basic types for computer graphics. It
@@ -33,7 +45,8 @@ stdenv.mkDerivation {
     '';
     inherit homepage;
     inherit (ocaml.meta) platforms;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.jirkamarsik ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.jirkamarsik ];
+    broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

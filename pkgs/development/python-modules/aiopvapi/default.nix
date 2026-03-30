@@ -1,43 +1,42 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "2.0.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sander76";
     repo = "aio-powerview-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cghfNi5T343/7GxNLDrE0iAewMlRMycQTP7SvDVpU2M=";
+    tag = "v${version}";
+    hash = "sha256-yystaH2HRsJoYh2aTpOBA7DLiC2xwpBUccHwmJ0FlaY=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
+  patches = [
+    # https://github.com/sander76/aio-powerview-api/pull/46
+    ./fix-tests.patch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "aiopvapi"
-  ];
+  dependencies = [ aiohttp ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "aiopvapi" ];
+
+  meta = {
     description = "Python API for the PowerView API";
     homepage = "https://github.com/sander76/aio-powerview-api";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

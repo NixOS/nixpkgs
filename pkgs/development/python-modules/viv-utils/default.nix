@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, funcy
-, intervaltree
-, pefile
-, typing-extensions
-, vivisect
-, pytest-sugar
-, pytestCheckHook
-, python-flirt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  funcy,
+  intervaltree,
+  pefile,
+  pytest-sugar,
+  pytestCheckHook,
+  python-flirt,
+  setuptools-scm,
+  typing-extensions,
+  vivisect,
 }:
+
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.7.5";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
-    rev = "v${version}";
-    sha256 = "sha256-JDu+1n1wP2Vsp2V/bKdE+RFp6bE8RNmimi4wdsatwME=";
+    tag = "v${version}";
+    hash = "sha256-YyD6CFA8lhc1XU7pckKv3th422ssYZkRJ/JfQD5e65c=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "==" ">="
-  '';
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     funcy
     intervaltree
     pefile
@@ -34,23 +35,24 @@ buildPythonPackage rec {
     vivisect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-sugar
     pytestCheckHook
   ];
 
   passthru = {
     optional-dependencies = {
-      flirt = [
-        python-flirt
-      ];
+      flirt = [ python-flirt ];
     };
   };
 
-  meta = with lib; {
+  pythonImportsCheck = [ "viv_utils" ];
+
+  meta = {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
-    license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

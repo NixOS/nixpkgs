@@ -1,37 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, exceptiongroup
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  exceptiongroup,
+  fetchPypi,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "generic";
-  version = "1.1.0";
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  version = "1.1.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/947oEvZSD5mjRD9qcuzKAFativTmaeejXxQ322UD+A=";
+    hash = "sha256-CFtkkGjFjvM4WsYz08nmik61eM5S71GT+Rh+nI8mZ1k=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    exceptiongroup
-  ];
+  dependencies = [ exceptiongroup ];
 
   pythonImportsCheck = [ "generic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic programming (Multiple dispatch) library for Python";
-    maintainers = with maintainers; [ wolfangaukang ];
     homepage = "https://github.com/gaphor/generic";
-    license = licenses.bsdOriginal;
+    changelog = "https://github.com/gaphor/generic/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

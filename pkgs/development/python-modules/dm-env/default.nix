@@ -1,18 +1,21 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, dm-tree
-, numpy
-, absl-py
-, nose }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  dm-tree,
+  numpy,
+  absl-py,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "dm-env";
-  version = "1.5";
+  version = "1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Pv2ZsGUlY1mVB8QV1ItRiWyIvi8BwrYlCvi6tRVx41M=";
+    hash = "sha256-pDbrHGVMOeDJhqUWzuIYvqcUC1EPzv9j+X60/P89k94=";
   };
 
   buildInputs = [
@@ -21,18 +24,14 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dm_env"
-  ];
+  pythonImportsCheck = [ "dm_env" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python client for Apache Kafka";
     homepage = "https://github.com/dpkp/kafka-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

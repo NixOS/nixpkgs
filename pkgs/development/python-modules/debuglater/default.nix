@@ -1,52 +1,46 @@
-{ lib
-, buildPythonPackage
-, colorama
-, dill
-, fetchFromGitHub
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  dill,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "debuglater";
-  version = "1.4.3";
+  version = "1.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ploomber";
-    repo = pname;
-    rev = version;
-    hash = "sha256-0fnWXmrlZjlLFGbiLC7HuDgMEM6OJVn8ajjNRqFg3Lc=";
+    repo = "debuglater";
+    tag = version;
+    hash = "sha256-o9IAk3EN8ghEft7Y7Xx+sEjWMNgoyiZ0eiBqnCyXkm8=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
-  passthru.optional-dependencies = {
-    all = [
-      dill
-    ];
+  optional-dependencies = {
+    all = [ dill ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pandas
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
-  pythonImportsCheck = [
-    "debuglater"
-  ];
+  pythonImportsCheck = [ "debuglater" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for post-mortem debugging of Python programs";
     homepage = "https://github.com/ploomber/debuglater";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ploomber/debuglater/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

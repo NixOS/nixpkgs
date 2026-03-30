@@ -1,13 +1,26 @@
-{ config, pkgs, lib, ... }:
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
+  inherit (lib)
+    literalMD
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.services.quake3-server;
+
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
-    set net_port ${builtins.toString cfg.port}
+    set net_port ${toString cfg.port}
 
     ${cfg.extraConfig}
   '';
+
   defaultBaseq3 = pkgs.requireFile rec {
     name = "baseq3";
     hashMode = "recursive";
@@ -25,24 +38,27 @@ let
       $services.quake3-server.baseq3/.q3a/
     '';
   };
-  home = pkgs.runCommand "quake3-home" {} ''
-      mkdir -p $out/.q3a/baseq3
 
-      for file in ${cfg.baseq3}/*; do
-        ln -s $file $out/.q3a/baseq3/$(basename $file)
-      done
+  home = pkgs.runCommand "quake3-home" { } ''
+    mkdir -p $out/.q3a/baseq3
 
-      ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
+    for file in ${cfg.baseq3}/*; do
+      ln -s $file $out/.q3a/baseq3/$(basename $file)
+    done
+
+    ln -s ${configFile} $out/.q3a/baseq3/nix.cfg
   '';
-in {
+in
+{
   options = {
     services.quake3-server = {
-      enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
+      enable = mkEnableOption "Quake 3 dedicated server";
+      package = lib.mkPackageOption pkgs "ioquake3" { };
 
       port = mkOption {
         type = types.port;
         default = 27960;
-        description = lib.mdDoc ''
+        description = ''
           UDP Port the server should listen on.
         '';
       };
@@ -50,7 +66,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open the firewall.
         '';
       };
@@ -62,7 +78,7 @@ in {
           seta rconPassword "superSecret"      // sets RCON password for remote console
           seta sv_hostname "My Quake 3 server"      // name that appears in server list
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options. Note that options changed via RCON will not be persisted. To list all possible
           options, use "cvarlist 1" via RCON.
         '';
@@ -73,7 +89,7 @@ in {
         default = defaultBaseq3;
         defaultText = literalMD "Manually downloaded Quake 3 installation directory.";
         example = "/var/lib/q3ds";
-        description = lib.mdDoc ''
+        description = ''
           Path to the baseq3 files (pak*.pk3). If this is on the nix store (type = package) all .pk3 files should be saved
           in the top-level directory. If this is on another filesystem (e.g /var/lib/baseq3) the .pk3 files are searched in
           $baseq3/.q3a/baseq3/
@@ -82,31 +98,35 @@ in {
     };
   };
 
-  config = let
-    baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
-  in mkIf cfg.enable {
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
+  config =
+    let
+      baseq3InStore = builtins.typeOf cfg.baseq3 == "set";
+    in
+    mkIf cfg.enable {
+      networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    systemd.services.q3ds = {
-      description = "Quake 3 dedicated server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      systemd.services.q3ds = {
+        description = "Quake 3 dedicated server";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      environment.HOME = if baseq3InStore then home else cfg.baseq3;
+        environment.HOME = if baseq3InStore then home else cfg.baseq3;
 
-      serviceConfig = with lib; {
-        Restart = "always";
-        DynamicUser = true;
-        WorkingDirectory = home;
+        serviceConfig = with lib; {
+          Restart = "always";
+          DynamicUser = true;
+          WorkingDirectory = home;
 
-        # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
-        ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
-        ExecStartPre = optionalString (!baseq3InStore) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
+          # It is possible to alter configuration files via RCON. To ensure reproducibility we have to prevent this
+          ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
+          ExecStartPre = optionalString (
+            !baseq3InStore
+          ) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
-        ExecStart = "${pkgs.ioquake3}/ioq3ded.x86_64 +exec nix.cfg";
+          ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
+        };
       };
     };
-  };
 
-  meta.maintainers = with maintainers; [ f4814n ];
+  meta.maintainers = with lib.maintainers; [ f4814n ];
 }

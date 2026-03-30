@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, flask, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   version = "0.2.14";
+  format = "setuptools";
   pname = "flask-swagger";
 
   src = fetchPypi {
@@ -18,10 +24,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gangverk/flask-swagger";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Extract swagger specs from your flask project";
-    maintainers = with maintainers; [ vanschelven ];
+    mainProgram = "flaskswagger";
+    maintainers = with lib.maintainers; [ vanschelven ];
   };
 }

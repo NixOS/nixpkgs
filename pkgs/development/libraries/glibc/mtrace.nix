@@ -15,7 +15,7 @@ glibc.overrideAttrs (oldAttrs: {
     runHook preBuild
 
     mkdir malloc
-    make -C ../glibc-${glibc.minorRelease}/malloc objdir=`pwd` `pwd`/malloc/mtrace;
+    make -C ../malloc objdir=`pwd` `pwd`/malloc/mtrace;
 
     runHook postBuild
   '';
@@ -35,6 +35,7 @@ glibc.overrideAttrs (oldAttrs: {
   separateDebugInfo = false;
 
   meta = oldAttrs.meta // {
-    description = "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3).";
+    description = "Perl script used to interpret and provide human readable output of the trace log contained in the file mtracedata, whose contents were produced by mtrace(3)";
+    mainProgram = "mtrace";
   };
 })

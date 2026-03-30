@@ -1,30 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, biopython
-, docopt
-, flametree
-, numpy
-, proglog
-, pytestCheckHook
-, python-codon-tables
-, primer3
-, genome-collector
-, matplotlib
+{
+  lib,
+  biopython,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  flametree,
+  genome-collector,
+  matplotlib,
+  numpy,
+  primer3,
+  proglog,
+  pytestCheckHook,
+  python-codon-tables,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.9";
+  version = "3.2.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Fg0gkI+01xIt8LQmNmRzkzd4AObg/99x34y5NclMtDQ=";
+    tag = "v${version}";
+    hash = "sha256-F+G7dwehUCHYKSGsLQR4OZg2NQ4677XMlN6jOcmz8No=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     biopython
     docopt
     flametree
@@ -33,7 +38,7 @@ buildPythonPackage rec {
     python-codon-tables
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     primer3
     genome-collector
     matplotlib
@@ -50,13 +55,15 @@ buildPythonPackage rec {
     "test_avoid_phage_blast_matches"
     "test_avoid_matches_with_list"
     "test_avoid_matches_with_phage"
-   ];
+  ];
+
   pythonImportsCheck = [ "dnachisel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
     description = "Optimize DNA sequences under constraints";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

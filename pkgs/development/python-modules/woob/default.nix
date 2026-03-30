@@ -1,95 +1,89 @@
-{ lib
-, babel
-, buildPythonPackage
-, colorama
-, cssselect
-, feedparser
-, fetchFromGitLab
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer-six
-, pillow
-, prettytable
-, pyqt5
-, python-dateutil
-, pythonOlder
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  babel,
+  html2text,
+  lxml,
+  packaging,
+  pillow,
+  prettytable,
+  pycountry,
+  pytestCheckHook,
+  python-dateutil,
+  python-jose,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  testers,
+  unidecode,
+  termcolor,
+  responses,
+  woob,
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.7";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "woob";
-    repo = pname;
-    rev = version;
-    hash = "sha256-XLcHNidclORbxVXgcsHY6Ja/dak+EVSKTaVQmg1f/rw=";
+    repo = "woob";
+    tag = version;
+    hash = "sha256-EZHzw+/BIIvmDXG4fF367wsdUTVTHWYb0d0U56ZXwOs=";
   };
 
-  nativeBuildInputs = [
-    pyqt5
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "packaging"
+    "rich"
+    "requests"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
-    colorama
-    cssselect
     python-dateutil
-    feedparser
-    gdata
-    gnupg
-    google-api-python-client
+    python-jose
     html2text
-    libyaml
     lxml
-    mechanize
-    pdfminer-six
+    packaging
     pillow
     prettytable
-    pyqt5
+    pycountry
     pyyaml
     requests
-    simplejson
-    termcolor
+    rich
     unidecode
+    termcolor
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "with-doctest = 1" "" \
-      --replace "with-coverage = 1" ""
-  '';
-
-  checkInputs = [
-    nose
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
   ];
 
-  checkPhase = ''
-    nosetests
-  '';
-
-  pythonImportsCheck = [
-    "woob"
+  disabledTests = [
+    # require networking
+    "test_ciphers"
+    "test_verify"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "woob" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = woob;
+    version = "v${version}";
+  };
+
+  meta = {
+    changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
+    mainProgram = "woob";
     homepage = "https://woob.tech";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ DamienCassou ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ DamienCassou ];
   };
 }

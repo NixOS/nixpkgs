@@ -1,9 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 let
   # build a getent that itself doesn't see anything in /etc/hosts and
   # /etc/nsswitch.conf, by using libredirect to steer its own requests to
   # /dev/null.
-  # This means is /has/ to go via nscd to actuallly resolve any of the
+  # This means is /has/ to go via nscd to actually resolve any of the
   # additionally configured hosts.
   getent' = pkgs.writeScript "getent-without-etc-hosts" ''
     export NIX_REDIRECTS=/etc/hosts=/dev/null:/etc/nsswitch.conf=/dev/null
@@ -14,42 +14,50 @@ in
 {
   name = "nscd";
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [ common/user-account.nix ];
-    networking.extraHosts = ''
-      2001:db8::1 somehost.test
-      192.0.2.1 somehost.test
-    '';
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [ common/user-account.nix ];
+      networking.extraHosts = ''
+        2001:db8::1 somehost.test
+        192.0.2.1 somehost.test
+      '';
 
-    systemd.services.sockdump = {
-      wantedBy = [ "multi-user.target" ];
-      path = [
-        # necessary for bcc to unpack kernel headers and invoke modprobe
-        pkgs.gnutar
-        pkgs.xz.bin
-        pkgs.kmod
-      ];
-      environment.PYTHONUNBUFFERED = "1";
+      systemd.services.sockdump = {
+        wantedBy = [ "multi-user.target" ];
+        path = [
+          # necessary for bcc to unpack kernel headers and invoke modprobe
+          pkgs.gnutar
+          pkgs.xz.bin
+          pkgs.kmod
+        ];
+        environment.PYTHONUNBUFFERED = "1";
 
-      serviceConfig = {
-        ExecStart = "${pkgs.sockdump}/bin/sockdump /var/run/nscd/socket";
-        Restart = "on-failure";
-        RestartSec = "1";
-        Type = "simple";
+        serviceConfig = {
+          ExecStart = "${pkgs.sockdump}/bin/sockdump /var/run/nscd/socket";
+          Restart = "on-failure";
+          RestartSec = "1";
+          Type = "simple";
+        };
+      };
+
+      specialisation = {
+        withGlibcNscd.configuration =
+          { ... }:
+          {
+            services.nscd.enableNsncd = false;
+          };
+        withUnscd.configuration =
+          { ... }:
+          {
+            services.nscd.enableNsncd = false;
+            services.nscd.package = pkgs.unscd;
+          };
       };
     };
 
-    specialisation = {
-      withUnscd.configuration = { ... }: {
-        services.nscd.package = pkgs.unscd;
-      };
-      withNsncd.configuration = { ... }: {
-        services.nscd.enableNsncd = true;
-      };
-    };
-  };
-
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       specialisations = "${nodes.machine.system.build.toplevel}/specialisation";
     in
@@ -118,6 +126,14 @@ in
       test_host_lookups()
       test_nss_myhostname()
 
+      with subtest("glibc-nscd"):
+          machine.succeed('${specialisations}/withGlibcNscd/bin/switch-to-configuration test')
+          machine.wait_for_unit("default.target")
+
+          test_dynamic_user()
+          test_host_lookups()
+          test_nss_myhostname()
+
       with subtest("unscd"):
           machine.succeed('${specialisations}/withUnscd/bin/switch-to-configuration test')
           machine.wait_for_unit("default.target")
@@ -129,13 +145,5 @@ in
 
           # known to fail, unscd doesn't load external NSS modules
           # test_nss_myhostname()
-
-      with subtest("nsncd"):
-          machine.succeed('${specialisations}/withNsncd/bin/switch-to-configuration test')
-          machine.wait_for_unit("default.target")
-
-          test_dynamic_user()
-          test_host_lookups()
-          test_nss_myhostname()
     '';
-})
+}

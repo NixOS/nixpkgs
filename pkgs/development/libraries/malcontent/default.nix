@@ -1,34 +1,44 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsNoGuiHook
-, glib
-, coreutils
-, accountsservice
-, dbus
-, pam
-, polkit
-, glib-testing
-, python3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
+  glib,
+  coreutils,
+  accountsservice,
+  dbus,
+  pam,
+  polkit,
+  glib-testing,
+  python3,
+  nixosTests,
+  malcontent-ui,
 }:
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.11.0";
+  version = "0.13.1";
 
-  outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
+  outputs = [
+    "bin"
+    "out"
+    "lib"
+    "pam"
+    "dev"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
-    repo = pname;
+    repo = "malcontent";
     rev = version;
-    sha256 = "sha256-92F30DfdSJvO5C9EmNtiC/H6Fa6qQHecYSx59JKp8vA=";
+    hash = "sha256-ekRi4yXu8u8t1AjyS3bD6tdqqnqtKyI6yZs+28LnfRY=";
   };
 
   patches = [
@@ -53,9 +63,11 @@ stdenv.mkDerivation rec {
     pam
     polkit
     glib-testing
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pygobject3
+      ]
+    ))
   ];
 
   propagatedBuildInputs = [
@@ -71,10 +83,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libmalcontent/tests/app-filter.c \
-      --replace "/usr/bin/true" "${coreutils}/bin/true" \
-      --replace "/bin/true" "${coreutils}/bin/true" \
-      --replace "/usr/bin/false" "${coreutils}/bin/false" \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/usr/bin/false" "${coreutils}/bin/false" \
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
   '';
 
   postInstall = ''
@@ -87,18 +99,24 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.malcontent;
+      inherit malcontent-ui;
     };
   };
 
-  meta = with lib; {
+  meta = {
     # We need to install Polkit & AccountsService data files in `out`
     # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
-    outputsToInstall = [ "bin" "out" "man" ];
+    outputsToInstall = [
+      "bin"
+      "out"
+      "man"
+    ];
 
     description = "Parental controls library";
+    mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    inherit (polkit.meta) platforms badPlatforms;
   };
 }

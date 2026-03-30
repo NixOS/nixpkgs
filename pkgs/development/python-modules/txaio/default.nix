@@ -1,53 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, twisted
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "txaio";
-  version = "22.2.1";
-  disabled = pythonOlder "3.7";
+  version = "25.12.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-LkWCtw8EsjRZCCVGhKmEIGwNm1DjB0okpMVauiHSTQE=";
+  src = fetchFromGitHub {
+    owner = "crossbario";
+    repo = "txaio";
+    tag = "v${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-/vlkjSOlQYbRpjMySBzoSBSXm0yxWSHmzIF3ZfFIR64=";
   };
 
-  propagatedBuildInputs = [
-    twisted
-    zope_interface
+  build-system = [
+    hatchling
   ];
 
-  checkInputs = [
-    mock
-    pytest-asyncio
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # No real value
-    "test_sdist"
-    # Some tests seems out-dated and require additional data
-    "test_as_future"
-    "test_errback"
-    "test_create_future"
-    "test_callback"
-    "test_immediate_result"
-    "test_cancel"
   ];
 
   pythonImportsCheck = [ "txaio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio";
     homepage = "https://github.com/crossbario/txaio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/crossbario/txaio/blob/${finalAttrs.src.tag}/docs/releases.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

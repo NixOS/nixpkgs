@@ -1,29 +1,27 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, jmespath
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  jmespath,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-core";
-  version = "2.13.36";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.16.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IL1UmE+jFtpwDH81WlGrC4FmkOKg/O+3te8BP+0NqSg=";
+    hash = "sha256-ZRyq1ZfrOdT61s+FEz3/6Sg31TvfYtudjzfatlCLuPk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     jmespath
   ];
@@ -31,16 +29,13 @@ buildPythonPackage rec {
   # All components are stored in a mono repo
   doCheck = false;
 
-  pythonRelaxDeps = true;
+  pythonImportsCheck = [ "aliyunsdkcore" ];
 
-  pythonImportsCheck = [
-    "aliyunsdkcore"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Core module of Aliyun Python SDK";
     homepage = "https://github.com/aliyun/aliyun-openapi-python-sdk";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/aliyun/aliyun-openapi-python-sdk/blob/master/aliyun-python-sdk-core/ChangeLog.txt";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

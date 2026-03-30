@@ -1,25 +1,28 @@
-{ lib
-, aiowinreg
-, buildPythonPackage
-, colorama
-, fetchPypi
-, pycryptodomex
-, pythonOlder
-, tqdm
-, unicrypto
+{
+  lib,
+  aiowinreg,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pycryptodomex,
+  setuptools,
+  tqdm,
+  unicrypto,
 }:
 
 buildPythonPackage rec {
   pname = "aesedb";
-  version = "0.1.0";
-  format = "setuptools";
+  version = "0.1.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TetXhDrWG6MECm/nhsZDUwcOJwP5drFO+YLarGC2pak=";
+  src = fetchFromGitHub {
+    owner = "skelsec";
+    repo = "aesedb";
+    tag = version;
+    hash = "sha256-YoeqxYkohAR6RaQYDXt7T00LCQDSb/o/ddxYRDGP/2s=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiowinreg
@@ -32,14 +35,14 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aesedb"
-  ];
+  pythonImportsCheck = [ "aesedb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for JET databases";
+    mainProgram = "antdsparse";
     homepage = "https://github.com/skelsec/aesedb";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/skelsec/aesedb/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

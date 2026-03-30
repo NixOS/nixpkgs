@@ -1,48 +1,44 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "freebox-api";
-  version = "1.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-60hIv35nNxXPFZy/JvG1O/ZkSMk65XDojUYP1QyfwXY=";
+    repo = "freebox-api";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3rmOIHneGUtaLw+0Z0UTKoCSoJs70KKLjDPi0gOtV6I=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "urllib3" ];
+
+  dependencies = [
     aiohttp
     urllib3
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "freebox_api"
-  ];
+  pythonImportsCheck = [ "freebox_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "freebox_api";
   };
-}
+})

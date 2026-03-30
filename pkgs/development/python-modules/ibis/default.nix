@@ -1,36 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "ibis";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dmulholl";
-    repo = pname;
+    repo = "ibis";
     rev = version;
-    sha256 = "sha256-EPz9zHnxR75WoRaiHKJNiCRWFwU1TBpC4uHz62jUOqM=";
+    hash = "sha256-9ELOAQhD6KXyTN2U0lGmNxxSzx9o2QIt+CNa6i8o5xs=";
   };
 
   checkPhase = ''
     ${python.interpreter} test_ibis.py
   '';
 
-  pythonImportsCheck = [
-    "ibis"
-  ];
+  pythonImportsCheck = [ "ibis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight template engine";
     homepage = "https://github.com/dmulholland/ibis";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ costrouc ];
+    license = lib.licenses.publicDomain;
+    maintainers = [ ];
   };
 }

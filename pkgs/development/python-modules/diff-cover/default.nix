@@ -1,44 +1,45 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchPypi
-, jinja2
-, jinja2_pluralize
-, pluggy
-, pycodestyle
-, pyflakes
-, pygments
-, pylint
-, pytest-datadir
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchPypi,
+  jinja2,
+  jinja2-pluralize,
+  pluggy,
+  poetry-core,
+  pycodestyle,
+  pyflakes,
+  pygments,
+  pylint,
+  pytest-datadir,
+  pytest-mock,
+  pytestCheckHook,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "7.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "10.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-aSWDVdr4J2BXqS5CzsUllK2M/n3VBdbw5W/kQLxEGNA=";
+    hash = "sha256-Yb+DAl8QUQx272pYIGgM9hubl06Pgd5wxXrJJvpjhyo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     chardet
     jinja2
-    jinja2_pluralize
+    jinja2-pluralize
     pluggy
     pygments
     tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pycodestyle
     pyflakes
     pylint
@@ -52,16 +53,18 @@ buildPythonPackage rec {
     "file_does_not_exist"
     # Comparing console output doesn't work reliable
     "console"
+    # Assertion failure
+    "test_html_with_external_css"
+    "test_style_defs"
   ];
 
-  pythonImportsCheck = [
-    "diff_cover"
-  ];
+  pythonImportsCheck = [ "diff_cover" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dzabraev ];
+    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dzabraev ];
   };
 }

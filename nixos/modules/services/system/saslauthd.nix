@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.saslauthd;
@@ -16,35 +18,29 @@ in
 
     services.saslauthd = {
 
-      enable = mkEnableOption (lib.mdDoc "saslauthd, the Cyrus SASL authentication daemon");
+      enable = lib.mkEnableOption "saslauthd, the Cyrus SASL authentication daemon";
 
-      package = mkOption {
-        default = pkgs.cyrus_sasl.bin;
-        defaultText = literalExpression "pkgs.cyrus_sasl.bin";
-        type = types.package;
-        description = lib.mdDoc "Cyrus SASL package to use.";
-      };
+      package = lib.mkPackageOption pkgs [ "cyrus_sasl" "bin" ] { };
 
-      mechanism = mkOption {
-        type = types.str;
+      mechanism = lib.mkOption {
+        type = lib.types.str;
         default = "pam";
-        description = lib.mdDoc "Auth mechanism to use";
+        description = "Auth mechanism to use";
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc "Configuration to use for Cyrus SASL authentication daemon.";
+        description = "Configuration to use for Cyrus SASL authentication daemon.";
       };
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.saslauthd = {
       description = "Cyrus SASL authentication daemon";

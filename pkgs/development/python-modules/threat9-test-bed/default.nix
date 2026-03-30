@@ -1,53 +1,48 @@
-{ lib
-, buildPythonPackage
-, click
-, faker
-, fetchFromGitHub
-, flask
-, gunicorn
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, requests
+{
+  lib,
+  buildPythonPackage,
+  click,
+  faker,
+  fetchFromGitHub,
+  flask,
+  gunicorn,
+  pyopenssl,
+  pytestCheckHook,
+  pythonAtLeast,
+  requests,
+  setuptools-scm,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
   pname = "threat9-test-bed";
   version = "0.6.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "threat9";
-    repo = pname;
+    repo = "threat9-test-bed";
     rev = "v${version}";
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  patches = [ ./asyncio-loop.patch ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     faker
     flask
     gunicorn
     pyopenssl
     requests
-  ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "threat9_test_bed"
-  ];
+  pythonImportsCheck = [ "threat9_test_bed" ];
 
   disabledTests = [
     # Assertion issue with the response codes
@@ -56,10 +51,11 @@ buildPythonPackage rec {
     "test_http_service_mock_random_port"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for adding unittests.mock as view functions";
     homepage = "https://github.com/threat9/threat9-test-bed";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "test-bed";
   };
 }

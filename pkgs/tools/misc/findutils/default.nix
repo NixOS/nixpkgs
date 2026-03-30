@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  coreutils,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -7,31 +11,44 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findutils";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
-    sha256 = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
+    url = "mirror://gnu/findutils/findutils-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
   postPatch = ''
     substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
   '';
 
-  patches = [ ./no-install-statedir.patch ];
+  patches = [
+    ./no-install-statedir.patch
 
+    # Fixes test-float failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    # Multiple upstream commits squashed with adjustments, see header
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+  ];
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
-  doCheck
-    =  !stdenv.hostPlatform.isDarwin
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
+    && !stdenv.hostPlatform.isFreeBSD
     && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  outputs = [ "out" "info" "locate"];
+  outputs = [
+    "out"
+    "info"
+    "locate"
+  ];
 
   configureFlags = [
     # "sort" need not be on the PATH as a run-time dep, so we need to tell
@@ -40,11 +57,13 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var/cache"
   ];
 
-  CFLAGS = lib.optionals stdenv.isDarwin [
-    # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
-    # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
-    "-D__nonnull\\(params\\)="
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CFLAGS = toString [
+      # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
+      # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
+      "-D__nonnull\\(params\\)="
+    ];
+  };
 
   postInstall = ''
     moveToOutput bin/locate $locate
@@ -60,10 +79,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  # or you can check libc/include/sys/cdefs.h in bionic source code
+  hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
-
     longDescription = ''
       The GNU Find Utilities are the basic directory searching
       utilities of the GNU operating system.  These programs are
@@ -81,9 +104,11 @@ stdenv.mkDerivation rec {
           * locate - list files in databases that match a pattern;
           * updatedb - update a file name database;
     '';
-
     platforms = lib.platforms.all;
-
     license = lib.licenses.gpl3Plus;
+    mainProgram = "find";
+    maintainers = [ lib.maintainers.mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

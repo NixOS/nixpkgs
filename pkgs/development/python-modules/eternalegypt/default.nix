@@ -1,26 +1,27 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "eternalegypt";
-  version = "0.0.13";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.0.18";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amelchio";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0wi2cqd81irqm873npkqg3mvdrb57idqdsp8qw8h0s7lk0kil1wi";
+    repo = "eternalegypt";
+    tag = "v${version}";
+    hash = "sha256-dS4APZWOI8im1Ls1A5750FedTWBy3UpXvJmYpd1po94=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     attrs
   ];
@@ -30,10 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eternalegypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Netgear LTE modems";
     homepage = "https://github.com/amelchio/eternalegypt";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/amelchio/eternalegypt/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

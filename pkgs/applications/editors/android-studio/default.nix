@@ -1,46 +1,68 @@
-{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv, tiling_wm ? false }:
+{
+  callPackage,
+  makeFontsConf,
+  buildFHSEnv,
+  tiling_wm ? false,
+}:
 
 let
-  mkStudio = opts: callPackage (import ./common.nix opts) {
-    fontsConf = makeFontsConf {
-      fontDirectories = [];
+  mkStudio =
+    opts:
+    callPackage (import ./common.nix opts) {
+      fontsConf = makeFontsConf {
+        fontDirectories = [ ];
+      };
+      inherit buildFHSEnv;
+      inherit tiling_wm;
     };
-    inherit (gnome2) GConf gnome_vfs;
-    inherit buildFHSUserEnv;
-    inherit tiling_wm;
-  };
   stableVersion = {
-    version = "2021.3.1.17"; # "Android Studio Dolphin (2021.3.1)"
-    sha256Hash = "sha256-ia2wzg/6RreJTnv+2xQrH11SxDwXHmpsualaSfd3Vso=";
+    version = "2025.3.2.6"; # "Android Studio Panda 2 | 2025.3.2"
+    sha256Hash = "sha256-MpQtjNdogZLPPNB78oL7EgA1ub2bVubxPFVA5tOYB+k=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.2.6/android-studio-panda2-linux.tar.gz";
   };
   betaVersion = {
-    version = "2022.1.1.12"; # "Android Studio Electric Eel (2022.1.1) Beta 2"
-    sha256Hash = "8iSFPH0PTQkzV1t8bEq7CBtOU8pzdnD/PrpVcgPnO6Q=";
+    version = "2025.3.2.5"; # "Android Studio Panda 2 | 2025.3.2 RC 1"
+    sha256Hash = "sha256-qpmc7MO48GV2nnxEdRstg3ne0Gvlrgk9UX5Dr60gAMM=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.2.5/android-studio-panda2-rc1-linux.tar.gz";
   };
-  latestVersion = { # canary & dev
-    version = "2022.2.1.2"; # "Android Studio Flamingo (2022.2.1) Canary 2"
-    sha256Hash = "hlHlgyl9If2LH4aExpElx0rqmWeoFX+qx4w6RRb5e8U=";
+  latestVersion = {
+    version = "2025.3.3.2"; # "Android Studio Panda 3 | 2025.3.3 Canary 2"
+    sha256Hash = "sha256-z8GpBqyEnbyyBc0XPo5q52WS5d7b4292QgUj0FPW+C0=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.3.2/android-studio-panda3-canary2-linux.tar.gz";
   };
-in {
+in
+{
   # Attributes are named by their corresponding release channels
 
-  stable = mkStudio (stableVersion // {
-    channel = "stable";
-    pname = "android-studio";
-  });
+  stable = mkStudio (
+    stableVersion
+    // {
+      channel = "stable";
+      pname = "android-studio";
+    }
+  );
 
-  beta = mkStudio (betaVersion // {
-    channel = "beta";
-    pname = "android-studio-beta";
-  });
+  beta = mkStudio (
+    betaVersion
+    // {
+      channel = "beta";
+      pname = "android-studio-beta";
+    }
+  );
 
-  dev = mkStudio (latestVersion // {
-    channel = "dev";
-    pname = "android-studio-dev";
-  });
+  dev = mkStudio (
+    latestVersion
+    // {
+      channel = "dev";
+      pname = "android-studio-dev";
+    }
+  );
 
-  canary = mkStudio (latestVersion // {
-    channel = "canary";
-    pname = "android-studio-canary";
-  });
+  canary = mkStudio (
+    latestVersion
+    // {
+      channel = "canary";
+      pname = "android-studio-canary";
+    }
+  );
 }

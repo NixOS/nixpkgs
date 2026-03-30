@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, fcitx5
-, m17n_lib
-, m17n_db
-, gettext
-, fmt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  fcitx5,
+  m17n_lib,
+  m17n_db,
+  gettext,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
-  version = "5.0.10";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u4rW89ofuKYCn+NcvdIy0eU+lZ7Lp9kp/d0NdHW2V1s=";
+    hash = "sha256-+sQu/P28XV2nkS7rxy+pTXijY1mLvmwbePaJLUtLaBg=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +34,17 @@ stdenv.mkDerivation rec {
     fcitx5
     m17n_db
     m17n_lib
-    fmt
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) fcitx5;
+  };
+
+  meta = {
     description = "m17n support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-m17n";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ Technical27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ Technical27 ];
+    platforms = lib.platforms.linux;
   };
 }

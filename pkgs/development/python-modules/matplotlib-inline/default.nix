@@ -1,22 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  traitlets,
 
-# tests
-, ipython
+  # tests
+  ipython,
 }:
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";
-  version = "0.1.6";
+  version = "0.2.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+Ifl8Qupjo0rFQ3c9HAsHl+LOiAAXrD3S/29Ng7m8wQ=";
+  src = fetchFromGitHub {
+    owner = "ipython";
+    repo = "matplotlib-inline";
+    tag = version;
+    hash = "sha256-qExS0SsbnYgu0wFTew90z5QwPyJ+UWGVEgFURSMedSY=";
   };
 
-  propagatedBuildInputs = [
-    traitlets
-  ];
+  build-system = [ flit-core ];
+
+  dependencies = [ traitlets ];
 
   # wants to import ipython, which creates a circular dependency
   doCheck = false;
@@ -27,12 +34,14 @@ buildPythonPackage rec {
     #"matplotlib_inline"
   ];
 
-  passthru.tests = { inherit ipython; };
+  passthru.tests = {
+    inherit ipython;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Matplotlib Inline Back-end for IPython and Jupyter";
     homepage = "https://github.com/ipython/matplotlib-inline";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

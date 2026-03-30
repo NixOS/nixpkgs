@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cronsim";
-  version = "2.3";
-  format = "setuptools";
+  version = "2.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ebFYIOANXZLmM6cbovwBCJH8Wr/HlJbOR9YGp8Jw7pc=";
+  src = fetchFromGitHub {
+    owner = "cuu508";
+    repo = "cronsim";
+    tag = version;
+    hash = "sha256-9TextQcZAX5Ri6cc+Qd4T+u8XjxriqoTsy/9/G8XDAM=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "cronsim"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "cronsim" ];
+
+  meta = {
     description = "Cron expression parser and evaluator";
     homepage = "https://github.com/cuu508/cronsim";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

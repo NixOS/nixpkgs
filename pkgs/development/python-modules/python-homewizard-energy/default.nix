@@ -1,51 +1,68 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  multidict,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-homewizard-energy";
-  version = "1.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "10.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCSBL";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aaTxUx1eMM4Me4D0EkV5iDzs+yPt83/7PyPXTCTIgq8=";
+    repo = "python-homewizard-energy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/bz/KM6kCLciHRcPifd5F1P6Agzzb2ULxEzWP9xbfwo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
+    async-timeout
+    awesomeversion
+    backoff
+    mashumaro
+    multidict
+    orjson
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "homewizard_energy"
-  ];
+  pythonImportsCheck = [ "homewizard_energy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with HomeWizard Energy devices";
-    homepage = "https://github.com/DCSBL/python-homewizard-energy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/homewizard/python-homewizard-energy";
+    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

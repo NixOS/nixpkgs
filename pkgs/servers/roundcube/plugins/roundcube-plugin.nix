@@ -1,7 +1,11 @@
 { runCommand }:
-{ pname, version, src }:
+{
+  pname,
+  version,
+  src,
+}:
 
-runCommand "roundcube-plugin-${pname}-${version}" { } ''
+runCommand "roundcube-plugin-${pname}-${version}" { inherit pname version; } ''
   mkdir -p $out/plugins/
   cp -r ${src} $out/plugins/${pname}
 ''

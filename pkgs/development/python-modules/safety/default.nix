@@ -1,74 +1,109 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, click
-, requests
-, packaging
-, dparse
-, ruamel-yaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  setuptools,
+  click,
+  requests,
+  packaging,
+  dparse,
+  ruamel-yaml,
+  jinja2,
+  marshmallow,
+  nltk,
+  authlib,
+  typer,
+  pydantic,
+  safety-schemas,
+  typing-extensions,
+  filelock,
+  psutil,
+  httpx,
+  tenacity,
+  tomlkit,
+  git,
+  pytestCheckHook,
+  tomli,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "2.3.1";
+  version = "3.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bm/LfU6DIQmM8on1m2UFHK/TRn8InG5XyfiUrjLCO3E=";
+  src = fetchFromGitHub {
+    owner = "pyupio";
+    repo = "safety";
+    tag = version;
+    hash = "sha256-BPLK/V7YQBCGopfRFAWdra8ve8Ww5KN1+oZKyoEPiFc=";
   };
 
-  postPatch = ''
-    substituteInPlace safety/safety.py \
-      --replace "telemetry=True" "telemetry=False"
-    substituteInPlace safety/util.py \
-      --replace "telemetry=True" "telemetry=False"
-    substituteInPlace safety/cli.py \
-      --replace "telemetry', default=True" "telemetry', default=False"
-  '';
-
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    ./disable-telemetry.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    "filelock"
+    "pydantic"
+    "psutil"
+    "safety-schemas"
+  ];
+
+  dependencies = [
     setuptools
     click
     requests
     packaging
     dparse
     ruamel-yaml
+    jinja2
+    marshmallow
+    nltk
+    authlib
+    typer
+    pydantic
+    safety-schemas
+    typing-extensions
+    filelock
+    psutil
+    httpx
+    tenacity
+    tomlkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    git
     pytestCheckHook
+    tomli
+    writableTmpDirAsHomeHook
   ];
 
-  # Disable tests depending on online services
   disabledTests = [
+    # Disable tests depending on online services
     "test_announcements_if_is_not_tty"
     "test_check_live"
-    "test_check_live_cached"
-    "test_check_vulnerabilities"
-    "test_license"
-    "test_chained_review"
+    "test_debug_flag"
+    "test_get_packages_licenses_without_api_key"
+    "test_init_project"
+    "test_validate_with_basic_policy_file"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # ImportError: cannot import name 'get_command_for' from partially initialized module 'safety.cli_util' (most likely due to a circular import)
+  disabledTestPaths = [ "tests/alerts/test_utils.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks installed dependencies for known vulnerabilities";
+    mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
-    changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thomasdesr dotlambda ];
+    changelog = "https://github.com/pyupio/safety/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      thomasdesr
+      dotlambda
+    ];
   };
 }

@@ -1,46 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, requests
-, psutil
-, pytest
-, setuptools-scm
-, toml
-, zc_lockfile
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psutil,
+  pylibmc,
+  pytest,
+  pytestCheckHook,
+  requests,
+  setuptools-scm,
+  toml,
+  mysqlclient,
+  zc-lockfile,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-services";
-  version = "2.2.1";
+  version = "2.2.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2da740487d08ea63dfdf718f5d4ba11e590c99ddf5481549edebf7a3a42ca536";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-services";
+    tag = "v${version}";
+    hash = "sha256-kWgqb7+3/hZKUz7B3PnfxHZq6yU3JUeJ+mruqrMD/NE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
     toml
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     psutil
-    zc_lockfile
+    zc-lockfile
   ];
 
-  # no tests in PyPI tarball
-  doCheck = false;
+  nativeCheckInputs = [
+    mysqlclient
+    pylibmc
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pytest_services" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests require binaries and additional parts
+    "test_memcached"
+    "test_mysql"
+    "test_xvfb"
+  ];
+
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/pytest-dev/pytest-services/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

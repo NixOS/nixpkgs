@@ -1,36 +1,44 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, pkgconfig
-, gmp
-, pari
-, mpfr
-, fplll
-, cython
-, cysignals
-, numpy
-, pytest
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cysignals,
+  cython,
+  pkgconfig,
+  setuptools,
+
+  gmp,
+  pari,
+  mpfr,
+  fplll,
+  numpy,
+
+  # Reverse dependency
+  sage,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.7";
+  version = "0.6.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
-    rev = version;
-    sha256 = "sha256-iUPreJ8BSB8LDisbJis0xn8ld6+Nf9Z4AP8SWJlCfZg=";
+    tag = version;
+    hash = "sha256-vks4rTXk6fh8183PCxJzfTXQyo3scBH4afjbQAkT6Gw=";
   };
 
-  patches = [
-   (fetchpatch {
-     name = "remove-strategies-doctest.patch";
-     url = "https://github.com/fplll/fpylll/commit/3edffcd189e9d827a322d83b0f84d32e5f067442.patch";
-     sha256 = "sha256-U7qOIbVzUNwYmjOPryjnE3J+MX/vMwm3T0UyOZ5ylLc=";
-   })
+  nativeBuildInputs = [
+    cython
+    cysignals
+    pkgconfig
+    setuptools
   ];
 
   buildInputs = [
@@ -41,32 +49,29 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython
-    cysignals
     numpy
+    cysignals
   ];
 
-  nativeBuildInputs = [
-    pkgconfig
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
+  preCheck = ''
     # Since upstream introduced --doctest-modules in
     # https://github.com/fplll/fpylll/commit/9732fdb40cf1bd43ad1f60762ec0a8401743fc79,
     # it is necessary to ignore import mismatches. Not sure why, but the files
     # should be identical anyway.
-    PY_IGNORE_IMPORTMISMATCH=1 pytest
+    export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  meta = with lib; {
-    description = "A Python interface for fplll";
-    changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
+  passthru.tests = {
+    inherit sage;
+  };
+
+  meta = {
+    description = "Python interface for fplll";
+    changelog = "https://github.com/fplll/fpylll/releases/tag/${src.tag}";
     homepage = "https://github.com/fplll/fpylll";
-    maintainers = teams.sage.members;
-    license = licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl2Plus;
   };
 }

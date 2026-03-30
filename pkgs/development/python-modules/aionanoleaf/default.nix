@@ -1,39 +1,34 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "aionanoleaf";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "milanmeu";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-bz568DlodWtSu2WTTd/QMhdiX9IkllW7UYVXuNlKFaY=";
+    repo = "aionanoleaf";
+    tag = "v${version}";
+    hash = "sha256-f0TyXhuAzI0s0n6sXH9mKWA4nad2YchZkQ0+jw/Bmv0=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aionanoleaf"
-  ];
+  pythonImportsCheck = [ "aionanoleaf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Nanoleaf API";
     homepage = "https://github.com/milanmeu/aionanoleaf";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/milanmeu/aionanoleaf/releases/tag/v${version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

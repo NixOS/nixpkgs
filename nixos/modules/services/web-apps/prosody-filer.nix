@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -7,14 +12,15 @@ let
 
   settingsFormat = pkgs.formats.toml { };
   configFile = settingsFormat.generate "prosody-filer.toml" cfg.settings;
-in {
+in
+{
 
   options = {
     services.prosody-filer = {
-      enable = mkEnableOption (lib.mdDoc "Prosody Filer XMPP upload file server");
+      enable = mkEnableOption "Prosody Filer XMPP upload file server";
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Prosody Filer.
           Refer to <https://github.com/ThomasLeister/prosody-filer#configure-prosody-filer> for details on supported values.
         '';
@@ -78,8 +84,14 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

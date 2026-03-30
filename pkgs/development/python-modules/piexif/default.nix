@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pillow }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pillow,
+}:
 
 buildPythonPackage rec {
   pname = "piexif";
   version = "1.1.3";
+  format = "setuptools";
 
   # patch does not apply to PyPI sdist due to different line endings
   src = fetchFromGitHub {
@@ -21,12 +28,12 @@ buildPythonPackage rec {
   ];
 
   # Pillow needed for unit tests
-  checkInputs = [ pillow ];
+  nativeCheckInputs = [ pillow ];
 
-  meta = with lib; {
+  meta = {
     description = "Simplify Exif manipulations with Python";
     homepage = "https://github.com/hMatoba/Piexif";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

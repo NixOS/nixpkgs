@@ -1,51 +1,40 @@
-{ lib
-, buildPythonPackage
-, setuptools
-, isPyPy
-, fetchPypi
-, pythonOlder
-, cffi
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  fetchPypi,
+  cffi,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "bcrypt";
   version = "3.2.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-QzxBDCF3BXcF2iqfLNAd0VdJOyp6wUyFk6FrPatra/s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     six
     cffi
   ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bcrypt"
-  ];
+  pythonImportsCheck = [ "bcrypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern password hashing for your software and your servers";
     homepage = "https://github.com/pyca/bcrypt/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

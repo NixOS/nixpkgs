@@ -1,21 +1,22 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "doctest";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0hh9izj9ds69bmrvmmj16fd1c4z7733h50c7isl8f714srw26kf4";
+    sha256 = "sha256-dmZpgnz2vNd1AmDKhpNTZW1UEvBNUUv+rRn3VsnSeuk=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/doctest/index.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/doctest/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Find and run example code within documentation";
     longDescription = ''
       Find and run example code within documentation. Formatted blocks

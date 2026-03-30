@@ -1,58 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# buildtime
-, setuptools-scm
+  # buildtime
+  setuptools-scm,
 
-# runtime
-, django
-, python-ldap
+  # runtime
+  django,
+  python-ldap,
 
-# tests
-, python
-, pkgs
+  # tests
+  openldap,
 }:
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.1.0";
-  format = "pyproject";
+  version = "5.3.0";
+  pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-d/dJ07F4B86OtWqcnI5XRv8xZWf4HVumE0ldnHSVqUk=";
+  src = fetchFromGitHub {
+    owner = "django-auth-ldap";
+    repo = "django-auth-ldap";
+    tag = version;
+    hash = "sha256-+ezadod2ZKrsNW7lVO1dVqQWUnzP1Mi9On8/RJ2qNfI=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     python-ldap
   ];
 
-  # ValueError: SCHEMADIR is None, ldap schemas are missing.
+  # Duplicate attributeType: "MSADat2:102"\nslapadd: could not add entry dn="cn={4}msuser,cn=schema,cn=config" (line=1): \xd0\xbe\xff\xff\xff\x7f\n'
   doCheck = false;
+
+  preCheck = ''
+    export PATH=${openldap}/bin:${openldap}/libexec:$PATH
+    export SCHEMA=${openldap}/etc/schema
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
 
   checkPhase = ''
     runHook preCheck
-    export PATH=${pkgs.openldap}/bin:${pkgs.openldap}/libexec:$PATH
-    ${python.interpreter} -m django test --settings tests.settings
+    python -m django test --settings tests.settings
     runHook postCheck
   '';
 
   pythonImportsCheck = [ "django_auth_ldap" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/django-auth-ldap/django-auth-ldap/releases/tag/${src.tag}";
     description = "Django authentication backend that authenticates against an LDAP service";
     homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mmai ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mmai ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

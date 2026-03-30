@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.npm;
@@ -11,19 +14,13 @@ in
 
   options = {
     programs.npm = {
-      enable = mkEnableOption (lib.mdDoc "{command}`npm` global config");
+      enable = lib.mkEnableOption "{command}`npm` global config";
 
-      package = mkOption {
-        type = types.package;
-        description = lib.mdDoc "The npm package version / flavor to use";
-        default = pkgs.nodePackages.npm;
-        defaultText = literalExpression "pkgs.nodePackages.npm";
-        example = literalExpression "pkgs.nodePackages_13_x.npm";
-      };
+      package = lib.mkPackageOption pkgs "nodejs" { };
 
-      npmrc = mkOption {
+      npmrc = lib.mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
+        description = ''
           The system-wide npm configuration.
           See <https://docs.npmjs.com/misc/config>.
         '';
@@ -34,7 +31,7 @@ in
           prefix = ''${HOME}/.npm
           https-proxy=proxy.example.com
           init-license=MIT
-          init-author-url=http://npmjs.org
+          init-author-url=https://www.npmjs.com/
           color=true
         '';
       };

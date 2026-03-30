@@ -1,25 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, pytest
-, pybind11
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  pytest,
+  python,
+  pybind11,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "4.2.3";
+  version = "5.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N608Hcr/JDXCq3yOw2lCrwcmxWPTUFm80Y6wdHP3GC4=";
+    hash = "sha256-UyPQ8aTNmZviRqkNWAyeHptYS5iIf2KY05dhEIfvhgs=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  # removed by next version, https://github.com/pyamg/pyamg/pull/420
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'setuptools_scm[toml]==8.3.0' \
+        'setuptools_scm>=8.3.0' \
+  '';
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     numpy
@@ -28,22 +38,28 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  # failed with "ModuleNotFoundError: No module named 'pyamg.amg_core.evolution_strength'"
-  doCheck = false;
-  # taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python-pyamg#n27
-  # checkPhase = ''
-  #   PYTHONPATH="$PWD/build/lib.linux-*:$PYTHONPATH" ${python3.interpreter} -c "import pyamg; pyamg.test()"
-  # '';
+  checkPhase = ''
+    runHook preCheck
+
+    # The `pyamg` directory in PWD doesn't have the compiled Cython modules in it, but has higher import priority compared to the properly built and installed `pyamg`.
+    # It's easier to just remove the package directory in PWD.
+    rm -r pyamg
+    ${python.interpreter} -c "import pyamg; pyamg.test()"
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [
     "pyamg"
     "pyamg.amg_core.evolution_strength"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Algebraic Multigrid Solvers in Python";
     homepage = "https://github.com/pyamg/pyamg";
-    license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stephen-huan ];
+    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast python.version "3.14";
   };
 }

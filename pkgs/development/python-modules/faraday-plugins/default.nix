@@ -1,47 +1,60 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, colorama
-, fetchFromGitHub
-, html2text
-, lxml
-, pytestCheckHook
-, python-dateutil
-, pytz
-, requests
-, simplejson
-, tabulate
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchFromGitHub,
+  html2text,
+  lxml,
+  markdown,
+  pandas,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  requests,
+  setuptools,
+  simplejson,
+  tabulate,
+  tldextract,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "faraday-plugins";
-  version = "1.8.0";
-  format = "setuptools";
+  version = "1.27.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KAfy2AQWZYFT/+rX8dNe8aWTFI0kkGg5IaSHhwYGk3A=";
+    tag = finalAttrs.version;
+    hash = "sha256-GcHZQJCpEnuHfnyynULFla/ou7BCl64JAmi6eFYr1tk=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=version," "version='${finalAttrs.version}',"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     click
     colorama
     html2text
     lxml
+    markdown
+    pandas
     python-dateutil
     pytz
     requests
     simplejson
     tabulate
+    tldextract
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # faraday itself is currently not available
@@ -51,20 +64,21 @@ buildPythonPackage rec {
   disabledTests = [
     # Fail because of missing faraday
     "test_detect_report"
-    "test_process_report_summary"
+    "test_process_report"
+    "TestNuclei3x"
     # JSON parsing issue
     "test_process_report_ignore_info"
     "test_process_report_tags"
   ];
 
-  pythonImportsCheck = [
-    "faraday_plugins"
-  ];
+  pythonImportsCheck = [ "faraday_plugins" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "faraday-plugins";
   };
-}
+})

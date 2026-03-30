@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-
   cfg = config.virtualisation.waydroid;
-  kernelPackages = config.boot.kernelPackages;
+  kCfg = config.lib.kernelConfig;
   waydroidGbinderConf = pkgs.writeText "waydroid.conf" ''
     [Protocol]
     /dev/binder = aidl2
@@ -22,22 +24,27 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = mkEnableOption (lib.mdDoc "Waydroid");
+    enable = lib.mkEnableOption "Waydroid";
+    package = lib.mkPackageOption pkgs "waydroid" { } // {
+      default = if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid;
+      defaultText = lib.literalExpression "if config.networking.nftables.enable then pkgs.waydroid-nftables else pkgs.waydroid";
+    };
   };
 
-  config = mkIf cfg.enable {
-    assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+  config = lib.mkIf cfg.enable {
+    assertions = lib.singleton {
+      assertion = lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.18";
       message = "Waydroid needs user namespace support to work properly";
     };
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isEnabled "ANDROID_BINDER_IPC")
-      (isEnabled "ANDROID_BINDERFS")
-      (isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
+    system.requiredKernelConfig = [
+      (kCfg.isEnabled "ANDROID_BINDER_IPC")
+      (kCfg.isEnabled "ANDROID_BINDERFS")
+      (kCfg.isEnabled "MEMFD_CREATE")
     ];
 
-    /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
+    /*
+      NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
       as reading the kernel config is not always possible and on kernels where it's
       already on it will be no-op
     */
@@ -45,7 +52,7 @@ in
 
     environment.etc."gbinder.d/waydroid.conf".source = waydroidGbinderConf;
 
-    environment.systemPackages = with pkgs; [ waydroid ];
+    environment.systemPackages = [ cfg.package ];
 
     networking.firewall.trustedInterfaces = [ "waydroid0" ];
 
@@ -56,20 +63,19 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      unitConfig = {
-        ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
-      };
-
       serviceConfig = {
-        ExecStart = "${pkgs.waydroid}/bin/waydroid container start";
-        ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
-        ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
+        Type = "dbus";
+        UMask = "0022";
+        ExecStart = "${cfg.package}/bin/waydroid container start";
+        BusName = "id.waydro.Container";
       };
     };
 
     systemd.tmpfiles.rules = [
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
+
+    services.dbus.packages = [ cfg.package ];
   };
 
 }

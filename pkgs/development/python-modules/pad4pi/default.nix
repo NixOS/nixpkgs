@@ -1,12 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, rpi-gpio }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rpi-gpio,
+}:
 
 buildPythonPackage rec {
   pname = "pad4pi";
   version = "1.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+oVYlqF5PQAFz4EO1ap6pjmYTLg9xQy6UbQja4utt2Q=";
+    hash = "sha256-+oVYlqF5PQAFz4EO1ap6pjmYTLg9xQy6UbQja4utt2Q=";
   };
 
   propagatedBuildInputs = [ rpi-gpio ];
@@ -15,10 +21,10 @@ buildPythonPackage rec {
   # therefore it fails on other systems
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brettmclean/pad4pi";
     description = "Interrupt-based matrix keypad library for Raspberry Pi";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

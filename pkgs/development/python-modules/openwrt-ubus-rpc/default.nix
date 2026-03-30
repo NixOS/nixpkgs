@@ -1,34 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "openwrt-ubus-rpc";
   version = "0.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "python-ubus-rpc";
-    rev = version;
-    sha256 = "19scncc1w9ar3pw4yrw24akjgm74n2m7y308hzl1i360daf5p21k";
+    tag = version;
+    hash = "sha256-M4hbnGrAjBjohwgMf6qw5NQnpyKCZ0/4HVklHhizTKc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     urllib3
   ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "openwrt.ubus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for OpenWrt ubus RPC";
     homepage = "https://github.com/Noltari/python-ubus-rpc";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Noltari/python-ubus-rpc/releases/tag/${version}";
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

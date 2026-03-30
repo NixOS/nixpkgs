@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ferm;
 
@@ -14,35 +16,31 @@ let
       ${cfg.package}/bin/ferm --noexec $out
     '';
   };
-in {
+in
+{
   options = {
     services.ferm = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Whether to enable Ferm Firewall.
           *Warning*: Enabling this service WILL disable the existing NixOS
           firewall! Default firewall rules provided by packages are not
           considered at the moment.
         '';
       };
-      config = mkOption {
-        description = lib.mdDoc "Verbatim ferm.conf configuration.";
+      config = lib.mkOption {
+        description = "Verbatim ferm.conf configuration.";
         default = "";
-        defaultText = literalMD "empty firewall, allows any traffic";
-        type = types.lines;
+        defaultText = lib.literalMD "empty firewall, allows any traffic";
+        type = lib.types.lines;
       };
-      package = mkOption {
-        description = lib.mdDoc "The ferm package.";
-        type = types.package;
-        default = pkgs.ferm;
-        defaultText = literalExpression "pkgs.ferm";
-      };
+      package = lib.mkPackageOption pkgs "ferm" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.firewall.enable = false;
     systemd.services.ferm = {
       description = "Ferm Firewall";
@@ -52,7 +50,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = {
-        Type="oneshot";
+        Type = "oneshot";
         RemainAfterExit = "yes";
         ExecStart = "${cfg.package}/bin/ferm ${configFile}";
         ExecReload = "${cfg.package}/bin/ferm ${configFile}";

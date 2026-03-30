@@ -1,19 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation rec {
   pname = "akvcam";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "akvcam";
     rev = version;
-    sha256 = "1f0vjia2d7zj3y5c63lx1r537bdjx6821yxy29ilbrvsbjq2szj8";
+    sha256 = "sha256-3fs+Kfafry77SQvsAidM29g9CcfjWirteS/VdNSWVCE=";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -23,12 +29,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Virtual camera driver for Linux";
     homepage = "https://github.com/webcamoid/akvcam";
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    broken = kernel.kernelAtLeast "5.18";
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

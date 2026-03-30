@@ -1,55 +1,49 @@
-{ lib
-, blockdiag
-, fetchFromGitHub
-, buildPythonPackage
-, nose
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  blockdiag,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nwdiag";
   version = "3.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blockdiag";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
+    repo = "nwdiag";
+    tag = version;
+    hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
-  propagatedBuildInputs = [
-    blockdiag
-    setuptools
-  ];
+  patches = [ ./fix_test_generate.patch ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pytestFlagsArray = [
-    "src/nwdiag/tests/"
-  ];
+  dependencies = [ blockdiag ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "src/nwdiag/tests/" ];
 
   disabledTests = [
-    # UnicodeEncodeError: 'latin-1' codec can't encode...
-    "test_setup_inline_svg_is_true_with_multibytes"
+    # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
+    "svg"
+    "noviewbox"
   ];
 
-  pythonImportsCheck = [
-    "nwdiag"
-  ];
+  pythonImportsCheck = [ "nwdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    changelog = "https://github.com/blockdiag/nwdiag/blob/${version}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    mainProgram = "rackdiag";
+    platforms = lib.platforms.unix;
   };
 }

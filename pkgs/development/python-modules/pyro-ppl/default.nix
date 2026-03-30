@@ -1,54 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, graphviz
-, jupyter
-, matplotlib
-, networkx
-, opt-einsum
-, pandas
-, pillow
-, pyro-api
-, pythonOlder
-, torch
-, scikit-learn
-, seaborn
-, torchvision
-, tqdm
-, wget
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  ipywidgets,
+  matplotlib,
+  notebook,
+  numpy,
+  opt-einsum,
+  pandas,
+  pillow,
+  pyro-api,
+  scikit-learn,
+  scipy,
+  seaborn,
+  setuptools,
+  torch,
+  torchvision,
+  tqdm,
+  wget,
 }:
 
 buildPythonPackage rec {
   pname = "pyro-ppl";
-  version = "1.8.2";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit version pname;
-    hash = "sha256-4Afl0ROCpY78+4+61xxy6vEGbIZsaNxURXDEGMGCiks=";
+  src = fetchFromGitHub {
+    owner = "pyro-ppl";
+    repo = "pyro";
+    tag = version;
+    hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    numpy
+    opt-einsum
     pyro-api
     torch
-    networkx
-    opt-einsum
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
+      notebook
+      ipywidgets
       graphviz
-      jupyter
-      # lap
       matplotlib
+      torchvision
       pandas
       pillow
       scikit-learn
       seaborn
-      torchvision
+      scipy
       # visdom
       wget
     ];
@@ -64,10 +70,14 @@ buildPythonPackage rec {
     "pyro.optim"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for probabilistic modeling and inference";
     homepage = "http://pyro.ai";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teh georgewhewell ];
+    changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      teh
+      georgewhewell
+    ];
   };
 }

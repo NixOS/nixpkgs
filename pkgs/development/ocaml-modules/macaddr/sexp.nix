@@ -1,5 +1,9 @@
-{ lib, buildDunePackage
-, macaddr, ppx_sexp_conv, macaddr-cstruct, ounit
+{
+  buildDunePackage,
+  macaddr,
+  ppx_sexp_conv,
+  macaddr-cstruct,
+  ounit2,
 }:
 
 buildDunePackage {
@@ -7,12 +11,17 @@ buildDunePackage {
 
   inherit (macaddr) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ ppx_sexp_conv ];
 
-  checkInputs = [ macaddr-cstruct ounit ];
+  checkInputs = [
+    macaddr-cstruct
+    ounit2
+  ];
   doCheck = true;
 
   meta = macaddr.meta // {
-    description = "A library for manipulation of MAC address representations using sexp";
+    description = "Library for manipulation of MAC address representations using sexp";
   };
 }

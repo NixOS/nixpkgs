@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 pkgdir=$(pwd)/pkg
 deploydir=$(pwd)/deploy
 

@@ -1,7 +1,7 @@
 # Setup hook to use in case a conda binary package is fetched
 echo "Sourcing conda unpack hook"
 
-condaUnpackPhase(){
+condaUnpackPhase() {
     echo "Executing condaUnpackPhase"
     runHook preUnpack
 

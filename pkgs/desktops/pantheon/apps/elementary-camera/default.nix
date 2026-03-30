@@ -1,76 +1,66 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook
-, glib
-, granite
-, gst_all_1
-, gtk3
-, libcanberra
-, libgee
-, libhandy
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  glib,
+  granite7,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libcanberra,
+  libgee,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "6.2.0";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "camera";
     rev = version;
-    sha256 = "sha256-866Iky0GKQv2yUJVNY1McgXGeup5WqONN3gvoOlilGU=";
+    sha256 = "sha256-jJJhCFDo5Iw6zV6aE8JgG/sMFpUfra2j2zQ8+GjyQrk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    granite
-    gtk3
+    granite7
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-plugins-rs # GTK 4 sink
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gstreamer
+    gtk4
+    libadwaita
     libcanberra
     libgee
-    libhandy
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    # gtkSupport needed for gtksink
-    # https://github.com/elementary/camera/issues/181
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-ugly
-    gstreamer
-  ]);
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
+  ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Camera app designed for elementary OS";
     homepage = "https://github.com/elementary/camera";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.camera";
   };
 }

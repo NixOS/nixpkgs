@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, cerberus
-, django
-, djangorestframework
-, marshmallow
-, pyschemes
-, wtforms
-, email-validator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  cerberus,
+  django,
+  djangorestframework,
+  marshmallow,
+  pyschemes,
+  wtforms,
+  email-validator,
 }:
 
 buildPythonPackage rec {
   pname = "vaa";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "life4";
-    repo = pname;
-    rev = "refs/tags/v.${version}";
+    repo = "vaa";
+    tag = "v.${version}";
     hash = "sha256-24GTTJSZ55ejyHoWP1/S3DLTKvOolAJr9UhWoOm84CU=";
   };
 
@@ -30,11 +31,9 @@ buildPythonPackage rec {
       --replace "build-backend = \"flit.buildapi\"" "build-backend = \"flit_core.buildapi\""
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     cerberus
     django
@@ -47,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vaa" ];
 
-  meta = with lib; {
+  meta = {
     description = "VAlidators Adapter makes validation by any existing validator with the same interface";
     homepage = "https://github.com/life4/vaa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

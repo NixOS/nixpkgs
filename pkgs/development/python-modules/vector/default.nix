@@ -1,38 +1,92 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, numpy
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  numpy,
+  packaging,
+
+  # tests
+  awkward,
+  dask-awkward,
+  notebook,
+  numba,
+  papermill,
+  pytestCheckHook,
+  sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "1.8.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b785678f449de32476f427911248391ddcc7c3582a522a88cbbd50c92dcae490";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "vector";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k54tCCGZ0ix112u8oxuHPl3LDNV6Fp5s79iVE85b33k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
+    packaging
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    awkward
+    dask-awkward
+    notebook
+    numba
+    papermill
+    pytestCheckHook
+    sympy
+  ];
 
   pythonImportsCheck = [ "vector" ];
 
-  meta = with lib; {
-    description = "A Python 3.7+ library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # AssertionErrors in sympy tests
+    "test_lorentz_object"
+    "test_lorentz_sympy"
+    "test_rhophi_eta_t"
+    "test_rhophi_eta_tau"
+    "test_xy_eta_t"
+    "test_xy_eta_tau"
+
+    # AssertionError: assert array([2.]) == array([-2.])
+    "test_issue_443"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    # numba/typed/typeddict.py", line 185 in __setitem__
+    "test_method_transform2D"
+    "test_method_transform3D"
+    "test_method_transform4D"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: assert 2.1073424255447017e-08 == 0.0
+    "test_issue_463"
+  ];
+
+  meta = {
+    description = "Library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
     homepage = "https://github.com/scikit-hep/vector";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/vector/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

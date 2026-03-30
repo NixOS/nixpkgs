@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyter_server
-, pytestCheckHook
-, pytest-tornasync
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jupyter-server,
+  pytestCheckHook,
+  pytest-tornasync,
 }:
 
 buildPythonPackage rec {
   pname = "notebook-shim";
-  version = "0.1.0";
+  version = "0.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
-    rev = "v${version}";
-    sha256 = "sha256-5oIYj8SdC4E0N/yFxsmD2p4VkStHvqrVqAwb/htyPm4=";
+    tag = "v${version}";
+    hash = "sha256-CWnXOKE1xvr+a/qWNY6XCTB5+G/fg2O/glgeLzYD+Zc=";
   };
 
-  propagatedBuildInputs = [ jupyter_server ];
+  nativeBuildInputs = [ hatchling ];
+  propagatedBuildInputs = [ jupyter-server ];
 
   preCheck = ''
     mv notebook_shim/conftest.py notebook_shim/tests
@@ -25,24 +29,24 @@ buildPythonPackage rec {
   '';
 
   # TODO: understand & possibly fix why tests fail. On github most testfiles
-  # have been comitted with msgs "wip" though.
+  # have been committed with msgs "wip" though.
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-tornasync
   ];
 
   pythonImportsCheck = [ "notebook_shim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Switch frontends to Jupyter Server";
     longDescription = ''
       This project provides a way for JupyterLab and other frontends to switch
       to Jupyter Server for their Python Web application backend.
     '';
     homepage = "https://github.com/jupyter/notebook_shim";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ friedelino ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

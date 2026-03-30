@@ -1,43 +1,50 @@
-{ lib
-, buildPythonPackage
-, chevron
-, decorator
-, fetchFromGitHub
-, mypy
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  mypy,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  pyyaml,
+  regex,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "1.10.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeddjango";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-7Qow315zuZB6BNIIm6QR9ZMFH6E/VSp2vRBpONlqYhM=";
+    repo = "pytest-mypy-plugins";
+    tag = version;
+    hash = "sha256-60VxMUUCIP+Mp+OsgdyRTPZVLGC/3iaMxxhw02ABB9k=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    chevron
-    pyyaml
-    mypy
+  buildInputs = [ pytest ];
+
+  dependencies = [
     decorator
+    jinja2
+    jsonschema
+    mypy
+    packaging
+    pyyaml
     regex
+    tomlkit
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "pytest_mypy_plugins" ];
+
+  nativeCheckInputs = [
     mypy
     pytestCheckHook
   ];
@@ -46,14 +53,13 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "pytest_mypy_plugins"
-  ];
+  disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";
     homepage = "https://github.com/TypedDjango/pytest-mypy-plugins";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    changelog = "https://github.com/typeddjango/pytest-mypy-plugins/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

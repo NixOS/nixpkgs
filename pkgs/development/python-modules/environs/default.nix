@@ -1,49 +1,49 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, dj-email-url
-, django-cache-url
-, fetchFromGitHub
-, marshmallow
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  dj-email-url,
+  django-cache-url,
+  fetchFromGitHub,
+  flit-core,
+  marshmallow,
+  pytestCheckHook,
+  python-dotenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "environs";
-  version = "9.5.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "14.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-hucApIn7ul7+MC2W811VTxZNO8Pqb6HDXz9VRcEdmIc=";
+    repo = "environs";
+    tag = finalAttrs.version;
+    hash = "sha256-TX8C3KIuvAkC+ArGFz9FXyqxd9pfTgmMqnLuYNIlA4o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     marshmallow
     python-dotenv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dj-database-url
     dj-email-url
     django-cache-url
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "environs"
-  ];
+  pythonImportsCheck = [ "environs" ];
 
-  meta = with lib; {
-    description = "Python modle for environment variable parsing";
+  meta = {
+    description = "Python module for environment variable parsing";
     homepage = "https://github.com/sloria/environs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sloria/environs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,88 +1,157 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchzip
-, cmake
-, boost
-, catch2
-, inchi
-, cairo
-, eigen
-, python
-, rapidjson
-, maeparser
-, coordgenlibs
-, numpy
-, pandas
-, pillow
-, git
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchzip,
+  applyPatches,
+  replaceVars,
+  cmake,
+  comic-neue,
+  boost,
+  catch2_3,
+  cairo,
+  eigen,
+  python,
+  rapidjson,
+  maeparser,
+  coordgenlibs,
+  numpy,
+  pandas,
+  pillow,
 }:
 let
   external = {
-    avalon = fetchzip {
-      url = "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
-      sha256 = "0nhxfxckb5a5qs0g148f55yarhncqjgjzcvdskkv9rxi2nrs7160";
-      stripRoot = false;
+    avalon = fetchFromGitHub {
+      owner = "rdkit";
+      repo = "ava-formake";
+      rev = "AvalonToolkit_2.0.5-pre.3";
+      hash = "sha256-2MuFZgRIHXnkV7Nc1da4fa7wDx57VHUtwLthrmjk+5o=";
     };
-    yaehmop = fetchFromGitHub {
-      owner = "greglandrum";
-      repo = "yaehmop";
-      rev = "cfb5aeebbdf5ae93c4f4eeb14c7a507dea54ae9e";
-      sha256 = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
+    chemdraw = fetchFromGitHub {
+      owner = "Glysade";
+      repo = "chemdraw";
+      tag = "v1.0.10";
+      hash = "sha256-ee2Oxvo2d7Yb59lN0zkrbFqy/3rOvVLo6qdS+f23wVQ=";
+    };
+    yaehmop = applyPatches {
+      src = fetchFromGitHub {
+        owner = "greglandrum";
+        repo = "yaehmop";
+        rev = "v2025.03.1";
+        hash = "sha256-rhR7Ev+9Fk/Ks7R2x2SjWu1L/48a4zHDHUBohx1Dw/M=";
+      };
+
+      # Compatibility with CMake < 3.5 has been removed from CMake.
+      postPatch = ''
+        substituteInPlace tightbind/CMakeLists.txt \
+          --replace-fail \
+            "cmake_minimum_required(VERSION 3.0)" \
+            "cmake_minimum_required(VERSION 3.5)"
+      '';
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
       repo = "freesasa";
-      rev = "2.1.1";
-      sha256 = "sha256-fUJvLDTVhpBWl9MavZwp0kAO5Df1QuHEKqe20CXNfcg=";
+      rev = "2.0.3";
+      hash = "sha256-7E+imvfDAJFnXQRWb5hNaSu+Xrf9NXeIKc9fl+o3yHQ=";
+    };
+    pubchem-align3d = fetchFromGitHub {
+      owner = "ncbi";
+      repo = "pubchem-align3d";
+      rev = "daefab3dd0c90ca56da9d3d5e375fe4d651e6be3";
+      hash = "sha256-tQB4wqza9rlSoy4Uj9bA99ddawjxGyN9G7DYbcv/Qdo=";
+    };
+    better_enums = fetchFromGitHub {
+      owner = "aantron";
+      repo = "better-enums";
+      tag = "0.11.3";
+      hash = "sha256-UYldCOkRTySc78oEOJzgoY9h2lB386W/D5Rz3KjVCO8=";
+    };
+    # We cannot use the inchi from nixpkgs as the version is too old
+    inchi = fetchzip {
+      url = "https://github.com/IUPAC-InChI/InChI/releases/download/v1.07.3/INCHI-1-SRC.zip";
+      hash = "sha256-TUC2175HifB63EfSsg/ixA3wYzAxsvUnY6ZyNjVR/Fc=";
     };
   };
+  boost' = boost.override { enableNumpy = true; };
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.03.5";
-  format = "other";
+  version = "2025.03.6";
+  pyproject = false;
 
   src =
     let
       versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
     in
     fetchFromGitHub {
-      owner = pname;
-      repo = pname;
-      rev = "Release_${versionTag}";
-      sha256 = "19idgilabh04cbr1qj6zgrgsfjm248mmfz6fsr0smrd68d0xnml9";
+      owner = "rdkit";
+      repo = "rdkit";
+      tag = "Release_${versionTag}";
+      hash = "sha256-DqnwfT+lX7OnArIcFlCBrDl+QDmNpbPO9u7OGwu8fJo=";
     };
 
   unpackPhase = ''
-    mkdir -p source/External/AvalonTools/avalon source/External/YAeHMOP/yaehmop source/External/FreeSASA/freesasa
-    cp -r ${src}/* source
-    cp -r ${external.avalon}/SourceDistribution/* source/External/AvalonTools/avalon
-    cp -r ${external.yaehmop}/* source/External/YAeHMOP/yaehmop
-    cp -r ${external.freesasa}/* source/External/FreeSASA/freesasa
+    cp -r $src/* .
+    find . -type d -exec chmod +w {} +
 
-    find source -type d -exec chmod 755 {} +
-    cp source/External/FreeSASA/freesasa2.c source/External/FreeSASA/freesasa/src
-    ln -s ${rapidjson} source/External/rapidjson-1.1.0
+    mkdir External/AvalonTools/avalon
+    # In buildPhase, CMake patches the file in this directory
+    # see https://github.com/rdkit/rdkit/pull/5928
+    cp -r ${external.avalon}/* External/AvalonTools/avalon
+
+    mkdir External/ChemDraw/chemdraw
+    cp -r ${external.chemdraw}/* External/ChemDraw/chemdraw/
+    chmod -R +w External/ChemDraw/chemdraw
+
+    mkdir External/YAeHMOP/yaehmop
+    ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
+
+    mkdir External/FreeSASA/freesasa
+    cp -r ${external.freesasa}/* External/FreeSASA/freesasa
+    chmod +w External/FreeSASA/freesasa/src
+    cp External/FreeSASA/freesasa2.c External/FreeSASA/freesasa/src
+
+    mkdir External/pubchem_shape/pubchem-align3d
+    cp -r ${external.pubchem-align3d}/* External/pubchem_shape/pubchem-align3d
+
+    mkdir External/INCHI-API/src
+    ln -s ${external.inchi}/* External/INCHI-API/src
+
+    ln -s ${rapidjson} External/rapidjson-1.1.0
+    ln -s ${comic-neue}/share/fonts/truetype/ComicNeue-Regular.ttf Data/Fonts/
   '';
 
-  sourceRoot = "source";
-
-  nativeBuildInputs = [
-    cmake
-    git # required by freesasa
+  patches = [
+    (replaceVars ./dont-fetch-better-enums.patch {
+      inherit (external) better_enums;
+    })
   ];
+
+  # Prevent linking to libpython which fails on darwin with:
+  # Undefined symbols for architecture arm64
+  # Reverts https://github.com/rdkit/rdkit/commit/470df8cd2fab78d64ef1dd254576097b651c3dd9
+  postPatch = ''
+    substituteInPlace \
+      CMakeLists.txt \
+      External/pubchem_shape/Wrap/CMakeLists.txt \
+      --replace-fail \
+        "find_package(Python3 COMPONENTS Interpreter Development.Module NumPy" \
+        "find_package(Python3 COMPONENTS Interpreter Development NumPy" \
+  '';
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost
-    catch2
-    inchi
-    eigen
+    boost'
     cairo
-    rapidjson
+    catch2_3
+    coordgenlibs
+    eigen
+    maeparser
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
     pillow
@@ -90,70 +159,53 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ]; # required by yaehmop
 
-  dontUseSetuptoolsBuild = true;
-  dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
-
-  preConfigure = ''
-    # Don't want this contacting the git remote during the build
-    substituteInPlace External/YAeHMOP/CMakeLists.txt --replace \
-      'GIT_TAG master' 'DOWNLOAD_COMMAND true'
-
-    # Since we can't expand with bash in cmakeFlags
-    cmakeFlags="$cmakeFlags -DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
-    cmakeFlags="$cmakeFlags -DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
-    cmakeFlags="$cmakeFlags -DFREESASA_SRC_DIR=$PWD/External/FreeSASA/freesasa"
-    cmakeFlags="$cmakeFlags -DAVALONTOOLS_DIR=$PWD/External/AvalonTools/avalon"
-  '';
-
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
-    "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
-    "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
-    "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
-    "-DRDK_INSTALL_INTREE=OFF"
-    "-DRDK_INSTALL_STATIC_LIBS=OFF"
-    "-DRDK_INSTALL_COMIC_FONTS=OFF"
-    "-DRDK_BUILD_INCHI_SUPPORT=ON"
-    "-DRDK_BUILD_AVALON_SUPPORT=ON"
-    "-DRDK_BUILD_FREESASA_SUPPORT=ON"
-    "-DRDK_BUILD_YAEHMOP_SUPPORT=ON"
-    "-DRDK_BUILD_MAEPARSER_SUPPORT=ON"
-    "-DMAEPARSER_DIR=${maeparser}"
-    "-DRDK_BUILD_COORDGEN_SUPPORT=ON"
-    "-DCOORDGEN_DIR=${coordgenlibs}"
-    "-DRDK_USE_URF=OFF"
-    "-DRDK_USE_FLEXBISON=OFF"
-    "-DRDK_BUILD_CAIRO_SUPPORT=ON"
-    "-DRDK_BUILD_THREADSAFE_SSS=ON"
-    "-DRDK_TEST_MULTITHREADED=ON"
-    "-DRDK_BUILD_CPP_TESTS=ON"
-    "-DRDK_TEST_MULTITHREADED=ON"
-    "-DPYTHON_EXECUTABLE=${python}/bin/python"
-    "-DBOOST_ROOT=${boost}"
-    "-DBoost_NO_SYSTEM_PATHS=ON"
-    "-DBoost_NO_BOOST_CMAKE=TRUE"
-    "-DCMAKE_SKIP_BUILD_RPATH=ON" # fails to find libs in pythonImportsCheckPhase otherwise
+    (lib.cmakeBool "Boost_NO_BOOST_CMAKE" true)
+    (lib.cmakeBool "Boost_NO_SYSTEM_PATHS" true)
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # fails to find libs in pythonImportsCheckPhase otherwise
+    (lib.cmakeBool "RDK_BUILD_AVALON_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_CAIRO_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_COORDGEN_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_CPP_TESTS" true)
+    (lib.cmakeBool "RDK_BUILD_FREESASA_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_INCHI_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_MAEPARSER_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_THREADSAFE_SSS" true)
+    (lib.cmakeBool "RDK_BUILD_XYZ2MOL_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_YAEHMOP_SUPPORT" true)
+    (lib.cmakeBool "RDK_INSTALL_INTREE" false)
+    (lib.cmakeBool "RDK_INSTALL_STATIC_LIBS" false)
+    (lib.cmakeBool "RDK_TEST_MULTITHREADED" true)
+    (lib.cmakeBool "RDK_USE_FLEXBISON" false)
+    (lib.cmakeBool "RDK_USE_URF" false)
+    (lib.cmakeFeature "AVALONTOOLS_DIR" "avalon")
+    (lib.cmakeFeature "FREESASA_SRC_DIR" "freesasa")
+    (lib.cmakeFeature "maeparser_DIR" "${maeparser}/lib/cmake")
+    (lib.cmakeFeature "coordgen_DIR" "${coordgenlibs}/lib/cmake")
   ];
 
   checkPhase = ''
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
   '';
 
   pythonImportsCheck = [
-     "rdkit"
-     "rdkit.Chem"
-     "rdkit.Chem.AllChem"
+    "rdkit"
+    "rdkit.Chem"
+    "rdkit.Chem.AllChem"
+    "rdkit.Chem.rdDetermineBonds"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      rmcgibbo
+      natsukium
+    ];
+    license = lib.licenses.bsd3;
     homepage = "https://www.rdkit.org";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.tag}";
   };
 }

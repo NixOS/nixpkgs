@@ -1,32 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, ipython
-, matplotlib
-, numpy
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  ipython,
+  matplotlib,
+  numpy,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "mediapy";
-  version = "1.1.0";
-
-  disabled = pythonOlder "3.6";
+  version = "1.2.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CejgiCiW7an1GpKB5MUiA1Alkigv3RmfTq0um9pc93E=";
+    hash = "sha256-LHpMUXBLJmQnNxkKbl++qCYLAn/enZnGRKZwJVquhg8=";
   };
 
-  propagatedBuildInputs = [ ipython matplotlib numpy pillow ];
+  nativeBuildInputs = [ flit-core ];
+
+  propagatedBuildInputs = [
+    ipython
+    matplotlib
+    numpy
+    pillow
+  ];
 
   pythonImportsCheck = [ "mediapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read/write/show images and videos in an IPython notebook";
     homepage = "https://github.com/google/mediapy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    changelog = "https://github.com/google/mediapy/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
 }

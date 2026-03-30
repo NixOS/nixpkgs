@@ -1,98 +1,179 @@
-{ stdenv, lib, fetchurl, buildEnv, makeWrapper
-
-, xorg, alsa-lib, at-spi2-core, dbus, glib, gtk3, atk, pango, freetype
-, fontconfig , gdk-pixbuf, cairo, mesa, nss, nspr, expat, systemd
-, libcap, libdrm, libxkbcommon
-, libnotify
-, ffmpeg, libxcb, cups
-, sqlite, udev
-, libuuid
-, sdk ? false
+{
+  alsa-lib,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  buildEnv,
+  buildPackages,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fetchurl,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libcap,
+  libdrm,
+  libGL,
+  libnotify,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  makeWrapper,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  sdk ? false,
+  sqlite,
+  stdenv,
+  systemd,
+  udev,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
 }:
+
 let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-         else "ia32";
+  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
 
   nwEnv = buildEnv {
     name = "nwjs-env";
     paths = [
-      xorg.libX11 xorg.libXrender glib gtk3 atk at-spi2-core pango cairo gdk-pixbuf
-      freetype fontconfig xorg.libXcomposite alsa-lib xorg.libXdamage
-      xorg.libXext xorg.libXfixes mesa nss nspr expat dbus
-      xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
-      xorg.libXScrnSaver xorg.libxshmfence cups
-      libcap libdrm libnotify
+      alsa-lib
+      at-spi2-core
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gtk3
+      libcap
+      libdrm
+      libGL
+      libnotify
       libxkbcommon
+      libgbm
+      nspr
+      nss
+      pango
+      libx11
+      libxscrnsaver
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
+      libxshmfence
       # libnw-specific (not chromium dependencies)
-      ffmpeg libxcb
+      ffmpeg
+      libxcb
       # chromium runtime deps (dlopen’d)
-      sqlite udev
       libuuid
+      sqlite
+      udev
     ];
 
-    extraOutputsToInstall = [ "lib" "out" ];
+    extraOutputsToInstall = [
+      "lib"
+      "out"
+    ];
   };
 
-in stdenv.mkDerivation rec {
+  version = "0.102.1";
+in
+stdenv.mkDerivation {
   pname = "nwjs";
-  version = "0.54.1";
+  inherit version;
 
-  src = if sdk then fetchurl {
-    url = "https://dl.nwjs.io/v${version}/nwjs-sdk-v${version}-linux-${bits}.tar.gz";
-    sha256 = if bits == "x64" then
-      "sha256-1qeU4+EIki0M7yJPkRuzFwMdswfDOni5gltdmM6A/ds=" else
-      "sha256-wDEGePE9lrKa6OAzeiDLhVj992c0TJgiMHb8lJ4PF80=";
-  } else fetchurl {
-    url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
-    sha256 = if bits == "x64" then
-      "sha256-TACEM06K2t6dDXRD44lSW7GRi77yzSW4BZJw8gT+fl4=" else
-      "sha256-yX9knqFV5VQTT3TJDmQoDgt17NqH8fLt+bLQAqKleTU=";
-  };
+  src =
+    let
+      flavor = if sdk then "sdk-" else "";
+    in
+    fetchurl {
+      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
+      # TODO: Write an update script to update all 4 hashes.
+      # nixpkgs-update: no auto update
+      hash =
+        {
+          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
+          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
+          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
+          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
+        }
+        ."${flavor + bits}";
+    };
 
-  # we have runtime deps like sqlite3 that should remain
-  dontPatchELF = true;
+  nativeBuildInputs = [
+    autoPatchelfHook
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+  ];
 
-  installPhase =
-    let ccPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-    in ''
-      mkdir -p $out/share/nwjs
-      cp -R * $out/share/nwjs
-      find $out/share/nwjs
+  buildInputs = [ nwEnv ];
+  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
+    nwEnv
+    stdenv.cc.libc
+    stdenv.cc.cc
+  ];
 
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
-
-      ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
-
-      libpath="$out/share/nwjs/lib/"
-      for f in "$libpath"/*.so; do
-        patchelf --set-rpath "${nwEnv}/lib:${ccPath}:$libpath" "$f"
-      done
-      patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${ccPath}:$libpath" $out/share/nwjs/nw
-      # check, whether all RPATHs are correct (all dependencies found)
-      checkfile=$(mktemp)
-      for f in "$libpath"/*.so "$out/share/nwjs/nw"; do
-         (echo "$f:";
-          ldd "$f"  ) > "$checkfile"
-      done
-      if <"$checkfile" grep -e "not found"; then
-        cat "$checkfile"
-        exit 1
-      fi
-
-      mkdir -p $out/bin
-      ln -s $out/share/nwjs/nw $out/bin
-
-      mkdir $out/lib
-      ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    )
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  installPhase = ''
+    runHook preInstall
 
-  meta = with lib; {
-    description = "An app runtime based on Chromium and node.js";
+    mkdir -p $out/share/nwjs
+    cp -R * $out/share/nwjs
+    find $out/share/nwjs
+
+    ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
+
+    mkdir -p $out/bin
+    ln -s $out/share/nwjs/nw $out/bin
+
+    mkdir $out/lib
+    ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
-    platforms = ["i686-linux" "x86_64-linux"];
-    maintainers = [ maintainers.offline ];
-    license = licenses.bsd3;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = [ lib.maintainers.mikaelfangel ];
+    mainProgram = "nw";
+    license = lib.licenses.mit;
   };
 }

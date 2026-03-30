@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.aerospike;
@@ -39,23 +41,18 @@ in
   options = {
 
     services.aerospike = {
-      enable = mkEnableOption (lib.mdDoc "Aerospike server");
+      enable = lib.mkEnableOption "Aerospike server";
 
-      package = mkOption {
-        default = pkgs.aerospike;
-        defaultText = literalExpression "pkgs.aerospike";
-        type = types.package;
-        description = lib.mdDoc "Which Aerospike derivation to use";
-      };
+      package = lib.mkPackageOption pkgs "aerospike" { };
 
-      workDir = mkOption {
-        type = types.str;
+      workDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/aerospike";
-        description = lib.mdDoc "Location where Aerospike stores its files";
+        description = "Location where Aerospike stores its files";
       };
 
-      networkConfig = mkOption {
-        type = types.lines;
+      networkConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           service {
             address any
@@ -80,11 +77,11 @@ in
             port 3003
           }
         '';
-        description = lib.mdDoc "network section of configuration file";
+        description = "network section of configuration file";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           namespace test {
@@ -94,16 +91,15 @@ in
             storage-engine memory
           }
         '';
-        description = lib.mdDoc "Extra configuration";
+        description = "Extra configuration";
       };
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.aerospike.enable {
+  config = lib.mkIf config.services.aerospike.enable {
 
     users.users.aerospike = {
       name = "aerospike";
@@ -112,6 +108,11 @@ in
       description = "Aerospike server user";
     };
     users.groups.aerospike.gid = config.ids.gids.aerospike;
+
+    boot.kernel.sysctl = {
+      "net.core.rmem_max" = lib.mkDefault 15728640;
+      "net.core.wmem_max" = lib.mkDefault 5242880;
+    };
 
     systemd.services.aerospike = rec {
       description = "Aerospike server";
@@ -135,14 +136,6 @@ in
         if [ $(echo "$(${pkgs.procps}/bin/sysctl -n kernel.shmmax) < 1073741824" | ${pkgs.bc}/bin/bc) == "1"  ]; then
           echo "kernel.shmmax too low, setting to 1GB"
           ${pkgs.procps}/bin/sysctl -w kernel.shmmax=1073741824
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/rmem_max) < 15728640" | ${pkgs.bc}/bin/bc) == "1" ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/rmem_max): $(cat /proc/sys/net/core/rmem_max) -> 15728640"
-          echo 15728640 > /proc/sys/net/core/rmem_max
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/wmem_max) <  5242880" | ${pkgs.bc}/bin/bc) == "1"  ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/wmem_max): $(cat /proc/sys/net/core/wmem_max) -> 5242880"
-          echo  5242880 > /proc/sys/net/core/wmem_max
         fi
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}"
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}/smd"

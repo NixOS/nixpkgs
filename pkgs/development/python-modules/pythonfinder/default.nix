@@ -1,59 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, attrs
-, cached-property
-, click
-, packaging
-, pytest-cov
-, pytest-timeout
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  packaging,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.3.1";
-  format = "pyproject";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-N/q9zi2SX38ivSpnjrx+bEzdR9cS2ivSgy42SR8cl+Q=";
+    repo = "pythonfinder";
+    tag = version;
+    hash = "sha256-Qym/t+IejBMFHvBfIm+G5+J3GBC9O3RFrwSqHLuxwcg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    attrs
-    cached-property
-    click
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
+  optional-dependencies = {
+    cli = [ click ];
+  };
+
+  nativeCheckInputs = [
+    pytest-cov-stub
     pytest-timeout
-  ];
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "--no-cov" ];
+  pythonImportsCheck = [ "pythonfinder" ];
 
-  # these tests invoke git in a subprocess and
-  # for some reason git can't be found even if included in checkInputs
-  disabledTests = [
-    "test_shims_are_kept"
-    "test_shims_are_removed"
-  ];
-
-  meta = with lib; {
+  meta = {
+    description = "Cross platform search tool for finding Python";
+    mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
-    description = "Cross Platform Search Tool for Finding Pythons";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/sarugaku/pythonfinder/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

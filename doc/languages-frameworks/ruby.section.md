@@ -2,13 +2,13 @@
 
 ## Using Ruby {#using-ruby}
 
-Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 2.6. It's also possible to refer to specific versions, e.g. `ruby_2_y`, `jruby`, or `mruby`.
+Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 3.3. It's also possible to refer to specific versions, e.g. `ruby_3_y`, `jruby`, or `mruby`.
 
 In the Nixpkgs tree, Ruby packages can be found throughout, depending on what they do, and are called from the main package set. Ruby gems, however are separate sets, and there's one default set for each interpreter (currently MRI only).
 
 There are two main approaches for using Ruby with gems. One is to use a specifically locked `Gemfile` for an application that has very strict dependencies. The other is to depend on the common gems, which we'll explain further down, and rely on them being updated regularly.
 
-The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_2_7.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
+The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_3_4.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
 
 Since not all gems have executables like `nokogiri`, it's usually more convenient to use the `withPackages` function like this: `ruby.withPackages (p: with p; [ nokogiri ])`. This will also make sure that the Ruby in your environment will be able to find the gem and it can be used in your Ruby code (for example via `ruby` or `irb` executables) via `require "nokogiri"` as usual.
 
@@ -32,11 +32,17 @@ Again, it's possible to launch the interpreter from the shell. The Ruby interpre
 
 #### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
-As explained in the Nix manual, `nix-shell` can also load an expression from a `.nix` file. Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
+As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+Say we want to have Ruby, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
-with import <nixpkgs> {};
-ruby.withPackages (ps: with ps; [ nokogiri pry ])
+with import <nixpkgs> { };
+ruby.withPackages (
+  ps: with ps; [
+    nokogiri
+    pry
+  ]
+)
 ```
 
 What's happening here?
@@ -93,7 +99,7 @@ $ bundle lock
 $ bundix
 ```
 
-If you already have a `Gemfile.lock`, you can simply run `bundix` and it will work the same.
+If you already have a `Gemfile.lock`, you can run `bundix` and it will work the same.
 
 To update the gems in your `Gemfile.lock`, you may use the `bundix -l` flag, which will create a new `Gemfile.lock` in case the `Gemfile` has a more recent time of modification.
 
@@ -106,18 +112,41 @@ let
     name = "gems-for-some-project";
     gemdir = ./.;
   };
-in mkShell { packages = [ gems gems.wrappedRuby ]; }
+in
+mkShell {
+  packages = [
+    gems
+    gems.wrappedRuby
+  ];
+}
 ```
 
 With this file in your directory, you can run `nix-shell` to build and use the gems. The important parts here are `bundlerEnv` and `wrappedRuby`.
 
 The `bundlerEnv` is a wrapper over all the gems in your gemset. This means that all the `/lib` and `/bin` directories will be available, and the executables of all gems (even of indirect dependencies) will end up in your `$PATH`. The `wrappedRuby` provides you with all executables that come with Ruby itself, but wrapped so they can easily find the gems in your gemset.
 
-One common issue that you might have is that you have Ruby 2.6, but also `bundler` in your gemset. That leads to a conflict for `/bin/bundle` and `/bin/bundler`. You can resolve this by wrapping either your Ruby or your gems in a `lowPrio` call. So in order to give the `bundler` from your gemset priority, it would be used like this:
+One common issue that you might have is that you have Ruby, but also `bundler` in your gemset. That leads to a conflict for `/bin/bundle` and `/bin/bundler`. You can resolve this by wrapping either your Ruby or your gems in a `lowPrio` call. So in order to give the `bundler` from your gemset priority, it would be used like this:
 
 ```nix
 # ...
-mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
+mkShell {
+  buildInputs = [
+    gems
+    (lowPrio gems.wrappedRuby)
+  ];
+}
+```
+
+Sometimes a Gemfile references other files. Such as `.ruby-version` or vendored gems. When copying the Gemfile to the nix store we need to copy those files alongside. This can be done using `extraConfigPaths`. For example:
+
+```nix
+{
+  gems = bundlerEnv {
+    name = "gems-for-some-project";
+    gemdir = ./.;
+    extraConfigPaths = [ "${./.}/.ruby-version" ];
+  };
+}
 ```
 
 ### Gem-specific configurations and workarounds {#gem-specific-configurations-and-workarounds}
@@ -135,41 +164,58 @@ Two places that allow this modification are the `ruby` derivation, or `bundlerEn
 Here's the `ruby` one:
 
 ```nix
-{ pg_version ? "10", pkgs ? import <nixpkgs> { } }:
+{
+  pg_version ? "10",
+  pkgs ? import <nixpkgs> { },
+}:
 let
   myRuby = pkgs.ruby.override {
     defaultGemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
-        buildFlags =
-        [ "--with-pg-config=${pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
+        buildFlags = [
+          "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config"
+        ];
       };
     };
   };
-in myRuby.withPackages (ps: with ps; [ pg ])
+in
+myRuby.withPackages (ps: with ps; [ pg ])
 ```
 
 And an example with `bundlerEnv`:
 
 ```nix
-{ pg_version ? "10", pkgs ? import <nixpkgs> { } }:
+{
+  pg_version ? "10",
+  pkgs ? import <nixpkgs> { },
+}:
 let
   gems = pkgs.bundlerEnv {
     name = "gems-for-some-project";
     gemdir = ./.;
     gemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
-        buildFlags =
-        [ "--with-pg-config=${pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
+        buildFlags = [
+          "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config"
+        ];
       };
     };
   };
-in mkShell { buildInputs = [ gems gems.wrappedRuby ]; }
+in
+mkShell {
+  buildInputs = [
+    gems
+    gems.wrappedRuby
+  ];
+}
 ```
 
 And finally via overlays:
 
 ```nix
-{ pg_version ? "10" }:
+{
+  pg_version ? "10",
+}:
 let
   pkgs = import <nixpkgs> {
     overlays = [
@@ -177,16 +223,15 @@ let
         defaultGemConfig = super.defaultGemConfig // {
           pg = attrs: {
             buildFlags = [
-              "--with-pg-config=${
-                pkgs."postgresql_${pg_version}"
-              }/bin/pg_config"
+              "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config"
             ];
           };
         };
       })
     ];
   };
-in pkgs.ruby.withPackages (ps: with ps; [ pg ])
+in
+pkgs.ruby.withPackages (ps: with ps; [ pg ])
 ```
 
 Then we can get whichever postgresql version we desire and the `pg` gem will always reference it correctly:
@@ -201,7 +246,7 @@ $ nix-shell --run 'ruby -rpg -e "puts PG.library_version"'
 
 Of course for this use-case one could also use overlays since the configuration for `pg` depends on the `postgresql` alias, but for demonstration purposes this has to suffice.
 
-### Platform-specific gems
+### Platform-specific gems {#ruby-platform-specif-gems}
 
 Right now, bundix has some issues with pre-built, platform-specific gems: [bundix PR #68](https://github.com/nix-community/bundix/pull/68).
 Until this is solved, you can tell bundler to not use platform-specific gems and instead build them from source each time:
@@ -218,7 +263,7 @@ $ bundle config set --local force_ruby_platform true
 
 Now that you know how to get a working Ruby environment with Nix, it's time to go forward and start actually developing with Ruby. We will first have a look at how Ruby gems are packaged on Nix. Then, we will look at how you can use development mode with your code.
 
-All gems in the standard set are automatically generated from a single `Gemfile`. The dependency resolution is done with `bundler` and makes it more likely that all gems are compatible to each other.
+All gems in the standard set are automatically generated from a single `Gemfile`. The dependency resolution is done with `bundler` and makes it more likely that all gems are compatible with each other.
 
 In order to add a new gem to nixpkgs, you can put it into the `/pkgs/development/ruby-modules/with-packages/Gemfile` and run `./maintainers/scripts/update-ruby-packages`.
 
@@ -228,9 +273,11 @@ To test that it works, you can then try using the gem with:
 NIX_PATH=nixpkgs=$PWD nix-shell -p "ruby.withPackages (ps: with ps; [ name-of-your-gem ])"
 ```
 
+To check the gems for any security vulnerabilities, run `./maintainers/scripts/audit-ruby-packages/audit-ruby-packages.bash`.
+
 ### Packaging applications {#packaging-applications}
 
-A common task is to add a ruby executable to nixpkgs, popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables, otherwise the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
+A common task is to add a Ruby executable to Nixpkgs; popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables. Otherwise, the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
 
 The absolute easiest way to do that is to write a `Gemfile` along these lines:
 
@@ -240,7 +287,7 @@ source 'https://rubygems.org' do
 end
 ```
 
-If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by simply running the `bundle lock` and `bundix` steps again.
+If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by running the `bundle lock` and `bundix` steps again.
 
 Now you can also make a `default.nix` that looks like this:
 
@@ -258,7 +305,7 @@ All that's left to do is to generate the corresponding `Gemfile.lock` and `gemse
 
 #### Packaging executables that require wrapping {#packaging-executables-that-require-wrapping}
 
-Sometimes your app will depend on other executables at runtime, and tries to find it through the `PATH` environment variable.
+Sometimes your app will depend on other executables at runtime and try to find them through the `PATH` environment variable.
 
 In this case, you can provide a `postBuild` hook to `bundlerApp` that wraps the gem in another script that prefixes the `PATH`.
 
@@ -267,7 +314,14 @@ Of course you could also make a custom `gemConfig` if you know exactly how to pa
 Here's another example:
 
 ```nix
-{ lib, bundlerApp, makeWrapper, git, gnutar, gzip }:
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
+  git,
+  gnutar,
+  gzip,
+}:
 
 bundlerApp {
   pname = "r10k";
@@ -277,7 +331,13 @@ bundlerApp {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/r10k --prefix PATH : ${lib.makeBinPath [ git gnutar gzip ]}
+    wrapProgram $out/bin/r10k --prefix PATH : ${
+      lib.makeBinPath [
+        git
+        gnutar
+        gzip
+      ]
+    }
   '';
 }
 ```

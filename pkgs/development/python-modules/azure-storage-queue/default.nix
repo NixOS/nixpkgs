@@ -1,31 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-storage-common
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "2.1.0";
+  version = "12.15.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "14e82d3691f1bbd23f2aff143a6c17af3c297164f6e597d223b65a67051ba278";
+    pname = "azure_storage_queue";
+    inherit version;
+    hash = "sha256-TgHcrlrv0MRj97rlx1yKkflVyJPxTtdZD8DNRHrEZm0=";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-storage-common
+  build-system = [ setuptools ];
+
+  dependencies = [
+    azure-core
+    cryptography
+    isodate
+    typing-extensions
   ];
+
+  optional-dependencies = {
+    aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
+  };
 
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "azure.storage.queue" ];
+
+  meta = {
     description = "Client library for Microsoft Azure Storage services containing the queue service APIs";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-queue_${version}/sdk/storage/azure-storage-queue/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

@@ -1,29 +1,35 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gstreamer
-, gst-plugins-base
-, gettext
-, libav
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gstreamer,
+  gst-plugins-base,
+  gettext,
+  ffmpeg-headless,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-# Note that since gst-libav-1.6, libav is actually ffmpeg. See
-# https://gstreamer.freedesktop.org/releases/1.6/ for more info.
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.20.3";
+  version = "1.26.5";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P+3RBWD836obZGLL95o4xOe1fX85A1k5P8DO9tvyff4=";
+    url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
+    hash = "sha256-1t4FiE70I3bdjN6JlA97UM7Zb09vUoiOdkzYIz508FI=";
   };
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     meson
@@ -31,16 +37,22 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     gstreamer
     gst-plugins-base
-    libav
+    ffmpeg-headless
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
@@ -48,10 +60,19 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with lib; {
-    description = "FFmpeg/libav plugin for GStreamer";
-    homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
+  passthru = {
+    updateScript = directoryListingUpdater { };
   };
-}
+
+  meta = {
+    description = "FFmpeg plugin for GStreamer";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
+  };
+})

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, virtualenv
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  virtualenv,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -12,31 +13,37 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "edwardgeorge";
-    repo = pname;
+    repo = "virtualenv-clone";
     rev = version;
-    sha256 = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
+    hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
 
   postPatch = ''
     substituteInPlace tests/__init__.py \
-      --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+      --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'" \
+      --replace-fail "'3.9', '3.10']" "'3.9', '3.10', '3.11', '3.12', '3.13', '3.14']" # if the Python version used isn't in this list, tests fail
 
     substituteInPlace tests/test_virtualenv_sys.py \
-      --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+      --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+
+    # PermissionError: [Errno 13] Permission denied: '/tmp/test_fixup_pth_file.pth'
+    # Unable to reproduce.
+    # Theory: this fixed path may collide with itself on darwin if this package is built for multiple python versions simultaneously
+    substituteInPlace tests/test_fixup_scripts.py \
+      --replace-fail \
+        "pth = '/tmp/test_fixup_pth_file.pth'" \
+        "pth = '$(mktemp -d)/test_fixup_pth_file.pth'"
   '';
 
-  propagatedBuildInputs = [
-    virtualenv
-  ];
+  propagatedBuildInputs = [ virtualenv ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    mainProgram = "virtualenv-clone";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

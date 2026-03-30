@@ -1,52 +1,74 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, treelog
-, stringly
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  appdirs,
+  matplotlib,
+  meshio,
+  numpy,
+  nutils-poly,
+  scipy,
+  stringly,
+  treelog,
+  pytestCheckHook,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-V7lSMhwzc9+36uXMCy5uF241XwJ62Pdf59RUulOt4i8=";
+    tag = "v${version}";
+    hash = "sha256-Q55nSs7SmB76vG8xJNaSu11vtSuWCXrNn0PRCkTWji4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
+    appdirs
     numpy
-    treelog
+    nutils-poly
     stringly
+    treelog
   ];
 
-  checkInputs = [
+  optional-dependencies = {
+    export-mpl = [ matplotlib ];
+    # TODO: matrix-mkl = [ mkl ];
+    matrix-scipy = [ scipy ];
+    import-gmsh = [ meshio ];
+  };
+
+  pythonRelaxDeps = [ "psutil" ];
+
+  nativeCheckInputs = [
+    pkgs.graphviz
     pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # Error: invalid value 'x' for farg: loading 'x' as float
+    "run.test_badvalue"
+    "choose.test_badvalue"
+    # ModuleNotFoundError: No module named 'stringly'
+    "picklability.test_basis"
+    "picklability.test_domain"
+    "picklability.test_geom"
   ];
 
-  pythonImportsCheck = [
-    "nutils"
-  ];
+  pythonImportsCheck = [ "nutils" ];
 
-  disabledTestPaths = [
-    # AttributeError: type object 'setup' has no attribute '__code__'
-    "tests/test_cli.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Numerical Utilities for Finite Element Analysis";
+    changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
-    license = licenses.mit;
-    broken = stdenv.hostPlatform.isAarch64;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

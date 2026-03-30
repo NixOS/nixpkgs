@@ -1,53 +1,53 @@
-{ lib
-, aiohttp
-, auth0-python
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyjwt
-, pytest-aiohttp
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  auth0-python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
-  version = "0.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basilfx";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-P8BExzL22rRj1IFPpojKR8ITdVq0RF8e3qLgb+H1PzE=";
+    repo = "aiobiketrax";
+    tag = "v${version}";
+    hash = "sha256-N0v5SCTf3NkW/TCSTQL9VkrDj7/GXEejJGFCvJY4pIc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    # https://github.com/basilfx/aiobiketrax/pull/63
+    substituteInPlace aiobiketrax/api.py \
+      --replace-fail "auth0.v3" "auth0"
+  '';
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "auth0-python" ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     auth0-python
     python-dateutil
     pyjwt
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aiobiketrax"
-  ];
+  pythonImportsCheck = [ "aiobiketrax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with the PowUnity BikeTrax GPS tracker";
     homepage = "https://github.com/basilfx/aiobiketrax";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/basilfx/aiobiketrax/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

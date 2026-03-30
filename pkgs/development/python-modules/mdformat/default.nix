@@ -1,63 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, markdown-it-py
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tomli
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  markdown-it-py,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat";
-  version = "0.7.16";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
+    repo = "mdformat";
+    tag = finalAttrs.version;
+    hash = "sha256-fo4xO4Y89qPAggEjwuf6dnTyu1JzhZVdJyUqGNpti7g=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    markdown-it-py
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
+  dependencies = [ markdown-it-py ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    versionCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError
-    "test_no_codeblock_trailing_newline"
-    # Issue with upper/lower case
-    "default_style.md-options0"
-  ];
+  pythonImportsCheck = [ "mdformat" ];
 
-  pythonImportsCheck = [
-    "mdformat"
-  ];
+  passthru = {
+    withPlugins = throw "Use pkgs.mdformat.withPlugins, i.e. the top-level attribute.";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/executablebooks/mdformat/blob/${finalAttrs.src.tag}/docs/users/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      fab
+      aldoborrero
+    ];
+    mainProgram = "mdformat";
   };
-}
+})

@@ -1,26 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pdm-backend,
+  pdm-pep517,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "jsonref";
-  version = "0.2";
+  version = "1.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "15v69rg2lkcykb2spnq6vbbirv9sfq480fnwmfppw9gn3h95pi7k";
+  src = fetchFromGitHub {
+    owner = "gazpachoking";
+    repo = "jsonref";
+    tag = "v${version}";
+    hash = "sha256-tOhabmqCkktJUZjCrzjOjUGgA/X6EVz0KqehyLtigfc=";
   };
 
-  checkInputs = [ pytest mock ];
+  nativeBuildInputs = [
+    pdm-backend
+    pdm-pep517
+  ];
 
-  checkPhase = ''
-    py.test tests.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "An implementation of JSON Reference for Python";
-    homepage    = "https://github.com/gazpachoking/jsonref";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms   = platforms.all;
+  enabledTestPaths = [ "tests.py" ];
+
+  pythonImportsCheck = [ "jsonref" ];
+
+  meta = {
+    description = "Implementation of JSON Reference for Python";
+    homepage = "https://github.com/gazpachoking/jsonref";
+    changelog = "https://github.com/gazpachoking/jsonref/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

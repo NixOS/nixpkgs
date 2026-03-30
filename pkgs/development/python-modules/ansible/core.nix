@@ -1,49 +1,71 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, ansible
-, cryptography
-, jinja2
-, junit-xml
-, lxml
-, ncclient
-, packaging
-, paramiko
-, pexpect
-, psutil
-, pycrypto
-, pyyaml
-, requests
-, resolvelib
-, scp
-, windowsSupport ? false, pywinrm
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  installShellFiles,
+  docutils,
+  setuptools,
+  ansible,
+  cryptography,
+  jinja2,
+  junit-xml,
+  lxml,
+  ncclient,
+  packaging,
+  paramiko,
+  ansible-pylibssh,
+  pexpect,
+  psutil,
+  pycrypto,
+  pyyaml,
+  requests,
+  resolvelib,
+  scp,
+  windowsSupport ? false,
+  pywinrm,
+  xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-core";
-  version = "2.13.5";
+  version = "2.20.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-JtzZIY1VRMwVFE9gu1tjTyJ25HbIn0gbP2GcT53vFYg=";
+  disabled = pythonOlder "3.12";
+
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7KsxZH1d5FfdnsYfKSNGCmdYuBi8KzZxyZbG2WNAM9Y=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
   # the python interpreter again, as it would break execution of
   # connection plugins.
   postPatch = ''
-    substituteInPlace lib/ansible/executor/task_executor.py \
-      --replace "[python," "["
+    patchShebangs --build packaging/cli-doc/build.py
+
+    SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
+    WHEEL_PATTERN='"wheel[0-9 <>=.,]+"'
+    echo "Patching pyproject.toml"
+    # print replaced patterns to stdout
+    sed -r -i -e 's/'"$SETUPTOOLS_PATTERN"'/"setuptools"/w /dev/stdout' \
+      -e 's/'"$WHEEL_PATTERN"'/"wheel"/w /dev/stdout' pyproject.toml
   '';
 
   nativeBuildInputs = [
     installShellFiles
+    docutils
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     # depend on ansible instead of the other way around
     ansible
     # from requirements.txt
@@ -51,32 +73,42 @@ buildPythonPackage rec {
     jinja2
     packaging
     pyyaml
-    resolvelib # This library is a PITA, since ansible requires a very old version of it
+    resolvelib
     # optional dependencies
     junit-xml
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto
     requests
     scp
     xmltodict
-  ] ++ lib.optional windowsSupport pywinrm;
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ]
+  ++ extraPackages python.pkgs;
+
+  pythonRelaxDeps = [ "resolvelib" ];
 
   postInstall = ''
-    installManPage docs/man/man1/*.1
+    export HOME="$(mktemp -d)"
+    packaging/cli-doc/build.py man --output-dir=man
+    installManPage man/*
   '';
 
   # internal import errors, missing dependencies
   doCheck = false;
 
-  meta = with lib; {
-    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
+  meta = {
+    changelog = "https://github.com/ansible/ansible/blob/v${finalAttrs.version}/changelogs/CHANGELOG-v${lib.versions.majorMinor finalAttrs.version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
-}
+})

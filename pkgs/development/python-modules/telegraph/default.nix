@@ -1,52 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, httpx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  httpx,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "telegraph";
-  version = "2.1.0";
-  disabled = pythonOlder "3.6";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
-    sha256 = "ChlQJu4kHkXUf4gOtW5HS+ThP3eQL7LsyANeS/10pLo=";
-    rev = "da629de7c00c3b8b0c7ab8ef4bf23caf419a3c6c";
+    tag = "v${version}";
+    hash = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [ requests ];
 
-  pytestFlagsArray = [ "tests/" ];
-
-  disabledTests = [
-    "test_get_page"
-  ];
-
-  doCheck = true;
-
-  propagatedBuildInputs = [
-    requests
-  ];
-
-  passthru.optional-dependencies = {
-    aio = [
-      httpx
-    ];
+  optional-dependencies = {
+    aio = [ httpx ];
   };
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "tests/" ];
+
+  disabledTests = [ "test_get_page" ];
 
   pythonImportsCheck = [ "telegraph" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/python273/telegraph";
+  meta = {
     description = "Telegraph API wrapper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gp2112 ];
+    homepage = "https://github.com/python273/telegraph";
+    changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gp2112 ];
   };
 }
-

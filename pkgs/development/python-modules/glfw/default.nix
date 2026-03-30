@@ -1,31 +1,39 @@
-{ lib, buildPythonPackage, fetchFromGitHub, glfw3 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glfw3,
+}:
 
 buildPythonPackage rec {
   pname = "glfw";
-  version = "2.5.5";
+  version = "2.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-puaKveByAEkgME81uePTMSglvMgyqornW1sNAbJXNuc=";
+    tag = "v${version}";
+    hash = "sha256-jZdM/rvPseQUsRv8+P3To2VCrQUiDHqr6XuXEBW0otM=";
   };
 
   # Patch path to GLFW shared object
-  patches = [ ./search-path.patch ];
   postPatch = ''
-    substituteInPlace glfw/library.py --replace "@GLFW@" '${glfw3}/lib'
+    substituteInPlace glfw/library.py --replace "_get_library_search_paths()," "[ '${glfw3}/lib' ],"
   '';
+
   propagatedBuildInputs = [ glfw3 ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "glfw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for GLFW";
     homepage = "https://github.com/FlorianRhiem/pyGLFW";
-    license = licenses.mit;
-    maintainers = [ maintainers.McSinyx ];
+    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

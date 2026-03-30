@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p "python3.withPackages (ps: [ps.PyGithub])" git gnupg
+#! nix-shell -i python -p "python3.withPackages (ps: [ps.pygithub ps.packaging])" git gnupg
 
 # This is automatically called by ../update.sh.
 
@@ -27,6 +27,8 @@ from typing import (
 from github import Github
 from github.GitRelease import GitRelease
 
+from packaging.version import parse as parse_version, Version
+
 VersionComponent = Union[int, str]
 Version = List[VersionComponent]
 
@@ -37,6 +39,11 @@ Patch = TypedDict("Patch", {
     "version": str,
     "sha256": str,
 })
+
+
+def read_min_kernel_branch() -> List[str]:
+    with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as f:
+        return list(parse_version(sorted(json.load(f).keys())[0]).release)
 
 
 @dataclass
@@ -51,7 +58,7 @@ NIXPKGS_PATH = HERE.parents[4]
 HARDENED_GITHUB_REPO = "anthraxx/linux-hardened"
 HARDENED_TRUSTED_KEY = HERE / "anthraxx.asc"
 HARDENED_PATCHES_PATH = HERE / "patches.json"
-MIN_KERNEL_VERSION: Version = [4, 14]
+MIN_KERNEL_VERSION: Version = read_min_kernel_branch()
 
 
 def run(*args: Union[str, Path]) -> subprocess.CompletedProcess[bytes]:
@@ -138,7 +145,7 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     if not sig_ok:
         return None
 
-    kernel_ver = re.sub(r"(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
+    kernel_ver = re.sub(r"v?(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
     major = kernel_ver.split('.')[0]
     sha256_kernel, _ = nix_prefetch_url(f"mirror://kernel/linux/kernel/v{major}.x/linux-{kernel_ver}.tar.xz")
 
@@ -149,9 +156,13 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     )
 
 
-def parse_version(version_str: str) -> Version:
-    version: Version = []
-    for component in re.split('\.|\-', version_str):
+def normalize_kernel_version(version_str: str) -> list[str|int]:
+    # There have been two variants v6.10[..] and 6.10[..], drop the v
+    version_str_without_v = version_str[1:] if not version_str[0].isdigit() else version_str
+
+    version: list[str|int] = []
+
+    for component in re.split(r'\.|\-', version_str_without_v):
         try:
             version.append(int(component))
         except ValueError:
@@ -163,14 +174,14 @@ def version_string(version: Version) -> str:
     return ".".join(str(component) for component in version)
 
 
-def major_kernel_version_key(kernel_version: Version) -> str:
+def major_kernel_version_key(kernel_version: list[int|str]) -> str:
     return version_string(kernel_version[:-1])
 
 
-def commit_patches(*, kernel_key: str, message: str) -> None:
+def commit_patches(*, kernel_key: Version, message: str) -> None:
     new_patches_path = HARDENED_PATCHES_PATH.with_suffix(".new")
     with open(new_patches_path, "w") as new_patches_file:
-        json.dump(patches, new_patches_file, indent=4, sort_keys=True)
+        json.dump(patch_json, new_patches_file, indent=4, sort_keys=True)
         new_patches_file.write("\n")
     os.rename(new_patches_path, HARDENED_PATCHES_PATH)
     message = f"linux/hardened/patches/{kernel_key}: {message}"
@@ -187,49 +198,32 @@ def commit_patches(*, kernel_key: str, message: str) -> None:
 
 
 # Load the existing patches.
-patches: Dict[str, Patch]
 with open(HARDENED_PATCHES_PATH) as patches_file:
-    patches = json.load(patches_file)
+    patch_json = json.load(patches_file)
+    patch_versions = set([parse_version(k) for k in patch_json.keys()])
 
-# Get the set of currently packaged kernel versions.
-kernel_versions = {}
-for filename in os.listdir(NIXPKGS_KERNEL_PATH):
-    filename_match = re.fullmatch(r"linux-(\d+)\.(\d+)\.nix", filename)
-    if filename_match:
-        nix_version_expr = f"""
-            with import {NIXPKGS_PATH} {{}};
-            (callPackage {NIXPKGS_KERNEL_PATH / filename} {{}}).version
-        """
-        kernel_version_json = run(
-            "nix-instantiate", "--eval", "--system", "x86_64-linux", "--json", "--expr", nix_version_expr,
-        ).stdout
-        kernel_version = parse_version(json.loads(kernel_version_json))
-        if kernel_version < MIN_KERNEL_VERSION:
-            continue
-        kernel_key = major_kernel_version_key(kernel_version)
-        kernel_versions[kernel_key] = kernel_version
+with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as kernel_versions_json:
+    kernel_versions = json.load(kernel_versions_json)
 
-# Remove patches for unpackaged kernel versions.
-for kernel_key in sorted(patches.keys() - kernel_versions.keys()):
-    commit_patches(kernel_key=kernel_key, message="remove")
+    kernels = {
+        parse_version(version): meta
+        for version, meta in kernel_versions.items()
+        if version != "testing"
+    }
+
+    latest_lts = sorted(ver for ver, meta in kernels.items() if meta.get("lts", False))[-1]
+    keys = sorted(kernels.keys())
+    latest_release = keys[-1]
+    fallback = keys[-2]
 
 g = Github(os.environ.get("GITHUB_TOKEN"))
 repo = g.get_repo(HARDENED_GITHUB_REPO)
 failures = False
 
-# Match each kernel version with the best patch version.
-releases = {}
-i = 0
-for release in repo.get_releases():
-    # Dirty workaround to make sure that we don't run into issues because
-    # GitHub's API only allows fetching the last 1000 releases.
-    # It's not reliable to exit earlier because not every kernel minor may
-    # have hardened patches, hence the naive search below.
-    i += 1
-    if i > 500:
-        break
-
-    version = parse_version(release.tag_name)
+all_candidates = set([latest_lts, latest_release, fallback])
+kernels_to_package = {}
+for release in repo.get_releases()[:30]:
+    version = normalize_kernel_version(release.tag_name)
     # needs to look like e.g. 5.6.3-hardened1
     if len(version) < 4:
         continue
@@ -238,44 +232,51 @@ for release in repo.get_releases():
         continue
 
     kernel_version = version[:-1]
+    kernel_key = parse_version(major_kernel_version_key(kernel_version))
 
-    kernel_key = major_kernel_version_key(kernel_version)
-    try:
-        packaged_kernel_version = kernel_versions[kernel_key]
-    except KeyError:
+    if kernel_key not in all_candidates:
         continue
 
-    release_info = ReleaseInfo(version=version, release=release)
-
-    if kernel_version == packaged_kernel_version:
-        releases[kernel_key] = release_info
-    else:
-        # Fall back to the latest patch for this major kernel version,
-        # skipping patches for kernels newer than the packaged one.
-        if '.'.join(str(x) for x in kernel_version) > '.'.join(str(x) for x in packaged_kernel_version):
+    try:
+        found = kernels_to_package[kernel_key]
+        if found.version > version:
             continue
-        elif (
-            kernel_key not in releases or releases[kernel_key].version < version
-        ):
-            releases[kernel_key] = release_info
+    except KeyError:
+        pass
+
+    kernels_to_package[kernel_key] = ReleaseInfo(version=version, release=release)
+
+if latest_release in kernels_to_package:
+    if fallback != latest_lts:
+        del kernels_to_package[fallback]
+    kernel_versions = set([latest_lts, latest_release])
+else:
+    kernel_versions = set([latest_lts, fallback])
+
+# Remove patches for unpackaged kernel versions.
+removals = False
+for kernel_key in sorted(patch_versions - kernels_to_package.keys()):
+    del patch_json[str(kernel_key)]
+    removals = True
+    commit_patches(kernel_key=kernel_key, message="remove")
 
 # Update hardened-patches.json for each release.
-for kernel_key in sorted(releases.keys()):
-    release_info = releases[kernel_key]
+for kernel_key in sorted(kernels_to_package.keys()):
+    release_info = kernels_to_package[kernel_key]
     release = release_info.release
     version = release_info.version
     version_str = release.tag_name
     name = f"linux-hardened-{version_str}"
 
-    old_version: Optional[Version] = None
+    old_version: Optional[list[int|str]] = None
     old_version_str: Optional[str] = None
     update: bool
     try:
-        old_filename = patches[kernel_key]["patch"]["name"]
+        old_filename = patch_json[str(kernel_key)]["patch"]["name"]
         old_version_str = old_filename.replace("linux-hardened-", "").replace(
             ".patch", ""
         )
-        old_version = parse_version(old_version_str)
+        old_version = normalize_kernel_version(old_version_str)
         update = old_version < version
     except KeyError:
         update = True
@@ -285,21 +286,16 @@ for kernel_key in sorted(releases.keys()):
         if patch is None:
             failures = True
         else:
-            patches[kernel_key] = patch
-            if old_version:
+            if str(kernel_key) in patch_json:
                 message = f"{old_version_str} -> {version_str}"
             else:
                 message = f"init at {version_str}"
+            patch_json[str(kernel_key)] = patch
+
             commit_patches(kernel_key=kernel_key, message=message)
 
-missing_kernel_versions = kernel_versions.keys() - patches.keys()
-
-if missing_kernel_versions:
-    print(
-        f"warning: no patches for kernel versions "
-        + ", ".join(missing_kernel_versions),
-        file=sys.stderr,
-    )
+if removals:
+    print("Hardened kernels were removed. Don't forget to remove their attributes!")
 
 if failures:
     sys.exit(1)

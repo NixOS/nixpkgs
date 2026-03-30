@@ -1,45 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyexcel-io
-, xlrd
-, xlwt
-, nose
-, pyexcel
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyexcel-io,
+  xlrd,
+  xlwt,
+  pyexcel,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-xls";
-  version = "0.7.0";
+  version = "0.7.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5ec606ef8667aafbb0c3fbd8242a7c23bf175ee7c10b08f70799b84fb2db84cb";
+  src = fetchFromGitHub {
+    owner = "pyexcel";
+    repo = "pyexcel-xls";
+    tag = "v${version}";
+    hash = "sha256-+iwdMSGUsUbWFO4s4+3Zf+47J9bzFffWthZoeThT8f0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyexcel-io
     xlrd
     xlwt
   ];
 
-  checkInputs = [
-    nose
+  nativeCheckInputs = [
+    pytestCheckHook
     pyexcel
-    mock
+    pytest-cov-stub
   ];
 
   postPatch = ''
     substituteInPlace setup.py --replace "xlrd<2" "xlrd<3"
   '';
 
-  checkPhase = "nosetests --exclude test_issue_151";
-
   meta = {
-    description = "A wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
+    description = "Wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = [ ];
   };
 }

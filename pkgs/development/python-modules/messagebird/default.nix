@@ -1,26 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pyjwt
-, mock
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pyjwt,
+  mock,
+  python-dateutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "messagebird";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "messagebird";
     repo = "python-rest-api";
     rev = version;
-    hash = "sha256-2KVAxdHT5+Ie3ZRxXZhU0hLOtHWjIiJi+ferkYTlSn0=";
+    hash = "sha256-OiLhnmZ725VbyoOHvSf4nKQRA7JsxqcOv0VKBL6rUtU=";
   };
 
   propagatedBuildInputs = [
@@ -29,24 +27,22 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "messagebird"
-  ];
+  pythonImportsCheck = [ "messagebird" ];
 
   disabledTestPaths = [
     # ValueError: not enough values to unpack (expected 6, got 0)
     "tests/test_request_validator.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for MessageBird's REST API";
     homepage = "https://github.com/messagebird/python-rest-api";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

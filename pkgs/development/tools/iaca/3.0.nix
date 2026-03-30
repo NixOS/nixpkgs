@@ -1,5 +1,9 @@
-{ lib, stdenv, requireFile, unzip }:
-with lib;
+{
+  lib,
+  stdenv,
+  requireFile,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iaca";
@@ -19,8 +23,8 @@ stdenv.mkDerivation rec {
     description = "Intel Architecture Code Analyzer";
     homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kazcw ];
+    maintainers = with lib.maintainers; [ kazcw ];
   };
 }

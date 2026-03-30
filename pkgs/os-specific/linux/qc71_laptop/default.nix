@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qc71_laptop";
-  version = "unstable-2022-06-01";
+  version = "0-unstable-2025-01-07";
 
   src = fetchFromGitHub {
     owner = "pobrn";
     repo = "qc71_laptop";
-    rev = "28106e0602807d78d1f5fa220ab6148dd6477c1c";
-    hash = "sha256-3bhw2HbEVuxPfGMt/eE2nCuMLHzYHRY3nRWPzZxKHro=";
+    rev = "ebab4af0b2c5b162bb9f27c80cd284c36b8fb7a9";
+    hash = "sha256-sRvxcdocYKnwMH/qYkKj66uClI1bSmMSxXHrHsc7uco=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "VERSION=${version}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -24,11 +31,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "Linux driver for QC71 laptop";
     homepage = "https://github.com/pobrn/qc71_laptop/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      aacebedo
+      lucasfa
+    ];
+    platforms = [ "x86_64-linux" ];
   };
 }

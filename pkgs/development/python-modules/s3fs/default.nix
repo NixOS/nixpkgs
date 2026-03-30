@@ -1,51 +1,75 @@
-{ lib
-, stdenv
-, aiobotocore
-, aiohttp
-, buildPythonPackage
-, docutils
-, fetchPypi
-, fsspec
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiobotocore,
+  aiohttp,
+  fsspec,
+
+  # tests
+  flask,
+  flask-cors,
+  moto,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2022.10.0";
-  format = "setuptools";
+  version = "2026.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6N64DyC9CyBZFBuHT9udauuMzjUxLqXywCsiWnigBAY=";
+  src = fetchFromGitHub {
+    owner = "fsspec";
+    repo = "s3fs";
+    tag = version;
+    hash = "sha256-wkcDViE2Vr1fFMMFz3o7ewlI5UvVnWV7jIa9Es8d9Do=";
   };
 
-  buildInputs = [
-    docutils
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "fsspec" ];
+
+  dependencies = [
     aiobotocore
-    aiohttp
     fsspec
+    aiohttp
   ];
 
-  # Depends on `moto` which has a long dependency chain with exact
-  # version requirements that can't be made to work with current
-  # pythonPackages.
-  doCheck = false;
+  optional-dependencies = {
+    awscli = aiobotocore.optional-dependencies.awscli;
+    boto3 = aiobotocore.optional-dependencies.boto3;
+  };
 
-  pythonImportsCheck = [
-    "s3fs"
+  pythonImportsCheck = [ "s3fs" ];
+
+  nativeCheckInputs = [
+    flask
+    flask-cors
+    moto
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A Pythonic file interface for S3";
+  disabledTests = [
+    # require network access
+    "test_async_close"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
-    changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    changelog = "https://github.com/fsspec/s3fs/blob/${src.tag}/docs/source/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

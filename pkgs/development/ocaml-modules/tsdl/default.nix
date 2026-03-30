@@ -1,26 +1,48 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config, ocb-stubblr }:
-
-if lib.versionOlder ocaml.version "4.03"
-then throw "tsdl is not available for OCaml ${ocaml.version}"
-else
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  ctypes,
+  ctypes-foreign,
+  result,
+  SDL2,
+  pkg-config,
+}:
 
 let
   pname = "tsdl";
-  version = "0.9.8";
+  version = "1.2.0";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml${ocaml.version}-${pname}";
+  inherit version;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-zjXz2++42FHmbE0nIDeryNQeX+avGwh9rwAs8O0pZYU=";
+    hash = "sha256-IhB/qCh6KVfTQNFoTdxmSRRd6uMq/9OpdGvx6uqliAY=";
   };
 
-  nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
-  propagatedBuildInputs = [ SDL2 ctypes ];
+  propagatedBuildInputs = [
+    SDL2
+    ctypes
+    ctypes-foreign
+  ];
 
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)
@@ -33,10 +55,11 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with lib; {
+  meta = {
     homepage = webpage;
     description = "Thin bindings to the cross-platform SDL library";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
+    broken = lib.versionOlder ocaml.version "4.03";
   };
 }

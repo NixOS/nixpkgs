@@ -1,27 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "2.0.4";
   pname = "python-json-logger";
-  disabled = isPy27;
+  version = "4.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-dk12IXX5n8xGML1IU7CWMqy2CmIkrLJ84IzXDwsbgb0=";
+  src = fetchFromGitHub {
+    owner = "nhairs";
+    repo = "python-json-logger";
+    tag = "v${version}";
+    hash = "sha256-YFtM+YWXDCaipqhQntdGeGbTmWO5XMGfpWhgQwicxFQ=";
   };
 
-  checkInputs = [ nose ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
+
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/madzak/python-json-logger/issues/185
+      "test_custom_object_serialization"
+      "test_percentage_format"
+      "test_rename_reserved_attrs"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/madzak/python-json-logger/issues/198
+      "test_json_default_encoder_with_timestamp"
+    ];
+
+  meta = {
+    description = "Json Formatter for the standard python logger";
     homepage = "https://github.com/madzak/python-json-logger";
-    description = "A python library adding a json log formatter";
-    license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ ];
   };
-
 }

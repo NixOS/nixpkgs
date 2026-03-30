@@ -1,24 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pdm-backend,
 }:
 
 buildPythonPackage rec {
   pname = "docopt-ng";
-  version = "0.8.1";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-6mphooj8hk7uayLW/iiqIC1Z/Ib60F8W/145zE6n9uM=";
+    pname = "docopt_ng";
+    inherit version;
+    hash = "sha256-kcbaELW7by6eJTRYKfuCeMeK8Bn2/ECIetSbBgSDsdc=";
   };
+
+  nativeBuildInputs = [ pdm-backend ];
 
   pythonImportsCheck = [ "docopt" ];
   doCheck = false; # no tests in the package
 
-  meta = with lib; {
-    description = "More-magic command line arguments parser. Now with more maintenance!";
+  meta = {
+    description = "More-magic command line arguments parser. Now with more maintenance";
     homepage = "https://github.com/bazaar-projects/docopt-ng";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

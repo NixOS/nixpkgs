@@ -1,47 +1,59 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, metar
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  metar,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "pynws";
-  version = "1.4.1";
-  disabled = pythonOlder "3.6";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-hAUD92wlQZ0BZ++e/KdIOgTzavmUkrH3esDhI3mbl5Y=";
+    repo = "pynws";
+    tag = "v${version}";
+    hash = "sha256-OKq3IdBr/YDWsmyJLHNoffVp2Q0RV+rZU5rm1Ba0FoY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     aiohttp
     metar
   ];
 
-  checkInputs = [
+  optional-dependencies.retry = [ tenacity ];
+
+  nativeCheckInputs = [
     freezegun
     pytest-aiohttp
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pynws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to retrieve data from NWS/NOAA";
     homepage = "https://github.com/MatthewFlamm/pynws";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/MatthewFlamm/pynws/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

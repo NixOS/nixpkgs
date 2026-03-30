@@ -1,98 +1,109 @@
-{ lib
-, stdenv
-, Accelerate
-, blis
-, buildPythonPackage
-, catalogue
-, confection
-, contextvars
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, cymem
-, cython
-, dataclasses
-, fetchPypi
-, hypothesis
-, mock
-, murmurhash
-, numpy
-, plac
-, preshed
-, pydantic
-, pytestCheckHook
-, python
-, pythonOlder
-, srsly
-, tqdm
-, typing-extensions
-, wasabi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  blis,
+  cymem,
+  cython,
+  murmurhash,
+  numpy,
+  preshed,
+  setuptools,
+
+  # buildInputs
+  blas,
+
+  # dependencies
+  catalogue,
+  confection,
+  pydantic,
+  srsly,
+  wasabi,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thinc";
-  version = "8.1.1";
-  format = "setuptools";
+  version = "8.3.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "thinc";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-8nf+AWAD7Fy50XRJDINmyk42F7KMDhGgATwqbln3r04=";
   };
 
-  buildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail coverage.exceptions.CoverageWarning ""
+  '';
+
+  build-system = [
+    blis
+    cymem
     cython
-  ] ++ lib.optionals stdenv.isDarwin [
-    Accelerate
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
+    murmurhash
+    numpy
+    preshed
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
+    blas
+  ];
+
+  dependencies = [
     blis
     catalogue
     confection
     cymem
     murmurhash
     numpy
-    plac
     preshed
     pydantic
     srsly
-    tqdm
     wasabi
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextvars
-    dataclasses
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "thinc" ];
+
+  nativeCheckInputs = [
     hypothesis
-    mock
     pytestCheckHook
   ];
 
-  # Add native extensions.
+  # avoid local paths, relative imports wont resolve correctly
   preCheck = ''
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
-
-    # avoid local paths, relative imports wont resolve correctly
     mv thinc/tests tests
     rm -r thinc
   '';
 
-  pythonImportsCheck = [
-    "thinc"
+  pytestFlags = [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    "-Wignore::UserWarning"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # pydantic.v1.error_wrappers.ValidationError: 1 validation error for DefaultsSchema
+    "tests/test_config.py"
+  ];
+
+  disabledTests = [
+    # RecursionError: Stack overflow (used 8148 kB)
+    "test_pickle_with_flatten"
+  ];
+
+  meta = {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    changelog = "https://github.com/explosion/thinc/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

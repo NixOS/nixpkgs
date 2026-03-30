@@ -1,41 +1,52 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioairq";
-  version = "0.2.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CorantGmbH";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
+    repo = "aioairq";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I8pbNYbSWns0fbJvgJ71AZK0SzpY/51MXLr7+D5/xF4=";
   };
 
-  propagatedBuildInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     pycryptodome
   ];
 
-  # Module has no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "aioairq"
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "aioairq" ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_core_on_device.py"
+  ];
+
+  meta = {
     description = "Library to retrieve data from air-Q devices";
     homepage = "https://github.com/CorantGmbH/aioairq";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CorantGmbH/aioairq/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

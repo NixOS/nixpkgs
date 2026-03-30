@@ -1,20 +1,28 @@
-{ lib
-, bluepy
-, buildPythonPackage
-, csrmesh
-, fetchPypi
-, pycryptodome
-, requests
+{
+  lib,
+  bluepy,
+  buildPythonPackage,
+  csrmesh,
+  fetchPypi,
+  pycryptodome,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "avion";
   version = "0.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zgv45086b97ngyqxdp41wxb7hpn9g7alygc21j9y3dib700vzdz";
+    hash = "sha256-v/0NwFmxDZ9kEOx5qs5L9sKzOg/kto79syctg0Ah+30=";
   };
+
+  postPatch = ''
+    # https://github.com/mjg59/python-avion/pull/16
+    substituteInPlace setup.py \
+      --replace "bluepy>==1.1.4" "bluepy>=1.1.4"
+  '';
 
   propagatedBuildInputs = [
     bluepy
@@ -23,15 +31,16 @@ buildPythonPackage rec {
     requests
   ];
 
-  # Project has no test
+  # Module has no test
   doCheck = false;
+
   # bluepy/uuids.json is not found
   # pythonImportsCheck = [ "avion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for controlling Avi-on Bluetooth dimmers";
     homepage = "https://github.com/mjg59/python-avion";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

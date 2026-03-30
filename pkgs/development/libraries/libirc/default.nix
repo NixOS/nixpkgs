@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libirc";
   version = "unstable-2022-10-15";
 
@@ -12,6 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   cmakeFlags = [
     "-DQT5_BUILD=1"
@@ -25,11 +35,11 @@ stdenv.mkDerivation rec {
     cp ../libircclient/*.h $out/libirc/libircclient
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ IRC library written in Qt with support for data serialization";
     homepage = "https://github.com/grumpy-irc/libirc";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ fee1-dead ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ fee1-dead ];
+    platforms = lib.platforms.linux;
   };
 }

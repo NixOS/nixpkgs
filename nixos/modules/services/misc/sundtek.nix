@@ -1,17 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.sundtek;
 
 in
 {
   options.services.sundtek = {
-    enable = mkEnableOption (lib.mdDoc "Sundtek driver");
+    enable = lib.mkEnableOption "Sundtek driver";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.sundtek ];
 
@@ -24,7 +26,7 @@ in
         ExecStart = ''
           ${pkgs.sundtek}/bin/mediasrv -d -v -p ${pkgs.sundtek}/bin ;\
           ${pkgs.sundtek}/bin/mediaclient --start --wait-for-devices
-          '';
+        '';
         ExecStop = "${pkgs.sundtek}/bin/mediaclient --shutdown";
         RemainAfterExit = true;
       };

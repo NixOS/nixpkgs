@@ -1,84 +1,114 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, eventlet
-, futures ? null
-, iana-etc
-, geomet
-, libev
-, mock
-, nose
-, pytestCheckHook
-, pytz
-, pyyaml
-, scales
-, six
-, sure
-, gremlinpython
-, gevent
-, twisted
-, libredirect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  cython,
+  eventlet,
+  fetchFromGitHub,
+  geomet,
+  gevent,
+  gremlinpython,
+  iana-etc,
+  libev,
+  libredirect,
+  pytestCheckHook,
+  pytz,
+  pyyaml,
+  scales,
+  sure,
+  twisted,
+  setuptools,
+  distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cassandra-driver";
-  version = "3.25.0";
+  version = "3.29.3";
+  pyproject = true;
 
-  # pypi tarball doesn't include tests
   src = fetchFromGitHub {
-    owner = "datastax";
-    repo = "python-driver";
-    rev = version;
-    sha256 = "1dn7iiavsrhh6i9hcyw0mk8j95r5ym0gbrvdca998hx2rnz5ark6";
+    owner = "apache";
+    repo = "cassandra-python-driver";
+    tag = finalAttrs.version;
+    hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'geomet>=0.1,<0.3' 'geomet'
+  pythonRelaxDeps = [ "geomet" ];
+
+  build-system = [
+    distutils
+    setuptools
+    cython
+  ];
+
+  buildInputs = [ libev ];
+
+  dependencies = [
+    geomet
+  ];
+
+  optional-dependencies = {
+    cle = [ cryptography ];
+    eventlet = [ eventlet ];
+    gevent = [ gevent ];
+    graph = [ gremlinpython ];
+    metrics = [ scales ];
+    twisted = [ twisted ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytz
+    pyyaml
+    sure
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  # This is used to determine the version of cython that can be used
+  env.CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
+
+  preBuild = ''
+    export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
   '';
 
-  nativeBuildInputs = [ cython ];
-  buildInputs = [ libev ];
-  propagatedBuildInputs = [ six geomet ]
-    ++ lib.optionals (pythonOlder "3.4") [ futures ];
+  __darwinAllowLocalNetworking = true;
 
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
-  preCheck = (lib.optionalString stdenv.isLinux ''
-    echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '') + ''
-    # increase tolerance for time-based test
-    substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
-  '';
+  preCheck =
+    (lib.optionalString stdenv.hostPlatform.isLinux ''
+      echo "nameserver 127.0.0.1" > resolv.conf
+      export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+      export LD_PRELOAD=${libredirect}/lib/libredirect.so
+    '')
+    + ''
+      # increase tolerance for time-based test
+      substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
+
+      export HOME=$(mktemp -d)
+      # cythonize this before we hide the source dir as it references
+      # one of its files
+      cythonize -i tests/unit/cython/types_testhelper.pyx
+
+      mv cassandra .cassandra.hidden
+    '';
+
+  pythonImportsCheck = [ "cassandra" ];
+
   postCheck = ''
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  checkInputs = [
-    pytestCheckHook
-    eventlet
-    mock
-    nose
-    pytz
-    pyyaml
-    sure
-    scales
-    gremlinpython
-    gevent
-    twisted
-  ];
+  enabledTestPaths = [ "tests/unit" ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
   disabledTestPaths = [
     # requires puresasl
     "tests/unit/advanced/test_auth.py"
+    # Uses asyncore, which is deprecated in python 3.12+
+    "tests/unit/io/test_asyncorereactor.py"
   ];
+
   disabledTests = [
     # doesn't seem to be intended to be run directly
     "_PoolTests"
@@ -86,12 +116,18 @@ buildPythonPackage rec {
     "test_connection_initialization"
     # time-sensitive
     "test_nts_token_performance"
+    "test_empty_connections"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # AssertionError: [(1773409714.980824, <cassandra.connection.Timer object at 0x116cb2870>)] is not false
+    "test_timer_cancellation"
   ];
 
-  meta = with lib; {
-    description = "A Python client driver for Apache Cassandra";
-    homepage = "http://datastax.github.io/python-driver";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ turion ris ];
+  meta = {
+    description = "Python client driver for Apache Cassandra";
+    homepage = "https://github.com/apache/cassandra-python-driver";
+    changelog = "https://github.com/apache/cassandra-python-driver/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

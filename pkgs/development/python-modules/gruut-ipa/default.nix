@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, espeak
-, numpy
-, python
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  espeak,
+  numpy,
+  python,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,32 +15,29 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rhasspy";
-    repo = pname;
+    repo = "gruut-ipa";
     rev = "v${version}";
-    sha256 = "sha256-Q2UKELoG8OaAPxIrZNCpXgeWZ2fCzb3g3SOVzCm/gg0=";
+    hash = "sha256-Q2UKELoG8OaAPxIrZNCpXgeWZ2fCzb3g3SOVzCm/gg0=";
   };
 
   postPatch = ''
     patchShebangs bin/*
     substituteInPlace bin/speak-ipa \
-      --replace '${"\${src_dir}:"}' "$out/lib/${python.libPrefix}/site-packages:" \
+      --replace '${"\${src_dir}:"}' "$out/${python.sitePackages}:" \
       --replace "do espeak" "do ${espeak}/bin/espeak"
   '';
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "gruut_ipa"
-  ];
+  pythonImportsCheck = [ "gruut_ipa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for manipulating pronunciations using the International Phonetic Alphabet (IPA)";
+    mainProgram = "gruut-ipa";
     homepage = "https://github.com/rhasspy/gruut-ipa";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

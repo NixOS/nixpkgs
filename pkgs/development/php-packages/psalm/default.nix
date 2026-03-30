@@ -1,33 +1,47 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  php,
+  versionCheckHook,
+  runCommand,
+}:
+
 let
-  pname = "psalm";
-  version = "4.29.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "6.14.3";
 
-  src = fetchurl {
+  # The PHAR file is only required to get the `composer.lock` file
+  psalm-phar = fetchurl {
     url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "q+OjEPNAPwSjtnbfBynbbJy3WDITr01ci8O74BMO0Og=";
+    hash = "sha256-dqRI73CdY51K1aitIK6R74Y2sLb68l4ndNuTzRv8qRE=";
+  };
+in
+php.buildComposerProject2 (finalAttrs: {
+  pname = "psalm";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "vimeo";
+    repo = "psalm";
+    tag = finalAttrs.version;
+    hash = "sha256-6MO16Ch3SR2kn48lTj64c/1DZDpsLjpZcFYmtiBhCCU=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/psalm/psalm.phar
-    makeWrapper ${php}/bin/php $out/bin/psalm \
-      --add-flags "$out/libexec/psalm/psalm.phar"
-    runHook postInstall
+  composerLock = runCommand "composer.lock" { } ''
+    ${lib.getExe php} -r '$phar = new Phar("${psalm-phar}"); $phar->extractTo(".", "composer.lock");'
+    cp composer.lock $out
   '';
+  vendorHash = "sha256-2LlP0D7b07yXVGc/+pJUUWYXF8rsc4HiErBUt5SfZmw=";
 
-  meta = with lib; {
-    description = "A static analysis tool for finding errors in PHP applications";
-    license = licenses.mit;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
+    changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
+    description = "Static analysis tool for finding errors in PHP applications";
     homepage = "https://github.com/vimeo/psalm";
-    maintainers = teams.php.members;
+    license = lib.licenses.mit;
+    mainProgram = "psalm";
+    maintainers = [ lib.maintainers.patka ];
   };
-}
+})

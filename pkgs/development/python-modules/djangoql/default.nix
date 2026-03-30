@@ -1,28 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, django, ply }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  django,
+  setuptools,
+  ply,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djangoql";
-  version = "0.17.1";
+  version = "0.19.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-TwU9ASjij0EpJuLakCc19L3Lq1wI1Dvk3+/XR/yi6W4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-vOCdUoV4V7InRPkyQfFtXGKhsRing04civoUvruWTu4=";
   };
 
-  propagatedBuildInputs = [ ply ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ django ];
+  dependencies = [ ply ];
+
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     export PYTHONPATH=test_project:$PYTHONPATH
     ${python.executable} test_project/manage.py test core.tests
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "djangoql" ];
+
+  meta = {
     description = "Advanced search language for Django";
     homepage = "https://github.com/ivelum/djangoql";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erikarvstedt ];
+    changelog = "https://github.com/ivelum/djangoql/blob/master/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
-}
+})

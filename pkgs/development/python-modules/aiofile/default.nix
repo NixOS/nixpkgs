@@ -1,43 +1,40 @@
-{ lib
-, aiomisc
-, asynctest
-, caio
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiomisc,
+  aiomisc-pytest,
+  caio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiofile";
-  version = "3.8.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.8.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-PIImQZ1ymazsOg8qmlO91tNYHwXqK/d8AuKPsWYvh0w=";
+    repo = "aiofile";
+    tag = version;
+    hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
   };
 
-  propagatedBuildInputs = [
-    caio
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ caio ];
+
+  nativeCheckInputs = [
     aiomisc
-    asynctest
+    aiomisc-pytest
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiofile"
-  ];
+  pythonImportsCheck = [ "aiofile" ];
 
   disabledTests = [
-    # Tests (SystemError) fails randomly during nix-review
+    # Tests (SystemError) fails randomly during nixpkgs-review
     "test_async_open_fp"
     "test_async_open_iter_chunked"
     "test_async_open_iter_chunked"
@@ -47,16 +44,21 @@ buildPythonPackage rec {
     "test_async_open_unicode"
     "test_async_open"
     "test_binary_io_wrapper"
+    "test_line_reader_one_line"
     "test_modes"
+    "test_open_non_existent_file_with_append"
     "test_text_io_wrapper"
+    "test_truncate"
+    "test_unicode_reader"
     "test_unicode_writer"
     "test_write_read_nothing"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/aiofile";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

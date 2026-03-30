@@ -1,34 +1,49 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder,
-cython, numpy, pytest, requests-toolbelt }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython,
+  setuptools,
+  pytestCheckHook,
+  requests-toolbelt,
+}:
 
 buildPythonPackage rec {
   pname = "streaming-form-data";
-  version = "1.8.1";
-  disabled = pythonOlder "3.6";
+  version = "1.19.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "streaming-form-data";
-    rev = "v${version}";
-    sha256 = "1wnak8gwkc42ihgf0g9r7r858hxbqav2xdgqa8azid8v2ff6iq4d";
+    tag = "v${version}";
+    hash = "sha256-3tK7dX5p1uH/azmFxzELM1bflGI/SHoLvsw+Ta+7rC4=";
   };
 
-  nativeBuildInputs = [ cython ];
+  # streaming-form-data has a small bit of code that uses smart_open, which has a massive closure.
+  # The only consumer of streaming-form-data is Moonraker, which doesn't use that code.
+  # So, just drop the dependency to not have to deal with it.
+  patches = [ ./drop-smart-open.patch ];
 
-  propagatedBuildInputs = [ requests-toolbelt ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  checkInputs = [ numpy pytest ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests-toolbelt
+  ];
 
-  checkPhase = ''
-    make test
-  '';
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "streaming_form_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming parser for multipart/form-data";
     homepage = "https://github.com/siddhantgoel/streaming-form-data";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    changelog = "https://github.com/siddhantgoel/streaming-form-data/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

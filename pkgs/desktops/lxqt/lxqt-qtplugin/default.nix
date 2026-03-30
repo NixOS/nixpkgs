@@ -1,56 +1,57 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, libdbusmenu
-, libfm-qt
-, libqtxdg
-, lxqt-build-tools
-, gitUpdater
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libdbusmenu-lxqt,
+  libfm-qt,
+  libqtxdg,
+  lxqt-build-tools,
+  gitUpdater,
+  qtbase,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-qtplugin";
-  version = "1.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    sha256 = "oxETofSxje7fNEI8AahSUCaT+k/flfU6XJroMhtdiCw=";
+    repo = "lxqt-qtplugin";
+    tag = finalAttrs.version;
+    hash = "sha256-3rY9VpZKnl1E3ma1ioiKECpazeymQYVuXrLXhRL407o=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    libdbusmenu
+    libdbusmenu-lxqt
     libfm-qt
     libqtxdg
     qtbase
     qtsvg
-    qttools
-    qtx11extras
   ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
+      --replace-fail "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-qtplugin";
     description = "LXQt Qt platform integration plugin";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

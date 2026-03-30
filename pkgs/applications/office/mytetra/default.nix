@@ -1,17 +1,30 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtsvg, makeWrapper, xdg-utils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtsvg,
+  makeWrapper,
+  wrapQtAppsHook,
+  xdg-utils,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mytetra";
-  version = "1.44.55";
+  version = "1.44.183";
 
   src = fetchFromGitHub {
     owner = "xintrea";
     repo = "mytetra_dev";
     rev = "v.${version}";
-    sha256 = "sha256-jQXnDoLkqbDZxfsYKPDsTOE7p/BFeA8wEznpbkRVGdw=";
+    sha256 = "sha256-9fPioIws+9rzczCsbtOS/ra4eW5FZZeiKmDpqJqx3MQ=";
   };
 
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [
+    qmake
+    makeWrapper
+    wrapQtAppsHook
+  ];
   buildInputs = [ qtsvg ];
 
   hardeningDisable = [ "format" ];
@@ -23,6 +36,10 @@ mkDerivation rec {
 
     substituteInPlace app/src/views/mainWindow/MainWindow.cpp \
       --replace ":/resource/pic/logo.svg" "$out/share/icons/hicolor/48x48/apps/mytetra.png"
+
+    # https://github.com/xintrea/mytetra_dev/issues/164
+    substituteInPlace thirdParty/mimetex/mimetex.c \
+      --replace "const char *strcasestr" "char *strcasestr"
   '';
 
   postFixup = ''
@@ -31,11 +48,12 @@ mkDerivation rec {
       --suffix PATH : ${xdg-utils}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Smart manager for information collecting";
+    mainProgram = "mytetra";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

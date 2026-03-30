@@ -1,6 +1,17 @@
-{ buildDunePackage
-, conduit-lwt, ppx_sexp_conv, lwt, uri, ipaddr, ipaddr-sexp, ca-certs, logs
-, lwt_ssl, tls, lwt_log, ssl
+{
+  lib,
+  buildDunePackage,
+  conduit-lwt,
+  ppx_sexp_conv,
+  lwt,
+  uri,
+  ipaddr,
+  ipaddr-sexp,
+  ca-certs,
+  logs,
+  lwt_ssl,
+  lwt_log,
+  ssl,
 }:
 
 buildDunePackage {
@@ -15,19 +26,18 @@ buildDunePackage {
     uri
     ipaddr
     ipaddr-sexp
-    tls
     ca-certs
     logs
     lwt_ssl
   ];
 
-  doCheck = true;
+  doCheck = !lib.versionAtLeast lwt.version "6.0.0";
   checkInputs = [
     lwt_log
     ssl
   ];
 
   meta = conduit-lwt.meta // {
-    description = "A network connection establishment library for Lwt_unix";
+    description = "Network connection establishment library for Lwt_unix";
   };
 }

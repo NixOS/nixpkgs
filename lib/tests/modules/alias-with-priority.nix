@@ -6,12 +6,19 @@
 
 { config, lib, ... }:
 
-with lib;
+let
+  inherit (lib)
+    mkAliasOptionModule
+    mkDefault
+    mkOption
+    types
+    ;
+in
 
 {
   options = {
     # A simple boolean option that can be enabled or disabled.
-    enable = lib.mkOption {
+    enable = mkOption {
       type = types.nullOr types.bool;
       default = null;
       example = true;
@@ -23,7 +30,7 @@ with lib;
     # mkAliasOptionModule sets warnings, so this has to be defined.
     warnings = mkOption {
       internal = true;
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "The `foo' service is deprecated and will go away soon!" ];
       description = ''
@@ -39,14 +46,16 @@ with lib;
 
     # Disable the aliased option, but with a default (low) priority so it
     # should be able to be overridden by the next import.
-    ( { config, lib, ... }:
+    (
+      { config, lib, ... }:
       {
-        enableAlias = lib.mkDefault false;
+        enableAlias = mkDefault false;
       }
     )
 
     # Enable the normal (non-aliased) option.
-    ( { config, lib, ... }:
+    (
+      { config, lib, ... }:
       {
         enable = true;
       }

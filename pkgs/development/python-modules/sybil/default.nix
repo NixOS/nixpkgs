@@ -1,40 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "3.0.1";
-  format = "setuptools";
+  version = "9.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bwLcIgSvflohIDeSTZdPcngfbcGP08RMx85GOhIPUw0=";
+  src = fetchFromGitHub {
+    owner = "simplistix";
+    repo = "sybil";
+    tag = version;
+    hash = "sha256-rr6zVY1yJVL/s/Wg5S4pSljj9Zq+jo7CZ6TZvtPpxow=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  disabledTests = [
-    # Sensitive to output of other commands
-    "test_namespace"
-    "test_unittest"
-  ];
+  # Circular dependency with testfixtures
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "sybil"
-  ];
+  pythonImportsCheck = [ "sybil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated testing for the examples in your documentation";
     homepage = "https://github.com/cjw296/sybil";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/simplistix/sybil/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

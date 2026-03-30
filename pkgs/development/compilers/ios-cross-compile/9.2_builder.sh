@@ -1,5 +1,4 @@
 # -*- shell-script -*-
-source $stdenv/setup
 
 function extract
 {

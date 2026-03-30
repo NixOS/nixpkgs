@@ -1,24 +1,56 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, qttools, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  wrapQtAppsHook,
+  qttools,
+  qtbase,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "heimer";
-  version = "3.6.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "juzzlin";
-    repo = pname;
+    repo = "heimer";
     rev = version;
-    sha256 = "sha256-i4jgmqRvBX6g6IOitnBnQqWnFY5QoLk6/Cah0wCU8uc=";
+    hash = "sha256-eKnGCYxC3b7qd/g2IMDyZveBg+jvFA9s3tWEGeTPSkU=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qttools qtbase ];
+  patches = [
+    # Fix the build with CMake 4
+    (fetchpatch {
+      name = "update-Argengine.patch";
+      url = "https://github.com/juzzlin/Heimer/commit/76d9e8458038d2da4171be3a58766b84334119e8.patch";
+      hash = "sha256-mFzfxxhaJ1jdwfFVo36N66+jzS/scEeray1s75c+T8M=";
+    })
+    (fetchpatch {
+      name = "update-SimpleLogger.patch";
+      url = "https://github.com/juzzlin/Heimer/commit/75bff37b6ebd02d9f734e70ee4d3c10ec0291e0d.patch";
+      hash = "sha256-ZPj5GaM13UsGwJbc0NW0xJd07agZT+g86674i3apqWY=";
+    })
+  ];
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qttools
+    qtbase
+  ];
+
+  meta = {
     description = "Simple cross-platform mind map and note-taking tool written in Qt";
+    mainProgram = "heimer";
     homepage = "https://github.com/juzzlin/Heimer";
-    license = licenses.gpl3;
-    maintainers  = with maintainers; [ dtzWill ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

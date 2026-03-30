@@ -1,23 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 let
-  version = "1.0.2";
-  sha256 = "sha256-DWUjQmoojkzFv1p4Xyt0kOwwqQ216ocO5yR/ujhhMPA=";
+  hash = "sha256-VE6sCehjXlRuOVcK4EN2H+FhaVaBi/jrAYx4TZjbreA=";
 in
-stdenv.mkDerivation {
-  name = "system76-io-module-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "system76-io-module";
+  version = "1.0.4";
 
   passthru.moduleName = "system76_io";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-io-dkms";
-    rev = version;
-    inherit sha256;
+    rev = finalAttrs.version;
+    inherit hash;
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -25,14 +34,19 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D system76-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-io.ko
+    install -D system76-thelio-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-thelio-io.ko
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.khumba ];
-    license = [ licenses.gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = versionOlder kernel.version "4.14";
-    description = "DKMS module for controlling System76 I/O board";
+  meta = {
+    maintainers = with lib.maintainers; [ ahoneybun ];
+    license = lib.licenses.gpl2Plus;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    broken = lib.versionOlder kernel.version "5.10";
+    description = "DKMS module for controlling System76 Io board";
     homepage = "https://github.com/pop-os/system76-io-dkms";
   };
-}
+})

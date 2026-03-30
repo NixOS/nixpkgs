@@ -1,32 +1,48 @@
-{lib, stdenv, qtdeclarative, fetchFromGitHub, qmake }:
+{
+  lib,
+  stdenv,
+  qtbase,
+  qtdeclarative,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  unstableGitUpdater,
+}:
+
 stdenv.mkDerivation {
   pname = "qml-box2d";
-  version = "unstable-2018-04-06";
+  version = "0-unstable-2025-09-30";
+
   src = fetchFromGitHub {
     owner = "qml-box2d";
     repo = "qml-box2d";
-    sha256 = "0gb8limy6ck23z3k0k2j7c4c4s95p40f6lbzk4szq7fjnnw22kb7";
-    rev = "b7212d5640701f93f0cd88fbd3a32c619030ae62";
+    rev = "e3674e0fe030c406a1d915e47eab760624fffa55";
+    hash = "sha256-kxDSPO2ifffJng9rKgEwdKRoP6alnYWwItbvE1t4Hbo=";
   };
 
   dontWrapQtApps = true;
-  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtdeclarative ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  patchPhase = ''
-    substituteInPlace box2d.pro \
-      --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
-    qmakeFlags="$qmakeFlags PREFIXSHORTCUT=$out"
-    '';
+  buildInputs = [
+    qtbase
+    qtdeclarative
+  ];
 
-  installFlags = [ "INSTALL_ROOT=$(out)" ];
+  passthru = {
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
+  };
 
-  meta = with lib; {
-    description = "A QML plugin for Box2D engine";
+  meta = {
+    description = "QML plugin for Box2D engine";
     homepage = "https://github.com/qml-box2d/qml-box2d";
-    maintainers = [ maintainers.guibou ];
-    platforms = platforms.linux;
-    license = licenses.zlib;
+    maintainers = with lib.maintainers; [ guibou ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.zlib;
   };
 }

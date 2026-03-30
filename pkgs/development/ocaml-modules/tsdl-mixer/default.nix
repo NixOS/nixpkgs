@@ -1,21 +1,24 @@
-{ buildDunePackage
-, dune-configurator
-, fetchFromGitHub
-, lib
-, SDL2
-, SDL2_mixer
-, tsdl
+{
+  buildDunePackage,
+  dune-configurator,
+  fetchFromGitHub,
+  lib,
+  SDL2,
+  SDL2_mixer,
+  tsdl,
 }:
 
 buildDunePackage rec {
   pname = "tsdl-mixer";
-  version = "0.3.2";
+  version = "0.6";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "sanette";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UDRhwnanrn87/PYVnacur1z/LsKuUu2G+0QQXjTw/IE=";
+    hash = "sha256-szuGmLzgGyQExCQwpopVNswtZZdhP29Q1+uNQJZb43Q=";
   };
 
   buildInputs = [
@@ -28,10 +31,10 @@ buildDunePackage rec {
     tsdl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SDL2_mixer bindings to go with Tsdl";
     homepage = "https://github.com/sanette/tsdl-mixer";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

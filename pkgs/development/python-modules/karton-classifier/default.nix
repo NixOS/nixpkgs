@@ -1,57 +1,59 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchFromGitHub
-, karton-core
-, pytestCheckHook
-, python-magic
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchFromGitHub,
+  setuptools,
+  karton-core,
+  pytestCheckHook,
+  python-magic,
+  yara-python,
 }:
 
 buildPythonPackage rec {
   pname = "karton-classifier";
-  version = "1.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TRmAin0TAOIwR5EBMwTOJ9QaHO+mOx/eAjgqvyQZDj4=";
+    repo = "karton-classifier";
+    tag = "v${version}";
+    hash = "sha256-YqxRiQ/kJheEJpYDqRNu9FydfnNX3OlGjgfX9Hwv+dM=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "chardet"
+    "python-magic"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     karton-core
     python-magic
+    yara-python
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "chardet==3.0.4" "chardet" \
-      --replace "python-magic==0.4.18" "python-magic"
-  '';
-
-  pythonImportsCheck = [
-    "karton.classifier"
-  ];
+  pythonImportsCheck = [ "karton.classifier" ];
 
   disabledTests = [
     # Tests expecting results from a different version of libmagic
-    "test_process_archive_ace"
+    "test_process_archive"
+    "test_process_misc_csv"
+    "test_process_runnable_win32_jar"
     "test_process_runnable_win32_lnk"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File type classifier for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "karton-classifier";
   };
 }

@@ -1,26 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.zsh.zsh-autoenv;
-in {
+in
+{
   options = {
     programs.zsh.zsh-autoenv = {
-      enable = mkEnableOption (lib.mdDoc "zsh-autoenv");
-      package = mkOption {
-        default = pkgs.zsh-autoenv;
-        defaultText = literalExpression "pkgs.zsh-autoenv";
-        description = lib.mdDoc ''
-          Package to install for `zsh-autoenv` usage.
-        '';
-
-        type = types.package;
-      };
+      enable = lib.mkEnableOption "zsh-autoenv";
+      package = lib.mkPackageOption pkgs "zsh-autoenv" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.zsh.interactiveShellInit = ''
       source ${cfg.package}/share/zsh-autoenv/autoenv.zsh
     '';

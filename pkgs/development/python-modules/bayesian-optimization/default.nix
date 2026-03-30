@@ -1,58 +1,71 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, scipy
-, pytestCheckHook
-, isPy27
-, fetchpatch
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  uv-build,
+
+  # dependencies
+  scikit-learn,
+  numpy,
+  scipy,
+  colorama,
+  packaging,
+
+  # tests
+  jupyter,
+  matplotlib,
+  nbconvert,
+  nbformat,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.2.0";
-  disabled = isPy27;
+  version = "3.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fmfn";
+    owner = "bayesian-optimization";
     repo = "BayesianOptimization";
-    rev = version;
-    sha256 = "01mg9npiqh1qmq5ldnbpjmr8qkiw827msiv3crpkhbj4bdzasbfm";
+    tag = "v${version}";
+    hash = "sha256-pTtwuBQUdVsi98nndEyY9mawGiTwjgiD05EsQwQFiPo=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.7.21,<0.8.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
+
+  dependencies = [
     scikit-learn
+    numpy
     scipy
+    colorama
+    packaging
   ];
 
-  patches = [
-    # TypeError with scipy >= 1.8
-    # https://github.com/fmfn/BayesianOptimization/issues/300
-    (fetchpatch {
-      url = "https://github.com/fmfn/BayesianOptimization/commit/b4e09a25842985a4a0acea0c0f5c8789b7be125e.patch";
-      sha256 = "sha256-PfcifCFd4GRNTA+4+T+6A760QAgyZxhDCTyzNn2crdM=";
-      name = "scipy_18_fix.patch";
-    })
-  ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # New sklearn broke one test
-    # https://github.com/fmfn/BayesianOptimization/issues/243
-    "test_suggest_with_one_observation"
+  nativeCheckInputs = [
+    jupyter
+    matplotlib
+    nbconvert
+    nbformat
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "bayes_opt" ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    description = ''
-      A Python implementation of global optimization with gaussian processes
-    '';
-    homepage = "https://github.com/fmfn/BayesianOptimization";
-    license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Python implementation of global optimization with gaussian processes";
+    homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

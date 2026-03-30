@@ -1,34 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dnspython
-, sphinx
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dnspython,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "localzone";
   version = "0.9.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ags-slc";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1cbiv21yryjqy46av9hbjccks95sxznrx8nypd3yzihf1vkjiq5a";
+    repo = "localzone";
+    tag = "v${version}";
+    hash = "sha256-quAo5w4Oxu9Hu96inu3vuiQ9GZMLpq0M8Vj67IPYcbE=";
   };
 
-  propagatedBuildInputs = [ dnspython sphinx ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytest ];
+  dependencies = [ dnspython ];
 
-  checkPhase = ''
-    pytest
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "localzone" ];
+
+  postPatch = ''
+    # Fix tests with dnspython 2.8.0
+    # https://github.com/ags-slc/localzone/pull/6
+    substituteInPlace tests/test_models.py \
+      --replace-fail 'raises((AttributeError, DNSSyntaxError))' 'raises((AttributeError, DNSSyntaxError, ValueError))'
   '';
 
-  meta = with lib; {
-    description = "A simple DNS library for managing zone files";
+  meta = {
+    description = "Simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flyfloh ];
+    changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.bsd3;
   };
 }

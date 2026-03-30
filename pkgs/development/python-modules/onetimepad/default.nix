@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "onetimepad" ];
 
   meta = {
-    description = "A hacky implementation of one-time pad";
+    description = "Hacky implementation of one-time pad";
+    mainProgram = "onetimepad";
     homepage = "https://jailuthra.in/onetimepad";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];

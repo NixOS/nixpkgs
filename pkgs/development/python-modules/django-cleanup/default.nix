@@ -1,20 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-cleanup";
-  version = "6.0.0";
+  version = "9.0.0";
+  pyproject = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a";
+    pname = "django_cleanup";
+    inherit version;
+    hash = "sha256-u5+1YKr2KVnIHjH6QIhcNrvVhU1aohuQ3yx+S6YzUx4=";
   };
 
-  checkInputs = [ django ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ django ];
+
+  pythonImportsCheck = [ "django_cleanup" ];
+
+  meta = {
     description = "Automatically deletes old file for FileField and ImageField. It also deletes files on models instance deletion";
     homepage = "https://github.com/un1t/django-cleanup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmai ];
+    changelog = "https://github.com/un1t/django-cleanup/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

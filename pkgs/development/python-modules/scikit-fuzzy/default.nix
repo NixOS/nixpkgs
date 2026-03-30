@@ -1,36 +1,49 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, matplotlib
-, networkx
-, nose
-, numpy
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  matplotlib,
+  networkx,
+  numpy,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-fuzzy";
-  version = "unstable-2022-11-07";
-  disabled = isPy27;
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "d8c45c259d62955004379592e45bc64c8e002fc3";
-    hash = "sha256-kS48aHC719wUdc2WcJa9geoMUcLHSj7ZsoRZYAhF2a0=";
+    owner = "scikit-fuzzy";
+    repo = "scikit-fuzzy";
+    tag = "v${version}";
+    hash = "sha256-02aIYBdbQXQD9S1R/gZZeKTn5LxloE0GGGRttxJnR/o=";
   };
 
-  propagatedBuildInputs = [ networkx numpy scipy ];
-  checkInputs = [ matplotlib nose pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    networkx
+    numpy
+    scipy
+  ];
+
+  nativeCheckInputs = [
+    matplotlib
+    pytestCheckHook
+  ];
+
+  preCheck = "rm -rf build";
 
   pythonImportsCheck = [ "skfuzzy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scikit-fuzzy/scikit-fuzzy";
     description = "Fuzzy logic toolkit for scientific Python";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    changelog = "https://github.com/scikit-fuzzy/scikit-fuzzy/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

@@ -1,32 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, six
-, setuptools
-, pytestCheckHook
-, httpbin
-, requests
-, wsgiprox
-, multidict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  httpbin,
+  multidict,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  six,
+  wsgiprox,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "warcio";
-  version = "1.7.4";
+  version = "1.7.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "webrecorder";
     repo = "warcio";
-    rev = "aa702cb321621b233c6e5d2a4780151282a778be"; # Repo has no git tags, see https://github.com/webrecorder/warcio/issues/126
-    sha256 = "sha256-wn2rd73wRfOqHu9H0GIn76tmEsERBBCQatnk4b/JToU=";
+    tag = "v${version}"; # Repo has no git tags, see https://github.com/webrecorder/warcio/issues/126
+    hash = "sha256-i1bVbXf1RQoWCADFwlVEnFhb3sVZ91vijUtzVLWMc2Q=";
   };
 
   patches = [
     (fetchpatch {
+      # Add offline mode to skip tests that require an internet connection, https://github.com/webrecorder/warcio/pull/135
       name = "add-offline-option.patch";
       url = "https://github.com/webrecorder/warcio/pull/135/commits/2546fe457c57ab0b391764a4ce419656458d9d07.patch";
-      sha256 = "sha256-3izm9LvAeOFixiIUUqmd5flZIxH92+NxL7jeu35aObQ=";
+      hash = "sha256-3izm9LvAeOFixiIUUqmd5flZIxH92+NxL7jeu35aObQ=";
     })
   ];
 
@@ -35,22 +39,31 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
     httpbin
+    multidict # Optional. Without this, one test in test/test_utils.py is skipped.
+    pytestCheckHook
     requests
     wsgiprox
-    multidict # Optional. Without this, one test in test/test_utils.py is skipped.
+    pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "--offline" ];
+  pytestFlags = [
+    "--offline"
+  ];
+
+  disabledTestPaths = [
+    "test/test_capture_http_proxy.py"
+  ];
 
   pythonImportsCheck = [ "warcio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming WARC/ARC library for fast web archive IO";
+    mainProgram = "warcio";
     homepage = "https://github.com/webrecorder/warcio";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
+    changelog = "https://github.com/webrecorder/warcio/blob/master/CHANGELIST.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

@@ -1,24 +1,37 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, jellyfin-apiclient-python
-, jinja2
-, mpv
-, pillow
-, pystray
-, python-mpv-jsonipc
-, pywebview
-, tkinter
+{
+  lib,
+  buildPythonApplication,
+  copyDesktopItems,
+  fetchPypi,
+  gobject-introspection,
+  jellyfin-apiclient-python,
+  jinja2,
+  makeDesktopItem,
+  mpv,
+  pillow,
+  pystray,
+  python,
+  python-mpv-jsonipc,
+  pywebview,
+  tkinter,
+  wrapGAppsHook3,
 }:
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.2.0";
+  version = "2.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JiSC6WjrLsWk3/m/EHq7KNXaJ6rqT2fG9TT1jPvYlK0=";
+    hash = "sha256-YrwMvP66LAWKgx/yWBkWIkZtJ4a0YnhCiL7xB6fGm0E=";
   };
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     jellyfin-apiclient-python
@@ -50,13 +63,47 @@ buildPythonApplication rec {
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace "check_updates: bool = True" "check_updates: bool = False" \
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
+    # python-mpv renamed to mpv with 1.0.4
+    substituteInPlace setup.py \
+      --replace "python-mpv" "mpv" \
+      --replace "mpv-jsonipc" "python_mpv_jsonipc"
   '';
+
+  # Install all the icons for the desktop item
+  postInstall = ''
+    for s in 16 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/''${s}x''${s}/apps
+      ln -s $out/${python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
+        $out/share/icons/hicolor/''${s}x''${s}/apps/${pname}.png
+    done
+  '';
+
+  # needed for pystray to access appindicator using GI
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+  dontWrapGApps = true;
 
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
 
-  meta = with lib; {
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "Jellyfin MPV Shim";
+      categories = [
+        "Video"
+        "AudioVideo"
+        "TV"
+        "Player"
+      ];
+    })
+  ];
+
+  meta = {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     longDescription = ''
@@ -66,7 +113,7 @@ buildPythonApplication rec {
       to prevent needless transcoding of your media files on the server. The player also has
       advanced features, such as bulk subtitle updates and launching commands on events.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       # jellyfin-mpv-shim
       gpl3Only
       mit
@@ -79,6 +126,7 @@ buildPythonApplication rec {
       # Static Grain
       unlicense
     ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [ jojosch ];
+    mainProgram = "jellyfin-mpv-shim";
   };
 }

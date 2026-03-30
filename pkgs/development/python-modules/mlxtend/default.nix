@@ -1,36 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
-, scipy
-, numpy
-, scikit-learn
-, pandas
-, matplotlib
-, joblib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  setuptools,
+  pytestCheckHook,
+  scipy,
+  numpy,
+  scikit-learn,
+  pandas,
+  matplotlib,
+  joblib,
 }:
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.20.0";
+  version = "0.24.0";
+  pyproject = true;
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-ECDO3nc9IEgmZNdSA70BzOODOi0wnisI00F2Dxzdz+M=";
+    repo = "mlxtend";
+    tag = "v${version}";
+    hash = "sha256-zDMFfm8VqEfAQd11PZNp7HsoLcqrj3nMqnvKhXaeA04=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  # image tests download files over the network
-  pytestFlagsArray = [ "-sv" "--ignore=mlxtend/image" ];
-  # Fixed in master, but failing in release version
-  # see: https://github.com/rasbt/mlxtend/pull/721
-  disabledTests = [ "test_variance_explained_ratio" ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     scipy
     numpy
     scikit-learn
@@ -39,13 +38,38 @@ buildPythonPackage rec {
     joblib
   ];
 
-  meta = with lib; {
-    description = "A library of Python tools and extensions for data science";
+  patches = [
+    # https://github.com/rasbt/mlxtend/issues/1117
+    ./0001-StackingCVClassifier-fit-ensure-compatibility-with-s.patch
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [ "-sv" ];
+
+  disabledTests = [
+    # Type changed in numpy2 test should be updated
+    "test_invalid_labels_1"
+    "test_default"
+    "test_nullability"
+  ];
+
+  disabledTestPaths = [
+    "mlxtend/evaluate/f_test.py" # need clean
+    "mlxtend/evaluate/tests/test_feature_importance.py" # urlopen error
+    "mlxtend/evaluate/tests/test_bias_variance_decomp.py" # keras.api._v2
+    "mlxtend/evaluate/tests/test_bootstrap_point632.py" # keras.api._v2
+    # Failing tests, most likely an upstream issue. See https://github.com/rasbt/mlxtend/issues/1117
+    "mlxtend/classifier/tests/test_ensemble_vote_classifier.py"
+    "mlxtend/classifier/tests/test_stacking_classifier.py"
+    "mlxtend/classifier/tests/test_stacking_cv_classifier.py"
+  ];
+
+  meta = {
+    description = "Library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
-    license= licenses.bsd3;
-    maintainers = with maintainers; [ evax ];
-    platforms = platforms.unix;
-    # incompatible with nixpkgs scikit-learn version
-    broken = true;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evax ];
+    platforms = lib.platforms.unix;
   };
 }

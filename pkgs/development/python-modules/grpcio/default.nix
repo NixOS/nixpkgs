@@ -1,47 +1,88 @@
-{ lib, stdenv
-, buildPythonPackage
-, grpc
-, six
-, protobuf
-, enum34 ? null
-, futures ? null
-, isPy27
-, pkg-config
-, cython
-, c-ares
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  c-ares,
+  cython,
+  fetchPypi,
+  openssl,
+  pkg-config,
+  protobuf,
+  typing-extensions,
+  setuptools,
+  zlib,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
-  inherit (grpc) src version;
   pname = "grpcio";
-  format = "setuptools";
+  version = "1.78.0";
+  pyproject = true;
 
-  outputs = [ "out" "dev" ];
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-c4K5UYlUbzdcF09TpfqHPO+RxLgAX6oFzFs77qnE8cU=";
+  };
 
-  nativeBuildInputs = [ cython pkg-config ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail cython==3.1.1 cython
+  '';
 
-  buildInputs = [ c-ares openssl zlib ];
-  propagatedBuildInputs = [ six protobuf ]
-    ++ lib.optionals (isPy27) [ enum34 futures ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  preBuild = lib.optionalString stdenv.isDarwin "unset AR";
+  build-system = [ setuptools ];
 
-  GRPC_BUILD_WITH_BORING_SSL_ASM = "";
-  GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  nativeBuildInputs = [
+    cython
+    pkg-config
+  ];
+
+  buildInputs = [
+    c-ares
+    openssl
+    zlib
+  ];
+
+  dependencies = [
+    protobuf
+    typing-extensions
+  ];
+
+  preBuild = ''
+    export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+    if [ -z "$enableParallelBuilding" ]; then
+      GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    unset AR
+  '';
+
+  env = {
+    GRPC_BUILD_WITH_BORING_SSL_ASM = "";
+    GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  };
 
   # does not contain any tests
   doCheck = false;
 
+  enableParallelBuilding = true;
+
   pythonImportsCheck = [ "grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2-based RPC framework";
-    license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

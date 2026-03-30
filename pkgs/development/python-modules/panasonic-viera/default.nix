@@ -1,24 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, pycryptodome
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  aiohttp,
+  pycryptodome,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "panasonic-viera";
-  version = "0.4.0";
+  version = "0.4.4";
+  pyproject = true;
 
-  format = "setuptools";
-
-  src = fetchPypi {
-    pname = "panasonic_viera";
-    inherit version;
-    sha256 = "baad2db7958ddbc7288d0f1c50a9eeddd8b83f3d30ad14ac3f6c51fe953e0eb6";
+  src = fetchFromGitHub {
+    owner = "florianholzapfel";
+    repo = "panasonic-viera";
+    tag = version;
+    hash = "sha256-f/FLM6xoJwRZwq8Q6uf9W+fJN96wE6HvJozaNVmORtg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     pycryptodome
     xmltodict
@@ -30,6 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "panasonic_viera" ];
 
   meta = {
+    changelog = "https://github.com/florianholzapfel/panasonic-viera/releases/tag/${src.tag}";
     description = "Library to control Panasonic Viera TVs";
     homepage = "https://github.com/florianholzapfel/panasonic-viera";
     license = lib.licenses.mit;

@@ -1,88 +1,104 @@
-{ lib
-, buildPythonPackage
-, dissect-cim
-, dissect-clfs
-, dissect-cstruct
-, dissect-esedb
-, dissect-etl
-, dissect-eventlog
-, dissect-evidence
-, dissect-extfs
-, dissect-fat
-, dissect-ffs
-, dissect-hypervisor
-, dissect-ntfs
-, dissect-ole
-, dissect-regf
-, dissect-shellitem
-, dissect-sql
-, dissect-target
-, dissect-util
-, dissect-vmfs
-, dissect-volume
-, dissect-xfs
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dissect-apfs,
+  dissect-archive,
+  dissect-btrfs,
+  dissect-cim,
+  dissect-clfs,
+  dissect-cramfs,
+  dissect-cstruct,
+  dissect-esedb,
+  dissect-etl,
+  dissect-eventlog,
+  dissect-evidence,
+  dissect-executable,
+  dissect-extfs,
+  dissect-fat,
+  dissect-ffs,
+  dissect-fve,
+  dissect-hypervisor,
+  dissect-jffs,
+  dissect-ntfs,
+  dissect-ole,
+  dissect-qnxfs,
+  dissect-regf,
+  dissect-shellitem,
+  dissect-sql,
+  dissect-squashfs,
+  dissect-target,
+  dissect-util,
+  dissect-vmfs,
+  dissect-volume,
+  dissect-xfs,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "3.22";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
-    rev = version;
-    hash = "sha256-DtiaBKQtz6CgU1csfGhCw0LJLoiKwyH6N6b7/elpJkU=";
+    tag = version;
+    hash = "sha256-+Nq/7ftOD9/un9TYdrztbaUcBtDcfju36bkrDH57+ms=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    dissect-apfs
+    dissect-archive
+    dissect-btrfs
     dissect-cim
     dissect-clfs
+    dissect-cramfs
     dissect-cstruct
     dissect-esedb
     dissect-etl
     dissect-eventlog
     dissect-evidence
+    dissect-executable
     dissect-extfs
     dissect-fat
     dissect-ffs
+    dissect-fve
     dissect-hypervisor
+    dissect-jffs
     dissect-ntfs
     dissect-ole
+    dissect-qnxfs
     dissect-regf
     dissect-shellitem
     dissect-sql
+    dissect-squashfs
     dissect-target
     dissect-util
     dissect-vmfs
     dissect-volume
     dissect-xfs
-  ] ++ dissect-target.optional-dependencies.full;
+  ]
+  ++ dissect-target.optional-dependencies.full;
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dissect"
-  ];
+  pythonImportsCheck = [ "dissect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

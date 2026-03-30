@@ -1,41 +1,42 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, construct
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  construct,
+  fetchFromGitHub,
+  pytestCheckHook,
+  uv-build,
 }:
 
 buildPythonPackage rec {
-  pname   = "construct-classes";
-  version = "0.1.2";
-  format = "pyproject";
+  pname = "construct-classes";
+  version = "0.2.2";
+  pyproject = true;
 
-  # no tests in PyPI tarball
   src = fetchFromGitHub {
-    owner  = "matejcik";
-    repo   = "construct-classes";
-    rev    = "v${version}";
-    sha256 = "sha256-l4sVacKTuQbhXCw2lVHCl1OzpCiKmEAm9nSQ8pxFuTo=";
+    owner = "matejcik";
+    repo = "construct-classes";
+    tag = "v${version}";
+    hash = "sha256-goOQMt/nVjWXYltpnKHtJaLOhR+gRTmtoUh7zVb7go4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.13,<0.9.0" "uv_build>=0.8.13"
+  '';
 
-  propagatedBuildInputs = [
-    construct
-  ];
+  build-system = [ uv-build ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [ construct ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "construct_classes" ];
 
-  meta = with lib; {
-    description = "Parse your binary data into dataclasses.";
+  meta = {
+    description = "Parse your binary data into dataclasses";
     homepage = "https://github.com/matejcik/construct-classes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    changelog = "https://github.com/matejcik/construct-classes/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

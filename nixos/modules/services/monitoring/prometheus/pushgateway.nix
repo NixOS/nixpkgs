@@ -1,69 +1,65 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.prometheus.pushgateway;
 
   cmdlineArgs =
-       opt "web.listen-address" cfg.web.listen-address
+    opt "web.listen-address" cfg.web.listen-address
     ++ opt "web.telemetry-path" cfg.web.telemetry-path
     ++ opt "web.external-url" cfg.web.external-url
     ++ opt "web.route-prefix" cfg.web.route-prefix
-    ++ optional cfg.persistMetrics ''--persistence.file="/var/lib/${cfg.stateDir}/metrics"''
+    ++ lib.optional cfg.persistMetrics ''--persistence.file="/var/lib/${cfg.stateDir}/metrics"''
     ++ opt "persistence.interval" cfg.persistence.interval
     ++ opt "log.level" cfg.log.level
     ++ opt "log.format" cfg.log.format
     ++ cfg.extraFlags;
 
-  opt = k : v : optional (v != null) ''--${k}="${v}"'';
+  opt = k: v: lib.optional (v != null) ''--${k}="${v}"'';
 
-in {
+in
+{
   options = {
     services.prometheus.pushgateway = {
-      enable = mkEnableOption (lib.mdDoc "Prometheus Pushgateway");
+      enable = lib.mkEnableOption "Prometheus Pushgateway";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.prometheus-pushgateway;
-        defaultText = literalExpression "pkgs.prometheus-pushgateway";
-        description = lib.mdDoc ''
-          Package that should be used for the prometheus pushgateway.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "prometheus-pushgateway" { };
 
-      web.listen-address = mkOption {
-        type = types.nullOr types.str;
+      web.listen-address = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Address to listen on for the web interface, API and telemetry.
 
           `null` will default to `:9091`.
         '';
       };
 
-      web.telemetry-path = mkOption {
-        type = types.nullOr types.str;
+      web.telemetry-path = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path under which to expose metrics.
 
           `null` will default to `/metrics`.
         '';
       };
 
-      web.external-url = mkOption {
-        type = types.nullOr types.str;
+      web.external-url = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The URL under which Pushgateway is externally reachable.
         '';
       };
 
-      web.route-prefix = mkOption {
-        type = types.nullOr types.str;
+      web.route-prefix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Prefix for the internal routes of web endpoints.
 
           Defaults to the path of
@@ -71,50 +67,58 @@ in {
         '';
       };
 
-      persistence.interval = mkOption {
-        type = types.nullOr types.str;
+      persistence.interval = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "10m";
-        description = lib.mdDoc ''
+        description = ''
           The minimum interval at which to write out the persistence file.
 
           `null` will default to `5m`.
         '';
       };
 
-      log.level = mkOption {
-        type = types.nullOr (types.enum ["debug" "info" "warn" "error" "fatal"]);
+      log.level = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "debug"
+            "info"
+            "warn"
+            "error"
+            "fatal"
+          ]
+        );
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Only log messages with the given severity or above.
 
           `null` will default to `info`.
         '';
       };
 
-      log.format = mkOption {
-        type = types.nullOr types.str;
+      log.format = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "logger:syslog?appname=bob&local=7";
-        description = lib.mdDoc ''
+        description = ''
           Set the log target and format.
 
           `null` will default to `logger:stderr`.
         '';
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
           Extra commandline options when launching the Pushgateway.
         '';
       };
 
-      persistMetrics = mkOption {
-        type = types.bool;
+      persistMetrics = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to persist metrics to a file.
 
           When enabled metrics will be saved to a file called
@@ -125,10 +129,10 @@ in {
         '';
       };
 
-      stateDir = mkOption {
-        type = types.str;
+      stateDir = lib.mkOption {
+        type = lib.types.str;
         default = "pushgateway";
-        description = lib.mdDoc ''
+        description = ''
           Directory below `/var/lib` to store metrics.
 
           This directory will be created automatically using systemd's
@@ -140,26 +144,71 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = !hasPrefix "/" cfg.stateDir;
+        assertion = !lib.hasPrefix "/" cfg.stateDir;
         message =
-          "The option services.prometheus.pushgateway.stateDir" +
-          " shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib.";
+          "The option services.prometheus.pushgateway.stateDir"
+          + " shouldn't be an absolute directory."
+          + " It should be a directory relative to /var/lib.";
       }
     ];
     systemd.services.pushgateway = {
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        Restart  = "always";
+        ExecStart =
+          "${cfg.package}/bin/pushgateway"
+          + lib.optionalString (lib.length cmdlineArgs != 0) (
+            " \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs
+          );
+
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/pushgateway" +
-          optionalString (length cmdlineArgs != 0) (" \\\n  " +
-            concatStringsSep " \\\n  " cmdlineArgs);
+        NoNewPrivileges = true;
+
+        MemoryDenyWriteExecute = true;
+
+        LockPersonality = true;
+
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ProtectHome = "tmpfs";
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+
+        ProcSubset = "pid";
+
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+
+        Restart = "always";
+
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
         StateDirectory = if cfg.persistMetrics then cfg.stateDir else null;
+        SystemCallFilter = [
+          "@system-service"
+          "~@cpu-emulation"
+          "~@privileged"
+          "~@reboot"
+          "~@setuid"
+          "~@swap"
+        ];
       };
     };
   };

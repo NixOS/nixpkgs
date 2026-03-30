@@ -1,115 +1,129 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-# python dependencies
-, click
-, python-dateutil
-, etelemetry
-, filelock
-, funcsigs
-, future
-, mock
-, networkx
-, nibabel
-, numpy
-, packaging
-, prov
-, psutil
-, pybids
-, pydot
-, pytest
-, pytest-xdist
-, pytest-forked
-, rdflib
-, scipy
-, simplejson
-, traits
-, xvfbwrapper
-, pytest-cov
-, codecov
-, sphinx
-# other dependencies
-, which
-, bash
-, glibcLocales
-, callPackage
-# causes Python packaging conflict with any package requiring rdflib,
-# so use the unpatched rdflib by default (disables Nipype provenance tracking);
-# see https://github.com/nipy/nipype/issues/2888:
-, useNeurdflib ? false
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # python dependencies
+  acres,
+  click,
+  python-dateutil,
+  etelemetry,
+  filelock,
+  looseversion,
+  lxml,
+  networkx,
+  nibabel,
+  numpy,
+  packaging,
+  prov,
+  puremagic,
+  pybids,
+  pydot,
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-cov-stub,
+  rdflib,
+  scipy,
+  simplejson,
+  traits,
+
+  # optional-dependencies
+  datalad,
+  duecredit,
+  pandas,
+  paramiko,
+  psutil,
+  sphinx,
+  xvfbwrapper,
+
+  # other dependencies
+  which,
+  bash,
+  glibcLocales,
 }:
-
-let
-
- # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
- neurdflib = callPackage ./neurdflib.nix { };
-
-in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.8.4";
-  disabled = isPy27;
+  version = "1.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yoG6iLfF7ugBL4eNC9OLINIzBj1YgF4TVngFKb77qak=";
+    hash = "sha256-ZwfsTDz44Zg673+O6nlifue3q0qklkmZFVDhKcFlt6c=";
   };
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
-      --replace "/usr/bin/env bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+    substituteInPlace nipype/pipeline/engine/tests/test_nodes.py \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
-  nativeBuildInputs = [
-    sphinx
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    acres
     click
-    python-dateutil
     etelemetry
     filelock
-    funcsigs
-    future
+    looseversion
+    lxml
     networkx
     nibabel
     numpy
     packaging
     prov
-    psutil
+    puremagic
     pydot
+    python-dateutil
+    rdflib
     scipy
     simplejson
     traits
-    xvfbwrapper
-  ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
+  ];
 
-  checkInputs = [
-    pybids
-    codecov
+  passthru.optional-dependencies = {
+    data = [ datalad ];
+    duecredit = [ duecredit ];
+    profiler = [ psutil ];
+    pybids = [ pybids ];
+    ssh = [ paramiko ];
+    xvfbwrapper = [ xvfbwrapper ];
+  };
+
+  nativeCheckInputs = [
     glibcLocales
-    mock
-    pytest
-    pytest-forked
+    pandas
+    pytestCheckHook
+    pytest-cov-stub
     pytest-xdist
-    pytest-cov
+    sphinx
     which
   ];
 
   # checks on darwin inspect memory which doesn't work in build environment
-  doCheck = !stdenv.isDarwin;
-  # ignore tests which incorrect fail to detect xvfb
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
-  '';
-  pythonImportsCheck = [ "nipype" ];
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
-    homepage = "https://nipy.org/nipype/";
+  pythonImportsCheck = [
+    "nipype"
+    "nipype.algorithms"
+    "nipype.interfaces"
+  ];
+
+  meta = {
+    homepage = "https://nipy.org/nipype";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    changelog = "https://github.com/nipy/nipype/releases/tag/${version}";
+    mainProgram = "nipypecli";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

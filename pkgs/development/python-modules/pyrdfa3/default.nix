@@ -1,42 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, rdflib
-, html5lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  html5lib,
+  rdflib,
+  requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrdfa3";
-  version = "3.5.3";
-  disabled = isPy27;
+  version = "3.6.5";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "pyRdfa3";
-    sha256 = "sha256-FXZjqSuH3zRbb2m94jXf9feXiRYI4S/h5PqNrWhxMa4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-D8KP8UJq+AWxAK/3Fi22pD+iFeN/krzpsRO0Zf61Y+o=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'html = pyRdfa.rdflibparsers:StructuredDataParser'" "'html = pyRdfa.rdflibparsers:StructuredDataParser'," \
-      --replace "'hturtle = pyRdfa.rdflibparsers:HTurtleParser'" "'hturtle = pyRdfa.rdflibparsers:HTurtleParser',"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     rdflib
     html5lib
+    requests
   ];
 
-  # Does not work with python3
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyRdfa" ];
 
-  meta = with lib; {
+  meta = {
     description = "RDFa 1.1 distiller/parser library";
-    homepage = "https://www.w3.org/2012/pyRdfa/";
-    license = licenses.w3c;
-    maintainers = with maintainers; [ ambroisie ];
+    homepage = "https://github.com/prrvchr/pyrdfa3/";
+    changelog = "https://github.com/prrvchr/pyrdfa3/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.w3c;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

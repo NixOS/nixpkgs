@@ -1,38 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, fusepy
-, fuse
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  fusepy,
+  fuse,
+  openssl,
 }:
 
 buildPythonPackage rec {
   pname = "acme-tiny";
-  version = "5.0.1";
+  version = "5.0.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "378549808eece574c3b5dcea82b216534949423d5c7ac241d9419212d676bc8d";
+    pname = "acme_tiny";
+    inherit version;
+    hash = "sha256-s84ZVYPcLxOnxvqQBS+Ks0myMtvCZ62cv0co6u2E3dg=";
   };
 
   patchPhase = ''
-    substituteInPlace acme_tiny.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
-    substituteInPlace tests/test_module.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
-    substituteInPlace tests/utils.py --replace /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
+    substituteInPlace acme_tiny.py --replace-fail '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/test_module.py --replace-fail '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/utils.py --replace-fail /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
   '';
 
-  buildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkInputs = [ fusepy fuse ];
-
-  doCheck = false; # seems to hang, not sure
+  nativeCheckInputs = [
+    fusepy
+    fuse
+  ];
 
   pythonImportsCheck = [ "acme_tiny" ];
 
-  meta = with lib; {
-    description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
+  meta = {
+    description = "Tiny script to issue and renew TLS certs from Let's Encrypt";
+    mainProgram = "acme-tiny";
     homepage = "https://github.com/diafygi/acme-tiny";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

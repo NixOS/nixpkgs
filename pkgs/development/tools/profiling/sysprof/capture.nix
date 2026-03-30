@@ -1,10 +1,12 @@
-{ lib, stdenv
-, meson
-, ninja
-, sysprof
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  sysprof,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsysprof-capture";
 
   inherit (sysprof) src version;
@@ -15,20 +17,21 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dagent=false"
     "-Dsysprofd=none"
     "-Dgtk=false"
     "-Dlibsysprof=false"
-    "-Dlibunwind=false"
     "-Dhelp=false"
     "-Dtools=false"
     "-Dtests=false"
     "-Dexamples=false"
+    "-Dpolkit-agent=disabled" # only useful for sysprof-cli
+    "-Ddebuginfod=disabled"
   ];
 
   meta = sysprof.meta // {
     description = "Static library for Sysprof capture data generation";
     license = lib.licenses.bsd2Patent;
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "sysprof-capture-4" ];
   };
 }

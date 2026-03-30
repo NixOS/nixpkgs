@@ -1,43 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, ninja
-, ignite
-, numpy
-, pybind11
-, torch
-, which
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ninja,
+  numpy,
+  packaging,
+  pybind11,
+  torch,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.0.0";
-  disabled = pythonOlder "3.7";
+  version = "1.5.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BnsgZpkXsY2l6inuzOkuvK4zJqYs2dj7jF5gKKiLnZM=";
+    tag = version;
+    hash = "sha256-tRHHldNQc8Rx/oXyAEMQwIYOVtzzNpwQo8V9TdWLtO8=";
+    # fix source non-reproducibility due to versioneer + git-archive, as with Numba, Pytensor etc. derivations:
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/monai/_version.py
+    '';
   };
-
-  # Ninja is not detected by setuptools for some reason even though it's present:
-  postPatch = ''
-    substituteInPlace "setup.cfg" --replace "ninja" ""
-  '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [ ninja which ];
+  build-system = [
+    ninja
+    which
+  ];
+
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy torch ignite ];
 
-  BUILD_MONAI = 1;
+  dependencies = [
+    numpy
+    packaging
+    torch
+  ];
 
-  doCheck = false;  # takes too long; numerous dependencies, some not in Nixpkgs
+  env.BUILD_MONAI = 1;
+
+  doCheck = false; # takes too long; tries to download data
 
   pythonImportsCheck = [
     "monai"
@@ -55,10 +63,11 @@ buildPythonPackage rec {
     "monai.visualize"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

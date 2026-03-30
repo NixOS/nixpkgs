@@ -1,8 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, colorama }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  colorama,
+}:
 
 buildPythonPackage rec {
   pname = "crayons";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,9 +17,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorama ];
 
-  meta = with lib; {
+  meta = {
     description = "TextUI colors for Python";
     homepage = "https://github.com/kennethreitz/crayons";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

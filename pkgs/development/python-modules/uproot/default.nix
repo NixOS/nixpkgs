@@ -1,76 +1,110 @@
-{ lib
-, awkward
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, lz4
-, numpy
-, packaging
-, pytestCheckHook
-, pythonOlder
-, scikit-hep-testdata
-, xxhash
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  awkward,
+  cramjam,
+  fsspec,
+  numpy,
+  packaging,
+
+  # tests
+  awkward-pandas,
+  pandas,
+  pytest-timeout,
+  pytestCheckHook,
+  rangehttpserver,
+  scikit-hep-testdata,
+  writableTmpDirAsHomeHook,
+  xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "4.3.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "5.7.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
-    repo = "uproot4";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Te4D2tHVD5fD8DH2njjQMGnTUvLQdcGBzApklnGn6g8=";
+    repo = "uproot5";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5FTGUYn+wveNA10ccIVmDuAmAuCZ5DdMAhRXRIgExg8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     awkward
+    cramjam
+    fsspec
     numpy
-    lz4
     packaging
     xxhash
-    zstandard
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    awkward-pandas
+    pandas
+    pytest-timeout
     pytestCheckHook
+    rangehttpserver
     scikit-hep-testdata
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   disabledTests = [
     # Tests that try to download files
-    "test_http"
-    "test_no_multipart"
+    "test_descend_into_path_classname_of"
     "test_fallback"
+    "test_fsspec_cache_http"
+    "test_fsspec_cache_http_directory"
+    "test_fsspec_chunks"
+    "test_fsspec_globbing_http"
+    "test_http"
+    "test_http_fallback_workers"
+    "test_http_multipart"
+    "test_http_port"
+    "test_http_size"
+    "test_http_size_port"
+    "test_http_workers"
+    "test_issue176"
+    "test_issue176_again"
+    "test_issue_1054_filename_colons"
+    "test_no_multipart"
+    "test_open_fsspec_github"
+    "test_open_fsspec_http"
     "test_pickle_roundtrip_http"
+
+    # Cyclic dependency with dask-awkward
+    "test_dask_duplicated_keys"
+    "test_decompression_executor_for_dask"
+    "test_decompression_threadpool_executor_for_dask"
   ];
 
   disabledTestPaths = [
     # Tests that try to download files
-    "tests/test_0066-fix-http-fallback-freeze.py"
-    "tests/test_0088-read-with-http.py"
-    "tests/test_0220-contiguous-byte-ranges-in-http.py"
+    "tests/test_0066_fix_http_fallback_freeze.py"
+    "tests/test_0220_contiguous_byte_ranges_in_http.py"
   ];
 
-  pythonImportsCheck = [
-    "uproot"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "uproot" ];
+
+  meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
-    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, packaging
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "openwrt-luci-rpc";
-  version = "1.1.12";
+  version = "1.1.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vLRmv8xxbjBp6TDFExfprqw3JGi8qCVZ5bV7AgVZnuA=";
+    hash = "sha256-RFZCnQTDs3vre0qbedIEnng7lGo3Ikp0Bw4+7sbPRJk=";
   };
 
   propagatedBuildInputs = [
@@ -22,13 +24,11 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "openwrt_luci_rpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with the OpenWrt Luci RPC interface";
     longDescription = ''
       This module allows you to use the Luci RPC interface to fetch connected devices
@@ -36,7 +36,7 @@ buildPythonPackage rec {
       OpenWrt.
     '';
     homepage = "https://github.com/fbradyirl/openwrt-luci-rpc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matt-snider ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matt-snider ];
   };
 }

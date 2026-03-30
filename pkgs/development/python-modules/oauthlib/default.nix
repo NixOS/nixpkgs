@@ -1,47 +1,71 @@
-{ lib
-, blinker
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, mock
-, pyjwt
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  mock,
+  pyjwt,
+  pytestCheckHook,
+  setuptools,
+
+  # for passthru.tests
+  django-allauth,
+  django-oauth-toolkit,
+  google-auth-oauthlib,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "oauthlib";
-  version = "3.2.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9Du0REnN7AkvMmejXsWc7Uy+YF8MYeLK+QnYHbrPhPA=";
+    owner = "oauthlib";
+    repo = "oauthlib";
+    tag = "v${version}";
+    hash = "sha256-ZTmR+pTNQaRQMnUA+8hXM5VACRd8Hn62KTNooy5FQyk=";
   };
 
-  propagatedBuildInputs = [
-    blinker
-    cryptography
-    pyjwt
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  optional-dependencies = {
+    rsa = [ cryptography ];
+    signedtoken = [
+      cryptography
+      pyjwt
+    ];
+    signals = [ blinker ];
+  };
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # too narrow time comparison issues
+    "test_fetch_access_token"
   ];
 
-  pythonImportsCheck = [
-    "oauthlib"
-  ];
+  pythonImportsCheck = [ "oauthlib" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit
+      django-allauth
+      django-oauth-toolkit
+      google-auth-oauthlib
+      requests-oauthlib
+      ;
+  };
+
+  meta = {
+    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.tag}/CHANGELOG.rst";
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
-    homepage = "https://github.com/idan/oauthlib";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ prikhi ];
+    homepage = "https://github.com/oauthlib/oauthlib";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ prikhi ];
   };
 }

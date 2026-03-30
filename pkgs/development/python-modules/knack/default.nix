@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, argcomplete
-, colorama
-, jmespath
-, pygments
-, pyyaml
-, six
-, tabulate
-, mock
-, vcrpy
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  argcomplete,
+  colorama,
+  jmespath,
+  pygments,
+  pyyaml,
+  six,
+  tabulate,
+  mock,
+  vcrpy,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.10.0";
+  version = "0.13.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ExkPqV1MIbzgS0vuItak4/sZqTtpmbHRBL0CxHZwbCg=";
+    hash = "sha256-3aNbT/TFdrJQGhjw7C8v4KOl+czoJl1AZtMR5e1LW8Y=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     vcrpy
     pytest
@@ -42,11 +44,14 @@ buildPythonPackage rec {
     HOME=$TMPDIR pytest .
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "knack" ];
+
+  meta = {
     homepage = "https://github.com/microsoft/knack";
-    description = "A Command-Line Interface framework";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    description = "Command-Line Interface framework";
+    changelog = "https://github.com/microsoft/knack/blob/v${version}/HISTORY.rst";
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

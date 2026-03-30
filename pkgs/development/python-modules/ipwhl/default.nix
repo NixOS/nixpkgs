@@ -1,28 +1,38 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut
-, kubo, packaging, tomli }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromSourcehut,
+  kubo,
+  packaging,
+  tomli,
+  flit-core,
+}:
 
 buildPythonPackage rec {
   pname = "ipwhl";
   version = "1.1.0";
-  format = "flit";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "ipwhl-utils";
     rev = version;
-    sha256 = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
+    hash = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
   };
 
+  nativeBuildInputs = [ flit-core ];
   buildInputs = [ kubo ];
-  propagatedBuildInputs = [ packaging tomli ];
+  propagatedBuildInputs = [
+    packaging
+    tomli
+  ];
   doCheck = false; # there's no test
   pythonImportsCheck = [ "ipwhl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for the InterPlanetary Wheels";
     homepage = "https://git.sr.ht/~cnx/ipwhl-utils";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

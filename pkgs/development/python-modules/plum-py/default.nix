@@ -1,29 +1,48 @@
-{ lib, buildPythonPackage, fetchFromGitLab, isPy3k, pytest, baseline }:
+{
+  lib,
+  baseline,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "plum-py";
-  version = "0.4.0";
-  disabled = !isPy3k;
+  version = "0.8.6";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
-    rev = "6a9ff863c0e9fa21f7b2230d25402155a5522e4b";
-    sha256 = "1iv62yb704c61b0dvsmyp3j6xpbmay532g9ny4pw4zbg3l69vd5j";
+    tag = version;
+    hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
   };
 
   postPatch = ''
-    substituteInPlace src/plum/int/flag/_flag.py \
-      --replace 'if sys.version_info < (3, 7):' 'if True:'
+    # Drop broken version specifier
+    sed -i "/python_requires =/d" setup.cfg
   '';
 
-  checkInputs = [ pytest baseline ];
-  checkPhase = "pytest tests";
+  nativeCheckInputs = [
+    baseline
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "plum" ];
+
+  enabledTestPaths = [ "tests" ];
+
+  disabledTestPaths = [
+    # tests enum.IntFlag behaviour which has been disallowed in python 3.11.6
+    # https://gitlab.com/dangass/plum/-/issues/150
+    "tests/flag/test_flag_invalid.py"
+  ];
+
+  meta = {
     description = "Classes and utilities for packing/unpacking bytes";
-    homepage = "https://plum-py.readthedocs.io/en/latest/index.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dnr ];
+    homepage = "https://plum-py.readthedocs.io/";
+    changelog = "https://gitlab.com/dangass/plum/-/blob/${version}/docs/release_notes.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

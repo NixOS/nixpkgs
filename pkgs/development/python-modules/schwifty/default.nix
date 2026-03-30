@@ -1,49 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-resources
-, importlib-metadata
-, iso3166
-, pycountry
-, pytestCheckHook
-, pytest-cov
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
+  importlib-resources,
+  iso3166,
+  pycountry,
+  rstr,
+
+  # optional-dependencies
+  pydantic,
+
+  # tests
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2022.9.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2026.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/zxK0pUfg5G5w9E+QBt1H12Ld5gWc+WakQdNVRMSFiA=";
+    hash = "sha256-VhZBQDAewy23iyMfli9Xsf1zIAKO6Q38OWNEOW9pdJg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     iso3166
     pycountry
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-metadata
-  ];
+    rstr
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
-  checkInputs = [
-    pytest-cov
+  optional-dependencies = {
+    pydantic = [ pydantic ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pythonImportsCheck = [
-    "schwifty"
-  ];
+  pythonImportsCheck = [ "schwifty" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
 }

@@ -1,43 +1,41 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  backoff,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2022.10.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2023.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-g89UV3rQc6WP6xU4x07Vdgp6plTH1BVdwxmjE2ocnp4=";
+    repo = "pyopenuv";
+    tag = version;
+    hash = "sha256-r+StbiU77/1dz41tCseleIWjiIvuvRveVgPNr3n4CEY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     backoff
+    certifi
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-asyncio
     pytest-aiohttp
     pytestCheckHook
@@ -48,14 +46,13 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyopenuv"
-  ];
+  pythonImportsCheck = [ "pyopenuv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to retrieve data from openuv.io";
     homepage = "https://github.com/bachya/pyopenuv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bachya/pyopenuv/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

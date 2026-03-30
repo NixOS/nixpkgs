@@ -1,32 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "pox";
-  version = "0.3.2";
+  version = "0.3.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6CUiUpdjjW49SUFfjPtlQHpdFeVvL7f+nZueMFDGXuE=";
+    hash = "sha256-BlL28hA/5tS6Y4vrb6jT6KaP1EvLYzFcYUEYUVvMOvs=";
   };
 
   # Test sare failing the sandbox
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pox"
-  ];
+  pythonImportsCheck = [ "pox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for filesystem exploration and automated builds";
+    mainProgram = "pox";
     homepage = "https://pox.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

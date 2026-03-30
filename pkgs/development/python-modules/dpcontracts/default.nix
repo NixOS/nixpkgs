@@ -1,14 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dpcontracts";
   version = "unstable-2018-11-20";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "deadpixi";
@@ -22,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dpcontracts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a collection of decorators that makes it easy to write software using contracts";
     homepage = "https://github.com/deadpixi/contracts";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

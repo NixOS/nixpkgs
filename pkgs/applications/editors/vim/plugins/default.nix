@@ -1,22 +1,49 @@
 # TODO check that no license information gets lost
-{ callPackage, config, lib, vimUtils, vim, darwin, llvmPackages
-, neovimUtils
-, luaPackages
+{
+  callPackage,
+  config,
+  lib,
+  vimUtils,
+  vim,
+  llvmPackages,
+  neovimUtils,
 }:
 
 let
 
-  inherit (vimUtils.override {inherit vim;})
-    buildVimPluginFrom2Nix vimGenDocHook vimCommandCheckHook;
+  inherit (vimUtils.override { inherit vim; })
+    buildVimPlugin
+    ;
 
   inherit (lib) extends;
 
   initialPackages = self: { };
 
-  plugins = callPackage ./generated.nix {
-    inherit buildVimPluginFrom2Nix;
-    inherit (neovimUtils) buildNeovimPluginFrom2Nix;
+  cocPlugins = callPackage ./cocPlugins.nix {
+    inherit buildVimPlugin;
   };
+
+  luaPackagePlugins = callPackage ./luaPackagePlugins.nix {
+    inherit (neovimUtils) buildNeovimPlugin;
+  };
+
+  nonGeneratedPlugins =
+    self: super:
+    let
+      root = ./non-generated;
+      call = name: callPackage (root + "/${name}") { };
+    in
+    lib.pipe root [
+      builtins.readDir
+      (lib.filterAttrs (_: type: type == "directory"))
+      (builtins.mapAttrs (name: _: call name))
+    ];
+
+  plugins = callPackage ./generated.nix {
+    inherit buildVimPlugin;
+  };
+
+  corePlugins = callPackage ./corePlugins.nix { };
 
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
@@ -25,18 +52,18 @@ let
   # If additional modifications to the build process are required,
   # add to ./overrides.nix.
   overrides = callPackage ./overrides.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
-    inherit buildVimPluginFrom2Nix;
-    inherit llvmPackages luaPackages;
+    inherit llvmPackages;
   };
 
-  aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: {};
-
-  extensible-self = lib.makeExtensible
-    (extends aliases
-      (extends overrides
-        (extends plugins initialPackages)
-      )
-    );
+  aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: { };
 in
-  extensible-self
+lib.pipe initialPackages [
+  (extends plugins)
+  (extends cocPlugins)
+  (extends luaPackagePlugins)
+  (extends nonGeneratedPlugins)
+  (extends corePlugins)
+  (extends overrides)
+  (extends aliases)
+  lib.makeExtensible
+]

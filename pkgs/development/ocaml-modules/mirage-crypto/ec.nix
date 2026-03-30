@@ -1,53 +1,44 @@
-{ lib
-, ocaml
-, buildDunePackage
-, mirage-crypto
-, dune-configurator
-, pkg-config
-, cstruct
-, mirage-crypto-rng
-, mirage-crypto-pk
-, hex
-, alcotest
-, asn1-combinators
-, ppx_deriving_yojson
-, ppx_deriving
-, yojson
-, withFreestanding ? false
-, ocaml-freestanding
+{
+  buildDunePackage,
+  mirage-crypto,
+  dune-configurator,
+  pkg-config,
+  mirage-crypto-rng,
+  alcotest,
+  asn1-combinators,
+  ohex,
+  ounit2,
+  ppx_deriving_yojson,
+  ppx_deriving,
+  yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mirage-crypto-ec";
 
   inherit (mirage-crypto)
     src
-    version;
+    version
+    ;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    ocaml
     dune-configurator
   ];
   propagatedBuildInputs = [
-    cstruct
     mirage-crypto
     mirage-crypto-rng
-  ] ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
-
-  strictDeps = !doCheck;
 
   doCheck = true;
   checkInputs = [
-    hex
     alcotest
     asn1-combinators
+    ohex
+    ounit2
     ppx_deriving_yojson
     ppx_deriving
     yojson
-    mirage-crypto-pk
   ];
 
   meta = mirage-crypto.meta // {

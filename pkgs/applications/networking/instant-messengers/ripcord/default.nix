@@ -1,27 +1,67 @@
-{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
-, qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
-, autoPatchelfHook, desktop-file-utils, imagemagick
-, twemoji-color-font, xorg, libsodium, libopus, libGL, alsa-lib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeFontsConf,
+  appimageTools,
+  qtbase,
+  qtsvg,
+  qtmultimedia,
+  qtwebsockets,
+  qtimageformats,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  desktop-file-utils,
+  imagemagick,
+  twemoji-color-font,
+  xkeyboard-config,
+  libxscrnsaver,
+  libxcursor,
+  libx11,
+  libsodium,
+  libopus,
+  libGL,
+  alsa-lib,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ripcord";
   version = "0.4.29";
 
-  src = let
-    appimage = fetchurl {
-      url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
-      sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
-      name = "${pname}-${version}.AppImage";
+  src =
+    let
+      appimage = fetchurl {
+        url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
+        sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
+        name = "${pname}-${version}.AppImage";
+      };
+    in
+    appimageTools.extract {
+      inherit pname version;
+      src = appimage;
     };
-  in appimageTools.extract {
-    name = "${pname}-${version}";
-    src = appimage;
-  };
 
-  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils imagemagick ];
-  buildInputs = [ libsodium libopus libGL alsa-lib ]
-    ++ [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ]
-    ++ (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
+  nativeBuildInputs = [
+    autoPatchelfHook
+    desktop-file-utils
+    imagemagick
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    libsodium
+    libopus
+    libGL
+    alsa-lib
+    qtbase
+    qtsvg
+    qtmultimedia
+    qtwebsockets
+    qtimageformats
+    libx11
+    libxscrnsaver
+    libxcursor
+    xkeyboard-config
+  ];
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];
@@ -50,20 +90,20 @@ mkDerivation rec {
     makeQtWrapper $out/Ripcord $out/bin/ripcord \
       --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
-      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --prefix LD_LIBRARY_PATH ":" "${libxcursor}/lib" \
+      --prefix QT_XKB_CONFIG_ROOT ":" "${xkeyboard-config}/share/X11/xkb" \
       --set RIPCORD_ALLOW_UPDATES 0
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ infinisil ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

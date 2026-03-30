@@ -1,0 +1,13 @@
+diff --git a/src/Levenshtein/CMakeLists.txt b/src/Levenshtein/CMakeLists.txt
+index 721f7a7..f6159ed 100644
+--- a/src/Levenshtein/CMakeLists.txt
++++ b/src/Levenshtein/CMakeLists.txt
+@@ -9,7 +9,7 @@ function(create_cython_target _name)
+       MAIN_DEPENDENCY "${CMAKE_CURRENT_LIST_DIR}/${_name}.pyx"
+       VERBATIM
+       COMMAND
+-        Python::Interpreter -m cython "${CMAKE_CURRENT_LIST_DIR}/${_name}.pyx"
++        Python::Interpreter -m cython --cplus "${CMAKE_CURRENT_LIST_DIR}/${_name}.pyx"
+         --output-file "${CMAKE_CURRENT_BINARY_DIR}/${_name}.cxx")
+ 
+     set(${_name}

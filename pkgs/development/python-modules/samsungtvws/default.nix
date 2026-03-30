@@ -1,45 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates:
-, requests
-, websocket-client
+  # build system
+  setuptools,
 
-# extras: async
-, aiohttp
-, websockets
+  # propagates:
+  requests,
+  websocket-client,
 
-# extras: encrypted
-, cryptography
-, py3rijndael
+  # extras: async
+  aiohttp,
+  websockets,
 
-# tests
-, aioresponses
-, pytest-asyncio
-, pytestCheckHook
+  # extras: encrypted
+  cryptography,
+  py3rijndael,
+
+  # tests
+  aioresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "2.5.0";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "3.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
-    rev = "v${version}";
-    hash = "sha256-AimG5tyTRBETpivC2BwCuoR4o7y98YT6u5sogJlcmoo=";
+    tag = "v${version}";
+    hash = "sha256-wQujnvIvq15k7GGIc5FSQFk90kcaxvXbpo4DZAESX58=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     websocket-client
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiohttp
       websockets
@@ -50,20 +54,21 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ passthru.optional-dependencies.async
-  ++ passthru.optional-dependencies.encrypted;
+  ++ optional-dependencies.async
+  ++ optional-dependencies.encrypted;
 
   pythonImportsCheck = [ "samsungtvws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

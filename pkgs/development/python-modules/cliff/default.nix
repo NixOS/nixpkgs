@@ -1,56 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autopage
-, cmd2
-, importlib-metadata
-, installShellFiles
-, openstackdocstheme
-, pbr
-, prettytable
-, pyparsing
-, pyyaml
-, stevedore
-, sphinx
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  autopage,
+  cmd2,
+  openstackdocstheme,
+  pbr,
+  prettytable,
+  pyyaml,
+  stevedore,
+  sphinxHook,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.0.0";
+  version = "4.13.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ow0w56z1DjwhSjnuPmaqLytZV+Kh3jc+F7uo6Yx1AaU=";
+    hash = "sha256-6Um1hbm2RUnehziM79Seh91jCVziufO5j5Ej182Uvho=";
   };
 
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
-
-  nativeBuildInputs = [
-    installShellFiles
-    openstackdocstheme
-    sphinx
+  patches = [
+    # Fix compatibility with Python 3.14.3
+    (fetchpatch {
+      url = "https://github.com/openstack/cliff/commit/391261c849c994ca2d3f42926497e633047ed8c7.patch";
+      hash = "sha256-jcjZKJlcJ8C4VKJejb/bjJ6Li4JjeC2xWK/nFWzIL2c=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    openstackdocstheme
+    pbr
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     autopage
     cmd2
-    importlib-metadata
-    pbr
     prettytable
-    pyparsing
     pyyaml
     stevedore
   ];
-
-  postInstall = ''
-    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
-    installManPage doc/build/man/cliff.1
-  '';
 
   # check in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;
@@ -61,10 +57,10 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface Formulation Framework";
     homepage = "https://github.com/openstack/cliff";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

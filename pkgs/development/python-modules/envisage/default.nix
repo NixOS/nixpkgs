@@ -1,58 +1,48 @@
-{ lib
-, apptools
-, buildPythonPackage
-, fetchPypi
-, ipython
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, traits
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  fetchPypi,
+  pyface,
+  pytestCheckHook,
+  setuptools,
+  traits,
+  traitsui,
 }:
 
 buildPythonPackage rec {
   pname = "envisage";
-  version = "6.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "7.0.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
+    hash = "sha256-1rspOLu0XE7xdmxV7W9sHHK2/OcEaKyfWw780e+MHZc=";
   };
 
-  # for the optional dependency ipykernel, only versions < 6 are
-  # supported, so it's not included in the tests, and not propagated
-  propagatedBuildInputs = [
-    traits
+  build-system = [ setuptools ];
+
+  dependencies = [
     apptools
+    pyface
     setuptools
-  ];
+    traits
+    traitsui
+  ]
+  ++ apptools.optional-dependencies.preferences;
 
   preCheck = ''
     export HOME=$PWD/HOME
   '';
 
-  checkInputs = [
-    ipython
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/enthought/envisage/issues/455
-    "envisage/tests/test_egg_basket_plugin_manager.py"
-    "envisage/tests/test_egg_plugin_manager.py"
-  ];
+  pythonImportsCheck = [ "envisage" ];
 
-  pythonImportsCheck = [
-    "envisage"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";
     homepage = "https://github.com/enthought/envisage";
-    license = licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ knedlsepp ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = [ ];
   };
 }

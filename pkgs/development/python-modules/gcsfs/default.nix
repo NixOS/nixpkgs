@@ -1,73 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, google-auth
-, google-auth-oauthlib
-, google-cloud-storage
-, requests
-, decorator
-, fsspec
-, ujson
-, aiohttp
-, crcmod
-, pytest-vcr
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  google-auth,
+  google-auth-oauthlib,
+  google-cloud-storage,
+  google-cloud-storage-control,
+  requests,
+  decorator,
+  fsspec,
+  fusepy,
+  aiohttp,
+  crcmod,
 }:
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2022.10.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2026.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
-    repo = pname;
-    rev = version;
-    hash = "sha256-+S4AziibYWos/hZ1v3883b1Vv3y4xjIDUrQ8c2XJ1MQ=";
+    repo = "gcsfs";
+    tag = version;
+    hash = "sha256-WAHRaLsb6znzfuTOtulDhI0rQOOmmcgv9UEEMujPgkE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
-    crcmod
     decorator
     fsspec
     google-auth
     google-auth-oauthlib
     google-cloud-storage
+    google-cloud-storage-control
     requests
-    ujson
   ];
 
-  checkInputs = [
-    pytest-vcr
-    pytestCheckHook
-    vcrpy
-  ];
+  optional-dependencies = {
+    gcsfuse = [ fusepy ];
+    crc = [ crcmod ];
+  };
 
-  disabledTestPaths = [
-    # Tests require a running Docker instance
-    "gcsfs/tests/test_core.py"
-    "gcsfs/tests/test_mapping.py"
-    "gcsfs/tests/test_retry.py"
-  ];
+  # Tests require a running Docker instance
+  doCheck = false;
 
-  pytestFlagsArray = [
-    "-x"
-  ];
+  pythonImportsCheck = [ "gcsfs" ];
 
-  pythonImportsCheck = [
-    "gcsfs"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/fsspec/gcsfs";
-    changelog = "https://github.com/fsspec/gcsfs/raw/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nbren12 ];
+    changelog = "https://github.com/fsspec/gcsfs/raw/${src.tag}/docs/source/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nbren12 ];
   };
 }

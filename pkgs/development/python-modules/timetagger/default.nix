@@ -1,33 +1,42 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, asgineer
-, bcrypt
-, itemdb
-, jinja2
-, markdown
-, pscript
-, pyjwt
-, uvicorn
-, pytestCheckHook
-, requests
+{
+  lib,
+  asgineer,
+  bcrypt,
+  buildPythonPackage,
+  fetchFromGitHub,
+  iptools,
+  itemdb,
+  jinja2,
+  markdown,
+  nodejs,
+  pscript,
+  pyjwt,
+  pytestCheckHook,
+  pythonAtLeast,
+  requests,
+  setuptools,
+  uvicorn,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timetagger";
-  version = "22.10.1";
+  version = "26.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-+7PKYVZfX+zDBKpaFwEVftyp4yPL90X9HSQDvoNNFuA=";
+    repo = "timetagger";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X82Ai6E844deRGs6KcJATEid3X6IlDq4+LCEU4lc4hM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asgineer
     bcrypt
+    iptools
     itemdb
     jinja2
     markdown
@@ -36,20 +45,26 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
+    nodejs
     pytestCheckHook
     requests
+    writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    homepage = "https://timetagger.app";
-    license = licenses.gpl3Only;
-    description = "Tag your time, get the insight";
-    maintainers = with maintainers; [ matthiasbeyer ];
+  pythonImportsCheck = [ "timetagger" ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    #  RuntimeError: There is no current event loop in thread 'MainThread'
+    "tests/test_server_apiserver.py"
+  ];
+
+  meta = {
+    description = "Library to interact with TimeTagger";
+    homepage = "https://github.com/almarklein/timetagger";
+    changelog = "https://github.com/almarklein/timetagger/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    mainProgram = "timetagger";
   };
-}
+})

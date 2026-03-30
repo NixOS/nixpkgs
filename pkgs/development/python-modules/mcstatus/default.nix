@@ -1,68 +1,69 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, click
-, dnspython
-, fetchFromGitHub
-, mock
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asyncio-dgram,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  hatchling,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  typing-extensions,
+  uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mcstatus";
-  version = "9.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "12.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-mine";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
+    repo = "mcstatus";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-twgFGeJfeKZSWbBui/zmtF/7aZ5Kw8k1K81Bj3Nm2ZY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncio-dgram
-    click
     dnspython
   ];
 
-  checkInputs = [
-    mock
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
+    pytest-rerunfailures
+    pytest-cov-stub
     pytestCheckHook
+    typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" "" \
-      --replace 'asyncio-dgram = "2.1.2"' 'asyncio-dgram = ">=2.1.2"' \
-      --replace 'dnspython = "2.2.1"' 'dnspython = ">=2.2.0"'
-  '';
-
-  pythonImportsCheck = [
-    "mcstatus"
-  ];
+  pythonImportsCheck = [ "mcstatus" ];
 
   disabledTests = [
     # DNS features are limited in the sandbox
-    "test_query"
-    "test_query_retry"
+    "test_resolve_localhost"
+    "test_async_resolve_localhost"
+    "test_java_server_with_query_port"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for checking the status of Minecraft servers";
     homepage = "https://github.com/py-mine/mcstatus";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fab
+      PerchunPak
+    ];
+    mainProgram = "mcstatus";
   };
-}
+})

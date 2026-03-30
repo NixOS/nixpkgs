@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, funcy
-, matplotlib
-, tabulate
-, pytestCheckHook
-, pytest-mock
-, pytest-test-utils
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flatten-dict,
+  funcy,
+  matplotlib,
+  tabulate,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-test-utils,
+  setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-render";
-  version = "0.0.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZUIyNg+PTj5CWC65RqB1whnB+pUp1yNJQj43iSBcyvU=";
+    repo = "dvc-render";
+    tag = finalAttrs.version;
+    hash = "sha256-V4QVZu4PSOW9poT6YUWbgTjJpIJ8YUtGDAE4Ijgm5Ac=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
   passthru.optional-dependencies = {
     table = [
+      flatten-dict
       tabulate
     ];
     markdown = [
@@ -41,23 +42,24 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     funcy
     pytestCheckHook
     pytest-mock
     pytest-test-utils
   ]
-  ++ passthru.optional-dependencies.table
-  ++ passthru.optional-dependencies.markdown;
+  ++ finalAttrs.passthru.optional-dependencies.table
+  ++ finalAttrs.passthru.optional-dependencies.markdown;
 
-  pythonImportsCheck = [
-    "dvc_render"
-  ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_vega.py" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "dvc_render" ];
+
+  meta = {
     description = "Library for rendering DVC plots";
     homepage = "https://github.com/iterative/dvc-render";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab anthonyroussel ];
+    changelog = "https://github.com/iterative/dvc-render/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

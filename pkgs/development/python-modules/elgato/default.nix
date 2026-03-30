@@ -1,61 +1,59 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "3.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "5.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-elgato";
-    rev = "v${version}";
-    sha256 = "sha256-lGHRwDxxgi1QJvK3WrvwghoAZk5J1mdwD4+Is0n7Jgs=";
+    tag = "v${version}";
+    hash = "sha256-NAU4tr0oaAPPrOUZYl9WoGOM68MlrBqGewHBIiIv2XY=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    pydantic
-    yarl
-  ];
-
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
       --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [
-    "elgato"
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiohttp
+    mashumaro
+    orjson
+    yarl
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "elgato" ];
+
+  meta = {
     description = "Python client for Elgato Key Lights";
     homepage = "https://github.com/frenck/python-elgato";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frenck/python-elgato/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

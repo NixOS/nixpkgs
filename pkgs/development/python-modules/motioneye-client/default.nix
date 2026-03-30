@@ -1,57 +1,51 @@
-{ stdenv
-, lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "motioneye-client";
-  version = "0.3.12";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.3.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
-    repo = pname;
+    repo = "motioneye-client";
     rev = "v${version}";
-    sha256 = "sha256-vEB9ztz0RTGoolFUVQcMV7DUthCEAx1kpwkAS2186OU=";
+    hash = "sha256-kgFSd5RjO+OtnPeAOimPTDVEfJ47rXh2Ku5xEYStHv8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiohttp = "^3.8.1,!=3.8.2,!=3.8.3"' 'aiohttp = "*"'
+  '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ aiohttp ];
+
+  nativeCheckInputs = [
     pytest-aiohttp
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-report=term-missing --cov=motioneye_client --cov-fail-under=100" ""
-  '';
+  pythonImportsCheck = [ "motioneye_client" ];
 
-  pythonImportsCheck = [
-    "motioneye_client"
-  ];
-
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     description = "Python library for motionEye";
     homepage = "https://github.com/dermotduffy/motioneye-client";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

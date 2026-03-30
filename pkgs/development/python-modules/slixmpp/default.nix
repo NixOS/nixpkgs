@@ -1,62 +1,97 @@
-{ lib
-, buildPythonPackage
-, aiodns
-, aiohttp
-, fetchPypi
-, gnupg
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, substituteAll
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  aiodns,
+  aiohttp,
+  cargo,
+  cryptography,
+  defusedxml,
+  emoji,
+  fetchFromCodeberg,
+  gnupg,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
+  replaceVars,
+  rustc,
+  rustPlatform,
+  setuptools,
+  setuptools-rust,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.3";
-  format = "setuptools";
+  version = "1.13.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rJtZqq7tZ/VFk4fMpDZYyTQRa1Pokmn2aw6LA+FBGXw=";
+  src = fetchFromCodeberg {
+    owner = "poezio";
+    repo = "slixmpp";
+    tag = "slix-${version}";
+    hash = "sha256-hjM1OIFYpHV5SSN32858pyuwOvaAA0tFZWCZI+5n9u4=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (replaceVars ./hardcode-gnupg-path.patch {
+      inherit gnupg;
+    })
+  ];
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-rust
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
+
+  dependencies = [
     aiodns
-    aiohttp
     pyasn1
     pyasn1-modules
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    xep-0363 = [ aiohttp ];
+    xep-0444-compliance = [ emoji ];
+    xep-0454 = [ cryptography ];
+    safer-xml-parsing = [ defusedxml ];
+  };
 
-  patches = [
-    (substituteAll {
-      src = ./hardcode-gnupg-path.patch;
-      inherit gnupg;
-    })
-    # Upstream MR: https://lab.louiz.org/poezio/slixmpp/-/merge_requests/198
-    ./0001-xep_0030-allow-extra-args-in-get_info_from_domain.patch
-  ];
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+
+  preCheck = ''
+    # don't test against pure python version in the source tree
+    rm -rf slixmpp
+  '';
 
   disabledTestPaths = [
+    # Exclude integration tests
+    "itests/"
     # Exclude live tests
     "tests/live_test.py"
-    "tests/test_xep_0454.py"
   ];
 
-  pythonImportsCheck = [
-    "slixmpp"
-  ];
+  pythonImportsCheck = [ "slixmpp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

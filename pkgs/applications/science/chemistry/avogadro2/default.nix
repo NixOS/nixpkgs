@@ -1,49 +1,64 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, avogadrolibs, molequeue, hdf5
-, openbabel, qttools, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  avogadrolibs,
+  hdf5,
+  jkqtplotter,
+  openbabel,
+  qt6,
+  mesa,
 }:
 
 let
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    rev = "3b8a86cc37e988b043d1503d2f11068389b0aca3";
-    sha256 = "9wLY7/EJyIZYnlUAMsViCwD5kGc1vCNbk8vUhb90LMQ=";
+    tag = "1.103.0";
+    hash = "sha256-gdr0Ed0UWjQB0LQq+6RvlAb8ZNFQAjV9mrgFLePG+CM=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "avogadro2";
-  version = "1.97.0";
+  version = "1.103.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
-    rev = version;
-    hash = "sha256-gZpMgFSPz70QNfd8gH5Jb9RTxQfQalWx33LkgXLEqOQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-nmvK3R966Xv2Xs5wXDh/8itIZLIRqbXHFe8dffFiI+s=";
   };
 
   postUnpack = ''
     cp -r ${avogadroI18N} avogadro-i18n
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs = [
     avogadrolibs
-    molequeue
     eigen
     hdf5
-    qttools
+    jkqtplotter
+    qt6.qttools
   ];
 
   propagatedBuildInputs = [ openbabel ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${openbabel}/bin" ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Molecule editor and visualizer";
-    maintainers = with maintainers; [ sheepforce ];
+    mainProgram = "avogadro2";
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadroapp";
-    platforms = platforms.mesaPlatforms;
-    license = licenses.bsd3;
+    inherit (mesa.meta) platforms;
+    license = lib.licenses.bsd3;
   };
-}
+})

@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "deluge";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli ];
@@ -26,11 +27,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           allow_remote = true;
           download_location = "/var/lib/deluge/my-download";
           daemon_port = 58846;
-          listen_ports = [ 6881 6889 ];
+          listen_ports = [
+            6881
+            6889
+          ];
         };
         web = {
           enable = true;
-          port =  3142;
+          port = 3142;
         };
         authFile = pkgs.writeText "deluge-auth" ''
           localclient:a7bef72a890:10
@@ -54,8 +58,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     declarative.wait_for_unit("deluged")
     declarative.wait_for_unit("delugeweb")
     declarative.wait_until_succeeds("curl --fail http://declarative:3142")
+
+    # deluge-console always exits with 1. https://dev.deluge-torrent.org/ticket/3291
     declarative.succeed(
-        "deluge-console 'connect 127.0.0.1:58846 andrew password; help' | grep -q 'rm.*Remove a torrent'"
+        "(deluge-console 'connect 127.0.0.1:58846 andrew password; help' || true) | grep -q 'rm.*Remove a torrent'"
     )
   '';
-})
+}

@@ -15,8 +15,10 @@ build_lib() {
     $lib_src \
     --out-dir target/lib \
     -L dependency=target/deps \
-    --cap-lints allow \
+    --cap-lints $CAP_LINTS \
     $LINK \
+    $EXTRA_LINK_ARGS \
+    $EXTRA_LINK_ARGS_LIB \
     $LIB_RUSTC_OPTS \
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
@@ -47,8 +49,10 @@ build_bin() {
     --out-dir target/bin \
     -L dependency=target/deps \
     $LINK \
+    $EXTRA_LINK_ARGS \
+    $EXTRA_LINK_ARGS_BINS \
     $EXTRA_LIB \
-    --cap-lints allow \
+    --cap-lints $CAP_LINTS \
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
     $EXTRA_FEATURES \
@@ -56,7 +60,11 @@ build_bin() {
     --color ${colors} \
 
   if [ "$crate_name_" != "$crate_name" ]; then
-    mv target/bin/$crate_name_ target/bin/$crate_name
+    if [ -f "target/bin/$crate_name_.wasm" ]; then
+      mv target/bin/$crate_name_.wasm target/bin/$crate_name.wasm
+    else
+      mv target/bin/$crate_name_ target/bin/$crate_name
+    fi
   fi
 }
 
@@ -74,7 +82,17 @@ build_bin_test() {
 build_bin_test_file() {
     local file="$1"
     local derived_crate_name="${file//\//_}"
+    # Make sure to strip the top level `tests` directory: see #204051. Note that
+    # a forward slash has now become an underscore due to the substitution
+    # above.
+    derived_crate_name=${derived_crate_name#"tests_"}
     derived_crate_name="${derived_crate_name%.rs}"
+    # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main — strip the
+    # trailing _main that the `/`→`_` substitution produced. Guarded so
+    # a flat-style tests/<name>_main.rs keeps its _main suffix.
+    if [[ "$file" == */main.rs ]]; then
+        derived_crate_name="${derived_crate_name%_main}"
+    fi
     build_bin_test "$derived_crate_name" "$file"
 }
 
@@ -94,7 +112,7 @@ setup_link_paths() {
        done
      fi
   done
-  echo "$EXTRA_LINK" | while read i; do
+  echo "$EXTRA_LINK_LIBS" | while read i; do
      if [[ ! -z "$i" ]]; then
        for library in $i; do
          echo "-l $library" >> target/link
@@ -105,6 +123,12 @@ setup_link_paths() {
   if [[ -e target/link ]]; then
      tr '\n' ' ' < target/link > target/link_
      LINK=$(cat target/link_)
+  fi
+
+  # Add "rustc-cdylib-link-arg" as linker arguments
+  # https://doc.rust-lang.org/cargo/reference/build-scripts.html#rustc-cdylib-link-arg
+  if [[ -n "$CRATE_TYPE_IS_CDYLIB" ]]; then
+    EXTRA_BUILD+=" $EXTRA_CDYLIB_LINK_ARGS"
   fi
 }
 

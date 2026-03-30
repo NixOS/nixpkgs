@@ -1,40 +1,44 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
-, setuptools
-, six
-, stone
-, mock
-, pytest-mock
-, pytestCheckHook
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  six,
+  stone,
+  mock,
+  pytest-mock,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.35.0";
-  format = "setuptools";
+  version = "12.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-  outputs = ["out" "doc"];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vrOqsRe2sBsL5CIfGCmoO3geE9G0FJl88HRcP6FzZe0=";
+    tag = "v${version}";
+    hash = "sha256-9Fsh06V226vIyJhrlLkh9Xr4UGoEIISnIFCtuKqI218=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
-    setuptools
     six
     stone
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-mock
     pytestCheckHook
@@ -42,15 +46,22 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner == 5.2.0'," ""
+      --replace-fail "'pytest-runner==5.2.0'," ""
   '';
 
-  doCheck = true;
+  pythonImportsCheck = [ "dropbox" ];
 
-  pythonImportsCheck = [
-    "dropbox"
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
   ];
-  nativeBuildInputs = [ sphinxHook ];
+
+  # Version 12.0.0 re-introduced Python 2 support and set some very restrictive version bounds
+  # https://github.com/dropbox/dropbox-sdk-python/commit/75596daf316b4a806f18057e2797a15bdf83cf6d
+  # This will be the last major version to support Python 2, so version bounds might be more reasonable again in the future.
+  pythonRelaxDeps = [
+    "stone"
+  ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
   disabledTests = [
@@ -72,12 +83,15 @@ buildPythonPackage rec {
     "test_as_user"
     "test_as_admin"
     "test_clone_when_team_linked"
+    "test_bad_pins"
+    "test_bad_pins_session"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

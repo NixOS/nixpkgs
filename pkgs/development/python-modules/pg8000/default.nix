@@ -1,54 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, passlib
-, python-dateutil
-, pythonOlder
-, scramp
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  passlib,
+  python-dateutil,
+  scramp,
+  hatchling,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.29.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.31.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yMlU08htf79ZG8g7ANbs4on64XbIM1oYKnVwaZ2iv9w=";
+    hash = "sha256-RuuwO+UrenfAPHJcedosooHW6PWVd8pmsXyQCWGMrng=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
+    hatchling
+    versioningit
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     passlib
     python-dateutil
     scramp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
-
-  postPatch = ''
-    sed '/^\[metadata\]/a version = ${version}' setup.cfg
-  '';
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pg8000"
-  ];
+  pythonImportsCheck = [ "pg8000" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python driver for PostgreSQL";
     homepage = "https://github.com/tlocke/pg8000";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ domenkozar ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/tlocke/pg8000#release-notes";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }
