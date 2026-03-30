@@ -13,6 +13,7 @@
   fontconfig,
   libglycin,
   glycin-loaders,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     glycin-loaders
   ];
+
+  passthru = {
+    tests.thumbnailers = callPackage ./tests.nix { };
+  };
 
   meta = {
     description = "Generate thumbnailer for video and audio files";
