@@ -1176,7 +1176,9 @@ in
   ombi = runTest ./ombi.nix;
   omnom = runTest ./omnom;
   oncall = runTest ./web-apps/oncall.nix;
-  onlyoffice = runTest ./onlyoffice.nix;
+  onlyoffice = runTest (import ./onlyoffice.nix { }) // {
+    passthru.override = args: runTest (import ./onlyoffice.nix args);
+  };
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
   openafs = runTest ./openafs.nix;
