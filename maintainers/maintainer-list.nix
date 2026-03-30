@@ -13744,6 +13744,12 @@
     githubId = 15855440;
     name = "Keanu Ashwell";
   };
+  kasifrasi = {
+    name = "Ardit Abrashi";
+    github = "Kasifrasi";
+    githubId = 73264146;
+    email = "ardit.abrashi03@gmail.com";
+  };
   katanallama = {
     github = "katanallama";
     githubId = 70604257;
