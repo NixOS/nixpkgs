@@ -1,5 +1,4 @@
 {
-  callPackage,
   fetchFromSourcehut,
   lib,
   pandoc,
@@ -9,6 +8,7 @@
   wayland-protocols,
   wayland-scanner,
   zig_0_14,
+  nix-update-script,
 }:
 
 let
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc # used for building documentation
   ];
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-EqfWZlTyV0zmw4HVBUmdN039DVz1nzptwBAAKjsJ2IQ=";
+  };
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Configurable layout generator for the River compositor";

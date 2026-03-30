@@ -1,5 +1,4 @@
 {
-  callPackage,
   fetchFromCodeberg,
   lib,
   libxcb,
@@ -36,13 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (lib.optionals x11Support [ libxcb ]);
 
-  postConfigure = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        inherit zig;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-xNDvB2+CAW9kDEKVqXoeOzOGOx3+KmQY385v67UHsuI=";
+  };
 
   zigBuildFlags = [
     "-Denable_x11_support=${lib.boolToString x11Support}"

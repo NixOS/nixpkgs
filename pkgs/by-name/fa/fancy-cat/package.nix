@@ -1,5 +1,4 @@
 {
-  callPackage,
   fetchFromGitHub,
   freetype,
   gumbo,
@@ -11,24 +10,25 @@
   mujs,
   mupdf,
   openjpeg,
+  pkg-config,
   stdenv,
-  zig_0_14,
+  zig_0_15,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";
-  version = "0.4.0";
+  version = "0.5.0-unstable-2025-11-17";
 
   src = fetchFromGitHub {
     owner = "freref";
     repo = "fancy-cat";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Wasxhsv4QhGscOEsGirabsq92963S8v1vOBWvAFuRoM=";
+    rev = "9094d1165bd5ee41f264553d9630c5db40b2fad9";
+    hash = "sha256-mCaeL0wZCfNpTT63nNGJz54LmvbcorUHCqBET8j3uNQ=";
+    fetchSubmodules = true;
   };
 
-  patches = [ ./0001-changes.patch ];
-
   nativeBuildInputs = [
-    zig_0_14
+    zig_0_15.hook
+    pkg-config
   ];
 
   zigBuildFlags = [ "--release=fast" ];
@@ -45,17 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
     libz
   ];
 
-  postConfigure = ''
-    ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-755vjT5pZGg4GXTHsDd6+VtAnbEhSPopKFVo0OcP/Kg=";
+  };
 
   meta = {
-    broken = true; # build phase wants to fetch from github
     description = "PDF viewer for terminals using the Kitty image protocol";
     homepage = "https://github.com/freref/fancy-cat";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ ciflire ];
     mainProgram = "fancy-cat";
-    inherit (zig_0_14.meta) platforms;
+    inherit (zig_0_15.meta) platforms;
   };
 })

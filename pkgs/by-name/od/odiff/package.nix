@@ -4,7 +4,6 @@
   installShellFiles,
   fetchFromGitHub,
   zig_0_15,
-  callPackage,
   versionCheckHook,
   nasm,
 }:
@@ -23,15 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gCF+CInczBJfDyZgxEQor5C/OSxKciCu9gbZanaE/nA=";
   };
 
-  postConfigure = ''
-    ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
-
   nativeBuildInputs = [
     installShellFiles
     zig
     nasm
   ];
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-gfZJhsd7p+CsYMN9Xepel4jxnDNhRwYRtkUAAf4TAnI=";
+  };
 
   doInstallCheck = true;
 

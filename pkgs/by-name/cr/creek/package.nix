@@ -1,5 +1,4 @@
 {
-  callPackage,
   lib,
   zig_0_14,
   stdenv,
@@ -10,6 +9,7 @@
   wayland,
   wayland-scanner,
   wayland-protocols,
+  nix-update-script,
 }:
 let
   zig = zig_0_14;
@@ -40,14 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-X4LNce0T5xFGBP+YVvV/tCtjzVaIqOodmQzB0UMZO0g=";
+  };
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ];
-
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/nmeum/creek";

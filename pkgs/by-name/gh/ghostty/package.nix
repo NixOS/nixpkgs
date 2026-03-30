@@ -3,7 +3,6 @@
   stdenv,
   blueprint-compiler,
   bzip2,
-  callPackage,
   fetchFromGitHub,
   fontconfig,
   freetype,
@@ -17,6 +16,7 @@
   libxml2,
   ncurses,
   nixosTests,
+  nix-update-script,
   oniguruma,
   pandoc,
   pkg-config,
@@ -48,8 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+ddMmUe9Jjkun4qqW8XFXVgwVZdVHsGWcQzndgIlBjQ=";
   };
 
-  deps = callPackage ./deps.nix {
-    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-dhWoZPysNVnjJi5PgP6CL5Lo0YrV1sRJmu57HocKghg= ";
   };
 
   strictDeps = true;
@@ -90,8 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
   dontSetZigDefaultFlags = true;
 
   zigCheckFlags = [
-    "--system"
-    "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
     "-Dcpu=baseline"
   ]
@@ -144,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/vim
     ln -s $vim $out/share/vim-plugins
 
-    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+    remove-references-to -t ${finalAttrs.zigDeps} $out/bin/.ghostty-wrapped
   '';
 
   nativeInstallCheckInputs = [
@@ -158,7 +157,9 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) allTerminfo;
       nixos = nixosTests.terminal-emulators.ghostty;
     };
-    updateScript = ./update.nu;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=v(.+)" ];
+    };
   };
 
   meta = {
