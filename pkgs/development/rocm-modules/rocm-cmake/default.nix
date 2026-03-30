@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -22,11 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ rocm-core ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "CMake modules for common build tasks for the ROCm stack";

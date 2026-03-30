@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -34,10 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocSPARSE";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-jmrX1a09DlQTkuXwkrInt9pKX5pk3oCO88S0pKXXhO0=";
+    sparseCheckout = [
+      "projects/rocsparse"
+      "shared"
+    ];
+    hash = "sha256-hkfBTcLig39al2w8zFTSQQnouaou9wlD6VlvIyFTNMg=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocsparse";
 
   nativeBuildInputs = [
     cmake
@@ -141,16 +146,12 @@ stdenv.mkDerivation (finalAttrs: {
       mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
     };
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
   };
 
   meta = {
     description = "ROCm SPARSE implementation";
-    homepage = "https://github.com/ROCm/rocSPARSE";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsparse";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

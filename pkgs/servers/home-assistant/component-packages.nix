@@ -2665,7 +2665,8 @@
       ];
     "hypontech" =
       ps: with ps; [
-      ]; # missing inputs: hyponcloud
+        hyponcloud
+      ];
     "ialarm" =
       ps: with ps; [
         pyialarm
@@ -4089,7 +4090,8 @@
       ];
     "nanoleaf" =
       ps: with ps; [
-      ]; # missing inputs: aionanoleaf2
+        aionanoleaf2
+      ];
     "nasweb" =
       ps: with ps; [
         webio-api
@@ -6527,8 +6529,9 @@
     "tuya" =
       ps: with ps; [
         ha-ffmpeg
+        tuya-device-handlers
         tuya-device-sharing-sdk
-      ]; # missing inputs: tuya-device-handlers
+      ];
     "twentemilieu" =
       ps: with ps; [
         twentemilieu
@@ -7636,6 +7639,7 @@
     "hvv_departures"
     "hydrawise"
     "hyperion"
+    "hypontech"
     "ialarm"
     "iaqualink"
     "ibeacon"
@@ -7832,6 +7836,7 @@
     "myuplink"
     "nam"
     "namecheapdns"
+    "nanoleaf"
     "nasweb"
     "neato"
     "nederlandse_spoorwegen"
@@ -8196,6 +8201,7 @@
     "trend"
     "triggercmd"
     "tts"
+    "tuya"
     "twentemilieu"
     "twilio"
     "twinkly"

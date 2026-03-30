@@ -21,7 +21,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "7.2.0";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -38,11 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "hipFFT";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-5zeL3o/Dfh0iyZOj5CHyfEQdFNehD2BLmllnZRdpsQI=";
+    sparseCheckout = [
+      "projects/hipfft"
+      "shared"
+    ];
     fetchSubmodules = true;
+    hash = "sha256-EtxZuxBPx6trTN9iC7uri2+UR0Eolp919Ry4U1PEqNA=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/hipfft";
 
   nativeBuildInputs = [
     clr
@@ -104,15 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "FFT marshalling library";
-    homepage = "https://github.com/ROCm/hipFFT";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipfft";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

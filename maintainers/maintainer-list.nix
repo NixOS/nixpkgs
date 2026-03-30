@@ -2809,7 +2809,7 @@
   };
   azban = {
     name = "azban";
-    matrix = "azban@matrix.org";
+    matrix = "@azban:matrix.org";
     github = "azban";
     githubId = 714931;
   };
