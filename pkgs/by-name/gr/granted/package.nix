@@ -88,7 +88,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Easiest way to access your cloud";
     homepage = "https://github.com/fwdcloudsec/granted";
-    changelog = "https://github.com/fwdcloudsec/granted/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/fwdcloudsec/granted/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jlbribeiro
