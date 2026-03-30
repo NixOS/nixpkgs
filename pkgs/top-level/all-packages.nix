@@ -2443,8 +2443,6 @@ with pkgs;
 
   gnused = callPackage ../tools/text/gnused { };
 
-  gnutar = callPackage ../tools/archivers/gnutar { };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates

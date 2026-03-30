@@ -477,7 +477,7 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/desktops/expidus              @RossComputerGuy
 
 # GNU Tar & Zip
-/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/by-name/gn/gnutar        @RossComputerGuy
 /pkgs/by-name/zi/zip           @RossComputerGuy
 
 # SELinux
