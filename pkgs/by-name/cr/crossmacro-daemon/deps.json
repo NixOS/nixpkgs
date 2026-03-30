@@ -1,8 +1,8 @@
 [
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "10.0.3",
-    "hash": "sha256-ShB94jEtsq5X5r6xDZQ+wotZYG3OPKOCHNGy4B7NVFs="
+    "version": "10.0.5",
+    "hash": "sha256-KrP+hE3gk7pATbJYZsJ1LHiXjzLA+ntHW7G/VGgHk2g="
   },
   {
     "pname": "Serilog",
@@ -41,7 +41,7 @@
   },
   {
     "pname": "Tmds.DBus",
-    "version": "0.90.3",
-    "hash": "sha256-/yBQpjsIqbY4JFBxxVKXPR2S/N1TMLG5QPXvScSCdEk="
+    "version": "0.91.1",
+    "hash": "sha256-MtHZFutIm0VKVkM/kRMucZIRL0jAEEPSj2D2MLxbAH4="
   }
 ]
