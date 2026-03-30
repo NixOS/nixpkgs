@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "sigtop";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EvdO7fGnNdu1/f61c4k2dpeMUqKaq9xKGgevAQ+f3q0=";
+    sha256 = "sha256-HxU0A5t+O3414dIK/dmL1tUz3M7qrN4nQpEQfSmzhmc=";
   };
 
-  vendorHash = "sha256-EAMnuDm3Lmw2i4sumgCTE58JCtMq9QeT6pjtmC/PKMA=";
+  vendorHash = "sha256-qUXevafaUDxtaj+4e7ZxrUtkkX0T2WANp+axXdtQr+A=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsecret ];
