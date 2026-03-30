@@ -18,7 +18,7 @@
   tesseract5,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -29,6 +29,8 @@
   lndir,
 }:
 let
+  pnpm = pnpm_10;
+
   version = "2.20.15";
 
   src = fetchFromGitHub {

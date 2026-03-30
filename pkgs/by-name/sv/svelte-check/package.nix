@@ -4,11 +4,14 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-check";
   version = "4.3.1";
@@ -29,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-3bsY31sp5hjTYhRiZniAMVb3kZ1EqOlbyOvljU8jHlY=";
   };

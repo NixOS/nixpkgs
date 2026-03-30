@@ -1,5 +1,6 @@
 {
   lib,
+  pnpm_10,
   stdenv,
   rustPlatform,
   cargo-tauri,
@@ -9,7 +10,6 @@
   systemdLibs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
   openssl,
   nix-update-script,
   pkg-config,
@@ -18,6 +18,9 @@
   autoPatchelfHook,
   fetchFromGitHub,
 }:
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool-gui";
   version = "1.0.3";
@@ -34,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     fetcherVersion = 2;
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     hash = "sha256-gamgu9koBf+JLDswi3eGXRZybF8UiYE8CoifpQCgLaI=";
   };
 

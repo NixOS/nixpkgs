@@ -6,12 +6,14 @@
   makeWrapper,
   net-tools,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   stdenvNoCC,
 }:
 
 let
+  pnpm = pnpm_10;
+
   version = "0.63.7";
 
   src = fetchFromGitHub {
@@ -27,6 +29,7 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/client";
       fetcherVersion = 3;
       hash = "sha256-1YZf32lDwX3e9EC0Uixyo+yDczfU4/ZSlG+jFZwf+38=";
