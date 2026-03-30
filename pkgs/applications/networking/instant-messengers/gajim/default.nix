@@ -148,6 +148,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       raskin
       hlad
+      vbgl
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
