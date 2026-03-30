@@ -87,6 +87,7 @@ in
               moreutils
               pnpm # from args
               pnpm-fixup-state-db'
+              writableTmpDirAsHomeHook
               yq
               zstd
             ]
@@ -98,13 +99,16 @@ in
             installPhase = ''
               runHook preInstall
 
+              versionAtLeast () {
+                  local cur_version=$1 min_version=$2
+                  printf "%s\0%s" "$min_version" "$cur_version" | sort -zVC
+              }
+
               lockfileVersion="$(yq -r .lockfileVersion pnpm-lock.yaml)"
               if [[ ''${lockfileVersion:0:1} -gt ${lib.versions.major pnpm.version} ]]; then
                 echo "ERROR: lockfileVersion $lockfileVersion in pnpm-lock.yaml is too new for the provided pnpm version ${lib.versions.major pnpm.version}!"
                 exit 1
               fi
-
-              export HOME=$(mktemp -d)
 
               # For fetcherVersion < 3, the pnpm store files are placed directly into $out.
               # For fetcherVersion >= 3, it is bundled into a compressed tarball within $out,
@@ -116,19 +120,32 @@ in
                 storePath=$out
               fi
 
-              # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
-              # any pnpm command would fail in that directory, the following disables this
-              pushd ..
-              pnpm config set manage-package-manager-versions false
+              pushd "$HOME"
+              pnpmVersion=$(pnpm --version)
+
+              if versionAtLeast "$pnpmVersion" "11"; then
+                # pnpm 11 uses a different mechanism to manage package manager versions
+                export npm_config_pm_on_fail=ignore
+                export pnpm_config_pm_on_fail=ignore
+
+                # Some packages produce platform dependent outputs. We do not want to cache those in the global store
+                export npm_config_side_effects_cache false
+                export pnpm_config_side_effects_cache false
+
+                export npm_config_update_notifier false
+                export pnpm_config_update_notifier false
+              else
+                pnpm config set manage-package-manager-versions false
+                pnpm config set side-effects-cache false
+                pnpm config set update-notifier false
+              fi
               popd
 
               pnpm config set store-dir $storePath
-              # Some packages produce platform dependent outputs. We do not want to cache those in the global store
-              pnpm config set side-effects-cache false
-              # As we pin pnpm versions, we don't really care about updates
-              pnpm config set update-notifier false
+
               # Run any additional pnpm configuration commands that users provide.
               ${prePnpmInstall}
+
               # pnpm is going to warn us about using --force
               # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
               pnpm install \
