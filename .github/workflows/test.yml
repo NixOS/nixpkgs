@@ -62,6 +62,7 @@ jobs:
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
               'ci/github-script/supportedSystems.js',
+              'ci/pinned.json',
               'ci/supportedBranches.js',
             ].includes(file))) core.setOutput('merge-group', true)
 
@@ -85,6 +86,7 @@ jobs:
               'ci/github-script/reviews.js',
               'ci/github-script/supportedSystems.js',
               'ci/github-script/withRateLimit.js',
+              'ci/pinned.json',
               'ci/supportedBranches.js',
             ].includes(file))) core.setOutput('pr', true)
 
