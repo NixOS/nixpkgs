@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectx";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = "kubectx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rbfdqksNqWv2evrCl+2jMft2wBo7iWJoLvCABl1MUgk=";
+    hash = "sha256-/5VJ7RMq1kt+z9V+UymJ1SKbaFF+E9eHxYzkS37siG8=";
   };
 
   vendorHash = "sha256-6bzTLnT69IdLwgbz/zZhjQYm8WpimJlItutW6fvwACs=";
