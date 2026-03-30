@@ -4443,8 +4443,6 @@ self: super: with self; {
       { };
 
   # LTS in extended support phase
-  django_4 = callPackage ../development/python-modules/django/4.nix { };
-
   django_5 = callPackage ../development/python-modules/django/5.nix { };
 
   django_6 = callPackage ../development/python-modules/django/6.nix { };
