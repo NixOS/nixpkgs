@@ -1,7 +1,7 @@
-diff --git a/flang/CMakeLists.txt b/flang/CMakeLists.txt
+diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 070c39eb6e9a..168c97524943 100644
---- a/flang/CMakeLists.txt
-+++ b/flang/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
 @@ -1,6 +1,22 @@
  cmake_minimum_required(VERSION 3.20.0)
  set(LLVM_SUBPROJECT_TITLE "Flang")
