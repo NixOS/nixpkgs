@@ -10,17 +10,21 @@
 
 buildPythonPackage rec {
   pname = "victron-ble-ha-parser";
-  version = "0.4.10";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rajlaud";
     repo = "victron-ble-ha-parser";
     tag = "v${version}";
-    hash = "sha256-mvQrY1f3Da621yMgTzxduZQ0pxCJN6j7+6pgFwgl4Rs=";
+    hash = "sha256-CwixmpjLxZX858u/JRt6UtJQNh8wFAZd9g/xgqZzrEs=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "victron-ble"
+  ];
 
   dependencies = [
     bluetooth-sensor-state-data
