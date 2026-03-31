@@ -80,6 +80,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sympy
   ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
     rm -rf freud
   '';
