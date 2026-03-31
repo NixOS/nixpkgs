@@ -240,46 +240,97 @@ stdenv.mkDerivation rec {
               [[ -f "$f" ]] || return 0
               file "$f" | grep -q "Mach-O" || return 0  # spellok
 
+              # QGIS core libraries
+              local qgis_libs=(core gui analysis 3d native app python)
+              for lib in "''${qgis_libs[@]}"; do
+                install_name_tool \
+                  -change "$out/lib/libqgis_$lib.${version}.dylib" \
+                          "$FRAMEWORKS/libqgis_$lib.${version}.dylib" \
+                  "$f" 2>/dev/null || true
+              done
+
+              # QGIS frameworks
+              local qgis_frameworks=(core gui analysis 3d native)
+              for fw in "''${qgis_frameworks[@]}"; do
+                install_name_tool \
+                  -change "@loader_path/../../../qgis_$fw.framework/qgis_$fw" \
+                          "$FRAMEWORKS/qgis_$fw.framework/Versions/$SHORT_VERSION/qgis_$fw" \
+                  "$f" 2>/dev/null || true
+              done
+
+              # External libraries - qscintilla
               install_name_tool \
-                -change "$out/lib/libqgis_core.${version}.dylib" "$FRAMEWORKS/libqgis_core.${version}.dylib" \
-                -change "$out/lib/libqgis_gui.${version}.dylib" "$FRAMEWORKS/libqgis_gui.${version}.dylib" \
-                -change "$out/lib/libqgis_analysis.${version}.dylib" "$FRAMEWORKS/libqgis_analysis.${version}.dylib" \
-                -change "$out/lib/libqgis_3d.${version}.dylib" "$FRAMEWORKS/libqgis_3d.${version}.dylib" \
-                -change "$out/lib/libqgis_native.${version}.dylib" "$FRAMEWORKS/libqgis_native.${version}.dylib" \
-                -change "$out/lib/libqgis_app.${version}.dylib" "$FRAMEWORKS/libqgis_app.${version}.dylib" \
-                -change "$out/lib/libqgispython.${version}.dylib" "$FRAMEWORKS/libqgispython.${version}.dylib" \
-                -change "qwt.framework/Versions/6/qwt" "${qwt}/lib/qwt.framework/Versions/6/qwt" \
-                -change "@loader_path/../lib/libqscintilla2_qt6.dylib" "${qscintilla}/lib/libqscintilla2_qt6.dylib" \
-                -change "@loader_path/../lib/libqt6keychain.dylib" "${qtkeychain}/lib/libqt6keychain.dylib" \
-                -change "@loader_path/../lib/libqwt.dylib" "${qwt}/lib/libqwt.dylib" \
-                -change "@loader_path/../../Frameworks/qca-qt6.framework/qca-qt6" "${qca}/lib/qca-qt6.framework/qca-qt6" \
-                -change "@loader_path/../../../qca-qt6.framework/qca-qt6" "${qca}/lib/qca-qt6.framework/qca-qt6" \
-                -change "@loader_path/../../../../MacOS/lib/libqscintilla2_qt6.dylib" "${qscintilla}/lib/libqscintilla2_qt6.dylib" \
-                -change "@loader_path/../../../../MacOS/lib/libqt6keychain.dylib" "${qtkeychain}/lib/libqt6keychain.dylib" \
-                -change "@loader_path/../../../../MacOS/lib/libqwt.dylib" "${qwt}/lib/libqwt.dylib" \
-                -change "@executable_path/lib/libqwt.dylib" "${qwt}/lib/libqwt.dylib" \
-                -change "@executable_path/lib/libqscintilla2_qt6.dylib" "${qscintilla}/lib/libqscintilla2_qt6.dylib" \
-                -change "@executable_path/lib/libqt6keychain.dylib" "${qtkeychain}/lib/libqt6keychain.dylib" \
-                -change "@executable_path/../Frameworks/qca-qt6.framework/qca-qt6" "${qca}/lib/qca-qt6.framework/qca-qt6" \
-                -change "@loader_path/../../../qgis_core.framework/qgis_core" "$FRAMEWORKS/qgis_core.framework/Versions/$SHORT_VERSION/qgis_core" \
-                -change "@loader_path/../../../qgis_gui.framework/qgis_gui" "$FRAMEWORKS/qgis_gui.framework/Versions/$SHORT_VERSION/qgis_gui" \
-                -change "@loader_path/../../../qgis_analysis.framework/qgis_analysis" "$FRAMEWORKS/qgis_analysis.framework/Versions/$SHORT_VERSION/qgis_analysis" \
-                -change "@loader_path/../../../qgis_3d.framework/qgis_3d" "$FRAMEWORKS/qgis_3d.framework/Versions/$SHORT_VERSION/qgis_3d" \
-                -change "@loader_path/../../../qgis_native.framework/qgis_native" "$FRAMEWORKS/qgis_native.framework/Versions/$SHORT_VERSION/qgis_native" \
+                -change "@loader_path/../lib/libqscintilla2_qt6.dylib" \
+                        "${qscintilla}/lib/libqscintilla2_qt6.dylib" \
                 "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "@loader_path/../../../../MacOS/lib/libqscintilla2_qt6.dylib" \
+                        "${qscintilla}/lib/libqscintilla2_qt6.dylib" \
+                "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "@executable_path/lib/libqscintilla2_qt6.dylib" \
+                        "${qscintilla}/lib/libqscintilla2_qt6.dylib" \
+                "$f" 2>/dev/null || true
+
+              # External libraries - qtkeychain
+              install_name_tool \
+                -change "@loader_path/../lib/libqt6keychain.dylib" \
+                        "${qtkeychain}/lib/libqt6keychain.dylib" \
+                "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "@loader_path/../../../../MacOS/lib/libqt6keychain.dylib" \
+                        "${qtkeychain}/lib/libqt6keychain.dylib" \
+                "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "@executable_path/lib/libqt6keychain.dylib" \
+                        "${qtkeychain}/lib/libqt6keychain.dylib" \
+                "$f" 2>/dev/null || true
+
+              # External libraries - qwt
+              install_name_tool \
+                -change "@loader_path/../lib/libqwt.dylib" \
+                        "${qwt}/lib/libqwt.dylib" \
+                "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "@loader_path/../../../../MacOS/lib/libqwt.dylib" \
+                        "${qwt}/lib/libqwt.dylib" \
+                "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "@executable_path/lib/libqwt.dylib" \
+                        "${qwt}/lib/libqwt.dylib" \
+                "$f" 2>/dev/null || true
+              install_name_tool \
+                -change "qwt.framework/Versions/6/qwt" \
+                        "${qwt}/lib/qwt.framework/Versions/6/qwt" \
+                "$f" 2>/dev/null || true
+
+              # QCA framework paths
+              local qca_paths=(
+                "@loader_path/../../Frameworks/qca-qt6.framework/qca-qt6"
+                "@loader_path/../../../qca-qt6.framework/qca-qt6"
+                "@executable_path/../Frameworks/qca-qt6.framework/qca-qt6"
+              )
+              for qca_path in "''${qca_paths[@]}"; do
+                install_name_tool \
+                  -change "$qca_path" "${qca}/lib/qca-qt6.framework/qca-qt6" \
+                  "$f" 2>/dev/null || true
+              done
             }
 
             fix_binary "$BUNDLE/Contents/MacOS/qgis"
             for bin in "$BUNDLE/Contents/MacOS"/*; do fix_binary "$bin"; done
             for lib in "$FRAMEWORKS"/*.dylib; do fix_binary "$lib"; done
+
             if [[ -d "$BUNDLE/Contents/MacOS/lib" ]]; then
               for lib in "$BUNDLE/Contents/MacOS/lib"/*.dylib; do fix_binary "$lib"; done
             fi
+
             for fw in qgis_core qgis_gui qgis_analysis qgis_3d qgis_native; do
               fix_binary "$FRAMEWORKS/$fw.framework/Versions/$SHORT_VERSION/$fw"
               [[ -f "$FRAMEWORKS/$fw.framework/$fw" && ! -L "$FRAMEWORKS/$fw.framework/$fw" ]] && \
                 fix_binary "$FRAMEWORKS/$fw.framework/$fw"
             done
+
             for plugin in "$BUNDLE/Contents/PlugIns/qgis"/*.so; do fix_binary "$plugin"; done
 
             # Fix Python binding .so files in Frameworks/qgis
@@ -287,9 +338,11 @@ stdenv.mkDerivation rec {
 
             ${lib.optionalString withGrass ''
               fix_binary "$FRAMEWORKS/qgisgrass8.framework/Versions/$SHORT_VERSION/qgisgrass8"
+
               install_name_tool \
                 -change "@loader_path/../../../qgisgrass8.framework/qgisgrass8" "$FRAMEWORKS/qgisgrass8.framework/Versions/$SHORT_VERSION/qgisgrass8" \
                 "$BUNDLE/Contents/MacOS/QGIS" 2>/dev/null || true
+
               for lib in "$BUNDLE/Contents/MacOS/lib"/*.dylib; do
                 install_name_tool \
                   -change "@loader_path/../../../qgisgrass8.framework/qgisgrass8" "$FRAMEWORKS/qgisgrass8.framework/Versions/$SHORT_VERSION/qgisgrass8" \
