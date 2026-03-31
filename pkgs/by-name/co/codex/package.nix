@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   cargo,
+  bubblewrap,
   clang,
   cmake,
   gitMinimal,
@@ -65,6 +66,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ]
     );
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $(grep -rlF "/usr/bin/bwrap" .) \
+      --replace-fail "/usr/bin/bwrap" "${lib.getExe bubblewrap}"
+  '';
 
   # NOTE: part of the test suite requires access to networking, local shells,
   # apple system configuration, etc. since this is a very fast moving target
