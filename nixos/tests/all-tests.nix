@@ -681,10 +681,10 @@ in
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
   grub = runTest ./grub.nix;
+  gs1200-exporter = handleTest ./gs1200-exporter.nix { };
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
-  gs1200-exporter = handleTest ./gs1200-exporter.nix { };
   h2o = import ./web-servers/h2o {
     inherit runTest;
     inherit (pkgs) lib;
