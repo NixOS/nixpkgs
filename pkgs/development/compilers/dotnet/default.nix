@@ -187,7 +187,7 @@ pkgs
   sdk_8_0-source = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0-source = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
   sdk_10_0-source =
-    if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
+    if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10_0_2xx.sdk else pkgs.sdk_10_0_2xx-bin;
   sdk_11_0-source =
     if !pkgs.dotnet_11.vmr.meta.broken then pkgs.dotnet_11.sdk else pkgs.sdk_11_0_1xx-bin;
   runtime_8_0 = sdk_8_0.runtime;
