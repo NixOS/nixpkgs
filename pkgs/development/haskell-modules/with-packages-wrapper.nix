@@ -63,9 +63,10 @@ let
   docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths = lib.concatLists (
-    map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
-      lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages)
-    )
+    map (
+      pkg:
+      [ (lib.getOutput "dev" pkg) ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]
+    ) (lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages))
   );
   hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
   # Clang is needed on Darwin for -fllvm to work.
