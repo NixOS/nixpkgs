@@ -6,7 +6,7 @@
   pymupdf,
   numpy,
   ipython,
-  texlive,
+  texliveSmall,
 }:
 
 buildPythonPackage {
@@ -31,7 +31,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tikz" ];
 
-  nativeCheckInputs = [ texlive.combined.scheme-small ];
+  nativeCheckInputs = [ texliveSmall ];
   checkPhase = ''
     runHook preCheck
     python -c 'if 1:

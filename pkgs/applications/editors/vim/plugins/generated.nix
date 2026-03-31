@@ -22902,6 +22902,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vivify-vim = buildVimPlugin {
+    pname = "vivify.vim";
+    version = "0-unstable-2025-08-08";
+    src = fetchFromGitHub {
+      owner = "jannis-baum";
+      repo = "vivify.vim";
+      rev = "99a1539a440633ee7a164e094a736c04acc2335d";
+      hash = "sha256-tF77R2WHSc+YXltWkntNFC8mouaEYn640PqCfis0zW0=";
+    };
+    meta.homepage = "https://github.com/jannis-baum/vivify.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vs-tasks-nvim = buildVimPlugin {
     pname = "vs-tasks.nvim";
     version = "0-unstable-2025-10-27";
@@ -23344,19 +23357,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  yanky-nvim = buildVimPlugin {
-    pname = "yanky.nvim";
-    version = "2.0.0-unstable-2026-03-12";
-    src = fetchFromGitHub {
-      owner = "gbprod";
-      repo = "yanky.nvim";
-      rev = "784188e0a7363e762e53140f39124d786aec0832";
-      hash = "sha256-oGiXbSXo48NbaImzIKquEvplPCotLeIs4scvbhO6wyA=";
-    };
-    meta.homepage = "https://github.com/gbprod/yanky.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   yank-path-nvim = buildVimPlugin {
     pname = "yank-path.nvim";
     version = "0-unstable-2025-12-11";
@@ -23367,6 +23367,19 @@ final: prev: {
       hash = "sha256-z6USTspCiWU6UEP9TyACvzlb4MGEadBKUfxN2vJyeV0=";
     };
     meta.homepage = "https://github.com/ywpkwon/yank-path.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  yanky-nvim = buildVimPlugin {
+    pname = "yanky.nvim";
+    version = "2.0.0-unstable-2026-03-12";
+    src = fetchFromGitHub {
+      owner = "gbprod";
+      repo = "yanky.nvim";
+      rev = "784188e0a7363e762e53140f39124d786aec0832";
+      hash = "sha256-oGiXbSXo48NbaImzIKquEvplPCotLeIs4scvbhO6wyA=";
+    };
+    meta.homepage = "https://github.com/gbprod/yanky.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

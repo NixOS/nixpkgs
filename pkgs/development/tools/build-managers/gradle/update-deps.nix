@@ -101,6 +101,12 @@ lib.makeOverridable (
           "${dirOf pkg.meta.position}/${data}"
       }"
 
+      # Check that the parent directory exists before running more costly tasks
+      if [ ! -d $(dirname "$outPath") ]; then
+        echo "Directory \"$(dirname "$outPath")\" does not exist, aborting as the next steps would fail anyway"
+        exit 1
+      fi
+
       pushd "$(mktemp -d)" >/dev/null
       MITM_CACHE_DIR="$PWD"
       trap "rm -rf '$MITM_CACHE_DIR'" SIGINT SIGTERM ERR EXIT
