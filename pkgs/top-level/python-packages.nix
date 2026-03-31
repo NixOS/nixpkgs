@@ -14997,6 +14997,8 @@ self: super: with self; {
 
   pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
 
+  pysindy = callPackage ../development/python-modules/pysindy { };
+
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
