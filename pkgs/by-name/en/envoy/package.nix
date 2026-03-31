@@ -49,7 +49,7 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-X77IM7D6dijR3jJp1QIHZUXc5Vko0jaQAOKx+EBW97Q=";
+        x86_64-linux = lib.fakeHash;
         aarch64-linux = "sha256-59sY+bpGsKMDthcj+jw00WhN+vsP5MOTXy0m8HJxebM=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
@@ -91,6 +91,7 @@ buildBazelPackage rec {
   postPatch = ''
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
+    sed -i 's/HOST_CPUS-1/1/' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
 
     mkdir -p bazel/nix/
@@ -210,6 +211,11 @@ buildBazelPackage rec {
         fi
       done
       shopt -u nullglob
+
+      # Keep the extracted external workspaces, but drop the repository cache itself.
+      # Bazel's cache metadata is the most likely source of the drifting fixed-output hash.
+      rm -rf $bazelOut/external/repository_cache
+      mkdir -p $bazelOut/external/repository_cache
 
       # CMake 4.1 drops compatibility with <3.5; bump libevent's floor to avoid configure failure.
       sed -i 's/cmake_minimum_required(VERSION 3\\.1.2 FATAL_ERROR)/cmake_minimum_required(VERSION 3.5 FATAL_ERROR)/' \
