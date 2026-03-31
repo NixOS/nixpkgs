@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://sequoia-pgp.gitlab.io/sequoia-git";
     license = lib.licenses.lgpl2Plus;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "sq-git";
   };
 }
