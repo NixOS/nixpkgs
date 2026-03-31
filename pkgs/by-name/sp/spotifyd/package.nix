@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   config,
   alsa-lib,
   cmake,
@@ -14,11 +14,11 @@
   portaudio,
   rustPlatform,
   testers,
-  withALSA ? stdenv.hostPlatform.isLinux,
-  withJack ? stdenv.hostPlatform.isLinux,
-  withMpris ? stdenv.hostPlatform.isLinux,
-  withPortAudio ? stdenv.hostPlatform.isDarwin,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  withALSA ? stdenvNoCC.hostPlatform.isLinux,
+  withJack ? stdenvNoCC.hostPlatform.isLinux,
+  withMpris ? stdenvNoCC.hostPlatform.isLinux,
+  withPortAudio ? stdenvNoCC.hostPlatform.isDarwin,
+  withPulseAudio ? config.pulseaudio or stdenvNoCC.hostPlatform.isLinux,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,9 +41,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    lib.optionals stdenvNoCC.hostPlatform.isLinux [ openssl ]
     # The `dbus_mpris` feature works on other platforms, but only requires `dbus` on Linux
-    ++ lib.optional (withMpris && stdenv.hostPlatform.isLinux) dbus
+    ++ lib.optional (withMpris && stdenvNoCC.hostPlatform.isLinux) dbus
     ++ lib.optional (withALSA || withJack) alsa-lib
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withPulseAudio "pulseaudio_backend";
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  checkFlags = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     # `assertion failed: shell.is_some()`
     # Internally it's trying to query the user's shell through `dscl`. This is bad
     # https://github.com/Spotifyd/spotifyd/blob/8777c67988508d3623d3f6b81c9379fb071ac7dd/src/utils.rs#L45-L47
