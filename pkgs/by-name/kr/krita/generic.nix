@@ -39,7 +39,6 @@
   xsimd,
   poppler,
   curl,
-  ilmbase,
   immer,
   kseexpr,
   lager,
@@ -118,7 +117,6 @@ mkDerivation rec {
     xsimd
     poppler
     curl
-    ilmbase
     immer
     kseexpr
     libmypaint
