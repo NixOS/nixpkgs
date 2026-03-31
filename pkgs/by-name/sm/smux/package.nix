@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
@@ -27,14 +28,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/smux completions zsh --dir completions
     installShellCompletion --zsh completions/_smux
 
     $out/bin/smux man --dir man
     installManPage man/*.1
     installManPage man/*.5
+  '';
 
+  postFixup = ''
     wrapProgram $out/bin/smux \
       --prefix PATH : ${
         lib.makeBinPath [
