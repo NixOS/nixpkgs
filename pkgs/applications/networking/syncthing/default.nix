@@ -8,6 +8,7 @@
   nixosTests,
   autoSignDarwinBinariesHook,
   nix-update-script,
+  fetchpatch,
 }:
 
 let
@@ -28,7 +29,7 @@ let
         hash = "sha256-bWClKODxzcSbKiKFcgDKbRGih8KaSeVpltiFDAE8sHM=";
       };
 
-      vendorHash = "sha256-Xiod2Bd+uXcOpZ0rt8my8jkNdkdUhuoz5fcce+6JMXY=";
+      vendorHash = "sha256-QTnVVsBDqnpup2PBxTMYh0UkhZ7e2Nh/lF83JU5h6K8=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -56,6 +57,20 @@ let
         ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
       '';
+
+      # https://github.com/quic-go/quic-go/pull/5462
+      modPostBuild =
+        let
+          patch = fetchpatch {
+            url = "https://github.com/quic-go/quic-go/commit/8bfbd717c8379913493f3d6a80a09eb901420030.patch";
+            hash = "sha256-ULNJ7j9/VKHpZK7m2O6jTeXk+xvpED03TE0xPdlAQZ0=";
+            stripLen = 1;
+            extraPrefix = "vendor/github.com/quic-go/quic-go/";
+          };
+        in
+        ''
+          patch -p1 <${patch}
+        '';
 
       installPhase = ''
         runHook preInstall
