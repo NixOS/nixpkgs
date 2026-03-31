@@ -11,13 +11,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "solidtime-desktop";
-  version = "0.0.42";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "solidtime-io";
     repo = "solidtime-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ve8hT+Gja2HawJ9G6aELxserOfTK7dRNnfdHpY3WUDU=";
+    hash = "sha256-p4QAhmHjOz7okX8lY9HQ7jx3AETYoBILfNrOdwnIXKo=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-y4bO2Rcr+JXkS+q1EbSjg3nNd3GCrB8A+t9ePJsE2L4=";
+  npmDepsHash = "sha256-/zm876lpwCSronLBIuRJUieZEyJSRFSzFK5VjFQB9w0=";
 
   makeCacheWritable = true;
 
