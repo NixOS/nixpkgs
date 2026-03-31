@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "valdi";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "Snapchat";
     repo = "Valdi";
-    rev = "57fba0055df5351fa5019168fa164b6e80ed7816";
-    hash = "sha256-vduG/WPhh6zRC5JACav2FPQQZHhdFHfo3wsnncgfFvE=";
+    rev = "e5bec35276f9aa5727384252fdeefff98dd53d6c";
+    hash = "sha256-cXLSZK7duxdgkAnDDJRDgEVdiz6dt08A7KvrmBfX37c=";
   };
 
   passthru.updateScript = ./update.sh;

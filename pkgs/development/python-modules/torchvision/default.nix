@@ -63,18 +63,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
   }
   // lib.optionalAttrs cudaSupport {
-    # At of 2026-03-27, the default `cudaPackages` version is 12.9.1
-    # According to Nvidia, it should support GCC versions up to 14.x:
-    # -> https://docs.nvidia.com/cuda/archive/12.9.1/cuda-installation-guide-linux/index.html#host-compiler-support-policy
-    # However, PyTorch's *strict* upper bound is 14.0:
-    # -> https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L75
-    # Hence, the build fails with:
-    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
-    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
-    #   (>=6.0.0, <14.0).
-    # Hence, we disable the version check to silence the error:
-    TORCH_DONT_CHECK_COMPILER_ABI = 1;
-
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
     FORCE_CUDA = 1;
   };

@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "Tautulli";
-  version = "2.16.1";
+  version = "2.17.0";
   pyproject = false;
 
   pythonPath = [ python3Packages.setuptools ];
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Tautulli";
     repo = "Tautulli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Zct7EhnU5LROO23Joz6OxQTtC9uGZhtceSG+aX6MI2c=";
+    sha256 = "sha256-1NslfaQLQvYM0WeAxzAmZVHTgVbFB2XK/8T+EoCMK1k=";
   };
 
   installPhase = ''

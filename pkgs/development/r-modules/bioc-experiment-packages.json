@@ -113,8 +113,8 @@
     },
     "BloodCancerMultiOmics2017": {
       "name": "BloodCancerMultiOmics2017",
-      "version": "1.30.0",
-      "sha256": "095vzj9g8sj3zlkvc44938i6xi3c7q95080z9ygknmqczczr11b4",
+      "version": "1.30.1",
+      "sha256": "1dq7d4k8zwbgk6nyqfvicqy33f86rkygmhn3jjrv25nfasj9jifr",
       "depends": ["Biobase", "DESeq2", "RColorBrewer", "SummarizedExperiment", "beeswarm", "devtools", "dplyr", "ggdendro", "ggplot2", "glmnet", "gtable", "ipflasso", "reshape2", "scales", "survival", "tibble"]
     },
     "CCl4": {
@@ -2489,8 +2489,8 @@
     },
     "systemPipeRdata": {
       "name": "systemPipeRdata",
-      "version": "2.14.4",
-      "sha256": "1jl65qpwp4mk3zc10w28ksaivki8cw06mlx8bfbkwqsd6canwn3a",
+      "version": "2.14.6",
+      "sha256": "1j7h40hcm0gyahmlilvlb83ddmwrarqn319qwpnrgwcji8fm92jd",
       "depends": ["BiocGenerics", "Biostrings", "jsonlite", "remotes"]
     },
     "tartare": {

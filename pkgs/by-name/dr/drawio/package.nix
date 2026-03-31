@@ -2,27 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchNpmDeps,
   makeDesktopItem,
   copyDesktopItems,
-  fixup-yarn-lock,
+  npm-lockfile-fix,
   makeWrapper,
   darwin,
   nodejs,
-  yarn,
   electron,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "29.0.3";
+  version = "29.6.6";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YVkGt096Vy1s/ZjvuWUWVE2eiaI7Wg/YdWSueTsKzEg=";
+    hash = "sha256-g2p6PEKWynS/+yvy6TUNrJJi4fQjBMq4koihSeVfxU4=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -31,16 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
   '';
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-/CzHvGUKhB2RBaz+LVXaHr5q6KLkQR0asFZRruOUmqU=";
+  offlineCache = fetchNpmDeps {
+    src = finalAttrs.src;
+    hash = "sha256-53QqN5FBn7K13BjLoM4B6EgMsxPRNNXpQ0ecXjxpGpE=";
   };
 
   nativeBuildInputs = [
-    fixup-yarn-lock
+    npm-lockfile-fix
     makeWrapper
     nodejs
-    yarn
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
@@ -55,12 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preConfigure
 
     export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-    # Ensure that the node_modules folder is created by yarn install.
-    # See https://github.com/yarnpkg/yarn/issues/5500#issuecomment-1221456246
-    echo "nodeLinker: node-modules" > .yarnrc.yml
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    npm config set cache "$offlineCache"
+    npm-lockfile-fix package-lock.json
+    npm ci --offline --ignore-scripts --no-audit --no-fund
     patchShebangs node_modules/
 
     runHook postConfigure
@@ -77,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   ''
   + ''
-    yarn --offline run electron-builder --dir \
+    npm exec electron-builder -- \
+      --dir \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json --config.mac.identity=null"} \
       -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}

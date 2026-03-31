@@ -1902,8 +1902,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.8";
-          hash = "sha256-rhtf1JJMi8eGYmuKFUA1TAnf2gdMbckQ8Vke2owMoyI=";
+          version = "1.18.11";
+          hash = "sha256-Jd0J7/8amQ1pLjvk+YXp6GbSrRgWhyKBw1TKr+h4OrI=";
         };
 
         meta = {
@@ -2293,8 +2293,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.62";
-          hash = "sha256-Urfa4XligTfFk6+GIuGabm5EFeQe+gRhdtb8IoXz+Ak=";
+          version = "1.1.65";
+          hash = "sha256-0DUKDBhabh8vOgPw5p6ZFavRLIuy4vPgOfAa6fLtJRA=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -4008,8 +4008,8 @@ let
         mktplcRef = {
           name = "partial-diff";
           publisher = "ryu1kn";
-          version = "1.4.3";
-          sha256 = "0x3lkvna4dagr7s99yykji3x517cxk5kp7ydmqa6jb4bzzsv1s6h";
+          version = "1.4.4";
+          sha256 = "sha256-T+C/C2DBh05mgoFUdnSGcmhf9JXfMYc/JvG0aX0vEoU=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4458,8 +4458,8 @@ let
         mktplcRef = {
           name = "vscode-stylelint";
           publisher = "stylelint";
-          version = "2.1.0";
-          hash = "sha256-cL86Gv2HAtvqNd+2vJPuKAgKVrp5pg6IECFm1Di8Eqk=";
+          version = "2.2.0";
+          hash = "sha256-N23nzAI0cBNeX7txsgxKXhSUrcOGM9rjnMIJNK4OYFY=";
         };
         meta = {
           description = "Official Stylelint extension for Visual Studio Code";

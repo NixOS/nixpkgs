@@ -414,6 +414,8 @@ self: super: with self; {
 
   aionanoleaf = callPackage ../development/python-modules/aionanoleaf { };
 
+  aionanoleaf2 = callPackage ../development/python-modules/aionanoleaf2 { };
+
   aionotion = callPackage ../development/python-modules/aionotion { };
 
   aiontfy = callPackage ../development/python-modules/aiontfy { };
@@ -4138,8 +4140,6 @@ self: super: with self; {
 
   django-crossdomainmedia = callPackage ../development/python-modules/django-crossdomainmedia { };
 
-  django-cryptography = callPackage ../development/python-modules/django-cryptography { };
-
   django-csp = callPackage ../development/python-modules/django-csp { };
 
   django-cte = callPackage ../development/python-modules/django-cte { };
@@ -4378,6 +4378,8 @@ self: super: with self; {
 
   django-sql-utils = callPackage ../development/python-modules/django-sql-utils { };
 
+  django-sslserver = callPackage ../development/python-modules/django-sslserver { };
+
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
   django-storages = callPackage ../development/python-modules/django-storages { };
@@ -4434,9 +4436,11 @@ self: super: with self; {
 
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
 
-  # LTS in extended support phase
-  django_4 = callPackage ../development/python-modules/django/4.nix { };
+  django-xforwardedfor-middleware =
+    callPackage ../development/python-modules/django-xforwardedfor-middleware
+      { };
 
+  # LTS in extended support phase
   django_5 = callPackage ../development/python-modules/django/5.nix { };
 
   django_6 = callPackage ../development/python-modules/django/6.nix { };
@@ -5876,6 +5880,8 @@ self: super: with self; {
     inherit (pkgs) foundationdb;
   };
 
+  foundrytools = callPackage ../development/python-modules/foundrytools { };
+
   fountains = callPackage ../development/python-modules/fountains { };
 
   foxdot = callPackage ../development/python-modules/foxdot { };
@@ -6591,6 +6597,8 @@ self: super: with self; {
 
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
+  gpiod = callPackage ../development/python-modules/gpiod { inherit (pkgs) libgpiod; };
+
   gpiodevice = callPackage ../development/python-modules/gpiodevice { };
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
@@ -7291,6 +7299,8 @@ self: super: with self; {
   hyperpyyaml = callPackage ../development/python-modules/hyperpyyaml { };
 
   hyperscan = callPackage ../development/python-modules/hyperscan { };
+
+  hyponcloud = callPackage ../development/python-modules/hyponcloud { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
@@ -8691,8 +8701,6 @@ self: super: with self; {
 
   libfive = toPythonModule (pkgs.libfive.override { python3 = python; });
 
-  libgpiod = callPackage ../development/python-modules/libgpiod { inherit (pkgs) libgpiod; };
-
   libgravatar = callPackage ../development/python-modules/libgravatar { };
 
   libiio =
@@ -9665,6 +9673,8 @@ self: super: with self; {
   mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
 
   mediapy = callPackage ../development/python-modules/mediapy { };
+
+  mediawiki-langcodes = callPackage ../development/python-modules/mediawiki-langcodes { };
 
   medpy = callPackage ../development/python-modules/medpy { };
 
@@ -14757,8 +14767,6 @@ self: super: with self; {
 
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
 
-  pyreaderwriterlock = callPackage ../development/python-modules/pyreaderwriterlock { };
-
   pyreadstat = callPackage ../development/python-modules/pyreadstat { };
 
   pyrealsense2 = toPythonModule (
@@ -18344,6 +18352,8 @@ self: super: with self; {
 
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
 
+  sqlalchemy-utc = callPackage ../development/python-modules/sqlalchemy-utc { };
+
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   sqlalchemy_1_3 = callPackage ../development/python-modules/sqlalchemy/1_3.nix { };
@@ -19758,6 +19768,8 @@ self: super: with self; {
 
   turrishw = callPackage ../development/python-modules/turrishw { };
 
+  tuya-device-handlers = callPackage ../development/python-modules/tuya-device-handlers { };
+
   tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
@@ -21092,6 +21104,10 @@ self: super: with self; {
   wikipedia2vec = callPackage ../development/python-modules/wikipedia2vec { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
+
+  wikitextprocessor = callPackage ../development/python-modules/wikitextprocessor { };
+
+  wiktextract = callPackage ../development/python-modules/wiktextract { };
 
   willow = callPackage ../development/python-modules/willow { };
 

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -176,8 +175,5 @@ in
   wlroots_0_20 = generic {
     version = "0.20.0";
     hash = "sha256-hVJlJiJK6+9RkgkmQzUzb8ypVMqsNhbQG6KfeCvxtb0=";
-    extraBuildInputs = [
-      lcms2
-    ];
   };
 }

@@ -35,7 +35,6 @@
   enablePython ? false,
   which,
   swig,
-  xcbuild,
   gitUpdater,
   enableBarcode ? false,
   # for passthru.tests
@@ -135,7 +134,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
-    xcbuild
   ];
 
   buildInputs = [

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3Packages,
+  python3,
   nltk-data,
   writeShellScript,
   nix-update-script,
@@ -22,16 +22,8 @@ let
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages;
-  python = pythonpkgs.python;
-  pyhumps38 = python3Packages.pyhumps.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchFromGitHub {
-      owner = "nficano";
-      repo = "humps";
-      tag = "v3.8.0";
-      hash = "sha256-ElL/LY2V2Z3efdV5FnDy9dSoBltULrzxsjaOx+7W9Oo=";
-    };
-  });
+  python = python3;
+  pythonpkgs = python.pkgs;
 in
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
@@ -75,7 +67,7 @@ pythonpkgs.buildPythonApplication rec {
       psycopg2 # pgsql optional-dependencies
       pydantic
       pydantic-settings
-      pyhumps38
+      pyhumps
       pyjwt
       python-dateutil
       python-dotenv

@@ -10,7 +10,6 @@
   pnpmConfigHook,
   python3,
   stdenv,
-  xcbuild,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
@@ -32,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3 # required for sqlite3 bindings
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin [
-    xcbuild
     cctools.libtool
   ];
 

@@ -24,6 +24,7 @@ assert lib.assertMsg (
   closureInfo,
   runCommand,
   meson,
+  bash,
   bison,
   boehmgc,
   boost,
@@ -35,6 +36,7 @@ assert lib.assertMsg (
   cargo,
   curl,
   cmake,
+  darwin,
   doxygen,
   editline,
   flex,
@@ -374,6 +376,19 @@ stdenv.mkDerivation (finalAttrs: {
           ]
         ))
         (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
+      ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95")
+      [
+        (lib.mesonOption "build-test-env" (
+          lib.makeBinPath [
+            darwin.file_cmds
+            darwin.shell_cmds
+            darwin.text_cmds
+          ]
+        ))
+        (lib.mesonOption "build-test-shell" "${bash}/bin")
       ]
   ++ lib.optionals (lib.versionAtLeast version "2.95") [
     "--${

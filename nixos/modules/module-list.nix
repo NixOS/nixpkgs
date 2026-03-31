@@ -957,6 +957,7 @@
   ./services/misc/servarr/sonarr.nix
   ./services/misc/servarr/whisparr.nix
   ./services/misc/serviio.nix
+  ./services/misc/shelfmark.nix
   ./services/misc/shoko.nix
   ./services/misc/sickbeard.nix
   ./services/misc/snapper.nix

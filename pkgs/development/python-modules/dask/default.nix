@@ -44,14 +44,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dask";
-  version = "2026.1.2";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = finalAttrs.version;
-    hash = "sha256-cyeAU5r8uYb7aAII9HztKY+3On44/nOC9eU9stYYWzE=";
+    hash = "sha256-JfCiABGSCJKKSz2/r8fvpVwdQSZqvoQICe+lDvuNhoM=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -118,6 +118,10 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # Rerun failed tests up to three times
     "--reruns=3"
+
+    # FutureWarning: The previous implementation of stack is deprecated and will be removed in a
+    # future version of pandas.
+    "-Wignore::FutureWarning"
   ];
 
   disabledTestMarks = [
@@ -125,8 +129,16 @@ buildPythonPackage (finalAttrs: {
     "network"
   ];
 
-  # https://github.com/dask/dask/issues/12042
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+  disabledTests = [
+    # https://github.com/dask/dask/issues/10931
+    "test_combine_first_all_nans"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeWarning: divide by zero encountered in det
+    "test_array_notimpl_function_dask"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/dask/dask/issues/12042
     "test_multiple_repartition_partition_size"
   ];
 

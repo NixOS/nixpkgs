@@ -101,7 +101,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.11.6";
+    version = "0.12.0";
 
     __structuredAttrs = true;
 
@@ -109,7 +109,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-GdfCaKNe/qPaUV2NJPXY+ATnQNWnyFTFnkOYDyLhTNg=";
+      hash = "sha256-uWhrGAwQ2nnAkyJ46qGkYxJ5K1jtyUIQOAVu3yTlquk=";
     };
 
     strictDeps = true;

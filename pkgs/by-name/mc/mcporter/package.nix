@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcporter";
-  version = "0.7.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "steipete";
     repo = "mcporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x/2Ln6kohj59RSJgctWlYKckmGbWjY2ryPaLhoj0Q48=";
+    hash = "sha256-I7UqHsi4pw4wQB4bb8XObo4aUOVtYpF17aYzEHzgCrg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-0nc+jYANd95/R+BrkGRHcdqw9/RqMja88qkVvHtj1W4=";
+    hash = "sha256-OJhlpKwRCE7IqstwIzj1dBJMbMyPVA/w3RVnYfjz764=";
   };
 
   nativeBuildInputs = [

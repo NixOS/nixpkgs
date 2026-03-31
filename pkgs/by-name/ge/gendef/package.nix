@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gendef";
-  version = "11.0.1";
+  version = "14.0.0";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/mingw-w64/mingw-w64.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0vbAHSN+uwxoXXZtbuycP67PxjcB8Ftxd/Oij1gqE3Y=";
+    hash = "sha256-ZhbY/RvTBI8ELSe0D7uzWi13sspgNZhdYg4LLK0JRng=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/mingw-w64-tools/gendef";

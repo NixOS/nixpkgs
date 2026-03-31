@@ -474,7 +474,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
-      hash = "sha256-7mFn4dLgaxfAxtPFCc3VzcBx2HuywcZTYqCGTbaGS0k=";
+      hash = "sha256-nkWQOjqShgDcLfQDOGsB9CMHZxI/Lrx/+tC4ZeUl/Ak=";
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -854,6 +854,16 @@ in
   };
 
   neotest = prev.neotest.overrideAttrs (old: {
+    patches = [
+      (fetchpatch {
+        # fix compatibility with neovim 0.12: iter_matches breaking change
+        # https://github.com/nvim-neotest/neotest/pull/594
+        name = "fix-neovim-0-12-compat";
+        url = "https://github.com/LiamCoop/neotest/commit/2ffca3aefb070e31f1ac00e9fbfd1a83f995c326.patch";
+        hash = "sha256-3+ooC3ZB8pl90FG+kTZxIzmPxrdJTx/XNYE2tPDWO+w=";
+      })
+    ];
+
     doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = old.nativeCheckInputs ++ [
       final.nlua

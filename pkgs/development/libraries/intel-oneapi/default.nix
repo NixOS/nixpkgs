@@ -16,7 +16,6 @@
   # For the updater script
   writeShellApplication,
   curl,
-  jq,
   htmlq,
   common-updater-scripts,
   writableTmpDirAsHomeHook,
@@ -129,11 +128,10 @@
       downloadPage,
       file,
     }:
-    writeShellApplication {
+    lib.getExe (writeShellApplication {
       name = "update-intel-oneapi";
       runtimeInputs = [
         curl
-        jq
         htmlq
         common-updater-scripts
       ];
@@ -141,7 +139,7 @@
         download_page=${lib.escapeShellArg downloadPage}
         pname=${lib.escapeShellArg pname}
         nixpkgs="$(git rev-parse --show-toplevel)"
-        packageDir="$nixpkgs/pkgs/by-name/in/intel-oneapi"
+        packageDir="$nixpkgs/pkgs/development/libraries/intel-oneapi"
         file="$packageDir"/${lib.escapeShellArg file}
 
         echo 'Figuring out the download URL' >&2
@@ -152,24 +150,29 @@
           | htmlq 'code' --text \
           | grep "wget.*$pname.*sh")"
 
-        regex="wget (.*$pname.([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)_offline[.]sh)"
+        # _offline is optional: Intel sometimes only links the online installer, which shares the same UUID and version.
+        regex="wget (https://registrationcenter-download[.]intel[.]com/akdlm/IRC_NAS/([0-9a-z-]+)/$pname.([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)(_offline)?[.]sh)"
         if [[ "$wget_command" =~ $regex ]]; then
-            url="''${BASH_REMATCH[1]}"
-            versionYear="''${BASH_REMATCH[2]}"
-            versionMajor="''${BASH_REMATCH[3]}"
-            versionMinor="''${BASH_REMATCH[4]}"
-            versionRel="''${BASH_REMATCH[5]}"
+            uuid="''${BASH_REMATCH[2]}"
+            versionYear="''${BASH_REMATCH[3]}"
+            versionMajor="''${BASH_REMATCH[4]}"
+            versionMinor="''${BASH_REMATCH[5]}"
+            versionRel="''${BASH_REMATCH[6]}"
         else
             echo "'$wget_command' does not match the expected format $regex" >&2
             exit 1
         fi
 
-        if [[ "$(grep 'url =' "$file")" =~ "$url" ]] && [[ "''${BASH_REMATCH[0]}" == "$url" ]]; then
+        # Always reconstruct to point at the offline installer
+        url="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/$uuid/$pname-$versionYear.$versionMajor.$versionMinor.''${versionRel}_offline.sh"
+
+        if grep -qF "url = \"$url\"" "$file"; then
             echo "The URL is the same ($url), skipping update" >&2
-        else
-            echo "The new download URL is $url, prefetching it to store" >&2
-            hash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --quiet "$url")")"
+            exit 0
         fi
+
+        echo "The new download URL is $url, prefetching it to store" >&2
+        hash="$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")"
 
         sed -i "s|versionYear = \".*\";|versionYear = \"$versionYear\";|" "$file"
         sed -i "s|versionMajor = \".*\";|versionMajor = \"$versionMajor\";|" "$file"
@@ -178,7 +181,7 @@
         sed -i "s|url = \".*\";|url = \"$url\";|" "$file"
         sed -i "s|hash = \".*\";|hash = \"$hash\";|" "$file"
       '';
-    };
+    });
 
   base = callPackage ./base.nix { };
   hpc = callPackage ./hpc.nix { };

@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2QDiAk2HO9oQ1gNvc7QFZSCbWkCDYW5OJWT8f4bmXyg=";
   };
 
+  patches = [
+    ./0001-fix-build-with-minizip-1.3.2.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

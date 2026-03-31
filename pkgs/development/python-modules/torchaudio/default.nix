@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -53,18 +54,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 1;
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MULTIGPU_CUDA = 1;
 
-    # At of 2026-03-27, the default `cudaPackages` version is 12.9.1
-    # According to Nvidia, it should support GCC versions up to 14.x:
-    # -> https://docs.nvidia.com/cuda/archive/12.9.1/cuda-installation-guide-linux/index.html#host-compiler-support-policy
-    # However, PyTorch's *strict* upper bound is 14.0:
-    # -> https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L75
-    # Hence, the build fails with:
-    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
-    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
-    #   (>=6.0.0, <14.0).
-    # Hence, we disable the version check to silence the error:
-    TORCH_DONT_CHECK_COMPILER_ABI = cudaSupport;
-
     # ROCM
     USE_ROCM = rocmSupport;
     PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport torch.gpuTargetString;
@@ -80,6 +69,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     #   RuntimeError: Test is known to fail for Python 3.10, disabling for now
     #   See: https://github.com/pytorch/audio/pull/2224#issuecomment-1048329450
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_ON_PYTHON_310 = true;
+
+    # Fails on aarch64-linux with:
+    #   RuntimeError: `fbgemm` is not available
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION =
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 
   build-system = [
@@ -128,9 +122,17 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Very long to run
     "AutogradCPUTest"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: Tensor-likes are not close!
+    "test_batch_inverse_spectrogram"
+    "test_batch_pitch_shift"
+    "test_batch_spectrogram"
+    "test_griffinlim_0_99"
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
+    pname = "${finalAttrs.pname}-gpuCheck";
     requiredSystemFeatures = [ "cuda" ];
 
     env = (old.env or { }) // {

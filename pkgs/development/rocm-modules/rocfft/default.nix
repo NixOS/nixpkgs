@@ -20,14 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocFFT";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AFBV5tlhNYH9+d0KG7mCjSifKfRt+8c1ie5wASTiQXM=";
+    sparseCheckout = [
+      "projects/rocfft"
+      "shared"
+    ];
+    hash = "sha256-RjWMzLX0nBA8ClweJ8YgRTn+Nzt/VUkOoSw3jMQ3IWg=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocfft";
 
   nativeBuildInputs = [
     cmake
@@ -68,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-test";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "${finalAttrs.src.name}/clients/tests";
+      sourceRoot = "${finalAttrs.src.name}/projects/rocfft/clients/tests";
 
       nativeBuildInputs = [
         cmake
@@ -97,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-benchmark";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "${finalAttrs.src.name}/clients/rider";
+      sourceRoot = "${finalAttrs.src.name}/projects/rocfft/clients/rider";
 
       nativeBuildInputs = [
         cmake
@@ -127,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-samples";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "${finalAttrs.src.name}/clients/samples";
+      sourceRoot = "${finalAttrs.src.name}/projects/rocfft/clients/samples";
 
       nativeBuildInputs = [
         cmake
@@ -150,18 +155,14 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "FFT implementation for ROCm";
-    homepage = "https://github.com/ROCm/rocFFT";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocfft";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

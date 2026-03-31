@@ -519,3 +519,7 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
 /pkgs/build-support/build-nim-package.nix @NixOS/nim
 /pkgs/build-support/build-nim-sbom.nix    @NixOS/nim
 /pkgs/top-level/nim-overrides.nix         @NixOS/nim
+
+# Radicle
+/pkgs/build-support/fetchradicle/      @NixOS/radicle
+/pkgs/build-support/fetchradiclepatch/ @NixOS/radicle

@@ -28,9 +28,9 @@ buildPythonPackage rec {
 
   dependencies = [
     bleak
-    dbus-fast
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus-fast
     bluetooth-adapters
   ];
 
@@ -39,6 +39,9 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ];
+
+  # ModuleNotFoundError: No module named 'dbus_fast'
+  doCheck = stdenv.hostPlatform.isLinux;
 
   pythonImportsCheck = [ "bleak_retry_connector" ];
 
