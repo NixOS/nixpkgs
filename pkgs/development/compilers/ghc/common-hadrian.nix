@@ -230,6 +230,10 @@
             ../../tools/haskell/hadrian/disable-hyperlinked-source-extra-args.patch
         )
       ]
+      # XXX this is only tested with GHC 9.10 currently
+      ++ lib.optionals (lib.versionAtLeast version "9.10") [
+        ./ghc_split.diff
+      ]
       ++ lib.optionals (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "enable-ignore-build-platform-mismatch.patch";
@@ -608,7 +612,7 @@ stdenv.mkDerivation (
       ''
     )
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
+      export NIX_LDFLAGS+=" -rpath $lib/lib/ghc-${version}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
@@ -748,6 +752,7 @@ stdenv.mkDerivation (
       python3
       # Tool used to update GHC's settings file in postInstall
       bootPkgs.ghc-settings-edit
+      buildPackages.removeReferencesTo
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       autoSignDarwinBinariesHook
@@ -826,6 +831,8 @@ stdenv.mkDerivation (
     outputs = [
       "out"
       "doc"
+      "lib"
+      "debug"
     ];
 
     # We need to configure the bindist *again* before installing
@@ -835,6 +842,38 @@ stdenv.mkDerivation (
     preInstall = ''
       pushd _build/bindist/*
 
+      # install RTS debug files to $debug, install other libs to $lib
+      pushd NIXOUT
+      find -type f,l -name '*_debug*.so' | \
+        while read file; do
+          targetdir="$debug/$(dirname "$file")"
+          mkdir -p "$targetdir"
+          mv "$file" -t "$targetdir"
+        done
+      mkdir $lib && cp -r * $lib/
+      popd
+
+      # fix RPATH to reference the .so libs in the nix store correctly
+      grep --binary -l -r /NIXOUT/ bin/ | while read file; do
+         mapfile -t -d : rpaths < <( patchelf --print-rpath "$file" )
+         suffix=""
+         for i in "''${!rpaths[@]}"; do
+            rpath="''${rpaths[i]}"
+            if [[ "$rpath" == */NIXOUT/* ]]; then
+               suffix="''${rpath#*/NIXOUT/}"
+               unset 'rpaths[i]'
+            fi
+         done
+         IFS=: newrpath="$lib/$suffix:''${rpaths[*]}"
+         echo "Set RPATH on $file" >&2
+         patchelf --set-rpath "$newrpath" "$file"
+      done
+
+      # fix package .conf files
+      pushd lib/package.conf.d
+      sed -i -e '/NIXOUT/{ p; s,[$]{pkgroot}/../lib/../NIXOUT/,'"$debug"'/,; }' rts-*.conf
+      substituteInPlace *.conf --replace-quiet ${"'$"}{pkgroot}/../lib/../NIXOUT/' "$lib/"
+      popd
     ''
     # the bindist configure script uses different env variables than the GHC configure script
     # see https://github.com/NixOS/nixpkgs/issues/267250 krank:ignore-line
@@ -845,12 +884,17 @@ stdenv.mkDerivation (
     ''
     # Replicate configurePhase
     + ''
-      $configureScript "''${configureFlags[@]}"
+      $configureScript "''${configureFlags[@]}" --libdir=$out/lib --libexecdir=$out/libexec
     '';
 
     postInstall = ''
       # leave bindist directory
       popd
+
+      find $lib -type f -exec remove-references-to -t $out '{}' +
+
+      # clean up: remove .copy files
+      find $out -type f -name '*.copy' -exec rm '{}' +
 
       settingsFile="$out/lib/${targetPrefix}${haskellCompilerName}/lib/settings"
 
@@ -900,6 +944,21 @@ stdenv.mkDerivation (
 
       # Install the bash completion file.
       install -Dm 644 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
+    '';
+
+    # this is weird. after the fixup phase (including patchELF) the binaries are broken
+    # (no version information available, symbol lookup error)
+    # the workaround is to add an arbitrary path to the RPATH and shrink the RPATH again.
+    postFixup = ''
+      find "$out/lib/${targetPrefix}${haskellCompilerName}/bin" -type f -executable | \
+        while read binary; do
+          if file "$binary" | grep -q "ELF"; then
+             echo "  Repairing: $(basename "$binary")"
+             p=$( patchelf --print-rpath "$binary" )
+             patchelf --set-rpath "$p:/fake/path" "$binary"
+             patchelf --shrink-rpath "$binary"
+          fi
+        done
     '';
 
     passthru = {
