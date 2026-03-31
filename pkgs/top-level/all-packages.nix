@@ -3475,10 +3475,6 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
-  globalprotect-openconnect =
-    libsForQt5.callPackage ../tools/networking/globalprotect-openconnect
-      { };
-
   buildWasmBindgenCli = callPackage ../build-support/wasm-bindgen-cli { };
 
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
