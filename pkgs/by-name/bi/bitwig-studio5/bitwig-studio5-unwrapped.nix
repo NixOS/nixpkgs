@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
   version = "5.3.13";
 
   src = fetchurl {
-    name = "bitwig-studio-${version}.deb";
-    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
+    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/bitwig-studio-${version}.deb";
     hash = "sha256-tx+Dz9fTm4DIobwLa055ZOCMG+tU7vQl11NFnEKMAno=";
   };
 

@@ -3,8 +3,11 @@
   bubblewrap,
   mktemp,
   writeShellScript,
-  bitwig-studio-unwrapped,
+  callPackage,
 }:
+let
+  bitwig-studio-unwrapped = callPackage ./bitwig-studio5-unwrapped.nix { };
+in
 stdenv.mkDerivation {
   inherit (bitwig-studio-unwrapped) version;
 

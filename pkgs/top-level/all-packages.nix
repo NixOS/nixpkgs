@@ -9515,19 +9515,6 @@ with pkgs;
     callPackage ../applications/science/electronics/bitscope/packages.nix { }
   );
 
-  bitwig-studio4 = callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
-    libjpeg = libjpeg8;
-  };
-  bitwig-studio5-unwrapped = callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
-    libjpeg = libjpeg8;
-  };
-
-  bitwig-studio5 = callPackage ../applications/audio/bitwig-studio/bitwig-wrapper.nix {
-    bitwig-studio-unwrapped = bitwig-studio5-unwrapped;
-  };
-
-  bitwig-studio = bitwig-studio5;
-
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
   };
