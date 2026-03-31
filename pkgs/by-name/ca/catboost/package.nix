@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   cctools,
-  libiconv,
   llvmPackages,
   ninja,
   openssl,
@@ -19,22 +18,24 @@
 }:
 let
   stdenv = if cudaSupport then cudaPackages.backendStdenv else llvmPackages.stdenv;
+  buildPythonBindingsEnv = python3Packages.python.withPackages (
+    ps: with ps; [
+      cython
+      numpy
+    ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I3geFdVQ1Pm61eRXi+ueaxel3QRb8EJV9f4zV2Q7kk4=";
+    hash = "sha256-z68vflYgO3cWeOkb417Gyco1Fqb98ulyRgI+OS+B4is=";
   };
-
-  patches = [
-    ./remove-conan.patch
-  ];
 
   postPatch = ''
     substituteInPlace cmake/common.cmake \
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
-      sed -i "s/OpenSSL::OpenSSL/OpenSSL::SSL/g" $cmakelists
+      sed -i "s/openssl::openssl/OpenSSL::SSL/g" $cmakelists
     done
   '';
 
@@ -53,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    buildPythonBindingsEnv
     cmake
     llvmPackages.bintools
     ninja
-    (python3Packages.python.withPackages (ps: with ps; [ six ]))
     ragel
     yasm
   ]
@@ -70,9 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -101,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
     (lib.cmakeFeature "CATBOOST_COMPONENTS" "app;libs${lib.optionalString pythonSupport ";python-package"}")
     (lib.cmakeBool "HAVE_CUDA" cudaSupport)
-  ];
+  ]
+  ++ lib.optional pythonSupport (
+    lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"
+  );
 
   installPhase = ''
     runHook preInstall
