@@ -1,25 +1,23 @@
 {
   buildPythonPackage,
-  cached-property,
-  click,
   fetchFromGitHub,
-  la-panic,
   lib,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pycrashreport";
-  version = "1.2.8";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pycrashreport";
     tag = "v${version}";
-    hash = "sha256-CjFMixbnRlCT2tnBgpYjnOXg+SJgUtzsVNazPtNyfYQ=";
+    hash = "sha256-huiPTpcNwRY8IMHe4y4H/OBCdlDWhBiU9u1xTvLSDQk=";
   };
 
   build-system = [
@@ -28,9 +26,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    cached-property
-    click
-    la-panic
+    typer
   ];
 
   pythonImportsCheck = [ "pycrashreport" ];
