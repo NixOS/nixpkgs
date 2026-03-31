@@ -991,7 +991,7 @@ in
   moonraker = runTest ./moonraker.nix;
   moosefs = runTest ./moosefs.nix;
   mopidy = runTest ./mopidy.nix;
-  morph-browser = runTest ./morph-browser.nix;
+  morph-browser = discoverTests (import ./morph-browser.nix);
   mosquitto = runTest ./mosquitto.nix;
   movim = import ./web-apps/movim {
     inherit runTest;
