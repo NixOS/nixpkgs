@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   makeWrapper,
   nixosTests,
   symlinkJoin,
@@ -40,7 +42,8 @@ symlinkJoin {
         --prefix PATH : $program_PATH \
         --set PYTHONPATH $program_PYTHONPATH
     done
-
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     ln -s ${qgis-unwrapped.man} $man
   '';
 
