@@ -3840,6 +3840,8 @@ self: super: with self; {
 
   depyf = callPackage ../development/python-modules/depyf { };
 
+  derivative = callPackage ../development/python-modules/derivative { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
