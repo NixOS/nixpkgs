@@ -182,15 +182,20 @@ stdenv.mkDerivation (finalAttrs: {
     # "https://sourceforge.net/p/sbcl/mailman/sbcl-devel/thread/2cf20df7-01d0-44f2-8551-0df01fe55f1a%400brg.net/"),
     # but for Nix envvars are sufficiently useful that it’s worth maintaining
     # this functionality downstream.
-    if lib.versionOlder "2.5.2" finalAttrs.version then
+    if lib.versionOlder "2.6.2" finalAttrs.version then
       [
-        ./dynamic-space-size-envvar-2.5.3-feature.patch
-        ./dynamic-space-size-envvar-2.5.3-tests.patch
+        ./patches/dynamic-space-size-envvar-2.6.3-feature.patch
+        ./patches/dynamic-space-size-envvar-2.6.3-tests.patch
+      ]
+    else if lib.versionOlder "2.5.2" finalAttrs.version then
+      [
+        ./patches/dynamic-space-size-envvar-2.5.3-feature.patch
+        ./patches/dynamic-space-size-envvar-2.5.3-tests.patch
       ]
     else
       [
-        ./dynamic-space-size-envvar-2.5.2-feature.patch
-        ./dynamic-space-size-envvar-2.5.2-tests.patch
+        ./patches/dynamic-space-size-envvar-2.5.2-feature.patch
+        ./patches/dynamic-space-size-envvar-2.5.2-tests.patch
       ];
 
   sbclPatchPhase =
