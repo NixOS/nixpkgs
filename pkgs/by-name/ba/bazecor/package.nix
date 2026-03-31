@@ -60,7 +60,6 @@ appimageTools.wrapAppImage {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      amesgen
       gcleroux
     ];
     platforms = [ "x86_64-linux" ];

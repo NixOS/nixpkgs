@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "typecode";
-  version = "30.1.0";
+  version = "30.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "typecode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OAQX39f6chM+xSY41rCBYsv4RDhLuBlu2WLcCt7vw0w=";
+    hash = "sha256-+7Yu2t++4PaF8yT+kKgo5MP6lbr8CXkjo5/4KMrApZY=";
   };
 
   dontConfigure = true;

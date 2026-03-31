@@ -136,7 +136,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Another Mihomo GUI";
