@@ -75,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace gdb/darwin-nat.c \
-        --replace-fail '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+        --replace-fail '#include "bfd/mach-o.h"' '#include "mach-o.h"' \
+        --replace-fail '#include "inferior.h"' $'#include "inferior.h"\n#include "gdbsupport/common-inferior.h"'
     ''
     + optionalString stdenv.hostPlatform.isMusl ''
       substituteInPlace sim/erc32/erc32.c  --replace-fail sys/fcntl.h fcntl.h
