@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "hydra";
-  version = "25.4.0";
+  version = "26.2.0";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "hydra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vcbJiwWoq7WA7K5WpD68za1VecNwdzqfyXuPfUpa1QU=";
+    hash = "sha256-LnF1k/C9uPRY4xXeBCJPSQ8gxwwZx0N1e1s+Rhop5ic=";
   };
 
-  vendorHash = "sha256-ADS1kBqSJXDwmCS4CCfiMvmlzzL39E0G4J2UEKXy2Qs=";
+  vendorHash = "sha256-KVCoDATyt5Qp0r3vGwdXqkjh0FEdNyKi6mXk99D6HD8=";
 
   # `json1` not needed (see: https://github.com/ory/hydra/commit/93edc9ad894771c67f46ae2c57ee7e50382d73cd)
   # `sqlite_omit_load_extension` consistency with upstream (see: https://github.com/ory/hydra/blob/master/.docker/Dockerfile-local-build#L20C58-L20C84). Will disable sqlite runtime extension loading (see: https://sqlite.org/loadext.html)
