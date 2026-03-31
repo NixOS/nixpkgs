@@ -1,11 +1,11 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   makeWrapper,
   llvmPackages_20,
-  go,
+  go_1_25,
   xar,
   binaryen,
   avrdude,
@@ -16,8 +16,10 @@
 }:
 
 let
-  # nixpkgs typically updates default llvm version faster than tinygo releases
-  # which ends up breaking this build. Use fixed version for each release.
+  # nixpkgs typically updates default llvm and go versions faster than tinygo releases
+  # which ends up breaking this build. Use fixed versions for each release.
+  buildGoModule = buildGo125Module;
+  go = go_1_25;
   llvmMajor = lib.versions.major llvm.version;
   inherit (llvmPackages_20)
     llvm
@@ -34,14 +36,14 @@ let
   '';
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tinygo";
   version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+dLdQdq47M+HKjiMQI1/NJZqiRFuR8rnv/osCbFTpQE=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
@@ -134,7 +136,7 @@ buildGoModule rec {
     make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 
     runHook postInstall
   '';
@@ -147,4 +149,4 @@ buildGoModule rec {
       muscaln
     ];
   };
-}
+})
