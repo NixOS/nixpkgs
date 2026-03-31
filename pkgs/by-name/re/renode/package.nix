@@ -11,7 +11,6 @@
   gtk3,
   lib,
   mono,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -180,7 +179,7 @@ buildDotnetModule rec {
 
   executables = [ "Renode" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/renode/renode/blob/${version}/CHANGELOG.rst";
