@@ -11,18 +11,18 @@
 }:
 
 let
-  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_4;
 in
 ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2026-01-29";
+  version = "0.2-unstable-2026-03-16";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "07b96ef58021810352caceffbadf2d614785bb0d";
+    rev = "7fb7af27025501c732d8dda903865b47bc5d4901";
     fetchSubmodules = true;
-    hash = "sha256-vVTAoPWfjbX4c3AXxh4C2igig5LiMLZMpLmLSjLcxgo=";
+    hash = "sha256-aRNJiW6UTcpJU3fIcEQB3gujmAxsp2dwR1hFeWJrhzs=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -39,11 +39,15 @@ ocamlPackages.buildDunePackage {
   ];
 
   buildInputs = with ocamlPackages; [
+    dune-build-info
+    dune-site
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
     bos
     cmdliner
     digestif
-    dune-build-info
-    dune-site
+    domainpc
     menhirLib
     ocaml_intrinsics
     ocamlgraph
@@ -52,11 +56,11 @@ ocamlPackages.buildDunePackage {
     scfg
     sedlex
     smtml
+    symex
     synchronizer
     uutf
     xmlm
     yojson
-    z3
   ];
 
   postInstall = ''
