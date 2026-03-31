@@ -17,7 +17,6 @@
   sha256,
   extraMeta ? { },
   callPackage,
-  ...
 }:
 
 let
