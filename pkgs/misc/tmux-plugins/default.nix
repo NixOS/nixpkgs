@@ -1203,6 +1203,32 @@ in
       maintainers = with lib.maintainers; [ szaffarano ];
     };
   };
+
+  smart-splits-nvim = mkTmuxPlugin {
+    pluginName = "smart-splits-nvim";
+    version = "0-unstable-2025-03-28";
+    rtpFilePath = "smart-splits.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "mrjones2014";
+      repo = "smart-splits.nvim";
+      rev = "b64e778448f74d6b15db10b141b82228487ce7e7";
+      hash = "sha256-e9MkKwaMHdceFQa/wIoZS4z2GtKMH+aPfDFwnXDbUhg=";
+    };
+    meta = {
+      homepage = "https://github.com/mrjones2014/smart-splits.nvim";
+      description = "Smart, seamless, directional navigation and resizing of Neovim + terminal multiplexer splits.";
+      longDescription = ''
+        Smarter and more intuitive split pane management that
+        uses a mental model of left/right/up/down instead of
+        wider/narrower/taller/shorter for resizing. Supports
+        seamless navigation between Neovim and terminal multiplexer
+        split panes.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ asakura ];
+    };
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
