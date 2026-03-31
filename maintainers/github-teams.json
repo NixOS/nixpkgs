@@ -843,11 +843,11 @@
     "description": "Maintain Radicle related packages, modules, and tests",
     "id": 16784086,
     "maintainers": {
-      "Defelo": 41747605
+      "Defelo": 41747605,
+      "lorenzleutgeb": 542154
     },
     "members": {
       "ju1m": 21160136,
-      "lorenzleutgeb": 542154,
       "matthiasbeyer": 427866
     },
     "name": "Radicle"

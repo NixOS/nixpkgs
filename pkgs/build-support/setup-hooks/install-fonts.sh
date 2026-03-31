@@ -41,6 +41,7 @@ installFonts() {
   installFont 'bdf' "$out/share/fonts/misc"
   installFont 'otb' "$out/share/fonts/misc"
   installFont 'psf' "$out/share/consolefonts"
+  installFont 'psfu' "$out/share/consolefonts"
 
   if [ -n "${webfont-}" ]; then
     installFont 'woff' "$webfont/share/fonts/woff"

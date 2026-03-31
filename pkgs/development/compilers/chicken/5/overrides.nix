@@ -78,7 +78,29 @@ in
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
+  fuse =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.fuse old)
+    // {
+      env.NIX_CFLAGS_COMPILE = toString [
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
+      ];
+    };
+  isaac =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.libffi old)
+    // {
+      postPatch = ''
+        substituteInPlace rand.h \
+          --replace-fail '/*_ randctx *r, word flag _*/' 'randctx *r, word flag' \
+          --replace-fail '/*_ randctx *r _*/' 'randctx *r'
+      '';
+    };
   gl-math = old: {
     env.NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=incompatible-pointer-types"
@@ -111,10 +133,13 @@ in
     old:
     (addToBuildInputs pkgs.pcre old)
     // {
-      env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=implicit-function-declaration"
-        "-Wno-error=implicit-int"
-      ];
+      postPatch = ''
+        substituteInPlace bmgsubs.c \
+          --replace-fail "char   *gotamatch();" "char *gotamatch(char *, int, int (*)(char *, int));" \
+          --replace-fail "int bmg_search(char *, int, int (*)());" "int bmg_search(char *, int, int (*)(char *, int));" \
+          --replace-fail "int	(*action)();" "int (*action)(char *, int);" \
+          --replace-fail "int (*action)();" "int (*action)(char *, int);"
+      '';
     };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
@@ -193,7 +218,19 @@ in
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
-  xlib = addToPropagatedBuildInputs pkgs.libx11;
+  xlib =
+    old:
+    (addToPropagatedBuildInputs pkgs.libx11 old)
+    // {
+      env.NIX_CFLAGS_COMPILE = toString [
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
+      ];
+    };
   yaml = addToBuildInputs pkgs.libyaml;
   zlib = addToBuildInputs pkgs.zlib;
   zmq = addToBuildInputs pkgs.zeromq;

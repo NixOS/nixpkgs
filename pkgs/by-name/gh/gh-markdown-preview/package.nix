@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/yusukebe/gh-markdown-preview";
     changelog = "https://github.com/yusukebe/gh-markdown-preview/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "gh-markdown-preview";
   };
 })

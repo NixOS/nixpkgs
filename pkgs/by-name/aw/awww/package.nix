@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   rustPlatform,
   pkg-config,
   lz4,
@@ -14,17 +14,18 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "swww";
-  version = "0.11.2";
+  pname = "awww";
+  version = "0.12.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "LGFae";
-    repo = "swww";
+    repo = "awww";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X2ptpXRo6ps5RxDe5RS7qfTaHWqBbBNw/aSdC2tzUG8=";
+    hash = "sha256-bvO+gfuUOVUiBEwAJ5A2RjpysPzCfyXD+DM8piOa1+4=";
   };
 
-  cargoHash = "sha256-5KZWsdo37NbFFkK8XFc0XI9iwBkpV8KsOaOc0y287Io=";
+  cargoHash = "sha256-4ApaMiVqXD4RlyWFMk2wKsyo37FT/OeVly/H88pF7oc=";
 
   buildInputs = [
     lz4
@@ -49,10 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installManPage "$page"
     done
 
-    installShellCompletion --cmd swww \
-      --bash completions/swww.bash \
-      --fish completions/swww.fish \
-      --zsh completions/_swww
+    installShellCompletion --cmd awww \
+      --bash completions/awww.bash \
+      --fish completions/awww.fish \
+      --zsh completions/_awww
   '';
 
   postFixup = ''
@@ -64,13 +65,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
-    homepage = "https://github.com/LGFae/swww";
+    homepage = "https://codeberg.org/LGFae/awww";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       mateodd25
       donovanglover
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "swww";
+    mainProgram = "awww";
   };
 })
