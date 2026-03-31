@@ -48,7 +48,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       lucperkins
-      amesgen
     ];
   };
 }
