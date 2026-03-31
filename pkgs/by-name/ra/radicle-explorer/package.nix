@@ -111,11 +111,8 @@ lib.fix (
         homepage = "https://radicle.xyz";
         license = lib.licenses.gpl3;
 
-        maintainers = with lib.maintainers; [
-          tazjin
-          lorenzleutgeb
-          defelo
-        ];
+        teams = [ lib.teams.radicle ];
+        maintainers = with lib.maintainers; [ tazjin ];
       };
     }
   )

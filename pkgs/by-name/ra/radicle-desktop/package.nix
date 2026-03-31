@@ -125,11 +125,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      matthiasbeyer
-      defelo
-      faukah
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ faukah ];
     mainProgram = "radicle-desktop";
   };
 })
