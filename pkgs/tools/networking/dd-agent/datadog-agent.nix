@@ -145,6 +145,7 @@ buildGoModule rec {
     homepage = "https://www.datadoghq.com";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      mel
       thoughtpolice
     ];
   };
