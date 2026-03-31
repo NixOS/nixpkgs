@@ -124,6 +124,7 @@ in
       // lib.optionalAttrs (cfg.dataDir == "/var/lib/sonarr/.config/NzbDrone") {
         StateDirectory = "sonarr";
       };
+      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
