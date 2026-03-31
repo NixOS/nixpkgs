@@ -1,5 +1,5 @@
 {
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   k3s,
   lib,
@@ -8,11 +8,11 @@
 }:
 
 let
-  version = "3.5.25";
-  etcdSrcHash = "sha256-7fCvlp/EG1SofsLC8il/twjg0rEaB/lhz6dnUxgLXik=";
-  etcdServerVendorHash = "sha256-R78j1BTuY3ORQiMnm2kWJGnK4jJi7am4x0udW4jjcCE=";
-  etcdUtlVendorHash = "sha256-J+/QgRAU1uk9LXdW8b6AhitFlxx/QU7IkJ+5Jez9MkM=";
-  etcdCtlVendorHash = "sha256-IiggECH1iFkb51MTeFSFnVbVVDUR1KgsQcbxz9IR4c4=";
+  version = "3.5.28";
+  etcdSrcHash = "sha256-D4c+YfNQATW8/9m/5edPKtG9qQa8MxpbpDTCZY6cvA4=";
+  etcdServerVendorHash = "sha256-IiGoG/5HJBZXhWhluK1uQVOXRk2I4VDokT7EcjhEnWU=";
+  etcdUtlVendorHash = "sha256-mUzwpxAsUhXdK70BwtjWJqjzLpDnNFNXW6tHP81c72w=";
+  etcdCtlVendorHash = "sha256-Bn3mirDqs9enpNTlp65YWiQRKpc+B6wD33b0xkaqSKE=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -35,7 +35,7 @@ let
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGo124Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -62,7 +62,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo124Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -77,7 +77,7 @@ let
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGo124Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit
