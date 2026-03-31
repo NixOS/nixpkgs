@@ -1725,20 +1725,6 @@ with haskellLib;
   reflex-localize-dom = dontDistribute super.reflex-localize-dom;
   trasa-reflex = dontDistribute super.trasa-reflex;
 
-  # https://github.com/ghcjs/jsaddle/pull/160/
-  jsaddle = appendPatch (fetchpatch {
-    name = "fix-on-firefox.patch";
-    url = "https://github.com/ghcjs/jsaddle/commit/71ef7f0cbc60a380ba0dc299e758c8f90cc4b526.patch";
-    relative = "jsaddle";
-    sha256 = "sha256-IBOX74r+lyywVWp0ZucoseeevFrGiInkq7V6RoWADNU=";
-  }) super.jsaddle;
-  jsaddle-warp = appendPatch (fetchpatch {
-    name = "fix-on-firefox.patch";
-    url = "https://github.com/ghcjs/jsaddle/commit/71ef7f0cbc60a380ba0dc299e758c8f90cc4b526.patch";
-    relative = "jsaddle-warp";
-    sha256 = "sha256-jYEUOkP4Kv3yBjo3SbN7sruV+T5R5XWbRFcCUAa6HvE=";
-  }) super.jsaddle-warp;
-
   # https://github.com/ghcjs/jsaddle/issues/151
   jsaddle-webkit2gtk =
     overrideCabal
