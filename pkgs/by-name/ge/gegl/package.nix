@@ -29,7 +29,7 @@
   gexiv2,
   libwebp,
   luajit,
-  openexr_2,
+  openexr,
   suitesparse,
   withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
   gimp,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libraw
     libwebp
     gexiv2
-    openexr_2
+    openexr
     suitesparse
   ]
   ++ lib.optionals stdenv.cc.isClang [
