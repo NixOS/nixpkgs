@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  nix-update-script,
   renode,
   lib,
 }:
@@ -32,10 +31,6 @@ renode.overrideAttrs (old: rec {
   '';
 
   passthru = old.passthru // {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version=branch"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 })
