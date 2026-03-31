@@ -145,10 +145,16 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.git ];
-
       preStart = ''
-        # This is safe to be run on an existing repo
-        git init ${cfg.stateDir}
+        # Check if it's a bare repository.
+        IS_BARE=$(git -C "${cfg.stateDir}" rev-parse --is-bare-repository 2>/dev/null || echo "false")
+
+        if [ "$IS_BARE" = "true" ]; then
+          echo "Directory is a bare repository. Skipping initialization."
+        else
+          echo "Directory is not a bare repository. Initializing..."
+          git init "${cfg.stateDir}"
+        fi
       '';
 
       serviceConfig = {
