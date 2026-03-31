@@ -23,7 +23,7 @@
   sqliteSupport ? true,
   lndir,
   runCommand,
-  stdenv,
+  stdenvNoCC,
   fetchFromCodeberg,
   buildNpmPackage,
   writableTmpDirAsHomeHook,
@@ -195,7 +195,7 @@ buildGoModule rec {
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.forgejo ];
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = stdenvNoCC.hostPlatform.isDarwin;
     mainProgram = "forgejo";
   };
 }
