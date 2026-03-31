@@ -15,6 +15,7 @@
   nix-update-script,
   nixosTests,
   orca,
+  fetchpatch2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,7 +30,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-HP2Dl/vEX4K3XaXtjOpN1EW6uE4RuLm2+RMLB3QvOXQ=";
   };
 
-  cargoHash = "sha256-4yRBgFrH4RBpuvChTED+ynx+PyFumoT2Z+R1gXxF4Xc=";
+  cargoHash = "sha256-KLIUE3+iAZbNB6YPSl75I6jHwa1RBN+go5A7RFi5LxE=";
+
+  cargoPatches = [
+    (fetchpatch2 {
+      # https://github.com/pop-os/cosmic-greeter/pull/426
+      name = "security-hardening.patch";
+      url = "https://github.com/pop-os/cosmic-greeter/commit/6049b50f8984f98c2c61117d86b9f6f9befc9300.patch?full_index=1";
+      hash = "sha256-T9tc4Krmp5jieKhbaTgI1CByWqSWy97HWcKMIXzr7MU=";
+    })
+  ];
 
   env = {
     VERGEN_GIT_COMMIT_DATE = "2025-12-05";
