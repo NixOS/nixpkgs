@@ -1114,6 +1114,8 @@ self: super: with self; {
 
   async-generator = callPackage ../development/python-modules/async-generator { };
 
+  async-geotiff = callPackage ../development/python-modules/async-geotiff { };
+
   async-interrupt = callPackage ../development/python-modules/async-interrupt { };
 
   async-lru = callPackage ../development/python-modules/async-lru { };
