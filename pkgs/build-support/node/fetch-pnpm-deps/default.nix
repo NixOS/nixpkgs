@@ -7,6 +7,7 @@
   cacert,
   makeSetupHook,
   pnpm,
+  pnpm-fixup-state-db,
   writableTmpDirAsHomeHook,
   yq,
   zstd,
@@ -47,6 +48,14 @@ in
           };
 
       filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
+
+      pnpm-fixup-state-db' =
+        if pnpm.nodejs or null != null then
+          pnpm-fixup-state-db.override {
+            inherit (pnpm) nodejs;
+          }
+        else
+          pnpm-fixup-state-db;
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
     assert (lib.throwIf (args ? pnpmWorkspace)
@@ -77,6 +86,7 @@ in
               jq
               moreutils
               pnpm # from args
+              pnpm-fixup-state-db'
               yq
               zstd
             ]
@@ -145,6 +155,10 @@ in
               for f in $(find $storePath -name "*.json"); do
                 jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
               done
+
+              if [ -f "$storePath/v11/index.db" ]; then
+                pnpm-fixup-state-db "$storePath/v11";
+              fi
 
               # This folder contains symlinks to /build/source which we don't need
               # since https://github.com/pnpm/pnpm/releases/tag/v10.27.0

@@ -103,7 +103,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               ];
             })
           );
-      inherit majorVersion;
+      inherit nodejs majorVersion;
 
       tests.version = lib.optionalAttrs withNode (
         testers.testVersion { package = finalAttrs.finalPackage; }
