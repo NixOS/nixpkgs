@@ -60,6 +60,7 @@ let
     exec = "obsidian %u";
     categories = [ "Office" ];
     mimeTypes = [ "x-scheme-handler/obsidian" ];
+    startupWMClass = "obsidian";
   };
 
   linux = stdenv.mkDerivation {
