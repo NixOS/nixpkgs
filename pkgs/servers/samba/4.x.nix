@@ -277,6 +277,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  hardeningDisable = [ "strictflexarrays1" ];
+
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
   '';
