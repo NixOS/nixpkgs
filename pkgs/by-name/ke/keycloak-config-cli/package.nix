@@ -8,16 +8,16 @@
 }:
 maven.buildMavenPackage rec {
   pname = "keycloak-config-cli";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "adorsys";
     repo = "keycloak-config-cli";
     tag = "v${version}";
-    hash = "sha256-Vg56Dz9U0eAJw+7u90MSZWmMIZttWYGXAwsXZsEfTj8=";
+    hash = "sha256-ZE5GYgh9iWheBt3VJEsNr7A6IzXKdmgdCyWnqqjBKrA=";
   };
 
-  mvnHash = "sha256-tdh8hRqGXI3zuwy55dC3La9dm2naqeCEZT4qcw37iDI=";
+  mvnHash = "sha256-LsSCNq4p8pQSunNtfphXdkwNS0sy+GgGb6GlNFLXlzI=";
 
   # Tests use MockServer which needs to bind to a local port
   __darwinAllowLocalNetworking = true;
