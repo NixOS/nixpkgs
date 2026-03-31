@@ -477,6 +477,7 @@ in
         nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
         nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
         nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
+        nvidia_x11_legacy580 = nvidiaPackages.legacy_580;
         nvidia_x11_production = nvidiaPackages.production;
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
