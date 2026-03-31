@@ -584,6 +584,10 @@ in
           "plymouth-quit.service"
           "systemd-logind.service"
         ];
+        # sddm stores state in this directory, which should be mounted.
+        unitConfig.RequiresMountsFor = [
+          config.users.users.sddm.home
+        ];
       };
     };
   };
