@@ -39,33 +39,6 @@ in
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
 
-  femon = stdenv.mkDerivation rec {
-    pname = "vdr-femon";
-    version = "2.4.0";
-
-    buildInputs = [ vdr ];
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-femon";
-      owner = "rofafor";
-      sha256 = "sha256-0qBMYgNKk7N9Bj8fAoOokUo+G9gfj16N5e7dhoKRBqs=";
-      rev = "v${version}";
-    };
-
-    postPatch = "substituteInPlace Makefile --replace /bin/true true";
-
-    makeFlags = [ "DESTDIR=$(out)" ];
-
-    meta = {
-      inherit (src.meta) homepage;
-      description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ lib.maintainers.ck3d ];
-      license = lib.licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
-
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
     version = "1.8.3";
