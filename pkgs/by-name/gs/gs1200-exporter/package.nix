@@ -20,8 +20,9 @@ buildGoModule rec {
   meta = {
     description = "Prometheus exporter for Zyxel GS1200 switches";
     homepage = "https://github.com/robinelfrink/gs1200-exporter";
-    license = lib.licenses.asl20; # adjust to your LICENSE
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ DerGrumpf ];
     mainProgram = "gs1200-exporter";
+    platforms = lib.platforms.all;
   };
 }
