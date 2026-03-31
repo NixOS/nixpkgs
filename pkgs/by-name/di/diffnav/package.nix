@@ -47,7 +47,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/dlvhdr/diffnav";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      amesgen
       matthiasbeyer
     ];
     mainProgram = "diffnav";

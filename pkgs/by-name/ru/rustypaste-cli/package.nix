@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustypaste-cli";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "rustypaste-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tv5nAs5g7NWVakKUyw5PVxHJYQniV9OYm7yDXhooWU4=";
+    hash = "sha256-7SuX7abFrQegELvlwFRvt7yRmNWq1egIzYIkAvG4eQQ=";
   };
 
-  cargoHash = "sha256-Z8rybofRp4hzTbn3iT0X50fcJCn2tT3HTYTLLWTJBek=";
+  cargoHash = "sha256-aEvkRI467cE2S3q4uIHypclhVk9X/GXi3MiLsxPgANQ=";
 
   meta = {
     description = "CLI tool for rustypaste";
