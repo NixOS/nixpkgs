@@ -11682,11 +11682,6 @@ with pkgs;
     lisp-compiler = ecl;
   };
 
-  yacas-gui = yacas.override {
-    enableGui = true;
-    enableJupyter = false;
-  };
-
   ### SCIENCE / MISC
 
   boinc-headless = boinc.override { headless = true; };
