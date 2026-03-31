@@ -5393,6 +5393,11 @@
     githubId = 5953003;
     name = "Connor Nelson";
   };
+  conny = {
+    github = "ConstantConstantin";
+    githubId = 162139822;
+    name = "Constantin-Paul Hertel";
+  };
   conradmearns = {
     email = "conradmearns+github@pm.me";
     github = "ConradMearns";
