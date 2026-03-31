@@ -16,7 +16,7 @@
   libsm,
   libxfixes,
   coreutils,
-  wrapQtAppsHook,
+  libsForQt5,
   icu63,
   nss,
   minizip,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     minizip
