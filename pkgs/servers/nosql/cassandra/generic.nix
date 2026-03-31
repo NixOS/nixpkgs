@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  python311Packages,
+  python3Packages,
   makeWrapper,
   gawk,
   bash,
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/cassandra/${version}/apache-cassandra-${version}-bin.tar.gz";
   };
 
-  pythonPath = with python311Packages; [ cassandra-driver ];
+  pythonPath = with python3Packages; [ cassandra-driver ];
 
-  nativeBuildInputs = [ python311Packages.wrapPython ];
+  nativeBuildInputs = [ python3Packages.wrapPython ];
 
-  buildInputs = [ python311Packages.python ] ++ pythonPath;
+  buildInputs = [ python3Packages.python ] ++ pythonPath;
 
   installPhase = ''
     runHook preInstall
