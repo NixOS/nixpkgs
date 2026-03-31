@@ -4,7 +4,7 @@
   vdr,
   fetchFromGitHub,
   graphicsmagick,
-  boost186,
+  boost,
   libgcrypt,
   ncurses,
   callPackage,
@@ -132,19 +132,19 @@ in
 
   fritzbox = stdenv.mkDerivation rec {
     pname = "vdr-fritzbox";
-    version = "1.5.4";
+    version = "1.5.8";
 
     src = fetchFromGitHub {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      hash = "sha256-o+wJJCAOTg6pPScZ0iIiEWZyT2/++pLtuOppNeaXzmQ=";
       fetchSubmodules = true;
     };
 
     buildInputs = [
       vdr
-      boost186
+      boost
       libgcrypt
     ];
 
