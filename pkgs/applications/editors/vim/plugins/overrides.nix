@@ -871,6 +871,7 @@ assertNoAdditions {
       "conjure-spec.client.fennel.nfnl_spec"
       "conjure-spec.client.guile.socket_spec"
       "conjure-spec.client.scheme.stdio_spec"
+      "conjure-spec.process_spec"
       # No parser for fennel
       "conjure.client.fennel.def-str-util"
     ];
