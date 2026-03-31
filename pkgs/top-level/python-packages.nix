@@ -18090,6 +18090,8 @@ self: super: with self; {
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
+  spectral-derivatives = callPackage ../development/python-modules/spectral-derivatives { };
+
   speechbrain = callPackage ../development/python-modules/speechbrain { };
 
   speechrecognition = callPackage ../development/python-modules/speechrecognition { };
