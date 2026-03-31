@@ -75,6 +75,11 @@
     githubId = 54892055;
     name = "David mp";
   };
+  _0don = {
+    name = "Don";
+    github = "0-don";
+    githubId = 70039285;
+  };
   _0nyr = {
     email = "onyr.maintainer@gmail.com";
     github = "0nyr";
