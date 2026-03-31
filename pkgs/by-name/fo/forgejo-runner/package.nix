@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   buildGoModule,
   fetchFromGitea,
@@ -42,7 +42,7 @@ let
     "TestHandler"
     "TestHandler_gcCache"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenvNoCC.isDarwin [
     # Uses docker-specific options, unsupported on Darwin
     "TestMergeJobOptions"
   ];
@@ -100,7 +100,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    tests = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux {
       latest = nixosTests.forgejo.sqlite3;
       lts = nixosTests.forgejo-lts.sqlite3;
     };
