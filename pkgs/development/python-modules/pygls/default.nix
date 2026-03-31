@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
     tag = "v${version}";
-    hash = "sha256-VXLPtZDbTs59DRvrB9xv1EJshV02K+7983BHR7QKTaE=";
+    hash = "sha256-jxc1nKxfiRenb629a2WCZOzqyIOvT5XU4NrjmKPlDHk=";
   };
 
   nativeBuildInputs = [
