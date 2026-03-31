@@ -111,6 +111,8 @@ stdenv.mkDerivation rec {
     rm $out/bin/cqlsh
     # Make "cqlsh.py" accessible by invoking "cqlsh"
     ln -s $out/bin/cqlsh.py $out/bin/cqlsh
+    # Use nixpkgs Python packages instead of bundled zips
+    makeWrapperArgs+=("--set" "CQLSH_NO_BUNDLED" "1")
     wrapPythonPrograms
   '';
 
