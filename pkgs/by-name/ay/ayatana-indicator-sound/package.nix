@@ -16,8 +16,6 @@
   libgee,
   libnotify,
   libpulseaudio,
-  libqtdbusmock,
-  libqtdbustest,
   libsForQt5,
   libxml2,
   lomiri,
@@ -99,8 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     gtest
     libsForQt5.qtbase
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     lomiri.gmenuharness
   ];
 

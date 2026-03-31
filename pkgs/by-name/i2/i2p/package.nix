@@ -26,12 +26,13 @@ let
       "java.security.jgss"
       "java.sql"
       "java.xml"
+      "jdk.zipfs"
     ];
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchzip {
     urls = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de/"
       "https://download.i2p2.no/releases/"
     ]);
-    hash = "sha256-Ogok7s5sawG27ucstG+NYiIAF66Pb3ExOYsL8mfNav8=";
+    hash = "sha256-NDiE3HhY18zZKLu1zkp3omwf8zmTJ9JPRIq34rDdpGc=";
   };
 
   strictDeps = true;

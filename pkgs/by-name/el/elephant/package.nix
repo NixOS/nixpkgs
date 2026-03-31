@@ -74,16 +74,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "elephant";
-  version = "2.20.2";
+  version = "2.20.3";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "elephant";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RvCzINnVISBT3d0F1DoIcQFbQsbRJISW9qZeKTzmNaA=";
+    hash = "sha256-5PLTPbnbtK0iDbsB9yFeHr5y/pv6/XzoVm/CDeXXt/c=";
   };
 
-  vendorHash = "sha256-tO+5x2FIY1UBvWl9x3ZSpHwTWUlw1VNDTi9+2uY7xdU=";
+  vendorHash = "sha256-EWXZ+9/QDRpidpVHBcfJgp0xoc3YtRsiC/UTk1R+FSY=";
 
   buildInputs = [ protobuf ];
   nativeBuildInputs = [
