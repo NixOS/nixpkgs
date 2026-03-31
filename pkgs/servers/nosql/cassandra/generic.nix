@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests =
       let
-        test = nixosTests."cassandra_${generation}";
+        test = nixosTests.cassandra;
       in
       {
         nixos =
