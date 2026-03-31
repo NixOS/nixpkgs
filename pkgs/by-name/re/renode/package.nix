@@ -58,13 +58,13 @@ let
 in
 buildDotnetModule rec {
   pname = "renode";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "renode";
     repo = "renode";
-    rev = "20ad06d9379997829df309c5724be94ba4effedd";
-    hash = "sha256-I/W3OAzHCN8rEIlDyBwI1ZDvKfHYYBDiqE9XkWHxo7o=";
+    rev = "d66b0c2aa3d420408eccecfd1d3bab0fd702a6db";
+    hash = "sha256-HQaMo3qsZvD4uBIsGzyKpTO7gaxjVvurI91pm1UXvjc=";
     fetchSubmodules = true;
   };
 

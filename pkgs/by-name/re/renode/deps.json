@@ -40,6 +40,31 @@
     "hash": "sha256-5THx4af5PghPnQxXdnsC+wtVcoslh+0636WkB1FaPYg="
   },
   {
+    "pname": "GirCore.GLib-2.0",
+    "version": "0.7.0",
+    "hash": "sha256-u3jwn7fQONG4M4i4gX6glR1zKn2JNI05QieFf1Gsays="
+  },
+  {
+    "pname": "GirCore.GObject-2.0",
+    "version": "0.7.0",
+    "hash": "sha256-bmCHh0NyjG8YumCCI2zR8lrb6lhD6uF3MsA9tE1aWIA="
+  },
+  {
+    "pname": "GirCore.Gst-1.0",
+    "version": "0.7.0",
+    "hash": "sha256-XxUcFgzhtD1YKjP9vF1w/oloZOZRlBPH1AO0cAkoWvk="
+  },
+  {
+    "pname": "GirCore.GstApp-1.0",
+    "version": "0.7.0",
+    "hash": "sha256-uKSgmjZ4WwGxptKZKofcXMPa99UO1VHRX7OZdgqEs04="
+  },
+  {
+    "pname": "GirCore.GstBase-1.0",
+    "version": "0.7.0",
+    "hash": "sha256-WZC/W/zsRFixjoYb19PttEnKw422n7qZC+dnWLcgCb8="
+  },
+  {
     "pname": "GLibSharp",
     "version": "3.24.24.95",
     "hash": "sha256-1pDRkKoUI9fLJBcTA2DBlpVccJl2GyAdL+VKjsFbttA="
