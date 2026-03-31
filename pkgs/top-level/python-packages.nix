@@ -5014,6 +5014,8 @@ self: super: with self; {
 
   enocean = callPackage ../development/python-modules/enocean { };
 
+  enocean-async = callPackage ../development/python-modules/enocean-async { };
+
   enochecker-core = callPackage ../development/python-modules/enochecker-core { };
 
   enrich = callPackage ../development/python-modules/enrich { };
