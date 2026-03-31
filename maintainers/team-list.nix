@@ -849,6 +849,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  radicle = {
+    github = "radicle";
+  };
+
   redcodelabs = {
     members = [
       unrooted
