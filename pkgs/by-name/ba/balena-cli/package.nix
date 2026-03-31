@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_latest,
+  nodejs_24,
   versionCheckHook,
   node-gyp,
   python3,
@@ -13,10 +13,10 @@
 
 let
   buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_latest;
+    nodejs = nodejs_24;
   };
   node-gyp' = node-gyp.override {
-    nodejs = nodejs_latest;
+    nodejs = nodejs_24;
   };
 in
 buildNpmPackage' rec {
