@@ -86,7 +86,11 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTests = [
+    # 4 tests fail with:
+    #
     # AttributeError: module 'scipy.special' has no attribute 'sph_harm'
+    #
+    # See: https://github.com/glotzerlab/freud/issues/1408
     "test_ld"
     "test_multiple_l"
     "test_qlmi"
