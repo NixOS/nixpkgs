@@ -256,7 +256,7 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 
 ### `lib.sourceTypes.binaryBytecode` {#lib.sourceTypes.binaryBytecode}
 
-Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
+Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files or minified/obfuscated Javascript `.js` files from another source.
 
 ## Software identifiers {#sec-meta-identifiers}
 
