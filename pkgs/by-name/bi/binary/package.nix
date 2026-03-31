@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "binary";
-  version = "5.3";
+  version = "5.4";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "fizzyizzy05";
     repo = "binary";
     tag = version;
-    hash = "sha256-kJLEDE/jHKc/VDGa0lcm4eM7nEMam0fbEW8YJVfc7OY=";
+    hash = "sha256-Yz+DMTf89QY7W6WrInNvHz8sx3uCOch/zU/FssY90eA=";
   };
 
   strictDeps = true;
