@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   nix-update-script,
 }:
 
@@ -14,16 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-R4zC1pnM72FVqBQ5d03z8vyVccsM163BE15m2hdEnSA=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 PlemolJP/*.ttf -t $out/share/fonts/truetype/plemoljp
-    install -Dm444 PlemolJP35/*.ttf -t $out/share/fonts/truetype/plemoljp-35
-    install -Dm444 PlemolJPConsole/*.ttf -t $out/share/fonts/truetype/plemoljp-console
-    install -Dm444 PlemolJP35Console/*.ttf -t $out/share/fonts/truetype/plemoljp-35console
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru = {
     updateScript = nix-update-script {

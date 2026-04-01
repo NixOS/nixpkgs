@@ -2,6 +2,7 @@
   stdenvNoCC,
   fetchzip,
   plemoljp,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,16 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-V21T8ktNZE4nq3SH6aN9iIJHmGTkZuMsvT84yHbwSqI=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 PlemolJP_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs
-    install -Dm444 PlemolJP35_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-35
-    install -Dm444 PlemolJPConsole_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-console
-    install -Dm444 PlemolJP35Console_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-35console
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = plemoljp.meta // {
     description = "Composite font of IBM Plex Mono, IBM Plex Sans JP and hidden full-width space";
