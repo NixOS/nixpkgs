@@ -13,13 +13,13 @@
 
 buildGo126Module (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.138.0";
+  version = "1.122.17";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7gEmaslhTmk72/GiL2xfWn4Pb/e/35wDXePGrvmuTUg=";
+    hash = "sha256-ujYRUYx+jr5KyNnH5bI98nM85AFNPPAUMTqXV+a6IsU=";
   };
 
   vendorHash = null;
