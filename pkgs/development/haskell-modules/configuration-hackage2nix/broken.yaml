@@ -5120,7 +5120,6 @@ broken-packages:
   - psx # failure in job https://hydra.nixos.org/build/233199666 at 2023-09-02
   - ptera-core # failure in job https://hydra.nixos.org/build/295096340 at 2025-04-22
   - PTQ # failure in job https://hydra.nixos.org/build/233202571 at 2023-09-02
-  - ptr-peeker # failure in job https://hydra.nixos.org/build/307521316 at 2025-09-19
   - pub # failure in job https://hydra.nixos.org/build/233255415 at 2023-09-02
   - publicsuffix # failure in job https://hydra.nixos.org/build/233241572 at 2023-09-02
   - publicsuffixlistcreate # failure in job https://hydra.nixos.org/build/233251430 at 2023-09-02
