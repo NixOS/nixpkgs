@@ -750,8 +750,8 @@ in
       "sha256-DsxrKv4SwSJc08EAb2kSGFfT+QkU/HQbCiOOirtLpj8=";
 
   mypy-boto3-kinesisanalyticsv2 =
-    buildMypyBoto3Package "kinesisanalyticsv2" "1.42.3"
-      "sha256-EgqYSa3GqFX/JE0PJnY3jkG1LTI6VEaREPe2KHuxBf8=";
+    buildMypyBoto3Package "kinesisanalyticsv2" "1.42.80"
+      "sha256-SoUg2kSi/08rTIMYbpIdDxmcSHgoS8ll+e22PZsIX9w=";
 
   mypy-boto3-kinesisvideo =
     buildMypyBoto3Package "kinesisvideo" "1.42.3"
