@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smux";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "Aietes";
     repo = "smux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pmTQTw6HayQK8g+W39UVJe35TVgUEM6tcbzWNCOBeSQ=";
+    hash = "sha256-xmZD80eWO9yOSn7nWmS2vyj8hkuWjc/ztflaylxI7JM=";
   };
 
-  cargoHash = "sha256-Td61UrS83rqd5g50gEEARkE0/uMnOMUytF5XSW4pJVI=";
+  cargoHash = "sha256-4sgy+jz7Gwdb7UIU5BqZlP63envlNRqv/Olx2fIaL1U=";
 
   nativeBuildInputs = [
     installShellFiles
