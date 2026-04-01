@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nagios";
-  version = "4.5.11";
+  version = "4.5.12";
 
   src = fetchFromGitHub {
     owner = "NagiosEnterprises";
     repo = "nagioscore";
     tag = "nagios-${finalAttrs.version}";
-    hash = "sha256-RUiEVCOqEo0+oD6GPl9U3Y4C2Fz4uOGgSaBC+WIkxjs=";
+    hash = "sha256-4syNU+j8ZOyNZkQKib8ia2zmgysXXwBQ5eURzMzl0Zg=";
   };
 
   patches = [ ./nagios.patch ];
