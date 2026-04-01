@@ -325,6 +325,16 @@ builtins.intersectAttrs super {
   # Heist's test suite requires system pandoc
   heist = addTestToolDepend pkgs.pandoc super.heist;
 
+  pandoc = lib.pipe super.pandoc [
+    # pandoc can't do I/O (including reading data files). See
+    # <https://pandoc.org/pandoc-server.html#description>.
+    # It's simpler to just enable this globally rather than building multiple pandocs.
+    (enableCabalFlag "embed_data_files")
+    # pandoc still references these data files and we can't prevent their installation.
+    # pkgs.pandoc removes the reference to $out, so having everything in one place is best.
+    (overrideCabal { enableSeparateDataOutput = false; })
+  ];
+
   # Use Nixpkgs' double-conversion library
   double-conversion = disableCabalFlag "embedded_double_conversion" (
     addBuildDepends [ pkgs.double-conversion ] super.double-conversion
