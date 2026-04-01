@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "8.1.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "ntc-templates";
     tag = "v${version}";
-    hash = "sha256-J1Icf9UG5IMYBH90Mfxd+p+rk57z2OXQENnoRAaepN4=";
+    hash = "sha256-Tgjc2tQaCbmzvp+6FFa5KKFnGHSH01EJFeOoopB6vBI=";
   };
 
   build-system = [ poetry-core ];
