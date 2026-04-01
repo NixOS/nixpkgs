@@ -5,7 +5,7 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "merriweather";
   version = "2.200";
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ emily ];
   };
-}
+})
