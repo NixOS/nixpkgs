@@ -10,6 +10,7 @@
   stripJavaArchivesHook,
   wrapGAppsHook3,
   libGL,
+  libxxf86vm,
 }:
 let
   # Force use of JDK 17, see https://github.com/processing/processing4/issues/1043
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     jdk
     jogl
     rsync
+    libGL
+    libxxf86vm
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -108,7 +111,12 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/unwrapped/Processing $out/bin/Processing \
       ''${gappsWrapperArgs[@]} \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libGL
+          libxxf86vm
+        ]
+      }" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
