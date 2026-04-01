@@ -99,6 +99,10 @@ in
             libayatana-common
             ubports-click
           ])
+          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+          ++ (with pkgs.lomiri-qt6; [
+            morph-browser
+          ])
           ++ (with pkgs.lomiri; [
             hfd-service
             libusermetrics
@@ -125,10 +129,6 @@ in
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
-            # morph-browser
-            # Adding another browser that is known-working until Morph Browser can migrate to Qt6
-            pkgs.epiphany
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
             teleports
           ]);

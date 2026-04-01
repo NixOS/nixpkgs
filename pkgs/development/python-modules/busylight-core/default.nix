@@ -10,16 +10,16 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "busylight-core";
-  version = "2.0.1";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight-core";
-    tag = "v${version}";
-    hash = "sha256-BJJkuArs7zRvnxVykcMzc/K+MC9r/NYy3wUfAUxrnNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-as2IvaxyMjGKPGlBmz1cntAhbpuW+f3INtnNIcwpWh8=";
   };
 
   postPatch = ''
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting programmatically with USB-connected LED lights";
     homepage = "https://github.com/JnyJny/busylight-core";
-    changelog = "https://github.com/JnyJny/busylight-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/JnyJny/busylight-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

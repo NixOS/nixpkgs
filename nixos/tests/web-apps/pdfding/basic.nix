@@ -56,6 +56,7 @@
 
       # create admin
       machine.wait_for_unit("multi-user.target")
+      machine.wait_for_open_port(${toString port})
       machine.succeed("DJANGO_SUPERUSER_PASSWORD=admin pdfding-manage createsuperuser --no-input --username admin --email admin@localhost")
 
       cookie_jar = "/tmp/cookies.txt"
