@@ -1,4 +1,5 @@
 {
+  stdenv,
   rustPlatform,
   pnpm_10,
   fetchPnpmDeps,
@@ -21,13 +22,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.100";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GsIOMfNqjcdtVRZ0XwCkxpQoIonivLJVT4GmZyB86M0=";
+    hash = "sha256-nlmz3XE8SxWJ8JxBFLRfZmpRyTzYQA2l4qfSC/IsN2k=";
     fetchSubmodules = true;
   };
 
@@ -44,11 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-/bzjOdpvuPLBMvX/q1WaO3lFg5/jLz5Ypr5OojssXUI=";
+    hash = "sha256-0BihRVXYRGKciBhyHd14vco34RYpKE+TUQzwXq6BkrU=";
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-qYBHYjwfGkKmGXN8caamZ6/XGtnxe+lmy6dIpdMwS/I=";
+  cargoHash = "sha256-d8V3mdfE9LgmPtM2GMWbed3u+GBD45cuSkQ44+lToVY=";
 
   buildAndTestSubdir = "src-tauri";
 
@@ -60,6 +61,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
+
+    mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
+    cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
+    jq '.scripts.build = "true"' \
+      src-tauri/plugins/tauri-plugin-turso/package.json | \
+      sponge src-tauri/plugins/tauri-plugin-turso/package.json
   '';
 
   nativeBuildInputs = [
@@ -89,9 +96,49 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = ''
     # set up pdfjs and simplecc
     pnpm setup-vendors
+
+    # `tauri-plugin-turso` expects frontend files to exist before the build, else it fails with:
+    #
+    # > > tauri-plugin-turso-api@0.1.0 build /build/source/apps/readest-app/src-tauri/plugins/tauri-plugin-turso
+    # > > true
+    # >
+    # >   Error Unable to find your web assets, did you forget to build your web app?
+    #     Your frontendDist is set to "../out" (which is `/build/source/apps/readest-app/out`).
+    pnpm --filter @readest/readest-app build
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tursoPluginDeps = fetchPnpmDeps {
+    pname = "tauri-plugin-turso";
+    version = finalAttrs.version;
+    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Jf/UaEaLUg/v9ZRInBCEfkDY4d6nwyAIegCMKZe0iAQ=";
+  };
+
+  passthru.tursoPlugin = stdenv.mkDerivation {
+    pname = "tauri-plugin-turso";
+    version = finalAttrs.version;
+    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+
+    nativeBuildInputs = [
+      pnpm_10
+      pnpmConfigHook
+      nodejs
+    ];
+
+    pnpmDeps = finalAttrs.passthru.tursoPluginDeps;
+
+    buildPhase = ''
+      pnpm build
+    '';
+
+    installPhase = ''
+      cp -r dist-js $out
+    '';
+  };
 
   meta = {
     description = "Modern, feature-rich ebook reader";
