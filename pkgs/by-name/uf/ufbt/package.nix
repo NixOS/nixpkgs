@@ -86,11 +86,11 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [
     "--set FBT_NOENV 1"
     "--set UFBT_SDK_PATH ${flipper-sdk}"
-    "--set UFBT_OPENOCD ${lib.getBin openocd}/bin/openocd"
-    "--set UFBT_DFUUTIL ${lib.getBin dfu-util}/bin/dfu-util"
-    "--set UFBT_CLANGD ${lib.getBin llvmPackages.clang-unwrapped}/bin/clangd"
-    "--set UFBT_PROTOC ${lib.getBin protobuf}/bin/protoc"
-    "--set UFBT_HEATSHRINK ${lib.getBin heatshrink}/bin/heatshrink"
+    "--set UFBT_OPENOCD ${lib.getExe openocd}"
+    "--set UFBT_DFUUTIL ${lib.getExe dfu-util}"
+    "--set UFBT_CLANGD ${lib.getExe llvmPackages.clang-unwrapped}"
+    "--set UFBT_PROTOC ${lib.getExe protobuf}"
+    "--set UFBT_HEATSHRINK ${lib.getExe heatshrink}"
     "--set UFBT_TOOLCHAIN_BINDIR ${gcc-arm-13-2}/bin"
     "--prefix PYTHONPATH : ${scons}/lib/python${python3.pythonVersion}/site-packages"
     "--prefix PATH : ${
