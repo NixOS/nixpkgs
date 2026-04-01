@@ -1,0 +1,35 @@
+From 7a9f71d7c1dcd8372e50e18fd2549df86a3543df Mon Sep 17 00:00:00 2001
+From: nixpkgs <nix@nixpkgs>
+Date: Wed, 1 Apr 2026 17:56:21 +0300
+Subject: [PATCH 2/3] replace .extraLarge with .large for macOS <26 SDK
+
+
+diff --git a/src/ui/main-window/TilesView.swift b/src/ui/main-window/TilesView.swift
+index 63f3ddd..14304c8 100644
+--- a/src/ui/main-window/TilesView.swift
++++ b/src/ui/main-window/TilesView.swift
+@@ -137,7 +137,7 @@ class TilesView {
+         searchField.sendsWholeSearchString = true
+         searchField.bezelStyle = .roundedBezel
+         if #available(macOS 26.0, *) {
+-            searchField.controlSize = .extraLarge
++            searchField.controlSize = .large
+         } else if #available(macOS 13.0, *) {
+             searchField.controlSize = .large
+         } else {
+diff --git a/src/ui/settings-window/SettingsWindow.swift b/src/ui/settings-window/SettingsWindow.swift
+index fec566a..c1589ed 100644
+--- a/src/ui/settings-window/SettingsWindow.swift
++++ b/src/ui/settings-window/SettingsWindow.swift
+@@ -625,7 +625,7 @@ class SettingsWindow: NSWindow {
+         searchField.sendsWholeSearchString = true
+         searchField.bezelStyle = .roundedBezel
+         if #available(macOS 26.0, *) {
+-            searchField.controlSize = .extraLarge
++            searchField.controlSize = .large
+         } else if #available(macOS 13.0, *) {
+             searchField.controlSize = .large
+         }
+-- 
+2.53.0
+
