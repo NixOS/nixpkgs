@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fc61af7..b2b594e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -303,7 +303,7 @@ if (MAGMA_ENABLE_HIP)
+     set(GPU_ARCH_FLAGS ${DEVCCFLAGS})
+ 
+     #add_compile_options(${GPU_ARCH_FLAGS})
+-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__HIP_PLATFORM_AMD__" )
++    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__HIP_PLATFORM_AMD__ -DHIPBLAS_V2" )
+     option(ROCM_CORE "Location of the rocm-core package")
+     execute_process(COMMAND "${CMAKE_SOURCE_DIR}/tools/get-rocm-version.sh" "${ROCM_CORE}" OUTPUT_VARIABLE ROCM_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+     message(STATUS "ROCM_VERSION=${ROCM_VERSION}")
+diff --git a/Makefile b/Makefile
+index 44880ab..afaab45 100644
+--- a/Makefile
++++ b/Makefile
+@@ -846,7 +846,7 @@ ifeq ($(BACKEND),cuda)
+ d_ext := cu
+ else ifeq ($(BACKEND),hip)
+ d_ext := cpp
+-CXXFLAGS += -D__HIP_PLATFORM_AMD__
++CXXFLAGS += -D__HIP_PLATFORM_AMD__ -DHIPBLAS_V2
+ CXXFLAGS += -DROCM_VERSION=$(shell ./tools/get-rocm-version.sh)
+ endif
+ 

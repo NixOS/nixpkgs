@@ -1,0 +1,28 @@
+diff --git a/kit/pom.xml b/kit/pom.xml
+index 644d36c..e4d91fb 100644
+--- a/kit/pom.xml
++++ b/kit/pom.xml
+@@ -11,23 +11,6 @@
+     </parent>
+ 
+     <dependencies>
+-        <!-- JavaFX -->
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>${javafx.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-web</artifactId>
+-            <version>${javafx.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-swing</artifactId>
+-            <version>${javafx.version}</version>
+-        </dependency>
+-
+         <!-- Eclipse Aether -->
+         <dependency>
+             <groupId>org.eclipse.aether</groupId>

@@ -1,0 +1,34 @@
+diff --git a/cmd/main.go b/cmd/main.go
+index f9af7038..099ff2e2 100644
+--- a/cmd/main.go
++++ b/cmd/main.go
+@@ -24,11 +24,6 @@ import (
+ )
+ 
+ func main() {
+-	if !pufferpanel.UserInGroup("pufferpanel") {
+-		fmt.Println("You do not have permission to use this command")
+-		return
+-	}
+-
+ 	defer logging.Close()
+ 
+ 	defer func() {
+diff --git a/cmd/user.go b/cmd/user.go
+index d4a27aaf..9bf21910 100644
+--- a/cmd/user.go
++++ b/cmd/user.go
+@@ -218,10 +218,9 @@ type userCreate struct {
+ }
+ 
+ func editUser(cmd *cobra.Command, args []string) {
+-	if !pufferpanel.UserInGroup() {
+-		fmt.Printf("You do not have permission to use this command")
+-		return
+-	}
++	// Keeping import to avoid merge conflicts with future updates in case
++	// PufferPanel starts using this import elsewhere in this file.
++	_ = pufferpanel.UserInGroup
+ 
+ 	db, err := database.GetConnection()
+ 	if err != nil {

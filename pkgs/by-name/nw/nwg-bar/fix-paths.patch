@@ -1,0 +1,47 @@
+diff --git a/config/bar.json b/config/bar.json
+index 6c456e7..98527cb 100644
+--- a/config/bar.json
++++ b/config/bar.json
+@@ -2,21 +2,21 @@
+   {
+     "label": "Lock",
+     "exec": "swaylock -f -c 000000",
+-    "icon": "/usr/share/nwg-bar/images/system-lock-screen.svg"
++    "icon": "@out@/share/nwg-bar/images/system-lock-screen.svg"
+   },
+   {
+     "label": "Logout",
+     "exec": "swaymsg exit",
+-    "icon": "/usr/share/nwg-bar/images/system-log-out.svg"
++    "icon": "@out@/share/nwg-bar/images/system-log-out.svg"
+   },
+   {
+     "label": "Reboot",
+     "exec": "systemctl reboot",
+-    "icon": "/usr/share/nwg-bar/images/system-reboot.svg"
++    "icon": "@out@/share/nwg-bar/images/system-reboot.svg"
+   },
+   {
+     "label": "Shutdown",
+     "exec": "systemctl -i poweroff",
+-    "icon": "/usr/share/nwg-bar/images/system-shutdown.svg"
++    "icon": "@out@/share/nwg-bar/images/system-shutdown.svg"
+   }
+ ]
+\ No newline at end of file
+diff --git a/tools.go b/tools.go
+index f97751e..987163e 100644
+--- a/tools.go
++++ b/tools.go
+@@ -45,10 +45,7 @@ func configDir() string {
+ }
+ 
+ func getDataHome() string {
+-	if os.Getenv("XDG_DATA_HOME") != "" {
+-		return os.Getenv("XDG_DATA_HOME")
+-	}
+-	return "/usr/share/"
++	return "@out@/share/"
+ }
+ 
+ func createDir(dir string) {

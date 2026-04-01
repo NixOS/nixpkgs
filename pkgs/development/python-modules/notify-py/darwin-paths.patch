@@ -1,0 +1,13 @@
+diff --git a/notifypy/os_notifiers/macos.py b/notifypy/os_notifiers/macos.py
+index 68731fb..53fcee3 100644
+--- a/notifypy/os_notifiers/macos.py
++++ b/notifypy/os_notifiers/macos.py
+@@ -75,7 +75,7 @@ class MacOSNotifier(BaseNotifier):
+     def _find_installed_afplay():
+         """Function to find the path for afplay"""
+         try:
+-            run_which_for_aplay = subprocess.check_output(["which", "afplay"])
++            run_which_for_aplay = subprocess.check_output(["@which@", "afplay"])
+             return run_which_for_aplay.decode("utf-8")
+         except subprocess.CalledProcessError:
+             logger.exception("Unable to find aplay.")

@@ -1,0 +1,13 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index aac26e060..d10c34a40 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -228,7 +228,7 @@ reqwest = { version = "0.12", default-features = false, features = [
+ ] }
+ ring = "0.17"
+ rpds = "0.11"
+-rusqlite = { version = "0.28", features = ["bundled"] }
++rusqlite = { version = "0.28" }
+ rust_eth_kzg = "0.9"
+ safe_arith = "0.1"
+ sensitive_url = { version = "0.1", features = ["serde"] }

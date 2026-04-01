@@ -1,0 +1,35 @@
+commit cca718816f66b0155602c974e6743e8ce49e367b
+Author: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date:   Thu Jun 12 03:37:27 2025 +0200
+
+    blueprints: copy default blueprints w/o permissions
+    
+    There is no easy way to achieve this with shutil, because copytree() will
+    always call copystat() an ruin directory permissions.
+
+diff --git a/homeassistant/components/blueprint/models.py b/homeassistant/components/blueprint/models.py
+index 88052100259..a0b29ed3d01 100644
+--- a/homeassistant/components/blueprint/models.py
++++ b/homeassistant/components/blueprint/models.py
+@@ -378,9 +378,17 @@ class DomainBlueprints:
+             if self.blueprint_folder.exists():
+                 return
+ 
+-            shutil.copytree(
+-                integration.file_path / BLUEPRINT_FOLDER,
+-                self.blueprint_folder / HOMEASSISTANT_DOMAIN,
+-            )
++            import os
++            os.makedirs(self.blueprint_folder / HOMEASSISTANT_DOMAIN)
++
++            import subprocess
++            subprocess.check_call([
++                "cp",
++                "--no-preserve=mode",
++                "--no-target-directory",
++                "--recursive",
++                str(integration.file_path / BLUEPRINT_FOLDER),
++                str(self.blueprint_folder / HOMEASSISTANT_DOMAIN),
++            ])
+ 
+         await self.hass.async_add_executor_job(populate)

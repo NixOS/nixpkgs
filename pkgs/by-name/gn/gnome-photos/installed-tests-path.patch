@@ -1,0 +1,23 @@
+diff --git a/meson.build b/meson.build
+index dee932dc..f8851913 100644
+--- a/meson.build
++++ b/meson.build
+@@ -16,8 +16,8 @@
+ photos_docdir = join_paths(photos_datadir, 'doc', meson.project_name())
+ photos_libdir = join_paths(photos_prefix, get_option('libdir'), meson.project_name())
+ 
+-photos_installed_test_metadir = join_paths(photos_datadir, 'installed-tests', meson.project_name())
+-photos_installed_test_execdir = join_paths(photos_libexecdir, 'installed-tests', meson.project_name())
++photos_installed_test_metadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', meson.project_name())
++photos_installed_test_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
+ 
+ photos_namespace = 'org.gnome.Photos'
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index f34b5cc0..8e09970b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,2 +1,3 @@
+ option('dogtail', type: 'boolean', value: true, description: 'test using dogtail')
+ option('installed_tests', type: 'boolean', value: false, description: 'Enable installation of some test cases')
++option('installed_test_prefix', type: 'string', value: '', description: 'Prefix for installed tests')

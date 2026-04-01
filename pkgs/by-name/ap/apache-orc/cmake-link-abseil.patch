@@ -1,0 +1,12 @@
+diff --git a/tools/src/CMakeLists.txt b/tools/src/CMakeLists.txt
+index 81e2da6f19..cdb809aed9 100644
+--- a/tools/src/CMakeLists.txt
++++ b/tools/src/CMakeLists.txt
+@@ -64,6 +64,7 @@
+ target_link_libraries (orc-metadata
+   orc-tools-common
+   orc::protobuf
++  absl::raw_hash_set
+   )
+ 
+  add_executable (orc-statistics
