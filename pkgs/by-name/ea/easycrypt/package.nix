@@ -5,10 +5,22 @@
   fetchFromGitHub,
   ocamlPackages,
   dune,
-  why3,
   python3,
+  why3,
+  why3IdeSupport ? false,
+  why3Coq ? null,
+  why3Flocq ? null,
 }:
-
+let
+  # 3. Apply these exposed arguments to the base dependency
+  why3' = why3.override {
+    ideSupport = why3IdeSupport;
+    coqPackages = {
+      coq = why3Coq;
+      flocq = why3Flocq;
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "easycrypt";
   version = "2026.03";
@@ -37,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     dune-site
     markdown
     pcre2
-    why3
+    why3'
     yojson
     zarith
   ];
 
-  propagatedBuildInputs = [ why3.out ];
+  propagatedBuildInputs = [ why3'.out ];
 
   strictDeps = true;
 
