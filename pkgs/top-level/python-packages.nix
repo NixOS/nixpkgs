@@ -17235,6 +17235,8 @@ self: super: with self; {
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
 
+  sbvirtualdisplay = callPackage ../development/python-modules/sbvirtualdisplay { };
+
   scalar-fastapi = callPackage ../development/python-modules/scalar-fastapi { };
 
   scalene = callPackage ../development/python-modules/scalene { };
