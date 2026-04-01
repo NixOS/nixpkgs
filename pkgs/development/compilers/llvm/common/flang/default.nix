@@ -40,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
         chmod -R +w $out/llvm
       '';
 
-  patches = [
-    ./dummy_target_19+.patch
-  ];
+  patches = [ ];
   patchFlags = [ "-p1" ];
 
   sourceRoot = "${finalAttrs.src.name}/flang";
@@ -73,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLANG_DIR" "${libclang.dev}/lib/cmake/clang")
     (lib.cmakeFeature "MLIR_DIR" "${mlir.dev}/lib/cmake/mlir")
     (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
-    (lib.cmakeFeature "MLIR_TABLEGEN_TARGET" "MLIR-TBLGen")
     (lib.cmakeBool "MLIR_LINK_MLIR_DYLIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "LLVM_LIT_ARGS" "-v")
     (lib.cmakeBool "LLVM_ENABLE_PLUGINS" false)
