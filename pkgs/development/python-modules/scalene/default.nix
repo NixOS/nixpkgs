@@ -12,6 +12,7 @@
   psutil,
   pydantic,
   pytestCheckHook,
+  python,
   pyyaml,
   rich,
   setuptools-scm,
@@ -34,18 +35,20 @@ let
     tag = "v4.0.0";
     hash = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
   };
+
+  pythonPath = lib.getExe python;
 in
 
 buildPythonPackage (finalAttrs: {
   pname = "scalene";
-  version = "2.1.4";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ISXD7QegTL0OvAGS7KYZAk9MAKTr0hMFe/9ws02Ykgk=";
+    hash = "sha256-a8laU7w6DLNIxmfhis/PvYd0iQMSqiQ2j6WURbsWPxk=";
   };
 
   patches = [
@@ -60,6 +63,15 @@ buildPythonPackage (finalAttrs: {
     cp -r ${printf-src}/* vendor/printf
     sed -i 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
     sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+  '';
+
+  postPatch = ''
+    # Fix hash mismatch
+    rm vendor/printf/printf.c
+
+    # Set correct sys.executable
+    substituteInPlace tests/test_{multiprocessing_pool_spawn,on_off_windows}.py \
+      --replace-fail "sys.executable" "\"${pythonPath}\""
   '';
 
   build-system = [

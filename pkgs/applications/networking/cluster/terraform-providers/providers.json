@@ -391,11 +391,11 @@
     "vendorHash": null
   },
   "f5networks_bigip": {
-    "hash": "sha256-L/qV8Ff5UhRs6r+jadBUkofLcxggBq96gCpkk0Tv3k8=",
+    "hash": "sha256-+/YCeCJKeETCewktWc749/GILooNsxyGz3bXOeIDga8=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.25.1",
+    "rev": "v1.26.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -580,13 +580,13 @@
     "vendorHash": "sha256-znm43JcwFf/NpGIaayyiOazAa7yCStrbuSNnGkyxzFA="
   },
   "hashicorp_google-beta": {
-    "hash": "sha256-WOeYK5uti8NYhR3j8BgxwnlybEGOJryIPPTEgM23Fp0=",
+    "hash": "sha256-tEkGG/4KR7tuIJCKpQpW3FGcGyDgalJdw5wFPEkQBhw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v7.24.0",
+    "rev": "v7.25.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-YZQMUGScsYjBkhAQ4DXYlBpAw805iKgX/iXDMTpRr6c="
+    "vendorHash": "sha256-udSeBMl8hkYTOjcMC0w8j7scyWyRmQ4gTD9jV1yqWYw="
   },
   "hashicorp_helm": {
     "hash": "sha256-S4Fe65f+gEWWxRMC+/i93dwwe7QigPccx4wiqNBpcL8=",
@@ -652,13 +652,13 @@
     "vendorHash": "sha256-GlkqFg9Bgs+Hi59PYAxqq3YW9ji1qeuX4vz59wQ4pRw="
   },
   "hashicorp_tfe": {
-    "hash": "sha256-dak9/lYjL+2gbXyjxRqS61wr4YJRHFzHNJdCPJqiaW4=",
+    "hash": "sha256-6Qzchshn6T9gHdk6nd2wzDesFTUsGUViwTrBmMue3yI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tfe",
     "owner": "hashicorp",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.74.1",
+    "rev": "v0.76.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-GAwAGw8N4B/jCtcR2ok3g/0j//CHK9yPaBj+otJLjKc="
+    "vendorHash": "sha256-JNTe1RI2aDw86jNzYJqmiBr5BBnr824/DhkJeaMpbKI="
   },
   "hashicorp_time": {
     "hash": "sha256-ZArYfbzbrkxGlL1BRFM7PN3hLzdssIL4COsUBdLVMYY=",
@@ -1265,11 +1265,11 @@
     "vendorHash": "sha256-9M1DsE/FPQK8TG7xCJWbU3HAJCK3p/7lxdzjO1oAfWs="
   },
   "sumologic_sumologic": {
-    "hash": "sha256-lW2XWDc95Sfnb3VNtsw5mZ8uGgInCkaWRCaUS9c7d2s=",
+    "hash": "sha256-cxMx9SCsRbBVG1ixuzB4DqoI6mG2UdyuNYWATbHuRiQ=",
     "homepage": "https://registry.terraform.io/providers/SumoLogic/sumologic",
     "owner": "SumoLogic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v3.2.4",
+    "rev": "v3.2.5",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
