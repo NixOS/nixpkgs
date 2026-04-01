@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript =
       let
-        updateSource = directoryListingUpdater { };
+        updateSource = directoryListingUpdater { odd-unstable = true; };
 
         updateLockfile = {
           command = [
