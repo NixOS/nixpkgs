@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   beam,
   callPackage,
@@ -46,10 +47,6 @@ in
       inherit wxSupport systemdSupport;
     };
 
-    erlang_26 = callErlang ../development/interpreters/erlang/26.nix {
-      inherit wxSupport systemdSupport;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_27.elixir`.
@@ -76,6 +73,11 @@ in
     erlang_29 = self.packagesWith self.interpreters.erlang_29;
     erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
-    erlang_26 = self.packagesWith self.interpreters.erlang_26;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    erlang_26 = throw "'erlang_26' has been removed, as it is EOL"; # added 2026-04-01
   };
+}
+// lib.optionalAttrs config.allowAliases {
+  erlang_26 = throw "'erlang_26' has been removed, as it is EOL"; # added 2026-04-01
 }

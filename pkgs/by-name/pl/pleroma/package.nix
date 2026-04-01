@@ -16,7 +16,7 @@
 }:
 
 let
-  beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
+  beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = elixir_1_17; });
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
