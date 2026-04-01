@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Japanese Kanji font set which is the official successor to Hanazono Mincho";
     homepage = "https://kamichikoichi.github.io/jigmo/";
     license = lib.licenses.cc0;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 }
