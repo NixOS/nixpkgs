@@ -1,54 +1,53 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
   symlinkJoin,
+  fetchzip,
   installFonts,
   families ? [ ],
 }:
 let
-  version = import ./version.nix;
-  availableFamilies = import ./hashes.nix;
-
-  availableFamilyNames = builtins.attrNames availableFamilies;
+  allFonts = import ./fonts.nix;
+  availableFamilyNames = builtins.attrNames allFonts;
   selectedFamilies = if (families == [ ]) then availableFamilyNames else families;
-
   unknownFamilies = lib.subtractLists availableFamilyNames families;
-in
-assert lib.assertMsg (unknownFamilies == [ ]) "Unknown font(s): ${toString unknownFamilies}";
-stdenvNoCC.mkDerivation {
-  pname = "ibm-plex";
-  inherit version;
+  fontsToBuild = lib.filterAttrs (name: _: lib.elem name selectedFamilies) allFonts;
+  makeFont =
+    font:
+    stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = lib.toLower (lib.replaceStrings [ " (" ")" " " ] [ "-" "" "-" ] font.name);
+      inherit (font) version;
 
-  src = symlinkJoin {
-    name = "ibm-plex-src";
-    paths = map (
-      family:
-      fetchzip {
-        url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
-        hash = availableFamilies.${family};
-      }
-    ) selectedFamilies;
-    postBuild = ''
-      find "$out" \( -name hinted -or -name unhinted -or -name split \) -exec rm -fr {} +
-    '';
-  };
+      nativeBuildInputs = [ installFonts ];
 
-  sourceRoot = ".";
+      outputs = [
+        "out"
+        "webfont"
+      ];
 
-  nativeBuildInputs = [ installFonts ];
+      src = fetchzip {
+        inherit (font) hash url stripRoot;
+      };
 
-  outputs = [
-    "out"
-    "webfont"
-  ];
+      # Some fonts, e.g. "ibm-plex-sans-korean" and "ibm-plex-sans-japanese"
+      # include both unhinted and hinted variants of the ttf and woff/woff2 type
+      # fonts, which collide when using the `installFonts` hook.
+      # Default to installing the hinted variant of the fonts.
+      #
+      # Additionally, fonts with webfonts include complete and split forms.
+      # Default to the complete forms.
+      preInstall = ''
+        find . -type d \( -name unhinted -or -name split \) -exec rm -rf {} +
+      '';
 
-  passthru.updateScript = ./update.sh;
-
+      meta = meta // {
+        description = font.name;
+      };
+    });
+  fontDerivations = lib.mapAttrs (_: v: makeFont v) fontsToBuild;
   meta = {
     description = "IBM Plex Typeface";
     homepage = "https://www.ibm.com/plex/";
-    changelog = "https://github.com/IBM/plex/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
@@ -57,4 +56,12 @@ stdenvNoCC.mkDerivation {
       ryanccn
     ];
   };
+in
+assert lib.assertMsg (unknownFamilies == [ ]) "Unknown font(s): ${toString unknownFamilies}";
+symlinkJoin {
+  pname = "ibm-plex";
+  version = "0-unstable-2026-02-12";
+  paths = lib.attrValues fontDerivations;
+  passthru = fontDerivations;
+  inherit meta;
 }
