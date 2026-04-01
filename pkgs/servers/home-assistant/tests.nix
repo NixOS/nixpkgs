@@ -236,6 +236,10 @@ let
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
+    vacuum = [
+      # Translation not found for vacuum
+      "test_segments_changed_issue"
+    ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
