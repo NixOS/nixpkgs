@@ -39,7 +39,7 @@ def urlopen(url_or_request):
 with urlopen(f'{GAME_URL}/data.json') as response:
     data = json.load(response)
     GAME_ID = data['id']
-    IS_FREE = 'price' not in data
+    IS_FREE = 'price' not in data or data['price'] == '$0.00'
 
 def api(path, params={}, download=False):
     url = f'{ENDPOINT}{path}?{urllib.parse.urlencode({'api_key': API_KEY, **params})}'
