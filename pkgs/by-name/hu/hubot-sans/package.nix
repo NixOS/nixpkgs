@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,14 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 Hubot\ Sans/TTF/*.ttf -t $out/share/fonts/truetype/
-    install -Dm644 Hubot\ Sans/OTF/*.otf -t $out/share/fonts/opentype/
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Variable font from GitHub";
