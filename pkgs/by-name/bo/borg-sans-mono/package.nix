@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,13 +15,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-nn7TGeVm45t7QI8+eEREBTFg9aShYYKtdEYEwQwO2fQ=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Droid Sans Mono Slashed + Hasklig-style ligatures";
