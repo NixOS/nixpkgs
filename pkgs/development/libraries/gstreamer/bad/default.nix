@@ -115,7 +115,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.26.11";
+  version = "1.28.2";
 
   outputs = [
     "out"
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EQ+4J5Xw5Wmx4nsSq5aZ01x3YuH/TblTNdasjRRCrz0=";
+    hash = "sha256-ZGfjlkgo9NfQi/4fu012KHocj6dmdOWeEBoUnAIP79c=";
   };
 
   patches = [
@@ -311,6 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
+    "-Dwpe2=disabled"
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
@@ -326,6 +327,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "webrtcdsp" webrtcAudioProcessingSupport)
     (lib.mesonEnable "isac" webrtcAudioProcessingSupport)
   ]
+  ++ lib.mapAttrsToList lib.mesonEnable {
+    mpeghdec = false; # mpeghdec not packaged
+    tflite = false;
+  }
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
   ]
