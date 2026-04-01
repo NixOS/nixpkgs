@@ -62,6 +62,8 @@ symlinkJoin {
   pname = "ibm-plex";
   version = "0-unstable-2026-02-12";
   paths = lib.attrValues fontDerivations;
-  passthru = fontDerivations;
+  passthru = fontDerivations // {
+    updateScript = ./update.py;
+  };
   inherit meta;
 }
