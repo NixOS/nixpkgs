@@ -77,6 +77,9 @@
   # for example if a settings.json is linked declaratively (e.g., with home-manager).
   disableUpdates ? true,
   commandLineArgs ? "",
+  krispSrc ? null,
+  withKrisp ? withOpenASAR || withVencord || withEquicord || withMoonlight,
+  unzip,
 }:
 
 let
@@ -94,6 +97,12 @@ let
   moduleSrcs = lib.mapAttrs (_: mod: fetchurl { inherit (mod) url hash; }) source.modules;
 
   moduleVersions = lib.mapAttrs (_: mod: mod.version) source.modules;
+
+  stagedModuleSrcs =
+    if krispSrc != null && withKrisp then
+      lib.removeAttrs moduleSrcs [ "discord_krisp" ]
+    else
+      moduleSrcs;
 
   libPath = lib.makeLibraryPath (
     [
@@ -152,14 +161,25 @@ let
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
     modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
-    if [ ! -f "$modules_dir/installed.json" ]; then
-      mkdir -p "$modules_dir"
-      for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
-        ln -sfn "$store_modules/$m" "$modules_dir/$m"
-      done
-      echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
-        > "$modules_dir/installed.json"
-    fi
+
+    mkdir -p "$modules_dir"
+    for m in ${lib.concatStringsSep " " (lib.attrNames moduleVersions)}; do
+      rm -f "$modules_dir/pending/$m"-*.zip 2>/dev/null || true
+    done
+    for m in ${lib.concatStringsSep " " (lib.attrNames stagedModuleSrcs)}; do
+      dest="$modules_dir/$m"
+      if [ -L "$dest" ]; then
+        rm "$dest"
+      elif [ -e "$dest" ]; then
+        chmod -R u+w "$dest" 2>/dev/null || true
+        rm -rf "$dest"
+      fi
+      ln -sfn "$store_modules/$m" "$dest"
+    done
+    cat > "$modules_dir/installed.json.tmp" <<'EOF'
+    ${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}
+    EOF
+    mv "$modules_dir/installed.json.tmp" "$modules_dir/installed.json"
   '';
 
   disableBreakingUpdates =
@@ -176,6 +196,28 @@ let
         substituteAllInPlace $out/bin/disable-breaking-updates.py
         chmod +x $out/bin/disable-breaking-updates.py
       '';
+
+  deployKrispPython = python3.withPackages (ps: [ ps.watchdog ]);
+
+  patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "discord-krisp-patched"
+      {
+        nativeBuildInputs = [
+          brotli
+          unzip
+          (python3.withPackages (ps: [
+            ps.lief
+            ps.capstone
+          ]))
+        ];
+      }
+      ''
+        mkdir -p "$out"
+        brotli -d < ${krispSrc} | tar xf - --strip-components=1 -C "$out"
+        python3 ${./patch-krisp.py} "$out/discord_krisp.node"
+        python3 ${./patch-krisp-module.py} "$out" linux
+      ''
+  );
 in
 assert lib.assertMsg (
   enabledDiscordModsCount <= 1
@@ -202,6 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     makeShellWrapper
     brotli
+    python3
   ];
 
   dontWrapGApps = true;
@@ -247,8 +290,13 @@ stdenv.mkDerivation (finalAttrs: {
       lib.mapAttrsToList (name: src: ''
         mkdir -p $out/opt/${binaryName}/modules/${name}
         brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
-      '') moduleSrcs
+      '') stagedModuleSrcs
     )}
+    ${lib.optionalString (krispSrc != null && withKrisp) ''
+      mkdir -p $out/opt/${binaryName}/modules/discord_krisp
+      cp -R ${patchedKrisp}/. $out/opt/${binaryName}/modules/discord_krisp/
+      chmod -R u+w $out/opt/${binaryName}/modules/discord_krisp
+    ''}
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
@@ -262,11 +310,25 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
         --run "${stageModules} $out/opt/${binaryName}/modules" \
+        ${
+          lib.strings.optionalString (
+            krispSrc != null && withKrisp
+          ) ''--run "$out/bin/.discord-deploy-krisp"''
+        } \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
+    ${lib.optionalString (krispSrc != null && withKrisp) ''
+      cp ${./deploy-krisp.py} "$out/bin/.discord-deploy-krisp"
+      substituteInPlace "$out/bin/.discord-deploy-krisp" \
+        --replace-fail '@pythonInterpreter@' '${deployKrispPython}/bin/python3' \
+        --replace-fail '@krispPath@' "$out/opt/${binaryName}/modules/discord_krisp" \
+        --replace-fail '@discordVersion@' '${version}' \
+        --replace-fail '@configDirName@' '${lib.toLower binaryName}'
+      chmod +x "$out/bin/.discord-deploy-krisp"
+    ''}
 
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
@@ -276,7 +338,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall =
-    lib.strings.optionalString withOpenASAR ''
+    lib.strings.optionalString (krispSrc != null && withKrisp) ''
+      python3 ${./patch-voice-krisp.py} \
+        "$out/opt/${binaryName}/modules/discord_voice/index.js" \
+        "require('path').join(process.env.XDG_CONFIG_HOME || require('path').join(require('os').homedir(), '.config'), '${lib.toLower binaryName}', '${version}', 'modules', 'discord_krisp')" \
+        "$out/opt/${binaryName}/resources/build_info.json" \
+        "$out/opt/${binaryName}/modules"
+    ''
+    + lib.strings.optionalString withOpenASAR ''
       cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
     ''
     + lib.strings.optionalString withVencord ''
@@ -332,6 +401,10 @@ stdenv.mkDerivation (finalAttrs: {
       withOpenASAR = self.override {
         withOpenASAR = true;
       };
+      withKrisp = self.override {
+        withKrisp = true;
+      };
     };
-  };
+  }
+  // lib.optionalAttrs (krispSrc != null && withKrisp) { inherit patchedKrisp; };
 })

@@ -24,6 +24,10 @@
   withMoonlight ? false,
   moonlight,
   commandLineArgs ? "",
+  krispSrc ? null,
+  withKrisp ? withOpenASAR || withVencord || withEquicord || withMoonlight,
+  unzip,
+  darwin,
 }:
 
 let
@@ -41,6 +45,12 @@ let
   moduleSrcs = lib.mapAttrs (_: mod: fetchurl { inherit (mod) url hash; }) source.modules;
 
   moduleVersions = lib.mapAttrs (_: mod: mod.version) source.modules;
+
+  stagedModuleSrcs =
+    if krispSrc != null && withKrisp then
+      lib.removeAttrs moduleSrcs [ "discord_krisp" ]
+    else
+      moduleSrcs;
 
   configDirName = lib.replaceStrings [ " " ] [ "" ] (lib.toLower binaryName);
 
@@ -64,13 +74,27 @@ let
 
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
-    modules_dir="$HOME/Library/Application Support/${configDirName}/${version}/modules"
+    darwin_home="$(${python3.interpreter} -c 'import os, pwd; print(pwd.getpwuid(os.getuid()).pw_dir)')"
+    modules_dir="$darwin_home/Library/Application Support/${configDirName}/${version}/modules"
+
     mkdir -p "$modules_dir"
-    for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
-      ln -sfn "$store_modules/$m" "$modules_dir/$m"
+    for m in ${lib.concatStringsSep " " (lib.attrNames moduleVersions)}; do
+      rm -f "$modules_dir/pending/$m"-*.zip 2>/dev/null || true
     done
-    echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
-      > "$modules_dir/installed.json"
+    for m in ${lib.concatStringsSep " " (lib.attrNames stagedModuleSrcs)}; do
+      dest="$modules_dir/$m"
+      if [ -L "$dest" ]; then
+        rm "$dest"
+      elif [ -e "$dest" ]; then
+        chmod -R u+w "$dest" 2>/dev/null || true
+        rm -rf "$dest"
+      fi
+      ln -sfn "$store_modules/$m" "$dest"
+    done
+    cat > "$modules_dir/installed.json.tmp" <<'EOF'
+    ${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}
+    EOF
+    mv "$modules_dir/installed.json.tmp" "$modules_dir/installed.json"
   '';
 
   disableBreakingUpdates =
@@ -87,6 +111,45 @@ let
         substituteAllInPlace $out/bin/disable-breaking-updates.py
         chmod +x $out/bin/disable-breaking-updates.py
       '';
+
+  patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "discord-krisp-patched"
+      {
+        nativeBuildInputs = [
+          brotli
+          unzip
+          (python3.withPackages (ps: [
+            ps.lief
+            ps.capstone
+          ]))
+        ];
+      }
+      ''
+        mkdir -p "$out"
+        brotli -d < ${krispSrc} | tar xf - --strip-components=1 -C "$out"
+        python3 ${./patch-krisp.py} "$out/discord_krisp.node"
+        python3 ${./patch-krisp-module.py} "$out" darwin
+        source ${darwin.signingUtils}
+        sign "$out/discord_krisp.node"
+      ''
+  );
+
+  deployKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "deploy-krisp.py"
+      {
+        pythonInterpreter = "${python3.withPackages (ps: [ ps.watchdog ])}/bin/python3";
+        krispPath = "${patchedKrisp}";
+        discordVersion = version;
+        configDirName = lib.toLower binaryName;
+        meta.mainProgram = "deploy-krisp.py";
+      }
+      ''
+        mkdir -p "$out/bin"
+        cp ${./deploy-krisp.py} "$out/bin/deploy-krisp.py"
+        substituteAllInPlace "$out/bin/deploy-krisp.py"
+        chmod +x "$out/bin/deploy-krisp.py"
+      ''
+  );
 in
 assert lib.assertMsg (
   enabledDiscordModsCount <= 1
@@ -102,6 +165,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     brotli
     makeWrapper
+    python3
   ];
 
   sourceRoot = ".";
@@ -133,21 +197,32 @@ stdenv.mkDerivation {
       lib.mapAttrsToList (name: src: ''
         mkdir -p "$out/Applications/${desktopName}.app/Contents/Resources/modules/${name}"
         extractDistro ${src} "$out/Applications/${desktopName}.app/Contents/Resources/modules/${name}"
-      '') moduleSrcs
+      '') stagedModuleSrcs
     )}
+    ${lib.optionalString (krispSrc != null && withKrisp) ''
+      mkdir -p "$out/Applications/${desktopName}.app/Contents/Resources/modules/discord_krisp"
+      cp -R ${patchedKrisp}/. "$out/Applications/${desktopName}.app/Contents/Resources/modules/discord_krisp/"
+      chmod -R u+w "$out/Applications/${desktopName}.app/Contents/Resources/modules/discord_krisp"
+    ''}
 
     # wrap executable to $out/bin
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
       --run ${lib.getExe disableBreakingUpdates} \
       --run "${stageModules} \"$out/Applications/${desktopName}.app/Contents/Resources/modules\"" \
+      ${lib.strings.optionalString (krispSrc != null && withKrisp) "--run ${lib.getExe deployKrisp}"} \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
   postInstall =
-    lib.strings.optionalString withOpenASAR ''
+    lib.strings.optionalString (krispSrc != null && withKrisp) ''
+      python3 ${./patch-voice-krisp.py} \
+        "$out/Applications/${desktopName}.app/Contents/Resources/modules/discord_voice/index.js" \
+        "require('path').join(require('os').userInfo().homedir, 'Library', 'Application Support', '${configDirName}', '${version}', 'modules', 'discord_krisp')"
+    ''
+    + lib.strings.optionalString withOpenASAR ''
       cp -f ${openasar} "$out/Applications/${desktopName}.app/Contents/Resources/app.asar"
     ''
     + lib.strings.optionalString withVencord ''
@@ -188,6 +263,10 @@ stdenv.mkDerivation {
       withOpenASAR = self.override {
         withOpenASAR = true;
       };
+      withKrisp = self.override {
+        withKrisp = true;
+      };
     };
-  };
+  }
+  // lib.optionalAttrs (krispSrc != null && withKrisp) { inherit patchedKrisp; };
 }
