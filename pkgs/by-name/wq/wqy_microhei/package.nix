@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,13 +14,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-KAKsgCOqNqZupudEWFTjoHjTd///QhaTQb0jeHH3IT4=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 wqy-microhei.ttc $out/share/fonts/wqy-microhei.ttc
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Chinese Unicode font optimized for screen display";
