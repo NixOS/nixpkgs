@@ -56,7 +56,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "ufbt";
   version = "0.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
