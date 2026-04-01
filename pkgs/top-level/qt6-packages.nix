@@ -67,6 +67,8 @@ makeScopeWithSplicing' {
       futuresql = callPackage ../development/libraries/futuresql { };
       kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+      ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
+
       libiodata = callPackage ../development/libraries/libiodata { };
 
       libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
