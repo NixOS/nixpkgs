@@ -1220,6 +1220,7 @@ in
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-pgsql = runTest ./pam/pam-pgsql.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
+  pam-u2f-polkit = runTest ./pam/pam-u2f-polkit.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pangolin = runTest ./pangolin.nix;
