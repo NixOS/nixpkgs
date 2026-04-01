@@ -144,6 +144,8 @@ with haskellLib;
         cabal-install-solver = super.cabal-install-solver.overrideScope cabalInstallOverlay;
 
         cabal2nix-unstable = super.cabal2nix-unstable.overrideScope cabalInstallOverlay;
+        distribution-nixpkgs-unstable = super.distribution-nixpkgs-unstable.overrideScope cabalInstallOverlay;
+        hackage-db-unstable = super.hackage-db-unstable.overrideScope cabalInstallOverlay;
 
         # Needs cabal-install >= 3.8 /as well as/ matching Cabal
         guardian = lib.pipe (super.guardian.overrideScope cabalInstallOverlay) [
@@ -156,6 +158,9 @@ with haskellLib;
     )
     cabal-install
     cabal-install-solver
+    cabal2nix-unstable
+    distribution-nixpkgs-unstable
+    hackage-db-unstable
     guardian
     ;
 
