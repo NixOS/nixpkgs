@@ -77,6 +77,7 @@ let
     image_processing = getComponentDeps "conversation";
     intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
+    kitchen_sink = getComponentDeps "infrared";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";
     locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
