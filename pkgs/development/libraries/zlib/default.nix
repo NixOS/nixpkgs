@@ -46,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-uzKaCizQJ00FUZ1hxmfAYuBpkNcuEl7i36jeZPARnRY=";
     };
 
+  # https://github.com/madler/zlib/commit/60ab906ea29f4f67204c4398be4ec5af8d7e87c7
+  # Fix s390x vectorized CRC32 build by passing VGFMAFLAG through configure.
+  patches = lib.optional stdenv.hostPlatform.isS390 ./fix-s390x-vgfmaflag.patch;
+
   postPatch = ''
     substituteInPlace configure \
       --replace-fail '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
