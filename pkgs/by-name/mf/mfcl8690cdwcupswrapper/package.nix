@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwcupswrapper";
-  version = "1.4.0-0";
+  version = "1.5.0-3";
 
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf103250/${pname}-${version}.i386.deb";
