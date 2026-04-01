@@ -5,12 +5,12 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wqy-microhei";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wqy/wqy-microhei-${version}-beta.tar.gz";
+    url = "mirror://sourceforge/wqy/wqy-microhei-${finalAttrs.version}-beta.tar.gz";
     hash = "sha256-KAKsgCOqNqZupudEWFTjoHjTd///QhaTQb0jeHH3IT4=";
   };
 
@@ -23,4 +23,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.pkmx ];
     platforms = lib.platforms.all;
   };
-}
+})
