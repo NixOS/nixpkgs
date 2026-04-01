@@ -6,6 +6,8 @@
   electron,
   makeDesktopItem,
   imagemagick,
+  asar,
+  jq,
   autoPatchelfHook,
   writeScript,
   _7zz,
@@ -75,7 +77,19 @@ let
       autoPatchelfHook
       makeWrapper
       imagemagick
+      asar
+      jq
     ];
+
+    buildPhase = ''
+      runHook preBuild
+      asar extract resources/app.asar app
+      jq '.desktopName = "obsidian"' app/package.json > package.json
+      mv package.json app/package.json
+      asar pack app resources/app.asar
+      runHook postBuild
+    '';
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
