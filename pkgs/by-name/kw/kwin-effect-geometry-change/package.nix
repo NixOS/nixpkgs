@@ -37,6 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/peterfajdiga/kwin4_effect_geometry_change";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ CouldBeMathijs ];
+    maintainers = with lib.maintainers; [ couldbemathijs ];
   };
 })
