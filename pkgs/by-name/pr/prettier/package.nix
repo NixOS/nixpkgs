@@ -187,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     plugins = import ./plugins {
       inherit
         fetchFromGitHub
+        lib
         nodejs
         stdenv
         ;
@@ -194,6 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
         fetchYarnDeps
         pnpm_9
         rubyPackages_4_0
+        ruby_4_0
         yarnBuildHook
         yarnConfigHook
         yarnInstallHook

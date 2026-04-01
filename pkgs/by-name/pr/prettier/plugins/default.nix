@@ -1,9 +1,11 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
-  rubyPackages_4_0,
+  lib,
   nodejs,
   pnpm_9,
+  rubyPackages_4_0,
+  ruby_4_0,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -37,8 +39,10 @@
     inherit
       fetchFromGitHub
       fetchYarnDeps
-      rubyPackages_4_0
+      lib
       nodejs
+      rubyPackages_4_0
+      ruby_4_0
       stdenv
       yarnBuildHook
       yarnConfigHook

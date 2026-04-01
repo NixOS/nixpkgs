@@ -7,15 +7,16 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
-  rubyPackages_4_0,
+  lib,
   nodejs,
+  rubyPackages_4_0,
+  ruby_4_0,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
   yarnInstallHook,
   ...
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier-plugin-ruby";
   packageName = "@prettier/plugin-ruby";
@@ -29,11 +30,28 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-KG6LwkBN3Ao85mIt244SNzOsLNxYM/g9meWJ5AknHis=";
   };
 
   yarnKeepDevDeps = true;
+
+  patchPhase =
+    let
+      rubyDeps = with rubyPackages_4_0; [
+        prettier_print
+        syntax_tree
+        syntax_tree-haml
+        syntax_tree-rbs
+      ];
+
+      rubyEnv = ruby_4_0.withPackages (ps: rubyDeps);
+    in
+    ''
+      sed -i '/default: "ruby"/ {
+        s|ruby|${lib.getExe rubyEnv}|;
+      }' ./src/plugin.js
+    '';
 
   buildPhase = ''
     runHook preBuild
@@ -54,13 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     yarnInstallHook
     nodejs
-  ];
-
-  propagatedBuildInputs = with rubyPackages_4_0; [
-    prettier_print
-    syntax_tree
-    syntax_tree-haml
-    syntax_tree-rbs
   ];
 
   meta = {
