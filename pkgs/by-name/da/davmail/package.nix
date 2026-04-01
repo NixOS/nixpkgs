@@ -12,11 +12,13 @@
   libxtst,
   coreutils,
   gnugrep,
+  zulu,
   preferGtk3 ? true,
+  preferZulu ? false,
 }:
 
 let
-  jre' = jdk.override { enableJavaFX = true; };
+  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -80,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      doronbehar
+      shymega
+    ];
     platforms = lib.platforms.all;
     mainProgram = "davmail";
   };
