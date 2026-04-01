@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchzip,
   nix-update-script,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,13 +16,12 @@ stdenvNoCC.mkDerivation rec {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm644 -t $out/share/fonts/opentype *.otf
-    install -Dm644 -t $out/share/fonts/truetype *.ttf
-    install -Dm644 -t $out/share/fonts/woff2 *.woff2
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
