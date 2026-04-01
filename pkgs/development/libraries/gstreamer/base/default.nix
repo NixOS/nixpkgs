@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     glEnabled = enableGl;
     waylandEnabled = enableWayland;
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
