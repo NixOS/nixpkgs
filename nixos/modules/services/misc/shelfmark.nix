@@ -95,12 +95,6 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectClock = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
-        ];
 
         RestrictAddressFamilies = [
           "AF_INET"
@@ -112,7 +106,6 @@ in
 
         LockPersonality = true;
         ProtectHostname = true;
-        RestrictRealtime = true;
         RestrictNamespaces = true;
         ProtectProc = "invisible";
         ProcSubset = "pid";
