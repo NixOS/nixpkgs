@@ -12,12 +12,12 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.6.3";
+  version = "1.7.1";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qfw5urcUsVMxaVeVQeZkG8x5aK29y1HrcRY69AbdUXA=";
+    hash = "sha256-T3Y9eWwBVxGPISZ3EZndAR6mwsq4g67RRCPpoZPuh+0=";
   };
   pyproject = true;
 
