@@ -9676,12 +9676,6 @@ with pkgs;
     }
   );
 
-  librespot = callPackage ../applications/audio/librespot {
-    withALSA = stdenv.hostPlatform.isLinux;
-    withPulseAudio = config.pulseaudio or stdenv.hostPlatform.isLinux;
-    withPortAudio = stdenv.hostPlatform.isDarwin;
-  };
-
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   deadd-notification-center = haskell.lib.compose.justStaticExecutables (
