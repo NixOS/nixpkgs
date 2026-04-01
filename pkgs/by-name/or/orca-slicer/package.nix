@@ -26,7 +26,6 @@
   gtest,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libsecret,
   libpng,
   mpfr,
@@ -111,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gtk3
     hicolor-icon-theme
-    ilmbase
     libsecret
     libpng
     mpfr
@@ -141,6 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
       hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
     })
+
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./patches/no-ilmbase.patch
   ];
 
   doCheck = true;

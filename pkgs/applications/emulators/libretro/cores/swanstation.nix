@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "swanstation";
-  version = "0-unstable-2025-08-02";
+  version = "0-unstable-2026-03-28";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "swanstation";
-    rev = "4d309c05fd7bdc503d91d267bd542edb8d192b09";
-    hash = "sha256-v51xgsyVtyipss0VWqMTI69MLTJ4Eb37hJfbQfid/0Q=";
+    rev = "9498be27f8cdde1244045ee7bd6f11922a8f7916";
+    hash = "sha256-+8CcxNl6s7/St4aRf3a1LTsl8wRTIhAYIaAGCt/HbtU=";
   };
 
   extraNativeBuildInputs = [ cmake ];

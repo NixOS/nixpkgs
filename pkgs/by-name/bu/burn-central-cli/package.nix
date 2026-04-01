@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "burn-central-cli";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "tracel-ai";
     repo = "burn-central-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gZ92DFZPox6s4+EKPQ/uxWNV5+F7kYhSnv/Mtpur3Vo=";
+    hash = "sha256-wXLfmCV6aElnYnhOCScr/3+4I6oOfNPrZ8+0t4TPDOA=";
   };
 
   buildAndTestSubdir = "crates/burn-central-cli";
 
-  cargoHash = "sha256-kUCjkkIog+xXFMTw8LAoHE/D6aBPR6S7Mtqg/Hjuw+o=";
+  cargoHash = "sha256-MeDIYFXkyJdxierq9iVIAvEIc8JU13szrbSTfKyUkJk=";
 
   nativeBuildInputs = [
     pkg-config

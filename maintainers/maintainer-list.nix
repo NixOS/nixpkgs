@@ -13967,6 +13967,12 @@
     githubId = 1778670;
     name = "Austin Horstman";
   };
+  Kharacternyk = {
+    email = "nazar@vinnich.uk";
+    github = "Kharacternyk";
+    githubId = 43315801;
+    name = "Nazar Vinnichuk";
+  };
   khaser = {
     email = "a-horohorin@mail.ru";
     github = "khaser";
@@ -19477,6 +19483,12 @@
     name = "nishimara";
     github = "Nishimara";
     githubId = 59232119;
+  };
+  nitinbhat972 = {
+    email = "nitinbhat972@gmail.com";
+    github = "nitinbhat972";
+    githubId = 80189191;
+    name = "Nitin Bhat";
   };
   nitsky = {
     name = "nitsky";

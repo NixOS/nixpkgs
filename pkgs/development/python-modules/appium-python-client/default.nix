@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "appium-python-client";
-  version = "5.2.7";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = "python-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H8WBByS/8P8xIM8RmWJFgvrVbEDc5LrFj1rQzxL3174=";
+    hash = "sha256-2lQDGDO7xwNRMErxKcfFkXEMnO96zlDhHyakZkh7pfY=";
   };
 
   build-system = [ hatchling ];
