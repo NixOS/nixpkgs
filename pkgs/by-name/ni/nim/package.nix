@@ -86,7 +86,7 @@ let
           runHook postBuild
         '';
 
-      wrapperArgs = lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
+      wrapperArgs = [
         "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${placeholder "out"}/bin"
         # Used by nim-gdb
 
