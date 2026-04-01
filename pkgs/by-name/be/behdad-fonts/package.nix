@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Persian/Arabic Open Source Font";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 }
