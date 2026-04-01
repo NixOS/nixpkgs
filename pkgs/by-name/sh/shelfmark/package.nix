@@ -58,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  env = {
+    RELEASE_VERSION = finalAttrs.src.tag;
+    BUILD_VERSION = finalAttrs.src.tag;
+  };
+
   pythonPath = pythonDeps;
 
   installPhase = ''
