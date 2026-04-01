@@ -11357,6 +11357,8 @@ self: super: with self; {
 
   odsgenerator = callPackage ../development/python-modules/odsgenerator { };
 
+  odsparsator = callPackage ../development/python-modules/odsparsator { };
+
   oelint-data = callPackage ../development/python-modules/oelint-data { };
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
