@@ -211,6 +211,11 @@ let
       # intent fixture mismatch
       "test_error_no_device_on_floor"
     ];
+    roborock = [
+      # Translation not found for vacuum
+      "test_clean_segments_mixed_maps"
+      "test_segments_changed_issue"
+    ];
     sensor = [
       # Failed: Translation not found for sensor
       "test_validate_unit_change_convertible"
