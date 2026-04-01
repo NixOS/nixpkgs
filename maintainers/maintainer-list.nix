@@ -5464,6 +5464,11 @@
     githubId = 1573344;
     name = "Andrey Pavlov";
   };
+  couldbemathijs = {
+    github = "couldbemathijs";
+    githubId = 79464596;
+    name = "couldbemathijs";
+  };
   cpages = {
     email = "page@ruiec.cat";
     github = "cpages";
