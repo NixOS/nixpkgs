@@ -14,21 +14,15 @@
 let
   pygments = buildPythonPackage (finalAttrs: {
     pname = "pygments";
-    version = "2.19.2";
+    version = "2.20.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit (finalAttrs) pname version;
-      hash = "sha256-Y2yyR3zsf4lSU2lwvFM7xDdDVC9wOSrgJjdGAK3VuIc=";
+      hash = "sha256-Z1fNA3aAU/+Z8wOcGjbWwKoLJjQ4/KsXUgswowOoK18=";
     };
 
-    patches = [
-      # https://github.com/NixOS/nixpkgs/issues/502540
-      # https://github.com/pygments/pygments/issues/3058
-      ./CVE-2026-4539.patch
-    ];
-
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
     # circular dependencies if enabled by default
     doCheck = false;
