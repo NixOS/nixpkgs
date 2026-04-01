@@ -170,7 +170,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
-  version = "0.3.31";
+  version = "0.3.32";
 
   outputs = [
     "out"
@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YBR81GOLnTsc0g1SZL+j31/OFucJrBRFqtOTV8lcy8U=";
+    hash = "sha256-D0Wu5Ew72aTqSjj970yOfAwPg1T4Qm6zmpaGlQ/5Q1k=";
   };
 
   patches = [
@@ -190,16 +190,10 @@ stdenv.mkDerivation (finalAttrs: {
     # INCLUDEDIR already fixed in upstream HEAD & significant refactor
     # to config gen so not PRing changes
     ./cmake-include-fixes.patch
-  ]
-  ++ lib.optionals singleThreaded [
-    # fix single threaded build
+    # Fix build on LoongArch (error: '_Float16' is not supported on this target)
     (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/874243421298866d116e1e8bdbd7e0ed4e31e4f6.diff";
-      hash = "sha256-+L98AjuMaDdmEdF8yruvBpljQ+hGmsfNuJSLxB4quDU=";
-    })
-    (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/d2906e8787ccc50051505f97262027bae6b55258.diff";
-      hash = "sha256-jYYMDr2rDJjM8ESO7/yPDl7Z/Y1MsrFBB4HsNOuFL9M=";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/7086a1b075ca317e12cfe79d40a32ad342a30496.patch";
+      hash = "sha256-pA3HK2f2MJr/+h/uale7edIYk/KH194EscYFcsujPXY=";
     })
   ];
 
