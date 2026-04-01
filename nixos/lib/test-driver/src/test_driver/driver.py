@@ -372,7 +372,7 @@ class Driver:
         *,
         name: str | None = None,
         keep_machine_state: bool = False,
-    ) -> BaseMachine:
+    ) -> QemuMachine:
         """
         Create a `QemuMachine`. This currently only supports qemu "nodes", not containers.
         """
