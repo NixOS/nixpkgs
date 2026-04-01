@@ -19,7 +19,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pot";
   version = "0.9.6.post1";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-db4fKXqvg9DEmbI/RTQWcOdw+3ccPk74ME0VDsXZlsQ=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     ];
     plot = [ matplotlib ];
     all =
-      with optional-dependencies;
+      with finalAttrs.passthru.optional-dependencies;
       (
         backend-numpy
         ++ backend-jax
@@ -137,7 +137,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python Optimal Transport Library";
     homepage = "https://pythonot.github.io/";
+    changelog = "https://github.com/PythonOT/POT/blob/${finalAttrs.version}/RELEASES.md";
+    downloadPage = "https://github.com/PythonOT/POT";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yl3dy ];
   };
-}
+})
