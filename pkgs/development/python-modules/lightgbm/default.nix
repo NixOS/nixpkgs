@@ -127,8 +127,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
-    homepage = "https://github.com/Microsoft/LightGBM";
-    changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
+    homepage = "https://github.com/lightgbm-org/LightGBM";
+    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teh ];
   };
