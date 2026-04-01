@@ -36,7 +36,6 @@ let
     }
     ."${stdenvNoCC.hostPlatform.system}";
 
-  # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
@@ -293,6 +292,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = {
+      command = [
+        ./update.sh
+        ./.
+      ];
+      supportedFeatures = [ "commit" ];
+    };
+  };
 
   meta = {
     description = "Modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability";
