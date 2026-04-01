@@ -56,11 +56,10 @@ in
       elixir_1_19
       elixir_1_18
       elixir_1_17
-      elixir_1_16
-      elixir_1_15
       elixir-ls
       lfe
       ;
+
   };
 
   # Helper function to generate package set with a specific Erlang version.
@@ -80,4 +79,7 @@ in
 }
 // lib.optionalAttrs config.allowAliases {
   erlang_26 = throw "'erlang_26' has been removed, as it is EOL"; # added 2026-04-01
+
+  elixir_1_16 = throw "'elixir_1_16' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
+  elixir_1_15 = throw "'elixir_1_15' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
 }
