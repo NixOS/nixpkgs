@@ -70,11 +70,19 @@ python3Packages.buildPythonApplication rec {
     ln -s ${gcc-arm-13-2}/bin/arm-none-eabi-gdb $out/bin/arm-none-eabi-gdb-py3
   '';
 
-  nativeBuildInputs = [
-    python3Packages.setuptools-git-versioning
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-git-versioning
   ];
 
-  propagatedBuildInputs = [ ufbt-python ];
+  dependencies = with python3Packages; [
+    pyserial
+    oslex
+    ansi
+    protobuf
+    pyelftools
+    colorlog
+  ];
   makeWrapperArgs = [
     "--set FBT_NOENV 1"
     "--set UFBT_SDK_PATH ${flipper-sdk}"
