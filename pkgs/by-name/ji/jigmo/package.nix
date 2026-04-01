@@ -5,12 +5,12 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jigmo";
   version = "20250912";
 
   src = fetchzip {
-    url = "https://kamichikoichi.github.io/jigmo/Jigmo-${version}.zip";
+    url = "https://kamichikoichi.github.io/jigmo/Jigmo-${finalAttrs.version}.zip";
     hash = "sha256-Z9WYPqNjHqnYjRndxtHsQ9XhFshMR50hVkQsXgUMKE8=";
     stripRoot = false;
   };
@@ -24,4 +24,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
-}
+})
