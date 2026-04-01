@@ -263,7 +263,9 @@ in
   };
 
   dep-selector-libgecode = attrs: {
-    USE_SYSTEM_GECODE = true;
+    env = attrs.env or { } // {
+      USE_SYSTEM_GECODE = true;
+    };
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
@@ -327,7 +329,9 @@ in
   };
 
   mimemagic = attrs: {
-    FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    env = attrs.env or { } // {
+      FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    };
   };
 
   mini_magick = attrs: {
@@ -1035,7 +1039,9 @@ in
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
-    SASS_LIBSASS_PATH = toString libsass;
+    env = attrs.env or { } // {
+      SASS_LIBSASS_PATH = toString libsass;
+    };
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
