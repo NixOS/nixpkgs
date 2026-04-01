@@ -40,5 +40,6 @@ buildNimSbom (finalAttrs: {
     mainProgram = "nim_lk";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin; # Unfixable issue, darwin locks file access, see #308593 for more info.
   };
 }) ./sbom.json
