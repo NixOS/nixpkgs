@@ -21,14 +21,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pot";
-  version = "0.9.6.post1";
+  version = "0.9.7-unstable-2026-03-05";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    tag = finalAttrs.version;
-    hash = "sha256-db4fKXqvg9DEmbI/RTQWcOdw+3ccPk74ME0VDsXZlsQ=";
+    rev = "41a4d57e1ecc88d79e8ebfe825b32ba761132007";
+    # tag = finalAttrs.version;
+    hash = "sha256-xM6GEBXRo6rOjX276glNyF1EIX5eM/3RR+N9fsjTk+Q=";
   };
 
   build-system = [
