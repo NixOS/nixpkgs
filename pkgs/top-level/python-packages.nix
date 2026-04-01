@@ -10386,6 +10386,8 @@ self: super: with self; {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  mycdp = callPackage ../development/python-modules/mycdp { };
+
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygene = callPackage ../development/python-modules/mygene { };
