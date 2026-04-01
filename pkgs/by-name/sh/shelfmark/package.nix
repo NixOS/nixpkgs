@@ -7,34 +7,43 @@
   nixosTests,
   shelfmark-frontend,
   unrar-free,
+  chromedriver,
+
+  withInternalBypasser ? false,
 }:
 
 let
-  pythonDeps = with python3Packages; [
-    flask
-    flask-cors
-    flask-socketio
-    python-socketio
-    requests
-    pysocks
-    defusedxml
-    beautifulsoup4
-    tqdm
-    dnspython
-    gunicorn
-    gevent
-    gevent-websocket
-    psutil
-    emoji
-    rarfile
-    qbittorrent-api
-    transmission-rpc
-    authlib
-    apprise
-  ];
+  pythonDeps =
+    with python3Packages;
+    [
+      flask
+      flask-cors
+      flask-socketio
+      python-socketio
+      requests
+      pysocks
+      defusedxml
+      beautifulsoup4
+      tqdm
+      dnspython
+      gunicorn
+      gevent
+      gevent-websocket
+      psutil
+      emoji
+      rarfile
+      qbittorrent-api
+      transmission-rpc
+      authlib
+      apprise
+    ]
+    ++ lib.optionals withInternalBypasser [ python3Packages.seleniumbase ];
+
+  descriptionSuffix = if withInternalBypasser then ", including internal bypasser" else "";
+  pnameSuffix = if withInternalBypasser then "-full" else "";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "shelfmark";
+  pname = "shelfmark${pnameSuffix}";
   version = "1.2.1";
 
   src = fetchFromGitHub {
@@ -64,14 +73,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${python3Packages.python.interpreter} $out/bin/shelfmark \
       --prefix PATH : ${
-        lib.makeBinPath [
-          python3Packages.python
-          unrar-free
-        ]
+        lib.makeBinPath (
+          [
+            python3Packages.python
+            unrar-free
+          ]
+          ++ lib.optionals withInternalBypasser [ chromedriver ]
+        )
       } \
       --set PYTHONPATH "$out/libexec:$program_PYTHONPATH" \
-      --set USING_EXTERNAL_BYPASSER true \
-      --add-flags "-m gunicorn.app.wsgiapp --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --workers 1 -t 300 shelfmark.main:app"
+      --add-flags "-m gunicorn.app.wsgiapp --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --workers 1 -t 300 shelfmark.main:app" \
+      ${if !withInternalBypasser then "--set USING_EXTERNAL_BYPASSER true" else ""}
 
     runHook postInstall
   '';
@@ -86,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Self-hosted web interface for searching and downloading books and audiobooks";
+    description = "Self-hosted web interface for searching and downloading books and audiobooks${descriptionSuffix}";
     homepage = "https://github.com/calibrain/shelfmark";
     changelog = "https://github.com/calibrain/shelfmark/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
