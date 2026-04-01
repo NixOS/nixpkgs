@@ -211,6 +211,10 @@ let
       # intent fixture mismatch
       "test_error_no_device_on_floor"
     ];
+    ecovacs = [
+      # Translation not found for vacuum
+      "test_raise_segment_changed_issue"
+    ];
     roborock = [
       # Translation not found for vacuum
       "test_clean_segments_mixed_maps"
