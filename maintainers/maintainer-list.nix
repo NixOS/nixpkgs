@@ -3813,6 +3813,12 @@
     github = "bohanubis";
     githubId = 77834479;
   };
+  BohdanTkachenko = {
+    email = "bohdan@tkachenko.dev";
+    github = "BohdanTkachenko";
+    githubId = 929598;
+    name = "Bohdan Tkachenko";
+  };
   bohreromir = {
     github = "bohreromir";
     githubId = 40412303;
