@@ -105,10 +105,10 @@ python3Packages.buildPythonApplication rec {
     }"
     "--set UFBT_HOME .ufbt_state"
   ];
-  meta = with lib; {
+  meta = {
     description = "Micro Flipper Build Tool";
     homepage = "https://github.com/flipperdevices/flipperzero-ufbt";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pignated ];
     platforms = [
       "x86_64-linux"
