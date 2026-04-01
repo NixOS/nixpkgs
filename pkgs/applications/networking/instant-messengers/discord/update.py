@@ -9,10 +9,17 @@ import json
 import urllib.request
 import re
 import os.path
+import tempfile
+import zipfile
 
 SRC_NAME = "source"
 
 VERSION_REGEX = re.compile(r"\/([\d.]+)\/")
+
+# pmovmskb %xmm0, %eax + cmp $0xffff, %eax
+KRISP_PATCH_SIGNATURE = b"\x66\x0f\xd7\xc0\x3d\xff\xff\x00\x00"
+# Apple Security framework API used as the anchor for Mach-O call-chain tracing
+ANCHOR_IMPORT = b"_SecStaticCodeCreateWithPath"
 
 
 class Platform(StrEnum):
@@ -162,6 +169,57 @@ def fetch_legacy_source(variant: Variant) -> LegacySource:
     )
 
 
+def fetch_krisp_module_url(branch, version, platform):
+    """Return the krisp module download URL, or None if unavailable."""
+    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
+    url = f"https://discord.com/api/modules/{branch.value}/versions.json?host_version={version}&platform={platform.value}"
+    req = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(req) as response:
+        modules = json.loads(response.read())
+
+    if "discord_krisp" not in modules:
+        return None
+
+    krisp_ver = modules["discord_krisp"]
+    download_url = f"https://discord.com/api/modules/{branch.value}/discord_krisp/{krisp_ver}?host_version={version}&platform={platform.value}"
+    return fetch_redirect_url(download_url)
+
+
+def verify_krisp_patchable(url):
+    """Download krisp and check it contains the expected patchable target."""
+    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
+    with tempfile.TemporaryDirectory() as tmpdir:
+        zip_path = os.path.join(tmpdir, "krisp.zip")
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req) as resp, open(zip_path, "wb") as f:
+            f.write(resp.read())
+
+        with zipfile.ZipFile(zip_path) as zf:
+            if "discord_krisp.node" not in zf.namelist():
+                print("  WARNING: discord_krisp.node not found in zip")
+                return False
+            zf.extract("discord_krisp.node", tmpdir)
+
+        with open(os.path.join(tmpdir, "discord_krisp.node"), "rb") as f:
+            data = f.read()
+
+        # ELF: check for MD5 comparison byte pattern (exactly 1 match)
+        if data[:4] == b"\x7fELF":
+            count = data.count(KRISP_PATCH_SIGNATURE)
+            if count != 1:
+                print(f"  WARNING: found {count} ELF signature matches (expected 1)")
+                return False
+            print("  Verified: ELF signature pattern found (1 unique match)")
+            return True
+
+        if ANCHOR_IMPORT in data:
+            print("  Verified: Mach-O contains _SecStaticCodeCreateWithPath import")
+            return True
+
+        print("  WARNING: no patchable target found")
+        return False
+
+
 def main():
     variants: List[Variant] = [
         Variant(Platform.LINUX, Branch.STABLE, Kind.LEGACY),
@@ -181,6 +239,42 @@ def main():
             fetch_distro_source(v) if v.kind == Kind.DISTRO else fetch_legacy_source(v)
         )
         sources[serialize_variant(v)] = asdict(source)
+
+    for v in variants:
+        platform, branch = v.platform, v.branch
+        version = sources[serialize_variant(v)]["version"]
+        print(
+            f"Fetching krisp module for {platform.value}/{branch.value} (v{version})..."
+        )
+
+        try:
+            krisp_url = fetch_krisp_module_url(branch, version, platform)
+            if krisp_url is None:
+                print(
+                    f"  No krisp module available for {platform.value}/{branch.value}"
+                )
+                continue
+
+            if not verify_krisp_patchable(krisp_url):
+                print(
+                    f"  WARNING: Krisp for {platform.value}/{branch.value} is NOT patchable, skipping"
+                )
+                continue
+
+            krisp_hash = prefetch(krisp_url)
+            sources[f"{serialize_variant(v)}-krisp"] = {
+                "url": krisp_url,
+                "version": krisp_url
+                .rsplit("/", 1)[-1]
+                .split("?")[0]
+                .replace("discord_krisp-", "")
+                .replace(".zip", ""),
+                "hash": krisp_hash,
+            }
+            print(f"  OK: krisp for {platform.value}/{branch.value}")
+
+        except Exception as exc:
+            print(f"  Failed to fetch krisp for {platform.value}/{branch.value}: {exc}")
 
     with open(os.path.join(os.path.dirname(__file__), "sources.json"), "w") as f:
         json.dump(sources, f, indent=2, sort_keys=True)

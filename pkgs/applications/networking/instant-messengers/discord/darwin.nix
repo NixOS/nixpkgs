@@ -23,6 +23,10 @@
   withMoonlight ? false,
   moonlight,
   commandLineArgs ? "",
+  krispSrc ? null,
+  withKrisp ? withVencord || withEquicord || withMoonlight,
+  unzip,
+  darwin,
 }:
 
 let
@@ -49,6 +53,44 @@ let
         substituteAllInPlace $out/bin/disable-breaking-updates.py
         chmod +x $out/bin/disable-breaking-updates.py
       '';
+
+  patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "discord-krisp-patched"
+      {
+        nativeBuildInputs = [
+          unzip
+          (python3.withPackages (ps: [
+            ps.lief
+            ps.capstone
+          ]))
+        ];
+      }
+      ''
+        mkdir -p "$out"
+        unzip ${krispSrc} -d "$out"
+        python3 ${./patch-krisp.py} "$out/discord_krisp.node"
+        source ${darwin.signingUtils}
+        sign "$out/discord_krisp.node"
+      ''
+  );
+
+  deployKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "deploy-krisp.py"
+      {
+        pythonInterpreter = "${python3.withPackages (ps: [ ps.watchdog ])}/bin/python3";
+        krispPath = "${patchedKrisp}";
+        discordVersion = version;
+        configDirName = lib.toLower binaryName;
+        meta.mainProgram = "deploy-krisp.py";
+      }
+      ''
+        mkdir -p "$out/bin"
+        cp ${./deploy-krisp.py} "$out/bin/deploy-krisp.py"
+        substituteAllInPlace "$out/bin/deploy-krisp.py"
+        chmod +x "$out/bin/deploy-krisp.py"
+      ''
+  );
+
 in
 assert lib.assertMsg (
   enabledDiscordModsCount <= 1
@@ -78,6 +120,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
       --run ${lib.getExe disableBreakingUpdates} \
+      ${lib.strings.optionalString (krispSrc != null && withKrisp) "--run ${lib.getExe deployKrisp}"} \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
@@ -125,6 +168,10 @@ stdenv.mkDerivation {
       withOpenASAR = self.override {
         withOpenASAR = true;
       };
+      withKrisp = self.override {
+        withKrisp = true;
+      };
     };
-  };
+  }
+  // lib.optionalAttrs (krispSrc != null && withKrisp) { inherit patchedKrisp; };
 }

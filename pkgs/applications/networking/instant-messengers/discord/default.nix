@@ -1,5 +1,6 @@
 {
   callPackage,
+  fetchurl,
   lib,
   stdenv,
   discord,
@@ -96,6 +97,13 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
     args = (variants.${stdenv.hostPlatform.system} or variants.default).${pname};
     platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
     source = sources."${platformName}-${args.branch}";
+    krispSource =
+      if sources ? "${platformName}-${args.branch}-krisp" then
+        sources."${platformName}-${args.branch}-krisp"
+      else if source ? modules && source.modules ? discord_krisp then
+        source.modules.discord_krisp
+      else
+        null;
   in
   callPackage package (
     args
@@ -103,6 +111,12 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
       inherit pname source;
       meta = meta // {
         mainProgram = args.binaryName;
+      };
+    }
+    // lib.optionalAttrs (krispSource != null) {
+      krispSrc = fetchurl {
+        inherit (krispSource) url;
+        hash = krispSource.hash or lib.fakeHash;
       };
     }
   )
