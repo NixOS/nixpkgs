@@ -1,38 +1,42 @@
 {
-  lib,
-  stdenv,
   callPackage,
   fetchFromCodeberg,
+  lib,
   libGL,
-  libx11,
   libevdev,
   libinput,
+  libx11,
   libxkbcommon,
   pixman,
   pkg-config,
   scdoc,
+  stdenv,
   udev,
   versionCheckHook,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
-  xwayland,
-  zig_0_15,
   withManpages ? true,
+  wlroots_0_20,
+  xwayland,
   xwaylandSupport ? true,
+  zig_0_15,
 }:
 
+let
+  wlroots = wlroots_0_20;
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.14";
+  version = "0.3.15";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
   src = fetchFromCodeberg {
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-UhWA7jmBDhktHqHds06C0GY+xzlQZZezYopsLmIAGgI=";
+    hash = "sha256-zVUbLojSyCOOz3+DR9J9nQpNNuboG5/moCGjQx2ZI8w=";
     tag = "v${finalAttrs.version}";
   };
 
@@ -42,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_15
+    zig
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -55,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots_0_19
+    wlroots
   ]
   ++ lib.optional xwaylandSupport libx11;
 
@@ -67,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
-    install contrib/river.desktop -Dt $out/share/wayland-sessions
-    install -Dm755 example/init -t $out/example/
+    install -Dm644 contrib/river.desktop --target-directory=$out/share/wayland-sessions
+    install -Dm755 example/init --target-directory=$out/example
   '';
 
   doInstallCheck = true;
@@ -81,24 +85,25 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://codeberg.org/river/river-classic";
     description = "Dynamic tiling wayland compositor";
     longDescription = ''
-      river-classic is a dynamic tiling Wayland compositor with flexible runtime
-      configuration.
+      river-classic is a dynamic tiling Wayland compositor with
+      flexible runtime configuration.
 
-      It is a fork of river 0.3 intended for users that are happy with how river 0.3
-      works and do not wish to deal with the majorly breaking changes planned for
-      the river 0.4.0 release.
+      It is a fork of [river](https://codeberg.org/river/river) 0.3
+      intended for users that are happy with how river 0.3 works and
+      do not wish to deal with the majorly breaking changes from the
+      river 0.4.0 release.
     '';
     changelog = "https://codeberg.org/river/river-classic/releases/tag/v${finalAttrs.version}";
+    homepage = "https://codeberg.org/river/river-classic";
     license = lib.licenses.gpl3Only;
+    mainProgram = "river";
     maintainers = with lib.maintainers; [
       adamcstephens
       moni
       rodrgz
     ];
-    mainProgram = "river";
     platforms = lib.platforms.linux;
   };
 })

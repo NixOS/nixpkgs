@@ -9981,6 +9981,12 @@
     githubId = 66037909;
     name = "Graham J. Norris";
   };
+  granddave = {
+    email = "davidisaksson93@gmail.com";
+    github = "Granddave";
+    githubId = 13297896;
+    name = "David Isaksson";
+  };
   gravndal = {
     email = "gaute.ravndal+nixos@gmail.com";
     github = "gravndal";
@@ -13967,6 +13973,12 @@
     github = "khaneliman";
     githubId = 1778670;
     name = "Austin Horstman";
+  };
+  Kharacternyk = {
+    email = "nazar@vinnich.uk";
+    github = "Kharacternyk";
+    githubId = 43315801;
+    name = "Nazar Vinnichuk";
   };
   khaser = {
     email = "a-horohorin@mail.ru";
@@ -19478,6 +19490,12 @@
     name = "nishimara";
     github = "Nishimara";
     githubId = 59232119;
+  };
+  nitinbhat972 = {
+    email = "nitinbhat972@gmail.com";
+    github = "nitinbhat972";
+    githubId = 80189191;
+    name = "Nitin Bhat";
   };
   nitsky = {
     name = "nitsky";
