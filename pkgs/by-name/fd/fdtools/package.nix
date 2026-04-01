@@ -96,6 +96,6 @@ stdenv.mkDerivation {
     description = "Set of utilities for working with file descriptors";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ ];
   };
 }
