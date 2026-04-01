@@ -19046,6 +19046,11 @@
     githubId = 1771772;
     name = "Alexander Ben Nasrallah";
   };
+  neovim-btw = {
+    github = "neovim-btw";
+    githubId = 270734577;
+    name = "neovim-btw";
+  };
   nerdypepper = {
     email = "nerdy@peppe.rs";
     github = "oppiliappan";
