@@ -12,6 +12,8 @@ For example, [`python.withPackage`](#attributes-on-interpreters-packages) is bas
 
 Unless otherwise noted, arguments can be overridden directly using [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
+`buildEnv` enforces [structured attributes (`{ __structuredAttrs = true; }`)](https://nix.dev/manual/nix/2.18/language/advanced-attributes.html#adv-attr-structuredAttrs).
+
 - `name` or `pname` and `version` (required):
     The name of the environment.
 
