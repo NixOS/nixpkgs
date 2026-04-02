@@ -9,7 +9,7 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
-  npmDepsHash = "sha256-RAzotFGj0FGpfF7iyB5f2fdKFvMLcpJx142yplRwboU=";
+  npmDepsHash = "sha256-VCnxEcaqWo31oIpF6X8Lid4I/aaQCQZ9l9rV6TTqXPI=";
 
   installPhase = ''
     runHook preInstall

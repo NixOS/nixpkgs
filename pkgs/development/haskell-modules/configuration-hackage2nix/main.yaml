@@ -393,8 +393,6 @@ package-maintainers:
     - cornelis
   poscat:
     - hinit
-  Profpatsch:
-    - gitit
   psibi:
     - path-pieces
     - persistent
