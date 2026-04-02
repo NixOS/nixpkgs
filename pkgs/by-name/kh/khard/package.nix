@@ -1,7 +1,7 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
   versionCheckHook,
 }:
 
@@ -10,9 +10,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "0.20.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
+  src = fetchFromGitHub {
+    owner = "lucc";
+    repo = "khard";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5ZKLOwoAzY36htMzMLpdwn1Xo34rGe56+TFuHRfFB9Q=";
   };
 
   build-system = with python3.pkgs; [
