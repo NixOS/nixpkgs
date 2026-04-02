@@ -5,6 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   testers,
+  pkg-config,
   validatePkgConfig,
 }:
 
@@ -53,15 +54,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir $out/lib/pkgconfig
     cat -> $out/lib/pkgconfig/temporal_capi.pc <<EOF
     prefix=$out
-    exec_prefix=''${prefix}
-    libdir=''${exec_prefix}/lib
-    includedir=''${prefix}/include
+    exec_prefix=\''${prefix}
+    libdir=\''${exec_prefix}/lib
+    includedir=\''${prefix}/include
 
     Name: temporal_capi
     Description: C API for temporal_rs
     Version: ${finalAttrs.version}
-    Libs: -L''${libdir} -ltemporal_capi
-    Cflags: -I''${includedir}
+    Libs: -L\''${libdir} -ltemporal_capi
+    Cflags: -I\''${includedir}
     EOF
   '';
   postFixup = lib.optional (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
@@ -71,13 +72,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # We don't want to run Rust checks, we only check the resulting lib using C/C++ in the installCheckPhase.
   doCheck = false;
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ stdenv.cc ];
+  nativeInstallCheckInputs = [
+    stdenv.cc
+    pkg-config
+  ];
   installCheckPhase = ''
     runHook preInstallCheck
 
-    cc -L $out/lib -I $out/include temporal_capi/tests/c/simple.c -ltemporal_capi -lm -o c_test
+    FLAGS=$(PKG_CONFIG_PATH="$out/lib/pkgconfig" pkg-config --cflags --libs temporal_capi)
+    cc $FLAGS temporal_capi/tests/c/simple.c -o c_test
     ./c_test
-    c++ -L $out/lib -I $out/include temporal_capi/tests/cpp/simple.cpp -ltemporal_capi -lm -o cpp_test
+    c++ $FLAGS temporal_capi/tests/cpp/simple.cpp -o cpp_test
     ./cpp_test
 
     runHook postInstallCheck
