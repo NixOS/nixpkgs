@@ -585,9 +585,9 @@
   };
 
   elixir = {
-    version = "0.3.4";
+    version = "0.3.5";
     url = "github:elixir-lang/tree-sitter-elixir";
-    hash = "sha256-9M/DpqpGivDtgGt3ojU/kHR51sla59+KtZ/95hT6IIo=";
+    hash = "sha256-C5/+t49pcFh45GqLZRjRs/sH8Ej+dklR/brad+snsyQ=";
     meta = {
       license = lib.licenses.asl20;
     };
