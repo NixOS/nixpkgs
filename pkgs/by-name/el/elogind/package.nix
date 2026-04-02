@@ -35,6 +35,9 @@
   enableSystemd ? false,
 }:
 
+let
+  system = "/run/current-system/sw";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "elogind";
   version = "255.5";
@@ -148,6 +151,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc")
+    (lib.mesonOption "halt-path" "${system}/bin/halt")
+    (lib.mesonOption "poweroff-path" "${system}/bin/poweroff")
+    (lib.mesonOption "reboot-path" "${system}/bin/reboot")
     (lib.mesonBool "utmp" (!stdenv.hostPlatform.isMusl))
     (lib.mesonEnable "xenctrl" false)
   ];
