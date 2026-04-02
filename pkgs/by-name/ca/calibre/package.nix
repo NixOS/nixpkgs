@@ -153,6 +153,15 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/kovidgoyal/calibre/commit/b1ef6a8142b8dadeb7e72c250c65d42b36ee7118.patch";
         hash = "sha256-1uZ2c+yUilt06okc0vSgilPrmvluAodbwEMEtdd/7JE=";
       })
+      # Fix CVE-2026-33206
+      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0825
+      # https://github.com/NixOS/nixpkgs/issues/504458
+      # Fixed upstream in 9.6.0.
+      (fetchpatch {
+        name = "CVE-2026-33206.patch";
+        url = "https://github.com/kovidgoyal/calibre/commit/c43f347837dbc00d9a7b5ff15a228b6f6081e290.patch";
+        hash = "sha256-rHDMaZ/P9Or6Asr9YZO1lmvNqEpoFfil1w98t713XdI=";
+      })
     ]
     ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
