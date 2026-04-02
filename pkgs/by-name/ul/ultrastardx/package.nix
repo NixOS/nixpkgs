@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       diogotcorreia
-      Profpatsch
     ];
     platforms = lib.platforms.linux;
   };

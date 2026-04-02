@@ -7,6 +7,9 @@
 
 let
   cfg = config.virtualisation.incus;
+
+  acmeHostDir = config.security.acme.certs."${cfg.useACMEHost}".directory;
+
   preseedFormat = pkgs.formats.yaml { };
 
   nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
@@ -279,6 +282,17 @@ in
 
         package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
+      useACMEHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "incus.example.com";
+        description = ''
+          Host of an existing Let's Encrypt certificate to use for TLS.
+          *Note that this option does not create any certificates and it
+          doesn't add subdomains to existing ones – you will need to create
+          them manually using {option}`security.acme.certs`.*
+        '';
+      };
     };
   };
 
@@ -378,6 +392,10 @@ in
       '';
     };
 
+    security.acme.certs = lib.mkIf (cfg.useACMEHost != null) {
+      "${cfg.useACMEHost}".reloadServices = [ "incus.service" ];
+    };
+
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
 
@@ -389,7 +407,8 @@ in
         "lxcfs.service"
         "incus.socket"
       ]
-      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ]
+      ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
       requires = [
         "lxcfs.service"
@@ -397,7 +416,10 @@ in
       ]
       ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
-      wants = [ "network-online.target" ];
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -414,6 +436,11 @@ in
         Restart = "on-failure";
         TimeoutStartSec = "${cfg.startTimeout}s";
         TimeoutStopSec = "30s";
+
+        BindReadOnlyPaths = lib.mkIf (cfg.useACMEHost != null) [
+          "${acmeHostDir}/fullchain.pem:/var/lib/incus/server.crt"
+          "${acmeHostDir}/key.pem:/var/lib/incus/server.key"
+        ];
       };
     };
 
