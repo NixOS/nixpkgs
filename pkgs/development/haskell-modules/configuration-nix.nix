@@ -335,6 +335,16 @@ builtins.intersectAttrs super {
     (overrideCabal { enableSeparateDataOutput = false; })
   ];
 
+  # So pandoc-server can be used:
+  # https://pandoc.org/MANUAL.html#running-pandoc-as-a-web-server
+  # TODO(@sternenseemann): provide pandoc-server.cgi symlink?
+  pandoc-cli = overrideCabal (drv: {
+    postInstall = ''
+      ${drv.postInstall or ""}
+      ln -s "''${!outputBin}/bin/pandoc" "''${!outputBin}/bin/pandoc-server"
+    '';
+  }) super.pandoc-cli;
+
   # Use Nixpkgs' double-conversion library
   double-conversion = disableCabalFlag "embedded_double_conversion" (
     addBuildDepends [ pkgs.double-conversion ] super.double-conversion
