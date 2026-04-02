@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "UTF8CPP_ENABLE_TESTS" true)
+  ];
+  doCheck = true;
+
   meta = {
     homepage = "https://github.com/nemtrif/utfcpp";
     changelog = "https://github.com/nemtrif/utfcpp/releases/tag/v${finalAttrs.version}";
