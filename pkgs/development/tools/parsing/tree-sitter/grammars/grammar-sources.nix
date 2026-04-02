@@ -585,9 +585,9 @@
   };
 
   elixir = {
-    version = "0.3.4";
+    version = "0.3.5";
     url = "github:elixir-lang/tree-sitter-elixir";
-    hash = "sha256-9M/DpqpGivDtgGt3ojU/kHR51sla59+KtZ/95hT6IIo=";
+    hash = "sha256-C5/+t49pcFh45GqLZRjRs/sH8Ej+dklR/brad+snsyQ=";
     meta = {
       license = lib.licenses.asl20;
     };
@@ -693,9 +693,9 @@
   };
 
   fish = rec {
-    version = "3.6.0";
+    version = "3.7.0";
     url = "github:ram02z/tree-sitter-fish?ref=${version}";
-    hash = "sha256-ZQj6XR7pHGoCOBS6GOHiRW9LWNoNPlwVcZe5F2mtGNE=";
+    hash = "sha256-n6eGMdbW1Rsn5XbszLSSSG3F8jh+loYnPEiabNY+jfk=";
     meta = {
       license = lib.licenses.unlicense;
     };
@@ -732,6 +732,19 @@
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
+      ];
+    };
+  };
+
+  fstar = {
+    version = "0-unstable-2026-03-14";
+    url = "github:sei40kr/tree-sitter-fstar";
+    rev = "cdb06d462e0ee727c313f3e07c71bc2d288e0f89";
+    hash = "sha256-kGFP+MbZ10qS13n8pcI6YhIS6xWjDtuqZSeIiPSO7pM=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        sei40kr
       ];
     };
   };
@@ -833,9 +846,9 @@
   };
 
   gitcommit = {
-    version = "0.4.0";
+    version = "0.5.0";
     url = "github:gbprod/tree-sitter-gitcommit";
-    hash = "sha256-KYfcs99p03b0RiPYnZeKJf677fmVf658FLZcFk2v2Ws=";
+    hash = "sha256-ttULjFU9slnPcT4bCjOozGkaKAOxMW5Oa2/caVNeEsA=";
     meta = {
       license = lib.licenses.wtfpl;
       maintainers = with lib.maintainers; [
@@ -1052,9 +1065,9 @@
   };
 
   heex = {
-    version = "0.8.0";
+    version = "0.9.0";
     url = "github:phoenixframework/tree-sitter-heex";
-    hash = "sha256-rifYGyIpB14VfcEZrmRwYSz+ZcajQcB4mCjXnXuVFDQ=";
+    hash = "sha256-1p2drpkA+5o+WSH5cv+zPVx30lNhQ9bqX5JHA0YSS2Y=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -1329,10 +1342,10 @@
   };
 
   just = {
-    version = "0-unstable-2026-03-15";
+    version = "0.2.0";
     url = "github:casey/tree-sitter-just";
-    rev = "d9da862c156020c1a83d3c6ccdda32be6d8a5d4a";
-    hash = "sha256-YV+vab/QqGHVPV1e3wjd0w1nFskJEIU4ukq/yIlojk0=";
+    rev = "5685543a6e64f66335e25518c9ae8ffa1dae3d01";
+    hash = "sha256-lrW5E+HIqrDSWZ4+KOjIc80/wYm/WV9ZOfdLXxPIbX4=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
@@ -1550,9 +1563,9 @@
   };
 
   markdown = {
-    version = "0.5.2";
+    version = "0.5.3";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
+    hash = "sha256-WUVN7+lzDI+VC5PuJjhHiS4JpVr1x0Ic30i2tVrI6W8=";
     location = "tree-sitter-markdown";
     meta = {
       license = lib.licenses.mit;
@@ -1561,9 +1574,9 @@
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.5.2";
+    version = "0.5.3";
     url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-JJCFksPDwaiOmU+nZ3PHeLHlPKWTZBTnqcD/tQorWdU=";
+    hash = "sha256-WUVN7+lzDI+VC5PuJjhHiS4JpVr1x0Ic30i2tVrI6W8=";
     location = "tree-sitter-markdown-inline";
     meta = {
       license = lib.licenses.mit;
@@ -1962,10 +1975,10 @@
   };
 
   pod = {
-    version = "0-unstable-2024-08-23";
+    version = "1.0.0-unstable-2026-03-23";
     url = "github:tree-sitter-perl/tree-sitter-pod/release";
-    rev = "0bf8387987c21bf2f8ed41d2575a8f22b139687f";
-    hash = "sha256-yV2kVAxWxdyIJ3g2oivDc01SAQF0lc7UMT2sfv9lKzI=";
+    rev = "3f15a3f11b422753fbf985190dceacb4bbf80ecf";
+    hash = "sha256-Yu6sK+tGtFVgAZUE3pfoMLzMNwxQQuQu/ZtrM45tNHs=";
 
     meta = {
       license = lib.licenses.artistic2;
@@ -1988,9 +2001,9 @@
   };
 
   powershell = {
-    version = "0.25.10";
+    version = "0.26.3";
     url = "github:airbus-cert/tree-sitter-powershell";
-    hash = "sha256-xzDM1CdBY95XgLsEjqKWrwuIf/s6/2Q0XbxJRvOuL2o=";
+    hash = "sha256-ETuZcVSvHF5ILN6+xjWlQM5IiT/+dtxdSckrHJSJSWk=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2214,9 +2227,9 @@
   };
 
   robot = {
-    version = "1.1.2";
+    version = "1.3.0";
     url = "github:Hubro/tree-sitter-robot";
-    hash = "sha256-M0Um0JYvxQDYC3kqIENCiEIdEPOPNa05/2idih/fWas=";
+    hash = "sha256-GJTZMIOrEXsfVzVigF2XKKDxchkOGv0zEya5o9k5ZnY=";
     meta = {
       license = lib.licenses.isc;
       maintainers = with lib.maintainers; [
@@ -2257,9 +2270,9 @@
   };
 
   rust = {
-    version = "0.24.0";
+    version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-rust";
-    hash = "sha256-y3sJURlSTM7LRRN5WGIAeslsdRZU522Tfcu6dnXH/XQ=";
+    hash = "sha256-Ls6tB6IxXDQDWwx0BJ7RgbheelC4MH8z97E7wwhkDcY=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2279,9 +2292,9 @@
   };
 
   scala = {
-    version = "0.24.0";
+    version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-scala";
-    hash = "sha256-ZE+zjpb52hvehJjNchJYK81XZbGAudeTRxlczuoix5g=";
+    hash = "sha256-xDp1+i0QLnY18EtiwurW1B4bbeS1qZKNJRxS6Qeb3pw=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2785,10 +2798,10 @@
   };
 
   unison = {
-    version = "0-unstable-2025-03-06";
+    version = "2.1.3-unstable-2026-02-27";
     url = "github:kylegoetz/tree-sitter-unison";
-    rev = "169e7f748a540ec360c0cb086b448faad012caa4";
-    hash = "sha256-0HOLtLh1zRdaGQqchT5zFegWKJHkQe9r7DGKL6sSkPo=";
+    rev = "10365cc70ab2b2de85ea7ab35cf6b7636c36ce8b";
+    hash = "sha256-l6X2x5lGlUhyf6Pr6lWd4aWacz7vmvtHVyM4qqPO8zg=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

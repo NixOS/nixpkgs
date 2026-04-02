@@ -18,12 +18,6 @@ buildLakePackage {
 
   leanPackageName = "LeanSearchClient";
 
-  # Upstream lean-toolchain lags behind; remove it so the
-  # buildLakePackage toolchain check does not reject this package.
-  postPatch = ''
-    rm -f lean-toolchain
-  '';
-
   meta = {
     description = "Lean 4 client for LeanSearch and Moogle proof search";
     homepage = "https://github.com/leanprover-community/LeanSearchClient";
