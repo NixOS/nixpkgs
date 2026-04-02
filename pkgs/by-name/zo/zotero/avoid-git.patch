@@ -1,0 +1,55 @@
+diff --git a/app/scripts/dir_build b/app/scripts/dir_build
+index 493288ad47..ccabb3722b 100755
+--- a/app/scripts/dir_build
++++ b/app/scripts/dir_build
+@@ -86,7 +86,7 @@ fi
+ 
+ CHANNEL="source"
+ 
+-hash=$(git -C "$ROOT_DIR" rev-parse --short HEAD)
++hash="0000000000000000000000000000000000000000"
+ 
+ build_dir=$(mktemp -d)
+ cleanup() { rm -rf "$build_dir"; }
+diff --git a/js-build/note-editor.js b/js-build/note-editor.js
+index 1435730342..6eebb10c50 100644
+--- a/js-build/note-editor.js
++++ b/js-build/note-editor.js
+@@ -12,8 +12,7 @@ async function getZoteroNoteEditor(signatures) {
+ 
+ 	const modulePath = path.join(__dirname, '..', 'note-editor');
+ 
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 
+ 	if (!('note-editor' in signatures) || signatures['note-editor'].hash !== hash) {
+ 		const targetDir = path.join(__dirname, '..', 'build', 'resource', 'note-editor');
+diff --git a/js-build/pdf-worker.js b/js-build/pdf-worker.js
+index b820304f3a..6bbd0708c9 100644
+--- a/js-build/pdf-worker.js
++++ b/js-build/pdf-worker.js
+@@ -12,8 +12,7 @@ async function getPDFWorker(signatures) {
+ 
+ 	const modulePath = path.join(__dirname, '..', 'pdf-worker');
+ 
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 
+ 	if (!('pdf-worker' in signatures) || signatures['pdf-worker'].hash !== hash) {
+ 		const targetDir = path.join(__dirname, '..', 'build', 'chrome', 'content', 'zotero', 'xpcom', 'pdfWorker');
+diff --git a/js-build/reader.js b/js-build/reader.js
+index 67a02a3ad2..2127f680df 100644
+--- a/js-build/reader.js
++++ b/js-build/reader.js
+@@ -12,8 +12,7 @@ async function getReader(signatures) {
+ 
+ 	const modulePath = path.join(__dirname, '..', 'reader');
+ 	
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 	
+ 	if (!('reader' in signatures) || signatures['reader'].hash !== hash) {
+ 		const targetDir = path.join(__dirname, '..', 'build', 'resource', 'reader');

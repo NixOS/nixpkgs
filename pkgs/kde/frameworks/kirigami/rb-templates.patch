@@ -1,0 +1,52 @@
+commit a1801928b5eea0bf224c81a638f658bf3a9d9a6c
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Wed Nov 26 11:24:02 2025 +0100
+
+    Make qml generation deterministic by adding explicit dependencies
+    
+    Similar to https://qt-project.atlassian.net/browse/QTBUG-137440
+    
+    To fix https://bugs.kde.org/show_bug.cgi?id=513292
+
+diff --git a/src/dialogs/CMakeLists.txt b/src/dialogs/CMakeLists.txt
+index 9bf3cde9..c199c6f5 100644
+--- a/src/dialogs/CMakeLists.txt
++++ b/src/dialogs/CMakeLists.txt
+@@ -5,6 +5,7 @@ ecm_add_qml_module(KirigamiDialogs URI "org.kde.kirigami.dialogs"
+     GENERATE_PLUGIN_SOURCE
+     INSTALLED_PLUGIN_TARGET KF6KirigamiDialogsplugin
+     DEPENDENCIES QtQuick org.kde.kirigami.platform
++    LIBRARIES KirigamiPrimitives
+ )
+ 
+ 
+@@ -26,7 +27,7 @@ set_target_properties(KirigamiDialogs PROPERTIES
+ 
+ target_include_directories(KirigamiDialogs PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+ 
+-target_link_libraries(KirigamiDialogs PRIVATE Qt6::Quick KirigamiPlatform)
++target_link_libraries(KirigamiDialogs PRIVATE Qt6::Quick KirigamiPlatform KirigamiPrimitives)
+ 
+ ecm_finalize_qml_module(KirigamiDialogs EXPORT KirigamiTargets)
+ 
+diff --git a/src/templates/CMakeLists.txt b/src/templates/CMakeLists.txt
+index b0027ea2..6813a6d0 100644
+--- a/src/templates/CMakeLists.txt
++++ b/src/templates/CMakeLists.txt
+@@ -4,6 +4,8 @@ ecm_add_qml_module(KirigamiTemplates URI "org.kde.kirigami.templates"
+     VERSION 2.0
+     GENERATE_PLUGIN_SOURCE
+     INSTALLED_PLUGIN_TARGET KF6KirigamiTemplates
++    DEPENDENCIES
++    LIBRARIES KirigamiPrimitives KirigamiLayouts
+ )
+ 
+ set_source_files_properties(AppHeaderSizeGroup.qml PROPERTIES
+@@ -37,6 +39,7 @@ set_target_properties(KirigamiTemplates PROPERTIES
+ 
+ target_include_directories(KirigamiTemplates PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+ 
++target_link_libraries(KirigamiTemplates PRIVATE KirigamiPrimitives KirigamiLayouts)
+ 
+ ecm_finalize_qml_module(KirigamiTemplates EXPORT KirigamiTargets)
+ 

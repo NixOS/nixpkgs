@@ -1,0 +1,41 @@
+diff --git a/Makefile b/Makefile
+index 9430d7e..e46efd3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,8 +2,10 @@
+ #
+ NAME	:=	vwifi
+ VERSION	:=	6.3
+-BINDIR	:=	$(DESTDIR)/usr/local/bin
+-MANDIR	:=	$(DESTDIR)/usr/local/man/man1
++PREFIX	?=	$(out)
++DESTDIR	?=	$(PREFIX)
++BINDIR	?=	$(PREFIX)/bin
++MANDIR	?=	$(PREFIX)/share/man/man1
+ 
+ EXEC	:=	vwifi-server vwifi-client vwifi-ctrl vwifi-add-interfaces
+ #EXEC	:=	vwifi-server vwifi-client vwifi-ctrl vwifi-add-interfaces vwifi-inet-monitor
+@@ -23,10 +25,8 @@ MODE+= -O3 -s -Wall -Wextra -pedantic # //////////      RELEASE
+ 
+ EDITOR	?=	geany
+ 
+-NETLINK_FLAGS_PATH := /usr/include/libnl3
+-NETLINK_FLAGS := -I $(NETLINK_FLAGS_PATH)
+-NETLINK_LIBS_PATH := .
+-NETLINK_LIBS := -L $(NETLINK_LIBS_PATH) -lnl-genl-3 -lnl-3
++NETLINK_FLAGS := $(shell pkg-config --cflags libnl-3.0 libnl-genl-3.0)
++NETLINK_LIBS := $(shell pkg-config --libs libnl-3.0 libnl-genl-3.0)
+ 
+ THREAD_LIBS := -lpthread
+ 
+@@ -101,10 +101,6 @@ gitversion: .git
+ 	@sed -i "s/^\(VERSION.[^\-]*\)\(-.*\)\?/\1-$(shell git log --pretty=format:"%h" -n 1)/g" Makefile
+ 
+ install : build
+-ifneq ($(EUID),0)
+-	@echo "Please run 'make install' as root user"
+-	@exit 1
+-endif
+ 	chmod +x $(EXEC)
+ 	# Install binaire :
+ 	mkdir -p $(BINDIR) && cp -p $(EXEC) $(BINDIR)

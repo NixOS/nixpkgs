@@ -1,0 +1,18 @@
+diff --git a/src/gui/gsc_main_window.cpp b/src/gui/gsc_main_window.cpp
+index a5a6ac9..2d7a1f7 100644
+--- a/src/gui/gsc_main_window.cpp
++++ b/src/gui/gsc_main_window.cpp
+@@ -955,8 +955,13 @@ void GscMainWindow::run_update_drivedb()
+ 		if (smartctl_binary.is_absolute()) {
+ 			update_binary_path = smartctl_binary.parent_path() / update_binary_path;
+ 		}
+-		argv = {"xterm", "-hold", "-e", hz::fs_path_to_string(update_binary_path)};
++
++		gui_show_error_dialog(
++			_("Error Updating Drive Database"),
++			_("Updating drivedb from GSmartControl is unavailable in nixpkgs because smartmontools in the Nix store is immutable. Please update your NixOS or nixpkgs channel/flake inputs to get a newer drive database."),
++			this);
++		return;
+ 	}
+ 
+ 	try {

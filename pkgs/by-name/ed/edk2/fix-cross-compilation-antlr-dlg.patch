@@ -1,0 +1,27 @@
+diff --git i/BaseTools/Source/C/VfrCompile/GNUmakefile w/BaseTools/Source/C/VfrCompile/GNUmakefile
+index ad6c350876..bc30e25cd3 100644
+--- i/BaseTools/Source/C/VfrCompile/GNUmakefile
++++ w/BaseTools/Source/C/VfrCompile/GNUmakefile
+@@ -32,6 +32,9 @@ LINKER = $(CXX)
+ 
+ EXTRA_CLEAN_OBJECTS = EfiVfrParser.cpp EfiVfrParser.h VfrParser.dlg VfrTokens.h VfrLexer.cpp VfrLexer.h VfrSyntax.cpp tokens.h
+ 
++CC_FOR_BUILD ?= $(CC)
++CXX_FOR_BUILD ?= $(CXX)
++
+ MAKEROOT ?= ../..
+ 
+ include $(MAKEROOT)/Makefiles/header.makefile
+@@ -61,10 +64,10 @@ VfrLexer.cpp VfrLexer.h: Pccts/dlg/dlg VfrParser.dlg
+ 	Pccts/dlg/dlg -C2 -i -CC -cl VfrLexer -o . VfrParser.dlg
+ 
+ Pccts/antlr/antlr:
+-	$(MAKE) -C Pccts/antlr
++	$(MAKE) -C Pccts/antlr CC=$(CC_FOR_BUILD) CXX=$(CXX_FOR_BUILD)
+ 
+ Pccts/dlg/dlg:
+-	$(MAKE) -C Pccts/dlg
++	$(MAKE) -C Pccts/dlg CC=$(CC_FOR_BUILD) CXX=$(CXX_FOR_BUILD)
+ 
+ ATokenBuffer.o: Pccts/h/ATokenBuffer.cpp
+ 	$(CXX) -c $(VFR_CPPFLAGS) $(INC) $(VFR_CXXFLAGS) $? -o $@

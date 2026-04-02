@@ -1,0 +1,66 @@
+diff --git a/dolphin/mat2.desktop b/dolphin/mat2.desktop
+index 41c8de4..11df258 100644
+--- a/dolphin/mat2.desktop
++++ b/dolphin/mat2.desktop
+@@ -8,6 +8,6 @@ Type=Service
+ Name=Clean metadata
+ Name[de]=Metadaten löschen
+ Name[es]=Limpiar metadatos
+-Icon=/usr/share/icons/hicolor/scalable/apps/mat2.svg
+-Exec=kdialog --yesno  "$( mat2 -s %F )" --title "Clean Metadata?" && mat2 %U
+-Exec[de]=kdialog --yesno  "$( mat2 -s %F )" --title "Metadaten löschen?" && mat2 %U
++Icon=@mat2svg@
++Exec=@kdialog@ --yesno  "$( @mat2@ -s %F )" --title "Clean Metadata?" && @mat2@ %U
++Exec[de]=@kdialog@ --yesno  "$( @mat2@ -s %F )" --title "Metadaten löschen?" && @mat2@ %U
+diff --git a/libmat2/exiftool.py b/libmat2/exiftool.py
+index 2b91ac2..5fcf6e5 100644
+--- a/libmat2/exiftool.py
++++ b/libmat2/exiftool.py
+@@ -1,8 +1,6 @@
+-import functools
+ import json
+ import logging
+ import os
+-import shutil
+ import subprocess
+ from typing import Union, Set, Dict
+ 
+@@ -67,14 +65,5 @@ class ExiftoolParser(abstract.AbstractParser):
+             return False
+         return True
+ 
+-@functools.lru_cache(maxsize=None)
+ def _get_exiftool_path() -> str:  # pragma: no cover
+-    which_path = shutil.which('exiftool')
+-    if which_path:
+-        return which_path
+-
+-    # Exiftool on Arch Linux has a weird path
+-    if os.access('/usr/bin/vendor_perl/exiftool', os.X_OK):
+-        return '/usr/bin/vendor_perl/exiftool'
+-
+-    raise RuntimeError("Unable to find exiftool")
++    return '@exiftool@'
+diff --git a/libmat2/video.py b/libmat2/video.py
+index 39059c5..82fe1e7 100644
+--- a/libmat2/video.py
++++ b/libmat2/video.py
+@@ -1,6 +1,4 @@
+ import subprocess
+-import functools
+-import shutil
+ import logging
+ 
+ from typing import Union, Dict
+@@ -135,10 +133,5 @@ class MP4Parser(AbstractFFmpegParser):
+     }
+ 
+ 
+-@functools.lru_cache(maxsize=None)
+ def _get_ffmpeg_path() -> str:  # pragma: no cover
+-    which_path = shutil.which('ffmpeg')
+-    if which_path:
+-        return which_path
+-
+-    raise RuntimeError("Unable to find ffmpeg")
++    return '@ffmpeg@'
