@@ -7,13 +7,13 @@
 
 buildLakePackage {
   pname = "lean4-aesop";
-  version = "4.28.0";
+  version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "aesop";
-    tag = "v4.28.0";
-    hash = "sha256-KeP46qtEf4/lgi4iCVuYIQbazufTR4luTbsuia9JkK4=";
+    tag = "v4.29.0";
+    hash = "sha256-CNwxNig8OWjtfQRYyRnM/HGBn2oaNX5qP9CVT2eWNlg=";
   };
 
   leanPackageName = "aesop";

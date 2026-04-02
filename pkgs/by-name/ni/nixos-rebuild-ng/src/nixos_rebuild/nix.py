@@ -717,6 +717,12 @@ def switch_to_configuration(
         },
         remote=target_host,
         sudo=sudo,
+        # switch-to-configuration is not expected to produce meaningful
+        # stdout, but if it (or any of its children) does, it would leak
+        # into our stdout and break the "only the store path on stdout"
+        # contract documented in services.py (see print_result). Redirect
+        # its stdout to our stderr defensively.
+        stdout=sys.stderr,
     )
 
 
