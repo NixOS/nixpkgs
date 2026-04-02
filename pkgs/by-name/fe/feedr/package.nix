@@ -6,20 +6,22 @@
   pkg-config,
   openssl,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "feedr";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "bahdotsh";
     repo = "feedr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-owdJDY61170g28Ujnwzt/8dZ+uyPHlM0iXRyfOL9gls=";
+    hash = "sha256-5s4QgkUX27WNrTyzyYDQjf4VjKD0Kdkicjf7hlO9OKE=";
   };
 
-  cargoHash = "sha256-gl6kiDNvRzn5ZG6syuZ9Y8EgwcHpr+5lVEmn3mI5qSw=";
+  cargoHash = "sha256-3xSvqj2kW0lOFUzkAbBJThJx6u7f1tSk1qgFdm2tVfg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,7 +44,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/bahdotsh/feedr/releases/tag/${finalAttrs.src.tag}";

@@ -181,6 +181,7 @@ mapAliases {
   docker_pycreds = throw "'docker_pycreds' has been renamed to/replaced by 'docker-pycreds'"; # Converted to throw 2025-10-29
   dogpile_cache = throw "'dogpile_cache' has been renamed to/replaced by 'dogpile-cache'"; # Converted to throw 2025-10-29
   duckduckgo-search = throw "duckduckgo-search was renamed to ddgs, use ddgs instead"; # added 2025-10-20
+  dukpy = throw "'dukpy' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
   easyeda2ato = throw "easyeda2ato as been removed in favor of atopile-easyda2kicad"; # added 2025-06-08
   EasyProcess = throw "'EasyProcess' has been renamed to/replaced by 'easyprocess'"; # Converted to throw 2025-10-29
   editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
@@ -204,6 +205,7 @@ mapAliases {
   filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
   flask-security-too = throw "'flask-security-too' has been renamed to/replaced by 'flask-security'"; # Converted to throw 2025-10-29
   flask-silk = throw "flask-silk was removed, as it is unmaintained since 2018."; # added 2025-05-25
+  flask-themes2 = throw "'flask-themes2' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
   flask_assets = throw "'flask_assets' has been renamed to/replaced by 'flask-assets'"; # Converted to throw 2025-10-29
   flask_elastic = throw "'flask_elastic' has been renamed to/replaced by 'flask-elastic'"; # Converted to throw 2025-10-29
   flask_login = throw "'flask_login' has been renamed to/replaced by 'flask-login'"; # Converted to throw 2025-10-29
