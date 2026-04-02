@@ -1052,9 +1052,9 @@
   };
 
   heex = {
-    version = "0.8.0";
+    version = "0.9.0";
     url = "github:phoenixframework/tree-sitter-heex";
-    hash = "sha256-rifYGyIpB14VfcEZrmRwYSz+ZcajQcB4mCjXnXuVFDQ=";
+    hash = "sha256-1p2drpkA+5o+WSH5cv+zPVx30lNhQ9bqX5JHA0YSS2Y=";
     meta = {
       license = lib.licenses.mit;
     };
