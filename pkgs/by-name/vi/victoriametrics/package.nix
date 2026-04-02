@@ -2,6 +2,7 @@
   lib,
   buildGo126Module,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
   withServer ? true, # the actual metrics server
   withVmAgent ? true, # Agent to collect metrics
@@ -78,7 +79,7 @@ buildGo126Module (finalAttrs: {
 
   passthru = {
     tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
