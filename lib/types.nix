@@ -1242,7 +1242,9 @@ rec {
       base = evalModules {
         inherit class specialArgs;
         modules = [
-          {
+          rec {
+            _file = ./types.nix;
+            key = _file;
             # This is a work-around for the fact that some sub-modules,
             # such as the one included in an attribute set, expects an "args"
             # attribute to be given to the sub-module. As the option
@@ -1299,7 +1301,14 @@ rec {
           { loc, defs }:
           let
             configuration = base.extendModules {
-              modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
+              modules = [
+                rec {
+                  _file = ./types.nix;
+                  key = "${_file}:set-name";
+                  _module.args.name = last loc;
+                }
+              ]
+              ++ allModules defs;
               prefix = loc;
             };
           in
