@@ -98,7 +98,6 @@ in
 
     enablePortals = lib.mkEnableOption "Enabled GTK and WLR xdg portals";
 
-
     xwayland.enable = lib.mkEnableOption "XWayland" // {
       default = true;
     };
