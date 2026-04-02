@@ -16,6 +16,8 @@ in
   options.services.mighttpd2 = {
     enable = mkEnableOption "Mighttpd2 web server";
 
+    package = mkPackageOption pkgs [ "haskellPackages" "mighttpd2" ] { };
+
     config = mkOption {
       default = "";
       example = ''
@@ -113,7 +115,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.haskellPackages.mighttpd2}/bin/mighty \
+          ${lib.getExe' cfg.package "mighty"} \
             ${configFile} \
             ${routingFile} \
             +RTS -N${optionalString (cfg.cores != null) "${cfg.cores}"}
