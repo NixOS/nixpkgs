@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./fastcap-mulglobal-drop-conflicting-lib.patch
     ./fastcap-mulsetup-add-forward-declarations.patch
+    ./fastcap-mulglobal-add-ualloc-declaration.patch
   ];
 
   nativeBuildInputs = [
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./doc/Makefile \
-      --replace '/bin/rm' 'rm'
+      --replace-fail '/bin/rm' 'rm'
 
     for f in "doc/*.tex" ; do
       sed -i -E $f \
@@ -54,8 +55,14 @@ stdenv.mkDerivation rec {
     "all"
   ];
 
-  # GCC 14 makes these errors by default
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=return-mismatch -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # gcc14
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=return-mismatch"
+    "-Wno-error=implicit-int"
+    # gcc15
+    "-std=gnu17"
+  ];
 
   outputs = [
     "out"
