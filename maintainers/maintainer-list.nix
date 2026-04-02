@@ -30485,6 +30485,12 @@
     githubId = 250877;
     name = "Elmar Athmer";
   };
+  zaz = {
+    name = "zaz";
+    email = "nixpkgs@rtljvp.fr";
+    github = "leafblowersama";
+    githubId = 12385515;
+  };
   zazedd = {
     name = "Leonardo Santos";
     email = "leomendesantos@gmail.com";
