@@ -10,6 +10,7 @@
   xz,
   zstd,
   openssl,
+  enableCompat ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     zlib
     bzip2
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMZ_OPENSSL=ON"
     "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DMZ_LIB_SUFFIX='-ng'"
+    "-DMZ_COMPAT=${if enableCompat then "ON" else "OFF"}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isi686 [
     # tests fail
@@ -53,18 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
 
-  postInstall = ''
-    # make lib findable as libminizip-ng even if compat is enabled
-    for ext in so dylib a ; do
-      if [ -e $out/lib/libminizip.$ext ] && [ ! -e $out/lib/libminizip-ng.$ext ]; then
-        ln -s $out/lib/libminizip.$ext $out/lib/libminizip-ng.$ext
-      fi
-    done
-    if [ ! -e $out/include/minizip-ng ]; then
-      ln -s $out/include $out/include/minizip-ng
-    fi
-  '';
-
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [ gtest ];
   enableParallelChecking = false;
@@ -75,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
       ris
+      kuflierl
     ];
     platforms = lib.platforms.unix;
   };
