@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   versionCheckHook,
@@ -42,6 +43,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     versionCheckHook
+    python3.pkgs.pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # Nixpkgs' default is `--capture=fd`, and with it, 2 command mock tests
+    # fail, see: https://github.com/lucc/khard/issues/353
+    "--capture=no"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/lucc/khard/issues/354
+    "test/test_khard.py::TestSortContacts::test_sorting_of_korean_names"
   ];
 
   meta = {
