@@ -18465,6 +18465,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  mugaizzo = {
+    email = "mugahedman@hotmail.com";
+    github = "mugaizzo";
+    githubId = 15838537;
+    name = "Mugahed Izzeldin";
+  };
   mulatta = {
     email = "seungwon@mulatta.io";
     github = "mulatta";
