@@ -68,6 +68,8 @@ let
       nixosLabel = config.system.nixos.label;
 
       inherit (config.system) extraDependencies;
+
+      meta.packageType = [ lib.packageTypes.operating-system ];
     }
     // config.system.systemBuilderArgs
   );
