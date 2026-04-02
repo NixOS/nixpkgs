@@ -99,6 +99,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   patches = [ ];
 
+  postPatch = ''
+    find tools/server/public -type f -not -name loading.html -delete # remove pre-compiled assets
+  '';
+
   nativeBuildInputs = [
     cmake
     installShellFiles
