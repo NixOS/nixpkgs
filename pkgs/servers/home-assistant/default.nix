@@ -223,6 +223,10 @@ let
         doCheck = false;
       });
 
+      # Pinned because systemmonitor in Home Assistant 2026.3.4 still requires
+      # psutil 7.1.2 and breaks with 7.2.x (missing sbattery in psutil._common).
+      psutil = self.psutil_7_1;
+
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
