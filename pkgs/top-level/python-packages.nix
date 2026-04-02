@@ -8293,6 +8293,8 @@ self: super: with self; {
 
   kicad-python = callPackage ../development/python-modules/kicad-python { };
 
+  kicad9 = toPythonModule (pkgs.kicad9.override { python3 = python; }).src;
+
   kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
 
   kinparse = callPackage ../development/python-modules/kinparse { };

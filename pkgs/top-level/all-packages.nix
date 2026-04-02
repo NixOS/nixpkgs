@@ -11774,6 +11774,11 @@ with pkgs;
     pname = "kicad-small";
     with3d = false;
   };
+
+  kicad9 = kicad.override {
+    pname = "kicad9";
+    version9 = true;
+  };
   # this is the stable branch at whatever point update.sh last updated versions.nix
   kicad-testing = kicad.override {
     pname = "kicad-testing";

@@ -22,6 +22,7 @@
   jq,
 
   pname ? "kicad",
+  version9 ? false,
   stable ? true,
   compressStep ? true,
   testing ? false,
@@ -84,13 +85,15 @@
 
 let
   baseName =
-    if testing then
+    if version9 then
+      "kicad9"
+    else if testing then
       "kicad-testing"
     else if stable then
       "kicad"
     else
       "kicad-unstable";
-  versionsImport = import ./versions.nix;
+  versionsImport = import ./versions.nix // import ./custom_versions.nix;
 
   # versions.nix does not provide us with version, src and rev. We
   # need to turn this into appropriate fetcher calls.
@@ -314,6 +317,9 @@ stdenv.mkDerivation rec {
     ];
     supportedFeatures = [ "commit" ];
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description =
