@@ -1808,14 +1808,6 @@ with pkgs;
 
   klaus = with python3Packages; toPythonApplication klaus;
 
-  klipper = callPackage ../servers/klipper { };
-
-  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
-
-  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
-
-  klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
-
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
   lgogdownloader-gui = callPackage ../by-name/lg/lgogdownloader/package.nix { enableGui = true; };
