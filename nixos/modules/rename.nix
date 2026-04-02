@@ -486,6 +486,9 @@ in
     (mkRemovedOptionModule [ "programs" "spacefm" ] ''
       spacefm has been removed since it was unmaintained upstream.
     '')
+    (mkRemovedOptionModule [ "services" "pyload" ] ''
+      services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
