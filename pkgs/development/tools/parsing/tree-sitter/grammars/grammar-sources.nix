@@ -2257,9 +2257,9 @@
   };
 
   rust = {
-    version = "0.24.0";
+    version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-rust";
-    hash = "sha256-y3sJURlSTM7LRRN5WGIAeslsdRZU522Tfcu6dnXH/XQ=";
+    hash = "sha256-Ls6tB6IxXDQDWwx0BJ7RgbheelC4MH8z97E7wwhkDcY=";
     meta = {
       license = lib.licenses.mit;
     };
