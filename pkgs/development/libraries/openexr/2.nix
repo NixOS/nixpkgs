@@ -6,6 +6,7 @@
   ilmbase,
   fetchpatch,
   cmake,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +62,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
   nativeBuildInputs = [ cmake ];
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
   propagatedBuildInputs = [
     ilmbase
     zlib
@@ -69,6 +73,11 @@ stdenv.mkDerivation rec {
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1281
   doCheck = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isi686;
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/AcademySoftwareFoundation/openexr/issues/222
+    "OpenEXR.IlmImf"
+  ];
 
   meta = {
     description = "High dynamic-range (HDR) image file format";
