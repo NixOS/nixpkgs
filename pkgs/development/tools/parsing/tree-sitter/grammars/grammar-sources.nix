@@ -1329,10 +1329,10 @@
   };
 
   just = {
-    version = "0-unstable-2026-03-15";
+    version = "0.2.0";
     url = "github:casey/tree-sitter-just";
-    rev = "d9da862c156020c1a83d3c6ccdda32be6d8a5d4a";
-    hash = "sha256-YV+vab/QqGHVPV1e3wjd0w1nFskJEIU4ukq/yIlojk0=";
+    rev = "5685543a6e64f66335e25518c9ae8ffa1dae3d01";
+    hash = "sha256-lrW5E+HIqrDSWZ4+KOjIc80/wYm/WV9ZOfdLXxPIbX4=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
