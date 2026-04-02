@@ -384,6 +384,16 @@ with haskellLib;
     })
   ] super.criterion;
 
+  # Avoid rebinding to the same port with tasty >= 1.5.4 parallelism
+  # https://github.com/lpeterse/haskell-socket/pull/73
+  socket = appendPatches [
+    (pkgs.fetchpatch {
+      name = "socket-tasty-1.5.4.patch";
+      url = "https://github.com/lpeterse/haskell-socket/commit/a2687d9f1a60cfb72f85962c501a68d110ed6de0.patch";
+      hash = "sha256-21qkRFnRF6nuM1BILps8o5A/QvaVQ6SkKxO0u2goXos=";
+    })
+  ] super.socket;
+
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
   # https://github.com/ocharles/weeder/issues/198
