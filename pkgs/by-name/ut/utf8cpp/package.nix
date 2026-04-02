@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nemtrif/utfcpp/releases/tag/v${finalAttrs.version}";
     description = "UTF-8 with C++ in a Portable Way";
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [ jobojeha ];
+    maintainers = with lib.maintainers; [
+      jobojeha
+      doronbehar
+    ];
     platforms = lib.platforms.all;
   };
 })
