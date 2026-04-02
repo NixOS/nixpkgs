@@ -249,6 +249,7 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                     "boot",
                 ],
                 check=True,
+                stdout=ANY,
                 **(
                     DEFAULT_RUN_KWARGS
                     | {
@@ -547,6 +548,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -795,6 +797,7 @@ def test_execute_nix_switch_build_target_host(
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -920,6 +923,7 @@ def test_execute_nix_switch_flake_target_host(
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1047,6 +1051,7 @@ def test_execute_nix_switch_flake_build_host(
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1132,6 +1137,7 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1307,6 +1313,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [config_path / "bin/switch-to-configuration", "test"],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1372,6 +1379,7 @@ def test_execute_test_rollback(
                     "test",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
@@ -1433,6 +1441,7 @@ def test_execute_switch_store_path(mock_run: Mock, tmp_path: Path) -> None:
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **(
                     DEFAULT_RUN_KWARGS
                     | {
@@ -1551,6 +1560,7 @@ def test_execute_switch_store_path_target_host(
                     "switch",
                 ],
                 check=True,
+                stdout=ANY,
                 **DEFAULT_RUN_KWARGS,
             ),
         ]
