@@ -3,22 +3,22 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "plandex";
   version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "plandex-ai";
     repo = "plandex";
-    rev = "cli/v${version}";
+    rev = "cli/v${finalAttrs.version}";
     hash = "sha256-mNNL1K+gNhYDuKpGt3FP/L4JxO/bHyebhABOpFjLLLI=";
   };
 
   ldflags = [
-    "-X plandex-cli/version.Version=${version}"
+    "-X plandex-cli/version.Version=${finalAttrs.version}"
   ];
 
-  sourceRoot = "${src.name}/app/cli";
+  sourceRoot = "${finalAttrs.src.name}/app/cli";
 
   vendorHash = "sha256-0wYlCxg0CPPizdhJ1VfZEEcauy2rJeeTqPiiqsExBu8=";
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ viraptor ];
   };
-}
+})

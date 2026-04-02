@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "systemrdl-compiler";
-  version = "1.32.1";
+  version = "1.32.2";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SystemRDL";
     repo = "systemrdl-compiler";
     tag = "v${version}";
-    hash = "sha256-BTONBzNE9GfBeallS6P4E1ukPs2EzFa31/SpxEjXmKw=";
+    hash = "sha256-1Dx6WxSzGaZxwRzXR/bjfZSU7TsvTYNVN0NaK3qQ7eo=";
   };
 
   build-system = [

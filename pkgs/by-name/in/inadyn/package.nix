@@ -9,14 +9,14 @@
   libconfuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inadyn";
   version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "inadyn";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-R+DlhRZOwL/hBZAu4L7w7DAoHy1/1m8wsidSxByO74E=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "inadyn";
   };
-}
+})

@@ -16,7 +16,7 @@ Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
  2 files changed, 7 insertions(+), 21 deletions(-)
 
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index 58f2463104..0c263430a7 100644
+index 862d57dcb6..8ba0ca4486 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
 @@ -46,10 +46,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
@@ -46,10 +46,10 @@ index 58f2463104..0c263430a7 100644
  
  systemd_sleep_dir=${prefix}/lib/systemd/system-sleep
 diff --git a/src/libsystemd/sd-path/path-lookup.c b/src/libsystemd/sd-path/path-lookup.c
-index 3ddbda0e9f..3eddc80c90 100644
+index 389d7e2ad9..0819689ffa 100644
 --- a/src/libsystemd/sd-path/path-lookup.c
 +++ b/src/libsystemd/sd-path/path-lookup.c
-@@ -64,11 +64,7 @@ int runtime_directory(RuntimeScope scope, const char *suffix, char **ret) {
+@@ -86,11 +86,7 @@ int runtime_directory(RuntimeScope scope, const char *fallback_suffix, char **re
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -61,7 +61,7 @@ index 3ddbda0e9f..3eddc80c90 100644
          NULL
  };
  
-@@ -476,16 +472,13 @@ int lookup_paths_init(
+@@ -498,16 +494,13 @@ int lookup_paths_init(
                                         persistent_config,
                                         SYSTEM_CONFIG_UNIT_DIR,
                                         "/etc/systemd/system",
@@ -79,7 +79,7 @@ index 3ddbda0e9f..3eddc80c90 100644
                                         STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -503,13 +496,10 @@ int lookup_paths_init(
+@@ -525,13 +518,10 @@ int lookup_paths_init(
                          add = strv_new(persistent_config,
                                         USER_CONFIG_UNIT_DIR,
                                         "/etc/systemd/user",
@@ -95,7 +95,7 @@ index 3ddbda0e9f..3eddc80c90 100644
                          break;
  
                  case RUNTIME_SCOPE_USER:
-@@ -648,7 +638,6 @@ void lookup_paths_log(LookupPaths *lp) {
+@@ -670,7 +660,6 @@ void lookup_paths_log(LookupPaths *lp) {
  static const char* const system_generator_paths[] = {
          "/run/systemd/system-generators",
          "/etc/systemd/system-generators",
@@ -103,7 +103,7 @@ index 3ddbda0e9f..3eddc80c90 100644
          SYSTEM_GENERATOR_DIR,
          NULL,
  };
-@@ -656,7 +645,6 @@ static const char* const system_generator_paths[] = {
+@@ -678,7 +667,6 @@ static const char* const system_generator_paths[] = {
  static const char* const user_generator_paths[] = {
          "/run/systemd/user-generators",
          "/etc/systemd/user-generators",
@@ -111,7 +111,7 @@ index 3ddbda0e9f..3eddc80c90 100644
          USER_GENERATOR_DIR,
          NULL,
  };
-@@ -664,7 +652,6 @@ static const char* const user_generator_paths[] = {
+@@ -686,7 +674,6 @@ static const char* const user_generator_paths[] = {
  static const char* const system_env_generator_paths[] = {
          "/run/systemd/system-environment-generators",
          "/etc/systemd/system-environment-generators",
@@ -119,7 +119,7 @@ index 3ddbda0e9f..3eddc80c90 100644
          SYSTEM_ENV_GENERATOR_DIR,
          NULL,
  };
-@@ -672,7 +659,6 @@ static const char* const system_env_generator_paths[] = {
+@@ -694,7 +681,6 @@ static const char* const system_env_generator_paths[] = {
  static const char* const user_env_generator_paths[] = {
          "/run/systemd/user-environment-generators",
          "/etc/systemd/user-environment-generators",

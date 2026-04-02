@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flask,
   python-ldap,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "flask-simpleldap";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alexferl";

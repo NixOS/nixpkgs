@@ -6,15 +6,12 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyversasense";
   version = "0.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "imstevenxyz";
@@ -25,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  doCheck = pythonOlder "3.11"; # asynctest unsupported on python3.11
+  doCheck = false; # asynctest unsupported on 3.11+
 
   nativeCheckInputs = [
     asynctest

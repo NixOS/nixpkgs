@@ -8,7 +8,6 @@
   google-auth,
   protobuf,
   pydantic,
-  pythonOlder,
   setuptools,
   tqdm,
   typing-extensions,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "google-generativeai";
   version = "0.8.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";

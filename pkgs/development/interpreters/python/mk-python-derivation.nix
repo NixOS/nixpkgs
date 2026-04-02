@@ -82,17 +82,12 @@ let
     "installer"
   ];
 
-  isBootstrapPackage' = flip elem (
-    [
-      "build"
-      "packaging"
-      "pyproject-hooks"
-      "wheel"
-    ]
-    ++ optionals (python.pythonOlder "3.11") [
-      "tomli"
-    ]
-  );
+  isBootstrapPackage' = flip elem [
+    "build"
+    "packaging"
+    "pyproject-hooks"
+    "wheel"
+  ];
 
   isSetuptoolsDependency' = flip elem [
     "setuptools"
@@ -283,6 +278,14 @@ lib.extendMkDerivation {
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
+      runtimeDepsCheckHook =
+        if isBootstrapPackage then
+          pythonRuntimeDepsCheckHook.override {
+            inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+          }
+        else
+          pythonRuntimeDepsCheckHook;
+
     in
     {
       inherit name;
@@ -330,17 +333,11 @@ lib.extendMkDerivation {
           else
             pypaBuildHook
         )
-        (
-          if isBootstrapPackage then
-            pythonRuntimeDepsCheckHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-            }
-          else
-            pythonRuntimeDepsCheckHook
-        )
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
         wheelUnpackHook
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "egg") [
         eggUnpackHook
@@ -386,7 +383,10 @@ lib.extendMkDerivation {
 
       inherit strictDeps;
 
-      LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      env = {
+        LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      }
+      // (attrs.env or { });
 
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
@@ -418,6 +418,7 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
         updateScript = nix-update-script { };
+        ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
       }
       // attrs.passthru or { };
 

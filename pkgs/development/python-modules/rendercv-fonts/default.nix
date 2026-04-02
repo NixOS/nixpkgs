@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "rendercv-fonts";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rendercv";

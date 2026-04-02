@@ -7,13 +7,13 @@
 }:
 mkLibretroCore {
   core = "vecx";
-  version = "0-unstable-2025-04-12";
+  version = "0-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-vecx";
-    rev = "841229a6a81a0461d08af6488f252dcec5266c6a";
-    hash = "sha256-bWhXXJCf/ax7n/sOfXibGvcFnCnmULcALoBR1uyIN+I=";
+    rev = "eacee1f6f029688b043ed802cece29dd3c320e21";
+    hash = "sha256-2OlacvnJWcfTA8l91IBvuoUgd1HAs5ZHCbBGfaTGCyg=";
   };
 
   extraBuildInputs = [

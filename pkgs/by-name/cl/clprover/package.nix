@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "CLProver++";
   version = "1.0.3";
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation (self: {
     mkdir -p $out/bin
     cp -r bin $out/
 
-    mkdir -p $out/share/${self.pname}
-    cp -r examples $out/share/${self.pname}/examples
+    mkdir -p $out/share/${finalAttrs.pname}
+    cp -r examples $out/share/${finalAttrs.pname}/examples
 
     runHook postInstall
   '';

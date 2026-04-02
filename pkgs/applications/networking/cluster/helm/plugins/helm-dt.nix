@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-labs";
     repo = "distribution-tooling-for-helm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/fU56Dw7tvUnby4S78tyH/dasg4n3rb0hMlIkzvrv4M=";
   };
 

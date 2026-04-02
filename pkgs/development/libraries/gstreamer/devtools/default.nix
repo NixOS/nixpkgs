@@ -127,6 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";

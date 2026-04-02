@@ -76,7 +76,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    tag = "debian/${version}+debian-35";
+    tag = "debian/${finalAttrs.version}+debian-35";
     hash = "sha256-RVv9USAHTVYnGgKygIPgfXpfjCYigJvScuzc2+1Uzfw=";
     name = "dsniff.tar.gz";
   };
@@ -103,8 +103,20 @@ stdenv.mkDerivation rec {
     libnsl
     libnl
   ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+
+  env = {
+    NIX_CFLAGS_LINK = toString [
+      "-lglib-2.0"
+      "-lpthread"
+      "-ltirpc"
+      "-lnl-3"
+      "-lnl-genl-3"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${libtirpc.dev}/include/tirpc"
+      "-std=gnu17"
+    ];
+  };
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch
@@ -129,4 +141,4 @@ stdenv.mkDerivation rec {
     # bsd and solaris should work as well
     platforms = lib.platforms.linux;
   };
-}
+})

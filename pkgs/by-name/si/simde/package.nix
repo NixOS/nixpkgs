@@ -6,14 +6,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simde";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-igjDHCpKXy6EbA9Mf6peL4OTVRPYTV0Y2jbgYQuWMT4=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
       ]
     );
   };
-}
+})

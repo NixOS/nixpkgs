@@ -106,14 +106,24 @@ in
       example = "/run/netbox/netbox.sock";
     };
 
+    gunicornArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "extra args for gunicorn when serving netbox";
+      example = [
+        "--workers"
+        "9"
+      ];
+    };
+
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "25.11" then pkgs.netbox_4_4 else pkgs.netbox_4_2;
+        if lib.versionAtLeast config.system.stateVersion "26.05" then pkgs.netbox_4_5 else pkgs.netbox_4_4;
       defaultText = lib.literalExpression ''
-        if lib.versionAtLeast config.system.stateVersion "25.11"
-        then pkgs.netbox_4_4
-        else pkgs.netbox_4_2;
+        if lib.versionAtLeast config.system.stateVersion "26.05"
+        then pkgs.netbox_4_5
+        else pkgs.netbox_4_4;
       '';
       description = ''
         NetBox package to use.
@@ -152,6 +162,15 @@ in
       type = lib.types.path;
       description = ''
         Path to a file containing the secret key.
+      '';
+    };
+
+    apiTokenPeppersFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      description = ''
+        Path to a file containing the API_TOKEN_PEPPER that will be configured for the pepper_id with the id 1.
+        This is required for netbox >= 4.5. For generating this pepper,
+        [consider using `$INSTALL_ROOT/netbox/generate_secret_key.py`](https://netboxlabs.com/docs/netbox/configuration/required-parameters/#api_token_peppers)
       '';
     };
 
@@ -227,10 +246,12 @@ in
 
         GIT_PATH = "${pkgs.gitMinimal}/bin/git";
 
-        DATABASE = {
-          NAME = "netbox";
-          USER = "netbox";
-          HOST = "/run/postgresql";
+        DATABASES = {
+          "default" = {
+            NAME = "netbox";
+            USER = "netbox";
+            HOST = "/run/postgresql";
+          };
         };
 
         # Redis database settings. Redis is used for caching and for queuing
@@ -273,6 +294,12 @@ in
         with open("${cfg.secretKeyFile}", "r") as file:
             SECRET_KEY = file.readline()
       ''
+      + (lib.optionalString (cfg.apiTokenPeppersFile != null) ''
+        with open("${cfg.apiTokenPeppersFile}", "r") as pepper_file:
+            API_TOKEN_PEPPERS = {
+                1: pepper_file.readline(),
+            };
+      '')
       + (lib.optionalString (cfg.keycloakClientSecret != null) ''
         with open("${cfg.keycloakClientSecret}", "r") as file:
             SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
@@ -362,7 +389,8 @@ in
                   else
                     "${cfg.listenAddress}:${toString cfg.port}"
                 } \
-                --pythonpath ${pkg}/opt/netbox/netbox
+                --pythonpath ${pkg}/opt/netbox/netbox \
+                ${lib.concatStringsSep " " cfg.gunicornArgs}
             '';
             PrivateTmp = true;
             TimeoutStartSec = lib.mkDefault "5min";
@@ -435,5 +463,12 @@ in
     };
     users.groups.netbox = { };
     users.groups."${config.services.redis.servers.netbox.user}".members = [ "netbox" ];
+
+    assertions = [
+      {
+        assertion = (lib.versionAtLeast cfg.package.version "4.5") -> (cfg.apiTokenPeppersFile != null);
+        message = "NetBox 4.5 or newer require setting `services.netbox.apiTokenPeppersFile`";
+      }
+    ];
   };
 }

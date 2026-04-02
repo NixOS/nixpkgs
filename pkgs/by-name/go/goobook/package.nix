@@ -6,7 +6,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "goobook";
   version = "3.5.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "goobook";
     repo = "goobook";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
   };
 
@@ -60,8 +60,8 @@ python3Packages.buildPythonApplication rec {
       It can be used from Mutt the same way as abook.
     '';
     homepage = "https://gitlab.com/goobook/goobook";
-    changelog = "https://gitlab.com/goobook/goobook/-/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.com/goobook/goobook/-/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

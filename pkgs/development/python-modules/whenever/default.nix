@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pythonOlder,
   rustPlatform,
   cargo,
   rustc,
@@ -20,21 +19,19 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.9.4";
+  version = "0.10.0b2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "whenever";
     tag = version;
-    hash = "sha256-b4xxh2Pva5+Qwv5DyifJohEY73wOO/eFc1dJeQSN3QY=";
+    hash = "sha256-39vl5/v4bkfNXuU9dXnXgUhR8NagvHFX2IRdS77e/nI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-2VXS6SQjYx61D8b42TjS5OJxcg4+e+T6dEsZfRA/gRk=";
+    hash = "sha256-L4k0s28AYqOV/M9BQsczZT08bwtDYIzEdgpdR4z8CeU=";
   };
 
   build-system = [

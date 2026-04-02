@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-3ds";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "rust3ds";
     repo = "cargo-3ds";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UMeIxYxQ+0VGyDJTu78n9O5iXw3ZBg8mHqmnUtbnXo4=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ l1npengtul ];
   };
-}
+})

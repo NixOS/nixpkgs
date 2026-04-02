@@ -14,7 +14,7 @@
   libvorbis,
   libopus,
   openal,
-  openalSoft,
+  openal-soft,
   physfs,
   miniupnpc,
   libsodium,
@@ -36,24 +36,25 @@
 
   gitUpdater,
 
-  withVideos ? false,
+  withVideos ? true,
 }:
 
 let
   pname = "warzone2100";
-  sequences_src = fetchurl {
-    url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
-    sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
+
+  sequences = fetchurl {
+    url = "mirror://sourceforge/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz";
+    hash = "sha256-kP9VLKSnDiU34CfiLFCY6k7RvBG7f8lBOMbJQac9Kfo=";
   };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-hWIW2r6vLgOuj351jDlbJ9IYif6LX+RfOvznAP3n1x8=";
+    hash = "sha256-Qx/iQ2z/loeOLtTtxtBzlFOtYpPWQwtYMt6bUi/wsTo=";
   };
 
   buildInputs = [
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libopus
     openal
-    openalSoft
+    openal-soft
     physfs
     miniupnpc
     libsodium
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
-    cp ${sequences_src} $out/share/warzone2100/sequences.wz
+    ln -sn ${sequences} $out/share/warzone2100/sequences.wz
   '';
 
   passthru.tests = {

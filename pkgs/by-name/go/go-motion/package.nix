@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "motion";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "fatih";
     repo = "motion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7vkMhjO4JUAf0sUcKiMjqJ5GzLb//QoHd7Cagerx4/s=";
   };
 
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

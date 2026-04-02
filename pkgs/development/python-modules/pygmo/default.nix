@@ -5,9 +5,6 @@
   fetchFromGitHub,
   cmake,
   boost,
-  eigen,
-  ipopt,
-  nlopt,
   pagmo2,
   python,
   cloudpickle,
@@ -43,9 +40,6 @@ toPythonModule (
 
     buildInputs = [
       boost
-      eigen
-      ipopt
-      nlopt
       pagmo2
       pybind11
     ];

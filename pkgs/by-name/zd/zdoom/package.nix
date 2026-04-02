@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  NIX_CFLAGS_LINK = [
+  env.NIX_CFLAGS_LINK = toString [
     "-lopenal"
     "-lfluidsynth"
   ];

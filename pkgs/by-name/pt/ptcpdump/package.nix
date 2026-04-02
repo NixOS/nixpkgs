@@ -6,14 +6,14 @@
   libpcap,
 }:
 
-buildGoModule (finalAttr: {
+buildGoModule (finalAttrs: {
   pname = "ptcpdump";
   version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "ptcpdump";
-    tag = "v${finalAttr.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ouH7VFWSCOElbmbSWAkmM4dtNVp545mC/FnoNAFtaEw=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule (finalAttr: {
   tags = [ "dynamic" ];
 
   ldflags = [
-    "-X github.com/mozillazg/ptcpdump/internal.Version=v${finalAttr.version}"
+    "-X github.com/mozillazg/ptcpdump/internal.Version=v${finalAttrs.version}"
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

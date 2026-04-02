@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commitlint";
-  version = "20.3.0";
+  version = "20.5.0";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "commitlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FJ2MhC3EPpJ2wSsWPh+A+tQofWXzDkV9/T89i5ibYl8=";
+    hash = "sha256-AVc3uToQ3hvpesWkhIdYfvawoIJmDW+T5pHonujaL/s=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-wFR/2M0CYQgSlb2a1bDyWdOQt7TGVgK72mhcSESyt84=";
+    hash = "sha256-SOUweX/dvA67E6Vjpq3WLITbh6bevErV0wGZgWQ3U7o=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://commitlint.js.org/";
     license = lib.licenses.mit;
     mainProgram = "commitlint";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

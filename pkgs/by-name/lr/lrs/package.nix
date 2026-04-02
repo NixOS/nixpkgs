@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "7.3";
 
   src = fetchurl {
-    url = "http://cgm.cs.mcgill.ca/~avis/C/lrslib/archive/lrslib-073.tar.gz";
+    url = "https://cgm.cs.mcgill.ca/~avis/C/lrslib/archive/lrslib-073.tar.gz";
     sha256 = "sha256-xJpOvYVhg0c9HVpieF/N/hBX1dZx1LlvOhJQ6xr+ToM=";
   };
 

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tran";
   version = "0.1.43";
 
   src = fetchFromGitHub {
     owner = "abdfnx";
     repo = "tran";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qp4g1ZLRIIz0CZ/Zey354g0j9ePE4pGb82IivLezU7s=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "tran";
   };
-}
+})

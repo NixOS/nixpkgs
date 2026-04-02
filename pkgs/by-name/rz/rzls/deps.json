@@ -43,9 +43,9 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-ARzhiaKHCyl9IY39hWfzHiv5eDmmTBgnrhRaoYGSfTU=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.analyzers/5.0.0-2.25461.22/microsoft.codeanalysis.analyzers.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-qheubNeMD7sx/1wh3LgXVNIoiLqc6SKj2ELhrhieuS0=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.analyzers/5.3.0-2.25555.17/microsoft.codeanalysis.analyzers.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.BannedApiAnalyzers",
@@ -55,27 +55,27 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Common",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-GltCV7wW9rNxN2k6pS26lILDVDZcoyAZD1td4lmzKn4=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.common/5.0.0-2.25461.22/microsoft.codeanalysis.common.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-ZDQKdL1L27gdPLrbKMJ7fwTcXKcwIX/C24fYaEmMc3U=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.common/5.3.0-2.25555.17/microsoft.codeanalysis.common.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.CSharp",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-+mf1IuoaRl5RPU6RjXrHkrdes8jE3z/JAPw+0ab4Fzk=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp/5.0.0-2.25461.22/microsoft.codeanalysis.csharp.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-JD12KbfKLurEWaszDigBuDeSWagBJndwuIkexJEEfnI=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp/5.3.0-2.25555.17/microsoft.codeanalysis.csharp.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.CSharp.Features",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-tPGG+CWkok0B9ggro1wU0g9iLaJ//oUtE/Z4EEqLdjk=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.features/5.0.0-2.25461.22/microsoft.codeanalysis.csharp.features.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-vPPBuDBT6ZG17ItmVzD6w7MbInB+x/VQo/cXm7ZfhcE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.features/5.3.0-2.25555.17/microsoft.codeanalysis.csharp.features.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.CSharp.Workspaces",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-9FTv+MloLtCBFmLN1eZ+7dLrHrMlFPA7na8gB2LwO0U=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.workspaces/5.0.0-2.25461.22/microsoft.codeanalysis.csharp.workspaces.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-wWxb9nLi9zR9nxDMzIjIyMov7/Jd+auQD9TSc3X3RFw=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.workspaces/5.3.0-2.25555.17/microsoft.codeanalysis.csharp.workspaces.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Elfie",
@@ -85,21 +85,21 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.ExternalAccess.Razor.Features",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-LdE0uEZqa0NYG9n2MdVVw4gkj/5WlRjbdu0tL9u3Ir4=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.externalaccess.razor.features/5.0.0-2.25461.22/microsoft.codeanalysis.externalaccess.razor.features.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-Of7lX/nEwwuWmVj4FWYrLrOFw8pHtetRNO6QncmHJn0=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.externalaccess.razor.features/5.3.0-2.25555.17/microsoft.codeanalysis.externalaccess.razor.features.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Features",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-vx5X2WC2Oc8sMmfOK09JOXMDtIdKeAXQJzD28DAeX0Q=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.features/5.0.0-2.25461.22/microsoft.codeanalysis.features.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-2eR2OaCcpa8/P7xU8zqIyTNCpBcATFSyHbyA8T3aSJ0=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.features/5.3.0-2.25555.17/microsoft.codeanalysis.features.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.LanguageServer.Protocol",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-c75mxIhdNy5MmCxFQBTkyiyOgIDcTcBn2q+za3sR+gE=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.languageserver.protocol/5.0.0-2.25461.22/microsoft.codeanalysis.languageserver.protocol.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-qEqPYY461/hal0uh512ZMDvoc/0tFYHdJZAg6DJVeqQ=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.languageserver.protocol/5.3.0-2.25555.17/microsoft.codeanalysis.languageserver.protocol.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.PublicApiAnalyzers",
@@ -109,27 +109,27 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Remote.Workspaces",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-kdk4Xb2DIK/ClG7sRFrP8KhmWjoi/t12zuEvt29D12I=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.remote.workspaces/5.0.0-2.25461.22/microsoft.codeanalysis.remote.workspaces.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-3/GuchshjL7aK6pZjt20yv1BQvr3OcM3Hftp4on8XuM=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.remote.workspaces/5.3.0-2.25555.17/microsoft.codeanalysis.remote.workspaces.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Scripting.Common",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-Y9D+zE9oiEceJ7eaD9jb0YWA/p7GG76m8TqL+bFex8U=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.scripting.common/5.0.0-2.25461.22/microsoft.codeanalysis.scripting.common.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-Thv3WMWyX/q9uhGFBBlCfAw3aPY1bRIscvVMLvIcxkQ=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.scripting.common/5.3.0-2.25555.17/microsoft.codeanalysis.scripting.common.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Workspaces.Common",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-EmmjTePJXCdGjqYSFXHrZ6twXaJ9WWvLTFKrQGjVmhw=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.workspaces.common/5.0.0-2.25461.22/microsoft.codeanalysis.workspaces.common.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-Dc2jAYOWs4uScbTqBbhqTB0DChKSQvAF+04Ce0FuvlU=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.workspaces.common/5.3.0-2.25555.17/microsoft.codeanalysis.workspaces.common.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CommonLanguageServerProtocol.Framework",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-1ek78xZapHDcYE6JEXhXjwuLDNZgr/jLckM7WEw8G0I=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.commonlanguageserverprotocol.framework/5.0.0-2.25461.22/microsoft.commonlanguageserverprotocol.framework.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-MCtOQTeiBJXTgGyoHYZud4iFtizYDgJdnaT8CcwgcbI=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.commonlanguageserverprotocol.framework/5.3.0-2.25555.17/microsoft.commonlanguageserverprotocol.framework.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.CSharp",
@@ -145,15 +145,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "9.0.0-beta.25462.4",
-    "hash": "sha256-UsK0l85wtrwYf7tmEELr3RfCf+Y3IKInI8IOziPfEE4=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25462.4/microsoft.dotnet.arcade.sdk.9.0.0-beta.25462.4.nupkg"
+    "version": "9.0.0-beta.25515.2",
+    "hash": "sha256-Sph0ObFG6sKQkDib+hAikSKMrPjsr8GmNIdXf7QB4zo=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25515.2/microsoft.dotnet.arcade.sdk.9.0.0-beta.25515.2.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "9.0.0-beta.25462.4",
-    "hash": "sha256-Pd3JOHzGDL+gwNy+2wlvsoUFU8S0q71af6vmdApbHPA=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.25462.4/microsoft.dotnet.xlifftasks.9.0.0-beta.25462.4.nupkg"
+    "version": "9.0.0-beta.25515.2",
+    "hash": "sha256-mIeFiboFBgp1FvFXNItM85sHviHvkAQv+EebSOZNKtg=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.25515.2/microsoft.dotnet.xlifftasks.9.0.0-beta.25515.2.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection",
@@ -181,9 +181,9 @@
   },
   {
     "pname": "Microsoft.Net.Compilers.Toolset",
-    "version": "5.0.0-2.25461.22",
-    "hash": "sha256-MNgU0lJksVPs7o1yMRWcpativck4As+cG4mOFbFPYLw=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.net.compilers.toolset/5.0.0-2.25461.22/microsoft.net.compilers.toolset.5.0.0-2.25461.22.nupkg"
+    "version": "5.3.0-2.25555.17",
+    "hash": "sha256-R5hKttKAjjeAMopSUJ6mEK94dw7BhjMGsOGzZwF8TTo=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.net.compilers.toolset/5.3.0-2.25555.17/microsoft.net.compilers.toolset.5.3.0-2.25555.17.nupkg"
   },
   {
     "pname": "Microsoft.NET.StringTools",

@@ -7,14 +7,14 @@
   mtools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fwanalyzer";
   version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "cruise-automation";
     repo = "fwanalyzer";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-fcqtyfpxdjD+1GsYl05RSJaFDoLSYQDdWcQV6a+vNGA=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fwanalyzer";
   };
-}
+})

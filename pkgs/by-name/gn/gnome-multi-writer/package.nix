@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "3.35.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-multi-writer/${lib.versions.majorMinor version}/gnome-multi-writer-${version}.tar.xz";
     sha256 = "07vgzjjdrxcp7h73z13h9agafxb4vmqx5i81bcfyw0ilw9kkdzmp";
   };
 

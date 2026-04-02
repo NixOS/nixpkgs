@@ -32,16 +32,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ultralytics";
-  version = "8.3.221";
+  version = "8.4.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
-    tag = "v${version}";
-    hash = "sha256-oQuiAq1QJlgrEDk26/+pcIifFBO/ckH1qG7niEXbMIo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FLW1LZkWX5EeKo9A1op4p+xdc27xE/CXYgnju+fV2kE=";
   };
 
   build-system = [ setuptools ];
@@ -86,6 +86,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # also remove the individual tests that require internet
+    "test_predict_gray_and_4ch"
     "test_all_model_yamls"
     "test_data_annotator"
     "test_labels_and_crops"
@@ -129,10 +130,18 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/ultralytics/ultralytics";
-    changelog = "https://github.com/ultralytics/ultralytics/releases/tag/${src.tag}";
+    changelog = "https://github.com/ultralytics/ultralytics/releases/tag/${finalAttrs.src.tag}";
     description = "Train YOLO models for computer vision tasks";
     mainProgram = "yolo";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      mana-byte
+    ];
+    badPlatforms = [
+      # Tests crash with:
+      # Fatal Python error: Segmentation fault for x86_64 Darwin in tests/python.py
+      "x86_64-darwin"
+    ];
   };
-}
+})

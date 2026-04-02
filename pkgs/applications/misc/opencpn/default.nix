@@ -42,8 +42,9 @@
   sqlite,
   tinyxml,
   util-linux,
-  wxGTK32,
-  xorg,
+  wxwidgets_3_2,
+  libxtst,
+  libxdmcp,
   xz,
 }:
 
@@ -111,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     xz
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -119,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     libsepol
     util-linux
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils

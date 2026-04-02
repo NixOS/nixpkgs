@@ -13,7 +13,6 @@
   parameterized,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   six,
 }:
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "nasdaq-data-link";
   version = "1.0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Nasdaq";

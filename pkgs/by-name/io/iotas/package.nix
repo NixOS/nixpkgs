@@ -18,17 +18,17 @@
   webkitgtk_6_0,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "iotas";
-  version = "0.12.5";
+  version = "2026.4";
   pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "iotas";
-    tag = version;
-    hash = "sha256-qbUI2hkW3rRiiBWFADuB9KFMf6Maw+WAkdy6dTE+Yo0=";
+    tag = finalAttrs.version;
+    hash = "sha256-PLKKV6FNYvhvb1Kp2tYu7jXkzxfN/W0C618o5+/tenY=";
   };
 
   nativeBuildInputs = [
@@ -77,4 +77,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ zendo ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

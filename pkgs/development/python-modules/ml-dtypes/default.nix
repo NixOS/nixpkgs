@@ -30,6 +30,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=" "setuptools>="
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];

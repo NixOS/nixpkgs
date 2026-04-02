@@ -9,14 +9,14 @@
   libadwaita,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "multiplex";
   version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "pojntfx";
     repo = "multiplex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+KvFBzoIYmSbuazstJae8lC0xdPtXLhFWawlc+iGGoU=";
   };
 
@@ -69,4 +69,4 @@ buildGoModule rec {
     mainProgram = "multiplex";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

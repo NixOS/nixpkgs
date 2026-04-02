@@ -9,12 +9,12 @@
   sqlite ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hostapd";
   version = "2.11";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
+    url = "https://w1.fi/releases/hostapd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
   };
 
@@ -103,12 +103,10 @@ stdenv.mkDerivation rec {
     CONFIG_SQLITE=y
   '';
 
-  passAsFile = [ "extraConfig" ];
-
   configurePhase = ''
     cd hostapd
     cp -v defconfig .config
-    cat $extraConfigPath >> .config
+    printf "%s" "$extraConfig" >> .config
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
@@ -124,6 +122,8 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) wpa_supplicant;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://w1.fi/hostapd/";
     description = "User space daemon for access point and authentication servers";
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ oddlama ];
     platforms = lib.platforms.linux;
   };
-}
+})

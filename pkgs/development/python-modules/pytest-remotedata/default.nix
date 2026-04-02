@@ -4,7 +4,6 @@
   fetchPypi,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-remotedata";
   version = "0.4.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

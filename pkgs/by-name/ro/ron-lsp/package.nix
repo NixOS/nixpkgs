@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ron-lsp";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jasonjmcghee";
     repo = "ron-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+cJrXINuoK+NR1rMSrOeZqZzrEcg/brSTKSTu5mNr4=";
+    hash = "sha256-+fMV2J6S6+vRmdSsS6TtrCGxxOw+dgL4dEJWsJpB5bY=";
   };
 
-  cargoHash = "sha256-eEoxgnfc9s59b0SNozEIj/1wHv+OWDmd4bniBbGsgSQ=";
+  cargoHash = "sha256-vJ0+M0Mg2ONfGcKqGs2hffMAdcgawra1cHWPeaqpo1w=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -4,8 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
-  setuptools,
+  hatchling,
 
   # dependencies
   asgiref,
@@ -35,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.65.1";
+  version = "0.75.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
-    tag = "v${version}";
-    hash = "sha256-cX/eG6qWe/h9U4p1pMhhI+bZ5pLmiwGeYxNthKvdI6o=";
+    tag = version;
+    hash = "sha256-vosD0JZYZzzl6Mp+AAxdXVox/7ay4FqnwqE6f1lSw3s=";
   };
 
   postPatch = ''
@@ -51,8 +50,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    poetry-core
-    setuptools
+    hatchling
   ];
 
   dependencies = [

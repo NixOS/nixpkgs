@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo125Module,
+  buildGo126Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
@@ -9,21 +9,22 @@
   pnpmConfigHook,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
-buildGo125Module (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.1.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tBjo5evQVRG0oembk1VfAfM3M/FJ4zPWV/9vgAWH9Kc=";
+    hash = "sha256-lH8OYBJn1tsHs2wZCbqMqevjqK+tgAqG+Z+fsWP/fV4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-hMhOG/2xnI/adjg8CnA0tRBD8/OFDsTloFXC8iwxlV0=";
+  vendorHash = "sha256-a/h8Ptvs4UTgfX9jweo1IyDbwTFafgYrzUSE5pRUjRI=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -40,9 +41,16 @@ buildGo125Module (finalAttrs: {
     "-skip=TestOidcService_downloadAndSaveLogoFromURL"
   ];
 
+  # required for TestIsURLPrivate
+  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
@@ -57,7 +65,7 @@ buildGo125Module (finalAttrs: {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-jhlHrekVk0sNLwo8LFQY6bgX9Ic0xbczM6UTzmZTnPI=";
+      hash = "sha256-vVCRfQWck9SR1hkJhUnoZ+0QDT8XmOiWeontgzv1e0s=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
@@ -101,6 +109,7 @@ buildGo125Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
+      tmarkus
       ymstnt
     ];
     platforms = lib.platforms.unix;

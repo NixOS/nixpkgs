@@ -6,10 +6,10 @@
   pkg-config,
   extra-cmake-modules,
   dbus,
-  libX11,
+  libx11,
   libxcb,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libnotify,
   libxkbcommon,
   libpng,
@@ -18,7 +18,7 @@
   xdotool,
   setxkbmap,
   wl-clipboard,
-  wxGTK32,
+  wxwidgets_3_2,
   makeWrapper,
   securityWrapperPath ? null,
   nix-update-script,
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extra-cmake-modules
     pkg-config
     makeWrapper
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libpng
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
@@ -82,9 +82,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wl-clipboard
   ]
   ++ lib.optionals x11Support [
-    libXi
-    libXtst
-    libX11
+    libxi
+    libxtst
+    libx11
     libxcb
     xclip
     xdotool

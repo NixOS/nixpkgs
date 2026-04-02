@@ -9,14 +9,14 @@
   arpa2cm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickmem";
   version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "Quick-MEM";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cqg8QN4/I+zql7lVDDAgFA05Dmg4ylBTvPSPP7WATdc=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ leungbk ];
   };
-}
+})

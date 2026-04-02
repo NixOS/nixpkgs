@@ -10,7 +10,6 @@
   poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   semver,
   shtab,
   rich,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "25.8.1";
+  version = "26.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
     tag = "v${version}";
-    hash = "sha256-uQe21Yp1PYeU/NgbQMbC2yBqEA1yUUaCiKc7k/oeS7g=";
+    hash = "sha256-tmu4BGjQlYehOg6lucKaeDnWK8v2VMviFwnmKd6IKWE=";
   };
 
   build-system = [ poetry-core ];

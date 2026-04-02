@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   python-dotenv,
   pytz,
   requests,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "transmission-rpc";
   version = "7.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Trim21";

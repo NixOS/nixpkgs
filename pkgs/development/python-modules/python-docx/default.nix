@@ -7,7 +7,6 @@
   mock,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "python-docx";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-openxml";

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
 }:
 
@@ -9,8 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "l8w8jwt";
   version = "2.5.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "GlitchedPolygons";
     repo = "l8w8jwt";
     tag = finalAttrs.version;

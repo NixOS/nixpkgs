@@ -23,7 +23,9 @@ let
   };
 
   pname = "nextpnr";
-  version = "0.9";
+
+  # Version 0.9 was patched (c7cfb) for Boost 1.87+ compatibility (boost system)
+  version = "0.9-unstable-2026-02-08";
 
   prjbeyond_src = fetchFromGitHub {
     owner = "YosysHQ-GmbH";
@@ -39,8 +41,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "nextpnr";
-    tag = "${pname}-${version}";
-    hash = "sha256-rpg99k7rSNU4p5D0iXipLgNNOA2j0PdDsz8JTxyYNPM=";
+    rev = "35f14336c042a9aa86cc66221434262fbb02034e";
+    hash = "sha256-5Fn/Y+pjhnGFcZsCN7XZN0nPB9u/BIr+lxgrCC5pnpE=";
     fetchSubmodules = true;
   };
 
@@ -49,6 +51,7 @@ stdenv.mkDerivation rec {
     python3
   ]
   ++ (lib.optional enableGui wrapQtAppsHook);
+
   buildInputs = [
     boostPython
     eigen
@@ -59,13 +62,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     let
-      # the specified version must always start with "nextpnr-", so add it if
-      # missing (e.g. if the user overrides with a git hash)
+      # Use the commit hash for the internal versioning
       rev = src.rev;
-      version = if (lib.hasPrefix "nextpnr-" rev) then rev else "nextpnr-${rev}";
+      versionStr = if (lib.hasPrefix "nextpnr-" rev) then rev else "nextpnr-${lib.substring 0 7 rev}";
     in
     [
-      "-DCURRENT_GIT_VERSION=${version}"
+      "-DCURRENT_GIT_VERSION=${versionStr}"
       "-DARCH=generic;ice40;ecp5;himbaechel"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "django-cors-headers";
   version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "adamchainz";

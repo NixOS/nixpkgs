@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pymdstat";
-  version = "0.4.3";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "pymdstat";
     rev = "v${version}";
-    hash = "sha256-ifQZXc+it/UTltHc1ZL2zxJu7GvAxYzzmB4D+mCqEoE=";
+    hash = "sha256-ZpAXD77bNJ+YpXCW0es7jR+Hs3uDDfxWVeHiWz3sDRs=";
   };
 
   build-system = [ setuptools ];

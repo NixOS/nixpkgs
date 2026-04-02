@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
 
   # build-system
   pdm-backend,
@@ -29,6 +30,18 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-+ZFrJpy5xdW6Yde/XEvxoAN8+TSQdiI0PfjZ7bHG0Rs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "django-5.2.patch";
+      url = "https://gitlab.com/mailman/django-mailman3/-/commit/465c1ffc77556bb8a80a678f53a40f16b9766cc6.patch";
+      excludes = [
+        ".gitlab-ci.yml"
+        "README.rst"
+      ];
+      hash = "sha256-gSFczuNLlMclqixOu6ElS0BewUTGyhP6RXtE/waLzyo=";
+    })
+  ];
 
   pythonRelaxDeps = [ "django-allauth" ];
 
@@ -65,6 +78,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ qyliss ];
     broken =
-      lib.versionAtLeast django-allauth.version "65.0.0" || lib.versionAtLeast django.version "5.1";
+      lib.versionAtLeast django-allauth.version "65.0.0" || lib.versionAtLeast django.version "5.3";
   };
 }

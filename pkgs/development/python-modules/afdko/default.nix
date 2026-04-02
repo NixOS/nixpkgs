@@ -9,27 +9,26 @@
   fetchFromGitHub,
   fetchpatch,
   fontmath,
-  fontpens,
   fonttools,
   libxml2,
-  mutatormath,
+  lxml,
   ninja,
   pytestCheckHook,
-  pythonOlder,
   runAllTests ? false,
   scikit-build,
   setuptools-scm,
   tqdm,
   ufonormalizer,
   ufoprocessor,
+
+  # passthru
+  afdko,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "afdko";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
@@ -70,10 +69,16 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-error=incompatible-function-pointer-types"
-    "-Wno-error=int-conversion"
-  ]);
+  env = {
+    # Use system libxml2
+    FORCE_SYSTEM_LIBXML2 = true;
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-function-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
@@ -82,21 +87,18 @@ buildPythonPackage (finalAttrs: {
     booleanoperations
     defcon
     fontmath
-    fontpens
     fonttools
-    mutatormath
+    lxml
     tqdm
     ufonormalizer
     ufoprocessor
   ]
   ++ defcon.optional-dependencies.lxml
+  ++ defcon.optional-dependencies.pens
   ++ fonttools.optional-dependencies.lxml
   ++ fonttools.optional-dependencies.ufo
   ++ fonttools.optional-dependencies.unicode
   ++ fonttools.optional-dependencies.woff;
-
-  # Use system libxml2
-  FORCE_SYSTEM_LIBXML2 = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -142,7 +144,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.tests = {
-    fullTestsuite = finalAttrs.finalPackage.override { runAllTests = true; };
+    fullTestsuite = afdko.override { runAllTests = true; };
   };
 
   meta = {

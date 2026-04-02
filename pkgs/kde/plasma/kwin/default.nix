@@ -7,11 +7,12 @@
   qtvirtualkeyboard,
   qtwayland,
   libinput,
-  xorg,
+  libxcvt,
   xwayland,
   libcanberra,
   libdisplay-info,
   libei,
+  libevdev,
   libgbm,
   lcms2,
   pipewire,
@@ -27,10 +28,11 @@ mkKdeDerivation {
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
 
-    # backport crash fix recommended by upstream
+    # backport fix for AMDGPU display corruption
+    # FIXME: remove in next update
     (fetchpatch {
-      url = "https://invent.kde.org/plasma/kwin/-/commit/ef4504320de2c3a7c7aebcf083d75db361f802ae.diff";
-      hash = "sha256-aYUXlpnvtzWd5bJ3Y9NKDBqAg0x+4enaUTnyZiZCB48=";
+      url = "https://invent.kde.org/plasma/kwin/-/commit/bc2efa2f0e848ff0a621377cfe1141294c91b1bf.diff";
+      hash = "sha256-eLrwHCKRgFimUMhIibQPEv5NAOo0GlSxY7TbtIa2/eY=";
     })
   ];
 
@@ -62,11 +64,15 @@ mkKdeDerivation {
     libcanberra
     libdisplay-info
     libei
+    libevdev
     libinput
     pipewire
 
-    xorg.libxcvt
+    libxcvt
     # we need to provide this so it knows our xwayland supports new features
     xwayland
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }

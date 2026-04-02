@@ -1,11 +1,12 @@
 {
   lib,
-  buildPythonPackage,
   boto3,
+  buildPythonPackage,
   fetchFromGitHub,
   httpretty,
   keyring,
   lz4,
+  orjson,
   pytestCheckHook,
   python-dateutil,
   pytz,
@@ -21,20 +22,21 @@
 
 buildPythonPackage rec {
   pname = "trino-python-client";
-  version = "0.334.0";
+  version = "0.337.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "trino-python-client";
     owner = "trinodb";
     tag = version;
-    hash = "sha256-cSwMmzIUFYX8VgSwobth8EsARUff3hhfBf+IrhuFSYM=";
+    hash = "sha256-q080IbPeck5Ru+3T2jChhNXi05CYPSO8ncf3KI62cRw=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     lz4
+    orjson
     python-dateutil
     pytz
     requests

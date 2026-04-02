@@ -22,7 +22,7 @@
   which,
   curl,
   jq,
-  xorg,
+  libx11,
   libGL,
   steam-run,
   # needed for avoiding crash on file selector
@@ -66,7 +66,7 @@ let
   libs =
     pkgs:
     lib.makeLibraryPath [
-      xorg.libX11
+      libx11
       libGL
     ];
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    xorg.libX11
+    libx11
     libGL
     python
     gsettings-desktop-schemas

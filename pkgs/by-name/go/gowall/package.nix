@@ -8,14 +8,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gowall";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HZEVH3T4dmBE4OMPjtHj3qdeT4i27+YhZWJgYqbg5ss=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/Achno/gowall/releases/tag/v${version}";
+    changelog = "https://github.com/Achno/gowall/releases/tag/v${finalAttrs.version}";
     description = "Tool to convert a Wallpaper's color scheme / palette";
     homepage = "https://github.com/Achno/gowall";
     license = lib.licenses.mit;
@@ -47,4 +47,4 @@ buildGoModule rec {
       FKouhai
     ];
   };
-}
+})

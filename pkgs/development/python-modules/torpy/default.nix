@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cryptography,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "torpy";
   version = "1.1.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "torpyorg";

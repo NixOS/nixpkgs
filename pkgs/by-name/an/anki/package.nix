@@ -5,7 +5,6 @@
   writableTmpDirAsHomeHook,
   cargo,
   fetchFromGitHub,
-  fetchurl,
   installShellFiles,
   lame,
   mpv-unwrapped,
@@ -26,9 +25,12 @@
   yarn-berry_4,
   runCommand,
 
+  wrapGAppsHook3,
+
   swift,
 
   mesa,
+  imagemagick,
 }:
 
 let
@@ -41,10 +43,63 @@ let
   srcHash = "sha256-0hLTQR7f7s58DUgAZbDeREMee6VrqAKHyhS1Hs/Em1A=";
   cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
   yarnHash = "sha256-EmKeHORr/+qsDzAwtearMi7qodcCgjeAQcy+79HL7Vg=";
-  pythonDeps = map (meta: {
-    url = meta.url;
-    path = toString (fetchurl meta);
-  }) (lib.importJSON ./uv-deps.json);
+  pythonDeps =
+    with python3Packages;
+    [
+      # anki (pylib) runtime deps
+      decorator
+      distro
+      markdown
+      orjson
+      protobuf
+      requests
+      typing-extensions
+
+      # aqt runtime deps
+      beautifulsoup4
+      flask
+      flask-cors
+      jsonschema
+      pip-system-certs
+      pyqt6
+      pyqt6-sip
+      pyqt6-webengine
+      send2trash
+      waitress
+
+      # build-system deps (needed by uv for editable installs)
+      editables
+      hatchling
+      pathspec
+      pluggy
+      setuptools
+      trove-classifiers
+
+      # transitive deps
+      attrs
+      blinker
+      certifi
+      charset-normalizer
+      click
+      idna
+      itsdangerous
+      jinja2
+      jsonschema-specifications
+      markupsafe
+      packaging
+      pip
+      pysocks
+      referencing
+      rpds-py
+      soupsieve
+      urllib3
+      werkzeug
+      wrapt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      anki-audio
+      anki-mac-helper
+    ];
 
   src = fetchFromGitHub {
     owner = "ankitects";
@@ -73,34 +128,16 @@ let
     exec ${yarn}/bin/yarn "$@"
   '';
 
-  uvWheels = runCommand "uv-wheels" {
-    # otherwise, it's too long of a string
-    passAsFile = [ "installCommand" ];
-    installCommand = ''
-      #!${stdenv.shell}
-      mkdir -p $out
-      # note: uv.lock doesn't contain build deps?? https://github.com/astral-sh/uv/issues/5190
-      # link them in manually
-      ln -vsf ${python3Packages.setuptools.dist}/*.whl $out
-      ln -vsf ${python3Packages.editables.dist}/*.whl $out
-      # we also force nixpkgs pyqt6 stuff because that needs to match the
-      # nixpkgs qt6 version, otherwise we get linker errors
-      ln -vsf ${python3Packages.pyqt6.dist}/*.whl $out
-      ln -vsf ${python3Packages.pyqt6-webengine.dist}/*.whl $out
-      ln -vsf ${python3Packages.pyqt6-sip.dist}/*.whl $out
+  uvWheels = runCommand "uv-wheels" { } (
     ''
-    + (lib.strings.concatStringsSep "\n" (
-      map (dep: ''
-        if ! [[ "${baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
-          ln -vsf ${dep.path} "$out/${baseNameOf dep.url}"
-        fi
-      '') pythonDeps
-    ));
-  } "bash $installCommandPath";
+      mkdir -p $out
+    ''
+    + (lib.strings.concatMapStringsSep "\n" (dep: "ln -vsf ${dep.dist}/*.whl $out") pythonDeps)
+  );
 in
 
-python3Packages.buildPythonApplication rec {
-  format = "other";
+python3Packages.buildPythonApplication (finalAttrs: {
+  pyproject = false;
   inherit pname version;
 
   outputs = [
@@ -124,8 +161,8 @@ python3Packages.buildPythonApplication rec {
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit missingHashes;
-    yarnLock = "${src}/yarn.lock";
+    inherit (finalAttrs) missingHashes;
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = yarnHash;
   };
 
@@ -136,17 +173,22 @@ python3Packages.buildPythonApplication rec {
     jq
     ninja
     nodejs
+    python3Packages.mypy-protobuf
     qt6.wrapQtAppsHook
     rsync
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
+    imagemagick
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift
+  # Needed for when Qt uses a system's GTK file picker.
+  ++ lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3;
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
+    qt6.qtwebengine
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
@@ -168,6 +210,7 @@ python3Packages.buildPythonApplication rec {
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
+  dontWrapGApps = stdenv.hostPlatform.isLinux;
 
   env = {
     # Activate optimizations
@@ -196,26 +239,27 @@ python3Packages.buildPythonApplication rec {
     echo ${python3.version} > .python-version
 
     # Setup the python environment.
-    # We have 'UV_FIND_LINKS' set, so packages generally should just get picked
-    # up, so install everything anki wants.
-    # Note, for pyqt stuff, our versions may not match (see the comment above
-    # uvWheels), so we don't install those.
+    # We use nixpkgs python packages (via UV_FIND_LINKS), whose versions may
+    # differ from the uv.lock pins. Strip version constraints so uv accepts
+    # whatever version is available.
+    strip_versions() { sed 's/==[0-9][^ ;]*//g'; }
     mkdir -p ./out/pyenv
-    uv export > requirements.txt
+    uv export --no-dev | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
+    # pyqt6-qt6 and pyqt6-webengine-qt6 are C++ Qt runtimes provided by the
+    # system, not Python packages, so exclude them from resolution.
     uv export --project qt --extra qt --extra audio \
-      --no-emit-package "pyqt6" \
       --no-emit-package "pyqt6-qt6" \
-      --no-emit-package "pyqt6-webengine" \
       --no-emit-package "pyqt6-webengine-qt6" \
-      --no-emit-package "pyqt6-sip" \
-      > requirements.txt
+      | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
-    uv export --project pylib > requirements.txt
+    uv export --project pylib | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
 
-    # anki's build tooling expects python in there too
+    # anki's build tooling expects python and protoc-gen-mypy in pyenv
+    mkdir -p ./out/pyenv/bin
     ln -sf $PYTHON_BINARY ./out/pyenv/bin/python
+    ln -sf ${lib.getExe python3Packages.mypy-protobuf} ./out/pyenv/bin/protoc-gen-mypy
 
     mv node_modules out
 
@@ -269,7 +313,10 @@ python3Packages.buildPythonApplication rec {
     install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
     install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
-    install -D -t $out/share/pixmaps qt/launcher/lin/anki.{png,xpm}
+
+    mkdir -p $out/share/icons/hicolor/{32x32,128x128}/apps
+    magick qt/launcher/lin/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
+    magick qt/launcher/lin/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
     installManPage qt/launcher/lin/anki.1
 
     runHook postInstall
@@ -277,6 +324,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''"''${gappsWrapperArgs[@]}"''}
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
       --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"
@@ -312,4 +360,4 @@ python3Packages.buildPythonApplication rec {
       oxij
     ];
   };
-}
+})

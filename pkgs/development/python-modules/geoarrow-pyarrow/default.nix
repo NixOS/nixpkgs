@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   geoarrow-c,
   pyarrow,
@@ -17,16 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-pyarrow";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    tag = "geoarrow-pyarrow-${version}";
-    hash = "sha256-tgeWrVpGIyRqRGk1y9OdS/eYMJjt80sXHt6VCx8RWys=";
+    tag = "geoarrow-types-${version}";
+    hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
   };
 
   sourceRoot = "${src.name}/geoarrow-pyarrow";

@@ -3,15 +3,12 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crossplane";
   version = "0.5.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nginxinc";

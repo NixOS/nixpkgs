@@ -14,19 +14,25 @@
   lttng-ust_2_12,
   krb5,
   bash,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
   nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.16.9";
+  version = "7.19.4";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-co2JLOlt2TafpSwxD6E/Q0dMbXADBdTL7C4DZTJQCNs=";
+    hash = "sha256-MkLJi+rMHhLjZ1huappvdxziYCNlKkoWTjjmvSPznFg=";
     fetchSubmodules = true;
   };
 
@@ -72,14 +78,14 @@ buildDotnetModule (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = with xorg; [
-    libX11
-    libXrandr
-    libXi
-    libICE
-    libSM
-    libXcursor
-    libXext
+  runtimeDeps = [
+    libx11
+    libxrandr
+    libxi
+    libice
+    libsm
+    libxcursor
+    libxext
   ];
 
   desktopItems = [

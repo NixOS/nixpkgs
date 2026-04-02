@@ -1,8 +1,8 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   pytestCheckHook,
   chardet,
   cssselect,
@@ -13,35 +13,30 @@
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.4";
-  format = "setuptools";
+  version = "0.8.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
-    rev = "v${version}";
-    hash = "sha256-6A4zpe3GvHHf235Ovr2RT/cJgj7bWasn96yqy73pVgY=";
+    rev = "${version}";
+    hash = "sha256-tL0OnvCrbrpBvcy+6RJ+u/BDdra+MnVT51DSAeYxJbc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "lxml" ];
+
+  dependencies = [
     chardet
     cssselect
     lxml
     lxml-html-clean
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'sys.platform == "darwin"' "False"
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     timeout-decorator
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Test is broken on darwin. Fix in master from https://github.com/buriy/python-readability/pull/178
-    "test_many_repeated_spaces"
   ];
 
   meta = {

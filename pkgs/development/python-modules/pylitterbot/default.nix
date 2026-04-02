@@ -5,30 +5,30 @@
   buildPythonPackage,
   deepdiff,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   pycognito,
   pyjwt,
   pytest-aiohttp,
   pytest-freezegun,
   pytestCheckHook,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2025.0.0";
+  version = "2025.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
-    tag = "v${version}";
-    hash = "sha256-Rr7QseViy6i13QbZVb8BxMWDsE9meG4NqT5B1Z+TZbc=";
+    tag = version;
+    hash = "sha256-pQnrmH/mfh7cwEnL/qoG3dN638HsP9w5zK0CgarGstE=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    uv-dynamic-versioning
   ];
 
   dependencies = [

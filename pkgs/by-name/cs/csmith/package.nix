@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     SysCPU
   ]);
 
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \

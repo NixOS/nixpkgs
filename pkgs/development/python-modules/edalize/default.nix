@@ -9,7 +9,6 @@
   pandas,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   which,
   yosys,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "edalize";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "olofk";

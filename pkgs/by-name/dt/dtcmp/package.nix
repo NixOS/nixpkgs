@@ -8,14 +8,14 @@
   lwgrp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtcmp";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "dtcmp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Dc+c8JCc5D23CtpwiWkHCqngywEZXw7cYsRiSYiQdWk=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

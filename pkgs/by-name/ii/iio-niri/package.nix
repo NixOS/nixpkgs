@@ -5,18 +5,18 @@
   dbus,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iio-niri";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Zhaith-Izaliel";
     repo = "iio-niri";
-    tag = "v${version}";
-    hash = "sha256-IOMJ1xtjUkUoUgFZ9pxBf5XKdaUHu3WbUH5TlEiNRc4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tbCiG/u350U7UbYDV5gWczDQd//RosNHuzB/cP9Dyyo=";
   };
 
-  cargoHash = "sha256-b05Jy+EKFAUcHR9+SdjHZUcIZG0Ta+ar/qc0GdRlJik=";
+  cargoHash = "sha256-JnjBnqZXRhxUClvC2hIW898AwwEOS/ELrsrjY2dV3Is=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "iio-niri";
     platforms = lib.platforms.linux;
   };
-}
+})

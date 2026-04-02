@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reredirect";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "jerome-pouiller";
     repo = "reredirect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-RHRamDo7afnJ4DlOVAqM8lQAC60YESGSMKa8Io2vcX0=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

@@ -1,13 +1,14 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
+  qmake,
+  qttools,
+  wrapQtAppsHook,
   phonon,
   phonon-backend-vlc,
   qtbase,
-  qmake,
   qtdeclarative,
-  qttools,
   qtx11extras,
   mpv,
 
@@ -15,7 +16,7 @@
   withAPIKey ? "AIzaSyBQvZXseEVvgu5Ega_DI-AIJ55v0OsHmVY",
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "minitube";
   version = "3.9.3";
 
@@ -36,6 +37,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [

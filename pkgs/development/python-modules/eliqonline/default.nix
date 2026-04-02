@@ -4,7 +4,6 @@
   buildPythonPackage,
   docopt,
   fetchPypi,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "eliqonline";
   version = "1.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

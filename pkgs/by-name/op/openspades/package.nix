@@ -19,7 +19,7 @@
   openal,
   opusfile,
   libogg,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     opusfile
     openal
     libogg
-    libXext
+    libxext
   ];
 
   patches = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     cp $notoFont $out/share/games/openspades/Resources/
   '';
 
-  NIX_CFLAGS_LINK = "-lopenal";
+  env.NIX_CFLAGS_LINK = "-lopenal";
 
   meta = {
     description = "Compatible client of Ace of Spades 0.75";

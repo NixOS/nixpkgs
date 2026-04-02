@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gocovsh";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "orlangure";
     repo = "gocovsh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VZNu1uecFVVDgF4xDLTgkCahUWbM+1XASV02PEUfmr0=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
-    "-X main.commit=v${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
     "-X main.date=19700101T000000Z"
   ];
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gocovsh";
   };
-}
+})

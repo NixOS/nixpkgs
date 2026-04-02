@@ -8,7 +8,6 @@
   hatchling,
   async-lru,
   httpx,
-  importlib-metadata,
   ipykernel,
   jinja2,
   jupyter-core,
@@ -18,22 +17,20 @@
   notebook-shim,
   packaging,
   setuptools,
-  tomli,
   tornado,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.5.0";
+  version = "4.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab";
     tag = "v${version}";
-    hash = "sha256-3vKz79/19F4kZeTjHSChgwAsM8quzIVBmjiRekA/8vo=";
+    hash = "sha256-QQ8g1+nB5aeXSrjwuL22L49S84cm2oiiNCqWj+dk7XI=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +45,7 @@ buildPythonPackage rec {
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit src;
     sourceRoot = "${src.name}/jupyterlab/staging";
-    hash = "sha256-3Gvbsi/oi8lTRrCYut126zsksjSSWmfJCoRxDmjne1E=";
+    hash = "sha256-a+pTp1IqY/RLCjClKbb7LMvUblYULChtT/knGgTlI7U=";
   };
 
   preBuild = ''
@@ -74,9 +71,7 @@ buildPythonPackage rec {
     setuptools
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   makeWrapperArgs = [
     "--set"

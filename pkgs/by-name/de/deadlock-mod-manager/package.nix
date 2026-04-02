@@ -27,19 +27,19 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadlock-mod-manager";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "deadlock-mod-manager";
     repo = "deadlock-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ja7B48UVpwj1gCZfrFWZjtTTaUh1QLTAE88oXwDt18Y=";
+    hash = "sha256-rsOaCgP7ub4FkTkg1VWPZyf+N2I0qM0DCIIqBpJZCVg=";
   };
 
   cargoRoot = "apps/desktop";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-PeY59bvL/JGl8KyE0X+nPY3XC4TNa15lGcG2i///bCI=";
+  cargoHash = "sha256-aUtJzgjc9reFxUVMRwqCd2lNMRALlfMkfIRN4QT3g+E=";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -79,14 +79,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm = pnpm_9;
     fetcherVersion = 2;
     sourceRoot = "source";
-    hash = "sha256-dS9s5oy8GtRek7OwiGDwv7280zZuyjxIhiA6BqH8C1w=";
+    hash = "sha256-oQxW0q+myMllwLQd+GRXXvnce+bYtwTLEEwFU0nupv4=";
   };
 
   patches = [
     ./no-updater-artifacts.patch
   ];
 
-  VITE_API_URL = "https://api.deadlockmods.app";
+  env.VITE_API_URL = "https://api.deadlockmods.app";
 
   # Skip tests that require network access
   checkFlags = [

@@ -16,19 +16,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-sdk";
-  version = "0.3.1";
+  version = "0.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "sdk==${version}";
-    hash = "sha256-pIQuvOYyjXajPxqoRDHuolxNgaBeSmJvPRskinXkkDo=";
+    tag = "sdk==${finalAttrs.version}";
+    hash = "sha256-J8QqbzJe5tW11Nuio2uFAJk2EZIL1LNGIbJn7TZvlaA=";
   };
 
-  sourceRoot = "${src.name}/libs/sdk-py";
+  sourceRoot = "${finalAttrs.src.name}/libs/sdk-py";
 
   build-system = [ hatchling ];
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "SDK for interacting with the LangGraph Cloud REST API";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/sdk-py";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

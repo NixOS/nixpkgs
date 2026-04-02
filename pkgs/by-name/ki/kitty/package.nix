@@ -11,13 +11,13 @@
   imagemagick,
   libstartup_notification,
   libGL,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   libxkbcommon,
-  libXi,
-  libXext,
+  libxi,
+  libxext,
   wayland-protocols,
   wayland,
   xxHash,
@@ -39,11 +39,11 @@
   zsh,
   fish,
   nixosTests,
-  go_1_24,
-  buildGo124Module,
+  go_1_26,
+  buildGo126Module,
   nix-update-script,
   makeBinaryWrapper,
-  autoSignDarwinBinariesHook,
+  darwin,
   cairo,
   fetchpatch,
 }:
@@ -51,21 +51,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.45.0";
-  format = "other";
+  version = "0.46.2";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-3XQWmLd8F0ndzzLOcV/7144M9enqc/7FULVLeM2Kpts=";
+    hash = "sha256-x+jBQrg3Iaj6PLMF1hIjS46odxv5GxPMcvC9JddYCHo=";
   };
 
   goModules =
-    (buildGo124Module {
+    (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-aLl9hPfRmUE8VARwkwXhxjzDPKUGNGD+yzxY5pUIcgs=";
+      vendorHash = "sha256-FaSWBeQJlvw9vXcHJ/OaFd48K8d7X86X8w7wpG84Ltw=";
     }).goModules;
 
   buildInputs = [
@@ -87,13 +87,13 @@ buildPythonApplication rec {
     fontconfig
     libunistring
     libcanberra
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     libxkbcommon
-    libXi
-    libXext
+    libxi
+    libxext
     wayland-protocols
     wayland
     dbus
@@ -110,14 +110,14 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go_1_24
+    go_1_26
     fontconfig
     makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns # For the png2icns tool.
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
@@ -150,8 +150,10 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  env.CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+  };
 
   configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache

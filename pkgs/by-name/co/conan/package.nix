@@ -10,20 +10,21 @@
   zlib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
-  version = "2.22.2";
+  version = "2.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    tag = version;
-    hash = "sha256-4OKrAfhHgtAS606P88JFYCjgYYlSAH8RReqFs6N2V5s=";
+    tag = finalAttrs.version;
+    hash = "sha256-8XurC7H2JSMOYRfGCilUzuTDr7y1W8N+a2Hc3dtAdzQ=";
   };
 
   pythonRelaxDeps = [
     "distro"
+    "patch-ng"
     "urllib3"
   ];
 
@@ -82,6 +83,7 @@ python3Packages.buildPythonApplication rec {
     "test_shared_windows_find_libraries"
     # 'cmake' tool version 'Any' is not available
     "test_build"
+    "test_conan_new"
     "test_conan_new_compiles"
     # 'cmake' tool version '3.27' is not available
     "test_metabuild"
@@ -104,6 +106,7 @@ python3Packages.buildPythonApplication rec {
     # Requires cmake, meson, autotools, apt-get, etc.
     "test/functional/command/runner_test.py"
     "test/functional/command/test_install_deploy.py"
+    "test/functional/command/test_new.py"
     "test/functional/layout/test_editable_cmake.py"
     "test/functional/layout/test_editable_cmake_components.py"
     "test/functional/layout/test_in_subfolder.py"
@@ -113,20 +116,24 @@ python3Packages.buildPythonApplication rec {
     "test/functional/toolchains/"
     "test/functional/tools/scm/test_git.py"
     "test/functional/tools/system/package_manager_test.py"
+    "test/functional/sbom/test_cyclonedx.py"
+    "test/functional/workspace/test_workspace.py"
     "test/functional/tools_versions_test.py"
     "test/functional/util/test_cmd_args_to_string.py"
-    "test/performance/test_large_graph.py"
+
+    # Requires network access to PyPI
+    "test/functional/tools/system/python_manager_test.py"
+
+    # Test failure
     "test/unittests/tools/env/test_env_files.py"
-    # pipenv will attempt to access the network.
-    "test/functional/tools/system/pip_manager_test.py"
   ];
 
   meta = {
     description = "Decentralized and portable C/C++ package manager";
     homepage = "https://conan.io";
-    changelog = "https://github.com/conan-io/conan/releases/tag/${src.tag}";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ HaoZeke ];
     mainProgram = "conan";
   };
-}
+})

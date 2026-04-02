@@ -9,7 +9,6 @@
   py,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pypytools";
   version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

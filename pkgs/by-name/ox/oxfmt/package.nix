@@ -14,7 +14,6 @@
   rustc,
   versionCheckHook,
   nix-update-script,
-  tsgolint,
 }:
 
 # Build with pnpm instead of buildRustPackage because Prettier integration
@@ -22,33 +21,25 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.23.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-kMCGKbc7qaY0KUOR+67mLvKW4J5CuvYUmC6Aj9xlzSk=";
+    hash = "sha256-A2cq1WgZg8csNGB3yFNo21450f46n4ZVblke1yqlBCc=";
   };
-
-  # Remove patchedDependencies from both workspace and lockfile
-  # to avoid LOCKFILE_CONFIG_MISMATCH error
-  postPatch = ''
-    substituteInPlace pnpm-workspace.yaml pnpm-lock.yaml \
-      --replace-fail "patchedDependencies:" "_patchedDependencies:"
-  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-cesj9jwWHIFxpFV62QDgYl22EUE8qVjIbb2nRObAyLo=";
+    hash = "sha256-Oz9u2+5lq+z9A81BEn2T4jvVMqf1uNXip+OH4AxiTG0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-cPswWCksQ5TyR9M2Maj5mg9I+UltR0WN3U4ClBvwG68=";
-    prePnpmInstall = finalAttrs.postPatch;
+    hash = "sha256-iO1MRUTO8Ce1YGH/qDWQmdfvTfvsmgwGBaybWw3wiu0=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp npm/oxfmt/configuration_schema.json $outPath/
 
     makeWrapper ${lib.getExe nodejs-slim} $out/bin/oxfmt \
-      --prefix PATH : "${lib.makeBinPath [ tsgolint ]}" \
       --add-flags $outPath/dist/cli.js
 
     runHook postInstall
@@ -104,8 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "JavaScript formatter with Prettier integration";
-    homepage = "https://github.com/oxc-project/oxc";
+    description = "High-performance formatter for the JavaScript ecosystem";
+    homepage = "https://oxc.rs/docs/guide/usage/formatter";
+    downloadPage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/blob/${finalAttrs.src.tag}/apps/oxfmt/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];

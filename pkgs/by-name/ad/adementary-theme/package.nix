@@ -6,14 +6,14 @@
   sassc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adementary-theme";
   version = "201905r1";
 
   src = fetchFromGitHub {
     owner = "hrdwrrsk";
     repo = "adementary-theme";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "14y5s18g9r2c1ciw1skfksn09gvqgy8vjvwbr0z8gacf0jc2apqk";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,0 +1,43 @@
+diff --git a/test/draw_test.py b/test/draw_test.py
+index ed99f0ce9..0484ef53d 100644
+--- a/test/draw_test.py
++++ b/test/draw_test.py
+@@ -7496,6 +7496,10 @@ class DrawModuleTest(unittest.TestCase):
+             with self.assertRaises(TypeError):
+                 draw.polygon(surf, col, points, 0)
+ 
++    @unittest.skipIf(
++        True,
++        "https://github.com/pygame-community/pygame-ce/pull/3680#issuecomment-3796052119",
++    )
+     def test_aafunctions_depth_segfault(self):
+         """Ensure future commits don't break the segfault fixed by pull request
+         https://github.com/pygame-community/pygame-ce/pull/3008
+diff --git a/test/surface_test.py b/test/surface_test.py
+index c2c91f4f5..35b9e1aaf 100644
+--- a/test/surface_test.py
++++ b/test/surface_test.py
+@@ -286,6 +286,7 @@ class SurfaceTypeTest(unittest.TestCase):
+         for pt in test_utils.rect_outer_bounds(fill_rect):
+             self.assertNotEqual(s1.get_at(pt), color)
+ 
++    @unittest.skipIf(True, "https://github.com/libsdl-org/sdl2-compat/issues/575")
+     def test_fill_rle(self):
+         """Test RLEACCEL flag with fill()"""
+         color = (250, 25, 25, 255)
+diff --git a/test/window_test.py b/test/window_test.py
+index b8dd1f005..5b7939908 100644
+--- a/test/window_test.py
++++ b/test/window_test.py
+@@ -113,10 +113,7 @@ class WindowTypeTest(unittest.TestCase):
+         self.win.always_on_top = False
+         self.assertFalse(self.win.always_on_top)
+ 
+-    @unittest.skipIf(
+-        SDL < (2, 0, 18),
+-        "requires SDL 2.0.18+",
+-    )
++    @unittest.skipIf(True, "https://github.com/pygame-community/pygame-ce/pull/3680")
+     def test_mouse_rect(self):
+         self.win.mouse_rect = None
+         self.assertIsNone(self.win.mouse_rect)

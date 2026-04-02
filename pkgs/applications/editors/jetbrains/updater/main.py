@@ -1,5 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3 python3.pkgs.packaging python3.pkgs.xmltodict python3.pkgs.requests nurl
+import sys
+
 import argparse
 import json
 
@@ -54,12 +56,13 @@ def main():
     )
 
     print(f"[.] found IDEs to update: {', '.join(ide.name for ide in ides_to_run_for)}")
+    success = True
     for ide in ides_to_run_for:
         if ide.is_source and config.no_src:
-            print(f"[!] skipping {ide.name}, due to --no-src")
+            print(f"[!] skipping {ide.name}, due to --no-src", file=sys.stderr)
             continue
         if not ide.is_source and config.no_bin:
-            print(f"[!] skipping {ide.name}, due to --no-bin")
+            print(f"[!] skipping {ide.name}, due to --no-bin", file=sys.stderr)
             continue
 
         print(f"[@] updating IDE {ide.name}")
@@ -67,15 +70,18 @@ def main():
         info = version_fetcher.latest_version_info(
             ide, ignore_no_url_error=ide.is_source
         )
-        if info is not None:
+        if info is None:
+            success = False
+        else:
             if config.old_version == info.version:
                 print("[o] Version is the same, no update required")
                 return
 
             if ide.is_source:
-                run_src_update(ide, info, config)
+                success &= run_src_update(ide, info, config)
             else:
-                run_bin_update(ide, info, config)
+                success &= run_bin_update(ide, info, config)
+    exit(0 if success else 1)
 
 
 if __name__ == "__main__":

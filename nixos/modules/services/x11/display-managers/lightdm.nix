@@ -73,7 +73,7 @@ let
 in
 {
   meta = {
-    maintainers = [ ] ++ lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
   };
 
   # Note: the order in which lightdm greeter modules are imported
@@ -215,22 +215,24 @@ in
 
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.displayManager.preStart =
+    services.displayManager.generic.preStart =
       optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null)
         ''
           ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
         '';
 
     # setSessionScript needs session-files in XDG_DATA_DIRS
-    services.displayManager.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
+    services.displayManager.generic.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
 
     # setSessionScript wants AccountsService
     systemd.services.display-manager.wants = [
       "accounts-daemon.service"
     ];
 
+    services.displayManager.generic.enable = true;
+
     # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-    services.displayManager.execCmd = ''
+    services.displayManager.generic.execCmd = ''
       export PATH=${lightdm}/sbin:$PATH
       exec ${lightdm}/sbin/lightdm
     '';

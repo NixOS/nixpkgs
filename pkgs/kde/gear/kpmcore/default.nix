@@ -9,6 +9,7 @@
   smartmontools,
   systemdMinimal,
   util-linux,
+  bcachefs-tools,
   btrfs-progs,
   dosfstools,
   e2fsprogs,
@@ -23,7 +24,7 @@
   zfs,
 }:
 let
-  # https://github.com/KDE/kpmcore/blob/06f15334ecfbe871730a90dbe2b694ba060ee998/src/util/externalcommand_whitelist.h
+  # https://github.com/KDE/kpmcore/blob/v25.12.1/src/util/externalcommand_whitelist.h
   runtimeDeps = [
     cryptsetup
     lvm2
@@ -32,6 +33,7 @@ let
     systemdMinimal
     util-linux
 
+    bcachefs-tools
     btrfs-progs
     dosfstools
     e2fsprogs

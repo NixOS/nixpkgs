@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   version = "0.7.0";
   pname = "bespon";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Encodes and decodes data in the BespON format";
     homepage = "https://github.com/gpoore/bespon_py";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
   };
 }

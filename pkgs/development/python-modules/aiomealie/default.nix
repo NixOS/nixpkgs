@@ -15,16 +15,16 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiomealie";
-  version = "1.1.1";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
-    tag = "v${version}";
-    hash = "sha256-qiLynV/nJkejUVyS3p12bcAR3+Oj+XKp7Z/zVpxb84I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TwzE5GAP4DNxj3DZdu83eSobcYYbrOn9tPb+8904a/8=";
   };
 
   build-system = [ poetry-core ];
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Mealie";
     homepage = "https://github.com/joostlek/python-mealie";
-    changelog = "https://github.com/joostlek/python-mealie/releases/tag/${src.tag}";
+    changelog = "https://github.com/joostlek/python-mealie/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation {
   pname = "ptouch-print";
-  version = "1.5-unstable-2024-02-11";
+  version = "1.7-unstable-2026-01-23";
 
   src = fetchgit {
     url = "https://git.familie-radermacher.ch/linux/ptouch-print.git";
-    rev = "8aaeecd84b619587dc3885dd4fea4b7310c82fd4";
-    hash = "sha256-IIq3SmMfsgwSYbgG1w/wrBnFtb6xdFK2lkK27Qqk6mw=";
+    rev = "3e026ef26b48dda338bb983132494935d6aeb626";
+    hash = "sha256-LpBgZWpbOiEf+yA/fDNwsSPxkgMVLnOsrE65Q3lvhwg";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,6 @@ stdenv.mkDerivation {
     homepage = "https://dominic.familie-radermacher.ch/projekte/ptouch-print/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ptouch-print";
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.unix;
   };
 }

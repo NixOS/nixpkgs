@@ -7,20 +7,20 @@
 let
   python = python3.override {
     self = python3;
-    packageOverrides = (self: super: { django = super.django_5_2; });
+    packageOverrides = (self: super: { django = super.django_5; });
   };
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "1.1.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-wa0KhS/UeFbw9fJVuFLIPtsLaC5+7Euaew8n6p2jC5Q=";
+    hash = "sha256-xm9NhsoM4ggLdtULfiUqJkB41n8q6eS8g4Q/zBaKRbs=";
   };
 
   sourceRoot = "source/src/backend";
@@ -30,7 +30,12 @@ python.pkgs.buildPythonApplication rec {
     ./secure_settings.patch
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
+  '';
+
+  build-system = with python.pkgs; [ uv-build ];
 
   dependencies =
     with python.pkgs;
@@ -40,13 +45,16 @@ python.pkgs.buildPythonApplication rec {
       brevo-python
       brotli
       celery
+      dj-database-url
       django
       django-configurations
       django-cors-headers
       django-countries
       django-extensions
+      django-filter
       django-lasuite
       django-parler
+      django-pydantic-field
       django-redis
       django-storages
       django-timezone-field
@@ -64,9 +72,11 @@ python.pkgs.buildPythonApplication rec {
       mozilla-django-oidc
       nested-multipart-parser
       psycopg
+      pydantic
       pyjwt
       pyopenssl
       python-frontmatter
+      python-magic
       redis
       requests
       sentry-sdk

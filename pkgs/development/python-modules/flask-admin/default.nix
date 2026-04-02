@@ -3,14 +3,12 @@
   fetchFromGitHub,
   flit-core,
   lib,
-  pythonOlder,
   # dependencies
   flask,
   jinja2,
   markupsafe,
   werkzeug,
   wtforms,
-  typing-extensions,
   # optional dependencies
   # sqlalchemy
   flask-sqlalchemy,
@@ -55,8 +53,6 @@ buildPythonPackage rec {
   version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";
@@ -72,9 +68,6 @@ buildPythonPackage rec {
     markupsafe
     werkzeug
     wtforms
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   optional-dependencies = {

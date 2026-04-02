@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.51.2";
+  version = "0.51.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab-git";
     tag = "v${version}";
-    hash = "sha256-YQWS+/GfQzkQ/n0xBq+K8lJ9tjvIRJxa3w3AzNARpDo=";
+    hash = "sha256-8/XspIMT2x/buBKbUTknpyh0VGionozavjgi67gg1/k=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Jupyter lab extension for version control with Git";
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
-    changelog = "https://github.com/jupyterlab/jupyterlab-git/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab-git/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ chiroptical ];
   };

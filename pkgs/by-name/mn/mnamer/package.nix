@@ -4,15 +4,15 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mnamer";
   version = "2.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
   };
 
@@ -51,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     description = "Intelligent and highly configurable media organization utility";
     mainProgram = "mnamer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urlordjames ];
+    maintainers = [ ];
   };
-}
+})

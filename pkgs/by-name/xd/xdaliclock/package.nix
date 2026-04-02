@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdaliclock";
   version = "2.49";
 
   src = fetchurl {
-    url = "https://www.jwz.org/xdaliclock/xdaliclock-${version}.tar.gz";
+    url = "https://www.jwz.org/xdaliclock/xdaliclock-${finalAttrs.version}.tar.gz";
     hash = "sha256-jRTlt8IYZZ6EDLyU7kLQ2bktQztnj15IUpqUBvntXU8=";
   };
 
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
   ];
 
   preInstall = ''
-    mkdir -vp $out/bin $out/share/man/man1 $out/share/gsettings-schemas/$name/glib-2.0/schemas $out/share/pixmaps $out/share/applications
+    mkdir -vp $out/bin $out/share/man/man1 $out/share/gsettings-schemas/$name/glib-2.0/schemas $out/share/icons/hicolor/512x512/apps $out/share/applications
 
     # https://www.jwz.org/blog/2022/08/dali-clock-2-45-released/#comment-236762
     gappsWrapperArgs+=(--set MESA_GL_VERSION_OVERRIDE 3.1)
   '';
 
   installFlags = [
-    "GTK_ICONDIR=${placeholder "out"}/share/pixmaps/"
+    "GTK_ICONDIR=${placeholder "out"}/share/icons/hicolor/512x512/apps"
     "GTK_APPDIR=${placeholder "out"}/share/applications/"
   ];
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.jwz.org/xdaliclock/";
     mainProgram = "xdaliclock";
   };
-}
+})

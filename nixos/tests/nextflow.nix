@@ -1,5 +1,7 @@
 { pkgs, ... }:
 let
+  # This is the default image used by Nextflow if docker.enabled=true and no
+  # process.container is defined.
   bash = pkgs.dockerTools.pullImage {
     imageName = "quay.io/nextflow/bash";
     imageDigest = "sha256:bea0e244b7c5367b2b0de687e7d28f692013aa18970941c7dd184450125163ac";
@@ -21,13 +23,17 @@ let
   };
   run-nextflow-pipeline = pkgs.writeShellApplication {
     name = "run-nextflow-pipeline";
-    runtimeInputs = [ pkgs.nextflow ];
     text = ''
       export NXF_OFFLINE=true
-      for b in false true; do
-        echo "docker.enabled = $b" > nextflow.config
-        cat nextflow.config
-        nextflow run -ansi-log false ${hello}
+      for d in true false; do
+        for t in true false; do
+          rm -f nextflow.config; touch nextflow.config
+          echo "docker.enabled = $d" >> nextflow.config
+          echo "trace.enabled = $t" >> nextflow.config
+          echo "Testing docker=$d trace=$t"
+          nextflow run -ansi-log false ${hello}
+          echo "PASSED docker=$d trace=$t"
+        done
       done
     '';
   };

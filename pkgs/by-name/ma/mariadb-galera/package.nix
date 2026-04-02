@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mariadb-galera";
   version = "26.4.24";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
-    tag = "release_${version}";
+    tag = "release_${finalAttrs.version}";
     hash = "sha256-mpf+YY0m+UwvemdZt6SfRP9IJlq5IZtlOJMucADc1oM=";
     fetchSubmodules = true;
   };
@@ -52,9 +52,13 @@ stdenv.mkDerivation rec {
     mainProgram = "garbd";
     homepage = "https://galeracluster.com/";
     license = lib.licenses.lgpl2Only;
-    maintainers = with lib.maintainers; [ izorkin ];
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+      izorkin
+    ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

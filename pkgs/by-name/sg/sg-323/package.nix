@@ -7,26 +7,26 @@
   alsa-lib,
   fontconfig,
   freetype,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SG-323";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "greyboxaudio";
     repo = "SG-323";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-DvA9Y7eAG0pWLmHEZmJlo0JLU+0B4c8rlkX1bbVcnL8=";
+    hash = "sha256-7zqIWLF9gcqHFg2LYauvF+6qUTIohYC5vZEn76siS7o=";
   };
 
   nativeBuildInputs = [
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.isLinux [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
   ];
 
   enableParallelBuilding = true;

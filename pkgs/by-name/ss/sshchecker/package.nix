@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sshchecker";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "lazytools";
     repo = "sshchecker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QMc64ynPLHQGsmDOsoChgmqmpRDyMYmmSAPwAEFBK40=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

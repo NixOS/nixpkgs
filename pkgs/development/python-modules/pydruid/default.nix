@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # required dependencies
   requests,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pydruid";
   version = "0.6.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     repo = "pydruid";

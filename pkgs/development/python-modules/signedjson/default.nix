@@ -3,12 +3,9 @@
   buildPythonPackage,
   canonicaljson,
   fetchPypi,
-  importlib-metadata,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
-  typing-extensions,
   unpaddedbase64,
 }:
 
@@ -16,8 +13,6 @@ buildPythonPackage rec {
   pname = "signedjson";
   version = "1.1.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +25,6 @@ buildPythonPackage rec {
     canonicaljson
     unpaddedbase64
     pynacl
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

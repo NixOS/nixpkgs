@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "python-overseerr";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-overseerr";
     tag = "v${version}";
-    hash = "sha256-izgUTgRG63FUjb8mH1W4yXFRvwPWIWPKsSiY9awq9SM=";
+    hash = "sha256-9sJWglF1EqwXG0Cj1hOtNE2dYTmxIZoVWHYT5I4RQu0=";
   };
 
   build-system = [ poetry-core ];

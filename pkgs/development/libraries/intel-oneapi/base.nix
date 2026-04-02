@@ -10,7 +10,14 @@
   pkg-config,
   libdrm,
   elfutils,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   glib,
   nss,
   nspr,
@@ -20,7 +27,7 @@
   gtk3,
   pango,
   cairo,
-  mesa,
+  libgbm,
   expat,
   libxkbcommon,
   eudev,
@@ -60,14 +67,14 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
   pname = "intel-oneapi-base-toolkit";
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/3b7a16b3-a7b0-460f-be16-de0d64fa6b1e/intel-oneapi-base-toolkit-2025.2.1.44_offline.sh";
-    hash = "sha256-oVURJZG6uZ3YvYefUuqeakbaVR47ZgWduBV6bS6r5Dk=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6caa93ca-e10a-4cc5-b210-68f385feea9e/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh";
+    hash = "sha256-xXV6FP4t1ChSi/bcDFpkmMexNejPTtk2Nay/PmSpCFA=";
   };
 
   versionYear = "2025";
-  versionMajor = "2";
+  versionMajor = "3";
   versionMinor = "1";
-  versionRel = "44";
+  versionRel = "36";
 
   inherit components;
 
@@ -86,18 +93,18 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       fontconfig
       glib
       freetype
-      xorg.libX11
-      xorg.libXxf86vm
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxxf86vm
+      libxext
+      libxcb
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       nss
       dbus
       cups
-      mesa
+      libgbm
       expat
       libxkbcommon
       eudev
@@ -134,13 +141,13 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       libdrm
       elfutils
       zlib
-      xorg.libX11
-      xorg.libXext
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxext
+      libxcb
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
       glib
       nss
       dbus
@@ -149,7 +156,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       gtk3
       pango
       cairo
-      mesa
+      libgbm
       expat
       libxkbcommon
       eudev
@@ -173,6 +180,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
     "libffi.so.6"
     "libgdbm.so.4"
     "libopencl-clang.so.14"
+    "libreadline.so.6"
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {

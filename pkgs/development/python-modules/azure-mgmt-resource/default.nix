@@ -5,7 +5,6 @@
   azure-mgmt-core,
   azure-mgmt-common,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-resource";
   version = "24.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "azure_mgmt_resource";

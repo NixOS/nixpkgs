@@ -106,11 +106,11 @@ let
       with pkgs;
       [
         libdrm
-        xorg.libXext
-        xorg.libX11
-        xorg.libXv
-        xorg.libXrandr
-        xorg.libxcb
+        libxext
+        libx11
+        libxv
+        libxrandr
+        libxcb
         zlib
         stdenv.cc.cc
         wayland
@@ -143,7 +143,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "nvidia-${if useFabricmanager then "dc" else "x11"}-${version}${nameSuffix}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}${nameSuffix}";
+  pname = "nvidia-${if useFabricmanager then "dc" else "x11"}";
 
   builder = ./builder.sh;
 

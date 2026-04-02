@@ -8,29 +8,29 @@
   testers,
   mas,
 }:
-
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
-  version = "4.1.0";
+  version = "5.1.0";
 
   src =
     let
+      # nix store prefetch-file https://github.com/mas-cli/mas/releases/download/v$VERSION/mas-$VERSION-$ARCH.pkg
       sources =
         {
           x86_64-darwin = {
             arch = "x86_64";
-            hash = "sha256-9GkAV2gitqtZ7Ew/QVXDj3tDTbh5uwBxPtYdLSnucZE=";
+            hash = "sha256-G7o0nHsf6Ay2k3quMs45KH9h4yEpbvyGPm/u86naWcM=";
           };
           aarch64-darwin = {
             arch = "arm64";
-            hash = "sha256-8zaZOPOCyLHOFmHhviJXIy5SB5trqQM/MFHhB9ygilQ=";
+            hash = "sha256-XZM0YeFLHYhoEqQLaG1Jz3OWcT9DILqFEcgqI3yvDk8=";
           };
         }
         .${stdenvNoCC.hostPlatform.system}
           or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
     in
     fetchurl {
-      url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}-${sources.arch}.pkg";
+      url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-${sources.arch}.pkg";
       inherit (sources) hash;
     };
 
@@ -49,12 +49,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postUnpack
   '';
 
+  dontConfigure = true;
   dontBuild = true;
+  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 usr/local/opt/mas/bin/mas $out/bin/mas
+    installBin usr/local/opt/mas/bin/mas
 
     installManPage usr/local/opt/mas/share/man/man1/mas.1
     installShellCompletion --bash usr/local/opt/mas/etc/bash_completion.d/mas
@@ -83,4 +85,4 @@ stdenvNoCC.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})

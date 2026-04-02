@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter341,
   fetchFromGitHub,
   webkitgtk_4_1,
   copyDesktopItems,
@@ -12,19 +12,16 @@
   dart,
 }:
 
-let
-  version = "1.5.3";
+flutter341.buildFlutterApplication (finalAttrs: {
+  pname = "venera";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
-    tag = "v${version}";
-    hash = "sha256-yjO7nQ3F+DLudjqXUp0N13lhBZSAKwAeKXRAKxPxDVQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UgQej91SsqyZzJaN3kQDHqJI3686W451wBTeTACXrV8=";
   };
-in
-flutter335.buildFlutterApplication {
-  pname = "venera";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -64,7 +61,7 @@ flutter335.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -99,4 +96,4 @@ flutter335.buildFlutterApplication {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

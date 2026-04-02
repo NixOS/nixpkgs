@@ -3,21 +3,22 @@
   biome,
   buildNpmPackage,
   fetchFromGitHub,
-  jre,
+  jdk25,
   maven,
   makeWrapper,
   unzip,
   nixosTests,
   writeText,
+  stdenv,
 }:
 let
-  version = "5.11.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     tag = version;
-    hash = "sha256-B0ztra7j5V5Qm0DRpu4cl04tmOE1gS89NOV2kyMrzOg=";
+    hash = "sha256-hoRaegcpimIYfUv81txgXSSdwX8iCU4K5EtZMyozjFQ=";
   };
 
   frontend = buildNpmPackage {
@@ -27,7 +28,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-TD57bDY/7/zYT1T/HOl0+G59/hct8fzJaKaMC8/bBEI=";
+    npmDepsHash = "sha256-z6W0xyOpGbTogqZ0UgVQMNPXjwLW0ulpwLBtXvf00bQ=";
 
     nativeBuildInputs = [ biome ];
 
@@ -53,7 +54,8 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-ipGxdX/LHEn2mQa2JhfeMTmg0esj5Z+7fJ3W2ipLfto=";
+  mvnHash = "sha256-YY/etqDtnobarg8Cj4vDv7rmzPrOqz6YCyAxjIQlzeU=";
+  mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
@@ -85,7 +87,7 @@ maven.buildMavenPackage {
     mkdir -p $out/bin $out/share
     unzip -d $out/share/ commafeed-server/target/commafeed-$version-h2-jvm.zip
 
-    makeWrapper ${jre}/bin/java $out/bin/commafeed \
+    makeWrapper ${jdk25}/bin/java $out/bin/commafeed \
       --add-flags "-jar $out/share/commafeed-$version-h2/quarkus-run.jar"
 
     runHook postInstall
@@ -99,5 +101,6 @@ maven.buildMavenPackage {
     license = lib.licenses.asl20;
     mainProgram = "commafeed";
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 }

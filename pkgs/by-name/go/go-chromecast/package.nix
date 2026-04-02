@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-chromecast";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = "go-chromecast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FFe87Z0aiNP5aGAiJ2WJkKRAMCQGWEBB0gLDGBpE3fk=";
   };
 
@@ -25,8 +25,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=unknown"
   ];
 
@@ -52,4 +52,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.zi3m5f ];
     mainProgram = "go-chromecast";
   };
-}
+})

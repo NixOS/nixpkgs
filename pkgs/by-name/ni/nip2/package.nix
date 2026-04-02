@@ -16,12 +16,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nip2";
   version = "8.9.1";
 
   src = fetchurl {
-    url = "https://github.com/libvips/nip2/releases/download/v${version}/nip2-${version}.tar.gz";
+    url = "https://github.com/libvips/nip2/releases/download/v${finalAttrs.version}/nip2-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-t14m6z+5lPqpiOjgdDbKwqSWXCyrCL7zlo6BeoZtds0=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nip2";
   };
-}
+})

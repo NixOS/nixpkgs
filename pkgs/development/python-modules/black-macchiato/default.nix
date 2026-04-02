@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   black,
   fetchpatch,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "black-macchiato";
   version = "1.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "wbolster";

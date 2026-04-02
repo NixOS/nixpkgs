@@ -16,11 +16,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.3.3";
+  version = "3.4";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
-    hash = "sha256-B3bwHV+f6IuoNESz5B4ij5KsIcCcpUPmoSnJeJj0J0Y=";
+    hash = "sha256-7IMInvVLIjGcHZvnSzhcne+4ieFa85ep7KMn2Oy9pF8=";
   };
 
   # Don't build and install html documentation
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "devman"
   ];
 
-  MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  env.MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 

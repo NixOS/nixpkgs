@@ -12,15 +12,15 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "signalbackup-tools";
-  version = "20260108-2";
+  version = "20260325";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
-    tag = version;
-    hash = "sha256-5WDwlhy8oRVqmFWY28Fz9ZNhliwP9GjFkBaEZOAGb7M=";
+    tag = finalAttrs.version;
+    hash = "sha256-5Tb9bY0sZvCUlYkGpmu6hVi7EOEMaygEH9x3tbyo2T4=";
   };
 
   nativeBuildInputs = [
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.malo ];
     platforms = lib.platforms.all;
   };
-}
+})

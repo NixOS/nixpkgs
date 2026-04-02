@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   numpy,
   pillow,
   pyyaml,
@@ -26,17 +27,20 @@
 
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.3.12";
+  version = "3.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-IK+Mk2IWrDGCLH3nw5/WR0uPIFBAsb/h4/MMmSlxT9s=";
+    hash = "sha256-XQrRo4B/xn7uBbQv7YjfKaK4DLiTciGnXjb+dL1hkw4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "pyyaml"

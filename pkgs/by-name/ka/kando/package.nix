@@ -15,9 +15,9 @@
   makeDesktopItem,
 
   libxkbcommon,
-  libX11,
-  libXtst,
-  libXi,
+  libx11,
+  libxtst,
+  libxi,
   wayland,
 }:
 
@@ -53,9 +53,9 @@ buildNpmPackage.override { inherit nodejs; } rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
-    libX11
-    libXtst
-    libXi
+    libx11
+    libxtst
+    libxi
     wayland
   ];
 

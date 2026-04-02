@@ -32,22 +32,23 @@
   wayland,
   wayland-protocols,
   util-linux,
+  versionCheckHook,
 }:
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RDeDDRgmMnmEKJalIovpXKu9urHuCvH8tHP4RsplyXs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6N1JeQx9/M3XCcxErk24FLMxTgn8GH40fpckP8X3ons=";
   };
 
   prePatch = ''
     substituteInPlace src/main.cpp \
-      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.tag}"'
   '';
 
   nativeBuildInputs = [
@@ -85,6 +86,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     util-linux
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;

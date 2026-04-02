@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   poetry-core,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "readmdict";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ffreemt";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";
     tag = version;
-    hash = "sha256-OiBTlAcSLhaMWbp5k+0yU1amSpLKnJA+3Q56lyiSDUA=";
+    hash = "sha256-qcSqsfbA5maGDTf07fz4dwlrMUF5wnWPsWcYWbsFiwQ=";
   };
 
   build-system = [ setuptools ];

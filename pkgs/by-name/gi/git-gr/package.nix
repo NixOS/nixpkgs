@@ -14,7 +14,7 @@ let
   canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;
   gitGr = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/git-gr";
   pname = "git-gr";
-  version = "1.4.3";
+  version = "1.4.6";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage {
     owner = "9999years";
     repo = "git-gr";
     tag = "v${version}";
-    hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
+    hash = "sha256-ihCwrM8Mt3cBxP5HIXYkvVwKt0CYUE8Ph1S62ztl0tE=";
   };
 
   buildFeatures = [ "clap_mangen" ];
 
-  cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
+  cargoHash = "sha256-j/qUWGzsODSsn/dbygN2mYHED3wvUDKEGu7nYcTUm90=";
 
   env.OPENSSL_NO_VENDOR = true;
 

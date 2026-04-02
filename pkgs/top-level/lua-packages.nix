@@ -48,6 +48,7 @@ rec {
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
     luarocksMoveDataFolder
     luarocksCheckHook
+    bustedCheckHook
     ;
 
   inherit lua;
@@ -65,9 +66,7 @@ rec {
     ;
 
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
-  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
-    inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
-  };
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix { };
 
   luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
@@ -112,6 +111,8 @@ rec {
     }
   ) { };
 
+  image-nvim = callPackage ../development/lua-modules/image-nvim { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
@@ -131,7 +132,7 @@ rec {
       };
 
       # The makefile tries to link to `-llua<luaversion>`
-      LUA_LIBS = "-llua";
+      env.LUA_LIBS = "-llua";
 
       buildInputs =
         lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
@@ -252,6 +253,8 @@ rec {
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
   };
+
+  readline = callPackage ../development/lua-modules/readline { inherit (pkgs) readline; };
 
   vicious = callPackage (
     { fetchFromGitHub }:

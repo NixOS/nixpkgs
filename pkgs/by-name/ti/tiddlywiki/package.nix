@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Self-contained JavaScript wiki for the browser, Node.js, AWS Lambda etc";
     homepage = "https://tiddlywiki.com";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "tiddlywiki";
   };
 })

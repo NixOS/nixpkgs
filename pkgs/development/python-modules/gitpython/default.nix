@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gitpython";
-  version = "3.1.45";
+  version = "3.1.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
     tag = version;
-    hash = "sha256-VHnuHliZEc/jiSo/Zi9J/ipAykj7D6NttuzPZiE8svM=";
+    hash = "sha256-ymuJlxGEmWwvmVFYiIW23k5Gl2h09ugFLPosnUWg5S0=";
   };
 
   postPatch = ''

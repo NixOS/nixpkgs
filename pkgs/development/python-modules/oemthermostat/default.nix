@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "oemthermostat";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Cadair";

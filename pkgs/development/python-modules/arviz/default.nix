@@ -16,6 +16,7 @@
   matplotlib,
   numpy,
   pandas,
+  platformdirs,
   scipy,
   typing-extensions,
   xarray,
@@ -39,16 +40,16 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arviz";
-  version = "0.23.0";
+  version = "0.23.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    tag = "v${version}";
-    hash = "sha256-/Xz4hTKB1lh9cxHkVXAZY8NsZoqdadukI/V1/LRZu24=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YQ5i+CSuznbWAQ29jgqrOs+zgOAS5U4wSNEIquJQkvY=";
   };
 
   nativeBuildInputs = [
@@ -65,9 +66,11 @@ buildPythonPackage rec {
 
   dependencies = [
     h5netcdf
+    h5py
     matplotlib
     numpy
     pandas
+    platformdirs
     scipy
     typing-extensions
     xarray
@@ -79,7 +82,6 @@ buildPythonPackage rec {
     cloudpickle
     emcee
     ffmpeg
-    h5py
     jax
     jaxlib
     numba
@@ -104,6 +106,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_deterministic"
+    "test_mcse_array"
+    "test_mcse_dataset"
+    "test_mcse_nan"
+    "test_multichain_summary_array"
+    "test_numba_mcse"
+    "test_plot_mcse"
+
     # Tests require network access
     "test_plot_ppc_transposed"
     "test_plot_separation"
@@ -124,8 +135,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
-    changelog = "https://github.com/arviz-devs/arviz/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/arviz-devs/arviz/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ omnipotententity ];
   };
-}
+})

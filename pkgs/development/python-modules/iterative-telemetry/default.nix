@@ -7,7 +7,6 @@
   filelock,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "iterative-telemtry";
   version = "0.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";

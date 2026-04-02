@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zk";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "zk-org";
     repo = "zk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-h4q3GG4DPPEJk2G5JDbUhnHpqEdMAkGYSMs9TS5Goco=";
   };
 
@@ -25,8 +25,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Build=${version}"
-    "-X=main.Version=${version}"
+    "-X=main.Build=${finalAttrs.version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -40,4 +40,4 @@ buildGoModule rec {
     homepage = "https://github.com/mickael-menu/zk";
     mainProgram = "zk";
   };
-}
+})

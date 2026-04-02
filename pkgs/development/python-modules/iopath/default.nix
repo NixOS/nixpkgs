@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   tqdm,
   portalocker,
@@ -18,8 +17,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";

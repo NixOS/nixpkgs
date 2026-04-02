@@ -1,16 +1,26 @@
 {
   buildOctavePackage,
   lib,
-  fetchurl,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "sockets";
-  version = "1.4.1";
+  version = "1.5.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-u5Nb9PVyMoR0lIzXEMtkZntXbBfpyXrtLB8U+dkgYrc=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-sockets";
+    tag = "release-${version}";
+    sha256 = "sha256-l5W/mLYVcTRYKLCzM8MQW7nad+Gq0fy2XKQmdH8GG/Y=";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
   };
 
   meta = {

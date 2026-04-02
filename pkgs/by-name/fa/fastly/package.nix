@@ -10,15 +10,15 @@
   viceroy,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fastly";
-  version = "13.3.0";
+  version = "14.2.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-DQPZUp5UYx8GSOC8SeERwmOJ6N1ZH23YHI+Na5BWLFU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Pz1lK/A4PK41SNZgXLh041a8KQMH8zDuQevWQReffYU=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -35,7 +35,7 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
-  vendorHash = "sha256-wMpMV2jTr4zc8uOmI5itLJLvtbfeSOI8XggZKeEJ/+s=";
+  vendorHash = "sha256-/pLaVfP/qnfcGNClhkhYB3Au8tEz1Tiw2HM7IiKfhPs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -47,7 +47,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${version}"
+    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${finalAttrs.version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
     "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
     "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
@@ -79,11 +79,11 @@ buildGoModule rec {
   meta = {
     description = "Command line tool for interacting with the Fastly API";
     homepage = "https://github.com/fastly/cli";
-    changelog = "https://github.com/fastly/cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastly/cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
     ];
     mainProgram = "fastly";
   };
-}
+})

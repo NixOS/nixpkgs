@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aioquic,
-  cacert,
   h11,
   h2,
   httpx,
@@ -12,7 +10,7 @@
   trio,
   uvloop,
   wsproto,
-  poetry-core,
+  pdm-backend,
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
@@ -20,23 +18,21 @@
 
 buildPythonPackage rec {
   pname = "hypercorn";
-  version = "0.17.3";
+  version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "Hypercorn";
     tag = version;
-    hash = "sha256-AtSMURz1rOr6VTQ7L2EQ4XZeKVEGTPXTbs3u7IhnZo8";
+    hash = "sha256-RNurpDq5Z3N9Wv9Hq/l6A3yKUriCCKx9BrbrWGwBsUk=";
   };
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     h11

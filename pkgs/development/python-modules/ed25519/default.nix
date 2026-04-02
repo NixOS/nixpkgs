@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   versioneer,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ed25519";
   version = "1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "warner";

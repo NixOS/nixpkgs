@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   desktop-file-utils,
   gettext,
   glib,
@@ -22,17 +22,16 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "1.99.0";
+  version = "50.0.1";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
-    tag = "v${version}";
-    hash = "sha256-JKPAY6vfoU0FIXW8BDjUimeDkqp6K1/DG81wNWBGLbY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9OxksblhdgGZYgr+lKEt0Kwpoa360ODgdbZrYpiOwkI=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +60,9 @@ python3.pkgs.buildPythonApplication rec {
     brotli
     colorthief
     dateparser
+    ebooklib
     emoji
+    jxlpy
     keyring
     lxml
     natsort
@@ -106,11 +107,11 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "komikku";
     homepage = "https://apps.gnome.org/Komikku/";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       chuangzhu
       Gliczy
     ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

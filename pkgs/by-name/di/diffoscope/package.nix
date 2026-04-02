@@ -108,12 +108,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "309";
+  version = "315";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-VB7CBvHKIJWHanuDnoobSnvGcdxMFTUGLxRZgsNoLbQ=";
+    hash = "sha256-Zw2goFgD47vZ/AQ1TEXqdlWxkY9p6digduAp78EHtnc=";
   };
 
   outputs = [
@@ -211,11 +211,9 @@ python.pkgs.buildPythonApplication rec {
     ])
     ++ lib.optionals enableBloat (
       [
-        aapt
         abootimg
         apksigcopier
         apksigner
-        apktool
         cbfstool
         colord
         enjarify
@@ -259,6 +257,12 @@ python.pkgs.buildPythonApplication rec {
       ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
       ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
+      # Causes an eval failure
+      # See https://github.com/NixOS/nixpkgs/issues/463873
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) [
+        aapt
+        apktool
+      ]
     )
   );
 
@@ -339,7 +343,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      dezgeg
       danielfullmer
       raitobezarius
     ];

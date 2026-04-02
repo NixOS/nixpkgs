@@ -13,8 +13,8 @@
   gtk-layer-shell,
   glib,
   libnotify,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libxfce4ui,
   libxfce4util,
   libxklavier,
@@ -26,7 +26,7 @@
   wlr-protocols,
   xapp,
   xfconf,
-  xf86inputlibinput,
+  xf86-input-libinput,
   colord,
   withColord ? true,
   gitUpdater,
@@ -34,14 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-settings";
-  version = "4.20.3";
+  version = "4.20.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-settings";
     tag = "xfce4-settings-${finalAttrs.version}";
-    hash = "sha256-dQyALVooaie2vkETghddKM4HqAZQmx3E9UJ+ChKtydc=";
+    hash = "sha256-EAiu29wctXg0EjdFVJOl+0nh1A0l2E44v+i/o5l/PQ8=";
   };
 
   nativeBuildInputs = [
@@ -59,14 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gtk-layer-shell
     libnotify
-    libX11
-    libXext
+    libx11
+    libxext
     libxfce4ui
     libxfce4util
     libxklavier
     wlr-protocols
     xapp # org.x.apps.portal
-    xf86inputlibinput
+    xf86-input-libinput
     xfconf
   ]
   ++ lib.optionals withUpower [ upower ]

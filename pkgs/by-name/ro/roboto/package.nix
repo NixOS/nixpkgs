@@ -2,25 +2,22 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "roboto";
-  version = "3.014";
+  version = "3.015";
 
   src = fetchzip {
     url = "https://github.com/googlefonts/roboto-3-classic/releases/download/v${finalAttrs.version}/Roboto_v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-JP30nhh0CcQMqWgvA9Tmu6hCD1F8bx4XMbX0F6T6jUk=";
+    hash = "sha256-vfn4KmOHHSVYT9XK+mDz5f4s8LnkCAY/IyTa3Rmir2k=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 unhinted/static/*.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  sourceRoot = "${finalAttrs.src.name}/unhinted/static";
 
   meta = {
     homepage = "https://github.com/googlefonts/roboto-3-classic";

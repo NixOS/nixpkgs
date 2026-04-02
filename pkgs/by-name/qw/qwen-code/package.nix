@@ -14,16 +14,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.4.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B7dL0pWSCPwPKwwTHycgC3/qHB66AUWZc62sen7U/7c=";
+    hash = "sha256-8qSjr/VsJX6p6/sBRr9jlu2jjPhr1ZpdPe9WZofL/ug=";
   };
 
-  npmDepsHash = "sha256-SPb+TSi4MCiAr9ruS1Idg3KfTbX6gtMK7f/+vdnabt8=";
+  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-nmydorBc1r7OA/oXvetKw7ivyeqSppScINFXEpPYES0=";
 
   # npm 11 incompatible with fetchNpmDeps
   # https://github.com/NixOS/nixpkgs/issues/474535
@@ -74,6 +75,9 @@ buildNpmPackage (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    # Build web-templates package first (required by main bundle)
+    npm run build --workspace=@qwen-code/web-templates
 
     npm run generate
     npm run bundle

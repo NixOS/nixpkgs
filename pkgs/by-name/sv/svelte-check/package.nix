@@ -78,6 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelte-check";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

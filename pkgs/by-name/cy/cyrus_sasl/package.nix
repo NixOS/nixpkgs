@@ -5,6 +5,7 @@
   fetchpatch,
   openssl,
   openldap,
+  libmysqlclient,
   libkrb5,
   db,
   gettext,
@@ -13,6 +14,7 @@
   fixDarwinDylibNames,
   autoreconfHook,
   enableLdap ? false,
+  enableMySQL ? false,
   buildPackages,
   pruneLibtoolFiles,
   nixosTests,
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     libxcrypt
   ]
   ++ lib.optional enableLdap openldap
+  ++ lib.optional enableMySQL libmysqlclient
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform pam) pam;
 
   configureFlags = [
@@ -78,10 +81,19 @@ stdenv.mkDerivation rec {
     "--enable-shared"
   ]
   ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
+  ++ lib.optionals enableMySQL [
+    # https://github.com/cyrusimap/cyrus-sasl/blob/ac0c278817a082c625c496ec812318c019e0b96f/docsrc/sasl/installation.rst#build-configuration
+    # https://gitlab.alpinelinux.org/alpine/aports/-/blob/fa9312c830bfabbf3280248682650245a5b37205/main/cyrus-sasl/APKBUILD#L82-86
+    "--enable-sql"
+    "--with-mysql=${libmysqlclient}"
+    "--without-pgsql"
+  ]
   ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
     "--disable-sample"
     "CFLAGS=-DTIME_WITH_SYS_TIME"
   ];
+
+  makeFlags = lib.optionals enableMySQL [ "CFLAGS=-I${libmysqlclient.dev}/include/mysql" ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";

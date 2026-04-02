@@ -11,7 +11,7 @@
   expat,
   sqlite,
   openssl,
-  unixODBC,
+  unixodbc,
   libmysqlclient,
   writableTmpDirAsHomeHook,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    unixODBC
+    unixodbc
     libmysqlclient
   ];
 
@@ -52,8 +52,10 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  MYSQL_DIR = libmysqlclient;
-  MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
+  env = {
+    MYSQL_DIR = libmysqlclient;
+    MYSQL_INCLUDE_DIR = "${env.MYSQL_DIR}/include/mysql";
+  };
 
   cmakeFlags =
     let

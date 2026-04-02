@@ -19,14 +19,14 @@ let
     hash = "sha256-HEZAyUyjWs0N4bRLbW3tHDHCiTBtdCbgY23JsiYsZCA=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvas-smb";
   version = "22.5.10";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-smb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H0nG+0DPBQmXVQDVLTEhxhoFeU9ryU5N6qz64+PxV+g=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wmic";
     platforms = lib.platforms.linux;
   };
-}
+})

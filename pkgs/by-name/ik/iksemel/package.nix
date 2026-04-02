@@ -9,14 +9,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iksemel";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "timothytylee";
     repo = "iksemel-1.4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1xv302p344hnpxqcgs3z6wwxhrik39ckgfw5cjyrw0dkf316z9yh";
   };
 
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://github.com/timothytylee/iksemel-1.4";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ disassembler ];
     platforms = lib.platforms.linux;
   };
-}
+})

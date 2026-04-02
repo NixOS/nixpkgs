@@ -10,7 +10,7 @@
   # arguments from default.nix
   lang,
   meta,
-  name,
+  pname,
   src,
   version,
   # dependencies
@@ -41,11 +41,26 @@
   openssl,
   pciutils,
   tre,
-  unixODBC,
-  xcbutilimage,
-  xcbutilkeysyms,
+  unixodbc,
+  libxcb-image,
+  libxcb-keysyms,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
   # options
   cudaSupport,
@@ -74,7 +89,7 @@ in
 stdenv.mkDerivation {
   inherit
     meta
-    name
+    pname
     src
     version
     ;
@@ -111,29 +126,27 @@ stdenv.mkDerivation {
     openssl
     pciutils
     tre
-    unixODBC
-    xcbutilimage
-    xcbutilkeysyms
+    unixodbc
+    libxcb-image
+    libxcb-keysyms
     xkeyboard_config
-  ]
-  ++ (with xorg; [
-    libICE
-    libSM
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXmu
-    libXrandr
-    libXrender
-    libXtst
+    libice
+    libsm
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxmu
+    libxrandr
+    libxrender
+    libxtst
     libxcb
-  ])
+  ]
   ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [

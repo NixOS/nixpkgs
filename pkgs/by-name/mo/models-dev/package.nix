@@ -9,12 +9,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2026-01-11";
+  version = "0-unstable-2026-03-26";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "5771ec68d0d780820d7bdf94671db72bb78a29e2";
-    hash = "sha256-+S7TqNGSS4cZ3b8NEt+2o34cw8sCTXcHlL3d5vsuOWU=";
+    rev = "62015086c67bd76ebeb29cecb468834c9e17b938";
+    hash = "sha256-fIqUY3usE8pf10Q0SmLUZ9VB6TXeyiXcX4j97NRS4u4=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -36,15 +36,12 @@ let
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-       bun install \
-         --filter=./packages/web \
-         --force \
-         --frozen-lockfile \
-         --ignore-scripts \
-         --no-progress \
-         --production
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
 
       runHook postBuild
     '';
@@ -61,7 +58,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-E6QV2ruzEmglBZaQMKtAdKdVpxOiwDX7bMQM8jRsiqs=";
+    outputHash = "sha256-E78Hb4ByMfYL/IZG911dX6XRRKNJ0UbQUWMSv0dclFo=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -112,7 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/anomalyco/models-dev";
+    homepage = "https://github.com/anomalyco/models.dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

@@ -4,27 +4,25 @@
   buildPythonPackage,
   hatchling,
   pyqt6,
-  poppler-qt5,
   pycups,
 }:
 
 buildPythonPackage rec {
   pname = "qpageview";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "qpageview";
     tag = "v${version}";
-    hash = "sha256-bUZI3ML3MN+0KLQxrPfQOC7lxdpvl3sxJ4zi0phsiCw=";
+    hash = "sha256-cKidVtsqNXGuWNTTgvVOP3Wyf6M+Xctwaq7pOZb8eeo=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     pyqt6
-    poppler-qt5
     pycups
   ];
 
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qpageview" ];
 
   meta = {
-    description = "Page-based viewer widget for Qt5/PyQt5";
+    description = "Page-based viewer widget for Qt6/PyQt6";
     homepage = "https://github.com/frescobaldi/qpageview";
     changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;

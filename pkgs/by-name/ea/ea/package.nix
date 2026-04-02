@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ea";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "dduan";
     repo = "ea";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VXSSe5d7VO3LfjumzN9a7rrKRedOtOzTdLVQWgV1ED8=";
   };
 
@@ -45,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dduan/ea";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ deejayem ];
+    mainProgram = "ea";
   };
-}
+})

@@ -2,14 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  autoreconfHook,
   buildPackages,
   libiconv,
   perl,
-  texinfo,
   xz,
   binlore,
-  coreutils,
   gmpSupport ? true,
   gmp,
   aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
@@ -19,6 +16,7 @@
   selinuxSupport ? false,
   libselinux,
   libsepol,
+  texinfo,
   # No openssl in default version, so openssl-induced rebuilds aren't too big.
   # It makes *sum functions significantly faster.
   minimal ? true,
@@ -46,26 +44,21 @@ let
     ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.8";
+  version = "9.10"; # TODO: remove texinfo dep and the patches on next release.
 
   src = fetchurl {
-    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
+    url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FlNamt8LEANzZOLWEqrT2fTso6NElJztdNEvr0vVHSU=";
   };
 
   patches = [
-    # Extremely bad bug where `tail` prints fewer lines than it should.
-    # https://github.com/coreutils/coreutils/commit/914972e80dbf82aac9ffe3ff1f67f1028e1a788b
-    ./tail.patch
-    # Fix performance regression in cp.
-    # https://github.com/coreutils/coreutils/commit/231cc20195294c9774ab68f523dd06059f4b0a5c
-    # https://github.com/coreutils/coreutils/commit/64b8fdb5b4767e0f833486507c3eae46ed1b40f8
-    # https://github.com/coreutils/coreutils/commit/2c5754649e08a664f3d43f7bc1df08f498bc1554
-    ./cp-1.patch
-    ./cp-2.patch
-    ./cp-3.patch
+    ./fix-kill-doctest.patch
+    # See https://github.com/NixOS/nixpkgs/pull/487081#issuecomment-3953615275,
+    # https://github.com/NixOS/nixpkgs/issues/495290,
+    # and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=80477
+    ./tests-notty-sighup.patch
   ];
 
   postPatch = ''
@@ -147,6 +140,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl
+    texinfo
     xz.bin
   ];
 
@@ -167,6 +161,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-packager=https://nixos.org"
+    "--with-selinux"
+    "--enable-install-program=kill,uptime"
   ]
   ++ optional (singleBinary != false) (
     "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
@@ -203,23 +199,26 @@ stdenv.mkDerivation rec {
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
     && !stdenv.hostPlatform.isAarch32;
 
-  # Prevents attempts of running 'help2man' on cross-built binaries.
-  PERL = if isCross then "missing" else null;
-
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
-  FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
-  env.NIX_CFLAGS_COMPILE = toString (
-    [ ]
-    # Work around a bogus warning in conjunction with musl.
-    ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
-    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
-    # gnulib does not consider Clang-specific warnings to be bugs:
-    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
-    # TODO: find out why these are happening on cygwin, which is gcc
-    ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
-  );
+  env = {
+    NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+    NIX_CFLAGS_COMPILE = toString (
+      [ ]
+      # Work around a bogus warning in conjunction with musl.
+      ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
+      ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+      # gnulib does not consider Clang-specific warnings to be bugs:
+      # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+      # TODO: find out why these are happening on cygwin, which is gcc
+      ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
+    );
+  }
+  // optionalAttrs isCross {
+    # Prevents attempts of running 'help2man' on cross-built binaries.
+    PERL = "missing";
+  };
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -245,7 +244,7 @@ stdenv.mkDerivation rec {
       #
       # binlore only spots exec in runcon on some platforms (i.e., not
       # darwin; see comment on inverse case below)
-      binlore.out = binlore.synthesize coreutils ''
+      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
         execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
         execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
       '';
@@ -255,7 +254,7 @@ stdenv.mkDerivation rec {
       # darwin; I have a note that the behavior may need selinux?).
       # hard-set it so people working on macOS don't miss cases of
       # runcon until ofBorg fails.
-      binlore.out = binlore.synthesize coreutils ''
+      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
         execer can bin/runcon
       '';
     };
@@ -273,7 +272,9 @@ stdenv.mkDerivation rec {
       das_j
       mdaniels5757
     ];
+    teams = [ lib.teams.security-review ];
     platforms = with lib.platforms; unix ++ windows;
     priority = 10;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

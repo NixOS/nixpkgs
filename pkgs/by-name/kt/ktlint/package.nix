@@ -7,12 +7,12 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktlint";
   version = "1.8.0";
 
   src = fetchurl {
-    url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
+    url = "https://github.com/pinterest/ktlint/releases/download/${finalAttrs.version}/ktlint";
     sha256 = "sha256-o/1iAgfVxA2myniblef4I8VOhUt/ref2E+kQlqNwbXU=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "ktlint";
   };
-}
+})

@@ -33,7 +33,7 @@
   python3Packages,
   readline,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
   zstd,
 }:
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     proj
     readline
     sqlite
-    wxGTK32
+    wxwidgets_3_2
     zlib
     zstd
   ]

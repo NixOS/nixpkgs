@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.29.2";
+  version = "1.30.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WiiezZ/2FgRte4BStIGHQhb5bHtfldi3TaIRG0xFtW0=";
+    hash = "sha256-Rk1H07UqLr/GLIT4VW4eC3SezYPAZPxlC4TTpZm/F9Q=";
   };
 
-  vendorHash = "sha256-CdzcOE/J0gqUbq7BXPpLFyNPNbFTziR5j9GPdYPzv50=";
+  vendorHash = "sha256-YJbovD2woypOiYfn9axO8lshIg/6gO9Sa8a3DIt8QFg=";
 
   overrideModAttrs = old: {
     # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.

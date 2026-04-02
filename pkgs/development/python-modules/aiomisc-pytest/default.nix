@@ -5,15 +5,12 @@
   fetchPypi,
   poetry-core,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc-pytest";
   version = "1.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "aiomisc_pytest";

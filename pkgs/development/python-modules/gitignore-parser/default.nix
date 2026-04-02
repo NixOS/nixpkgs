@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   unittestCheckHook,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "gitignore-parser";
   version = "0.1.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mherrmann";

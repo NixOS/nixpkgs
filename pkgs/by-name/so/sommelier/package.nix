@@ -11,7 +11,7 @@
   libxkbcommon,
   libgbm,
   pixman,
-  xorg,
+  libxcb,
   wayland,
   gtest,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     libgbm
     pixman
     wayland
-    xorg.libxcb
+    libxcb
   ];
 
   preConfigure = ''

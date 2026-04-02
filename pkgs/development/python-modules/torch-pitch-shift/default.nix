@@ -7,15 +7,12 @@
   primepy,
   torch,
   torchaudio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "torch-pitch-shift";
   version = "1.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KentoNishi";

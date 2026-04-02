@@ -47,24 +47,28 @@
   # tests
   ipython,
   pytest-datadir,
+  pytest-timeout,
   pytestCheckHook,
   wikipedia-api,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "smolagents";
-  version = "1.21.3";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X9tJfNxF2icULyma0dWIQEllY9oKaCB+MQ4JJTdzhz4=";
+    hash = "sha256-I+I7XVnYGKuATP4MIN99vx6qvDhIwcn2x25GhDIg0u0=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "huggingface-hub"
+  ];
   dependencies = [
     huggingface-hub
     jinja2
@@ -77,6 +81,10 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = lib.fix (self: {
     audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
+    # blaxel = [
+    #   blaxel
+    #   websocket-client
+    # ];
     docker = [
       docker
       websocket-client
@@ -91,6 +99,10 @@ buildPythonPackage (finalAttrs: {
       mcp
       mcpadapt
     ];
+    # modal = [
+    #   modal
+    #   websocket-client
+    # ];
     # mlx-lm = [ mlx-lm ];
     openai = [ openai ];
     # telemetry = [
@@ -129,6 +141,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     wikipedia-api
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ pytest-timeout ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "smolagents" ];
@@ -136,18 +149,23 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # ImportError: cannot import name 'require_soundfile' from 'transformers.testing_utils'
     "tests/test_types.py"
+
+    # Requires unpackaged 'helium'
+    "tests/test_vision_web_browser.py"
   ];
 
   disabledTests = [
     # Missing dependencies
+    "TestBlaxelExecutorUnit"
+    "TestModalExecutorUnit"
+    "mcp"
     "test_cleanup"
     "test_ddgs_with_kwargs"
     "test_e2b_executor_instantiation"
     "test_flatten_messages_as_text_for_all_models"
-    "mcp"
     "test_import_smolagents_without_extras"
-    "test_vision_web_browser_main"
     "test_multiple_servers"
+    "test_vision_web_browser_main"
     # Tests require network access
     "test_agent_type_output"
     "test_call_different_providers_without_key"
@@ -173,6 +191,18 @@ buildPythonPackage (finalAttrs: {
     "test_init_agent_with_different_toolsets"
     "test_multiagents_save"
     "test_new_instance"
+
+    # Flaky: assert 0.9858949184417725 <= 0.73
+    "test_retry_on_rate_limit_error"
+
+    # Requires optional "blaxel" dependencies
+    "test_blaxel_executor_instantiation_with_blaxel_sdk"
+    "test_blaxel_executor_custom_parameters"
+    "test_blaxel_executor_cleanup"
+    # Requires optional "modal" dependencies
+    "test_sandbox_lifecycle"
+    # TypeError: 'function' object is not subscriptable
+    "test_stream_to_gradio_memory_step"
   ];
 
   __darwinAllowLocalNetworking = true;

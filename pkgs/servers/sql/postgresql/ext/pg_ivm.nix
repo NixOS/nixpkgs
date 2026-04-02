@@ -20,7 +20,7 @@ postgresqlBuildExtension (finalAttrs: {
     description = "Materialized views with IVM (Incremental View Maintenance) for PostgreSQL";
     homepage = "https://github.com/sraoss/pg_ivm";
     changelog = "https://github.com/sraoss/pg_ivm/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };

@@ -6,13 +6,10 @@
   pkg-config,
   makeWrapper,
   cmake,
-  meson,
-  ninja,
   aquamarine,
   binutils,
   cairo,
   epoll-shim,
-  git,
   glaze,
   hyprcursor,
   hyprgraphics,
@@ -39,17 +36,16 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxcb-wm,
+  libxcb-errors,
+  libxdmcp,
+  libxcursor,
+  libxcb,
   xwayland,
   debug ? false,
   enableXWayland ? true,
   withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
-  # deprecated flags
-  nvidiaPatches ? false,
-  hidpiXWayland ? false,
-  enableNvidiaPatches ? false,
-  legacyRenderer ? false,
 }:
 let
   inherit (builtins)
@@ -82,39 +78,36 @@ let
 
   customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
 in
-assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
-assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
-assert assertMsg (!hidpiXWayland)
-  "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
-assert assertMsg (
-  !legacyRenderer
-) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
-
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.53.1";
+  version = "0.54.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hzhaKo5Cx/hr0QWXnpbF59TzF1GwVPCdT70Zbcxgyg4=";
+    hash = "sha256-e+mVjQL3V+xoaH1c3YqAzRq9wwiuEYQTOgZlK0LwfYA=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
-    sed -i "s#/usr#$out#" src/render/OpenGL.cpp
+    substituteInPlace src/render/OpenGL.cpp \
+      --replace-fail /usr $out
 
     # Remove extra @PREFIX@ to fix pkg-config paths
-    sed -i "s#@PREFIX@/##g" hyprland.pc.in
-    sed -i "s#@PREFIX@/##g" example/hyprland.desktop.in
+    substituteInPlace hyprland.pc.in \
+      --replace-fail  "@PREFIX@/" ""
+    substituteInPlace example/hyprland.desktop.in \
+      --replace-fail  "@PREFIX@/" ""
   '';
 
   # variables used by CMake, and shown in `hyprctl version`
   env = {
     GIT_BRANCH = info.branch;
-    GIT_COMMITS = info.commit_hash;
+    # The amount of commits altogether. Not really worth getting that info from
+    # GitHub's API, so we set a dummy value.
+    GIT_COMMITS = "-1";
     GIT_COMMIT_DATE = info.date;
     GIT_DIRTY = "clean";
     GIT_COMMIT_HASH = info.commit_hash;
@@ -132,9 +125,6 @@ customStdenv.mkDerivation (finalAttrs: {
     hyprwire
     makeWrapper
     cmake
-    # meson + ninja are used to build the hyprland-protocols submodule
-    meson
-    ninja
     pkg-config
     wayland-scanner
     # for udis86
@@ -152,17 +142,17 @@ customStdenv.mkDerivation (finalAttrs: {
       aquamarine
       cairo
       glaze
-      git
       hyprcursor.dev
       hyprgraphics
       hyprlang
       hyprutils
       libGL
       libdrm
+      libgbm
       libinput
       libuuid
+      libxcursor
       libxkbcommon
-      libgbm
       muparser
       pango
       pciutils
@@ -170,15 +160,14 @@ customStdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
-      xorg.libXcursor
     ]
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
     (optionals enableXWayland [
-      xorg.libxcb
-      xorg.libXdmcp
-      xorg.xcbutilerrors
-      xorg.xcbutilwm
+      libxcb
+      libxcb-errors
+      libxcb-wm
+      libxdmcp
       xwayland
     ])
     (optionals withSystemd [ systemd ])
@@ -195,7 +184,6 @@ customStdenv.mkDerivation (finalAttrs: {
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
     "NO_UWSM" = !withSystemd;
-    "NO_HYPRPM" = true;
     "TRACY_ENABLE" = false;
   };
 

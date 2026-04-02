@@ -7,26 +7,28 @@
   fetchPypi,
   knack,
   setuptools-scm,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-azure";
   version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UsvHDVQUtQIZs9sKFvaK0l2rp24/Igrr5OSbPGSYriA=";
   };
 
   # Prevent circular dependency
   pythonRemoveDeps = [ "dvc" ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     adlfs
     azure-identity
     dvc-objects
@@ -43,8 +45,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Azure plugin for dvc";
-    homepage = "https://pypi.org/project/dvc-azure/${version}";
-    changelog = "https://github.com/iterative/dvc-azure/releases/tag/${version}";
+    homepage = "https://pypi.org/project/dvc-azure/";
+    changelog = "https://github.com/iterative/dvc-azure/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

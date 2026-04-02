@@ -11,7 +11,7 @@
 
   # Automatically login as nixos.
   services.displayManager = {
-    sddm.enable = true;
+    plasma-login-manager.enable = true;
     autoLogin = {
       enable = true;
       user = "nixos";
@@ -19,9 +19,8 @@
   };
 
   environment.systemPackages = [
-    # FIXME: using Qt5 builds of Maliit as upstream has not ported to Qt6 yet
-    pkgs.maliit-framework
-    pkgs.maliit-keyboard
+    # provide onscreen keyboard
+    pkgs.kdePackages.plasma-keyboard
   ];
 
   environment.plasma6.excludePackages = [

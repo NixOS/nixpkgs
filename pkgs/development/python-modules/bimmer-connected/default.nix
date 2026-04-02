@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pbr,
   httpx,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.17.3";
+  version = "0.17.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     tag = version;
-    hash = "sha256-XKKMOKvZO6CrAioflyhTWZrNJv1+5yqYPFL4Al8YPY8=";
+    hash = "sha256-wNrUZepfkEFPvU3HWop9JAjCHlK3v+xTuAUIZ0P4YtA=";
   };
 
   build-system = [
@@ -36,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   dependencies = [
     httpx
@@ -79,5 +76,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+    # https://github.com/bimmerconnected/bimmer_connected#library-not-working-anymore-due-to-changes-at-bmw-side
+    broken = true;
   };
 }

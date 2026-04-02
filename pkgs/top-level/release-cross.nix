@@ -205,11 +205,12 @@ in
     }
   );
 
-  # Test some cross builds on 32 bit mingw-w64
-  crossMingw32 = mapTestOnCross systems.examples.mingw32 windowsCommon;
-
-  # Test some cross builds on 64 bit mingw-w64
-  crossMingwW64 = mapTestOnCross systems.examples.mingwW64 windowsCommon;
+  # Test some cross builds on various mingw-w64 platforms
+  crossMingw32 = mapTestOnCross systems.examples.mingw-msvcrt-i686 windowsCommon;
+  cross-mingw-msvcrt-x86_64 = mapTestOnCross systems.examples.mingw-msvcrt-x86_64 windowsCommon;
+  cross-mingw-ucrt-x86_64 = mapTestOnCross systems.examples.mingw-ucrt-x86_64 windowsCommon;
+  cross-mingw-ucrt-x86_64-llvm = mapTestOnCross systems.examples.mingw-ucrt-x86_64-llvm windowsCommon;
+  cross-mingw-ucrt-aarch64 = mapTestOnCross systems.examples.mingw-ucrt-aarch64 windowsCommon;
 
   x86_64-cygwin = mapTestOnCross systems.examples.x86_64-cygwin cygwinCommon;
 
@@ -299,11 +300,15 @@ in
     let
       linuxTools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       freebsdTools = import ../stdenv/freebsd/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+      cygwinTools = import ../stdenv/cygwin/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       linuxMeta = {
-        maintainers = [ maintainers.dezgeg ];
+        maintainers = [ ];
       };
       freebsdMeta = {
         maintainers = [ maintainers.rhelmot ];
+      };
+      cygwinMeta = {
+        maintainers = [ maintainers.corngood ];
       };
       mkBootstrapToolsJob =
         meta: drv:
@@ -330,8 +335,11 @@ in
       freebsd = mapAttrsRecursiveCond (as: !isDerivation as) (
         name: mkBootstrapToolsJob freebsdMeta
       ) freebsdTools;
+      cygwin = mapAttrsRecursiveCond (as: !isDerivation as) (
+        name: mkBootstrapToolsJob cygwinMeta
+      ) cygwinTools;
     in
-    linux // freebsd;
+    linux // freebsd // cygwin;
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;

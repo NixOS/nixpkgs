@@ -44,7 +44,7 @@ let
 in
 # Mono is required to compile plugin at runtime, after loading.
 buildEnv {
-  name = drv.name;
+  inherit (drv) pname version;
   paths = [
     mono
     drv

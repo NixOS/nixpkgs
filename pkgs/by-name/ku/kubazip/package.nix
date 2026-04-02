@@ -7,14 +7,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kubazip";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "kuba--";
     repo = "zip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wNkIYuwwXo7v3vNaOnRZt1tcd0RGjDvCUqDGdvJzVdo=";
+    hash = "sha256-KZy3d1eQQVssZ2aQToOZ+A//bdyl9Wt0krfMM7ibc5o=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
+  '';
 
   outputs = [
     "out"

@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "arocc";
   inherit version src;
 
-  nativeBuildInputs = [ zig.hook ];
+  nativeBuildInputs = [ zig ];
 
   passthru = {
     inherit zig;

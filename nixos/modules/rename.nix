@@ -76,6 +76,10 @@ in
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
+      "ecryptfs"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule
@@ -105,6 +109,11 @@ in
       consider using `programs.pay-respects` instead.
     '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "unity3d"
+      "enable"
+    ] "The corresponding package was removed from nixpkgs in 2022.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
@@ -139,6 +148,10 @@ in
       "cgmanager"
       "enable"
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "charybdis"
+    ] "The charybdis module has been removed, the project was archived in 2021.")
     (mkRemovedOptionModule [
       "services"
       "chatgpt-retrieval-plugin"
@@ -222,6 +235,9 @@ in
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "light" ]
+      "The corresponding package was removed from nixpkgs due to being unmaintained upstream. `brightnessctl` and `hardware.acpilight` offer replacements."
+    )
     (mkRemovedOptionModule [ "services" "lshd" ]
       "The corresponding package was removed from nixpkgs as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decades."
     )
@@ -303,6 +319,9 @@ in
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
     '')
+    (mkRemovedOptionModule [ "services" "statsd" ] ''
+      The statsd module was removed because the packages it uses have been removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
@@ -312,6 +331,10 @@ in
     (mkRemovedOptionModule [ "services" "unifi-video" ]
       "The unifi-video package and the corresponding module have been removed as the software has been unsupported since 2021 and requires a MongoDB version that has reached end of life."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "uptime"
+    ] "The package for services.uptime has been removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
@@ -429,14 +452,14 @@ in
     (mkRemovedOptionModule [ "services" "gateone" ] ''
       The gateone module was removed since the package was removed alongside much other obsolete python 2.
     '')
+    (mkRemovedOptionModule [ "services" "opengfw" ] ''
+      The opengfw package and services.opengfw module have been removed since the upstream
+      GitHub repository and website have been shut down.
+    '')
     (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
       LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-    '')
-    (mkRemovedOptionModule [ "services" "invoiceplane" ] ''
-      services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
-      and removed from nixpkgs.
     '')
     (mkRemovedOptionModule [ "services" "filesender" ] ''
       services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
@@ -448,6 +471,9 @@ in
     (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
+    (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
+      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
+    '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises
       as an hardware RNG, as it will automatically run the krngd task
@@ -456,6 +482,12 @@ in
     '')
     (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
       virtualisation.multipass has been removed since it was unmaintained in nixpkgs
+    '')
+    (mkRemovedOptionModule [ "programs" "spacefm" ] ''
+      spacefm has been removed since it was unmaintained upstream.
+    '')
+    (mkRemovedOptionModule [ "services" "pyload" ] ''
+      services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
     '')
     # Do NOT add any option renames here, see top of the file
   ];

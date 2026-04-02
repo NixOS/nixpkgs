@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
@@ -122,6 +121,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # depends on Pydantic v1 notations, will not load
     "tests/unit_tests/document_loaders/test_gitbook.py"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    # https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+    "tests/unit_tests/document_loaders/test_hugging_face.py"
+    "tests/unit_tests/indexes/test_sql_record_manager.py"
   ];
 
   passthru.updateScript = gitUpdater {

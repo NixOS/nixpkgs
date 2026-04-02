@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.12.5";
+  version = "2026.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-PCUxnX/Gtlfo8puayBBJt7T98hQT1/iZtlDyrbDwxog=";
+    hash = "sha256-0v9K2zXIfp5Ka/DJarnVB4kmhgXh95Yvzm8Ts72eCZE=";
   };
 
   patches = [
@@ -68,8 +68,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.46" "wheel"
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.47" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -95,7 +95,10 @@ python.pkgs.buildPythonApplication rec {
     pyparsing
     pyserial
     pyyaml
+    requests
+    resvg-py
     ruamel-yaml
+    smpclient
     tornado
     tzdata
     tzlocal
@@ -170,6 +173,7 @@ python.pkgs.buildPythonApplication rec {
     # tries to use esptool, which is wrapped in an fhsenv
     "test_upload_using_esptool_path_conversion"
     "test_upload_using_esptool_with_file_path"
+    "test_upload_using_esptool_passes_crystal_callback"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
     # Expects a full git clone
@@ -193,6 +197,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      picnoir
       thanegill
     ];
     mainProgram = "esphome";

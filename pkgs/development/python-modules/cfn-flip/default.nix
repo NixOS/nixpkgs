@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   six,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "cfn-flip";
   version = "1.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "awslabs";

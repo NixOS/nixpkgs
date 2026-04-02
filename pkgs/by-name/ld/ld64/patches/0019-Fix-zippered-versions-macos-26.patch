@@ -1,0 +1,13 @@
+diff --git a/src/ld/Options.cpp b/src/ld/Options.cpp
+--- a/src/ld/Options.cpp
++++ b/src/ld/Options.cpp
+@@ -4882,7 +4885,8 @@ void Options::reconfigureDefaults()
+ 		uint32_t iOSMacOSMajorVersion = (iOSMacVersion >> 16) & 0xFFFF;
+ 
+ 		// macOS 11 -> iOSMac 14, and so on
+-		uint32_t newMajorVersion = macOSMajorVersion + 3;
++		uint32_t newMajorVersion = macOSMajorVersion < 26 ? macOSMajorVersion + 3 : macOSMajorVersion;
++		// rdar://154107557 (ld64 fix handling of zippered versions for macOS 26+)
+ 		if ( newMajorVersion > iOSMacOSMajorVersion ) {
+ 			uint32_t newVersion = newMajorVersion << 16;
+ 			std::string oldVersionString = getVersionString32(iOSMacVersion);

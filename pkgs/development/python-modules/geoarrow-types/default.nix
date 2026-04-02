@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyarrow,
   setuptools-scm,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "geoarrow-types";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";

@@ -5,11 +5,11 @@
   pkg-config,
   alsa-lib,
   freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ];
 
   enableParallelBuilding = true;

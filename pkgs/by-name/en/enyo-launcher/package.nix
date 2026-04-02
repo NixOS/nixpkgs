@@ -5,14 +5,14 @@
   cmake,
   qt6,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enyo-launcher";
   version = "2.0.7";
 
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-launcher";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Ig1b+JylRlxhl5k5ys9SOGMYw3eUxXyoVXt3YNeWNqI=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.usrfriendly ];
   };
-}
+})

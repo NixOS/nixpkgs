@@ -24,6 +24,11 @@ stdenv.mkDerivation {
     hash = "sha256-IaERXT648v2nTW89V6gpf7Dt95GJd92QmC50de+Knq8=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   cmakeFlags = [
     "-DSUBVERSION_INSTALL_PATH=${lib.getDev subversion}"
   ];

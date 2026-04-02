@@ -8,14 +8,14 @@
   qt6Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qastools";
   version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sebholt";
     repo = "qastools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mJjhM1y50f44kvxMidM7uqlkkXx1sbJC21vIMEDenoU=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

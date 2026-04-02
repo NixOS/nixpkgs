@@ -12,14 +12,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pylyzer";
   version = "0.0.82";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cSMHd3j3xslSR/v4KZ5LUwxPPR/b+okwrT54gUyLXXw=";
   };
 
@@ -58,9 +58,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast static code analyzer & language server for Python";
     homepage = "https://github.com/mtshiba/pylyzer";
-    changelog = "https://github.com/mtshiba/pylyzer/releases/tag/v${version}";
+    changelog = "https://github.com/mtshiba/pylyzer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "pylyzer";
   };
-}
+})

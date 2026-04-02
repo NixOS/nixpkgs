@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   buildDunePackage,
   repr,
   ppx_repr,
@@ -26,6 +27,15 @@ buildDunePackage rec {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
     hash = "sha256-k4iDUJik7UTuztBw7YaFXASd8SqYMR1JgLm3JOyriGA=";
   };
+
+  patches = [
+    # Compatibility with cmdliner 2.0
+    (fetchpatch {
+      url = "https://github.com/mirage/index/commit/aa7aa4734213f74a246f66719a1085b522f431d4.patch";
+      hash = "sha256-Vc4r/I3TeIy/D4FcYzj4vRrH87vI2JRagqAXhD9BUxc=";
+      includes = [ "*.ml" ];
+    })
+  ];
 
   # Compatibility with logs 0.8.0
   postPatch = ''

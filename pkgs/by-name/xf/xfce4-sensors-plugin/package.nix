@@ -9,8 +9,8 @@
   wrapGAppsHook3,
   glib,
   gtk3,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libxfce4ui,
   libxfce4util,
   xfce4-panel,
@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libX11
-    libXext
+    libx11
+    libxext
     libxfce4ui
     libxfce4util
     xfce4-panel

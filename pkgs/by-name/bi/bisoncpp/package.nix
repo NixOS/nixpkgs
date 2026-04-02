@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   version = "6.04.00";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bisoncpp";
     rev = "6.04.00";

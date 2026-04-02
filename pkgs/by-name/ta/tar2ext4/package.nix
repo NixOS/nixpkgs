@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tar2ext4";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "hcsshim";
-    rev = "v${version}";
-    sha256 = "sha256-/ImyicXRBGclnUEpqygNYhknFYJmRqBqKkz/gNxVLWQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-8FPEGQ6DBYYnT6mIjYmSTRfHMloS42oB8xPU5wmFLwI=";
   };
 
-  sourceRoot = "${src.name}/cmd/tar2ext4";
+  sourceRoot = "${finalAttrs.src.name}/cmd/tar2ext4";
   vendorHash = null;
 
   meta = {
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "tar2ext4";
   };
-}
+})

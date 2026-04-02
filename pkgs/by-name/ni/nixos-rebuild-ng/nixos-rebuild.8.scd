@@ -21,18 +21,19 @@ nixos-rebuild - reconfigure a NixOS machine
 _nixos-rebuild_ \[--verbose] [--quiet] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS] [--include INCLUDE]++
 	\[--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file] [--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file]++
 	\[--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT] [--no-build-output] [--use-substitutes] [--help] [--debug] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader]++
-	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
+	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--store-path STORE_PATH] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST] [--no-build-nix] [--image-variant IMAGE_VARIANT]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
 
 # DESCRIPTION
 
 This command updates the system so that it corresponds to the configuration
-specified in /etc/nixos/configuration.nix, /etc/nixos/flake.nix or the file and
-attribute specified by the *--file* and/or *--attr* options. Thus, every
+specified in /etc/nixos/configuration.nix, /etc/nixos/flake.nix,
+/etc/nixos/system.nix or the file and attribute specified by the *--file*,
+*--attr* or *--flake* options. Thus, every
 time you modify the configuration or any other NixOS module, you must run
 *nixos-rebuild* to make the changes take effect. It builds the new system in
-/nix/store, runs its activation script, and stop and (re)starts any system
+/nix/store, runs its activation script, stops and (re)starts any system
 services if needed. Please note that user services need to be started manually
 as they aren't detected by the activation script at the moment.
 
@@ -182,6 +183,20 @@ It must be one of the following:
 	(The previous configuration is defined as the one before the “current”
 	generation of the Nix profile _/nix/var/nix/profiles/system_.)
 
+*--store-path* _path_
+	Use a pre-built NixOS system store path at _path_ instead of evaluating
+	and building from the configuration. This skips the evaluation and build
+	phases entirely. The path must be a valid NixOS system closure
+	(containing _nixos-version_ and _bin/switch-to-configuration_).
+
+	This is useful for deploying closures that were built elsewhere, such as
+	in CI systems or on remote build machines.
+
+	Can only be used with *switch*, *boot*, *test*, and *dry-activate*
+	actions. Mutually exclusive with *--rollback*, *--flake*, *--file*, and
+	*--attr*. The *--build-host* option is ignored when *--store-path* is
+	specified.
+
 *--builders* _builder-spec_
 	Allow ad-hoc remote builders for building the new system. This requires
 	the user executing *nixos-rebuild* (usually root) to be configured as a
@@ -258,26 +273,30 @@ It must be one of the following:
 	When set, *nixos-rebuild* prefixes activation commands with sudo.
 	Setting this option allows deploying as a non-root user.
 
+	You can set sudo options by defining the NIX_SUDOOPTS environment
+	variable.
+
 *--ask-sudo-password*, *-S*
 	When set, *nixos-rebuild* will ask for sudo password for remote
 	activation (i.e.: on *--target-host*) at the start of the build process.
 	Implies *--sudo*.
 
 *--file* _path_, *-f* _path_
-	Enable and build the NixOS system from the specified file. The file must
+	Build the NixOS system from the specified file. The file must
 	evaluate to an attribute set, and it must contain a valid NixOS
 	configuration at attribute _attrPath_. This is useful for building a
 	NixOS system from a nix file that is not a flake or a NixOS
 	configuration module. Attribute set a with valid NixOS configuration can
 	be made using _nixos_ function in nixpkgs or importing and calling
 	nixos/lib/eval-config.nix from nixpkgs. If specified without *--attr*
-	option, builds the configuration from the top-level attribute of the
+	option, builds the configuration from the top-level attribute set of the
 	file.
 
 *--attr* _attrPath_, *-A* _attrPath_
-	Enable and build the NixOS system from nix file and use the specified
-	attribute path from file specified by the *--file* option. If specified
-	without *--file* option, uses _default.nix_ in current directory.
+	Build the NixOS system from a nix file and use the specified
+	attribute path from the file specified by the *--file* option.
+	If specified without *--file* option, uses _system.nix_ in current directory,
+	the system-wide _<nixos-system>_ file, or finally, /etc/nixos/system.nix.
 
 *--flake* _flake-uri[#name]_, *-F* _flake-uri[#name]_
 	Build the NixOS system from the specified flake. It defaults to the
@@ -290,6 +309,14 @@ It must be one of the following:
 	Do not imply *--flake* if _/etc/nixos/flake.nix exists_. With this
 	option, it is possible to build non-flake NixOS configurations even if
 	the current NixOS systems uses flakes.
+
+*--diff*
+	show the diff between the system closure in /run/current-system
+	and the newly built system closure.
+	(avaliable for actions: build, boot, test, switch)
+
+	This is similar to running:
+	"nix store diff-closures /run/current-system result" after build
 
 In addition, *nixos-rebuild* accepts following options from nix commands that
 the tool calls:
@@ -325,7 +352,15 @@ NIX_PATH
 NIX_SSHOPTS
 	Additional options to be passed to ssh on the command line.
 
+NIX_SUDOOPTS
+	Additional options to be passed to sudo on the command line.
+
 # FILES
+
+/etc/nixos/system.nix
+	If this file exists, then *nixos-rebuild* will use it as if the
+	*--file* option was given. This allows to build a self-contained
+	system configuration, without requiring ‘nixos’ channel.
 
 /etc/nixos/flake.nix
 	If this file exists, then *nixos-rebuild* will use it as if the

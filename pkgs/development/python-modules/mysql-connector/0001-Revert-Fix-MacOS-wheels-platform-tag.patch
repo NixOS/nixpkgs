@@ -2,16 +2,16 @@ diff --git a/cpydist/__init__.py b/cpydist/__init__.py
 index 7fdbaf2..3c427da 100644
 --- a/cpydist/__init__.py
 +++ b/cpydist/__init__.py
-@@ -38,7 +38,7 @@ import tempfile
+@@ -37,7 +37,7 @@ import tempfile
  from glob import glob
  from pathlib import Path
- from subprocess import PIPE, Popen, check_call
+ from subprocess import PIPE, Popen
 -from sysconfig import get_config_vars, get_python_version
 +from sysconfig import get_python_version
 
  from setuptools import Command
  from setuptools.command.build_ext import build_ext
-@@ -68,8 +68,6 @@ version_py = os.path.join("lib", "mysql", "connector", "version.py")
+@@ -67,8 +67,6 @@ version_py = os.path.join("lib", "mysql", "connector", "version.py")
  with open(version_py, "rb") as fp:
      exec(compile(fp.read(), version_py, "exec"))
 

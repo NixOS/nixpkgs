@@ -8,7 +8,7 @@
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsverity-utils";
   version = "1.6";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableManpages "man";
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/snapshot/fsverity-utils-v${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/snapshot/fsverity-utils-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-FZN4MKNmymIXZ2Q0woA0SLzPf4SaUJkj4ssKPsY4xXc=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jk ];
     platforms = lib.platforms.linux;
   };
-}
+})

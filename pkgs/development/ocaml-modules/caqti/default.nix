@@ -17,14 +17,14 @@
   darwin,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "caqti";
   version = "2.2.4";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${version}/caqti-v${version}.tbz";
+    url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${finalAttrs.version}/caqti-v${finalAttrs.version}.tbz";
     hash = "sha256-uOpDKCAVTsCVEyxPeyRLBs2FU+CyA1GFuETZxPMK+Ls=";
   };
 
@@ -56,4 +56,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ bcc32 ];
     homepage = "https://github.com/paurkedal/ocaml-caqti";
   };
-}
+})

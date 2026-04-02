@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitls";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "gitls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kLkH/nNidd1QNPKvo7fxZwMhTgd4AVB8Ofw0Wo0z6c0=";
   };
 
@@ -22,15 +22,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = gitls;
     command = "gitls -version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "Tools to enumerate git repository URL";
     homepage = "https://github.com/hahwul/gitls";
-    changelog = "https://github.com/hahwul/gitls/releases/tag/v${version}";
+    changelog = "https://github.com/hahwul/gitls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gitls";
   };
-}
+})

@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msal,
-  pythonOlder,
   requests,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-datalake-store";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_datalake_store";

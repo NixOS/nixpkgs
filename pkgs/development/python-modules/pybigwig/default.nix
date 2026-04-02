@@ -4,22 +4,19 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pybigwig";
-  version = "0.3.24";
+  version = "0.3.25";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";
     tag = version;
-    hash = "sha256-gK3cOwbvQtf+g1H/4x69swqCFdkBwpV7ZOrbE0eANh0=";
+    hash = "sha256-Vq/QdJg2qObJ49lHZ4RjULfI0f7pScLRWGW8NBZoMAw=";
   };
 
   buildInputs = [ zlib ];

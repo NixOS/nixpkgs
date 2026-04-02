@@ -5,7 +5,7 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-soundcloud";
   version = "3.0.2";
   pyproject = true;
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-soundcloud";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-1Qqbfw6NZ+2K1w+abMBfWo0RAmIRbNyIErEmalmWJ0s=";
   };
 
@@ -35,4 +35,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

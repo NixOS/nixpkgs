@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.21";
+  version = "0.4.9.6";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6vb1tzCRuVV2lF6t6YgW3f980AW+/k2UcYpvdmuECQM=";
+    hash = "sha256-qJq6lwUumWOmVLQN8tRr4H6Ka24k5UN5F/2BrNkKcBc=";
   };
 
   outputs = [
@@ -85,7 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       # cross compiles correctly but needs the following
       lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_LINK = "-lgcc_s";
+  };
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
@@ -148,7 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tor";
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
       prusnak
     ];
     platforms = lib.platforms.unix;

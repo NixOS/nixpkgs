@@ -96,7 +96,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       peterhoeg
-      c0bw3b
       sigmasquadron
     ];
     platforms = lib.platforms.unix;

@@ -12,7 +12,7 @@ in
       defaultText = "hardware dependent";
     };
   };
-  config = lib.mkIf (config.hardware.facter.reportPath != null && cfg.enable) {
+  config = lib.mkIf (config.hardware.facter.enable && cfg.enable) {
     services.xserver.videoDrivers = [ "modesetting" ];
   };
 }

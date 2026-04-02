@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   requests,
   robotframework,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "robotframework-requests";
   version = "0.9.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MarketSquare";

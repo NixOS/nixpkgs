@@ -3,7 +3,6 @@
   buildPythonPackage,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
   fava,
   hatch-vcs,
   hatchling,
@@ -15,12 +14,12 @@
 }:
 let
   pname = "fava-portfolio-returns";
-  version = "2.3.0";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "andreasgerstmayr";
     repo = "fava-portfolio-returns";
-    rev = "v${version}";
-    hash = "sha256-NM+0gcgSztcgzYj0nCe9DOK90lrzE0TOzH30WvTKsUA=";
+    tag = "v${version}";
+    hash = "sha256-3v5zIpho6HppNm1yJdVJKhPxKgNsvRetOQIAKkp6u9U=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {
@@ -29,7 +28,7 @@ let
 
     src = "${src}/frontend";
 
-    npmDepsHash = "sha256-MDoZC5IAR9puWMLBhLb5HRoagBPyNiyJ+0879ljCNUo=";
+    npmDepsHash = "sha256-/9sCyhGUOZ/muwJNKABy7ouPJa5ieVXjIFCSWw9AyRo=";
 
     postPatch = ''
       substituteInPlace package.json \
@@ -71,16 +70,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fava_portfolio_returns" ];
 
-  # Stay in the root of the repository, so that relative paths to example files
-  # loaded by tests stay correct.
-  # Remove `src` to avoid `PYTHONPATH` issues related to `pytestCheckHook` ([1])
+  # Use importlib import mode to avoid `PYTHONPATH` issues related to `pytestCheckHook` ([1])
   # [1]: https://github.com/NixOS/nixpkgs/issues/255262
-  preCheck = ''
-    rm -rf src
-  '';
-
   pytestFlags = [
-    "${placeholder "out"}"
+    "--import-mode=importlib"
   ];
 
   passthru = {

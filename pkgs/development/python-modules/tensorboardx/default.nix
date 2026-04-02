@@ -1,15 +1,16 @@
 {
   boto3,
   buildPythonPackage,
-  crc32c,
   fetchFromGitHub,
   lib,
   matplotlib,
   moto,
   numpy,
+  packaging,
   protobuf,
   pytestCheckHook,
   torch,
+  setuptools,
   setuptools-scm,
   soundfile,
   stdenv,
@@ -19,26 +20,33 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.6.2.2";
-  format = "setuptools";
+  version = "2.6.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     tag = "v${version}";
-    hash = "sha256-4eMkjya0B+r/DMQobeFJCfYHwnTOWrb+aNkkW2XvoqY=";
+    hash = "sha256-GZQUJCiCKVthO95jHMIzNFcBM3R85BkyxO74CKCzizc=";
   };
 
-  nativeBuildInputs = [
-    protobuf
+  postPatch = ''
+    # https://github.com/lanpa/tensorboardX/pull/761
+    substituteInPlace tensorboardX/utils.py tests/test_utils.py \
+      --replace-fail "newshape=" "shape="
+  '';
+
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
   # required to make tests deterministic
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
-  propagatedBuildInputs = [
-    crc32c
+  dependencies = [
+    packaging
+    protobuf
     numpy
   ];
 
@@ -79,7 +87,7 @@ buildPythonPackage rec {
     description = "Library for writing tensorboard-compatible logs";
     homepage = "https://tensorboardx.readthedocs.io";
     downloadPage = "https://github.com/lanpa/tensorboardX";
-    changelog = "https://github.com/lanpa/tensorboardX/blob/${src.rev}/HISTORY.rst";
+    changelog = "https://github.com/lanpa/tensorboardX/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lebastr

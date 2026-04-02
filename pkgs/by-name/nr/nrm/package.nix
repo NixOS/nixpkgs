@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Helps you switch between npm registries easily";
     homepage = "https://github.com/Pana/nrm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "nrm";
   };
 })

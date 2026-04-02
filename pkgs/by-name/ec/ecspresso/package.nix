@@ -5,28 +5,28 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ecspresso";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "kayac";
     repo = "ecspresso";
-    tag = "v${version}";
-    hash = "sha256-GaxMpc6VUnPPlpFxptWFEpAec5VuSR0EOBOuZufrxvM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mcKvjNHpyP6s9D1KVIqZLmSPOUZ0RkXioGXWbRsp3uc=";
   };
 
   subPackages = [
     "cmd/ecspresso"
   ];
 
-  vendorHash = "sha256-NFuWMfw31BfolRd8yxleVdwFi/XcnHcSTOlqkm/stko=";
+  vendorHash = "sha256-gkCs7wtaRdpA8BY8H309fJKRB8NwMehGvIW8tNNFb/I=";
 
   ldflags = [
     "-s"
     "-w"
     "-X main.buildDate=none"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -46,4 +46,4 @@ buildGoModule rec {
       FKouhai
     ];
   };
-}
+})

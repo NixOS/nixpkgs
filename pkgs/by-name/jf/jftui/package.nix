@@ -8,14 +8,14 @@
   yajl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jftui";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "Aanok";
     repo = "jftui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0gTJ2uXDcK9zCx6yKS3VxFyxSQZ2l4ydKUI2gYbsiao=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "jftui";
   };
-}
+})

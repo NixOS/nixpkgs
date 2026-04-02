@@ -78,6 +78,30 @@ in
     ];
     systemd.services.polkit.stopIfChanged = false;
 
+    systemd.sockets."polkit-agent-helper".wantedBy = [ "sockets.target" ];
+
+    systemd.services."polkit-agent-helper@".serviceConfig = lib.mkMerge [
+      # The upstream unit inherits stderr to the polkit agent, which causes
+      # agent processes to misinterpret diagnostic output from PAM modules
+      # as protocol errors, resulting in tight re-execution loops.
+      { StandardError = "journal"; }
+
+      # The upstream unit uses PrivateDevices=yes and ProtectHome=yes,
+      # which prevents PAM modules from accessing hardware (e.g. FIDO
+      # tokens via /dev/hidraw*) or reading key files from home directories.
+      (lib.mkIf config.security.pam.u2f.enable {
+        # Override upstream PrivateDevices=yes to allow access to /dev/hidraw*
+        PrivateDevices = false;
+        DeviceAllow = [
+          "/dev/urandom r"
+          "char-hidraw rw"
+        ];
+        # Override upstream ProtectHome=yes so pam_u2f can read
+        # ~/.config/Yubico/u2f_keys (the default key file location)
+        ProtectHome = "read-only";
+      })
+    ];
+
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
 
@@ -94,19 +118,11 @@ in
 
     security.pam.services.polkit-1 = { };
 
-    security.wrappers = {
-      pkexec = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${cfg.package.bin}/bin/pkexec";
-      };
-      polkit-agent-helper-1 = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${cfg.package.out}/lib/polkit-1/polkit-agent-helper-1";
-      };
+    security.wrappers.pkexec = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${cfg.package.bin}/bin/pkexec";
     };
 
     systemd.tmpfiles.rules = [

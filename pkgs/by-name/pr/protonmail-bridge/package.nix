@@ -6,14 +6,14 @@
   libsecret,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protonmail-bridge";
   version = "3.21.2";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IQgP+eWUCyViEBi0WFIOW2rXZLtoyVlrQrtAaqaLOv0=";
   };
 
@@ -33,8 +33,8 @@ buildGoModule rec {
       constants = "github.com/ProtonMail/proton-bridge/v3/internal/constants";
     in
     [
-      "-X ${constants}.Version=${version}"
-      "-X ${constants}.Revision=${src.rev}"
+      "-X ${constants}.Version=${finalAttrs.version}"
+      "-X ${constants}.Revision=${finalAttrs.src.rev}"
       "-X ${constants}.buildTime=unknown"
       "-X ${constants}.FullAppName=ProtonMailBridge" # Should be "Proton Mail Bridge", but quoting doesn't seems to work in nix's ldflags
     ];
@@ -48,7 +48,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/ProtonMail/proton-bridge/blob/${src.rev}/Changelog.md";
+    changelog = "https://github.com/ProtonMail/proton-bridge/blob/${finalAttrs.src.rev}/Changelog.md";
     description = "Use your ProtonMail account with your local e-mail client";
     downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
     homepage = "https://github.com/ProtonMail/proton-bridge";
@@ -65,4 +65,4 @@ buildGoModule rec {
       daniel-fahey
     ];
   };
-}
+})

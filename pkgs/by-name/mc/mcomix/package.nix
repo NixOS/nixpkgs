@@ -17,13 +17,13 @@
   unrarSupport ? false, # unfree software
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mcomix";
   version = "3.1.1";
   pyproject = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcomix/mcomix-${version}.tar.gz";
+    url = "mirror://sourceforge/mcomix/mcomix-${finalAttrs.version}.tar.gz";
     hash = "sha256-oQqq7XvAfet0796Tv5qKJ+G8vxgkoFGbJkz+5YK+zvg=";
   };
 
@@ -84,4 +84,4 @@ python3.pkgs.buildPythonApplication rec {
       thiagokokada
     ];
   };
-}
+})

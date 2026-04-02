@@ -5,7 +5,7 @@
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otf2bdf";
   version = "3.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "otf2bdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HK9ZrnwKhhYcBvSl+3RwFD7m/WSaPkGKX6utXnk5k+A=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hzeller ];
     mainProgram = "otf2bdf";
   };
-}
+})

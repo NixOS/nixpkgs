@@ -46,13 +46,17 @@ function runChecklist({
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only files of packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
-      'Approved by a committer.': committers.intersection(approvals).size > 0,
+      'Approved by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+        committers.intersection(approvals).size > 0,
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
-      'Opened by a committer.': committers.has(pull_request.user.id),
-      'Opened by r-ryantm.': pull_request.user.login === 'r-ryantm',
+      'Opened by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+        committers.has(pull_request.user.id),
+      'Opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).':
+        pull_request.user.login === 'r-ryantm',
     },
+    'PR is not a draft': !pull_request.draft,
   }
 
   if (user) {
@@ -171,7 +175,7 @@ async function handleMerge({
   async function merge() {
     if (dry) {
       core.info(`Merging #${pull_number}... (dry)`)
-      return 'Merge completed (dry)'
+      return ['Merge completed (dry)']
     }
 
     // Using GraphQL mutations instead of the REST /merge endpoint, because the latter
@@ -191,11 +195,12 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
+      log('merge', 'Queued for merge')
       return [
         `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
       ]
     } catch (e) {
-      log('Enqueing failed', e.response.errors[0].message)
+      log('Enqueuing failed', e.response.errors[0].message)
     }
 
     // If required status checks are not satisfied, yet, the above will fail. In this case
@@ -212,6 +217,7 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
+      log('merge', 'Auto-merge enabled')
       return [
         `:heavy_check_mark: Enabled Auto Merge (#306934)`,
         '',

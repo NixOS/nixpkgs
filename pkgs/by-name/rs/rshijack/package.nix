@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rshijack";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rshijack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-vTbjb0tm6jCP9+QWG5R83v31W6RUgSEv96iR37QdnFo=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "rshijack";
   };
-}
+})

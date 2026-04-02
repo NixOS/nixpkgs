@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
 
   anthy,
@@ -16,9 +16,10 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
+  wrapQtAppsHook,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "maliit-keyboard";
   version = "2.3.1-unstable-2024-09-04";
 
@@ -55,6 +56,7 @@ mkDerivation {
     cmake
     pkg-config
     wrapGAppsHook3
+    wrapQtAppsHook
   ];
 
   postInstall = ''

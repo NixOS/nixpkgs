@@ -7,12 +7,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-apl";
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/apl/apl-${version}.tar.gz";
+    url = "mirror://gnu/apl/apl-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-KRhn8bGTdpOrtXvn2aN2GLA3bj4nCVdIVKe75Suyjrg=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
       Jürgen Sauermann.
     '';
   };
-}
+})

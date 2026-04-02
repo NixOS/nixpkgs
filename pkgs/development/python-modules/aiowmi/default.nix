@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiowmi";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cesbit";

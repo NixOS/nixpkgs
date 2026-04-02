@@ -6,18 +6,18 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-store-veritysetup-generator";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "nix-store-veritysetup-generator";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RTGdcLn4zuZAcC1Td4gJcywIerCYyaD0JYz8g5ybmho=";
   };
 
-  sourceRoot = "${src.name}/rust";
+  sourceRoot = "${finalAttrs.src.name}/rust";
 
   cargoHash = "sha256-9DwED8X/RHjBCInm+VbzoeVSb28U+XIE2IjNAGon6+E=";
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "nix-store-veritysetup-generator";
   };
-}
+})

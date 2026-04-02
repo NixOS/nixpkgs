@@ -10,14 +10,14 @@
   gtk3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "myxer";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Aurailus";
     repo = "myxer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c5SHjnhWLp0jMdmDlupMTA0hWphub5DFY1vOI6NW8E0=";
   };
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "myxer";
     platforms = lib.platforms.linux;
   };
-}
+})

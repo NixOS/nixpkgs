@@ -6,14 +6,14 @@
   vimcats,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vimcats";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "mrcjkb";
     repo = "vimcats";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BW1pU7NnW8yWePV0IQOUmcNa13NvV9lOZhfnEdQFBQQ=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mrcjkb ];
     mainProgram = "vimcats";
   };
-}
+})

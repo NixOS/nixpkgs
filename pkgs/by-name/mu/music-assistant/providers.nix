@@ -1,10 +1,12 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.3";
+  version = "2.7.11";
   providers = {
-    airplay = ps: [
-    ];
+    airplay =
+      ps: with ps; [
+        srptools
+      ];
     airplay_receiver = ps: [
     ];
     alexa =
@@ -134,6 +136,7 @@
     sendspin =
       ps: with ps; [
         aiosendspin
+        av
       ];
     siriusxm = ps: [
     ]; # missing sxm
@@ -152,8 +155,10 @@
         defusedxml
         soco
       ];
-    soundcloud = ps: [
-    ]; # missing soundcloudpy
+    soundcloud =
+      ps: with ps; [
+        soundcloudpy
+      ];
     spotify =
       ps: with ps; [
         pkce
@@ -178,8 +183,10 @@
     ];
     universal_group = ps: [
     ];
-    vban_receiver = ps: [
-    ];
+    vban_receiver =
+      ps: with ps; [
+        aiovban
+      ];
     ytmusic =
       ps: with ps; [
         bgutil-ytdlp-pot-provider

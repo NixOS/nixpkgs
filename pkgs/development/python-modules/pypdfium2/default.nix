@@ -36,14 +36,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.2.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypdfium2-team";
     repo = "pypdfium2";
     tag = version;
-    hash = "sha256-A/NNyEmGXk21r5eXOYqIx6LXceOKnj2jUQFhUJbl7nU=";
+    hash = "sha256-3mGjr8GgylxFIFT+NmyJ50ozTQvCIPexAgaQ30Ki2Ww=";
   };
 
   build-system = [

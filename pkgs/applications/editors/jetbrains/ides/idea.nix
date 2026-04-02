@@ -15,20 +15,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2025.3.1.tar.gz";
-      hash = "sha256-IeG5C17GhHZ6A0mLpCTvP5rMXb91nM7v1e3UdPBDrWw=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.1.tar.gz";
+      hash = "sha256-9X09uplwx3TPN3WDYprqVAQY5nfsY2VXDnbeqcsvP5s=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-CVcRMp0enBRkG6Qm5lLU29OIWyfJoEbkRyWuZ3SR6MM=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.1-aarch64.tar.gz";
+      hash = "sha256-wjX2ZMNcIEIsOrKMhQuG6kq3oF2d+cAnWBo6jJi+QBs=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2025.3.1.dmg";
-      hash = "sha256-rfWvODnge6Y4e/DsqU3y9EyCkCOhiYFw6svFy6/OA5M=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.1.dmg";
+      hash = "sha256-dN5eiknRaqGJIRWmdQbfO5MriAbGa6SU7Vc6cpAcGJk=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2025.3.1-aarch64.dmg";
-      hash = "sha256-ITeGPMOl9KzSW6OKguAE6TXTqU+lZvjjhR1riorBJ3c=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.1-aarch64.dmg";
+      hash = "sha256-kPKuyj/QFzECs9JzSthjYCuxcUbDF/4tiLBhj9R+pgA=";
     };
   };
   # update-script-end: urls
@@ -43,8 +43,8 @@ mkJetBrainsProduct {
   productShort = "IDEA";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.138";
+  version = "2026.1";
+  buildNumber = "261.22158.277";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
@@ -55,7 +55,7 @@ mkJetBrainsProduct {
     ''--set M2 "${maven}/maven/bin"''
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     lldb
     musl
   ];

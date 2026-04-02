@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeDesktopItem,
   ncurses,
-  libX11,
+  libx11,
   boost,
   cmake,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     ncurses
-    libX11
+    libx11
     boost
   ];
 

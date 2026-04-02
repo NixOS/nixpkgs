@@ -16,7 +16,6 @@ let
       STRIP_PNG_TEXT = "NO";
     };
     Description = if stdenvNoCC.hostPlatform.isMacOS then "macOS" else "iOS";
-    FamilyDisplayName = Description;
     FamilyIdentifier = lib.toLower xcodePlatform;
     FamilyName = Description;
     Identifier = CFBundleIdentifier;

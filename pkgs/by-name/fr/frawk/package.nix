@@ -15,12 +15,12 @@
 assert lib.assertMsg (
   !(lib.elem "default" features || lib.elem "llvm_backend" features)
 ) "LLVM support has been dropped due to LLVM 12 EOL.";
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "frawk";
   version = "0.4.8";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
   };
 
@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage rec {
     description = "Small programming language for writing short programs processing textual data";
     mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
-    changelog = "https://github.com/ezrosent/frawk/releases/tag/v${version}";
+    changelog = "https://github.com/ezrosent/frawk/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = [ ];
   };
-}
+})

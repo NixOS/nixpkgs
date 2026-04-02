@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-session";
-  version = "4.20.3";
+  version = "4.20.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-session";
     tag = "xfce4-session-${finalAttrs.version}";
-    hash = "sha256-HfVspmAkjuGgoI87VHNHFGZP17ZA0b31llY93gUtWxs=";
+    hash = "sha256-mL5fOWJtpkpskBQmyYhcVRzGJlzAHsvtcy4j3DceOBE=";
   };
 
   nativeBuildInputs = [

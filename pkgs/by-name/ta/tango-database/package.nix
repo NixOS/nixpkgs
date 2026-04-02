@@ -15,16 +15,16 @@
 
 # NOTE: You need to manually set up the database structure to run Tango successfully.
 # See $out/share/tango/db/create_db.sh
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tango-database";
-  version = "5.25";
+  version = "5.28";
 
   src = fetchFromGitLab {
     owner = "tango-controls";
     repo = "TangoDatabase";
-    tag = "Database-Release-${version}";
+    tag = "Database-Release-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hu2TIPxXyUtLK3bHFHuBYho23TGLkmsHfxEabsjsvmE=";
+    hash = "sha256-r8jrsDR22u30l1R6mK95KsLWHhheZa4/N6n/Xv4mKPc=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +60,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tango distributed control system - database server";
     homepage = "https://gitlab.com/tango-controls/TangoDatabase";
+    changelog = "https://gitlab.com/tango-controls/TangoDatabase/-/blob/Database-Release-${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.gilice ];
   };
-}
+})

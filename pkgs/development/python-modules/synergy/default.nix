@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   numpy,
   scipy,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "synergy";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "djwooten";

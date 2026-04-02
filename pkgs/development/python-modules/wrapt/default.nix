@@ -20,6 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-QduT5bncXi4LeI034h5Pqtwybru0QcQIYI7cMchLy7c=";
   };
 
+  patches = [ ./pytest9-compat.patch ];
+
   build-system = [ setuptools ];
 
   nativeBuildInputs = [

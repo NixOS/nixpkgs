@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "f1viewer";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "SoMuchForSubtlety";
     repo = "f1viewer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ michzappa ];
     mainProgram = "f1viewer";
   };
-}
+})

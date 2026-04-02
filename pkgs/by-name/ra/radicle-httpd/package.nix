@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.22.0";
+  version = "0.24.0";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/${finalAttrs.version}";
     sparseCheckout = [ "radicle-httpd" ];
-    hash = "sha256-NA5U+Ac6imbtNabvaeYATfUbbmT48uqWAcbJ+ukJcDs=";
+    hash = "sha256-749hFe7GJz/YUmocW5MO7uKWLTo3W4wJYSXdIURcRtg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/radicle-httpd";
 
-  cargoHash = "sha256-9xyuoOuoFWu7oItQporJuGA8EIfEMrCvPaRPnwYMzmM=";
+  cargoHash = "sha256-6uHukSsNnnk11tudFnNvNd+ZXmwGxMSYArsiaCaabWk=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -78,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       repositories on a Radicle node via their web browser.
     '';
     homepage = "https://radicle.xyz";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/radicle-httpd/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only
@@ -85,11 +86,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      gador
-      lorenzleutgeb
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "radicle-httpd";
   };
 })

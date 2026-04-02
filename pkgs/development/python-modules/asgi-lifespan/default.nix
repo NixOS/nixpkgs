@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   sniffio,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "asgi-lifespan";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "florimondmanca";

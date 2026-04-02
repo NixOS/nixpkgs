@@ -5,7 +5,6 @@
   fetchFromGitHub,
   markdown,
   pillow,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-markdownx";
   version = "4.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "neutronX";

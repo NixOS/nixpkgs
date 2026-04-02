@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
+    fetcherVersion = 3;
     hash = pinData.uiPNPMDepsHash;
   };
 

@@ -8,6 +8,7 @@
   yq,
   protobuf,
   installShellFiles,
+  makeBinaryWrapper,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -29,17 +30,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.6.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-qJ5ZIGfUqV/ayZVABbrcOBGa6xFLZ53WGuBz8JsXvOw=";
+    hash = "sha256-L1dLMcA7YDNMF8uRImHZlQ0mXox3kpGln6MXeB9cMLU=";
   };
 
-  cargoHash = "sha256-DNwuybqdHQtosQwtVgbds4gu0YCXY3tnX2IqXhhyfs8=";
+  cargoHash = "sha256-ebozsCns5J95u+C4smysslJB9xVltHeVOdfD2IBuLtI=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
@@ -128,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test integration_tests"
+    "--test=integration_test"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
@@ -177,6 +179,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
     "--skip=sqlite_extension_test"
+
+    # Needs deno in $PATH
+    "--skip=tests::test_rebuild_async_stubs"
+
+    # Causes SIGTRAP
+    "--skip=external::tests::test_external_deref_after_take"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
@@ -215,6 +223,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
+
+    # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
+    makeBinaryWrapper $out/bin/deno $out/bin/dx --add-flags "x"
   ''
   + lib.optionalString canExecute ''
     installShellCompletion --cmd deno \

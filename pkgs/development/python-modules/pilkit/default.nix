@@ -6,7 +6,6 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pilkit";
   version = "3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "matthewwithanm";

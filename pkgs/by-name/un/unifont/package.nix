@@ -2,33 +2,34 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   libfaketime,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
-  version = "16.0.03";
+  version = "17.0.04";
 
   otf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.otf";
-    hash = "sha256-9TnyHLrjkWoJP4GdNsR3EtVwGshtrO2KaOzPe9nTPAw=";
+    hash = "sha256-0fZkqXU7nGt/81cSh0njK10+7pDHwDYYNj+r1Do5tbc=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.pcf.gz";
-    hash = "sha256-ysKULOBusx4n7NfYRAzEoRfqaTNn5JtjigTVmb7wozY=";
+    hash = "sha256-21hNQMglGdfPrx8VWP3lMT+/Guga7uoKbm72MqXjxJY=";
   };
 
   bdf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.bdf.gz";
-    hash = "sha256-fz0WZKwcBR9ZoaE2DdZU942CwkamiMNC6GPOx/a6ldQ=";
+    hash = "sha256-mi3kgmOIJCdxEhx/4A5BJSPDGDGLjuOOa+bNRU5+yAI=";
   };
 
   nativeBuildInputs = [
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ];
 
   dontUnpack = true;
@@ -61,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Unicode font for Base Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
@@ -70,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       fontException
     ];
-    maintainers = [ lib.maintainers.rycee ];
+    maintainers = with lib.maintainers; [
+      rycee
+      qweered
+    ];
     platforms = lib.platforms.all;
   };
 })

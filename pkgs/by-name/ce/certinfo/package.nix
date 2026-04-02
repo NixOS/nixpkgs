@@ -3,24 +3,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certinfo";
-  version = "1.0.39";
+  version = "1.0.40";
 
   src = fetchFromGitHub {
     owner = "pete911";
     repo = "certinfo";
-    rev = "v${version}";
-    sha256 = "sha256-U3uVQiALtI7aWkIPQyHxSzMTD6AjAMoOEjkbPO07SdA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-2Feb2+7UJ+39waO9rFyT3ZDlEdS5s3uLuxUiDh4iuJE=";
   };
 
   # clipboard functionality not working on Darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   vendorHash = null;
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakuzure ];
   };
-}
+})

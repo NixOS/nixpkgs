@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pycryptodome,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "brelpy";
   version = "0.0.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

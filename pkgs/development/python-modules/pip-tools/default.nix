@@ -9,24 +9,22 @@
   pyproject-hooks,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  tomli,
   tomli-w,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.5.2";
+  version = "7.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "pip-tools";
     tag = "v${version}";
-    hash = "sha256-+y4oXiLWGFIzIT75EZFpcYCX5HKeEyPsk+phTOyoKl8=";
+    hash = "sha256-MkYGD/ropw+MLLrk4gRZZguOv5extzNNXwTy6NQnCu0=";
   };
 
   patches = [
@@ -42,8 +40,7 @@ buildPythonPackage rec {
     pyproject-hooks
     setuptools
     wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -74,6 +71,9 @@ buildPythonPackage rec {
     "test_get_hashes_from_mixed"
     "test_toggle_reuse_hashes_local_repository"
     "test_generate_hashes_all_platforms"
+    "test_iter_dependencies_after_combine_install_requirements"
+    "test_iter_dependencies_after_combine_install_requirements_extras"
+    "test_name_collision"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"

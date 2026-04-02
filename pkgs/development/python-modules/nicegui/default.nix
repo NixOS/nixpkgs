@@ -41,19 +41,22 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "3.4.1";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    tag = "v${version}";
-    hash = "sha256-fZAGqFQQFLFi5jWlQb1SAQnAFEtt2C07vNZXfyUHIa0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+hZUGRHK51x4nlcbOOGbW15U6YZgKsxuzZPBad9mjXA=";
   };
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "orjson"
+    "requests"
+  ];
 
   build-system = [
     poetry-core
@@ -105,7 +108,7 @@ buildPythonPackage rec {
     webdriver-manager
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 
@@ -115,8 +118,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

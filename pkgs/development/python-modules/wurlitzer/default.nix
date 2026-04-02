@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "wurlitzer";
   version = "3.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

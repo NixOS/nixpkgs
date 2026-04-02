@@ -7,7 +7,6 @@
   fetchFromGitLab,
   pyfakefs,
   python-dateutil,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   unittestCheckHook,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "cryptodatahub";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "coroner";

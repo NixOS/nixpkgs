@@ -10,7 +10,6 @@
   pillow,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   ujson,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.29.1";
+  version = "4.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     tag = version;
-    hash = "sha256-djiuIHTcPiKIfMxFevCa4c3V8ydGpSqH4mo0qH+Cpw8=";
+    hash = "sha256-WFikKZxc9PjqcAcKrZIXaFO7XiUBAg8y60/UH2so4Vc=";
   };
 
   build-system = [ hatchling ];

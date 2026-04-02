@@ -84,10 +84,25 @@ in
 
         enablePureSSHTransfer = lib.mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
       };
+      
       filter-repo = {
         enable = lib.mkEnableOption "git-filter-repo";
 
         package = lib.mkPackageOption pkgs "git-filter-repo" { };
+      };
+
+      attributes = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = "*.pdf diff=pdf";
+        description = ''
+          Assign git attributes to files (one pattern per line):
+
+              PATTERN1 ATTR1 ATTR2 ...
+
+          Blank lines and lines beginning with # are ignored. See
+          {manpage}`gitattributes(5)` for more information.
+        '';
       };
     };
   };
@@ -97,6 +112,10 @@ in
       environment.systemPackages = [ cfg.package ];
       environment.etc.gitconfig = lib.mkIf (cfg.config != [ ]) {
         text = lib.concatMapStringsSep "\n" lib.generators.toGitINI cfg.config;
+      };
+
+      environment.etc.gitattributes = lib.mkIf (cfg.attributes != "") {
+        text = cfg.attributes + "\n";
       };
     })
     (lib.mkIf (cfg.enable && cfg.lfs.enable) {

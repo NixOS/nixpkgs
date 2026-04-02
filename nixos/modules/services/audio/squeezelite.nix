@@ -51,7 +51,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${bin} -N ${dataDir}/player-name ${cfg.extraArguments}";
-        StateDirectory = builtins.baseNameOf dataDir;
+        StateDirectory = baseNameOf dataDir;
         SupplementaryGroups = "audio";
       };
     };

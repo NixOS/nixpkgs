@@ -10,7 +10,6 @@
   pytest-xdist,
   pytestCheckHook,
   pytz,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
   version = "0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

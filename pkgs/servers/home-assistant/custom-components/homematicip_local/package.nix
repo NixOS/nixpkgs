@@ -4,6 +4,7 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   aiohomematic,
+  aiohomematic-config,
   aiohomematic-test-support,
   home-assistant,
   pytest-homeassistant-custom-component,
@@ -13,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "2.1.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-zXosnxVbJ/rADzbOvm6GIJLAx+EIK3vQ50qNck5sYwg=";
+    hash = "sha256-Hl3nvTEf70SNS0qPatddCO5MEhZfAnMONoT7ghH2U00=";
   };
 
   postPatch = ''
@@ -31,6 +32,7 @@ buildHomeAssistantComponent rec {
 
   dependencies = [
     aiohomematic
+    aiohomematic-config
   ];
 
   nativeCheckInputs = [

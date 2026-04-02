@@ -11,17 +11,15 @@
   sdl3,
   stdenv,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "lite-xl";
   version = "2.1.8";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9JpD7f5vOGhLW8dBjjYUI5PSaz/XWW5sIOZCAbKhxtE=";
   };
 
@@ -60,4 +58,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "lite-xl";
   };
-}
+})

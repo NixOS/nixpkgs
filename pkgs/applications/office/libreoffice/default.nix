@@ -38,7 +38,15 @@
   jdk21,
   ant,
   cups,
-  xorg,
+  libxtst,
+  libxi,
+  libxinerama,
+  libxext,
+  libxdmcp,
+  libxaw,
+  libx11,
+  libpthread-stubs,
+  libxshmfence,
   fontforge,
   jre21_minimal,
   openssl,
@@ -66,10 +74,10 @@
   nspr,
   libwpg,
   dbus-glib,
-  clucene_core_2,
+  clucene-core_2,
   libcdr,
   lcms2,
-  unixODBC,
+  unixodbc,
   sane-backends,
   mythes,
   libexttextcat,
@@ -149,7 +157,7 @@
   liberation-sans-narrow,
   liberation_ttf_v2,
   libertine,
-  libertine-g,
+  linux-libertine-g,
   noto-fonts,
   noto-fonts-lgc-plus,
   noto-fonts-cjk-sans,
@@ -178,15 +186,6 @@ let
     optionalString
     ;
 
-  notoSubset =
-    suffixes:
-    runCommand "noto-fonts-subset" { } ''
-      mkdir -p "$out/share/fonts/noto/"
-      ${concatMapStrings (x: ''
-        cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
-      '') suffixes}
-    '';
-
   fontsConf = makeFontsConf {
     fontDirectories = [
       amiri
@@ -198,10 +197,9 @@ let
       liberation-sans-narrow
       liberation_ttf_v2
       libertine
-      libertine-g
-      # Font priority issues in some tests in Still
+      linux-libertine-g
       noto-fonts-lgc-plus
-      (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))
+      noto-fonts
       noto-fonts-cjk-sans
     ];
   };
@@ -408,7 +406,7 @@ stdenv.mkDerivation (finalAttrs: {
       bluez5
       box2d_2
       cairo
-      clucene_core_2
+      clucene-core_2
       cppunit
       cups
       curl
@@ -433,13 +431,13 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       libGLU
       libtool
-      xorg.libX11
-      xorg.libXaw
-      xorg.libXdmcp
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXtst
+      libx11
+      libxaw
+      libxdmcp
+      libxext
+      libxi
+      libxinerama
+      libxtst
       libabw
       libargon2
       libatomic_ops
@@ -455,7 +453,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      xorg.libpthreadstubs
+      libpthread-stubs
       librdf_redland
       librevenge
       librsvg
@@ -466,7 +464,7 @@ stdenv.mkDerivation (finalAttrs: {
       libwps
       libxcrypt
       libxml2
-      xorg.libxshmfence
+      libxshmfence
       libxslt
       libzmf
       libwebp
@@ -483,7 +481,7 @@ stdenv.mkDerivation (finalAttrs: {
       libpq
       python3
       sane-backends
-      unixODBC
+      unixodbc
       util-linux
       which
       xmlsec
@@ -708,7 +706,7 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
       gst-plugins-ugly
-      gstreamer
+      gstreamer.out
     ];
     qmlPackages = [
       kdePackages.ki18n

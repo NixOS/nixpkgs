@@ -7,7 +7,7 @@
   cacert,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gam";
   version = "7.21.01";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "GAM";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xj9GTNVuRddu3YQtXD/+yM/MNMxXUkfprtIFAm9SnA4=";
   };
 
@@ -64,9 +64,9 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command line management for Google Workspace";
     mainProgram = "gam";
     homepage = "https://github.com/GAM-team/GAM/wiki";
-    changelog = "https://github.com/GAM-team/GAM/releases/tag/v${version}";
+    changelog = "https://github.com/GAM-team/GAM/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thanegill ];
   };
 
-}
+})

@@ -2,9 +2,9 @@
   lib,
   python3,
   fetchFromGitLab,
-  fetchpatch,
   openldap,
   nixosTests,
+  postgresql,
 }:
 
 let
@@ -12,25 +12,15 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.74";
+  version = "0.2.3";
   pyproject = true;
-
-  disabled = python.pythonOlder "3.10";
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    rev = "refs/tags/${version}";
-    hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
+    tag = version;
+    hash = "sha256-kBbkqoXyGO238EArwYyjO46Kk5SkfP31Dc51qglLmqQ=";
   };
-
-  patches = [
-    # https://gitlab.com/yaal/canaille/-/merge_requests/275
-    (fetchpatch {
-      url = "https://gitlab.com/yaal/canaille/-/commit/1c7fc8b1034a4423f7f46ad8adeced854910b702.patch";
-      hash = "sha256-fu7D010NG7yUChOve7HY3e7mm2c/UGpfcTAiTU8BnGg=";
-    })
-  ];
 
   build-system = with python.pkgs; [
     hatchling
@@ -38,31 +28,35 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      blinker
-      flask
-      flask-caching
-      flask-wtf
-      pydantic-settings
-      httpx
-      wtforms
-    ]
-    ++ sentry-sdk.optional-dependencies.flask;
+  dependencies = with python.pkgs; [
+    blinker
+    click
+    dramatiq
+    dramatiq-eager-broker
+    flask
+    flask-caching
+    flask-dramatiq
+    flask-session
+    flask-wtf
+    httpx
+    pydantic-settings
+    wtforms
+  ];
 
   nativeCheckInputs =
     with python.pkgs;
     [
       pytestCheckHook
-      coverage
+      postgresql
       flask-webtest
       pyquery
       pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
+      pytest-postgresql
       pytest-smtpd
       pytest-xdist
+      python-avatars
       scim2-tester
       slapd
       toml
@@ -70,13 +64,7 @@ python.pkgs.buildPythonApplication rec {
       time-machine
       pytest-scim2-server
     ]
-    ++ optional-dependencies.front
-    ++ optional-dependencies.oidc
-    ++ optional-dependencies.scim
-    ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -89,10 +77,13 @@ python.pkgs.buildPythonApplication rec {
     export SBIN="${openldap}/bin"
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
-
-    # Just use their example config for testing
-    export CONFIG=tests/app/fixtures/default-config.toml
   '';
+
+  disabledTests = [
+    # Tries to use DNS resolution
+    "test_send_new_email_error"
+    "test_send_test_email_ssl"
+  ];
 
   optional-dependencies = with python.pkgs; {
     front = [
@@ -100,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
       flask-babel
       flask-talisman
       flask-themer
+      isodate
       pycountry
       pytz
       tomlkit
@@ -110,10 +102,10 @@ python.pkgs.buildPythonApplication rec {
       joserfc
     ];
     scim = [
-      httpx
-      scim2-models
       authlib
+      httpx
       scim2-client
+      scim2-models
     ];
     ldap = [ python-ldap ];
     sentry = [ sentry-sdk ];
@@ -130,8 +122,18 @@ python.pkgs.buildPythonApplication rec {
       pillow
       qrcode
     ];
+    fido = [ webauthn ];
     sms = [ smpplib ];
-    server = [ hypercorn ];
+    captcha = [ captcha ];
+    server = [
+      asgiref
+      hypercorn
+      isodate
+      pydanclick
+      tomlkit
+    ];
+    redis = [ dramatiq ] ++ dramatiq.optional-dependencies.redis;
+    rabbitmq = [ dramatiq ] ++ dramatiq.optional-dependencies.rabbitmq;
   };
 
   passthru = {
@@ -144,7 +146,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
-    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];

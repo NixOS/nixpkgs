@@ -5,7 +5,6 @@
   fetchPypi,
   freezegun,
   pytestCheckHook,
-  pythonOlder,
   selenium,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "httpserver";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

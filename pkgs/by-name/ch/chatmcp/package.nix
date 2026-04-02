@@ -40,7 +40,7 @@ flutter332.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    install -Dm0644 assets/logo.png $out/share/pixmaps/chatmcp.png
+    install -Dm0644 assets/logo.png $out/share/icons/hicolor/1024x1024/apps/chatmcp.png
   '';
 
   passthru = {

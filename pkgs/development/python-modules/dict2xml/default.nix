@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "dict2xml";
-  version = "1.7.7";
+  version = "1.7.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "delfick";
     repo = "python-dict2xml";
     tag = "release-${version}";
-    hash = "sha256-66ODdslXF6nWYqJku8cNG0RPK/YGEfbpHwVLLnSoDrk=";
+    hash = "sha256-wCspFcqn6uAvecxx4Agzg7N3ps82mg8ukmmGwhfgajk=";
   };
 
   nativeBuildInputs = [ hatchling ];

@@ -105,12 +105,12 @@ in
               (toXmlAttrs { inherit (value) version; })
               {
                 inherit (value) short description;
-                port = builtins.map toXmlAttrs value.ports;
-                protocol = builtins.map (mkXmlAttr "value") value.protocols;
-                source-port = builtins.map toXmlAttrs value.sourcePorts;
+                port = map toXmlAttrs value.ports;
+                protocol = map (mkXmlAttr "value") value.protocols;
+                source-port = map toXmlAttrs value.sourcePorts;
                 destination = toXmlAttrs value.destination;
-                include = builtins.map (mkXmlAttr "service") value.includes;
-                helper = builtins.map (mkXmlAttr "name") value.helpers;
+                include = map (mkXmlAttr "service") value.includes;
+                helper = map (mkXmlAttr "name") value.helpers;
               }
             ]
           );

@@ -24,13 +24,13 @@
 
 let
 
-  version = "2.83.1";
+  version = "2.85.5";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
-    hash = "sha256-DojqKLoGb6aGpqpeTAXyLFsbWs/UgYr9nA+JMGa712A=";
+    hash = "sha256-QKCyOiYGLh67lS0WS+LCCl/edhl/A+zccCWyWRTV1vM=";
     fetchSubmodules = true;
   };
 
@@ -175,9 +175,9 @@ let
 
     args
     // {
-      name = "${baseName}-${version}";
+      pname = baseName;
 
-      inherit src;
+      inherit src version;
 
       dontBuild = true;
 

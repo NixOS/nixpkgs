@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   websocket-client,
   xmltodict,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyskyqremote";
   version = "0.3.26";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RogerSelwyn";

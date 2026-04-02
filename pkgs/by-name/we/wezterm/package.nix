@@ -5,7 +5,7 @@
   fontconfig,
   installShellFiles,
   libGL,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   ncurses,
@@ -19,27 +19,27 @@
   vulkan-loader,
   wayland,
   wezterm,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-wm,
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-01-08";
+  version = "0-unstable-2026-01-17";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "3715c8744def1e9bedb038e5ace1d5dfb76e8d3b";
+    rev = "05343b387085842b434d267f91b6b0ec157e4331";
     fetchSubmodules = true;
-    hash = "sha256-RMUoYt6i4rIS0S2qOSv+7nlt8jzbIA5y10P01QjKi0I=";
+    hash = "sha256-V6WvkNZryYofarsyfcmsuvtpNJ/c3O+DmOKNvoYPbmA=";
   };
 
   postPatch = ''
-    echo ${version} > .tag
+    echo ${finalAttrs.version} > .tag
 
     # hash does not work well with NixOS
     substituteInPlace assets/shell-integration/wezterm.sh \
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-am5i7Bsoiu1a4RWDy+dpuHgyZpQvKOlEMzCP8QxbeaQ=";
+  cargoHash = "sha256-waXq0U2Ud7FhlJn3evO7bZSBsOAA39ObiVWHycNQXmA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -74,21 +74,21 @@ rustPlatform.buildRustPackage rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libxcb
     libxkbcommon
     wayland
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilwm # contains xcb-ewmh among others
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-wm # contains xcb-ewmh among others
   ];
 
   buildFeatures = [ "distro-defaults" ];
 
   postInstall = ''
     mkdir -p $out/nix-support
-    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+    echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
@@ -142,7 +142,7 @@ rustPlatform.buildRustPackage rec {
         }
         ''
           mkdir -p $out/share/terminfo $out/nix-support
-          tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+          tic -x -o $out/share/terminfo ${finalAttrs.src}/termwiz/data/wezterm.terminfo
         '';
 
     tests = {
@@ -160,8 +160,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "wezterm";
     maintainers = with lib.maintainers; [
-      mimame
       SuperSandro2000
     ];
   };
-}
+})

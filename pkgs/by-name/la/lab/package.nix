@@ -8,14 +8,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lab";
   version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VCvjP/bSd/0ywvNWPsseXn/SPkdp+BsXc/jTvB11EOk=";
   };
 
@@ -33,7 +33,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -59,4 +59,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "lab";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "natls";
   version = "2.1.14";
 
   src = fetchFromGitHub {
     owner = "willdoescode";
     repo = "nat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-4x92r6V9AvEO88gFofPTUt+mS7ZhmptDn/8O4pizSRg=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "natls";
   };
-}
+})

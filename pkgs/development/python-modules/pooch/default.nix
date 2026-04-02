@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pooch";
   version = "1.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPy27;
 

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   webcolors,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "flux-led";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

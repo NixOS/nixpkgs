@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libX11,
-  libXi,
-  libXt,
-  libXft,
+  libx11,
+  libxi,
+  libxt,
+  libxft,
 }:
 
 stdenv.mkDerivation {
@@ -27,13 +27,13 @@ stdenv.mkDerivation {
       --replace "RXPATH=/usr/bin/ssh" "RXPATH=ssh"
   '';
 
-  CFLAGS = "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [
-    libX11
-    libXi
-    libXt
-    libXft
+    libx11
+    libxi
+    libxt
+    libxft
   ];
   # build fails when run in parallel
   enableParallelBuilding = false;

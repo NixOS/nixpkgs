@@ -6,18 +6,18 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-kiosk";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-kiosk";
-    rev = "v${version}";
-    hash = "sha256-dp+yKpPm11/LfRXjgFZrDAwstnz6vALJBANBqwlEXFo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+LoUJiMqE/OO0J7zIy+8uvQUq1wFpGvNvxzhb4pj+r8=";
   };
 
-  vendorHash = "sha256-3ctFiBgR7Lzhy7M3USWD3mv6FZ6cSfdjHhtOVFNLQag=";
+  vendorHash = "sha256-+tslKo5onMgnEtitYi9uwO4m5MUGzctJ7Vt4C7hJ7Fc=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''
@@ -27,9 +27,9 @@ buildGoModule rec {
   meta = {
     description = "Kiosk Utility for Grafana";
     homepage = "https://github.com/grafana/grafana-kiosk";
-    changelog = "https://github.com/grafana/grafana-kiosk/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/grafana/grafana-kiosk/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ marcusramberg ];
     mainProgram = "grafana-kiosk";
   };
-}
+})

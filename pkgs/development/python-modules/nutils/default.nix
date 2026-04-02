@@ -12,22 +12,19 @@
   stringly,
   treelog,
   pytestCheckHook,
-  pythonOlder,
   pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "9.1";
+  version = "9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
     tag = "v${version}";
-    hash = "sha256-NmWoRDYOfSweqUhw0KTdXubWgXmVr+odrs1dMLXdHEI=";
+    hash = "sha256-Q55nSs7SmB76vG8xJNaSu11vtSuWCXrNn0PRCkTWji4=";
   };
 
   build-system = [ flit-core ];
@@ -72,6 +69,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 }

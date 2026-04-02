@@ -4,25 +4,25 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bee";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
-    rev = "v${version}";
-    hash = "sha256-Yz23iVYGZ4PS1jbV5zFaCEsQOoAbHBpePml0zp5GSkQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-C9kaTaqpMbJmgr+pxHZ9RjBEnzm1ykQLCItI0uoebBI=";
   };
 
-  vendorHash = "sha256-0czsloD2EhSWKQbj7NJ4IqGgKM9+Vp8gSIhOKWg/onA=";
+  vendorHash = "sha256-AtyC7I1sr+uNRi6fNoOJ7QVmCB16iXOZacYDQBauBI0=";
 
   subPackages = [ "cmd/bee" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ethersphere/bee/v2.version=${version}"
+    "-X github.com/ethersphere/bee/v2.version=${finalAttrs.version}"
     "-X github.com/ethersphere/bee/v2/pkg/api.Version=5.2.0"
     "-X github.com/ethersphere/bee/v2/pkg/api.DebugVersion=4.1.1"
     "-X github.com/ethersphere/bee/v2/pkg/p2p/libp2p.reachabilityOverridePublic=false"
@@ -54,4 +54,4 @@ buildGoModule rec {
     license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
   };
-}
+})

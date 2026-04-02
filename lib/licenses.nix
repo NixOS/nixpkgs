@@ -304,6 +304,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    bzip2 = {
+      spdxId = "bzip2-1.0.6";
+      fullName = "bzip2 and libbzip2 License v1.0.6";
+    };
+
     cal10 = {
       spdxId = "CAL-1.0";
       fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
@@ -740,6 +745,18 @@ lib.mapAttrs mkLicense (
     hpndSellVariantMitDisclaimerXserver = {
       spdxId = "HPND-sell-MIT-disclaimer-xserver";
       fullName = "Historical Permission Notice and Disclaimer - sell xserver variant with MIT disclaimer";
+    };
+
+    hpndSellVariantSafetyClause = {
+      fullName = "HPND - sell variant with safety critical systems clause";
+      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-voodoo/-/blob/68a5b6d98ae34749cca889f4373b4043d00bfe6a/src/voodoo_dga.c#L12-33";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace reference with whatever this license is supposed to be then
+      # https://github.com/spdx/license-list-XML/issues/2922
+      # spdxId = "HPND-sell-variant-safety-clause";
     };
 
     hpndDec = {
@@ -1404,7 +1421,7 @@ lib.mapAttrs mkLicense (
 
     tsl = {
       shortName = "TSL";
-      fullName = "Timescale License Agreegment";
+      fullName = "Timescale License Agreement";
       url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
       free = false;
     };

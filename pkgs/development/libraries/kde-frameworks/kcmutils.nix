@@ -15,6 +15,10 @@
 
 mkDerivation {
   pname = "kcmutils";
+  outputs = [
+    "out"
+    "dev"
+  ];
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcoreaddons

@@ -596,7 +596,10 @@ stdenv.mkDerivation rec {
         echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
       '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
   nativeBuildInputs = [
     bison
     flex
@@ -661,6 +664,12 @@ stdenv.mkDerivation rec {
     ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
     substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+  ''
+  # build-grub-mkfont is built & run during build, need to find freetype for buildPlatform
+  + lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+    configureFlagsArray+=(
+      "BUILD_PKG_CONFIG=$PKG_CONFIG_FOR_BUILD"
+    )
   '';
 
   postConfigure = ''

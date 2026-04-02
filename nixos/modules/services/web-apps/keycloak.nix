@@ -701,7 +701,7 @@ in
           mkTarget =
             file:
             let
-              baseName = builtins.baseNameOf file;
+              baseName = baseNameOf file;
               name = if lib.hasSuffix ".json" baseName then baseName else "${baseName}.json";
             in
             "/run/keycloak/data/import/${name}";

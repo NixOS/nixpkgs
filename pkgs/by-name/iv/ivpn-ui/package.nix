@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://github.com/ivpn/desktop-app";
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = [ "x86_64-linux" ];
   };
 })

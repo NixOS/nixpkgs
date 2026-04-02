@@ -1,22 +1,26 @@
 {
   buildOctavePackage,
   lib,
-  fetchhg,
+  fetchurl,
   matgeom,
+  gsl,
 }:
 
 buildOctavePackage rec {
   pname = "geometry";
-  version = "unstable-2021-07-07";
+  version = "4.1.0";
 
-  src = fetchhg {
-    url = "http://hg.code.sf.net/p/octave/${pname}";
-    rev = "04965cda30b5f9e51774194c67879e7336df1710";
-    sha256 = "sha256-ECysYOJMF4gPiCFung9hFSlyyO60X3MGirQ9FlYDix8=";
+  src = fetchurl {
+    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
+    sha256 = "sha256-28FliEXJfS1mh8FJCmG0PTWZE9M0IOR1tlnzNfejQ2A=";
   };
 
   requiredOctavePackages = [
     matgeom
+  ];
+
+  buildInputs = [
+    gsl
   ];
 
   meta = {

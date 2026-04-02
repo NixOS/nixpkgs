@@ -5,14 +5,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simg2img";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "anestisb";
     repo = "android-simg2img";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sNHdSbms35YnENASFEG+VMLJGkV/JAlQUVMquDrePDc=";
   };
 
@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      dezgeg
       arkivm
     ];
   };
-}
+})

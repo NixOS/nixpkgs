@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -10,7 +9,6 @@
 
   # buildInputs
   ffmpeg,
-  cudaPackages,
 
   # build-system
   cmake,
@@ -21,19 +19,21 @@
   pytestCheckHook,
   torchvision,
 
-  cudaSupport ? config.cudaSupport,
+  cudaSupport ? torch.cudaSupport,
+  cudaPackages,
+  rocmSupport ? torch.rocmSupport,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
-    tag = "v${version}";
-    hash = "sha256-QG7LX9G1HV2l75jsgsbM4ts6bg0wvsNhjml19b7yYEQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VKpwKV+B2e5z1V1XAdvk6K4/4C3ISPsSiwZ05w5XTBU=";
   };
 
   postPatch = ''
@@ -48,6 +48,11 @@ buildPythonPackage rec {
       --replace-fail \
         '"ffmpeg"' \
         '"${lib.getExe ffmpeg}"'
+
+    substituteInPlace test/test_transform_ops.py \
+      --replace-fail \
+        'ffmpeg_cli = "ffmpeg"' \
+        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
   '';
 
   nativeBuildInputs = [
@@ -89,6 +94,12 @@ buildPythonPackage rec {
     I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION = true;
 
     ENABLE_CUDA = cudaSupport;
+  }
+  // lib.optionalAttrs rocmSupport {
+    ROCM_PATH = torch.rocmtoolkit_joined;
+    ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
+    PYTORCH_ROCM_ARCH = torch.gpuTargetString;
+    CMAKE_CXX_FLAGS = "-I${torch.rocmtoolkit_joined}/include";
   };
 
   pythonImportsCheck = [ "torchcodec" ];
@@ -146,6 +157,7 @@ buildPythonPackage rec {
       "test_contiguit"
       "test_crf_valid_value"
       "test_encode_to_tensor_long_outpu"
+      "test_num_channels"
       "test_round_trip"
       "test_video_encoder_against_ffmpeg_cli"
       "test_video_encoder_round_trip"
@@ -159,8 +171,11 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch media decoding and encoding";
     homepage = "https://github.com/meta-pytorch/torchcodec";
-    changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${src.tag}";
+    changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      caniko
+    ];
   };
-}
+})

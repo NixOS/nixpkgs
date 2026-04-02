@@ -3,19 +3,19 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  xcbutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-wm,
   git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xtitle";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "xtitle";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-SVfM2vCCacgchXj0c0sPk3VR6DUI4R0ofFnxJSY4oDg=";
   };
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxcb
     git
-    xcbutil
-    xcbutilwm
+    libxcb-util
+    libxcb-wm
   ];
 
   meta = {
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xtitle";
   };
-}
+})

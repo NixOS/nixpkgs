@@ -9,17 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau-lsp";
-  version = "1.60.0";
+  version = "1.62.0";
 
   src = fetchFromGitHub {
     owner = "JohnnyMorganz";
     repo = "luau-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-36Nl9robV0RVhEwV3Cu75IDyexnWwf5ZBHOaEx2/kPM=";
+    hash = "sha256-dbuya7mjS0tZUX0nHHDoM7TXS/n9wAfXgcSBsfNW94M=";
     fetchSubmodules = true;
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
@@ -54,10 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/JohnnyMorganz/luau-lsp/releases/tag/${finalAttrs.version}";
     changelog = "https://github.com/JohnnyMorganz/luau-lsp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      anninzy
-      HeitorAugustoLN
-    ];
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "luau-lsp";
     platforms = lib.platforms.all;
     badPlatforms = [

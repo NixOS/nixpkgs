@@ -7,11 +7,11 @@
 let
   src = mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.1";
-    buildNumber = "253.29346.142";
+    version = "2025.3.3";
+    buildNumber = "253.31033.139";
     buildType = "pycharm";
-    ideaHash = "sha256-eAq/lgv6ZcN9SR2E1KYnnhDHe/rBQ3GqqbbF6GstDoU=";
-    androidHash = "sha256-quMCzrjCKIo1pkzw4PWewAs5tz7A2aq7TI5zd+QaaUY=";
+    ideaHash = "sha256-GRlWzpHvgy7P+vw+UWApyPpLLzWiHmvsC8HLPUyrshQ=";
+    androidHash = "sha256-FA/6ry1M7+RISJL+2SR9QkDvAGJAkXhFMh9YoOEU5nk=";
     jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
     mvnDeps = ../source/pycharm_maven_artefacts.json;
@@ -20,7 +20,6 @@ let
       "packages.jetbrains.team/maven/p/ij/intellij-dependencies"
       "dl.google.com/dl/android/maven2"
       "download.jetbrains.com/teamcity-repository"
-      "maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies"
       "packages.jetbrains.team/maven/p/grazi/grazie-platform-public"
       "packages.jetbrains.team/maven/p/kpm/public"
       "packages.jetbrains.team/maven/p/ki/maven"
@@ -60,7 +59,6 @@ in
       It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing and powerful Debugger.
     '';
     maintainers = with lib.maintainers; [
-      genericnerdyusername
       tymscar
     ];
     license = lib.licenses.asl20;

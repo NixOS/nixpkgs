@@ -9,7 +9,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools-scm,
   standard-telnetlib,
@@ -20,14 +19,14 @@ buildPythonPackage rec {
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "threat9";
     repo = "threat9-test-bed";
     rev = "v${version}";
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
+
+  patches = [ ./asyncio-loop.patch ];
 
   build-system = [ setuptools-scm ];
 

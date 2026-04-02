@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter341,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -13,16 +13,17 @@
 }:
 
 let
-  version = "1.0.1276";
+  version = "1.0.1340";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-fmL03BNVi1aKhb0jV7MnEtRKTOEaLBGl6uMJtLr6cFk=";
+    fetchSubmodules = true;
+    hash = "sha256-O9JW8BKe/qJcoHZNt2ayJOYlQLHhEs28JCWU9Xz7gVI=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
@@ -36,7 +37,7 @@ flutter335.buildFlutterApplication {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -92,7 +93,8 @@ flutter335.buildFlutterApplication {
 
   meta = {
     description = "Server status & toolbox";
-    homepage = "https://github.com/lollipopkit/flutter_server_box";
+    homepage = "https://serverbox.lpkt.cn";
+    downloadPage = "https://serverbox.lpkt.cn/installation";
     changelog = "https://github.com/lollipopkit/flutter_server_box/releases/tag/${src.tag}";
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;

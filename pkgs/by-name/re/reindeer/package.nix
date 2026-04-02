@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reindeer";
-  version = "2025.12.29.00";
+  version = "2026.02.23.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
-    tag = "v${version}";
-    hash = "sha256-BBiVJx6LyR6LcIqla7PVnoiBIbwmEZONS/FP3a5OseU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m2IqtOzkrKhFfpwNX1KGW2HZz9DLskGXHum8mc4SVuc=";
   };
 
-  cargoHash = "sha256-GeRXwE6QqWaPxRTMIIvcIGE1NdWVSSjfxy6wq3pKieM=";
+  cargoHash = "sha256-fWpxIQJOcqzUwHNID+Wc+3QOY9P9hIAYSb9wP8x4pVU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nickgerace ];
+    maintainers = with lib.maintainers; [ amaanq ];
   };
-}
+})

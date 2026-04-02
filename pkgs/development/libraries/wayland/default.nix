@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # patch from: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
     ./darwin.patch
   ];
 
@@ -107,10 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.unix;
-    # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
+    # Builds with a large downstream patch, but breaks at least the
+    # `qt6Packages.qtbase` build. Please audit Wayland availability
+    # checks throughout the tree before enabling (and work with
+    # upstream if you want sustainable Wayland support on macOS).
     badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      codyopel
       qyliss
     ];
     pkgConfigModules = [

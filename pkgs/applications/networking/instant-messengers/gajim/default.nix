@@ -43,17 +43,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.3.6";
+  version = "2.4.5";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-Mvi69FI2zRefcCnLsurdVNMxYaqKsUCKgeFxOh6vg/o=";
+    hash = "sha256-5daPMlC2Ejfi5UXsRLaLWwEZHHEC0szbfkqavIisoUQ=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = [
     gtk4
@@ -112,6 +112,9 @@ python3.pkgs.buildPythonApplication rec {
       qrcode
       sqlalchemy
       emoji
+      httpx
+      h2
+      truststore
     ]
     ++ lib.optionals enableE2E [
       pycrypto
@@ -145,6 +148,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       raskin
       hlad
+      vbgl
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;

@@ -9,7 +9,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webrtc-audio-processing";
   version = "1.3";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pulseaudio";
     repo = "webrtc-audio-processing";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
 
@@ -68,13 +68,12 @@ stdenv.mkDerivation rec {
       lib.intersectLists
         # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
         (lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.windows)
-        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
+        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/v1.3/webrtc/rtc_base/system/arch.h
         (
           lib.platforms.arm
           ++ lib.platforms.aarch64
           ++ lib.platforms.loongarch64
           ++ lib.platforms.mips
-          ++ lib.platforms.power
           ++ lib.platforms.riscv
           ++ lib.platforms.x86
         );
@@ -82,4 +81,4 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
     badPlatforms = lib.platforms.bigEndian;
   };
-}
+})

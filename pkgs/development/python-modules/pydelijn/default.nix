@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytz,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pydelijn";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

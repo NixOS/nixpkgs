@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "beniget";
-  version = "0.4.2.post1";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "beniget";
     tag = version;
-    hash = "sha256-rNMgCEkI6p9KtLSz/2jVJ9rPeJzxv5rT+Pu6OHM8z70=";
+    hash = "sha256-abxBLrz4JhZX084fd2wZEhP7w5bPBxvNXudYUaqS1Yo=";
   };
 
   build-system = [ setuptools ];

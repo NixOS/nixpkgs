@@ -22,16 +22,16 @@
   scikit-image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rawpy";
-  version = "0.25.1";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
-    tag = "v${version}";
-    hash = "sha256-d3TxPW3GdCQT8bBbnveSxtWHkf5zinM8nSy4m/P7m7Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/pD3t6sP/SctjzjiOo2e937NEetvkcC5wB/RWi8UXI0=";
   };
 
   build-system = [
@@ -88,4 +88,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -3,38 +3,52 @@
   stdenvNoCC,
   fetchurl,
   nodejs,
+  sysctl,
   writableTmpDirAsHomeHook,
   nix-update-script,
+  ripgrep,
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.22.5";
+  version = "0.34.0";
 
   src = fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
-    hash = "sha256-g6b45+EWBiZ6Ij0nXp0L5jBW8wv1y0KK5CgiThk8Y7U=";
+    hash = "sha256-Qfol6zATjVK6d4gfA6ql3aVwjqRE7NAYqg5YTyEVDHk=";
   };
 
   dontUnpack = true;
 
   strictDeps = true;
 
-  buildInputs = [ nodejs ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    nodejs
+    ripgrep
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    install -D "$src" "$out/bin/gemini"
+    local dest="$out/lib/gemini/gemini.js"
+    install -Dm644 "$src" "$dest"
 
-    # ideal method to disable auto-update
-    sed -i '/disableautoupdate: {/,/}/ s/default: false/default: true/' "$out/bin/gemini"
+    # disable auto-update
+    sed -i '/enableAutoUpdate: {/,/}/ s/default: true/default: false/' "$dest"
 
-    # disable auto-update for real because the default value in settingsschema isn't cleanly applied
-    # https://github.com/google-gemini/gemini-cli/issues/13569
-    substituteInPlace $out/bin/gemini \
-      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)" \
-      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
-      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
+    # use `ripgrep` from `nixpkgs`, more dependencies but prevent downloading incompatible binary on NixOS
+    # this workaround can be removed once the following upstream issue is resolved:
+    # https://github.com/google-gemini/gemini-cli/issues/11438
+    substituteInPlace "$dest" \
+      --replace-fail 'const existingPath = await resolveExistingRgPath();' 'const existingPath = "${lib.getExe ripgrep}";'
+
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/gemini" \
+      --add-flags "--no-warnings=DEP0040" \
+      --add-flags "$dest"
 
     runHook postInstall
   '';
@@ -42,6 +56,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (with stdenvNoCC.hostPlatform; isDarwin && isx86_64) [
+    sysctl
   ];
   # versionCheckHook cannot be used because the reported version might be incorrect (e.g., 0.6.1 returns 0.6.0).
   installCheckPhase = ''

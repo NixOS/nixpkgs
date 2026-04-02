@@ -12,7 +12,6 @@
   pyproject-metadata,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   scikit-build-core,
   scipy,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "phik";
   version = "0.12.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KaveIO";

@@ -50,7 +50,7 @@ let
           (lib.concatStringsSep "," permissions)
           dataset
         ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
+      ${lib.optionalString ((dirOf dataset) != ".") ''
         else
           ${lib.escapeShellArgs [
             "/run/booted-system/sw/bin/zfs"
@@ -58,7 +58,7 @@ let
             cfg.user
             (lib.concatStringsSep "," permissions)
             # Remove the last part of the path
-            (builtins.dirOf dataset)
+            (dirOf dataset)
           ]}
       ''}
       fi
@@ -82,14 +82,14 @@ let
         (lib.concatStringsSep "," permissions)
         dataset
       ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") (
+      ${lib.optionalString ((dirOf dataset) != ".") (
         lib.escapeShellArgs [
           "/run/booted-system/sw/bin/zfs"
           "unallow"
           cfg.user
           (lib.concatStringsSep "," permissions)
           # Remove the last part of the path
-          (builtins.dirOf dataset)
+          (dirOf dataset)
         ]
       )}
     ''}";
@@ -240,7 +240,7 @@ in
                 '';
               };
 
-              recursive = lib.mkEnableOption ''the transfer of child datasets'';
+              recursive = lib.mkEnableOption "the transfer of child datasets";
 
               sshKey = lib.mkOption {
                 type = with lib.types; nullOr (coercedTo path toString str);

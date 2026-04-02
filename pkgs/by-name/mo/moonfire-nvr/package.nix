@@ -36,8 +36,8 @@ let
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_9;
       sourceRoot = "${finalAttrs.src.name}/ui";
-      fetcherVersion = 1;
-      hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
+      fetcherVersion = 3;
+      hash = "sha256-1bkuou8jfWqdev4ZlpqvC4BRrFj//LK6ImVvSeMUEuM=";
     };
     installPhase = ''
       runHook preInstall

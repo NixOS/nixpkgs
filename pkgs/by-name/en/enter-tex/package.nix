@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/gedit/enter-tex";
     description = "LaTeX editor for the GNOME desktop";
     maintainers = with lib.maintainers; [
-      manveru
       bobby285271
     ];
     license = lib.licenses.gpl3Plus;

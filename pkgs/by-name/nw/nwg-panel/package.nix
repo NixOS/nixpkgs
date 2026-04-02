@@ -21,7 +21,7 @@
   playerctl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-panel";
   version = "0.10.13";
   format = "setuptools";
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TfE2RjbCBoHcdp9st+HeVhSfTMahZdQaItOIuT8Sxcc=";
   };
 
@@ -66,9 +66,8 @@ python3Packages.buildPythonApplication rec {
     ++ [ libdbusmenu-gtk3 ];
 
   postInstall = ''
-    mkdir -p $out/share/{applications,pixmaps}
-    cp $src/nwg-panel-config.desktop nwg-processes.desktop $out/share/applications/
-    cp $src/nwg-shell.svg $src/nwg-panel.svg nwg-processes.svg $out/share/pixmaps/
+    install -D $src/nwg-panel-config.desktop nwg-processes.desktop -t $out/share/applications/
+    install -D $src/nwg-shell.svg $src/nwg-panel.svg nwg-processes.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
   preFixup = ''
@@ -92,11 +91,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-panel";
-    changelog = "https://github.com/nwg-piotr/nwg-panel/releases/tag/${src.tag}";
+    changelog = "https://github.com/nwg-piotr/nwg-panel/releases/tag/${finalAttrs.src.tag}";
     description = "GTK3-based panel for Sway window manager";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ludovicopiero ];
     mainProgram = "nwg-panel";
   };
-}
+})

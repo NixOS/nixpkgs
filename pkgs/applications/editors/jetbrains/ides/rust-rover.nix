@@ -18,20 +18,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.1.tar.gz";
-      hash = "sha256-Whs04QocWe7jBpQja6qCM8d4dYB2k4G+AbTMsJYY7Ik=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.5.tar.gz";
+      hash = "sha256-2yEZOWUoD6ELs0WSvdMSZSVAmA/LsoKyfJiR20I86aQ=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-+w+BydKipgRxhISVSyYaZCvp7W9R3pj83GztsysKTJ4=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.5-aarch64.tar.gz";
+      hash = "sha256-tl8lxMH6XH+2VGqv6vxGEjjALevaEl7VAzs9LAjwtPQ=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.1.dmg";
-      hash = "sha256-OJmHVFKlGC25OxMsANvIQ5T/tjdDC5fyOQvoq7BBJTc=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.5.dmg";
+      hash = "sha256-8ONWTld29DJjaDH4ubsBRmYYosQ6wTAQInuko76Ucoc=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.1-aarch64.dmg";
-      hash = "sha256-EDoS7Rw3trOM/11jfn3HuNzHj1xXa6OLj4Ysa6NkfVI=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2025.3.5-aarch64.dmg";
+      hash = "sha256-N3D6YE6vV8x+slvphyqzDu2mTp8y2uAeSZTZg0pMABQ=";
     };
   };
   # update-script-end: urls
@@ -45,8 +45,8 @@ in
   product = "RustRover";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.139";
+  version = "2025.3.5";
+  buildNumber = "253.31033.204";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
@@ -68,7 +68,7 @@ in
     homepage = "https://www.jetbrains.com/rust/";
     description = "Rust IDE from JetBrains";
     longDescription = "Rust IDE from JetBrains";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

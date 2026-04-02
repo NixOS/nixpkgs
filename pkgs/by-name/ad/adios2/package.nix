@@ -126,8 +126,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
-    ++ lib.optional pythonSupport python3Packages.numpy
-    ++ lib.optional (mpiSupport && pythonSupport) adios2Packages.mpi4py;
+    # create meta package providing dist-info for python3Pacakges.adios2
+    ++ lib.optional pythonSupport (
+      python3Packages.mkPythonMetaPackage {
+        inherit (finalAttrs) pname version meta;
+        dependencies = [
+          python3Packages.numpy
+        ]
+        ++ lib.optional mpiSupport adios2Packages.mpi4py;
+      }
+    );
 
   cmakeFlags = [
     # adios2 builtin modules
@@ -182,6 +190,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3Packages.python.sitePackages)
   ];
+
+  # python binding libraries should be linked against installed libraries
+  preInstall = lib.optionalString pythonSupport ''
+    export adios2_DIR=$out/lib/cmake/adios2
+  '';
 
   # Tests are time-consuming and moved to passthru.tests.withCheck.
   doCheck = false;

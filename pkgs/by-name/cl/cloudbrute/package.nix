@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudbrute";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "0xsha";
     repo = "CloudBrute";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L233VdQolSPDPDXQALLvF5seb3peHiLRiZuj2RqdaRU=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

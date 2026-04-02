@@ -6,15 +6,12 @@
   fetchPypi,
   murmurhash,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "preshed";
   version = "3.0.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

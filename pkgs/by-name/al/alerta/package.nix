@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alerta";
   version = "8.5.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
   };
 
@@ -25,12 +25,10 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  disabled = python3.pythonOlder "3.6";
-
   meta = {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System command-line interface";
     mainProgram = "alerta";
     license = lib.licenses.asl20;
   };
-}
+})

@@ -145,18 +145,11 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 Feel free to create a new maintainer team in [`team-list.nix`](./team-list.nix) when a group is collectively responsible for a collection of packages.
 Use taste and personal judgment when deciding if a team is warranted.
 
-Teams are allowed to define their own rules about membership.
+Teams should be organised around areas of maintenance interest and expertise, rather than employer or participation in another project or organization.
+For example, a team dedicated to maintaining support for a desktop environment or programming language in Nixpkgs makes sense, as does a team to maintain packaging of software from a given vendor, but a team exclusive to employees of a company or maintainers of another project does not.
 
-For example, some teams will represent a business or other group which wants to carefully track its members.
-Other teams may be very open about who can join, and allow anybody to participate.
-
-When reviewing changes to a team, read the team's scope and the context around the member list for indications about the team's membership policy.
-
-In any case, request reviews from the existing team members.
-If the team lists no specific membership policy, feel free to merge changes to the team after giving the existing members a few days to respond.
-
-> [!IMPORTANT]
-> If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
+When reviewing changes to a team, request reviews from the existing team members.
+Feel free to merge changes to the team if the existing members are unresponsive.
 
 #### Synced GitHub teams
 
@@ -176,7 +169,7 @@ See its [README](./scripts/README.md) for further information.
 
 # nixpkgs-merge-bot
 
-To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
+To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in `pkgs/by-name`, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
 The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request.
 Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
 

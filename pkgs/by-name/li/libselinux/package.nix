@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  buildPackages,
   pcre2,
   pkg-config,
   libsepol,
@@ -13,11 +12,11 @@
   fts,
 }:
 
-assert enablePython -> swig != null && python3 != null;
+assert enablePython -> swig != null && python3 != null && !stdenv.hostPlatform.isStatic;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libselinux";
-  version = "3.8.1";
+  version = "3.10";
   inherit (libsepol) se_url;
 
   outputs = [
@@ -30,39 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/libselinux-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7C0nifkxFS0hwdsetLwgLOTszt402b6eNg47RSQ87iw=";
+    hash = "sha256-HvIWxbVvt+ClHNKQl4ehdaF+45HgRniUgHhzU56+dms=";
   };
 
   patches = [
-    # Make it possible to disable shared builds (for pkgsStatic).
-    #
-    # We can't use fetchpatch because it processes includes/excludes
-    # /after/ stripping the prefix, which wouldn't work here because
-    # there would be no way to distinguish between
-    # e.g. libselinux/src/Makefile and libsepol/src/Makefile.
-    #
-    # This is a static email, so we shouldn't have to worry about
-    # normalizing the patch.
-    (fetchurl {
-      url = "https://lore.kernel.org/selinux/20250211211651.1297357-3-hi@alyssa.is/raw";
-      hash = "sha256-a0wTSItj5vs8GhIkfD1OPSjGmAJlK1orptSE7T3Hx20=";
-      postFetch = ''
-        mv "$out" $TMPDIR/patch
-        ${buildPackages.patchutils_0_3_3}/bin/filterdiff \
-            -i 'a/libselinux/*' --strip 1 <$TMPDIR/patch >"$out"
-      '';
-    })
-
     (fetchurl {
       url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
       hash = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
     })
-
-    # commit 5c3fcbd931b7f9752b5ce29cec3b6813991d61c0 plus an additional
-    # fix for a musl build regression caused by that commit:
-    # https://lore.kernel.org/selinux/20250426151356.7116-2-hi@alyssa.is/
-    # Fix build on 32-bit LFS platforms
-    ./fix-build-32bit-lfs.patch
   ];
 
   nativeBuildInputs = [
@@ -129,6 +103,19 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = lib.optionalString enablePython ''
     mv $out/${python3.sitePackages}/selinux/* $py/${python3.sitePackages}/selinux/
     rm -rf $out/lib/python*
+
+    # We need to fix this symlink so it's named correctly for cross compiles.
+    # e.g. the Makefile would put _selinux.cpython-313-x86_64-linux-gnu.so -> selinux/_selinux.cpython-313-x86_64-linux-gnu.so
+    # here on a cross compile for aarch64, but put the aarch64 file in the selinux directory
+    pushd .
+    cd $py/${python3.sitePackages}
+    [ -f "$(ls selinux/_selinux.*${stdenv.hostPlatform.extensions.sharedLibrary})" ] || {
+      echo "selinux shared library not found!" >&2
+      exit 1
+    }
+    rm -vf _selinux.*${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -vsf selinux/_selinux.*${stdenv.hostPlatform.extensions.sharedLibrary}
+    popd
   '';
 
   meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {

@@ -41,7 +41,6 @@
     "description": "Maintenance of https://bazel.build/ and related packages",
     "id": 5468470,
     "maintainers": {
-      "Profpatsch": 3153638
     },
     "members": {
       "aherrmann": 732652,
@@ -170,8 +169,8 @@
       "emilazy": 18535642
     },
     "members": {
-      "reckenrode": 7413633,
       "Samasaur1": 30577766,
+      "reckenrode": 7413633,
       "toonn": 1486805
     },
     "name": "darwin-core"
@@ -196,7 +195,6 @@
       "Moraxyc": 69713071,
       "Prince213": 25235514,
       "Samasaur1": 30577766,
-      "Sciencentistguy": 4983935,
       "Steven0351": 24440751,
       "afh": 16507,
       "azuwis": 9315,
@@ -209,16 +207,18 @@
       "domenkozar": 126339,
       "donn": 12652988,
       "dwt": 57199,
+      "eclairevoyant": 848000,
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
-      "frogamic": 10263813,
+      "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
       "groodt": 343415,
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
+      "iamanaws": 78835633,
       "isabelroses": 71222764,
       "jonhermansen": 660911,
       "juliusrickert": 5007494,
@@ -229,6 +229,7 @@
       "kloenk": 12898828,
       "konradmalik": 13033392,
       "kubukoz": 894884,
+      "lilyball": 714,
       "lutzmor": 9321736,
       "magistau": 43097806,
       "maljub01": 350635,
@@ -241,13 +242,13 @@
       "mstone": 412508,
       "n8henrie": 1234956,
       "ofalvai": 1694986,
-      "pasqui23": 6931743,
       "prusnak": 42201,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
       "sarahec": 11277967,
       "shaunsingh": 71196912,
+      "shunueda": 62182668,
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
@@ -267,6 +268,7 @@
       "willcohen": 5185341,
       "willjr": 5904828,
       "wldhx": 15619766,
+      "yamashitax": 99486674,
       "yeongsheng-tan": 809030,
       "youhaveme9": 58213083,
       "yzx9": 41458459,
@@ -275,13 +277,13 @@
     "name": "darwin-maintainers"
   },
   "documentation-team": {
-    "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
+    "description": "Owns the standards, tooling, and processes that keep NixOS documentation reliable.",
     "id": 6590023,
     "maintainers": {
-      "alejandrosame": 1078000
+      "hsjobeki": 50398876
     },
     "members": {
-      "hsjobeki": 50398876,
+      "friedow": 17351844,
       "wamirez": 24505474
     },
     "name": "Documentation Team"
@@ -425,10 +427,9 @@
     "maintainers": {
       "Mic92": 96200,
       "kalbasit": 87115,
-      "zowoq": 59103226
+      "katexochen": 49727155
     },
     "members": {
-      "katexochen": 49727155,
       "mfrw": 4929861,
       "qbit": 68368
     },
@@ -485,9 +486,9 @@
       "wrmilling": 6162814
     },
     "members": {
-      "azey7f": 41077433,
       "frederictobiasc": 26125115,
       "heywoodlh": 18178614,
+      "maevii": 41077433,
       "rorosen": 76747196
     },
     "name": "k3s"
@@ -511,7 +512,6 @@
     "id": 5536808,
     "maintainers": {
       "johanot": 998763,
-      "offlinehacker": 585547,
       "saschagrunert": 695473,
       "srhb": 219362
     },
@@ -527,7 +527,7 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "TredwellGit": 61860346
+      "zowoq": 59103226
     },
     "name": "Linux kernel"
   },
@@ -551,10 +551,8 @@
       "lf-": 6652840
     },
     "members": {
-      "9999years": 15312184,
       "Qyriad": 1542224,
-      "RaitoBezarius": 314564,
-      "alois31": 36605164
+      "RaitoBezarius": 314564
     },
     "name": "Lix maintainers"
   },
@@ -568,7 +566,6 @@
     "members": {
       "Ericson2314": 1055245,
       "emilazy": 18535642,
-      "lovek323": 265084,
       "rrbutani": 7833358,
       "sternenseemann": 3154475
     },
@@ -620,9 +617,8 @@
     },
     "members": {
       "aanderse": 7755101,
-      "jnsgruk": 668505,
-      "megheaiulian": 1788114,
-      "mkg20001": 7735145
+      "herbetom": 15121114,
+      "megheaiulian": 1788114
     },
     "name": "LXC"
   },
@@ -642,6 +638,7 @@
       "djacu": 7043297
     },
     "members": {
+      "Sigmanificient": 53050011,
       "flyfloh": 74379,
       "thilobillerbeck": 7442383
     },
@@ -687,14 +684,12 @@
     "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
     "id": 9676823,
     "maintainers": {
-      "infinisil": 20525370,
+      "MattSturgeon": 5046562,
       "jfly": 277474
     },
     "members": {
       "0x4A6F": 9675338,
-      "MattSturgeon": 5046562,
       "Sereja313": 112060595,
-      "dasJ": 4971975,
       "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
@@ -710,6 +705,7 @@
       "Mic92": 96200,
       "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lovesegfault": 7243783,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -719,7 +715,7 @@
     "id": 3620128,
     "maintainers": {
       "jopejoe1": 34899572,
-      "leona-ya": 11006031
+      "yayayayaka": 73759599
     },
     "members": {},
     "name": "nixos-release-managers"
@@ -733,7 +729,9 @@
       "philiptaron": 43863,
       "zowoq": 59103226
     },
-    "members": {},
+    "members": {
+      "mdaniels5757": 8762511
+    },
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
@@ -741,8 +739,7 @@
     "id": 14317027,
     "maintainers": {
       "alyssais": 2768870,
-      "emilazy": 18535642,
-      "wolfgangwalther": 9132420
+      "emilazy": 18535642
     },
     "members": {},
     "name": "Nixpkgs core"
@@ -832,7 +829,6 @@
       "K900": 386765,
       "LunNova": 782440,
       "NickCao": 15247171,
-      "SCOTT-HAMILTON": 24496705,
       "SuperSandro2000": 7258858,
       "bkchr": 5718007,
       "ilya-fedin": 17829319,
@@ -841,6 +837,19 @@
       "peterhoeg": 722550
     },
     "name": "Qt-KDE"
+  },
+  "radicle": {
+    "description": "Maintain Radicle related packages, modules, and tests",
+    "id": 16784086,
+    "maintainers": {
+      "Defelo": 41747605,
+      "lorenzleutgeb": 542154
+    },
+    "members": {
+      "ju1m": 21160136,
+      "matthiasbeyer": 427866
+    },
+    "name": "Radicle"
   },
   "reproducible": {
     "description": "Team that is interested in reproducible builds",
@@ -922,6 +931,18 @@
     },
     "name": "SDL"
   },
+  "security-review": {
+    "description": "Reviews changes to core packages for Nixpkgs security vulnerabilities: https://github.com/NixOS/nixpkgs/issues/494349",
+    "id": 16430758,
+    "maintainers": {
+      "balsoft": 18467667,
+      "infinisil": 20525370
+    },
+    "members": {
+      "pyrox0": 35778371
+    },
+    "name": "Security review"
+  },
   "static": {
     "description": "People interested in static builds (creation of `.a` files, fully static executables, etc.) and keeping them working",
     "id": 5906550,
@@ -961,7 +982,8 @@
     "description": "Maintain systemd for NixOS",
     "id": 3894007,
     "maintainers": {
-      "flokli": 183879
+      "flokli": 183879,
+      "nikstur": 61635709
     },
     "members": {
       "ElvishJerricco": 1365692,

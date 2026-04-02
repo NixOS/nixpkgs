@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -20,7 +20,7 @@
   python3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pothos";
   version = "0.7.1";
 
@@ -61,7 +61,7 @@ mkDerivation rec {
   '';
 
   # poco 1.14 requires c++17
-  NIX_CFLAGS_COMPILE = [ "-std=gnu++17" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
 
   nativeBuildInputs = [
     cmake

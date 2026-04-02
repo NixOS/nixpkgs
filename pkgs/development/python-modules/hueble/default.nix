@@ -5,18 +5,20 @@
   setuptools,
   bleak,
   bleak-retry-connector,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hueble";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flip-dots";
     repo = "HueBLE";
     tag = "v${version}";
-    hash = "sha256-1KDKfmP7fNe66ZMHbOsNvnikkm1/AGQPBKTh7h9ku6Y=";
+    hash = "sha256-BokZeQMgOseIlxs4u5BpYmGLKCM5IwSCvV8ic0ZVIeI=";
   };
 
   build-system = [ setuptools ];
@@ -28,8 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "HueBLE" ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   meta = {
     changelog = "https://github.com/flip-dots/HueBLE/blob/${src.tag}/CHANGELOG.rst";

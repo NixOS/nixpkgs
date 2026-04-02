@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tasktimer";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "tasktimer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B2kuAGY7qVvv+95DzFn78no1vofJGr0dw0kW2AIeJpo=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     ];
     mainProgram = "tt";
   };
-}
+})

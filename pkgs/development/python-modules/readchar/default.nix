@@ -25,6 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-r+dKGv0a7AU+Ef94AGCCJLQolLqTTxaNmqRQYkxk15s=";
   };
 
+  # https://github.com/magmax/python-readchar/pull/129
+  patches = [ ./pytest9-compat.patch ];
+
   postPatch = ''
     # Tags on GitHub still have a postfix (-dev0)
     sed -i 's/\(version = "\)[^"]*\(".*\)/\1${version}\2/' pyproject.toml

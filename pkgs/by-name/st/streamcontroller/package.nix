@@ -18,19 +18,19 @@
 }:
 let
   # We have to hardcode revision because upstream often create multiple releases for the same version number.
-  # This is the commit hash that maps to 1.5.0-beta.12 released on 2025-10-11
-  rev = "73b7632ff2977d05763acd56e53bdc7a37d30c0c";
+  # This is the commit hash that maps to 1.5.0-beta.13 released on 2025-12-30
+  rev = "359de976eb23120d6e6a2d31104e15b37d1edfeb";
 in
 stdenv.mkDerivation {
   pname = "streamcontroller";
 
-  version = "1.5.0-beta.12";
+  version = "1.5.0-beta.13";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
     inherit rev;
-    hash = "sha256-6H0FPkvjKSfso1+E0JwseOnubDXwYys0RVBbyaGCXw0=";
+    hash = "sha256-b5tRhXEQGRhaJd1Q/hlmqUTO+0F+3+lziYSi8QpUa9c=";
   };
 
   # The installation method documented upstream

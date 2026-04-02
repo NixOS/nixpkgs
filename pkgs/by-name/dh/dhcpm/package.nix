@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dhcpm";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "leshow";
     repo = "dhcpm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vjKN9arR6Os3pgG89qmHt/0Ds5ToO38tLsQBay6VEIk=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "dhcpm";
   };
-}
+})

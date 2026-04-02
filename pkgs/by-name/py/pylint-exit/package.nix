@@ -27,7 +27,7 @@ buildPythonApplication rec {
   buildInputs = [ m2r ];
 
   # setup.py reads its version from the TRAVIS_TAG environment variable
-  TRAVIS_TAG = version;
+  env.TRAVIS_TAG = version;
 
   checkPhase = ''
     ${python.interpreter} -m doctest pylint_exit.py
@@ -37,6 +37,6 @@ buildPythonApplication rec {
     description = "Utility to handle pylint exit codes in an OS-friendly way";
     license = lib.licenses.mit;
     homepage = "https://github.com/jongracecox/pylint-exit";
-    maintainers = [ lib.maintainers.fabiangd ];
+    maintainers = [ ];
   };
 }

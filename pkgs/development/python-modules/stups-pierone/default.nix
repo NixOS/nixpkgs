@@ -8,15 +8,12 @@
   stups-zign,
   pytestCheckHook,
   hypothesis,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "stups-pierone";
   version = "1.1.51";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zalando-stups";

@@ -9,7 +9,6 @@
   gwcs,
   matplotlib,
   numpy,
-  pythonOlder,
   rasterio,
   scikit-image,
   scikit-learn,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "photutils";
   version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "astropy";

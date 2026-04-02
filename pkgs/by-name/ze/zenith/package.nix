@@ -1,21 +1,20 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nvidiaSupport ? false,
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenith";
-  version = "0.14.2";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = "zenith";
-    rev = version;
-    hash = "sha256-kMjDbWhey3SoT4hlEz2mEoSIICfI+X03PdBgTs5yxuI=";
+    rev = finalAttrs.version;
+    hash = "sha256-D/o8JmKLiT8LhmJ6q2h7f5vJQNXAN5aCislxwDw9yqo=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoHash = "sha256-M+I7+mcXn2UM340loy4OS6z+uZMxwiO/JwD0KjHvcFw=";
+  cargoHash = "sha256-/SRZWbsAvV4rgEsVj5WRgc5KJZm+JvIs1QTgaK/+l+g=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
 
@@ -44,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = if nvidiaSupport then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})

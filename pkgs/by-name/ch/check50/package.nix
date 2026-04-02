@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "check50";
   version = "3.4.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "check50";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3WxFdXECIjbTxHK65BFnxOroEYzu7iOJwm15gIjitLA=";
   };
 
@@ -44,10 +44,10 @@ python3Packages.buildPythonApplication rec {
     description = "Testing tool for checking student CS50 code";
     homepage = "https://cs50.readthedocs.io/projects/check50/en/latest/";
     downloadPage = "https://github.com/cs50/check50";
-    changelog = "https://github.com/cs50/check50/releases/tag/${src.tag}";
+    changelog = "https://github.com/cs50/check50/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "check50";
   };
-}
+})

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "medvol";
-  version = "0.0.18";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "medvol";
     tag = "v${version}";
-    hash = "sha256-PUZZRF5KzfvwI335H1tnUtGa2+zdnL6J5NArqQWL7tM=";
+    hash = "sha256-U73Whle2/4QwlU9MyRclB5o+pHWdpbCCiYJIdMsMoMg=";
   };
 
   build-system = [ setuptools ];

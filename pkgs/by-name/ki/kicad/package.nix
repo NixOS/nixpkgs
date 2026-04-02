@@ -12,7 +12,7 @@
   adwaita-icon-theme,
   dconf,
   gtk3,
-  wxGTK32,
+  wxwidgets_3_2,
   librsvg,
   cups,
   gsettings-desktop-schemas,
@@ -134,7 +134,7 @@ let
     else
       versionsImport.${baseName}.libVersion.version;
 
-  wxGTK = wxGTK32;
+  wxGTK = wxwidgets_3_2;
   python = python3;
   wxPython = python.pkgs.wxpython;
   addonPath = "addon.zip";
@@ -234,9 +234,9 @@ stdenv.mkDerivation rec {
       "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
       # required to open a bug report link in firefox-wayland
       "--set-default MOZ_DBUS_REMOTE 1"
-      "--set-default KICAD9_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-      "--set-default KICAD9_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-      "--set-default KICAD9_TEMPLATE_DIR ${template_dir}"
+      "--set-default KICAD10_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+      "--set-default KICAD10_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+      "--set-default KICAD10_TEMPLATE_DIR ${template_dir}"
     ]
     ++ optionals (addons != [ ]) (
       let
@@ -248,10 +248,10 @@ stdenv.mkDerivation rec {
           ];
         };
       in
-      [ "--set-default NIX_KICAD9_STOCK_DATA_PATH ${stockDataPath}" ]
+      [ "--set-default NIX_KICAD10_STOCK_DATA_PATH ${stockDataPath}" ]
     )
     ++ optionals with3d [
-      "--set-default KICAD9_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+      "--set-default KICAD10_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
     ]
     ++ optionals withNgspice [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
@@ -283,7 +283,7 @@ stdenv.mkDerivation rec {
     (concatStringsSep "\n" (flatten [
       "runHook preInstall"
 
-      (optionalString withScripting "buildPythonPath \"${base} $pythonPath\" \n")
+      (optionalString withScripting ''buildPythonPath "${base} ''${pythonPath[*]}"'')
 
       # wrap each of the directly usable tools
       (map (
@@ -332,7 +332,10 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ korken89 ];
+    maintainers = with lib.maintainers; [
+      korken89
+      ryand56
+    ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "kicad";

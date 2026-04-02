@@ -142,9 +142,8 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members ++ [
-      lib.maintainers.frontear
-    ];
+    teams = [ lib.teams.freedesktop ];
+    maintainers = [ lib.maintainers.frontear ];
   };
 
   ###### interface
@@ -238,7 +237,7 @@ in
           types.listOf networkManagerPluginPackage;
         default = [ ];
         example = literalExpression ''
-          [
+          with pkgs; [
             networkmanager-fortisslvpn
             networkmanager-iodine
             networkmanager-l2tp
@@ -346,7 +345,7 @@ in
         ];
         default = "default";
         description = ''
-          Set the DNS (`resolv.conf`) processing mode.
+          Set the DNS ({file}`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
           [

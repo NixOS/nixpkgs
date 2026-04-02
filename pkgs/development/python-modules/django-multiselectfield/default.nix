@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "django-multiselectfield";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "django_multiselectfield";

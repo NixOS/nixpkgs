@@ -3,15 +3,12 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "base58check";
   version = "1.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "joeblackwaslike";

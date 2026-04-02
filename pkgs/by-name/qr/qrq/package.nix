@@ -6,18 +6,18 @@
   pulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qrq";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "dj1yfk";
     repo = "qrq";
-    rev = "qrq-${version}";
+    rev = "qrq-${finalAttrs.version}";
     hash = "sha256-uuETGbv5qm0Z+45+kK66SBHhQ0Puu6I5z+TWIh3iR2g=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   buildInputs = [
     ncurses
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High Speed Morse trainer - mirror of https://git.fkurz.net/dj1yfk/qrq";
     homepage = "https://github.com/dj1yfk/qrq";
-    changelog = "https://github.com/dj1yfk/qrq/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/dj1yfk/qrq/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pkharvey ];
     mainProgram = "qrq";
     platforms = lib.platforms.all;
   };
-}
+})

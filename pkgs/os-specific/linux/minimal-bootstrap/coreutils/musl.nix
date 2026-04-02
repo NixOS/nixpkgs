@@ -13,30 +13,37 @@
   gzip,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils-musl";
-  version = "9.4";
+  version = "9.9";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.gz";
-    hash = "sha256-X2ANkJOXOwr+JTk9m8GMRPIjJlf0yg2V6jHHAutmtzk=";
+    hash = "sha256-kacZ/Pkj3mhgFvLI0ISovh95PzQXOGEnPEZo98Za+Uo=";
   };
 
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
-    # musl 1.1.x doesn't use 64bit time_t
-    "--disable-year2038"
+    "--disable-dependency-tracking"
     # libstdbuf.so fails in static builds
     "--enable-no-install-program=stdbuf,arch,coreutils,hostname"
     # Disable PATH_MAX for better reproducibility
     "gl_cv_func_getcwd_path_max=\"no, but it is partly working\""
     "gl_cv_have_unlimited_file_name_length=no"
+
+    # test crashes bash-2.05b?
+    "gl_cv_func_pthread_rwlock_good_waitqueue=no"
+
+    # depends on linux/version.h, which is not present at this stage
+    "gl_cv_func_copy_file_range=no"
+    "gl_cv_onwards_func_copy_file_range=no"
   ];
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -54,14 +61,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/cat --version
         mkdir $out
       '';
-
-    meta = {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      platforms = lib.platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -75,8 +74,12 @@ bash.runCommand "${pname}-${version}"
     bash ./configure ${lib.concatStringsSep " " configureFlags}
 
     # Build
-    make -j $NIX_BUILD_CORES AR="tcc -ar" MAKEINFO="true"
+    #
+    # Set SUBDIRS=. to avoid cd'ing to gnulib-tests. Those have
+    # compilation issues related to pthread and linux/*.h not
+    # being available.
+    make -j $NIX_BUILD_CORES AR="tcc -ar" MAKEINFO="true" SUBDIRS=.
 
     # Install
-    make -j $NIX_BUILD_CORES install MAKEINFO="true"
+    make -j $NIX_BUILD_CORES install MAKEINFO="true" SUBDIRS=.
   ''

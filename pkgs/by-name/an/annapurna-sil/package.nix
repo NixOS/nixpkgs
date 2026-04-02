@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "annapurna-sil";
   version = "2.100";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/annapurna/AnnapurnaSIL-${version}.zip";
+    url = "https://software.sil.org/downloads/r/annapurna/AnnapurnaSIL-${finalAttrs.version}.zip";
     hash = "sha256-TFaCchtd9SRGsU9r+m8QOvZfc7/FJxwclkSfbLwf6/4=";
   };
 
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 OFL.txt OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 OFL.txt OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/annapurna-sil-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.kmein ];
   };
-}
+})

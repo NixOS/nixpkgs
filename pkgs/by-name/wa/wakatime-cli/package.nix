@@ -8,23 +8,23 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wakatime-cli";
-  version = "1.132.1";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
-    tag = "v${version}";
-    hash = "sha256-VdCuQ8Wv/tMo/pZ1NzqA4y1kru78KQJfJ7mE2rWsmCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VBlERyaoRmOO7CGPmF9R2f6sU+8BNJ3Ze4AX2mxezCo=";
   };
 
-  vendorHash = "sha256-yy8y+qjaaaYThTWsuoO3R+mXT6baDqiRKNEGi7mKW64=";
+  vendorHash = "sha256-1BtTtR8wPVzzOEGv3te3hOeKakZX7cS+HYvoCLnuZ/c=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
+    "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${finalAttrs.version}"
   ];
 
   # dial tcp 127.0.0.1:51272: connect: operation not permitted
@@ -60,4 +60,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "wakatime-cli";
   };
-}
+})

@@ -8,16 +8,12 @@
   pep517,
   pytestCheckHook,
   setuptools,
-  tomli,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
   version = "0.51";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mgedmin";
@@ -32,8 +28,7 @@ buildPythonPackage rec {
     build
     pep517
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     git

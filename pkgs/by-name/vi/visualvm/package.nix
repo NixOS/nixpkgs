@@ -7,13 +7,13 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.2";
   pname = "visualvm";
 
   src = fetchzip {
-    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${
-      builtins.replaceStrings [ "." ] [ "" ] version
+    url = "https://github.com/visualvm/visualvm.src/releases/download/${finalAttrs.version}/visualvm_${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     sha256 = "sha256-xEqzSNM5Mkt9SQ+23Edb2NMN/o8koBjhQWTGuyZ/0m4=";
   };
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
       moaxcp
     ];
   };
-}
+})

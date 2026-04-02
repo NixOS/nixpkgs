@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   grpcio,
   protobuf,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "grpc-interceptor";
   version = "0.15.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "d5h-foss";

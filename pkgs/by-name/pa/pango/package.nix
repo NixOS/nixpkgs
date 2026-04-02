@@ -18,7 +18,7 @@
   python3,
   docutils,
   x11Support ? !stdenv.hostPlatform.isDarwin,
-  libXft,
+  libxft,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
   ]
   ++ lib.optionals x11Support [
-    libXft
+    libxft
   ];
 
   mesonFlags = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 

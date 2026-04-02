@@ -1,29 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatch-vcs,
   hatchling,
   sphinx,
   pytestCheckHook,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-autodoc-typehints";
-  version = "3.5.2";
-in
-
-buildPythonPackage {
-  inherit pname version;
+  version = "3.9.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "sphinx_autodoc_typehints";
-    inherit version;
-    hash = "sha256-X81KPreqiUJMHi4yvtymbtw4NnVpyRaagPSz6TQXH9s=";
+  src = fetchFromGitHub {
+    owner = "tox-dev";
+    repo = "sphinx-autodoc-typehints";
+    tag = finalAttrs.version;
+    hash = "sha256-RfeY9i7M+5SoZtJzdORm/ZyCZ+RLyERJFK7I9L1B7ws=";
   };
-
-  pythonRelaxDeps = [ "sphinx" ];
 
   build-system = [
     hatch-vcs
@@ -40,10 +35,10 @@ buildPythonPackage {
   pythonImportsCheck = [ "sphinx_autodoc_typehints" ];
 
   meta = {
-    changelog = "https://github.com/tox-dev/sphinx-autodoc-typehints/releases/tag/${version}";
+    changelog = "https://github.com/tox-dev/sphinx-autodoc-typehints/releases/tag/${finalAttrs.version}";
     description = "Type hints (PEP 484) support for the Sphinx autodoc extension";
     homepage = "https://github.com/tox-dev/sphinx-autodoc-typehints";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

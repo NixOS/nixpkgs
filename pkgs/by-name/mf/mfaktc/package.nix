@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "primesearch";
     repo = "mfaktc";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-7lJ3+v9exe+n+Txkn1vsvSPYLEP4l/0UgHpc6lAGv1Y=";
   };

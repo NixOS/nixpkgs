@@ -6,17 +6,17 @@
   perl,
   python3,
   openssl,
-  xorg,
+  libxcb-util,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kdash";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "kdash-rs";
     repo = "kdash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fFpdWVoeWycnp/hRw2S+hYpnXYmCs+rLqcZdmSSMGwI=";
   };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    xorg.xcbutil
+    libxcb-util
   ];
 
   # Fix for build failure with gcc15
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

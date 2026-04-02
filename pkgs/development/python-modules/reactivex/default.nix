@@ -5,6 +5,7 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
+  pythonAtLeast,
   typing-extensions,
 }:
 
@@ -12,6 +13,9 @@ buildPythonPackage rec {
   pname = "reactivex";
   version = "4.1.0";
   pyproject = true;
+
+  # https://github.com/ReactiveX/RxPY/issues/737
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "ReactiveX";

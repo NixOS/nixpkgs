@@ -4,16 +4,13 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "flatten-dict";
   version = "0.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ianlini";

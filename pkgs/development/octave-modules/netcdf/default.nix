@@ -1,17 +1,20 @@
 {
   buildOctavePackage,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   netcdf,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "netcdf";
-  version = "1.0.18";
+  version = "1.0.19";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ydgcKFh4uWuSlr7zw+k1JFUSzGm9tiWmOHV1IWvlgwk=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-netcdf";
+    tag = "v${version}";
+    sha256 = "sha256-yt39bd6EBLj7mr6EYngPfPXEMusncc9tx5So1Cp1zkM=";
   };
 
   propagatedBuildInputs = [

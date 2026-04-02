@@ -2,32 +2,31 @@
   lib,
   aiohttp,
   aresponses,
-  async-timeout,
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  mashumaro,
-  orjson,
   packaging,
+  pydantic,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   yarl,
+  zeroconf,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "3.1.6";
+  version = "5.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FMbba7z/Di5oD6xrjpF2cyJzdzdFjSw7wfTwS8Sjo8c=";
+    hash = "sha256-P7c+5x5wQaWfNeeYKkylhV2AQESp40duSQfwsTDVW6M=";
   };
 
   postPatch = ''
@@ -42,9 +41,8 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     backoff
-    mashumaro
-    orjson
     packaging
+    pydantic
     yarl
   ];
 
@@ -55,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    zeroconf
   ];
 
   __darwinAllowLocalNetworking = true;

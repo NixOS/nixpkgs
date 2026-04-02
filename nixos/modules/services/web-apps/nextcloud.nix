@@ -7,10 +7,6 @@
 let
   cfg = config.services.nextcloud;
 
-  overridePackage = cfg.package.override {
-    inherit (config.security.pki) caBundle;
-  };
-
   fpm = config.services.phpfpm.pools.nextcloud;
 
   jsonFormat = pkgs.formats.json { };
@@ -53,13 +49,13 @@ let
   };
 
   webroot =
-    pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
+    pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps"
       {
         preferLocalBuild = true;
       }
       ''
         mkdir $out
-        ln -sfv "${overridePackage}"/* "$out"
+        ln -sfv "${cfg.package}"/* "$out"
         ${lib.concatStrings (
           lib.mapAttrsToList (
             name: store:
@@ -161,6 +157,7 @@ let
             --uid=nextcloud \
             --same-dir \
             --pty \
+            --pipe \
             --wait \
             --collect \
             --service-type=exec \
@@ -297,9 +294,6 @@ let
         ) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
         ${lib.optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
-        )}
         ${objectstoreConfig}
       ];
 
@@ -307,6 +301,12 @@ let
         "${jsonFormat.generate "nextcloud-settings.json" cfg.settings}",
         "impossible: this should never happen (decoding generated settings file %s failed)"
       ));
+
+      $CONFIG = array_replace_recursive($CONFIG, [
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
+        )}
+      ]);
 
       ${lib.optionalString (cfg.secretFile != null) ''
         $CONFIG = array_replace_recursive($CONFIG, nix_read_secret_and_decode_json_file('secret_file'));
@@ -465,8 +465,8 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud31"
         "nextcloud32"
+        "nextcloud33"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {
@@ -1195,7 +1195,7 @@ in
       {
         warnings =
           let
-            latest = 32;
+            latest = 33;
             upgradeWarning = major: nixos: ''
               A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
@@ -1221,13 +1221,14 @@ in
             If you have an existing installation with a custom table prefix, make sure it is
             set correctly in `config.php` and remove the option from your NixOS config.
           '')
-          ++ (lib.optional (lib.versionOlder overridePackage.version "26") (upgradeWarning 25 "23.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "27") (upgradeWarning 26 "23.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "32") (upgradeWarning 31 "25.11"));
+          ++ (lib.optional (lib.versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
@@ -1236,12 +1237,12 @@ in
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if lib.versionOlder stateVersion "25.05" then
-            pkgs.nextcloud30
           else if lib.versionOlder stateVersion "25.11" then
             pkgs.nextcloud31
-          else
+          else if lib.versionOlder stateVersion "26.05" then
             pkgs.nextcloud32
+          else
+            pkgs.nextcloud33
         );
 
         services.nextcloud.phpOptions = lib.mkMerge [
@@ -1289,7 +1290,7 @@ in
           }
           {
             assertion =
-              lib.versionAtLeast overridePackage.version "32.0.0"
+              lib.versionAtLeast cfg.package.version "32.0.0"
               || (cfg.config.adminuser != null && cfg.config.adminpassFile != null);
             message = ''
               Disabling initial admin user creation is only available on Nextcloud >= 32.0.0.
@@ -1472,21 +1473,12 @@ in
             # NOTE: In contrast to the occ wrapper script running phpCli directly will not
             #       set NEXTCLOUD_CONFIG_DIR by itself currently.
             environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
-              ${phpCli} -f ${webroot}/cron.php
-            '';
             serviceConfig = {
               Type = "exec";
               User = "nextcloud";
               KillMode = "process";
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
+              ExecStart = "${phpCli} -f ${webroot}/cron.php";
               LoadCredential = runtimeSystemdCredentials;
             };
           };
@@ -1503,14 +1495,6 @@ in
           nextcloud-update-db = {
             after = [ "nextcloud-setup.service" ];
             script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
               ${lib.getExe occ} db:add-missing-columns
               ${lib.getExe occ} db:add-missing-indices
               ${lib.getExe occ} db:add-missing-primary-keys
@@ -1519,6 +1503,7 @@ in
               Type = "exec";
               User = "nextcloud";
               LoadCredential = runtimeSystemdCredentials;
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
             };
           };
 
@@ -1622,6 +1607,7 @@ in
               "upgrade.disable-web" = true;
               # NixOS already provides its own integrity check and the nix store is read-only, therefore Nextcloud does not need to do its own integrity checks.
               "integrity.check.disabled" = true;
+              "default_certificates_bundle_path" = config.security.pki.caBundle;
             }
             (lib.mkIf cfg.configureRedis {
               "memcache.distributed" = ''\OC\Memcache\Redis'';
@@ -1713,7 +1699,7 @@ in
                 fastcgi_pass unix:${fpm.socket};
                 fastcgi_intercept_errors on;
                 fastcgi_request_buffering ${if cfg.nginx.enableFastcgiRequestBuffering then "on" else "off"};
-                fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
+                fastcgi_read_timeout ${toString cfg.fastcgiTimeout}s;
               '';
             };
             "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
@@ -1789,5 +1775,5 @@ in
   );
 
   meta.doc = ./nextcloud.md;
-  meta.maintainers = lib.teams.nextcloud.members;
+  meta.teams = [ lib.teams.nextcloud ];
 }

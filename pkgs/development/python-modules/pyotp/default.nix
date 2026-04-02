@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   unittestCheckHook,
 }:
@@ -9,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyotp";
   version = "2.9.0";
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 

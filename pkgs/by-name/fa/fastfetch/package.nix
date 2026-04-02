@@ -11,7 +11,7 @@
   glib,
   hwdata,
   imagemagick,
-  libXrandr,
+  libxrandr,
   libdrm,
   libelf,
   libglvnd,
@@ -35,7 +35,9 @@
   vulkan-loader,
   wayland,
   xfconf,
-  xorg,
+  libxext,
+  libxdmcp,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -59,13 +61,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.56.1";
+  version = "2.61.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-loTEadHPhE0b7VYCq2Lh+FKKnqzc4kzWFkHLnTjFsBg=";
+    hash = "sha256-gy4xxY3w3OzzqLrXvpy5ruwticUKRhx/B9OU/bpukvs=";
   };
 
   outputs = [
@@ -166,12 +168,12 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optionals x11Support [
           # At least one of them sould be present in X11 sessions for better display detection and faster WM detection.
           # The *randr ones provide multi monitor support The libxcb* ones usually have better performance.
-          libXrandr
+          libxrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
-          xorg.libXdmcp
-          xorg.libXext
+          libxau
+          libxdmcp
+          libxext
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   dahlia,
   ixia,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "oddsprout";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "trag1c";

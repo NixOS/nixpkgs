@@ -7,12 +7,12 @@
   alsa-lib,
   fontconfig,
   mesa_glu,
-  libXcursor,
-  libXinerama,
-  libXrandr,
+  libxcursor,
+  libxinerama,
+  libxrandr,
   xinput,
-  libXi,
-  libXext,
+  libxi,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     fontconfig
     mesa_glu
-    libXcursor
-    libXinerama
-    libXrandr
+    libxcursor
+    libxinerama
+    libxrandr
     xinput
-    libXi
-    libXext
+    libxi
+    libxext
   ];
 
   postFixup = ''

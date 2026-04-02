@@ -88,7 +88,7 @@ buildNpmPackage {
     downloadPage = "https://github.com/kopia/kopia";
     changelog = "https://github.com/kopia/kopia/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = lib.platforms.linux;
   };
 }

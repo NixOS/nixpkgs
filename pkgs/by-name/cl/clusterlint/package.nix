@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "clusterlint";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "clusterlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zNrGWXKVpkr4NtDmawkICGy0l8foNr40zcdsdsKVAGY=";
+    hash = "sha256-iOd0mjVJDtALxdsmG6+ruJ8CxoNe17D9grkjRW+N34A=";
   };
 
   vendorHash = null;

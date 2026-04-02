@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fprettify";
   version = "0.3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pseewald";
     repo = "fprettify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "17v52rylmsy3m3j5fcb972flazykz2rvczqfh8mxvikvd6454zyj";
   };
 
@@ -33,6 +33,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "fprettify";
     homepage = "https://pypi.org/project/fprettify/";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
   };
-}
+})

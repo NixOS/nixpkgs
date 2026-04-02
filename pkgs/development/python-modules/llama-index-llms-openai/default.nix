@@ -7,21 +7,16 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-llms-openai";
-  version = "0.6.12";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_llms_openai";
-    inherit version;
-    hash = "sha256-m4sddDWYP5dPe0X3lCg2G/22jGIlQSBTkr+PD+oXm64=";
+    inherit (finalAttrs) version;
+    hash = "sha256-NnpHdp9jqfZi5uP6kCT/27Q0nXbWZ+zeTAaDYNzJ3oM=";
   };
-
-  pythonRemoveDeps = [
-    # Circular dependency
-    "llama-index-agent-openai"
-  ];
 
   build-system = [ hatchling ];
 
@@ -41,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

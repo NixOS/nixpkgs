@@ -6,18 +6,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
-  version = "2.0";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
-    rev = "v${finalAttrs.version}";
+    rev = finalAttrs.version;
     owner = "github";
     repo = "mona-sans";
-    sha256 = "sha256-pFc6EUzf4FlA0LVdDEnFNr7m5V1FLc4jTAvtZdOslTg=";
+    sha256 = "sha256-L1KlduItf1jBrw08NwbJvZFemLY8JHRXq2UDl9Wlq70=";
   };
 
   installPhase = ''
-    install -D -m444 -t $out/share/fonts/opentype fonts/otf/*.otf
-    install -D -m444 -t $out/share/fonts/truetype fonts/ttf/*.ttf fonts/variable/*.ttf
+    install -D -m444 -t $out/share/fonts/opentype fonts/static/otf/*.otf
+    install -D -m444 -t $out/share/fonts/truetype fonts/static/ttf/*.ttf fonts/variable/*.ttf
   '';
 
   meta = {
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       by all major browsers, allowing for performance benefits and granular
       design control of the typeface's weight, width, and slant.
     '';
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     platforms = lib.platforms.all;
   };
 })

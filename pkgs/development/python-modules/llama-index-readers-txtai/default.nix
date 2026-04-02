@@ -4,20 +4,17 @@
   fetchPypi,
   llama-index-core,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-txtai";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_txtai";
     inherit version;
-    hash = "sha256-GMloD+eqjYdMCqFM03NhdKjN9bMHqIdZYORA1OtWd/0=";
+    hash = "sha256-dZg+EqXQvqaMN4DQS3VPZi3Ak5j1Y+KZ6ngsJkK5SYA=";
   };
 
   build-system = [ hatchling ];

@@ -12,15 +12,15 @@
   sqlitestudio-plugins,
   includeOfficialPlugins ? lib.meta.availableOn stdenv.hostPlatform sqlitestudio-plugins,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlitestudio";
-  version = "3.4.20";
+  version = "3.4.21";
 
   src = fetchFromGitHub {
     owner = "pawelsalawa";
     repo = "sqlitestudio";
-    rev = version;
-    hash = "sha256-bylfbfYpXrXRolPmTRHEDyq6fjF1quVwwzg6q2XRmac=";
+    rev = finalAttrs.version;
+    hash = "sha256-xs0+bB0gPoDkIldaTA/nFofx9KPvIcyxe6kzcHuboxA=";
   };
 
   nativeBuildInputs = [
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ asterismono ];
   };
-}
+})

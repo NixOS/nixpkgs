@@ -40,7 +40,7 @@
   artworkSupport ? true,
   imlib2,
   hotkeysSupport ? true,
-  libX11,
+  libx11,
   osdSupport ? true,
   dbus,
   # output plugins
@@ -116,7 +116,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     imlib2
   ]
   ++ optionals hotkeysSupport [
-    libX11
+    libx11
   ]
   ++ optionals osdSupport [
     dbus

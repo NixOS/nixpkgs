@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pulsar-client";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
     tag = "v${version}";
-    hash = "sha256-0EeQiYEYdER6qPQUYsk/OwYKiPWG0oymG5eiB01Oysk=";
+    hash = "sha256-TxX+om+uKjZlgG10qcLAddiUisBWLxBfBSHEHGix1d4=";
   };
 
   build-system = [

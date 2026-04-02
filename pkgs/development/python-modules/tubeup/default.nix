@@ -6,15 +6,12 @@
   fetchPypi,
   yt-dlp,
   docopt,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tubeup";
   version = "2025.5.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

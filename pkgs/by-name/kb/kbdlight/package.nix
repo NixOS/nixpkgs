@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kbdlight";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "hobarrera";
     repo = "kbdlight";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1f08aid1xrbl4sb5447gkip9lnvkia1c4ap0v8zih5s9w8v72bny";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.womfoo ];
     platforms = lib.platforms.linux;
   };
-}
+})

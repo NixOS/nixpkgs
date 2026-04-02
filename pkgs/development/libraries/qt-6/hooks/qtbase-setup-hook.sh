@@ -1,13 +1,13 @@
 if [[ -n "${__nix_qtbase-}" ]]; then
     # Throw an error if a different version of Qt was already set up.
-    if [[ "$__nix_qtbase" != "@out@" ]]; then
+    if [[ "$__nix_qtbase" != "@qtbaseOut@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
-        echo >&2 "    @out@"
+        echo >&2 "    @qtbaseOut@"
         echo >&2 "    $__nix_qtbase"
         exit 1
     fi
 else # Only set up Qt once.
-    __nix_qtbase="@out@"
+    __nix_qtbase="@qtbaseOut@"
 
     qtPluginPrefix=@qtPluginPrefix@
     qtQmlPrefix=@qtQmlPrefix@
@@ -16,7 +16,7 @@ else # Only set up Qt once.
     . @fix_qt_module_paths@
 
     # Build tools are often confused if QMAKE is unset.
-    export QMAKE=@out@/bin/qmake
+    export QMAKE=@qtbaseOut@/bin/qmake
 
     export QMAKEPATH=
 

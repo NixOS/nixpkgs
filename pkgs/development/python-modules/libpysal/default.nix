@@ -3,12 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   beautifulsoup4,
   fiona,
   geodatasets,
   geopandas,
+  jinja2,
   numpy,
   packaging,
   pandas,
@@ -22,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "libpysal";
-  version = "4.13.0";
+  version = "4.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "libpysal";
     tag = "v${version}";
-    hash = "sha256-lUaSUNNT2alfbBOjo59Dbjc3Yrkim3ZQHdLbxdrhDFw=";
+    hash = "sha256-epwviJtQ97MxUA4Gpw6SJceCdBPFXnZBF13A1HiJcOo=";
   };
 
   build-system = [ setuptools-scm ];
@@ -40,6 +38,7 @@ buildPythonPackage rec {
     beautifulsoup4
     fiona
     geopandas
+    jinja2
     numpy
     packaging
     pandas

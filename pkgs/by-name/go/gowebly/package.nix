@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "gowebly";
   version = "3.0.5";
 

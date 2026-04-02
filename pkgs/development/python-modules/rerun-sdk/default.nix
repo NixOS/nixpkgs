@@ -36,8 +36,22 @@ buildPythonPackage {
     src
     version
     cargoDeps
-    postPatch
     ;
+
+  postPatch =
+    (rerun.postPatch or "")
+
+    # error: failed to parse contents of PYO3_CONFIG_FILE
+    #
+    # The pyo3 config file is supposed to be generated beforehand by invoking pixi.
+    # As the only goal of this file is to enhance build caching, it is not worth bothering with it.
+    # See https://github.com/rerun-io/rerun/blob/0.29.0/BUILD.md#pythonpyo3-configuration-important
+    + ''
+      substituteInPlace .cargo/config.toml \
+        --replace-fail \
+          "PYO3_CONFIG_FILE" \
+          "# PYO3_CONFIG_FILE"
+    '';
 
   nativeBuildInputs = [
     pkgs.protobuf # for protoc
@@ -87,6 +101,7 @@ buildPythonPackage {
     # ConnectionError: Connection: connecting to server: transport error
     "test_isolated_streams"
     "test_send_dataframe_roundtrip"
+    "test_server_failed_table_creation_does_not_leak_entry"
     "test_server_with_dataset_files"
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"

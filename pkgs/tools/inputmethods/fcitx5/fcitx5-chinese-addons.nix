@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
@@ -34,13 +35,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.10";
+  version = "5.1.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-kVBDfr8NKsQQQX69N3/fVqJgObRNSX2p0GNSUjbZvcg=";
+    hash = "sha256-bAx5m+tU8hT1WdaLChpQV3J0l+QJzDLzMEPTgjEGCuw=";
   };
 
   nativeBuildInputs = [

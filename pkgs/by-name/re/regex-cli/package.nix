@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regex-cli";
   version = "0.2.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ytI1C2QRUfInIChwtSaHze7VJnP9UIcO93e2wjz2/I0=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

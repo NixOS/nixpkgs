@@ -4,17 +4,17 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "20kly";
-  version = "1.5.0";
+  version = "1.5.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "20kly";
     repo = "20kly";
-    tag = "v${version}";
-    sha256 = "1zxsxg49a02k7zidx3kgk2maa0vv0n1f9wrl5vch07sq3ghvpphx";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-7i1tHylnXWlTvfu9CbStTcA0qsFFqQcGX6bUUTUcYBw=";
   };
 
   patchPhase = ''
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

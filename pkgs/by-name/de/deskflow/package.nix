@@ -8,12 +8,12 @@
   gtest,
   libei,
   libportal,
-  libX11,
+  libx11,
   libxkbfile,
-  libXtst,
-  libXinerama,
-  libXi,
-  libXrandr,
+  libxtst,
+  libxinerama,
+  libxi,
+  libxrandr,
   libxkbcommon,
   pugixml,
   python3,
@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     libei
     libportal
-    libX11
+    libx11
     libxkbfile
-    libXinerama
-    libXi
-    libXrandr
-    libXtst
+    libxinerama
+    libxi
+    libxrandr
+    libxtst
     libxkbcommon
     pugixml
     gdk-pixbuf

@@ -14,18 +14,18 @@
   gtk4,
   pantheon-wayland,
   systemd,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "8.0.4";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
-    rev = version;
-    sha256 = "sha256-I0GsdpaH4SoOVPLLZa0da8+rwmJs1HtLrhkglNmYtrQ=";
+    tag = version;
+    hash = "sha256-e02cVUEzRGVIJQQh2bONLUhrjRfeSpYQYWup5Sn9HhM=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gtk4
     pantheon-wayland
     systemd
-    xorg.libX11
+    libx11
   ];
 
   mesonFlags = [

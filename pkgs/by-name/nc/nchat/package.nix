@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  replaceVars,
   file, # for libmagic
   ncurses,
   openssl,
@@ -16,13 +17,13 @@
 }:
 
 let
-  version = "5.12.21";
+  version = "5.13.17";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-WofBqdUX88USnCA4iyDVMDXyx4Bxz/ZV0FqDUeAOe4Q=";
+    hash = "sha256-VSya6s3/+vII/M76tHmeJEZh7/gv9L5tYdILuthdO5s=";
   };
 
   libcgowm = buildGoModule {
@@ -30,7 +31,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-4jn2CDWqg0GqZ7QTTaZh+9GDUH7L6WllfTONkxnfKEU=";
+    vendorHash = "sha256-lfy7uHH3rLYx6kzIy72ftEiO1CkJkEr7rRXHhuFU/ac=";
 
     buildPhase = ''
       runHook preBuild
@@ -45,34 +46,17 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nchat";
   inherit version src;
 
-  nl = "\n";
-  postPatch = ''
-    substituteInPlace lib/tgchat/ext/td/CMakeLists.txt \
-      --replace "get_git_head_revision" "#get_git_head_revision"
-    substituteInPlace lib/tgchat/CMakeLists.txt \
-      --replace-fail "list(APPEND OPENSSL_ROOT_DIR" "#list(APPEND OPENSSL_ROOT_DIR"
-
-    # specific mangling to handle whatsapp go module:
-
-    substituteInPlace CMakeLists.txt \
-      --replace "if(HAS_WHATSAPP AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))" \
-      "if(FALSE AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))"
-
-    substituteInPlace lib/wmchat/CMakeLists.txt \
-      --replace-fail "add_subdirectory(go)" \
-    "set(GO_LIBRARIES ${libcgowm}/libcgowm.a)${nl}target_include_directories(wmchat PRIVATE ${libcgowm})"
-
-    substituteInPlace lib/wmchat/CMakeLists.txt \
-      --replace-fail "target_link_libraries(wmchat PUBLIC ref-cgowm ncutil \''${GO_LIBRARIES})" \
-      "target_link_libraries(wmchat PUBLIC ${libcgowm}/libcgowm.a ncutil \''${GO_LIBRARIES})"
-
-    substituteInPlace lib/wmchat/CMakeLists.txt \
-      --replace-fail "add_dependencies(wmchat ref-cgowm)" "#add_dependencies(wmchat ref-cgowm)"
-  '';
+  patches = [
+    (replaceVars ./go-libs-build.patch {
+      inherit libcgowm;
+    })
+    # Don't use brew
+    ./fix-darwin.patch
+  ];
 
   nativeBuildInputs = [
     cmake

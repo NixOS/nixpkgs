@@ -4,14 +4,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "batmon";
   version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "6543";
     repo = "batmon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+kjDNQKlaoI5fQ5FqYF6IPCKeE92WKxIhVCKafqfE0o=";
   };
 
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
       but about the batteries installed in your notebook.
     '';
     homepage = "https://github.com/6543/batmon/";
-    changelog = "https://github.com/6543/batmon/releases/tag/v${version}";
+    changelog = "https://github.com/6543/batmon/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "batmon";
     platforms = with lib.platforms; unix ++ windows;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ _6543 ];
   };
-}
+})

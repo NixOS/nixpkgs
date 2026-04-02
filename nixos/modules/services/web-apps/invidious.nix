@@ -127,7 +127,7 @@ let
   serviceConfig = {
     systemd.services = builtins.listToAttrs (
       builtins.genList (scaleIndex: {
-        name = "invidious" + lib.optionalString (scaleIndex > 0) "-${builtins.toString scaleIndex}";
+        name = "invidious" + lib.optionalString (scaleIndex > 0) "-${toString scaleIndex}";
         value = mkInvidiousService scaleIndex;
       }) cfg.serviceScale
     );

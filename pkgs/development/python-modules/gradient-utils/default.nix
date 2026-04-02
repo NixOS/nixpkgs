@@ -8,16 +8,13 @@
   poetry-core,
   prometheus-client,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
   version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Paperspace";

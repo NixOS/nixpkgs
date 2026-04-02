@@ -16,18 +16,18 @@
   glibc,
   udevCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.2.0";
+  version = "6.3.6";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
-    tag = version;
-    hash = "sha256-frQbfCdK7bD6IAUa+MAOaRLhMrbdFRdHocQ0Z1tzsqE=";
+    tag = finalAttrs.version;
+    hash = "sha256-HkqVNhxbz/JBVmGBeYvdWRttvAcvP05iSfp2VZPR+x8=";
   };
 
-  cargoHash = "sha256-Z3JFp/qH3mD3Hy/kqSONOZ+syulgr+t0ZzFRvNN+Ayg=";
+  cargoHash = "sha256-PTktA8e5pR+vl0trH0MhBXhcsxU+d/WtBMSKeSztgSY=";
 
   postPatch = ''
     files="
@@ -49,14 +49,14 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
-    substituteInPlace data/asusd-user.service \
-      --replace-fail /usr/bin/asusd-user $out/bin/asusd-user \
-      --replace-fail /usr/bin/sleep ${lib.getExe' coreutils "sleep"}
+
+    substituteInPlace data/asus-shutdown.service \
+      --replace-fail /usr/bin/asus-shutdown $out/bin/asus-shutdown
 
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 
-    substituteInPlace /build/asusctl-${version}-vendor/sg-0.4.0/build.rs \
+    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
@@ -112,4 +112,4 @@ rustPlatform.buildRustPackage rec {
       yuannan
     ];
   };
-}
+})

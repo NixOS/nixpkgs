@@ -7,14 +7,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-pack";
   version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CN1LcLX7ag+in9sosT2NYVKfhDLGv2m3zHOk2T4MFYc=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ lib.maintainers.dhkl ];
   };
-}
+})

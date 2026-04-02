@@ -5,8 +5,8 @@
 }:
 let
   pname = "keto";
-  version = "0.14.0";
-  commit = "613779b6dad89f6fb6b4fa6968f13ede11963c97";
+  version = "26.2.0";
+  commit = "e4393662cd2e744deeb79de77669e07b6ccf51f3";
 in
 buildGoModule {
   inherit pname version commit;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "keto";
     rev = "v${version}";
-    hash = "sha256-DQiE7PvRnOzdRITRl7LgUDmCJO5/aUzbFdEIyiofZfU=";
+    hash = "sha256-wRtz4RvJ7LxVnSLmXVZFGa9QXjcPnDNJxHKosbyTed0=";
   };
 
-  vendorHash = "sha256-deQxdG3HZiMzzwTr6moILBSNeNR/3noFlJlIx1eyBZs=";
+  vendorHash = "sha256-B27aC4yXS36eOoq53+RWp0vq1Oqw2aR+gOjv0m+b/I4=";
 
   tags = [
     "sqlite"
@@ -40,6 +40,9 @@ buildGoModule {
     description = "ORY Keto, the open source access control server";
     homepage = "https://www.ory.sh/keto/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mrmebelman ];
+    maintainers = with lib.maintainers; [
+      mrmebelman
+      debtquity
+    ];
   };
 }

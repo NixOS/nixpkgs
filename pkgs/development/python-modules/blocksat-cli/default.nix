@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-gnupg,
   pythonAtLeast,
-  pythonOlder,
   qrcode,
   requests,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "blocksat-cli";
   version = "2.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Blockstream";

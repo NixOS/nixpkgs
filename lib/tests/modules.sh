@@ -58,12 +58,19 @@ logFailure() {
 evalConfig() {
     local attr=$1
     shift
-    local script="import ./default.nix { modules = [ $* ];}"
+
+    local nix_args=()
+
     if [ "${ABORT_ON_WARN-0}" = "1" ]; then
-      local-nix-instantiate --option abort-on-warn true -E "$script" -A "$attr"
-    else
-      local-nix-instantiate -E "$script" -A "$attr"
+        nix_args+=(--option abort-on-warn true)
     fi
+
+    if [ "${STRICT_EVAL-0}" = "1" ]; then
+        nix_args+=(--strict)
+    fi
+
+    local script="import ./default.nix { modules = [ $* ];}"
+    local-nix-instantiate "${nix_args[@]}" -E "$script" -A "$attr"
 }
 
 reportFailure() {
@@ -164,6 +171,8 @@ checkConfigError() {
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
+checkConfigError "In module .*test-push-down-non-attrs.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config ./test-push-down-non-attrs.nix
+
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 
 # Check that a module argument is passed, also when a default is available
@@ -246,6 +255,19 @@ checkConfigError 'A definition for option .* is not of type .fileset.. Definitio
 checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err2 ./fileset.nix
 checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err3 ./fileset.nix
 checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err4 ./fileset.nix
+
+# types.serializableValueWith
+checkConfigOutput '^null$' config.nullableValue.null ./types.nix
+checkConfigOutput '^true$' config.nullableValue.bool ./types.nix
+checkConfigOutput '^1$' config.nullableValue.int ./types.nix
+checkConfigOutput '^1.1$' config.nullableValue.float ./types.nix
+checkConfigOutput '^"foo"$' config.nullableValue.str ./types.nix
+checkConfigOutput '^".*/store.*"$' config.nullableValue.path ./types.nix
+STRICT_EVAL=1 checkConfigOutput '^\{"foo":1\}$' config.nullableValue.attrs ./types.nix
+STRICT_EVAL=1 checkConfigOutput '^\[\{"bar":\[1\]\}\]$' config.nullableValue.list ./types.nix
+
+checkConfigError 'A definition for option .* is not of type .VAL value.. .*' config.nullableValue.lambda ./types.nix
+checkConfigError 'A definition for option .* is not of type .VAL value.. .*' config.structuredValue.null ./types.nix
 
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
@@ -654,6 +676,17 @@ checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
 
+## defaults
+checkConfigOutput "\[\]" config.list ./defaults.nix
+checkConfigOutput "{}" config.attrs ./defaults.nix
+checkConfigOutput "{}" config.attrsOf ./defaults.nix
+checkConfigOutput "null" config.null ./defaults.nix
+checkConfigOutput "{}" config.submodule ./defaults.nix
+checkConfigOutput "\[\]" config.unique ./defaults.nix
+checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
+# These types don't have empty values
+checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
+
 # types.unique
 #   requires a single definition
 checkConfigError 'The option .examples\.merged. is defined multiple times while it.s expected to be unique' config.examples.merged.a ./types-unique.nix
@@ -849,6 +882,14 @@ checkConfigError 'Please use.*lib.types.addCheck.*instead' config.adhocFail.foo 
 checkConfigError 'A definition for option .* is not of type .*' config.addCheckFail.bar.baz ./v2-check-coherence.nix
 checkConfigOutput '^true$' config.result ./v2-check-coherence.nix
 
+
+# Option name suggestions
+checkConfigError 'Did you mean .set\.enable.\?' config.set ./error-typo-nested.nix
+checkConfigError 'Did you mean .set.\?' config ./error-typo-outside-with-nested.nix
+checkConfigError 'Did you mean .bar., .baz. or .foo.\?' config ./error-typo-multiple-suggestions.nix
+checkConfigError 'Did you mean .enable., .ebe. or .enabled.\?' config ./error-typo-large-attrset.nix
+checkConfigError 'Did you mean .services\.myservice\.port. or .services\.myservice\.enable.\?' config.services.myservice ./error-typo-submodule.nix
+checkConfigError 'Did you mean .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificate. or .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificateKey.\?' config.services.nginx.virtualHosts.\"example.com\" ./error-typo-deeply-nested.nix
 
 cat <<EOF
 ====== module tests ======

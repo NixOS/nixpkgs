@@ -4,15 +4,12 @@
   fetchPypi,
   hatchling,
   click,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "userpath";
   version = "1.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sslsplit";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "droe";
     repo = "sslsplit";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1p43z9ln5rbc76v0j1k3r4nhvfw71hq8jzsallb54z9hvwfvqp3l";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "sslsplit";
   };
-}
+})

@@ -6,14 +6,14 @@
   fts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fpart";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
-    rev = "fpart-${version}";
+    rev = "fpart-${finalAttrs.version}";
     sha256 = "sha256-BQGSKDSuK2iB0o2v8I+XOwhYtU/0QtMevt4pgIfRhNQ=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

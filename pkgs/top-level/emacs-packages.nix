@@ -66,7 +66,7 @@ let
   emacsWithPackages =
     { pkgs, lib }:
     pkgs.callPackage ../applications/editors/emacs/build-support/wrapper.nix {
-      inherit (pkgs.xorg) lndir;
+      inherit (pkgs) lndir;
       inherit lib;
     };
 

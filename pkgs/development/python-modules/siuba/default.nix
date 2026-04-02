@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   hypothesis,
   numpy,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "siuba";
   version = "0.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "machow";

@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.9.1";
+  version = "1.10.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-t4a/Zp8rC+DMjskdwVvYIfYDAT57zGVfVu7IApwRNGA=";
+    hash = "sha256-UeSD3lIZ5hz3UsxZ1sCPzUhiekr3WIEiGxu+inyV8vo=";
   };
 
   patches = [
@@ -121,26 +121,26 @@ python3.pkgs.buildPythonApplication rec {
     ++ (map (f: ''rm -vr "${f}";'') (
       [
         # requires git, creating cyclic dependency
-        ''test cases/common/66 vcstag''
+        "test cases/common/66 vcstag"
         # requires glib, creating cyclic dependency
-        ''test cases/linuxlike/6 subdir include order''
-        ''test cases/linuxlike/9 compiler checks with dependencies''
+        "test cases/linuxlike/6 subdir include order"
+        "test cases/linuxlike/9 compiler checks with dependencies"
         # requires static zlib, see #66461
-        ''test cases/linuxlike/14 static dynamic linkage''
+        "test cases/linuxlike/14 static dynamic linkage"
         # Nixpkgs cctools does not have bitcode support.
-        ''test cases/osx/7 bitcode''
+        "test cases/osx/7 bitcode"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # requires llvmPackages.openmp, creating cyclic dependency
-        ''test cases/common/184 openmp''
+        "test cases/common/184 openmp"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
         # pch doesn't work quite right on FreeBSD, I think
-        ''test cases/common/13 pch''
+        "test cases/common/13 pch"
       ]
       ++ lib.optionals python3.isPyPy [
         # fails for unknown reason
-        ''test cases/python/4 custom target depends extmodule''
+        "test cases/python/4 custom target depends extmodule"
       ]
     ))
     ++ [

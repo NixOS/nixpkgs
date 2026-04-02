@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   xmltodict,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "datamodeldict";
   version = "0.9.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "DataModelDict";

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
   setuptools,
   click-default-group,
@@ -83,6 +82,7 @@ let
       llm-hacker-news ? false,
       llm-jq ? false,
       llm-llama-server ? false,
+      llm-lmstudio ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
@@ -167,18 +167,16 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.28";
+    version = "0.30";
     pyproject = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-PMQGyBwP6UCIz7p94atWgepbw9IwW6ym60sfP/PBrCA=";
+      hash = "sha256-+8fwx7sS1vFSTqb+p2uDLqWW/UIx8WoW3kYJihznRRg=";
     };
 
     patches = [
@@ -261,7 +259,7 @@ let
       };
 
       # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
     };
 
     meta = {

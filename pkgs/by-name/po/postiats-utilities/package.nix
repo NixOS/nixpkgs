@@ -6,13 +6,13 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postiats-utilities";
   version = "2.1.1";
   src = fetchFromGitHub {
     owner = "Hibou57";
     repo = "PostiATS-Utilities";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
 
     wrapPythonPrograms
   '';
-}
+})

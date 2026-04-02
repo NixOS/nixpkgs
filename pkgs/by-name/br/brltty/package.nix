@@ -20,13 +20,13 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brltty";
-  version = "6.8";
+  version = "6.9";
 
   src = fetchurl {
-    url = "https://brltty.app/archive/brltty-${version}.tar.gz";
-    sha256 = "sha256-MoDYjHU6aJY9e5cgjm9InOEDGCs+jvlEurMWg9wo4RY=";
+    url = "https://brltty.app/archive/brltty-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-KiWymWeI5RqRq++m23SJKnZYowqIbdBSrmffZ59FDaQ=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
        --replace 'logger' "${util-linux}/bin/logger" \
        --replace 'udevadm' "${systemdMinimal}/bin/udevadm"
   '';
-}
+})

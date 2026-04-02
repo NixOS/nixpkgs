@@ -4,21 +4,21 @@
   lib,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "litestream";
-  version = "0.3.13";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
-    rev = "v${version}";
-    sha256 = "sha256-p858gK+ICKDQ+/LUiBaxF/kfrZzQAXnYMZDFU8kNCJ4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-rTPw1BnZPtcWzhwR9mCzoE4LXdlaFfRCIDMHlN/SRzk=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   vendorHash = "sha256-sYIY3Z3VrCqbjEbQtEY7q6Jljg8jMoa2qWEB/IkDjzM=";
@@ -34,4 +34,4 @@ buildGoModule rec {
     homepage = "https://litestream.io/";
     maintainers = with lib.maintainers; [ fbrs ];
   };
-}
+})

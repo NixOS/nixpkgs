@@ -4,7 +4,6 @@
   fetchFromGitHub,
   octodns,
   pytestCheckHook,
-  pythonOlder,
   dnspython,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "octodns-bind";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";

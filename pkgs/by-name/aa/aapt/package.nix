@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "aapt";
-  version = "8.4.1-11315950";
+  version = "8.13.2-14304508";
 
   src =
     let
@@ -16,12 +16,12 @@ stdenvNoCC.mkDerivation rec {
         if stdenvNoCC.hostPlatform.isLinux then
           {
             url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-linux.jar";
-            hash = "sha256-eSQaZrRtb5aCG320hrXAL256fxa/oMhBC4hcTA1KRxs=";
+            hash = "sha256-eiNY58ueDpcyKvAteRuKFVr3r22kOhwSADkaH3CRwKw=";
           }
         else if stdenvNoCC.hostPlatform.isDarwin then
           {
             url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-osx.jar";
-            hash = "sha256-LUihNjase79JbUkHDb10A5d6pJ+VXDVfv7m09hkL8kY=";
+            hash = "sha256-RI/S2oXMSvipALRfeRTsiXUh130/b8iP+EO0yltd7x0=";
           }
         else
           throw "Unsupport platform: ${stdenvNoCC.system}";
@@ -52,11 +52,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ linsui ];
     teams = [ lib.teams.android ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      # The linux executable only supports x86_64
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

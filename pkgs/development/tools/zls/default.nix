@@ -38,9 +38,9 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       hash = "sha256-A5Mn+mfIefOsX+eNBRHrDVkqFDVrD3iXDNsUL4TPhKo=";
     };
 
-    nativeBuildInputs = [ zig_0_14.hook ];
+    nativeBuildInputs = [ zig_0_14 ];
 
-    postPatch = ''
+    postConfigure = ''
       ln -s ${callPackage ./deps_0_14.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
     '';
   };
@@ -56,9 +56,9 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       hash = "sha256-6IkRtQkn+qUHDz00QvCV/rb2yuF6xWEXug41CD8LLw8=";
     };
 
-    nativeBuildInputs = [ zig_0_15.hook ];
+    nativeBuildInputs = [ zig_0_15 ];
 
-    postPatch = ''
+    postConfigure = ''
       ln -s ${callPackage ./deps_0_15.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
     '';
   };

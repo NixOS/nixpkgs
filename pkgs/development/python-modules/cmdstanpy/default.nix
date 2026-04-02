@@ -14,7 +14,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmdstanpy";
   version = "1.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XVviGdJ41mcjCscL3jvcpHi6zMREHsuShGHpnMQX6V8=";
   };
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/stan-dev/cmdstanpy";
     description = "Lightweight interface to Stan for Python users";
-    changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/v${version}";
+    changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

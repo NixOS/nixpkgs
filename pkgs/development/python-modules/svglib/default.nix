@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   cssselect2,
   lxml,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "svglib";
   version = "1.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

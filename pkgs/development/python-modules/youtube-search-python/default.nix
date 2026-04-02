@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   httpx,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "youtube-search-python";
   version = "1.6.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

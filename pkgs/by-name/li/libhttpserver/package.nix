@@ -9,14 +9,14 @@
   libmicrohttpd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhttpserver";
   version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "etr";
     repo = "libhttpserver";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # configure: error: cannot find required auxiliary files: ltmain.sh
   };
-}
+})

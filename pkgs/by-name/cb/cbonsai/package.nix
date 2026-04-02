@@ -8,14 +8,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cbonsai";
   version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "jallbrit";
     repo = "cbonsai";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TZb/5DBdWcl54GoZXxz2xYy9dXq5lmJQsOA3C26tjEU=";
   };
 
@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     mainProgram = "cbonsai";
     homepage = "https://gitlab.com/jallbrit/cbonsai";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ manveru ];
     platforms = lib.platforms.unix;
   };
-}
+})

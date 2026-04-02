@@ -4,20 +4,17 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.7.7";
+  version = "1.7.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8/d0SM/iTCuNIpa22HMigLJQQaPz4fVRhWxkUdPgG5Y=";
+    hash = "sha256-X2ltTzl66bCvObH6/7MZV8Ud+8WjgVhWRy1PTocpN+4=";
   };
 
   propagatedBuildInputs = [ six ];

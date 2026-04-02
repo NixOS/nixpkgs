@@ -6,20 +6,21 @@
   setuptools-scm,
   numpy,
   pint,
+  toolz,
   xarray,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pint-xarray";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "pint-xarray";
-    tag = "v${version}";
-    hash = "sha256-bPvLTtaROCYr8yWI6vQK7pYbBYUlsMzy7ALnufAT7Xo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t2I17dyl/XoO7NBvEyz7TRZkG/uQKPDHUUCG+bQXdOo=";
   };
 
   build-system = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     pint
+    toolz
     xarray
   ];
 
@@ -44,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interface for using pint with xarray, providing convenience accessors";
     homepage = "https://github.com/xarray-contrib/pint-xarray";
-    changelog = "https://github.com/xarray-contrib/pint-xarray/blob/${src.tag}/docs/whats-new.rst";
+    changelog = "https://github.com/xarray-contrib/pint-xarray/blob/${finalAttrs.src.tag}/docs/whats-new.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

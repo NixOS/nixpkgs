@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "bumble";
-  version = "0.0.221";
+  version = "0.0.226";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bumble";
     tag = "v${version}";
-    hash = "sha256-GCcvbYLHChvrsQuhFjeYnncjrzFqOlmL+LlG7t2iAkE=";
+    hash = "sha256-sZFP/Vdk8L7oL6+AbsyqmEar3K4oR9rp78mDBxIVdeY=";
   };
 
   build-system = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "libusb-package"
+    "tomli"
   ];
 
   dependencies = [

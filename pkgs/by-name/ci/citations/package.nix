@@ -23,19 +23,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-oWRBJvf7EimxIwdsr11vsN5605nZ4p4LQ1tzx/ZiCrg=";
+    hash = "sha256-CnCXyKXB/wH6lt35370dh+lFhqdJLCJRGBs2WH+FCP0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-FCrrZ9efzTsYleOzaBVjLpC+shgwLnvHfpJmWXF80DI=";
+    hash = "sha256-xEJe752Qr1s2d/9nfTpwDP+zxZKwx0UuEUwIf4wzJW4=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Manage your bibliographies using the BibTeX format";
     homepage = "https://apps.gnome.org/app/org.gnome.World.Citations";
+    changelog = "https://gitlab.gnome.org/World/citations/-/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ benediktbroich ];
     teams = [ lib.teams.gnome-circle ];

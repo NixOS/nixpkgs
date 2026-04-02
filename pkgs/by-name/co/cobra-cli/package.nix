@@ -8,14 +8,14 @@
   go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cobra-cli";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "spf13";
     repo = "cobra-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-E0I/Pxw4biOv7aGVzGlQOFXnxkc+zZaEoX1JmyMh6UE=";
   };
 
@@ -57,8 +57,8 @@ buildGoModule rec {
     description = "Cobra CLI tool to generate applications and commands";
     mainProgram = "cobra-cli";
     homepage = "https://github.com/spf13/cobra-cli/";
-    changelog = "https://github.com/spf13/cobra-cli/releases/tag/${version}";
+    changelog = "https://github.com/spf13/cobra-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.afl20;
     maintainers = [ lib.maintainers.ivankovnatsky ];
   };
-}
+})

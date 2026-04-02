@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     tag = version;
-    hash = "sha256-zKlw8KEVc0FJrxWHOx95UXGzqxFFCaYBKID4hRbTQas=";
+    hash = "sha256-0Or83zod1RIx7Dm+3+EuyV8gP4Ip3ziOuS2if0ThzAQ=";
   };
 
   build-system = [ hatchling ];

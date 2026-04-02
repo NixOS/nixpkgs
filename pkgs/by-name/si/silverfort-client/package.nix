@@ -11,11 +11,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverfort-client";
-  version = "3.7.5";
+  version = "3.7.6";
 
   src = requireFile rec {
     name = "${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-eOkSVoucMiGH4sTnC8/3sWMyT9DpnGEYXX+1y2ULDBg=";
+    hash = "sha256-r/za9JNQoVVowYp3DQ7nHfS+W74v5SZWOmRmIiRvOKw=";
     message = ''
       Due to the commercial license of Silverfort, Nix is unable to download
       Silverfort automatically. Please download ${name} manually and add it
@@ -61,10 +61,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    asar extract "opt/Silverfort Client/resources/app.asar" $TMP/work
+
+    # By default, Silverfort will delete the envfile after it has been read one time.
+    # This file is located at "~/.config/Silverfort Client/config.env" and can be configured
+    # to store environment variables in JSON format.
+    # For example: `{"SF_MESSAGING_URL":"https://example-sdms-server.net"}`
+    substituteInPlace $TMP/work/build/electron/main.js --replace-fail \
+      'try{await fsPromises.unlink(t,{force:!0})}catch(e){log.error(`failed to delete env file (''${t})`,e.toString())}' ""
+  '';
+
   installPhase = ''
     runHook preInstall
-
-    asar extract "opt/Silverfort Client/resources/app.asar" $TMP/work
 
     # Remove unneeded files
     rm $TMP/work/build/{"public assests.zip",robots.txt}
@@ -74,15 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm444 $TMP/work/build/favicon.ico $out/share/icons/hicolor/256x256/apps/silverfort-client.png
     install -Dm444 $TMP/work/build/logo512.png $out/share/icons/hicolor/512x512/apps/silverfort-client.png
 
-    # By default, Silverfort will delete the envfile after it has been read one time.
-    # This file is located at "~/.config/Silverfort Client/config.env" and can be configured
-    # to store environment variables in JSON format.
-    # For example: `{"SF_MESSAGING_URL":"https://example-sdms-server.net"}`
-    patch -d $TMP/work -p1 < ${./dont-delete-envfile.patch}
-
     asar pack $TMP/work $out/share/silverfort-client/resources/app.asar
-
-    rm -rf $TMP/work
 
     runHook postInstall
   '';

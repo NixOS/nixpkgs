@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   #, pytestCheckHook
-  pythonOlder,
   pkg-config,
   gammu,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-gammu";
   version = "3.2.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "gammu";

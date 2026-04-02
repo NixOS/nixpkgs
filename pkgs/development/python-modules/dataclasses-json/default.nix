@@ -7,7 +7,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   pytestCheckHook,
-  pythonOlder,
   typing-inspect,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "dataclasses-json";
   version = "0.6.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";

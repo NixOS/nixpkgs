@@ -11,7 +11,6 @@
   pygments,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
   sphinx,
   typeguard,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "deal";
   version = "4.24.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";

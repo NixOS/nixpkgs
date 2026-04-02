@@ -15,7 +15,6 @@
   pyshp,
   pytest-mpl,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   shapely,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "cartopy";
   version = "0.25.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

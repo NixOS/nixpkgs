@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   deprecated,
   mss,
   websockets,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-SsjNiLavEzwm3BV/t49asXRipZtKDaMwTjrxK75LQ0M=";
   };
-
-  disabled = pythonOlder "3.9";
 
   dependencies = [
     deprecated

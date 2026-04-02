@@ -6,22 +6,19 @@
   jinja2,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "4.2.0";
+  version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     tag = "v${version}";
-    hash = "sha256-zwY0YXMlhQEPdHLPivwE9ZI9XoY9UVFHVLUOYNeq9Ew=";
+    hash = "sha256-O34MHsP4BC5fALHDzXJBWGtcRifdL3dJNwW721QN4vA=";
   };
 
   build-system = [ setuptools ];

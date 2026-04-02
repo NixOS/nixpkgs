@@ -22,14 +22,14 @@ let
     EOF
   '';
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-fido2-hmac";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-fido2-hmac";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8DO62uISwleJB/NFH7U8xhfT5bcda+d+7U6LXvySsD0=";
   };
 
@@ -38,7 +38,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   buildInputs = [ libfido2 ];
@@ -52,4 +52,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "age-plugin-fido2-hmac";
   };
-}
+})

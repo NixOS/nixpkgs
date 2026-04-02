@@ -4,16 +4,13 @@
   boost,
   cmake,
   curl,
-  eigen,
+  eigen_5,
   exiv2,
-  extra-cmake-modules,
-  fetchpatch,
   fetchurl,
   fftw,
   fribidi,
   giflib,
   gsl,
-  ilmbase,
   immer,
   kseexpr,
   lager,
@@ -24,7 +21,8 @@
   libjxl,
   libmypaint,
   libraw,
-  libsForQt5,
+  qt6,
+  kdePackages,
   libunibreak,
   libwebp,
   opencolorio,
@@ -36,37 +34,28 @@
   zug,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "krita-unwrapped";
 
-  version = "5.2.14";
+  version = "6.0.0";
   src = fetchurl {
-    url = "mirror://kde/stable/krita/${version}/krita-${version}.tar.gz";
-    hash = "sha256-VWkAcmwv8U5g97rB6OkVAQDyzZJmnKXcdKxYUe+sKIc=";
+    url = "mirror://kde/stable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
+    hash = "sha256-kytodhJvfGKeQn7j0BIwDIKGsFoYQnc1S0FK9kGg8e0=";
   };
-
-  patches = [
-    # Fixes build with SIP 6.8
-    (fetchpatch {
-      name = "bump-SIP-ABI-version-to-12.8.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
-      hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     python3Packages.sip
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     boost
     libraw
     fftw
-    eigen
+    eigen_5
     exiv2
     fribidi
     lcms2
@@ -82,7 +71,6 @@ stdenv.mkDerivation rec {
     opencolorio
     xsimd
     curl
-    ilmbase
     immer
     kseexpr
     libmypaint
@@ -90,9 +78,12 @@ stdenv.mkDerivation rec {
     libwebp
     SDL2
     zug
-    python3Packages.pyqt5
+    python3Packages.pyqt6
+
+    qt6.qtmultimedia
+    qt6.qttools
   ]
-  ++ (with libsForQt5; [
+  ++ (with kdePackages; [
     breeze-icons
     karchive
     kcompletion
@@ -108,15 +99,9 @@ stdenv.mkDerivation rec {
     kwindowsystem
     mlt
     poppler
-    qtmultimedia
-    qtx11extras
     quazip
-
-    # TODO: reenable libkdcraw when migrating to Qt6, see #430298
-    # libkdcraw
+    libkdcraw
   ]);
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
 
   # Krita runs custom python scripts in CMake with custom PYTHONPATH which krita determined in their CMake script.
   # Patch the PYTHONPATH so python scripts can import sip successfully.
@@ -143,8 +128,9 @@ stdenv.mkDerivation rec {
   cmakeBuildType = "RelWithDebInfo";
 
   cmakeFlags = [
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+    "-DBUILD_WITH_QT6=ON"
+    "-DALLOW_UNSTABLE=QT6"
+    "-DENABLE_UPDATERS=OFF"
     "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
@@ -153,10 +139,9 @@ stdenv.mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with lib.maintainers; [
       sifmelcara
-      nek0
     ];
     mainProgram = "krita";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
   };
-}
+})

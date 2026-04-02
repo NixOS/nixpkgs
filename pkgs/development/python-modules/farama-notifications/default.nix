@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-UUrJ/5t5x54xs1gweNUhwqrMJQXiyrUPn1bBfTsiPcw=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ setuptools ];
 

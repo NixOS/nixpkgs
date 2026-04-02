@@ -1,78 +1,200 @@
 {
-  lib,
-  stdenv,
   buildFHSEnv,
-  corefonts,
-  dejavu_fonts,
+  buildNpmPackage,
   dpkg,
+  fetchFromGitHub,
   fetchurl,
   gcc-unwrapped,
-  liberation_ttf_v1,
-  writeScript,
-  xorg,
+  lib,
+  lndir,
   nixosTests,
+  pkg-config,
+  runCommand,
+  stdenv,
+  vips,
+  writeScript,
+  x2t,
+
+  extra-fonts ? [ ],
 }:
 
 let
+  version = "9.2.1";
+  server-src = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "server";
+    tag = "v9.2.1.1";
+    hash = "sha256-McG+PGL+ZmmnInuBhqVqMeX0o36/LbC0C5vQA1TDjO8=";
+  };
+  common = buildNpmPackage (finalAttrs: {
+    name = "onlyoffice-server-Common";
+    src = server-src;
+    sourceRoot = "${finalAttrs.src.name}/Common";
+    npmDepsHash = "sha256-zFGqDtnNFzXCwp6uvK04GDMRG6BATv6ti3Wi8ikLjBU=";
+    dontNpmBuild = true;
+    postPatch = ''
+      # https://github.com/ONLYOFFICE/build_tools/blob/ef8153c053bed41909ceb0762b124f8fe7faa0a7/scripts/build_server.py#L34
+      sed -e "s/^const buildVersion = '[0-9.]*'/const buildVersion = '${version}'/" -i sources/commondefines.js
+    '';
+    postInstall = ''
+      ln -s $out/lib/node_modules/common $out/lib/node_modules/Common
+    '';
+  });
+  docservice = buildNpmPackage (finalAttrs: {
+    name = "onlyoffice-server-DocService";
+    src = server-src;
+    sourceRoot = "${finalAttrs.src.name}/DocService";
+    nativeBuildInputs = [
+      pkg-config
+    ];
+    buildInputs = [
+      vips.dev
+    ];
+    npmDepsHash = "sha256-4t3wrO+Tt3bTRzmvB+tbVr5D3fXpn7CCU7+dNRc7xEo=";
+    npmFlags = [ "--loglevel=verbose" ];
+    dontNpmBuild = true;
+    postInstall = ''
+      # it would be neater if this were a 'ln -s', but this is not possible
+      # because common/sources/notificationService.js has a circular dependency
+      # back on DocService
+      cp -r ${common}/lib/node_modules/common $out/lib/node_modules/Common
+      ln -s $out/lib/node_modules/coauthoring $out/lib/node_modules/DocService
+    '';
+  });
+  fileconverter = buildNpmPackage (finalAttrs: {
+    name = "onlyoffice-server-FileConverter";
+    src = server-src;
+
+    sourceRoot = "${finalAttrs.src.name}/FileConverter";
+
+    npmDepsHash = "sha256-JKZqbpVBNe6dwxsTg8WqlJAlAqOYmqm+LyWgIxpRb8k=";
+
+    dontNpmBuild = true;
+
+    postInstall = ''
+      ln -s ${common}/lib/node_modules/common $out/lib/node_modules/Common
+      ln -s ${docservice}/lib/node_modules/coauthoring $out/lib/node_modules/DocService
+    '';
+  });
+
+  # https://github.com/ONLYOFFICE/document-server-package/blob/master/common/documentserver/bin/documentserver-generate-allfonts.sh.m4
+  x2t-with-fonts-and-themes = runCommand "x2t-with-fonts-and-themes" { } ''
+    mkdir -p $out/web
+    mkdir -p $out/converter
+    mkdir -p $out/images
+    mkdir -p $out/fonts
+
+    echo Generating fonts
+    export CUSTOM_FONTS_PATHS=${lib.concatStringsSep ":" extra-fonts}
+    ${x2t.components.allfontsgen}/bin/allfontsgen \
+      --input=${x2t.components.core-fonts} \
+      --allfonts-web=$out/web/AllFonts.js \
+      --allfonts=$out/converter/AllFonts.js \
+      --images=$out/images \
+      --selection=$out/converter/font_selection.bin \
+      --output-web=$out/fonts \
+      --use-system=true
+
+    mkdir -p $out/bin
+    cp ${x2t}/bin/x2t $out/bin
+    cat >$out/bin/DoctRenderer.config <<EOF
+      <Settings>
+        <file>${x2t.components.sdkjs}/common/Native/native.js</file>
+        <file>${x2t.components.sdkjs}/common/Native/jquery_native.js</file>
+        <allfonts>$out/converter/AllFonts.js</allfonts>
+        <file>${x2t.components.web-apps}/vendor/xregexp/xregexp-all-min.js</file>
+        <sdkjs>${x2t.components.sdkjs}</sdkjs>
+        <dictionaries>${x2t.components.dictionaries}</dictionaries>
+      </Settings>
+    EOF
+
+    echo Generating presentation themes
+    # creates temporary files next to sources...
+    mkdir working
+    cp ${x2t.components.sdkjs}/slide/themes/src/* working
+    ${x2t.components.allthemesgen}/bin/allthemesgen \
+      --converter-dir="$out/bin"\
+      --src="working"\
+      --output="$out/images"
+    ${x2t.components.allthemesgen}/bin/allthemesgen \
+      --converter-dir="$out/bin"\
+      --src="working"\
+      --output="$out/images"\
+      --postfix="ios"\
+      --params="280,224"
+    ${x2t.components.allthemesgen}/bin/allthemesgen \
+      --converter-dir="$out/bin"\
+      --src="working"\
+      --output="$out/images"\
+      --postfix="android"\
+      --params="280,224"
+  '';
   # var/www/onlyoffice/documentserver/server/DocService/docservice
-  onlyoffice-documentserver = stdenv.mkDerivation rec {
+  onlyoffice-documentserver = stdenv.mkDerivation {
     pname = "onlyoffice-documentserver";
     version = "9.2.1";
 
-    src = fetchurl (
-      {
-        "aarch64-linux" = {
-          url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-          sha256 = "sha256-1hSGR68v2azRT2PsthXKjEekGekgAv0FFESrXK6vGs0=";
-        };
-        "x86_64-linux" = {
-          url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-          sha256 = "sha256-/H/x069JA9MtrfILos5KRT0IKOHKOuS7nI1ZspizvvA=";
-        };
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
-    );
+    src = fetchFromGitHub {
+      owner = "ONLYOFFICE";
+      repo = "document-server-package";
+      tag = "v9.2.1.13";
+      hash = "sha256-jyXSYkWu63vdeWsRm1Pl/3p3jRjasj0whzN0CytdHks=";
+    };
 
-    preferLocalBuild = true;
-
-    unpackCmd = "dpkg -x $curSrc source";
-
-    nativeBuildInputs = [
-      dpkg
-    ];
+    buildPhase = ''
+      runHook preBuild
+      # nothing for now
+      runHook postBuild
+    '';
 
     installPhase = ''
-      # replace dangling symlinks which are not copied into fhs with actually files
-      mkdir lib
-      for file in var/www/onlyoffice/documentserver/server/FileConverter/bin/*.so* ; do
-        ln -rs "$file" lib/$(basename "$file")
-      done
+      mkdir -p $out/etc/onlyoffice/documentserver/log4js
+      cp ${server-src}/Common/config/default.json $out/etc/onlyoffice/documentserver
+      cp ${server-src}/Common/config/production-linux.json $out/etc/onlyoffice/documentserver
+      cp ${server-src}/Common/config/log4js/production.json $out/etc/onlyoffice/documentserver/log4js
 
-      # NixOS uses systemd, not supervisor
-      rm -rf etc/supervisor
+      mkdir -p $out/var/www/onlyoffice/documentserver-example
+      cp -r common/documentserver-example/welcome $out/var/www/onlyoffice/documentserver-example
 
-      install -Dm755 usr/bin/documentserver-prepare4shutdown.sh -t $out/bin
-      # maintainer scripts which expect supervisorctl, try to write into the nix store or are handled by nixos modules
-      rm -rf usr/bin
+      mkdir -p $out/var/www/onlyoffice/documentserver
 
-      # .deb default documentation
-      rm -rf usr/share
+      # equivalent of usr/bin/documentserver-flush-cache.sh,
+      # busts cache also when fonts collection changes
+      mkdir $out/var/www/onlyoffice/documentserver/web-apps
+      ${lndir}/bin/lndir -silent ${x2t.components.web-apps} $out/var/www/onlyoffice/documentserver/web-apps
+      mv $out/var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js{,.orig}
+      sed -e "s/{{HASH_POSTFIX}}/$(basename $out | cut -d '-' -f 1)/" $out/var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js.orig > $out/var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js
 
-      # required for bwrap --bind
-      mkdir -p var/lib/onlyoffice/ var/www/onlyoffice/documentserver/fonts/
+      ln -s ${x2t-with-fonts-and-themes}/fonts $out/var/www/onlyoffice/documentserver/fonts
 
-      # see usr/bin/documentserver-flush-cache.sh
-      cp var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js{.tpl,}
-      substituteInPlace var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js \
-        --replace-fail '{{HASH_POSTFIX}}' "$(basename $out | cut -d '-' -f 1)"
+      mkdir -p $out/var/www/onlyoffice/documentserver/sdkjs
+      ${lndir}/bin/lndir -silent ${x2t.components.sdkjs} $out/var/www/onlyoffice/documentserver/sdkjs
+      ln -s ${x2t-with-fonts-and-themes}/web/AllFonts.js $out/var/www/onlyoffice/documentserver/sdkjs/common/AllFonts.js
+      ${lndir}/bin/lndir -silent ${x2t-with-fonts-and-themes}/images $out/var/www/onlyoffice/documentserver/sdkjs/common/Images
 
-      mv * $out/
+      # we don't currently support sdkjs plugins in NixOS
+      # https://github.com/ONLYOFFICE/build_tools/blob/master/scripts/deploy_server.py#L130
+      mkdir -p $out/var/www/onlyoffice/documentserver/sdkjs-plugins
+      echo "[]" > $out/var/www/onlyoffice/documentserver/sdkjs-plugins/plugin-list-default.json
+
+      mkdir -p $out/var/www/onlyoffice/documentserver/server/schema
+      cp -r ${server-src}/schema/* $out/var/www/onlyoffice/documentserver/server/schema
+
+      ## required for bwrap --bind
+      chmod u+w $out/var
+      mkdir -p $out/var/lib/onlyoffice
     '';
 
     # stripping self extracting javascript binaries likely breaks them
     dontStrip = true;
 
     passthru = {
+      inherit
+        x2t-with-fonts-and-themes
+        common
+        docservice
+        fileconverter
+        ;
       tests = nixosTests.onlyoffice;
       fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
@@ -80,11 +202,7 @@ let
         targetPkgs = pkgs: [
           gcc-unwrapped.lib
           onlyoffice-documentserver
-
-          # fonts
-          corefonts
-          dejavu_fonts
-          liberation_ttf_v1
+          fileconverter
         ];
 
         extraBuildCommands = ''
@@ -94,72 +212,12 @@ let
 
         extraBwrapArgs = [
           "--bind var/lib/onlyoffice/ var/lib/onlyoffice/"
-          "--bind var/lib/onlyoffice/documentserver/sdkjs/common/ var/www/onlyoffice/documentserver/sdkjs/common/"
-          "--bind var/lib/onlyoffice/documentserver/sdkjs/slide/themes/ var/www/onlyoffice/documentserver/sdkjs/slide/themes/"
-          "--bind var/lib/onlyoffice/documentserver/fonts/ var/www/onlyoffice/documentserver/fonts/"
-          "--bind var/lib/onlyoffice/documentserver/server/FileConverter/bin/ var/www/onlyoffice/documentserver/server/FileConverter/bin/"
         ];
-
-        runScript = writeScript "onlyoffice-documentserver-run-script" ''
-          export NODE_CONFIG_DIR=$2
-          export NODE_DISABLE_COLORS=1
-          export NODE_ENV=production-linux
-
-          if [[ $1 == DocService/docservice ]]; then
-            mkdir -p var/www/onlyoffice/documentserver/sdkjs/slide/themes/
-            # symlinking themes/src breaks discovery in allfontsgen
-            rm -rf var/www/onlyoffice/documentserver/sdkjs/slide/themes/src
-            cp -r ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/slide/themes/src var/www/onlyoffice/documentserver/sdkjs/slide/themes/
-            chmod -R u+w var/www/onlyoffice/documentserver/sdkjs/slide/themes/
-
-            # onlyoffice places generated files in those directores
-            rm -rf var/www/onlyoffice/documentserver/sdkjs/common/*
-            ${xorg.lndir}/bin/lndir -silent ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/ var/www/onlyoffice/documentserver/sdkjs/common/
-            rm -rf var/www/onlyoffice/documentserver/server/FileConverter/bin/*
-            ${xorg.lndir}/bin/lndir -silent ${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/server/FileConverter/bin/ var/www/onlyoffice/documentserver/server/FileConverter/bin/
-
-            # https://github.com/ONLYOFFICE/document-server-package/blob/master/common/documentserver/bin/documentserver-generate-allfonts.sh.m4
-            echo -n Generating AllFonts.js, please wait...
-            "var/www/onlyoffice/documentserver/server/tools/allfontsgen"\
-              --input="${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/core-fonts"\
-              --allfonts-web="var/www/onlyoffice/documentserver/sdkjs/common/AllFonts.js"\
-              --allfonts="var/www/onlyoffice/documentserver/server/FileConverter/bin/AllFonts.js"\
-              --images="var/www/onlyoffice/documentserver/sdkjs/common/Images"\
-              --selection="var/www/onlyoffice/documentserver/server/FileConverter/bin/font_selection.bin"\
-              --output-web="var/www/onlyoffice/documentserver/fonts"\
-              --use-system="true"
-            echo Done
-
-            echo -n Generating presentation themes, please wait...
-            "var/www/onlyoffice/documentserver/server/tools/allthemesgen"\
-              --converter-dir="var/www/onlyoffice/documentserver/server/FileConverter/bin"\
-              --src="var/www/onlyoffice/documentserver/sdkjs/slide/themes"\
-              --output="var/www/onlyoffice/documentserver/sdkjs/common/Images"
-
-            "var/www/onlyoffice/documentserver/server/tools/allthemesgen"\
-              --converter-dir="var/www/onlyoffice/documentserver/server/FileConverter/bin"\
-              --src="var/www/onlyoffice/documentserver/sdkjs/slide/themes"\
-              --output="var/www/onlyoffice/documentserver/sdkjs/common/Images"\
-              --postfix="ios"\
-              --params="280,224"
-
-            "var/www/onlyoffice/documentserver/server/tools/allthemesgen"\
-              --converter-dir="var/www/onlyoffice/documentserver/server/FileConverter/bin"\
-              --src="var/www/onlyoffice/documentserver/sdkjs/slide/themes"\
-              --output="var/www/onlyoffice/documentserver/sdkjs/common/Images"\
-              --postfix="android"\
-              --params="280,224"
-            echo Done
-          fi
-
-          exec var/www/onlyoffice/documentserver/server/$1
-        '';
       };
     };
 
     meta = {
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
-      mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
         ONLYOFFICE Document Server is an online office suite comprising viewers and editors for texts, spreadsheets and presentations,
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
@@ -170,7 +228,6 @@ let
         "x86_64-linux"
         "aarch64-linux"
       ];
-      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       maintainers = with lib.maintainers; [ raboof ];
     };
   };

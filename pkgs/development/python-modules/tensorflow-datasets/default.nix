@@ -85,6 +85,25 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
+  postPatch =
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    ''
+      substituteInPlace tensorflow_datasets/core/dataset_info.py \
+        --replace-fail \
+          "elif field.label == field.LABEL_REPEATED:" \
+          "elif hasattr(field_value, 'extend'):"
+    ''
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    + ''
+      substituteInPlace tensorflow_datasets/datasets/smallnorb/smallnorb_dataset_builder.py \
+        --replace-fail \
+          "magic = int(np.frombuffer(s, dtype=int32_dtype, count=1))" \
+          "magic = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1)))" \
+        --replace-fail \
+          "ndim = int(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4))" \
+          "ndim = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4)))"
+    '';
+
   build-system = [ setuptools ];
 
   dependencies = [

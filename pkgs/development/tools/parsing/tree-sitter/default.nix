@@ -1,11 +1,13 @@
 {
   lib,
   stdenv,
+  newScope,
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+  fetchFromCodeberg,
+  fetchpatch,
   nix-update-script,
-  runCommand,
   which,
   rustPlatform,
   emscripten,
@@ -19,9 +21,6 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
-
-  # tests
-  lunarvim,
 }:
 
 let
@@ -56,6 +55,8 @@ let
       fetchFromGitHub
       fetchFromGitLab
       fetchFromSourcehut
+      fetchFromCodeberg
+      fetchpatch
       ;
   };
 
@@ -68,6 +69,14 @@ let
     Use pkgs.tree-sitter-grammars.<name> to access.
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
+
+  /**
+    # Extensible package set for tree-sitter grammars.
+    # Provides .override and .extend for customization.
+    # Note: Use builtGrammars (not this) when iterating over grammars,
+    # as this includes package set functions alongside derivations
+  */
+  grammarsScope = lib.makeScope newScope (self: builtGrammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -101,14 +110,14 @@ let
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
 in
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
   version = "0.25.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
     fetchSubmodules = true;
   };
@@ -132,6 +141,11 @@ rustPlatform.buildRustPackage (final: {
   patches = lib.optionals (!webUISupport) [
     (substitute {
       src = ./remove-web-interface.patch;
+    })
+    (fetchpatch {
+      name = "feat: allow `-` in grammar names";
+      url = "https://github.com/tree-sitter/tree-sitter/commit/7d3c32125379c1dc02f47277bcd4eceaac299bdb.diff";
+      hash = "sha256-ZNjdNateHVHDy0/txlAW8TUdz+DVxLKXpw8ojZbIQS8=";
     })
   ];
 
@@ -162,6 +176,8 @@ rustPlatform.buildRustPackage (final: {
     PREFIX=$out make install
     ${lib.optionalString (!enableShared) "rm -f $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm -f $out/lib/*.a"}
+
+    mv docs/src/assets/schemas/config.schema.json $out/
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tree-sitter \
@@ -184,6 +200,7 @@ rustPlatform.buildRustPackage (final: {
       grammars
       buildGrammar
       builtGrammars
+      grammarsScope
       withPlugins
       allGrammars
       ;
@@ -193,8 +210,6 @@ rustPlatform.buildRustPackage (final: {
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
-
-      inherit lunarvim;
     };
   };
 
@@ -202,7 +217,7 @@ rustPlatform.buildRustPackage (final: {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${final.version}";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.
@@ -216,7 +231,6 @@ rustPlatform.buildRustPackage (final: {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Profpatsch
       uncenter
       amaanq
     ];

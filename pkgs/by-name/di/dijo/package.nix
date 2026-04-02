@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dijo";
   version = "0.2.7";
   buildInputs = [ ncurses ];
   src = fetchFromGitHub {
     owner = "oppiliappan";
     repo = "dijo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-g+A8BJxqoAvm9LTLrLnClVGtFJCQ2gT0mDGAov/6vXE=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "dijo";
   };
-}
+})

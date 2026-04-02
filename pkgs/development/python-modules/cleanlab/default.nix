@@ -32,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cleanlab";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sgDQJy0iNxs3bIVuqV7LVEFC0jjlWvnqFzKr7ZDGmPo=";
+    hash = "sha256-0H4JTAc2tCtIFklGciXQ+TCWOiJ6kRkqcycJNeIpero=";
   };
 
   postPatch = ''

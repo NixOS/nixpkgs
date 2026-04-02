@@ -4,26 +4,29 @@
   cffi,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
-  xorg,
+  setuptools,
+  libxcb,
+  xeyes,
+  xvfb,
 }:
 
 buildPythonPackage rec {
   pname = "xcffib";
-  version = "1.9.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.12.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K6xgY2lnVOiHHC9AcwR7Uz792Cx33fhnYgEWcJfMUlM=";
+    hash = "sha256-Q0Ut5QnBJk1bzqS8Alyhv2gnLSQO8m0zQLRuEfY9PUo=";
   };
 
   postPatch = ''
     # Hardcode cairo library path
-    sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
+    substituteInPlace xcffib/__init__.py \
+      --replace-fail "lib = ffi.dlopen(soname)" "lib = ffi.dlopen('${lib.getLib libxcb}/lib/' + soname)"
   '';
+
+  build-system = [ setuptools ];
 
   propagatedNativeBuildInputs = [ cffi ];
 
@@ -31,8 +34,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    xorg.xeyes
-    xorg.xvfb
+    xeyes
+    xvfb
   ];
 
   preCheck = ''

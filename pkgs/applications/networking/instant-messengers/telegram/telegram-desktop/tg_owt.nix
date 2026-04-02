@@ -13,14 +13,14 @@
   openh264,
   crc32c,
   libvpx,
-  libX11,
-  libXtst,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXrender,
-  libXrandr,
-  libXi,
+  libx11,
+  libxtst,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxrender,
+  libxrandr,
+  libxi,
   glib,
   abseil-cpp,
   pipewire,
@@ -33,20 +33,17 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "0-unstable-2025-06-02";
+  version = "0-unstable-2026-03-09";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "62321fd7128ab2650b459d4195781af8185e46b5";
-    hash = "sha256-l6EdHJLd42TU+4pLakdU3a5PLVxrxjta0CSRy5hVBFU=";
+    rev = "26068e29bfa8d74a9dc9c8f7f94172fafbc262b8";
+    hash = "sha256-/9uJMm54LC9ZeDwmursdyGeR81vBVTpjGdRUTOX0gV0=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # fix build with abseil 202508
-    # upstream PR: https://github.com/desktop-app/tg_owt/pull/164
-    ./abseil-202508.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -80,14 +77,14 @@ stdenv.mkDerivation {
     abseil-cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXtst
-    libXcomposite
-    libXdamage
-    libXext
-    libXrender
-    libXrandr
-    libXi
+    libx11
+    libxtst
+    libxcomposite
+    libxdamage
+    libxext
+    libxrender
+    libxrandr
+    libxi
     glib
     pipewire
     libgbm

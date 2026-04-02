@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krapslog";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "acj";
     repo = "krapslog-rs";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-c/Zh4fOsSKY0XopaklRbFEh4QM5jjUcj0zhAx5v9amI=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ yanganto ];
     mainProgram = "krapslog";
   };
-}
+})

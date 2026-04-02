@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "itch-dl";
   version = "0.6.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "DragoonAethis";
     repo = "itch-dl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zwsiG38wOVi3pP0gQWkZqfAmdWKadjB65qiTg68tZWg=";
   };
 
@@ -42,8 +42,8 @@ python3Packages.buildPythonApplication rec {
     description = "Itch.io game downloader with website, game jam, collection and library support";
     mainProgram = "itch-dl";
     homepage = "https://github.com/DragoonAethis/itch-dl";
-    changelog = "https://github.com/DragoonAethis/itch-dl/releases/tag/${src.tag}";
+    changelog = "https://github.com/DragoonAethis/itch-dl/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

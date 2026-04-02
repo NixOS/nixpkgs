@@ -18,14 +18,14 @@
   libadwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foliate";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = "foliate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QpWJDwatT4zOAPF+dn+Sm5xivk9SIZOvexj0M/Nyu24=";
     fetchSubmodules = true;
   };
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple and modern GTK eBook reader";
     homepage = "https://johnfactotum.github.io/foliate";
-    changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
+    changelog = "https://github.com/johnfactotum/foliate/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       onny
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "foliate";
   };
-}
+})

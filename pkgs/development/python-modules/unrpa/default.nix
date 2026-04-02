@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   uncompyle6,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "unrpa";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

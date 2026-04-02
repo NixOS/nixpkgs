@@ -30,6 +30,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     google-api-core
     grpc-google-iam-v1

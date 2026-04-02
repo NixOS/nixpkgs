@@ -28,16 +28,16 @@
   tensorflow-probability,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpyro";
-  version = "0.19.0";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
-    tag = version;
-    hash = "sha256-3kzaINsz1Mjk97ERQsQIYIBz7CVmXtVDn0edJFMHQWs=";
+    tag = finalAttrs.version;
+    hash = "sha256-sNqllL9nBwXp0kn+HAjvIaHf7LR0UKh9q7DZ20yCr5A=";
   };
 
   build-system = [ setuptools ];
@@ -81,6 +81,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Failing with jax>=0.9.0
+    # TypeError: Error interpreting argument to closed_call as a JAX value
+    "test_provenance_call"
+    "test_provenance_closed_call"
+    "test_numpyrooptim_no_double_jit"
+
     # ValueError: Found unexpected Arrays on value of type <class 'list'> in static attribute 'layers'
     # of Pytree type '<class 'test_module.test_random_nnx_module_mcmc_sequence_params.<locals>.MLP'>'.
     # This is an error starting from Flax version 0.12.0.
@@ -102,6 +108,9 @@ buildPythonPackage rec {
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
+
+    # Failed: DID NOT RAISE <class 'UserWarning'>
+    "test_interval_censored_validate_sample"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Not equal to tolerance rtol=0.06, atol=0
@@ -116,8 +125,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
-    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

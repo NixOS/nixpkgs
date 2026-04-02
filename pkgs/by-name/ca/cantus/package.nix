@@ -10,18 +10,18 @@
   libxkbcommon,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cantus";
-  version = "0.4.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "CodedNil";
     repo = "cantus";
-    tag = version;
-    hash = "sha256-U8a0LcNlaiLdba4z2LUBQkwrOrE/7S9OIQ4JJw1m4Ck=";
+    tag = finalAttrs.version;
+    hash = "sha256-7MaUdrFbpqfQ4Bim1zbQdT/J+SI79zXoaAmmwMbMeqg=";
   };
 
-  cargoHash = "sha256-mpjcX5xuhsqr3Jxva8Oy1tQvM+29N3LHvym76Bs0uhk=";
+  cargoHash = "sha256-ttV8Ff+il71d6RbCCH3XkAj4CyKW3LO5zY5FiYOAWxo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ CodedNil ];
     platforms = lib.platforms.linux;
   };
-}
+})

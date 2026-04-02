@@ -1,4 +1,9 @@
-{ callPackage, fetchpatch2 }:
+{
+  callPackage,
+  fetchpatch2,
+  gcc14Stdenv,
+  gfortran14,
+}:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -27,52 +32,67 @@ in
   );
   julia_111-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.11.7";
+      version = "1.11.9";
       sha256 = {
-        x86_64-linux = "aa5924114ecb89fd341e59aa898cd1882b3cb622ca4972582c1518eff5f68c05";
-        aarch64-linux = "f97f80b35c12bdaf40c26f6c55dbb7617441e49c9e6b842f65e8410a388ca6f4";
-        x86_64-darwin = "b2c11315df39da478ab0fa77fb228f3fd818f1eaf42dc5cc1223c703f7122fe5";
-        aarch64-darwin = "74df9d4755a7740d141b04524a631e2485da9d65065d934e024232f7ba0790b6";
+        x86_64-linux = "0dfy4wlrz6jbs7kd9r0bjk9d6sqgf4fakrxrnzwfl1bsdlsn6qxk";
+        aarch64-linux = "0gk2zxkwz2yyg3im23jpgaxzixchyywm19nbh51szmniah31y1x2";
+        x86_64-darwin = "14nz5qf9raida260srcmh7p41xdylipx5n61nbx9sf12vcyrrd7p";
+        aarch64-darwin = "1mrvycjlxs225sspdvvq4qbay1riyyjzqjs1d0xgqdkh6c6kv47d";
       };
     }) { }
   );
   julia_112-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.12.3";
+      version = "1.12.5";
       sha256 = {
-        x86_64-linux = "04mrysmaq0z6vzzr8az22zdf572x6hqxxxjxijx4xbkjfh7xaywg";
-        aarch64-linux = "036cvw7cnbfylpg106mb2d8gn23bljqpcq94w268m5wnp4jn2s9j";
-        x86_64-darwin = "1cwy57qvw196m9fm4j18smipikfyz1f8h5966bz71n652w1yqjpq";
-        aarch64-darwin = "1miv453pxnkih041nmdwbyjs6zkyi0f5db4gjs2ddgs43f56xb1l";
+        x86_64-linux = "1rxsb2bnk2wgd2nkzxwpj1xj8gbpblczm4lyxprzp5jfgrr4vf21";
+        aarch64-linux = "1qp8ydagd39c1rcj9ryrq0y1hcimw1dgmaaviaqbyqj4x92fhp9f";
+        x86_64-darwin = "1b8mdpy6ww89xngsl1q3ym245iyw59alki9cvnplcbg3iqjhgdz4";
+        aarch64-darwin = "01fli18s43p74hb7z2fcv8sv72pijp3k1azba6rjjpgfic7f1h0z";
       };
     }) { }
   );
   julia_110 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.10.10";
-      hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
-      patches = [
-        # Revert https://github.com/JuliaLang/julia/pull/55354
-        # [build] Some improvements to the LLVM build system
-        # Related: https://github.com/JuliaLang/julia/issues/55617
-        (fetchpatch2 {
-          url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
-          revert = true;
-          hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
-        })
-      ];
-    }) { }
+    callPackage
+      (import ./generic.nix {
+        version = "1.10.10";
+        hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
+        patches = [
+          # Revert https://github.com/JuliaLang/julia/pull/55354
+          # [build] Some improvements to the LLVM build system
+          # Related: https://github.com/JuliaLang/julia/issues/55617
+          (fetchpatch2 {
+            url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
+            revert = true;
+            hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
+          })
+        ];
+      })
+      {
+        stdenv = gcc14Stdenv;
+        gfortran = gfortran14;
+      }
   );
   julia_111 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.11.7";
-      hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
-    }) { }
+    callPackage
+      (import ./generic.nix {
+        version = "1.11.9";
+        hash = "sha256-SX5jIfJfxQQfP2P5sCGtglFn+GZlOIyHgnQ3qrr8GSI=";
+      })
+      {
+        stdenv = gcc14Stdenv;
+        gfortran = gfortran14;
+      }
   );
   julia_112 = wrapJulia (
-    callPackage (import ./generic.nix {
-      version = "1.12.1";
-      hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
-    }) { }
+    callPackage
+      (import ./generic.nix {
+        version = "1.12.5";
+        hash = "sha256-3jvzaT2TjX4VU5pcOsIXfFRqzQ17e8TjJ+MNanI48eM=";
+      })
+      {
+        stdenv = gcc14Stdenv;
+        gfortran = gfortran14;
+      }
   );
 }

@@ -16,22 +16,29 @@
   libpq,
   makeWrapper,
 }:
+let
+  python = python3.withPackages (
+    ps: with ps; [
+      websockets
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.3.0";
+  version = "2.13.3";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-6VfoT8Rw2c46ugSpW1IHJPSHTWnphNn0MG1XDhrPeBg=";
+    hash = "sha256-ErChLX9bzOABz1hM4YuB2horhTWR4tskItx5rE0zR8g=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-wSKxoxWys3gf++yTDr/XBadW9bq/w/NKPGUZpbAPe+I=";
+    hash = "sha256-SyGVhJ1kKH209TQken89RnBpZ7K3agHPN0jSmoFtX6c=";
   };
 
   nativeBuildInputs = [
@@ -87,10 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,lib/n8n}
-    mv {packages,node_modules} $out/lib/n8n
+    cp -r {packages,node_modules} $out/lib/n8n
 
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
       --set N8N_RELEASE_TYPE "stable"
+
+    # JavaScript runner
+    makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \
+      --add-flags "$out/lib/n8n/packages/@n8n/task-runner/dist/start.js"
+
+    # Python runner
+    mkdir -p $out/lib/n8n-task-runner-python
+    cp -r packages/@n8n/task-runner-python/* $out/lib/n8n-task-runner-python/
+    makeWrapper ${python}/bin/python $out/bin/n8n-task-runner-python \
+      --add-flags "$out/lib/n8n-task-runner-python/src/main.py" \
+      --prefix PYTHONPATH : "$out/lib/n8n-task-runner-python"
 
     runHook postInstall
   '';
@@ -117,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       gepbird
       AdrienLemaire
       sweenu
+      wrbbz
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

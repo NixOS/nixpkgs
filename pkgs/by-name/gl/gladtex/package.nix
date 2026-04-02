@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage {
   pname = "gladtex";
   version = "unstable-2023-01-22";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "humenda";

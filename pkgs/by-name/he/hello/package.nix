@@ -7,16 +7,19 @@
   testers,
   versionCheckHook,
   hello,
+  gnulib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hello";
-  version = "2.12.2";
+  version = "2.12.3";
 
   src = fetchurl {
     url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WpqZbcKSzCTc9BHO6H6S9qrluNE72caBm0x6nc4IGKs=";
+    hash = "sha256-DV9gFUOC/uELEUocNOeF2LH0kgc64tOm97FHaHs2aqA=";
   };
+
+  patches = lib.optional stdenv.hostPlatform.isCygwin gnulib.patches.memcpy-fix-backport-250512;
 
   # The GNU Hello `configure` script detects how to link libiconv but fails to actually make use of that.
   # Unfortunately, this cannot be a patch to `Makefile.am` because `autoreconfHook` causes a gettext
@@ -24,12 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-liconv";
   };
-
-  # lib/string.h:754:20: error: expected declaration specifiers or '...' before numeric constant
-  # The embedded gnulib is currently broken on cygwin when fortify is enabled.
-  # This can be removed when gnulib is updated with the fix:
-  # https://gitweb.git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff_plain;h=c44fe03b72687c9e913727724c29bdb49c1f86e3
-  hardeningDisable = lib.optional stdenv.hostPlatform.isCygwin "fortify";
 
   doCheck = true;
 

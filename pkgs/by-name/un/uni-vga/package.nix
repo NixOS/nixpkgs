@@ -6,22 +6,24 @@
   kbd,
   bdftopcf,
   libfaketime,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation {
-  name = "uni-vga";
+  pname = "uni-vga";
+  version = "0-unstable-2002-10-31";
 
   src = fetchurl {
-    url = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
+    url = "https://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
     sha256 = "05sns8h5yspa7xkl81ri7y1yxf5icgsnl497f3xnaryhx11s2rv6";
   };
 
   nativeBuildInputs = [
     bdftopcf
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     perl

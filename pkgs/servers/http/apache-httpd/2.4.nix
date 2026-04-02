@@ -86,7 +86,9 @@ stdenv.mkDerivation rec {
   '';
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    NIX_LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-apr=${apr.dev}"
@@ -162,6 +164,6 @@ stdenv.mkDerivation rec {
     homepage = "https://httpd.apache.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

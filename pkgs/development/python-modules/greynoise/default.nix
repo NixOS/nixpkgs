@@ -16,7 +16,6 @@
   six,
   pytestCheckHook,
   mock,
-  pythonOlder,
   # The REPL depends on click-repl, which is incompatible with our version of
   # click.
   withRepl ? false,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "greynoise";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";
     tag = "v${version}";
-    hash = "sha256-wJDO666HC3EohfR+LbG5F0Cp/eL7q4kXniWhJfc7C3s=";
+    hash = "sha256-CP+Fx3Gu6pQWnX/WjJ+qq7TK9onatVHp0ghu33WU7X4=";
   };
 
   patches = lib.optionals (!withRepl) [

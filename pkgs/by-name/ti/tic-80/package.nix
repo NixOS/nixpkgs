@@ -10,7 +10,7 @@
   kubazip,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   janet,
   lua5_3_compat,
   quickjs,
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
     kubazip
     libGL
     libGLU
-    libX11
+    libx11
     janet
     (lua5_3_compat.withPackages (ps: [ ps.fennel ]))
     quickjs

@@ -9,7 +9,6 @@
   mock,
   pyrdfa3,
   pytestCheckHook,
-  pythonOlder,
   rdflib,
   setuptools,
   six,
@@ -20,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "extruct";
   version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scrapinghub";

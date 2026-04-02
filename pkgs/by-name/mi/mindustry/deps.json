@@ -17,10 +17,10 @@
    "module": "sha256-r0Hiyh4MXzQkBudNhixHcXf1QOr4GWU841ypzRa0w/g=",
    "pom": "sha256-2Zp//AsIqW7/+5ybmtConz5ykh3ZYrFBi6SzLuKTz8A="
   },
-  "Anuken#rhino/73a812444ac388ac2d94013b5cadc8f70b7ea027": {
-   "jar": "sha256-g2+szbtgsHvalu5F4kygVDN89kk0zvzVSw3EOcAL11I=",
-   "module": "sha256-BbXoWzXoJGKhH6kA6EiluDHhfs3th9X+ojLLZuGISOg=",
-   "pom": "sha256-ngLvPqdMq7ayWlDHf7qr8MGYsDh+uMK6OYcDX9y5bXk="
+  "Anuken#rhino/54b75cbd1207ef1fd5cff517cbd188e763c85baa": {
+   "jar": "sha256-sZ5zFOXvyOLYEbb/LAQLU2u2S4FZ41T+rFHBfrG5O/Y=",
+   "module": "sha256-QqoHjAbLp9eza+7r921k2L6bbV8zqjhdkqHhCy1qIkA=",
+   "pom": "sha256-5xheV+aFDLRgYUS6b7GoGW0b2KSYsA8jY7NPy+Gb+H8="
   },
   "Anuken#steamworks4j/0b86023401880bb5e586bc404bedbaae9b1f1c94": {
    "jar": "sha256-YbaPhCjWtlExwQ1dFNA6JrkiAfQYWxJ0VRV9rLnoYhY=",
@@ -58,8 +58,8 @@
   }
  },
  "https://raw.githubusercontent.com": {
-  "nothings/stb/e140649ccf40818781b7e408f6228a486f6d254b/stb_image": {
-   "h": "sha256-jlsNcX38ioNMl+8gLSDnjQg9AJWG4XMcmFgX0BVdVow="
+  "nothings/stb/013ac3beddff3dbffafd5177e7972067cd2b5083/stb_image": {
+   "h": "sha256-WUwv411JSItDgtv67I+YNm3vyoGdkWrJW+zz519CALM="
   }
  },
  "https://repo.maven.apache.org/maven2": {

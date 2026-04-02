@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nlojet++";
   version = "4.1.3";
 
   src = fetchurl {
-    url = "https://desy.de/~znagy/hep-programs/nlojet++/nlojet++-${version}.tar.gz";
+    url = "https://desy.de/~znagy/hep-programs/nlojet++/nlojet++-${finalAttrs.version}.tar.gz";
     sha256 = "18qfn5kjzvnyh29x40zm2maqzfmrnay9r58n8pfpq5lcphdhhv8p";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

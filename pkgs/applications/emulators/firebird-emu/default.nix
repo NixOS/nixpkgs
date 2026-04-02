@@ -8,14 +8,14 @@
   qtquickcontrols,
   wrapQtAppsHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firebird-emu";
   version = "1.6";
 
   src = fetchFromGitHub {
     owner = "nspire-emus";
     repo = "firebird";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-ZptjlnOiF+hKuKYvBFJL95H5YQuR99d4biOco/MVEmE=";
   };
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
-    mv $out/bin/${pname}.app $out/Applications/
+    mv $out/bin/firebird-emu.app $out/Applications/
   '';
 
   meta = {
     homepage = "https://github.com/nspire-emus/firebird";
-    changelog = "https://github.com/nspire-emus/firebird/releases/tag/v${version}";
+    changelog = "https://github.com/nspire-emus/firebird/releases/tag/v${finalAttrs.version}";
     description = "Third-party multi-platform emulator of the ARM-based TI-Nspire™ calculators";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pneumaticat ];
     platforms = lib.platforms.unix;
   };
-}
+})

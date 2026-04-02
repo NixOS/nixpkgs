@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   typing-extensions,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "python-can";
   version = "4.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hardbyte";

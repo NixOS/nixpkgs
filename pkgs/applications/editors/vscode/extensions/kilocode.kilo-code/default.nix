@@ -1,80 +1,59 @@
 {
   lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  pnpm,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  nodejs,
   vscode-utils,
-  nix-update-script,
+  vscode-extension-update-script,
+  autoPatchelfHook,
+  stdenv,
 }:
 
-let
-  vsix = stdenvNoCC.mkDerivation (finalAttrs: {
-    name = "kilo-code-${finalAttrs.version}.vsix";
-    pname = "kilo-code-vsix";
-    version = "4.124.0";
+vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef =
+    let
+      sources = {
+        "x86_64-linux" = {
+          arch = "linux-x64";
+          hash = "sha256-tG2PUESSzOs5jEPD7Wgtee832pOTOLkxxV/FP7Md6k8=";
+        };
+        "x86_64-darwin" = {
+          arch = "darwin-x64";
+          hash = "sha256-CqgMcb03eA+orz0rmKoSi5qtQXAN/MzrmogGQGV2yzw=";
+        };
+        "aarch64-linux" = {
+          arch = "linux-arm64";
+          hash = "sha256-kDv8t9COz8sWRH9FlrhrDC9UqGBXD7F0IMaWCbZYwBk=";
+        };
+        "aarch64-darwin" = {
+          arch = "darwin-arm64";
+          hash = "sha256-S27qkOYs3arqa68raX+0itOywnlQZAIjxD93GCEjKhs=";
+        };
+      };
+    in
+    {
+      publisher = "kilocode";
+      name = "Kilo-Code";
+      version = "7.0.51";
+    }
+    // sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system ${stdenv.hostPlatform.system}");
 
-    src = fetchFromGitHub {
-      owner = "Kilo-Org";
-      repo = "kilocode";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-Dy0dd07pWsSbrO6BX7GEYf7CunXD0itaeIFRv9mQJks=";
-    };
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-hxgzmJD+Sl7E+ape1M1/Xl8XLtAhtht3AE45zHFctsQ=";
-    };
+  buildInputs = [ stdenv.cc.cc.lib ];
 
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      node --run build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cp ./bin/kilo-code-$version.vsix $out
-
-      runHook postInstall
-    '';
-  });
-in
-vscode-utils.buildVscodeExtension (finalAttrs: {
-  pname = "kilo-code";
-  inherit (finalAttrs.src) version;
-
-  vscodeExtPublisher = "kilocode";
-  vscodeExtName = "Kilo-Code";
-  vscodeExtUniqueId = "${finalAttrs.vscodeExtPublisher}.${finalAttrs.vscodeExtName}";
-
-  src = vsix;
-
-  passthru = {
-    vsix = finalAttrs.src;
-    updateScript = nix-update-script {
-      attrPath = "vscode-extensions.kilocode.kilo-kode.vsix";
-    };
-  };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Open Source AI coding assistant for planning, building, and fixing code";
-    homepage = "https://kilocode.ai";
+    homepage = "https://kilo.ai";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=kilocode.Kilo-Code";
-    license = lib.licenses.asl20;
+    license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
-})
+}

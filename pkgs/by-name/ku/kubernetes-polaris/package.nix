@@ -6,26 +6,26 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-polaris";
-  version = "10.1.3";
+  version = "10.1.6";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = version;
-    sha256 = "sha256-TGdfyjAARYBf2JVQuq+6J1b7W2QSbnl1USSbGdGs59k=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-lIvOWX3j4N0vG9jXFxKyKqdMERNov6NI/RaNPBN3MVM=";
   };
 
-  vendorHash = "sha256-3crserX1lwgEsz1a/MeyYMbb6Sf3JoFRBaEu9pEHX1I=";
+  vendorHash = "sha256-pfO5+iDUZY8PIOw/47qcopfox4DX2yf/4fqiLM94AF8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X main.Commit=${version}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.Commit=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -40,7 +40,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/polaris help
-    $out/bin/polaris version | grep 'Polaris version:${version}'
+    $out/bin/polaris version | grep 'Polaris version:${finalAttrs.version}'
 
     runHook postInstallCheck
   '';
@@ -52,4 +52,4 @@ buildGoModule rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ longer ];
   };
-}
+})

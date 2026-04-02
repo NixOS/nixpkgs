@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "book-summary";
   version = "0.2.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dxM6bqgHp4IaG03NriHvoT3al2u5Sz/I5ajlgzpjG1c=";
   };
 
@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "book-summary";
     homepage = "https://github.com/dvogt23/book-summary";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ iog ];
   };
-}
+})

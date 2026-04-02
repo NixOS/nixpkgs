@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "panicparse";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "maruel";
     repo = "panicparse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EBNOHI04v47sXAWrjHsU4pixP4TPOuHy8S3YmlkiLN4=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "panicparse";
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   attrs,
   pillow,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "clickgen";
   version = "2.2.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ful1e5";

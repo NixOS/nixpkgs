@@ -8,7 +8,6 @@
   pytest-timeout,
   responses,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyvera";
   version = "0.3.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pavoni";

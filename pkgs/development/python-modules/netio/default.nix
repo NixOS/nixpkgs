@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pyopenssl,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "netio";
   version = "1.0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "netioproducts";

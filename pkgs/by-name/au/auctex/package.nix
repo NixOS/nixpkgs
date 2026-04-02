@@ -21,7 +21,7 @@ let
     ];
 
     src = fetchurl {
-      url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+      url = "mirror://gnu/auctex/auctex-${version}.tar.gz";
       hash = "sha256-Hn5AKrz4RmlOuncZklvwlcI+8zpeZgIgHHS2ymCUQDU=";
     };
 

@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conventional-changelog-cli";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "conventional-changelog";
     tag = "conventional-changelog-v${finalAttrs.version}";
-    hash = "sha256-Pgx5gM4SdSL6WCkStByA7AP2O96MjAjyeMOI+Lo2mt0=";
+    hash = "sha256-0Fee2sfLwxfE/MRLMUUMACTGVxnJJF1MPsWWzleVA3c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-ZfG3F0J1hIhZlF2OadhVdbxhQrFcMYDG9gEXR04DgEI=";
+    hash = "sha256-vOZnVCz5lFdVD2qmlHdTRxzuEjpR3W/rXfzvjvdOh9E=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generate a CHANGELOG from git metadata";
     homepage = "https://github.com/conventional-changelog/conventional-changelog";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.pyrox0 ];
+    maintainers = [ ];
     mainProgram = "conventional-changelog";
   };
 })

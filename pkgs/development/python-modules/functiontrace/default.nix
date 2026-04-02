@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "functiontrace";
   version = "0.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

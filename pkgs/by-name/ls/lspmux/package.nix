@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
 }:
 
@@ -8,8 +8,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lspmux";
   version = "0.3.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "p2502";
     repo = "lspmux";
     rev = "v${finalAttrs.version}";

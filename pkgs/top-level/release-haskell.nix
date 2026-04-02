@@ -10,7 +10,7 @@
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
 {
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
 }:
 
 let
@@ -255,7 +255,6 @@ let
         cachix
         # carp broken on 2024-04-09
         changelog-d
-        cedille
         client-ip-echo
         cornelis
         codd
@@ -429,38 +428,9 @@ let
                 postgrest
                 ;
             };
-
-            haskell.packages.native-bignum.ghc9103 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
-                hello
-                random
-                QuickCheck
-                terminfo # isn't bundled for cross
-                ;
-            };
           };
 
       pkgsCross = {
-        aarch64-android-prebuilt.pkgsStatic =
-          removePlatforms
-            [
-              # Android NDK package doesn't support building on
-              "aarch64-darwin"
-              "aarch64-linux"
-
-              "x86_64-darwin"
-            ]
-            {
-              haskell.packages.ghc912 = {
-                inherit
-                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-            };
-
         ghcjs =
           removePlatforms
             [
@@ -521,7 +491,24 @@ let
               ghc948
               ;
           };
-        };
+        }
+        //
+          removePlatforms
+            [
+              # Testing cross from x86_64-linux
+              "aarch64-darwin"
+              "aarch64-linux"
+              "x86_64-darwin"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskellPackages)
+                  ghc
+                  hello
+                  th-orphans
+                  ;
+              };
+            };
       };
     })
     (versionedCompilerJobs {
@@ -545,7 +532,7 @@ let
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
-      Cabal_3_16_0_0 = released;
+      Cabal_3_16_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -665,7 +652,6 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9103
         ];
       };
     }

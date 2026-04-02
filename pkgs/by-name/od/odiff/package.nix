@@ -23,13 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gCF+CInczBJfDyZgxEQor5C/OSxKciCu9gbZanaE/nA=";
   };
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
   nativeBuildInputs = [
     installShellFiles
-    zig.hook
+    zig
     nasm
   ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/dmtrKovalenko/odiff/releases";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ddogfoodd ];
-    platforms = lib.platforms.linux;
+    platforms = (lib.platforms.linux ++ lib.platforms.darwin);
     mainProgram = "odiff";
   };
 })

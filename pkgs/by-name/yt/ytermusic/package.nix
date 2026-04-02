@@ -8,14 +8,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ytermusic";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "ccgauche";
     repo = "ytermusic";
-    tag = "beta-${version}";
+    tag = "beta-${finalAttrs.version}";
     hash = "sha256-nu/vedQNs5TgCG1v5qwwDTnFTyXCS2KnLVrnEhCtzCs=";
   };
 
@@ -43,9 +43,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TUI based Youtube Music Player that aims to be as fast and simple as possible";
     homepage = "https://github.com/ccgauche/ytermusic";
-    changelog = "https://github.com/ccgauche/ytermusic/releases/tag/${src.tag}";
+    changelog = "https://github.com/ccgauche/ytermusic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ codebam ];
     mainProgram = "ytermusic";
   };
-}
+})

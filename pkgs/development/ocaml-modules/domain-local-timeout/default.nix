@@ -11,14 +11,14 @@
   domain-local-await,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "domain-local-timeout";
   version = "1.0.1";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/domain-local-timeout/releases/download/${version}/domain-local-timeout-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/domain-local-timeout/releases/download/${finalAttrs.version}/domain-local-timeout-${finalAttrs.version}.tbz";
     hash = "sha256-6sCqUkOjN8E+7OLUwVQntkv0vrQDkGDV8KNqDhVm0d8=";
   };
 
@@ -42,4 +42,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

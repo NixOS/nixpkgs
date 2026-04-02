@@ -49,7 +49,7 @@ let
   inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
-    inherit stdenv;
+    inherit stdenv haskellLib;
     nodejs = buildPackages.nodejs-slim;
     inherit (self)
       buildHaskellPackages
@@ -57,6 +57,10 @@ let
       ghcWithHoogle
       ghcWithPackages
       ;
+    iserv-proxy = {
+      build = buildHaskellPackages.iserv-proxy;
+      host = self.iserv-proxy;
+    };
     inherit (self.buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal (drv: {
       isLibrary = false;
@@ -157,7 +161,7 @@ let
           inherit (scope) ghc buildHaskellPackages;
         };
     in
-    ps // ps.xorg // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
+    ps // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -177,10 +181,12 @@ let
         nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = pkgs.lib.optionalString (
-          buildPlatform.libc == "glibc"
-        ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        env = {
+          LANG = "en_US.UTF-8";
+        }
+        // lib.optionalAttrs (buildPlatform.libc == "glibc") {
+          LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        };
       }
       ''
         export HOME="$TMP"
@@ -695,10 +701,18 @@ package-set { inherit pkgs lib callPackage; } self
   */
   buildFromCabalSdist =
     pkg:
-    haskellLib.overrideSrc {
-      src = self.cabalSdist { inherit (pkg) src; };
-      version = pkg.version;
-    } pkg;
+    haskellLib.overrideCabal
+      (_: {
+        # Patches are already applied by srcOnly above, so clear them
+        # to avoid double-application.
+        patches = [ ];
+      })
+      (
+        haskellLib.overrideSrc {
+          src = self.cabalSdist { src = pkgs.srcOnly pkg; };
+          version = pkg.version;
+        } pkg
+      );
 
   /*
     Modify a Haskell package to add shell completion scripts for the

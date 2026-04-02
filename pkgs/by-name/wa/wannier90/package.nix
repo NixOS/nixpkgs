@@ -11,7 +11,7 @@
 assert (!blas.isILP64);
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wannier90";
   version = "3.1.0";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wannier-developers";
     repo = "wannier90";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+Mq7lM6WuwAnK/2FlDz9gNRIg2sRazQRezb3BfD0veY=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

@@ -4,15 +4,12 @@
   fetchPypi,
   httpx,
   pyspnego,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "httpx-ntlm";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "httpx_ntlm";

@@ -12,12 +12,12 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "httpfs2";
   version = "0.1.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/httpfs/httpfs2/httpfs2-${version}.tar.gz";
+    url = "mirror://sourceforge/httpfs/httpfs2/httpfs2-${finalAttrs.version}.tar.gz";
     sha256 = "1h8ggvhw30n2r6w11n1s458ypggdqx6ldwd61ma4yd7binrlpjq1";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

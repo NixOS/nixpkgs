@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "5.1.0";
+  version = "5.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
     tag = "v${version}";
-    hash = "sha256-3eVxGBvYkTLHTD5uDE2rB09v0mzj1DkuZb8N1ZFj4qs=";
+    hash = "sha256-Ngvoq8BugTH8r187S+nUhNX/NRVhhBDX+eVc/zvq08g=";
   };
 
   build-system = [ setuptools ];

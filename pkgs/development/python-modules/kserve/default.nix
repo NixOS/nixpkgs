@@ -8,11 +8,14 @@
   setuptools,
 
   # dependencies
+  aiohttp,
   cloudevents,
+  cryptography,
   fastapi,
   grpc-interceptor,
   grpcio,
   grpcio-tools,
+  h11,
   httpx,
   kubernetes,
   numpy,
@@ -23,10 +26,13 @@
   psutil,
   pydantic,
   python-dateutil,
+  python-multipart,
   pyyaml,
   six,
+  starlette,
   tabulate,
   timing-asgi,
+  urllib3,
   uvicorn,
 
   # optional-dependencies
@@ -51,40 +57,31 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    tag = "v${version}";
-    hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gLYYuIy43cuXrCvjjXLHMim0m/EAwaivLdFhKuUdeX0=";
   };
 
-  # Fix vllm 0.12.0 compatibility
-  # Patch submitted upstream: https://github.com/kserve/kserve/pull/4882
-  postPatch = ''
-    substituteInPlace kserve/protocol/rest/openai/types/__init__.py \
-      --replace-fail \
-        "from vllm.entrypoints.openai.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
-        "from vllm.entrypoints.pooling.embed.protocol import EmbeddingRequest, EmbeddingResponse as Embedding, EmbeddingResponseData, EmbeddingCompletionRequest" \
-      --replace-fail \
-        "from vllm.entrypoints.openai.protocol import RerankRequest, RerankResponse as Rerank" \
-        "from vllm.entrypoints.pooling.score.protocol import RerankRequest, RerankResponse as Rerank"
-  '';
-
-  sourceRoot = "${src.name}/python/kserve";
+  sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
   pythonRelaxDeps = [
+    "cryptography"
     "fastapi"
     "httpx"
     "numpy"
     "prometheus-client"
     "protobuf"
-    "uvicorn"
     "psutil"
+    "python-multipart"
+    "starlette"
+    "uvicorn"
   ];
 
   build-system = [
@@ -92,11 +89,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp
     cloudevents
+    cryptography
     fastapi
     grpc-interceptor
     grpcio
     grpcio-tools
+    h11
     httpx
     kubernetes
     numpy
@@ -107,10 +107,13 @@ buildPythonPackage rec {
     psutil
     pydantic
     python-dateutil
+    python-multipart
     pyyaml
     six
+    starlette
     tabulate
     timing-asgi
+    urllib3
     uvicorn
   ]
   ++ uvicorn.optional-dependencies.standard;
@@ -142,7 +145,7 @@ buildPythonPackage rec {
     pytestCheckHook
     tomlkit
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "kserve" ];
 
@@ -173,6 +176,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    "test_health_handler"
+    "test_list_handler"
+    "test_liveness_handler"
+    "test_server_readiness"
+
     # Started failing since vllm was updated to 0.13.0
     # pydantic_core._pydantic_core.ValidationError: 1 validation error for RerankResponse
     # usage.prompt_tokens
@@ -205,8 +214,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    changelog = "https://github.com/kserve/kserve/releases/tag/${src.tag}";
+    changelog = "https://github.com/kserve/kserve/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -8,7 +8,6 @@
   pyjwt,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "notifications-python-client";
   version = "10.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alphagov";

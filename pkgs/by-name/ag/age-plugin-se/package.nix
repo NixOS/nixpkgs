@@ -26,8 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     swiftpm
   ];
 
-  # Can't find libdispatch without this on NixOS. (swift 5.8)
-  LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux "${swiftPackages.Dispatch}/lib";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # Can't find libdispatch without this on NixOS. (swift 5.8)
+    LD_LIBRARY_PATH = "${swiftPackages.Dispatch}/lib";
+  };
 
   postPatch =
     let

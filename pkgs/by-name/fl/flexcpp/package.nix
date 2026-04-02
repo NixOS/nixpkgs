@@ -7,13 +7,13 @@
   yodl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flexc++";
   version = "2.05.00";
 
   src = fetchFromGitHub {
     sha256 = "0s25d9jsfsqvm34rwf48cxwz23aq1zja3cqlzfz3z33p29wwazwz";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "flexcpp";
     owner = "fbb-git";
   };
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

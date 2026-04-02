@@ -9,14 +9,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mle";
   version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "mle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0rkk7mh6w5y1lrbdv7wmxdgl5cqzpzw0p26adazkqlfdyb6wbj9k";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ adsr ];
     mainProgram = "mle";
   };
-}
+})

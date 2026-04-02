@@ -10,15 +10,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moosefs";
-  version = "4.58.3";
+  version = "4.58.4";
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
-    rev = "v${version}";
-    sha256 = "sha256-lEnCP+ORWdW52SVO7K3WxcjlFMrQFR9VT8fjquI/fZg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-AvY1TOoxxpiqrMqngZe3BTgMuxwltQk1unr/IEfOLt4=";
   };
 
   nativeBuildInputs = [
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

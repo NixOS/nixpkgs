@@ -3,21 +3,26 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
+  nix-update-script,
   xercesc,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libe57format";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "asmaloney";
     repo = "libE57Format";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-GyzfJshL2cOTEDp8eR0sqQq4GSnOdskiLi5mY1a2KW0=";
-    fetchSubmodules = true; # for submodule-vendored libraries such as `gtest`
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rEX251cgb6GMToGzcZcwDzjLZBGcwN8+ij1nCIpK2ZE=";
   };
+
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    rmdir test/extern/googletest
+    ln -s ${gtest.src} test/extern/googletest
+  '';
 
   # Repository of E57 files used for testing.
   libE57Format-test-data_src = fetchFromGitHub {
@@ -27,16 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JARpxp6Z2VioBfY0pZSyQU2mG/EllbaF3qteSFM9u8o=";
   };
 
-  CXXFLAGS = [
-    # GCC 13: error: 'int16_t' has not been declared in 'std'
-    "-include cstdint"
-  ];
-
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     xercesc
   ];
 
@@ -72,10 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     g++ -Wl,--no-undefined -shared -o libE57FormatShared.so -L. -Wl,-whole-archive -lE57Format -Wl,-no-whole-archive -lxerces-c
     mv libE57FormatShared.so libE57Format.so
 
-    if [ "$dontDisableStatic" -ne "1" ]; then
+    if [ "''${dontDisableStatic:-1}" -ne "1" ]; then
       rm libE57Format.a
     fi
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for reading & writing the E57 file format";

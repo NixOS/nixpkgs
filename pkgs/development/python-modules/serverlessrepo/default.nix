@@ -7,15 +7,12 @@
   six,
   pyyaml,
   mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "serverlessrepo";
   version = "0.1.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

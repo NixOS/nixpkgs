@@ -5,19 +5,18 @@
   pkg-config,
   gnutls,
   libedit,
-  texinfo,
   libcap,
   libseccomp,
   pps-tools,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrony";
   version = "4.8";
 
   src = fetchurl {
-    url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
+    url = "https://chrony-project.org/releases/chrony-${finalAttrs.version}.tar.gz";
     hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
   };
 
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnutls
     libedit
-    texinfo
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
@@ -99,4 +97,4 @@ stdenv.mkDerivation rec {
       different computer.
     '';
   };
-}
+})

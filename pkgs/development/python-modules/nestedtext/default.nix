@@ -8,28 +8,25 @@
   inform,
   nestedtext,
   pytestCheckHook,
-  pythonOlder,
   quantiphy,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nestedtext";
   version = "3.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eg5Q11dl9ikGpNYx2Sd47MBPC9S4W2M6PpehFpowzdk=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ inform ];
+  dependencies = [ inform ];
 
   nativeCheckInputs = [
     docopt
@@ -72,8 +69,8 @@ buildPythonPackage rec {
       non-programmers.
     '';
     homepage = "https://nestedtext.org";
-    changelog = "https://github.com/KenKundert/nestedtext/blob/v${version}/doc/releases.rst";
+    changelog = "https://github.com/KenKundert/nestedtext/blob/${finalAttrs.src.tag}/doc/releases.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
-}
+})

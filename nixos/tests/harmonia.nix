@@ -5,7 +5,7 @@
 
   nodes = {
     harmonia = {
-      services.harmonia = {
+      services.harmonia.cache = {
         enable = true;
         signKeyPaths = [
           (pkgs.writeText "cache-key" "cache.example.com-1:9FhO0w+7HjZrhvmzT1VlAZw4OSAlFGTgC24Seg3tmPl4gZBdwZClzTTHr9cVzJpwsRSYLTu7hEAQe3ljy92CWg==")
@@ -37,7 +37,7 @@
 
       harmonia.wait_for_unit("harmonia.service")
 
-      client01.wait_until_succeeds("curl -f http://harmonia:5000/nix-cache-info | grep '${toString nodes.harmonia.services.harmonia.settings.priority}' >&2")
+      client01.wait_until_succeeds("curl -f http://harmonia:5000/nix-cache-info | grep '${toString nodes.harmonia.services.harmonia.cache.settings.priority}' >&2")
       client01.succeed("curl -f http://harmonia:5000/version | grep '${nodes.harmonia.services.harmonia.package.version}' >&2")
 
       client01.succeed("cat /etc/nix/nix.conf >&2")

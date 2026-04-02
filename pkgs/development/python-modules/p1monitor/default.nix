@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
-  pythonOlder,
   yarl,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "p1monitor";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";

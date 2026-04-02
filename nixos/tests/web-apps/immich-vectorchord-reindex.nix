@@ -17,24 +17,38 @@
         environment.IMMICH_LOG_LEVEL = "verbose";
       };
 
-      services.postgresql.extensions = lib.mkForce (ps: [
-        ps.pgvector
-        # pin vectorchord to an older version simulate version bump
-        (ps.vectorchord.overrideAttrs (prevAttrs': rec {
-          version = "0.5.2";
-          src = pkgs.fetchFromGitHub {
-            owner = "tensorchord";
-            repo = "vectorchord";
-            tag = version;
-            hash = "sha256-KGwiY5t1ivFiYex3D20y3sdiu3CT9LCDd2fPnRE56jM=";
-          };
+      services.postgresql.extensions = lib.mkForce (
+        ps:
+        let
+          # Pin vectorchord to an older version simulate version bump.
+          # This version must have a different "schema" version than the latest version in nixpkgs.
+          # See version number at https://github.com/tensorchord/VectorChord/blob/1.1.0/crates/vchordrq/src/tuples.rs#L23
+          vectorchord =
+            (ps.vectorchord.override {
+              cargo-pgrx_0_17_0 = pkgs.cargo-pgrx_0_16_0;
+            }).overrideAttrs
+              (
+                finalAttrs: _: {
+                  version = "1.0.0";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "tensorchord";
+                    repo = "vectorchord";
+                    tag = finalAttrs.version;
+                    hash = "sha256-+BOuiinbKPZZaDl9aYsIoZPgvLZ4FA6Rb4/W+lAz4so=";
+                  };
 
-          cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-            inherit src;
-            hash = "sha256-Vn3c/xuUpQzERJ74I0qbvufTZtW3goefPa5B/nOUO48=";
-          };
-        }))
-      ]);
+                  cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+                    inherit (finalAttrs) src;
+                    hash = "sha256-kwe2x7OTjpdPonZsvnR1C/89D5W/R5JswYF79YcSFEA=";
+                  };
+                }
+              );
+        in
+        [
+          ps.pgvector
+          vectorchord
+        ]
+      );
 
       specialisation."immich-vectorchord-upgraded".configuration = {
         # needs to be lower than mkForce, otherwise it does not get rid of the previous version

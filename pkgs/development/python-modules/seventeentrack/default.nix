@@ -9,16 +9,13 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "seventeentrack";
   version = "2022.04.6";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "McSwindler";

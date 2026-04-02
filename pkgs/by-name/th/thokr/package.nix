@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thokr";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "thatvegandev";
     repo = "thokr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0aryfx9qlnjdq3iq2d823c82fhkafvibmbz58g48b8ah5x5fv3ir";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "thokr";
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "t1utils";
   version = "1.42";
 
   src = fetchurl {
-    url = "https://www.lcdf.org/type/t1utils-${version}.tar.gz";
+    url = "https://www.lcdf.org/type/t1utils-${finalAttrs.version}.tar.gz";
     sha256 = "YYd5NbGYcETd/0u5CgUgDKcWRnijVeFwv18aVVbMnyk=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

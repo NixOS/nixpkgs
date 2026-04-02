@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "OPENCL_LIBRARIES" "OpenCL")
   ];
 
+  # Upstream installs to bin/$<CONFIG> (e.g. bin/Release/); flatten it.
+  postInstall = ''
+    mv "$out/bin/''${cmakeBuildType:-Release}"/* "$out"/bin/
+  '';
+
   meta = {
     description = "OpenCL Conformance Test Suite";
     homepage = "https://github.com/KhronosGroup/OpenCL-CTS";

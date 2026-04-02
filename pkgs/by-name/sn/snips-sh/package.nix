@@ -7,16 +7,16 @@
   withTensorflow ? false,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snips-sh";
-  version = "0.6.1";
-  vendorHash = "sha256-1aS9aICqakGaKPVju5Y9VQ1LV5SjW3oqZciihwhORag=";
+  version = "0.9.1";
+  vendorHash = "sha256-41REdYiHEZOEsV8qslQoRBbP9H+sdVSZ+KBkZWkZtHM=";
 
   src = fetchFromGitHub {
     owner = "robherley";
     repo = "snips.sh";
-    rev = "v${version}";
-    hash = "sha256-lXR6tDVH4CSJOn6n8dM1OoBqeynFnP/Hg046LH9J3Bs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-U3ORTWPLJL+vNQ7nYQa2MgW2uQJzV5oIH/062b1dwqc=";
   };
 
   tags = (lib.optional (!withTensorflow) "noguesser");
@@ -36,4 +36,4 @@ buildGoModule rec {
     ];
     mainProgram = "snips.sh";
   };
-}
+})

@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "twentemilieu";
   version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";

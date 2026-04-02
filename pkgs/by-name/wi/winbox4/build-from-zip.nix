@@ -15,8 +15,13 @@
   stdenvNoCC,
   unzip,
   writeShellApplication,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb,
   zlib,
+  dbus,
   metaCommon ? { },
 }:
 
@@ -44,18 +49,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     freetype
     libGL
     libxkbcommon
-    xorg.libxcb
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libxcb
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     zlib
+    dbus
   ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 "assets/img/winbox.png" "$out/share/pixmaps/winbox.png"
+    install -Dm644 "assets/img/winbox.png" -t "$out/share/icons/hicolor/1024x1024/apps"
     install -Dm755 "WinBox" "$out/bin/WinBox"
 
     wrapProgram "$out/bin/WinBox" --run "${lib.getExe finalAttrs.migrationScript}"

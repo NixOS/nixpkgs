@@ -41,7 +41,7 @@
     "virtio_rng"
     "ext4"
     "virtiofs"
-    "crc32c_generic"
+    "crc32c"
   ],
 }:
 
@@ -307,8 +307,8 @@ let
       ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
 
       # Wait until virtiofsd has created these sockets to avoid race condition.
-      until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 1; done
-      until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 1; done
+      until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+      until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 0.1; done
 
       ${qemuCommand}
       EOF
@@ -403,8 +403,8 @@ let
         ];
         origArgs = args;
         origBuilder = builder;
-        QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
-        passAsFile = [ ]; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
+        env.QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
+        __structuredAttrs = true;
       }
     );
 

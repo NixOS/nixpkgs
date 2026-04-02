@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.20";
   pname = "libtar";
 
   # Maintenance repo for libtar (Arch Linux uses this)
   src = fetchgit {
     url = "git://repo.or.cz/libtar.git";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1pjsqnqjaqgkzf1j8m6y5h76bwprffsjjj6gk8rh2fjsha14rqn9";
   };
 
@@ -49,6 +49,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  # libtar/Makefile.in hardcodes `INSTALL_PROGRAM = @INSTALL_PROGRAM@ -s`,
+  # which runs bare `strip` during `make install`. This fails in cross builds
+  # where only the prefixed strip (e.g. aarch64-unknown-linux-gnu-strip) is
+  # available. Nix's fixup phase handles stripping with the correct tool, so
+  # just remove the flag.
+  postPatch = ''
+    substituteInPlace libtar/Makefile.in \
+      --replace-fail '@INSTALL_PROGRAM@ -s' '@INSTALL_PROGRAM@'
+  '';
+
   meta = {
     description = "C library for manipulating POSIX tar files";
     mainProgram = "libtar";
@@ -57,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

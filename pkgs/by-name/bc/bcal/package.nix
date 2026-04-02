@@ -7,15 +7,15 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcal";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "bcal";
-    rev = "v${version}";
-    sha256 = "sha256-PleWU2yyJzkUAZEvEYoCGdpEXqOgRvZK9zXTYrxRtQU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-6oJEinw9KmZSinMl0s94oWiNshKsEp9HMUvWl12kLP4=";
   };
 
   buildInputs = [ readline ];
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

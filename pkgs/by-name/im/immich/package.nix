@@ -115,27 +115,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.4.1";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AOtKRK2vRQKoQAzU4P3h4tQebpWPF3zIWLcToKaU0Lc=";
+    hash = "sha256-7N11eqKxrSO7+KRvwbYG7VaMrcDNru12DXJHe+G6gj8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 2;
-    hash = "sha256-1UhyEHSGNWSNvzDJUSojIoIJA/Gz8KMAGMsL2XZfS5s=";
+    fetcherVersion = 3;
+    hash = "sha256-Tsb1sdKeyP1Bhw2l+L0jDQF6AaWqTEgrOOvTsAyt9dQ=";
   };
 
   postPatch = ''
-    # pg_dumpall fails without database root access
-    # see https://github.com/immich-app/immich/issues/13971
-    substituteInPlace server/src/services/backup.service.ts \
-      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+    substituteInPlace server/src/services/database-backup.service.ts \
+      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/''${bin}`' '`''${bin}`'
   '';
 
   nativeBuildInputs = [
@@ -226,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
+      inherit (nixosTests) immich immich-vectorchord-reindex;
     };
 
     machine-learning = immich-machine-learning.override {

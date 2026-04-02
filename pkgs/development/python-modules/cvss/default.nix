@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonschema,
   unittestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cvss";
   version = "3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";

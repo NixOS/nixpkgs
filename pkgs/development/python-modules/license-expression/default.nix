@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "license-expression";
   version = "30.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aboutcode-org";

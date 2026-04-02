@@ -6,7 +6,6 @@
   fetchPypi,
   fetchpatch,
   fetchpatch2,
-  pythonOlder,
   asn1crypto,
   cffi,
   cryptography,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "tpm2-pytss";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -73,6 +70,7 @@ buildPythonPackage rec {
     # when cross-compiling is turned on.
     # This patch changes the call to pycparser.preprocess_file to provide the name
     # of the cross-compiling cpp
+    # NOTE: This patch could be dropped after next release. 3.0.0-rc0 already have proper `$CC -E` invocation
     (replaceVars ./cross.patch {
       crossPrefix = stdenv.hostPlatform.config;
     })

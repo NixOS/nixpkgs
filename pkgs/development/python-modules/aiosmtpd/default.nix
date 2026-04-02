@@ -6,9 +6,7 @@
   fetchFromGitHub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 
   # for passthru.tests
   django,
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "aiosmtpd";
   version = "1.4.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -34,16 +30,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     atpublic
     attrs
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  # Fixes for Python 3.10 can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
-  doCheck = pythonOlder "3.10";
+  # Fixes can't be applied easily, https://github.com/aio-libs/aiosmtpd/pull/294
+  doCheck = false;
 
   disabledTests = [
     # Requires git

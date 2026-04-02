@@ -27,15 +27,15 @@
   webkitgtk_6_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
-  version = "4.17.0";
+  version = "4.18.3";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    tag = "v${version}";
-    hash = "sha256-wsjLx5MYLAnYZEAeavvuh0nogpINeklo2VD3EftW+UA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VCLXQnB3JhhK3UvnGTfR+mZ/AYGQ2YNxa6hD4QCUfjM=";
   };
 
   nativeBuildInputs = [
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };
-}
+})

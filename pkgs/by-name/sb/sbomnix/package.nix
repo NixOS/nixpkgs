@@ -8,26 +8,7 @@
   python3,
   vulnix,
 }:
-
-let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      pyrate-limiter = super.pyrate-limiter.overridePythonAttrs (oldAttrs: rec {
-        version = "2.10.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
-        };
-        doCheck = false;
-      });
-    };
-  };
-
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sbomnix";
   version = "1.7.4";
   pyproject = true;
@@ -35,7 +16,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s7mmtbELRcl/7ab5A3fU7f8m4rIm+mBLmXMeYHa7/n4=";
 
     # Remove documentation as it contains references to nix store
@@ -50,7 +31,7 @@ python.pkgs.buildPythonApplication rec {
       lib.makeBinPath [
         git
         nix
-        python.pkgs.graphviz
+        python3.pkgs.graphviz
         nix-visualize
         vulnix
         grype
@@ -58,9 +39,9 @@ python.pkgs.buildPythonApplication rec {
     }"
   ];
 
-  build-system = [ python.pkgs.setuptools ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     colorlog
     dfdiskcache
@@ -97,4 +78,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "sbomnix";
   };
-}
+})

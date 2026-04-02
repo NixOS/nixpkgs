@@ -20,18 +20,18 @@
   jq,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.1.1";
+  version = "2026.3.17";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
-    rev = "v${version}";
-    hash = "sha256-z2sk7g0XleaV83udcxqvlyqit3NPcqbcttN6Zo9asdI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RVRKvhzjIHFGanBO8Ukat310IQT0HZA73WMFUCvVY84=";
   };
 
-  cargoHash = "sha256-zau4N7TsgcKmG5AUdUm1WL3AKqT7d8CqTnjnUgqYDvU=";
+  cargoHash = "sha256-YoEVPfKeABvL5zAbLvQdcuf5Exnm8wwgylSoMd8Q7rs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -74,8 +74,8 @@ rustPlatform.buildRustPackage rec {
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # started failing mid-April 2025
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         # Ignore subcrate releases (fox, aqua-registry)
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
     tests = {
@@ -137,9 +137,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://mise.jdx.dev";
     description = "Front-end to your dev env";
-    changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "mise";
   };
-}
+})

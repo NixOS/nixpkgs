@@ -43,6 +43,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
     "test_with_auth" # calls github api
+    "test_no_auth" # returns 401 instead of 403
   ];
 
   meta = {

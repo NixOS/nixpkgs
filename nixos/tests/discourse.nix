@@ -165,7 +165,7 @@ in
     };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     let
       request = builtins.toJSON {
         title = "Private message";

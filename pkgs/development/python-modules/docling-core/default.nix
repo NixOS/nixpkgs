@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  defusedxml,
   jsonref,
   jsonschema,
   latex2mathml,
@@ -18,25 +19,27 @@
   semchunk,
   tabulate,
   transformers,
+  tree-sitter,
   typer,
   typing-extensions,
 
   # tests
+  gitpython,
   jsondiff,
   pytestCheckHook,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-core";
-  version = "2.50.1";
+  version = "2.70.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-core";
-    tag = "v${version}";
-    hash = "sha256-pLIWskl5nXdOC5UwvfJ3Yhl8qV6jg42P89gLj7ASpTA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YRvvizPwc3sJ6FgZfhadixDayMIGS1zTo+bnHBS7FMg=";
   };
 
   build-system = [
@@ -44,7 +47,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "defusedxml"
+    "pillow"
+    "typer"
+  ];
   dependencies = [
+    defusedxml
     jsonref
     jsonschema
     latex2mathml
@@ -55,19 +64,15 @@ buildPythonPackage rec {
     semchunk
     tabulate
     transformers
+    tree-sitter
     typer
     typing-extensions
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
-
-  pythonImportsCheck = [
-    "docling_core"
-  ];
+  pythonImportsCheck = [ "docling_core" ];
 
   nativeCheckInputs = [
+    gitpython
     jsondiff
     pytestCheckHook
     requests
@@ -75,14 +80,17 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # attempts to download models
+    "test/test_code_chunker.py"
+    "test/test_code_chunking_strategy.py"
     "test/test_hybrid_chunker.py"
+    "test/test_line_chunker.py"
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
-    homepage = "https://github.com/DS4SD/docling-core";
+    homepage = "https://github.com/docling-project/docling-core";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

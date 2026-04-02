@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   ];
 
   # error by default in GCC 14
-  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   preFixup = ''
     gappsWrapperArgs+=(

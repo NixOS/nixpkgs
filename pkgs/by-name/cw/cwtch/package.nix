@@ -4,13 +4,13 @@
   nix-update-script,
   lib,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "libcwtch";
   version = "0.2.1";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/autobindings.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Il4jADldw/tnRRiecCUrddKEvJ8WHvyT4s4zxSXqrnM=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail '$(shell git describe --tags)' v${version} \
+      --replace-fail '$(shell git describe --tags)' v${finalAttrs.version} \
       --replace-fail '$(shell git log -1 --format=%cd --date=format:%G-%m-%d-%H-%M)' 1980-01-01-00-00
   '';
 
@@ -47,4 +47,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.gmacon ];
   };
-}
+})

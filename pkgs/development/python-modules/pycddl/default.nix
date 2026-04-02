@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchPypi,
   buildPythonPackage,
   rustPlatform,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pycddl";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

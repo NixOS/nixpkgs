@@ -6,7 +6,6 @@
   fetchPypi,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   saneyaml,
   semantic-version,
   semver,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "univers";
   version = "31.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

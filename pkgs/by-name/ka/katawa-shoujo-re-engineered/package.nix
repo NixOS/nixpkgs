@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -12,9 +12,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";
   version = "2.0.3";
 
-  src = fetchFromGitea {
+  src = fetchFromCodeberg {
     # GitHub mirror at fleetingheart/ksre
-    domain = "codeberg.org";
     owner = "fhs";
     repo = "katawa-shoujo-re-engineered";
     rev = "v${finalAttrs.version}";
@@ -26,26 +25,40 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "katawa-shoujo-re-engineered";
       desktopName = "Katawa Shoujo: Re-Engineered";
       type = "Application";
-      icon = finalAttrs.meta.mainProgram;
+      icon = "katawa-shoujo-re-engineered";
       categories = [ "Game" ];
-      exec = finalAttrs.meta.mainProgram;
+      exec = "katawa-shoujo-re-engineered";
     })
   ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    renpy
   ];
 
-  dontBuild = true;
+  postPatch = ''
+    substituteInPlace game/config.rpy --replace-fail 0.0.0-localbuild ${finalAttrs.version}
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    renpy . compile
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe' renpy "renpy"} $out/bin/${finalAttrs.meta.mainProgram} \
-      --add-flags ${finalAttrs.src} --add-flags run
-    install -D $src/web-icon.png $out/share/icons/hicolor/512x512/apps/${finalAttrs.meta.mainProgram}.png
+    phome=$out/share/kataswa-shoujo-re-engineered
+    mkdir -p $phome
+    cp -r game $phome
+    find $phome -type f -name "*.rpy" -delete
+    makeWrapper ${lib.getExe renpy} $out/bin/katawa-shoujo-re-engineered \
+      --add-flags $phome --add-flags run
+    install -D $src/web-icon.png $out/share/icons/hicolor/512x512/apps/katawa-shoujo-re-engineered.png
 
     runHook postInstall
   '';
@@ -65,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       quantenzitrone
       rapiteanu
+      ulysseszhan
     ];
     platforms = renpy.meta.platforms;
   };

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -35,17 +36,25 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.13.0";
+  version = "3.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    tag = "v${version}";
-    hash = "sha256-JsWmwJbIJIF3eEj7wYzNOSAiNHQkQ5LHKrE0lVQtU/U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7s3bJdkS/G/Ydj9txbtGrqGCE3PjjS1ZiuoGOzk+UIg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "numpy-2.4-compat.patch";
+      url = "https://github.com/keras-team/keras/commit/bc3bc4fc167049eb35136deaf5680cdaacc80371.patch";
+      hash = "sha256-+eN3QVBpHGIv67hbRxzVHeKjFZIz5LCdbNO0AL65OoQ=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -157,8 +166,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
-    changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
+    changelog = "https://github.com/keras-team/keras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

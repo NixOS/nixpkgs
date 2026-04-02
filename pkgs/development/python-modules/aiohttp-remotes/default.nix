@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiohttp-remotes";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";

@@ -1,11 +1,13 @@
 {
   android-tools,
   clang,
+  dbus,
   expat,
   fetchFromGitHub,
   fontconfig,
   freetype,
   lib,
+  stdenv,
   libglvnd,
   libxkbcommon,
   makeWrapper,
@@ -15,21 +17,24 @@
   rustPlatform,
   wayland,
   writableTmpDirAsHomeHook,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "universal-android-debloater";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Universal-Debloater-Alliance";
     repo = "universal-android-debloater-next-generation";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DapPUvkI4y159gYbSGJQbbDfW+C0Ggvaxo45Qj3mLrQ=";
+    hash = "sha256-TGelOjwqTzYShZxXyPTTfkjAreFmZmrCF7jtp1UAfDw=";
   };
 
-  cargoHash = "sha256-eXbReRi/0h4UyJwIMI3GfHcQzX1E5Spoa4moMXtrBng=";
+  cargoHash = "sha256-RutiCWTkXnF7W86SnXRs+vI7dELrbdZXI62J8suZv5g=";
 
   buildInputs = [
     expat
@@ -50,17 +55,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/uad-ng --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        fontconfig
-        freetype
-        libglvnd
-        libxkbcommon
-        wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
-      ]
+      lib.makeLibraryPath (
+        [
+          dbus
+          fontconfig
+          freetype
+          libglvnd
+          libxkbcommon
+          libx11
+          libxcursor
+          libxi
+          libxrandr
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ]
+      )
     } --suffix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
@@ -73,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "uad-ng";
     maintainers = with lib.maintainers; [ lavafroth ];
-    platforms = lib.platforms.linux;
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

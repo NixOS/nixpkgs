@@ -8,18 +8,18 @@
   libglut,
   zlib,
   cmake,
-  libX11,
+  libx11,
   libxml2,
   libpng,
-  libXxf86vm,
+  libxxf86vm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freepv";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freepv/freepv-${version}.tar.gz";
+    url = "mirror://sourceforge/freepv/freepv-${finalAttrs.version}.tar.gz";
     sha256 = "1w19abqjn64w47m35alg7bcdl1p97nf11zn64cp4p0dydihmhv56";
   };
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     libGL
     libglut
     zlib
-    libX11
+    libx11
     libxml2
     libpng
-    libXxf86vm
+    libxxf86vm
   ];
 
   postPatch = ''
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     homepage = "https://freepv.sourceforge.net/";
     license = [ lib.licenses.lgpl21 ];
   };
-}
+})

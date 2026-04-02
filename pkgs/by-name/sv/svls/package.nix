@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "svls";
   version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "svls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dLAlXsvUno6bx67A3knevo0ZRBMNOlWW3CmNfgCgha4=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ trepetti ];
   };
-}
+})

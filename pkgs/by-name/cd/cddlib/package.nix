@@ -7,13 +7,13 @@
   texliveSmall,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cddlib";
   version = "0.94n";
   src = fetchFromGitHub {
     owner = "cddlib";
     repo = "cddlib";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-j4gXrxsWWiJH5gZc2ZzfYGsBCMJ7G7SQ1xEgurRWZrQ=";
   };
   buildInputs = [ gmp ];
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html";
   };
-}
+})

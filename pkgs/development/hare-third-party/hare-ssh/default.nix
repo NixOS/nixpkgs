@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-ssh";
-  version = "0-unstable-2023-11-16";
+  version = "0.26.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-ssh";
-    rev = "c6a39e37ba4a42721594e0a907fe016f8e2198a8";
-    hash = "sha256-I43TLPoImBsvkgV3hDy9dw0pXVt4ezINnxFtEV9P2/M=";
+    tag = finalAttrs.version;
+    hash = "sha256-msPY8m7/GDKsGDrhZ1IK65U+6fcI26FW9CONC4w87Pg=";
   };
 
   nativeBuildInputs = [ hareHook ];

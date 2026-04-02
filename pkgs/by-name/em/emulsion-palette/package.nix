@@ -14,14 +14,14 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emulsion-palette";
   version = "3.3.9";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = "emulsion";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-xG7yZKbbNao/pzFhdTMof/lw9K12NKZi47YRaEd65ok=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

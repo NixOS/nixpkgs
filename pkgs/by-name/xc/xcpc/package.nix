@@ -10,14 +10,14 @@
   libepoxy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.52.1";
   pname = "xcpc";
 
   src = fetchFromGitHub {
     owner = "ponceto";
     repo = "xcpc-emulator";
-    rev = "xcpc-${version}";
+    rev = "xcpc-${finalAttrs.version}";
     hash = "sha256-N4UfnCbebaAhx0490niMov/JqlrXt5goblWbW0ajkcc=";
   };
 
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   postInstall = ''
+    install -D $out/share/pixmaps/xcpc.png -t $out/share/icons/hicolor/64x64/apps
+    rm -r $out/share/pixmaps
     substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
       "$out/bin/" ""
     substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
@@ -47,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xcpc";
   };
-}
+})

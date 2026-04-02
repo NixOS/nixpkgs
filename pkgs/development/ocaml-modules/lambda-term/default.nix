@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildDunePackage,
   zed,
-  lwt_log,
   lwt_react,
   mew_vi,
   uucp,
@@ -12,18 +11,17 @@
 
 buildDunePackage (finalAttrs: {
   pname = "lambda-term";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "lambda-term";
     tag = finalAttrs.version;
-    hash = "sha256-T2DDpHqLar1sgmju0PLvhAZef5VzOpPWcFVhuZlPQmM=";
+    hash = "sha256-WAn3gTTHjfsEG5sLk3c1YHcyyzPUDzkcU+/fKBcGZFo=";
   };
 
   propagatedBuildInputs = [
     zed
-    lwt_log
     lwt_react
     mew_vi
     uucp

@@ -18,7 +18,6 @@
   pkg-config,
   pygobject3,
   pyxdg,
-  systemd,
   wrapGAppsHook3,
 }:
 
@@ -27,12 +26,12 @@ buildPythonApplication rec {
   version = "1.0.0";
 
   # This packages doesn't have a setup.py
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "vagnum08";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cpupower-gui";
+    tag = "v${version}";
     sha256 = "05lvpi3wgyi741sd8lgcslj8i7yi3wz7jwl7ca3y539y50hwrdas";
   };
 

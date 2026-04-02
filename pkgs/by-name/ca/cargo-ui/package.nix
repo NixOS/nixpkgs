@@ -9,15 +9,19 @@
   expat,
   fontconfig,
   libGL,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-ui";
   version = "0.3.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-M/ljgtTHMSc7rY/a8CpKGNuOSdVDwRt6+tzPPHdpKOw=";
   };
 
@@ -35,11 +39,11 @@ rustPlatform.buildRustPackage rec {
     expat
     fontconfig
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -60,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     description = "GUI for Cargo";
     mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
-    changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/slint-ui/cargo-ui/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -70,4 +74,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

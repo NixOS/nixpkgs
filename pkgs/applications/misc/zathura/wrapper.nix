@@ -67,7 +67,6 @@ symlinkJoin {
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      smironov
       TethysSvensson
     ];
     mainProgram = "zathura";

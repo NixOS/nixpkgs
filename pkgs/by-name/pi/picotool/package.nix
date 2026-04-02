@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPICO_SDK_PATH=${pico-sdk}/lib/pico-sdk"
   ];
 
+  postInstall = ''
+    install -Dm444 ../udev/60-picotool.rules -t $out/etc/udev/rules.d
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

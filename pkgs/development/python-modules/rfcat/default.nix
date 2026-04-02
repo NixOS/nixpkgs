@@ -9,7 +9,6 @@
   pyserial,
   pyusb,
   pytestCheckHook,
-  pythonOlder,
   udevCheckHook,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "rfcat";
   version = "2.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "atlas0fd00m";

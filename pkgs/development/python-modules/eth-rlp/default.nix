@@ -7,7 +7,6 @@
   eth-utils,
   hexbytes,
   pytestCheckHook,
-  pythonOlder,
   rlp,
   pydantic,
 }:
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "eth-rlp";
   version = "2.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";

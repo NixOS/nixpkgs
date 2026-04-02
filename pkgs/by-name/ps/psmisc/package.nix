@@ -8,14 +8,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psmisc";
   version = "23.7";
 
   src = fetchFromGitLab {
     owner = "psmisc";
     repo = "psmisc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-49YpdIh0DxLHfxos4sw1HUkV0XQBqmm4M9b0T4eN2xI=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ryantm ];
   };
-}
+})

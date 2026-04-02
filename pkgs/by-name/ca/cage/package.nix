@@ -14,9 +14,9 @@
   wayland-protocols,
   pixman,
   libxkbcommon,
-  xcbutilwm,
+  libxcb-wm,
   libGL,
-  libX11,
+  libx11,
   xwayland ? null,
   nixosTests,
 }:
@@ -61,9 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     pixman
     libxkbcommon
-    xcbutilwm
+    libxcb-wm
     libGL
-    libX11
+    libx11
   ];
 
   postFixup = lib.optionalString wlroots_0_19.enableXWayland ''

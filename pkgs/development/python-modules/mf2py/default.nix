@@ -8,7 +8,6 @@
   mock,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mf2py";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microformats";

@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.92.5";
+  version = "1.96.5";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0aD+x8dUPHaNb5MdB41oeID/8eERB3FKKuuqlCqJkU=";
+    hash = "sha256-vYYb+2OtuXftjGGG0zWJesHccrClB8YZpclv9KzNN/c=";
   };
 
-  vendorHash = "sha256-jJSSXMyUqcJoZuqfSlBsKDQezyqS+jDkRglMMjG1K8g=";
+  vendorHash = "sha256-rhuWEEN+CtumVxOw6Dy/IRxWIrZ2x6RJb6ULYwXCQc4=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -55,7 +55,6 @@ buildGoModule (finalAttrs: {
     "cmd/derper"
     "cmd/derpprobe"
     "cmd/tailscaled"
-    "cmd/tsidp"
     "cmd/get-authkey"
   ];
 
@@ -92,11 +91,6 @@ buildGoModule (finalAttrs: {
     # subPackages above limits what is built to just what we
     # want but also limits the tests
     unset subPackages
-
-    # several tests hang, but keeping the file for tsnet/packet_filter_test.go
-    # packet_filter_test issue: https://github.com/tailscale/tailscale/issues/16051
-    substituteInPlace tsnet/tsnet_test.go \
-      --replace-fail 'func Test' 'func skippedTest'
   '';
 
   checkFlags =
@@ -134,9 +128,6 @@ buildGoModule (finalAttrs: {
         # not necessary and fails to match
         "TestSyncedToUpstream" # tempfork/acme
 
-        # flaky: https://github.com/tailscale/tailscale/issues/7030
-        "TestConcurrent"
-
         # flaky: https://github.com/tailscale/tailscale/issues/11762
         "TestTwoDevicePing"
 
@@ -145,7 +136,36 @@ buildGoModule (finalAttrs: {
         "TestTaildropIntegration_Fresh"
 
         # context deadline exceeded
-        "TestPacketFilterFromNetmap"
+        "TestPacketFilterFromNetmap" # tsnet
+
+        # tsnet tests that need a full tailscale server and hang in the sandbox
+        "TestListener_Server" # tsnet
+        "TestDialBlocks" # tsnet
+        "TestConn" # tsnet
+        "TestLoopbackLocalAPI" # tsnet
+        "TestLoopbackSOCKS5" # tsnet
+        "TestTailscaleIPs" # tsnet
+        "TestListenerCleanup" # tsnet
+        "TestStartStopStartGetsSameIP" # tsnet
+        "TestFunnel" # tsnet
+        "TestFunnelClose" # tsnet
+        "TestListenService" # tsnet
+        "TestListenerClose" # tsnet
+        "TestFallbackTCPHandler" # tsnet
+        "TestCapturePcap" # tsnet
+        "TestUDPConn" # tsnet
+        "TestUserMetricsByteCounters" # tsnet
+        "TestUserMetricsRouteGauges" # tsnet
+        "TestTUN" # tsnet
+        "TestTUNDNS" # tsnet
+        "TestListenPacket" # tsnet
+        "TestListenTCP" # tsnet
+        "TestListenTCPDualStack" # tsnet
+        "TestDialTCP" # tsnet
+        "TestDialUDP" # tsnet
+        "TestSelfDial" # tsnet
+        "TestListenUnspecifiedAddr" # tsnet
+        "TestListenMultipleEphemeralPorts" # tsnet
 
         # flaky: https://github.com/tailscale/tailscale/issues/15348
         "TestSafeFuncHappyPath"
@@ -155,6 +175,11 @@ buildGoModule (finalAttrs: {
 
         # Fails because we vendor dependencies
         "TestLicenseHeaders"
+
+        # Uses testing/synctest which spawns goroutines that block on syscalls
+        # incompatible with synctest's bubble mechanism
+        "TestDNSTrampleRecovery"
+        "TestOnPolicyChangeSkipsPreAuthConns" # ssh/tailssh
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat

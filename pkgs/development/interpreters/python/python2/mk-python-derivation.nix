@@ -248,7 +248,10 @@ let
 
         inherit strictDeps;
 
-        LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+        env = {
+          LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+        }
+        // (attrs.env or { });
 
         # Python packages don't have a checkPhase, only an installCheckPhase
         doCheck = false;

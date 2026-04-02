@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "html2text";
   version = "2025.4.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Alir3z4";

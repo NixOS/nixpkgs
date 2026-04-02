@@ -32,6 +32,10 @@ stdenv.mkDerivation {
 
 The variables below are exclusive to `zig`.
 
+#### `dontUseZigConfigure` {#dont-use-zig-configure}
+
+Disables using `zigConfigurePhase`.
+
 #### `dontUseZigBuild` {#dont-use-zig-build}
 
 Disables using `zigBuildPhase`.

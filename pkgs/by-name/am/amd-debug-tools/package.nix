@@ -7,15 +7,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amd-debug-tools";
-  version = "0.2.10";
+  version = "0.2.13";
   pyproject = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/superm1/amd-debug-tools.git";
-    rev = version;
-    hash = "sha256-tbykQ8tc6YKHjKEHA9Ml7Z7MjDQzMGXtTwMG9buiovg=";
+    rev = finalAttrs.version;
+    hash = "sha256-748K4Ee9HVYWQ7/DVz7F2nZNjau5v4OGvgHwJZ4vYpM=";
   };
 
   build-system = with python3Packages; [
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "amd-s2idle";
   };
-}
+})

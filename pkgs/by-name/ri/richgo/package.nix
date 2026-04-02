@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "richgo";
   version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "kyoh86";
     repo = "richgo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pOB1exuwGwSxStodKhLLwh1xBvLjopUn0k+sEARdA9g=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvolosatovs ];
   };
-}
+})

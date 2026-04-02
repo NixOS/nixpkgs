@@ -35,16 +35,19 @@
   nixosTests,
 }:
 
+# lastlog requires PAM, or else it's broken.
+assert withLastlog -> pamSupport;
+
 let
   isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.2";
+  version = "2.41.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YGKh2JtXGmGTLm/AIR82BgxBg1aLge6GbPNjvOn2WD4=";
+    hash = "sha256-MzDYc/D861VguJp9wU5PMoi72IDpaQPtm1DsK1eZ5Ys=";
   };
 
   patches = [
@@ -52,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
+
+    # pam_lastlog2: link with libpam
+    # see https://github.com/NixOS/nixpkgs/issues/493934
+    ./pam_lastlog2-add-lpam-to-Makemodule.am.patch
+
     # bits: only build when cpu_set_t is available
     # Otherwise, the build fails on macOS
     (fetchurl {
@@ -202,7 +210,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     moveToOutput "bin/lastlog2" "$lastlog"
     ln -svf "$lastlog/bin/"* $bin/bin/
-
   ''
   + lib.optionalString (withLastlog && systemdSupport) ''
     moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
@@ -245,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ numinit ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [
       "blkid"
@@ -254,5 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
       "uuid"
     ];
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
+
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kernel" finalAttrs.version;
   };
 })

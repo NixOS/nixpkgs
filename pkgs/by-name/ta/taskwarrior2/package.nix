@@ -11,14 +11,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
     fetchSubmodules = true;
   };
@@ -76,11 +76,10 @@ stdenv.mkDerivation rec {
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      marcweber
       oxalica
       Necior
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;
   };
-}
+})

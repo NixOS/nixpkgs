@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytest,
   pyflakes,
 }:
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-flakes";
   version = "4.0.5";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

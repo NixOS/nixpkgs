@@ -34,6 +34,7 @@
   http-parser,
   # enable internal X11 support via libssh2
   enableX11 ? true,
+  enablePAM ? true,
   enableNVML ? config.cudaSupport,
   cudaPackages,
   symlinkJoin,
@@ -42,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "25.11.1.1";
+  version = "25-11-4-1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -51,21 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-Hv0rqogwZH5GafwlELghAbKLwurd8x30u9DJZylBQP0=";
+    hash = "sha256-5axewcMS7+S9R7aQUlQH24M8+AeqO1/qNv+WZMkVDUc=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    # upstream patch; remove with next upgrade.
-    (fetchpatch {
-      name = "pmix-509-compatability.patch";
-      url = "https://github.com/SchedMD/slurm/commit/be063f0c646d2bfe10d358fa7063f2b64e19e063.patch";
-      hash = "sha256-QbKMBMl+VTLrzdXhPtcqwC7OcAXcJBxDS8jRZ2EoJL4=";
-    })
   ];
 
   prePatch = ''
@@ -153,16 +145,35 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
   ++ (lib.optional (!enableX11) "--disable-x11")
-  ++ (lib.optional enableNVML "--with-nvml");
+  ++ (lib.optional enableNVML "--with-nvml")
+  ++ (lib.optional enablePAM "--enable-pam --with-pam_dir=${placeholder "out"}/lib/security");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
     patchShebangs ./doc/man/man2html.py
+  ''
+  + (lib.optionalString enablePAM ''
+    mkdir -p $out/lib/security
+  '');
+  postConfigure = lib.optionalString enablePAM ''
+    rm -rf $out
   '';
 
-  postInstall = ''
-    rm -f $out/lib/*.la $out/lib/slurm/*.la
+  postBuild = lib.optionalString enablePAM ''
+    make -C contribs/pam
+    make -C contribs/pam_slurm_adopt
   '';
+
+  postInstall =
+    (lib.optionalString enablePAM ''
+      export LIBRARY_PATH="$PWD/src/api/.libs:''${LIBRARY_PATH:+:$LIBRARY_PATH}"
+      mkdir -p $out/lib/security
+      make -C contribs/pam install
+      make -C contribs/pam_slurm_adopt install
+    '')
+    + ''
+      rm -f $out/lib/*.la $out/lib/slurm/*.la $out/lib/security/*.la
+    '';
 
   enableParallelBuilding = true;
 
@@ -175,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       markuskowa
+      edwtjo
     ];
   };
 })

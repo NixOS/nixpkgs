@@ -1,58 +1,65 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
+  lib,
   poetry-core,
-  pydantic,
-  typing-extensions,
-  websockets,
   aiohttp,
+  websockets,
+  typing-extensions,
+  pydantic,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest-cov-stub,
   python-dotenv,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
-  pname = "realtime-py";
-  version = "2.7.0";
+  pname = "realtime";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
-    repo = "realtime-py";
+    repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-cWWgVs+ZNRvBje3kuDQS5L5utkY3z7MluGFNmjf9LFc=";
+    hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
   };
 
+  sourceRoot = "${src.name}/src/realtime";
+
+  build-system = [ poetry-core ];
+
   dependencies = [
-    pydantic
-    typing-extensions
     websockets
+    typing-extensions
+    pydantic
   ];
 
-  pythonRelaxDeps = [
-    "websockets"
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   nativeCheckInputs = [
     aiohttp
-    pytest-asyncio
     pytestCheckHook
+    pytest-cov-stub
     python-dotenv
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [ "realtime" ];
 
-  build-system = [ poetry-core ];
-
-  # requires running Supabase
-  doCheck = false;
+  disabledTestPaths = [
+    "tests/test_connection.py"
+    "tests/test_presence.py"
+  ];
 
   meta = {
-    changelog = "https://github.com/supabase/realtime-py/blob/${src.tag}/CHANGELOG.md";
-    homepage = "https://github.com/supabase/realtime-py";
-    license = lib.licenses.mit;
-    description = "Python Realtime Client for Supabase";
+    description = "Client library for Supabase Functions";
+    homepage = "https://github.com/supabase/supabase-py";
+    changelog = "https://github.com/supabase/supabase-py/blob/v${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ siegema ];
+    license = lib.licenses.mit;
   };
 }

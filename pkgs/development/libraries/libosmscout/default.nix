@@ -1,16 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   marisa,
   qttools,
   qtlocation,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "libosmscout";
   version = "2022.04.25";
 
@@ -36,6 +37,7 @@ mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     marisa

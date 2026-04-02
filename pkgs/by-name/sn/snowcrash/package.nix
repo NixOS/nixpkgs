@@ -29,7 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/redcode-labs/SNOWCRASH";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
-    teams = [ lib.teams.redcodelabs ];
     mainProgram = "SNOWCRASH";
   };
 }

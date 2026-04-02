@@ -38,7 +38,9 @@
   udev,
   wayland,
   wayland-scanner,
-  xorg,
+  libxcursor,
+  libx11,
+  xorgproto,
   xwayland,
   dbus,
   gobject-introspection,
@@ -94,6 +96,14 @@ stdenv.mkDerivation (
       substituteInPlace src/platform/graphics/CMakeLists.txt \
         --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
         --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
+    ''
+    # Boost.System was deprecated & dropped
+    + lib.optionalString (lib.strings.versionOlder version "2.23.0") ''
+      substituteInPlace \
+        tests/CMakeLists.txt \
+        tests/unit-tests/CMakeLists.txt \
+        tests/mir_test_framework/CMakeLists.txt \
+        --replace-fail 'Boost::system' ""
     '';
 
     strictDeps = true;
@@ -141,9 +151,9 @@ stdenv.mkDerivation (
       nettle
       udev
       wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.xorgproto
+      libx11
+      libxcursor
+      xorgproto
       xwayland
     ]
     ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [
@@ -262,7 +272,7 @@ stdenv.mkDerivation (
             # Have to double-wrap it...
             installPhase = oa.installPhase + ''
               wrapProgram $out/bin/update-source-version \
-                --add-flag '--file=${lib.strings.removeSuffix "/common.nix" __curPos.file}/default.nix'
+                --add-flag '--file=pkgs/servers/mir/default.nix'
             '';
           });
         in

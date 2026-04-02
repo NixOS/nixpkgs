@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "consul-template";
-  version = "0.41.3";
+  version = "0.41.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
-    rev = "v${version}";
-    hash = "sha256-v598V/pWZupZ6LKTYrJ0ES3Bs6TR5oAX5q2mnLbff+8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YZ6PZh9ZFEaanTkvQ6I35ubRxSKB/dMq8JXLPf5Ym4I=";
   };
 
-  vendorHash = "sha256-Tz80n37NBqKX+h3OE6RBufPQ7OteWpZaa5br2WFIvOs=";
+  vendorHash = "sha256-IfOaJlcMNRWxC0XNZYU/5Lz3ILlMWSfzFXwLu3gLKOc=";
 
   # consul-template tests depend on vault and consul services running to
   # execute tests so we skip them here
@@ -36,4 +36,4 @@ buildGoModule rec {
     ];
     mainProgram = "consul-template";
   };
-}
+})

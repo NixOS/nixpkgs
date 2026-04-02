@@ -7,15 +7,15 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gshogi";
   version = "0.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johncheetham";
     repo = "gshogi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EPOIYPSFAhilxuZeYfuZ4Cd29ReJs/E4KNF5/lyzbxs=";
   };
 
@@ -53,4 +53,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ciil ];
   };
-}
+})

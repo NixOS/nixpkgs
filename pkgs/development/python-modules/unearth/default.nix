@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   packaging,
   pdm-backend,
   httpx,
@@ -16,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.17.5";
+  version = "0.18.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oZ4cAuZLQFGNCIB5x0FvxBtFpki4GkEoqsAllyNO5ro=";
+    hash = "sha256-HlPX9S9G3V+HXnf/HFWxJHfiFaCS5LZsl2SnffSptSA=";
   };
 
   build-system = [ pdm-backend ];

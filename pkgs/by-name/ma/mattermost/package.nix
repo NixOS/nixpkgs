@@ -20,9 +20,9 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.9";
-    srcHash = "sha256-e7itz3VcjSwXGTA+Dn0g5CmQzpnquQ6GmWNdvwrhaQo=";
-    vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
+    version = "10.11.13";
+    srcHash = "sha256-jh1Ez+5pJiB9eBbOkVMVWryok0NsHrg0p/1d2723fwU=";
+    vendorHash = "sha256-hKAKM2qFn5Zvr/Sc33XmFl7l59agMaEvlvVD5aOyaxI=";
     npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
@@ -262,7 +262,6 @@ buildMattermost rec {
     maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
     ];
     platforms = lib.platforms.linux;

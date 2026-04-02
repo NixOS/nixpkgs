@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   docker,
@@ -16,21 +16,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "testcontainers";
-  version = "4.14.0";
+  version = "4.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
     tag = "testcontainers-v${finalAttrs.version}";
-    hash = "sha256-Zquh1tY9Z2BU6BPsEGR4eBjcHVB4KsxOQ81Tk6YTyTQ=";
+    hash = "sha256-AsRTCEICdxrDnsQyfEY19a7Fox9erSJVTykLN3RUlOE=";
   };
 
   postPatch = ''
     echo "${finalAttrs.version}" > VERSION
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     docker

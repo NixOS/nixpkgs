@@ -5,14 +5,14 @@
   makeBinaryWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-slim";
   version = "1.40.11";
 
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
   };
 
@@ -34,8 +34,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/slimtoolkit/slim/pkg/version.appVersionTag=${version}"
-    "-X github.com/slimtoolkit/slim/pkg/version.appVersionRev=${src.rev}"
+    "-X github.com/slimtoolkit/slim/pkg/version.appVersionTag=${finalAttrs.version}"
+    "-X github.com/slimtoolkit/slim/pkg/version.appVersionRev=${finalAttrs.src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix
@@ -47,10 +47,10 @@ buildGoModule rec {
   meta = {
     description = "Minify and secure Docker containers";
     homepage = "https://slimtoolkit.org/";
-    changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/slimtoolkit/slim/raw/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mbrgm
     ];
   };
-}
+})

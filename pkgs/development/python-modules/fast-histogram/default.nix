@@ -7,7 +7,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "fast-histogram";
   version = "0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "astrofrog";

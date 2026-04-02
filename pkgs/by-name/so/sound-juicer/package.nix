@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "3.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/sound-juicer/${lib.versions.majorMinor version}/sound-juicer-${version}.tar.xz";
     sha256 = "LuiCdEORvrTG1koPaCX7dlUQtwbsK3BL+0LkKvquHeY=";
   };
 

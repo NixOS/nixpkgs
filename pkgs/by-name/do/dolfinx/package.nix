@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   spdlog,
@@ -34,6 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-CK7YEtJtrx/Mto72RHT4Qjg5StO28Et+FeCYxk5T+8s=";
   };
+
+  patches = [
+    # Fix wrong span extent in _lift_bc_interior_facets
+    # https://github.com/FEniCS/dolfinx/pull/4102
+    (fetchpatch {
+      url = "https://github.com/FEniCS/dolfinx/commit/6daca34a075a6dcdfdf77feb13d55d5dbd20e4dd.patch";
+      hash = "sha256-b/C1MqslS2OBCt+kK/+vJjW8pmsJx2FQ36qDtFA1ewI=";
+      includes = [ "cpp/dolfinx/fem/assemble_vector_impl.h" ];
+    })
+    # Fix hdf5 interface for rank 1
+    # https://github.com/FEniCS/dolfinx/pull/4043
+    (fetchpatch {
+      url = "https://github.com/FEniCS/dolfinx/commit/fce7c44f220d4cb94c5149ad28cd1ab00909c319.patch";
+      hash = "sha256-EVm4Rx5UO/3pKIVvjgYAkN+i5QR+u0Nxwxotlf41t+Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

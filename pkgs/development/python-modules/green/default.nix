@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   colorama,
   coverage,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "green";
   version = "4.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

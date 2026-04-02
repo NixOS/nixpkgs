@@ -5,16 +5,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isd";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kainctl";
     repo = "isd";
-    tag = "v${version}";
-    hash = "sha256-MEfjE0zRxSuBwBkjAz9cKhodS+I4CjjtuvbO+WwL9SM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aIVZvsmIZRHKg7267wxWzmcwAqleu4i7z5GHSNJi260=";
   };
 
   build-system = with python3Packages; [
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
       customizable interface for power-users and newcomers alike.
     '';
     homepage = "https://github.com/kainctl/isd";
-    changelog = "https://github.com/kainctl/isd/releases/tag/v${version}";
+    changelog = "https://github.com/kainctl/isd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "isd";
     maintainers = with lib.maintainers; [
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

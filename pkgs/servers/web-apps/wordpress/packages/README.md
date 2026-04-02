@@ -8,13 +8,13 @@ file with the codename of the package:
 - `wordpress-plugins.json` for plugins
 
 The codename is the last part in the url of the plugin or theme page, for
-example `cookie-notice` in in the url
+example `cookie-notice` in the url
 `https://wordpress.org/plugins/cookie-notice/` or `twentytwenty` in
 `https://wordpress.org/themes/twentytwenty/`.
 
 In case of language packages, the name consists of country and language codes.
 For example `de_DE` for country code `de` (Germany) and language `DE` (German).
-For available translations and language codes see [upstream translation repository](https://translate.wordpress.org).
+For available translations and language codes see the [upstream translation repository](https://translate.wordpress.org).
 
 To regenerate the nixpkgs wordpressPackages set, run:
 

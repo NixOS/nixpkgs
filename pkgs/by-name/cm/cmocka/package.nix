@@ -5,13 +5,13 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmocka";
-  version = "1.1.8";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "https://cmocka.org/files/${lib.versions.majorMinor version}/cmocka-${version}.tar.xz";
-    hash = "sha256-WENbVYdm1/THKboWO9867Di+07x2batoTjUm7Qqnx4A=";
+    url = "https://cmocka.org/files/${lib.versions.majorMinor finalAttrs.version}/cmocka-${finalAttrs.version}.tar.xz";
+    hash = "sha256-PzUzOCuimrOr9cT0snt50WXw31HqWH3nSbEbaLQBkYA=";
   };
 
   patches = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags =
-    lib.optional doCheck "-DUNIT_TESTING=ON"
+    lib.optional finalAttrs.doCheck "-DUNIT_TESTING=ON"
     ++ lib.optional stdenv.hostPlatform.isStatic "-DBUILD_SHARED_LIBS=OFF";
 
   doCheck = true;
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
       kragniz
     ];
   };
-}
+})

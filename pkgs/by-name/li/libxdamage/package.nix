@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxdamage";
-  version = "1.1.6";
+  version = "1.1.7";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXdamage-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UnM8H1Ji/KNfZOfVBgxvzYGogLqOHmXJYhzwcnr7XRE=";
+    hash = "sha256-EnBn9SHT7kZ7l7yxRa66EHjiRU1EjodI65hNWzl73iQ=";
   };
 
   strictDeps = true;

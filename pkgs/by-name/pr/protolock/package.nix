@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protolock";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "nilslice";
     repo = "protolock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+7kU4nCBwCA6mnjFrejPrIILYUSfYpq13d+0MmNZoBg=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ groodt ];
   };
-}
+})

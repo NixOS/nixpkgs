@@ -53,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-incompatible-pointer-types"
     "-Wno-implicit-function-declaration"
+
+    # Fix build with gcc15 (-std=gnu23)
+    "-std=gnu17"
+
   ];
 
   meta = {

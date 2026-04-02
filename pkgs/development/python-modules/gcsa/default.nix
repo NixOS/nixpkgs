@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyfakefs,
   tzlocal,
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   pname = "gcsa";
   version = "2.6.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kuzmoyev";

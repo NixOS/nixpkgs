@@ -3,7 +3,6 @@
   bleak,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyacaia-async";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pyacaia_async";

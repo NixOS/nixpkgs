@@ -9,7 +9,7 @@
   patch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mozphab";
   version = "1.9.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CVpsq9YoEww47uruHYEsJk9YQ39ZFQsMdL0nBc8AHUM=";
   };
 
@@ -88,4 +88,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

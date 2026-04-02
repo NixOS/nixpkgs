@@ -2,24 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   hatchling,
   numpy,
+  py7zr,
   pytestCheckHook,
   stdlib-list,
   torch,
   torchvision,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fickling";
-  version = "0.1.6";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
-    tag = "v${version}";
-    hash = "sha256-p2XkHKqheVHqLTQKmUApiYH7NIaHc091B/TjiCDYWtA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hpVcYWoIH9sCQDha2aX0kzYHwpNcZ6US+4N/q70tQyA=";
   };
 
   build-system = [
@@ -40,21 +42,22 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    py7zr
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  disabledTestPaths = [
-    # https://github.com/trailofbits/fickling/issues/162
-    # AttributeError: module 'numpy.lib.format' has no attribute...
-    "test/test_polyglot.py"
-  ];
+  # Tests fail upstream in pytorch under python 3.14
+  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "fickling" ];
 
   meta = {
     description = "Python pickling decompiler and static analyzer";
     homepage = "https://github.com/trailofbits/fickling";
-    changelog = "https://github.com/trailofbits/fickling/releases/tag/${src.tag}";
+    changelog = "https://github.com/trailofbits/fickling/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

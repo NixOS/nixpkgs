@@ -7,19 +7,20 @@
   rust-jemalloc-sys,
   zlib,
   gitMinimal,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
-  version = "2.3.11";
+  version = "2.4.9";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "@biomejs/biome@${finalAttrs.version}";
-    hash = "sha256-AWVFrzIDg+mVnUYTMLr10o8IOSvewVhVMcYd2wvT5y0=";
+    hash = "sha256-Fv+jqgwI4UZNwsy5oC+ekXmnJpIqIXWY+ttRbIu+lQg=";
   };
 
-  cargoHash = "sha256-N2TauXj1pRrYnVD0qPtruy7qwdWBGJaa47++AaY8TMQ=";
+  cargoHash = "sha256-vU7yFXNx3r0aCDdMVra1omo+HgK5OwCohgbjyP3Q5VI=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -33,14 +34,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
+    "--"
     # fails due to cargo insta
-    "-- --skip=commands::check::print_json"
+    "--skip=commands::check::print_json"
     "--skip=commands::check::print_json_pretty"
     "--skip=commands::explain::explain_logs"
     "--skip=commands::format::print_json"
     "--skip=commands::format::print_json_pretty"
     "--skip=commands::format::should_format_files_in_folders_ignored_by_linter"
     "--skip=cases::migrate_v2::should_successfully_migrate_sentry"
+    "--skip=cases::help::check_help"
+    "--skip=cases::help::ci_help"
+    "--skip=cases::help::format_help"
+    "--skip=cases::help::lint_help"
+    "--skip=cases::help::lsp_proxy_help"
+    "--skip=cases::help::migrate_help"
+    "--skip=cases::help::rage_help"
+    "--skip=cases::help::start_help"
   ];
 
   env = {
@@ -48,6 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBGIT2_NO_VENDOR = 1;
     INSTA_UPDATE = "no";
   };
+
+  postInstall = ''
+    # Installs biome schema aside with the package
+    install -Dm644 packages/@biomejs/biome/configuration_schema.json $out/share/schema.json
+  '';
 
   preCheck = ''
     # tests assume git repository
@@ -57,6 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     unset BIOME_VERSION
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Toolchain of the web";
     homepage = "https://biomejs.dev/";
@@ -65,6 +82,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       isabelroses
       wrbbz
+      eveeifyeve # Schema
+      SchahinRohani
     ];
     mainProgram = "biome";
   };

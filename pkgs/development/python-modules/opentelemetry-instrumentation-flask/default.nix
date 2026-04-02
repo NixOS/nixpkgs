@@ -10,15 +10,12 @@
   opentelemetry-util-http,
   packaging,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-flask";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-flask";
 

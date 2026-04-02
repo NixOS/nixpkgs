@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  installFonts,
   stdenvNoCC,
 }:
 
@@ -21,6 +22,7 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [
+    installFonts
     (python3.withPackages (
       ps: with ps; [
         fontmake
@@ -37,14 +39,6 @@ stdenvNoCC.mkDerivation {
     python scripts/build.py
 
     runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D "build/"*.otf -t "$out/share/fonts/opentype/"
-
-    runHook postInstall
   '';
 
   meta = {

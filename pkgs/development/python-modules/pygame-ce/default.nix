@@ -4,7 +4,6 @@
   replaceVars,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   python,
   pkg-config,
   setuptools,
@@ -18,7 +17,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   portmidi,
   SDL2,
   SDL2_image,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pname = "pygame-ce";
   version = "2.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pygame-community";
@@ -63,8 +60,8 @@ buildPythonPackage rec {
       );
     })
 
-    # Can be removed after the SDL 3.4.0 bump.
-    ./skip-rle-tests.patch
+    # https://github.com/pygame-community/pygame-ce/pull/3680#issuecomment-3796052119
+    ./skip-failing-tests.patch
   ];
 
   postPatch = ''
@@ -103,7 +100,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     freetype
-    libX11
+    libx11
     libjpeg
     libpng
     portmidi

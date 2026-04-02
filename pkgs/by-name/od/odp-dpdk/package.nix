@@ -18,14 +18,14 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odp-dpdk";
   version = "1.46.0.0_DPDK_22.11";
 
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.abuibrahim ];
   };
-}
+})

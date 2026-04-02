@@ -9,7 +9,6 @@
   pcsclite,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
   vcrpy,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "johnnycanencrypt";
   version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kushaldas";

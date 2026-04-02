@@ -11,21 +11,19 @@
   nix-update-script,
   fetchpatch,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitui";
-  version = "0.28.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = "gitui";
-    rev = "v${version}";
-    hash = "sha256-B3Cdhhu8ECfpc57TKe6u08Q/Kl4JzUlzw4vtJJ1YAUQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IyDms4ke5evtSjFZrWEy0AascA0g9rG/a9RjbBNzZwg=";
   };
 
-  cargoHash = "sha256-dq5F7NJ0XcJ9x6hVWOboQQn8Liw8n8vkFgQSmTYIkSw=";
+  cargoHash = "sha256-LMw5TRNe9OK6ygOOMBpniMsmrK8K3qdkQ+SmaLJa+w0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +50,7 @@ rustPlatform.buildRustPackage {
   '';
 
   env = {
-    GITUI_BUILD_NAME = version;
+    GITUI_BUILD_NAME = finalAttrs.version;
     # Needed to get openssl-sys to use pkg-config.
     OPENSSL_NO_VENDOR = 1;
   };
@@ -65,7 +63,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/extrawurst/gitui/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Blazing fast terminal-ui for Git written in Rust";
     homepage = "https://github.com/extrawurst/gitui";
     license = lib.licenses.mit;
@@ -75,4 +73,4 @@ rustPlatform.buildRustPackage {
       mfrw
     ];
   };
-}
+})

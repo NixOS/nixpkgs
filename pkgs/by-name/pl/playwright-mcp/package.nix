@@ -7,22 +7,24 @@
 }:
 buildNpmPackage rec {
   pname = "playwright-mcp";
-  version = "0.0.54";
+  version = "0.0.56";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright-mcp";
     tag = "v${version}";
-    hash = "sha256-c5zmr04J01C0OLb+EHx9mX2t02kGDatBPz17nVVoPMY=";
+    hash = "sha256-kfn9vIxmx+dSYKzR5ayGX8RIWd5d8quTAyx4/dC6hIY=";
   };
 
-  npmDepsHash = "sha256-SJ1VIrEO7D+CYj8TXapOlVHzy9wgoOQok/2XA86OeJU=";
+  npmDepsHash = "sha256-Qsln4llNpfXYXhSEfHnvdsFIF7adHKEyC1eGHtVY2Qk=";
 
+  # Codex MCP smoke test (after `codex mcp add playwright-nix --env DISPLAY=:0 -- $out/bin/mcp-server-playwright --headless --isolated`):
+  # timeout 45s codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check "Use only playwright-nix MCP tools. Navigate to https://example.com and return only the page title."
   postInstall = ''
-    rm -r $out/lib/node_modules/@playwright/mcp/node_modules/playwright
-    rm -r $out/lib/node_modules/@playwright/mcp/node_modules/playwright-core
-    ln -s ${playwright-test}/lib/node_modules/playwright $out/lib/node_modules/@playwright/mcp/node_modules/playwright
-    ln -s ${playwright-test}/lib/node_modules/playwright-core $out/lib/node_modules/@playwright/mcp/node_modules/playwright-core
+    rm -rf "$out/lib/node_modules/@playwright/mcp/node_modules/playwright"
+    rm -rf "$out/lib/node_modules/@playwright/mcp/node_modules/playwright-core"
+    ln -s ${playwright-test}/lib/node_modules/playwright "$out/lib/node_modules/@playwright/mcp/node_modules/playwright"
+    ln -s ${playwright-test}/lib/node_modules/playwright-core "$out/lib/node_modules/@playwright/mcp/node_modules/playwright-core"
 
     wrapProgram $out/bin/mcp-server-playwright \
       --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers} \

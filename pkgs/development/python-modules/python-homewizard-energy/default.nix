@@ -14,27 +14,24 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-homewizard-energy";
-  version = "10.0.0";
+  version = "10.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
-    tag = "v${version}";
-    hash = "sha256-nrQI3yuIetcM7/Abwvxr4ffZb91N2Hhti/YBaI11uKc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/bz/KM6kCLciHRcPifd5F1P6Agzzb2ULxEzWP9xbfwo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -64,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with HomeWizard Energy devices";
     homepage = "https://github.com/homewizard/python-homewizard-energy";
-    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${src.tag}";
+    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

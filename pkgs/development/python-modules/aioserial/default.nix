@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioserial";
   version = "1.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

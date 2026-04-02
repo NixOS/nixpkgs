@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromSourcehut,
   kubo,
   packaging,
@@ -12,8 +11,7 @@
 buildPythonPackage rec {
   pname = "ipwhl";
   version = "1.1.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";

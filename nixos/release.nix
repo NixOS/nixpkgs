@@ -43,12 +43,17 @@ let
       pkgs = import ./.. { inherit system; };
       callTest =
         config:
-        if attrNamesOnly then
-          hydraJob config.test
-        else
-          {
-            ${system} = hydraJob config.test;
-          };
+        let
+          inherit (config) test;
+        in
+        lib.optionalAttrs (builtins.elem system (getPlatforms test)) (
+          if attrNamesOnly then
+            hydraJob test
+          else
+            {
+              ${system} = hydraJob test;
+            }
+        );
     }
     // {
       # for typechecking of the scripts and evaluation of
@@ -58,12 +63,17 @@ let
         pkgs = import ./.. { inherit system; };
         callTest =
           config:
-          if attrNamesOnly then
-            hydraJob config.test
-          else
-            {
-              ${system} = hydraJob config.driver;
-            };
+          let
+            inherit (config) driver;
+          in
+          lib.optionalAttrs (builtins.elem system (getPlatforms driver)) (
+            if attrNamesOnly then
+              hydraJob driver
+            else
+              {
+                ${system} = hydraJob driver;
+              }
+          );
       };
     };
 

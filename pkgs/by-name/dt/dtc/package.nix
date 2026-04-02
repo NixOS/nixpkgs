@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Device Tree Compiler";
     homepage = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     license = lib.licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "dtc";
   };

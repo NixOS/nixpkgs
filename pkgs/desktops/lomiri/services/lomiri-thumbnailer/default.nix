@@ -76,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests run in parallel to other builds, don't suck up cores
     substituteInPlace tests/headers/compile_headers.py \
       --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
+  ''
+  # https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/31
+  # Too simple to bother with fetchpatch
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'find_package(Boost COMPONENTS filesystem iostreams regex system REQUIRED)' \
+        'find_package(Boost COMPONENTS filesystem iostreams regex REQUIRED)'
   '';
 
   strictDeps = true;

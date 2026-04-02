@@ -62,14 +62,14 @@ let
     XMLTwig
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shutter";
   version = "0.99.6";
 
   src = fetchFromGitHub {
     owner = "shutter-project";
     repo = "shutter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2wRPmTpFfgU8xW9Fyn1+TMowcKm3pukT1ck06IWPiGo=";
   };
 
@@ -110,4 +110,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

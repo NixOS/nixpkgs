@@ -15,15 +15,15 @@
   librsvg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dynamic-wallpaper";
   version = "0.1.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "dusansimic";
     repo = "dynamic-wallpaper";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-DAdx34EYO8ysQzbWrAIPoghhibwFtoqCi8oyDVyO5lk=";
   };
 
@@ -63,4 +63,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "me.dusansimic.DynamicWallpaper";
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

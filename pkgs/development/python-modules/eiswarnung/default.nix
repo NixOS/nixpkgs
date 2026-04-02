@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   yarl,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "eiswarnung";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";

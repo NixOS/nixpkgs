@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "intbitset";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

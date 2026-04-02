@@ -16,7 +16,11 @@
   cctools,
   SDL2,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
   stdenv,
   libglvnd,
   libxkbcommon,
@@ -37,31 +41,33 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
 
   cargoHash = "sha256-DD2c63JHMdzwD1OmC7c9dMB59qjvdAYZ9drQf3f8xCs=";
 
-  SKIA_SOURCE_DIR =
-    let
-      repo = fetchFromGitHub {
-        owner = "rust-skia";
-        repo = "skia";
-        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        tag = "m140-0.87.4";
-        hash = "sha256-pHxqTrqguZcPmuZgv0ASbJ3dgn8JAyHI7+PdBX5gAZQ=";
-      };
-      # The externals for skia are taken from skia/DEPS
-      externals = linkFarm "skia-externals" (
-        lib.mapAttrsToList (name: value: {
-          inherit name;
-          path = fetchgit value;
-        }) (lib.importJSON ./skia-externals.json)
-      );
-    in
-    runCommand "source" { } ''
-      cp -R ${repo} $out
-      chmod -R +w $out
-      ln -s ${externals} $out/third_party/externals
-    '';
+  env = {
+    SKIA_SOURCE_DIR =
+      let
+        repo = fetchFromGitHub {
+          owner = "rust-skia";
+          repo = "skia";
+          # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+          tag = "m140-0.87.4";
+          hash = "sha256-pHxqTrqguZcPmuZgv0ASbJ3dgn8JAyHI7+PdBX5gAZQ=";
+        };
+        # The externals for skia are taken from skia/DEPS
+        externals = linkFarm "skia-externals" (
+          lib.mapAttrsToList (name: value: {
+            inherit name;
+            path = fetchgit value;
+          }) (lib.importJSON ./skia-externals.json)
+        );
+      in
+      runCommand "source" { } ''
+        cp -R ${repo} $out
+        chmod -R +w $out
+        ln -s ${externals} $out/third_party/externals
+      '';
 
-  SKIA_GN_COMMAND = "${gn}/bin/gn";
-  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+    SKIA_GN_COMMAND = "${gn}/bin/gn";
+    SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+  };
 
   nativeBuildInputs = [
     makeWrapper
@@ -87,11 +93,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
         [
           libglvnd
           libxkbcommon
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXrandr
-          xorg.libXi
+          libx11
+          libxcursor
+          libxext
+          libxrandr
+          libxi
         ]
         ++ lib.optionals enableWayland [ wayland ]
       );
@@ -120,7 +126,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.env.SKIA_SOURCE_DIR ];
 
   meta = {
     description = "Simple, no-nonsense, cross-platform graphical user interface for Neovim";

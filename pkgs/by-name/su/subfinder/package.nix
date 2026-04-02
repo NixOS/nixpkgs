@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subfinder";
-  version = "2.11.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
-    tag = "v${version}";
-    hash = "sha256-kgOI5/EA5ZAH7yColUdKdVoWwqm33qo5D9B8a26b+0w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3QvF+igCpunbUzYN1iq9ZN7Ty/6WOs98HiRuw1KgVTU=";
   };
 
-  vendorHash = "sha256-ss1lcdqBni5SmHVLDQpFFVTQ3/nL8qPTl5zul1GQpBM=";
+  vendorHash = "sha256-G8CNSCufXaj/rUNqfeScSuOeUDUYJRuFeKd+cGcjOCk=";
 
   patches = [
     # Disable automatic version check
@@ -39,7 +39,7 @@ buildGoModule rec {
       useful for bug bounties and safe for penetration testing.
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
-    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${src.tag}";
+    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fpletz
@@ -47,4 +47,4 @@ buildGoModule rec {
     ];
     mainProgram = "subfinder";
   };
-}
+})

@@ -14,7 +14,7 @@ let
   repo = fetchFromGitHub {
     owner = "pytorch";
     repo = "kineto";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nAtqGCv8q3Tati3NOGWWLb+gXdvO3qmECeC1WG2Mt3M=";
   };
 in

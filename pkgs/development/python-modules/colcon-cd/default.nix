@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-cd";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-eOo1DqTvYazr+wWraG9PZe0tTCgaAvhWtELG5rlaGSs=";
   };
 

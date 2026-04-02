@@ -7,7 +7,6 @@
   hidapi,
   noiseprotocol,
   protobuf,
-  pythonOlder,
   semver,
   setuptools,
   typing-extensions,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "bitbox02";
   version = "7.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

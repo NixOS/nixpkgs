@@ -854,7 +854,7 @@ runBuildTests {
     format = formats.nixConf {
       package = pkgs.nix;
       version = pkgs.nix.version;
-      extraOptions = ''ignore-try = false'';
+      extraOptions = "ignore-try = false";
     };
     input = {
       auto-optimise-store = true;
@@ -1079,5 +1079,71 @@ runBuildTests {
       ''\t<true/>
       </dict>
       </plist>'';
+  };
+
+  hcl1Atoms = shouldPass {
+    format = formats.hcl1 { };
+    input = {
+      resource = {
+        aws_instance = {
+          example = {
+            ami = "ami-12345";
+            instance_type = "t2.micro";
+          };
+        };
+      };
+      variable = {
+        region = {
+          default = "us-east-1";
+        };
+      };
+      output = {
+        ip = {
+          value = "127.0.0.1";
+        };
+      };
+      primitive = "just a string";
+      number = 42;
+      enabled = true;
+    };
+    expected = ''
+      {
+        "enabled": true,
+        "number": 42,
+        "output": [
+          {
+            "ip": [
+              {
+                "value": "127.0.0.1"
+              }
+            ]
+          }
+        ],
+        "primitive": "just a string",
+        "resource": [
+          {
+            "aws_instance": [
+              {
+                "example": [
+                  {
+                    "ami": "ami-12345",
+                    "instance_type": "t2.micro"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "variable": [
+          {
+            "region": [
+              {
+                "default": "us-east-1"
+              }
+            ]
+          }
+        ]
+      }
+    '';
   };
 }

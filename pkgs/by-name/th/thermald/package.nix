@@ -17,7 +17,7 @@
   upower,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thermald";
   version = "2.5.10";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+dk3lOlI8kaf8NvcWQSvTxSqVGPCgvVnTB9nltqQHrU=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "thermald";
   };
-}
+})

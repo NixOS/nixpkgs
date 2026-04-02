@@ -50,7 +50,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
 
@@ -83,7 +83,7 @@ let
     LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-7sPdIHWNFn13eaUanFgN988hFAwGnlU6cxmHOJUDpiQ=";
+      sha256 = "sha256-RzX8Shr8It9EahXDd3KotcZ2CjFcuzZVyK5aQutLPA4=";
     };
 
     buildAttrs = {

@@ -2,18 +2,24 @@
   lib,
   fetchCrate,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "b3sum";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-mU2r5xbYf6A1RibWqhow/637YxybCFMT3UzYcUMjhdg=";
+    inherit (finalAttrs) version pname;
+    hash = "sha256-xqR2BPtuAhsVvLY2DXfmgRF3tLix+H8lcD9GSZh9pUg=";
   };
 
-  cargoHash = "sha256-w9l8dn4Ahck3NXuN4Ph9qmGoS767/mQRBgO9AT0CH3Y=";
+  cargoHash = "sha256-h/M9SOyl9Dj9QNvKyxtg0L0mNYBhH7Q4Yke5n20SSSs=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "BLAKE3 cryptographic hash function";
@@ -21,12 +27,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/BLAKE3-team/BLAKE3/";
     maintainers = with lib.maintainers; [
       fpletz
-      ivan
     ];
     license = with lib.licenses; [
       cc0
       asl20
     ];
-    changelog = "https://github.com/BLAKE3-team/BLAKE3/releases/tag/${version}";
+    changelog = "https://github.com/BLAKE3-team/BLAKE3/releases/tag/${finalAttrs.version}";
   };
-}
+})

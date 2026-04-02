@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pycryptodomex,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "huawei-lte-api";
   version = "1.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Salamek";

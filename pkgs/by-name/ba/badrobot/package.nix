@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "badrobot";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "badrobot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-U3b5Xw+GjnAEXteivztHdcAcXx7DYtgaUbW5oax0mIk=";
   };
   vendorHash = "sha256-oYdkCEdrw1eE5tnKveeJM3upRy8hOVc24JNN1bLX+ec=";
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/controlplaneio/badrobot/cmd.version=v${version}"
+    "-X github.com/controlplaneio/badrobot/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -35,7 +35,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/controlplaneio/badrobot";
-    changelog = "https://github.com/controlplaneio/badrobot/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/controlplaneio/badrobot/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Operator Security Audit Tool";
     mainProgram = "badrobot";
     longDescription = ''
@@ -49,4 +49,4 @@ buildGoModule rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

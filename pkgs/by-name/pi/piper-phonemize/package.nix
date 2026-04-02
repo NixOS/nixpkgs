@@ -13,33 +13,14 @@
   onnxruntime,
 }:
 
-let
-  espeak-ng' = espeak-ng.overrideAttrs (oldAttrs: {
-    version = "1.52-dev";
-    src = fetchFromGitHub {
-      owner = "rhasspy";
-      repo = "espeak-ng";
-      rev = "0f65aa301e0d6bae5e172cc74197d32a6182200f";
-      hash = "sha256-2V0D3QO+v9OqffpNmwJQd3NIBd/IFeLkjaJ3Y0HHw7E=";
-    };
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
-        hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
-      })
-      ./espeak-mbrola.patch
-    ];
-  });
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "piper-phonemize";
   version = "2023.11.14-4";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper-phonemize";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pj1DZUhy3XWGn+wNtxKKDWET9gsfofEB0NZ+EEQz9q0=";
   };
 
@@ -50,17 +31,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DONNXRUNTIME_DIR=${onnxruntime.dev}"
-    "-DESPEAK_NG_DIR=${espeak-ng'}"
+    "-DESPEAK_NG_DIR=${espeak-ng}"
   ];
 
   buildInputs = [
-    espeak-ng'
+    espeak-ng
     onnxruntime
   ];
-
-  passthru = {
-    espeak-ng = espeak-ng';
-  };
 
   meta = {
     description = "C++ library for converting text to phonemes for Piper";
@@ -68,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

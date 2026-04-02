@@ -13,14 +13,14 @@
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airgorah";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "martin-olivier";
     repo = "airgorah";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6TH+DRDtWajZjHNmFSKL4XJK+AuDNUbWKRPRryOpSGY=";
   };
 
@@ -65,10 +65,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "WiFi security auditing software mainly based on aircrack-ng tools suite";
     homepage = "https://github.com/martin-olivier/airgorah";
-    changelog = "https://github.com/martin-olivier/airgorah/releases/tag/v${version}";
+    changelog = "https://github.com/martin-olivier/airgorah/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "airgorah";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.linux;
   };
-}
+})

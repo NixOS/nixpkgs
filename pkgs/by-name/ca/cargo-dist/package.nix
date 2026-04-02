@@ -11,18 +11,18 @@
   rustup,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-dist";
-  version = "0.30.3";
+  version = "0.30.4";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
-    rev = "v${version}";
-    hash = "sha256-x59bUgd89XAwuHwGvREDqAS/cI4Ot7HGTONGbTOgzw8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Woaa+KNRLqTRgglGM50L8w6UXlnDTcUHQZ20AYbZPnE=";
   };
 
-  cargoHash = "sha256-OTbUTYxqEzE3hyHq2hCbhigz5xJT2Bjd/pu6EI+0aWA=";
+  cargoHash = "sha256-DVIckYfIf7EqqRXQbNI3msvDopSY7RxR11942w3XBjg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool for building final distributable artifacts and uploading them to an archive";
     mainProgram = "dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
-    changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/axodotdev/cargo-dist/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -64,4 +64,4 @@ rustPlatform.buildRustPackage rec {
       mistydemeo
     ];
   };
-}
+})

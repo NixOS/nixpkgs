@@ -9,24 +9,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdserve";
-  version = "0.5.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jfernandez";
     repo = "mdserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tycFsE/jGh5OYD5ewv12vvOhhlbYtlvANk6BhDW38hw=";
+    hash = "sha256-f84Fkd3nONE+nJM27c+1kRztXEzsDye77heJDG8MUm0=";
   };
 
-  cargoHash = "sha256-otEa6+IdKHJAT+lPptXgnP5yggTkB3uYfbGhSKTXodo=";
+  cargoHash = "sha256-SuCLJE0uSUGCzF4OXL4I9go0rw5GMvCBHxnRpIKTqi0=";
 
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  checkFlags = [
+    "--skip=app::tests::test_temp_file_rename_triggers_reload_directory_mode"
+    "--skip=app::tests::test_temp_file_rename_triggers_reload_single_file_mode"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # times out on darwin during nixpkgs-review
-    "--skip test_file_modification_updates_via_websocket"
+    "--skip=test_file_modification_updates_via_websocket"
   ];
 
   passthru.updateScript = nix-update-script { };

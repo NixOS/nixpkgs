@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "mautrix-discord";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "discord";
     rev = "v${version}";
-    hash = "sha256-puYPsHahXdKYR16hPnvYCrSGqnWc7sZ8HmmPlkysvs0=";
+    hash = "sha256-qpyySoYX+JMEKDf7Iv5WSZFOxkrmd3ihAaAXAKcZs9Q=";
   };
 
-  vendorHash = "sha256-ffdR5OymFO7di4eOmL3zn6BvHgaLFBsmBkC4LKnw8Qg=";
+  vendorHash = "sha256-ZjY2+1M1LP/zBVG5+zfX4T8Lyjx/tpDwSxLlpsBG3iA=";
 
   ldflags = [
     "-s"
@@ -43,7 +43,6 @@ buildGoModule rec {
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      MoritzBoehme
       sumnerevans
     ];
     mainProgram = "mautrix-discord";

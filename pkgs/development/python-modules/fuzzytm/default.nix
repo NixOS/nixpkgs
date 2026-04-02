@@ -8,15 +8,12 @@
   pyfume,
   setuptools,
   scipy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fuzzytm";
   version = "2.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "FuzzyTM";

@@ -7,7 +7,6 @@
   eth-utils,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   pydantic,
 }:
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "py-ecc";
   version = "8.0.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";

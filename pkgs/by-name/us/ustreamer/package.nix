@@ -21,14 +21,14 @@
   withJanus ? true,
   withPython ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ustreamer";
   version = "6.40";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jKltFQsx8Q9+TMTOg1p6nljII72CLEg6VYe60/KojUY=";
   };
 
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ustreamer";
   };
-}
+})

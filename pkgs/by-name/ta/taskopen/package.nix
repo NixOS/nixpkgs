@@ -8,14 +8,14 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskopen";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "ValiValpas";
     repo = "taskopen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.winpat ];
   };
-}
+})

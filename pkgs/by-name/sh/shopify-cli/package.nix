@@ -6,33 +6,37 @@
   pnpmConfigHook,
   pnpm,
   faketty,
-  nodejs,
+  nodejs_22,
   versionCheckHook,
   makeBinaryWrapper,
   nix-update-script,
 }:
+let
+  nodejs = nodejs_22;
+  pnpm' = pnpm.override { inherit nodejs; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
-  version = "3.86.1";
+  version = "3.91.1";
 
   src = fetchFromGitHub {
     owner = "shopify";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-wEddzW5/+qdtNTxdUs7YEA5vk6/KjrVOgWvIeo0o2ww=";
+    hash = "sha256-cOq4LpTMr59ev04PIu0GYAAK0N0n2SrYCnz8sHfcXrs=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-JhyZpkrp78FECH6UKYYuhWF2w/mYW1BQG5FIsWh5GRE=";
+    hash = "sha256-5rghSHGigsw193OJLiVegjNs1qDj+sCq1KJ1J8oPnrA=";
   };
 
   nativeBuildInputs = [
     faketty
     nodejs
     pnpmConfigHook
-    pnpm
+    pnpm'
     makeBinaryWrapper
   ];
 
@@ -59,7 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Install runtime dependencies
     rm -rf node_modules
     pnpm config set nodeLinker hoisted
-    pnpm install --offline --prod --force --ignore-scripts --frozen-lockfile
+    # Avoid pnpm trying to replace directories with files (ENOTDIR) by
+    # preferring non-symlinked executables and removing --force which can
+    # exacerbate move/rename races during install.
+    pnpm config set preferSymlinkedExecutables false
+    pnpm install --offline --prod --ignore-scripts --frozen-lockfile
     mv node_modules $out/lib/node_modules/@shopify/cli/node_modules
 
     makeWrapper ${lib.getExe nodejs} $out/bin/shopify \
@@ -78,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "shopify";
     description = "CLI which helps you build against the Shopify platform faster";
     homepage = "https://github.com/Shopify/cli";
-    changelog = "https://github.com/Shopify/cli/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Shopify/cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fd

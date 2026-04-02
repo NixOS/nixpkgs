@@ -8,7 +8,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   version = "2.26.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_secret_manager";
     inherit version;
@@ -26,6 +23,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

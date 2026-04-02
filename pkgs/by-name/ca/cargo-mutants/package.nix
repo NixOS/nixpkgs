@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mutants";
-  version = "26.0.0";
+  version = "27.0.0";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "cargo-mutants";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TtB+g5WgEqKP9sYJY3P/WDbpT9lD23RDi0/A7khwDIw=";
+    hash = "sha256-ctbX5xoxmZzyvwJByDC7f71CLtpn8IkZTXTSdjXf25U=";
   };
 
-  cargoHash = "sha256-FVwRS9OcQ0CjH8h10BzP7rTNHFIvefagIHMxVrfMaHo=";
+  cargoHash = "sha256-+z2QSvSxKIt2giQYVcSOEqHvsUuLnxE2HqkA13W9KhY=";
 
   # too many tests require internet access
   doCheck = false;

@@ -6,6 +6,7 @@
   gitMinimal,
   fetchFromGitLab,
   glfw,
+  libGL,
   glm,
   spdlog,
   cereal,
@@ -19,14 +20,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "d38452e1ee03523a208362186fd42248ff2609f6";
-      hash = "sha256-SCQDORhmJmTb0CYm15zjEa7dkwc+lpW2s1d4DsMRovI=";
+      rev = "255c84dadd029fd8ad25c5efb5933e47beaa00c7";
+      hash = "sha256-TJT2Kzc64zI42FAbbGWP3Sshh1dU/D/AtEpgZrrhebg=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "5f7d66929fb66869d96dfcbacf0d8a586b33766d";
-      hash = "sha256-G9jMWq8BxKvRGP4D2/tcogdLwmek4XGYESqepnZIlCw=";
+      rev = "5c55f5d4f45a1b09c5d98aa63a671993ebd42c69";
+      hash = "sha256-CChXn58cqam3d6Q61ZJMr5NFq1Ezc5uywA7FSPhk4GI=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -37,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "49623d0c4e1af3c680845191948d10f6d3e92f8a";
-      hash = "sha256-jmPPyOHNP8Lrk5BKMhWW6KzizLF4dJB3txqOi2zBW40=";
+      rev = "75bcd155c40cb48e647c87c3f29052360255bc9e";
+      hash = "sha256-ZBm3ac6Kt7gOqNip6PeNNMiOF0fwG+7PJYA47KT0ogI=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -76,18 +77,12 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
-    trianglemeshdistance = fetchFromGitHub {
-      owner = "InteractiveComputerGraphics";
-      repo = "TriangleMeshDistance";
-      rev = "2cb643de1436e1ba8e2be49b07ec5491ac604457";
-      hash = "sha256-qG/8QKpOnUpUQJ1nLj+DFoLnUr+9oYkJPqUhwEQD2pc=";
-    };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.4.0";
+  version = "3.6.0";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -95,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-mW1AZKRo5rC3q7VARNI3HNKYGXxnAX6R1AfmY8J1D/Q=";
+    hash = "sha256-Gxr8AH9grTjrMTHHOVseLuTC3rNuQEZRWhSvR4HgIc4=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -113,6 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
     cereal
     glfw
+  ];
+
+  propagatedBuildInputs = [
+    # consuming MuJoCo through cmake find_package requires libGL
+    libGL
   ];
 
   cmakeFlags = [
@@ -146,10 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
-  ''
-  # Mujoco's cmake apply a patch on the trianglemeshdistance source code. Requires write permission.
-  + ''
-    cp -r ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 

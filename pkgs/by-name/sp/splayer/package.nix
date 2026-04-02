@@ -2,29 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron,
+  electron_39,
   rustPlatform,
   cargo,
   rustc,
+  python3,
+  pkg-config,
+  openssl,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  removeReferencesTo,
 }:
+let
+  electron = electron_39;
+  pnpm = pnpm_10_29_2;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.8.2025";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-LS9Z+dfL50ICaF8WskiKswl3LD7aSrpJHu6DY9m6ByE=";
+    hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -33,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_10;
+    inherit pnpm;
     fetcherVersion = 2;
-    hash = "sha256-t1pZJ7j+VyvXSTctNVg2XkoQ4CA6DlkxOlK9akDghUU=";
+    hash = "sha256-PTfZopse+9RS7qh0miLu3duYlWDfifZS254tZKqgxKk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -44,18 +52,24 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-LJuY9BFI+/GSckilZCXs3cw1EEG5Oy/iSljIABqsD/E=";
+    hash = "sha256-gd/5f3yraTQI5bu1VE6HHsGDeKJLR1oTm2H+pg1PAOA=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm
     nodejs
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    python3
     makeWrapper
     copyDesktopItems
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -72,6 +86,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    # After the pnpm configure, we need to build the binaries of all instances
+    # of better-sqlite3. It has a native part that it wants to build using a
+    # script which is disallowed.
+    # What's more, we need to use headers from electron to avoid ABI mismatches.
+    # Adapted from mkYarnModules.
+    for f in $(find . -path '*/node_modules/better-sqlite3' -type d); do
+      (cd "$f" && (
+      npm run build-release --offline --nodedir="${electron.headers}"
+      rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
+      find build -type f -exec \
+        ${lib.getExe removeReferencesTo} \
+        -t "${electron.headers}" {} \;
+      ))
+    done
 
     pnpm build
 
@@ -130,9 +159,18 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple Netease Cloud Music player";
     homepage = "https://github.com/imsyy/SPlayer";
+    changelog = "https://github.com/imsyy/SPlayer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "splayer";
     platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      # public/wasm/ffmpeg.wasm
+      # source: https://github.com/apoint123/ffmpeg-audio-player
+      # native/ferrous-opencc-wasm/pkg/ferrous_opencc_wasm_bg.wasm
+      # source: native/ferrous-opencc-wasm
+      binaryBytecode
+    ];
   };
 })

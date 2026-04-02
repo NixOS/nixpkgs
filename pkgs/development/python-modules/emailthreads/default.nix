@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  PKGVER = version;
+  env.PKGVER = version;
 
   meta = {
     homepage = "https://github.com/emersion/python-emailthreads";

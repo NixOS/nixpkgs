@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   aiohttp,
   asn1,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "smart-meter-texas";
   version = "0.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grahamwetzler";

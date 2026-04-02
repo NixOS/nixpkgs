@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "25.5.1";
+  version = "25.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WCyUj6miMYi4kNC8Ewc0pQbQOaLlrYfa4nakVsxoPmE=";
+    hash = "sha256-rfnNVS3kSk5nVMUf8ueNkZO3+m6rEj25V4ohDmVyNd0=";
   };
 
   build-system = [
@@ -51,7 +51,10 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (!isPyPy) [ greenlet ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
+  env = {
+    GEVENTSETUP_EMBED = "0";
+  }
+  // lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
@@ -71,8 +74,6 @@ buildPythonPackage rec {
       ;
   }
   // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
-
-  GEVENTSETUP_EMBED = "0";
 
   meta = {
     description = "Coroutine-based networking library";

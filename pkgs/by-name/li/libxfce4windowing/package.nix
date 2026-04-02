@@ -3,16 +3,18 @@
   lib,
   fetchFromGitLab,
   gettext,
+  meson,
+  ninja,
   pkg-config,
   python3,
+  vala,
   wayland-scanner,
-  xfce4-dev-tools,
   glib,
   gtk3,
   libdisplay-info,
   libwnck,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   wayland,
   wayland-protocols,
   wlr-protocols,
@@ -41,35 +43,53 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TVu6S/Cip9IqniAvrTU5uSs7Dgm0WZNxjgB4vjHvBNU=";
   };
 
+  patches = [
+    # Headers depend on gtk3 but it is only listed in Requires.private,
+    # which does not influence Cflags on non-static builds in nixpkgs’s
+    # pkg-config. Let’s add it to Requires to ensure Cflags are set correctly.
+    ./pkg-config-requires.patch
+  ];
+
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     gettext
+    meson
+    ninja
     pkg-config
     python3
     wayland-scanner
-    xfce4-dev-tools
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
+    vala # vala bindings require GObject introspection
   ];
 
   buildInputs = [
     glib
-    gtk3
     libdisplay-info
     libwnck
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     wayland
     wayland-protocols
     wlr-protocols
+  ];
+
+  propagatedBuildInputs = [
+    gtk3
   ];
 
   postPatch = ''
     patchShebangs xdt-gen-visibility
   '';
 
-  configureFlags = [ "--enable-maintainer-mode" ];
-  enableParallelBuilding = true;
+  mesonFlags = [
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonEnable "vala" withIntrospection)
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "libxfce4windowing-";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   pythonAtLeast,
   stdenv,
@@ -21,14 +20,12 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.5.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.5.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P6pcOQVLLwPKVH2psvUv3mfAYkDDGFPzBq6pfxNke1U=";
+    hash = "sha256-hWGjJp5oARBoY/0NbYS7c3vp52MeM6rtP7nOWVNojaM=";
   };
 
   nativeBuildInputs = [ setuptools ];

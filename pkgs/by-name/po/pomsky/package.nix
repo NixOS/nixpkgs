@@ -6,14 +6,14 @@
   oniguruma,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pomsky";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
     repo = "pomsky";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0rLY0WZj8p9D834SqHogV77GLHLesyPPxMGszDmkB9U=";
   };
 
@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage rec {
     description = "Portable, modern regular expression language";
     mainProgram = "pomsky";
     homepage = "https://pomsky-lang.org";
-    changelog = "https://github.com/pomsky-lang/pomsky/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pomsky-lang/pomsky/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = [ ];
   };
-}
+})

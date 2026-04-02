@@ -30,7 +30,7 @@
 }:
 
 let
-  version = "1.8.11";
+  version = "1.8.12";
   pname = "iptables";
 in
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    sha256 = "2HMD1V74ySvK1N0/l4sm0nIBNkKwKUJXdfW60QCf57I=";
+    sha256 = "jn7pYmAUkt5lA9Fx1KlICSqxj4nxEd5y4wN8H0DPuEY=";
   };
 
   outputs = [
@@ -170,7 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "iptables";
     maintainers = with lib.maintainers; [ fpletz ];
+    teams = [ lib.teams.security-review ];
     license = lib.licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "netfilter" finalAttrs.version;
   };
 })

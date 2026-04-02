@@ -4,7 +4,6 @@
   colorlog,
   pyyaml,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "lupupy";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

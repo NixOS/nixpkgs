@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyzipper,
   setuptools,
   striprtf,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "xknxproject";
   version = "3.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "XKNX";

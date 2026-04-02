@@ -12,7 +12,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5_2;
+      django = prev.django_5;
 
       django-countries = prev.django-countries.overridePythonAttrs (oldAttrs: rec {
         version = "8.1.0";
@@ -42,8 +42,10 @@ let
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/changelog/#${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
-    teams = [ lib.teams.c3d2 ];
+    maintainers = with lib.maintainers; [
+      hexa
+      SuperSandro2000
+    ];
     platforms = lib.platforms.linux;
   };
 

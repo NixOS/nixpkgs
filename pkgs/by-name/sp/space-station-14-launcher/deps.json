@@ -180,16 +180,6 @@
     "hash": "sha256-VdwpP5fsclvNqJuppaOvwEwv2ofnAI5ZSz2V+UEdLF0="
   },
   {
-    "pname": "Microsoft.AspNetCore.App.Ref",
-    "version": "8.0.22",
-    "hash": "sha256-Gs0Nq1KQ3rgHzwe8GQbCTbw6i1FGfa08YGyXGZDj6W8="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-    "version": "8.0.22",
-    "hash": "sha256-UMkCtSyjARdWST3hx0M9RXPwhrYN+DvIh8bSniFVAuA="
-  },
-  {
     "pname": "Microsoft.Data.Sqlite.Core",
     "version": "7.0.4",
     "hash": "sha256-+8pB6kjwp5dNxKZ54zM7xqWSkzQYRiB8AIw2JBeSDlY="
@@ -198,21 +188,6 @@
     "pname": "Microsoft.NET.ILLink.Tasks",
     "version": "8.0.0",
     "hash": "sha256-BAbtucZQvBgbiJ51UAL/Ilx+dz96LpWmfjnnNGlcw48="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.linux-x64",
-    "version": "8.0.22",
-    "hash": "sha256-7ie1B9o9D3Sgr88KxKs7IfhGlypuX4YzEkpe9SA+PNs="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Ref",
-    "version": "8.0.22",
-    "hash": "sha256-00SIT4Pme2xeYb8PUSALAnHeOIR3UlJwlK0hRZkzjS4="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.linux-x64",
-    "version": "8.0.22",
-    "hash": "sha256-cociJC//cl8d2TeOecGUAwbbfv29pMQZpu2z58B7mpE="
   },
   {
     "pname": "Microsoft.Toolkit.Mvvm",

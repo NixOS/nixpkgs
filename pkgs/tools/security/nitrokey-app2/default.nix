@@ -22,14 +22,14 @@ in
 
 buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.4.3";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     tag = "v${version}";
-    hash = "sha256-mwcYjkyEP2itwdQ/xAG50uvw6zHfUacAecbDh86GNGA=";
+    hash = "sha256-HkGdu8A8xpZheO+2NcKkTPXZGln28CnhRQzdpwRUlRE=";
   };
 
   nativeBuildInputs = [

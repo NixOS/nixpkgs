@@ -13,7 +13,6 @@
   numpy,
   oldest-supported-numpy,
   packaging,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "vispy";
   version = "0.16.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

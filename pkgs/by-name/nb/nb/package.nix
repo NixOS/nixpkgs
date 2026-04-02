@@ -1,23 +1,22 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   installShellFiles,
   testers,
   nix-update-script,
-  nb,
   bashInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nb";
-  version = "7.23.2";
+  version = "7.25.3";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
-    rev = version;
-    hash = "sha256-JwbIETH2D/qYZTNUemsYSmcCjV/7kXKUK9JKnuBBe/0=";
+    tag = finalAttrs.version;
+    hash = "sha256-liDNmc7pueIk0nFUkPjP8llXzV6dTpHMVkRSc0stEVk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -27,8 +26,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin/
-    mv nb $out/bin/
+    runHook preInstall
+    install -Dm755 -t $out/bin nb
     runHook postInstall
   '';
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = nb;
+      package = finalAttrs.finalPackage;
       # Setting EDITOR to avoid: "Command line text editor not found"
       command = "EDITOR=nano nb --version";
     };
@@ -81,8 +80,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xwmx.github.io/nb/";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.toonn ];
+    maintainers = with lib.maintainers; [
+      prince213
+      toonn
+    ];
     platforms = lib.platforms.all;
     mainProgram = "nb";
   };
-}
+})

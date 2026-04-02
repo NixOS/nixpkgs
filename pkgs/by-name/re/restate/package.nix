@@ -25,16 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.5.6";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N27cKlJxQtE+/fMnaTlWyM3QeOIkt5M79t9PzB69eqw=";
+    hash = "sha256-i9P6Lh0Qw4ylUVwAE51UTE5rSDluZafpEmxuAtv0SYQ=";
   };
 
-  cargoHash = "sha256-JnlqKESW2VBv902/qZqEr5rEDSLhnpQ/nZdYHU6tBMI=";
+  cargoHash = "sha256-LfLqScEqBJK9s+xRg2Ah1OnBEDQjXQ9LgJGusmxEDfk=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -76,6 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Have to be set to dynamically link librdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
+
+    # krb5-src contains K&R-style C code incompatible with GCC 14's default C23 standard;
+    # tikv-jemalloc-sys has a strerror_r return type mismatch (-Wint-conversion)
+    NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=int-conversion";
   };
 
   nativeBuildInputs = [
@@ -105,7 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # TIMEOUT [ 180.006s]
     "--skip"
     "fast_forward_over_trim_gap"
-    # TIMEOUT (could be related to https://github.com/resytatedev/restate/issues/3043)
+    # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
     "--skip"
     "restatectl_smoke_test"
   ];

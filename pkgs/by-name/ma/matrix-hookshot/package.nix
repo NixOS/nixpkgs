@@ -18,23 +18,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.1.0";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-jRLax1vqC0K3XvAWrH1J7nqtFioLr4n6Df9Kra/KKKU=";
+    hash = "sha256-FHxR0rUrony/z8Nxv4HA0XCDlwsdoLXK/yBQlfkC6U4=";
   };
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-bxSeaJyQojfqIl/X4pjG+QRATKYKjsQhTQ3JOY/HDFQ=";
+    hash = "sha256-Qodvybg0G2a6Jtcd89Mci/PoLXrozTJCRRVh/fedngk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-1eBiLZHGNJxXNCVavkKt0xckAD2cilOW2wNCtqJ8O4g=";
+    hash = "sha256-X0k60VOG/VoffE5+pCJ33C0Oxjr7NsOHHsLNWFb/z6s=";
   };
 
   buildInputs = [ openssl ];

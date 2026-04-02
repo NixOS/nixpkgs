@@ -11,6 +11,8 @@
   scikit-learn,
   toml-adapt,
   typer,
+  typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +45,7 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     typer
+    typing-extensions
   ];
 
   # create scikit-learn and niapy deps version consistent
@@ -51,7 +54,10 @@ buildPythonPackage rec {
     toml-adapt -path pyproject.toml -a change -dep niapy -ver X
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "niaaml" ];
 

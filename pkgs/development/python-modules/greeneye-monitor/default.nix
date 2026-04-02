@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   siobrultech-protocols,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "greeneye-monitor";
   version = "5.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jkeljo";

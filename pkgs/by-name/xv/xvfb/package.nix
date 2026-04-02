@@ -3,13 +3,15 @@
 {
   lib,
   stdenv,
+  meson,
+  ninja,
   pkg-config,
   xorg-server,
   dri-pkgconfig-stub,
   libdrm,
   libGL,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
   libxcvt,
   libxdmcp,
@@ -18,17 +20,19 @@
   libxkbfile,
   libxshmfence,
   mesa-gl-headers,
+  mesa,
   openssl,
   pixman,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   xkbcomp,
-  xkeyboardconfig,
+  xkeyboard-config,
   xorgproto,
   xtrans,
+  font-util,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvfb";
@@ -37,14 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
-    dri-pkgconfig-stub
-    libdrm
+    font-util
     libGL
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
     libxcvt
     libxdmcp
@@ -55,25 +62,44 @@ stdenv.mkDerivation (finalAttrs: {
     mesa-gl-headers
     openssl
     pixman
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     xorgproto
     xtrans
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    dri-pkgconfig-stub
+    libdrm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    mesa
   ];
 
-  configureFlags = [
-    "--enable-xvfb"
-    "--disable-xorg"
-    "--disable-xquartz"
-    "--disable-xwayland"
-    "--with-xkb-bin-directory=${xkbcomp}/bin"
-    "--with-xkb-path=${xkeyboardconfig}/share/X11/xkb"
-    "--with-xkb-output=$out/share/X11/xkb/compiled"
+  mesonFlags = [
+    "-Dxvfb=true"
+    "-Dxephyr=false"
+    "-Dxorg=false"
+    "-Dxnest=false"
+    "-Dsecure-rpc=false"
+    "-Dudev=false"
+    "-Dudev_kms=false"
+
+    "-Dlog_dir=/var/log"
+    "-Ddefault_font_path="
+
+    "-Dxkb_bin_dir=${xkbcomp}/bin"
+    "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
+    "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "--without-dtrace";
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "-Dxcsecurity=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Ddtrace=false"
+  ];
 
   meta = {
     description = "X virtual framebuffer";

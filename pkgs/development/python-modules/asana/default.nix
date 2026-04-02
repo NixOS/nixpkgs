@@ -6,7 +6,6 @@
   pytestCheckHook,
   python-dateutil,
   python-dotenv,
-  pythonOlder,
   setuptools,
   six,
   urllib3,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "5.2.2";
+  version = "5.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
     tag = "v${version}";
-    hash = "sha256-5GgBFZuiQDQXvZECIqY+kXTrUzkuoD8pJGKIg4TD1fw=";
+    hash = "sha256-GyNf5fr/cuwFSCQFsXno92ZOCVW88BWAVjzScVvnQdo=";
   };
 
   build-system = [ setuptools ];

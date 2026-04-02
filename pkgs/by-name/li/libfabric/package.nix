@@ -11,17 +11,17 @@
   numactl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfabric";
-  version = "2.3.1";
+  version = "2.4.0";
 
   enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "ofiwg";
     repo = "libfabric";
-    rev = "v${version}";
-    sha256 = "sha256-Zaf7iGr2/HWiMcH7zERz5Y9YzJ0QpHCCs+bU+qmoQTI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-C8k1caArVPBTtSggvAM7S660HpP99y9vac7oyf+HW2c=";
   };
 
   outputs = [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bzizou ];
   };
-}
+})

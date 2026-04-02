@@ -8,24 +8,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.8.6";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-30ltOQLobRy/M1v+0jFpBmH5ZkTmkZ+mQP7BX5RKo2s=";
+    hash = "sha256-v0wfdVhAOVCkxI59M7x7MneQrEK+Rfua4PcAcBq71Ho=";
   };
 
-  cargoHash = "sha256-BE7y4VlvINWdJM4/36CDn4YxPWUQnT22YJtcvjup0Ec=";
+  cargoHash = "sha256-WD2f9P42mGN3l111Cr3m75EppAWxsmFFsVSt8dc+RdQ=";
 
   # All integration tests require networking.
   postPatch = ''
     echo "fn main() {}" > tests/integration/main.rs
   '';
 
-  buildInputs = [ cmake ];
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
+  strictDeps = true;
 
   useNextest = true;
   checkFlags = [

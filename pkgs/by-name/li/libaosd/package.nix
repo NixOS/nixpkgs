@@ -5,20 +5,20 @@
   pkg-config,
   cairo,
   pango,
-  libX11,
-  libXcomposite,
+  libx11,
+  libxcomposite,
   autoconf,
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2.7-9-g177589f";
   pname = "libaosd";
 
   src = fetchFromGitHub {
     owner = "atheme-legacy";
     repo = "libaosd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1cn7k0n74p6jp25kxwcyblhmbdvgw3mikvj0m2jh4c6xccfrgb9a";
   };
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     pango
-    libX11
-    libXcomposite
+    libx11
+    libxcomposite
   ];
   enableParallelBuilding = true;
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ unode ];
     platforms = with lib.platforms; unix;
   };
-}
+})

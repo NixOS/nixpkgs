@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   qt5,
   cmake,
@@ -78,6 +77,7 @@ let
           "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
+          "-D warnings-as-errors=OFF" # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102
         ]
         ++ (overrides.cmakeFlags or [ ]);
 
@@ -136,7 +136,7 @@ let
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
         "-D oss=OFF"
-        "-D warnings-as-errors=OFF" # conversion error workaround
+        "-D warnings-as-errors=OFF" # `std::wstring_convert` deprecation workaround
         # building the overlay on darwin does not work in nipxkgs (yet)
         # also see the patch below to disable scripts the build option misses
         # see https://github.com/mumble-voip/mumble/issues/6816

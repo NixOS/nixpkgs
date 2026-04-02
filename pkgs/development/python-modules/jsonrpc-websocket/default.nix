@@ -7,7 +7,6 @@
   jsonrpc-base,
   pytest-asyncio_0,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "jsonrpc-websocket";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";

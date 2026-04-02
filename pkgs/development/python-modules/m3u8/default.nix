@@ -5,7 +5,6 @@
   iso8601,
   bottle,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "m3u8";
   version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "globocom";
@@ -47,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/globocom/m3u8";
     changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 }

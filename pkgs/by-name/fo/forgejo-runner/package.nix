@@ -22,6 +22,7 @@ let
     # Requires running Docker daemon
     "TestDocker"
     "TestJobExecutor"
+    "TestRunExec"
     "TestRunner"
     "Test_validateCmd"
 
@@ -46,19 +47,19 @@ let
     "TestMergeJobOptions"
   ];
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.4.0";
+  version = "12.7.3";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
-    rev = "v${version}";
-    hash = "sha256-e7IDkeeEz8uAZ8WbRnBjSGq3SXVt5NY5li/3s/kf6dY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HVkyn2MYGAFv0eTDnjs9qB1Kd2v98+hQkNNVFs7KrWs=";
   };
 
-  vendorHash = "sha256-oCSAehLC5NiL0Ttp+FeHQyTQYNh/59I1i0UfbwWPeRE=";
+  vendorHash = "sha256-8L3bJtV3kgxRILV7mIY3r77VQuaPn7whwMNWwq5NGN4=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -72,7 +73,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${finalAttrs.src.rev}"
   ];
 
   checkFlags = [
@@ -95,22 +96,23 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru = {
     updateScript = nix-update-script { };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      sqlite3 = nixosTests.forgejo.sqlite3;
+      latest = nixosTests.forgejo.sqlite3;
+      lts = nixosTests.forgejo-lts.sqlite3;
     };
   };
 
   meta = {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nrabulinski ];
     teams = [ lib.teams.forgejo ];
     mainProgram = "forgejo-runner";
   };
-}
+})

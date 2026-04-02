@@ -5,7 +5,7 @@ let
     "man-db"
   ];
 
-  machineNames = builtins.map machineSafe manImplementations;
+  machineNames = map machineSafe manImplementations;
 
   makeConfig = useImpl: {
     # Note: mandoc currently can't index symlinked section directories.
@@ -26,7 +26,7 @@ let
         generateCaches = true;
       }
       // lib.listToAttrs (
-        builtins.map (impl: {
+        map (impl: {
           name = impl;
           value = {
             enable = useImpl == impl;
@@ -43,7 +43,7 @@ in
   meta.maintainers = [ lib.maintainers.sternenseemann ];
 
   nodes = lib.listToAttrs (
-    builtins.map (i: {
+    map (i: {
       name = machineSafe i;
       value = makeConfig i;
     }) manImplementations
@@ -88,6 +88,8 @@ in
       ${machine}.succeed("man 3 libunwind > /dev/null")
       # NixOS configuration man page is installed
       ${machine}.succeed("man configuration.nix > /dev/null")
+      # Linux `man-pages` work
+      ${machine}.succeed("man 5 proc_vmstat > /dev/null")
 
     with subtest("Test generateCaches via man -k in ${machine}"):
       expected = [
@@ -97,6 +99,7 @@ in
         ("user", "userdel", 8),
         ("mem", "free", 3),
         ("mem", "free", 1),
+        ("statistics", "proc_vmstat", 5),
       ]
 
       for (keyword, page, section) in expected:

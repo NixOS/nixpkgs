@@ -85,36 +85,6 @@ in
 }@args:
 
 let
-  # This is a function from parsed platforms (like
-  # stdenv.hostPlatform.parsed) to parsed platforms.
-  makeMuslParsedPlatform =
-    parsed:
-    # The following line guarantees that the output of this function
-    # is a well-formed platform with no missing fields.  It will be
-    # uncommented in a separate PR, in case it breaks the build.
-    #(x: lib.trivial.pipe x [ (x: removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
-    (
-      parsed
-      // {
-        abi =
-          {
-            gnu = lib.systems.parse.abis.musl;
-            gnueabi = lib.systems.parse.abis.musleabi;
-            gnueabihf = lib.systems.parse.abis.musleabihf;
-            gnuabin32 = lib.systems.parse.abis.muslabin32;
-            gnuabi64 = lib.systems.parse.abis.muslabi64;
-            gnuabielfv2 = lib.systems.parse.abis.musl;
-            gnuabielfv1 = lib.systems.parse.abis.musl;
-            # The following two entries ensure that this function is idempotent.
-            musleabi = lib.systems.parse.abis.musleabi;
-            musleabihf = lib.systems.parse.abis.musleabihf;
-            muslabin32 = lib.systems.parse.abis.muslabin32;
-            muslabi64 = lib.systems.parse.abis.muslabi64;
-          }
-          .${parsed.abi.name} or lib.systems.parse.abis.musl;
-      }
-    );
-
   stdenvAdapters =
     self: super:
     let
@@ -134,8 +104,7 @@ let
       inherit lib;
       inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
-      inherit (self.pkgsBuildHost.xorg) lndir;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal lndir;
     };
 
   stdenvBootstappingAndPlatforms =
@@ -186,7 +155,11 @@ let
           overlays
           ;
       } res self super;
+
+      conflictingAttrs = lib.intersectAttrs res super;
     in
+    assert lib.assertMsg (conflictingAttrs == { })
+      "The following attributes were defined both in `pkgs/top-level/all-packages.nix` and elsewhere, most likely in `pkgs/by-name/`: ${lib.concatStringsSep ", " (lib.attrNames conflictingAttrs)}";
     res;
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
@@ -200,7 +173,6 @@ let
           nixpkgsFun
           stdenv
           overlays
-          makeMuslParsedPlatform
           ;
       } self super
     );
@@ -269,12 +241,16 @@ let
           ]
           ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.i686;
-              }
-            );
+            config =
+              if isSupported then
+                lib.systems.parse.tripleFromSystem (
+                  stdenv.hostPlatform.parsed
+                  // {
+                    cpu = lib.systems.parse.cpuTypes.i686;
+                  }
+                )
+              else
+                "i686-unknown-linux-gnu";
           };
         }
       else
@@ -320,7 +296,7 @@ let
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
           if stdenv.hostPlatform.isLinux then
-            makeMuslParsedPlatform stdenv.hostPlatform.parsed
+            lib.systems.parse.mkMuslSystem stdenv.hostPlatform.parsed
           else
             stdenv.hostPlatform.parsed
         );

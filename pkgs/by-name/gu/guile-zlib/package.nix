@@ -9,7 +9,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-zlib";
   version = "0.2.2";
 
@@ -17,9 +17,14 @@ stdenv.mkDerivation rec {
     domain = "notabug.org";
     owner = "guile-zlib";
     repo = "guile-zlib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aaZhwHimQq408DNtHy442kh/EYdRdxP0Z1tQGDKmkmc=";
   };
+
+  patches = [
+    # fix path to libz.so to sharedlibdir from zlib.pc
+    ./guile-zlib-change-zlib-path-from-libdir-to-sharedlibdir.diff
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -41,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

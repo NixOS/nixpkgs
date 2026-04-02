@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -20,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "equinox";
-  version = "0.13.2";
+  version = "0.13.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    tag = "v${version}";
-    hash = "sha256-d7IqRuohcZ3IYpbjm76Ir6I33zI5dnHvX5eX2WjSJQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OETWXAcCp945mMrpC8U4gSBvEeQX8RoUGZR4irBs7Ak=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -39,12 +38,6 @@ buildPythonPackage rec {
       --replace-fail "speed < 0.5" "speed < 1" \
       --replace-fail "speed < 1" "speed < 20" \
       --replace-fail "speed < 2" "speed < 20"
-  ''
-  # Fix jax 0.8.2 compat
-  # Fix submitted upstream: https://github.com/patrick-kidger/equinox/pull/1162
-  + ''
-    substituteInPlace equinox/_ad.py equinox/internal/_primitive.py \
-      --replace-fail "jax.core.get_aval(" "jax.typeof("
   '';
 
   build-system = [ hatchling ];
@@ -68,22 +61,27 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
+  disabledTestPaths = [
+    # ValueError: not enough values to unpack (expected 2, got 0)
+    "tests/test_finalise_jaxpr.py"
+  ];
+
   disabledTests = [
     # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
+    # Reported upstream: https://github.com/patrick-kidger/equinox/issues/1186
     "test_jax_transform_warn"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_filter"
+
+    # Flaky: AssertionError: Non-linear scaling detected
+    "test_speed_buffer_while"
   ];
 
   pythonImportsCheck = [ "equinox" ];
 
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
-    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/patrick-kidger/equinox";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

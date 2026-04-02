@@ -76,6 +76,9 @@ let
       ./update.sh
       ./.
     ];
+    # R-ryantm does not respect the commit feature, leading to inaccurate
+    # commit messages because it only sees the Linux version numbers.
+    # nixpkgs-update: no auto update
     supportedFeatures = [ "commit" ];
   };
 

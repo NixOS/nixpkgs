@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ponyc";
-  version = "0.60.4";
+  version = "0.60.6";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     tag = version;
-    hash = "sha256-L5qqAu0OozsN6zxC3iwdYTLdd1ux4Dl3bFx6XDD3ZbY=";
+    hash = "sha256-mBtSoFOX0dHtb0ojdT+uB1Lmu7Cak/3A8808dv3o1ik=";
     fetchSubmodules = true;
   };
 
@@ -98,6 +98,20 @@ stdenv.mkDerivation rec {
         --replace-fail "https://github.com/google/benchmark/archive/v$benchmarkRev.tar.gz" "$NIX_BUILD_TOP/deps/benchmark-$benchmarkRev.tar" \
         --replace-fail "https://github.com/google/googletest/releases/download/v$googletestRev/googletest-$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
+
+  # We do not concern ourselves with darwin as the ponyc compiler
+  # has logic which overrides this environmental variable in this
+  # case.
+  env.arch =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86-64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "armv8-a"
+    else
+      lib.warn ''
+        architecture '${stdenv.hostPlatform.system}' compiles with native optimizations,
+        this may result in crashes on incompatible CPUs!
+      '' "native";
 
   preBuild = ''
     extraFlags=(build_flags=-j$NIX_BUILD_CORES)

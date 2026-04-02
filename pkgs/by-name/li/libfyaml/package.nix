@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfyaml";
-  version = "0.9";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
     repo = "libfyaml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Id5pdFzjA9q67okfESO3LZH8jIz93mVgIEEuBbPjuGI=";
+    hash = "sha256-2cbw67gDcp5ufsSp+QQg8vOQx0cFcM2rTkAQ/53XB8I=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pantoniou/libfyaml";
     changelog = "https://github.com/pantoniou/libfyaml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ilkecan ];
     pkgConfigModules = [ "libfyaml" ];
     platforms = lib.platforms.all;
   };

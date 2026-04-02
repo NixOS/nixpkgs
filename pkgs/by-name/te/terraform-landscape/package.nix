@@ -18,7 +18,6 @@ bundlerApp {
     license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [
       mbode
-      manveru
       nicknovitski
     ];
     platforms = lib.platforms.unix;

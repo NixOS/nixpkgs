@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   async-timeout,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyevilgenius";
   version = "2.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

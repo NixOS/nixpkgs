@@ -10,14 +10,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scantailor-advanced";
   version = "1.0.19";
 
   src = fetchFromGitHub {
     owner = "vigri";
     repo = "scantailor-advanced";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mvoCoYdRTgXW5t8yd9Y9TOl7D3RDVwcjUv2YDUWrtRI=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; gnu ++ linux ++ darwin;
   };
-}
+})

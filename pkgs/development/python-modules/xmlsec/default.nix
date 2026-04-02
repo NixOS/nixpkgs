@@ -1,65 +1,88 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  hypothesis,
+  fetchFromGitHub,
+
+  # build-system
+  pkgconfig,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  pkg-config,
+  # pkgconfig,
+
+  # buildInputs
   libtool,
   libxml2,
   libxslt,
-  lxml,
-  pkg-config,
-  pkgconfig,
-  pytestCheckHook,
-  setuptools-scm,
   xmlsec,
+
+  # dependencies
+  lxml,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmlsec";
-  version = "1.3.16";
+  version = "1.3.17";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-K2xwVExtHUygBqqjFJWODvNRTcgf/94bI/LsQaV5H50=";
+  src = fetchFromGitHub {
+    owner = "xmlsec";
+    repo = "python-xmlsec";
+    tag = finalAttrs.version;
+    hash = "sha256-p3V75DLUI2PKdharP3/0HrKOgma9Kh3lAOZLRAQjo80=";
   };
 
-  build-system = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>="
+  '';
+
+  build-system = [
+    pkgconfig
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     pkg-config
-    pkgconfig
   ];
 
   buildInputs = [
-    xmlsec
-    libxslt
-    libxml2
     libtool
+    libxml2
+    libxslt
+    xmlsec
   ];
 
-  propagatedBuildInputs = [ lxml ];
+  dependencies = [ lxml ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     hypothesis
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
     # Full git clone required for test_doc_examples
     "tests/test_doc_examples.py"
-    # test_reinitialize_module segfaults python
-    # https://github.com/mehcode/python-xmlsec/issues/203
-    "tests/test_xmlsec.py"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: memory leak detected
+    "test_reinitialize_module"
   ];
 
   pythonImportsCheck = [ "xmlsec" ];
 
   meta = {
     description = "Python bindings for the XML Security Library";
-    homepage = "https://github.com/mehcode/python-xmlsec";
-    changelog = "https://github.com/xmlsec/python-xmlsec/releases/tag/${version}";
+    homepage = "https://github.com/xmlsec/python-xmlsec";
+    changelog = "https://github.com/xmlsec/python-xmlsec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
-}
+})

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -24,8 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wbg";
   version = "1.3.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "wbg";
     tag = finalAttrs.version;

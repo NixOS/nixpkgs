@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   cython,
   setuptools,
@@ -18,13 +17,12 @@
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.11";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  version = "0.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4Ie8fuk9CKdn/64TsCfN2No2dU16ICpBRWYerqqF0/0=";
+    hash = "sha256-Esv0iLBlXcBaoYoMpZgt6XAwJgTkYfyS6H69m3U5tv8=";
   };
 
   nativeBuildInputs = [

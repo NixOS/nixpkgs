@@ -107,7 +107,7 @@ in
       environment.etc = lib.mkIf (cfg.settings != { }) {
         atoprc.text = lib.concatStrings (
           lib.mapAttrsToList (n: v: ''
-            ${n} ${builtins.toString v}
+            ${n} ${toString v}
           '') cfg.settings
         );
       };

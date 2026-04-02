@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "timescaledb-tune";
   version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-tune";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-SC91yO3P2Q2QachSfAAzz7ldcnZedZfcnVXHcFXNrIk=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

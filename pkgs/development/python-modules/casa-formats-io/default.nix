@@ -6,7 +6,6 @@
   fetchPypi,
   numpy,
   oldest-supported-numpy,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   version = "0.3.0";
   format = "setuptools";
   prproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "casa_formats_io";

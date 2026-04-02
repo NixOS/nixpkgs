@@ -5,14 +5,14 @@
   installShellFiles,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netfetch";
   version = "5.2.10";
 
   src = fetchFromGitHub {
     owner = "deggja";
     repo = "netfetch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-N3wKpWdG92cXH0TwAkcsld9TRrfPRkbw0uZY/X4d+xk=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/deggja/netfetch/backend/cmd.Version=${version}"
+    "-X github.com/deggja/netfetch/backend/cmd.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -45,4 +45,4 @@ buildGoModule rec {
     mainProgram = "netfetch";
     maintainers = with lib.maintainers; [ banh-canh ];
   };
-}
+})

@@ -53,7 +53,15 @@ let
       };
 
     in
-    app.overrideAttrs (oldAttrs: oldAttrs // { inherit meta; });
+    app.overrideAttrs (
+      oldAttrs:
+      oldAttrs
+      // {
+        pname = "xcode";
+        inherit version;
+        inherit meta;
+      }
+    );
 
 in
 lib.makeExtensible (self: {
@@ -117,6 +125,8 @@ lib.makeExtensible (self: {
   xcode_26_1_1_Apple_silicon = requireXcode "26.1.1_Apple_silicon" "sha256-5dZ1O7iD2CF8R4TBeBLkaKLe/WOi8CMJJ1/Bg+uitCw=";
   xcode_26_2 = requireXcode "26.2_Universal" "sha256-uCw71PjAuvtKTIpcYsiFSjUZQnIBIpIoOm1QaaYHD7k=";
   xcode_26_2_Apple_silicon = requireXcode "26.2_Apple_silicon" "sha256-YxMVppJwRzTA6xWOILxVjLdl0bNmtZSifG/KQx6inRE=";
+  xcode_26_3 = requireXcode "26.3_Universal" "sha256-qrPSc036x3tW1TWWfX10+IS2c08dRCa6KFc+++35ueM=";
+  xcode_26_3_Apple_silicon = requireXcode "26.3_Apple_silicon" "sha256-q2p45zqAZUH6Z1Q3DHbZgpuuFTjZoMPhEfFdeIUvclw=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (

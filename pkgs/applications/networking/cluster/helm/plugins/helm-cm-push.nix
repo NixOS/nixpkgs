@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "helm-cm-push";
-  version = "0.10.4";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "chartmuseum";
     repo = "helm-push";
     rev = "v${version}";
-    hash = "sha256-YnhI1/BDk9swr3YFm5ajGf4LLgPty7blA2tlsMH0erY=";
+    hash = "sha256-a3+07/Kc0m679ONDldjRs9+E2sqFGsUWuEQPutM+jK4=";
   };
 
-  vendorHash = "sha256-7bUDKqkvBV1Upcrj4DQnVCP74QtKlSwF0Kl2sPFZpjc=";
+  vendorHash = "sha256-W7nWiWCLrzevunxYoDAqVbG5LhG+VXCAeI1D78fQQvw=";
 
   subPackage = [ "cmd/helm-cm-push" ];
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
   markdown-it-py,
   pytest-regressions,
@@ -11,21 +10,19 @@
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdit-py-plugins";
     tag = "v${version}";
-    hash = "sha256-aY2DMLh1OkWVcN6A29FLba1ETerf/EOqSjHVpsdE21M=";
+    hash = "sha256-MQU6u49KsWGaKeWU5v066kZidcfCoubqClxAapAZb9A=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ markdown-it-py ];
+  dependencies = [ markdown-it-py ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -37,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of core plugins for markdown-it-py";
     homepage = "https://github.com/executablebooks/mdit-py-plugins";
-    changelog = "https://github.com/executablebooks/mdit-py-plugins/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/mdit-py-plugins/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

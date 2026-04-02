@@ -7,7 +7,7 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "decoders-ezjsonm";
 
   # sub-package built separately from the same source
@@ -29,8 +29,8 @@ buildDunePackage rec {
   meta = {
     description = "Ezjsonm backend for decoders";
     homepage = "https://github.com/mattjbray/ocaml-decoders";
-    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

@@ -9,7 +9,7 @@
   gdk-pixbuf,
   glib,
   gtk2,
-  libX11,
+  libx11,
   pango,
 }:
 
@@ -34,11 +34,15 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk2
-    libX11
+    libx11
     pango
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = toString [
+    "--as-needed"
+    "-rpath"
+    (lib.makeLibraryPath buildInputs)
+  ];
 
   buildPhase = ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi

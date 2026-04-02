@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  intltool,
   autoreconfHook,
   pkg-config,
   libqalculate,
@@ -14,19 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "5.8.2";
+  version = "5.10.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jJKy3LKO2ihtXtYMSOlVvq8RAfgpcxDgE8Ud9Fzd/Qg=";
+    hash = "sha256-JZfolSRLRLtv529f25lEPYOlz+y+EdRqKA0Y5d1dK3s=";
   };
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    intltool
     pkg-config
     autoreconfHook
     wrapGAppsHook3

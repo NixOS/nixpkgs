@@ -6,12 +6,12 @@
   typst,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst-live";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-bR4Rhhs6rAC6C1nfPFj/3rCtfEziuTGn5m33CR0qZkU=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "typst-live";
   };
-}
+})

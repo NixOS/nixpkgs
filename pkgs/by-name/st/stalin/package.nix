@@ -3,7 +3,7 @@
   lib,
   stdenv,
   ncompress,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncompress
-    libX11
+    libx11
   ];
 
   buildPhase = "./build ";

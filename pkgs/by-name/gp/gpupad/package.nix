@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
 
   glslang,
@@ -17,26 +16,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpupad";
-  version = "2.7.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "gpupad";
     tag = finalAttrs.version;
-    hash = "sha256-Y0LNz8qHNfYhkh+ukJFi56zdaNIy5Gfvena+gSo0oOo=";
+    hash = "sha256-eZ9RhFPk7eV5xmp112E71xOc55GFkI0G8WTvyjxqGsM=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # the current version of glslang no longer separates its libs into sublibs
-    ./glslang-use-combined-lib.patch
-
-    (fetchpatch {
-      name = "add-missing-inline.patch";
-      url = "https://github.com/houmain/gpupad/commit/52fcb3619e5e2698a8c11a97668670a5cd0531a8.patch";
-      hash = "sha256-FnC5uKickZVPVr+y1Thvtk+Xi38V0AHBYGU+x64EXrA=";
-    })
-  ];
 
   strictDeps = true;
 

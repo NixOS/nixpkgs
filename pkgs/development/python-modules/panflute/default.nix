@@ -4,15 +4,12 @@
   click,
   pyyaml,
   buildPythonPackage,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "panflute";
   version = "2.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://scorreia.com/software/panflute";
     changelog = "https://github.com/sergiocorreia/panflute/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
   };
 }

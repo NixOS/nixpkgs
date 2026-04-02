@@ -3,8 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
-  # Remove "? null" once https://github.com/NixOS/nixpkgs/pull/444714 is merged
-  tt-smi ? null,
+  tt-smi,
   pstree,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-system-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bJtDfOXwtIKQMu8B+5/UYLmwBv/KTtGEsxAUhF2w6OY=";
+    hash = "sha256-fqmMO6Zo61gO0HtKasSKTt7kC8YGr5crymwbqVNQLck=";
   };
 
   nativeBuildInputs = [

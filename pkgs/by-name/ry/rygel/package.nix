@@ -23,7 +23,7 @@
   gst_all_1,
   libgee,
   libsoup_3,
-  libX11,
+  libx11,
   withGtk ? true,
   gtk4,
   libmediaart,
@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "45.0";
+  version = "45.1";
 
   # TODO: split out lib
   outputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.major finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gmZ7kC/AZy5kz5HrcnpwE3qP3+ej2aTBWLD0sfxwCII=";
+    hash = "sha256-zzhuKA2Or5tmd6L0i6eEhMcqCVVNXFjFHNh/pZRWF8g=";
   };
 
   patches = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Move this to withGtk when it's not unconditionally included
     # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
     # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
-    libX11
+    libx11
     sqlite
     systemd
     tinysparql

@@ -5,7 +5,6 @@
   networkx,
   numpy,
   pytest8_3CheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   # https://github.com/gtaylor/python-colormath/issues/104
   version = "3.0.0-unstable-2021-04-17";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gtaylor";

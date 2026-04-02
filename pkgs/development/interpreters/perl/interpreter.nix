@@ -85,7 +85,8 @@ let
 in
 
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     inherit version;
     pname = "perl";
 
@@ -296,9 +297,16 @@ stdenv.mkDerivation (
         perlOnHostForHost = override pkgsHostHost.${perlAttr};
         perlOnTargetForTarget =
           if lib.hasAttr perlAttr pkgsTargetTarget then (override pkgsTargetTarget.${perlAttr}) else { };
-      };
 
-    doCheck = false; # some tests fail, expensive
+        tests.withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+          preCheck = ''
+            # Weird test failure, can't even understand what it's about
+            # Disable the test for now
+            sed -i '/ext\/Pod-Html\/t\/htmldir3.*/d' MANIFEST
+          '';
+          doCheck = true;
+        });
+      };
 
     # TODO: it seems like absolute paths to some coreutils is required.
     postInstall = ''
@@ -351,10 +359,14 @@ stdenv.mkDerivation (
       description = "Standard implementation of the Perl 5 programming language";
       license = lib.licenses.artistic1;
       maintainers = [ ];
-      teams = [ lib.teams.perl ];
+      teams = [
+        lib.teams.perl
+        lib.teams.security-review
+      ];
       platforms = lib.platforms.all;
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
       mainProgram = "perl";
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "perl" finalAttrs.version;
     };
   }
   // lib.optionalAttrs crossCompiling rec {

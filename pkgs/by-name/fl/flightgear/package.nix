@@ -7,33 +7,34 @@
   freealut,
   libGLU,
   libGL,
-  libICE,
+  libice,
   libjpeg,
   openal,
   plib,
-  libSM,
+  libsm,
   libunwind,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXi,
-  libXmu,
-  libXt,
+  libxext,
+  libxi,
+  libxmu,
+  libxt,
   simgear,
   zlib,
   boost,
   cmake,
   libpng,
   udev,
-  fltk13,
+  fltk_1_3,
   apr,
   qt5,
   glew,
   curl,
+  nix-update-script,
 }:
 
 let
-  version = "2024.1.3";
+  version = "2024.1.4";
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
@@ -41,8 +42,8 @@ let
     src = fetchFromGitLab {
       owner = "flightgear";
       repo = "fgdata";
-      tag = "${version}";
-      hash = "sha256-LNHO/W8p4b8fYcehdfVecldKQ9uJp1zlg60xdgDC45c=";
+      tag = version;
+      hash = "sha256-0cIOyQhw/+jqwO1OddBC09ZnvrmtyjSoMhcu1tuwx4k=";
     };
 
     dontUnpack = true;
@@ -62,8 +63,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
-    tag = "${version}";
-    hash = "sha256-m4bbWwMXwKJrMkb6svGrIZhcsPghrTMgFs8JCx3Wn/A=";
+    tag = version;
+    hash = "sha256-s897bsHsVP0OAcrwDVRTPz3YNJkynyErJpH18oLPl3Y=";
   };
 
   nativeBuildInputs = [
@@ -75,25 +76,25 @@ stdenv.mkDerivation rec {
     freealut
     libGLU
     libGL
-    libICE
+    libice
     libjpeg
     openal
     openscenegraph
     plib
-    libSM
+    libsm
     libunwind
-    libX11
+    libx11
     xorgproto
-    libXext
-    libXi
-    libXmu
-    libXt
+    libxext
+    libxi
+    libxmu
+    libxt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost
     libpng
     udev
-    fltk13
+    fltk_1_3
     apr
     qt5.qtbase
     qt5.qtquickcontrols2
@@ -109,9 +110,14 @@ stdenv.mkDerivation rec {
     rm -rf "$out/appdir"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Flight simulator";
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      kirillrdy
+    ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = lib.licenses.gpl2Plus;

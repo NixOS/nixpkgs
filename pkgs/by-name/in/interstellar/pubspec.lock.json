@@ -244,11 +244,11 @@
       "dependency": "direct main",
       "description": {
         "name": "crypto",
-        "sha256": "1e445881f28f22d6140f181e07737b22f1e099a5e1ff94b0af2f9e4a463f4855",
+        "sha256": "c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.6"
+      "version": "3.0.7"
     },
     "csslib": {
       "dependency": "transitive",
@@ -978,21 +978,21 @@
       "dependency": "direct main",
       "description": {
         "name": "media_kit",
-        "sha256": "48c10c3785df5d88f0eef970743f8c99b2e5da2b34b9d8f9876e598f62d9e776",
+        "sha256": "2a207ea7baf1a2ea2ff2016d512e572ca6fc02a937769effb5c27b4d682b4a53",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.2.0"
+      "version": "1.2.3"
     },
     "media_kit_libs_android_video": {
       "dependency": "transitive",
       "description": {
         "name": "media_kit_libs_android_video",
-        "sha256": "adff9b571b8ead0867f9f91070f8df39562078c0eb3371d88b9029a2d547d7b7",
+        "sha256": "3f6274e5ab2de512c286a25c327288601ee445ed8ac319e0ef0b66148bd8f76c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.3.7"
+      "version": "1.3.8"
     },
     "media_kit_libs_ios_video": {
       "dependency": "transitive",
@@ -1028,11 +1028,11 @@
       "dependency": "direct main",
       "description": {
         "name": "media_kit_libs_video",
-        "sha256": "958cc55e7065d9d01f52a2842dab2a0812a92add18489f1006d864fb5e42a3ef",
+        "sha256": "2b235b5dac79c6020e01eef5022c6cc85fedc0df1738aadc6ea489daa12a92a9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.6"
+      "version": "1.0.7"
     },
     "media_kit_libs_windows_video": {
       "dependency": "transitive",
@@ -1048,11 +1048,11 @@
       "dependency": "direct main",
       "description": {
         "name": "media_kit_video",
-        "sha256": "a656a9463298c1adc64c57f2d012874f7f2900f0c614d9545a3e7b8bb9e2137b",
+        "sha256": "afaa509e7b7e0bf247557a3a740cde903a52c34ace9810f94500e127bd7b043d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.3.0"
+      "version": "2.0.1"
     },
     "meta": {
       "dependency": "transitive",
@@ -1303,26 +1303,6 @@
       },
       "source": "hosted",
       "version": "2.0.1"
-    },
-    "screen_brightness_android": {
-      "dependency": "transitive",
-      "description": {
-        "name": "screen_brightness_android",
-        "sha256": "d34f5321abd03bc3474f4c381f53d189117eba0b039eac1916aa92cca5fd0a96",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.1.3"
-    },
-    "screen_brightness_platform_interface": {
-      "dependency": "transitive",
-      "description": {
-        "name": "screen_brightness_platform_interface",
-        "sha256": "737bd47b57746bc4291cab1b8a5843ee881af499514881b0247ec77447ee769c",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.1.0"
     },
     "screen_retriever": {
       "dependency": "transitive",
@@ -1910,16 +1890,6 @@
       "source": "hosted",
       "version": "15.0.2"
     },
-    "volume_controller": {
-      "dependency": "transitive",
-      "description": {
-        "name": "volume_controller",
-        "sha256": "d75039e69c0d90e7810bfd47e3eedf29ff8543ea7a10392792e81f9bded7edf5",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "3.4.0"
-    },
     "wakelock_plus": {
       "dependency": "transitive",
       "description": {
@@ -1981,14 +1951,15 @@
       "version": "3.0.3"
     },
     "webcrypto": {
-      "dependency": "transitive",
+      "dependency": "direct overridden",
       "description": {
-        "name": "webcrypto",
-        "sha256": "e393b3d0b01694a8f81efecf278ed7392877130e6e7b29f578863e4f2d0b2ebd",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "dbb909449cee4b62f352a41038243a1c10690323",
+        "resolved-ref": "dbb909449cee4b62f352a41038243a1c10690323",
+        "url": "https://github.com/matehat/webcrypto.dart.git"
       },
-      "source": "hosted",
-      "version": "0.5.8"
+      "source": "git",
+      "version": "0.6.0"
     },
     "webpush_encryption": {
       "dependency": "direct main",
@@ -2094,15 +2065,15 @@
       "dependency": "direct main",
       "description": {
         "name": "youtube_explode_dart",
-        "sha256": "9ff345caf8351c59eb1b7560837f761e08d2beaea3b4187637942715a31a6f58",
+        "sha256": "3d731d71df9901b1915bae806781df519cff32517e36db279f844ae619669e45",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.5.2"
+      "version": "3.0.5"
     }
   },
   "sdks": {
     "dart": ">=3.9.0 <4.0.0",
-    "flutter": "3.38.4"
+    "flutter": "3.38.5"
   }
 }

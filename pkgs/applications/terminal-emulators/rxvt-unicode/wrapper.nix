@@ -45,7 +45,7 @@ let
       perlDeps = (config.perlDeps or [ ]) ++ lib.concatMap mkPerlDeps plugins;
     in
     symlinkJoin {
-      name = "rxvt-unicode-${rxvt-unicode-unwrapped.version}";
+      pname = "rxvt-unicode";
 
       paths = [ rxvt-unicode-unwrapped ] ++ plugins ++ extraDeps;
 
@@ -60,7 +60,7 @@ let
           --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
       '';
 
-      inherit (rxvt-unicode-unwrapped) meta;
+      inherit (rxvt-unicode-unwrapped) meta version;
 
       passthru = {
         plugins = plugins;

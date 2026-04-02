@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (lib.optional isFullBuild python3Packages.pyyaml);
 
-  buildInputs = lib.optional isFullBuild linuxHeaders;
+  buildInputs = lib.optional (isFullBuild && stdenv.hostPlatform.isLinux) linuxHeaders;
 
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 

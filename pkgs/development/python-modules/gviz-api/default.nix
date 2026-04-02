@@ -11,7 +11,8 @@ buildPythonPackage rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     sha256 = "a05055fed8c279f34f4b496eace7648c7fe9c1b06851e8a36e748541f1adbb05";
   };
 

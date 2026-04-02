@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alcove";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://github.com/henrikruscon/alcove-releases/releases/download/${finalAttrs.version}/Alcove.zip";
-    hash = "sha256-9SYqvJqLC4h4AcK/F86S7H15PiW+tcmaF83ILdc/ejE=";
+    hash = "sha256-MhwtQDuDKP4vLPvOxSe9pY2W//dHplHlu6YvxfswNOg=";
   };
 
   sourceRoot = ".";

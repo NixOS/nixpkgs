@@ -28,11 +28,11 @@
   lib,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxi,
+  libxrender,
+  libxxf86vm,
   libdecor,
   libepoxy,
   libffi,
@@ -99,7 +99,6 @@ let
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
-    withOsl = false;
   });
 
   libdecor' = libdecor.overrideAttrs (old: {
@@ -125,6 +124,9 @@ stdenv'.mkDerivation (finalAttrs: {
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
     hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
+
+  # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
+  patches = lib.optional rocmSupport ./hiprt-3-compat.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -165,7 +167,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
-    (lib.cmakeBool "WITH_CYCLES_OSL" false)
+    (lib.cmakeBool "WITH_CYCLES_OSL" true)
     (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
@@ -265,6 +267,7 @@ stdenv'.mkDerivation (finalAttrs: {
     pugixml
     python3
     python3Packages.materialx
+    python3Packages.openshadinglanguage
     rubberband
     zlib
     zstd
@@ -277,11 +280,11 @@ stdenv'.mkDerivation (finalAttrs: {
       [
         libGL
         libGLU
-        libX11
-        libXext
-        libXi
-        libXrender
-        libXxf86vm
+        libx11
+        libxext
+        libxi
+        libxrender
+        libxxf86vm
         openal
         openxr-loader
       ]
@@ -322,6 +325,7 @@ stdenv'.mkDerivation (finalAttrs: {
     [
       ps.materialx
       ps.numpy_1
+      ps.openshadinglanguage
       ps.requests
       ps.zstandard
     ]
@@ -342,7 +346,7 @@ stdenv'.mkDerivation (finalAttrs: {
       mv $out/Blender.app $out/Applications
     ''
     + ''
-      buildPythonPath "$pythonPath"
+      buildPythonPath "''${pythonPath[*]}"
       wrapProgram $blenderExecutable \
         --prefix PATH : $program_PATH \
         --prefix PYTHONPATH : "$program_PYTHONPATH" \

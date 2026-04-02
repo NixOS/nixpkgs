@@ -15,7 +15,6 @@
   pypdf,
   pytestCheckHook,
   python-fontconfig,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.31.0";
+  version = "3.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     tag = "v${version}";
-    hash = "sha256-thgLt1PHXbKxDDhqQcHUP/AZsGq/OfAOSRV9KrFmPWw=";
+    hash = "sha256-3SE54ihJY5zs4YIROalHhKoeCiXCk6wYgaOBHEP3ze0=";
   };
 
   postPatch = ''

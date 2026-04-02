@@ -32,6 +32,9 @@ let
       )
     );
   inherit (vmr) targetRid releaseManifest;
+  sdkVersion = releaseManifest.sdkVersion;
+  runtimeVersion = releaseManifest.runtimeVersion;
+  aspnetcoreVersion = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
 
   # TODO: do this properly
   hostRid = targetRid;
@@ -91,8 +94,10 @@ let
     (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
     (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
     (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
-    (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
   ]
+  ++ lib.optional vmr.hasILCompiler (
+    mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version
+  )
   ++ lib.optionals (lib.versionOlder runtime.version "9") [
     (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
     (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
@@ -111,12 +116,15 @@ let
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
       (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+    ]
+    ++ lib.optionals (lib.versionAtLeast runtime.version "10") [
+      (mkPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${targetRid}" runtime.version)
     ];
   };
 
-  sdk = mkCommon "sdk" rec {
+  sdk = mkCommon "sdk" {
     pname = "${baseName}-sdk";
-    version = releaseManifest.sdkVersion;
+    version = sdkVersion;
 
     src = vmr;
     dontUnpack = true;
@@ -136,7 +144,7 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src"/lib/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
+      cp -r "$src"/lib/dotnet-sdk-${sdkVersion}-${targetRid} "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
@@ -159,7 +167,10 @@ let
     '';
 
     ${
-      if stdenvNoCC.hostPlatform.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null
+      if stdenvNoCC.hostPlatform.isDarwin && lib.versionAtLeast sdkVersion "10" then
+        "postInstall"
+      else
+        null
     } =
       ''
         mkdir -p "$out"/nix-support
@@ -182,9 +193,9 @@ let
     };
   };
 
-  runtime = mkCommon "runtime" rec {
+  runtime = mkCommon "runtime" {
     pname = "${baseName}-runtime";
-    version = releaseManifest.runtimeVersion;
+    version = runtimeVersion;
 
     src = vmr;
     dontUnpack = true;
@@ -193,7 +204,7 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/lib/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${runtimeVersion}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
@@ -210,9 +221,9 @@ let
     };
   };
 
-  aspnetcore = mkCommon "aspnetcore" rec {
+  aspnetcore = mkCommon "aspnetcore" {
     pname = "${baseName}-aspnetcore-runtime";
-    version = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
+    version = aspnetcoreVersion;
 
     src = vmr;
     dontUnpack = true;
@@ -226,7 +237,7 @@ let
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/lib/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
+      cp -Tr "$src/lib/aspnetcore-runtime-${aspnetcoreVersion}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall

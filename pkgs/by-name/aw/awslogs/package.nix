@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awslogs";
   version = "0.15.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jorgebastida";
     repo = "awslogs";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-o6xZqwlqAy01P+TZ0rB5rpEddWNUBzzHp7/cycpcwes=";
   };
 
@@ -45,4 +45,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dbrock ];
   };
-}
+})

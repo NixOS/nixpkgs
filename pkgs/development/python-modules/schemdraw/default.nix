@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pyparsing,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "schemdraw";
   version = "0.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";

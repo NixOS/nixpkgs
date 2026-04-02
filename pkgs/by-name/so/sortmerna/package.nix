@@ -18,14 +18,14 @@ let
     hash = "sha256-MkhlDme6ZwKPuRINhfpv7cxliI2GU3RmTfC6O0ke/IQ=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sortmerna";
   version = "4.3.7";
 
   src = fetchFromGitHub {
     owner = "sortmerna";
     repo = "sortmerna";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oxwZBkeW3usEcJE1XLu1UigKsgOsljwGFTpb7U3845I=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ luispedro ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

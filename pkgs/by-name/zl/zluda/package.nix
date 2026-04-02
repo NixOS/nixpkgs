@@ -14,17 +14,17 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zluda";
-  version = "4-unstable-2025-01-28";
+  version = "6-preview.55";
 
   src = fetchFromGitHub {
     owner = "vosen";
     repo = "ZLUDA";
-    # Cargo.lock introduced and major bug fixes in this commit
-    rev = "df5a96d935b014f88e30af4abc487882b0b54a76";
-    hash = "sha256-T2pCZZzZbCLI01YSF0VguKtL3EDEdIoUyH4C9ccaCi8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yhWEzoDjNk1GefSqOVwowNky36ahmH/gTMdq1YTOhfE=";
     fetchSubmodules = true;
+    fetchLFS = true;
   };
 
   buildInputs = [
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     rocmPackages.rocsolver
     rocmPackages.rocblas
     rocmPackages.hipblas
+    rocmPackages.hipblaslt
     rocmPackages.rocm-cmake
     rocmPackages.hipfft
     zlib
@@ -50,7 +51,10 @@ rustPlatform.buildRustPackage rec {
     clang
   ];
 
-  cargoHash = "sha256-hDQWjzkx7YdkgSmNKTzCa2VhBFvn6P9QANV9hJ7UiT8=";
+  cargoHash = "sha256-YNBeweZ/vfXGfM0lrZbAh71z6Rb0+B7nOuO8VL2BmCo=";
+
+  # Tests require a GPU and segfault in the sandbox
+  doCheck = false;
 
   # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.cargoShortTarget;
@@ -80,10 +84,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CUDA on non-Nvidia GPUs";
     homepage = "https://github.com/vosen/ZLUDA";
-    changelog = "https://github.com/vosen/ZLUDA/releases/tag/${src.rev}";
+    changelog = "https://github.com/vosen/ZLUDA/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.errnoh
     ];
   };
-}
+})

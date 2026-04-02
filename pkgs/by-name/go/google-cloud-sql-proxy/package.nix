@@ -5,20 +5,20 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "google-cloud-sql-proxy";
-  version = "2.19.0";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "cloud-sql-proxy";
-    rev = "v${version}";
-    hash = "sha256-LF9ALCBgO2cIVLRTH0KxdmsIhfnnCO4akmoGS3kIWm0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3C7IfpVcv1BpzKnMV6dQJ0e7hY50owR3YijlI2+cAJQ=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-RtWTVb1JWNgVM3NZf28CMKIgPjGIgZztYYULqTM7nQg=";
+  vendorHash = "sha256-tbglk7rscPx1RrURSzVW5FgZE6b6mp4tvOXVQKMUrjQ=";
 
   checkFlags = [
     "-short"
@@ -44,4 +44,4 @@ buildGoModule rec {
     ];
     mainProgram = "cloud-sql-proxy";
   };
-}
+})

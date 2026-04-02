@@ -5,15 +5,12 @@
   pytestCheckHook,
   setuptools,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
   version = "4.8.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
@@ -34,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
     changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

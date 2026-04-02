@@ -37,8 +37,10 @@ in
   inherit cargoHash;
   doCheck = false;
 
-  BUILD_REV_COUNT = src.revCount or 1;
-  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
+  env = {
+    BUILD_REV_COUNT = src.revCount or 1;
+    RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
+  };
 
   nativeBuildInputs = [ rustPackages.rustfmt ];
 
@@ -69,7 +71,6 @@ in
     homepage = "https://github.com/nix-community/lorri";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      grahamc
       Profpatsch
       nyarly
     ];

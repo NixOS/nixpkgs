@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   colorama,
   tabulate,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cli-ui";
   version = "0.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8.1";
 
   src = fetchFromGitHub {
     owner = "your-tools";

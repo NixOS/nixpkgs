@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sekizai" ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = {
     description = "Define placeholders where your blocks get rendered and append to those blocks";

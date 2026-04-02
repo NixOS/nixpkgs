@@ -10,7 +10,6 @@
   stdenv,
   nixpkgsFun,
   overlays,
-  makeMuslParsedPlatform,
 }:
 let
   makeLLVMParsedPlatform =
@@ -73,9 +72,9 @@ self: super: {
 
   # All packages built with the Musl libc. This will override the
   # default GNU libc on Linux systems. Non-Linux systems are not
-  # supported. 32-bit is also not supported.
+  # supported. 32-bit is also not supported, except for x86.
   pkgsMusl =
-    if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
+    if stdenv.hostPlatform.isLinux && (stdenv.buildPlatform.is64bit || stdenv.buildPlatform.isx86) then
       nixpkgsFun {
         overlays = [
           (self': super': {
@@ -84,11 +83,13 @@ self: super: {
         ]
         ++ overlays;
         ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-          config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+          config = lib.systems.parse.tripleFromSystem (
+            lib.systems.parse.mkMuslSystem stdenv.hostPlatform.parsed
+          );
         };
       }
     else
-      throw "Musl libc only supports 64-bit Linux systems.";
+      throw "Musl libc only supports 64-bit Linux systems, and i686-linux.";
 
   # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
   pkgsx86_64Darwin =
@@ -160,12 +161,11 @@ self: super: {
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags
             ++ [
-              "strictflexarrays1"
               "shadowstack"
               "nostrictaliasing"
               "pacret"
               "glibcxxassertions"
-              "libcxxhardeningfast"
+              "libcxxhardeningextensive"
               "trivialautovarinit"
             ]
           ) super'.stdenv;

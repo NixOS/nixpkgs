@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nerdfix";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "loichyan";
     repo = "nerdfix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Mp8QFzMQXJEFIzkrmiW/wxMy/+WC4VqbPtWzE92z9Gc=";
   };
 
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
     description = "Helps you to find/fix obsolete nerd font icons in your project";
     mainProgram = "nerdfix";
     homepage = "https://github.com/loichyan/nerdfix";
-    changelog = "https://github.com/loichyan/nerdfix/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/loichyan/nerdfix/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = [ ];
   };
-}
+})

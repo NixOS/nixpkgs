@@ -3,22 +3,19 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiotedee";
-  version = "0.2.25";
+  version = "0.2.27";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "aiotedee";
     tag = "v${version}";
-    hash = "sha256-xVZrXKJXQd+Jklka+LGA/q+vgQqsVH+prboM6G3CWWg=";
+    hash = "sha256-yN5v/kZ3oX3HYqgQR33gyCkGkHaAdPpP1Q9Q0eavJJs=";
   };
 
   build-system = [ setuptools ];

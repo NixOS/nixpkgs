@@ -8,7 +8,6 @@
   lxml,
   nodejs,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   testers,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "readabilipy";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";

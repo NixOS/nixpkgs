@@ -3,7 +3,6 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aiopulse";
   version = "0.4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

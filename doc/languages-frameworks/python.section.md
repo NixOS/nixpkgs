@@ -50,7 +50,6 @@ sets are
 
 * `pkgs.python27Packages`
 * `pkgs.python3Packages`
-* `pkgs.python310Packages`
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
@@ -99,13 +98,14 @@ The following is an example:
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest";
   version = "3.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
+
     hash = "sha256-z4Q23FnYaVNG/NOrKW3kZCXsqwDWQJbOvnn7Ueyy65M=";
   };
 
@@ -130,7 +130,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ hypothesis ];
 
   meta = {
-    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
+    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${finalAttrs.version}";
     description = "Framework for writing tests";
     homepage = "https://github.com/pytest-dev/pytest";
     license = lib.licenses.mit;
@@ -140,7 +140,7 @@ buildPythonPackage rec {
       lsix
     ];
   };
-}
+})
 ```
 
 The `buildPythonPackage` mainly does four things:
@@ -304,13 +304,13 @@ specifying an interpreter version), like this:
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "luigi";
   version = "2.7.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
@@ -324,7 +324,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     # ...
   };
-}
+})
 ```
 
 This is then added to `pkgs/by-name` just as any other application would be.
@@ -550,6 +550,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
+- `stestrCheckHook` to run tests with `stestr`.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
@@ -896,7 +897,7 @@ on NixOS.
   # ...
 
   environment.systemPackages = with pkgs; [
-    (python310.withPackages (
+    (python314.withPackages (
       ps: with ps; [
         numpy
         toolz
@@ -928,13 +929,13 @@ building Python libraries is [`buildPythonPackage`](#buildpythonpackage-function
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toolz";
   version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
@@ -950,12 +951,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
+    changelog = "https://github.com/pytoolz/toolz/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
   };
-}
+})
 ```
 
 What happens here? The function [`buildPythonPackage`](#buildpythonpackage-function) is called and as argument
@@ -985,13 +986,13 @@ with import <nixpkgs> { };
 
 (
   let
-    my_toolz = python313.pkgs.buildPythonPackage rec {
+    my_toolz = python313.pkgs.buildPythonPackage (finalAttrs: {
       pname = "toolz";
       version = "0.10.0";
       pyproject = true;
 
       src = fetchPypi {
-        inherit pname version;
+        inherit (finalAttrs) pname version;
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
@@ -1005,7 +1006,7 @@ with import <nixpkgs> { };
         description = "List processing tools and functional utilities";
         # [...]
       };
-    };
+    });
 
   in
   python313.withPackages (
@@ -1042,57 +1043,57 @@ Our example, `toolz`, does not have any dependencies on other Python packages or
 Dependencies can belong to multiple arguments, for example if something is both a build time requirement & a runtime dependency.
 
 The following example shows which arguments are given to [`buildPythonPackage`](#buildpythonpackage-function) in
-order to build [`datashape`](https://github.com/blaze/datashape).
+order to build [`dirigera`](https://github.com/Leggin/dirigera).
 
 ```nix
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-
-  # build dependencies
-  setuptools,
-
-  # dependencies
-  numpy,
-  multipledispatch,
-  python-dateutil,
-
-  # tests
+  fetchFromGitHub,
+  pydantic,
   pytestCheckHook,
+  requests,
+  setuptools,
+  websocket-client,
 }:
 
-buildPythonPackage rec {
-  pname = "datashape";
-  version = "0.4.7";
+buildPythonPackage (finalAttrs: {
+  pname = "dirigera";
+  version = "1.2.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
+  src = fetchFromGitHub {
+    owner = "Leggin";
+    repo = "dirigera";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5pfzmaIkIEtxDtkhG1lOLSTjWahEDgQKLJKbAG5rBjE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    multipledispatch
-    numpy
-    python-dateutil
+    pydantic
+    requests
+    websocket-client
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "dirigera" ];
+
   meta = {
-    changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
-    homepage = "https://github.com/ContinuumIO/datashape";
-    description = "Data description language";
-    license = lib.licenses.bsd2;
+    description = "Module for controlling the IKEA Dirigera Smart Home Hub";
+    homepage = "https://github.com/Leggin/dirigera";
+    changelog = "https://github.com/Leggin/dirigera/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "generate-token";
   };
-}
+})
 ```
 
-We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
+We can see several runtime dependencies, `pydantic`, `requests`, and
+`websocket-client`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
 `pytestCheckHook` is a test runner hook and is only used during the [`checkPhase`](#ssec-check-phase) and is
 therefore not added to `dependencies`.
 
@@ -1111,13 +1112,13 @@ when building the bindings and are therefore added as [`buildInputs`](#var-stden
   libxslt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lxml";
   version = "3.4.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
@@ -1137,13 +1138,13 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
+    changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${finalAttrs.version}";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sjourdois ];
   };
-}
+})
 ```
 
 In this example `lxml` and Nix are able to work out exactly where the relevant
@@ -1173,13 +1174,13 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfftw";
   version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
@@ -1207,7 +1208,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyfftw" ];
 
   meta = {
-    changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
+    changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${finalAttrs.version}";
     description = "Pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with lib.licenses; [
@@ -1215,7 +1216,7 @@ buildPythonPackage rec {
       bsd3
     ];
   };
-}
+})
 ```
 
 Note also the line [`doCheck = false;`](#var-stdenv-doCheck), we explicitly disabled running the test-suite.
@@ -1609,13 +1610,13 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toolz";
   version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
@@ -1627,7 +1628,7 @@ buildPythonPackage rec {
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
   };
-}
+})
 ```
 
 It takes an argument [`buildPythonPackage`](#buildpythonpackage-function). We now call this function using
@@ -1682,7 +1683,7 @@ with import <nixpkgs> { };
           });
         };
       in
-      pkgs.python310.override { inherit packageOverrides; };
+      pkgs.python313.override { inherit packageOverrides; };
 
   in
   python.withPackages (ps: [ ps.pandas ])
@@ -1706,7 +1707,7 @@ with import <nixpkgs> { };
   let
     packageOverrides = self: super: { scipy = super.scipy_0_17; };
   in
-  (pkgs.python310.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
+  (pkgs.python313.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -1722,13 +1723,13 @@ let
   newpkgs = import pkgs.path {
     overlays = [
       (self: super: {
-        python310 =
+        python313 =
           let
             packageOverrides = python-self: python-super: {
               numpy = python-super.numpy_1_18;
             };
           in
-          super.python310.override { inherit packageOverrides; };
+          super.python313.override { inherit packageOverrides; };
       })
     ];
   };
@@ -2135,7 +2136,7 @@ The following rules are desired to be respected:
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
-* The file is formatted with `nixfmt-rfc-style`.
+* The file is formatted correctly (e.g., `nix-shell --run treefmt`).
 * Commit names of Python libraries must reflect that they are Python
   libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
   See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).

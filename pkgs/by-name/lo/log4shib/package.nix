@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  CXXFLAGS = "-std=c++11";
+  env.CXXFLAGS = "-std=c++11";
 
   meta = {
     description = "Forked version of log4cpp that has been created for the Shibboleth project";

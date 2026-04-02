@@ -7,6 +7,7 @@
   cacert,
   makeSetupHook,
   pnpm,
+  writableTmpDirAsHomeHook,
   yq,
   zstd,
 }:
@@ -141,6 +142,10 @@ in
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
 
+            # This folder contains symlinks to /build/source which we don't need
+            # since https://github.com/pnpm/pnpm/releases/tag/v10.27.0
+            rm -rf $storePath/{v3,v10}/projects
+
             # Ensure consistent permissions
             # NOTE: For reasons not yet fully understood, pnpm might create files with
             # inconsistent permissions, for example inside the ubuntu-24.04
@@ -194,6 +199,7 @@ in
   pnpmConfigHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [
+      writableTmpDirAsHomeHook
       zstd
     ];
     substitutions = {

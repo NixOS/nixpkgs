@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fenics-basix";
   version = "0.10.0.post0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "basix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iKG6Cs28D0scPEIRKoGk/CgquKzGZvIjf4UIj4MQXHA=";
   };
 
@@ -76,8 +76,8 @@ buildPythonPackage rec {
     homepage = "https://fenicsproject.org";
     downloadPage = "https://github.com/fenics/basix";
     description = "Finite element definition and tabulation runtime library";
-    changelog = "https://github.com/fenics/basix/releases/tag/${src.tag}";
+    changelog = "https://github.com/fenics/basix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

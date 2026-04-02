@@ -3,11 +3,14 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   openssl,
   buildNpmPackage,
-  nodejs_20,
+  nodejs,
   nix-update-script,
+  nixosTests,
+  versionCheckHook,
 }:
 let
   pname = "rqbit";
@@ -24,9 +27,7 @@ let
   rqbit-webui = buildNpmPackage {
     pname = "rqbit-webui";
 
-    nodejs = nodejs_20;
-
-    inherit version src;
+    inherit version src nodejs;
 
     sourceRoot = "${src.name}/crates/librqbit/webui";
 
@@ -47,7 +48,10 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-gYasOjrG0oeT/6Ben57MKAvBtgpoSmZ93RZQqSXAxIc=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
@@ -62,15 +66,26 @@ rustPlatform.buildRustPackage {
     rm crates/librqbit/build.rs
   '';
 
-  doCheck = false;
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd rqbit --$shell <($out/bin/rqbit completions $shell)
+    done
+  '';
 
-  passthru.webui = rqbit-webui;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    webui = rqbit-webui;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.testService = nixosTests.rqbit;
   };
 
   meta = {

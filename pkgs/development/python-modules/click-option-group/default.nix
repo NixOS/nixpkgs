@@ -6,15 +6,12 @@
   hatchling,
   hatch-vcs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "click-option-group";
   version = "0.5.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "click-contrib";

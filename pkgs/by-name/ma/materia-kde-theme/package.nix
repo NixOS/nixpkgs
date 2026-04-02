@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "materia-kde-theme";
-  version = "20220714";
+  version = "20220823";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "materia-kde";
-    rev = version;
-    sha256 = "sha256-/LA+H2ekxuO1RpfaPJruRGeWPVopA0rZUxU4Mh7YQ0s=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-/O+/L6C9WjxhfWZ8RzIeimNU+8sjKvbDvQwNlvVOjU4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.diffumist ];
     platforms = lib.platforms.all;
   };
-}
+})

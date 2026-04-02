@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "terser";
-  version = "5.44.1";
+  version = "5.46.1";
 
   src = fetchFromGitHub {
     owner = "terser";
     repo = "terser";
     rev = "v${version}";
-    hash = "sha256-Z4ZdCSGqyu7jjpLgHEZCvrZj+IsqEbdcjATdy80TnC8=";
+    hash = "sha256-Ob3bzaUrHfDaRy25eWmE3YEtZxhZGYp6TEMtDWbzgQs=";
   };
 
-  npmDepsHash = "sha256-Zmbh/NMriZtkYpFd5hCJo+nPrKTrqYfh3W+sZpopBHM=";
+  npmDepsHash = "sha256-24z5w43ciXydl14XwC0XZ5kZX9HoXFQyWHYntQXMHy0=";
 
   meta = {
     description = "JavaScript parser, mangler and compressor toolkit for ES6+";

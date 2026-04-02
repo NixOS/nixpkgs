@@ -32,9 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  # By no known reason libtirpc is not detected
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env = {
+    # By no known reason libtirpc is not detected
+    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+    NIX_LDFLAGS = [ "-ltirpc" ];
+  };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

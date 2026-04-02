@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   jupyterhub,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "jupyterhub-tmpauthenticator";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

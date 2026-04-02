@@ -8,16 +8,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfritzhome";
-  version = "0.6.18";
+  version = "0.6.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
-    tag = version;
-    hash = "sha256-tWWX3rUmESWOkiWU6Y8KIinbPUhBdolSHZ+5Rv2dnuY=";
+    tag = finalAttrs.version;
+    hash = "sha256-d79SS4zHsMD5aGuMNFnxwDV1IgU+0bwva/jUcfds9Hw=";
   };
 
   build-system = [ setuptools ];
@@ -35,8 +35,8 @@ buildPythonPackage rec {
     description = "Python Library to access AVM FRITZ!Box homeautomation";
     mainProgram = "fritzhome";
     homepage = "https://github.com/hthiery/python-fritzhome";
-    changelog = "https://github.com/hthiery/python-fritzhome/releases/tag/${src.tag}";
+    changelog = "https://github.com/hthiery/python-fritzhome/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -7,7 +7,7 @@
   doxygen,
   dynarmic,
   enet,
-  fetchzip,
+  fetchFromGitHub,
   fmt,
   ffmpeg_6-headless,
   glslang,
@@ -19,6 +19,7 @@
   libusb1,
   moltenvk,
   nlohmann_json,
+  oaknut,
   openal,
   openssl,
   pipewire,
@@ -30,10 +31,15 @@
   soundtouch,
   stdenv,
   vulkan-headers,
+  vulkan-memory-allocator,
   xbyak,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
   enableQtTranslations ? true,
   qt6,
+  gtk3,
+  gsettings-desktop-schemas,
   enableCubeb ? true,
   cubeb,
   useDiscordRichPresence ? true,
@@ -42,7 +48,8 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
-  fetchpatch2,
+  darwinMinVersionHook,
+  fetchpatch,
 }:
 let
   inherit (lib)
@@ -54,23 +61,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2123.4.1";
+  version = "2125.0.1";
 
-  src = fetchzip {
-    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-86i6GMnonQ8SeeDiOH1XSl3rHamnMTgPnkaeJOlAIuI=";
+  src = fetchFromGitHub {
+    owner = "azahar-emu";
+    repo = "azahar";
+    tag = finalAttrs.version;
+    postCheckout = ''
+      git -C "$out/externals" submodule update --init \
+        teakra zstd discord-rpc spirv-headers spirv-tools sirit xxHash \
+        faad2/faad2 lodepng/lodepng dds-ktx nihstro "$out/dist/compatibility_list"
+      echo "${finalAttrs.version}" > "$out/GIT-TAG"
+      git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
+    '';
+    hash = "sha256-KzM2FWJPxZtkpwvK4DSdfNuxE8yy1OVaioVegQbBSWk=";
   };
-
-  patches = [
-    # https://github.com/azahar-emu/azahar/pull/1305
-    ./fix-zstd-seekable-include.patch
-
-    # TODO: Remove in next release
-    (fetchpatch2 {
-      url = "https://github.com/azahar-emu/azahar/commit/1f483e1d335374482845d0325ac8b13af3162c53.patch?full_index=1";
-      hash = "sha256-9rmRbv7VFMhHly5qTGaeBLpvtWMu6HkCGUUM+t78Meg=";
-    })
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -107,26 +112,38 @@ stdenv.mkDerivation (finalAttrs: {
     soundtouch
     SDL2
     vulkan-headers
-    xbyak
+    vulkan-memory-allocator
 
-    # https://github.com/azahar-emu/azahar/pull/1281
+    # https://github.com/azahar-emu/azahar/issues/1283
     # spirv-tools
+    # spirv-headers
 
     # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
     # zstd
   ]
+  ++ optionals stdenv.hostPlatform.isx86_64 [ xbyak ]
+  ++ optionals stdenv.hostPlatform.isAarch64 [ oaknut ]
   ++ optionals enableQtTranslations [ qt6.qttools ]
   ++ optionals enableCubeb [ cubeb ]
   ++ optionals useDiscordRichPresence [ rapidjson ]
   ++ optionals stdenv.hostPlatform.isLinux [
     pipewire
     qt6.qtwayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
+    libx11
+    libxcb
+    libxext
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
+    (darwinMinVersionHook "13.4")
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "cmake-Add-option-to-use-system-oaknut.patch";
+      url = "https://github.com/azahar-emu/azahar/commit/6201256e15ee4d4fc053933545abf50fc46be178.patch";
+      hash = "sha256-03eIubAJ65W9clI9iaLcLNAAMbkX4E507nYNV8DVwZc=";
+    })
   ];
 
   postPatch = ''
@@ -152,16 +169,34 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
+  installPhase = optionalString stdenv.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/Applications $out/bin
+
+    cp ./bin/Release/${finalAttrs.pname}-room $out/bin
+    cp -r ./bin/Release/${finalAttrs.pname}.app $out/Applications
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      ${optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ moltenvk ]
+      }"}
+    )
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source 3DS emulator project based on Citra";
     homepage = "https://github.com/azahar-emu/azahar";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      marcin-serwin
-    ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     mainProgram = "azahar";
     platforms = with lib.platforms; linux ++ darwin;
   };

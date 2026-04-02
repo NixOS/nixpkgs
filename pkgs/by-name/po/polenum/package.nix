@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "polenum";
   version = "1.7";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Wh1t3Fox";
     repo = "polenum";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/xjGwolpbkh/ig0N9gpSTQMIJ/2ayThRBzx3tF1kfjM=";
   };
 
@@ -35,4 +35,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ exploitoverload ];
     mainProgram = "polenum";
   };
-}
+})

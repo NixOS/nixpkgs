@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   pytest-asyncio,
   setuptools,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "screenlogicpy";
   version = "0.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dieselrabbit";

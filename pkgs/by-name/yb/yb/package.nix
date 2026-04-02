@@ -8,7 +8,7 @@
   yubikey-manager,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yb";
   version = "0.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "douzebis";
     repo = "yb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Eq3qFDzi/G4qQ3UUZWyl42zMYAO2C0ipV2yXxt2EAUw=";
   };
 
@@ -88,10 +88,10 @@ python3Packages.buildPythonApplication rec {
       - Glob pattern filtering
     '';
     homepage = "https://github.com/douzebis/yb";
-    changelog = "https://github.com/douzebis/yb/releases/tag/v${version}";
+    changelog = "https://github.com/douzebis/yb/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ douzebis ];
     mainProgram = "yb";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -14,9 +14,9 @@
 
 let
   # for update.sh easy to handle
-  ngclientVersion = "0.0.163";
-  ngclientRev = "2546891ad116cb0a7a8df1c2bcf8a11fc17d58a4";
-  ngclientHash = "sha256-MQOJHr3JBceO7qZRQvCcR4NNxpc77oRRjBQkmMv9RUA=";
+  ngclientVersion = "0.0.192";
+  ngclientRev = "5237ca55b42e58896da2919ad8a76c034517e98a";
+  ngclientHash = "sha256-06LMFg0kRmG4c5s60/+NU8gugkfgWAyTGoLo0+UHRUI=";
 
   # from Duplicati/Server/webroot/ngclient/package.json
   ngclient = buildNpmPackage {
@@ -30,7 +30,7 @@ let
       hash = ngclientHash;
     };
 
-    npmDepsHash = "sha256-HYKzf7JaoOYvYlVZgMZ0jvYHf96be6abTZNtefgy59Y=";
+    npmDepsHash = "sha256-i9lW+JDB2TZGfhW1fzrZA36qgkYeMmHbJkeEYxga2ko=";
 
     nativeBuildInputs = [ bun ];
 
@@ -58,19 +58,17 @@ let
 in
 buildDotnetModule rec {
   pname = "duplicati";
-  version = "2.2.0.1";
+  version = "2.2.0.3";
   channel = "stable";
-  buildDate = "2025-11-09";
+  buildDate = "2026-01-06";
 
   src = fetchFromGitHub {
     owner = "duplicati";
     repo = "duplicati";
     tag = "v${version}_${channel}_${buildDate}";
-    hash = "sha256-fARK2nAqE9aN2PQSC62yIcYr3e/kBT3BVTBxLwMqk24=";
+    hash = "sha256-p2hl1S/XsKsbAfWBAgvNMl6z5zGm/FBH3EYSqDvkKy8=";
     stripRoot = true;
   };
-
-  patches = [ ./fix-unit-tests.patch ];
 
   nugetDeps = ./deps.json;
 

@@ -2,6 +2,7 @@
   buildPythonPackage,
   cmake,
   cryptography,
+  dnspython,
   fetchFromGitHub,
   lib,
   pytest-asyncio,
@@ -13,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "qh3";
-  version = "1.5.6";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "qh3";
     tag = "v${version}";
-    hash = "sha256-QJfun9CjqdtVmn7Ws4+VJaeGCQgxnEy+L3SMCZFMK1o=";
+    hash = "sha256-duZstcheiv3eLPp2IMaZvYo5vq5SMBxcy7HQmBI0SaI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-4CLvkyOd0GYh4/v40Qtv3rPJXRwOPXHg9Oo+eWN0luA=";
+    hash = "sha256-BqUofzjfDNUhE27GYcV7CXUK2dT/BQ16Z5aQkHyYUIE=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cryptography
+    dnspython
     pytest-asyncio
     pytest-mock
     pytestCheckHook

@@ -24,7 +24,6 @@
   pycparser,
   pyformlang,
   pydemumble,
-  pythonOlder,
   pyvex,
   rich,
   rpyc,
@@ -38,16 +37,14 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.154";
+  version = "9.2.193";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-aOgZXHk6GTWZAEraZQahEXUYs8LWAWv1n9GfX+2XTPU=";
+    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
   };
 
   pythonRelaxDeps = [ "capstone" ];

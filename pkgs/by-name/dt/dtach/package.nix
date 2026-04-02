@@ -5,12 +5,12 @@
   fetchpatch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtach";
   version = "0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${version}/dtach-${version}.tar.gz";
+    url = "mirror://sourceforge/project/dtach/dtach/${finalAttrs.version}/dtach-${finalAttrs.version}.tar.gz";
     sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "dtach";
   };
-}
+})

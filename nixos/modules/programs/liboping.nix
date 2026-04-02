@@ -15,7 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ liboping ];
     security.wrappers = lib.mkMerge (
-      builtins.map
+      map
         (exec: {
           "${exec}" = {
             owner = "root";

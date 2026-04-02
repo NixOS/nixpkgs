@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "syft";
-  version = "1.40.0";
+  version = "1.42.3";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
-    tag = "v${version}";
-    hash = "sha256-aU7i+bjOB6lM5/i/lDuncbCiCQdwkQxglgr4lawof1Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EPno5G2Wfgrcu9DdObn1NNwIkf2r6VgD/S2h/BUjIzU=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-W2Ea+2Pq2zPhVSWI/7NlG1/LeNfOE1kUnAB8Kp7AqgM=";
+  vendorHash = "sha256-Iy5syp/Mbuuz422Ylzl6lN/Q60PwrYW1jMfNahEH3Xg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,8 +38,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.gitDescription=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
   ];
 
@@ -69,7 +69,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/syft --help
-    $out/bin/syft version | grep "${version}"
+    $out/bin/syft version | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
@@ -77,7 +77,7 @@ buildGoModule rec {
   meta = {
     description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
-    changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
+    changelog = "https://github.com/anchore/syft/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       A CLI tool and Go library for generating a Software Bill of Materials
       (SBOM) from container images and filesystems. Exceptional for
@@ -91,4 +91,4 @@ buildGoModule rec {
     ];
     mainProgram = "syft";
   };
-}
+})

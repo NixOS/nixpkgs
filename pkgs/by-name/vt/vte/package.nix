@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "app" withApp)
     (lib.mesonBool "gtk3" (gtkVersion == "3"))
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
-    (lib.mesonBool "_systemd" (!systemdSupport))
+    (lib.mesonBool "_systemd" systemdSupport)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin

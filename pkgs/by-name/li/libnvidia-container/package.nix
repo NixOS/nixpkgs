@@ -121,11 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     CGO_ENABLED = "1"; # Needed for cross-compilation
     GOFLAGS = "-trimpath"; # Don't include paths to Go stdlib to resulting binary
     inherit (go) GOARCH GOOS;
+    NIX_LDFLAGS = toString [
+      "-L${lib.getLib libtirpc}/lib"
+      "-ltirpc"
+    ];
   };
-  NIX_LDFLAGS = [
-    "-L${lib.getLib libtirpc}/lib"
-    "-ltirpc"
-  ];
 
   nativeBuildInputs = [
     pkg-config

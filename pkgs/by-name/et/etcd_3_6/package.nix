@@ -1,6 +1,6 @@
 {
   applyPatches,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   k3s,
@@ -11,11 +11,11 @@
 }:
 
 let
-  version = "3.6.7";
-  etcdSrcHash = "sha256-i8VZlK76OQQeojKHo9sdkyNR0Hdiofx0TLUDWKiXOTU=";
-  etcdCtlVendorHash = "sha256-jN+oNoIxNYM2Wm3s+/zDyacyXxVWaHl9t7sot8PL9xk=";
-  etcdUtlVendorHash = "sha256-A2rYstzlBlS3ta5yJVP/RTjgBz+9Y0I79ITr77GrqOo=";
-  etcdServerVendorHash = "sha256-hUFUcoXaOKTkoJ7YUwljpg7EZRhXi5tXcE2bteVRBE0=";
+  version = "3.6.9";
+  etcdSrcHash = "sha256-6rNCfjfs/lwiF3rnq5IM8ohW8Gz9r6gFHhIu9kvJ8VA=";
+  etcdCtlVendorHash = "sha256-yUA28nP5ueJz/b7spbg1mFRs2doBIyVNuZMCMlf//AE=";
+  etcdUtlVendorHash = "sha256-E3AVaUVulVKWGRbj/v2owbqkIfvxo/5naN1sNd96z+s=";
+  etcdServerVendorHash = "sha256-HtAsmsdjBbqls0S80E08PZcZYFlfpKUYrgJunRFP8Gc=";
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -35,11 +35,14 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [ dtomvan ];
+    maintainers = with lib.maintainers; [
+      dtomvan
+      superherointj
+    ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGo124Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -66,7 +69,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo124Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -92,7 +95,7 @@ let
     '';
   };
 
-  etcdctl = buildGo124Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit
@@ -117,7 +120,7 @@ let
   };
 in
 symlinkJoin {
-  name = "etcd-${version}";
+  pname = "etcd";
 
   inherit meta version;
 

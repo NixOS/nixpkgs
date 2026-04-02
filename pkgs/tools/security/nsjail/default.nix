@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       arturcygan
       bosu
-      c0bw3b
     ];
     platforms = lib.platforms.linux;
     mainProgram = "nsjail";

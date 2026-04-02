@@ -7,18 +7,15 @@
   python3,
 }:
 
-let
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "mov-cli";
   version = "4.4.19";
-in
-python3.pkgs.buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sNeScHmQYR4Avr5OEFpE90Qn7udBgi1Ox5elFSyKXrY=";
   };
 
@@ -68,4 +65,4 @@ python3.pkgs.buildPythonPackage {
     mainProgram = "mov-cli";
     maintainers = with lib.maintainers; [ baitinq ];
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pythonAtLeast,
   fetchpatch,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pytest-subprocess";
   version = "1.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aklajnert";

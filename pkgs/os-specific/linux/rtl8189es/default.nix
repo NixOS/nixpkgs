@@ -9,7 +9,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rtl8189es-${kernel.version}-${version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "rtl8189es";
   version = "2025-09-26";
 
   src = fetchFromGitHub {

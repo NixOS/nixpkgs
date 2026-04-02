@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python3Packages,
   wrapGAppsHook4,
   gobject-introspection,
@@ -11,17 +11,16 @@
   desktop-file-utils,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "censor";
-  version = "0.3.0";
+  version = "0.6.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "censor";
     repo = "Censor";
-    tag = "v${version}";
-    hash = "sha256-16Cy9yNOLvdVZ234kTB8fa585eI4f7yVnbMoPcHtGHk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r5GhPr7dFLVy8nyKWg0poZSjWVrLrpnUHhe4MdEThvM=";
   };
 
   nativeBuildInputs = [
@@ -55,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "censor";
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   lib,
   stdenv,
   cmake,
@@ -10,10 +9,11 @@
   linyaps-box,
   cli11,
   curl,
+  elfutils,
   gpgme,
   gtest,
   libarchive,
-  libelf,
+  libcap,
   libsodium,
   libsysprof-capture,
   nlohmann_json,
@@ -24,7 +24,7 @@
   uncrustify,
   xz,
   yaml-cpp,
-  replaceVars,
+  versionCheckHook,
   bash,
   binutils,
   coreutils,
@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.10.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-C5rP6r3V+hxTjM+kmXjS4MnuL6P5wxSVP9nNmlQbcB8=";
+    hash = "sha256-hNXpJCz7px8uw2mbBhou3+Gb5InlMXJT2PjWmUycX5A=";
   };
 
   patches = [
@@ -53,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace apps/ll-cli/src/main.cpp \
+      --replace-fail "ociRuntimeCLI, { BINDIR }" "ociRuntimeCLI, { \"${lib.getBin linyaps-box}/bin\" }"
+
     substituteInPlace apps/ll-init/CMakeLists.txt \
       --replace-fail "target_link_options(\''${LL_INIT_TARGET} PRIVATE -static -static-libgcc" \
                      "target_link_options(\''${LL_INIT_TARGET} PRIVATE -static -static-libgcc -L${stdenv.cc.libc.static}/lib"
@@ -68,10 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cli11
     curl
+    elfutils
     gpgme
     gtest
     libarchive
-    libelf
+    libcap
     libsodium
     libsysprof-capture
     nlohmann_json
@@ -91,6 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "CPM_LOCAL_PACKAGES_ONLY" true)
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postInstall = ''
     # move to the right location for systemd.packages option

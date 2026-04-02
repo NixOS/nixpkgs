@@ -14,7 +14,9 @@ let
   flatbuffers_23_5_26 = flatbuffers.overrideAttrs (oldAttrs: rec {
     version = "23.5.26";
     cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [ "-DFLATBUFFERS_BUILD_SHAREDLIB=ON" ];
-    NIX_CXXSTDLIB_COMPILE = "-std=c++17";
+    env = (oldAttrs.env or { }) // {
+      NIX_CXXSTDLIB_COMPILE = "-std=c++17";
+    };
     configureFlags = (oldAttrs.configureFlags or [ ]) ++ [ "--enable-shared" ];
     src = fetchFromGitHub {
       owner = "google";
@@ -67,13 +69,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ xxd ];
 
-  NIX_CXXSTDLIB_COMPILE = "-std=c++17";
+  env = {
+    NIX_CXXSTDLIB_COMPILE = "-std=c++17";
 
-  TFROOT = fetchFromGitHub {
-    owner = "tensorflow";
-    repo = "tensorflow";
-    rev = "v2.16.1";
-    hash = "sha256-UPvK5Kc/FNVJq3FchN5IIBBObvcHtAPVv0ARzWzA35M=";
+    TFROOT = fetchFromGitHub {
+      owner = "tensorflow";
+      repo = "tensorflow";
+      rev = "v2.16.1";
+      hash = "sha256-UPvK5Kc/FNVJq3FchN5IIBBObvcHtAPVv0ARzWzA35M=";
+    };
   };
 
   enableParallelBuilding = true;

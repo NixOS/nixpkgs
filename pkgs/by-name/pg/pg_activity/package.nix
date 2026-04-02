@@ -4,16 +4,15 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pg_activity";
   version = "3.6.1";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";
     repo = "pg_activity";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-TzY+3RE06TxIrhl75wol9CvZDIz25GfgOx11vkREw2c=";
   };
 
@@ -36,4 +35,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.postgresql;
     maintainers = with lib.maintainers; [ mausch ];
   };
-}
+})

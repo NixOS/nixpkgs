@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";
-  format = "pyproject";
+  pyproject = true;
 
   # build the rust library independently
   prePatch = ''

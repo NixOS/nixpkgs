@@ -10,12 +10,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "OpenIPMI";
   version = "2.0.37";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openipmi/OpenIPMI-${version}.tar.gz";
+    url = "mirror://sourceforge/openipmi/OpenIPMI-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-xi049dp99Cmaw6ZSUI6VlTd1JEAYHjTHayrs69fzAbk=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ arezvov ];
   };
-}
+})

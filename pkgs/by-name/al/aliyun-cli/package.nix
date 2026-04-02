@@ -6,26 +6,26 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aliyun-cli";
-  version = "3.2.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
-    tag = "v${version}";
-    hash = "sha256-MIVhESm/5UJxUyN4ZnFLmVKX+2VCBjT33dIbsae3yVA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v44QWIpFTfUD7gOaQGwJ12MvtO4rMS69rCZr4Hv/e3k=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-lmlCPBEqopmoNjkihVOh8zKSKsS4HmaDQ+QAEJ/pEvA=";
+  vendorHash = "sha256-smlPjS2kda0ij+3Jch/FKRHm820Zux6vWXooqhm6fCA=";
 
   subPackages = [ "main" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aliyun/aliyun-cli/v3/cli.Version=${version}"
+    "-X github.com/aliyun/aliyun-cli/v3/cli.Version=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -39,7 +39,7 @@ buildGoModule rec {
   meta = {
     description = "Tool to manage and use Alibaba Cloud resources through a command line interface";
     homepage = "https://github.com/aliyun/aliyun-cli";
-    changelog = "https://github.com/aliyun/aliyun-cli/releases/tag/v${version}";
+    changelog = "https://github.com/aliyun/aliyun-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ornxka
@@ -47,4 +47,4 @@ buildGoModule rec {
     ];
     mainProgram = "aliyun";
   };
-}
+})

@@ -12,14 +12,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndn-cxx";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
-    rev = "ndn-cxx-${version}";
+    rev = "ndn-cxx-${finalAttrs.version}";
     sha256 = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
       bertof
     ];
   };
-}
+})

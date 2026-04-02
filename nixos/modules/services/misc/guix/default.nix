@@ -409,7 +409,7 @@ in
           '';
           script = ''
             exec ${lib.getExe' package "guix"} publish \
-              --user=${cfg.publish.user} --port=${builtins.toString cfg.publish.port} \
+              --user=${cfg.publish.user} --port=${toString cfg.publish.port} \
               ${lib.escapeShellArgs cfg.publish.extraArgs}
           '';
 

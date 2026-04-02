@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   time-machine,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "httpx-auth";
   version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Colin-b";

@@ -5,13 +5,10 @@
   fetchPypi,
   git, # shells out to git
   hatchling,
-  importlib-resources,
   incremental,
   jinja2,
   mock,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   twisted,
 }:
 
@@ -19,8 +16,6 @@ buildPythonPackage rec {
   pname = "towncrier";
   version = "25.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,9 +28,7 @@ buildPythonPackage rec {
     click
     incremental
     jinja2
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH

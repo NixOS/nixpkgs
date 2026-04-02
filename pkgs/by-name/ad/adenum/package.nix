@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "adenum";
   version = "0-unstable-2022-04-01";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "SecuProject";

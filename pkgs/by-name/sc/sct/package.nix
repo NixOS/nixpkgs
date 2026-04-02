@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   xorgproto,
 }:
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     xorgproto
   ];
 

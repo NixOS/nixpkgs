@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.6.2";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
     tag = "v${version}";
-    hash = "sha256-1aAc2qGVlClnsw70D1QqPbSsyij0JNgfIXsLzelYx3E=";
+    hash = "sha256-dZIWOwRRrF1bux9UTIxN31/S380wPT4gpQ/gYbUO4FQ=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pygsl/pygsl";
     changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

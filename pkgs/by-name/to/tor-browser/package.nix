@@ -21,11 +21,11 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxt,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -78,11 +78,11 @@ let
       glib
       gtk3
       libxcb
-      libX11
-      libXext
-      libXrender
-      libXt
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxt
+      libxtst
       libgbm
       pango
       pciutils
@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.3";
+  version = "15.0.8";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-MVbxV8U1WKT3loM174Zk0QG33qftzr/Ay3w/hbFAF2U=";
+      hash = "sha256-m/WZa1O9MTeE8YUku/BAbcl9Dx77yVkt44C5qe/1fP0=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-3IEmpO1ZanAVXiUINhA44hX06J1/9vEJ8T8hQjfnAHY=";
+      hash = "sha256-QMv59Tj2voJAvBF/UM0xNe1byx8qZZtZhWqt2yGjdM4=";
     };
   };
 
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
@@ -353,7 +353,6 @@ stdenv.mkDerivation rec {
       c4patino
       felschr
       hax404
-      joachifm
       panicgh
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether

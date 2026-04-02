@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-parallel";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "aaronriekenberg";
     repo = "rust-parallel";
-    rev = "v${version}";
-    hash = "sha256-osuuEYOktSMmpKURXvn0rWUeBgFV07aTeM8oxkiCe10=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-86CUFtq6XpTYL7zpDBBfbSXlPYhWofwMjJSK698lclI=";
   };
 
-  cargoHash = "sha256-20Lr7nRhr7Vrkk31iCioxmYpXYOfQFAmPkyHe1Nfijc=";
+  cargoHash = "sha256-g2R3dEvDv3uzZVXBFvsCoX/M0XuHhoE/mMHni6qEN1g=";
 
   postPatch = ''
     substituteInPlace tests/dummy_shell.sh \
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rust-parallel";
     maintainers = with lib.maintainers; [ sedlund ];
   };
-}
+})

@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kiln";
   version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~adnano";
     repo = "kiln";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BbKd+0Dmo6RaoS0N7rQmSGJasuJb6dl43GZ7LdMBy/o=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "kiln";
   };
-}
+})

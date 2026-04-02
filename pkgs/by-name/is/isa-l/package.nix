@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isa-l";
-  version = "2.31.1";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pv0Aq1Yp/NkGN7KXJ4oQMSG36k5v9YnsELuATl86Zp4=";
+    hash = "sha256-LvxAlyBUSYEVLrMGcLii7bGvN1GZY/noYRSrBqsGiMI=";
   };
 
   nativeBuildInputs = [
@@ -32,14 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
+  # configure.ac has two code paths for assembler detection:
+  # 1. When AS is unset: searches for nasm and tests with correct nasm syntax
+  # 2. When AS is set: tests with yasm-style syntax that nasm rejects
+  # AM_PROG_AS sets AS=as, so we must unset it to use path 1.
   preConfigure = ''
-    export AS=nasm
+    unset AS
   '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/igzip";
   doInstallCheck = true;
 
   passthru = {

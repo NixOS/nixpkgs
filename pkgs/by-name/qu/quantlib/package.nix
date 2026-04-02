@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
-  version = "1.40";
+  version = "1.41";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lballabio";
     repo = "QuantLib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cyri+kCwIFO/ccnqWhO8qOXNPIV0g6iiNvBYtN667pA=";
+    hash = "sha256-dHXITHP0SBrBXf5hrVhjSD4n2EtVvEkBDfE2NbT0/sc=";
   };
 
   nativeBuildInputs = [ cmake ];

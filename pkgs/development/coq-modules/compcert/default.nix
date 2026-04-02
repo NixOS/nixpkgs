@@ -29,6 +29,11 @@ let
     targets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
+  menhir_20260203 = fetchpatch {
+    url = "https://github.com/AbsInt/CompCert/commit/5fd8013305ecf6fa7cd2ea5a0a6fa3ebb2bc31c5.patch";
+    hash = "sha256-0bDqGSkvJM/rdCoFa6if/pJLJ4gYx2Bkld9wJaQDQOU=";
+  };
+
   compcert = mkCoqDerivation {
 
     pname = "compcert";
@@ -38,28 +43,16 @@ let
     releaseRev = v: "v${v}";
 
     defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
       with lib.versions;
       lib.switch coq.version [
-        {
-          case = range "8.15" "9.0";
-          out = "3.16";
-        }
-        {
-          case = range "8.14" "8.20";
-          out = "3.15";
-        }
-        {
-          case = isEq "8.13";
-          out = "3.10";
-        }
-        {
-          case = isEq "8.12";
-          out = "3.9";
-        }
-        {
-          case = range "8.8" "8.11";
-          out = "3.8";
-        }
+        (case (range "8.15" "9.1") "3.17")
+        (case (range "8.14" "8.20") "3.15")
+        (case (isEq "8.13") "3.10")
+        (case (isEq "8.12") "3.9")
+        (case (range "8.8" "8.11") "3.8")
       ] null;
 
     release = {
@@ -73,6 +66,7 @@ let
       "3.14".sha256 = "sha256-QXJMpp/BaPiK5okHeo2rcmXENToXKjB51UqljMHTDgw=";
       "3.15".sha256 = "sha256-QFTueGZd0hAWUj+c5GZL/AyNpfN4FuJiIzCICmwRXJ8=";
       "3.16".sha256 = "sha256-Ep8bcSFs3Cu+lV5qgo89JJU2vh4TTq66Or0c4evo3gM=";
+      "3.17".hash = "sha256-RRc39FUe2sHQdO/ybwA3B7o31qfxcUkgah6I20i0ElE=";
     };
 
     strictDeps = true;
@@ -90,8 +84,6 @@ let
       flocq
       MenhirLib
     ];
-
-    enableParallelBuilding = true;
 
     postPatch = ''
       substituteInPlace ./configure \
@@ -236,6 +228,16 @@ let
           }
           {
             cases = [
+              (range "8.15" "8.16")
+              (isEq "3.13")
+            ];
+            out = [
+              # Support for menhir 20260203
+              menhir_20260203
+            ];
+          }
+          {
+            cases = [
               (range "8.17" "8.19")
               (isEq "3.13")
             ];
@@ -265,6 +267,8 @@ let
                 url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
                 hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
               })
+              # Support for menhir 20260203
+              menhir_20260203
             ];
           }
           {
@@ -292,7 +296,7 @@ let
           }
           {
             cases = [
-              (isEq "8.20")
+              (range "8.19" "8.20")
               (isEq "3.15")
             ];
             out = [
@@ -301,6 +305,8 @@ let
                 url = "https://github.com/AbsInt/CompCert/commit/e524b0a19ae5140f64047b1cba6ebbe1d16d5bbf.patch";
                 hash = "sha256-24kt0hA75ooyXymH+kNS5VlsuXMHbkqTw4m+BzNUwrw=";
               })
+              # Support for menhir 20260203
+              menhir_20260203
             ];
           }
           {
@@ -313,6 +319,19 @@ let
               (fetchpatch {
                 url = "https://github.com/AbsInt/CompCert/commit/a962ef9da0fb4ef2a4314ccedd111eb248e42cf2.patch";
                 hash = "sha256-ipYqcfcgz3cKyI1NGSgfOgiVdV1WUwlv6DVB1S1hJvw=";
+              })
+            ];
+          }
+          {
+            cases = [
+              (isGe "9.0")
+              (isEq "3.17")
+            ];
+            out = [
+              # Support for Coq 9.0.1 & Coq 9.1.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/6e5d40fb028d787249cd897fe4a1b96420addb8b.patch";
+                hash = "sha256-YBDsvhfup1IMc5GcW7BdsHUKGCv3A1eGIeb4Wal4x7A=";
               })
             ];
           }

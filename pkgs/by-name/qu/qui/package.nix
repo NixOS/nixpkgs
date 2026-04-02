@@ -1,8 +1,9 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   stdenvNoCC,
+  nixosTests,
   nix-update-script,
   nodejs,
   pnpm_9,
@@ -11,14 +12,14 @@
   typescript,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "qui";
-  version = "1.12.0";
+  version = "1.15.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0d8aJ9qcK3+/g+qNBsH84U5zQho6bl5TdzHQRQsabs=";
+    hash = "sha256-TdZNccViu+YArjziohnAHJ5js97iMD8qA5iGUPBbwDU=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -42,8 +43,8 @@ buildGoModule (finalAttrs: {
         sourceRoot
         ;
       pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-3TAB5StrKBmgit02J7GiMfk6EDl8oiLvcOAnCJ9ian4=";
+      fetcherVersion = 3;
+      hash = "sha256-9ZPtkxRWzYm9SIYj/ncaKXo/xkyAamdcdFwvfbseb20=";
     };
 
     postBuild = ''
@@ -55,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-hdgTC/oA2ZUc7mqA3v1vunXcu+aeKGw2fEUBBeerCeg=";
+  vendorHash = "sha256-eex2smQRfArp1+aWNh+yBV4AtHNSEEPRsyZVkDDOt5w=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -72,11 +73,17 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "qui-web"
-    ];
+  # Required for tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "qui-web"
+      ];
+    };
+    tests.testService = nixosTests.qui;
   };
 
   meta = {

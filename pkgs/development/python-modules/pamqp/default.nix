@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -10,8 +9,6 @@
 buildPythonPackage rec {
   version = "3.3.0";
   pname = "pamqp";
-
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 

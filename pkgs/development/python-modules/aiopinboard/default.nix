@@ -10,7 +10,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aiopinboard";
   version = "2024.01.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";

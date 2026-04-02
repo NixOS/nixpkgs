@@ -4,7 +4,6 @@
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   yarl,
   zeep,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "onvif-zeep-async";
   version = "4.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "openvideolibs";

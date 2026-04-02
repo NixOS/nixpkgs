@@ -7,14 +7,14 @@
   argp-standalone,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "f3";
   version = "9.0";
 
   src = fetchFromGitHub {
     owner = "AltraMayor";
     repo = "f3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ZajlFGXJcYUVe/wUFfdPYVW8stOo1Aqe8uD2Bm9KIk0=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
       makefu
     ];
   };
-}
+})

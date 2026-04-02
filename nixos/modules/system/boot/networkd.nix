@@ -84,6 +84,7 @@ let
           "Duplex"
           "AutoNegotiation"
           "WakeOnLan"
+          "WakeOnLanPassword"
           "Port"
           "Advertise"
           "ReceiveChecksumOffload"
@@ -91,14 +92,57 @@ let
           "TCPSegmentationOffload"
           "TCP6SegmentationOffload"
           "GenericSegmentationOffload"
+          "PartialGenericSegmentationOffload"
           "GenericReceiveOffload"
+          "GenericReceiveOffloadHardware"
           "LargeReceiveOffload"
+          "ReceivePacketSteeringCPUMask"
+          "ReceiveVLANCTAGHardwareAcceleration"
+          "TransmitVLANCTAGHardwareAcceleration"
+          "ReceiveVLANCTAGFilter"
+          "NTupleFilter"
+          "ReceiveFCS"
+          "ReceiveAll"
           "RxChannels"
           "TxChannels"
           "OtherChannels"
           "CombinedChannels"
+          "Property"
+          "ImportProperty"
+          "UnsetProperty"
           "RxBufferSize"
+          "RxMiniBufferSize"
+          "RxJumboBufferSize"
           "TxBufferSize"
+          "RxFlowControl"
+          "TxFlowControl"
+          "AutoNegotiationFlowControl"
+          "GenericSegmentOffloadMaxBytes"
+          "GenericSegmentOffloadMaxSegments"
+          "UseAdaptiveRxCoalesce"
+          "UseAdaptiveTxCoalesce"
+          "RxCoalesceSec"
+          "RxCoalesceIrqSec"
+          "RxCoalesceLowSec"
+          "RxCoalesceHighSec"
+          "TxCoalesceSec"
+          "TxCoalesceIrqSec"
+          "TxCoalesceLowSec"
+          "TxCoalesceHighSec"
+          "RxMaxCoalescedFrames"
+          "RxMaxCoalescedIrqFrames"
+          "RxMaxCoalescedLowFrames"
+          "RxMaxCoalescedHighFrames"
+          "TxMaxCoalescedFrames"
+          "TxMaxCoalescedIrqFrames"
+          "TxMaxCoalescedLowFrames"
+          "TxMaxCoalescedHighFrames"
+          "CoalescePacketRateLow"
+          "CoalescePacketRateHigh"
+          "CoalescePacketRateSampleIntervalSec"
+          "StatisticsBlockCoalesceSec"
+          "MDI"
+          "SR-IOVVirtualFunctions"
           "ReceiveQueues"
           "TransmitQueues"
           "TransmitQueueLength"
@@ -155,8 +199,8 @@ let
         (assertRange "CombinedChannels" 1 4294967295)
         (assertInt "RxBufferSize")
         (assertInt "TxBufferSize")
-        (assertRange "ReceiveQueues" 1 4096)
-        (assertRange "TransmitQueues" 1 4096)
+        (assertRange "ReceiveQueues" 1 16384)
+        (assertRange "TransmitQueues" 1 16384)
         (assertRange "TransmitQueueLength" 1 4294967294)
       ];
     };
@@ -291,13 +335,20 @@ let
         sectionVLAN = checkUnitConfig "VLAN" [
           (assertOnlyFields [
             "Id"
+            "Protocol"
             "GVRP"
             "MVRP"
             "LooseBinding"
             "ReorderHeader"
+            "EgressQOSMaps"
+            "IngressQOSMaps"
           ])
           (assertInt "Id")
           (assertRange "Id" 0 4094)
+          (assertValueOneOf "Protocol" [
+            "802.1q"
+            "802.1ad"
+          ])
           (assertValueOneOf "GVRP" boolValues)
           (assertValueOneOf "MVRP" boolValues)
           (assertValueOneOf "LooseBinding" boolValues)
@@ -1060,6 +1111,7 @@ let
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
           "UseDNS"
+          "UseDNR"
           "RoutesToDNS"
           "UseNTP"
           "UseSIP"
@@ -1097,8 +1149,10 @@ let
           "Use6RD"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertValueOneOf "UseSIP" boolValues)
@@ -1131,13 +1185,16 @@ let
           "infinity"
         ])
         (assertValueOneOf "Use6RD" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
           "UseAddress"
           "UseDNS"
+          "UseDNR"
           "UseNTP"
+          "UseSIP"
           "SendHostname"
           "UseHostname"
           "Hostname"
@@ -1159,10 +1216,13 @@ let
           "SendRelease"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "UseSIP" boolValues)
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
@@ -1177,6 +1237,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
         (assertValueOneOf "SendRelease" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -1200,6 +1261,7 @@ let
       sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
         (assertOnlyFields [
           "UseDNS"
+          "UseDNR"
           "UseDomains"
           "RouteTable"
           "UseAutonomousPrefix"
@@ -1219,8 +1281,14 @@ let
           "UsePREF64"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
+          "UseRedirect"
+          "UseHopLimit"
+          "UseReachableTime"
+          "UseRetransmissionTime"
         ])
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
@@ -1230,6 +1298,11 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutePrefix" boolValues)
         (assertValueOneOf "UsePREF64" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UseRedirect" boolValues)
+        (assertValueOneOf "UseHopLimit" boolValues)
+        (assertValueOneOf "UseReachableTime" boolValues)
+        (assertValueOneOf "UseRetransmissionTime" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -3011,6 +3084,15 @@ let
       type = types.listOf types.str;
       description = ''
         A list of macvlan interfaces to be added to the network section of the
+        unit.  See {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipvlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of ipvlan interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };

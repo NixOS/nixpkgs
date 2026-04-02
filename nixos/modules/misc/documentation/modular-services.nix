@@ -18,7 +18,6 @@ let
     };
 
   modularServicesModule = {
-    _file = "${__curPos.file}:${toString __curPos.line}";
     options = {
       "<imports = [ pkgs.ghostunnel.services.default ]>" = fakeSubmodule pkgs.ghostunnel.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;

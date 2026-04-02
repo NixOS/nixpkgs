@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "deezer-py";
   version = "1.3.7";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

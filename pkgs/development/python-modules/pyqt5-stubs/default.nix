@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyqt5,
   pyqt3d,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "pyqt5-stubs";
   version = "5.15.6.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-qt-tools";

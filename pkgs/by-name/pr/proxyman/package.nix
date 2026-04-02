@@ -6,11 +6,11 @@
 }:
 let
   pname = "proxyman";
-  version = "3.6.0";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/${version}/Proxyman-${version}.AppImage";
-    hash = "sha256-uGzegB/t/9/ovgTY3F2ihBKOgLKDenZh2Ojg9SBNQos=";
+    hash = "sha256-hv0TYlCHoiWrMRLcPrruI09SC24Pafo9B5kkUpFDyKI=";
   };
 
   appimageContents = appimageTools.extract {
@@ -37,7 +37,7 @@ appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/proxyman.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/proxyman.png -t $out/share/pixmaps
+    install -Dm444 ${appimageContents}/proxyman.png -t $out/share/icons/hicolor/256x256/apps
     substituteInPlace $out/share/applications/proxyman.desktop \
       --replace-fail "Exec=AppRun" "Exec=proxyman --"
   '';

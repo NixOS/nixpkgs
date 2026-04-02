@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "luabridge";
-  version = "2.8";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "vinniefalco";
     repo = "LuaBridge";
     rev = version;
-    sha256 = "sha256-gXrBNzE41SH98Xz480+uHQlxHjMHzs23AImxil5LZ0g=";
+    sha256 = "sha256-pHJU9FxG1/vAakaXxJeXFDdDbOvmgL9/88jM6CWXzjg=";
   };
 
   dontConfigure = true;

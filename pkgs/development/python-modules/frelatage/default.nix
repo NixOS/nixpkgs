@@ -5,7 +5,6 @@
   numpy,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   timeout-decorator,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "frelatage";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Rog3rSm1th";

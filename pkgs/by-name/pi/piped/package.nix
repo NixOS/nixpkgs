@@ -38,8 +38,8 @@ buildNpmPackage rec {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-WtZfRZFRV9I1iBlAoV69GGFjdiQhTSBG/iiEadPVcys=";
+    fetcherVersion = 3;
+    hash = "sha256-IB/suR1I1hNip1qpIcUCP0YyUEDV2EwE5F2WXW8OhmU=";
   };
 
   passthru.updateScript = unstableGitUpdater { };

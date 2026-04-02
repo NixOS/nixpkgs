@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # FILECMD was added in libtool 2.4.7; previous versions hardwired `/usr/bin/file`
   #   https://lists.gnu.org/archive/html/autotools-announce/2022-03/msg00000.html
-  FILECMD = "${file}/bin/file";
+  env.FILECMD = "${file}/bin/file";
 
   postPatch =
     # libtool commit da2e352735722917bf0786284411262195a6a3f6 changed

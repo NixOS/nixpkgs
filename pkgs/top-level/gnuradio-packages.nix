@@ -3,6 +3,7 @@
   stdenv,
   newScope,
   gnuradio, # unwrapped gnuradio
+  packageOverrides,
 }:
 
 lib.makeScope newScope (
@@ -34,21 +35,21 @@ lib.makeScope newScope (
         inherit (gnuradio) uhd;
       }
     );
+
+    # Base package set without overrides
+    basePackages = {
+      inherit callPackage mkDerivation mkDerivationWith;
+
+      bladeRF = callPackage ../development/gnuradio-modules/bladeRF/default.nix { };
+
+      lora_sdr = callPackage ../development/gnuradio-modules/lora_sdr/default.nix { };
+
+      osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
+
+      fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };
+
+      gr-difi = callPackage ../development/gnuradio-modules/gr-difi/default.nix { };
+    };
   in
-  {
-
-    inherit callPackage mkDerivation mkDerivationWith;
-
-    ### Packages
-
-    bladeRF = callPackage ../development/gnuradio-modules/bladeRF/default.nix { };
-
-    lora_sdr = callPackage ../development/gnuradio-modules/lora_sdr/default.nix { };
-
-    osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
-
-    fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };
-
-    gr-difi = callPackage ../development/gnuradio-modules/gr-difi/default.nix { };
-  }
+  basePackages // (packageOverrides self basePackages)
 )

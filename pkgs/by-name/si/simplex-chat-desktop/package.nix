@@ -8,7 +8,7 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.4.8";
+  version = "6.4.10";
 
   sources = {
     "aarch64-linux" = fetchurl {
@@ -17,7 +17,7 @@ let
     };
     "x86_64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-      hash = "sha256-2XyA4UZ9EMzFnFNFFek1ka2MURBFFKyMolGMYZPD5Zw=";
+      hash = "sha256-HueMU1cCOspIsDg4hC9ebMbIvkOtZGiSktB1VSMGgT8=";
     };
   };
 

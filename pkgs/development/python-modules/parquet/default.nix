@@ -5,7 +5,6 @@
   fetchpatch,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   setuptools,
   thriftpy2,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "parquet";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jcrobak";

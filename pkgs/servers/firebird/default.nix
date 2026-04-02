@@ -29,7 +29,6 @@ let
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
         bbenno
-        marcweber
       ];
     };
 
@@ -40,7 +39,7 @@ let
       icu73
     ];
 
-    LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
+    env.LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
 
     configureFlags = [
       "--with-system-editline"

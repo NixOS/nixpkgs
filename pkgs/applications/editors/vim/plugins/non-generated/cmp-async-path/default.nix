@@ -1,20 +1,19 @@
 {
   lib,
   vimUtils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
   vimPlugins,
 }:
 vimUtils.buildVimPlugin {
   pname = "cmp-async-path";
-  version = "0-unstable-2026-01-05";
+  version = "0-unstable-2026-01-28";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "FelipeLema";
     repo = "cmp-async-path";
-    rev = "a14d3a9c7f303551a0b8c64a0e4e6527ce39a8a2";
-    hash = "sha256-QOa2Oke3p5wGhTJ4TjcgTUphb0OdDUwmw8MiYp2LkhA=";
+    rev = "f8af3f726e07f2e9d37672eaa9102581aefce149";
+    hash = "sha256-ALMK7TnEB7/UZibVgOl4r6/gYsHCo6YAZcAR536VL4g=";
   };
 
   checkInputs = [ vimPlugins.nvim-cmp ];

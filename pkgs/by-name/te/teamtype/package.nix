@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teamtype";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "teamtype";
     repo = "teamtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B/4xR16cEG90fK12XQqjlpWzd6tyUVYXOBXK0j5fvNU=";
+    hash = "sha256-74MufpLTACkPevzOyaXw2Rr7S7VvaFEYHEyTQYwKVT8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/daemon";
 
-  cargoHash = "sha256-yuAk4SqYzNK1gD6lqVVDOyAJNq/NIf44DWdZ3aM/Q8s=";
+  cargoHash = "sha256-OIOffnCC9PlT/SXPOuTnKx3feZnkHP+jzbQIJWX0tzk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

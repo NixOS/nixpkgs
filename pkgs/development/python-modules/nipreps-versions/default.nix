@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-scm,
   packaging,
   setuptools-scm,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "nipreps-versions";
   version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nipreps";

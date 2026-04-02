@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   aiolifx,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "aiolifx-connection";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "aiolifx_connection";

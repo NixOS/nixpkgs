@@ -6,14 +6,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libinjection";
   version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "client9";
     repo = "libinjection";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0chsgam5dqr9vjfhdcp8cgk7la6nf3lq44zs6z6si98cq743550g";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

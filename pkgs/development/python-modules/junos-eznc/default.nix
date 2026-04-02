@@ -12,28 +12,25 @@
   paramiko,
   pyparsing,
   pyserial,
-  pythonOlder,
   pyyaml,
   scp,
   setuptools,
   pytestCheckHook,
   six,
   transitions,
-  yamlordereddictloader,
+  yamlloader,
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.5";
+  version = "2.7.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
     tag = version;
-    hash = "sha256-1OOXhhY3fBG00PptUSfIPI906YLgludr9PRMoWBbPnU=";
+    hash = "sha256-+bheNSRcFnq/07Y6BaTqsUAVxEQcdQwtz39cX1nKOBs=";
   };
 
   build-system = [ setuptools ];
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     scp
     six
     transitions
-    yamlordereddictloader
+    yamlloader
   ];
 
   nativeCheckInputs = [

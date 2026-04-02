@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.13.0-unstable-2025-12-25";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
-    rev = "834d89c2115a48188e827089db05a88db5dc1f8f";
-    hash = "sha256-o7x6Ib9zL4akzjvz+mSACQHyj2xH6RzoCniumNjK1lw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lKJU8GIkubHLYsP7r+TA+1rg+TMGONwjEcys19f62/w=";
   };
 
   patches = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
   passthru.tests.kaidan = nixosTests.kaidan;
 
   meta = {

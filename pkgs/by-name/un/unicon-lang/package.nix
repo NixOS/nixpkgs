@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  libX11,
+  libx11,
   libxcrypt,
   fetchFromGitHub,
   coreutils,
   libpng,
-  xorg,
+  libxft,
   freetype,
   zlib,
   libjpeg,
@@ -34,10 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     # compression
     zlib
     # graphics
-    libX11
+    libx11
     libjpeg
     libpng
-    xorg.libXft
+    libxft
     freetype
     # ssl
     openssl

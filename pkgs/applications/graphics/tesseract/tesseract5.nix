@@ -14,14 +14,14 @@
   pango,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tesseract";
   version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-VLmKwycJK66fFkdWOSYO5OJkJC8MTWKTQWIVb243ekc=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tesseract";
   };
-}
+})

@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   scikit-learn,
   typer,
+  typing-extensions,
   requests,
   pillow,
   numpy,
@@ -14,25 +15,27 @@
 }:
 buildPythonPackage rec {
   pname = "pylette";
-  version = "4.1.0";
+  version = "5.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qTipTip";
     repo = "Pylette";
     tag = version;
-    hash = "sha256-6OZeCcF47xjj266+IasJYub042R46KRaNXGCv+hlWdY=";
+    hash = "sha256-5zQJrdXUr2J/si8YPNR/5FvhTOFZRMwXjpakt3vJWs0=";
   };
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   dependencies = [
+    opencv-python
     scikit-learn
     pillow
     requests
     typer
+    typing-extensions
     numpy
   ];
 
@@ -49,10 +52,11 @@ buildPythonPackage rec {
   disabledTests = [
     # hangs forever
     "test_color_extraction_deterministic_kmeans"
+    # AssertionError: assert 'Usage: ' in ''
+    "test_cli_no_input_is_error"
   ];
 
   nativeCheckInputs = [
-    opencv-python
     pytestCheckHook
     requests-mock
     typer

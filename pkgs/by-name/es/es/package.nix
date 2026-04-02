@@ -7,13 +7,13 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "es";
   version = "0.9.2";
 
   src = fetchurl {
-    url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";
+    url = "https://github.com/wryun/es-shell/releases/download/v${finalAttrs.version}/es-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ySZIK0IITpA+uHHuHrDO/Ana5vGt64QI3Z6TMDXE9d0=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
   passthru = {
     shellPath = "/bin/es";
   };
-}
+})

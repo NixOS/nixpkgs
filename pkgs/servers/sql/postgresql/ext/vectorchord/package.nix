@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_16_0,
+  cargo-pgrx_0_17_0,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -9,19 +9,19 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_16_0;
+  cargo-pgrx = cargo-pgrx_0_17_0;
 
   pname = "vectorchord";
-  version = "0.5.3";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "tensorchord";
     repo = "vectorchord";
     tag = finalAttrs.version;
-    hash = "sha256-+c1Uf/3rp+HuthDVPLloJF2MQPW3Xho897Z2eAnG6aM=";
+    hash = "sha256-QL9XGSQFOcrpww03Y5F0JuDbpo0v8oidUqucLxggkqE=";
   };
 
-  cargoHash = "sha256-/EcQgQ6J9hg4BsniRX7OMwEYy5EtVeT6Q/+3mAkyCH8=";
+  cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
 
   # Include upgrade scripts in the final package
   # https://github.com/tensorchord/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366

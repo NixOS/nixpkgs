@@ -11,7 +11,7 @@
   gsl,
   intltool,
   kdePackages,
-  ladspaH,
+  ladspa-header,
   libbs2b,
   libebur128,
   libmysofa,
@@ -35,7 +35,7 @@
   webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
-  wrapGAppsNoGuiHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -57,18 +57,16 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.0.9";
+  version = "8.1.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    tag = "v${version}";
-    hash = "sha256-cFMbeJeEIDP7uiNi+rRKErgHtjP/PbPKASo+M2qogZQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MNBlhwF8quJ0wXBzwyn7KM2TNgbYbWYHTK6itn0fUVU=";
   };
-
-  patches = [ ./qmlmodule-fix.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +74,7 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkg-config
-    wrapGAppsNoGuiHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -95,7 +93,7 @@ stdenv.mkDerivation rec {
     kiconthemes
     kirigami
     kirigami-addons
-    ladspaH
+    ladspa-header
     qqc2-desktop-style
     libbs2b
     libebur128
@@ -148,7 +146,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/src/contents/docs/community/CHANGELOG.md";
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${finalAttrs.version}/src/contents/docs/community/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       getchoo
@@ -158,4 +156,4 @@ stdenv.mkDerivation rec {
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,16 +5,16 @@
   qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "6.2.5";
+  version = "6.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
-    tag = version;
-    hash = "sha256-PP0SQbTXUaAfCX8EZ7+5/uGYDhOmgxxGwVhjc70c7mA=";
+    tag = finalAttrs.version;
+    hash = "sha256-3iFuJdiye0yt/6b6N1etS1YK+/QDS2p0eYXXtpPQDdE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://rtosta.com/zapzap/";
     mainProgram = "zapzap";
     license = lib.licenses.gpl3Only;
-    changelog = "https://github.com/rafatosta/zapzap/releases/tag/${src.tag}";
+    changelog = "https://github.com/rafatosta/zapzap/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

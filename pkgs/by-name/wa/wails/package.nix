@@ -14,18 +14,18 @@
   webkitgtk_4_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wails";
   version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = "wails";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H1Nml2vhCx4IB/CT+kDro5joAw8ewpxoQjDgvqamAr8=";
   };
 
-  sourceRoot = "${src.name}/v2";
+  sourceRoot = "${finalAttrs.src.name}/v2";
 
   vendorHash = "sha256-RgRrKok06HDg6j5tbOmtX9mOl/t6eXuCwQ2OhOXbHUU=";
 
@@ -64,7 +64,7 @@ buildGoModule rec {
   # As Wails calls a compiler, certain apps and libraries need to be made available.
   postFixup = ''
     wrapProgram $out/bin/wails \
-      --prefix PATH : ${
+      --suffix PATH : ${
         lib.makeBinPath [
           pkg-config
           go
@@ -72,7 +72,7 @@ buildGoModule rec {
           nodejs
         ]
       } \
-      --prefix LD_LIBRARY_PATH : "${
+      --suffix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath (
           lib.optionals stdenv.hostPlatform.isLinux [
             gtk3
@@ -94,4 +94,4 @@ buildGoModule rec {
     mainProgram = "wails";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apx-gui";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y2Xrb0+vohfOZTlauk9o4nISwLz6/u87+dXBr3UqwH4=";
+    hash = "sha256-FE/QoDzpTMez0nQWsIe8HTkwtXBGiQvZKyjfui6sqhY=";
   };
 
   strictDeps = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [
       ps.pygobject3
       ps.pyyaml
-      ps.requests
+      ps.podman
     ]))
     wrapGAppsHook4
   ];

@@ -6,15 +6,12 @@
   cython,
   pdm-backend,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "editdistance";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "roy-ht";

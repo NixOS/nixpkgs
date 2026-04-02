@@ -5,14 +5,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bit";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "chriswalz";
     repo = "bit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-18R0JGbG5QBDghF4SyhXaKe9UY5UzF7Ap0Y061Z1SZ8=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "bit";
   };
-}
+})

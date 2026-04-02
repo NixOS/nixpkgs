@@ -4,13 +4,13 @@
   anki,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mnemosyne";
   version = "2.10.1";
   format = "setuptools";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
+    url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${finalAttrs.version}/Mnemosyne-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
   };
 
@@ -80,4 +80,4 @@ python3Packages.buildPythonApplication rec {
       software even further.
     '';
   };
-}
+})

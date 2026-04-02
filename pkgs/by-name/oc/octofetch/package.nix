@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "octofetch";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "azur1s";
     repo = "octofetch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "octofetch";
   };
-}
+})

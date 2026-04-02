@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   devtools,
   fastapi,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "prometheus-fastapi-instrumentator";
   version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "trallnag";

@@ -37,7 +37,7 @@ buildGraalvmNativeImage (finalAttrs: {
     homepage = "https://github.com/markus-wa/cq";
     changelog = "https://github.com/markus-wa/cq/releases/releases/tag/${finalAttrs.version}";
     license = lib.licenses.epl20;
-    maintainers = with lib.maintainers; [ farcaller ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "cq";
   };

@@ -28,6 +28,11 @@ stdenv.mkDerivation {
     sha256 = "sha256-uBfECbU2Df/pPpEXXq62S7Ec0YU4lPIsZ8k5UmKD7xQ=";
   };
 
+  postPatch = ''
+    substituteInPlace RetroFE/Source/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
     makeWrapper

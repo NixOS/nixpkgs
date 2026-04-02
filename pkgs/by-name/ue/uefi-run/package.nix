@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uefi-run";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Richard-W";
     repo = "uefi-run";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tR547osqw18dCMHJLqJ8AQBelbv8yCl7rAqslu+vnDQ=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "uefi-run";
   };
-}
+})

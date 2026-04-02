@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   # build inputs
   jsonref,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "bravado-core";
   version = "6.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yelp";

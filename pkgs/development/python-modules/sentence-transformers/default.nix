@@ -10,6 +10,7 @@
 
   # dependencies
   huggingface-hub,
+  numpy,
   scikit-learn,
   scipy,
   torch,
@@ -31,22 +32,23 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
-    tag = "v${version}";
-    hash = "sha256-WD5uTfAbDYYeSXlgznSs4XyN1fAILxILmmSHmLosmV4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xf5ujZH7OH81ofavytI/Zd0PCkRf6rIoXzWI9kUjoDE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
+    numpy
     scikit-learn
     scipy
     torch
@@ -72,7 +74,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -98,7 +100,9 @@ buildPythonPackage rec {
     "test_mse_loss_matryoshka"
     "test_nanobeir_evaluator"
     "test_negative_dimension_raises_error"
+    "test_pairwise_angle_sim_even_and_odd_sparse_embeddings"
     "test_paraphrase_mining"
+    "test_pooling_prompt_attention_mask_respects_include_prompt"
     "test_pretrained_model"
     "test_router_as_middle_module"
     "test_router_backwards_compatibility"
@@ -149,14 +153,17 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/cross_encoder/test_cross_encoder.py"
+    "tests/cross_encoder/test_model_card.py"
     "tests/cross_encoder/test_train_stsb.py"
     "tests/evaluation/test_information_retrieval_evaluator.py"
     "tests/sparse_encoder/models/test_csr.py"
     "tests/sparse_encoder/models/test_sparse_static_embedding.py"
+    "tests/sparse_encoder/test_model_card.py"
     "tests/sparse_encoder/test_opensearch_models.py"
     "tests/sparse_encoder/test_pretrained.py"
     "tests/sparse_encoder/test_sparse_encoder.py"
     "tests/test_compute_embeddings.py"
+    "tests/test_model_card.py"
     "tests/test_model_card_data.py"
     "tests/test_multi_process.py"
     "tests/test_pretrained_stsb.py"
@@ -173,8 +180,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/huggingface/sentence-transformers";
-    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

@@ -72,7 +72,9 @@ let
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
       DEBUG_INFO_REDUCED = whenAtLeast "5.13" (option no);
-      DEBUG_INFO_BTF = option yes;
+      # Intermittently breaks on 5.10 for unknown reasons.
+      # https://lore.kernel.org/r/6dd6eef7-15cb-00a3-c216-d6eaaa5cbf54@est.tech
+      DEBUG_INFO_BTF = whenAtLeast "5.11" (option yes);
       # Allow loading modules with mismatched BTFs
       # FIXME: figure out how to actually make BTFs reproducible instead
       # See https://github.com/NixOS/nixpkgs/pull/181456 for details.
@@ -563,10 +565,6 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
-
-        # Required for Nova
-        # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
-        RUST_FW_LOADER_ABSTRACTIONS = lib.mkIf withRust (whenAtLeast "6.12" yes);
       }
       //
         lib.optionalAttrs
@@ -577,7 +575,7 @@ let
             # Enable Hyper-V Synthetic DRM Driver
             DRM_HYPERV = whenAtLeast "5.14" module;
             # And disable the legacy framebuffer driver when we have the new one
-            FB_HYPERV = whenAtLeast "5.14" no;
+            FB_HYPERV = whenBetween "5.14" "7.0" no;
           }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         # Intel GVT-g graphics virtualization supports 64-bit only
@@ -589,6 +587,8 @@ let
         DRM_VC4_HDMI_CEC = yes;
         # Enable HDMI out on platforms using the RK3588 lineup of SoCs.
         ROCKCHIP_DW_HDMI_QP = whenAtLeast "6.13" yes;
+        # Enable DSI out on platforms using the RK3588 lineup of SoCs.
+        ROCKCHIP_DW_MIPI_DSI2 = whenAtLeast "6.16" yes;
       };
 
     # Enable Rust and features that depend on it
@@ -602,6 +602,10 @@ let
       DRM_PANIC_SCREEN = whenAtLeast "6.12" (freeform "kmsg");
 
       DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" yes;
+
+      # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
+      NOVA_CORE = whenAtLeast "6.15" no;
+      DRM_NOVA = whenAtLeast "6.16" no;
     };
 
     sound = {
@@ -681,6 +685,8 @@ let
       FANOTIFY = yes;
       FANOTIFY_ACCESS_PERMISSIONS = yes;
 
+      FS_DAX = yes;
+
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
       FS_ENCRYPTION = yes;
@@ -701,9 +707,9 @@ let
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
-      REISERFS_FS_XATTR = option yes;
-      REISERFS_FS_POSIX_ACL = option yes;
-      REISERFS_FS_SECURITY = option yes;
+      REISERFS_FS_XATTR = whenOlder "6.13" (option yes);
+      REISERFS_FS_POSIX_ACL = whenOlder "6.13" (option yes);
+      REISERFS_FS_SECURITY = whenOlder "6.13" (option yes);
 
       JFS_POSIX_ACL = option yes;
       JFS_SECURITY = option yes;
@@ -735,7 +741,9 @@ let
       NFS_FSCACHE = yes;
       NFS_SWAP = yes;
       NFS_V3_ACL = yes;
-      NFS_V4_1 = yes; # NFSv4.1 client support
+      # NFSv4.1 is enabled unconditionally on 7.0 and up
+      # see: https://github.com/torvalds/linux/commit/7537db24806fdc3d3ec4fef53babdc22c9219e75
+      NFS_V4_1 = whenOlder "7.0" yes;
       NFS_V4_2 = yes;
       NFS_V4_SECURITY_LABEL = yes;
       NFS_LOCALIO = whenAtLeast "6.12" yes;
@@ -822,6 +830,8 @@ let
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = no;
+
+      IMA = yes;
 
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS = yes;
@@ -989,6 +999,9 @@ let
       XEN_PVH = option yes;
       XEN_PVHVM = option yes;
       XEN_SAVE_RESTORE = option yes;
+
+      # Disabled by default on POWER
+      VIRTIO_MENU = yes;
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
@@ -1159,7 +1172,7 @@ let
 
         ACCESSIBILITY = yes; # Accessibility support
         AUXDISPLAY = yes; # Auxiliary Display support
-        HIPPI = yes;
+        HIPPI = whenOlder "7.0" yes;
         MTD_COMPLEX_MAPPINGS = yes; # needed for many devices
 
         SCSI_LOWLEVEL = yes; # enable lots of SCSI devices
@@ -1241,6 +1254,7 @@ let
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
+        LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
         PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
         # Windows Logical Disk Manager (Dynamic Disk) support
@@ -1368,8 +1382,14 @@ let
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 
+        # We want to prefer PREEMPT_LAZY when available, and fall back on PREEMPT_VOLUNTARY.
+        # It just so happens that kconfig asks for PREEMPT_LAZY first, so doing it like this
+        # does what we want.
+        # FIXME: This is stupid and bad.
+        # See: https://github.com/torvalds/linux/commit/7dadeaa6e851e7d67733f3e24fc53ee107781d0f
         PREEMPT = no;
-        PREEMPT_VOLUNTARY = yes;
+        PREEMPT_LAZY = option yes;
+        PREEMPT_VOLUNTARY = option yes;
 
         X86_AMD_PLATFORM_DEVICE = lib.mkIf stdenv.hostPlatform.isx86 yes;
         X86_PLATFORM_DRIVERS_DELL = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" yes);
@@ -1437,6 +1457,10 @@ let
         # Enable coreboot firmware drivers.
         # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
         GOOGLE_FIRMWARE = yes;
+
+        # Disabled by default on POWER
+        ATA_BMDMA = yes;
+        ATA_SFF = yes;
       }
       //
         lib.optionalAttrs
@@ -1552,6 +1576,20 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isPower64) {
+        # avoid driver/FS trouble arising from unusual page size
+        PPC_64K_PAGES = no;
+        PPC_4K_PAGES = yes;
+
+        # Does not get auto-loaded on relevant systems, makes fans stuck at max speed.
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=713943 (2014 :<)
+        # > This module ought to be auto-loaded where it's needed, but somehow that
+        # > has broken.  I asked Benjamin Herrenschmidt (upstream powerpc maintainer
+        # > and the last person to touch it) and he was aware of this but hadn't got
+        # > round to working out why.  The workaround is to build it in[…].
+        # > (It won't do any harm on non-Mac systems.)
+        I2C_POWERMAC = yes;
       };
 
     accel = {

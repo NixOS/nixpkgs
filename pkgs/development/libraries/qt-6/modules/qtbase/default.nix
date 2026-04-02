@@ -9,11 +9,15 @@
   lndir,
   perl,
   pkg-config,
+  copyPathToStore,
+  makeSetupHook,
   which,
   cmake,
   ninja,
   libproxy,
-  xorg,
+  libxcb-cursor,
+  libxtst,
+  libxdmcp,
   zstd,
   double-conversion,
   util-linux,
@@ -39,11 +43,11 @@
   glib,
   harfbuzz,
   icu,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXi,
-  libXrender,
+  libx11,
+  libxcomposite,
+  libxext,
+  libxi,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -54,15 +58,15 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   zlib,
   at-spi2-core,
-  unixODBC,
-  unixODBCDrivers,
+  unixodbc,
+  unixodbcDrivers,
   libGL,
   # darwin
   moltenvk,
@@ -88,8 +92,12 @@
 
 let
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  fix_qt_builtin_paths = copyPathToStore ../../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = copyPathToStore ../../hooks/fix-qt-module-paths.sh;
+  qtPluginPrefix = "lib/qt-6/plugins";
+  qtQmlPrefix = "lib/qt-6/qml";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qtbase";
 
   inherit src version;
@@ -119,11 +127,11 @@ stdenv.mkDerivation rec {
     libproxy
     dbus
     glib
-    # unixODBC drivers
-    unixODBC
-    unixODBCDrivers.psql
-    unixODBCDrivers.sqlite
-    unixODBCDrivers.mariadb
+    # unixodbc drivers
+    unixodbc
+    unixodbcDrivers.psql
+    unixodbcDrivers.sqlite
+    unixodbcDrivers.mariadb
   ]
   ++ lib.optionals systemdSupport [
     systemd
@@ -144,21 +152,21 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     # X11 libs
-    libX11
-    libXcomposite
-    libXext
-    libXi
-    libXrender
+    libx11
+    libxcomposite
+    libxext
+    libxi
+    libxrender
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.xcbutilcursor
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxdmcp
+    libxtst
+    libxcb-cursor
     libepoxy
   ]
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
@@ -259,15 +267,10 @@ stdenv.mkDerivation rec {
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
 
-  fix_qt_builtin_paths = ../../hooks/fix-qt-builtin-paths.sh;
-  fix_qt_module_paths = ../../hooks/fix-qt-module-paths.sh;
   preHook = ''
-    . "$fix_qt_builtin_paths"
-    . "$fix_qt_module_paths"
+    . ${fix_qt_builtin_paths}
+    . ${fix_qt_module_paths}
   '';
-
-  qtPluginPrefix = "lib/qt-6/plugins";
-  qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
     # makes Qt print the configure summary
@@ -318,6 +321,13 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
+
+    # @out@ would be automagically replaced inside makeSetupHook by the output of that derivation,
+    # but we need it to be the output of this derivation.
+    # Use a different placeholder and explicitly substitute this
+    # to keep compatibility with __structuredAttrs and avoid substituteAll.
+    substituteInPlace "''${!outputDev}/nix-support/setup-hook" \
+      --replace-fail "@qtbaseOut@" $out
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # FIXME: not sure why this isn't added automatically?
@@ -327,7 +337,25 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  setupHook = ../../hooks/qtbase-setup-hook.sh;
+  setupHook =
+    let
+      hook = makeSetupHook {
+        name = "qtbase6-setup-hook";
+        substitutions = {
+          inherit
+            fix_qt_builtin_paths
+            fix_qt_module_paths
+            qtPluginPrefix
+            qtQmlPrefix
+            ;
+        };
+      } ../../hooks/qtbase-setup-hook.sh;
+    in
+    "${hook}/nix-support/setup-hook";
+
+  passthru = {
+    inherit qtPluginPrefix qtQmlPrefix;
+  };
 
   meta = {
     homepage = "https://www.qt.io/";

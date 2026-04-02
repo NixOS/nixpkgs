@@ -6,18 +6,18 @@
   bash,
   python3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi-python";
   inherit (pulumi) version src;
 
-  sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
+  sourceRoot = "${finalAttrs.src.name}/sdk/python/cmd/pulumi-language-python";
 
   vendorHash = "sha256-BfkjDesPdPDV2uILYaMJFIvaEBKT15ukwaReAL3yziw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -57,4 +57,4 @@ buildGoModule rec {
       tie
     ];
   };
-}
+})

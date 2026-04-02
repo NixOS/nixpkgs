@@ -646,6 +646,23 @@ in
                 EOF
               '';
             };
+
+          no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
+
+          inhibitors.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            quz = "bor";
+          };
+
+          inhibitors_changed.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "baz";
+            quz = "boz";
+          };
+
+          inhibitors_new.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            qux = "baz";
+          };
         };
       };
 
@@ -658,6 +675,7 @@ in
         echo "this should succeed (config: $config, action: $action)"
         [ "$action" == "check" ] || [ "$action" == "test" ]
       '';
+      boot.loader.grub.enable = false;
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail
         false
@@ -745,6 +763,24 @@ in
           out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
           assert_contains(out, "this will fail")
 
+      with subtest("switch inhibitors"):
+          # Start without any inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
+          # Check that we can switch into a generation with inhibitors from one that doesn't have any
+          switch_to_specialisation("${machine}", "inhibitors", action="switch")
+          # Check that we cannot switch into a generation that has a different value for an existing inhibitor
+          out = switch_to_specialisation("${machine}", "inhibitors_changed", action="switch", fail=True)
+          assert_contains(out, "There are changes to critical components of the system")
+          assert_contains(out, "foo")
+          assert_contains(out, "bar")
+          assert_contains(out, "baz")
+          # Confirm that we can set that same generation as the new boot default
+          switch_to_specialisation("${machine}", "inhibitors_changed", action="boot")
+          # Check that we can switch into a new generation with new inhibitors, but same values for existing ones
+          switch_to_specialisation("${machine}", "inhibitors_new", action="switch")
+          # Check that we can switch back into a generation without inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
+
       with subtest("actions"):
           # boot action
           out = switch_to_specialisation("${machine}", "simpleService", action="boot")
@@ -805,6 +841,14 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_contains(out, "the following new units were started: test.mount\n")
+          # we can start inactive mounts
+          machine.succeed("systemctl stop test.mount")
+          out = switch_to_specialisation("${machine}", "addedMount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: local-fs.target, test.mount\n")
           # modify the mountpoint's options
           out = switch_to_specialisation("${machine}", "addedMountOptsModified")
           assert_lacks(out, "stopping the following units:")
@@ -1408,6 +1452,15 @@ in
           switch_to_specialisation("${machine}", "mount")
           out = machine.succeed("mount | grep 'on /testmount'")
           assert_contains(out, "size=1024k")
+          # We can start inactive mounts
+          machine.succeed("systemctl stop testmount.mount")
+          out = switch_to_specialisation("${machine}", "mount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "reloading the following units")
+          assert_lacks(out, "restarting the following units:")
+          assert_lacks(out, "starting the following units:")
+          assert_contains(out, "the following new units were started: testmount.mount\n")
           # Changing options reloads the unit
           out = switch_to_specialisation("${machine}", "mountOptionsModified")
           assert_lacks(out, "stopping the following units:")

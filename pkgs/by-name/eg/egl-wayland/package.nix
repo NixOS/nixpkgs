@@ -8,13 +8,13 @@
   ninja,
   wayland-scanner,
   libGL,
-  libX11,
+  libx11,
   libdrm,
   wayland,
   wayland-protocols,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "egl-wayland";
   version = "1.1.21";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nvidia";
     repo = "egl-wayland";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-a98DzmzCG6DlLJ1HCl/LeD21Q7yyNbTce1poOoAnTjA=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libGL
-    libX11
+    libx11
     libdrm
     wayland
     wayland-protocols
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [ hedning ];
   };
-}
+})

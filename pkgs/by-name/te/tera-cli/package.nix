@@ -4,14 +4,14 @@
   nix-update-script,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tera-cli";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "chevdor";
     repo = "tera-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TN3zkxZC0Y9lev2wmvzwyLU+t4rNwut/dQILIA7+qbw=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "tera";
     platforms = lib.platforms.unix;
   };
-}
+})

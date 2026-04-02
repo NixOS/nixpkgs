@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   iso4217,
   pyserial,
   pyserial-asyncio-fast,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aioraven";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cottsay";

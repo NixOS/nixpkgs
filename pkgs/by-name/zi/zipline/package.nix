@@ -36,13 +36,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H3WzCe1AgnYYI5oskWPi4k1NdpyXCFMmeulPJtwvuIo=";
+    hash = "sha256-RFajEXewnOCkp4xz/fhugVEt+BPNrrQY4Oeqt6Gg6p0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
     fetcherVersion = 2;
-    hash = "sha256-JphaLunhwPdeKxlHdpMNGAl8um7wsOkNCCWYxQhLuBM=";
+    hash = "sha256-cYoZNalVDI1rLEYFLhJZ9pAZQCvieZL+Rj5VK7Q2/vk=";
   };
 
   buildInputs = [
@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = environment // {
     DATABASE_URL = "dummy";
+    NODE_PATH = "${node-gyp}/lib/node_modules";
   };
 
   buildPhase = ''

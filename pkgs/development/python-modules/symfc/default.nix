@@ -16,16 +16,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "symfc";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "symfc";
     repo = "symfc";
-    tag = "v${version}";
-    hash = "sha256-YDVO1/vt30ZaBOTCaYBtr3fkcuJmPa8Eg72k3XWpacg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Szj/s0ZsrpEFJMIo9p/9rDFd5yJiHky58Iab/k3log=";
   };
 
   build-system = [
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generate symmetrized force constants";
     homepage = "https://github.com/symfc/symfc";
-    changelog = "https://github.com/symfc/symfc/releases/tag/v${version}";
+    changelog = "https://github.com/symfc/symfc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

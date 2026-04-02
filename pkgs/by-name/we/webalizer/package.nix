@@ -9,12 +9,12 @@
   db,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webalizer";
   version = "2.23.08";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/w/webalizer/webalizer_${finalAttrs.version}.orig.tar.gz";
     sha256 = "sha256-7a3bWqQcxKCBoVAOP6lmFdS0G8Eghrzt+ZOAGM557Y0=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

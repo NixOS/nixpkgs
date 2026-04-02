@@ -15,7 +15,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.14" "9.1") "0.3.6")
+      (case (range "8.14" "9.2") "0.3.6")
       (case (range "8.10" "9.1") "0.3.4")
     ] null;
   release."0.3.6".sha256 = "sha256-Sd9cmRPb/0MDlR9mzbFrrF9ifP/2vd0KG6u5fGOydds=";

@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  jdk,
+  jdk_headless,
+  jre_minimal,
   ant,
   gettext,
   which,
@@ -12,9 +13,26 @@
   gmp,
 }:
 
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.desktop"
+      "java.instrument"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.rmi"
+      "java.security.jgss"
+      "java.sql"
+      "java.xml"
+      "jdk.zipfs"
+    ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchzip {
     urls = [
@@ -25,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de/"
       "https://download.i2p2.no/releases/"
     ]);
-    hash = "sha256-Ogok7s5sawG27ucstG+NYiIAF66Pb3ExOYsL8mfNav8=";
+    hash = "sha256-NDiE3HhY18zZKLu1zkp3omwf8zmTJ9JPRIq34rDdpGc=";
   };
 
   strictDeps = true;
@@ -34,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     ant
     gettext
-    jdk
+    jdk_headless
     which
   ];
 
@@ -77,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     done
 
-    makeWrapper ${jdk}/bin/java $out/bin/i2prouter \
+    makeWrapper ${jre}/bin/java $out/bin/i2prouter \
       --add-flags "-cp $CP -Djava.library.path=$out/lib/ -Di2p.dir.base=$out -DloggerFilenameOverride=logs/log-router-@.txt" \
       --add-flags "net.i2p.router.RouterLaunch"
 

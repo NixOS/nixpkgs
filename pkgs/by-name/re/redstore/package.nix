@@ -10,12 +10,12 @@
   librdf_rasqal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redstore";
   version = "0.5.4";
 
   src = fetchurl {
-    url = "https://www.aelius.com/njh/redstore/redstore-${version}.tar.gz";
+    url = "https://www.aelius.com/njh/redstore/redstore-${finalAttrs.version}.tar.gz";
     sha256 = "0hc1fjfbfvggl72zqx27v4wy84f5m7bp4dnwd8g41aw8lgynbgaq";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ freebsd ++ gnu;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

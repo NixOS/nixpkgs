@@ -39,6 +39,7 @@ rec {
     toJSON
     typeOf
     unsafeDiscardStringContext
+    appendContext
     ;
 
   /**
@@ -55,7 +56,7 @@ rec {
     # Type
 
     ```
-    join :: string -> [ string ] -> string
+    join :: String -> [String] -> String
     ```
 
     # Examples
@@ -77,7 +78,7 @@ rec {
     # Type
 
     ```
-    concatStrings :: [string] -> string
+    concatStrings :: [String] -> String
     ```
 
     # Examples
@@ -107,7 +108,7 @@ rec {
     # Type
 
     ```
-    concatMapStrings :: (a -> string) -> [a] -> string
+    concatMapStrings :: (a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -138,7 +139,7 @@ rec {
     # Type
 
     ```
-    concatImapStrings :: (int -> a -> string) -> [a] -> string
+    concatImapStrings :: (Int -> a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -208,7 +209,7 @@ rec {
     # Type
 
     ```
-    concatStringsSep :: string -> [string] -> string
+    concatStringsSep :: String -> [String] -> String
     ```
 
     # Examples
@@ -243,7 +244,7 @@ rec {
     # Type
 
     ```
-    concatMapStringsSep :: string -> (a -> string) -> [a] -> string
+    concatMapStringsSep :: String -> (a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -279,7 +280,7 @@ rec {
     # Type
 
     ```
-    concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
+    concatIMapStringsSep :: String -> (Int -> a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -315,7 +316,7 @@ rec {
     # Type
 
     ```
-    concatMapAttrsStringSep :: String -> (String -> Any -> String) -> AttrSet -> String
+    concatMapAttrsStringSep :: String -> (String -> a -> String) -> { [String] :: a } -> String
     ```
 
     # Examples
@@ -346,7 +347,7 @@ rec {
     # Type
 
     ```
-    concatLines :: [string] -> string
+    concatLines :: [String] -> String
     ```
 
     # Examples
@@ -379,7 +380,7 @@ rec {
     # Type
 
     ```
-    replaceString :: string -> string -> string -> string
+    replaceString :: String -> String -> String -> String
     ```
 
     # Examples
@@ -412,7 +413,7 @@ rec {
     # Type
 
     ```
-    replicate :: int -> string -> string
+    replicate :: Int -> String -> String
     ```
 
     # Examples
@@ -444,7 +445,7 @@ rec {
     # Type
 
     ```
-    trim :: string -> string
+    trim :: String -> String
     ```
 
     # Examples
@@ -486,7 +487,7 @@ rec {
     # Type
 
     ```
-    trimWith :: { start :: Bool; end :: Bool } -> String -> String
+    trimWith :: { start :: Bool; end :: Bool; } -> String -> String
     ```
 
     # Examples
@@ -547,7 +548,7 @@ rec {
     # Type
 
     ```
-    makeSearchPath :: string -> [string] -> string
+    makeSearchPath :: String -> [String] -> String
     ```
 
     # Examples
@@ -587,7 +588,7 @@ rec {
     # Type
 
     ```
-    makeSearchPathOutput :: string -> string -> [package] -> string
+    makeSearchPathOutput :: String -> String -> [Derivation] -> String
     ```
 
     # Examples
@@ -617,7 +618,7 @@ rec {
     # Type
 
     ```
-    makeLibraryPath :: [package] -> string
+    makeLibraryPath :: [Derivation] -> String
     ```
 
     # Examples
@@ -648,7 +649,7 @@ rec {
     # Type
 
     ```
-    makeIncludePath :: [package] -> string
+    makeIncludePath :: [Derivation] -> String
     ```
 
     # Examples
@@ -679,7 +680,7 @@ rec {
     # Type
 
     ```
-    makeBinPath :: [package] -> string
+    makeBinPath :: [Derivation] -> String
     ```
 
     # Examples
@@ -706,7 +707,7 @@ rec {
     # Type
 
     ```
-    normalizePath :: string -> string
+    normalizePath :: String -> String
     ```
 
     # Examples
@@ -747,7 +748,7 @@ rec {
     # Type
 
     ```
-    optionalString :: bool -> string -> string
+    optionalString :: Bool -> String -> String
     ```
 
     # Examples
@@ -779,7 +780,7 @@ rec {
     # Type
 
     ```
-    hasPrefix :: string -> string -> bool
+    hasPrefix :: String -> String -> Bool
     ```
 
     # Examples
@@ -822,7 +823,7 @@ rec {
     # Type
 
     ```
-    hasSuffix :: string -> string -> bool
+    hasSuffix :: String -> String -> Bool
     ```
 
     # Examples
@@ -868,7 +869,7 @@ rec {
     # Type
 
     ```
-    hasInfix :: string -> string -> bool
+    hasInfix :: String -> String -> Bool
     ```
 
     # Examples
@@ -917,7 +918,7 @@ rec {
     # Type
 
     ```
-    stringToCharacters :: string -> [string]
+    stringToCharacters :: String -> [String]
     ```
 
     # Examples
@@ -952,7 +953,7 @@ rec {
     # Type
 
     ```
-    stringAsChars :: (string -> string) -> string -> string
+    stringAsChars :: (String -> String) -> String -> String
     ```
 
     # Examples
@@ -984,7 +985,7 @@ rec {
     # Type
 
     ```
-    charToInt :: string -> int
+    charToInt :: String -> Int
     ```
 
     # Examples
@@ -1017,7 +1018,7 @@ rec {
     # Type
 
     ```
-    escape :: [string] -> string -> string
+    escape :: [String] -> String -> String
     ```
 
     # Examples
@@ -1049,7 +1050,7 @@ rec {
     # Type
 
     ```
-    escapeC = [string] -> string -> string
+    escapeC :: [String] -> String -> String
     ```
 
     # Examples
@@ -1081,7 +1082,7 @@ rec {
     # Type
 
     ```
-    escapeURL :: string -> string
+    escapeURL :: String -> String
     ```
 
     # Examples
@@ -1183,7 +1184,7 @@ rec {
     # Type
 
     ```
-    escapeShellArg :: string -> string
+    escapeShellArg :: String -> String
     ```
 
     # Examples
@@ -1219,7 +1220,7 @@ rec {
     # Type
 
     ```
-    escapeShellArgs :: [string] -> string
+    escapeShellArgs :: [String] -> String
     ```
 
     # Examples
@@ -1246,7 +1247,7 @@ rec {
     # Type
 
     ```
-    string -> bool
+    isValidPosixName :: String -> Bool
     ```
 
     # Examples
@@ -1286,7 +1287,7 @@ rec {
     # Type
 
     ```
-    string -> ( string | [string] | { ${name} :: string; } ) -> string
+    toShellVar :: String -> (String | [String] | { [String] :: String }) -> String
     ```
 
     # Examples
@@ -1328,8 +1329,8 @@ rec {
 
     ```
     toShellVars :: {
-      ${name} :: string | [ string ] | { ${key} :: string; };
-    } -> string
+      [String] :: String | [String] | { [String] :: String };
+    } -> String
     ```
 
     # Examples
@@ -1361,7 +1362,7 @@ rec {
     # Type
 
     ```
-    escapeNixString :: string -> string
+    escapeNixString :: String -> String
     ```
 
     # Examples
@@ -1388,7 +1389,7 @@ rec {
     # Type
 
     ```
-    escapeRegex :: string -> string
+    escapeRegex :: String -> String
     ```
 
     # Examples
@@ -1415,7 +1416,7 @@ rec {
     # Type
 
     ```
-    escapeNixIdentifier :: string -> string
+    escapeNixIdentifier :: String -> String
     ```
 
     # Examples
@@ -1466,7 +1467,7 @@ rec {
     # Type
 
     ```
-    escapeXML :: string -> string
+    escapeXML :: String -> String
     ```
 
     # Examples
@@ -1500,7 +1501,7 @@ rec {
     # Type
 
     ```
-    toLower :: string -> string
+    toLower :: String -> String
     ```
 
     # Examples
@@ -1527,7 +1528,7 @@ rec {
     # Type
 
     ```
-    toUpper :: string -> string
+    toUpper :: String -> String
     ```
 
     # Examples
@@ -1554,7 +1555,7 @@ rec {
     # Type
 
     ```
-    toSentenceCase :: string -> string
+    toSentenceCase :: String -> String
     ```
 
     # Examples
@@ -1592,7 +1593,7 @@ rec {
     # Type
 
     ```
-    toCamelCase :: string -> string
+    toCamelCase :: String -> String
     ```
 
     # Examples
@@ -1663,7 +1664,7 @@ rec {
     # Type
 
     ```
-    addContextFrom :: string -> string -> string
+    addContextFrom :: String -> String -> String
     ```
 
     # Examples
@@ -1704,7 +1705,7 @@ rec {
     # Type
 
     ```
-    splitString :: string -> string -> [string]
+    splitString :: String -> String -> [String]
     ```
 
     # Examples
@@ -1758,7 +1759,7 @@ rec {
     # Type
 
     ```
-    splitStringBy :: (string -> string -> bool) -> bool -> string -> [string]
+    splitStringBy :: (String -> String -> Bool) -> Bool -> String -> [String]
     ```
 
     # Examples
@@ -1834,7 +1835,7 @@ rec {
     # Type
 
     ```
-    removePrefix :: string -> string -> string
+    removePrefix :: String -> String -> String
     ```
 
     # Examples
@@ -1885,7 +1886,7 @@ rec {
     # Type
 
     ```
-    removeSuffix :: string -> string -> string
+    removeSuffix :: String -> String -> String
     ```
 
     # Examples
@@ -2115,13 +2116,16 @@ rec {
     `feature`
     : The feature to be set
 
+    `feature`
+    : The feature to be set
+
     `value`
     : The desired value
 
     # Type
 
     ```
-    cmakeOptionType :: string -> string -> string -> string
+    cmakeOptionType :: String -> String -> String -> String
     ```
 
     # Examples
@@ -2167,7 +2171,7 @@ rec {
     # Type
 
     ```
-    cmakeBool :: string -> bool -> string
+    cmakeBool :: String -> Bool -> String
     ```
 
     # Examples
@@ -2203,7 +2207,7 @@ rec {
     # Type
 
     ```
-    cmakeFeature :: string -> string -> string
+    cmakeFeature :: String -> String -> String
     ```
 
     # Examples
@@ -2238,7 +2242,7 @@ rec {
     # Type
 
     ```
-    mesonOption :: string -> string -> string
+    mesonOption :: String -> String -> String
     ```
 
     # Examples
@@ -2273,7 +2277,7 @@ rec {
     # Type
 
     ```
-    mesonBool :: string -> bool -> string
+    mesonBool :: String -> Bool -> String
     ```
 
     # Examples
@@ -2310,7 +2314,7 @@ rec {
     # Type
 
     ```
-    mesonEnable :: string -> bool -> string
+    mesonEnable :: String -> Bool -> String
     ```
 
     # Examples
@@ -2347,7 +2351,7 @@ rec {
     # Type
 
     ```
-    enableFeature :: bool -> string -> string
+    enableFeature :: Bool -> String -> String
     ```
 
     # Examples
@@ -2387,7 +2391,7 @@ rec {
     # Type
 
     ```
-    enableFeatureAs :: bool -> string -> string -> string
+    enableFeatureAs :: Bool -> String -> String -> String
     ```
 
     # Examples
@@ -2422,7 +2426,7 @@ rec {
     # Type
 
     ```
-    withFeature :: bool -> string -> string
+    withFeature :: Bool -> String -> String
     ```
 
     # Examples
@@ -2461,7 +2465,7 @@ rec {
     # Type
 
     ```
-    withFeatureAs :: bool -> string -> string -> string
+    withFeatureAs :: Bool -> String -> String -> String
     ```
 
     # Examples
@@ -2502,7 +2506,7 @@ rec {
     # Type
 
     ```
-    fixedWidthString :: int -> string -> string -> string
+    fixedWidthString :: Int -> String -> String -> String
     ```
 
     # Examples
@@ -2540,7 +2544,7 @@ rec {
     # Type
 
     ```
-    fixedWidthNumber :: int -> int -> string
+    fixedWidthNumber :: Int -> Int -> String
     ```
 
     # Examples
@@ -2568,7 +2572,7 @@ rec {
     # Type
 
     ```
-    floatToString :: float -> string
+    floatToString :: Float -> String
     ```
 
     # Examples
@@ -2607,7 +2611,7 @@ rec {
     # Type
 
     ```
-    isConvertibleWithToString :: a -> bool
+    isConvertibleWithToString :: Any -> Bool
     ```
   */
   isConvertibleWithToString =
@@ -2636,7 +2640,7 @@ rec {
     # Type
 
     ```
-    isStringLike :: a -> bool
+    isStringLike :: Any -> Bool
     ```
   */
   isStringLike = x: isString x || isPath x || x ? outPath || x ? __toString;
@@ -2652,7 +2656,7 @@ rec {
     # Type
 
     ```
-    isStorePath :: a -> bool
+    isStorePath :: Any -> Bool
     ```
 
     # Examples
@@ -2703,7 +2707,7 @@ rec {
     # Type
 
     ```
-    toInt :: string -> int
+    toInt :: String -> Int
     ```
 
     # Examples
@@ -2773,7 +2777,7 @@ rec {
     # Type
 
     ```
-    toIntBase10 :: string -> int
+    toIntBase10 :: String -> Int
     ```
 
     # Examples
@@ -2844,7 +2848,7 @@ rec {
     # Type
 
     ```
-    fileContents :: path -> string
+    fileContents :: Path -> String
     ```
 
     # Examples
@@ -2935,7 +2939,7 @@ rec {
     # Type
 
     ```
-    levenshtein :: string -> string -> int
+    levenshtein :: String -> String -> Int
     ```
 
     # Examples
@@ -2987,7 +2991,7 @@ rec {
     # Type
 
     ```
-    commonPrefixLength :: string -> string -> int
+    commonPrefixLength :: String -> String -> Int
     ```
   */
   commonPrefixLength =
@@ -3019,7 +3023,7 @@ rec {
     # Type
 
     ```
-    commonSuffixLength :: string -> string -> int
+    commonSuffixLength :: String -> String -> Int
     ```
   */
   commonSuffixLength =
@@ -3056,7 +3060,7 @@ rec {
     # Type
 
     ```
-    levenshteinAtMost :: int -> string -> string -> bool
+    levenshteinAtMost :: Int -> String -> String -> Bool
     ```
 
     # Examples

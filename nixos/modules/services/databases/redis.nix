@@ -335,7 +335,23 @@ in
                       If the master is password protected (using the requirePass configuration)
                       it is possible to tell the slave to authenticate before starting the replication synchronization
                       process, otherwise the master will refuse the slave request.
-                      (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';
+                      (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
+                    '';
+                  };
+
+                  masterAuthFile = lib.mkOption {
+                    type = with types; nullOr path;
+                    default = null;
+                    description = "File with password for the master user.";
+                    example = "/run/keys/redis-master-password";
+                  };
+
+                  masterUser = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = ''
+                      If the master is password protected via ACLs this option can be used to specify
+                      the Redis user that is used by replicas.'';
                   };
 
                   requirePass = lib.mkOption {
@@ -353,6 +369,43 @@ in
                     default = null;
                     description = "File with password for the database.";
                     example = "/run/keys/redis-password";
+                  };
+
+                  sentinelAuthPassFile = lib.mkOption {
+                    type = with types; nullOr path;
+                    default = null;
+                    description = "File with password for connecting to other Sentinel instances.";
+                    example = "/run/keys/sentinel-password";
+                  };
+
+                  sentinelAuthUser = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = "The username to use to monitor a master from Sentinel.";
+                  };
+
+                  sentinelMasterHost = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = "The IP address (recommended) or hostname of the Redis master that Sentinel will monitor.";
+                  };
+
+                  sentinelMasterName = lib.mkOption {
+                    type = with types; nullOr str;
+                    default = null;
+                    description = "The master name of the Redis master that Sentinel will monitor.";
+                  };
+
+                  sentinelMasterPort = lib.mkOption {
+                    type = with types; nullOr int;
+                    default = null;
+                    description = "The TCP port of the Redis master that Sentinel will monitor.";
+                  };
+
+                  sentinelMasterQuorum = lib.mkOption {
+                    type = with types; nullOr int;
+                    default = null;
+                    description = "The Sentinel quorum (minimum number of Sentinel nodes online for failover)";
                   };
 
                   appendOnly = lib.mkOption {
@@ -452,14 +505,55 @@ in
 
   config = lib.mkIf (enabledServers != { }) {
 
-    assertions = lib.attrValues (
-      lib.mapAttrs (name: conf: {
-        assertion = conf.requirePass != null -> conf.requirePassFile == null;
-        message = ''
-          You can only set one services.redis.servers.${name}.requirePass
-          or services.redis.servers.${name}.requirePassFile
-        '';
-      }) enabledServers
+    assertions = lib.concatLists (
+      lib.mapAttrsToList (name: conf: [
+        {
+          assertion = conf.requirePass != null -> conf.requirePassFile == null;
+          message = ''
+            You can only set one of services.redis.servers.${name}.requirePass
+            or services.redis.servers.${name}.requirePassFile
+          '';
+        }
+        {
+          assertion = conf.masterAuth != null -> conf.masterAuthFile == null;
+          message = ''
+            You can only set one of services.redis.servers.${name}.masterAuth
+            or services.redis.servers.${name}.masterAuthFile
+          '';
+        }
+        {
+          assertion = conf.masterUser != null -> (conf.masterAuth != null || conf.masterAuthFile != null);
+          message = ''
+            If using services.redis.servers.${name}.masterUser, either
+            services.redis.servers.${name}.masterAuthFile or
+            services.redis.servers.${name}.masterAuth must be provided
+          '';
+        }
+        {
+          assertion =
+            conf.sentinelMasterName != null
+            -> (
+              conf.sentinelMasterHost != null
+              && conf.sentinelMasterPort != null
+              && conf.sentinelMasterQuorum != null
+            );
+          message = ''
+            For Sentinel,
+            services.redis.servers.${name}.sentinelMasterName,
+            services.redis.servers.${name}.sentinelMasterHost,
+            services.redis.servers.${name}.sentinelMasterPort,
+            and services.redis.servers.${name}.sentinelMasterQuorum
+            must all be provided
+          '';
+        }
+        {
+          assertion = conf.sentinelAuthPassFile != null -> conf.sentinelMasterName != null;
+          message = ''
+            For Sentinel authentication, services.redis.servers.${name}.sentinelMasterName,
+            must be provided
+          '';
+        }
+      ]) enabledServers
     );
 
     boot.kernel.sysctl = lib.mkIf cfg.vmOverCommit {
@@ -498,6 +592,17 @@ in
           ExecStart = "${cfg.package}/bin/${
             cfg.package.serverBin or "redis-server"
           } /var/lib/${redisName name}/redis.conf ${lib.escapeShellArgs conf.extraParams}";
+
+          # NOTE: Redis/Valkey Sentinel persists dynamic cluster state by rewriting its
+          # configuration file at runtime (redis.conf). This includes monitors,
+          # authentication credentials, and failover metadata, and this behaviour
+          # cannot be disabled.
+          # As a result, a fully declarative configuration is not possible for
+          # Sentinel-managed options. The preStart logic below appends sentinel
+          # configuration only if it is not already present, in order to avoid
+          # overwriting state that is owned and maintained by Sentinel itself.
+          # This is an intentional deviation from strict declarative semantics and
+          # is required for correct Sentinel operation.
           ExecStartPre =
             "+"
             + pkgs.writeShellScript "${redisName name}-prep-conf" (
@@ -515,10 +620,40 @@ in
                 fi
                 echo 'include "${redisConfStore}"' > "${redisConfRun}"
                 ${lib.optionalString (conf.requirePassFile != null) ''
-                  {
-                    echo -n "requirepass "
-                    cat ${lib.escapeShellArg conf.requirePassFile}
-                  } >> "${redisConfRun}"
+                  echo "requirepass $(cat ${lib.escapeShellArg conf.requirePassFile})" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.masterUser != null) ''
+                  echo "masteruser ${conf.masterUser}" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.masterAuthFile != null) ''
+                  echo "masterauth $(cat ${lib.escapeShellArg conf.masterAuthFile})" >> "${redisConfRun}"
+                ''}
+                ${lib.optionalString (conf.sentinelMasterHost != null) ''
+                  sentinel_monitor_line="sentinel monitor ${conf.sentinelMasterName} ${conf.sentinelMasterHost} ${toString conf.sentinelMasterPort} ${toString conf.sentinelMasterQuorum}"
+                  if grep -qE "^sentinel monitor ${conf.sentinelMasterName}\b" "${redisConfVar}"; then
+                    sed -i \
+                      "s|^sentinel monitor ${conf.sentinelMasterName}\b.*|$sentinel_monitor_line|" "${redisConfVar}"
+                  else
+                    echo "$sentinel_monitor_line" >> "${redisConfVar}"
+                  fi
+                ''}
+                ${lib.optionalString (conf.sentinelAuthUser != null) ''
+                  sentinel_auth_user_line="sentinel auth-user ${conf.sentinelMasterName} ${conf.sentinelAuthUser}"
+                  if grep -qE "^sentinel auth-user ${conf.sentinelMasterName}\b" "${redisConfVar}"; then
+                    sed -i \
+                      "s|^sentinel auth-user ${conf.sentinelMasterName}\b.*|$sentinel_auth_user_line|" "${redisConfVar}"
+                  else
+                    echo "$sentinel_auth_user_line" >> "${redisConfVar}"
+                  fi
+                ''}
+                ${lib.optionalString (conf.sentinelAuthPassFile != null) ''
+                  sentinel_auth_pass_line="sentinel auth-pass ${conf.sentinelMasterName} $(cat ${lib.escapeShellArg conf.sentinelAuthPassFile})"
+                  if grep -qE "^sentinel auth-pass ${conf.sentinelMasterName}\b" "${redisConfVar}"; then
+                    sed -i \
+                      "s|^sentinel auth-pass ${conf.sentinelMasterName}\b.*|$sentinel_auth_pass_line|" "${redisConfVar}"
+                  else
+                    echo "$sentinel_auth_pass_line" >> "${redisConfVar}"
+                  fi
                 ''}
               ''
             );

@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protoc-gen-prost-serde";
   version = "0.4.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tgsGyUVoQZQcOqh56KGVwS3VcxwbKzBL3P2VpYs72Ok=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
       sitaaax
     ];
   };
-}
+})

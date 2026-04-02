@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   standard-telnetlib,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyws66i";
   version = "1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ssaenger";

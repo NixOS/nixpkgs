@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aetcd";
   version = "1.0.0a4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "martyanov";

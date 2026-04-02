@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-deploymentmanager";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

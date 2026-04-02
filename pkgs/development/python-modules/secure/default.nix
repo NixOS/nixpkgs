@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   maya,
-  pythonOlder,
   requests,
   pytestCheckHook,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "secure";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "typeerror";

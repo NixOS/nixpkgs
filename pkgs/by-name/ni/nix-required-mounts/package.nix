@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication {
     inherit allowedPatterns;
     tests = {
       inherit (nixosTests) nix-required-mounts;
+      eval-nvidia-gpu-preset = callPackage ./eval-test.nix { };
     };
   };
   meta = {

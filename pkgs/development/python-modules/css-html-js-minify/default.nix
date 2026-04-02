@@ -4,15 +4,12 @@
   fetchPypi,
   distutils,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "css-html-js-minify";
   version = "2.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

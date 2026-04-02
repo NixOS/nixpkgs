@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "exhaustive";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "nishanths";
     repo = "exhaustive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OLIdtKzCqnBkzdUSIl+UlENeMl3zrBE47pLWPg+6qXw=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ meain ];
   };
-}
+})

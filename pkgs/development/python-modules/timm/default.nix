@@ -23,15 +23,27 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "timm";
-  version = "1.0.24";
+  version = "1.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uimOYftxX3zRvrLlT8Y23g3LdlGUDVs3AMMyKNFbsPg=";
+    hash = "sha256-pbzDoNRRwz41b4X40yBp7oTcJ2e/Y2dKyj9XbEX5c34=";
   };
+
+  # Fix torch 2.11.0 compatibility
+  # AttributeError: 'AdamWLegacy' object has no attribute '_cuda_graph_capture_health_check'
+  postPatch = ''
+    substituteInPlace \
+      timm/optim/adopt.py \
+      timm/optim/adamw.py \
+      timm/optim/nadamw.py \
+      --replace-fail \
+        "_cuda_graph_capture_health_check" \
+        "_accelerator_graph_capture_health_check"
+  '';
 
   build-system = [ pdm-backend ];
 
@@ -58,6 +70,10 @@ buildPythonPackage (finalAttrs: {
 
       # AttributeError: 'LsePlus2d' object has no attribute '__annotations__'. Did you mean: '__annotate_func__'?
       "test_torchscript"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # assert nan < 71.5658950805664
+      "test_optim_factory"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:

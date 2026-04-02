@@ -5,12 +5,12 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clang-tidy-sarif";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ALwEsF1n6WYqITfYTn8mIyn3sxTbDux17FxKIorKkFc=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "clang-tidy-sarif";
     license = lib.licenses.mit;
   };
-}
+})

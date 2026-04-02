@@ -4,14 +4,12 @@
   buildPythonPackage,
   python,
   lxml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gpxpy";
   version = "1.6.2";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tkrajina";

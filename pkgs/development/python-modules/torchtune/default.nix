@@ -35,16 +35,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchtune";
-  version = "0.6.1";
+  version = "0.6.2-unstable-2026-02-19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchtune";
-    tag = "v${version}";
-    hash = "sha256-evhQBpZiUXriL0PAYkEzGypH21iRs37Ix6Nl5YAyeQ0=";
+    rev = "6f2aa7254458145f99d7004cbd6ebc8e53a06404";
+    hash = "sha256-ryR5iO3IwkoLdMLSFGhHCLl0P8yD+GQdZFEE6M/EYh0=";
   };
 
   build-system = [
@@ -71,8 +71,7 @@ buildPythonPackage rec {
     # Not explicitly listed as requirements, but effectively imported at runtime
     torchao
     torchvision
-  ]
-  ++ huggingface-hub.optional-dependencies.hf_transfer;
+  ];
 
   pythonImportsCheck = [ "torchtune" ];
 
@@ -104,12 +103,24 @@ buildPythonPackage rec {
     "test_deprecated"
 
     # Flaky
-    # AssertionError: actual: -83.3048095703125, expected: -83.15229797363281
+    # AssertionError: (numbers slightly different than expected))
     "test_forward"
     "test_forward_kv_cache"
     "test_forward_with_2d_pos_ids"
     "test_forward_with_curr_pos"
     "test_forward_with_packed_pos"
+    "test_local_kv_cache"
+
+    # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_deprecate_parameter"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    # RuntimeError: Error in dlopen:
+    # /tmp/yae2xK/mha/data/aotinductor/model/ckk2zlroqn6hgq5vvpy7bcjikztqmwqkek3njxe2gvvwp244hjny.wrapper.so:
+    # cannot enable executable stack as shared object requires: Invalid argument
+    "test_attention_aoti"
+    "test_tile_positional_embedding_aoti"
+    "test_tiled_token_positional_embedding_aoti"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Segmentation fault
@@ -121,11 +132,22 @@ buildPythonPackage rec {
     "test_init_from_env_dup"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # TypeError: HfHubHTTPError.__init__() missing 1 required keyword-only argument: 'response'
+    "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_download_calls_snapshot"
+    "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_gated_repo_error_no_token"
+    "tests/torchtune/_cli/test_download.py::TestTuneDownloadCommand::test_gated_repo_error_with_token"
+
+    # NameError: name 'TypeVar' is not defined
+    "tests/torchtune/rlhf/loss/test_dpo_loss.py"
+    "tests/torchtune/rlhf/loss/test_ppo_loss.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fail due to floating-point precision differences
     "tests/torchtune/models/flux/test_flux_autoencoder.py::TestFluxAutoencoder::test_encode"
     "tests/torchtune/modules/peft/test_dora.py::TestDoRALinear::test_qdora_parity[True-dtype1]"
     "tests/torchtune/modules/peft/test_lora.py::TestLoRALinear::test_qlora_parity[True-dtype1]"
+    "tests/torchtune/modules/test_common_utils.py::TestLocalKVCache::test_local_kv_cache[llama_decoder_model]"
 
     # hangs
     "tests/torchtune/utils"
@@ -134,11 +156,11 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch native post-training library";
     homepage = "https://github.com/meta-pytorch/torchtune";
-    changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${src.tag}";
+    # changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
       sarahec
     ];
   };
-}
+})

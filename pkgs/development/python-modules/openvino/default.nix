@@ -9,7 +9,7 @@
 buildPythonPackage {
   pname = "openvino";
   inherit (openvino-native) version;
-  format = "other";
+  pyproject = false;
 
   src = openvino-native.python;
 
@@ -26,7 +26,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [
     "openvino"
-    "openvino.runtime"
   ];
 
   meta = {

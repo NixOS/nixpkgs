@@ -152,8 +152,6 @@ let
 
   passthru =
     let
-      # When we override the interpreter we also need to override the spliced versions of the interpreter
-      inputs' = lib.filterAttrs (n: v: n != "passthruFun" && !lib.isDerivation v) inputs;
       # Memoization of the splices to avoid re-evaluating this function for all combinations of splices e.g.
       # python3.pythonOnBuildForHost.pythonOnBuildForTarget == python3.pythonOnBuildForTarget by consuming
       # __splices as an arg and using the cache if populated.
@@ -167,6 +165,31 @@ let
         );
       }
       // __splices;
+      # When we override the interpreter we also need to override the spliced
+      # versions of the interpreter. NOTE: In lua-5/interpreter.nix, this
+      # filter is different - we take every attribute from @inputs, besides
+      # derivations. That filter causes cross compilations issues for Python
+      # See e.g:
+      #
+      # pkgsCross.armv7l-hf-multiplatform.buildPackages.python3Packages.bcrypt
+      #
+      # And the following Nixpkgs issues/PRs:
+      #
+      # - https://github.com/NixOS/nixpkgs/issues/48046
+      # - https://github.com/NixOS/nixpkgs/pull/480005 (Wrong PR)
+      # - https://github.com/NixOS/nixpkgs/pull/482866 (Correct fix)
+      # - https://github.com/NixOS/nixpkgs/pull/498251 (Re-adds this @inputs filter)
+      inputs' = lib.filterAttrs (
+        n: v:
+        (builtins.elem (builtins.typeOf v) [
+          "int"
+          "bool"
+          "string"
+          "path"
+          "null"
+        ])
+        || n == "packageOverrides"
+      ) inputs;
       override =
         attr:
         let
@@ -174,18 +197,23 @@ let
             inputs'
             // {
               self = python;
-              __splices = splices;
             }
           );
         in
         python;
-    in
-    passthruFun rec {
-      inherit self sourceVersion packageOverrides;
-      implementation = "cpython";
-      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
-      executable = libPrefix;
       pythonVersion = with sourceVersion; "${major}.${minor}";
+      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
+    in
+    passthruFun {
+      inherit
+        self
+        sourceVersion
+        packageOverrides
+        libPrefix
+        pythonVersion
+        ;
+      implementation = "cpython";
+      executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
       inherit (splices)
@@ -368,19 +396,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
   ]
-  ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
-    # Stop checking for TCL/TK in global macOS locations
-    ./3.9/darwin-tcl-tk.patch
-  ]
   ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (
-      if pythonAtLeast "3.7" && pythonOlder "3.11" then
-        ./3.7/python-3.x-distutils-C++.patch
-      else if pythonAtLeast "3.11" then
+      if pythonAtLeast "3.11" then
         ./3.11/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -404,6 +426,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
+  ]
+  ++ optionals (static && pythonAtLeast "3.14") [
+    # https://github.com/python/cpython/issues/146264
+    # https://github.com/python/cpython/pull/146265
+    ./3.14/hacl-static-ldeps-for-static-modules.patch
   ]
   ++ optionals (version == "3.13.10" || version == "3.14.1") [
     # https://github.com/python/cpython/issues/142218
@@ -799,11 +826,6 @@ stdenv.mkDerivation (finalAttrs: {
     doc = stdenv.mkDerivation {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
-
-      postPatch = lib.optionalString (pythonAtLeast "3.9" && pythonOlder "3.11") ''
-        substituteInPlace Doc/tools/extensions/pyspecific.py \
-          --replace-fail "from sphinx.util import status_iterator" "from sphinx.util.display import status_iterator"
-      '';
 
       dontConfigure = true;
 

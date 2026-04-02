@@ -8,24 +8,24 @@
   pkg-config,
   makeWrapper,
   zlib,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libxi,
+  libxext,
   libGLU,
   alsa-lib,
   fontconfig,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foxotron";
   version = "2024-09-23";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-OnZWoiQ5ASKQV73/W6nl17B2ANwqCy/PlybHbNwrOyQ=";
   };
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
     alsa-lib
     fontconfig
     libGLU
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "Foxotron";
   };
-}
+})

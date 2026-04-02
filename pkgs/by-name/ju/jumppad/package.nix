@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jumppad";
-  version = "0.21.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
     repo = "jumppad";
-    rev = version;
-    hash = "sha256-7bc3OmWNLvi+T8xNEwp2aIg/lQ28XrWW4LTcYhEO2xs=";
+    rev = finalAttrs.version;
+    hash = "sha256-OH06qQ+gkPv9McHr+YiMRiqTvdvhW9UqcEJK2NZxGQo=";
   };
-  vendorHash = "sha256-mr7Rnqp2rPIeW9oqNMbxc0SR+l8pPhKm6jk6EEycpRQ=";
+  vendorHash = "sha256-m2aMRQ/K8etAKgGEcMbOrx2cYxp3ncdLe70Q3zYdj4I=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Tests require a large variety of tools and resources to run including
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "jumppad";
   };
-}
+})

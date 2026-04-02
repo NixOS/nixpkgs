@@ -1,30 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   markdown-it-py,
   pytest,
+
+  # tests
+  mdit-py-plugins,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-markdown-docs";
-  version = "0.5.1";
+  version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "modal-com";
     repo = "pytest-markdown-docs";
-    tag = "v${version}";
-    hash = "sha256-mclN28tfPcoFxswECjbrkeOI51XXSqUXfbvuSHrd7Sw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7fGuKTHeaMEbsHD9Zje0ODP2FRWSi0WrCZsPwRYP6rg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "markdown-it-py"
+  ];
   dependencies = [
     markdown-it-py
     pytest
@@ -32,7 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_markdown_docs" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    mdit-py-plugins
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Run pytest on markdown code fence blocks";
@@ -40,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -71,7 +71,7 @@ in
     # See <https://github.com/sosy-lab/benchexec/blob/3.18/doc/INSTALL.md#setting-up-cgroups>.
     systemd.services = builtins.listToAttrs (
       map (user: {
-        name = "user@${builtins.toString (uid user)}";
+        name = "user@${toString (uid user)}";
         value = {
           serviceConfig.Delegate = "yes";
           overrideStrategy = "asDropin";

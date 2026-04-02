@@ -7,18 +7,14 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "glom";
   version = "25.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,7 +30,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    toml = lib.optionals (pythonOlder "3.11") [ tomli ];
     yaml = [ pyyaml ];
   };
 

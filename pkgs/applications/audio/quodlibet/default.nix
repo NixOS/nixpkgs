@@ -44,7 +44,7 @@
   python3,
   xvfb-run,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "quodlibet${tag}";
   version = "4.7.1";
   pyproject = true;
@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "quodlibet";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-xr3c1e4tjw2YHuKbvNeUPBIFdHEcpztqXjHVDSSxYlo=";
   };
 
@@ -140,21 +140,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-xdist
   ]);
 
-  pytestFlags = [
-    # missing translation strings in potfiles
-    "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
-    # require networking
-    "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
-    "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
-    # upstream does actually not enforce source code linting
-    "--ignore=tests/quality"
-    # marked as flaky, breaks in sandbox
-    "--deselect=tests/test_library_file.py::TWatchedFileLibrary::test_watched_adding"
-  ]
-  ++ lib.optionals (withXineBackend || !withGstPlugins) [
-    "--ignore=tests/plugin/test_replaygain.py"
-  ];
-
   env.LC_ALL = "en_US.UTF-8";
 
   preCheck = ''
@@ -162,15 +147,32 @@ python3.pkgs.buildPythonApplication rec {
     export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    let
+      pytestFlags = [
+        # missing translation strings in potfiles
+        "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+        # require networking
+        "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+        "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
+        # upstream does actually not enforce source code linting
+        "--ignore=tests/quality"
+        # marked as flaky, breaks in sandbox
+        "--deselect=tests/test_library_file.py::TWatchedFileLibrary::test_watched_adding"
+      ]
+      ++ lib.optionals (withXineBackend || !withGstPlugins) [
+        "--ignore=tests/plugin/test_replaygain.py"
+      ];
+    in
+    ''
+      runHook preCheck
 
-    xvfb-run -s '-screen 0 1920x1080x24' \
-      dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
-      pytest $pytestFlags
+      xvfb-run -s '-screen 0 1920x1080x24' \
+        dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
+        pytest ${lib.concatStringsSep " " pytestFlags}
 
-    runHook postCheck
-  '';
+      runHook postCheck
+    '';
 
   preFixup = lib.optionalString (kakasi != null) ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.getBin kakasi})
@@ -195,4 +197,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

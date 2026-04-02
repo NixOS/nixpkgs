@@ -13,7 +13,7 @@ let
     air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
     alexa = getComponentDeps "cloud" ++ getComponentDeps "frontend" ++ getComponentDeps "stream";
     android_ip_webcam = getComponentDeps "camera";
-    anthropic = getComponentDeps "ai_task";
+    anthropic = getComponentDeps "ai_task" ++ getComponentDeps "openai_conversation";
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
@@ -41,11 +41,15 @@ let
     environment_canada = getComponentDeps "camera";
     esphome = getComponentDeps "camera";
     fan = getComponentDeps "conversation";
+    fish_audio = getComponentDeps "tts";
     foscam = getComponentDeps "camera";
     freebox = getComponentDeps "camera";
     fully_kiosk = getComponentDeps "camera";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     geofency = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    go2rtc = [
+      tqdm
+    ];
     google_assistant = getComponentDeps "conversation";
     google_assistant_sdk = getComponentDeps "conversation" ++ getComponentDeps "frontend";
     google_cloud = getComponentDeps "tts";
@@ -58,6 +62,7 @@ let
     gpslogger = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     group = getComponentDeps "camera" ++ getComponentDeps "conversation";
     hassio = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_yellow";
+    hikvision = getComponentDeps "camera";
     homeassistant = getComponentDeps "camera" ++ getComponentDeps "conversation";
     homeassistant_connect_zbt2 = getComponentDeps "zha";
     homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
@@ -70,12 +75,13 @@ let
     hyperion = getComponentDeps "camera";
     ifttt = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     image_processing = getComponentDeps "conversation";
+    intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";
     locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     logbook = getComponentDeps "alexa";
-    lovelace = [
+    lovelace = getComponentDeps "frontend" ++ [
       pychromecast
     ];
     lutron_caseta = getComponentDeps "frontend";
@@ -95,6 +101,7 @@ let
       av
     ];
     number = getComponentDeps "conversation";
+    ntfy = getComponentDeps "camera" ++ getComponentDeps "tts";
     octoprint = getComponentDeps "camera";
     ollama = getComponentDeps "ai_task";
     onboarding = getComponentDeps "tts" ++ [
@@ -127,6 +134,7 @@ let
     songpal = [
       isal
     ];
+    sonos = getComponentDeps "frontend";
     swiss_public_transport = getComponentDeps "cookidoo";
     switch = getComponentDeps "camera" ++ getComponentDeps "conversation";
     switch_as_x = getComponentDeps "camera" ++ getComponentDeps "conversation";
@@ -155,10 +163,15 @@ let
     yolink = getComponentDeps "cloud";
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
+    zoneminder = getComponentDeps "camera";
     zwave_js = getComponentDeps "frontend";
   };
 
   extraDisabledTestPaths = {
+    hypontech = [
+      # outdated snapshot
+      "tests/components/hypontech/test_sensor.py::test_sensors"
+    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
@@ -190,6 +203,15 @@ let
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
+    ];
+    trane = [
+      # TraneConfigFlow doesn't support step reauth
+      "tests/components/trane/test_init.py::test_setup_auth_error"
+    ];
+    tuya = [
+      # entity ordering in diagnostics is non-deterministic; fixed upstream in
+      # https://github.com/home-assistant/core/pull/164819 (landing in HA 2026.4)
+      "tests/components/tuya/test_diagnostics.py"
     ];
     youtube = [
       # outdated snapshot
@@ -224,6 +246,12 @@ let
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
+    tuya = [
+      # snapshot mismatches: PyPI sdist translations differ from strings.json
+      # ("Power-on behavior" vs "Power on behavior"); expected to resolve in HA 2026.4
+      "test_device_diagnostics[tdq_9htyiowaf5rtdhrv]"
+      "test_platform_setup_and_discovery"
+    ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
@@ -236,8 +264,7 @@ lib.listToAttrs (
     lib.nameValuePair component (
       home-assistant.overridePythonAttrs (old: {
         pname = "homeassistant-test-${component}";
-        pyproject = null;
-        format = "other";
+        pyproject = false;
 
         dontBuild = true;
         dontInstall = true;

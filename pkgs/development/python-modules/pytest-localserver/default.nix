@@ -4,21 +4,18 @@
   buildPythonPackage,
   fetchPypi,
   werkzeug,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.9.0.post0";
+  version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "pytest_localserver";
     inherit version;
-    hash = "sha256-gDOjb7OC0rxIUPms/iw/tWVM1fDRY69tr0fykNt9X/A=";
+    hash = "sha256-JgcZfzkJEqslUl0SmsQ8PIdQSSVzaLP+CbXNA9zFJq8=";
   };
 
   build-system = [ setuptools-scm ];

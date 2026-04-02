@@ -8,18 +8,18 @@
   cairo,
   gtk3,
   xcur2png,
-  libX11,
+  libx11,
   zlib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-look";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cNVUgtbdzEuttDO7DZyipDugACr/fIU8RKmh5trykPw=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
     glib
     cairo
     xcur2png
-    libX11.dev
+    libx11.dev
     zlib
     gtk3
   ];
@@ -47,15 +47,11 @@ buildGoModule rec {
   env.CGO_ENABLED = 1;
 
   postInstall = ''
-    mkdir -p $out/share
     mkdir -p $out/share/nwg-look/langs
-    mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/icons
     cp stuff/main.glade $out/share/nwg-look/
     cp langs/* $out/share/nwg-look/langs
-    cp stuff/nwg-look.desktop $out/share/applications
-    cp stuff/nwg-look.svg $out/share/pixmaps
+    install -D -m 644 stuff/nwg-look.desktop -t $out/share/applications
+    install -D -m 644 stuff/nwg-look.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
   preFixup = ''
@@ -74,4 +70,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ max-amb ];
     mainProgram = "nwg-look";
   };
-}
+})

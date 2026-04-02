@@ -11,8 +11,8 @@ on:
 
 permissions:
   contents: read
-  issues: write
-  pull-requests: write
+  issues: write # adding the 'has: port to stable' label
+  pull-requests: write # creating backport pull requests
 
 defaults:
   run:
@@ -27,7 +27,7 @@ jobs:
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+      - uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
@@ -36,7 +36,7 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
@@ -49,9 +49,10 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@c656f5d5851037b2b38fb5db2691a03fa229e3b2 # v4.0.1
+        uses: korthout/backport-action@3c06f323a58619da1e8522229ebc8d5de2633e46 # v4.3.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
+          add_author_as_reviewer: true
           copy_labels_pattern: 'severity:\ssecurity'
           github_token: ${{ steps.app-token.outputs.token }}
           pull_description: |-

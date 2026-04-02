@@ -6,12 +6,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zine";
   version = "0.16.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pUoMMgZQ+oDs9Yhc1rQuy9cUWiR800DlIe8wxQjnIis=";
   };
 
@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple and opinionated tool to build your own magazine";
     homepage = "https://github.com/zineland/zine";
-    changelog = "https://github.com/zineland/zine/releases/tag/v${version}";
+    changelog = "https://github.com/zineland/zine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       dit7ya
     ];
     mainProgram = "zine";
   };
-}
+})

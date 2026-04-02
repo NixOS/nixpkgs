@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   importlib-resources,
   pydsdl,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "nunavut";
   version = "2.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

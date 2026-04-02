@@ -7,16 +7,16 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "softhsm";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "softhsm";
     repo = "SoftHSMv2";
-    rev = "${version}";
-    hash = "sha256-sx0ceVY795JbtKbQGAVFllB9UJfTdgd242d6c+s1tBw=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-gwqdgGCVPQwPkE6gFlZxZdk6Ln/qZn3CmMfbcLm9p04=";
   };
 
   nativeBuildInputs = [
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
   };
-}
+})

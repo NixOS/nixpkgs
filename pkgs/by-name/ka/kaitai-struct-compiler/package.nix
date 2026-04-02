@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kaitai-struct-compiler";
   version = "0.11";
 
   src = fetchzip {
-    url = "https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/${version}/kaitai-struct-compiler-${version}.zip";
+    url = "https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/${finalAttrs.version}/kaitai-struct-compiler-${finalAttrs.version}.zip";
     sha256 = "sha256-j9TEilijqgIiD0GbJfGKkU1FLio9aTopIi1v8QT1b+A=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ qubasa ];
     platforms = lib.platforms.unix;
   };
-}
+})

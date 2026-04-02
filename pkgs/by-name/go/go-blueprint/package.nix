@@ -7,19 +7,19 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-blueprint";
   version = "0.10.11";
 
   src = fetchFromGitHub {
     owner = "Melkeydev";
     repo = "go-blueprint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ahvSCu4bqzPmscHSQmaxhbUtlEL7T0T/13RY2sIGWjA=";
   };
 
   ldflags = [
-    "-s -w -X github.com/melkeydev/go-blueprint/cmd.GoBlueprintVersion=v${version}"
+    "-s -w -X github.com/melkeydev/go-blueprint/cmd.GoBlueprintVersion=v${finalAttrs.version}"
   ];
 
   vendorHash = "sha256-WBzToupC1/O70OYHbKk7S73OEe7XRLAAbY5NoLL7xvw=";
@@ -45,4 +45,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tobifroe ];
     mainProgram = "go-blueprint";
   };
-}
+})

@@ -18,10 +18,11 @@
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.17" "9.1") "1.10.0")
+      (case (range "8.17" "9.1") "1.11.0")
       (case (range "8.11" "8.19") "1.8.0")
       (case (range "8.7" "8.13") "1.3.0")
     ] null;
+  release."1.11.0".sha256 = "sha256-sgbH7eI4TPHOQ5qBvM6x7G3j8B40HSEMEzFaN1G9VEw=";
   release."1.10.0".sha256 = "sha256-67cBhLvRMWLWBL7NXK1zZTQC4PtSKu9qtesU4SqKkOw=";
   release."1.8.0".sha256 = "sha256-3ADNeXrBIpYRlfUW+LkLHUWV1w1HFrVc/TZISMuwvRY=";
   release."1.7.0".sha256 = "sha256:1a1q9x2abx71hqvjdai3n12jxzd49mhf3nqqh3ya2ssl2lj609ci";

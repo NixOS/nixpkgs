@@ -39,6 +39,12 @@ rec {
 
     : 2\. Function argument
 
+    # Type
+
+    ```
+    addMetaAttrs :: AttrSet -> Derivation -> Derivation
+    ```
+
     # Examples
     :::{.example}
     ## `lib.meta.addMetaAttrs` usage example
@@ -66,6 +72,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    dontDistribute :: Derivation -> Derivation
+    ```
   */
   dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
@@ -85,6 +97,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setName :: String -> Derivation -> Derivation
+    ```
   */
   setName = name: drv: drv // { inherit name; };
 
@@ -100,6 +118,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    updateName :: (String -> String) -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -122,6 +146,12 @@ rec {
     `suffix`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    appendToName :: String -> Derivation -> Derivation
+    ```
   */
   appendToName =
     suffix:
@@ -145,6 +175,12 @@ rec {
     `set`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mapDerivationAttrset :: (Derivation -> a) -> AttrSet -> AttrSet
+    ```
   */
   mapDerivationAttrset =
     f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
@@ -164,6 +200,12 @@ rec {
 
     `drv`
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setPrio :: Int -> Derivation -> Derivation
+    ```
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
@@ -176,6 +218,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrio :: Derivation -> Derivation
+    ```
   */
   lowPrio = setPrio 10;
 
@@ -187,6 +235,12 @@ rec {
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
+    ```
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
 
@@ -199,6 +253,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrio :: Derivation -> Derivation
+    ```
   */
   hiPrio = setPrio (-10);
 
@@ -210,6 +270,12 @@ rec {
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
+    ```
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
 
@@ -338,7 +404,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxId :: str -> AttrSet
+    getLicenseFromSpdxId :: String -> {
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    }
     ```
 
     # Examples
@@ -360,8 +434,9 @@ rec {
   getLicenseFromSpdxId =
     licstr:
     getLicenseFromSpdxIdOr licstr (
-      lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}" {
+      lib.warn "getLicenseFromSpdxId: No license with the given SPDX ID found: ${licstr}" {
         shortName = licstr;
+        spdxId = licstr;
       }
     );
 
@@ -383,7 +458,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxIdOr :: str -> Any -> Any
+    getLicenseFromSpdxIdOr :: String -> a -> ({
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    } | a)
     ```
 
     # Examples
@@ -425,7 +508,7 @@ rec {
     # Type
 
     ```
-    getExe :: package -> string
+    getExe :: Derivation -> StorePath
     ```
 
     # Examples
@@ -471,7 +554,7 @@ rec {
     # Type
 
     ```
-    getExe' :: derivation -> string -> string
+    getExe' :: Derivation -> String -> StorePath
     ```
 
     # Examples
@@ -513,7 +596,7 @@ rec {
     # Type
 
     ```
-    cpeFullVersionWithVendor :: string -> string -> AttrSet
+    cpeFullVersionWithVendor :: String -> String -> { update :: String; vendor :: String; version :: String; }
     ```
 
     # Examples
@@ -568,7 +651,7 @@ rec {
     # Type
 
     ```
-    tryCPEPatchVersionInUpdateWithVendor :: string -> string -> AttrSet
+    tryCPEPatchVersionInUpdateWithVendor :: String -> String -> ({ success = true; value :: { update :: String; vendor :: String; version :: String; }; } | { success = false; error :: String; })
     ```
 
     # Examples
@@ -639,7 +722,7 @@ rec {
     # Type
 
     ```
-    cpePatchVersionInUpdateWithVendor :: string -> string -> AttrSet
+    cpePatchVersionInUpdateWithVendor :: String -> String -> { update :: String; vendor :: String; version :: String; }
     ```
 
     # Examples

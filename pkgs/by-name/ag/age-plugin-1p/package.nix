@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-1p";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "Enzime";
     repo = "age-plugin-1p";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QYHHD7wOgRxRVkUOjwMz5DV8oxlb9mmb2K4HPoISguU=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ Enzime ];
   };
-}
+})

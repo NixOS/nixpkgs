@@ -9,7 +9,7 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subtitlecomposer";
   version = "0.8.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zGbI960NerlOEUvhOLm+lEJdbhj8VFUfm8pkOYGRcGw=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     mainProgram = "subtitlecomposer";
     platforms = with lib.platforms; linux ++ freebsd ++ windows;
   };
-}
+})

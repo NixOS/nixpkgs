@@ -7,14 +7,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.6.3";
   pname = "docopt.cpp";
 
   src = fetchFromGitHub {
     owner = "docopt";
     repo = "docopt.cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0cz3vv7g5snfbsqcf3q8bmd6kv5qp84gj3avwkn4vl00krw13bl7";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

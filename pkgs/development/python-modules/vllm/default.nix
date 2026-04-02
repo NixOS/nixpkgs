@@ -8,74 +8,87 @@
   symlinkJoin,
   autoAddDriverRunpath,
 
+  # nativeBuildInputs
+  which,
+
   # build-system
   cmake,
+  grpcio-tools,
   jinja2,
   ninja,
   packaging,
   setuptools,
   setuptools-scm,
 
-  # dependencies
-  which,
-  torch,
-  outlines,
-  psutil,
-  ray,
-  pandas,
-  pyarrow,
-  sentencepiece,
-  numpy,
-  transformers,
-  xformers,
-  xgrammar,
-  numba,
-  fastapi,
-  uvicorn,
-  pydantic,
-  aioprometheus,
-  anthropic,
-  nvidia-ml-py,
-  openai,
-  pyzmq,
-  tiktoken,
-  torchaudio,
-  torchvision,
-  py-cpuinfo,
-  lm-format-enforcer,
-  prometheus-fastapi-instrumentator,
-  cupy,
-  cbor2,
-  pybase64,
-  gguf,
-  einops,
-  importlib-metadata,
-  partial-json-parser,
-  compressed-tensors,
-  mcp,
-  ijson,
-  mistral-common,
-  msgspec,
-  model-hosting-container-standards,
+  # buildInputs
+  onednn,
   numactl,
-  tokenizers,
-  oneDNN,
-  blake3,
-  depyf,
-  opencv-python-headless,
-  cachetools,
-  llguidance,
-  python-json-logger,
-  python-multipart,
   llvmPackages,
-  opentelemetry-sdk,
+
+  # dependencies
+  aioprometheus,
+  amdsmi,
+  anthropic,
+  bitsandbytes,
+  blake3,
+  cachetools,
+  cbor2,
+  compressed-tensors,
+  datasets,
+  depyf,
+  einops,
+  fastapi,
+  gguf,
+  grpcio,
+  grpcio-reflection,
+  ijson,
+  importlib-metadata,
+  llguidance,
+  lm-format-enforcer,
+  mcp,
+  mistral-common,
+  model-hosting-container-standards,
+  msgspec,
+  numba,
+  numpy,
+  openai,
+  openai-harmony,
+  opencv-python-headless,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
-  bitsandbytes,
-  flashinfer,
-  py-libnuma,
+  opentelemetry-sdk,
+  outlines,
+  pandas,
+  partial-json-parser,
+  peft,
+  prometheus-fastapi-instrumentator,
+  py-cpuinfo,
+  pyarrow,
+  pybase64,
+  pydantic,
+  python-json-logger,
+  python-multipart,
+  pyzmq,
+  ray,
+  sentencepiece,
   setproctitle,
-  openai-harmony,
+  tiktoken,
+  timm,
+  tokenizers,
+  torch,
+  torchaudio,
+  torchvision,
+  transformers,
+  uvicorn,
+  xformers,
+  xgrammar,
+  # linux-only
+  psutil,
+  py-libnuma,
+  # cuda-only
+  cupy,
+  flashinfer,
+  nvidia-ml-py,
 
   # optional-dependencies
   # audio
@@ -124,8 +137,8 @@ let
   cutlass-flashmla = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.0";
-    hash = "sha256-Q6y/Z6vahASeSsfxvZDwbMFHGx8CnsF90IlveeVLO9g=";
+    rev = "147f5673d0c1c3dcf66f78d677fd647e4a020219";
+    hash = "sha256-dHQto08IwTDOIuFUp9jwm1MWkFi8v2YJ/UESrLuG71g=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -139,8 +152,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "46d64a8ebef03fa50b4ae74937276a5c940e3f95";
-      hash = "sha256-jtMzWB5hKz8mJGsdK6q4YpQbGp9IrQxbwmB3a64DIl0=";
+      rev = "c2afa9cb93e674d5a9120a170a6da57b89267208";
+      hash = "sha256-pKlwxV6G9iHag/jbu3bAyvYvnu5TbrQwUMFV0AlGC3s=";
     };
 
     dontConfigure = true;
@@ -186,8 +199,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "86f8f157cf82aa2342743752b97788922dd7de43";
-      hash = "sha256-+h43jMte/29kraNtPiloSQFfCay4W3NNIlzvs47ygyM=";
+      rev = "188be16520ceefdc625fdf71365585d2ee348fe2";
+      hash = "sha256-Osec+/IF3+UDtbIhDMBXzUeWJ7hDJNb5FpaVaziPSgM=";
     };
 
     patches = [
@@ -223,7 +236,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
+  # https://github.com/pytorch/pytorch/blob/v2.9.1/torch/utils/cpp_extension.py#L2407-L2410
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -246,10 +259,10 @@ let
         "9.0a"
         "10.0"
         "10.0a"
-        "10.1"
-        "10.1a"
         "10.3"
         "10.3a"
+        "11.0"
+        "11.0a"
         "12.0"
         "12.0a"
         "12.1"
@@ -285,7 +298,7 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      rocmPackages.clr.gpuTargets
+      rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     else
       throw "No GPU targets specified"
   );
@@ -302,6 +315,13 @@ let
     libcublas
   ];
 
+  # header path ends up missing rocthrust & its deps
+  rocmExtraIncludeFlags = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+    rocmPackages.rocthrust
+    rocmPackages.rocprim
+    rocmPackages.hipcub
+  ];
+
   # Some packages are not available on all platforms
   nccl = shouldUsePkg (cudaPackages.nccl or null);
 
@@ -313,22 +333,23 @@ let
 
 in
 
-buildPythonPackage.override { stdenv = torch.stdenv; } rec {
+buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.13.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
-    tag = "v${version}";
-    hash = "sha256-pI9vQBhjRPlKOjZp6kH+n8Y0Q4t9wLYM7SnLftSfYgs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7E67xVRlKmm+Hbp5nphhwH8SQC9LpCFNBfF2ZAOt79k=";
   };
 
   patches = [
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
+    ./0006-drop-rocm-extra-reqs.patch
   ];
 
   postPatch = ''
@@ -346,7 +367,8 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
+      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools" \
+      --replace-fail "grpcio-tools==1.78.0" "grpcio"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
@@ -372,6 +394,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
 
   build-system = [
     cmake
+    grpcio-tools
     jinja2
     ninja
     packaging
@@ -382,7 +405,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
 
   buildInputs =
     lib.optionals cpuSupport [
-      oneDNN
+      onednn
     ]
     ++ lib.optionals (cpuSupport && stdenv.hostPlatform.isLinux) [
       numactl
@@ -403,6 +426,16 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
         rocprim
         hipsparse
         hipblas
+        rocrand
+        hiprand
+        rocblas
+        miopen-hip
+        hipfft
+        hipcub
+        hipsolver
+        rocsolver
+        hipblaslt
+        rocm-runtime
       ]
     )
     ++ lib.optionals stdenv.cc.isClang [
@@ -412,20 +445,36 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
   dependencies = [
     aioprometheus
     anthropic
+    bitsandbytes
     blake3
     cachetools
     cbor2
+    compressed-tensors
     depyf
+    einops
     fastapi
+    gguf
+    grpcio
+    grpcio-reflection
     ijson
+    importlib-metadata
     llguidance
     lm-format-enforcer
     mcp
+    mistral-common
+    model-hosting-container-standards
+    msgspec
+    numba
     numpy
     openai
+    openai-harmony
     opencv-python-headless
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
     outlines
     pandas
+    partial-json-parser
     prometheus-fastapi-instrumentator
     py-cpuinfo
     pyarrow
@@ -436,43 +485,36 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
     pyzmq
     ray
     sentencepiece
+    setproctitle
     tiktoken
     tokenizers
-    msgspec
-    gguf
-    einops
-    importlib-metadata
-    partial-json-parser
-    compressed-tensors
-    mistral-common
-    model-hosting-container-standards
     torch
+    # vLLM needs Torch's compiler to be present in order to use torch.compile
+    torch.stdenv.cc
     torchaudio
     torchvision
     transformers
     uvicorn
     xformers
     xgrammar
-    numba
-    opentelemetry-sdk
-    opentelemetry-api
-    opentelemetry-exporter-otlp
-    bitsandbytes
-    setproctitle
-    openai-harmony
-    # vLLM needs Torch's compiler to be present in order to use torch.compile
-    torch.stdenv.cc
   ]
   ++ uvicorn.optional-dependencies.standard
   ++ aioprometheus.optional-dependencies.starlette
   ++ lib.optionals stdenv.targetPlatform.isLinux [
-    py-libnuma
     psutil
+    py-libnuma
   ]
   ++ lib.optionals cudaSupport [
     cupy
-    nvidia-ml-py
     flashinfer
+    nvidia-ml-py
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.rocminfo
+    amdsmi
+    datasets
+    peft
+    timm
   ];
 
   optional-dependencies = {
@@ -511,13 +553,16 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
-      # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-      PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
-      ROCM_HOME = "${rocmPackages.clr}";
+      PYTORCH_ROCM_ARCH = gpuTargetString;
+      # vLLM's CMake logic checks `ROCM_PATH` to decide whether HIP/ROCm is available.
+      ROCM_PATH = "${rocmPackages.clr}";
+      TRITON_KERNELS_SRC_DIR = "${lib.getDev triton-kernels}/python/triton_kernels/triton_kernels";
+      HIPFLAGS = rocmExtraIncludeFlags;
+      CXXFLAGS = rocmExtraIncludeFlags;
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
-      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${oneDNN.src}";
+      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${onednn.src}";
     };
 
   preConfigure = ''
@@ -539,13 +584,14 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
 
   meta = {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
-    changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
+    changelog = "https://github.com/vllm-project/vllm/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/vllm-project/vllm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       happysalada
       lach
       daniel-fahey
+      LunNova # esp. for ROCm
     ];
     badPlatforms = [
       # CMake Error at cmake/cpu_extension.cmake:188 (message):
@@ -559,4 +605,4 @@ buildPythonPackage.override { stdenv = torch.stdenv; } rec {
       "x86_64-darwin"
     ];
   };
-}
+})

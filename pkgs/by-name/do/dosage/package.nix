@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dosage";
   version = "3.2";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "sha256-MHikoqbsQ2WkDi+S+1fhHuJy/cwzHu6PVy/JfALNJUI=";
   };
 
@@ -43,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toonn ];
   };
-}
+})

@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karere";
-  version = "2.0.9";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "tobagin";
     repo = "karere";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-roxynxGiM43VHl+ngo/EMKEJ56XaYA6qaok/SzppFlY=";
+    hash = "sha256-0HIy//dIr3uHgapPCSxTx4Rq52g1f6JAS62eUvpEMwc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BYG1TgCbkaQlquFy/tmjzdfypc8yno7w7SdBsgqOxkU=";
+    hash = "sha256-agZ4wBHYBgNpnu9deMbKFbJev+WXvvmtXm2s79B+SEE=";
   };
 
   nativeBuildInputs = [

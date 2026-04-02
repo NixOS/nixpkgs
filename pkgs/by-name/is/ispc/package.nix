@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ispc";
-  version = "1.29.1";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "ispc";
     repo = "ispc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4kYyUBGhTS9XurRjxXnEv12+UzZvSnu7DndhS5AhwQo=";
+    hash = "sha256-CzyK38c8fCG7QiVHE0rSzxmyTXNr4sg1WtChbi75Wmw=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     homepage = "https://ispc.github.io/";
-    changelog = "https://github.com/ispc/ispc/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/ispc/ispc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       thoughtpolice

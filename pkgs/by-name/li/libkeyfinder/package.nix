@@ -7,14 +7,14 @@
   catch2_3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkeyfinder";
   version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "libkeyfinder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Et8u5j/ke9u2bwHFriPCCBiXkPel37gwx+kwuViAr4o=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

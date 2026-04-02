@@ -15,19 +15,25 @@
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -111,12 +117,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # Backport crash fix
-    (fetchpatch2 {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ecf90f65ef738ae20b114691d02fb15c82e6babe.diff";
-      hash = "sha256-TW+EmCxasH5LdZ80y/0YHird3NsrVdlwciDJpgSD9x0=";
-    })
   ]
   ++ lib.optionals stdenv.cc.isClang [
     # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
@@ -232,6 +232,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -254,19 +255,19 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
-    xorg.libpciaccess
-    libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
-    libXi
-    xorg.libXext
+    libxi
+    libxext
 
     # Pipewire
     pipewire

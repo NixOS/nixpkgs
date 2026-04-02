@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
   smbus2,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "lcd-i2c";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

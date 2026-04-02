@@ -11,7 +11,7 @@
   lapack,
   config,
   guiSupport ? false,
-  libX11,
+  libx11,
   enableShared ? !stdenv.hostPlatform.isStatic, # dlib has a build system that forces the user to choose between either shared or static libraries. See https://github.com/davisking/dlib/issues/923#issuecomment-2175865174
   sse4Support ? stdenv.hostPlatform.sse4_1Support,
   avxSupport ? stdenv.hostPlatform.avxSupport,
@@ -66,7 +66,7 @@
     blas
     lapack
   ]
-  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals guiSupport [ libx11 ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [

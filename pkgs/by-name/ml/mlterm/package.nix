@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoconf,
   makeDesktopItem,
@@ -42,8 +43,8 @@
     xft = enableX11;
     cairo = true;
   },
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   cairo,
   # List of external tools to create, this default list includes all default
   # tools, as recorded on release 3.9.3.
@@ -110,6 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-YogapVTmW4HAyVgvhR4ZvW4Q6v0kGiW11CCxN6SpPCY=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/arakiken/mlterm/commit/819366f9c3c015d1be501d626ca954ce3ce38a60.patch";
+      hash = "sha256-xI0CzXN3gfXZXrL1/tFgQDtpY5hnzGLPruidOuMrbPQ=";
+      excludes = [
+        "ChangeLog"
+      ];
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoconf
@@ -123,10 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
   ]
   ++ lib.optionals enableTypeEngines.xcore [
-    libX11
+    libx11
   ]
   ++ lib.optionals enableTypeEngines.xft [
-    libXft
+    libxft
   ]
   ++ lib.optionals enableTypeEngines.cairo [
     cairo
@@ -161,32 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     uim
   ];
 
-  #bad configure.ac and Makefile.in everywhere
-  preConfigure = ''
-    sed -i -e 's;-L/usr/local/lib -R/usr/local/lib;;g' \
-      main/Makefile.in \
-      tool/mlfc/Makefile.in \
-      tool/mlimgloader/Makefile.in \
-      tool/mlconfig/Makefile.in \
-      uitoolkit/libtype/Makefile.in \
-      uitoolkit/libotl/Makefile.in
-    sed -i -e 's;cd ..srcdir. && rm -f ...lang..gmo.*;;g' \
-      tool/mlconfig/po/Makefile.in.in
-    #utmp and mlterm-fb
-    substituteInPlace configure.in \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
-    substituteInPlace configure \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
-  '';
-
   env = {
     NIX_CFLAGS_COMPILE =
-      (lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types ")
       # GCC15 defaults to C23 which is stricter about prototypes
       # There are upstream fixes, but they are not in 3.9.4 release
-      + (lib.optionalString stdenv.cc.isGNU " -std=c17 ");
+      lib.optionalString stdenv.cc.isGNU " -std=c17 ";
   };
 
   configureFlags = [
@@ -251,7 +241,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = desktopBinary;
-    # https://github.com/arakiken/mlterm/issues/157
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

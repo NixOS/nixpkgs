@@ -94,6 +94,7 @@ stdenv.mkDerivation {
 
     for file in "$out"/bin/* "$lib"/lib/*.dylib; do
       if [ -L "$file" ]; then continue; fi
+      if [[ "$file" == *.py ]]; then continue; fi
       echo "$file: fixing dylib references"
       # note that -id does nothing on binaries
       install_name_tool -id "$file" "''${flags[@]}" "$file"

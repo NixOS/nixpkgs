@@ -13,16 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.18.0";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_websecurityscanner";
     inherit version;
-    hash = "sha256-JjW9Rifp3BZIjAzs94trQj1RJAHLzll+tDksV/e1rag=";
+    hash = "sha256-6u7VvENhWk25oIFFyeV/9JRYVUnQSeyc5G3sWR4DBF4=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

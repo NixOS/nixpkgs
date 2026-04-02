@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seadrive-fuse";
-  version = "3.0.18";
+  version = "3.0.21";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seadrive-fuse";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oMi297ORIKdJhuYOvazJ+oSVCwRAqvjy0pc+lyBq5oQ=";
+    hash = "sha256-SAosWgcqxK99leKGYJ7F8zuraOiBz49/AJjTQ/PeEwQ=";
   };
 
   nativeBuildInputs = [

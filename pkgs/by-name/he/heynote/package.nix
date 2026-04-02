@@ -7,11 +7,11 @@
 }:
 let
   pname = "heynote";
-  version = "2.7.0";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://github.com/heyman/heynote/releases/download/v${version}/Heynote_${version}_x86_64.AppImage";
-    sha256 = "sha256-g96Vs9fCYRQc3vmQZd3N2jJSU4TQanLUa/Grb+71eW4=";
+    sha256 = "sha256-bK79Au/0UoDvgzFPp/xx7ABtGf3vzWzU1XKuOEOKPTI=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -25,8 +25,8 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ desktop-file-utils ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/pixmaps $out/share/licenses/heynote
-    cp ${appimageContents}/heynote.png $out/share/pixmaps/
+    mkdir -p $out/share/licenses/heynote
+    install -D ${appimageContents}/heynote.png -t $out/share/icons/hicolor/512x512/apps
     cp ${appimageContents}/heynote.desktop $out
     # verify binary is present
     stat $out/bin/heynote

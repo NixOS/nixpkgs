@@ -12,7 +12,6 @@ stdenv.mkDerivation {
   version = "1.80-unstable-2025-05-03";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "kumm";
     repo = "pagsuite";
     rev = "1cc657765658cb2eb622d4a9c656ab9854150e7d";

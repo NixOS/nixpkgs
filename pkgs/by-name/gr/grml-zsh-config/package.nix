@@ -5,14 +5,14 @@
   asciidoctor,
   txt2tags,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grml-zsh-config";
   version = "0.19.26";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WZ3eyX9ijsU221I4hEhWUtFmtBQ9jm1QvQZh20gcR/s=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       rvolosatovs
     ];
   };
-}
+})

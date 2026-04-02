@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
   ];
 
-  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
   passthru.updateScript = nix-update-script { };
 

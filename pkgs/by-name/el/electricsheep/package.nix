@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK32,
+  wxwidgets_3_2,
   ffmpeg,
   lua5_1,
   curl,
   libpng,
-  xorg,
+  libxrender,
   pkg-config,
   flam3,
   libgtop,
@@ -42,12 +42,12 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     ffmpeg
     lua5_1
     curl
     libpng
-    xorg.libXrender
+    libxrender
     flam3
     libgtop
     boost

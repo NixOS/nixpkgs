@@ -93,7 +93,7 @@ let
       ;
     baseName = "thunderbird";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
-    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    baseUrl = "https://archive.mozilla.org/pub/thunderbird/releases/";
   };
 
   nativeBuildInputs = [

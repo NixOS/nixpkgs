@@ -11,14 +11,14 @@
   debugBuild ? false,
   withJcef ? true,
 
-  libXdamage,
-  libXxf86vm,
-  libXrandr,
-  libXi,
-  libXcursor,
-  libXrender,
-  libX11,
-  libXext,
+  libxdamage,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libxrender,
+  libx11,
+  libxext,
   libxkbcommon,
   libxcb,
   nss,
@@ -62,7 +62,7 @@ jdk.overrideAttrs (oldAttrs: rec {
     hash = "sha256-P2boCbGB66X8LB4sZHGFO8lqHbv6F4kqGVMGBd9yKu0=";
   };
 
-  env = {
+  env = (oldAttrs.env or { }) // {
     BOOT_JDK = jdk.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
     SOURCE_DATE_EPOCH = 1765114563;
@@ -135,14 +135,14 @@ jdk.overrideAttrs (oldAttrs: rec {
     # Build the set of output library directories to rpath against
     LIBDIRS="${
       lib.makeLibraryPath [
-        libXdamage
-        libXxf86vm
-        libXrandr
-        libXi
-        libXcursor
-        libXrender
-        libX11
-        libXext
+        libxdamage
+        libxxf86vm
+        libxrandr
+        libxi
+        libxcursor
+        libxrender
+        libx11
+        libxext
         libxkbcommon
         libxcb
         nss

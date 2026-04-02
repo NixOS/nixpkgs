@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "huniq";
   version = "2.7.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5GvHM05qY/Jj1mPYwn88Zybn6Nn5nJIaw0XP8iCcrwE=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

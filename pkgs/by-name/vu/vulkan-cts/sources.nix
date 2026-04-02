@@ -60,8 +60,8 @@ rec {
   vulkan-video-samples = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Video-Samples";
-    rev = "v0.3.7";
-    hash = "sha256-vNdRAx4kgPHxhHB0bUUsvi6yJhNcm/H5pU24tkVshuM=";
+    rev = "v0.3.9";
+    hash = "sha256-SyW/OzDGPdRPYGG7jgFMp8AkvpZq8Yi/7QZKZugXKho=";
   };
 
   prePatch = ''

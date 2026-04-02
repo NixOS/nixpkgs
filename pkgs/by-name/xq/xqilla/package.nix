@@ -6,12 +6,12 @@
   xercesc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xqilla";
   version = "2.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xqilla/XQilla-${version}.tar.gz";
+    url = "mirror://sourceforge/xqilla/XQilla-${finalAttrs.version}.tar.gz";
     sha256 = "0m9z7diw7pdyb4qycbqyr2x55s13v8310xsi7yz0inpw27q4vzdd";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.all;
   };
-}
+})

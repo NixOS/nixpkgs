@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   writeTextFile,
 
   pkg-config,
@@ -43,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-default-commit-hash.patch
     ./remove-vendored-libraries.patch
     ./fix-avcodec-close.patch
+    (fetchpatch {
+      name = "CVE-2026-2245.patch";
+      url = "https://github.com/CCExtractor/ccextractor/commit/fd7271bae238ccb3ae8a71304ea64f0886324925.patch";
+      hash = "sha256-wZiJob5v4SVa5YBmiHuNvgphSi4PhTTb3hg4vs1lhVg=";
+    })
   ]
   ++ finalAttrs.cargoDeps.vendorStaging.patches;
 

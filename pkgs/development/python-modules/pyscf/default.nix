@@ -22,16 +22,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyscf";
-  version = "2.11.0";
+  version = "2.12.1-unstable-2026-03-21";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
-    tag = "v${version}";
-    hash = "sha256-JqjZn4EL6P7qS9PJ/wV6+FniEUeCB/f271nczVH5VuQ=";
+    rev = "e8642fb7220248bd750c34ef6adf88a9744977ee";
+    hash = "sha256-RVv5vTmTtHDAbgOXHW1DUzYVsf+NvrYh9++WfNGJ07k=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -96,6 +96,7 @@ buildPythonPackage rec {
     "test_collinear_kgks_gga"
     "test_libxc_gga_deriv4"
     "test_sacasscf_grad"
+    "test_sparse_dot"
   ];
 
   disabledTestPaths = [

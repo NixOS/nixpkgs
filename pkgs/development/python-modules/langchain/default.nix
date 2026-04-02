@@ -2,41 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
 
   # dependencies
-  aiohttp,
-  async-timeout,
   langchain-core,
-  langchain-text-splitters,
   langgraph,
-  langsmith,
-  numpy,
   pydantic,
-  pyyaml,
-  requests,
-  sqlalchemy,
-  tenacity,
+
+  # Optional dependencies
+  langchain-anthropic,
+  langchain-aws,
+  langchain-community,
+  langchain-deepseek,
+  langchain-fireworks,
+  langchain-google-genai,
+  langchain-groq,
+  langchain-huggingface,
+  langchain-mistralai,
+  langchain-ollama,
+  langchain-openai,
+  langchain-perplexity,
+  langchain-xai,
 
   # runtime
   runtimeShell,
 
   # tests
   blockbuster,
-  freezegun,
-  httpx,
   langchain-tests,
-  lark,
-  pandas,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
-  requests-mock,
-  responses,
   syrupy,
   toml,
 
@@ -44,19 +44,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain";
-  version = "1.2.0";
+  version = "1.2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain==${version}";
-    hash = "sha256-DximXCwrDSUVXZenUrubuGcxdnRCPCPMgdW9UJnkGnE=";
+    tag = "langchain==${finalAttrs.version}";
+    hash = "sha256-Eb9sXYUaBQn6f7IqgrSIbNz75g79Vka0RommZFJUQko=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain_v1";
+  sourceRoot = "${finalAttrs.src.name}/libs/langchain_v1";
 
   postPatch = ''
     substituteInPlace langchain/agents/middleware/shell_tool.py \
@@ -65,46 +65,40 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
-    "tenacity"
+  dependencies = [
+    langchain-core
+    langgraph
+    pydantic
   ];
 
-  dependencies = [
-    aiohttp
-    langchain-core
-    langchain-text-splitters
-    langgraph
-    langsmith
-    numpy
-    pydantic
-    pyyaml
-    requests
-    sqlalchemy
-    tenacity
-  ]
-  ++ lib.optional (pythonOlder "3.11") async-timeout;
-
   optional-dependencies = {
-    numpy = [ numpy ];
+    anthropic = [ langchain-anthropic ];
+    aws = [ langchain-aws ];
+    # azure-ai = [langchain-azure-ai];
+    community = [ langchain-community ];
+    deepseek = [ langchain-deepseek ];
+    fireworks = [ langchain-fireworks ];
+    google-genai = [ langchain-google-genai ];
+    # google-vertexai = [langchain-google-vertexai];
+    groq = [ langchain-groq ];
+    huggingface = [ langchain-huggingface ];
+    mistralai = [ langchain-mistralai ];
+    ollama = [ langchain-ollama ];
+    openai = [ langchain-openai ];
+    perplexity = [ langchain-perplexity ];
+    # together = [langchain-together];
+    xai = [ langchain-xai ];
   };
 
   nativeCheckInputs = [
     blockbuster
-    freezegun
-    httpx
-    lark
     langchain-tests
-    pandas
+    # langchain-openai -- causes recursion error
     pytest-asyncio
     pytest-mock
     pytest-socket
+    pytest-xdist
     pytestCheckHook
-    requests-mock
-    responses
     syrupy
     toml
   ];
@@ -113,6 +107,7 @@ buildPythonPackage rec {
     "--only-core"
   ];
 
+  # Note: Not testing with optional dependencies due to mutual recursion
   enabledTestPaths = [
     # integration_tests require network access, database access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
@@ -122,12 +117,16 @@ buildPythonPackage rec {
   disabledTests = [
     # Depends on shell's truncation style
     "test_truncation_indicator_present"
+    "test_truncation_by_bytes"
     # Depends on the sleep shell command
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
     # Timing sensitive tests
     "test_tool_retry_constant_backoff"
+    # AttributeError: 'ImportErrorProfileModel' object has no attribute 'profile'
+    # https://github.com/langchain-ai/langchain/issues/36312
+    "test_summarization_middleware_missing_profile"
   ];
 
   disabledTestPaths = [
@@ -149,11 +148,11 @@ buildPythonPackage rec {
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
       sarahec
     ];
   };
-}
+})

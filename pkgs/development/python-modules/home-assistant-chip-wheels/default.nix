@@ -44,7 +44,6 @@
   python,
   python-daemon,
   python-path,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -66,6 +65,7 @@
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
   version = "2025.7.0";
+
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
@@ -258,12 +258,12 @@ stdenv.mkDerivation rec {
   gnFlags = [
     ''chip_project_config_include_dirs=["//.."]''
     ''chip_crypto="openssl"''
-    ''enable_rtti=true''
-    ''chip_config_memory_debug_checks=false''
-    ''chip_config_memory_debug_dmalloc=false''
+    "enable_rtti=true"
+    "chip_config_memory_debug_checks=false"
+    "chip_config_memory_debug_dmalloc=false"
     ''chip_mdns="minimal"''
     ''chip_minmdns_default_policy="libnl"''
-    ''chip_python_version="${lib.versions.majorMinor python.version}"''
+    ''chip_python_version="${version}"''
     ''chip_python_platform_tag="any"''
     ''chip_python_package_prefix="home-assistant-chip"''
     ''custom_toolchain="custom"''

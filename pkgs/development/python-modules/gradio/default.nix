@@ -56,6 +56,7 @@
 
   # tests
   pytestCheckHook,
+  build,
   hypothesis,
   altair,
   boto3,
@@ -79,40 +80,32 @@ let
   nodejs = nodejs_24;
   pnpm = pnpm_10.override { inherit nodejs; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.2.0";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    tag = "gradio@${version}";
-    hash = "sha256-lD0tMqkbuLMLAkdjT52ZXx9I+Cs3OVI0oQmN+VPEBts=";
+    tag = "gradio@${finalAttrs.version}";
+    hash = "sha256-iGaUiJto/tquCSa6D/wbkNyVtK/2kZB/hz62STfwLOY=";
   };
 
+  patches = [
+    ./fix-transformers-pipelines-imports.patch
+  ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
-      pnpm
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-Lk8B2nQsKHs7JP3tjZufghXI7VL7GYfC30e/gpSSd4M=";
+    hash = "sha256-pZCYtWFNlrcRFomx6HbO0zySOyifO3n/ffzx59pS/A8=";
   };
-
-  pythonRelaxDeps = [
-    "aiofiles"
-    "gradio-client"
-    "markupsafe"
-    "pydantic" # Requests >=2.11.10,<=2.12.4. Staging has it, master doesn't.
-  ];
-
-  pythonRemoveDeps = [
-    # this isn't a real runtime dependency
-    "ruff"
-  ];
 
   nativeBuildInputs = [
     zip
@@ -128,6 +121,10 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
   ];
 
+  pythonRelaxDeps = [
+    "aiofiles"
+    "tomlkit"
+  ];
   dependencies = [
     aiofiles
     anyio
@@ -171,6 +168,7 @@ buildPythonPackage rec {
     boto3
     brotli
     diffusers
+    build
     docker
     ffmpeg
     gradio-pdf
@@ -191,7 +189,7 @@ buildPythonPackage rec {
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
   ]
-  ++ optional-dependencies.oauth
+  ++ finalAttrs.passthru.optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
 
   preBuild = ''
@@ -216,6 +214,10 @@ buildPythonPackage rec {
 
     # requires network, it caught our xfail exception
     "test_error_analytics_successful"
+    "TestSnippetExecution"
+
+    # requires network, via subprocess.run
+    "test_endpoint_status"
 
     # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
     # These error only affect downstream use of the check dependencies.
@@ -257,6 +259,8 @@ buildPythonPackage rec {
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
+    "test_api_response"
+    "test_load_assets"
 
     # Flaky test (AssertionError when comparing to a fixed array)
     # https://github.com/gradio-app/gradio/issues/11620
@@ -359,6 +363,7 @@ buildPythonPackage rec {
     # 100% touches network
     "test/test_networking.py"
     "client/python/test/test_client.py"
+
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
 
@@ -425,7 +430,9 @@ buildPythonPackage rec {
     # enough tags for the ones we're looking for to show up.
     updateScript = writeScript "update-python3Packages.gradio" ''
       #! /usr/bin/env nix-shell
-      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update
+      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update jq curl
+      set -euo pipefail
+      set -x
 
       tag=$(list-git-tags \
             | grep "^gradio@" \
@@ -435,15 +442,18 @@ buildPythonPackage rec {
             | head -n 1 \
             | tr -d '\n' \
            )
-      nix-update --version="$tag"
+      nix-update python3Packages.gradio --version="$tag"
+
+      gradio_client_version="$(curl https://raw.githubusercontent.com/gradio-app/gradio/gradio@"$tag"/client/python/gradio_client/package.json | jq ".version" -r)"
+      nix-update python3Packages.gradio-client --version="$gradio_client_version" --no-src
     '';
   };
 
   meta = {
     homepage = "https://www.gradio.app/";
-    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio@${version}";
+    changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

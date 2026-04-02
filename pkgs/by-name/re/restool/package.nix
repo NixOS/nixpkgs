@@ -13,7 +13,7 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "restool";
   version = "2.4";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "prefix="
     "bindir_completion=/share/bash-completion/completions"
     "DESTDIR=$(out)"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
   ];
 
   postPatch = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     # symlinks). Instead, inject the environment directly into the shell
     # scripts we need to wrap.
     for tool in ls-append-dpl ls-debug ls-main; do
-      sed -i "1 a export PATH=\"$out/bin:${lib.makeBinPath buildInputs}:\$PATH\"" $out/bin/$tool
+      sed -i "1 a export PATH=\"$out/bin:${lib.makeBinPath finalAttrs.buildInputs}:\$PATH\"" $out/bin/$tool
     done
   '';
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "genesis-plus-gx";
-  version = "0-unstable-2025-12-21";
+  version = "0-unstable-2026-03-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "Genesis-Plus-GX";
-    rev = "7c5819b7bd0b84c3265ee7dfcd7b90210ed7d687";
-    hash = "sha256-3YrRWxKk6Uci5MKS5lQYU+edrLdsFYIAR6pTPXwiy8c=";
+    rev = "ee71e47c8d4b3b73b596dea1d8a6bf8d2cac7662";
+    hash = "sha256-f7Ox204WmvPwwLce5/ztADr5P5Z5JhVOn04vt7Ww1Ns=";
   };
 
   meta = {

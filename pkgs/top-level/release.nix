@@ -19,7 +19,7 @@
   system ? builtins.currentSystem,
   officialRelease ? false,
   # The platform doubles for which we build Nixpkgs.
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
     "arm64-apple-darwin"
@@ -40,12 +40,13 @@
       allowAliases = false;
       allowUnfree = false;
       inHydra = true;
+      recursionMode = "hydra";
       # Exceptional unsafe packages that we still build and distribute,
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_6-1.6.4"
-        "kanidmWithSecretProvisioning_1_6-1.6.4"
+        "kanidm_1_7-1.7.4"
+        "kanidmWithSecretProvisioning_1_7-1.7.4"
       ];
     };
 
@@ -95,11 +96,10 @@ let
     "aarch64"
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
-  nonPackageJobs = rec {
+  nonPackageJobs = {
     tarball = import ./make-tarball.nix {
       inherit
         pkgs
-        lib-tests
         nixpkgs
         officialRelease
         ;
@@ -111,7 +111,6 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
     darwin-tested =
       if supportDarwin.x86_64 || supportDarwin.aarch64 then
@@ -153,7 +152,6 @@ let
             jobs.gimp2.x86_64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.x86_64-darwin
             jobs.wireshark.x86_64-darwin
-            jobs.transmission_4-gtk.x86_64-darwin
 
             # Tests
             /*
@@ -196,7 +194,6 @@ let
             jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
-            jobs.transmission_4-gtk.aarch64-darwin
 
             # Tests
             /*
@@ -220,7 +217,7 @@ let
         jobs.release-checks
         jobs.metrics
         jobs.manual
-        jobs.lib-tests
+        jobs.tests.lib-tests.x86_64-linux
         jobs.tests.pkgs-lib.formats-tests.x86_64-linux
         jobs.stdenv.x86_64-linux
         jobs.cargo.x86_64-linux

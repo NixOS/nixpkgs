@@ -5,13 +5,11 @@
   hatchling,
   lib,
   manifestoo-core,
-  pythonOlder,
-  tomli,
 }:
 buildPythonPackage rec {
   pname = "hatch-odoo";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acsone";
@@ -25,9 +23,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     hatchling
     manifestoo-core
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   meta = {

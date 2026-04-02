@@ -7,7 +7,6 @@
   psutil,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sybil,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "flufl-lock";
   version = "8.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "flufl_lock";

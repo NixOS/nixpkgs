@@ -6,11 +6,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "atdgen-codec-runtime";
-  version = "3.0.1";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://github.com/ahrefs/atd/releases/download/${finalAttrs.version}/atd-${finalAttrs.version}.tbz";
-    hash = "sha256-A66uRWWjLYu2ishRSvXvx4ALFhnClzlBynE4sSs0SIQ=";
+    hash = "sha256-NRT+TcTniGQLPpqf7DtbEG5vYJtZ0oUicB3hvS6pCfE=";
   };
 
   meta = {

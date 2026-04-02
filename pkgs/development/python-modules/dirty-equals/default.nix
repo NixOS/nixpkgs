@@ -6,23 +6,20 @@
   pydantic,
   pytest-examples,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
 let
   dirty-equals = buildPythonPackage rec {
     pname = "dirty-equals";
-    version = "0.9.0";
+    version = "0.11.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "samuelcolvin";
       repo = "dirty-equals";
       tag = "v${version}";
-      hash = "sha256-V+Ef/X4xQNSp2PiiXHHIAZT7v2sjU4vDBd9hNOqiRQw=";
+      hash = "sha256-JFKWrbMdxhvSBbjQ+S9HPW87CK+5ZZiXHg8Wltlv2YY=";
     };
 
     build-system = [ hatchling ];

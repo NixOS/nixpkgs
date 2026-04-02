@@ -262,7 +262,9 @@ in
                 interpreter = mkDefault interpreterReg;
                 fixBinary = mkDefault useStaticEmulator;
                 wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
-                interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
+                interpreterSandboxPath = mkDefault (
+                  if config.fixBinary then null else dirOf (dirOf config.interpreter)
+                );
               }
               // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"))
             );
@@ -276,10 +278,13 @@ in
         let
           ruleFor = system: cfg.registrations.${system};
           hasWrappedRule = lib.any (system: (ruleFor system).wrapInterpreterInShell) cfg.emulatedSystems;
+          allFixBinary = lib.all (system: (ruleFor system).fixBinary) cfg.emulatedSystems;
         in
-        [ "/run/binfmt" ]
+        lib.optional (!allFixBinary) "/run/binfmt"
         ++ lib.optional hasWrappedRule "${pkgs.bash}"
-        ++ (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems);
+        ++ lib.filter (x: x != null) (
+          map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems
+        );
     };
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf" (

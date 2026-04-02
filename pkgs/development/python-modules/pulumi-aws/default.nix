@@ -4,7 +4,6 @@
   fetchFromGitHub,
   parver,
   pulumi,
-  pythonOlder,
   semver,
   setuptools,
 }:
@@ -12,16 +11,14 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independent of pulumi's.
-  version = "7.15.0";
+  version = "7.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
     tag = "v${version}";
-    hash = "sha256-aCTXhaWQgYcDyUMc6ulo/PtEGU/6Mb5MlIjtJI/V1Mw=";
+    hash = "sha256-yD6VJ51AWJk4jlHJUtoHXGPtQvAyS0EuItbS1Obq6lc=";
   };
 
   sourceRoot = "${src.name}/sdk/python";

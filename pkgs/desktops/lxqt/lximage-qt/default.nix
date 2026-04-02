@@ -4,10 +4,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libXdmcp,
+  libxdmcp,
   libexif,
   libfm-qt,
-  libpthreadstubs,
+  libpthread-stubs,
   lxqt-build-tools,
   menu-cache,
   qtbase,
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXdmcp
+    libxdmcp
     libexif
     libfm-qt
-    libpthreadstubs
+    libpthread-stubs
     menu-cache
     qtbase
     qtimageformats # add-on module to support more image file formats

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "1.9";
 
   src = fetchurl {
-    url = "http://ftp.tu-chemnitz.de/pub/Local/urz/ding/ding-${version}.tar.gz";
+    url = "https://ftp.tu-chemnitz.de/pub/Local/urz/ding/ding-${version}.tar.gz";
     sha256 = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/dict
     mkdir -p $out/share/man/man1
     mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/32x32/apps
 
     for f in ding ding.1; do
       sed -i "s@/usr/share@$out/share@g" "$f"
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     cp -v ding $out/bin/
     cp -v de-en.txt $out/share/dict/
     cp -v ding.1 $out/share/man/man1/
-    cp -v ding.png $out/share/pixmaps/
+    cp -v ding.png $out/share/icons/hicolor/32x32/apps
     cp -v ding.desktop $out/share/applications/
 
     wrapProgram $out/bin/ding --prefix PATH : ${

@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "batticonplus";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "artist4xlibre";
     repo = "batticonplus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H9ZoiQ5zWMIoWWol2a6f9Z8g4o9DIHYdF+/nEsBfuzc=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ yechielw ];
   };
-}
+})

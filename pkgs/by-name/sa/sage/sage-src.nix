@@ -96,6 +96,41 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/9bd5304f1a222e215d7006a04854ff66616748bf.patch?full_index=1";
       hash = "sha256-7bgouXV3pM20IX5PM24ZpJWOBlZjQksGtjopgouEbyg=";
     })
+
+    # https://github.com/sagemath/sage/pull/41078, landed in 10.8.beta8
+    (fetchpatch2 {
+      name = "docutils-0.22-update.patch";
+      url = "https://github.com/sagemath/sage/commit/e206e205a6841cc5251dfb37fdd36ed29345fba4.patch?full_index=1";
+      hash = "sha256-Y8DqwGBkRnL+6ejZibCmkEJ7q/Qs0wD2KGmAefVdd94=";
+    })
+
+    # https://github.com/sagemath/sage/pull/41342, landed in 10.9.beta1
+    (fetchpatch2 {
+      name = "numpy-2.4-update.patch";
+      url = "https://github.com/sagemath/sage/commit/97ceea842a39fa2f2e9098daae2738a2f2765b9e.patch?full_index=1";
+      hash = "sha256-/Tk3tIy0syOjaNRMCyot6kma3jj4288QJ3zypS79jZo=";
+    })
+
+    # https://github.com/sagemath/sage/pull/41346, landed in 10.9.beta2
+    (fetchpatch2 {
+      name = "ipython-9.8-updte.patch";
+      url = "https://github.com/sagemath/sage/commit/380949e6eeda80cca6e5dd971e2c6f367647a863.patch?full_index=1";
+      hash = "sha256-e4zmgfHrenOixgbUS1uFHzftmwNGGoSb7yFhYmqT0yc=";
+    })
+
+    # https://github.com/sagemath/sage/pull/41395, landed in 10.9.beta2
+    (fetchpatch2 {
+      name = "pyparsing-3.3-update.patch";
+      url = "https://github.com/sagemath/sage/commit/1b5a5dd78b5dcb4b3c7d1f94461ddbc647c5679f.patch?full_index=1";
+      hash = "sha256-kFXg2O3IpwaOwAaNIy6Wscx8/XSDWXrqAXS2ZJgdqsg=";
+    })
+
+    # https://github.com/sagemath/sage/pull/41433, landed in 10.9.beta3
+    (fetchpatch2 {
+      name = "scipy-1.17-update.patch";
+      url = "https://github.com/sagemath/sage/commit/ff58afe27c80c067a8965e1d70966e25d0355aaf.patch?full_index=1";
+      hash = "sha256-gWoXwhUVXL2RSVLPRbxtlP0LCSEkJ9z1PJ1wKLXef1k=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

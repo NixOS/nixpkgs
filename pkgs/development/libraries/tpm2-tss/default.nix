@@ -115,6 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     substituteInPlace src/tss2-fapi/ifapi_config.c \
       --replace-fail 'SYSCONFDIR' '"/etc"'
+
+    # https://github.com/tpm2-software/tpm2-tss/pull/3041
+    substituteInPlace test/unit/tcti-libtpms.c \
+      --replace-fail 'check_expected_ptr(st);' 'check_expected(st);' \
+      --replace-fail 'check_expected_ptr(buf_len);' 'check_expected(buf_len);'
   ''
   # tcti tests rely on mocking function calls, which appears not to be supported
   # on clang

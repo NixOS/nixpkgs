@@ -13,7 +13,7 @@
   addBinToPathHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fenics-ffcx";
   version = "0.10.1.post0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "ffcx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uV3sfK6tpdoVf+O/EYZw3yR1PdqkoXt4q66zwQ8h/Ks=";
   };
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     homepage = "https://fenicsproject.org";
     downloadPage = "https://github.com/fenics/ffcx";
     description = "FEniCSx Form Compiler";
-    changelog = "https://github.com/fenics/ffcx/releases/tag/${src.tag}";
+    changelog = "https://github.com/fenics/ffcx/releases/tag/v${finalAttrs.version}";
     mainProgram = "ffcx";
     license = with lib.licenses; [
       unlicense
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

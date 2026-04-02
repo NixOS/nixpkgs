@@ -4,15 +4,12 @@
   fetchPypi,
   setuptools-scm,
   certifi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "twitter";
   version = "1.19.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

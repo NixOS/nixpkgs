@@ -99,6 +99,11 @@ buildPythonPackage rec {
   ]
   ++ lib.optional (!isPy3k) mock;
 
+  pythonRemoveDeps = [
+    "libclang"
+    "keras"
+  ];
+
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
 

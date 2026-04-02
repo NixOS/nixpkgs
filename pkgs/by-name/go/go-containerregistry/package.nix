@@ -13,15 +13,15 @@ let
   ];
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-containerregistry";
-  version = "0.20.7";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-containerregistry";
-    rev = "v${version}";
-    sha256 = "sha256-UDLKdeQ2Nxf5MCruN4IYNGL0xOp8Em2d+wmXX+R9ow4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-BfKiBjfL5th1TPpw6hpno04MffLnXmOVq7BsGUCkPT0=";
   };
   vendorHash = null;
 
@@ -41,8 +41,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}/cmd/crane/cmd.Version=v${version}"
-      "-X ${t}/pkg/v1/remote/transport.Version=${version}"
+      "-X ${t}/cmd/crane/cmd.Version=v${finalAttrs.version}"
+      "-X ${t}/pkg/v1/remote/transport.Version=${finalAttrs.version}"
     ];
 
   postInstall =
@@ -75,4 +75,4 @@ buildGoModule rec {
       ryan4yin
     ];
   };
-}
+})

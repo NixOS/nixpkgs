@@ -20,7 +20,6 @@ let
     take
     length
     filterAttrs
-    optionalString
     flip
     head
     pipe
@@ -626,15 +625,18 @@ rec {
     # Type
 
     ```
-    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> scope
+    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> Scope
     ```
   */
   makeScope =
     newScope: f:
     let
-      self = f self // {
-        newScope = scope: newScope (self // scope);
+      self = {
         callPackage = self.newScope { };
+      }
+      // f self
+      // {
+        newScope = scope: newScope (self // scope);
         overrideScope = g: makeScope newScope (extends g f);
         packages = f;
       };
@@ -689,20 +691,20 @@ rec {
 
     ```
     makeScopeWithSplicing' ::
-      { splicePackages :: Splice -> AttrSet
-      , newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+      { splicePackages :: Splice -> AttrSet;
+        newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a;
       }
-      -> { otherSplices :: Splice, keep :: AttrSet -> AttrSet, extra :: AttrSet -> AttrSet }
+      -> { otherSplices :: Splice; keep :: AttrSet -> AttrSet; extra :: AttrSet -> AttrSet; }
       -> AttrSet
 
-    Splice ::
-      { pkgsBuildBuild :: AttrSet
-      , pkgsBuildHost :: AttrSet
-      , pkgsBuildTarget :: AttrSet
-      , pkgsHostHost :: AttrSet
-      , pkgsHostTarget :: AttrSet
-      , pkgsTargetTarget :: AttrSet
-      }
+    Splice :: {
+      pkgsBuildBuild :: AttrSet;
+      pkgsBuildHost :: AttrSet;
+      pkgsBuildTarget :: AttrSet;
+      pkgsHostHost :: AttrSet;
+      pkgsHostTarget :: AttrSet;
+      pkgsTargetTarget :: AttrSet;
+    }
     ```
   */
   makeScopeWithSplicing' =
@@ -806,17 +808,16 @@ rec {
     ```
     extendMkDerivation ::
       {
-        constructDrv :: ((FixedPointArgs | AttrSet) -> a)
-        excludeDrvArgNames :: [ String ],
-        excludeFunctionArgNames :: [ String ]
-        extendDrvArgs :: (AttrSet -> AttrSet -> AttrSet)
-        inheritFunctionArgs :: Bool,
-        transformDrv :: a -> a,
+        constructDrv :: (FixedPointArgs | AttrSet) -> Derivation;
+        excludeDrvArgNames :: [String];
+        excludeFunctionArgNames :: [String];
+        extendDrvArgs :: AttrSet -> AttrSet -> AttrSet;
+        inheritFunctionArgs :: Bool;
+        transformDrv :: Derivation -> Derivation;
       }
-      -> (FixedPointArgs | AttrSet) -> a
+      -> ((FixedPointArgs | AttrSet) -> Derivation)
 
-    FixedPointArgs = AttrSet -> AttrSet
-    a = Derivation when defining a build helper
+    FixedPointArgs :: AttrSet -> AttrSet
     ```
 
     # Examples
@@ -998,7 +999,21 @@ rec {
     # Type
 
     ```
-    mapCrossIndex :: (a -> b) -> AttrSet -> AttrSet
+    mapCrossIndex :: (a -> b) -> {
+      buildBuild :: a;
+      buildHost :: a;
+      buildTarget :: a;
+      hostHost :: a;
+      hostTarget :: a;
+      targetTarget :: a;
+    } -> {
+      buildBuild :: b;
+      buildHost :: b;
+      buildTarget :: b;
+      hostHost :: b;
+      hostTarget :: b;
+      targetTarget :: b;
+    }
     ```
 
     # Examples

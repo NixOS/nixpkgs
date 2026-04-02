@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.1.0";
+  version = "2026.3.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -33,8 +33,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -126,7 +126,8 @@
       ];
     "airpatrol" =
       ps: with ps; [
-      ]; # missing inputs: airpatrol
+        airpatrol
+      ];
     "airq" =
       ps: with ps; [
         aioairq
@@ -157,8 +158,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -298,7 +299,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "anwb_energie" =
@@ -386,8 +387,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -428,7 +429,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "assist_satellite" =
@@ -437,7 +438,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "asuswrt" =
@@ -468,10 +469,11 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
         yalexs
@@ -522,6 +524,9 @@
     "aws_s3" =
       ps: with ps; [
         aiobotocore
+        aiohasupervisor
+        cronsim
+        securetar
       ];
     "axis" =
       ps: with ps; [
@@ -658,8 +663,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -705,8 +710,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -731,8 +736,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -756,6 +761,9 @@
         boschshcpy
         ifaddr
         zeroconf
+      ];
+    "brands" =
+      ps: with ps; [
       ];
     "brandt" =
       ps: with ps; [
@@ -832,8 +840,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -884,14 +892,15 @@
         hassil
         home-assistant-intents
         ifaddr
+        matter-python-client
         mutagen
+        openai
         plexapi
         plexauth
         plexwebsocket
         pychromecast
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
         zeroconf
@@ -951,16 +960,21 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
     "cloudflare" =
       ps: with ps; [
         pycfdns
+      ];
+    "cloudflare_r2" =
+      ps: with ps; [
+        aiobotocore
       ];
     "cmus" =
       ps: with ps; [
@@ -1149,15 +1163,16 @@
         home-assistant-frontend
         home-assistant-intents
         ifaddr
+        matter-python-client
         mutagen
         numpy
+        openai
         pillow
         psutil-home-assistant
+        pymicro-vad
         pynacl
         pyserial
-        pysilero-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
         sqlalchemy
@@ -1313,8 +1328,8 @@
         ifaddr
         mutagen
         py-dormakaba-dkey
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1440,7 +1455,8 @@
       ];
     "egauge" =
       ps: with ps; [
-      ]; # missing inputs: egauge-async
+        egauge-async
+      ];
     "eheimdigital" =
       ps: with ps; [
         eheimdigital
@@ -1549,7 +1565,9 @@
       ];
     "enocean" =
       ps: with ps; [
+        aiousbwatcher
         enocean
+        pyserial
       ];
     "enphase_envoy" =
       ps: with ps; [
@@ -1605,8 +1623,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1636,8 +1654,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1675,8 +1693,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1766,7 +1784,8 @@
       ];
     "fing" =
       ps: with ps; [
-      ]; # missing inputs: fing_agent_api
+        fing-agent-api
+      ];
     "fints" =
       ps: with ps; [
         fints
@@ -1788,7 +1807,8 @@
       ];
     "fish_audio" =
       ps: with ps; [
-      ]; # missing inputs: fish-audio-sdk
+        fish-audio-sdk
+      ];
     "fitbit" =
       ps: with ps; [
         fitbit
@@ -1824,8 +1844,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -1865,7 +1885,8 @@
       ];
     "fluss" =
       ps: with ps; [
-      ]; # missing inputs: fluss-api
+        fluss-api
+      ];
     "flux" =
       ps: with ps; [
       ];
@@ -1927,7 +1948,8 @@
       ];
     "fressnapf_tracker" =
       ps: with ps; [
-      ]; # missing inputs: fressnapftracker
+        fressnapftracker
+      ];
     "fritz" =
       ps:
       with ps;
@@ -2013,8 +2035,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2051,7 +2073,8 @@
       ];
     "gentex_homelink" =
       ps: with ps; [
-      ]; # missing inputs: homelink-integration-api
+        homelink-integration-api
+      ];
     "geo_json_events" =
       ps: with ps; [
         aio-geojson-generic-client
@@ -2078,6 +2101,9 @@
       ps: with ps; [
         aio-geojson-geonetnz-volcano
       ];
+    "ghost" =
+      ps: with ps; [
+      ]; # missing inputs: aioghost
     "gios" =
       ps: with ps; [
         gios
@@ -2123,11 +2149,12 @@
       ];
     "google_air_quality" =
       ps: with ps; [
-      ]; # missing inputs: google_air_quality_api
+        google-air-quality-api
+      ];
     "google_assistant" =
       ps: with ps; [
         aiohasupervisor
-        python-matter-server
+        matter-python-client
         pyturbojpeg
       ];
     "google_assistant_sdk" =
@@ -2153,7 +2180,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "google_mail" =
@@ -2217,8 +2244,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2241,6 +2268,10 @@
       ps: with ps; [
         greeclimate
         ifaddr
+      ];
+    "green_planet_energy" =
+      ps: with ps; [
+        greenplanet-energy-api
       ];
     "greeneye_monitor" =
       ps: with ps; [
@@ -2271,7 +2302,8 @@
       ];
     "hanna" =
       ps: with ps; [
-      ]; # missing inputs: hanna-cloud
+        hanna-cloud
+      ];
     "hardkernel" =
       ps: with ps; [
         aiohasupervisor
@@ -2305,6 +2337,10 @@
     "hddtemp" =
       ps: with ps; [
       ];
+    "hdfury" =
+      ps: with ps; [
+        hdfury
+      ];
     "hdmi_cec" =
       ps: with ps; [
         pycec
@@ -2312,6 +2348,10 @@
     "heatmiser" =
       ps: with ps; [
         heatmiserv3
+      ];
+    "hegel" =
+      ps: with ps; [
+        hegel-ip-client
       ];
     "heicko" =
       ps: with ps; [
@@ -2478,9 +2518,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyroute2
         pyserial
-        pysilero-vad
         pyspeex-noise
         python-otbr-api
         zeroconf
@@ -2492,6 +2532,10 @@
     "homematicip_cloud" =
       ps: with ps; [
         homematicip
+      ];
+    "homevolt" =
+      ps: with ps; [
+        homevolt
       ];
     "homewizard" =
       ps: with ps; [
@@ -2515,6 +2559,7 @@
       ];
     "html5" =
       ps: with ps; [
+        py-vapid
         pywebpush
       ];
     "http" =
@@ -2551,8 +2596,8 @@
         hueble
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2597,8 +2642,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2617,6 +2662,10 @@
     "hyperion" =
       ps: with ps; [
         hyperion-py
+      ];
+    "hypontech" =
+      ps: with ps; [
+        hyponcloud
       ];
     "ialarm" =
       ps: with ps; [
@@ -2653,8 +2702,8 @@
         ibeacon-ble
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2684,10 +2733,15 @@
         idasen-ha
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
+      ];
+    "idrive_e2" =
+      ps: with ps; [
+        aiobotocore
+        idrive-e2-client
       ];
     "idteck_prox" =
       ps: with ps; [
@@ -2763,14 +2817,18 @@
         ifaddr
         mutagen
         py-improv-ble-client
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
     "incomfort" =
       ps: with ps; [
         incomfort-client
+      ];
+    "indevolt" =
+      ps: with ps; [
+        indevolt-api
       ];
     "indianamichiganpower" =
       ps: with ps; [
@@ -2808,8 +2866,8 @@
         ifaddr
         inkbird-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -2844,6 +2902,10 @@
       ];
     "integration" =
       ps: with ps; [
+      ];
+    "intelliclima" =
+      ps: with ps; [
+        pyintelliclima
       ];
     "intellifire" =
       ps: with ps; [
@@ -2922,9 +2984,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pynecil
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3052,8 +3114,8 @@
         ifaddr
         kegtron-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3086,9 +3148,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pymicrobot
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3166,8 +3228,8 @@
         ifaddr
         mutagen
         pykulersky
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3208,8 +3270,8 @@
         ifaddr
         mutagen
         pylamarzocco
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3269,8 +3331,8 @@
         ifaddr
         ld2410-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3296,8 +3358,8 @@
         ifaddr
         leaone-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3323,8 +3385,8 @@
         ifaddr
         led-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3362,6 +3424,10 @@
     "lidarr" =
       ps: with ps; [
         aiopyarr
+      ];
+    "liebherr" =
+      ps: with ps; [
+        pyliebherrhomeapi
       ];
     "life360" =
       ps: with ps; [
@@ -3480,10 +3546,11 @@
         hassil
         home-assistant-intents
         loqedapi
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
@@ -3567,7 +3634,7 @@
     "matter" =
       ps: with ps; [
         aiohasupervisor
-        python-matter-server
+        matter-python-client
       ];
     "maxcube" =
       ps: with ps; [
@@ -3621,8 +3688,8 @@
         ifaddr
         medcom-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3673,8 +3740,8 @@
         ifaddr
         melnor-bluetooth
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3795,8 +3862,8 @@
         ifaddr
         moat-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3808,12 +3875,13 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
+        openai
         pillow
+        pymicro-vad
         pynacl
-        pysilero-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
@@ -3882,8 +3950,8 @@
         ifaddr
         mopeka-iot-ble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3914,8 +3982,8 @@
         ifaddr
         motionblindsble
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -3960,6 +4028,10 @@
       ps: with ps; [
         pymsteams
       ];
+    "mta" =
+      ps: with ps; [
+        py-nymta
+      ];
     "mullvad" =
       ps: with ps; [
         mullvad-api
@@ -3974,10 +4046,15 @@
       ];
     "mvglive" =
       ps: with ps; [
-      ]; # missing inputs: mvg
+        mvg
+      ];
     "my" =
       ps: with ps; [
         home-assistant-frontend
+      ];
+    "myneomitis" =
+      ps: with ps; [
+        pyaxencoapi
       ];
     "myq" =
       ps: with ps; [
@@ -4010,11 +4087,10 @@
       ];
     "namecheapdns" =
       ps: with ps; [
-        defusedxml
       ];
     "nanoleaf" =
       ps: with ps; [
-        aionanoleaf
+        aionanoleaf2
       ];
     "nasweb" =
       ps: with ps; [
@@ -4054,11 +4130,12 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
+        openai
         pyatmo
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
@@ -4183,6 +4260,10 @@
       ps: with ps; [
         aionotion
       ];
+    "nrgkick" =
+      ps: with ps; [
+        nrgkick-api
+      ];
     "nsw_fuel_station" =
       ps: with ps; [
         nsw-fuel-api-client
@@ -4270,7 +4351,7 @@
         home-assistant-intents
         mutagen
         ollama
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "ombi" =
@@ -4299,11 +4380,29 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
         onedrive-personal-sdk
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
+        pyturbojpeg
+        securetar
+      ];
+    "onedrive_for_business" =
+      ps: with ps; [
+        aiohasupervisor
+        cronsim
+        ha-ffmpeg
+        hass-nabucasa
+        hassil
+        home-assistant-intents
+        matter-python-client
+        mutagen
+        onedrive-personal-sdk
+        openai
+        pymicro-vad
+        pyspeex-noise
         pyturbojpeg
         securetar
       ];
@@ -4333,7 +4432,7 @@
         home-assistant-intents
         mutagen
         openai
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         python-open-router
       ];
@@ -4344,7 +4443,7 @@
         home-assistant-intents
         mutagen
         openai
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
       ];
     "openalpr_cloud" =
@@ -4356,7 +4455,9 @@
       ];
     "openevse" =
       ps: with ps; [
-        openevsewifi
+        ifaddr
+        python-openevse-http
+        zeroconf
       ];
     "openexchangerates" =
       ps: with ps; [
@@ -4434,8 +4535,8 @@
         ifaddr
         mutagen
         oralb-ble
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4493,10 +4594,11 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         python-overseerr
         pyturbojpeg
         securetar
@@ -4513,12 +4615,13 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
+        openai
         paho-mqtt
+        pymicro-vad
         pynacl
-        pysilero-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
@@ -4638,11 +4741,12 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
+        openai
+        pymicro-vad
         pyplaato
-        pysilero-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
@@ -4697,10 +4801,17 @@
       ps: with ps; [
         powerfox
       ];
+    "powerfox_local" =
+      ps: with ps; [
+        powerfox
+      ];
     "powerwall" =
       ps: with ps; [
         tesla-powerwall
       ];
+    "prana" =
+      ps: with ps; [
+      ]; # missing inputs: prana-api-client
     "private_ble_device" =
       ps: with ps; [
         aioesphomeapi
@@ -4722,8 +4833,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4748,9 +4859,9 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyprobeplus
         pyserial
-        pysilero-vad
         pyspeex-noise
         zeroconf
       ];
@@ -4885,8 +4996,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         qingping-ble
         zeroconf
@@ -4937,10 +5048,11 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         rachiopy
         securetar
@@ -5005,8 +5117,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         rapt-ble
         zeroconf
@@ -5039,19 +5151,6 @@
       ];
     "recovery_mode" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
-        ha-ffmpeg
-        hass-nabucasa
-        hassil
-        home-assistant-frontend
-        home-assistant-intents
-        mutagen
-        pysilero-vad
-        pyspeex-noise
-        python-matter-server
-        pyturbojpeg
-        securetar
       ];
     "recswitch" =
       ps: with ps; [
@@ -5060,6 +5159,10 @@
     "reddit" =
       ps: with ps; [
         praw
+      ];
+    "redgtech" =
+      ps: with ps; [
+        redgtech-api
       ];
     "refoss" =
       ps: with ps; [
@@ -5251,8 +5354,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         ruuvitag-ble
         zeroconf
@@ -5296,7 +5399,8 @@
       ];
     "saunum" =
       ps: with ps; [
-      ]; # missing inputs: pysaunum
+        pysaunum
+      ];
     "scene" =
       ps: with ps; [
       ];
@@ -5378,8 +5482,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         sensirion-ble
         zeroconf
@@ -5414,8 +5518,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         sensorpro-ble
         zeroconf
@@ -5441,8 +5545,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         sensorpush-ble
         zeroconf
@@ -5702,8 +5806,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pysnooz
         pyspeex-noise
         zeroconf
@@ -5944,8 +6048,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         pyswitchbot
         zeroconf
@@ -6004,6 +6108,10 @@
       ps: with ps; [
         psutil
         psutil-home-assistant
+      ];
+    "systemnexa2" =
+      ps: with ps; [
+        python-sn2
       ];
     "tado" =
       ps: with ps; [
@@ -6087,6 +6195,10 @@
     "telnet" =
       ps: with ps; [
       ];
+    "teltonika" =
+      ps: with ps; [
+        teltasync
+      ];
     "temper" =
       ps: with ps; [
         temperusb
@@ -6139,8 +6251,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         thermobeacon-ble
         zeroconf
@@ -6169,8 +6281,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         thermopro-ble
         zeroconf
@@ -6236,8 +6348,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         tilt-ble
         zeroconf
@@ -6301,10 +6413,11 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
         toonapi
@@ -6384,6 +6497,10 @@
       ps: with ps; [
         pytrafikverket
       ];
+    "trane" =
+      ps: with ps; [
+        steamloop
+      ];
     "transmission" =
       ps: with ps; [
         transmission-rpc
@@ -6412,6 +6529,7 @@
     "tuya" =
       ps: with ps; [
         ha-ffmpeg
+        tuya-device-handlers
         tuya-device-sharing-sdk
       ];
     "twentemilieu" =
@@ -6451,6 +6569,10 @@
     "ubus" =
       ps: with ps; [
         openwrt-ubus-rpc
+      ];
+    "uhoo" =
+      ps: with ps; [
+        uhooapi
       ];
     "uk_transport" =
       ps: with ps; [
@@ -6604,6 +6726,7 @@
       ];
     "viaggiatreno" =
       ps: with ps; [
+        viaggiatreno-ha
       ];
     "vicare" =
       ps: with ps; [
@@ -6630,11 +6753,12 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
+        victron-ble-ha-parser
         zeroconf
-      ]; # missing inputs: victron-ble-ha-parser
+      ];
     "victron_remote_monitoring" =
       ps: with ps; [
         victron-vrm
@@ -6673,7 +6797,7 @@
         home-assistant-intents
         ifaddr
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         voip-utils
       ];
@@ -6730,13 +6854,15 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
-      ]; # missing inputs: visionpluspython
+        visionpluspython
+      ];
     "watttime" =
       ps: with ps; [
         aiowatttime
@@ -6821,10 +6947,11 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
       ];
@@ -6872,7 +6999,7 @@
         hassil
         home-assistant-intents
         mutagen
-        pysilero-vad
+        pymicro-vad
         pyspeex-noise
         wyoming
       ];
@@ -6916,8 +7043,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         xiaomi-ble
         zeroconf
@@ -6949,10 +7076,11 @@
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-python-client
         mutagen
-        pysilero-vad
+        openai
+        pymicro-vad
         pyspeex-noise
-        python-matter-server
         pyturbojpeg
         securetar
         yalexs
@@ -6983,8 +7111,8 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pymicro-vad
         pyserial
-        pysilero-vad
         pyspeex-noise
         yalexs-ble
         zeroconf
@@ -7090,6 +7218,10 @@
       ps: with ps; [
         zcc-helper
       ];
+    "zinvolt" =
+      ps: with ps; [
+        zinvolt
+      ];
     "zodiac" =
       ps: with ps; [
       ];
@@ -7138,6 +7270,7 @@
     "airnow"
     "airobot"
     "airos"
+    "airpatrol"
     "airq"
     "airthings"
     "airthings_ble"
@@ -7221,6 +7354,7 @@
     "bond"
     "bosch_alarm"
     "bosch_shc"
+    "brands"
     "braviatv"
     "bring"
     "broadlink"
@@ -7245,6 +7379,7 @@
     "climate"
     "cloud"
     "cloudflare"
+    "cloudflare_r2"
     "co2signal"
     "coinbase"
     "color_extractor"
@@ -7317,6 +7452,7 @@
     "ecowitt"
     "edl21"
     "efergy"
+    "egauge"
     "eheimdigital"
     "eight_sleep"
     "ekeybionyx"
@@ -7367,10 +7503,12 @@
     "file_upload"
     "filesize"
     "filter"
+    "fing"
     "fints"
     "firefly_iii"
     "fireservicerota"
     "firmata"
+    "fish_audio"
     "fitbit"
     "fivem"
     "fjaraskupan"
@@ -7379,6 +7517,7 @@
     "flipr"
     "flo"
     "flume"
+    "fluss"
     "flux"
     "flux_led"
     "folder"
@@ -7390,6 +7529,7 @@
     "freebox"
     "freedns"
     "freedompro"
+    "fressnapf_tracker"
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
@@ -7406,6 +7546,7 @@
     "generic_hygrostat"
     "generic_thermostat"
     "geniushub"
+    "gentex_homelink"
     "geo_json_events"
     "geo_location"
     "geo_rss_events"
@@ -7421,6 +7562,7 @@
     "gogogate2"
     "goodwe"
     "google"
+    "google_air_quality"
     "google_assistant"
     "google_assistant_sdk"
     "google_cloud"
@@ -7441,17 +7583,21 @@
     "gpslogger"
     "graphite"
     "gree"
+    "green_planet_energy"
     "greeneye_monitor"
     "group"
     "growatt_server"
     "guardian"
     "habitica"
+    "hanna"
     "hardkernel"
     "hardware"
     "harmony"
     "hassio"
     "hddtemp"
+    "hdfury"
     "hdmi_cec"
+    "hegel"
     "heos"
     "here_travel_time"
     "hikvision"
@@ -7475,6 +7621,7 @@
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
+    "homevolt"
     "homewizard"
     "homeworks"
     "honeywell"
@@ -7492,11 +7639,13 @@
     "hvv_departures"
     "hydrawise"
     "hyperion"
+    "hypontech"
     "ialarm"
     "iaqualink"
     "ibeacon"
     "icloud"
     "idasen_desk"
+    "idrive_e2"
     "ifttt"
     "igloohome"
     "ign_sismologia"
@@ -7509,6 +7658,7 @@
     "immich"
     "improv_ble"
     "incomfort"
+    "indevolt"
     "inels"
     "influxdb"
     "inkbird"
@@ -7520,6 +7670,7 @@
     "input_text"
     "insteon"
     "integration"
+    "intelliclima"
     "intellifire"
     "intent"
     "intent_script"
@@ -7580,6 +7731,7 @@
     "lg_thinq"
     "libre_hardware_monitor"
     "lidarr"
+    "liebherr"
     "life360"
     "lifx"
     "light"
@@ -7671,10 +7823,12 @@
     "mqtt_json"
     "mqtt_room"
     "mqtt_statestream"
+    "mta"
     "mullvad"
     "music_assistant"
     "mutesync"
     "my"
+    "myneomitis"
     "myq"
     "mysensors"
     "mystrom"
@@ -7711,6 +7865,7 @@
     "notify"
     "notify_events"
     "notion"
+    "nrgkick"
     "nsw_fuel_station"
     "nsw_rural_fire_service_feed"
     "ntfy"
@@ -7732,6 +7887,7 @@
     "oncue"
     "ondilo_ico"
     "onedrive"
+    "onedrive_for_business"
     "onewire"
     "onkyo"
     "onvif"
@@ -7740,6 +7896,7 @@
     "openai_conversation"
     "openalpr_cloud"
     "openerz"
+    "openevse"
     "openexchangerates"
     "opengarage"
     "openhardwaremonitor"
@@ -7789,6 +7946,7 @@
     "poolsense"
     "portainer"
     "powerfox"
+    "powerfox_local"
     "powerwall"
     "private_ble_device"
     "probe_plus"
@@ -7798,6 +7956,7 @@
     "prosegur"
     "prowl"
     "proximity"
+    "proxmoxve"
     "prusalink"
     "ps4"
     "pterodactyl"
@@ -7835,6 +7994,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "redgtech"
     "refoss"
     "rehlko"
     "remember_the_milk"
@@ -7872,6 +8032,7 @@
     "samsungtv"
     "sanix"
     "satel_integra"
+    "saunum"
     "scene"
     "schedule"
     "schlage"
@@ -7940,6 +8101,7 @@
     "spc"
     "speedtestdotnet"
     "spider"
+    "splunk"
     "spotify"
     "sql"
     "squeezebox"
@@ -7977,6 +8139,7 @@
     "system_health"
     "system_log"
     "systemmonitor"
+    "systemnexa2"
     "tado"
     "tag"
     "tailscale"
@@ -7991,6 +8154,7 @@
     "telegram"
     "telegram_bot"
     "tellduslive"
+    "teltonika"
     "temper"
     "template"
     "tesla_fleet"
@@ -8031,6 +8195,7 @@
     "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
+    "trane"
     "transmission"
     "transport_nsw"
     "trend"
@@ -8041,6 +8206,7 @@
     "twilio"
     "twinkly"
     "twitch"
+    "uhoo"
     "uk_transport"
     "ukraine_alarm"
     "unifi"
@@ -8071,6 +8237,7 @@
     "version"
     "vesync"
     "vicare"
+    "victron_ble"
     "victron_remote_monitoring"
     "vilfo"
     "vivotek"
@@ -8087,7 +8254,9 @@
     "wallbox"
     "waqi"
     "water_heater"
+    "waterfurnace"
     "watergate"
+    "watts"
     "watttime"
     "waze_travel_time"
     "weather"
@@ -8139,8 +8308,10 @@
     "zeversolar"
     "zha"
     "zimi"
+    "zinvolt"
     "zodiac"
     "zone"
+    "zoneminder"
     "zwave_js"
     "zwave_me"
   ];

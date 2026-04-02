@@ -6,14 +6,14 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lianad";
   version = "13.1"; # keep in sync with liana
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WrVvirqcseUZbuDHlABw6sFgdohbv/JQ/RB4j2hO+QQ=";
   };
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs_20,
+  nix-update-script,
   nixosTests,
 }:
 buildNpmPackage rec {
@@ -27,13 +28,13 @@ buildNpmPackage rec {
 
   env = {
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
   };
 
   makeCacheWritable = true;
 
   npmPackFlags = [ "--ignore-scripts" ];
-
-  NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall = ''
     cp -r dist $out/lib/node_modules/send/
@@ -44,8 +45,11 @@ buildNpmPackage rec {
       --set "NODE_ENV" "production"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) send;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) send;
+    };
   };
 
   meta = {

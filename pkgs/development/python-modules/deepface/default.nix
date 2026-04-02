@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "deepface";
-  version = "0.0.96";
+  version = "0.0.97";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";
     tag = "v${version}";
-    hash = "sha256-UusTzMZl7ITKFbMTZI457Y2K9knO2U1n9LurJZhUJ0A=";
+    hash = "sha256-TstY/ZxKzXCQ0e+mFNkg+y0rMDBJNz++MwXPZnsD0IA=";
   };
 
   postPatch = ''

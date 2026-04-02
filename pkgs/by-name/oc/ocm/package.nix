@@ -8,18 +8,18 @@
   ocm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ocm";
-  version = "1.0.10";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
-    rev = "v${version}";
-    sha256 = "sha256-tY7THl1mv9XTL6KVO1/lvZpcNimk3M8pmCbXoH0oet0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-f5y7debNrMVTjGXyFtCjGnTtV8LuPHnblQ9tmllfsRs=";
   };
 
-  vendorHash = "sha256-GOdRYVnFPS1ovFmU+9MEnwTNg1sa9/25AjzbcbBJrQ0=";
+  vendorHash = "sha256-vlFMN0490J48+koPgB6ezVJyjda+kGWmU+d+rLgVSmg=";
 
   # Strip the final binary.
   ldflags = [
@@ -61,4 +61,4 @@ buildGoModule rec {
       jfchevrette
     ];
   };
-}
+})

@@ -12,14 +12,21 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.0.6";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-AQAyxNVt8PCDCU/jViYY3IlPdNiesgx5kT9W7yrNJ4I=";
+    hash = "sha256-bvstexoBQylLmTMzAhId+1HvC3iiL3tPahGhwZ5Yroo=";
   };
+
+  patches = [
+    # On linux we're running Blockbench by giving the path to the app.asar file to the electron executable,
+    # but Blockbench assumes paths at the and og the argv are files to be opened
+    # This patch disables trying to open the app.asar file
+    ./dont-assume-opening-app-asar.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -29,14 +36,13 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-OSrX/H1m89GLIznP8/Q1pVDgrlfp55ZUnYjyQIwlJi4=";
+  npmDepsHash = "sha256-1CCYk3cKFdLhx8oC5XreFCf5sL/7eKjOfXCmHt7hZrM=";
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  # disable code signing on Darwin
+  # disable notarization logic
   postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" package.json
   '';
 
@@ -48,9 +54,10 @@ buildNpmPackage rec {
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=electron-dist \
-        -c.electronVersion=${electron.version}
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
   '';
 
   installPhase = ''

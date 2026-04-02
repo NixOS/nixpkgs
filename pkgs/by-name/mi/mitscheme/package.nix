@@ -13,7 +13,7 @@
   ghostscript,
   ncurses,
   enableX11 ? false,
-  libX11,
+  libx11,
 }:
 
 let
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];
+  buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libx11 ];
 
   configurePhase = ''
     runHook preConfigure

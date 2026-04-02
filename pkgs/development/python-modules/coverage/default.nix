@@ -1,43 +1,33 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  isPy312,
   fetchFromGitHub,
   flaky,
   hypothesis,
   pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+  pytest7CheckHook,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.13.1";
+  version = "7.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coveragepy";
     repo = "coveragepy";
     tag = version;
-    hash = "sha256-xdbgHUE+vbSiqLRDhd5G5u90VU5+TxLehAuwdhdGzBQ=";
+    hash = "sha256-XsgOBdehJi2fIZdwE60a32+unYLSMK5MGe1nJOfPBEY=";
   };
 
   build-system = [ setuptools ];
-
-  optional-dependencies = {
-    toml = lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
-  };
 
   nativeCheckInputs = [
     flaky
     hypothesis
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   preCheck = ''

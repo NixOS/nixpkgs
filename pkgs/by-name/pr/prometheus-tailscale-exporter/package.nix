@@ -6,18 +6,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tailscale-exporter";
-  version = "0.2.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "adinhodovic";
     repo = "tailscale-exporter";
-    tag = version;
-    hash = "sha256-6iQtGfQsXVmwFaSA7B1AG+kbtSyKVWFbEld1lMb0DnE=";
+    tag = finalAttrs.version;
+    hash = "sha256-1q4csOORVFc1tYoPv6Ll11+xgkPhzUQ/UAJrfLpD87k=";
   };
 
-  vendorHash = "sha256-Nbx6LyGGhdgI4oEtbyqhJ2H1lY6BfSL/ROH/Dh4UOk0=";
+  vendorHash = "sha256-GMaMNEJbSA39DTAXPh5jEy3LC0VzH3UInjnkZIFxT7I=";
 
   subPackages = [
     "cmd/tailscale-exporter"
@@ -29,7 +29,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -43,11 +43,11 @@ buildGoModule rec {
   meta = {
     description = "Tailscale Tailnet metric exporter for Prometheus";
     homepage = "https://github.com/adinhodovic/tailscale-exporter";
-    changelog = "https://github.com/adinhodovic/tailscale-exporter/releases/tag/${src.tag}";
+    changelog = "https://github.com/adinhodovic/tailscale-exporter/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       squat
     ];
     mainProgram = "tailscale-exporter";
   };
-}
+})

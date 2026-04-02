@@ -5,19 +5,19 @@
   cmake,
   extra-cmake-modules,
   uthash,
-  xcbutil,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-keysyms,
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcb-imdkit";
   version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "xcb-imdkit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QfuetGPY6u4OhFiE5/CoVEpdODWnd1PHWBtM3ymsZ98=";
   };
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xcbutil
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-keysyms
   ];
 
   meta = {
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };
-}
+})

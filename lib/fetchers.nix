@@ -45,7 +45,7 @@ rec {
 
     # Type
     ```
-    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
+    normalizeHash :: { hashTypes :: [String]; required :: Bool; } -> AttrSet -> AttrSet
     ```
 
     # Arguments
@@ -157,7 +157,7 @@ rec {
 
     # Type
     ```
-    withNormalizedHash :: { hashTypes :: List String } -> (AttrSet -> T) -> (AttrSet -> T)
+    withNormalizedHash :: { hashTypes :: [String]; } -> (AttrSet -> a) -> (AttrSet -> a)
     ```
 
     # Arguments

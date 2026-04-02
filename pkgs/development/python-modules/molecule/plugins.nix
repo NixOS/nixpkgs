@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "molecule-plugins";
   version = "23.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -4,20 +4,26 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yubihsm-connector";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-connector";
-    rev = version;
-    hash = "sha256-hiCh/TG1epSmJtaptfVzcPklDTaBh0biKqfM01YoWo0=";
+    rev = finalAttrs.version;
+    hash = "sha256-ddf8IamX8wC8IG9puFDoSKsVqc9KE/LtsJ0Wk0FFquw=";
   };
 
-  vendorHash = "sha256-XW7rEHY3S+M3b6QjmINgrCak+BqCEV3PJP90jz7J47A=";
+  # Don't run go generate in the module fetching
+  overrideModAttrs = _: {
+    preBuild = null;
+  };
+
+  vendorHash = "sha256-vtIXFOptDbBKjnDUSD9ng5tnfYQ3lklwgcEUvKMdCOM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,11 +42,18 @@ buildGoModule rec {
     GOOS= GOARCH= go generate
   '';
 
+  doInstallCheck = true;
+  installCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
   meta = {
     description = "Performs the communication between the YubiHSM 2 and applications that use it";
     homepage = "https://developers.yubico.com/yubihsm-connector/";
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      numinit
+    ];
     license = lib.licenses.asl20;
     mainProgram = "yubihsm-connector";
   };
-}
+})

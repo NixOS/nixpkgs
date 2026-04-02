@@ -2,13 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
-
-  # dependencies
-  importlib-metadata,
 
   # tests
   pytestCheckHook,
@@ -29,8 +25,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ flit-core ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook

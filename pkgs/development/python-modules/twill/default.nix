@@ -7,7 +7,6 @@
   lxml,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   quixote,
   setuptools,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "twill";
   version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

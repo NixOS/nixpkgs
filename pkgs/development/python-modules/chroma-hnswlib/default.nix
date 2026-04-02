@@ -6,7 +6,6 @@
   pybind11,
   setuptools,
   wheel,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "chroma-hnswlib";
   version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chroma-core";

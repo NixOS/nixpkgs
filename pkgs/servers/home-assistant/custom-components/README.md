@@ -3,12 +3,12 @@
 ## buildHomeAssistantComponent
 
 Custom components should be packaged using the
- `buildHomeAssistantComponent` function, that is provided at top-level.
+ `buildHomeAssistantComponent` function that is provided at top-level.
 It builds upon `buildPythonPackage` but uses a custom install and check
 phase.
 
 Python runtime dependencies can be directly consumed as unqualified
-function arguments. Pass them into `dependencies`, for them to
+function arguments. Pass them into `dependencies` for them to
 be available to Home Assistant.
 
 Out-of-tree components need to use Python packages from

@@ -3,7 +3,7 @@
   stdenv,
   fetchzip,
   fetchurl,
-  xorg,
+  libx11,
   withBigAtlas ? true,
   withEphemeris ? true,
   withMoonsEphemeris ? true,
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace cc "$CC" --replace strip "$STRIP"
   '';
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
   env.NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
   installPhase =

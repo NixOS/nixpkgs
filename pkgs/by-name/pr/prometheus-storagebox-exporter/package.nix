@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-storagebox-exporter";
   version = "1.0.0";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "fleaz";
     repo = "prometheus-storagebox-exporter";
     hash = "sha256-sufxNnHAdOaYEzKj9vriDrJF6Tq4Eim3Z45FEuuG97Q=";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
   };
 
   vendorHash = "sha256-hWM7JnL0x+vsUrQsJZGM3z2jB3F1wtjKWmX8j+WnjKY=";
@@ -27,4 +27,4 @@ buildGoModule rec {
       fleaz
     ];
   };
-}
+})

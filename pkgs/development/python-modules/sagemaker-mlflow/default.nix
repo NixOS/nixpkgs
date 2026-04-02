@@ -55,6 +55,10 @@ buildPythonPackage rec {
     "test_log_artifact"
     "test_presigned_url"
     "test_presigned_url_with_fields"
+
+    # https://github.com/aws/sagemaker-mlflow/issues/16
+    # TypeError: LogisticRegression.__init__() got an unexpected keyword argument 'multi_class'
+    "test_model_registry"
   ];
 
   meta = {

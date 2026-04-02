@@ -25,17 +25,27 @@
   tyro,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unsloth-zoo";
-  version = "2025.9.5";
+  version = "2026.3.4";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
-    inherit version;
-    hash = "sha256-wlKlXTgEdfkz4j//LHw23CmeL7toINg5IUxcpwrPtAw=";
+    inherit (finalAttrs) version;
+    hash = "sha256-24w8UV5cLG5XWrU73xfmg+Jk32zl+QSPdqXLzMtmP1E=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "setuptools==80.9.0" \
+        "setuptools" \
+      --replace-fail \
+        "setuptools-scm==9.2.0" \
+        "setuptools-scm"
+  '';
 
   # pyproject.toml requires an obsolete version of protobuf,
   # but it is not used.
@@ -44,6 +54,7 @@ buildPythonPackage rec {
     "datasets"
     "protobuf"
     "transformers"
+    "trl"
     "torch"
   ];
 
@@ -78,9 +89,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "unsloth_zoo"
-  ];
+  pythonImportsCheck = [ "unsloth_zoo" ];
 
   meta = {
     description = "Utils for Unsloth";
@@ -88,4 +97,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hoh ];
   };
-}
+})

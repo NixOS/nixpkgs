@@ -6,18 +6,18 @@
   pik,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pik";
-  version = "0.27.0";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "jacek-kurlit";
     repo = "pik";
-    rev = version;
-    hash = "sha256-qpIMm6ivt+v+Un+F03cCtUYMX2dxN/jVGKeCMA20294=";
+    rev = finalAttrs.version;
+    hash = "sha256-OFlt1JMuIX1oe6KE/prQJie+DaB+QFjnfYHJEdbIqcI=";
   };
 
-  cargoHash = "sha256-ugoXWn2ybdF/HbKqqUQWfNLqtxMdANTn3qnooOYLDKI=";
+  cargoHash = "sha256-Vg5pXpRSuO4PnN6uJbTrNBvKrmNz4Z8u9AgWtWb9ZYo=";
 
   passthru.tests.version = testers.testVersion { package = pik; };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bew ];
     mainProgram = "pik";
   };
-}
+})

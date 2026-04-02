@@ -7,27 +7,30 @@
   lib,
   makeBinaryWrapper,
   man-db,
-  nixos,
   nixosTests,
   openssh,
-  radicle-node,
   runCommand,
   rustPlatform,
   stdenv,
-  testers,
   xdg-utils,
   versionCheckHook,
+
+  version ? "1.8.0",
+  srcHash ? "sha256-QjAdZO5PwJ6FuThzQYnkF+hAeArltXxhEnzIcAePwzA=",
+  cargoHash ? "sha256-m8CqRTJD/1bOqTB2SoUjglZsOWGfv/nBNTOQftNvIqE=",
+  updateScript ? ./update.sh,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  inherit version cargoHash;
+
   pname = "radicle-node";
-  version = "1.5.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-/dWeG2jKCnfg7fwPP+BbRmEvM7rCppGYh2aeftcg3SY=";
+    hash = srcHash;
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -35,8 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -rf $out/.git
     '';
   };
-
-  cargoHash = "sha256-4URBtN5lyzFPaLJUf/HPAL2ugRUa6sZhpDeiFR0W7cc=";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -89,6 +90,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asciidoctor -d manpage -b manpage $page
       installManPage ''${page::-5}
     done
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rad \
+      --bash <($out/bin/rad completion bash) \
+      --fish <($out/bin/rad completion fish) \
+      --zsh <($out/bin/rad completion zsh)
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -109,19 +116,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests =
-    let
-      package = radicle-node;
-    in
-    {
+  passthru = {
+    inherit updateScript;
+    tests = {
       basic =
-        runCommand "${package.name}-basic-test"
+        runCommand "radicle-node-basic-test"
           {
             nativeBuildInputs = [
               jq
               openssh
-              radicle-node
+              finalAttrs.finalPackage
             ];
           }
           ''
@@ -140,23 +144,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
             touch $out
           '';
-      nixos-build = lib.recurseIntoAttrs {
-        checkConfig-success =
-          (nixos {
-            services.radicle.settings = {
-              node.alias = "foo";
-            };
-          }).config.services.radicle.configFile;
-        checkConfig-failure =
-          testers.testBuildFailure
-            (nixos {
-              services.radicle.settings = {
-                node.alias = null;
-              };
-            }).config.services.radicle.configFile;
+      nixos-run = nixosTests.radicle.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
       };
-      nixos-run = nixosTests.radicle;
+      ci-broker = nixosTests.radicle-ci-broker.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
     };
+  };
 
   meta = {
     description = "Radicle node and CLI for decentralized code collaboration";
@@ -166,16 +165,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      amesgen
-      lorenzleutgeb
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad";
   };
 })

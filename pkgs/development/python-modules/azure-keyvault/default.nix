@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   azure-keyvault-certificates,
   azure-keyvault-keys,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "azure-keyvault";
   version = "4.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

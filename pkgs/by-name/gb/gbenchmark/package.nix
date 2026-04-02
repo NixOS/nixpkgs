@@ -8,14 +8,14 @@
   prometheus-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gbenchmark";
   version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P7wJcKkIBoWtN9FCRticpBzYbEZPq71a0iW/2oDTZRU=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
     maintainers = [ ];
   };
-}
+})

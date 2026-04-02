@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "aioairctrl";
-  version = "0.2.5";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BPUV79S2A0F6vZA2pd3XNLpmRHTp6RSoNXPcI+OJRbk=";
+    hash = "sha256-mQNgkgQ83GOSc0g0ATctlr4ZeB7g8iGd4qTZfyoO8DM=";
   };
 
   build-system = [

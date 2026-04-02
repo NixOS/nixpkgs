@@ -25,7 +25,7 @@
   pkg-config,
   podofo_0_10,
   poppler-utils,
-  python3Packages,
+  python314Packages,
   qt6,
   speechd-minimal,
   sqlite,
@@ -35,30 +35,33 @@
   speechSupport ? true,
   unrarSupport ? false,
 }:
-
+let
+  python3Packages = python314Packages; # Calibre 9.0+ requires python3.14+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.15.0";
+  version = "9.5.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Wnv+S/4ajebu87+R+pft9Ka//sD12SsH6+1nXVx/XrQ=";
+    hash = "sha256-NDz3SxR8GyJi/POdpgEJzRdYNVV88/NkHczrA0JylfM=";
   };
 
   patches =
     let
       debian-source = "ds+_0.10.5-1";
+      debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
       #  allow for plugin update check, but no calibre version check
       (fetchpatch {
-        name = "0001-only-plugin-update.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
-        hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
+        name = "0001-only-plugin-update-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-/Hz8DSL1VC/wwQPOssM54MInLidfo7kJoR69yi2wAP4=";
       })
       (fetchpatch {
-        name = "0007-Hardening-Qt-code.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        name = "0007-Hardening-Qt-code-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
         hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
       })
     ]
@@ -79,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3Packages.python
     qt6.qmake
     qt6.wrapQtAppsHook
     wrapGAppsHook3
@@ -131,10 +135,13 @@ stdenv.mkDerivation (finalAttrs: {
         pykakasi
         pyqt-builder
         pyqt6
+        pystache
         python
         regex
         sip
         setuptools
+        tzdata
+        tzlocal
         zeroconf
         jeepney
         pycryptodome
@@ -154,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals speechSupport [
     piper-tts
-    speechd-minimal
+    (speechd-minimal.override { inherit python3Packages; })
   ];
 
   env = {
@@ -212,6 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --set QTWEBENGINE_CHROMIUM_FLAGS "--disable-gpu" \
           --prefix PATH : ${
             lib.makeBinPath [
               libjpeg
@@ -285,7 +293,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
     license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

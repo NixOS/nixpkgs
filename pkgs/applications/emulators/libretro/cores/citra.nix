@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   mkLibretroCore,
 }:
 mkLibretroCore {
@@ -29,7 +29,7 @@ mkLibretroCore {
   extraBuildInputs = [
     libGL
     libGLU
-    libX11
+    libx11
   ];
 
   extraNativeBuildInputs = [ cmake ];

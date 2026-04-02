@@ -10,21 +10,21 @@
   libiconv,
   pcsclite,
   libassuan,
-  libXt,
+  libxt,
   docbook_xsl,
   libxslt,
   docbook_xml_dtd_412,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensc";
   version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     readline
     openssl
     libassuan
-    libXt
+    libxt
     libiconv
     docbook_xml_dtd_412
   ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     "completiondir=$(out)/etc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\\.]+)$" ]; };
 
   meta = {
     description = "Set of libraries and utilities to access smart cards";
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.michaeladler ];
   };
-}
+})

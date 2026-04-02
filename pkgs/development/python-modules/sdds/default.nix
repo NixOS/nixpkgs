@@ -4,21 +4,18 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sdds";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pylhc";
     repo = "sdds";
     tag = "v${version}";
-    hash = "sha256-h1gEqzmKCUr8+w3Fv8lv35/0itZwela//AQsD3u0UJA=";
+    hash = "sha256-2lsim4FlOKBZ4Lk/iKIcItE/hvqiAK4XTkoxm52At/8=";
   };
 
   propagatedBuildInputs = [ numpy ];

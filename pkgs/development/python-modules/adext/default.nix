@@ -5,15 +5,12 @@
   setuptools-scm,
   alarmdecoder,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adext";
   version = "0.4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ajschmidt8";

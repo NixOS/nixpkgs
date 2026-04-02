@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "httpref";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "dnnrly";
     repo = "httpref";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T5fR9cyqsM6Kw6kFqZedoSxyvFkkxNpuErscwiUTMa0=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
     description = "Command line, offline, access to HTTP status code, common header, and port references";
     mainProgram = "httpref";
     homepage = "https://github.com/dnnrly/httpref";
-    changelog = "https://github.com/dnnrly/httpref/releases/tag/${src.rev}";
+    changelog = "https://github.com/dnnrly/httpref/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

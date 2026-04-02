@@ -8,24 +8,25 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.41.0";
+  version = "1.44.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_securitycenter";
     inherit version;
-    hash = "sha256-JHbPkOVw19KQok3NV0j6AecKRw7NMH9WjsbAapISDiM=";
+    hash = "sha256-ir0rdSUREsfGTyR8YbSWbpDd1GxYOZ2hj8f7jwTmVsc=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     grpc-google-iam-v1

@@ -50,7 +50,7 @@
 }:
 
 let
-  nix = nixVersions.nix_2_32;
+  nix = nixVersions.nix_2_34;
 
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
@@ -132,14 +132,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-11-06";
+  version = "0-unstable-2026-03-13";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "241ab718002ca5740b7e3f659d0fbd483ab40523";
-    hash = "sha256-ifmzQS+u/dODQXmMVQLIb4AF4dkWI9s7VGYpV6x/Iq4=";
+    rev = "5decc46ce66335b225c1504a509fefa0f804436f";
+    hash = "sha256-wBVp3TDCBKyqyWbMlya+egjhSN7R067v20pUZINSF0g=";
   };
 
   outputs = [
@@ -264,7 +264,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nixos.org/hydra";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mindavi ];
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+      mindavi
+    ];
   };
 })

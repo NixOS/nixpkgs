@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ghp-import";
   version = "2.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

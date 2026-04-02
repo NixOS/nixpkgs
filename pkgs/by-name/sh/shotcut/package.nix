@@ -15,23 +15,25 @@
   cmake,
   gitUpdater,
   ffmpeg,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "25.10.31";
+  version = "26.2.26";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EUcYUhOZeTMCazl6TH3t1aP0cRhPXC4WKQlAiUkVoyw=";
+    hash = "sha256-dOkk2LGFtuCvec8NGoSIjAXQsCZcnx2fB3h6KWFeHj4=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  dontWrapGApps = true;
+
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
@@ -67,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
       lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
     }"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin
@@ -92,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       woffs
       peti
+      nick-linux
     ];
     platforms = lib.platforms.unix;
     mainProgram = "shotcut";

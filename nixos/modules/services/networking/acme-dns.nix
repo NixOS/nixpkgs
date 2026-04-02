@@ -95,11 +95,11 @@ in
           database = {
             engine = mkOption {
               type = types.enum [
-                "sqlite3"
+                "sqlite"
                 "postgres"
               ];
               description = "Database engine to use.";
-              default = "sqlite3";
+              default = "sqlite";
             };
             connection = mkOption {
               type = types.str;

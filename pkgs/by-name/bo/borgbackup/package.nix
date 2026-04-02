@@ -20,16 +20,16 @@
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
-    tag = version;
-    hash = "sha256-v42Mv2wz34w2VYu2mPT/K7VtGSYsUDr+NUM99AzpSB0=";
+    tag = finalAttrs.version;
+    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
   };
 
   postPatch = ''
@@ -153,7 +153,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
+    changelog = "https://github.com/borgbackup/borg/blob/${finalAttrs.src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = lib.licenses.bsd3;
@@ -163,4 +163,4 @@ python.pkgs.buildPythonApplication rec {
       dotlambda
     ];
   };
-}
+})

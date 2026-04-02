@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
     tag = "v${version}";
-    hash = "sha256-N1Gs/L2kCcKkhHYXCyfmentvl1RORUrWIEyxTEsvNKg=";
+    hash = "sha256-lYTaE4ar7VjyA/tnjiXQJtjHPP9bCjdYuPHYjbZEuxY=";
   };
 
   pythonRelaxDeps = [ "pysigma" ];

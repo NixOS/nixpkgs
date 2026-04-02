@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-webengine";
-  version = "6.9.0";
+  version = "6.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyqt6_webengine";
     inherit version;
-    hash = "sha256-auU347vaBrjgZTXkhSKX4Lw7AFQ8R5KVQfzJsRmBqiU=";
+    hash = "sha256-Jn0nJ10Mea4nC8pLA1IKQfp+hcKk2WMtqMucwjOlWtE=";
   };
 
   patches = [

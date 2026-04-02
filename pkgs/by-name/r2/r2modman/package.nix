@@ -5,42 +5,36 @@
   dart-sass,
   electron,
   fetchFromGitHub,
-  fetchurl,
   makeDesktopItem,
   makeWrapper,
-  nix-update-script,
   nodejs,
   yarn-berry,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.11";
+  version = "3.2.15";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cnaP5DbEqYEkTPd1QWNArvMMr7UbX/danXa7ISfPpc=";
+    hash = "sha256-AU2fswh2gNJr1JWTHjtxJh/vVwvDqFXjaaF+QaLprFo=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches missingHashes;
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-XusNho027MjQLaBxaXMOb/2rTiSLmi4mfwY2hjHQZgk=";
+    hash = "sha256-7ty3ESydrDzXrUIdgDC1DqYrkhRX5FsIeOJ0rWP5X0k=";
   };
 
   patches = [
-    # Temporary fix for MiSide cover image https://github.com/ebkr/r2modmanPlus/pull/2024
-    (fetchurl {
-      url = "https://github.com/ebkr/r2modmanPlus/commit/24a2b8386c7fe9a6856cea06967c96aa685d3660.patch";
-      hash = "sha256-6NmwFRtn8+t9XRPHHVLM05idbCSYcBG0VmUOd8fZKs0=";
-    })
-
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -108,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
@@ -118,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
       huantian
+      hythera
     ];
     inherit (electron.meta) platforms;
   };

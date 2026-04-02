@@ -6,14 +6,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsocket";
   version = "1.4.43";
 
   src = fetchFromGitHub {
     owner = "hackerschoice";
     repo = "gsocket";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7ph7YaY8rbfzvEh1ABgl3Jg15d6WBP4pywFn/nXjPKY=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.msm ];
   };
-}
+})

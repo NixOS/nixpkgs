@@ -3,12 +3,8 @@
 let
   inherit (systemdUtils.lib)
     assertValueOneOf
-    automountConfig
     checkUnitConfig
     makeJobScript
-    mountConfig
-    serviceConfig
-    unitConfig
     unitNameType
     ;
 
@@ -376,6 +372,14 @@ rec {
             environment variable.  Both the {file}`bin`
             and {file}`sbin` subdirectories of each
             package are added.
+          '';
+        };
+
+        enableDefaultPath = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to append a minimal default {env}`PATH` environment variable to the service, containing common system utilities.
           '';
         };
 

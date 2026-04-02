@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgff";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "COMBINE-lab";
     repo = "libgff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZCb3UyuB/+ykrYFQ9E5VytT65gAAULiOzIEu5IXISTc=";
+    hash = "sha256-OgXnNGIgWZDIChRdEfmHwvl+oQM03V3a/HnndGLjcHk=";
   };
 
   nativeBuildInputs = [ cmake ];

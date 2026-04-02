@@ -190,7 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libguestfs.org/";
     changelog = "https://libguestfs.org/guestfs-release-notes-${lib.versions.majorMinor finalAttrs.version}.1.html";
     maintainers = with lib.maintainers; [
-      offline
       lukts30
     ];
     platforms = lib.platforms.linux;

@@ -34,6 +34,8 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonRelaxDeps = [ "websockets" ];
+
   pythonImportsCheck = [ "pysignalr" ];
 
   nativeCheckInputs = [
