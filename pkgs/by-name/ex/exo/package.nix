@@ -18,18 +18,18 @@
   nix-update-script,
 }:
 let
-  version = "1.0.68";
+  version = "1.0.69";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-ryaz68vXS/SjPxGsWxtUSlzZrLBxV1tbBmJVraZu3RI=";
+    hash = "sha256-xHEvjztTSDMwfxdNt16Yo/hX1Fhpwz/zF7mnQsIOteY=";
   };
 
   python = python3.override {
     packageOverrides = _final: prev: {
-      # https://github.com/exo-explore/exo/blob/ba611f9cd0e21d3e63e2327b18fbc888fd085269/pyproject.toml#L67
+      # https://github.com/exo-explore/exo/blob/v1.0.69/pyproject.toml#L63
       mlx = prev.mlx.overridePythonAttrs (old: {
         version = "custom";
 
@@ -39,6 +39,27 @@ let
           rev = "address-rdma-gpu-locks";
           hash = "sha256-GosFIWxIB48Egb1MqJrR3xhsUsQeWdRk5rV93USY6wQ=";
         };
+
+        # mlx.meta.changelog fails to evaluate as it depends on mlx.src.tag which is not defined in
+        # this override
+        meta = old.meta // {
+          changelog = "";
+        };
+      });
+
+      # https://github.com/exo-explore/exo/blob/v1.0.69/pyproject.toml#L64
+      mlx-lm = prev.mlx-lm.overridePythonAttrs (old: {
+        version = "custom";
+
+        src = fetchFromGitHub {
+          owner = "rltakashige";
+          repo = "mlx-lm";
+          rev = "leo/fix-deepseek-v32-indexer";
+          hash = "sha256-sRMykX0hd15VF8tdO5MCjuVxkQvpjeluaS8U+wQvP4Q=";
+        };
+
+        # mlx-lm.meta.changelog fails to evaluate as it depends on mlx-lm.src.tag which is not
+        # defined in this override
         meta = old.meta // {
           changelog = "";
         };
@@ -56,7 +77,7 @@ let
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-Ga3/Yhg2Wn2w8cnNtq11/AN7K4nht4chSEIVOkYEI/U=";
+      hash = "sha256-gwOdA2sHz8n4GfNjK+OYmttXUTle4WYmAE2Y0KXYrwg=";
     };
 
     # Bypass rust nightly features not being available on rust stable
@@ -200,6 +221,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Require internet access:
     # openai_harmony.HarmonyError: error downloading or loading vocab file: failed to download or load vocab file
+    "TestParseGptOssMaxTokensTruncation"
     "test_both_formats_produce_identical_tool_calls"
     "test_format_a_yields_tool_call"
     "test_format_b_yields_tool_call"
