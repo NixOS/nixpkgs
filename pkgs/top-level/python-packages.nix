@@ -3756,6 +3756,8 @@ self: super: with self; {
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
 
+  deep-ep = callPackage ../development/python-modules/deep-ep { };
+
   deep-translator = callPackage ../development/python-modules/deep-translator { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
@@ -19450,6 +19452,8 @@ self: super: with self; {
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
 
   torch-bin = callPackage ../development/python-modules/torch/bin { triton = self.triton-bin; };
+
+  torch-c-dlpack-ext = callPackage ../development/python-modules/torch-c-dlpack-ext { };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 

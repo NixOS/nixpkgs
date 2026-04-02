@@ -28,6 +28,11 @@ buildHomeAssistantComponent rec {
     hash = "sha256-fgsYznTqJrEh4niyGfksnflRp1PpljrlzJBvs8gKn54=";
   };
 
+  patches = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1070
+    ./service-to-action.patch
+  ];
+
   dependencies = [
     hass-web-proxy-lib
     titlecase

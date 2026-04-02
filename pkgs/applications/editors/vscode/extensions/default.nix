@@ -1007,8 +1007,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.13.2";
-          hash = "sha256-Dw8eJPpbeMz2taELHI0eYwO67SngCFel8wL/ZCGXQoM=";
+          version = "1.14.3";
+          hash = "sha256-W4VciZMvVtRcCibJP5UGTlHCrdF/AF167xlLvZs5BB4=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.132.1";
-          hash = "sha256-iWDKJVgVhpycTNE044DSOf/uN0ZG4s2/JdpwBkka8sQ=";
+          version = "0.132.2";
+          hash = "sha256-1wBo1PaSZ0xNRIgdGAPQ7Jm4ywx4qc4kflZxHVAt2EA=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3828,8 +3828,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "26.3.0";
-          hash = "sha256-c6NcQsJe2sjJH/nBhStHYWKNSfJtU3CLHpv+2qPlyqM=";
+          version = "26.3.5";
+          hash = "sha256-IKSozGy4S04pSsbhpXVgsqQvJNzaxVkoSrLwhFb4Ag4=";
         };
         meta = {
           description = "Ansible language support";
