@@ -11,15 +11,15 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "engauge-digitizer";
   version = "12.2.2";
 
   src = fetchFromGitHub {
     owner = "akhuettel";
     repo = "engauge-digitizer";
-    rev = "v${version}";
-    sha256 = "sha256-Wj9o3wWbtHsEi6LFH4xDpwVR9BwcWc472jJ/QFDQZvY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Wj9o3wWbtHsEi6LFH4xDpwVR9BwcWc472jJ/QFDQZvY=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
     POPPLER_LIB = "${libsForQt5.poppler}/lib";
 
-    OPENJPEG_INCLUDE = "${openjpeg.dev}/include/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}";
+    OPENJPEG_INCLUDE = "${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}";
 
     OPENJPEG_LIB = "${openjpeg}/lib";
   };
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})
