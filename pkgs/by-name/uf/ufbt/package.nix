@@ -1,21 +1,15 @@
 {
   lib,
-  callPackage,
   buildFHSEnv,
-  fetchFromGitHub,
-  python3Packages,
+  ufbt-unwrapped,
   libz,
 
   extraRuntimeDependencies ? [ ],
 }:
 # Wrap ufbt in an FHS wrapper as it dynamically downloads and executes toolchains
-let
-  version = "0.2.6";
-  ufbt-unwrapped = callPackage ./ufbt-unwrapped.nix { inherit version; };
-in
 buildFHSEnv {
   pname = "ufbt";
-  inherit version;
+  inherit (ufbt-unwrapped) version;
 
   targetPkgs =
     pkgs:
@@ -32,13 +26,13 @@ buildFHSEnv {
   '';
 
   meta = {
-    changelog = "https://github.com/flipperdevices/flipperzero-ufbt/releases/tag/v${version}";
-    description = "Compact tool for building and debugging applications for Flipper Zero";
-    homepage = "https://github.com/flipperdevices/flipperzero-ufbt";
-    license = with lib.licenses; [
-      gpl3
-    ];
-    maintainers = with lib.maintainers; [ mart-w ];
-    mainProgram = "ufbt";
+    inherit (ufbt-unwrapped.meta)
+      description
+      homepage
+      changelog
+      license
+      mainProgram
+      maintainers
+      ;
   };
 }
