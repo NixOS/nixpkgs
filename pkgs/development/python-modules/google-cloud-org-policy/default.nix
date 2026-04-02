@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-org-policy";
-  version = "1.16.1";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_org_policy";
     inherit (finalAttrs) version;
-    hash = "sha256-KleKj6JhG4pi/XAM82C/VndJED2nvK1+NzvT1lm7zpE=";
+    hash = "sha256-93GJ7n9loo83VfhV9xC4tnuYYuKmtqk7B15vnak7/yA=";
   };
 
   build-system = [ setuptools ];

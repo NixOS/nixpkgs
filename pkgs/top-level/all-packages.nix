@@ -403,10 +403,6 @@ with pkgs;
 
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
-  ebpf-verifier = callPackage ../tools/networking/ebpf-verifier {
-    catch2 = catch2_3;
-  };
-
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
 
   inherit (gridlock) nyarr;
@@ -1125,7 +1121,7 @@ with pkgs;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
-  winbox = winbox3;
+  winbox = winbox4;
 
   ### APPLICATIONS/VERSION-MANAGEMENT
 

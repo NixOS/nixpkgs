@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/katef/kgt";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
   };
 
 }

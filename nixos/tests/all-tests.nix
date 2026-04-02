@@ -489,9 +489,8 @@ in
   early-mount-options = runTest ./early-mount-options.nix;
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
   easytier = runTest ./easytier.nix;
-  ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;
-  ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
+  ec2-userdata = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).ec2-userdata or { };
   echoip = runTest ./echoip.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
@@ -1221,6 +1220,7 @@ in
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-pgsql = runTest ./pam/pam-pgsql.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
+  pam-u2f-polkit = runTest ./pam/pam-u2f-polkit.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pangolin = runTest ./pangolin.nix;

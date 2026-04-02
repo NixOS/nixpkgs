@@ -6,18 +6,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_doc_cli";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "EmmyLuaLs";
     repo = "emmylua-analyzer-rust";
     tag = finalAttrs.version;
-    hash = "sha256-2H/8ILVk5QnLe099a25pzMEqJLRFDxMG/fQ3f5UwgmI=";
+    hash = "sha256-Zj5nLeTH/4sVElYP+erg6bSTX8jFqF7sqiXfaMam8pE=";
   };
 
   buildAndTestSubdir = "crates/emmylua_doc_cli";
 
-  cargoHash = "sha256-QdL4KtQ4sJUaviqMzxmC1KW4Qy5wO7c5koy0Pl8Eua0=";
+  cargoHash = "sha256-JNirHIKXFsiLme5oByerHjB/3lumuAr2u3pNfxh4qa0=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -179,7 +179,7 @@ lib.makeExtensible (
 
       nixComponents_2_31 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.31.3";
-        inherit (self.nix_2_30.meta) teams;
+        inherit teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -191,42 +191,10 @@ lib.makeExtensible (
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
-      nixComponents_2_32 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.32.6";
-          inherit (self.nix_2_31.meta) teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-5aH3xppfBs8j6P7A2wq8WQ05yJvlL7x0gQbWk4RN5eY=";
-          };
-        }).appendPatches
-          patches_common;
-
-      nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
-
-      nixComponents_2_33 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.33.3";
-          inherit (self.nix_2_32.meta) teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_33";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-2Mga4e9ZtOPLwYqF4+hcjdsTImcA7TKUvDDfaF7jqEo=";
-          };
-        }).appendPatches
-          patches_common;
-
-      nix_2_33 = addTests "nix_2_33" self.nixComponents_2_33.nix-everything;
-
       nixComponents_2_34 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.34.4";
-          inherit (self.nix_2_33.meta) teams;
+          inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_34";
           src = fetchFromGitHub {
             owner = "NixOS";
