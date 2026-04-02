@@ -5,14 +5,14 @@
 # nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
-  version = "26.0.3";
+  version = "26.0.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-CTOnJKsx9hDtLhDnuJSGc/lBQ2ZcDm3/Iie7awusGho=";
+    hash = "sha256-gsrqhFCxZRrTbA5MMWARrN6lFVp4Q3D5Jz7MDYbXznY=";
   };
 
   meta = {

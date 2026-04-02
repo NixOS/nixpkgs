@@ -157,6 +157,7 @@ let
             --uid=nextcloud \
             --same-dir \
             --pty \
+            --pipe \
             --wait \
             --collect \
             --service-type=exec \
