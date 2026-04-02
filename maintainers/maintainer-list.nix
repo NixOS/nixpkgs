@@ -23425,6 +23425,12 @@
     githubId = 592876;
     name = "Robert W. Pearce";
   };
+  rpmcruz = {
+    name = "Ricardo Cruz";
+    email = "ricardo.pdm.cruz@gmail.com";
+    github = "rpmcruz";
+    githubId = 11894291;
+  };
   rpqt = {
     email = "rpqt@rpqt.fr";
     matrix = "@rpqt:matrix.org";
