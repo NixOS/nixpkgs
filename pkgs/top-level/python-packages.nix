@@ -9212,6 +9212,10 @@ self: super: with self; {
 
   khanaa = callPackage ../development/python-modules/khanaa { };
 
+  kiauto = callPackage ../development/python-modules/kiauto {
+    kicadPkg = pkgs.kicad;
+  };
+
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
 
   kicad-python = callPackage ../development/python-modules/kicad-python { };
