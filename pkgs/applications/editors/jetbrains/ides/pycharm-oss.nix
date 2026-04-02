@@ -7,19 +7,18 @@
 let
   src = mkJetBrainsSource {
     # update-script-start: source-args
-    version = "2025.3.3";
-    buildNumber = "253.31033.139";
+    version = "2026.1";
+    buildNumber = "261.22158.340";
     buildType = "pycharm";
-    ideaHash = "sha256-GRlWzpHvgy7P+vw+UWApyPpLLzWiHmvsC8HLPUyrshQ=";
-    androidHash = "sha256-FA/6ry1M7+RISJL+2SR9QkDvAGJAkXhFMh9YoOEU5nk=";
-    jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
+    ideaHash = "sha256-dVA3sJvfPzxdztKufAkZJbqA78UAX6LxocTUJNcCNk8=";
+    androidHash = "sha256-xwxtfZPWTXnqDoonAuBG2xXedUbIOf7PFlbaUltJAuA=";
+    jpsHash = "sha256-s9urfVUDMKeF/1VhQpyMCGE8Xy4AdNKtYcYbK/cEJW0=";
     restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
     mvnDeps = ../source/pycharm_maven_artefacts.json;
     repositories = [
       "repo1.maven.org/maven2"
       "packages.jetbrains.team/maven/p/ij/intellij-dependencies"
       "dl.google.com/dl/android/maven2"
-      "download.jetbrains.com/teamcity-repository"
       "packages.jetbrains.team/maven/p/grazi/grazie-platform-public"
       "packages.jetbrains.team/maven/p/kpm/public"
       "packages.jetbrains.team/maven/p/ki/maven"
@@ -28,8 +27,8 @@ let
       "packages.jetbrains.team/maven/p/kt/bootstrap"
     ];
     kotlin-jps-plugin = {
-      version = "2.2.20";
-      hash = "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ=";
+      version = "2.3.20-RC2";
+      hash = "sha256-qg6E1xPElwErnQ2r1wYGH8TXg3B+ROasagTpXdRBG8c=";
     };
     # update-script-end: source-args
   };

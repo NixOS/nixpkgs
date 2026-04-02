@@ -38,10 +38,10 @@
 }:
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
-    version = "2.2.20";
+    version = "2.3.20-RC2";
     src = fetchurl {
       url = oldAttrs.src.url;
-      hash = "sha256-gfAmTJBztcu9s/+EGM8sXawHaHn8FW+hpkYvWlrMRCA=";
+      hash = "sha256-eBtUqFfry7ttW25bSlTirUgNC4E6xl7UjGNu9KgfjZA=";
     };
   });
 
