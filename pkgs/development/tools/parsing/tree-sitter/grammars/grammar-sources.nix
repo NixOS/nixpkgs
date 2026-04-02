@@ -2785,10 +2785,10 @@
   };
 
   unison = {
-    version = "0-unstable-2025-03-06";
+    version = "2.1.3-unstable-2026-02-27";
     url = "github:kylegoetz/tree-sitter-unison";
-    rev = "169e7f748a540ec360c0cb086b448faad012caa4";
-    hash = "sha256-0HOLtLh1zRdaGQqchT5zFegWKJHkQe9r7DGKL6sSkPo=";
+    rev = "10365cc70ab2b2de85ea7ab35cf6b7636c36ce8b";
+    hash = "sha256-l6X2x5lGlUhyf6Pr6lWd4aWacz7vmvtHVyM4qqPO8zg=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
