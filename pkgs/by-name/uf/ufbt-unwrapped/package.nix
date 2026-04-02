@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "ufbt-unwrapped";
@@ -30,6 +31,8 @@ python3Packages.buildPythonApplication rec {
     ansi
     oslex
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/flipperdevices/flipperzero-ufbt/releases/tag/v${version}";
