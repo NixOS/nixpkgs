@@ -25,14 +25,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stevia";
-  version = "0.52.1";
+  version = "0.53.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World/Phosh";
     repo = "stevia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GdAKy7F8SRGtfmN6as6AAg6p/WJrcDPp338OHUXoORM=";
+    hash = "sha256-lAavLOtrNd5rjzEG4/ZZs+yv/PyztVwyS/UH06nwMdA=";
   };
 
   mesonFlags = [
