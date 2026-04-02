@@ -22,3 +22,7 @@ and related options.
 
 For more helpful tips and tricks, see the
 [wiki page about Sway](https://wiki.nixos.org/wiki/Sway).
+
+```{=include=} sections
+gpu-screen-recorder-workspace-recording.section.md
+```

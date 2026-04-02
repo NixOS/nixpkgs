@@ -76,6 +76,9 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "module-programs-gpu-screen-recorder-workspace-recording": [
+    "index.html#module-programs-gpu-screen-recorder-workspace-recording"
+  ],
   "module-virtualisation-xen": [
     "index.html#module-virtualisation-xen"
   ],
