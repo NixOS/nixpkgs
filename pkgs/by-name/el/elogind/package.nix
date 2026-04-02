@@ -86,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""
+  ''
+  + lib.optionalString (!enableSystemd) ''
+    substituteInPlace ./rules.d/71-seat.rules.in --replace-fail "{{BINDIR}}/udevadm" "${eudev}/bin/udevadm"
   '';
 
   patches = [
