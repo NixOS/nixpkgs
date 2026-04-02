@@ -4438,6 +4438,11 @@
     github = "carlthome";
     githubId = 1595907;
   };
+  carschandler = {
+    name = "Cars Chandler";
+    github = "carschandler";
+    githubId = 92899389;
+  };
   casaca = {
     name = "J McNutt";
     email = "jmacasac@hotmail.com";
