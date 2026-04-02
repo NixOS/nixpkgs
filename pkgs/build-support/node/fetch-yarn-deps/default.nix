@@ -142,7 +142,8 @@ in
               NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
             };
 
-            impureEnvVars = [ "NIX_MIRRORS_npm" ] ++ args.impureEnvVars or [ ];
+            impureEnvVars =
+              lib.fetchers.proxyImpureEnvVars ++ [ "NIX_MIRRORS_npm" ] ++ args.impureEnvVars or [ ];
 
             buildPhase = ''
               runHook preBuild
