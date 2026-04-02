@@ -30,6 +30,8 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mgdelacroix
+      faukah
+      carschandler
     ];
     mainProgram = "lk";
   };
