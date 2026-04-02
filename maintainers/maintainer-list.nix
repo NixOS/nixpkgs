@@ -5549,6 +5549,13 @@
     githubId = 1222362;
     name = "Matías Lang";
   };
+  crispyfires = {
+    email = "junkstuff7489@gmail.com";
+    name = "Crispyfires";
+    matrix = "@ithkuilthecultist:matrix.org";
+    github = "crispyfires";
+    githubId = 152764922;
+  };
   criyle = {
     email = "i+nixos@goj.ac";
     name = "Yang Gao";
