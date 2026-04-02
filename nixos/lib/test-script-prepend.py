@@ -36,7 +36,7 @@ class CreateMachineProtocol(Protocol):
         name: Optional[str] = None,
         keep_machine_state: bool = False,
         **kwargs: Any, # to allow usage of deprecated keep_vm_state
-    ) -> BaseMachine:
+    ) -> QemuMachine:
         raise Exception("This is just type information for the Nix test driver")
 
 
@@ -45,6 +45,8 @@ subtest: Callable[[str], ContextManager[None]]
 retry: RetryProtocol
 test_script: Callable[[], None]
 machines: List[BaseMachine]
+machines_qemu: List[QemuMachine]
+machines_nspawn: List[NspawnMachine]
 vlans: List[VLan]
 driver: Driver
 log: AbstractLogger
