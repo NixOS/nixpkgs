@@ -73,6 +73,9 @@ stdenv.mkDerivation {
     munge
   ];
 
+  # https://github.com/openpbs/openpbs/issues/2713
+  hardeningDisable = [ "fortify" ];
+
   enableParallelBuilding = true;
 
   postPatch = ''
