@@ -23044,7 +23044,7 @@
     email = "lennart@cope.cool";
     github = "riotbib";
     githubId = 43172581;
-    name = "Lennart Mühlenmeier";
+    name = "lennart";
   };
   ris = {
     email = "code@humanleg.org.uk";
