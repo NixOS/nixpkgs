@@ -13,7 +13,6 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nemtrif";
     repo = "utfcpp";
     tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
     hash = "sha256-0FgMKHymFOA3BM7VS8US2is8TmQlL/wWj4nSRihqcDo=";
   };
 
