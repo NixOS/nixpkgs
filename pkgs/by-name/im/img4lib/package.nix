@@ -18,9 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xCWovBJ9cxT17u1uo+aUQnxDoYFQXYy9Qer0mD45aOU=";
   };
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
   buildInputs = [
     lzfse
