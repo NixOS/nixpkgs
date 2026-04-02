@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   installShellFiles,
   pandoc,
@@ -25,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-x5qEW4DqOw/vA+IuZA7VC5WRn+uDOZ6dJhyJoi7UKOA=";
   };
+
+  patches = [
+    # Fix apply-changes-version-on-version-timestamp test
+    (fetchpatch {
+      url = "https://github.com/osmcode/osmium-tool/commit/e58501ed1570f19340173c668568790369214d46.patch";
+      hash = "sha256-VhdwY1DpfTQAx24Qck0a96GGnEGfg4T27wSeGO1zdng=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

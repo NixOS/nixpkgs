@@ -6,13 +6,13 @@
 
 buildLakePackage {
   pname = "lean4-plausible";
-  version = "4.28.0";
+  version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "plausible";
-    tag = "v4.28.0";
-    hash = "sha256-xuOfeoRPt5L0Rk4fEJPIi1A0aoNIkC1fsh5yeIx5bFI=";
+    tag = "v4.29.0";
+    hash = "sha256-08fNB2GK5AqDJ15n5Ol+HYqaSbsznyp4cerDo32bG50=";
   };
 
   leanPackageName = "plausible";
