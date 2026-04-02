@@ -3,6 +3,7 @@
 , automake ? import <nixpkgs> {}.automake
 , autoconf ? import <nixpkgs> {}.autoconf
 , libtool ? import <nixpkgs> {}.libtool
+, lib ? import <nixpkgs> {}.lib
 , bash ? import <nixpkgs> {}.bash
 , makeWrapper ? import <nixpkgs> {}.makeWrapper
 , pkgs ? import <nixpkgs> {}
