@@ -18,42 +18,35 @@
   libxrandr,
   libxinerama,
   libxcursor,
+  gflags,
+  expat,
+  jansson,
+  boost,
+  fast-float,
+  utfcpp,
   nix-update-script,
 }:
 
-let
-  world_feed_integration_tests_data = fetchFromGitHub {
-    owner = "organicmaps";
-    repo = "world_feed_integration_tests_data";
-    rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
-    hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2026.01.26-11";
+  version = "2026.03.11-12";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     tag = "${finalAttrs.version}-android";
-    hash = "sha256-EsVPzibUta0cmKA6bYLqCKKij5FWbwPHgMmIs2THpL0=";
+    hash = "sha256-9UB/Qr+nNjNz8iDsxM7fTa6a2PDb7N90vE6cwkJ+K00=";
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    # Disable certificate check. It's dependent on time
-    echo "exit 0" > tools/unix/check_cert.sh
-
-    # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings [ "." "-" ] [ "" "" ] finalAttrs.version}" > tools/unix/version.sh
-
-    # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
-    patchShebangs 3party/boost/tools/build/src/engine/build.sh
-
-    # Prefetch test data, or the build system will try to fetch it with git.
-    ln -s ${world_feed_integration_tests_data} data/test_data/world_feed_integration_tests_data
-  '';
+  patches = [
+    # Adds a missing find_package
+    # https://github.com/organicmaps/organicmaps/pull/11902
+    ./boost.patch
+    # Needs the very old protobuf 3.3, so we use the vendored one
+    # https://github.com/organicmaps/organicmaps/pull/6310
+    ./force-vendored-protobuf.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -65,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  # Most dependencies are vendored
   buildInputs = [
     qt6.qtbase
     qt6.qtpositioning
@@ -80,12 +72,21 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxinerama
     libxcursor
+    gflags
+    expat
+    jansson
+    boost
+    fast-float
+    utfcpp
   ];
 
-  # Yes, this is PRE configure. The configure phase uses cmake
-  preConfigure = ''
-    bash ./configure.sh
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_SYSTEM_PROVIDED_3PARTY" true)
+    (lib.cmakeBool "SKIP_TESTS" true)
+    (lib.cmakeBool "SKIP_TOOLS" true)
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev utfcpp}/include/utf8cpp";
 
   passthru = {
     updateScript = nix-update-script {
