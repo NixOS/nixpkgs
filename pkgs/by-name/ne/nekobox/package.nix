@@ -61,7 +61,7 @@ pkgs.stdenv.mkDerivation rec {
     description = "NyameBox, The Original NekoBox Rebranded, the cross-platform Qt proxy utility, empowered by sing-box and thrift";
     homepage = "https://github.com/qr243vbi/nekobox";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ qr243vbi ];
+    maintainers = with maintainers; [ "qr243vbi" ];
     mainProgram = "nekobox";
     platforms = lib.platforms.linux;
   };
