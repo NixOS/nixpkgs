@@ -12965,6 +12965,8 @@ self: super: with self; {
 
   psutil-home-assistant = callPackage ../development/python-modules/psutil-home-assistant { };
 
+  psutil_7_1 = callPackage ../development/python-modules/psutil/7_1.nix { };
+
   psychrolib = callPackage ../development/python-modules/psychrolib { };
 
   psycopg = callPackage ../development/python-modules/psycopg { };
