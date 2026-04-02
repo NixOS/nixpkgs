@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubase";
-  version = "0-unstable-2024-03-07";
+  version = "0-unstable-2025-12-30";
 
   src = fetchgit {
     url = "https://git.suckless.org/ubase";
-    rev = "a570a80ed1606bed43118cb148fc83c3ac22b5c1";
-    hash = "sha256-afsTkctATIZ6ug9S2gIGoxtFM1h/esgsexyuxXpocs0=";
+    rev = "e8249b49ca3e02032dece5e0cdac3d236667a6d9";
+    hash = "sha256-/XwDmhIBjISUyS1hBMcfBe5i4ISKj6sJTGb4lYfJqO0=";
   };
 
   strictDeps = true;
