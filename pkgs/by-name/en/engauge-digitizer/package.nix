@@ -7,11 +7,8 @@
   log4cpp,
   openjpeg,
   libpng12,
-  poppler,
-  qtbase,
+  libsForQt5,
   qt5,
-  qmake,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,14 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    qt5.qtbase
     qt5.qttools
-    poppler
+    libsForQt5.poppler
     libpng12
     openjpeg
     openjpeg.dev
@@ -49,9 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   env = {
-    POPPLER_INCLUDE = "${poppler.dev}/include/poppler/qt5";
+    POPPLER_INCLUDE = "${libsForQt5.poppler.dev}/include/poppler/qt5";
 
-    POPPLER_LIB = "${poppler}/lib";
+    POPPLER_LIB = "${libsForQt5.poppler}/lib";
 
     OPENJPEG_INCLUDE = "${openjpeg.dev}/include/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}";
 
