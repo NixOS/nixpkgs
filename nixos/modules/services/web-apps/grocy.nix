@@ -216,6 +216,7 @@ in
     systemd.services.grocy-setup = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-grocy.service" ];
+      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
       script = ''
         rm -rf ${cfg.dataDir}/viewcache/*
       '';

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   isPyPy,
   lib,
+  chevron,
   defusedxml,
   packaging,
   psutil,
@@ -26,9 +27,9 @@
   shtab,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "glances";
-  version = "4.5.0.5";
+  version = "4.5.2";
   pyproject = true;
 
   disabled = isPyPy;
@@ -36,8 +37,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    tag = "v${version}";
-    hash = "sha256-IHgMZw+X7C/72w4vXaP37GgnhLVg7EF5/sd9QlmE0NM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o/q/zW7lRKQg+u4XblwNIswCVIroMdeUaPTNkN8QKwo=";
   };
 
   build-system = [ setuptools ];
@@ -77,6 +78,7 @@ buildPythonApplication rec {
   };
 
   nativeCheckInputs = [
+    chevron
     which
     pytestCheckHook
     selenium
@@ -100,16 +102,19 @@ buildPythonApplication rec {
     # Test always returns 3 plugin updates, but needs >=5 to not fail
     # May be an upstream bug, see: https://github.com/nicolargo/glances/issues/3430
     "test_perf_update"
+    # Upstream pipe handling currently fails under the new 4.5.2 sanitization coverage
+    "test_pipe"
   ];
 
   meta = {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
     mainProgram = "glances";
-    changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/nicolargo/glances/blob/${finalAttrs.src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       koral
+      miniharinn
     ];
   };
-}
+})

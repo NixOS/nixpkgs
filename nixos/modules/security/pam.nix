@@ -666,6 +666,137 @@ let
           };
         };
 
+        slurm = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = ''
+              If set, ONLY prevents users from logging into nodes if they have no
+              jobs in the node. This module is a legacy implementation with
+              functionality limited to login restrictions.
+            '';
+          };
+
+          adopt = {
+            enable = lib.mkOption {
+              default = false;
+              type = lib.types.bool;
+              description = ''
+                If set, it prevents users from logging into nodes if they have no jobs
+                in the node. It also tracks any other spawned processes for accounting
+                and ensures complete job cleanup when a job is completed for any
+                successful connection. Spawned processes get "adopted" as external
+                steps into the current job. As such, those steps get integrated with
+                Slurm accounting and control group facilities.
+              '';
+            };
+
+            settings = lib.mkOption {
+              type = lib.types.submodule {
+                freeformType = moduleSettingsType;
+                options = {
+
+                  action_no_jobs = lib.mkOption {
+                    type = lib.types.enum [
+                      "ignore"
+                      "deny"
+                    ];
+                    default = "deny";
+                    description = ''
+                      What to do if no jobs from the user are found, deny or ignore
+                      (pass along to next PAM module).
+                    '';
+                  };
+
+                  action_unknown = lib.mkOption {
+                    type = lib.types.enum [
+                      "newest"
+                      "allow"
+                      "deny"
+                    ];
+                    default = "newest";
+                    description = ''
+                      If the user has jobs, attach them to the newest job. Allow
+                      the connection through without adoption.
+                    '';
+                  };
+
+                  action_adopt_failure = lib.mkOption {
+                    type = lib.types.enum [
+                      "allow"
+                      "deny"
+                    ];
+                    default = "deny";
+                    description = ''
+                      What to do if the process is unable to be adopted into a job.
+                      `allow` matches the upstream default which is only really
+                      suitable for testing; production systems will want `deny`
+                      as a default.
+                    '';
+                  };
+
+                  action_generic_failure = lib.mkOption {
+                    type = lib.types.enum [
+                      "ignore"
+                      "allow"
+                      "deny"
+                    ];
+                    default = "ignore";
+                    description = ''
+                      Catch all for failures related to kernel issues or slurmd
+                      access. Ignore falls through to the next PAM module, allowing
+                      the connection to go through without adoption.
+                    '';
+                  };
+
+                  disable_x11 = lib.mkOption {
+                    type = lib.types.enum [
+                      "0"
+                      "1"
+                    ];
+                    default = "0";
+                    description = ''
+                      Disable or enable x11 sessions. '0' means the adopted connection
+                      has Slurm X11 forwarding with DISPLAY overwritten using X11
+                      tunnel endpoint details.
+                    '';
+                  };
+
+                  nodename = lib.mkOption {
+                    type = with lib.types; nullOr nonEmptyStr;
+                    default = null;
+                    example = "compute-a-01";
+                    description = ''
+                      Set this only when the Slurm `NodeName` for this machine
+                      differs from `hostname -s`. If unset, `pam_slurm_adopt`
+                      uses the host short name.
+                    '';
+                  };
+
+                  join_container = lib.mkOption {
+                    type = lib.types.enum [
+                      "true"
+                      "false"
+                    ];
+                    default = "true";
+                    description = ''
+                      Attach to a container created by job_container/tmpfs
+                    '';
+                  };
+                };
+              };
+
+              default = {
+                service = name;
+              };
+              description = ''
+                Slurm Adopt Settings. More information is available at:
+                  - https://slurm.schedmd.com/pam_slurm_adopt.html
+              '';
+            };
+          };
+        };
+
         zfs = lib.mkOption {
           default = config.security.pam.zfs.enable;
           defaultText = lib.literalExpression "config.security.pam.zfs.enable";
@@ -810,6 +941,12 @@ let
                 control = "sufficient";
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
+              {
+                name = "slurm";
+                enable = cfg.slurm.enable;
+                control = "required";
+                modulePath = "${pkgs.slurm}/lib/security/pam_slurm.so";
+              }
               # The required pam_unix.so module has to come after all the sufficient modules
               # because otherwise, the account lookup will fail if the user does not exist
               # locally, for example with MySQL- or LDAP-auth.
@@ -818,6 +955,15 @@ let
                 control = "required";
                 modulePath = "${package}/lib/security/pam_unix.so";
               }
+              # pam_slurm_adopt must be the last module in the account stack.
+              {
+                name = "slurm_adopt";
+                enable = cfg.slurm.adopt.enable;
+                control = "required";
+                modulePath = "${pkgs.slurm}/lib/security/pam_slurm_adopt.so";
+                settings = cfg.slurm.adopt.settings;
+              }
+
             ];
 
             auth = autoOrderRules (

@@ -3597,6 +3597,9 @@
   "sec-language-java": [
     "index.html#sec-language-java"
   ],
+  "sec-language-lean4": [
+    "index.html#sec-language-lean4"
+  ],
   "language-javascript": [
     "index.html#language-javascript"
   ],
@@ -3755,6 +3758,18 @@
   ],
   "julia-withpackage-arguments": [
     "index.html#julia-withpackage-arguments"
+  ],
+  "lean4-buildLakePackage": [
+    "index.html#lean4-buildLakePackage"
+  ],
+  "lean4-dev-shells": [
+    "index.html#lean4-dev-shells"
+  ],
+  "lean4-history": [
+    "index.html#lean4-history"
+  ],
+  "lean4-leanPackages": [
+    "index.html#lean4-leanPackages"
   ],
   "lisp": [
     "index.html#lisp"

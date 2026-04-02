@@ -92,38 +92,6 @@ in
         # New vendor kernels should go to nixos-hardware instead.
         # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
 
-        linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 1;
-        };
-
-        linux_rpi2 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 2;
-        };
-
-        linux_rpi3 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 3;
-        };
-
-        linux_rpi4 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 4;
-        };
-
         linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "5.10";
           kernelPatches = [
@@ -300,6 +268,56 @@ in
         linux_rt_5_4 = throw "linux_rt 5.4 has been removed because it will reach its end of life within 25.11";
 
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
+
+        # Remove warning added on 2026-04-01
+        linux_rpi1 =
+          lib.warnOnInstantiate
+            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+            (
+              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+                kernelPatches = with kernelPatches; [
+                  bridge_stp_helper
+                  request_key_helper
+                ];
+                rpiVersion = 1;
+              }
+            );
+        linux_rpi2 =
+          lib.warnOnInstantiate
+            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+            (
+              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+                kernelPatches = with kernelPatches; [
+                  bridge_stp_helper
+                  request_key_helper
+                ];
+                rpiVersion = 2;
+              }
+            );
+        linux_rpi3 =
+          lib.warnOnInstantiate
+            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+            (
+              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+                kernelPatches = with kernelPatches; [
+                  bridge_stp_helper
+                  request_key_helper
+                ];
+                rpiVersion = 3;
+              }
+            );
+        linux_rpi4 =
+          lib.warnOnInstantiate
+            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+            (
+              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+                kernelPatches = with kernelPatches; [
+                  bridge_stp_helper
+                  request_key_helper
+                ];
+                rpiVersion = 4;
+              }
+            );
       }
     )
   );

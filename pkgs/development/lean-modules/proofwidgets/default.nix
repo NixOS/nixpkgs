@@ -8,19 +8,18 @@
 }:
 
 let
+  version = "0.0.95";
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "ProofWidgets4";
-    tag = "v0.0.87";
-    hash = "sha256-qXEqNfwUBPnxAtLRkBZTBFhrM4JYl43gLo/PM6HOG7o=";
+    tag = "v${version}";
+    hash = "sha256-LETljr+QEU6CxprR3pB4hUzhgCD8PrIuiPOgTIdhHVM=";
   };
 in
 
 buildLakePackage {
   pname = "lean4-proofwidgets";
-  version = "0.0.87";
-
-  inherit src;
+  inherit version src;
 
   leanPackageName = "proofwidgets";
 
@@ -38,7 +37,7 @@ buildLakePackage {
     name = "lean4-proofwidgets-npm-deps";
     inherit src;
     sourceRoot = "source/widget";
-    hash = "sha256-CzBRrreOSytquZ/xFHPlY8r+lz5Bg9Zk9ienRhc8SiY=";
+    hash = "sha256-ShH6MDr76wzWQrJvhMWCnklaox/uRsfoe+aYVSo/eNA=";
   };
   npmRoot = "widget";
 
