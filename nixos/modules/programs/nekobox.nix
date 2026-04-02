@@ -73,5 +73,5 @@ in
         '';
   };
 
-  meta.maintainers = with lib.maintainers; [ qr243vbi ];
+  meta.maintainers = with lib.maintainers; [  ];
 }
