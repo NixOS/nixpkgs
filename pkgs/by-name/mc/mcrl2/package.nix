@@ -8,6 +8,7 @@
   qt6,
   boost,
   ninja,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/mCRL2.app $out/Applications
+    mkdir $out/bin
+    makeWrapper "$out/Applications/mCRL2.app/Contents/MacOS/mCRL2" "$out/bin/mcrl2ide"
   '';
 
   postFixup = lib.optional stdenv.hostPlatform.isDarwin ''
@@ -52,7 +55,8 @@ stdenv.mkDerivation rec {
     libGL
     qt6.qtbase
     boost
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   dontWrapQtApps = true;
 
