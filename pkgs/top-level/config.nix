@@ -221,6 +221,17 @@ let
       '';
     };
 
+    silenceAliasWarnings = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Silence warnings for aliases such as:
+        > warning: 'foo' has been renamed to/replaced by 'foo2'
+
+        Enabling this will remove all warnings made with `warnAlias` in `pkgs/top-level/aliases.nix`.
+      '';
+    };
+
     allowUnfree = mkOption {
       type = types.bool;
       default = false;

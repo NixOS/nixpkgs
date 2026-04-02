@@ -223,7 +223,9 @@ let
 
   warnAlias =
     msg: v:
-    if lib.isDerivation v then
+    if super.config.silenceAliasWarnings then
+      v
+    else if lib.isDerivation v then
       lib.warnOnInstantiate msg v
     else if lib.isAttrs v then
       lib.mapAttrs (_: lib.warn msg) v
