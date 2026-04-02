@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shelfmark";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t4t7je7Y/aezx/EX7paJIcsCq5qyZeU/+mPLeZ8oTPg=";
+    hash = "sha256-Fe7zu51gFG2QgcBWcGkFi64CdZW4ohZg+7jdmeMFVLI=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/calibrain/shelfmark";
     changelog = "https://github.com/calibrain/shelfmark/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jamiemagee ];
+    maintainers = with lib.maintainers; [
+      jamiemagee
+      pyrox0
+    ];
     mainProgram = "shelfmark";
   };
 })

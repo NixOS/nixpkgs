@@ -33,6 +33,7 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
+    # Tag from https://github.com/ml-explore/mlx/blob/v0.31.1/mlx/io/CMakeLists.txt#L14
     rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
     hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
@@ -40,14 +41,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.5";
+  version = "0.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SV/3MXt+SuJ69XfLfXycold6KgtXSM7OE0KwMSNw+eE=";
+    hash = "sha256-PiNk/MdMw9Vpat2KuslBTyaFuK+mJ4UvwJqBnysvvUU=";
   };
 
   patches = [

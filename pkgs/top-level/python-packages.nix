@@ -4763,8 +4763,6 @@ self: super: with self; {
 
   dufte = callPackage ../development/python-modules/dufte { };
 
-  dukpy = callPackage ../development/python-modules/dukpy { };
-
   dulwich = callPackage ../development/python-modules/dulwich { inherit (pkgs) gnupg; };
 
   dunamai = callPackage ../development/python-modules/dunamai { };
@@ -5726,8 +5724,6 @@ self: super: with self; {
   flask-testing = callPackage ../development/python-modules/flask-testing { };
 
   flask-themer = callPackage ../development/python-modules/flask-themer { };
-
-  flask-themes2 = callPackage ../development/python-modules/flask-themes2 { };
 
   flask-unsign = callPackage ../development/python-modules/flask-unsign { };
 
@@ -19452,6 +19448,8 @@ self: super: with self; {
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
 
   torch-bin = callPackage ../development/python-modules/torch/bin { triton = self.triton-bin; };
+
+  torch-c-dlpack-ext = callPackage ../development/python-modules/torch-c-dlpack-ext { };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 

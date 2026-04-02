@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daggaz";
     repo = "json-stream";
     tag = "v${version}";
-    hash = "sha256-oZYVRgDSl15/UJmhTAoLk3UoVimQeLGNOjNXLH6GTtY=";
+    hash = "sha256-iSJY53VImv9GSIC2IB969zzYYNg7gFKJH8QQFpjzrQU=";
   };
 
   build-system = [ setuptools ];
