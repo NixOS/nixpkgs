@@ -38,7 +38,7 @@ assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
-  version = "1.91.1";
+  version = "1.91.2";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "upower";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uXKhg3w1ybuRrIvSRBFRtuHN/eB8i8l3GBKryU+6Voo=";
+    hash = "sha256-lr7Va7jmC7Hy+kY8YIbAEE5mK3TxU9LtgTKxEyM1QY8=";
   };
 
   patches =
