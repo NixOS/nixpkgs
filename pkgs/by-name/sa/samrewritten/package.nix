@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-
   # Deps
   gdk-pixbuf,
   glib,
@@ -31,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   nativeBuildInputs = [
+    glib
     pkg-config
     wrapGAppsHook4
   ];
@@ -43,6 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     pango
   ];
+
+  postInstall = ''
+    install -Dm644 assets/org.samrewritten.SamRewritten.gschema.xml \
+      $out/share/glib-2.0/schemas/org.samrewritten.SamRewritten.gschema.xml
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
