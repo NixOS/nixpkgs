@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "3.6.1";
+  version = "3.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "scmrepo";
     tag = version;
-    hash = "sha256-nkHEeslQM+F4PpNrrbSql+jCJDHmdaGfGkciluhXmHo=";
+    hash = "sha256-E7BHdLDS57r/UbSA62lfr3z+5sqFTPRzwfFLIITeSs0=";
   };
 
   build-system = [
