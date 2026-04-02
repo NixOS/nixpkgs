@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "schemes";
     homepage = "https://gitlab.gnome.org/chergert/schemes";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0xMRTT ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

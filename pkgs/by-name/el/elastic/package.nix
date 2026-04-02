@@ -57,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "app.drey.Elastic";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ _0xMRTT ];
     teams = [ lib.teams.gnome-circle ];
   };
 })
