@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "peakrdl-cheader";
-  version = "1.0.0";
+  version = "1.1.0";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SystemRDL";
     repo = "PeakRDL-cheader";
     tag = "v${version}";
-    hash = "sha256-1LxKGCea5ClKmrArl+CM6ZRpiTh2ThbYSe9TYYHjRlY=";
+    hash = "sha256-IPGNauPA9y1HNEbk3eEOog17++/gSJt+185i+DFb54U=";
   };
 
   build-system = [
