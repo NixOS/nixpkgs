@@ -3,6 +3,7 @@
   stdenv,
   python3,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
 }:
 
@@ -18,10 +19,23 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-5ZKLOwoAzY36htMzMLpdwn1Xo34rGe56+TFuHRfFB9Q=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lucc/khard/commit/4e07412b8870f210409077a925d74ae47152a80c.patch";
+      hash = "sha256-tApB1xYLBHV/XQ73ITJjKxCjOz6DNPDsKXn8f7KQZRc=";
+    })
+  ];
+
   build-system = with python3.pkgs; [
     setuptools
     setuptools-scm
+    sphinxHook
+    sphinx-argparse
+    sphinx-autoapi
+    sphinx-autodoc-typehints
   ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = with python3.pkgs; [
     configobj
