@@ -833,9 +833,9 @@
   };
 
   gitcommit = {
-    version = "0.4.0";
+    version = "0.5.0";
     url = "github:gbprod/tree-sitter-gitcommit";
-    hash = "sha256-KYfcs99p03b0RiPYnZeKJf677fmVf658FLZcFk2v2Ws=";
+    hash = "sha256-ttULjFU9slnPcT4bCjOozGkaKAOxMW5Oa2/caVNeEsA=";
     meta = {
       license = lib.licenses.wtfpl;
       maintainers = with lib.maintainers; [
