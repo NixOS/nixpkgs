@@ -96,6 +96,9 @@ in
       '';
     };
 
+    enablePortals = lib.mkEnableOption "Enabled GTK and WLR xdg portals";
+
+
     xwayland.enable = lib.mkEnableOption "XWayland" // {
       default = true;
     };
@@ -185,10 +188,6 @@ in
         # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
         # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
         xdg.portal = {
-          # Include the portal as a actuall package if its not already installed
-          extraPortals = [
-            pkgs.xdg-desktop-portal-gtk
-          ];
           config.sway = {
             # Use xdg-desktop-portal-gtk for every portal interface...
             default = [ "gtk" ];
@@ -206,6 +205,8 @@ in
       (import ./wayland-session.nix {
         inherit lib pkgs;
         enableXWayland = cfg.xwayland.enable;
+        enableWlrPortal = cfg.enablePortals;
+        enableGtkPortal = cfg.enablePortals;
       })
     ]
   );
