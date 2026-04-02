@@ -80,12 +80,17 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sympy
   ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
     rm -rf freud
   '';
 
   disabledTests = [
+    # 4 tests fail with:
+    #
     # AttributeError: module 'scipy.special' has no attribute 'sph_harm'
+    #
+    # See: https://github.com/glotzerlab/freud/issues/1408
     "test_ld"
     "test_multiple_l"
     "test_qlmi"

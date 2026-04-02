@@ -6,7 +6,6 @@
   curl,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   openssl,
   pkg-config,
   stdenv,
@@ -37,8 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [ "--enable-aligned=yes" ];
-
-  passthru.updateScript = nix-update-script { };
 
   enableParallelBuilding = true;
 

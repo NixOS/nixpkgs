@@ -497,6 +497,7 @@ mapAliases {
   clang_17 = throw "clang_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   clashmi = throw "'clashmi' has been removed, as it is unmaintained in nixpkgs"; # Added 2026-01-31
   clasp = throw "'clasp' has been renamed to/replaced by 'clingo'"; # Converted to throw 2025-10-27
+  claude-code-acp = warnAlias "'claude-code-acp' has been renamed to 'claude-agent-acp'" claude-agent-acp; # Added 2026-03-31
   clearlyU = clearly-u; # Added 2026-02-08
   cli-visualizer = throw "'cli-visualizer' has been removed as the upstream repository is gone"; # Added 2025-06-05
   clima = throw "'clima' has been removed, as it has been unmaintained upstream since December 2024, use glow instead"; # Added 2026-01-01
@@ -624,6 +625,7 @@ mapAliases {
   e17gtk = throw "'e17gtk' has been removed because it was archived upstream."; # Added 2026-01-15
   eask = throw "'eask' has been renamed to/replaced by 'eask-cli'"; # Converted to throw 2025-10-27
   easyloggingpp = throw "easyloggingpp has been removed, as it is deprecated upstream and does not build with CMake 4"; # Added 2025-09-17
+  ebpf-verifier = warnAlias "'ebpf-verifier' has been renamed to 'prevail'" prevail; # Added 2026-04-01
   EBTKS = throw "'EBTKS' has been renamed to/replaced by 'ebtks'"; # Converted to throw 2025-10-27
   ec2-utils = throw "'ec2-utils' has been renamed to/replaced by 'amazon-ec2-utils'"; # Converted to throw 2025-10-27
   ecryptfs = throw "'ecryptfs' has been removed due to lack of maintenance. Consider using 'fscrypt', 'gocryptfs' or 'cryfs' instead."; # Added 2026-01-14
@@ -1070,6 +1072,8 @@ mapAliases {
   libpthreadstubs = libpthread-stubs; # Added 2025-02-04
   libpulseaudio-vanilla = throw "'libpulseaudio-vanilla' has been renamed to/replaced by 'libpulseaudio'"; # Converted to throw 2025-10-27
   libqt5pas = throw "'libqt5pas' has been renamed to/replaced by 'libsForQt5.libqtpas'"; # Converted to throw 2025-10-27
+  libqtdbusmock = warnAlias "'libqtdbusmock' has been renamed to 'libsForQt5.libqtdbusmock'"; # Added 2026-03-10
+  libqtdbustest = warnAlias "'libqtdbustest' has been renamed to 'libsForQt5.libqtdbustest'"; # Added 2026-03-10
   libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
   LibreArp = throw "'LibreArp' has been renamed to/replaced by 'librearp'"; # Converted to throw 2025-10-27
   LibreArp-lv2 = throw "'LibreArp-lv2' has been renamed to/replaced by 'librearp-lv2'"; # Converted to throw 2025-10-27
@@ -1241,6 +1245,7 @@ mapAliases {
   llvmPackages_15 = throw "llvmPackages_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   llvmPackages_16 = throw "llvmPackages_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   llvmPackages_17 = throw "llvmPackages_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  lnreader = warnAlias "'lnreader' has been renamed to 'pdf-cli'" pdf-cli; # Added 2026-03-18
   lockfileProgs = warnAlias "'lockfileProgs' has been renamed to 'lockfile-progs'" lockfile-progs; # Added 2026-02-08
   loco-cli = throw "'loco-cli' has been renamed to/replaced by 'loco'"; # Converted to throw 2025-10-27
   log4j-detect = throw "'log4j-detect' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
@@ -1670,6 +1675,7 @@ mapAliases {
   purple-vk-plugin = throw "'purple-vk-plugin' has been removed as upstream repository was deleted and no active forks are found."; # Added 2025-09-17
   purple-xmpp-http-upload = throw "'purple-xmpp-http-upload' has been renamed to/replaced by 'pidginPackages.purple-xmpp-http-upload'"; # Converted to throw 2025-10-27
   pyCA = warnAlias "'pyCA' was renamed to 'pyca'" pyca; # Added 2026-02-12
+  pyload-ng = throw "'pyload-ng' has been removed due to vulnerabilities and being unmaintained"; # Added 2026-03-21
   pyo3-pack = throw "'pyo3-pack' has been renamed to/replaced by 'maturin'"; # Converted to throw 2025-10-27
   pypolicyd-spf = throw "'pypolicyd-spf' has been renamed to/replaced by 'spf-engine'"; # Converted to throw 2025-10-27
   python3Full = throw "python3Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
@@ -1688,6 +1694,7 @@ mapAliases {
   qflipper = throw "'qflipper' has been renamed to/replaced by 'qFlipper'"; # Converted to throw 2025-10-27
   qMasterPassword = warnAlias "'qMasterPassword' has been renamed to/replaced by 'qmasterpassword'" qmasterpassword; # Added 2026-02-01
   qMasterPassword-wayland = warnAlias "'qMasterPassword-wayland' has been renamed to/replaced by 'qmasterpassword-wayland'" qmasterpassword-wayland; # Added 2026-02-01
+  qmenumodel = warnAlias "'qmenumodel' has been renamed to 'libsForQt5.qmenumodel'"; # Added 2026-03-26
   qnial = throw "'qnial' has been removed due to failing to build and being unmaintained"; # Added 2025-06-26
   qrscan = throw "qrscan has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-19
   qscintilla = throw "'qscintilla' has been renamed to/replaced by 'libsForQt5.qscintilla'"; # Converted to throw 2025-10-27

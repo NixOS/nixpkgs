@@ -396,8 +396,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.16.13";
-          hash = "sha256-lSYNRq7D/ggdNKO0ccqbIz5gAhsr/LdX2U8S6FsTktY=";
+          version = "2.16.14";
+          hash = "sha256-WuDsYSQ5B2xA3LnU1fiXBx8yqOplGstZO0qYaLtPF0A=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -1007,8 +1007,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.13.2";
-          hash = "sha256-Dw8eJPpbeMz2taELHI0eYwO67SngCFel8wL/ZCGXQoM=";
+          version = "1.14.3";
+          hash = "sha256-W4VciZMvVtRcCibJP5UGTlHCrdF/AF167xlLvZs5BB4=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1188,8 +1188,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.130.1";
-          hash = "sha256-qBCE1ior+xNKSAVWGbPGKK6pul22DUZ/movaHx0s/8c=";
+          version = "3.132.0";
+          hash = "sha256-AWzHCg6N//+RmQ1I3Qq4c8Kk+e3gZpeqK9yWB8kfl6w=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.132.1";
-          hash = "sha256-iWDKJVgVhpycTNE044DSOf/uN0ZG4s2/JdpwBkka8sQ=";
+          version = "0.132.2";
+          hash = "sha256-1wBo1PaSZ0xNRIgdGAPQ7Jm4ywx4qc4kflZxHVAt2EA=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3828,8 +3828,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "26.3.0";
-          hash = "sha256-c6NcQsJe2sjJH/nBhStHYWKNSfJtU3CLHpv+2qPlyqM=";
+          version = "26.3.5";
+          hash = "sha256-IKSozGy4S04pSsbhpXVgsqQvJNzaxVkoSrLwhFb4Ag4=";
         };
         meta = {
           description = "Ansible language support";
@@ -4324,8 +4324,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.45.0";
-          hash = "sha256-itrjHAA3gseflNzOd8UKB8DbhwJ/cWkGuuopLOD83GM=";
+          version = "5.0.0";
+          hash = "sha256-K8EZF7h86ErbIHW05LQSpReXSKa8FTMH6uOD+IczoR4=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };

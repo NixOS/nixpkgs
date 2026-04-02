@@ -236,6 +236,7 @@ in
   atuin = runTest ./atuin.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
   audit = runTest ./audit.nix;
+  audit-testsuite = runTest ./audit-testsuite.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
@@ -488,9 +489,8 @@ in
   early-mount-options = runTest ./early-mount-options.nix;
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
   easytier = runTest ./easytier.nix;
-  ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;
-  ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
+  ec2-userdata = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).ec2-userdata or { };
   echoip = runTest ./echoip.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
@@ -991,7 +991,7 @@ in
   moonraker = runTest ./moonraker.nix;
   moosefs = runTest ./moosefs.nix;
   mopidy = runTest ./mopidy.nix;
-  morph-browser = runTest ./morph-browser.nix;
+  morph-browser = discoverTests (import ./morph-browser.nix);
   mosquitto = runTest ./mosquitto.nix;
   movim = import ./web-apps/movim {
     inherit runTest;
@@ -1220,6 +1220,7 @@ in
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-pgsql = runTest ./pam/pam-pgsql.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
+  pam-u2f-polkit = runTest ./pam/pam-u2f-polkit.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pangolin = runTest ./pangolin.nix;
@@ -1347,7 +1348,6 @@ in
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
-  pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
   qemu-vm-credentials-fwcfg = runTest {

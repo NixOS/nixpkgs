@@ -53,6 +53,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-p5kI7HlG6RVxCCEb/J0L2gh36jkm/atAV98ny3h4vqo=";
 
+  # Upstream tagged v2.0.6 with Cargo.toml already bumped to 2.0.7
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail 'version = "2.0.7"' 'version = "${version}"'
+  '';
+
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
