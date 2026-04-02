@@ -26,7 +26,7 @@ buildGoModule (
     };
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (ui) pname;
+      inherit (ui) pname src;
       inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
       fetcherVersion = 3;
