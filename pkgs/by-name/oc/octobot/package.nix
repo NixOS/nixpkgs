@@ -53,7 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Drakkar-Software/OctoBot/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Octobot is a powerful open-source cryptocurrency trading robot.";
     homepage = "https://www.octobot.cloud";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ grandjeanlab ];
     mainProgram = "OctoBot";
     platforms = [
       "x86_64-linux"
