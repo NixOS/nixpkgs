@@ -25,24 +25,24 @@ in
       type = format.type;
       default = { };
       example = {
-        sonarr = [
-          {
+        sonarr = {
+          sonarr-main = {
             instance_name = "main";
             base_url = "http://localhost:8989";
             api_key = {
               _secret = "/run/credentials/recyclarr.service/sonarr-api_key";
             };
-          }
-        ];
-        radarr = [
-          {
+          };
+        };
+        radarr = {
+          radarr-main = {
             instance_name = "main";
             base_url = "http://localhost:7878";
             api_key = {
               _secret = "/run/credentials/recyclarr.service/radarr-api_key";
             };
-          }
-        ];
+          };
+        };
       };
       description = ''
         Recyclarr YAML configuration as a Nix attribute set.

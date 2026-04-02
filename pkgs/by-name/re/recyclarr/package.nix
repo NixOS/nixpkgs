@@ -21,7 +21,7 @@ buildDotnetModule (finalAttrs: {
   projectFile = "Recyclarr.slnx";
   nugetDeps = ./deps.json;
 
-  prePatch = ''
+  postPatch = ''
     cat > src/Recyclarr.Core/GitVersionInformation.g.cs <<'EOF'
     public static class GitVersionInformation
     {
