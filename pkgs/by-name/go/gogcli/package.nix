@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gogcli";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "steipete";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hJU40ysjRx4p9SWGmbhhpToYCpk3DcMAWCnKqxHRmh0=";
+    hash = "sha256-KtjqZLR4Uf77865IGHFmcjwpV8GWkiaV7fBeTrsx93E=";
   };
 
-  vendorHash = "sha256-WGRlv3UsK3SVBQySD7uZ8+FiRl03p0rzjBm9Se1iITs=";
+  vendorHash = "sha256-8RKzJq4nlg7ljPw+9mtiv0is6MeVtkMEiM2UUdKPP3U=";
 
   subPackages = [ "cmd/gog" ];
 
@@ -37,6 +37,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI tool for interacting with Google APIs (Gmail, Calendar, Drive, and more)";
     homepage = "https://github.com/steipete/gogcli";
+    changelog = "https://github.com/steipete/gogcli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ macalinao ];
     mainProgram = "gog";
