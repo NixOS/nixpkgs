@@ -5,6 +5,7 @@
   nix-update-script,
   openssh,
   openssl,
+  keyutils,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,6 +25,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     openssl
+    keyutils
   ];
 
   nativeCheckInputs = [
