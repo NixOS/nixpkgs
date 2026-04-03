@@ -741,7 +741,7 @@ in
         config.system.fsPackages
         ++ [ cfg.package.util-linux ]
         # systemd-ssh-generator needs sshd in PATH
-        ++ lib.optional config.services.openssh.enable config.services.openssh.package
+        ++ lib.optional (config.services.openssh.enable or false) config.services.openssh.package
       );
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       TZDIR = "/etc/zoneinfo";
@@ -899,7 +899,7 @@ in
     # the systemd vmspawn credential dropin executes sshd and expects ExecSearchPath to be set, see:
     # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
     # this service is used, for example, when NixOS is started via systemd-vmspawn
-    systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
+    systemd.services."sshd-vsock@" = mkIf (config.services.openssh.enable or false) {
       serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
       overrideStrategy = "asDropin";
     };
@@ -907,7 +907,7 @@ in
     # Fix paths in sshd-vsock.socket
     # https://github.com/systemd/systemd/blob/v259.3/src/ssh-generator/ssh-generator.c#L239
     # this socket is used, for example, when NixOS is started via systemd-vmspawn
-    systemd.sockets.sshd-vsock = mkIf config.services.openssh.enable {
+    systemd.sockets.sshd-vsock = mkIf (config.services.openssh.enable or false) {
       overrideStrategy = "asDropin";
       socketConfig.ExecStartPost = [
         ""
