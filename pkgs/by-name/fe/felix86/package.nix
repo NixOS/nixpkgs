@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "felix86";
-  version = "26.03";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "OFFTKP";
     repo = "felix86";
     tag = finalAttrs.version;
-    hash = "sha256-A586hVKpS4Z/hZsesTBqpRzYJpaFxatCuBnoIPtoDFI=";
+    hash = "sha256-onhPibvO74yo95zop7EhG+EILn4M70X9ivhS9I+fIBY=";
   };
 
   strictDeps = true;
