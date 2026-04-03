@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "MultiVNC";
-  version = "2.8.1";
+  version = "0.6.0-2024-10-20";
 
   src = fetchFromGitHub {
     owner = "bk138";
