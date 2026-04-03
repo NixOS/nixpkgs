@@ -116,6 +116,6 @@ rec {
   rocqPackages_9_1 = mkRocqPackages rocq-core_9_1;
   rocqPackages_9_2 = mkRocqPackages rocq-core_9_2;
 
-  rocqPackages = lib.recurseIntoAttrs rocqPackages_9_0;
+  rocqPackages = lib.recurseIntoAttrs rocqPackages_9_1;
   rocq-core = rocqPackages.rocq-core;
 }

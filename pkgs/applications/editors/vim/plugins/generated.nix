@@ -7102,6 +7102,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ipynb-nvim = buildVimPlugin {
+    pname = "ipynb.nvim";
+    version = "0-unstable-2026-01-31";
+    src = fetchFromGitHub {
+      owner = "ajbucci";
+      repo = "ipynb.nvim";
+      rev = "b9ec93f7c37a3a081810a733d6baf4973fc31f3d";
+      hash = "sha256-uB89olqvc5m6DHwtOOPpTRtyBnhNp6z6Pr9DS6mX7JA=";
+    };
+    meta.homepage = "https://github.com/ajbucci/ipynb.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   ir_black = buildVimPlugin {
     pname = "ir_black";
     version = "0-unstable-2012-03-05";

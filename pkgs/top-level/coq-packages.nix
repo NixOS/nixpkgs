@@ -359,6 +359,6 @@ rec {
   coq_9_1 = coqPackages_9_1.coq;
   coq_9_2 = coqPackages_9_2.coq;
 
-  coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_1;
   coq = coqPackages.coq;
 }
