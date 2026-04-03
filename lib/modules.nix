@@ -1436,6 +1436,48 @@ let
       };
 
   /**
+    Run the module-system property pipeline (`mkMerge` / `mkIf`
+    discharging followed by `mkOverride` priority filtering) on a list
+    of definitions.
+
+    Intended for option types that handle their own per-leaf priority
+    composition - e.g. tree-shaped types like `nestedAttrsOf` whose
+    `merge` walks into sub-paths that the top-level pipeline (run by
+    `mergeDefinitions`) doesn't reach. Returns the same shape as
+    `filterOverrides'`: a `values` list of definitions stripped of
+    their override wrappers, plus the surviving `highestPrio`.
+
+    `lib.modules.applyLeafProperties :: [{ file; value }] -> { values; highestPrio }`
+
+    # Inputs
+
+    `defs`
+
+    : 1\. List of `{ file, value }` definitions for one logical leaf.
+
+    # Example
+
+    ```nix
+    # Inside an option type's `merge`:
+    let
+      processed = lib.modules.applyLeafProperties subDefs;
+    in
+    elemType.merge loc processed.values
+    ```
+  */
+  applyLeafProperties =
+    defs:
+    filterOverrides' (
+      concatMap (
+        d:
+        map (v: {
+          inherit (d) file;
+          value = v;
+        }) (dischargeProperties d.value)
+      ) defs
+    );
+
+  /**
     Sort a list of properties.  The sort priority of a property is
     defaultOrderPriority by default, but can be overridden by wrapping the property
     using mkOrder.
@@ -2292,6 +2334,7 @@ private
   #       are just needed by types.nix, but are not meant to be consumed
   #       externally.
   inherit
+    applyLeafProperties
     defaultOrderPriority
     defaultOverridePriority
     doRename
