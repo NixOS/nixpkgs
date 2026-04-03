@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   utils,
   ...
 }:
@@ -217,15 +218,19 @@ in
         }
       ) cfg.dnsDelegates;
 
-      # If networkmanager is enabled, ask it to interface with resolved.
-      networking.networkmanager.dns = "systemd-resolved";
-
       networking.resolvconf.package = config.systemd.package;
 
+    })
+
+    # If networkmanager is enabled, ask it to interface with resolved.
+    (lib.optionalAttrs (options ? networking.networkmanager) {
+      networking.networkmanager.dns = "systemd-resolved";
+    })
+
+    (lib.optionalAttrs (options ? nix.firewall) {
       nix.firewall.extraNftablesRules = [
         "ip daddr { 127.0.0.53, 127.0.0.54 } udp dport 53 accept comment \"systemd-resolved listening IPs\""
       ];
-
     })
 
     (mkIf config.boot.initrd.services.resolved.enable {
