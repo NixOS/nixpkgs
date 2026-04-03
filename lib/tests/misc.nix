@@ -79,6 +79,11 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    isNestedAttrsLeaf
+    mapNestedAttrsWith
+    mapNestedAttrs'
+    concatMapNestedAttrs'
+    concatMapNestedAttrsWith
     mapAttrsToListRecursive
     mapAttrsToListRecursiveCond
     mapCartesianProduct
@@ -2162,6 +2167,211 @@ runTests {
       foo = "bar";
       foobar = "baz";
       foobarbaz = "baz";
+    };
+  };
+
+  # mapNestedAttrsWith: flat input (no nesting) - fn applied directly to each value
+  testMapNestedAttrsFlat = {
+    expr = mapNestedAttrsWith lib.any (types.nestedAttrsOf types.int) (x: x * 2) {
+      a = 1;
+      b = 3;
+    };
+    expected = {
+      a = 2;
+      b = 6;
+    };
+  };
+
+  # mapNestedAttrsWith: nested input - fn applied only at leaves, attrset nodes preserved
+  testMapNestedAttrsNested = {
+    expr = mapNestedAttrsWith lib.any (types.nestedAttrsOf types.int) (x: x * 2) {
+      a.b = 1;
+      a.c = 3;
+      d = 5;
+    };
+    expected = {
+      a.b = 2;
+      a.c = 6;
+      d = 10;
+    };
+  };
+
+  # mapNestedAttrsWith: empty input
+  testMapNestedAttrsEmpty = {
+    expr = mapNestedAttrsWith lib.any (types.nestedAttrsOf types.int) (x: x + 1) { };
+    expected = { };
+  };
+
+  # mapNestedAttrs': flat input - equivalent to mapNestedAttrsWith lib.any
+  testMapNestedAttrsFlat' = {
+    expr = mapNestedAttrs' (types.nestedAttrsOf types.int) (x: x * 2) {
+      a = 1;
+      b = 3;
+    };
+    expected = {
+      a = 2;
+      b = 6;
+    };
+  };
+
+  # mapNestedAttrs': nested input - structure preserved, apply `fn` only at leaves
+  testMapNestedAttrsNested' = {
+    expr = mapNestedAttrs' (types.nestedAttrsOf types.int) (x: x * 2) {
+      a.b = 1;
+      a.c = 3;
+      d = 5;
+    };
+    expected = {
+      a.b = 2;
+      a.c = 6;
+      d = 10;
+    };
+  };
+
+  # mapNestedAttrs': multiple siblings at same level all transformed
+  testMapNestedAttrsSiblings' = {
+    expr =
+      let
+        elementType = types.submodule { options.v = lib.mkOption { type = types.int; }; };
+      in
+      mapNestedAttrs' (types.nestedAttrsOf elementType) (x: x.v) {
+        ns.a.v = 1;
+        ns.b.v = 2;
+        ns.c.v = 3;
+      };
+    expected = {
+      ns.a = 1;
+      ns.b = 2;
+      ns.c = 3;
+    };
+  };
+
+  # concatMapNestedAttrs': flat input - fn receives single-element path and leaf value
+  testConcatMapNestedAttrsFlat = {
+    expr =
+      concatMapNestedAttrs' (types.nestedAttrsOf types.int)
+        (path: x: { ${lib.concatStringsSep "." path} = x * 2; })
+        {
+          a = 1;
+          b = 3;
+        };
+    expected = {
+      a = 2;
+      b = 6;
+    };
+  };
+
+  # concatMapNestedAttrs': nested input - fn receives full path list and leaf value, result is flat
+  testConcatMapNestedAttrsNested = {
+    expr =
+      concatMapNestedAttrs' (types.nestedAttrsOf types.int)
+        (path: x: { ${lib.concatStringsSep "." path} = x; })
+        {
+          a.b = 1;
+          a.c = 2;
+          d = 3;
+        };
+    expected = {
+      "a.b" = 1;
+      "a.c" = 2;
+      d = 3;
+    };
+  };
+
+  # concatMapNestedAttrs': empty input
+  testConcatMapNestedAttrsEmpty' = {
+    expr = concatMapNestedAttrs' (types.nestedAttrsOf types.int) (path: x: {
+      ${lib.head path} = x;
+    }) { };
+    expected = { };
+  };
+
+  # isNestedAttrsLeaf: scalar type - leaf detected by elemType.check
+  testIsNestedAttrsLeafScalar = {
+    expr = isNestedAttrsLeaf lib.any types.int 42;
+    expected = true;
+  };
+
+  # isNestedAttrsLeaf: scalar type - non-leaf (attrset where int expected)
+  testIsNestedAttrsLeafScalarNonLeaf = {
+    expr = isNestedAttrsLeaf lib.any types.int { a = 1; };
+    expected = false;
+  };
+
+  # isNestedAttrsLeaf: submodule type with lib.any - leaf when any key matches declared option
+  testIsNestedAttrsLeafSubmoduleAny = {
+    expr =
+      let
+        elementType = types.submodule { options.foo = lib.mkOption { type = types.int; }; };
+      in
+      isNestedAttrsLeaf lib.any elementType {
+        foo = 1;
+        extra = "x";
+      };
+    expected = true;
+  };
+
+  # isNestedAttrsLeaf: submodule type with lib.all - non-leaf when not all keys match declared options
+  testIsNestedAttrsLeafSubmoduleAllFalse = {
+    expr =
+      let
+        elementType = types.submodule { options.foo = lib.mkOption { type = types.int; }; };
+      in
+      isNestedAttrsLeaf lib.all elementType {
+        foo = 1;
+        extra = "x";
+      };
+    expected = false;
+  };
+
+  # isNestedAttrsLeaf: submodule type - intermediate attrset not a leaf (no keys match)
+  testIsNestedAttrsLeafSubmoduleIntermediate = {
+    expr =
+      let
+        elementType = types.submodule { options.foo = lib.mkOption { type = types.int; }; };
+      in
+      isNestedAttrsLeaf lib.any elementType {
+        a.foo = 1;
+      };
+    expected = false;
+  };
+
+  # concatMapNestedAttrsWith: lib.all predicate - only detects leaves where all keys match declared options
+  testConcatMapNestedAttrsWithAll = {
+    expr =
+      let
+        elementType = types.submodule { options.foo = lib.mkOption { type = types.int; }; };
+      in
+      concatMapNestedAttrsWith lib.all (types.nestedAttrsOf elementType)
+        (path: v: { ${lib.concatStringsSep "." path} = v.foo; })
+        {
+          a = {
+            b.foo = 1;
+            c.foo = 2;
+          };
+        };
+    expected = {
+      "a.b" = 1;
+      "a.c" = 2;
+    };
+  };
+
+  # concatMapNestedAttrsWith: lib.any predicate - detects leaves even with extra keys alongside declared options
+  testConcatMapNestedAttrsWithAny = {
+    expr =
+      let
+        elementType = types.submodule { options.foo = lib.mkOption { type = types.int; }; };
+      in
+      concatMapNestedAttrsWith lib.any (types.nestedAttrsOf elementType)
+        (path: v: { ${lib.concatStringsSep "." path} = v.foo; })
+        {
+          a = {
+            foo = 1;
+            extra = "x";
+          };
+        };
+    expected = {
+      a = 1;
     };
   };
 

@@ -256,6 +256,11 @@ let
         isAttrs
         intersectAttrs
         removeAttrs
+        isNestedAttrsLeaf
+        mapNestedAttrs'
+        mapNestedAttrsWith
+        concatMapNestedAttrsWith
+        concatMapNestedAttrs'
         ;
       inherit (self.lists)
         singleton

@@ -1661,6 +1661,75 @@ rec {
       nestedTypes.finalType = finalType;
     };
 
+  nestedAttrsOf =
+    elemType:
+    let
+      self = lib.types.mkOptionType {
+        name = "nestedAttrsOf";
+        description = "nested attribute set of ${elemType.description}";
+        descriptionClass = "composite";
+        nestedTypes.elemType = elemType;
+        check =
+          value: elemType.check value || (lib.isAttrs value && lib.all self.check (lib.attrValues value));
+
+        # Merge a list of definitions at a given location.
+        merge =
+          loc: defs:
+          let
+            # Collect all attribute names mentioned across every definition.
+            allNames = lib.unique (lib.concatMap (def: lib.attrNames def.value) defs);
+
+            # Top-level option names of the element type, used to detect leaves.
+            elemOptAttrs = elemType.getSubOptions [ ];
+
+            mergeAttr =
+              name:
+              let
+                # Narrow to the definitions that actually set this attribute,
+                # then run the module-system property pipeline on them so
+                # per-leaf priority wrappers
+                # (`mkOverride`/`mkDefault`/`mkOptionDefault`/`mkMerge`/`mkIf`)
+                # compose like they do at the top of an option. Without this,
+                # a tree-level `mkOptionDefault someTree` from one module is
+                # wiped out entirely by a normal-priority leaf override from
+                # another, and callers have to compose with
+                # `lib.recursiveUpdate` themselves.
+                rawSubDefs = lib.concatMap (
+                  def:
+                  lib.optional (def.value ? ${name}) {
+                    inherit (def) file;
+                    value = def.value.${name};
+                  }
+                ) defs;
+                subDefs = (lib.modules.applyLeafProperties rawSubDefs).values;
+
+                # Decide whether to recurse or delegate to the element type.
+                # We consider a value a leaf if its keys match the element type's known options.
+                # Otherwise it is an intermediate namespace attrset and we recurse.
+                # This is a way to cope with submodule types, as their `check` function accepts any attrset.
+                # While it would be nice to check their elements' types as well,
+                # the elements' types would only be available after merge.
+                isLeafLike = d: lib.all (k: elemOptAttrs ? ${k}) (lib.attrNames d.value);
+                goDeeper = lib.all (d: lib.isAttrs d.value && !isLeafLike d) subDefs;
+              in
+              if goDeeper then self.merge (loc ++ [ name ]) subDefs else elemType.merge (loc ++ [ name ]) subDefs;
+          in
+          lib.genAttrs allNames mergeAttr;
+
+        # Forward sub-option/module machinery to the element type so that
+        # tooling (e.g. `nixos-option`) can still introspect leaf values.
+        getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<name>" ]);
+        getSubModules = elemType.getSubModules;
+        substSubModules = m: nestedAttrsOf (elemType.substSubModules m);
+
+        # Standard functor so the type integrates with lib.types combinators.
+        functor = (lib.types.defaultFunctor "nestedAttrsOf") // {
+          wrapped = elemType;
+        };
+      };
+    in
+    self;
+
   /**
     Augment the given type with an additional type check function.
 
