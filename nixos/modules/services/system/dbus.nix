@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -104,8 +105,6 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      system.switch.inhibitors.dbus-implementation = cfg.implementation;
-
       environment.etc."dbus-1".source = configDir;
 
       environment.pathsToLink = [
@@ -142,6 +141,10 @@ in
         "sockets.target"
       ];
     }
+
+    (lib.optionalAttrs (options ? system.switch.inhibitors) {
+      system.switch.inhibitors.dbus-implementation = cfg.implementation;
+    })
 
     (mkIf config.boot.initrd.systemd.dbus.enable {
       boot.initrd.systemd = {
