@@ -68,6 +68,24 @@ in
         type = types.submodule {
           freeformType = ini.type;
 
+          options.keyboard.haptic_feedback = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = ''
+              Enable or disable vibrations when pressing keys.
+            '';
+          };
+
+          options.keyboard.sticky_shift = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = ''
+              Changes shift key behavior. When true, the keyboard remains in uppercase mode until
+              the shift key is pressed again (sticky). When false, the keyboard switches back to
+              lowercase mode and the shift key deactivates after a non-modifier key is pressed.
+            '';
+          };
+
           options.input.pointer = mkOption {
             type = types.nullOr types.bool;
             default = null;
