@@ -32,6 +32,7 @@
   langObjCpp,
   langJit,
   langRust ? false,
+  langCobol ? false,
   hostIsTarget,
   disableBootstrap ? (!hostIsTarget),
 }:
@@ -214,6 +215,7 @@ let
           ]
           ++ lib.optional langJit "jit"
           ++ lib.optional langRust "rust"
+          ++ lib.optional langCobol "cobol"
         )
       }"
     ]
