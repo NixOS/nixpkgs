@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Store and access data published by OwnTracks apps";
     homepage = "https://github.com/owntracks/recorder";
-    changelog = "https://github.com/owntracks/recorder/blob/master/Changelog";
+    changelog = "https://github.com/owntracks/recorder/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.aionescu ];
