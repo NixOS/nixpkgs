@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   utils,
   ...
@@ -271,6 +272,8 @@ in
         }
       ) cfg.emulatedSystems
     );
+  }
+  // lib.optionalAttrs (options ? nix.settings) {
     nix.settings = lib.mkIf (cfg.addEmulatedSystemsToNixSandbox && cfg.emulatedSystems != [ ]) {
       extra-platforms =
         cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
@@ -286,7 +289,8 @@ in
           map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems
         );
     };
-
+  }
+  // {
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf" (
       lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations)
     );
