@@ -14,6 +14,7 @@
   langJava ? false,
   langObjC ? stdenv.targetPlatform.isDarwin,
   langObjCpp ? stdenv.targetPlatform.isDarwin,
+  langRust ? false,
   langJit ? false,
   enablePlugin ? lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform,
   runCommand,
@@ -205,6 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
           ++ lib.optional langGo "go"
           ++ lib.optional langObjC "objc"
           ++ lib.optional langObjCpp "obj-c++"
+          ++ lib.optional langRust "rust"
           ++ lib.optional langJit "jit"
         )
       )
@@ -246,6 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
       langAda
       langFortran
       langGo
+      langRust
       ;
     isGNU = true;
   };

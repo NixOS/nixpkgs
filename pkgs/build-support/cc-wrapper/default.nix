@@ -582,6 +582,10 @@ stdenvNoCC.mkDerivation {
   + optionalString cc.langGo or false ''
     wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
     wrap ${targetPrefix}go ${./go-wrapper.sh} $ccPath/${targetPrefix}go
+  ''
+
+  + optionalString cc.langRust or false ''
+    wrap ${targetPrefix}gccrs $wrapper $ccPath/${targetPrefix}gccrs
   '';
 
   strictDeps = true;
