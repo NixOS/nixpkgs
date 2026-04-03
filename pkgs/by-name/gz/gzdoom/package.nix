@@ -79,7 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DYN_GTK" false)
     (lib.cmakeBool "DYN_OPENAL" false)
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "HAVE_GLES2" false) ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "OPENAL_INCLUDE_DIR" "${openal}/include/AL")
+    (lib.cmakeFeature "OPENAL_LIBRARY" "${openal}/lib/libopenal.dylib")
+    (lib.cmakeBool "HAVE_VULKAN" true)
+    (lib.cmakeBool "HAVE_GLES2" false)
+  ];
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
