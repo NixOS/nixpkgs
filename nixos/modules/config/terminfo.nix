@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -76,18 +77,19 @@
       export TERM=$TERM
     '';
 
-    security =
-      let
-        extraConfig = ''
+  }
+  // lib.optionalAttrs (options ? security.sudo.extraConfig) (
+    let
+      extraConfig = ''
 
-          # Keep terminfo database for root and %wheel.
-          Defaults:root,%wheel env_keep+=TERMINFO_DIRS
-          Defaults:root,%wheel env_keep+=TERMINFO
-        '';
-      in
-      lib.mkIf config.security.sudo.keepTerminfo {
-        sudo = { inherit extraConfig; };
-        sudo-rs = { inherit extraConfig; };
-      };
-  };
+        # Keep terminfo database for root and %wheel.
+        Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+        Defaults:root,%wheel env_keep+=TERMINFO
+      '';
+    in
+    lib.mkIf config.security.sudo.keepTerminfo {
+      security.sudo = { inherit extraConfig; };
+      security.sudo-rs = { inherit extraConfig; };
+    }
+  );
 }
