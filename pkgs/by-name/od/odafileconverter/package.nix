@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
       echo "patching $file"
       patchelf --set-rpath '${rpath}' $file
     done
+
+    substituteInPlace $out/share/applications/ODAFileConverter_*.desktop \
+      --replace-fail '/usr/bin/ODAFileConverter' 'ODAFileConverter'
   '';
 
   meta = {
