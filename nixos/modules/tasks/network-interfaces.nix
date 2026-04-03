@@ -1864,10 +1864,6 @@ in
       EOF
     '';
 
-    services.mstpd = mkIf needsMstpd { enable = true; };
-
-    virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
-
     services.udev.packages =
       lib.optionals (!config.systemd.network.enable) [
         (pkgs.writeTextFile rec {
@@ -2009,6 +2005,12 @@ in
             );
         }
       );
+  }
+  // lib.optionalAttrs (options ? services.mstpd) {
+    services.mstpd = mkIf needsMstpd { enable = true; };
+  }
+  // lib.optionalAttrs (options ? virtualisation.vswitch) {
+    virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
   };
 
 }
