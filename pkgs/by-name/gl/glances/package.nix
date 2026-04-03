@@ -1,38 +1,20 @@
 {
-  stdenv,
-  buildPythonApplication,
-  fetchFromGitHub,
-  isPyPy,
   lib,
-  chevron,
-  defusedxml,
-  packaging,
-  psutil,
-  pyinstrument,
-  setuptools,
-  nixosTests,
-  pytestCheckHook,
-  which,
-  podman,
-  selenium,
-  python-jose,
-  # Optional dependencies:
-  fastapi,
-  jinja2,
-  pysnmp,
+  stdenv,
+  fetchFromGitHub,
   hddtemp,
-  uvicorn,
-  requests,
-  prometheus-client,
-  shtab,
+  nixosTests,
+  podman,
+  python3Packages,
+  which,
 }:
 
-buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "glances";
   version = "4.5.2";
   pyproject = true;
 
-  disabled = isPyPy;
+  disabled = python3Packages.isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
@@ -41,7 +23,7 @@ buildPythonApplication (finalAttrs: {
     hash = "sha256-o/q/zW7lRKQg+u4XblwNIswCVIroMdeUaPTNkN8QKwo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -56,34 +38,40 @@ buildPythonApplication (finalAttrs: {
   # some tests fail in darwin sandbox
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  dependencies = [
-    defusedxml
-    packaging
-    psutil
-    pyinstrument
-    pysnmp
-    fastapi
-    uvicorn
-    requests
-    jinja2
-    python-jose
-    which
-    prometheus-client
-    shtab
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+  dependencies =
+    with python3Packages;
+    [
+      defusedxml
+      packaging
+      psutil
+      pyinstrument
+      pysnmp
+      fastapi
+      uvicorn
+      requests
+      jinja2
+      python-jose
+      prometheus-client
+      shtab
+    ]
+    ++ [ which ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ hddtemp ];
 
   passthru.tests = {
     service = nixosTests.glances;
   };
 
-  nativeCheckInputs = [
-    chevron
-    which
-    pytestCheckHook
-    selenium
-    podman
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      chevron
+      pytestCheckHook
+      selenium
+    ]
+    ++ [
+      podman
+      which
+    ];
 
   disabledTestPaths = [
     # Message: Unable to obtain driver for chrome
