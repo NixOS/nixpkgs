@@ -17,10 +17,6 @@ import ./make-test-python.nix (
           enable = true;
 
           username = "test";
-          passwordFile.output = config.testing.hardcoded-secret."stash-password".output;
-
-          jwtSecretKey.output.path = config.testing.hardcoded-secret."jwt_secret_key".output.path;
-          sessionStoreKey.output.path = config.testing.hardcoded-secret."session_store_key".output.path;
 
           plugins =
             let
@@ -64,18 +60,13 @@ import ./make-test-python.nix (
 
             stash = [ { path = "/srv"; } ];
           };
+          passwordFile.result = config.contracts.fileSecrets.results.stash.passwordFile;
         };
-        testing.hardcoded-secret."stash-password" = {
-          input = config.services.stash.passwordFile.input;
-          content = "MyPassword";
-        };
-        testing.hardcoded-secret."jwt_secret_key" = {
-          input = config.services.stash.jwtSecretKey.input;
-          content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        };
-        testing.hardcoded-secret."session_store_key" = {
-          input = config.services.stash.sessionStoreKey.input;
-          content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+        contracts.fileSecrets.defaultProvider = config.contracts.fileSecrets.providers.hardcoded-secret;
+        testing.hardcoded-secret.fileSecrets.stash = {
+          passwordFile.content = "MyPassword";
+          jwtSecretKey.content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+          sessionStoreKey.content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
         };
       };
 
