@@ -33,7 +33,11 @@ lib.extendMkDerivation {
       # Deterministic Erlang builds remove full system paths from debug information
       # among other things to keep builds more reproducible. See their docs for more:
       # https://www.erlang.org/doc/man/compile
-      erlangDeterministicBuilds ? true,
+      #
+      # Default to false because it breaks apps using Surface
+      # and does not improve determinism within a sandboxed nix build
+      # which always builds in the same path anyway.
+      erlangDeterministicBuilds ? false,
       ...
     }@args:
     {
