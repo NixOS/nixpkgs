@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   utils,
@@ -839,21 +840,6 @@ in
     # https://github.com/systemd/systemd/pull/12226
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
 
-    services.logrotate.settings = {
-      "/var/log/btmp" = mapAttrs (_: mkDefault) {
-        frequency = "monthly";
-        rotate = 1;
-        create = "0660 root ${config.users.groups.utmp.name}";
-        minsize = "1M";
-      };
-      "/var/log/wtmp" = mapAttrs (_: mkDefault) {
-        frequency = "monthly";
-        rotate = 1;
-        create = "0664 root ${config.users.groups.utmp.name}";
-        minsize = "1M";
-      };
-    };
-
     # Remove with systemd 259.4
     security.polkit.extraConfig = mkIf config.security.polkit.enable ''
       polkit.addRule(function(action, subject) {
@@ -874,6 +860,22 @@ in
         # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
         setLoginUid = true;
         pamMount = false;
+      };
+    };
+  }
+  // lib.optionalAttrs (options ? services.logrotate) {
+    services.logrotate.settings = {
+      "/var/log/btmp" = mapAttrs (_: mkDefault) {
+        frequency = "monthly";
+        rotate = 1;
+        create = "0660 root ${config.users.groups.utmp.name}";
+        minsize = "1M";
+      };
+      "/var/log/wtmp" = mapAttrs (_: mkDefault) {
+        frequency = "monthly";
+        rotate = 1;
+        create = "0664 root ${config.users.groups.utmp.name}";
+        minsize = "1M";
       };
     };
   };
