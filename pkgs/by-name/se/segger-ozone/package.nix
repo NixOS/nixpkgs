@@ -14,6 +14,8 @@
   libxrandr,
   libxrender,
   makeDesktopItem,
+  makeWrapper,
+  udev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
+    makeWrapper
   ];
 
   buildInputs = [
@@ -43,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     (lib.getLib stdenv.cc.cc)
+    udev
   ];
 
   desktopItems = [
@@ -72,7 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/libexec $out/bin
     cp --recursive . $out/libexec/segger-ozone
-    ln -s $out/libexec/segger-ozone/Ozone $out/bin/Ozone
+    # Enables package in non-nixos platforms
+    makeWrapper $out/libexec/segger-ozone/Ozone $out/bin/Ozone \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          udev
+        ]
+      }"
     install -D --mode=0644 Ozone.png $out/share/icons/hicolor/256x256/apps/Ozone.png
 
     runHook postInstall
