@@ -9562,8 +9562,6 @@ with pkgs;
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
-  huggle = libsForQt5.callPackage ../applications/misc/huggle { };
-
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
   hyperglot = with python3Packages; toPythonApplication hyperglot;
