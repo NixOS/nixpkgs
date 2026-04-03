@@ -32,6 +32,7 @@
   langObjCpp,
   langJit,
   langRust ? false,
+  langCobol ? false,
   disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform),
 }:
 
@@ -215,6 +216,7 @@ let
           ]
           ++ lib.optional langJit "jit"
           ++ lib.optional langRust "rust"
+          ++ lib.optional langCobol "cobol"
         )
       }"
     ]
