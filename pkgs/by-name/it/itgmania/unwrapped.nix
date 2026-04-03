@@ -54,7 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ];
 
-  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "-DWITH_MINIMAID=off" ];
+  cmakeFlags = [
+    "-DWITH_FULL_RELEASE=on"
+    "-DWITH_NIGHTLY_RELEASE=off"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [ "-DWITH_MINIMAID=off" ];
 
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/scalable/apps/
