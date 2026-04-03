@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "mr_goldberg";
     repo = "goldberg_emulator";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
   };
 
