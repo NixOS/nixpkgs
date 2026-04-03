@@ -3,9 +3,8 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
   lib,
-  qttools,
+  qt5,
   fribidi,
   libunibreak,
   zstd,
@@ -27,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qttools
+    qt5.qttools
     fribidi
     libunibreak
     zstd

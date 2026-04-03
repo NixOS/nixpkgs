@@ -1493,8 +1493,6 @@ with pkgs;
 
   coconut = with python312Packages; toPythonApplication coconut;
 
-  coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
-
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   inherit (cue) writeCueValidator;
