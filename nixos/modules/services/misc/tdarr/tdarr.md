@@ -2,7 +2,7 @@
 
 *Source:* {file}`modules/services/misc/tdarr`
 
-*Upstream documentation:* <https://docs.tdarr.io/\>
+*Upstream documentation:* <https://docs.tdarr.io/>
 
 [Tdarr](https://tdarr.io) is a distributed transcoding system for automating media library transcoding operations using FFmpeg and HandBrake. It provides a web interface for managing transcoding nodes and configuring media processing pipelines.
 
@@ -43,12 +43,21 @@ To run node(s) connecting to a remote server:
 {
   services.tdarr.nodes.worker1 = {
     serverURL = "http://192.168.1.100:8266";
+    serverIP = "192.168.1.100";
+    serverPort = 8266;
     environmentFile = "/run/secrets/tdarr-node-env";
     # /run/secrets/tdarr-node-env contains:
     # apiKey=tapi_your_api_key_here
   };
 }
 ```
+
+::: {.note}
+`serverIP` and `serverPort` must match the host and port in `serverURL`.
+Although these fields are deprecated upstream in favour of `serverURL`, the
+node binary still uses them for internal API calls.  Without them the node
+falls back to `0.0.0.0` and cannot reach the server.
+:::
 
 ## Authentication {#module-services-tdarr-authentication}
 
@@ -167,6 +176,13 @@ Path translators enable cross-mount-point file access by mapping server paths to
 }
 ```
 
+::: {.note}
+`pathTranslators` cannot be set via environment variables (a tdarr upstream
+limitation), so they are written to the node's JSON config file.  The module
+writes all node settings to this file to prevent tdarr from resetting
+`pathTranslators` to its empty default on startup.
+:::
+
 ## Networking {#module-services-tdarr-networking}
 
 ### Firewall Configuration {#module-services-tdarr-networking-firewall}
@@ -188,6 +204,18 @@ Path translators enable cross-mount-point file access by mapping server paths to
     enable = true;
     serverPort = 9266; # default: 8266
     webUIPort = 9265; # default: 8265
+  };
+}
+```
+
+When using a custom server port, update nodes accordingly:
+
+```nix
+{
+  services.tdarr.nodes.main = {
+    serverURL = "http://192.168.1.100:9266";
+    serverIP = "192.168.1.100";
+    serverPort = 9266;
   };
 }
 ```
@@ -266,6 +294,8 @@ Tdarr's distributed architecture allows running nodes on separate machines from 
 {
   services.tdarr.nodes.remote-worker = {
     serverURL = "http://192.168.1.100:8266";
+    serverIP = "192.168.1.100";
+    serverPort = 8266;
     environmentFile = "/run/secrets/tdarr-node-env";
     workers = {
       transcodeCPU = 4;
@@ -276,5 +306,11 @@ Tdarr's distributed architecture allows running nodes on separate machines from 
 ```
 
 ::: {.note}
-Ensure the server's firewall allows incoming connections on the configured ports. Both server and nodes must have access to the same media and transcode cache paths (for mapped nodes).
+`serverIP` and `serverPort` must be set alongside `serverURL` for remote nodes.
+Even though these fields are deprecated upstream, the node binary uses them for
+internal API calls and will attempt `0.0.0.0` if they are absent.
+
+Ensure the server's firewall allows incoming connections on the configured
+ports. Both server and nodes must have access to the same media and transcode
+cache paths (for mapped nodes).
 :::
