@@ -99,9 +99,13 @@ runs:
           await run('mkdir', 'nixpkgs')
           switch (process.env.RUNNER_OS) {
             case 'macOS':
+              await run('echo', 'pre-mount_tmpfs')
               await run('sudo', 'diskutil', 'list')
+              await run('sudo', 'mount')
               await run('sudo', 'mount_tmpfs', 'nixpkgs')
+              await run('echo', 'post-mount_tmpfs')
               await run('sudo', 'diskutil', 'list')
+              await run('sudo', 'mount')
               break
             case 'Linux':
               await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
