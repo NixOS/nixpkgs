@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  rename,
   unstableGitUpdater,
 }:
 stdenvNoCC.mkDerivation {
@@ -17,12 +16,9 @@ stdenvNoCC.mkDerivation {
     sparseCheckout = [ "variablefont" ];
   };
 
-  nativeBuildInputs = [ rename ];
-
   installPhase = ''
     runHook preInstall
 
-    rename 's/\[FILL,GRAD,opsz,wght\]//g' variablefont/*
     install -Dm755 variablefont/*.ttf -t $out/share/fonts/TTF
     install -Dm755 variablefont/*.woff2 -t $out/share/fonts/woff2
 
