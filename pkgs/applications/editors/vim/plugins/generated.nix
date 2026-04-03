@@ -645,6 +645,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  actions-nvim = buildVimPlugin {
+    pname = "actions.nvim";
+    version = "0-unstable-2026-04-02";
+    src = fetchFromGitHub {
+      owner = "mrtnvgr";
+      repo = "actions.nvim";
+      rev = "b78239fb1097d220feba105c26af60f88d3d9ac8";
+      hash = "sha256-AvCU8p68JeDvVliC1dRbNrHEaFRLVyS0js5ifc8iotc=";
+    };
+    meta.homepage = "https://github.com/mrtnvgr/actions.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   actions-preview-nvim = buildVimPlugin {
     pname = "actions-preview.nvim";
     version = "0-unstable-2025-10-03";
