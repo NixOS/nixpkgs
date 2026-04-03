@@ -102,6 +102,7 @@ let
         pkgs
         nixpkgs
         officialRelease
+        supportedSystems
         ;
     };
 

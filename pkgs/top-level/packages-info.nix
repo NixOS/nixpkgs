@@ -1,10 +1,29 @@
 {
   trace ? false,
+  supportedSystems,
 }:
 
 let
-  pkgs = import ../.. { config = import ./packages-config.nix; };
+  pkgsSystems =
+    if builtins.all (v: v != builtins.currentSystem) supportedSystems then
+      supportedSystems ++ [ builtins.currentSystem ]
+    else
+      supportedSystems;
+
+  pkgsByArch = builtins.listToAttrs (
+    map (system: {
+      name = system;
+      value = import ../.. {
+        inherit system;
+        config = import ./packages-config.nix;
+      };
+    }) pkgsSystems
+  );
+
+  pkgs = pkgsByArch.${builtins.currentSystem};
+
   inherit (pkgs) lib;
+
   generateInfo =
     path: value:
     let
@@ -23,10 +42,42 @@ let
                   system
                   ;
                 ${if value ? "outputs" then "outputs" else null} = lib.listToAttrs (
-                  lib.map (x: {
-                    name = x;
-                    value = null;
-                  }) value.outputs
+                  lib.map (
+                    x:
+                    let
+                      platforms = lib.intersectLists (value.meta.hydraPlatforms
+                        or (lib.subtractLists (value.meta.badPlatforms or [ ]) (value.meta.platforms or supportedSystems))
+                      ) supportedSystems;
+
+                      outPaths = lib.listToAttrs (
+                        lib.map (
+                          platform:
+                          let
+                            drvForPlatform =
+                              if lib.hasAttrByPath path pkgsByArch.${platform} then
+                                lib.getAttrFromPath path pkgsByArch.${platform}
+                              else
+                                null;
+                            outPath =
+                              if builtins.isAttrs drvForPlatform && drvForPlatform ? ${x}.outPath then
+                                builtins.unsafeDiscardStringContext drvForPlatform.${x}.outPath
+                              else
+                                null;
+                            eval = builtins.tryEval outPath;
+                          in
+                          {
+                            name = platform;
+                            value = if eval.success then eval.value else null;
+                          }
+                        ) platforms
+                      );
+                    in
+                    {
+                      name = x;
+                      value = (builtins.tryEval outPaths).value or null;
+                      # value = null;
+                    }
+                  ) value.outputs
                 );
                 # TODO: Remove the following two fallbacks when all packages have been fixed.
                 # Note: pname and version are *required* by repology, so do not change to

@@ -200,5 +200,6 @@ rec {
     officialRelease = false;
     inherit pkgs lib-tests;
     nix = pkgs.nixVersions.latest;
+    supportedSystems = [ system ];
   };
 }
