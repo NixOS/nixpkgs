@@ -92,6 +92,7 @@ let
 
       inherit (callPackages ./hooks { })
         beamCopySourceHook
+        beamCopySourceToSourceRootHook
         beamModuleInstallHook
         mixBuildDirHook
         mixCompileHook
