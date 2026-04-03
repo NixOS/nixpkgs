@@ -18499,6 +18499,12 @@
     githubId = 16356569;
     name = "Marcos Benevides";
   };
+  mudmaster556 = {
+    email = "mityakuz2308@gmail.com";
+    github = "mudmaster556";
+    githubId = 214629159;
+    name = "Dmitry Kuznetsov";
+  };
   mudri = {
     email = "lamudri@gmail.com";
     github = "laMudri";
