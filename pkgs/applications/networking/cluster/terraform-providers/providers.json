@@ -742,11 +742,11 @@
     "vendorHash": null
   },
   "infobloxopen_infoblox": {
-    "hash": "sha256-XUbvyErN6cbpbEVv5pUm0dIauBrtBZy6XoBHgA0Hy6E=",
+    "hash": "sha256-VfQTGyHWFTla/vRgJVY0Fzf+2QenaJBfsLnrICGA+9Q=",
     "homepage": "https://registry.terraform.io/providers/infobloxopen/infoblox",
     "owner": "infobloxopen",
     "repo": "terraform-provider-infoblox",
-    "rev": "v2.12.0",
+    "rev": "v2.13.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1076,11 +1076,11 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "pagerduty_pagerduty": {
-    "hash": "sha256-JiMc7HIowWM0CIWl8NZjmZs8Y/jYPPfsxDGNmgH2S8o=",
+    "hash": "sha256-Pvx0Fn+NpY+C/U2kUGImoJrglQooWht3eE2pdN/XVCw=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.32.0",
+    "rev": "v3.32.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

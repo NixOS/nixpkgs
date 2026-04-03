@@ -4384,6 +4384,8 @@ self: super: with self; {
 
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
+  django-stdimage = callPackage ../development/python-modules/django-stdimage { };
+
   django-storages = callPackage ../development/python-modules/django-storages { };
 
   django-structlog = callPackage ../development/python-modules/django-structlog { };
