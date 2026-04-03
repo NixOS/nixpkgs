@@ -4097,6 +4097,28 @@ with pkgs;
     }
   );
 
+  gcobol = wrapCC (
+    gcc.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gcobol15 = wrapCC (
+    gcc15.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
   # Cannot override gcc.cc, as this is built at in earlier stdenv bootstrapping
   # stage (in the native case), which doesn't have a fully-fledged fetchurl.
   # fetchurl is required to build cargo, and thus evaluation fails as it cannot
