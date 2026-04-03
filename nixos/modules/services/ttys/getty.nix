@@ -211,7 +211,7 @@ in
       ];
       serviceConfig.Restart = "always";
       restartIfChanged = false;
-      enable = mkDefault config.boot.isContainer;
+      enable = mkDefault (config.boot.isContainer or false);
     };
 
     environment.etc.issue = mkDefault {
