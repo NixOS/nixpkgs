@@ -2,11 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtdeclarative,
-  qtquickcontrols,
-  wrapQtAppsHook,
+  qt5,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "firebird-emu";
@@ -21,14 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
-    qmake
+    qt5.wrapQtAppsHook
+    qt5.qmake
   ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtquickcontrols
+    qt5.qtbase
+    qt5.qtdeclarative
+    qt5.qtquickcontrols
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
