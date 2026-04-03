@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopegelonline";
   version = "0.1.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aiopegelonline";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uV4qVCj28wgraWmWhyqN98/SaVDJFuJ30ugViKrl2us=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to retrieve data from PEGELONLINE";
     homepage = "https://github.com/mib1185/aiopegelonline";
-    changelog = "https://github.com/mib1185/aiopegelonline/releases/tag/v${version}";
+    changelog = "https://github.com/mib1185/aiopegelonline/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
