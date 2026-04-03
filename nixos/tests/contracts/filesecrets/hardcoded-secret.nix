@@ -1,17 +1,16 @@
-args@{
+{
   lib,
-  config,
-  pkgs,
   ...
 }:
-let
-  test = import ./test.nix args;
-in
-test {
-  name = "contracts-secrets-hardcoded-secret";
+{
+  meta.maintainers = [ lib.maintainers.ibizaman ];
+}
+// lib.contracts.fileSecrets.behaviorTest {
+  name = "hardcoded-secret";
   providerRoot = [
     "testing"
     "hardcoded-secret"
+    "fileSecrets"
     "mysecret"
   ];
   extraModules = [
@@ -19,11 +18,9 @@ test {
     (
       { config, ... }:
       {
-        testing.hardcoded-secret.mysecret.content = config.test.content;
+        contracts.fileSecrets.defaultProviderName = "hardcoded-secret";
+        testing.hardcoded-secret.fileSecrets."mysecret".content = config.test.content;
       }
     )
   ];
-}
-// {
-  meta.maintainers = [ lib.maintainers.ibizaman ];
 }
