@@ -35,6 +35,7 @@ class BootSpec:
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
     xen: XenBootSpec | None
+    uki: Dict[str, any] | None
     initrd: str | None = None
     initrdSecrets: str | None = None
 
@@ -114,28 +115,43 @@ def get_dest_path(path: str, target: str) -> str:
     return os.path.join(str(limine_install_dir), target, dest_file)
 
 
-def get_copied_path_uri(path: str, target: str) -> str:
-    result = ''
+def get_path_relative_to_limine_dir(path: str) -> str:
+    if path.startswith(str(limine_install_dir)):
+        reduced_path = path.replace(str(limine_install_dir), '', 1)
+        while reduced_path.startswith('/'):
+            reduced_path = reduced_path.replace('/', '', 1)
+        return reduced_path
+    raise Exception('Logic Error: Tried to make path outside of limine install directory relative to limine install directory')
 
-    dest_file = get_dest_file(path)
-    dest_path = get_dest_path(path, target)
+def get_uri(path: str) -> str:
+    file = get_path_relative_to_limine_dir(path)
+    full_path = os.path.join(str(limine_install_dir), file)
 
-    if not os.path.exists(dest_path):
-        copy_file(path, dest_path)
-    else:
-        paths[dest_path] = True
+    if not os.path.exists(full_path):
+        raise Exception('Logic Error: Trying to get URI for non-existent file')
 
-    path_with_prefix = os.path.join('/limine', target, dest_file)
-    result = f'boot():{path_with_prefix}'
+    paths[full_path] = True
+
+    path = os.path.join('/limine', file)
+    result = f'boot():{path}'
 
     if config('validateChecksums'):
-        with open(path, 'rb') as file:
+        with open(full_path, 'rb') as file:
             b2sum = hashlib.blake2b()
             b2sum.update(file.read())
 
             result += f'#{b2sum.hexdigest()}'
 
     return result
+
+
+def get_copied_path_uri(path: str, target: str) -> str:
+    dest_path = get_dest_path(path, target)
+
+    if not os.path.exists(dest_path):
+        copy_file(path, dest_path)
+
+    return get_uri(dest_path)
 
 
 def get_path_uri(path: str) -> str:
@@ -157,10 +173,14 @@ def bootjson_to_bootspec(bootjson: dict) -> BootSpec:
     xen = None
     if 'org.xenproject.bootspec.v2' in bootjson:
         xen = bootjson['org.xenproject.bootspec.v2']
+    uki = None
+    if 'org.limine.uki.v1' in bootjson:
+        uki = bootjson['org.limine.uki.v1']
     return BootSpec(
         **bootjson['org.nixos.bootspec.v1'],
         specialisations=specialisations,
         xen=xen,
+        uki=uki,
     )
 
 def generate_xen_efi_files(
@@ -285,42 +305,94 @@ def xen_config_entry(
             entry += 'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
     return entry
 
-def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
+def config_entry(levels: int, bootspec: BootSpec, label: str, time: str, profile: str, gen: int, spec: str|None) -> str:
+    useUki = (config('uki', 'buildUki') and bootspec.uki and bootspec.uki['useUki']) or config('uki', 'forceAll')
     entry = '/' * levels + label + '\n'
-    entry += 'protocol: linux\n'
+    entry += 'protocol: ' + ('linux' if not useUki else 'efi') + '\n'
     entry += f'comment: {bootspec.label}, built on {time}\n'
-    entry += 'kernel_path: ' + get_kernel_uri(bootspec.kernel) + '\n'
-    entry += 'cmdline: ' + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip() + '\n'
 
     # Set framebuffer resolution for Linux boot entries if configured
     resolution = config('resolution')
     if resolution is not None:
         entry += f'resolution: {resolution}\n'
 
-    if bootspec.initrd:
-        entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
+    if useUki:
+        uki_file = os.path.join(str(limine_install_dir), 'kernels', os.path.basename(bootspec.toplevel) + '-uki.efi')
+        # This check ensures the UKI for identical generations is only created once, preventing a hash change
+        if not (uki_file in paths and paths[uki_file]):
+            ukify = os.path.join(str(config('ukify')), 'bin', 'ukify')
+            if not os.path.exists(os.path.dirname(uki_file)):
+                os.makedirs(os.path.dirname(uki_file))
+            uki_args = [ukify, 'build', '--output', uki_file, '--linux', bootspec.kernel, '--cmdline', ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip()]
+            if bootspec.initrd:
+                uki_args.extend(['--initrd', bootspec.initrd])
 
-    if bootspec.initrdSecrets:
-        base_path = str(limine_install_dir) + '/kernels/'
-        initrd_secrets_path = base_path + os.path.basename(bootspec.toplevel) + '-secrets'
-        if not os.path.exists(base_path):
-            os.makedirs(base_path)
+            initrd_secrets_path = os.path.join(str(limine_install_dir), 'kernels', os.path.basename(bootspec.toplevel) + '-secrets')
+            if bootspec.initrdSecrets:
+                old_umask = os.umask(0o137)
 
-        old_umask = os.umask(0o137)
-        initrd_secrets_path_temp = tempfile.mktemp(os.path.basename(bootspec.toplevel) + '-secrets')
+                if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path) != 0:
+                    print(f'warning: failed to create initrd secrets for "{label}"', file=sys.stderr)
+                    print(f'note: if this is an older generation there is nothing to worry about')
 
-        if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
-            print(f'warning: failed to create initrd secrets for "{label}"', file=sys.stderr)
-            print(f'note: if this is an older generation there is nothing to worry about')
+                if os.path.exists(initrd_secrets_path):
+                    uki_args.extend(['--initrd', initrd_secrets_path])
 
-        if os.path.exists(initrd_secrets_path_temp):
-            copy_file(initrd_secrets_path_temp, initrd_secrets_path)
-            os.unlink(initrd_secrets_path_temp)
-            entry += 'module_path: ' + get_kernel_uri(initrd_secrets_path) + '\n'
+                os.umask(old_umask)
+            try:
+                subprocess.run(uki_args)
+            except:
+                print('error: failed to build uki', file=sys.stderr)
+                sys.exit(1)
 
-        os.umask(old_umask)
+            if os.path.exists(initrd_secrets_path):
+                os.unlink(initrd_secrets_path)
+
+            if config('secureBoot', 'enable'):
+                sbctl = os.path.join(str(config('secureBoot', 'sbctl')), 'bin', 'sbctl')
+                try:
+                    subprocess.run([sbctl, 'sign', uki_file])
+                except:
+                    print('error: failed to sign uki', file=sys.stderr)
+                    sys.exit(1)
+        entry += 'path: ' + get_uri(uki_file) + '\n'
+
+    if (not useUki) or config('biosSupport'):
+        if useUki:
+            entry = '/' * levels + label + (' (no UKI)' if useUki else '') + '\n'
+            entry += 'protocol: linux\n'
+            entry += f'comment: {bootspec.label}, built on {time}\n'
+
+            # Set framebuffer resolution for Linux boot entries if configured
+            resolution = config('resolution')
+            if resolution is not None:
+                entry += f'resolution: {resolution}\n'
+
+        entry += 'kernel_path: ' + get_kernel_uri(bootspec.kernel) + '\n'
+        entry += 'cmdline: ' + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip() + '\n'
+        if bootspec.initrd:
+            entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
+
+        if bootspec.initrdSecrets:
+            base_path = str(limine_install_dir) + '/kernels/'
+            initrd_secrets_path = base_path + os.path.basename(bootspec.toplevel) + '-secrets'
+            if not os.path.exists(base_path):
+                os.makedirs(base_path)
+
+            old_umask = os.umask(0o137)
+            initrd_secrets_path_temp = tempfile.mktemp(os.path.basename(bootspec.toplevel) + '-secrets')
+
+            if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
+                print(f'warning: failed to create initrd secrets for "{label}"', file=sys.stderr)
+                print(f'note: if this is an older generation there is nothing to worry about')
+
+            if os.path.exists(initrd_secrets_path_temp):
+                copy_file(initrd_secrets_path_temp, initrd_secrets_path)
+                os.unlink(initrd_secrets_path_temp)
+                entry += 'module_path: ' + get_kernel_uri(initrd_secrets_path) + '\n'
+
+            os.umask(old_umask)
     return entry
-
 
 def generate_config_entry(profile: str, gen: str, special: bool) -> str:
     time = datetime.datetime.fromtimestamp(os.stat(get_system_path(profile,gen), follow_symlinks=False).st_mtime).strftime("%F %H:%M:%S")
@@ -346,12 +418,12 @@ def generate_config_entry(profile: str, gen: str, special: bool) -> str:
             entry += '+'
 
         entry += f'Generation {gen}' + '\n'
-        entry += config_entry(depth, boot_spec, f'Default', str(time))
+        entry += config_entry(depth, boot_spec, f'Default', str(time), profile, gen, None)
     else:
-        entry += config_entry(depth, boot_spec, f'Generation {gen}', str(time))
+        entry += config_entry(depth, boot_spec, f'Generation {gen}', str(time), profile, gen, None)
 
     for spec, spec_boot_spec in specialisation_list:
-        entry += config_entry(depth, spec_boot_spec, f'{spec}', str(time))
+        entry += config_entry(depth, spec_boot_spec, f'{spec}', str(time), profile, gen, spec)
 
     return entry
 
@@ -433,6 +505,21 @@ def install_bootloader() -> None:
     if config('secureBoot', 'enable') and not config('secureBoot', 'createAndEnrollKeys') and not os.path.exists("/var/lib/sbctl"):
         print("There are no sbctl secure boot keys present. Please generate some.")
         sys.exit(1)
+
+    if config('secureBoot', 'enable') and config('secureBoot', 'createAndEnrollKeys'):
+        sbctl = os.path.join(str(config('secureBoot', 'sbctl')), 'bin', 'sbctl')
+        print("TEST MODE: creating and enrolling keys")
+        try:
+            subprocess.run([sbctl, 'create-keys'])
+        except:
+            print('error: failed to create keys', file=sys.stderr)
+            sys.exit(1)
+        try:
+            subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
+        except:
+            print('error: failed to enroll keys', file=sys.stderr)
+            sys.exit(1)
+
 
     if not os.path.exists(limine_install_dir):
         os.makedirs(limine_install_dir)
@@ -557,19 +644,6 @@ def install_bootloader() -> None:
 
         if config('secureBoot', 'enable'):
             sbctl = os.path.join(str(config('secureBoot', 'sbctl')), 'bin', 'sbctl')
-            if config('secureBoot', 'createAndEnrollKeys'):
-                print("TEST MODE: creating and enrolling keys")
-                try:
-                    subprocess.run([sbctl, 'create-keys'])
-                except:
-                    print('error: failed to create keys', file=sys.stderr)
-                    sys.exit(1)
-                try:
-                    subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
-                except:
-                    print('error: failed to enroll keys', file=sys.stderr)
-                    sys.exit(1)
-
             print('signing limine...')
             try:
                 subprocess.run([sbctl, 'sign', dest_path])
