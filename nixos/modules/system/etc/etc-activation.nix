@@ -34,7 +34,7 @@
         }
         {
           assertion =
-            (config.system.switch.enable)
+            (config.system.switch.enable or false)
             -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
           message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
         }
