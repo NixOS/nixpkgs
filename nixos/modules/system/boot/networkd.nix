@@ -1931,7 +1931,7 @@ let
       description = ''
         Whether to manage network configuration using {command}`systemd-network`.
 
-        This also enables {option}`systemd.networkd.enable`.
+        This also enables {option}`systemd.network.enable`.
       '';
     };
 
