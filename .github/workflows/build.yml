@@ -56,7 +56,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
-          ref: a6994aa05d874c8e7a82b7f884f15698a80bbcb0
+          ref: f279781095705273d97da4a6b5a128866df85ca8
 
       - name: Checkout the merge commit
         uses: ./.github/actions/checkout
