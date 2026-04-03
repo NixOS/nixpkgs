@@ -5,6 +5,7 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
+  writeText,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -192,6 +193,25 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
+  # The python env that ends up in the installed ukify's shebang via
+  # patchShebangsAuto (HOST_PATH). meson's pefile probe must validate this
+  # interpreter, not the build-time templating python from nativeBuildInputs.
+  ukifyPython = python3Packages.python.withPackages (ps: with ps; [ pefile ]);
+
+  # When cross-compiling the host python is not executable on the build machine,
+  # so meson cannot probe it; substitute a build-runnable env with the same
+  # module set so the check still validates that pefile is packageable.
+  ukifyPythonForMeson =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      ukifyPython
+    else
+      buildPackages.python3Packages.python.withPackages (ps: with ps; [ pefile ]);
+
+  ukifyNativeFile = writeText "ukify-native-file.ini" ''
+    [binaries]
+    python3-ukify = '${ukifyPythonForMeson.interpreter}'
+  '';
+
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
   # command:
@@ -257,6 +277,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
+    # Since v260 meson hard-requires the pefile module in the python3 it finds
+    # on PATH (systemd/systemd@582d499e32e7). That is the build-time templating
+    # python. Look up the runtime interpreter via a dedicated find_program()
+    # name supplied through a native machine file, then pass its path to
+    # find_installation() so the pefile probe runs against the interpreter
+    # that actually ships in ukify's shebang (or, when cross-compiling, a
+    # build-runnable env with the same module set).
+    substituteInPlace meson.build \
+      --replace-fail \
+      "want_ukify = pymod.find_installation('python3', required: get_option('ukify'), modules : ['pefile']).found()" \
+      "want_ukify = pymod.find_installation(find_program('python3-ukify', native : true, required : get_option('ukify')).full_path(), required : get_option('ukify'), modules : ['pefile']).found()"
   ''
   # Finally, patch shebangs in scripts used at build time. This must not patch
   # scripts that will end up in the output, to avoid build platform references
@@ -359,7 +390,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
-  ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+  ++ lib.optional withUkify ukifyPython
   ++ lib.optionals withPasswordQuality [ libpwquality ]
   ++ lib.optionals withQrencode [ qrencode ]
   ++ lib.optionals withLibarchive [ libarchive ]
@@ -373,6 +404,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # Options
+  ]
+  ++ lib.optionals withUkify [
+    "--native-file=${ukifyNativeFile}"
+  ]
+  ++ [
 
     # We bump this attribute on every (major) version change to ensure that we
     # have known-good value for a timestamp that is in the (not so distant)
