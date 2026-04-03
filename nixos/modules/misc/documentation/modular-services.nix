@@ -19,6 +19,7 @@ let
 
   modularServicesModule = {
     options = {
+      "<imports = [ pkgs.easytier.services.default ]>" = fakeSubmodule pkgs.easytier.services.default;
       "<imports = [ pkgs.ghostunnel.services.default ]>" = fakeSubmodule pkgs.ghostunnel.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;
     };

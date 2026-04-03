@@ -7,6 +7,7 @@
   nixosTests,
   nix-update-script,
   installShellFiles,
+  formats,
   withQuic ? false, # with QUIC protocol support
 }:
 
@@ -46,6 +47,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false; # tests failed due to heavy rely on network
 
   passthru = {
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix { settingsFormat = formats.toml { }; })
+      ];
+      easytier.package = lib.mkDefault finalAttrs.finalPackage;
+    };
     tests = { inherit (nixosTests) easytier; };
     updateScript = nix-update-script { };
   };
