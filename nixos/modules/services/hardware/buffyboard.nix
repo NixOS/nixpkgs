@@ -10,8 +10,8 @@
 # Desktop users are recommended to either:
 # 1. Stop buffyboard once your DE is started.
 #   e.g. `services.buffyboard.unitConfig.Conflicts = [ "my-de.service" ];`
-# 2. Configure your DE to ignore input events from buffyboard (product-id=25209; vendor-id=26214; name=rd)
-#   e.g. `echo 'input "26214:25209:rd" events disabled' > ~/.config/sway/config`
+# 2. Configure your DE to ignore input events from buffyboard (product-id=0; vendor-id=0; name=buffyboard)
+#   e.g. `echo 'input "0:0:buffyboard" events disabled' > ~/.config/sway/config`
 
 {
   config,
