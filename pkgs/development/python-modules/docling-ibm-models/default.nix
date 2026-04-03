@@ -80,11 +80,18 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # Require network access
-    "test_code_formula_predictor" # huggingface_hub.errors.LocalEntryNotFoundError
-    "test_figure_classifier" # huggingface_hub.errors.LocalEntryNotFoundError
+    # Requires network access
+    "test_figure_classifier"
     "test_layoutpredictor"
     "test_readingorder"
+    "test_tableformer_v2_model_loading"
+    "test_tableformer_v2_tokenizer_loading"
+    "test_tableformer_v2_image_encoding"
+    "test_tableformer_v2_forward_pass"
+    "test_tableformer_v2_predict"
+    "test_tableformer_v2_numpy_input"
+    "test_tableformer_v2_batch_inference"
+    "test_tableformer_v2_unsupported_input"
     "test_tf_predictor"
   ];
 
