@@ -5,7 +5,6 @@
   python,
   runCommand,
   fetchFromGitHub,
-  fetchpatch,
   configargparse,
   acme,
   configobj,
@@ -25,25 +24,17 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "5.3.1";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-u9qzZFhvIapXQwxehvMieCV+4uigteSOeHVw7ycMCEU=";
+    hash = "sha256-Tu46Wybod89TiwsVccNuQcweWoeQE1wbH+pDWNC9+kE=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-test_rollback_too_many.patch";
-      url = "https://github.com/certbot/certbot/commit/4c61a450d4a843c66baab6d5d9a42ce0554e99d7.patch";
-      hash = "sha256-PSh2JXoEWNUrqxNh8X5QchyIP8KRHT60T/cLax6VRWo=";
-    })
-  ];
-
-  postPatch = "cd certbot"; # using sourceRoot would interfere with patches
+  sourceRoot = "${src.name}/certbot";
 
   build-system = [ setuptools ];
 

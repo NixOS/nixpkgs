@@ -23,6 +23,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "pycountry"
+  ];
+
   dependencies = [
     pycountry
     pyrate-limiter
