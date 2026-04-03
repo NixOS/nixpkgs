@@ -431,19 +431,23 @@ in
       }
     ]
     ++
-      map
-        (name: {
-          assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
-          message = ''
-            systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
-              convert it to analogous systemd units in 'boot.initrd.systemd'.
+      lib.concatMap
+        (
+          name:
+          # Only assert if the option actually exists (it may not with minimal modules)
+          lib.optional (lib.hasAttrByPath name config.boot.initrd) {
+            assertion = lib.attrByPath name "" config.boot.initrd == "";
+            message = ''
+              systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+                convert it to analogous systemd units in 'boot.initrd.systemd'.
 
-                Definitions:
-            ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
-              (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
-            }
-          '';
-        })
+                  Definitions:
+              ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
+                (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
+              }
+            '';
+          }
+        )
         [
           [ "preFailCommands" ]
           [ "preDeviceCommands" ]
