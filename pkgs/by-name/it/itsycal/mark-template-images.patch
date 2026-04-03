@@ -1,0 +1,49 @@
+diff --git a/Itsycal/PrefsAppearanceVC.m b/Itsycal/PrefsAppearanceVC.m
+index 19c6dcc..a45f149 100644
+--- a/Itsycal/PrefsAppearanceVC.m
++++ b/Itsycal/PrefsAppearanceVC.m
+@@ -47,12 +47,17 @@ - (void)loadView
+     [v addSubview:separator1];
+     
+     // Icon picker segmented control
+-    NSSegmentedControl *iconPicker = [NSSegmentedControl segmentedControlWithImages:@[
+-        [NSImage imageNamed:@"menubaricon0"],
+-        [NSImage imageNamed:@"menubaricon1"],
+-        [NSImage imageNamed:@"menubaricon2"],
+-        [NSImage imageNamed:@"menubaricon3"]
+-    ] trackingMode:NSSegmentSwitchTrackingSelectOne target:nil action:nil];
++    // Mark images as template so they adapt to light/dark mode.
++    // (The xcassets template-rendering-intent metadata is lost when
++    //  using loose PNGs instead of a compiled asset catalog.)
++    NSMutableArray *iconImages = [NSMutableArray array];
++    for (NSString *name in @[@"menubaricon0", @"menubaricon1", @"menubaricon2", @"menubaricon3"]) {
++        NSImage *img = [NSImage imageNamed:name];
++        [img setTemplate:YES];
++        [iconImages addObject:img];
++    }
++    NSSegmentedControl *iconPicker = [NSSegmentedControl segmentedControlWithImages:iconImages
++        trackingMode:NSSegmentSwitchTrackingSelectOne target:nil action:nil];
+     [iconPicker setSelectedSegment:0]; // will be set by binding below.
+     [v addSubview:iconPicker];
+ 
+diff --git a/Itsycal/ViewController.m b/Itsycal/ViewController.m
+index 30e8e88..7a5a0e5 100644
+--- a/Itsycal/ViewController.m
++++ b/Itsycal/ViewController.m
+@@ -763,10 +763,14 @@ - (NSImage *)iconImageForText:(NSString *)text
+ 
+     NSInteger menuBarIconType = [defaults integerForKey:kMenuBarIconType];
+     if (menuBarIconType == 2) {
+-        return [NSImage imageNamed:@"menubaricon2"];
++        NSImage *img = [NSImage imageNamed:@"menubaricon2"];
++        [img setTemplate:YES];
++        return img;
+     }
+     if (menuBarIconType == 3) {
+-        return [NSImage imageNamed:@"menubaricon3"];
++        NSImage *img = [NSImage imageNamed:@"menubaricon3"];
++        [img setTemplate:YES];
++        return img;
+     }
+ 
+     // Does user want outline icon or solid icon?
