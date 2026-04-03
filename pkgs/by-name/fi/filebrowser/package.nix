@@ -72,7 +72,12 @@ buildGoModule {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
     inherit frontend;
     tests = {
       inherit (nixosTests) filebrowser;
