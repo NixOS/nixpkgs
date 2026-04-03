@@ -645,6 +645,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  actions-nvim = buildVimPlugin {
+    pname = "actions.nvim";
+    version = "0-unstable-2026-04-02";
+    src = fetchFromGitHub {
+      owner = "mrtnvgr";
+      repo = "actions.nvim";
+      rev = "b78239fb1097d220feba105c26af60f88d3d9ac8";
+      hash = "sha256-AvCU8p68JeDvVliC1dRbNrHEaFRLVyS0js5ifc8iotc=";
+    };
+    meta.homepage = "https://github.com/mrtnvgr/actions.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   actions-preview-nvim = buildVimPlugin {
     pname = "actions-preview.nvim";
     version = "0-unstable-2025-10-03";
@@ -7086,6 +7099,19 @@ final: prev: {
       hash = "sha256-u1c3SwgEw+UrhCex/5qWqdul1ZX94yGuFvUtw5jrRas=";
     };
     meta.homepage = "https://github.com/neutaaaaan/iosvkem/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  ipynb-nvim = buildVimPlugin {
+    pname = "ipynb.nvim";
+    version = "0-unstable-2026-01-31";
+    src = fetchFromGitHub {
+      owner = "ajbucci";
+      repo = "ipynb.nvim";
+      rev = "b9ec93f7c37a3a081810a733d6baf4973fc31f3d";
+      hash = "sha256-uB89olqvc5m6DHwtOOPpTRtyBnhNp6z6Pr9DS6mX7JA=";
+    };
+    meta.homepage = "https://github.com/ajbucci/ipynb.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
