@@ -109,7 +109,7 @@ in
     };
 
     services.journald.forwardToSyslog = lib.mkOption {
-      default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
+      default = (config.services.rsyslogd.enable or false) || (config.services.syslog-ng.enable or false);
       defaultText = lib.literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = lib.types.bool;
       description = ''
