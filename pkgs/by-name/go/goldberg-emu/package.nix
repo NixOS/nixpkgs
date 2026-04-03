@@ -3,9 +3,11 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  protobuf,
+  protobuf_21,
 }:
-
+let
+  protobuf = protobuf_21;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldberg-emu";
   version = "0.2.5";

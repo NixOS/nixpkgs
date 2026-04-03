@@ -1255,10 +1255,6 @@ with pkgs;
 
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
-  goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
-    protobuf = protobuf_21;
-  };
-
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
