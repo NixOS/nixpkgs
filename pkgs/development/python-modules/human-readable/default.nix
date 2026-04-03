@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "human-readable";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchPypi {
     pname = "human_readable";
     inherit version;
-    hash = "sha256-7Iky53uBlvvQ+UQLI8gP+glk6nb/llg29gT0HuSLWU8=";
+    hash = "sha256-I2s/hqxUexK2yizqiJt4HF5yceR7mM3ieV862ZaDs84=";
   };
 
   pyproject = true;
