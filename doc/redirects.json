@@ -1908,6 +1908,9 @@
   "fetchfromgithub": [
     "index.html#fetchfromgithub"
   ],
+  "fetchfromhuggingface": [
+    "index.html#fetchfromhuggingface"
+  ],
   "fetchfromgitlab": [
     "index.html#fetchfromgitlab"
   ],
