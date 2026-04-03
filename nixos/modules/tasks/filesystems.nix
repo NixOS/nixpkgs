@@ -553,7 +553,7 @@ in
         ];
       };
     }
-    // optionalAttrs (!config.boot.isContainer) {
+    // optionalAttrs (!(config.boot.isContainer or false)) {
       # systemd-nspawn populates /sys by itself, and remounting it causes all
       # kinds of weird issues (most noticeably, waiting for host disk device
       # nodes).
@@ -566,7 +566,7 @@ in
         ];
       };
     }
-    // optionalAttrs (!config.boot.isNspawnContainer) {
+    // optionalAttrs (!(config.boot.isNspawnContainer or false)) {
       "/proc" = {
         fsType = "proc";
         options = [
