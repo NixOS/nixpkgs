@@ -12,11 +12,10 @@
   langObjC ? stdenv.targetPlatform.isDarwin,
   langObjCpp ? stdenv.targetPlatform.isDarwin,
   langGo ? false,
+  langRust ? false,
   reproducibleBuild ? true,
   profiledCompiler ? false,
   langJit ? false,
-  langRust ? false,
-  cargo,
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
   enableDefaultPie ? stdenv.targetPlatform.hasSharedLibraries,
@@ -60,6 +59,7 @@
   majorMinorVersion,
   apple-sdk,
   darwin,
+  cargo,
 }:
 
 let
@@ -192,6 +192,9 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
+
+# Rust support requires libstdc++
+assert langRust -> atLeast14 && langCC;
 
 # threadsCross is just for MinGW
 assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
@@ -390,6 +393,7 @@ pipe
           langAda
           langFortran
           langGo
+          langRust
           version
           ;
         isGNU = true;
