@@ -720,7 +720,7 @@ in
         config.system.fsPackages
         ++ [ cfg.package.util-linux ]
         # systemd-ssh-generator needs sshd in PATH
-        ++ lib.optional config.services.openssh.enable config.services.openssh.package
+        ++ lib.optional (config.services.openssh.enable or false) config.services.openssh.package
       );
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       TZDIR = "/etc/zoneinfo";
