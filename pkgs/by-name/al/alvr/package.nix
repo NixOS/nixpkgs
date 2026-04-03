@@ -4,6 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   nix-update-script,
+  callPackage,
   pkg-config,
   autoAddDriverRunpath,
   alsa-lib,
@@ -11,7 +12,7 @@
   brotli,
   bzip2,
   celt,
-  ffmpeg_7,
+  ffmpeg-alvr ? callPackage ./ffmpeg.nix { },
   gmp,
   jack2,
   lame,
@@ -42,6 +43,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alvr";
+
   version = "20.14.1";
 
   src = fetchFromGitHub {
@@ -56,19 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-finding-libs.patch {
-      ffmpeg = lib.getDev ffmpeg_7;
+      ffmpeg = lib.getDev ffmpeg-alvr;
       x264 = lib.getDev x264;
     })
   ];
-
-  postPatch = ''
-    substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
-      --replace-fail 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
-      --replace-fail 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
-      --replace-fail 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
-      --replace-fail 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
-      --replace-fail 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
-  '';
 
   env = {
     NIX_CFLAGS_COMPILE = toString [
@@ -107,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     brotli
     bzip2
     celt
-    ffmpeg_7
+    ffmpeg-alvr
     gmp
     jack2
     lame
@@ -153,7 +146,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s $out/lib $out/lib64
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit ffmpeg-alvr;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
