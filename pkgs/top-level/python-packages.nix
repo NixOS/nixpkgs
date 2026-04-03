@@ -4384,6 +4384,8 @@ self: super: with self; {
 
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
+  django-stdimage = callPackage ../development/python-modules/django-stdimage { };
+
   django-storages = callPackage ../development/python-modules/django-storages { };
 
   django-structlog = callPackage ../development/python-modules/django-structlog { };
@@ -4762,8 +4764,6 @@ self: super: with self; {
   duet = callPackage ../development/python-modules/duet { };
 
   dufte = callPackage ../development/python-modules/dufte { };
-
-  dukpy = callPackage ../development/python-modules/dukpy { };
 
   dulwich = callPackage ../development/python-modules/dulwich { inherit (pkgs) gnupg; };
 
@@ -5726,8 +5726,6 @@ self: super: with self; {
   flask-testing = callPackage ../development/python-modules/flask-testing { };
 
   flask-themer = callPackage ../development/python-modules/flask-themer { };
-
-  flask-themes2 = callPackage ../development/python-modules/flask-themes2 { };
 
   flask-unsign = callPackage ../development/python-modules/flask-unsign { };
 
@@ -17756,6 +17754,8 @@ self: super: with self; {
   sklearn-compat = callPackage ../development/python-modules/sklearn-compat { };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
+
+  sklearn2pmml = callPackage ../development/python-modules/sklearn2pmml { };
 
   skodaconnect = callPackage ../development/python-modules/skodaconnect { };
 

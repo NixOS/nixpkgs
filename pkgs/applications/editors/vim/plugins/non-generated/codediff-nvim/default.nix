@@ -30,6 +30,11 @@ vimUtils.buildVimPlugin rec {
     runHook postBuild
   '';
 
+  # Cleanup
+  preInstall = ''
+    rm -rf build
+  '';
+
   # The plugin detects Nix and tries to download libgomp at runtime.
   # Symlinking it into the plugin directory fixes error message.
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''

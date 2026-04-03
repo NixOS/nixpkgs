@@ -228,6 +228,7 @@ class Driver:
         general_symbols = dict(
             start_all=self.start_all,
             test_script=self.test_script,
+            machines=self.machines,
             machines_qemu=self.machines_qemu,
             machines_nspawn=self.machines_nspawn,
             vlans=self.vlans,
@@ -243,6 +244,8 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             BaseMachine=BaseMachine,  # for typing
+            QemuMachine=QemuMachine,  # for typing
+            NspawnMachine=NspawnMachine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
         )
@@ -369,7 +372,7 @@ class Driver:
         *,
         name: str | None = None,
         keep_machine_state: bool = False,
-    ) -> BaseMachine:
+    ) -> QemuMachine:
         """
         Create a `QemuMachine`. This currently only supports qemu "nodes", not containers.
         """

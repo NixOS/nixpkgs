@@ -1348,7 +1348,6 @@ in
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
-  pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
   qemu-vm-credentials-fwcfg = runTest {
@@ -1473,6 +1472,7 @@ in
   slimserver = runTest ./slimserver.nix;
   slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
+  slurm-pam = runTest ./slurm-pam.nix;
   smokeping = runTest ./smokeping.nix;
   snapcast = runTest ./snapcast.nix;
   snapper = runTest ./snapper.nix;

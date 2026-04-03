@@ -6,13 +6,13 @@
 
 buildLakePackage {
   pname = "lean4-batteries";
-  version = "4.28.0";
+  version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "batteries";
-    tag = "v4.28.0";
-    hash = "sha256-3N1MCFsg5UiwBCMAhDK7WwIowMNnhjlFgAsm0UPtGKc=";
+    tag = "v4.29.0";
+    hash = "sha256-sEIDi2i2FaLTgKYWt/kzqPrjMdf+bFURfhw6ZZWBawQ=";
   };
 
   leanPackageName = "batteries";

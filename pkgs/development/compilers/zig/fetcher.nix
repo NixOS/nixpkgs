@@ -8,11 +8,12 @@
   version,
   name ? "${pname}-${version}",
   src,
+  fetchAll ? false,
   hash ? lib.fakeHash,
-}@args:
+}:
 runCommand "${name}-zig-deps"
   {
-    inherit (args) src;
+    inherit src fetchAll;
 
     nativeBuildInputs = [ zig ];
 
@@ -26,7 +27,7 @@ runCommand "${name}-zig-deps"
     runHook unpackPhase
 
     cd $sourceRoot
-    zig build --fetch
+    zig build --fetch''${fetchAll:+=all}
 
     mv $ZIG_GLOBAL_CACHE_DIR/p $out
   ''

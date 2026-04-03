@@ -9,6 +9,7 @@
   # dependencies
   eval-type-backport,
   httpx,
+  jsonpath-python,
   opentelemetry-api,
   opentelemetry-semantic-conventions,
   pydantic,
@@ -29,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.0.4";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SLPLj9rp8TTOSE3ldobBFU1+MpffzH1Bpshw+7LLUvU=";
+    hash = "sha256-d6z8l7h8PVPV72Phbb7zPg4pyhxcXA/V5q1Ao+Jtgms=";
   };
 
   preBuild = ''
@@ -53,6 +54,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     eval-type-backport
     httpx
+    jsonpath-python
     opentelemetry-api
     opentelemetry-semantic-conventions
     pydantic
