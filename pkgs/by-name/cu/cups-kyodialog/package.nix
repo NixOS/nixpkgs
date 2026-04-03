@@ -76,10 +76,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cups ] ++ lib.optionals withQtGui [ qt5.qtbase ];
 
   # For lib/cups/filter/kyofilter_pre_H.
-  # The source already contains a copy of pypdf3, but we use the Nix package
+  # The source already contains a copy of pypdf3, but we use the maintained
+  # Nix package instead and patch the legacy filter import accordingly.
   propagatedBuildInputs = with python3Packages; [
     reportlab
-    pypdf3
+    pypdf
     setuptools
   ];
 
@@ -94,6 +95,16 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/cups/
     mv ./usr/lib/cups/filter/ $out/lib/cups/
+    substituteInPlace $out/lib/cups/filter/kyofilter_pre_H \
+      --replace-fail 'from PyPDF3 import PdfFileWriter, PdfFileReader' 'from pypdf import PdfWriter, PdfReader' \
+      --replace-fail 'CONFIG_DIR = "/usr/share/kyocera/"' 'CONFIG_DIR = "'"$out"'/share/kyocera/"' \
+      --replace-fail 'PdfFileReader' 'PdfReader' \
+      --replace-fail 'PdfFileWriter()' 'PdfWriter()' \
+      --replace-fail 'base_pdf.getNumPages()' 'len(base_pdf.pages)' \
+      --replace-fail 'watermark_pdf.getPage(0)' 'watermark_pdf.pages[0]' \
+      --replace-fail 'base_pdf.getPage(p)' 'base_pdf.pages[p]' \
+      --replace-fail 'page.mergePage(watermark)' 'page.merge_page(watermark)' \
+      --replace-fail 'new_pdf.addPage(page)' 'new_pdf.add_page(page)'
     # for lib/cups/filter/kyofilter_pre_H
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
