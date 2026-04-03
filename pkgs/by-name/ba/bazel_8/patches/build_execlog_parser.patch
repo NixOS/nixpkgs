@@ -1,0 +1,28 @@
+diff --git a/compile.sh b/compile.sh
+index 4712355d48..feec286704 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -76,6 +76,13 @@ bazel_build "src:bazel_nojdk${EXE_EXT}" \
+   --host_platform=@platforms//host \
+   --platforms=@platforms//host \
+   || fail "Could not build Bazel"
++
++bazel_build src/tools/execlog:parser_deploy.jar \
++  --action_env=PATH \
++  --host_platform=@platforms//host \
++  --platforms=@platforms//host \
++  || fail "Could not build parser_deploy.jar"
++
+ bazel_bin_path="$(get_bazel_bin_path)/src/bazel_nojdk${EXE_EXT}"
+ [ -e "$bazel_bin_path" ] \
+   || fail "Could not find freshly built Bazel binary at '$bazel_bin_path'"
+@@ -84,5 +91,8 @@ cp -f "$bazel_bin_path" "output/bazel${EXE_EXT}" \
+ chmod 0755 "output/bazel${EXE_EXT}"
+ BAZEL="$(pwd)/output/bazel${EXE_EXT}"
+ 
++cp "$(get_bazel_bin_path)/src/tools/execlog/parser_deploy.jar" output/ \
++  || fail "Could not copy 'parser_deploy.jar' to 'output/"
++
+ clear_log
+ display "Build successful! Binary is here: ${BAZEL}"
+

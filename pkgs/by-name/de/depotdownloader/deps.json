@@ -1,0 +1,72 @@
+[
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "5.0.0",
+    "hash": "sha256-LIcg1StDcQLPOABp4JRXIs837d7z0ia6+++3SF3jl1c="
+  },
+  {
+    "pname": "Microsoft.Win32.Registry",
+    "version": "5.0.0",
+    "hash": "sha256-9kylPGfKZc58yFqNKa77stomcoNnMeERXozWJzDcUIA="
+  },
+  {
+    "pname": "Microsoft.Windows.CsWin32",
+    "version": "0.3.183",
+    "hash": "sha256-bn0rHYoVLRTqiZqkkp6u3PMKtg0NNxA2F++1e/+3Jhw="
+  },
+  {
+    "pname": "Microsoft.Windows.SDK.Win32Docs",
+    "version": "0.1.42-alpha",
+    "hash": "sha256-6DvzmNzrGVfWmNJNqooj+Ya+7bAQlyeg7pmyKaUlIws="
+  },
+  {
+    "pname": "Microsoft.Windows.SDK.Win32Metadata",
+    "version": "61.0.15-preview",
+    "hash": "sha256-OB60ThIv8e7AMGaRRzJ8dWme5HjN+Q0HoUDquP2ejTg="
+  },
+  {
+    "pname": "Microsoft.Windows.WDK.Win32Metadata",
+    "version": "0.12.8-experimental",
+    "hash": "sha256-YaN6JlgnpIooLYu3NdFVHwoqFwZYTeePtekXCfTiLTo="
+  },
+  {
+    "pname": "protobuf-net",
+    "version": "3.2.52",
+    "hash": "sha256-phXeroBt5KbHYkApkkMa0mRCVkDY+dtOOXXNY+i50Ek="
+  },
+  {
+    "pname": "protobuf-net.Core",
+    "version": "3.2.52",
+    "hash": "sha256-/9Jj26tuSKeYJb9udwew5i5EVvaoeNu/vBCKS0VhSQQ="
+  },
+  {
+    "pname": "QRCoder",
+    "version": "1.6.0",
+    "hash": "sha256-2Ev/6d7PH6K4dVYQQHlZ+ZggkCnDtrlaGygs65mDo28="
+  },
+  {
+    "pname": "SteamKit2",
+    "version": "3.2.0",
+    "hash": "sha256-hB/36fP9kf+1mIx+hTELUMHe8ZkmSKxOK41ZzOaBa3E="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "9.0.4",
+    "hash": "sha256-rbcQzEncB3VuUZIcsE1tq30suf5rvRE4HkE+0lR/skU="
+  },
+  {
+    "pname": "System.Security.AccessControl",
+    "version": "5.0.0",
+    "hash": "sha256-ueSG+Yn82evxyGBnE49N4D+ngODDXgornlBtQ3Omw54="
+  },
+  {
+    "pname": "System.Security.Principal.Windows",
+    "version": "5.0.0",
+    "hash": "sha256-CBOQwl9veFkrKK2oU8JFFEiKIh/p+aJO+q9Tc2Q/89Y="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.5",
+    "hash": "sha256-+UQFeU64md0LlSf9nMXif6hHnfYEKm+WRyYd0Vo2QvI="
+  }
+]

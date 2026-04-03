@@ -1,0 +1,19 @@
+--- a/doc/eukleides.texi
++++ b/doc/eukleides.texi
+@@ -6,12 +6,12 @@
+ 
+ % ------------------------------------------------------------------------------
+ 
+-\def\LaTeX{L\kern-.34em\raise.49ex\hbox{\sevenrm A}\kern-.18em\TeX}
+-\def\mdeg{$^\circ$}
++\def\LaTeX@{L\kern-.34em\raise.49ex\hbox@{\sevenrm A@}\kern-.18em\TeX@}
++\def\mdeg@{$^\circ$@}
+ \font\degfont=cmtt8
+-\def\deg{\raise.7ex\hbox{\degfont o}}
+-\def\exm#1{\noindent{\textit Example:}\quad{\texttt #1}}
+-\def\exmp{\noindent{\textit Example:}}
++\def\deg@{\raise.7ex\hbox@{\degfont o@}@}
++\def\exm#1@{\noindent@{\textit Example:@}\quad@{\texttt #1@}@}
++\def\exmp@{\noindent@{\textit Example:@}@}
+ 
+ % ------------------------------------------------------------------------------

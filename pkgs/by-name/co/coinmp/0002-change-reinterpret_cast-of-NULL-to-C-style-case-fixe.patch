@@ -1,0 +1,26 @@
+From 4571de031e528bc145590d6a1be5ceb87bd8cdb5 Mon Sep 17 00:00:00 2001
+From: Stefan Vigerske <svigerske@gams.com>
+Date: Mon, 11 Mar 2019 16:29:20 +0000
+Subject: [PATCH 2/2] change reinterpret_cast of NULL to C-style case, fixes
+ #93
+
+---
+ Clp/src/OsiClp/OsiClpSolverInterface.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Clp/src/OsiClp/OsiClpSolverInterface.cpp b/Clp/src/OsiClp/OsiClpSolverInterface.cpp
+index 55dd4dcd..a0217d42 100644
+--- a/Clp/src/OsiClp/OsiClpSolverInterface.cpp
++++ b/Clp/src/OsiClp/OsiClpSolverInterface.cpp
+@@ -1448,7 +1448,7 @@ OsiClpSolverInterface::setupForRepeatedUse(int senseOfAdventure, int printOut)
+   if (stopPrinting) {
+     CoinMessages * messagesPointer = modelPtr_->messagesPointer();
+     // won't even build messages 
+-    messagesPointer->setDetailMessages(100,10000,reinterpret_cast<int *> (NULL));
++    messagesPointer->setDetailMessages(100,10000,(int*)NULL);
+   }
+ #endif
+ }
+-- 
+2.37.3
+

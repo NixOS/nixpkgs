@@ -1,0 +1,58 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 7c10e63a..052a5852 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1658,7 +1658,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-a11y-manager-subscription"
+ version = "1.0.2"
+-source = "git+https://github.com/pop-os/cosmic-settings#55b502dff39bf4be056c23888aaad185f9227eb2"
++source = "git+https://github.com/pop-os/cosmic-settings#b46a55d4237f1fd6e1bacc852ceb053e6a26c2fe"
+ dependencies = [
+  "cosmic-protocols",
+  "iced_futures",
+@@ -1672,7 +1672,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-accessibility-subscription"
+ version = "1.0.2"
+-source = "git+https://github.com/pop-os/cosmic-settings#55b502dff39bf4be056c23888aaad185f9227eb2"
++source = "git+https://github.com/pop-os/cosmic-settings#b46a55d4237f1fd6e1bacc852ceb053e6a26c2fe"
+ dependencies = [
+  "cosmic-dbus-a11y",
+  "futures",
+@@ -1685,7 +1685,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-airplane-mode-subscription"
+ version = "1.0.2"
+-source = "git+https://github.com/pop-os/cosmic-settings#55b502dff39bf4be056c23888aaad185f9227eb2"
++source = "git+https://github.com/pop-os/cosmic-settings#b46a55d4237f1fd6e1bacc852ceb053e6a26c2fe"
+ dependencies = [
+  "futures",
+  "iced_futures",
+@@ -1718,7 +1718,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-daemon-subscription"
+ version = "1.0.2"
+-source = "git+https://github.com/pop-os/cosmic-settings#55b502dff39bf4be056c23888aaad185f9227eb2"
++source = "git+https://github.com/pop-os/cosmic-settings#b46a55d4237f1fd6e1bacc852ceb053e6a26c2fe"
+ dependencies = [
+  "futures",
+  "iced_futures",
+@@ -1731,7 +1731,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-network-manager-subscription"
+ version = "1.0.2"
+-source = "git+https://github.com/pop-os/cosmic-settings#55b502dff39bf4be056c23888aaad185f9227eb2"
++source = "git+https://github.com/pop-os/cosmic-settings#b46a55d4237f1fd6e1bacc852ceb053e6a26c2fe"
+ dependencies = [
+  "bitflags 2.10.0",
+  "cosmic-dbus-networkmanager",
+@@ -1765,7 +1765,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-upower-subscription"
+ version = "1.0.2"
+-source = "git+https://github.com/pop-os/cosmic-settings#55b502dff39bf4be056c23888aaad185f9227eb2"
++source = "git+https://github.com/pop-os/cosmic-settings#b46a55d4237f1fd6e1bacc852ceb053e6a26c2fe"
+ dependencies = [
+  "futures",
+  "iced_futures",

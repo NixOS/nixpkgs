@@ -1,0 +1,21 @@
+diff --git a/ext/KDDockWidgets/CMakeLists.txt b/ext/KDDockWidgets/CMakeLists.txt
+index 608a2491..d0edc399 100644
+--- a/ext/KDDockWidgets/CMakeLists.txt
++++ b/ext/KDDockWidgets/CMakeLists.txt
+@@ -160,8 +160,16 @@
+ include(KDQtInstallPaths) #to set QT_INSTALL_FOO variables
+ 
+ set(${PROJECT_NAME}_DEPS "widgets")
++if(Qt6Core_VERSION VERSION_GREATER_EQUAL "6.10.0")
++    set(QT_NO_PRIVATE_MODULE_WARNING ON)
++    find_package(Qt6 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS WidgetsPrivate)
++endif()
+ if(${PROJECT_NAME}_QTQUICK)
+     find_package(Qt${Qt_VERSION_MAJOR} NO_MODULE REQUIRED COMPONENTS Quick QuickControls2)
++    if(Qt6Core_VERSION VERSION_GREATER_EQUAL "6.10.0")
++        set(QT_NO_PRIVATE_MODULE_WARNING ON)
++        find_package(Qt6 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS QuickPrivate)
++    endif()
+     add_definitions(-DKDDOCKWIDGETS_QTQUICK)
+     set(${PROJECT_NAME}_DEPS "${${PROJECT_NAME}_DEPS} quick quickcontrols2")
+ else()

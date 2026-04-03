@@ -1,0 +1,24 @@
+diff --git a/src/pies.c b/src/pies.c
+index 9355d50..9fe6109 100644
+--- a/src/pies.c
++++ b/src/pies.c
+@@ -19,6 +19,7 @@
+ #include <configmake.h>
+ #include "meta1parse.h"
+ #include "grecsasrt.h"
++#include <stdlib.h>
+
+ int preprocess_only;		/* Preprocess config, do nothing more */
+ int lint_mode;			/* Test configuration syntax and exit */
+diff --git a/src/piesctl.c b/src/piesctl.c
+index a0ac967..fd6c3e2 100644
+--- a/src/piesctl.c
++++ b/src/piesctl.c
+@@ -14,6 +14,7 @@
+    You should have received a copy of the GNU General Public License
+    along with GNU Pies.  If not, see <http://www.gnu.org/licenses/>. */
+
++#include <stdlib.h>
+ #include <config.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>

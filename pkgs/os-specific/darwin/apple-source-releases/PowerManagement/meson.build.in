@@ -1,0 +1,23 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/PowerManagement/blob/main/PowerManagement.xcodeproj/project.pbxproj
+
+# Project settings
+project('PowerManagement', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Binaries
+caffeinate = executable(
+    'caffeinate',
+    dependencies : dependency('appleframeworks', modules : ['CoreFoundation', 'IOKit']),
+    install : true,
+    sources : [
+        'caffeinate/caffeinate.c',
+    ],
+)
+install_man(
+    'caffeinate/caffeinate.8',
+)

@@ -1,0 +1,36 @@
+diff --git i/momepy/functional/tests/test_elements.py w/momepy/functional/tests/test_elements.py
+index 75a3f5f..625fb69 100644
+--- i/momepy/functional/tests/test_elements.py
++++ w/momepy/functional/tests/test_elements.py
+@@ -290,28 +290,19 @@ class TestElements:
+     def test_buffered_limit_adaptive(self):
+         limit = mm.buffered_limit(self.df_buildings, "adaptive")
+         assert limit.geom_type == "Polygon"
+-        if LPS_G_4_13_0:
+-            exp = 347096.5835217
+-        else:
+-            exp = 355819.1895417
++        exp = 355819.1895417
+         assert exp == pytest.approx(limit.area)
+ 
+         limit = mm.buffered_limit(self.df_buildings, "adaptive", max_buffer=30)
+         assert limit.geom_type == "Polygon"
+-        if LPS_G_4_13_0:
+-            exp = 304712.451361391
+-        else:
+-            exp = 304200.301833294
++        exp = 304200.301833294
+         assert exp == pytest.approx(limit.area)
+ 
+         limit = mm.buffered_limit(
+             self.df_buildings, "adaptive", min_buffer=30, max_buffer=300
+         )
+         assert limit.geom_type == "Polygon"
+-        if LPS_G_4_13_0:
+-            exp = 348777.778371144
+-        else:
+-            exp = 357671.831894244
++        exp = 357671.831894244
+         assert exp == pytest.approx(limit.area)
+ 
+     def test_buffered_limit_error(self):
