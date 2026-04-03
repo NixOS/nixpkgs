@@ -324,6 +324,7 @@ let
           description = "Prometheus ${name} exporter service user";
           isSystemUser = true;
           inherit (conf) group;
+          extraGroups = mkIf (name == "libvirt") [ "libvirtd" ];
         }
       );
       users.groups = mkMerge [
