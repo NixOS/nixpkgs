@@ -28,7 +28,8 @@ let
 
   cfg = config.services.resolved;
 
-  dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
+  dnsmasqResolve =
+    (config.services.dnsmasq.enable or false) && (config.services.dnsmasq.resolveLocalQueries or false);
 
   transformSettings =
     settings:
