@@ -9,7 +9,6 @@
   nodejs_22,
   makeWrapper,
   versionCheckHook,
-  nix-update-script,
   rolldown,
   installShellFiles,
   version ? "2026.3.12",
@@ -100,7 +99,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Self-hosted, open-source AI assistant/agent";

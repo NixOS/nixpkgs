@@ -14,26 +14,26 @@
   crc,
   gpiod,
   pyserial-asyncio-fast,
+  tqdm,
   typing-extensions,
   zigpy,
 
   # tests
+  aioresponses,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-mock,
-  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.1.3";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-VBMxm953xp0qt4MIfOSjFNQu2jOh52uQ9Zz94NWy3dY=";
+    hash = "sha256-6rdWi+un85YWSann2zHFFnWvAZF6V8wXBP1VunaiZMo=";
   };
 
   postPatch = ''
@@ -50,16 +50,16 @@ buildPythonPackage rec {
     coloredlogs
     crc
     pyserial-asyncio-fast
+    tqdm
     typing-extensions
     zigpy
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ gpiod ];
 
   nativeCheckInputs = [
+    aioresponses
     pytestCheckHook
     pytest-asyncio
-    pytest-mock
-    pytest-timeout
   ];
 
   disabledTests = [
