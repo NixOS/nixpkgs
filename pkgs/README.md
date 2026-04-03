@@ -728,6 +728,48 @@ We use jbidwatcher as an example for a discontinued project here.
 
 This is what the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
 
+## Renaming packages
+
+Sometimes packages have to be renamed, for example, if
+- the upstream package name has changed, e.g. revolt (thus the desktop app `revolt-desktop`) has been renamed to [stoat](https://stoat.chat) (`stoat-desktop`).
+- the package has multiple maintained and packaged versions (e.g. `foo_1` and `foo_2`) and one of the older versions is the default version without a versioned reference (so `foo` is foo version 1 and `foo_1` is not defined). We can't just make one of the newer versions the default version to not break compatibility, so we have to rename `foo` to `foo_1` first to warn people before we make `foo = foo_2`.
+- a package was packaged twice under different names. -> Drop one package and alias it to the other.
+- the package name doesn't fit [current package naming guidelines](#package-naming).
+
+To rename a package, you need to make 2 PRs, one to `master` (or `staging`) and one to the current release channel (latest `release-<year>-<month>` branch) to create a forward compatibility alias.
+
+### Master/Staging PR
+
+Rename the package, e.g. by moving `pkgs/by-name/ol/old-name` to `pkgs/by-name/ne/new-name`.
+
+Add an alias to `pkgs/top-level/aliases.nix` like this
+
+```nix
+{
+  old-name = new-name; # Added <current date in yyyy-mm-dd format>
+  # or
+  old-name = warnAlias "'old-name' has been renamed to 'new-name'" new-name; # Added yyyy-mm-dd
+}
+```
+
+If there is any useful context for the rename, you can add it to the alias message.
+
+Sometimes reviewers want you to use the second option to speed up the deprecation of the old name.
+
+### Release Channel PR
+
+Add a compatibility alias to `pkgs/top-level/aliases.nix` or, if renaming a package in a package set, to the package set specific alias file:
+
+```nix
+{
+  new-name = old-name; # Release only, compatibility alias from <current date in yyyy-mm-dd format>
+}
+```
+
+Link the release channel PR in the master/staging PR, stating they should be reviewed and merged together.
+
+Reviewers should review both PRs, and mergers should merge the release channel PR together with the master/staging PR.
+
 ## Package tests
 
 To run the main types of tests locally:
