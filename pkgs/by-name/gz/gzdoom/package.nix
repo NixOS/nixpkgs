@@ -76,10 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Apple dropped GL support
   # Shader's loading will throw an error while linking
   cmakeFlags = [
-    "-DDYN_GTK=OFF"
-    "-DDYN_OPENAL=OFF"
+    (lib.cmakeBool "DYN_GTK" false)
+    (lib.cmakeBool "DYN_OPENAL" false)
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "HAVE_GLES2" false) ];
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
