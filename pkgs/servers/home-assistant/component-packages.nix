@@ -506,7 +506,8 @@
       ];
     "autoskope" =
       ps: with ps; [
-      ]; # missing inputs: autoskope_client
+        autoskope-client
+      ];
     "avea" =
       ps: with ps; [
         avea
@@ -7437,6 +7438,7 @@
     "autarco"
     "auth"
     "automation"
+    "autoskope"
     "awair"
     "aws"
     "aws_s3"
