@@ -62,7 +62,7 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          target-as-trusted-at: ${{ inputs.targetSha }}
+          target-as-trusted-at: 1d8a939046244fc63f47a314c1d364bc7c2b2b18
 
       - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
         with:
