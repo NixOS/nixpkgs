@@ -44,7 +44,7 @@ let
 
     printf "%s " "''${extraDependencies[@]}" > "$out/extra-dependencies"
 
-    ${optionalString (!config.boot.isContainer) ''
+    ${optionalString (!(config.boot.isContainer or false)) ''
       ${config.boot.bootspec.writer}
       ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
     ''}
