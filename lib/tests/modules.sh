@@ -706,6 +706,7 @@ checkConfigError 'The option .group..*would be a parent of the following options
 
 # types.optionDeclaration
 checkConfigOutput '^10$' config.anOption ./option.nix
+checkConfigError 'A definition for option .aBadOptionDef. is not of type .option declaration.' config.aBadOptionDef ./option.nix
 
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
