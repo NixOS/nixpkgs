@@ -1569,6 +1569,9 @@
   "lib.sourceTypes.binaryBytecode": [
     "index.html#lib.sourceTypes.binaryBytecode"
   ],
+  "lib.sourceTypes.obfuscatedCode": [
+    "index.html#lib.sourceTypes.obfuscatedCode"
+  ],
   "chap-passthru": [
     "index.html#chap-passthru"
   ],
