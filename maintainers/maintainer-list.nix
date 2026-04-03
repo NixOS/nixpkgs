@@ -30206,6 +30206,12 @@
     github = "zazedd";
     githubId = 93401987;
   };
+  zeal = {
+    name = "Mads Jensen";
+    github = "zzzealed";
+    githubId = 108904280;
+    email = "zzzealed@proton.me";
+  };
   zebradil = {
     email = "german.lashevich+nixpkgs@gmail.com";
     github = "zebradil";
