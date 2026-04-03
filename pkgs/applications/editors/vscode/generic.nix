@@ -274,6 +274,17 @@ stdenv.mkDerivation (
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
+    # autoPatchelfHook cannot index libwebkit2gtk-4.1.so because pyelftools
+    # fails to parse it (ELFError: String Table not found).  Ignore the
+    # missing dep and add the library path via appendRunpaths so it is still
+    # available at runtime for libmsalruntime.so (Microsoft Authentication).
+    autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.hostPlatform.isLinux [
+      "libwebkit2gtk-4.1.so.0"
+    ];
+    appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
+      "${webkitgtk_4_1}/lib"
+    ];
+
     dontBuild = true;
     dontConfigure = true;
     noDumpEnvVars = true;

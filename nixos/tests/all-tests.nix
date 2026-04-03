@@ -1746,6 +1746,7 @@ in
   wg-access-server = runTest ./wg-access-server.nix;
   whisparr = runTest ./whisparr.nix;
   whoami = runTest ./whoami.nix;
+  whois = runTest ./whois.nix;
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
   windmill = import ./windmill {

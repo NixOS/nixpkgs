@@ -357,6 +357,7 @@
   ./programs/wayland/wayfire.nix
   ./programs/wayland/wayvnc.nix
   ./programs/weylus.nix
+  ./programs/whois.nix
   ./programs/winbox.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix

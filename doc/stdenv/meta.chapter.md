@@ -258,6 +258,10 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
 
+### `lib.sourceTypes.obfuscatedCode` {#lib.sourceTypes.obfuscatedCode}
+
+Code which is intentionally obfuscated by a third party, for example by using a code obfuscator or by being distributed in an obfuscated form.
+
 ## Software identifiers {#sec-meta-identifiers}
 
 Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
