@@ -195,6 +195,8 @@ let
       neochat # Added 2025-07-04
       itinerary # Added 2025-07-04
       libquotient # Added 2025-07-04
+      qtwebengine # Added 2026-01-15
+      qtwebview # Added 2026-04-03
       ;
 
     kexi = throw ""; # Added 2025-08-21
