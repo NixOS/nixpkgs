@@ -1,0 +1,205 @@
+From 34c0d23c4e16775811f229cb190e72ba7d1e45ae Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Fri, 17 Feb 2023 12:40:10 +0100
+Subject: [PATCH] vaapi_encode: Allow to dynamically change bitrate and
+ framerate
+
+---
+ libavcodec/vaapi_encode.c | 147 ++++++++++++++++++++++++++++++++++++++
+ libavcodec/vaapi_encode.h |   1 +
+ 2 files changed, 148 insertions(+)
+
+diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
+index 9a58661b51..4add6458fd 100644
+--- a/libavcodec/vaapi_encode.c
++++ b/libavcodec/vaapi_encode.c
+@@ -262,6 +262,130 @@ static int vaapi_encode_make_tile_slice(AVCodecContext *avctx,
+     return 0;
+ }
+ 
++static av_cold int vaapi_encode_update_rate_control(AVCodecContext *avctx)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++    int64_t rc_bits_per_second;
++    int     rc_target_percentage;
++    int     rc_window_size;
++    int64_t hrd_buffer_size;
++    int64_t hrd_initial_buffer_fullness;
++    int fr_num, fr_den;
++    unsigned int frame_rate;
++
++    if (!ctx->rc_mode || !ctx->rc_mode->bitrate) {
++        return 0;
++    }
++
++    if (ctx->rc_mode->mode == RC_MODE_AVBR) {
++        // For maximum confusion AVBR is hacked into the existing API
++        // by overloading some of the fields with completely different
++        // meanings.
++
++        // Target percentage does not apply in AVBR mode.
++        rc_bits_per_second = avctx->bit_rate;
++
++        // Accuracy tolerance range for meeting the specified target
++        // bitrate.  It's very unclear how this is actually intended
++        // to work - since we do want to get the specified bitrate,
++        // set the accuracy to 100% for now.
++        rc_target_percentage = 100;
++
++        // Convergence period in frames.  The GOP size reflects the
++        // user's intended block size for cutting, so reusing that
++        // as the convergence period seems a reasonable default.
++        rc_window_size = avctx->gop_size > 0 ? avctx->gop_size : 60;
++
++    } else if (ctx->rc_mode->maxrate) {
++        if (avctx->rc_max_rate > 0) {
++            if (avctx->rc_max_rate < avctx->bit_rate) {
++                av_log(avctx, AV_LOG_ERROR, "Invalid bitrate settings: "
++                       "bitrate (%"PRId64") must not be greater than "
++                       "maxrate (%"PRId64").\n", avctx->bit_rate,
++                       avctx->rc_max_rate);
++                return 0;
++            }
++            rc_bits_per_second   = avctx->rc_max_rate;
++            rc_target_percentage = (avctx->bit_rate * 100) /
++                                   avctx->rc_max_rate;
++        } else {
++            // We only have a target bitrate, but this mode requires
++            // that a maximum rate be supplied as well.  Since the
++            // user does not want this to be a constraint, arbitrarily
++            // pick a maximum rate of double the target rate.
++            rc_bits_per_second   = 2 * avctx->bit_rate;
++            rc_target_percentage = 50;
++        }
++    } else {
++        if (avctx->rc_max_rate > avctx->bit_rate) {
++            av_log(avctx, AV_LOG_WARNING, "Max bitrate is ignored "
++                   "in %s RC mode.\n", ctx->rc_mode->name);
++        }
++        rc_bits_per_second   = avctx->bit_rate;
++        rc_target_percentage = 100;
++    }
++
++    if (ctx->rc_mode->hrd) {
++        if (avctx->rc_buffer_size)
++            hrd_buffer_size = avctx->rc_buffer_size;
++        else if (avctx->rc_max_rate > 0)
++            hrd_buffer_size = avctx->rc_max_rate;
++        else
++            hrd_buffer_size = avctx->bit_rate;
++        if (avctx->rc_initial_buffer_occupancy) {
++            if (avctx->rc_initial_buffer_occupancy > hrd_buffer_size) {
++                av_log(avctx, AV_LOG_ERROR, "Invalid RC buffer settings: "
++                       "must have initial buffer size (%d) <= "
++                       "buffer size (%"PRId64").\n",
++                       avctx->rc_initial_buffer_occupancy, hrd_buffer_size);
++                return 0;
++            }
++            hrd_initial_buffer_fullness = avctx->rc_initial_buffer_occupancy;
++        } else {
++            hrd_initial_buffer_fullness = hrd_buffer_size * 3 / 4;
++        }
++
++        rc_window_size = (hrd_buffer_size * 1000) / rc_bits_per_second;
++    } else {
++        if (avctx->rc_buffer_size || avctx->rc_initial_buffer_occupancy) {
++            av_log(avctx, AV_LOG_WARNING, "Buffering settings are ignored "
++                   "in %s RC mode.\n", ctx->rc_mode->name);
++        }
++
++        hrd_buffer_size             = 0;
++        hrd_initial_buffer_fullness = 0;
++
++        if (ctx->rc_mode->mode != RC_MODE_AVBR) {
++            // Already set (with completely different meaning) for AVBR.
++            rc_window_size = 1000;
++        }
++    }
++
++    if (avctx->framerate.num > 0 && avctx->framerate.den > 0)
++        av_reduce(&fr_num, &fr_den,
++                  avctx->framerate.num, avctx->framerate.den, 65535);
++    else
++        av_reduce(&fr_num, &fr_den,
++                  avctx->time_base.den, avctx->time_base.num, 65535);
++
++    frame_rate = (unsigned int)fr_den << 16 | fr_num;
++
++    if (ctx->va_bit_rate == rc_bits_per_second && ctx->va_frame_rate == frame_rate) {
++        return 0;
++    }
++
++    ctx->va_bit_rate                        = rc_bits_per_second;
++    ctx->rc_params.bits_per_second          = rc_bits_per_second;
++    ctx->rc_params.target_percentage        = rc_target_percentage;
++    ctx->rc_params.window_size              = rc_window_size;
++    ctx->hrd_params.initial_buffer_fullness = hrd_initial_buffer_fullness;
++    ctx->hrd_params.buffer_size             = hrd_buffer_size;
++    ctx->va_frame_rate                      = frame_rate;
++    ctx->fr_params.framerate                = frame_rate;
++
++    return 1;
++}
++
+ static int vaapi_encode_issue(AVCodecContext *avctx,
+                               VAAPIEncodePicture *pic)
+ {
+@@ -340,6 +464,7 @@ static int vaapi_encode_issue(AVCodecContext *avctx,
+     }
+ 
+     if (pic->type == PICTURE_TYPE_IDR) {
++        vaapi_encode_update_rate_control(avctx);
+         for (i = 0; i < ctx->nb_global_params; i++) {
+             err = vaapi_encode_make_misc_param_buffer(avctx, pic,
+                                                       ctx->global_params_type[i],
+@@ -348,6 +473,27 @@ static int vaapi_encode_issue(AVCodecContext *avctx,
+             if (err < 0)
+                 goto fail;
+         }
++    } else if (vaapi_encode_update_rate_control(avctx)) {
++            err = vaapi_encode_make_misc_param_buffer(avctx, pic,
++                                                      VAEncMiscParameterTypeRateControl,
++                                                      &ctx->rc_params,
++                                                      sizeof(ctx->rc_params));
++            if (err < 0)
++                goto fail;
++
++            err = vaapi_encode_make_misc_param_buffer(avctx, pic,
++                                                      VAEncMiscParameterTypeHRD,
++                                                      &ctx->hrd_params,
++                                                      sizeof(ctx->hrd_params));
++            if (err < 0)
++                goto fail;
++
++            err = vaapi_encode_make_misc_param_buffer(avctx, pic,
++                                                      VAEncMiscParameterTypeFrameRate,
++                                                      &ctx->fr_params,
++                                                      sizeof(ctx->fr_params));
++            if (err < 0)
++                goto fail;
+     }
+ 
+     if (ctx->codec->init_picture_params) {
+@@ -1875,6 +2021,7 @@ rc_mode_found:
+     ctx->fr_params = (VAEncMiscParameterFrameRate) {
+         .framerate = (unsigned int)fr_den << 16 | fr_num,
+     };
++    ctx->va_frame_rate = ctx->fr_params.framerate;
+ #if VA_CHECK_VERSION(0, 40, 0)
+     vaapi_encode_add_global_param(avctx,
+                                   VAEncMiscParameterTypeFrameRate,
+diff --git a/libavcodec/vaapi_encode.h b/libavcodec/vaapi_encode.h
+index 359f954fff..e7b6482c39 100644
+--- a/libavcodec/vaapi_encode.h
++++ b/libavcodec/vaapi_encode.h
+@@ -235,6 +235,7 @@ typedef struct VAAPIEncodeContext {
+     unsigned int    va_rc_mode;
+     // Bitrate for codec-specific encoder parameters.
+     unsigned int    va_bit_rate;
++    unsigned int    va_frame_rate;
+     // Packed headers which will actually be sent.
+     unsigned int    va_packed_headers;
+ 
+-- 
+2.39.2
+

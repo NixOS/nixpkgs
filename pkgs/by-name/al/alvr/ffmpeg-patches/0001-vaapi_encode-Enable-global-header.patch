@@ -1,0 +1,26 @@
+From 03e6b5617c94bf6073a17a0a7054e70345b512ae Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Sat, 1 Jul 2023 10:35:16 +0200
+Subject: [PATCH] vaapi_encode: Force enable global header
+
+---
+ libavcodec/vaapi_encode.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
+index bfca315a7a..ecce9bd721 100644
+--- a/libavcodec/vaapi_encode.c
++++ b/libavcodec/vaapi_encode.c
+@@ -2719,8 +2719,7 @@ av_cold int ff_vaapi_encode_init(AVCodecContext *avctx)
+         }
+     }
+ 
+-    if (ctx->va_packed_headers & VA_ENC_PACKED_HEADER_SEQUENCE &&
+-        ctx->codec->write_sequence_header &&
++    if (ctx->codec->write_sequence_header &&
+         avctx->flags & AV_CODEC_FLAG_GLOBAL_HEADER) {
+         char data[MAX_PARAM_BUFFER_SIZE];
+         size_t bit_len = 8 * sizeof(data);
+-- 
+2.41.0
+
