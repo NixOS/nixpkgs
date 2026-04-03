@@ -106,6 +106,7 @@ mapAliases {
   beancount_docverif = throw "'beancount_docverif' has been renamed to/replaced by 'beancount-docverif'"; # Converted to throw 2025-10-29
   beets-stable = lib.warn "beets-stable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16
   beets-unstable = lib.warn "beets-unstable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16
+  bimmer-connected = throw "'bimmer-connected' was removed because BMW started blocking third parties"; # added 2026-03-30
   bip_utils = throw "'bip_utils' has been renamed to/replaced by 'bip-utils'"; # Converted to throw 2025-10-29
   bjoern = throw "'bjoern' has been removed, as the upstream repository was unmaintained and it was using libraries with severe security issues."; # Added 2025-09-01
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
@@ -188,6 +189,7 @@ mapAliases {
   elegy = throw "elegy has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   email_validator = throw "'email_validator' has been renamed to/replaced by 'email-validator'"; # Converted to throw 2025-10-29
   embreex = throw "embreex has been removed, as it required embree2"; # added 2025-09-14
+  enocean = throw "'enocean' was removed because Home Assistant switched to 'enocean-async'"; # added 2026-03-31
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   et_xmlfile = throw "'et_xmlfile' has been renamed to/replaced by 'et-xmlfile'"; # Converted to throw 2025-10-29
   ev3dev2 = throw "'ev3dev2' has been renamed to/replaced by 'python-ev3dev2'"; # Converted to throw 2025-10-29
