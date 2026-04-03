@@ -68,7 +68,7 @@ let
     "systemd-udevd-varlink.socket"
     "systemd-udevd.service"
   ]
-  ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
+  ++ (optional (!(config.boot.isContainer or false)) "systemd-udev-trigger.service")
   ++ [
     # hwdb.bin is managed by NixOS
     # "systemd-hwdb-update.service"
@@ -100,7 +100,7 @@ let
     "dev-mqueue.mount"
     "sys-fs-fuse-connections.mount"
   ]
-  ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount")
+  ++ (optional (!(config.boot.isContainer or false)) "sys-kernel-config.mount")
   ++ [
     "sys-kernel-debug.mount"
     "sys-kernel-tracing.mount"
