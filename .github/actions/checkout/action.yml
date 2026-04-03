@@ -100,14 +100,12 @@ runs:
           switch (process.env.RUNNER_OS) {
             case 'macOS':
               await run('echo', 'pre-mount_tmpfs')
-              await run('sudo', 'diskutil', 'list')
               await run('sudo', 'mount')
               await run('sudo', 'df', '-h')
 
               await run('sudo', 'mount_tmpfs', 'nixpkgs')
-              
+
               await run('echo', 'post-mount_tmpfs')
-              await run('sudo', 'diskutil', 'list')
               await run('sudo', 'mount')
               await run('sudo', 'df', '-h')
               break
@@ -144,3 +142,6 @@ runs:
               await rm('pin-bump.patch')
             }
           }
+
+          await run('echo', 'final disk usage')
+          await run('sudo', 'df', '-h')
