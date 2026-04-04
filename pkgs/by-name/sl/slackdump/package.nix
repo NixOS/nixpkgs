@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "slackdump";
-  version = "4.0.2";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-82mMlb0sJXAnuTR8a+hchigVnc9cVzXutp1nD0qHIWk=";
+    hash = "sha256-Kt9FGQiGaWDOpJMeg/UFDcNO16skQ8qblYwl26Fr5Bk=";
   };
 
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.IOKitTools;
@@ -26,13 +26,16 @@ buildGoModule (finalAttrs: {
         "TestSession_saveUserCache"
         "TestSession_GetUsers"
         "Test_exportV3" # This was skipped on upstream's CI. It is seemed that some file are missed
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestWithRetry" # flaky timing-sensitive test on darwin
       ];
     in
     [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  vendorHash = "sha256-N5NzmnpKJ8cIvaY9h6kW9dT/L7a057H+nE0gBozwsuc=";
+  vendorHash = "sha256-3pZCGE8MLNIdU4zVDwkHJwPr7xHHDhnUlzidej6c4E0=";
 
   __darwinAllowLocalNetworking = true;
 
