@@ -43,7 +43,9 @@ let
   */
   equals =
     let
-      removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
+      # perf: avoid lib.isFunction because system attrs are never __functor-style attrsets.
+      removeFunctions =
+        a: removeAttrs a (builtins.filter (n: builtins.isFunction a.${n}) (builtins.attrNames a));
     in
     a: b: removeFunctions a == removeFunctions b;
 

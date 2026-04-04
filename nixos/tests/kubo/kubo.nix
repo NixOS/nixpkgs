@@ -56,7 +56,7 @@
 
     with subtest("Socket activation for the Gateway"):
         machine.succeed(
-            f"curl 'http://127.0.0.1:8080/ipfs/{ipfs_hash.strip()}' | grep fnord2"
+            f"curl -s 'http://127.0.0.1:8080/ipfs/{ipfs_hash.strip()}' | grep fnord2"
         )
 
     with subtest("Setting dataDir works properly with the hardened systemd unit"):

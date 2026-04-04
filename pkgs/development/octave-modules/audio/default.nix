@@ -52,7 +52,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/audio/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Audio and MIDI Toolbox for GNU Octave";
     platforms = lib.platforms.linux; # Because of run-time dependency on jack2 and alsa-lib
   };

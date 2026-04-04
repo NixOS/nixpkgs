@@ -610,8 +610,8 @@ in
       "sha256-rb8qotqFW+ZcesRS0TUl+NMsrOS7CTQosZ633jSE38k=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.42.45"
-      "sha256-q8toJ7n/MSEt+w/n21rBEXHV7JAMJEno32RBmznPcKY=";
+    buildMypyBoto3Package "imagebuilder" "1.42.83"
+      "sha256-SKqhvfHPmhOOYLnr7LkTClB2lB/3iQHqcefbsVsvk60=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.42.3"
@@ -798,16 +798,16 @@ in
       "sha256-Ru2IODClBpjyDb8JNzBJi9LPY12mg46dpSBz182qkuI=";
 
   mypy-boto3-lightsail =
-    buildMypyBoto3Package "lightsail" "1.42.74"
-      "sha256-DdvGA4L+J/aHyJpq2nqK6uov0A4j212h6lMk3gtVu+s=";
+    buildMypyBoto3Package "lightsail" "1.42.83"
+      "sha256-FymSFD0/M7ncv1p6hiFxGrWQL70X65mrUF9JBHlbv9M=";
 
   mypy-boto3-location =
     buildMypyBoto3Package "location" "1.42.3"
       "sha256-VGQzgnrUynTDjfYpEk+FR+PrljbULl0UpbeqbaPKqSc=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.42.82"
-      "sha256-xZxyCo7+tTU69IfNy2p6ECx+fXI9CsnAx8V9neRB818=";
+    buildMypyBoto3Package "logs" "1.42.83"
+      "sha256-dtYr9gkww6brHLUoQd7ew0yc59XqyZjczJL94ivt2bk=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.42.3"
@@ -862,8 +862,8 @@ in
       "sha256-+Dgo1XpVUPmmUntpzFlPDeym6xUxRiXZki1j5ieS3CU=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.42.68"
-      "sha256-J9NnMG0prpzU+1dNQcH396UcZ0tCoNCbRXqVI42Qfz0=";
+    buildMypyBoto3Package "medialive" "1.42.83"
+      "sha256-FmfFTQiciHHNheumvBOAXoBYVNfMp8owUndvr7n1JHs=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.42.3"
@@ -982,8 +982,8 @@ in
       "sha256-JEuEjo0htTuDCZx2nNJK2Zq59oSUqkMf4BrNamerfVk=";
 
   mypy-boto3-organizations =
-    buildMypyBoto3Package "organizations" "1.42.80"
-      "sha256-9buhdZaiVVK4dCg0tfFce1w8XVIpXnynAAkBwLgCDCU=";
+    buildMypyBoto3Package "organizations" "1.42.83"
+      "sha256-sQqxy9tcynLqyBfXS4+FOgAcIQsttj8hiRf+GFK+tHE=";
 
   mypy-boto3-osis =
     buildMypyBoto3Package "osis" "1.42.3"
@@ -998,8 +998,8 @@ in
       "sha256-ynBHsnTvNz9G8sM9d88RI31ZMl0UzBgIz3ONEsJ+aHA=";
 
   mypy-boto3-payment-cryptography =
-    buildMypyBoto3Package "payment-cryptography" "1.42.12"
-      "sha256-MpksWgEGbXdbgF2r6CKcEZif7zzFNqmLrsbvETJAAXc=";
+    buildMypyBoto3Package "payment-cryptography" "1.42.83"
+      "sha256-TpWy7EJGmqSb3u2+/5TPaAMjTOCtcuyEVJh48ADuxm8=";
 
   mypy-boto3-payment-cryptography-data =
     buildMypyBoto3Package "payment-cryptography-data" "1.42.12"
