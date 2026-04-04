@@ -116,10 +116,99 @@ in
   # We use `callPackage' to be able to omit function arguments that can be
   # obtained from `pkgs` or `buildPackages`.
   # Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
+  /**
+    Partially parametrized form of [`lib.callPackageWith`](#function-library-lib.customisation.callPackageWith) with `autoArgs` set to a spliced package set. See its documentation for details.
+
+    # Examples
+
+    :::{.example}
+    ## `pkgs.callPackage` usage example
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+
+      packageFn =
+        { foo, enableBaz ? true, stdenv }:
+        stdenv.mkDerivation {
+          ...
+        };
+
+      package = pkgs.callPackage packageFn { foo = "bar"; };
+    in
+    {
+      inherit package;
+      packageWithoutBaz = package.override { enableBaz = false; };
+    }
+    ```
+    :::
+
+    # Inputs
+
+    `fn`
+
+    : Function (or path to import) that takes in an attribute set composed of a spliced package set, `args` and overridden arguments.
+
+    `args`
+
+    : Attribute set to always apply to `fn`'s arguments.
+
+    # Type
+
+    ```
+    callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+  */
   callPackage = pkgs.newScope { };
 
+  /**
+    Like `callPackage`, but for a function that returns an attribute
+    set of derivations. The override function is added to the
+    individual attributes.
+
+    # Inputs
+
+    `fn`
+
+    : Function (or path to import) that takes in an attribute set composed of a spliced package set, `args` and overridden arguments.
+
+    `args`
+
+    : Attribute set to always apply to `fn`'s arguments.
+
+    # Type
+
+    ```
+    callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+  */
   callPackages = lib.callPackagesWith pkgsForCall;
 
+  /**
+    Partially parametrized form of [`lib.callPackageWith`](#function-library-lib.customisation.callPackageWith) with `autoArgs` set to `extraAutoArgs` on top of a spliced package set. See its documentation for details.
+
+    # Examples
+
+    # Inputs
+
+    `extraAutoArgs`
+
+    : Attribute set on top of a spliced package set to automatically apply to `fn`'s arguments.
+
+    `fn`
+
+    : Function (or path to import) that takes in an attribute set composed of `extraAutoArgs`, a spliced package set, `args` and overridden arguments.
+
+    `args`
+
+    : Attribute set to always apply to `fn`'s arguments.
+
+    # Type
+
+    ```
+    callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+  */
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
   pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
