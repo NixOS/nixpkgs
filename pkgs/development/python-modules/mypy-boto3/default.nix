@@ -862,8 +862,8 @@ in
       "sha256-+Dgo1XpVUPmmUntpzFlPDeym6xUxRiXZki1j5ieS3CU=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.42.68"
-      "sha256-J9NnMG0prpzU+1dNQcH396UcZ0tCoNCbRXqVI42Qfz0=";
+    buildMypyBoto3Package "medialive" "1.42.83"
+      "sha256-FmfFTQiciHHNheumvBOAXoBYVNfMp8owUndvr7n1JHs=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.42.3"
