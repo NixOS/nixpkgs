@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=template-body";
+
   cmakeFlags = [ "-DUSE_HDF5=ON" ];
 
   enableParallelBuilding = false;
