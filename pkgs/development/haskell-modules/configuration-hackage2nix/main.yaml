@@ -129,6 +129,9 @@ extra-packages:
 # keep-sorted start skip_lines=1 case=no
 package-maintainers:
   Ai-Ya-Ya:
+    - beam-duckdb
+    - duckdb-ffi
+    - duckdb-simple
     - reanimate
     - reanimate-svg
   alexfmpe:
