@@ -75,7 +75,6 @@ lib.makeOverridable (
 
     isLTS ? false,
     isZen ? false,
-    isHardened ? false,
 
     # easy overrides to stdenv.hostPlatform.linux-kernel members
     autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true,
@@ -315,7 +314,6 @@ lib.makeOverridable (
             extraMakeFlags
             isLTS
             isZen
-            isHardened
             ;
 
           # Adds dependencies needed to edit the config:

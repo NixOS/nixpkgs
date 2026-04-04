@@ -8653,8 +8653,6 @@ with pkgs;
 
   linuxPackagesFor = linuxKernel.packagesFor;
 
-  hardenedLinuxPackagesFor = linuxKernel.hardenedPackagesFor;
-
   linuxManualConfig = linuxKernel.manualConfig;
 
   linuxPackages_custom = linuxKernel.customPackage;
@@ -8684,12 +8682,6 @@ with pkgs;
   # Testing (rc) kernel
   linuxPackages_testing = linuxKernel.packages.linux_testing;
   linux_testing = linuxKernel.kernels.linux_testing;
-
-  # Realtime kernel
-  linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
-  linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;
-  linux-rt = linuxPackages-rt.kernel;
-  linux-rt_latest = linuxPackages-rt_latest.kernel;
 
   # zen-kernel
   linuxPackages_zen = linuxKernel.packages.linux_zen;

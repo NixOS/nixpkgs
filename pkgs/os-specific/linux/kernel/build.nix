@@ -77,7 +77,6 @@ lib.makeOverridable (
 
     # for module compatibility
     isZen ? false,
-    isHardened ? false,
 
     # Whether to utilize the controversial import-from-derivation feature to parse the config
     allowImportFromDerivation ? false,
@@ -530,7 +529,6 @@ lib.makeOverridable (
         ;
       inherit
         isZen
-        isHardened
         withRust
         ;
       baseVersion = lib.head (lib.splitString "-rc" version);
