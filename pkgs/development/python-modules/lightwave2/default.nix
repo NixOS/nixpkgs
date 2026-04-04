@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "lightwave2";
-  version = "0.8.23";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-umhFqeX16c6o006MU9/9h4EnqcX7v8C5q3XjxYgi+xk=";
+    hash = "sha256-7NFzfUDIDa36VfOsqcaAx8AbWHftfwTyYr0hu6VyAtI=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
