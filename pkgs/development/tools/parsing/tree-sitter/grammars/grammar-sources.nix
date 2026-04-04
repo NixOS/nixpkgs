@@ -2874,6 +2874,9 @@
     hash = "sha256-pCoyDRuRCpfpJh7vQIM8yZz5aPcqrdYlTJGM/K5oQFs=";
     meta = {
       license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        jeafleohj
+      ];
     };
   };
 
