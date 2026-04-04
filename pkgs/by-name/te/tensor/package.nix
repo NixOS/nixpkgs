@@ -9,7 +9,7 @@
 # we now have libqmatrixclient so a future version of tensor that supports it
 # should use that
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tensor";
   version = "unstable-2017-02-21";
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     name = "tensor";
     exec = "@bin@";
     icon = "tensor.png";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     desktopName = "Tensor Matrix Client";
-    genericName = meta.description;
+    genericName = finalAttrs.meta.description;
     categories = [
       "Chat"
       "Utility"
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
         install -Dm755 tensor $out/bin/tensor
         install -Dm644 client/logo.png \
                        $out/share/icons/hicolor/512x512/apps/tensor.png
-        install -Dm644 ${desktopItem}/share/applications/tensor.desktop \
+        install -Dm644 ${finalAttrs.desktopItem}/share/applications/tensor.desktop \
                        $out/share/applications/tensor.desktop
 
         substituteInPlace $out/share/applications/tensor.desktop \
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = libsForQt5.qtbase.meta.platforms;
   };
-}
+})
