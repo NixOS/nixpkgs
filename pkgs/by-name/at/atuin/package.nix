@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "client"
-    "sync"
     "clipboard"
     "daemon"
+    "sync"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
