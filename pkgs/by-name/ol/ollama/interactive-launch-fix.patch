@@ -1,25 +1,18 @@
-From e1a18fe294f6f088641edd69b54804e8d842903d Mon Sep 17 00:00:00 2001
+From 42337e6c3b794b4b212a0a924856d116fab33a42 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
-Date: Tue, 24 Mar 2026 12:03:05 +0100
-Subject: [PATCH] launch: skip interactive model picker in non-interactive
- auto-approve mode
+Date: Sun, 5 Apr 2026 01:29:56 +0200
+Subject: [PATCH] bla
 
-When --yes --config --model are all provided, the launcher would still
-try to show the interactive model picker because --config sets
-ForceConfigure unconditionally. Now both launchSingleIntegration and
-launchEditorIntegration check for auto-approve policy with a model
-already resolved and skip the picker, using ensureModelsReady directly.
-
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ---
- cmd/launch/launch.go | 32 ++++++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+ cmd/launch/launch.go      |  32 +++++++++---
+ cmd/launch/launch_test.go | 106 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 130 insertions(+), 8 deletions(-)
 
 diff --git a/cmd/launch/launch.go b/cmd/launch/launch.go
-index 0734bf31..b563826c 100644
+index a44569ad..f6865a4f 100644
 --- a/cmd/launch/launch.go
 +++ b/cmd/launch/launch.go
-@@ -458,11 +458,19 @@ func (c *launcherClient) launchSingleIntegration(ctx context.Context, name strin
+@@ -459,11 +459,19 @@ func (c *launcherClient) launchSingleIntegration(ctx context.Context, name strin
  	}
  
  	if needsConfigure {
@@ -43,7 +36,7 @@ index 0734bf31..b563826c 100644
  	} else if err := c.ensureModelsReady(ctx, []string{target}); err != nil {
  		return err
  	}
-@@ -484,11 +492,19 @@ func (c *launcherClient) launchEditorIntegration(ctx context.Context, name strin
+@@ -485,11 +493,19 @@ func (c *launcherClient) launchEditorIntegration(ctx context.Context, name strin
  	models, needsConfigure := c.resolveEditorLaunchModels(ctx, saved, req)
  
  	if needsConfigure {
@@ -64,9 +57,126 @@ index 0734bf31..b563826c 100644
 +			models = selected
  		}
 -		models = selected
- 	} else if err := c.ensureModelsReady(ctx, models); err != nil {
- 		return err
+ 	} else if len(models) > 0 {
+ 		if err := c.ensureModelsReady(ctx, models[:1]); err != nil {
+ 			return err
+diff --git a/cmd/launch/launch_test.go b/cmd/launch/launch_test.go
+index 98c64cf9..1b370460 100644
+--- a/cmd/launch/launch_test.go
++++ b/cmd/launch/launch_test.go
+@@ -1966,6 +1966,112 @@ func TestLaunchIntegration_HeadlessSelectorFlowFailsWithoutPrompt(t *testing.T)
  	}
+ }
+ 
++func TestLaunchIntegration_EditorAutoApproveSkipsPickerWithModel(t *testing.T) {
++	tmpDir := t.TempDir()
++	setLaunchTestHome(t, tmpDir)
++	withLauncherHooks(t)
++	withInteractiveSession(t, false)
++
++	binDir := t.TempDir()
++	writeFakeBinary(t, binDir, "droid")
++	t.Setenv("PATH", binDir)
++
++	editor := &launcherEditorRunner{paths: []string{"/tmp/settings.json"}}
++	withIntegrationOverride(t, "droid", editor)
++
++	DefaultMultiSelector = func(title string, items []ModelItem, preChecked []string) ([]string, error) {
++		t.Fatal("multi selector should not be called in auto-approve mode with model override")
++		return nil, nil
++	}
++
++	DefaultConfirmPrompt = func(prompt string) (bool, error) {
++		return true, nil
++	}
++
++	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		switch r.URL.Path {
++		case "/api/tags":
++			fmt.Fprint(w, `{"models":[{"name":"llama3.2"},{"name":"qwen3:8b"}]}`)
++		case "/api/show":
++			var req apiShowRequest
++			_ = json.NewDecoder(r.Body).Decode(&req)
++			fmt.Fprintf(w, `{"model":%q}`, req.Model)
++		default:
++			http.NotFound(w, r)
++		}
++	}))
++	defer srv.Close()
++	t.Setenv("OLLAMA_HOST", srv.URL)
++
++	policy := LaunchPolicy{
++		Confirm:      LaunchConfirmAutoApprove,
++		MissingModel: LaunchMissingModelAutoPull,
++	}
++	err := LaunchIntegration(context.Background(), IntegrationLaunchRequest{
++		Name:           "droid",
++		ModelOverride:  "llama3.2",
++		ForceConfigure: true,
++		Policy:         &policy,
++	})
++	if err != nil {
++		t.Fatalf("LaunchIntegration returned error: %v", err)
++	}
++	if editor.ranModel != "llama3.2" {
++		t.Fatalf("expected launch with model llama3.2, got %q", editor.ranModel)
++	}
++}
++
++func TestLaunchIntegration_SingleAutoApproveSkipsPickerWithModel(t *testing.T) {
++	tmpDir := t.TempDir()
++	setLaunchTestHome(t, tmpDir)
++	withLauncherHooks(t)
++	withInteractiveSession(t, false)
++
++	binDir := t.TempDir()
++	writeFakeBinary(t, binDir, "claude")
++	t.Setenv("PATH", binDir)
++
++	runner := &launcherSingleRunner{}
++	withIntegrationOverride(t, "claude", runner)
++
++	DefaultSingleSelector = func(title string, items []ModelItem, current string) (string, error) {
++		t.Fatal("single selector should not be called in auto-approve mode with model override")
++		return "", nil
++	}
++
++	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		switch r.URL.Path {
++		case "/api/tags":
++			fmt.Fprint(w, `{"models":[{"name":"llama3.2"}]}`)
++		case "/api/show":
++			var req apiShowRequest
++			_ = json.NewDecoder(r.Body).Decode(&req)
++			fmt.Fprintf(w, `{"model":%q}`, req.Model)
++		default:
++			http.NotFound(w, r)
++		}
++	}))
++	defer srv.Close()
++	t.Setenv("OLLAMA_HOST", srv.URL)
++
++	policy := LaunchPolicy{
++		Confirm:      LaunchConfirmAutoApprove,
++		MissingModel: LaunchMissingModelAutoPull,
++	}
++	err := LaunchIntegration(context.Background(), IntegrationLaunchRequest{
++		Name:           "claude",
++		ModelOverride:  "llama3.2",
++		ForceConfigure: true,
++		Policy:         &policy,
++	})
++	if err != nil {
++		t.Fatalf("LaunchIntegration returned error: %v", err)
++	}
++	if runner.ranModel != "llama3.2" {
++		t.Fatalf("expected launch with model llama3.2, got %q", runner.ranModel)
++	}
++}
++
+ type apiShowRequest struct {
+ 	Model string `json:"model"`
+ }
 -- 
 2.53.0
 
