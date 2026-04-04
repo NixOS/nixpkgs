@@ -149,15 +149,6 @@ The change gets submitted like this:
     ```
   * Update `linux_latest` to the new attribute.
 * __SQUASH__ the changes into the `linux: init at …` commit.
-* If a new hardened is available:
-  * Instantiate a `linux_X_Y_hardened = hardenedKernelsFor kernels.linux_X_Y { };` in `kernels` and
-    `linux_X_Y_hardened = hardenedKernelFor kernels.linux_X_Y { };` in the `packages`-section.
-  * Make sure to remove the hardened variant of the previous kernel version unless it's LTS.
-    We only support the latest and latest LTS version of hardened.
-* If no new hardened kernel is available:
-  * Keep the previously latest kernel until its mainline counterpart gets removed.
-    After that `linux_hardened` points to the latest LTS supported by hardened.
-* __SQUASH__ the changes into the `linux_X_Y_hardened: init at …` commit.
 
 ### Policy for accepting new kernel flavours {#sec-linux-new-kernels}
 

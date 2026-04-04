@@ -3,61 +3,51 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchYarnDeps,
+  yarn-berry_4,
 
   cargo,
-  cargo-tauri_1,
+  cargo-tauri,
   cmake,
-  jq,
-  moreutils,
   nodejs-slim,
   pkg-config,
   rustc,
   rustPlatform,
-  yarnConfigHook,
+  webkitgtk_4_1,
 
   cyrus_sasl,
   freetype,
-  libsoup_2_4,
+  libsoup_3,
   openssl,
+  curl,
+
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "insulator2";
-  version = "2.13.2";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = "insulator2";
-    rev = "v${version}";
-    hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3eDA+pwchnwWtweGeSDlf+Vt0Hoylmanf4hnvJ2YOGU=";
   };
 
-  patches = [
-    # see: https://github.com/andrewinci/insulator2/pull/733
-    ./fix-rust-1.80.0.patch
-  ];
-
-  # Yarn *really* wants us to use corepack if this is set
-  postPatch = ''
-    jq 'del(.packageManager)' package.json | sponge package.json
-  '';
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-3BgvOoGMY86xzSHf6S0265PYOPEgLv77nT6CO9IGdwc=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "apache-avro-0.16.0" = "sha256-v4TeJEhLEqQUgj+EHgFRVUGoLC+SpOUhAXngMP7R7nM=";
-      "rust-keystore-0.1.1" = "sha256-Cj64uJFZNxnrplhRuqf9/HK/RAaawzfYHo/J9snZ+TU=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    sourceRoot = finalAttrs.src.name + "/backend";
+    hash = "sha256-u5WFV7luvqSQQtEJFlN//GH6iNcQpH/o01ME1dPtOB4=";
   };
 
   cargoRoot = "backend/";
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   strictDeps = true;
 
@@ -65,34 +55,34 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cargo
-    cargo-tauri_1.hook
+    cargo-tauri.hook
     cmake
-    jq
-    moreutils # for sponge
     nodejs-slim
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
-    yarnConfigHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
   ];
 
   buildInputs = [
     cyrus_sasl
     freetype
-    libsoup_2_4
+    libsoup_3
     openssl
-    # webkitgtk_4_0
+    webkitgtk_4_1
+    curl
   ];
 
   env.OPENSSL_NO_VENDOR = 1;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    # webkitgtk_4_0 was removed
-    broken = true;
     description = "Client UI to inspect Kafka topics, consume, produce and much more";
     homepage = "https://github.com/andrewinci/insulator2";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tc-kaluza ];
-    mainProgram = "insulator-2";
+    mainProgram = "insulator2";
   };
-}
+})
