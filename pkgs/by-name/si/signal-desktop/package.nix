@@ -151,9 +151,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
 
-    # https://github.com/signalapp/Signal-Desktop/issues/7667
-    substituteInPlace ts/util/version.std.ts \
-      --replace-fail 'isAdhoc(version)' 'true'
+    # Disable auto-updater https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace config/production.json \
+      --replace-fail '"updatesEnabled": true' '"updatesEnabled": false'
 
     # Nix builds do not need upstream release hooks (notarization and
     # language-pack postprocessing), and they expect a different macOS
