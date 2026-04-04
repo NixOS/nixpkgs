@@ -14,7 +14,7 @@
 let
   inherit (stdenv.hostPlatform) isx86;
 in
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lrzip";
   version = "0.660";
 
