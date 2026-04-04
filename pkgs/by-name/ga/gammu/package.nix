@@ -18,6 +18,8 @@
   libdbi-drivers ? null,
   postgresSupport ? false,
   libpq ? null,
+  libgudev,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,8 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     curl
     gettext
+    glib
     sqlite
     libiconv
+    libgudev
   ]
   ++ lib.optionals dbiSupport [
     libdbi
