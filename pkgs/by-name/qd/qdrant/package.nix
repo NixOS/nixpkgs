@@ -68,6 +68,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/qdrant/qdrant";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      miniharinn
+    ];
   };
 })
