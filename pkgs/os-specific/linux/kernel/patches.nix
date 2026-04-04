@@ -49,9 +49,4 @@
       patches = lib.importJSON ./hardened/patches.json;
     in
     lib.mapAttrs mkPatch patches;
-
-  export-rt-sched-migrate = {
-    name = "export-rt-sched-migrate";
-    patch = ./export-rt-sched-migrate.patch;
-  };
 }

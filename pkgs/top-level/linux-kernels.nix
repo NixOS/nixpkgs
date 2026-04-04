@@ -26,7 +26,6 @@ let
     packagesFor
     packageAliases
     vanillaPackages
-    rtPackages
     rpiPackages
     ;
 
@@ -100,27 +99,11 @@ in
           ];
         };
 
-        linux_rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
-          ];
-        };
-
         linux_5_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "5.15";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_rt_5_15 = callPackage ../os-specific/linux/kernel/linux-rt-5.15.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
           ];
         };
 
@@ -132,27 +115,11 @@ in
           ];
         };
 
-        linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
-          ];
-        };
-
         linux_6_6 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.6";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_rt_6_6 = callPackage ../os-specific/linux/kernel/linux-rt-6.6.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
           ];
         };
 
@@ -266,6 +233,10 @@ in
         linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
 
         linux_rt_5_4 = throw "linux_rt 5.4 has been removed because it will reach its end of life within 25.11";
+        linux_rt_5_10 = throw "linux_rt_5_10 has been removed due to lack of maintenance";
+        linux_rt_5_15 = throw "linux_rt_5_15 has been removed due to lack of maintenance";
+        linux_rt_6_1 = throw "linux_rt_6_1 has been removed due to lack of maintenance";
+        linux_rt_6_6 = throw "linux_rt_6_6 has been removed due to lack of maintenance";
 
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
 
@@ -758,17 +729,6 @@ in
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
   };
 
-  rtPackages = {
-    # realtime kernel packages
-    linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
-    linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
-    linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
-    linux_rt_6_6 = packagesFor kernels.linux_rt_6_6;
-  }
-  // lib.optionalAttrs config.allowAliases {
-    linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
-  };
-
   rpiPackages = {
     linux_rpi1 = packagesFor kernels.linux_rpi1;
     linux_rpi2 = packagesFor kernels.linux_rpi2;
@@ -778,7 +738,6 @@ in
 
   packages = recurseIntoAttrs (
     vanillaPackages
-    // rtPackages
     // rpiPackages
     // {
 
@@ -813,6 +772,12 @@ in
       linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
       linux_6_15_hardened = throw "linux 6.15 was removed because it has reached its end of life upstream";
       linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
+
+      linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
+      linux_rt_5_10 = throw "linux_rt_5_10 has been removed due to lack of maintenance";
+      linux_rt_5_15 = throw "linux_rt_5_15 has been removed due to lack of maintenance";
+      linux_rt_6_1 = throw "linux_rt_6_1 has been removed due to lack of maintenance";
+      linux_rt_6_6 = throw "linux_rt_6_6 has been removed due to lack of maintenance";
     }
   );
 
@@ -820,11 +785,11 @@ in
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_19;
-    linux_rt_default = packages.linux_rt_5_15;
-    linux_rt_latest = packages.linux_rt_6_6;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
+    linux_rt_default = throw "linux_rt_default has been removed due to lack of maintenance";
+    linux_rt_latest = throw "linux_rt_latest has been removed due to lack of maintenance";
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/build.nix { };
