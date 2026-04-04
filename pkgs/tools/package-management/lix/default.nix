@@ -23,6 +23,7 @@
   nix-fast-build,
   haskell,
   nix-serve-ng,
+  nixos-rebuild-ng,
   colmena,
   nix-update,
   nix-init,
@@ -142,6 +143,10 @@ let
               broken = false;
             }))
           ];
+
+          nixos-rebuild-ng = nixos-rebuild-ng.override {
+            nix = self.lix;
+          };
 
           colmena = colmena.override {
             nix = self.lix;
