@@ -25,9 +25,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "ai"
     "client"
     "clipboard"
     "daemon"
+    "hex"
     "sync"
   ];
 
