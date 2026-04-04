@@ -3715,8 +3715,6 @@ with pkgs;
 
   tabview = with python3Packages; toPythonApplication tabview;
 
-  tautulli = python3Packages.callPackage ../servers/tautulli { };
-
   plfit = callPackage ../by-name/pl/plfit/package.nix {
     python = null;
   };
