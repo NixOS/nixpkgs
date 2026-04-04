@@ -7,7 +7,8 @@
   pytestCheckHook,
   pytest-asyncio,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "biothings-client";
   version = "0.5.0";
   pyproject = true;
@@ -15,12 +16,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biothings";
     repo = "biothings_client.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SG664xpajbLLTRfqanqYJhKdZqAOXPTDNBcfCAdlZ5M=";
   };
 
   build-system = [ setuptools ];
+
   dependencies = [ httpx ];
+
   pythonImportsCheck = [ "biothings_client" ];
 
   nativeCheckInputs = [
@@ -41,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/biothings/biothings_client.py/blob/${src.tag}/CHANGES.txt";
+    changelog = "https://github.com/biothings/biothings_client.py/blob/${finalAttrs.src.tag}/CHANGES.txt";
     description = "Wrapper to access Biothings.api-based backend services";
     homepage = "https://github.com/biothings/biothings_client.py";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rayhem ];
   };
-}
+})
