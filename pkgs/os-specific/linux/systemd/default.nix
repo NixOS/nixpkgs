@@ -253,6 +253,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/ssh-generator/ssh-generator.c \
+      --replace "/usr/lib/systemd/" "${placeholder "out"}/lib/systemd/"
   ''
   + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
