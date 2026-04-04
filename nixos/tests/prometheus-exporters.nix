@@ -1540,10 +1540,248 @@ let
         '';
       };
 
-    rspamd =
-      { ... }:
-      {
-        exporterConfig = {
+    rspamd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.rspamd.enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("rspamd.service")
+        wait_for_unit("prometheus-rspamd-exporter.service")
+        wait_for_open_port(11334)
+        wait_for_open_port(7980)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:7980/probe?target=http://localhost:11334/stat' | grep 'rspamd_scanned{host=\"rspamd\"} 0'"
+        )
+      '';
+    };
+
+    rtl_433 = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        # Mock rtl_433 binary to return a dummy metric stream.
+        nixpkgs.overlays = [
+          (self: super: {
+            rtl_433 = self.runCommand "rtl_433" { } ''
+              mkdir -p "$out/bin"
+              cat <<EOF > "$out/bin/rtl_433"
+              #!/bin/sh
+              while true; do
+                printf '{"time" : "2020-04-26 13:37:42", "model" : "zopieux", "id" : 55, "channel" : 3, "temperature_C" : 18.000}\n'
+                sleep 4
+              done
+              EOF
+              chmod +x "$out/bin/rtl_433"
+            '';
+          })
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-rtl_433-exporter.service")
+        wait_for_open_port(9550)
+        wait_until_succeeds(
+            "curl -sSf localhost:9550/metrics | grep '{}'".format(
+                'rtl_433_temperature_celsius{channel="3",id="55",location="",model="zopieux"} 18'
+            )
+        )
+      '';
+    };
+
+    sabnzbd = {
+      exporterConfig = {
+        enable = true;
+        servers = [
+          {
+            baseUrl = "http://localhost:8080";
+            apiKeyFile = "/var/sabnzbd-apikey";
+          }
+        ];
+      };
+
+      metricProvider = {
+        services.sabnzbd.enable = true;
+
+        # extract the generated api key before starting
+        systemd.services.sabnzbd-apikey = {
+          requires = [ "sabnzbd.service" ];
+          after = [ "sabnzbd.service" ];
+          requiredBy = [ "prometheus-sabnzbd-exporter.service" ];
+          before = [ "prometheus-sabnzbd-exporter.service" ];
+          script = ''
+            grep -Po '^api_key = \K.+' /var/lib/sabnzbd/sabnzbd.ini > /var/sabnzbd-apikey
+          '';
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("sabnzbd.service")
+        wait_for_unit("prometheus-sabnzbd-exporter.service")
+        wait_for_open_port(8080)
+        wait_for_open_port(9387)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9387/metrics' | grep 'sabnzbd_queue_size{sabnzbd_instance=\"http://localhost:8080\"} 0.0'"
+        )
+      '';
+    };
+
+    scaphandre = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.kernelModules = [ "intel_rapl_common" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-scaphandre-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:8080/metrics'"
+        )
+      '';
+    };
+
+    shelly = {
+      exporterConfig = {
+        enable = true;
+        metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-shelly-exporter.service")
+        wait_for_open_port(9784)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9784/metrics'"
+        )
+      '';
+    };
+
+    script = {
+      exporterConfig = {
+        enable = true;
+        settings.scripts = [
+          {
+            name = "success";
+            command = [ "sleep" ];
+            args = [ "1" ];
+          }
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-script-exporter.service")
+        wait_for_open_port(9172)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9172/probe?script=success' | grep -q '{}'".format(
+                'script_success{script="success"} 1'
+            )
+        )
+      '';
+    };
+
+    smartctl = {
+      exporterConfig = {
+        enable = true;
+        devices = [
+          "/dev/vda"
+        ];
+      };
+      exporterTest = ''
+        wait_until_succeeds(
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
+        )
+      '';
+    };
+
+    smokeping = {
+      exporterConfig = {
+        enable = true;
+        hosts = [ "127.0.0.1" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-smokeping-exporter.service")
+        wait_for_open_port(9374)
+        wait_until_succeeds(
+            "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source="",tos="0"} '
+            )
+        )
+        wait_until_succeeds(
+            "curl -sSf localhost:9374/metrics | grep '{}'".format(
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source="",tos="0"}'
+            )
+        )
+      '';
+    };
+
+    speedtest = {
+      exporterConfig = {
+        enable = true;
+        debug = true;
+        refreshInterval = "1h";
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-speedtest-exporter.service")
+        wait_for_open_port(9876)
+        succeed("curl -sSf http://localhost:9876")
+      '';
+    };
+
+    storagebox = {
+      exporterConfig = {
+        enable = true;
+        tokenFile = "/tmp/faketoken";
+      };
+      exporterTest = ''
+        succeed(
+          'echo faketoken > /tmp/faketoken'
+        )
+        wait_for_unit("prometheus-storagebox-exporter.service")
+        wait_for_open_port(9509)
+        succeed("curl -sSf localhost:9509/metrics | grep 'process_open_fds'")
+      '';
+    };
+
+    snmp = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          auths.public_v2 = {
+            community = "public";
+            version = 2;
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-snmp-exporter.service")
+        wait_for_open_port(9116)
+        succeed("curl -sSf localhost:9116/metrics | grep 'snmp_request_errors_total 0'")
+      '';
+    };
+
+    sql = {
+      exporterConfig = {
+        configuration.jobs.points = {
+          interval = "1m";
+          connections = [
+            "postgres://prometheus-sql-exporter@/data?host=/run/postgresql&sslmode=disable"
+          ];
+          queries = {
+            points = {
+              labels = [ "name" ];
+              help = "Amount of points accumulated per person";
+              values = [ "amount" ];
+              query = "SELECT SUM(amount) as amount, name FROM points GROUP BY name";
+            };
+          };
+        };
+        enable = true;
+        user = "prometheus-sql-exporter";
+      };
+      metricProvider = {
+        services.postgresql = {
           enable = true;
         };
         metricProvider = {
