@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  rocm-runtime,
-  rocprofiler,
   numactl,
   libpciaccess,
   libxml2,
@@ -36,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     clang
-    clr
   ];
 
   # TODO(@LunNova): use system fmt&glog once upstream fixes flag to not vendor
@@ -45,9 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpciaccess
     libxml2
     elfutils
-    rocm-runtime
-
-    rocprofiler.rocmtoolkit-merged
 
     python3Packages.lxml
     python3Packages.cppheaderparser
@@ -56,8 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pandas
   ];
   cmakeFlags = [
-    "-DCMAKE_MODULE_PATH=${clr}/lib/cmake/hip"
-    "-DHIP_ROOT_DIR=${clr}"
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     "-DBUILD_TEST=OFF"
     "-DROCPROFILER_BUILD_TESTS=0"
