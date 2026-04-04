@@ -18,6 +18,7 @@
   acl,
   libcap,
   libcap_ng,
+  libselinux,
   libconfig,
   systemdLibs,
   fuse,
@@ -45,11 +46,11 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
-  version = "1.56.2";
+  version = "1.58.1";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-u0SJGnleC3khPO4sSRSVpt1ksh9ydEVZFzDX94kBaJo=";
+    hash = "sha256-G45bTvQ+hjAsPO3Lb7wBS+W8pehcoode8Xw89nxnEYA=";
   };
 
   strictDeps = true;
@@ -87,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     acl
     libcap
     libcap_ng
+    libselinux
     libconfig
     systemdLibs
     fuse
