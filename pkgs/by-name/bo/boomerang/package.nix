@@ -4,11 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  qtbase,
+  qt5,
   capstone,
   bison,
   flex,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,10 +33,10 @@ stdenv.mkDerivation rec {
     cmake
     bison
     flex
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
+    qt5.qtbase
     capstone
   ];
   patches = [
