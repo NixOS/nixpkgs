@@ -1,15 +1,49 @@
-#!/usr/bin/env nix
-#!nix shell --ignore-environment .#cacert .#nodejs .#git .#nix-update .#nix .#gnused .#findutils .#bash --command bash
-
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p curl nix
+#
+# Update script for nixpkgs' automated update infrastructure.
+#
+# nixpkgs-update (r-ryantm bot) runs this via passthru.updateScript.
+# It can also be run manually:
+#   ./update.sh
+#
 set -euo pipefail
 
-version=$(npm view @anthropic-ai/claude-code version)
+GCS_BUCKET="https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases"
+PACKAGE_NIX="$(dirname "$0")/package.nix"
 
-# Update version and hashes
-AUTHORIZED=1 NIXPKGS_ALLOW_UNFREE=1 nix-update claude-code --version="$version" --generate-lockfile
+# 1. Get latest version
+version=$(curl -fsSL "$GCS_BUCKET/latest")
+echo "Latest version: $version"
 
-# nix-update can't update package-lock.json along with npmDepsHash
-# TODO: Remove this workaround if nix-update can update package-lock.json along with npmDepsHash.
-(nix-build --expr '((import ./.) { system = builtins.currentSystem; }).claude-code.npmDeps.overrideAttrs { outputHash = ""; outputHashAlgo = "sha256"; }' 2>&1 || true) \
-| sed -nE '$s/ *got: *(sha256-[A-Za-z0-9+/=-]+).*/\1/p' \
-| xargs -I{} sed -i 's|npmDepsHash = "sha256-[^"]*";|npmDepsHash = "{}";|' pkgs/by-name/cl/claude-code/package.nix
+# 2. Get manifest
+manifest=$(curl -fsSL "$GCS_BUCKET/$version/manifest.json")
+
+# 3. Extract hex checksums and convert to SRI
+declare -A PLATFORM_MAP=(
+  [x86_64-linux]="linux-x64"
+  [aarch64-linux]="linux-arm64"
+  [x86_64-darwin]="darwin-x64"
+  [aarch64-darwin]="darwin-arm64"
+)
+
+for nix_system in "${!PLATFORM_MAP[@]}"; do
+  gcs_platform="${PLATFORM_MAP[$nix_system]}"
+
+  hex=$(echo "$manifest" | grep -A2 "\"$gcs_platform\"" | grep '"checksum"' | sed 's/.*"\([a-f0-9]\{64\}\)".*/\1/')
+
+  if [ -z "$hex" ]; then
+    echo "WARNING: no checksum found for $gcs_platform" >&2
+    continue
+  fi
+
+  sri=$(nix-hash --to-sri --type sha256 "$hex")
+  echo "  $nix_system ($gcs_platform): $sri"
+
+  sed -i "/$nix_system = {/,/};/{s|hash = \"sha256-[^\"]*\"|hash = \"$sri\"|}" "$PACKAGE_NIX"
+done
+
+# 4. Update version
+sed -i "s/version = \"[^\"]*\"/version = \"$version\"/" "$PACKAGE_NIX"
+
+echo "Updated package.nix to version $version"

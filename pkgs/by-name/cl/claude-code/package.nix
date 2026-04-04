@@ -1,66 +1,124 @@
-# NOTE: Use the following command to update the package
-# ```sh
-# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["claude-code-bin"] ["vscode-extensions" "anthropic" "claude-code"]])'
-# ```
 {
   lib,
-  stdenv,
-  buildNpmPackage,
-  fetchzip,
+  stdenvNoCC,
+  fetchurl,
+  glibc,
+  makeWrapper,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   bubblewrap,
   procps,
   socat,
 }:
-buildNpmPackage (finalAttrs: {
-  pname = "claude-code";
-  version = "2.1.91";
+let
+  version = "2.1.92";
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
-    hash = "sha256-u7jdM6hTYN05ZLPz630Yj7gI0PeCSArg4O6ItQRAMy4=";
+  gcsBucket = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases";
+
+  # Per-platform download URLs and SRI hashes from the GCS manifest.
+  # To update, see update.sh or the instructions in flake.nix.
+  sources = {
+    x86_64-linux = {
+      platform = "linux-x64";
+      hash = "sha256-4iMkUUln/y1en5Hw7jfkZ1v4tt/sJ/r7GcslzFsj/K8=";
+    };
+    aarch64-linux = {
+      platform = "linux-arm64";
+      hash = "sha256-CN6z1WR3SW65LmJPSS4lsSP0Un3VZ09xr/9YpI7M2VM=";
+    };
+    x86_64-darwin = {
+      platform = "darwin-x64";
+      hash = "sha256-1CK1zJdLO8Syj2mBRP0DFvPhd3S6vgvB63bCuwhY0Ko=";
+    };
+    aarch64-darwin = {
+      platform = "darwin-arm64";
+      hash = "sha256-bRuWV3J9zoEzKzzaEb/gqMg+I5LjwGKjECLhCw5xzdE=";
+    };
   };
 
-  npmDepsHash = "sha256-0ppKP+XMgTzVVZtL7GDsOjgvSPUDrUa7SoG048RLaNg=";
+  info =
+    sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported platform: ${stdenvNoCC.hostPlatform.system}");
 
-  strictDeps = true;
+  isLinux = stdenvNoCC.hostPlatform.isLinux;
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  # The Nix store's dynamic linker for the current platform.
+  # On NixOS, /lib64/ld-linux-x86-64.so.2 doesn't exist (unless nix-ld
+  # is enabled), so we need to invoke the binary through the Nix store's
+  # copy of the dynamic linker.
+  #
+  # We CANNOT use autoPatchelfHook to rewrite the binary's ELF interpreter
+  # because this is a Bun Single Executable Application (SEA). Bun embeds
+  # the application bytecode at a specific offset within the binary, and
+  # autoPatchelfHook modifies the ELF layout, shifting those offsets and
+  # breaking the embedded code detection — causing the binary to fall back
+  # to behaving as plain Bun.
+  interpreter = "${glibc}/lib/${
+    if stdenvNoCC.hostPlatform.isx86_64 then "ld-linux-x86-64.so.2" else "ld-linux-aarch64.so.1"
+  }";
+in
+stdenvNoCC.mkDerivation {
+  pname = "claude-code";
+  inherit version;
 
-    # https://github.com/anthropics/claude-code/issues/15195
-    substituteInPlace cli.js \
-          --replace-fail '#!/bin/sh' '#!/usr/bin/env sh'
+  src = fetchurl {
+    url = "${gcsBucket}/${version}/${info.platform}/claude";
+    hash = info.hash;
+  };
+
+  dontUnpack = true;
+  dontBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  # Install the unmodified binary to libexec (not bin) on Linux.
+  # On macOS, Mach-O binaries use dyld from the OS — no patching needed.
+  installPhase = ''
+    runHook preInstall
+    ${
+      if isLinux then
+        ''
+          install -Dm755 $src $out/libexec/claude
+        ''
+      else
+        ''
+          install -Dm755 $src $out/bin/claude
+        ''
+    }
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
-
-  env.AUTHORIZED = "1";
-
-  # `claude-code` tries to auto-update by default, this disables that functionality.
   # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
-  # The DEV=true env var causes claude to crash with `TypeError: window.WebSocket is not a constructor`
-  postInstall = ''
-    wrapProgram $out/bin/claude \
-      --set DISABLE_AUTOUPDATER 1 \
-      --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
-      --set DISABLE_INSTALLATION_CHECKS 1 \
-      --unset DEV \
-      --prefix PATH : ${
-        lib.makeBinPath (
-          [
-            # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
-            procps
-          ]
-          # the following packages are required for the sandbox to work (Linux only)
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            bubblewrap
-            socat
-          ]
-        )
-      }
-  '';
+  postFixup =
+    if isLinux then
+      ''
+        # On Linux, create a wrapper that invokes the unmodified binary
+        # through the Nix store's dynamic linker. The --library-path flag
+        # tells the linker where to find glibc, and the binary path plus
+        # "$@" (user args) are passed through.
+        makeWrapper ${interpreter} $out/bin/claude \
+          --add-flags "--library-path ${lib.makeLibraryPath [ glibc ]} $out/libexec/claude" \
+          --set DISABLE_AUTOUPDATER 1 \
+          --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
+          --set DISABLE_INSTALLATION_CHECKS 1 \
+          --unset DEV \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              procps
+              bubblewrap
+              socat
+            ]
+          }
+      ''
+    else
+      ''
+        wrapProgram $out/bin/claude \
+          --set DISABLE_AUTOUPDATER 1 \
+          --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
+          --set DISABLE_INSTALLATION_CHECKS 1 \
+          --unset DEV \
+          --prefix PATH : ${lib.makeBinPath [ procps ]}
+      '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
@@ -74,16 +132,12 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
     homepage = "https://github.com/anthropics/claude-code";
-    downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
-      adeci
-      malo
-      markus1189
-      omarjatoi
-      xiaoxiangmoe
-    ];
     mainProgram = "claude";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = builtins.attrNames sources;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = [
+      # add your nixpkgs maintainer name here
+    ];
   };
-})
+}
