@@ -2240,12 +2240,6 @@
     githubId = 1291396;
     name = "Arnar Ingason";
   };
-  arnoldfarkas = {
-    email = "arnold.farkas@gmail.com";
-    github = "arnoldfarkas";
-    githubId = 59696216;
-    name = "Arnold Farkas";
-  };
   arnoutkroeze = {
     email = "nixpkgs@arnoutkroeze.nl";
     github = "ArnoutKroeze";
