@@ -167,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       booxter
+      kaynetik
     ];
     inherit (electron.meta) platforms;
     mainProgram = "podman-desktop";
