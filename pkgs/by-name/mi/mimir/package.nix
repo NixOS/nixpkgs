@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "mimir-(3\.[0-9.]+)"
+        "mimir-(3\\.[0-9.]+)"
       ];
     };
     tests = {
