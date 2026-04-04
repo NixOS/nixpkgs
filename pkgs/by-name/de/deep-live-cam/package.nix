@@ -194,6 +194,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/hacksider/Deep-Live-Cam/tree/${finalAttrs.version}";
     ## TODO: maybe double-check license is restricted to only AGPL v3
     license = with lib.licenses; [ agpl3Only ];
+    mainProgram = finalAttrs.pname;
     maintainers = with lib.maintainers; [
       S0AndS0
     ];
