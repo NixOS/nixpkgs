@@ -124,6 +124,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./force-90-days-expiration.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
+    # Signal ships the Apple emoji set without a licence via an npm
+    # package and upstream does not seem terribly interested in fixing
+    # this; see:
+    #
+    # * <https://github.com/signalapp/Signal-Android/issues/5862>
+    # * <https://whispersystems.discoursehosting.net/t/signal-is-likely-violating-apple-license-terms-by-using-apple-emoji-in-the-sticker-creator-and-android-and-desktop-apps/52883>
+    #
+    # We work around this by replacing it with the Noto Color Emoji
+    # set, which is available under a FOSS licence and more likely to
+    # be used on a NixOS machine anyway. The Apple emoji are removed
+    # before `fetchPnpmDeps` to ensure that the build doesn’t cache the
+    # unlicensed emoji files.
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
