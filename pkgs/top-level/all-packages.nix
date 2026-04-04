@@ -1625,8 +1625,6 @@ with pkgs;
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
-  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
-
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
@@ -9687,21 +9685,10 @@ with pkgs;
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
-  gphoto2 = callPackage ../applications/misc/gphoto2 { };
-
-  gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
-
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
   q4wine = kdePackages.callPackage ../applications/misc/q4wine { };
-
-  googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
-
-  gpsbabel-gui = gpsbabel.override {
-    withGUI = true;
-    withDoc = true;
-  };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
@@ -10497,10 +10484,6 @@ with pkgs;
   sxiv = callPackage ../applications/graphics/sxiv {
     imlib2 = imlib2Full;
   };
-
-  dropbox = callPackage ../applications/networking/dropbox { };
-
-  dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
   maestral = with python3Packages; toPythonApplication maestral;
 
