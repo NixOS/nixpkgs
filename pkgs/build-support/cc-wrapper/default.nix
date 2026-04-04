@@ -451,13 +451,12 @@ stdenvNoCC.mkDerivation {
     inherit nixSupport;
 
     inherit defaultHardeningFlags;
-  }
-  // optionalAttrs cc.langGo or false {
+
     # So gccgo looks more like go for buildGoModule
-
-    inherit (targetPlatform.go) GOOS GOARCH GOARM;
-
-    CGO_ENABLED = 1;
+    ${if cc.langGo or false then "GOOS" else null} = targetPlatform.go.GOOS;
+    ${if cc.langGo or false then "GOARCH" else null} = targetPlatform.go.GOARCH;
+    ${if cc.langGo or false then "GOARM" else null} = targetPlatform.go.GOARM;
+    ${if cc.langGo or false then "CGO_ENABLED" else null} = 1;
   };
 
   dontBuild = true;
@@ -993,14 +992,12 @@ stdenvNoCC.mkDerivation {
     inherit darwinPlatformForCC;
     default_hardening_flags_str = toString defaultHardeningFlags;
     inherit useMacroPrefixMap;
-  }
-  // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.
-    inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
-  }
-  // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
+    darwinMinVersion = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinMinVersion;
+    darwinMinVersionVariable = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinMinVersionVariable;
     # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
-    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
+    ${if stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null then "fallback_sdk" else null} =
+      apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =
