@@ -12799,6 +12799,8 @@ self: super: with self; {
 
   price-parser = callPackage ../development/python-modules/price-parser { };
 
+  pricehist = callPackage ../development/python-modules/pricehist { };
+
   primecountpy = callPackage ../development/python-modules/primecountpy { };
 
   primepy = callPackage ../development/python-modules/primepy { };

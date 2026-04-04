@@ -1,10 +1,17 @@
 {
   lib,
-  python3Packages,
   fetchFromGitLab,
+  buildPythonPackage,
+  cssselect,
+  curlify,
+  lxml,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
+  responses,
 }:
-
-python3Packages.buildPythonApplication (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "pricehist";
   version = "1.4.14";
   pyproject = true;
@@ -18,18 +25,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "lxml" ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     requests
     lxml
     cssselect
     curlify
   ];
 
-  build-system = with python3Packages; [
+  build-system = [
     poetry-core
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
     responses
     pytest-mock
     pytestCheckHook
