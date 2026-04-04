@@ -172,8 +172,12 @@ def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
     return json.loads(output)
 
 
-def try_get_crate_manifest_path_from_mainfest_path(manifest_path: Path, crate_name: str) -> Path | None:
-    metadata = get_manifest_metadata(manifest_path)
+def try_get_crate_manifest_path_from_manifest_path(manifest_path: Path, crate_name: str) -> Path | None:
+    try:
+        metadata = get_manifest_metadata(manifest_path)
+    except subprocess.CalledProcessError:
+        eprint(f"Warning: cargo metadata failed for {manifest_path}, skipping")
+        return None
 
     for pkg in metadata["packages"]:
         if pkg["name"] == crate_name:
@@ -183,11 +187,15 @@ def try_get_crate_manifest_path_from_mainfest_path(manifest_path: Path, crate_na
 
 
 def find_crate_manifest_in_tree(tree: Path, crate_name: str) -> Path:
-    # in some cases Cargo.toml is not located at the top level, so we also look at subdirectories
-    manifest_paths = tree.glob("**/Cargo.toml")
+    # Scan all Cargo.toml files; sort by depth/path to make ordering deterministic
+    # and prefer less-nested manifests first.
+    manifest_paths = sorted(
+        tree.glob("**/Cargo.toml"),
+        key=lambda path: (len(path.parts), str(path)),
+    )
 
     for manifest_path in manifest_paths:
-        res = try_get_crate_manifest_path_from_mainfest_path(manifest_path, crate_name)
+        res = try_get_crate_manifest_path_from_manifest_path(manifest_path, crate_name)
         if res is not None:
             return res
 

@@ -193,10 +193,19 @@ rustPlatform.buildRustPackage {
     })
   ];
 
-  postPatch = lib.optionalString webUISupport ''
-    substituteInPlace cli/loader/src/lib.rs \
-        --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
-  '';
+  postPatch =
+    lib.optionalString webUISupport ''
+      substituteInPlace cli/loader/src/lib.rs \
+          --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
+    ''
+    # when building on static platforms:
+    # 1. remove the `libtree-sitter.$(SOEXT)` step from `all`
+    # 2. remove references to shared object files in the Makefile
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      substituteInPlace ./Makefile \
+          --replace-fail 'all: libtree-sitter.a libtree-sitter.$(SOEXT) tree-sitter.pc' 'all: libtree-sitter.a tree-sitter.pc'
+      sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
+    '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
@@ -209,8 +218,8 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     PREFIX=$out make install
-    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
-    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+    ${lib.optionalString (!enableShared) "rm -f $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm -f $out/lib/*.a"}
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tree-sitter \

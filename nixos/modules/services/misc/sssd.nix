@@ -93,6 +93,15 @@ in
           Kerberos will be configured to cache credentials in SSS.
         '';
       };
+
+      subIDsIntegration = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to use SSS as a source for subuid and subgid.
+        '';
+      };
+
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -245,6 +254,11 @@ in
       };
       services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
       services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+
+    (lib.mkIf cfg.subIDsIntegration {
+      system.nssDatabases.subuid = [ "sss" ];
+      system.nssDatabases.subgid = [ "sss" ];
     })
   ];
 
