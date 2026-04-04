@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
         # Unity Hub binary dependencies
         libxrandr
         xdg-utils
+        p7zip
 
         # GTK filepicker
         gsettings-desktop-schemas
