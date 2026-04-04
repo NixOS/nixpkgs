@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
     changelog = "https://github.com/jazzband/djangorestframework-simplejwt/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arnoldfarkas ];
+    maintainers = [ ];
   };
 }
