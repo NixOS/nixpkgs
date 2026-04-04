@@ -4,20 +4,23 @@
   git,
   glibcLocales,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
   nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "devpi-client";
-  version = "7.2.0";
+  version = "7.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "devpi-client";
-    inherit (finalAttrs) version;
-    hash = "sha256-wUM2hFjDh4unvuah2bQY4uZZVxo4VmFPWNdriigmnXs=";
+  src = fetchFromGitHub {
+    owner = "devpi";
+    repo = "devpi";
+    tag = "client-${finalAttrs.version}";
+    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/client";
 
   build-system = with python3.pkgs; [
     setuptools
@@ -34,6 +37,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pkginfo
     pluggy
     platformdirs
+    requests
   ];
 
   nativeCheckInputs = [

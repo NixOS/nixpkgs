@@ -14,7 +14,7 @@
   ncurses,
   opencv4,
   openssl,
-  unixODBC,
+  unixodbc,
   xkeyboard_config,
   libxtst,
   libxrender,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     opencv4
     openssl
     (lib.getLib stdenv.cc.cc)
-    unixODBC
+    unixodbc
     xkeyboard_config
     libxml2
     libuuid

@@ -2,6 +2,7 @@
   channel,
   pname,
   version,
+  url,
   sha256Hash,
 }:
 
@@ -88,7 +89,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/${filename}";
+      url = url;
       sha256 = sha256Hash;
     };
 

@@ -22,6 +22,7 @@
   pytestCheckHook,
   pytest-cov-stub,
   pytest-mock,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,8 @@ buildPythonPackage rec {
     scipy
     pandas
   ];
+
+  pythonRemoveDeps = [ "pre-commit" ];
 
   optional-dependencies = {
     plot = [ matplotlib ];
@@ -72,13 +75,17 @@ buildPythonPackage rec {
     networkx
     pytestCheckHook
     pytest-cov-stub
+    writableTmpDirAsHomeHook
   ];
 
-  # test_calibration.py generates a divide by zero error on darwin
-  # and fails on Linux after updates of dependenceis
-  # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths = [
-    "skrf/calibration/tests/test_calibration.py"
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+
+  disabledTests = [
+    # numpy.exceptions.VisibleDeprecationWarning: dtype(): align should be
+    #  passed as Python or NumPy boolean but got `align=0`
+    "test_constructor_from_pathlib"
+    "test_constructor_from_pickle"
+    "test_constructor_from_touchstone_special_encoding"
   ];
 
   pythonImportsCheck = [ "skrf" ];

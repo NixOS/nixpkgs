@@ -18,6 +18,11 @@
 
   # build ESDM RNG plugin
   withEsdm ? false,
+  # build with jitterentropy RNG plugin,
+  # default disabled, health tests may fail without
+  # configuration of OSR and related parameters
+  # in jitterentropy
+  withJitterentropy ? false,
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
   withTpm2 ? false,
   policy ? null,
@@ -55,7 +60,7 @@ let
       '';
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.10.0";
+  version = "3.11.1";
   pname = "botan";
 
   __structuredAttrs = true;
@@ -77,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "randombit";
     repo = "botan";
     tag = finalAttrs.version;
-    hash = "sha256-E4kKk4ry3SMn2DbnUTVx22lcAWDxxbo8DLyixjr/S6A=";
+    hash = "sha256-AzQ/IblJF2atUXBTwI+84gmcceVQ6aMMElS3wOsfUDM=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
     tpm2-tss
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (withJitterentropy && !stdenv.hostPlatform.isMinGW) [
     jitterentropy
   ]
   ++ lib.optionals (withEsdm && !stdenv.hostPlatform.isMinGW) [
@@ -129,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
     "--with-tpm2"
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+  ++ lib.optionals (withJitterentropy && !stdenv.hostPlatform.isMinGW) [
     "--enable-modules=jitter_rng"
   ]
   ++ lib.optionals (withEsdm && !stdenv.hostPlatform.isMinGW) [

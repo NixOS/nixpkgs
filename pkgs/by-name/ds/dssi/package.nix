@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
   libjack2,
   liblo,
   alsa-lib,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    ladspaH
+    ladspa-header
     libjack2
     liblo
     alsa-lib

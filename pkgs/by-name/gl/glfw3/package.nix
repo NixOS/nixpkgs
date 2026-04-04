@@ -103,7 +103,6 @@ stdenv.mkDerivation {
     homepage = "https://www.glfw.org/";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
-      marcweber
       Scrumplex
       twey
     ];

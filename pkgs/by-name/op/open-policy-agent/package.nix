@@ -14,16 +14,16 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U4Yrib38zY+Xk7Ogo6OfD/G46YxSfnpnUNd74zlo+7o=";
+    hash = "sha256-IzgqQ52nTkcQLg1w9yn3op5Q2P/7rVMNh3IgVYb5sFI=";
   };
 
-  vendorHash = "sha256-BS0qYV3hU+WWkm/LWKUhM9Y+IT3rqi9gwvg2TT9HZqw=";
+  vendorHash = "sha256-l2HrTap6qZeKOvvCY6d+issQT2pL6TPU0pIdDN8vfVc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

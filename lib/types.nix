@@ -1185,7 +1185,7 @@ rec {
     name = "optionType";
     description = "optionType";
     descriptionClass = "noun";
-    check = value: value._type or null == "option-type";
+    check = isType "option-type";
     merge =
       loc: defs:
       if length defs == 1 then

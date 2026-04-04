@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/entropitor/dotenv-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "dotenv";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

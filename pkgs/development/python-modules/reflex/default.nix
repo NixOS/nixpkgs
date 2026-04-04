@@ -49,14 +49,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.8.26";
+  version = "0.8.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pV7J+O7WaD7hzrjvqOFtrj8CKT+SX6KWHot/VxEMtZQ=";
+    hash = "sha256-sohID83qFnXV8vsaRy+t4cKxkki97U7sFxHIEYIEWeY=";
   };
 
   # For some reason, pre_commit is supposedly missing when python>=3.14
@@ -123,6 +123,7 @@ buildPythonPackage (finalAttrs: {
     # flaky
     "test_preprocess" # KeyError: 'reflex___state____state'
     "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
+    "test_state_manager_lock" # Lock expired for token 87164611-f...
     # tries to pin the string of a traceback, doesn't account for ansi colors
     "test_state_with_invalid_yield"
     # tries to run bun or npm

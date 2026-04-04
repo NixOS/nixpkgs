@@ -90,6 +90,7 @@ buildPythonPackage (finalAttrs: {
     "httplib2"
     "jsonpickle"
     "objsize"
+    "protobuf"
     "pyarrow"
   ];
 

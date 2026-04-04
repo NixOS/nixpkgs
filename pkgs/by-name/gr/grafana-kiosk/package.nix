@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana-kiosk";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-kiosk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dp+yKpPm11/LfRXjgFZrDAwstnz6vALJBANBqwlEXFo=";
+    hash = "sha256-+LoUJiMqE/OO0J7zIy+8uvQUq1wFpGvNvxzhb4pj+r8=";
   };
 
-  vendorHash = "sha256-3ctFiBgR7Lzhy7M3USWD3mv6FZ6cSfdjHhtOVFNLQag=";
+  vendorHash = "sha256-+tslKo5onMgnEtitYi9uwO4m5MUGzctJ7Vt4C7hJ7Fc=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''

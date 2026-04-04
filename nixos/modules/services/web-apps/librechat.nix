@@ -85,6 +85,15 @@ in
             example = 2309;
             description = "The value that will be passed to the PORT environment variable, telling LibreChat what to listen on.";
           };
+          LIBRECHAT_LOG_DIR = lib.mkOption {
+            type = lib.types.str;
+            default = "${cfg.dataDir}/logs";
+            defaultText = lib.literalExpression "/var/lib/librechat/logs";
+            description = ''
+              Logs will be saved into this directory.
+              By default it is relative to `services.librechat.dataDir`.
+            '';
+          };
         };
       };
       example = {
@@ -120,9 +129,11 @@ in
       type = lib.types.submodule {
         freeformType = format.type;
       };
-      default = { };
+      default = {
+        version = "1.2.1";
+      };
       example = {
-        version = "1.0.8";
+        version = "1.2.1";
         cache = true;
         interface = {
           privacyPolicy = {

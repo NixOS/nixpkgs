@@ -13,10 +13,6 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
   meta = {
     description = "Chrome trace event generation library";
     inherit (dune_3.meta) homepage;

@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter341,
   fetchFromGitHub,
   copyDesktopItems,
   libayatana-appindicator,
@@ -12,18 +12,16 @@
   nix-update-script,
 }:
 
-let
+flutter341.buildFlutterApplication (finalAttrs: {
+  pname = "alisthelper";
+  version = "0.2.0-unstable-2026-03-13";
+
   src = fetchFromGitHub {
     owner = "Xmarmalade";
     repo = "alisthelper";
-    rev = "84a4f025ce184eb9cd910b90397eef8edaa95127";
-    hash = "sha256-Ju7AnUq59sk15YCvXhunr5r2/e2i26lWF3+pVY3oWzo=";
+    rev = "6d7e1acb86a5c67bcf86d99bc6034f130b1d04c2";
+    hash = "sha256-EIE90R4lCnCLAi6D0YFdntB/tIhqKnoVhbqzk/4bj/k=";
   };
-in
-flutter332.buildFlutterApplication {
-  pname = "alisthelper";
-  version = "0.2.0-unstable-2025-08-05";
-  inherit src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -35,7 +33,8 @@ flutter332.buildFlutterApplication {
   buildInputs = [ libayatana-appindicator ];
 
   preBuild = ''
-    packageRun build_runner build
+    packageRun slang
+    packageRun build_runner build --delete-conflicting-outputs
   '';
 
   desktopItems = [
@@ -56,7 +55,7 @@ flutter332.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -81,4 +80,4 @@ flutter332.buildFlutterApplication {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

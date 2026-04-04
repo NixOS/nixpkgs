@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyais";
-  version = "2.15.0";
+  version = "2.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "M0r13n";
     repo = "pyais";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EMMyH6bjoS0PFop1C0TZinfwAA9E8xA7jrJ8q1jm+CY=";
+    hash = "sha256-ZyVXZZd9JXTkfucJ5tAcP813FLWapoiTUrzj27SrLlk=";
   };
 
   __darwinAllowLocalNetworking = true;

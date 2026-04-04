@@ -13,7 +13,6 @@
   rocm-device-libs,
   rocm-comgr,
   rocm-runtime,
-  rocm-toolchain,
   rocm-core,
   roctracer,
   rocminfo,
@@ -70,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.0";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -82,10 +81,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "clr";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-zz2O4Qsl1zXMC25L714azsFR2PROAvdpjgKhRolmt1w=";
+    sparseCheckout = [
+      "projects/clr"
+      "shared"
+    ];
+    hash = "sha256-8V2WbyaJZbEcKZpF/xvg0p+3oX9f/zy/45rkKZT9R3o=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/clr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -207,12 +211,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${hipClang} $out/llvm
   '';
 
-  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution.
-  # Add its own directory to its RPATH so it can find itself
+  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution,
+  # same pattern with libhiprtc.so, so add own lib directory to all .so's
+  # RPATHs so they can find themselves and neighbouring libs
   # Must be in postFixup so it runs after patchelf --shrink-rpath which removes
   # the apparently useless rpath
   postFixup = ''
-    patchelf --add-rpath "$out/lib" "$out/lib/libamdhip64.so"
+    patchelf --add-rpath "$out/lib" "$out"/lib/*.so
   '';
 
   disallowedRequisites = [
@@ -254,19 +259,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit hipClangPath;
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-      page = "tags?per_page=4";
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
 
     impureTests = {
+      # bash $(nix-build -A rocmPackages.clr.impureTests.rocm-smi)
       rocm-smi = callPackage ./test-rocm-smi.nix {
         inherit rocm-smi;
         clr = finalAttrs.finalPackage;
       };
-      opencl-example = callPackage ./test-opencl-example.nix {
+      # Simple subset of opencl-cts test_basic
+      opencl-cts = callPackage ./test-opencl-cts.nix {
         clr = finalAttrs.finalPackage;
       };
       generic-arch = callPackage ./test-isa-compat.nix {
@@ -296,6 +298,10 @@ stdenv.mkDerivation (finalAttrs: {
           "amdgcnspirv"
         ];
       };
+      hiprtc-type-traits = callPackage ./test-hiprtc-type-traits.nix {
+        clr = finalAttrs.finalPackage;
+        inherit rocm-smi;
+      };
     };
 
     selectGpuTargets =
@@ -317,7 +323,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm/clr";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/clr";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

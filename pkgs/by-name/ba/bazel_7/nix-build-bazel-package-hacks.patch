@@ -10,7 +10,7 @@ index 53e6494656..22261cd268 100644
  import java.util.Map;
  import java.util.Optional;
  import java.util.TreeMap;
-@@ -193,16 +194,15 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+@@ -193,16 +194,16 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
        }
 
        if (shouldUseCachedRepos(env, handler, repoRoot, rule)) {
@@ -25,7 +25,8 @@ index 53e6494656..22261cd268 100644
 +        // real repo, not an empty dir created by module extensions before the
 +        // repository rule has had a chance to run.
 +        if (repoRoot.getChild("BUILD").exists() || repoRoot.getChild("BUILD.bazel").exists()
-+            || repoRoot.getChild("WORKSPACE").exists() || repoRoot.getChild("WORKSPACE.bazel").exists()) {
++            || repoRoot.getChild("WORKSPACE").exists() || repoRoot.getChild("WORKSPACE.bazel").exists()
++            || repoRoot.getChild("MODULE.bazel").exists()) {
            return RepositoryDirectoryValue.builder()
                .setPath(repoRoot)
 -              .setDigest(markerHash)

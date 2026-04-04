@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,13 +28,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage doc/macchina.{1,7}
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fast, minimal and customizable system information fetcher";
     homepage = "https://github.com/Macchina-CLI/macchina";
-    changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Macchina-CLI/macchina/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       _414owen
+      progrm_jarvis
     ];
     mainProgram = "macchina";
   };

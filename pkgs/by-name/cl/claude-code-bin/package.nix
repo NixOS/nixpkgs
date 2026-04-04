@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
+      --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
+      --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
       --prefix PATH : ${
         lib.makeBinPath (

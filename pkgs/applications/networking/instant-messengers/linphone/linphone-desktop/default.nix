@@ -123,6 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # used in Linphone's CMakeLists.txt
     "-DLINPHONEAPP_VERSION=${finalAttrs.version}"
+
+    # Disable update check
+    "-DENABLE_UPDATE_CHECK=OFF"
   ];
 
   # error: invalid conversion from 'int' to 'const char*'

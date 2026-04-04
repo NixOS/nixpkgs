@@ -56,7 +56,7 @@ makeScope newScope (
   in
   {
 
-    inherit callPackage buildOctavePackage computeRequiredOctavePackages;
+    inherit buildOctavePackage computeRequiredOctavePackages;
 
     inherit (callPackage ../development/interpreters/octave/hooks { })
       writeRequiredOctavePackagesHook
@@ -83,6 +83,8 @@ makeScope newScope (
     database = callPackage ../development/octave-modules/database { };
 
     dataframe = callPackage ../development/octave-modules/dataframe { };
+
+    datatypes = callPackage ../development/octave-modules/datatypes { };
 
     dicom = callPackage ../development/octave-modules/dicom { };
 
@@ -114,7 +116,14 @@ makeScope newScope (
       inherit (pkgs) gsl;
     };
 
-    image = callPackage ../development/octave-modules/image { };
+    image = callPackage ../development/octave-modules/image {
+      inherit (pkgs)
+        mesa
+        gnuplot
+        makeFontsConf
+        writableTmpDirAsHomeHook
+        ;
+    };
 
     image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
 

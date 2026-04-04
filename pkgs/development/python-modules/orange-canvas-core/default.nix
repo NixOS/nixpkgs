@@ -26,6 +26,7 @@
 
   # tests
   qt5,
+  pyqt5,
   pytest-qt,
   pytestCheckHook,
 
@@ -77,6 +78,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pyqt5
     pytest-qt
     pytestCheckHook
   ];

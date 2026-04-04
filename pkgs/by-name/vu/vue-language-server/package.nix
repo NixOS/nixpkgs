@@ -11,19 +11,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WvxZz3Rtv1AWWVJjPiUaddoyBQXUsnucg/QXCKtNXbk=";
+    hash = "sha256-Igy7Tc2rWbLX7jeuQm8MYbgeKfPYA1a92E8B11CrUyo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-rc0oq+dujIhCa+axSj5RjXsHKzh5BCpNAJ6w1vnCtt8=";
+    hash = "sha256-unlZBLcDGP6laU2smtOP+hVrvp8HDPBqEk3MmmhO8sE=";
   };
 
   nativeBuildInputs = [

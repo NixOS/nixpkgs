@@ -51,24 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
     # --with-systemdsystemunitdir
     # https://sourceforge.net/p/lirc/tickets/385/
     ./ubuntu.diff
+
+    # fix overriding PYTHONPATH
+    ./pythonpath.patch
   ];
 
   postPatch = ''
     patchShebangs .
 
-    # fix overriding PYTHONPATH
-    sed -i 's,^PYTHONPATH *= *,PYTHONPATH := $(PYTHONPATH):,' \
-      Makefile.in
-    sed -i 's,PYTHONPATH=,PYTHONPATH=$(PYTHONPATH):,' \
-      doc/Makefile.in
-
     # Pull fix for new pyyaml pending upstream inclusion
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
-    substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
+    substituteInPlace python-pkg/lirc/database.py \
+      --replace-fail 'yaml.load(' 'yaml.safe_load('
 
-    # cant import '/build/lirc-0.10.1/python-pkg/lirc/_client.so' while cross-compiling to check the version
-    substituteInPlace python-pkg/setup.py \
-      --replace "VERSION='0.0.0'" "VERSION='${finalAttrs.version}'"
+    substituteInPlace systemd/*.service \
+      --replace-fail "ExecStart=/usr/" "ExecStart=''${!outputBin}/"
   '';
 
   preConfigure = ''
@@ -111,6 +108,30 @@ stdenv.mkDerivation (finalAttrs: {
     "sysconfdir=$out/etc"
     "localstatedir=$TMPDIR"
   ];
+
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "dev"
+    # This is the output referenced by dependent packages most of the time.
+    # $out on the other hand contains files used by direct users of lirc -
+    # systemd units, binaries, shell scripts & lirc python package. Since
+    # Nixpkgs' stdenv puts by default python libraries in $lib, this causes a
+    # cyclic reference between $out and $lib. We solve this by moving the
+    # Python library to $out in postFixup below. Since the Python library is
+    # also strongly related to the direct usage of lirc (and not only linking
+    # to the libraries of it), this makes sense anyway.
+    "lib"
+  ];
+
+  postFixup = ''
+    moveToOutput "${python3.sitePackages}" "$out"
+    # $out/bin/lirc-setup is symlinked to $lib/''${python3.sitePackages}, so it
+    # has to be fixed due to the above.
+    rm $out/bin/lirc-setup
+    ln -s $out/${python3.sitePackages}/lirc-setup/lirc-setup $out/bin/lirc-setup
+  '';
 
   # Upstream ships broken symlinks in docs
   dontCheckForBrokenSymlinks = true;

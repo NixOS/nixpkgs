@@ -43,27 +43,27 @@ let
     }
   ];
 
-  nvimConfSingleLines = makeNeovimConfig {
+  nvimConfSingleLines = {
     plugins = packagesWithSingleLineConfigs;
-    customRC = ''
+    neovimRcContent = ''
       " just a comment
     '';
   };
 
-  nvimConfNix = makeNeovimConfig {
+  nvimConfNix = {
     inherit plugins;
-    customRC = ''
+    neovimRcContent = ''
       " just a comment
     '';
   };
 
-  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
+  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" {
     plugins = [
       {
         plugin = vimPlugins.luasnip;
       }
     ];
-  });
+  };
 
   # build should fail with a wrong
   nvim-run-failing-check =
@@ -73,8 +73,6 @@ let
       {
         doCheck = true;
       };
-
-  nvimAutoDisableWrap = makeNeovimConfig { };
 
   wrapNeovim2 =
     suffix: config:
@@ -308,15 +306,15 @@ pkgs.lib.recurseIntoAttrs rec {
   '';
 
   # nixpkgs should detect that no wrapping is necessary
-  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
+  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" { };
 
   # this will generate a neovimRc content but we disable wrapping
-  nvimDontWrap = wrapNeovim2 "-forced-nowrap" (makeNeovimConfig {
+  nvimDontWrap = wrapNeovim2 "-forced-nowrap" {
     wrapRc = false;
-    customRC = ''
+    neovimRcContent = ''
       " this shouldn't trigger the creation of an init.vim
     '';
-  });
+  };
 
   force-nowrap = runTest nvimDontWrap ''
     ! grep -F -- ' -u' ${nvimDontWrap}/bin/nvim
@@ -348,12 +346,12 @@ pkgs.lib.recurseIntoAttrs rec {
     configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
-  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
+  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" {
     extraLuaPackages = ps: [ ps.mpack ];
-    customRC = ''
-      lua require("mpack")
+    luaRcContent = ''
+      require("mpack")
     '';
-  });
+  };
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
     ${nvimWithLuaPackages}/bin/nvim -V3log.txt -i NONE --noplugin +quitall! -e
@@ -415,7 +413,7 @@ pkgs.lib.recurseIntoAttrs rec {
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps = runTest nvim-with-luasnip ''
-    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
+    ${nvim-with-luasnip}/bin/nvim -i NONE -c "lua require'jsregexp'" -e +quitall!
   '';
 
   inherit nvim_with_rocks_nvim;

@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mongodb-atlas-cli";
-  version = "1.53.0";
+  version = "1.53.2";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-atlas-cli";
     tag = "atlascli/v${finalAttrs.version}";
-    hash = "sha256-BOqXkm7PJAZUx1fuuTXhrubgWcI6MNiS6nBIRQEILVY=";
+    hash = "sha256-njclhtUYLya51mZSb4VKdR0CslaVGpFbYPw4v9qMEjo=";
   };
 
-  vendorHash = "sha256-ANwv4OGmMcdPssMzDIYGPPDjdQqqlCqxx9UR5nMf3Jo=";
+  vendorHash = "sha256-5P5wiWY4KnSR2T67BT/9d1xKPZdCZ7SE6oYjWmMcN/Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 

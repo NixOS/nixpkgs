@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "NewsGuyTor";
   domain = "fellow";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "NewsGuyTor";
     repo = "FellowAiden-HomeAssistant";
     tag = "v${version}";
-    hash = "sha256-qJizRqHcYQxcONke/++Hjh6yzHNCxfytvAJYXJWoHu8=";
+    hash = "sha256-n1D/kP1vxc+/kgZGwl+5nLD6IzERmMXeiQjSKZGiqvc=";
   };
 
   passthru.updateScript = unstableGitUpdater { };

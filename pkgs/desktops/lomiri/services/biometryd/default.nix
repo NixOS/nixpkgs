@@ -23,15 +23,20 @@
   validatePkgConfig,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
+  qtQmlPaths = listToQtVar qtbase.qtQmlPrefix [ qtdeclarative ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-MIyWGd4No4Qj8oEH1FQYCE4rQhyetwiAf1y6em4zk2A=";
+    hash = "sha256-3igUyiTI47I0lf5byypmHLigyopgEQQUYURiCb6HFeg=";
   };
 
   outputs = [
@@ -54,12 +59,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace data/biometryd.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
       --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
+
+    # Suffix our QML2_IMPORT_PATH
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail \
+        'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml;' \
+        'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml:${qtQmlPaths};'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
@@ -96,14 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    # maybe-uninitialized warnings
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "ENABLE_WERROR" true)
     (lib.cmakeBool "WITH_HYBRIS" false)
   ];
 
   preBuild = ''
     # Generating plugins.qmltypes (also used in checkPhase?)
-    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
   '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

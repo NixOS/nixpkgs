@@ -37,10 +37,10 @@ in
       machine1.wait_for_unit("systemd-coredump.socket")
       machine1.systemctl("start crasher");
       machine1.wait_until_succeeds("coredumpctl list | grep crasher", timeout=10)
-      machine1.fail("stat /var/lib/crasher/core")
+      machine1.fail("stat /var/lib/crasher/core*")
 
     with subtest("systemd-coredump disabled"):
       machine2.systemctl("start crasher");
-      machine2.wait_until_succeeds("stat /var/lib/crasher/core", timeout=10)
+      machine2.wait_until_succeeds("stat /var/lib/crasher/core*", timeout=10)
   '';
 }

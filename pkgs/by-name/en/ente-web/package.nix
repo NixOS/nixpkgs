@@ -8,11 +8,11 @@
   nodejs,
   rustPlatform,
   rustc,
-  wasm-bindgen-cli_0_2_106,
+  wasm-bindgen-cli_0_2_108,
   wasm-pack,
   yarnConfigHook,
   yarnBuildHook,
-  nix-update-script,
+  writeScript,
   extraBuildEnv ? { },
   # This package contains serveral sub-applications. This specifies which of them you want to build.
   enteApp ? "photos",
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.13";
+  version = "1.3.24";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Bfu4O+kBtXxxVyx2iC/577TPD049ifjg1ItmKN4bx4U=";
+    hash = "sha256-fM/a5V5Depkeu8hIzaYJr/0w0Mt/zM9/b+76W7ggUfw=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-dedLmQP15V+gAtycXx1fpWfjXWsTPLXPPcCIAcr/ME0=";
+    hash = "sha256-ftb0h5MOHyQ2iec6iE7/WdHXgrviLCy8oIqFXv5OTq8=";
   };
   cargoRoot = "packages/wasm";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-OPmO+4VlM4Fy9vjgb2ZxDP6Ber9A+ANwix1dZSuEgUE=";
+    hash = "sha256-NhpSwesQ9B5gEeBQVjEEAKO4A68wfmBoQ3ga/baieNE=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustc.llvmPackages.lld
     nodejs
-    wasm-bindgen-cli_0_2_106
+    wasm-bindgen-cli_0_2_108
     wasm-pack
   ];
 
@@ -106,12 +106,57 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "photos-v(.*)"
-    ];
-  };
+  passthru.updateScript = writeScript "update-ente-web" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p coreutils nix-update gnugrep gnused curl
+
+    set -eu -o pipefail
+
+    # Assume the current working directory is Nixpkgs
+    file_path="./pkgs/by-name/en/ente-web/package.nix"
+
+    # Extract version, then update
+    old_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+    if [[ -z "$old_version" ]]; then
+      echo "Failed to extract old version from $file_path"
+      exit 1
+    fi
+
+    nix-update ente-web --version-regex 'photos-v(.*)'
+
+    new_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+    if [[ -z "$new_version" ]]; then
+      echo "Failed to extract new version from $file_path"
+      exit 1
+    fi
+
+    if [[ "$old_version" == "$new_version" ]]; then
+      echo "No update"
+      exit 0
+    fi
+
+    echo "Updated to version $new_version, checking wasm-bindgen..."
+
+    # Fetch Cargo.lock from GitHub instead of cloning repository
+    cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
+
+    wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
+
+    if [[ -z "$wasm_bindgen_version" ]]; then
+      echo "Failed to find wasm-bindgen version in Cargo.lock from $cargo_lock_url"
+      exit 1
+    fi
+
+    echo "Found wasm-bindgen version: $wasm_bindgen_version"
+
+    # Construct new attribute name
+    wasm_bindgen_attr="wasm-bindgen-cli_''${wasm_bindgen_version//./_}"
+
+    # Replace old attribute name in file
+    sed -i "s/wasm-bindgen-cli_[0-9_]\+/$wasm_bindgen_attr/g" "$file_path"
+
+    echo "Successfully updated wasm-bindgen-cli to $wasm_bindgen_attr"
+  '';
 
   meta = {
     description = "Ente application web frontends";

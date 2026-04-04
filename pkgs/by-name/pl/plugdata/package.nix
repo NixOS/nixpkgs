@@ -35,13 +35,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plugdata";
-  version = "0.9.3";
+  version = "0.9.3-2";
 
   src = fetchFromGitHub {
     owner = "plugdata-team";
     repo = "plugdata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GjaJCg9FhsvUWHFfEk1a/Ef5gMglWKqEWaCLqazooto=";
+    hash = "sha256-V08xlc14JZZgmXb4Dernnt9vxWDd5l/GHMzolnmCK8Y=";
     fetchSubmodules = true;
   };
 

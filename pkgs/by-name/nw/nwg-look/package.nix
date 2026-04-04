@@ -47,15 +47,11 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 1;
 
   postInstall = ''
-    mkdir -p $out/share
     mkdir -p $out/share/nwg-look/langs
-    mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/icons
     cp stuff/main.glade $out/share/nwg-look/
     cp langs/* $out/share/nwg-look/langs
-    cp stuff/nwg-look.desktop $out/share/applications
-    cp stuff/nwg-look.svg $out/share/pixmaps
+    install -D -m 644 stuff/nwg-look.desktop -t $out/share/applications
+    install -D -m 644 stuff/nwg-look.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
   preFixup = ''

@@ -10,6 +10,7 @@
   coreutils,
   curl,
   dbus,
+  enet,
   expat,
   fd,
   fetchFromGitHub,
@@ -146,6 +147,32 @@ in
         rockspecFilename="$specDir/${pname}-${version}.rockspec"
       '';
   });
+
+  enet = prev.enet.overrideAttrs (old: {
+    postPatch = ''
+      # luaL_checkint is removed in Lua 5.3, and luaL_register is removed in Lua 5.4
+      sed -i '/#include "lauxlib.h"/a\
+      #if LUA_VERSION_NUM >= 502\
+        #define luaL_checkint(L,n) ((int)luaL_checkinteger(L, (n)))\
+        #define luaL_register(L,n,f) ((n) ? luaL_newlib(L,f) : luaL_setfuncs(L,f,0))\
+      #endif
+      ' enet.c
+    '';
+    buildInputs = old.buildInputs ++ [ enet ];
+  });
+
+  etlua = prev.etlua.overrideAttrs {
+    postPatch = ''
+      # unpack was deleted in Lua 5.2
+      sed -i '1i unpack = unpack or table.unpack' spec/etlua_spec.moon
+    '';
+    doCheck = luaOlder "5.5"; # some dependency of moonscript does not support Lua 5.5
+    preCheck = "moonc spec/etlua_spec.moon";
+    nativeCheckInputs = [
+      final.bustedCheckHook
+      final.moonscript
+    ];
+  };
 
   fzf-lua = prev.fzf-lua.overrideAttrs {
     # FIXME: https://github.com/NixOS/nixpkgs/issues/431458
@@ -402,6 +429,11 @@ in
     ];
   });
 
+  lsqlite3 = prev.lsqlite3.overrideAttrs (old: {
+    src = old.src.overrideAttrs { extension = "zip"; };
+    buildInputs = old.buildInputs ++ [ sqlite.dev ];
+  });
+
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
     strictDeps = false;
     meta.broken = isLuaJIT;
@@ -431,8 +463,8 @@ in
     src = fetchFromGitHub {
       owner = "cdbattags";
       repo = "lua-resty-jwt";
-      rev = "v0.2.3";
-      hash = "sha256-5lnr0ka6ijfujiRjqwCPb6jzItXx45FIN8CvhR/KiB8=";
+      rev = "v0.3.2";
+      hash = "sha256-VCi5ge2jAldJQgecFeMZJkq5PqRQdUs+K8NsXWmK7IQ=";
       fetchSubmodules = true;
     };
   };
@@ -442,7 +474,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
-      hash = "sha256-7mFn4dLgaxfAxtPFCc3VzcBx2HuywcZTYqCGTbaGS0k=";
+      hash = "sha256-nkWQOjqShgDcLfQDOGsB9CMHZxI/Lrx/+tC4ZeUl/Ak=";
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -822,6 +854,16 @@ in
   };
 
   neotest = prev.neotest.overrideAttrs (old: {
+    patches = [
+      (fetchpatch {
+        # fix compatibility with neovim 0.12: iter_matches breaking change
+        # https://github.com/nvim-neotest/neotest/pull/594
+        name = "fix-neovim-0-12-compat";
+        url = "https://github.com/LiamCoop/neotest/commit/2ffca3aefb070e31f1ac00e9fbfd1a83f995c326.patch";
+        hash = "sha256-3+ooC3ZB8pl90FG+kTZxIzmPxrdJTx/XNYE2tPDWO+w=";
+      })
+    ];
+
     doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = old.nativeCheckInputs ++ [
       final.nlua
@@ -1097,9 +1139,11 @@ in
       hash = "sha256-8lYvdraKEd1nf8dkZuSDQRVJvX56gHCcTZVtyoy/0IM=";
     };
 
-    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
-      if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua"
-    );
+    env = old.env // {
+      NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
+        if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua"
+      );
+    };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
       cargo
@@ -1128,6 +1172,16 @@ in
     # should be fixed upstream
     meta.broken = lua.luaversion != "5.1";
   });
+
+  utf8 = prev.utf8.overrideAttrs {
+    postPatch = ''
+      sed -i '/#include <assert.h>/a\
+      #ifndef lua_assert\
+        #define lua_assert(x) assert(x)\
+      #endif
+      ' lutf8lib.c
+    '';
+  };
 
   vstruct = prev.vstruct.overrideAttrs (_: {
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";

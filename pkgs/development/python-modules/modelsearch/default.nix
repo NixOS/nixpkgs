@@ -35,6 +35,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "django-tasks"
+  ];
   dependencies = [
     django
     django-tasks

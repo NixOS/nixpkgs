@@ -26,7 +26,7 @@ jobs:
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+      - uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
@@ -60,10 +60,10 @@ jobs:
           github_token: ${{ steps.app-token.outputs.token }}
 
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
         if: ${{ failure() }}
-        with:
-          issue-number: 105153
-          body: |
+        env:
+          BODY_TEXT: |
             Periodic merge from `${{ inputs.from }}` into [`${{ inputs.into }}`](https://github.com/NixOS/nixpkgs/tree/${{ inputs.into }}) has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
-          token: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr comment 105153 --body "$BODY_TEXT"

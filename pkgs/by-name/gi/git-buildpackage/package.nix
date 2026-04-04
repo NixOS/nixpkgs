@@ -48,6 +48,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "gbp"
   ];
 
+  # don't add pytest and pytest-cov to setup_requires
+  env.WITHOUT_PYTESTS = true;
+
   nativeCheckInputs = [
     debian-devscripts
     dpkg
@@ -56,8 +59,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     man
   ]
   ++ (with python3Packages; [
-    coverage
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ]);
 

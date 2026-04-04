@@ -16,7 +16,7 @@
   legacy-cgi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wfuzz";
   version = "3.1.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xmendez";
     repo = "wfuzz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OYMZHo0ujRzwOcE+EKRNPxffxVbbiMHe+AqBz7q/u2A=";
   };
 
@@ -36,11 +36,6 @@ buildPythonPackage rec {
       hash = "sha256-t7pUMcdFmwAsGUNBRdZr+Jje/yR0yzeGIgeYNEq4hFE=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pyparsing>=2.4*" "pyparsing>=2.4"
-  '';
 
   build-system = [ setuptools ];
 
@@ -80,7 +75,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/xmendez/wfuzz/releases/tag/${src.tag}";
+    changelog = "https://github.com/xmendez/wfuzz/releases/tag/${finalAttrs.src.tag}";
     description = "Web content fuzzer to facilitate web applications assessments";
     longDescription = ''
       Wfuzz provides a framework to automate web applications security assessments
@@ -91,4 +86,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ pamplemousse ];
   };
-}
+})

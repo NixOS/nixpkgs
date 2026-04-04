@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libx11,
   cairo,
+  cpio,
   lv2,
   libsndfile,
   pkg-config,
@@ -11,20 +12,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bangr";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "BAngr";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-tit0lF/LqHu3eAtkJj4lo3FfvArOy56JqjtxrzCLJdo=";
+    sha256 = "sha256-od1UPriojDQHrAWzCYjuNoz27MRGIe+NvntUEFgGGWE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libx11
     cairo
+    cpio
     lv2
     libsndfile
   ];

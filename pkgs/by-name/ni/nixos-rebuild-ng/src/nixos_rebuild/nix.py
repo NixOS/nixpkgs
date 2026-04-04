@@ -192,13 +192,7 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    # This command is always run locally and needs to keep its own environent
-    # while merging NIX_SSHOPTS and SSH_DEFAULT_OPTS together.
-    # E.g.: to preserve SSH_AUTH_SOCK
-    env = {
-        **os.environ,
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS])),
-    }
+    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
@@ -209,31 +203,37 @@ def copy_closure(
                 host.host,
                 closure,
             ],
-            env=env,
+            append_local_env=env,
         )
 
-    def nix_copy(to_host: Remote, from_host: Remote) -> None:
+    def nix_copy(to_host: Remote | None, from_host: Remote | None) -> None:
+        host_flags = []
+        if from_host is not None:
+            host_flags += ["--from", f"{from_host.store_type}://{from_host.host}"]
+        if to_host is not None:
+            host_flags += ["--to", f"{to_host.store_type}://{to_host.host}"]
+
         run_wrapper(
             [
                 "nix",
                 *FLAKE_FLAGS,
                 "copy",
                 *dict_to_flags(copy_flags),
-                "--from",
-                f"ssh://{from_host.host}",
-                "--to",
-                f"ssh://{to_host.host}",
+                *host_flags,
                 closure,
             ],
-            env=env,
+            append_local_env=env,
         )
 
     match (to_host, from_host):
         case (x, y) if x == y:
             return
-        case (Remote(_) as host, None) | (None, Remote(_) as host):
+        # nix-copy-closure doesn't support store types other than "ssh".
+        case (Remote(_) as host, None) | (None, Remote(_) as host) if (
+            host.store_type == "ssh"
+        ):
             nix_copy_closure(host, to=bool(to_host))
-        case (Remote(_), Remote(_)):
+        case (Remote(_), _) | (_, Remote(_)):
             nix_copy(to_host, from_host)
 
 
@@ -270,8 +270,8 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
-        stdout=PIPE,
         check=False,
+        capture_output=True,
     )
     if r.returncode:
         return None
@@ -442,7 +442,10 @@ def get_generations(profile: Profile) -> list[Generation]:
         )
 
     return sorted(
-        [parse_path(p, profile) for p in profile.path.parent.glob("system-*-link")],
+        [
+            parse_path(p, profile)
+            for p in profile.path.parent.glob(f"{profile.name}-*-link")
+        ],
         key=lambda d: d.id,
     )
 
@@ -714,6 +717,12 @@ def switch_to_configuration(
         },
         remote=target_host,
         sudo=sudo,
+        # switch-to-configuration is not expected to produce meaningful
+        # stdout, but if it (or any of its children) does, it would leak
+        # into our stdout and break the "only the store path on stdout"
+        # contract documented in services.py (see print_result). Redirect
+        # its stdout to our stderr defensively.
+        stdout=sys.stderr,
     )
 
 

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "clasp";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "clasp";
     tag = "v${version}";
-    hash = "sha256-JLfkGxUHvde5RXlIWH+raBvTwqvpHOR/ul4yArLFj28=";
+    hash = "sha256-6HHkGcWzzrfIjQUPycSkF4pM/vrOo9rvWUnhHrA4LJ8=";
   };
 
-  npmDepsHash = "sha256-dT0HA21wvU+wP5/9juMYinY60Fq5ngWl5dgj0JJi9hM=";
+  npmDepsHash = "sha256-zQt+diejFiG1oEkXxN5/X9rh33wHenk+iWeHsack/kY=";
 
   # `npm run build` tries installing clasp globally
   npmBuildScript = [ "compile" ];

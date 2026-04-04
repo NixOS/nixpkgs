@@ -41,11 +41,11 @@ There are several ways to try compiling a package which has been marked as broke
     $ export NIXPKGS_ALLOW_BROKEN=1
     ```
 
--   For permanently allowing broken packages that match some condition to be built, you may add `allowBrokenPredicate` to your user's configuration file with the desired condition, for example:
+-   For permanently allowing broken packages with a specific name to be built, you may add a corresponding `problems.handlers` to your user's configuration file, for example:
 
     ```nix
     {
-      allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+      problems.handlers.hello.broken = "warn"; # or "ignore"
     }
     ```
 
@@ -179,6 +179,7 @@ Currently, the following problem kinds are known (with more reserved to be added
 - "removal": The package is planned to be removed some time in the future. Unique.
 - "deprecated": The package relies on software which has reached its end of life.
 - "maintainerless": Automatically generated for packages with `meta.maintainers == []`. Unique, not manually specifiable.
+- "broken": Automatically generated for packages with `meta.broken = true`.
 
 Each problem has a handler that deals with it, which can be one of "error", "warn" or "ignore".
 "error" will disallow evaluating a package, while "warn" will simply print a message to the log.

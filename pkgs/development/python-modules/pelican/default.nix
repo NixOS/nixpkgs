@@ -98,6 +98,8 @@ buildPythonPackage rec {
   pytestFlags = [
     # DeprecationWarning: 'jinja2.Markup' is deprecated and...
     "-Wignore::DeprecationWarning"
+    # PendingDeprecationWarning: `Publisher.set_components()` will be removed in ...
+    "-Wignore::PendingDeprecationWarning"
   ];
 
   disabledTests = [

@@ -13,20 +13,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lasuite-docs-collaboration-server";
-  version = "4.4.0";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cm/Ch7dBKInQYPFGfSlSMLgj8uQR6E3S+6gCFUyvFSU=";
+    hash = "sha256-k90JxFxXL3vEGBMkgbQABUCK99utJ88E/v9Zcj/2oBo=";
   };
 
-  sourceRoot = "source/src/frontend";
+  sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/src/frontend/yarn.lock";
-    hash = "sha256-JacPecJvdyATea8o1jQOxY9Gzx4kH+HLqE0eq03dzjg=";
+    hash = "sha256-ElI6WWKPCsO7Viexgp2XtcjXAXzFnG2ZPN5PjOaKO2g=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "docs-collaboration-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     platforms = lib.platforms.all;
   };
 })

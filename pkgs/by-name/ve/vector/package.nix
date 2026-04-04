@@ -27,16 +27,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.53.0";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OFybPI2oppntYBEklJtdEhImZc/m4oaSSWylr2hHUjA=";
+    hash = "sha256-XEQN6Dk72Yn3FZoqvQk4mj+ME68hJuN7zHpiSLY9iNo=";
   };
 
-  cargoHash = "sha256-Xuff8ZanFCtvitNYnOwCyd0UYjrhrP8UglJqbpScGVM=";
+  cargoHash = "sha256-Jlw8mCPV5TU85VHN8UTXPsxvoSlxTfYzL7k/5Sb3U/M=";
 
   nativeBuildInputs = [
     pkg-config

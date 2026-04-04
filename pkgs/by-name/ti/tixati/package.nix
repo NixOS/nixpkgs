@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 tixati $out/bin/tixati
-    install -Dm644 tixati.png $out/share/pixmaps/tixati.png
+    install -Dm644 tixati.png -t $out/share/icons/hicolor/48x48/apps
     install -Dm644 tixati.desktop $out/share/applications/tixati.desktop
 
     runHook postInstall

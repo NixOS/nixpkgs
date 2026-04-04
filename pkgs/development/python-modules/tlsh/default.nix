@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tlsh";
-  version = "4.12.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
     tag = version;
-    hash = "sha256-bR4598ZA7SDGInyxxjtBsttv+4XpZ+iqM7YAjlejdcU=";
+    hash = "sha256-cYvXZrd+8ZC5LfucguFFNlEX8FR+AkchmCFButYoiMg=";
   };
 
   patches = [

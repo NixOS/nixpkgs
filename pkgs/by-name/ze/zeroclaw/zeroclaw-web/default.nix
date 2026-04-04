@@ -1,23 +1,16 @@
 {
-  fetchFromGitHub,
   buildNpmPackage,
+  src,
   version,
   ...
 }:
 buildNpmPackage (finalAttrs: {
   pname = "zeroclaw-web";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "zeroclaw-labs";
-    repo = "zeroclaw";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-D4/2h7TlOwAU4tl1xcdULRfO21KmP+zLlqQ8DzLqnjQ=";
-  };
+  inherit src version;
 
   sourceRoot = "${finalAttrs.src.name}/web";
 
-  npmDepsHash = "sha256-H3extDaq4DgNYTUcw57gqwVWc3aPCWjIJEVYRMzdFdM=";
+  npmDepsHash = "sha256-4+raDJ7+w+RpdeZs2PJL10IWzfoT5B3EpOxsLUnlrRc=";
 
   installPhase = ''
     runHook preInstall

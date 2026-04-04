@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "junction";
-  version = "1.9";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gnFig8C46x73gAUl9VVx3Y3hrhEVeP/DvaYHYuv9RTg=";
+    hash = "sha256-sl/NeElAp/SWHp0BdXycrZYCgm4I4MFx/uHnQf78H8g=";
     fetchSubmodules = true;
   };
 

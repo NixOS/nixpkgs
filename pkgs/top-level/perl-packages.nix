@@ -7428,10 +7428,10 @@ with self;
 
   CryptURandom = buildPerlPackage {
     pname = "Crypt-URandom";
-    version = "0.54";
+    version = "0.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.54.tar.gz";
-      hash = "sha256-SnPNOUkzMo2khKrrhkXXNbNUZd9gEJ5VngoosGYFOlc=";
+      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.55.tar.gz";
+      hash = "sha256-759EFBBzwTVz6FsUj/mpCJxFglt9ZgjYMuQmOJnTotQ=";
     };
     meta = {
       description = "Provide non blocking randomness";
@@ -12621,6 +12621,23 @@ with self;
     };
     meta = {
       description = "Various portability utilities for module builders";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  ExtUtilsH2PM = buildPerlPackage {
+    pname = "ExtUtils-H2PM";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/ExtUtils-H2PM-0.11.tar.gz";
+      hash = "sha256-RrSuyafSxXSSVtCdz3ukwtAM3dQRAUgkme2Ix2bp6No=";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      description = "Automatically generate perl modules to wrap C header files";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -30821,6 +30838,28 @@ with self;
     meta = {
       description = "IPv6 related part of the C socket.h defines and structure manipulators";
       license = with lib.licenses; [ bsd3 ];
+    };
+  };
+
+  SocketNetlink = buildPerlPackage {
+    pname = "Socket-Netlink";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Socket-Netlink-0.05.tar.gz";
+      hash = "sha256-2EfbWbFI0I1A/gndoswlfvcvsetaDWgVX77csfWF2L0=";
+    };
+    buildInputs = [
+      ExtUtilsCChecker
+      ExtUtilsH2PM
+      TestHexString
+      ModuleBuild
+    ];
+    meta = {
+      description = "Interface to Linux's C<PF_NETLINK> socket family";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 

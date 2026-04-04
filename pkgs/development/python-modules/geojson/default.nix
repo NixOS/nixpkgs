@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jazzband/geojson/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Python bindings and utilities for GeoJSON";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     teams = [ lib.teams.geospatial ];
   };
 })

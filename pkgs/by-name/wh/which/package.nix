@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://ftp.gnu.org/gnu/which/";
   };
 
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
+
   meta = {
     homepage = "https://www.gnu.org/software/which/";
     description = "Shows the full path of (shell) commands";

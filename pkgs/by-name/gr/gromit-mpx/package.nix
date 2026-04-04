@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gromit-mpx";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     tag = finalAttrs.version;
-    hash = "sha256-dqZbkbjcfNO/rlUn5pCDdPU5rYyG1qSR38WROFwPlN0=";
+    hash = "sha256-DgPhQtLmrhcRInaY4s23izWte86DczprjnWhfiiYsSE=";
   };
 
   nativeBuildInputs = [

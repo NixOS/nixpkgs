@@ -5,6 +5,9 @@
 ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
+    if [ -n "${qtQmlPrefix-}" ]; then
+      addToSearchPath NIXPKGS_QML_SEARCH_PATHS "$1/$qtQmlPrefix"
+    fi
 }
 addEnvHooks "$hostOffset" ecmEnvHook
 

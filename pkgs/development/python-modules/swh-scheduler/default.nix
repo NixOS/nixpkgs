@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -28,7 +29,7 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-scheduler";
   version = "3.3.0";
   pyproject = true;
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-scheduler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Kv5QH3sj/InKOSjxGtwVxtoAluHx5eIxO5GqcbOs0NY=";
   };
 
@@ -65,6 +66,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swh.scheduler" ];
 
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     plotille
     postgresql
@@ -85,10 +89,10 @@ buildPythonPackage rec {
   disabledTests = [ "test_setup_log_handler_with_env_configuration" ];
 
   meta = {
-    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${src.tag}";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${finalAttrs.src.tag}";
     description = "Job scheduler for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

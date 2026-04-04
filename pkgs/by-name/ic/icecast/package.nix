@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.5.0";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/icecast/icecast-${finalAttrs.version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/icecast/icecast-${finalAttrs.version}.tar.gz";
     hash = "sha256-2aoHx0Ka7BnZUP9v1CXDcfdxWM00/yIPwZGywYbGfHo=";
   };
 

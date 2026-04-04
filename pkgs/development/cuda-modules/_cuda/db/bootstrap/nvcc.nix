@@ -278,8 +278,21 @@
     };
 
     # 13.0 to 13.1 adds support for Clang 21
-    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    # https://docs.nvidia.com/cuda/archive/13.1.1/cuda-installation-guide-linux/index.html#host-compiler-support-policy
     "13.1" = {
+      clang = {
+        maxMajorVersion = "21";
+        minMajorVersion = "7";
+      };
+      gcc = {
+        maxMajorVersion = "15";
+        minMajorVersion = "6";
+      };
+    };
+
+    # No changes from 13.1 to 13.2
+    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "13.2" = {
       clang = {
         maxMajorVersion = "21";
         minMajorVersion = "7";

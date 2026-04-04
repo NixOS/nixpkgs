@@ -5,4 +5,4 @@
 # library.”  Therefore, we keep packages `abseil-cpp_YYYYMM` for each
 # required LTS branch, leaving `abseil-cpp` as an alias.
 
-{ abseil-cpp_202508 }: abseil-cpp_202508
+{ abseil-cpp_202601 }: abseil-cpp_202601

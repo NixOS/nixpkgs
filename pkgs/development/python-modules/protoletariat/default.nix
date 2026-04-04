@@ -8,7 +8,7 @@
   click,
   pkgs,
   protobuf,
-  mypy-protobuf,
+  mypy-protobuf_3_6,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
-    mypy-protobuf
+    mypy-protobuf_3_6
   ];
 
   meta = {

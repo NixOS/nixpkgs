@@ -112,6 +112,8 @@ buildPythonPackage rec {
     "tests/schema_registry/_sync/test_config.py"
     # crashes the test runner on shutdown
     "tests/test_kafka_error.py"
+    # stats_cb can raise during consumer.close() causing race-condition
+    "tests/test_Consumer.py::test_callback_exception_no_system_error"
   ];
 
   meta = {

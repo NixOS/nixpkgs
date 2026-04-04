@@ -18,7 +18,7 @@
     };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     ''
       machine.start()
       machine.wait_for_unit("peering-manager.target")

@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openresolv_project" finalAttrs.version;
   };

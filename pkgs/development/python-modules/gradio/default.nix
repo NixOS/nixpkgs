@@ -56,6 +56,7 @@
 
   # tests
   pytestCheckHook,
+  build,
   hypothesis,
   altair,
   boto3,
@@ -81,14 +82,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.8.0";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-ZHglnRs0AXCu9HlVoSO0h5p6SE4al/OLPn0jwZgKVR8=";
+    hash = "sha256-iGaUiJto/tquCSa6D/wbkNyVtK/2kZB/hz62STfwLOY=";
   };
 
   patches = [
@@ -103,7 +104,7 @@ buildPythonPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-6Cx0hdVd0srhArvck2Kn9U2fT7aKtTZjgV5b/Usrnoo=";
+    hash = "sha256-pZCYtWFNlrcRFomx6HbO0zySOyifO3n/ffzx59pS/A8=";
   };
 
   nativeBuildInputs = [
@@ -167,6 +168,7 @@ buildPythonPackage (finalAttrs: {
     boto3
     brotli
     diffusers
+    build
     docker
     ffmpeg
     gradio-pdf
@@ -214,6 +216,9 @@ buildPythonPackage (finalAttrs: {
     "test_error_analytics_successful"
     "TestSnippetExecution"
 
+    # requires network, via subprocess.run
+    "test_endpoint_status"
+
     # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
     # These error only affect downstream use of the check dependencies.
     "test_no_color"
@@ -254,6 +259,8 @@ buildPythonPackage (finalAttrs: {
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
+    "test_api_response"
+    "test_load_assets"
 
     # Flaky test (AssertionError when comparing to a fixed array)
     # https://github.com/gradio-app/gradio/issues/11620
@@ -356,6 +363,7 @@ buildPythonPackage (finalAttrs: {
     # 100% touches network
     "test/test_networking.py"
     "client/python/test/test_client.py"
+
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
 
@@ -422,7 +430,9 @@ buildPythonPackage (finalAttrs: {
     # enough tags for the ones we're looking for to show up.
     updateScript = writeScript "update-python3Packages.gradio" ''
       #! /usr/bin/env nix-shell
-      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update
+      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update jq curl
+      set -euo pipefail
+      set -x
 
       tag=$(list-git-tags \
             | grep "^gradio@" \
@@ -432,7 +442,10 @@ buildPythonPackage (finalAttrs: {
             | head -n 1 \
             | tr -d '\n' \
            )
-      nix-update --version="$tag"
+      nix-update python3Packages.gradio --version="$tag"
+
+      gradio_client_version="$(curl https://raw.githubusercontent.com/gradio-app/gradio/gradio@"$tag"/client/python/gradio_client/package.json | jq ".version" -r)"
+      nix-update python3Packages.gradio-client --version="$gradio_client_version" --no-src
     '';
   };
 

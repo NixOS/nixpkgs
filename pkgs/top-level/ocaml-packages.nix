@@ -76,6 +76,8 @@ let
 
         atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+        atdml = callPackage ../development/ocaml-modules/atdml { };
+
         augeas = callPackage ../development/ocaml-modules/augeas {
           inherit (pkgs) augeas;
         };
@@ -220,6 +222,8 @@ let
         caqti-eio = callPackage ../development/ocaml-modules/caqti/eio.nix { };
 
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
+
+        caqti-miou = callPackage ../development/ocaml-modules/caqti/miou.nix { };
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
@@ -686,6 +690,8 @@ let
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
 
+        fs-io = callPackage ../development/ocaml-modules/fs-io { };
+
         functory = callPackage ../development/ocaml-modules/functory { };
 
         ### G ###
@@ -816,6 +822,8 @@ let
         hmap = callPackage ../development/ocaml-modules/hmap { };
 
         hpack = callPackage ../development/ocaml-modules/hpack { };
+
+        htmlit = callPackage ../development/ocaml-modules/htmlit { };
 
         http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
 
@@ -1183,6 +1191,8 @@ let
           cohttp = cohttp_5_3; # due to cohttp_static_handler pulling in cohttp_5_3
         };
 
+        malfunction = callPackage ../development/ocaml-modules/malfunction { };
+
         mariadb = callPackage ../development/ocaml-modules/mariadb {
           inherit (pkgs) mariadb;
         };
@@ -1214,6 +1224,8 @@ let
         mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
         menhir = callPackage ../development/ocaml-modules/menhir { };
+
+        menhirGLR = callPackage ../development/ocaml-modules/menhir/glr.nix { };
 
         menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
 
@@ -1511,6 +1523,7 @@ let
         ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
         ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
         ocamlformat_0_28_1 = ocamlformat.override { version = "0.28.1"; };
+        ocamlformat_0_29_0 = ocamlformat.override { version = "0.29.0"; };
 
         ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix { };
 
@@ -1739,6 +1752,8 @@ let
         };
 
         posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
+
+        posix-errno = callPackage ../development/ocaml-modules/posix/errno.nix { };
 
         posix-math2 = callPackage ../development/ocaml-modules/posix/math2.nix { };
 
@@ -2093,6 +2108,12 @@ let
 
         terml = callPackage ../development/ocaml-modules/terml { };
 
+        testo = callPackage ../development/ocaml-modules/testo { };
+
+        testo-diff = callPackage ../development/ocaml-modules/testo/diff.nix { };
+
+        testo-util = callPackage ../development/ocaml-modules/testo/util.nix { };
+
         tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
         tezt = callPackage ../development/ocaml-modules/tezt { };
@@ -2122,6 +2143,8 @@ let
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
+
+        top-closure = callPackage ../development/ocaml-modules/top-closure { };
 
         topkg = callPackage ../development/ocaml-modules/topkg { };
 

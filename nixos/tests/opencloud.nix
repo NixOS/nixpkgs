@@ -41,7 +41,7 @@ let
         driver.find_element(By.ID, 'oc-login-password').send_keys(password)
         wait.until(EC.visibility_of_element_located((By.XPATH, '//button[@type="submit"]')))
         driver.find_element(By.XPATH, '//button[@type="submit"]').click()
-        wait.until(EC.visibility_of_element_located((By.ID, 'new-file-menu-btn')))
+        wait.until(EC.visibility_of_element_located((By.ID, 'app-floating-action-button-com-github-opencloud-eu-web-files-floating-action-button')))
         wait.until(EC.title_contains("Personal"))
       '';
 in

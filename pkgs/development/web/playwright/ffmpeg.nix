@@ -1,13 +1,18 @@
 {
   fetchzip,
-  suffix,
   revision,
   system,
   throwSystem,
 }:
+let
+  download =
+    (import ./browser-downloads.nix {
+      name = "ffmpeg";
+      inherit revision;
+    }).${system} or throwSystem;
+in
 fetchzip {
-  url = "https://playwright.azureedge.net/builds/ffmpeg/${revision}/ffmpeg-${suffix}.zip";
-  stripRoot = false;
+  inherit (download) url stripRoot;
   hash =
     {
       x86_64-linux = "sha256-AWTiui+ccKHxsIaQSgc5gWCJT5gYwIWzAEqSuKgVqZU=";

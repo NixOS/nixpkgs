@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
 
   nix-update-script,
@@ -9,7 +9,7 @@
 
 # fails with go 1.25, downgrade to 1.24
 # error tls.ConnectionState: struct field count mismatch: 17 vs 16
-buildGo124Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "warp-plus";
   version = "1.2.6-unstable-2025-11-17";
 
@@ -57,5 +57,6 @@ buildGo124Module (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "warp-plus";
+    broken = true;
   };
 })

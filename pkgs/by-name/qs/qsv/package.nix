@@ -15,7 +15,7 @@
   withUi ? true,
   buildFeatures ?
     # enable all features except self_update by default
-    # https://github.com/dathere/qsv/blob/16.1.0/Cargo.toml#L370
+    # https://github.com/dathere/qsv/blob/18.0.0/Cargo.toml#L370
     [
       "apply"
       "feature_capable"
@@ -33,7 +33,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
-  version = "16.1.0";
+  version = "18.0.0";
 
   inherit buildFeatures;
 
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dathere";
     repo = "qsv";
     rev = finalAttrs.version;
-    hash = "sha256-7v4I5UufODXgEBeM5+s6zBBPRlrihHrfCYOPjrny53I=";
+    hash = "sha256-2S10BYLSB2pLMX5kiLv1v4naSwFL66rl7NPzBGrz9Rg=";
   };
 
-  cargoHash = "sha256-wD5LjdHhCVltHYWij+/b8j9ER4OnwecVlc/2nGjvClE=";
+  cargoHash = "sha256-IdzTG3L3bzOMrmQls1mTsPQYp3hHThZ5l968fH+4Q5s=";
 
   buildInputs = [
     file

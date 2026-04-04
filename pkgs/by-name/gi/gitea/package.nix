@@ -26,8 +26,8 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-0p7P68BvO3hv0utUbnPpHSpGLlV7F9HHmOITvJAb/ww=";
+      fetcherVersion = 3;
+      hash = "sha256-Atb6m5ZD9NKjYezFnYLnQqnlr72g5dz7ROfOF9fsqto=";
     };
 
     nativeBuildInputs = [
@@ -48,18 +48,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.25.4";
+  version = "1.25.5";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-sVpCdDJWzHtRKiqTeRuvrHf/cmeLbLs4THAqkH8hqMY=";
+    hash = "sha256-EDj/n4dOZsdJx4zdP8GwUavZNK145Q8ENXmIL+81MY4=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-y7HurJg+/V1cn8iKDXepk/ie/iNgiJXsQbDi1dhgark=";
+  vendorHash = "sha256-o7OIVo0/gunGMIDd0r6c9KDtku6pWwzmgm1X9qVbx4w=";
 
   outputs = [
     "out"

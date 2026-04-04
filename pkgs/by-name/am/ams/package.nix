@@ -3,7 +3,7 @@
   stdenv,
   fetchgit,
   alsa-lib,
-  ladspaH,
+  ladspa-header,
   libjack2,
   fftw,
   zita-alsa-pcmi,
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    ladspaH
+    ladspa-header
     libjack2
     fftw
     zita-alsa-pcmi

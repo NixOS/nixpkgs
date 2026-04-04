@@ -20,7 +20,6 @@
   ca-certs,
   cohttp,
   cohttp-lwt-unix,
-  lwt_log,
   re,
   logs-syslog,
   cryptokit,
@@ -78,7 +77,6 @@ buildDunePackage (finalAttrs: {
     cohttp-lwt-unix
     cryptokit
     ipaddr
-    lwt_log
     lwt_ssl
     re
     logs-syslog

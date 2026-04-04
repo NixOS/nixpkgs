@@ -6,7 +6,6 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
-  fetchpatch2,
   fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
@@ -99,13 +98,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.0.4";
+  version = "32.1.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-OiLlYnHaW+ehHtz4N20ctkfL4WmCzI45+VUG5hHOga4=";
+    hash = "sha256-edmDqavmDT8+bl0nXmDqYPpkuitg9T8u2fI/j6mWoFc=";
     fetchSubmodules = true;
   };
 
@@ -113,11 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-nix-plugin-path.patch
-    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
-    (fetchpatch2 {
-      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
-      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
-    })
   ];
 
   nativeBuildInputs = [

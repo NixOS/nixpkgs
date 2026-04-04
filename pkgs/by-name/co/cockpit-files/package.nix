@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-files";
-  version = "36";
+  version = "39";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit-files";
     tag = finalAttrs.version;
-    hash = "sha256-JuGYEF+XIxHP2ACfujAglFk/rocEc7HL3Tjl3txPLjA=";
+    hash = "sha256-RoAlZ3PIJHdF2kBnrBnbJqnwl7/C7po7pvI3xmsRFQc=";
 
     fetchSubmodules = true;
     postFetch = "cp $out/node_modules/.package-lock.json $out/package-lock.json";

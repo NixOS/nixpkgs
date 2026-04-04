@@ -1,17 +1,16 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_16_1,
+  cargo-pgrx_0_17_0,
   fetchFromGitHub,
   fetchurl,
   lib,
   nix-update-script,
   pkg-config,
   postgresql,
-  stdenv,
 }:
 
 let
-  # https://github.com/paradedb/paradedb/blob/v0.21.8/Cargo.lock#L3316-L3346
+  # https://github.com/paradedb/paradedb/blob/v0.22.1/Cargo.lock#L4239-L4269
   linderaVersion = "1.4.1";
   linderaWebsite = "https://lindera.dev";
 
@@ -50,16 +49,16 @@ let
 in
 buildPgrxExtension (finalAttrs: {
   pname = "pg_search";
-  version = "0.21.8";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "paradedb";
     repo = "paradedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gvQOfyFU8SVtAJTGw0EuRatfDVZRqpv7WhIqYYZYbgc=";
+    hash = "sha256-WPkgVqrA2mOgj7IGh/GSjpJoLP7usdUWbFVY1SqGHq4=";
   };
 
-  cargoHash = "sha256-NRrDmswQ+oiVNeIbhfhDA7k4wOxotTLsOuT7WMewX6Y=";
+  cargoHash = "sha256-f8/5wDle97O3RoIvM+iPWeEzfASsaQm2k8YnaYg32Do=";
 
   inherit postgresql;
 
@@ -79,10 +78,10 @@ buildPgrxExtension (finalAttrs: {
     echo "Lindera cache prepared at $LINDERA_CACHE"
   '';
 
-  # https://github.com/paradedb/paradedb/blob/v0.21.8/Cargo.toml#L38-L39
-  cargo-pgrx = cargo-pgrx_0_16_1;
+  # https://github.com/paradedb/paradedb/blob/v0.22.1/Cargo.toml#L38-L39
+  cargo-pgrx = cargo-pgrx_0_17_0;
 
-  # https://github.com/paradedb/paradedb/tree/v0.21.8/pg_search
+  # https://github.com/paradedb/paradedb/tree/v0.22.1/pg_search
   cargoPgrxFlags = [
     "--package"
     "pg_search"
@@ -100,11 +99,11 @@ buildPgrxExtension (finalAttrs: {
   meta = {
     description = "Transactional Elasticsearch alternative as a PostgreSQL extension";
     homepage = "https://paradedb.com";
-    changelog = "https://github.com/paradedb/paradedb/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/paradedb/paradedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.lucperkins ];
-    # https://github.com/paradedb/paradedb/blob/v0.21.8/pg_search/Cargo.toml#L14-L18
-    broken = lib.versionOlder postgresql.version "14";
+    # https://github.com/paradedb/paradedb/blob/v0.22.1/pg_search/Cargo.toml#L14-L17
+    broken = lib.versionOlder postgresql.version "15";
     platforms = postgresql.meta.platforms;
   };
 })

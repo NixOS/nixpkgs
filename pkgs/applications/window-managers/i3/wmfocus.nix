@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wmfocus";
     homepage = "https://github.com/svenstaro/wmfocus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

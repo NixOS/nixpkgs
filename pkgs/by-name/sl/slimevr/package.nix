@@ -22,13 +22,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slimevr";
-  version = "18.1.0";
+  version = "18.2.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vU/dcKRlNsixr3TaCrqNkCd2ewAb38fLymb+ZslAum4=";
+    hash = "sha256-7QU+xQ72t722DOhrurI1XXpILLNnk8lE0yrD1P5XJbA=";
     # solarxr
     fetchSubmodules = true;
   };
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
     substituteInPlace gui/src-tauri/src/tray.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"

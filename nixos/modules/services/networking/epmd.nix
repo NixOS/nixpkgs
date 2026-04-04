@@ -63,5 +63,5 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.beam.members;
+  meta.teams = [ lib.teams.beam ];
 }

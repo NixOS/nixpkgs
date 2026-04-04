@@ -5,7 +5,6 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   lld,
-  libsixel,
   versionCheckHook,
   nix-update-script,
 }:
@@ -31,10 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lld
     ];
 
-  buildInputs = [
-    libsixel
-  ];
-
   cargoHash = "sha256-OlZXf8Wg32mXGDGbavLVf1ELoqqSmc8z9DNpvGOfAJ8=";
 
   env = lib.optionalAttrs (isDarwin && isx86_64) {
@@ -45,12 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
     "--skip=external_snippet"
   ];
-
-  # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionalString isDarwin ''
-    wrapProgram $out/bin/presenterm \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
-  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

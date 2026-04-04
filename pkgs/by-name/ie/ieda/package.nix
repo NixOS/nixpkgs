@@ -45,6 +45,12 @@ let
       })
     ];
 
+    postPatch = ''
+      # Patch for boost1.89, should be removed after upstream update: https://gitee.com/oscc-project/iEDA/pulls/92
+      sed -i '1i find_package(Boost REQUIRED)' src/operation/iPA/test/CMakeLists.txt
+      sed -i 's/boost_system/Boost::headers/g' src/operation/iPA/test/CMakeLists.txt
+    '';
+
     dontBuild = true;
     dontFixup = true;
     installPhase = ''

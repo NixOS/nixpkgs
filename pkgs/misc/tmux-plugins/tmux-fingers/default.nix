@@ -7,13 +7,13 @@
 let
   fingers = crystal.buildCrystalPackage rec {
     format = "shards";
-    version = "2.6.1";
+    version = "2.6.2";
     pname = "fingers";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
       rev = "${version}";
-      sha256 = "sha256-f18y4Jq5Ab/5KZKv8woMTkFGEY2/f5KeRH0sf6R1l1U=";
+      sha256 = "sha256-6zJq2Utr/TnbNS5WhQKQqU3WMAhToSdEvHqll8JzIBY=";
     };
 
     shardsFile = ./shards.nix;

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pluto";
-  version = "5.22.7";
+  version = "5.23.6";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "pluto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lB8xMkKCnQYMtwvYXbCwSsh30nbpQ/2Pl8dHA1R3bQg=";
+    hash = "sha256-P/N36LCoXLRDD4ASN4YQovgQFrW2WgS+tKRUlWTNZIs=";
   };
 
-  vendorHash = "sha256-PVax9C1tSlB8AVhJbRx4l5kvOrPfWd4O8jQ2lXoamls=";
+  vendorHash = "sha256-EAgfzwGt/kHMP5mJ9D+WW6KMV7P0r/gUf6EYTppLWIA=";
 
   ldflags = [
     "-w"

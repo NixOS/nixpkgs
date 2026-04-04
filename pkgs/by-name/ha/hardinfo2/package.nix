@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.runtimeLibs}
 
       substituteInPlace $out/lib/systemd/system/hardinfo2.service \
-        --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/hwinfo2_fetch_sysdata"
+        --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/bin/hwinfo2_fetch_sysdata"
   '';
 
   # account for tags having a release- prefix

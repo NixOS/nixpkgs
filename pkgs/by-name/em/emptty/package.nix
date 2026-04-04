@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "emptty";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = "emptty";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7RYzj+LcxK9i2RM8NFfKjz2DiD9CjCTNSJe7wVnYzdM=";
+    hash = "sha256-JP9PElmwSHk8rcP7NF1PsZETul978UZR+MUulT3BtYs=";
   };
 
   buildInputs = [

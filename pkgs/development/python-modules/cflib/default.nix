@@ -7,7 +7,6 @@
   libusb-package,
   numpy,
   packaging,
-  pyserial,
   pyusb,
   scipy,
   pytestCheckHook,
@@ -43,13 +42,13 @@ buildPythonPackage rec {
     libusb-package
     numpy
     packaging
-    pyserial
     pyusb
     scipy
   ];
 
   disabledTestPaths = [
     # exception: Cannot find a Crazyradio Dongle (HW required)
+    "examples/radio/radio_test.py"
     "sys_test/single_cf_grounded/"
     "sys_test/swarm_test_rig/"
   ];

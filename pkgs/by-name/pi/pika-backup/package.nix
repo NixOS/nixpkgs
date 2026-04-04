@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   rustPlatform,
   replaceVars,
   cargo,
@@ -24,27 +23,22 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
-    tag = "v${version}";
-    hash = "sha256-J5EsCanKEczPXw8QsNlp3mxh0MyJyJ+WulaZJ+c6hBA=";
+    tag = version;
+    hash = "sha256-tWTINRYCAhPV2srZWIYJeH4NAQIv/ED0bBdeKKgkC78=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-JjqtThxjMb+HDdPt50X7yXDxqouQliSlNvT14roZLYk=";
+    hash = "sha256-Ut7dFhm67tcpELZzQPwyIs9/3YNHofi2VF9RxQCD7qo=";
   };
 
   patches = [
-    # https://gitlab.gnome.org/World/pika-backup/-/issues/643
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/pika-backup/-/commit/842d93d65a342985bf6d7d8cacd5b38ea508df2e.patch";
-      hash = "sha256-HtGuEi8ghiMwzBEsvo/DTfVAExgmHpd0xp5bpWRn9Fs=";
-    })
     (replaceVars ./borg-path.patch {
       borg = lib.getExe borgbackup;
     })

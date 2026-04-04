@@ -4,6 +4,7 @@
   setuptools,
   pytestCheckHook,
   tree-sitter,
+  tree-sitter-config,
   symlinkJoin,
   writeTextDir,
   # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
@@ -44,26 +45,40 @@ buildPythonPackage {
   src = symlinkJoin {
     name = "${drvPrefix}-source";
     paths = [
-      (writeTextDir "${snakeCaseName}/__init__.py" ''
+      (writeTextDir "${snakeCaseName}/__init__.py" /* python */ ''
         # AUTO-GENERATED DO NOT EDIT
 
-        # preload the parser object before importing c binding
-        # this way we can avoid dynamic linker kicking in when
-        # downstream code imports this python module
+        from pathlib import Path
+        from tree_sitter_config import TreeSitterConfig
+
+        # Preload the parser object before importing the C binding.
+        # This way we can avoid dynamic linker kicking in when
+        # downstream code imports this python module.
         import ctypes
-        import sys
-        import os
         parser = "${grammarDrv}/parser"
         try:
             ctypes.CDLL(parser, mode=ctypes.RTLD_GLOBAL) # cached
         except OSError as e:
             raise ImportError(f"cannot load tree-sitter parser object from {parser}: {e}")
 
-        # expose binding
+        def config() -> TreeSitterConfig | None:
+            grammar_path = Path("${grammarDrv}")
+            json_path = grammar_path / "tree-sitter.json"
+            if not json_path.exists():
+                return None
+
+            # Massage each grammar's path into an absolute path so later code
+            # can find queries, etc.
+            conf = TreeSitterConfig.model_validate_json(json_path.read_text())
+            for grammar in conf.grammars:
+                grammar.path = str(grammar_path / grammar.path)
+
+            return conf
+
         from ._binding import language
-        __all__ = ["language"]
+        __all__ = ["language", "config"]
       '')
-      (writeTextDir "${snakeCaseName}/binding.c" ''
+      (writeTextDir "${snakeCaseName}/binding.c" /* c */ ''
         // AUTO-GENERATED DO NOT EDIT
 
         #include <Python.h>
@@ -94,7 +109,7 @@ buildPythonPackage {
             return PyModule_Create(&module);
         }
       '')
-      (writeTextDir "setup.py" ''
+      (writeTextDir "setup.py" /* python */ ''
         # AUTO-GENERATED DO NOT EDIT
 
         from platform import system
@@ -116,7 +131,7 @@ buildPythonPackage {
           ],
         )
       '')
-      (writeTextDir "pyproject.toml" ''
+      (writeTextDir "pyproject.toml" /* toml */ ''
         # AUTO-GENERATED DO NOT EDIT
 
         [build-system]
@@ -146,25 +161,34 @@ buildPythonPackage {
         build = "cp38-*"
         build-frontend = "build"
       '')
-      (writeTextDir "tests/test_language.py" ''
+      (writeTextDir "tests/test_language.py" /* python */ ''
         # AUTO-GENERATED DO NOT EDIT
 
-        from ${snakeCaseName} import language
+        from ${snakeCaseName} import config, language
         from tree_sitter import Language, Parser
 
-        # This test only checks that the binding can load the grammar from the compiled shared object.
-        # It does not verify the grammar itself; that is tested in
-        # `pkgs/development/tools/parsing/tree-sitter/grammar.nix`.
-
         def test_language():
+          # This test only checks that the binding can load the grammar from the compiled shared object.
+          # It does not verify the grammar itself; that is tested in
+          # `pkgs/development/tools/parsing/tree-sitter/grammar.nix`.
+
           lang = Language(language())
           assert lang is not None
           parser = Parser(lang)
           tree = parser.parse(bytes("", "utf-8"))
           assert tree is not None
+
+        def test_config():
+          # This test only checks if we can parse the tree-sitter.json, if one exists.
+          # (Not all grammars have one yet).
+          config()
       '')
     ];
   };
+
+  dependencies = [
+    tree-sitter-config
+  ];
 
   preCheck = ''
     # https://github.com/NixOS/nixpkgs/issues/255262

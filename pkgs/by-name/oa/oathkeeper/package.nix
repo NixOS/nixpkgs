@@ -5,8 +5,8 @@
 }:
 let
   pname = "oathkeeper";
-  version = "0.40.9";
-  commit = "c75695837f170334b526359f28967aa33d61bce6";
+  version = "26.2.0";
+  commit = "c84dbe07ecbf6f10154f04ec49b137a115155289";
 in
 buildGoModule {
   inherit pname version commit;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "oathkeeper";
     rev = "v${version}";
-    hash = "sha256-R7xKhKF7mhS/vmSpOj+QDL0OBBWnh42X2Kr3TDQxVIo=";
+    hash = "sha256-Dux9g5AWnbj9kXoIogVneOYywgg9TnyXqP41YT/1C8k=";
   };
 
-  vendorHash = "sha256-qETVUpxckZGa41Ll+SZTGcDlImsCvbvGQBcIwuIzSY8=";
+  vendorHash = "sha256-/Qgdes8EAxP9FDKbahQdCpAD7PSe4iCkUvL1+poqaWc=";
 
   tags = [
     "sqlite"
@@ -32,15 +32,18 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ory/oathkeeper/internal/driver/config.Version=${version}"
-    "-X github.com/ory/oathkeeper/internal/driver/config.Commit=${commit}"
+    "-X github.com/ory/oathkeeper/x.Version=${version}"
+    "-X github.com/ory/oathkeeper/x.Commit=${commit}"
   ];
 
   meta = {
     description = "Open-source identity and access proxy that authorizes HTTP requests based on sets of rules";
     homepage = "https://www.ory.sh/oathkeeper/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ camcalaquian ];
+    maintainers = with lib.maintainers; [
+      camcalaquian
+      debtquity
+    ];
     mainProgram = "oathkeeper";
   };
 }

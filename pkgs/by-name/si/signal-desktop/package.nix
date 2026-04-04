@@ -2,7 +2,7 @@
   stdenv,
   lib,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   electron_40,
@@ -25,7 +25,7 @@
 }:
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_29_2;
   electron = electron_40;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
@@ -55,13 +55,13 @@ let
     '';
   });
 
-  version = "8.1.0";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-pxylCBDEHOxcJeo/117661UMHSIKS7NSVJhwU48hPiA=";
+    hash = "sha256-HjIU7L3iSr51w3KxzmaVzOI6qtAyyyWTlK1HygNyEzw=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -163,15 +163,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 3;
     hash =
       if withAppleEmojis then
-        "sha256-XYLpn4yXEF0xBM2XkgeeGBCDQZepLvKwDJunbefq3XU="
+        "sha256-QaYUL5/JcXqd564CFAR+4EMMG38h8a1dpls054iWDzU="
       else
-        "sha256-f0aOXmjw/RtQ70qQjwuGxRxhsFMk1jaqGr2Y1YOpMGg=";
+        "sha256-NEUKdRT0aVznkXTZOJJ8TCUhidhTAiDdBxoukKvt4qs=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1772664318;
+    SOURCE_DATE_EPOCH = 1774560637;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Disable code signing during local macOS builds.

@@ -65,8 +65,8 @@
   libxcb-wm,
   zlib,
   at-spi2-core,
-  unixODBC,
-  unixODBCDrivers,
+  unixodbc,
+  unixodbcDrivers,
   libGL,
   # darwin
   moltenvk,
@@ -127,11 +127,11 @@ stdenv.mkDerivation {
     libproxy
     dbus
     glib
-    # unixODBC drivers
-    unixODBC
-    unixODBCDrivers.psql
-    unixODBCDrivers.sqlite
-    unixODBCDrivers.mariadb
+    # unixodbc drivers
+    unixodbc
+    unixodbcDrivers.psql
+    unixodbcDrivers.sqlite
+    unixodbcDrivers.mariadb
   ]
   ++ lib.optionals systemdSupport [
     systemd
@@ -321,6 +321,13 @@ stdenv.mkDerivation {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
+
+    # @out@ would be automagically replaced inside makeSetupHook by the output of that derivation,
+    # but we need it to be the output of this derivation.
+    # Use a different placeholder and explicitly substitute this
+    # to keep compatibility with __structuredAttrs and avoid substituteAll.
+    substituteInPlace "''${!outputDev}/nix-support/setup-hook" \
+      --replace-fail "@qtbaseOut@" $out
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # FIXME: not sure why this isn't added automatically?

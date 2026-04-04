@@ -66,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-EROr5uG7cSg0/ldKlmYhqRKFgAT0/v1wFmbsl8W+sgg=";
   };
 
+  patches = [
+    ./000-nixos-sanitization.patch
+  ];
+
   postPatch = ''
     # Fix permissions.
     find -type f -name \*.sh -exec chmod a+x '{}' \;

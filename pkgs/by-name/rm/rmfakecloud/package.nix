@@ -11,13 +11,13 @@
 }:
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.27";
+  version = "0.0.29";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
     rev = "v${version}";
-    hash = "sha256-Umh5MwFCKJ8Nr0uhPEvlTAn7SpMmvAh6N2l74bS6BYw=";
+    hash = "sha256-N6hAv8dVCM3VWuKpHlK82mjQh6RB7W+n9KBNNQXDrC8=";
   };
 
   vendorHash = "sha256-XksCJ9b5NDIutwqnWP63R2udp/Y5qkkgo2a4TPUi0Z4=";

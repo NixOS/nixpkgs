@@ -33,7 +33,6 @@
   gtest,
   libbacktrace,
   lz4,
-  minio,
   ninja,
   nlohmann_json,
   openssl,
@@ -132,8 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
       # apache-orc looks for things in caps
-      LZ4_ROOT = lz4;
-      ZSTD_ROOT = zstd.dev;
+      LZ4_HOME = lz4;
+      PROTOBUF_HOME = protobuf;
+      SNAPPY_HOME = snappy.dev;
+      ZSTD_HOME = zstd.dev;
       ARROW_TEST_DATA = "${arrow-testing}/data";
       PARQUET_TEST_DATA = "${parquet-testing}/data";
       GTEST_FILTER =
@@ -153,6 +154,11 @@ stdenv.mkDerivation (finalAttrs: {
               "TestMinioServer.Connect"
               "TestS3FS.*"
               "TestS3FSGeneric.*"
+              "TestS3FSHTTPS.*" # Needs Minio
+            ]
+            ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+              # https://github.com/apache/arrow/issues/41505
+              "TestAzuriteGeneric.Empty"
             ];
         in
         "-${lib.concatStringsSep ":" filteredTests}";
@@ -286,7 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
     which
     sqlite
   ]
-  ++ lib.optionals enableS3 [ minio ]
   ++ lib.optionals enableFlight [ python3 ]
   ++ lib.optionals enableAzure [ azurite ];
 
@@ -306,10 +311,6 @@ stdenv.mkDerivation (finalAttrs: {
         # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
         "arrow-flight-internals-test"
         "arrow-flight-sql-test"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        # https://github.com/apache/arrow/issues/41505
-        "TestAzuriteGeneric.Empty"
       ];
     in
     ''
@@ -320,7 +321,11 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
+  __structuredAttrs = true;
+
   meta = {
+    # https://hydra.nixos.org/job/nixpkgs/unstable/arrow-cpp.x86_64-darwin/all
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     changelog = "https://arrow.apache.org/release/${finalAttrs.version}.html";

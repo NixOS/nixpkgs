@@ -42,6 +42,7 @@ buildPythonPackage rec {
   '';
 
   pythonRelaxDeps = [
+    "deprecated"
     "networkx"
     "tabulate"
   ];

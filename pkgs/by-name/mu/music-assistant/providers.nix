@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.9";
+  version = "2.7.11";
   providers = {
     airplay =
       ps: with ps; [
@@ -183,8 +183,10 @@
     ];
     universal_group = ps: [
     ];
-    vban_receiver = ps: [
-    ];
+    vban_receiver =
+      ps: with ps; [
+        aiovban
+      ];
     ytmusic =
       ps: with ps; [
         bgutil-ytdlp-pot-provider

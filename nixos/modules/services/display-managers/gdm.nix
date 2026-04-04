@@ -105,7 +105,7 @@ in
   ];
 
   meta = {
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   ###### interface

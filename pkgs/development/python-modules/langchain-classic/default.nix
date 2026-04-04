@@ -40,26 +40,21 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-classic";
-  version = "1.0.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-classic==${version}";
-    hash = "sha256-4DlKOxt5OoPm38szMEJpw6gDl247eRsx4LZpofUKpUk=";
+    tag = "langchain-classic==${finalAttrs.version}";
+    hash = "sha256-vCYdBBN9vU8gWedCxKXnzLzZ5C7pYl3KyECBNAQggto=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain";
+  sourceRoot = "${finalAttrs.src.name}/libs/langchain";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    "langchain-core"
-  ];
 
   dependencies = [
     langchain-core
@@ -121,4 +116,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

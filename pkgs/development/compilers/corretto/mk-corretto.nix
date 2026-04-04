@@ -137,9 +137,6 @@ jdk.overrideAttrs (
         };
       };
 
-    # Some of the OpenJDK derivation set their `pos` by hand. We need to
-    # overwrite this in order to point to Corretto, not OpenJDK.
-    pos = __curPos;
     meta = oldAttrs.meta // {
       homepage = "https://aws.amazon.com/corretto";
       license = lib.licenses.gpl2Only;

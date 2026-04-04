@@ -1,43 +1,68 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  python-dateutil,
+  lib,
+  uv-build,
   httpx,
-  h2,
+  pydantic,
+  yarl,
+  pyiceberg,
   deprecation,
+  pytest-asyncio,
+  pytest-cov-stub,
+  python-dotenv,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "storage3";
-  version = "0.12.2";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
-    repo = "storage-py";
+    repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-ACilbwSCNEsXyr2lUTkhOgfw/SiTnwj+rA07tnuFy5A=";
+    hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
   };
 
-  dependencies = [
-    python-dateutil
-    httpx
-    h2
-    deprecation
-  ];
+  sourceRoot = "${src.name}/src/storage";
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
+
+  dependencies = [
+    httpx
+    pydantic
+    yarl
+    pyiceberg
+    deprecation
+  ]
+  ++ httpx.optional-dependencies.http2;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.8.3,<0.9.0' 'uv_build>=0.8.3'
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+    python-dotenv
+  ];
 
   pythonImportsCheck = [ "storage3" ];
 
-  # tests fail due to mock server not starting
+  disabledTestPaths = [
+    "tests/_sync/"
+    "tests/_async/"
+  ];
 
   meta = {
-    homepage = "https://github.com/supabase/storage-py";
-    license = lib.licenses.mit;
-    description = "Supabase Storage client for Python.";
+    description = "Client library for Supabase Functions";
+    homepage = "https://github.com/supabase/supabase-py";
+    changelog = "https://github.com/supabase/supabase-py/blob/v${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ siegema ];
+    license = lib.licenses.mit;
   };
 }

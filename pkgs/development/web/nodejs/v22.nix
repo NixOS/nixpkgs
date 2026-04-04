@@ -16,13 +16,15 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools = false; }
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
     else
       [ ];
 in
 buildNodejs {
-  version = "22.22.1";
-  sha256 = "87104b07e7acee748bcc5391e1bc69cf3571caa0fdfb8b1d6b5fd3f9599b7849";
+  version = "22.22.2";
+  sha256 = "b6bedd3a8cacd5df7df015a5088264b12c74a277ba60684cb9642ae8eb743132";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -55,6 +57,13 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove this when included in a next release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
+        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
+        includes = [ "test/*" ];
+      })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
       # Fix builds with shared llhttp

@@ -115,6 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://joplinapp.org/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "joplin";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

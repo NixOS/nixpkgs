@@ -37,6 +37,10 @@ import ../../make-test-python.nix (
           secretKeyFile = pkgs.writeText "secret" ''
             abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
           '';
+          # Value from https://netbox.readthedocs.io/en/feature/configuration/required-parameters/#api_token_peppers
+          apiTokenPeppersFile = pkgs.writeText "pepper" ''
+            kp7ht*76fiQAhUi5dHfASLlYUE_S^gI^(7J^K5M!LfoH@vl&b_
+          '';
 
           enableLdap = true;
           ldapConfigPath = pkgs.writeText "ldap_config.py" ''
@@ -155,10 +159,32 @@ import ../../make-test-python.nix (
           u.set_password('netbox')
           u.save()
         '';
+        createToken = pkgs.writeText "create-token-v2.py" ''
+          from users.models import Token, User
+          from users.choices import TokenVersionChoices
+          u = User.objects.first()
+          t = Token.objects.create(user=u, token="0123456789abcdef0123456789abcdef01234567", version=TokenVersionChoices.V2)
+          print(t.get_auth_header_prefix())
+        '';
+        netboxVersion = netbox.version;
       in
       builtins.replaceStrings
-        [ "\${changePassword}" "\${testUser}" "\${testPassword}" "\${testGroup}" ]
-        [ "${changePassword}" "${testUser}" "${testPassword}" "${testGroup}" ]
+        [
+          "\${changePassword}"
+          "\${testUser}"
+          "\${testPassword}"
+          "\${testGroup}"
+          "\${createToken}"
+          "\${netboxVersion}"
+        ]
+        [
+          "${changePassword}"
+          "${testUser}"
+          "${testPassword}"
+          "${testGroup}"
+          "${createToken}"
+          "${netboxVersion}"
+        ]
         (lib.readFile "${./testScript.py}");
   }
 )

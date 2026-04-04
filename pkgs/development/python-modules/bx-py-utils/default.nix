@@ -76,15 +76,18 @@ buildPythonPackage rec {
     "test_happy_path"
     # cli_base module not found
     "test_doctests"
+    # leaks unix timestamp of 1980 into test fixtures
+    "test_xlsx2dict_complex"
+    "test_xlsx2dict_simple"
   ];
 
   disabledTestPaths = [
     # depends on cli-base-utilities, which depends on bx-py-utils
     "bx_py_utils_tests/tests/test_project_setup.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # processify() doesn't work under darwin
     # https://github.com/boxine/bx_py_utils/issues/80
+    # Also not working under Linux anymore
+    # _pickle.PicklingError: Can't pickle local object <function processify.<locals>.process_func at 0x7ffff36deda0>
     "bx_py_utils_tests/tests/test_processify.py"
   ];
 

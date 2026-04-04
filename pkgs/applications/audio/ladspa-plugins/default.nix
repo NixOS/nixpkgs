@@ -5,7 +5,7 @@
   autoreconfHook,
   automake,
   fftw,
-  ladspaH,
+  ladspa-header,
   libxml2,
   pkg-config,
   perlPackages,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     fftw
-    ladspaH
+    ladspa-header
     libxml2
   ];
 

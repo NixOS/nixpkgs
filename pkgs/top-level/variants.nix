@@ -161,12 +161,11 @@ self: super: {
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags
             ++ [
-              "strictflexarrays1"
               "shadowstack"
               "nostrictaliasing"
               "pacret"
               "glibcxxassertions"
-              "libcxxhardeningfast"
+              "libcxxhardeningextensive"
               "trivialautovarinit"
             ]
           ) super'.stdenv;

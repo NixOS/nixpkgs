@@ -94,12 +94,15 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.4.4/llama/Makefile#L17-L18
+    # - https://github.com/ollama/ollama/blob/v0.19.0/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
+
+    # cuda_cccl and cuda_cudart both have a LICENSE file in their output
+    ignoreCollisions = true;
   };
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
@@ -120,7 +123,7 @@ let
   ]
   ++ lib.optionals enableVulkan [
     "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib vulkanLibs)}'"
-    "--set-default OLLAMA_VULKAN : '1'"
+    "--set-default OLLAMA_VULKAN '1'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -137,13 +140,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.17.6";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hd2U6FoYwtDPOt+AZhsYloWSF2/QE+fsXRcC6OKKJXA=";
+    hash = "sha256-QQKPXdXlsT+uMGGIyqkVZqk6OTa7VHrwDVmgDdgdKOY=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
@@ -229,7 +232,7 @@ goBuild (finalAttrs: {
     '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.5.11/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.19.0/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
@@ -258,7 +261,8 @@ goBuild (finalAttrs: {
     let
       # Skip tests that require network access
       skippedTests = [
-        "TestPushHandler/unauthorized_push" # Writes to $HOME, se https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+        "TestPushHandler/unauthorized_push" # Writes to $HOME, see https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+        "TestPiRun_InstallAndWebSearchLifecycle" # Requires network access to install npm packages
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

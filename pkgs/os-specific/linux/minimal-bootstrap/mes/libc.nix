@@ -21,18 +21,13 @@ let
   sources = (import ./sources.nix).${arch}.linux.gcc;
   inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
 
-  ldexpl = fetchurl {
-    url = "https://gitlab.com/janneke/mes/-/raw/c837abed8edb341d4e56913729fbe9803b4de47c/lib/math/ldexpl.c";
-    hash = "sha256-3QoFZZIqVmlMUosEqOdYIMEHzYgQ7GJ7Hz0Bf/1iIig=";
-  };
-
   # Concatenate all source files into a convenient bundle
   # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
   # compiled by tinycc
   #
   # Passing this many arguments is too much for kaem so we need to split
   # the operation in two
-  firstLibc = (lib.take 100 libc_gnu_SOURCES) ++ [ ldexpl ];
+  firstLibc = (lib.take 100 libc_gnu_SOURCES) ++ [ ./ldexpl.c ];
   lastLibc = lib.drop 100 libc_gnu_SOURCES;
 in
 kaem.runCommand "${pname}-${version}"

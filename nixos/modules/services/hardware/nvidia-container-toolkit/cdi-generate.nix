@@ -27,6 +27,7 @@ let
 in
 writeScriptBin "nvidia-cdi-generator" ''
   #! ${runtimeShell}
+  set -e -u -o pipefail
 
   function cdiGenerate {
     ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \

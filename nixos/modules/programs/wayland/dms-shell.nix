@@ -226,5 +226,5 @@ in
     hardware.graphics.enable = lib.mkDefault true;
   };
 
-  meta.maintainers = lib.teams.danklinux.members;
+  meta.teams = [ lib.teams.danklinux ];
 }

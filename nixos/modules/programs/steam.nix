@@ -285,5 +285,5 @@ in
     ];
   };
 
-  meta.maintainers = lib.teams.steam.members;
+  meta.teams = [ lib.teams.steam ];
 }

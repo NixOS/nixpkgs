@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  kaccounts-integration,
+  kcmutils,
   kdeclarative,
   prison,
 }:
@@ -10,7 +10,7 @@ mkKdeDerivation {
 
   extraBuildInputs = [ qtdeclarative ];
   extraPropagatedBuildInputs = [
-    kaccounts-integration
+    kcmutils
     kdeclarative
     prison
   ];

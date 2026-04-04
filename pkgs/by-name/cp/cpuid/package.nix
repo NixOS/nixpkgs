@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "20260220";
 
   src = fetchurl {
-    url = "http://etallen.com/cpuid/cpuid-${finalAttrs.version}.src.tar.gz";
+    url = "https://etallen.com/cpuid/cpuid-${finalAttrs.version}.src.tar.gz";
     sha256 = "sha256-52IP11rlkRcfEQxJuZo5EokzoMqtAjto1KOEub4Lj/s=";
   };
 

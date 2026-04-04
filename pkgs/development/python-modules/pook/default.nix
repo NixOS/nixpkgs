@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "2.1.4";
+  version = "2.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "pook";
     tag = "v${version}";
-    hash = "sha256-z0QaMdsX2xLXICgQwnlUD2KsgCn0jB4wO83+6O4B3D8=";
+    hash = "sha256-pStAlxhyZ1eDER17yLYc1r+kGpEZFW+mi0y3nrPA1CQ=";
   };
 
   build-system = [ hatchling ];

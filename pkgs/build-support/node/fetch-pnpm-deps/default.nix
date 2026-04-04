@@ -7,6 +7,7 @@
   cacert,
   makeSetupHook,
   pnpm,
+  writableTmpDirAsHomeHook,
   yq,
   zstd,
 }:
@@ -198,6 +199,7 @@ in
   pnpmConfigHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [
+      writableTmpDirAsHomeHook
       zstd
     ];
     substitutions = {

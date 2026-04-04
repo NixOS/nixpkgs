@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "2.57.1";
+  version = "2.61.2";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-rd/I5M1SoL6fUNkiv/KwWImbtWCoy0/DR993C714xU8=";
+    hash = "sha256-/8bBYRzWJ00FpcLMB8M6hkyMUEM/0PM8jsvR+m7jfpc=";
   };
 
   frontend = buildNpmPackage rec {
@@ -41,7 +41,7 @@ let
         ;
       fetcherVersion = 3;
       pnpm = pnpm_10;
-      hash = "sha256-AfQNSIiTRv+aEGsrRAymwpUO2IWDtvSruLuuTAjWy/0=";
+      hash = "sha256-2e3Gr5/pdOsT3cSTdOz5mAjZaWB1C3qGDikpoa5BoII=";
     };
 
     installPhase = ''
@@ -59,7 +59,7 @@ buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-P6R+lBmzYYMqC5D6VwLOE7UnKuYcLN7UDVkZHWLLjMk=";
+  vendorHash = "sha256-aY3OIr0Kbno38Y/PZ03JK5wCCD4HRdnznJ3OaaH/WVA=";
 
   excludedPackages = [ "tools" ];
 

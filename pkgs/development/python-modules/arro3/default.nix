@@ -10,19 +10,19 @@
   pandas,
 }:
 let
-  version = "0.5.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kylebarron";
     repo = "arro3";
     tag = "py-v${version}";
-    hash = "sha256-RTr+mf5slfxxvXp9cwPuy08AZUswPtIIRz+vngdg/k0=";
+    hash = "sha256-Zlc+M+h8pgYLLhEGgv2W6YfahYtdm9Q8ezVK+Kwd2lw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit version src;
     pname = "arro3-vendor";
-    hash = "sha256-YQA8Z86Ul8yAHncMgYrGmNe10KSpubHjaokCjaqTAxo=";
+    hash = "sha256-f36qIkQIu6Jl2hb3HJaMpnLbWVaR3z4WrQ1aLZr4VvQ=";
   };
 
   commonMeta = {
@@ -40,7 +40,7 @@ let
       pythonImportsCheck,
       dependencies ? [ ],
     }:
-    buildPythonPackage rec {
+    buildPythonPackage {
       inherit
         pname
         version

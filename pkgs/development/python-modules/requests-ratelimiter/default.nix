@@ -38,8 +38,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "requests_ratelimiter" ];
 
   meta = {
-    # https://github.com/JWCook/requests-ratelimiter/issues/78
-    broken = lib.versionOlder pyrate-limiter.version "4";
     description = "Module for rate-limiting for requests";
     homepage = "https://github.com/JWCook/requests-ratelimiter";
     changelog = "https://github.com/JWCook/requests-ratelimiter/blob/${finalAttrs.src.tag}/HISTORY.md";

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   sqlite,
-  unixODBC,
+  unixodbc,
   zstd,
   fetchurl,
 }:
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     sqlite
-    unixODBC
+    unixodbc
     zstd
   ];
 

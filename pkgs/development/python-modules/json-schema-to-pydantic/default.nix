@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "json-schema-to-pydantic";
-  version = "0.4.9";
+  version = "0.4.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "richard-gyiko";
     repo = "json-schema-to-pydantic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j3E3jkb9l5s4JnGeBACG4/GznB1F+S2Fh0ncZEvvXuM=";
+    hash = "sha256-9T7ScIf5jJBbldNwLHEchrctr3V4LmqxNGhor6QIzO4=";
   };
 
   build-system = [

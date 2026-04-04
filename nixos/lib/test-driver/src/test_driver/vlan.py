@@ -50,6 +50,8 @@ class VLan:
     pid: int
     fd: io.TextIOBase
 
+    plug_process: subprocess.Popen
+
     logger: AbstractLogger
 
     def __repr__(self) -> str:
@@ -58,6 +60,7 @@ class VLan:
     def __init__(self, nr: int, tmp_dir: Path, logger: AbstractLogger):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
+        self.tap_name = f"vde-tap{self.nr}"
         self.logger = logger
 
         # TODO: don't side-effect environment here
@@ -114,6 +117,13 @@ class VLan:
             if "1000 Success" in line:
                 break
 
+        # This is needed to allow systemd-nspawn containers to communicate
+        # with VMs connected to the VLAN.
+        self.logger.info(f"creating tap interface {self.tap_name}")
+        self.plug_process = subprocess.Popen(
+            ["vde_plug2tap", "-s", self.socket_dir, self.tap_name],
+        )
+
         assert (self.socket_dir / "ctl").exists(), "cannot start vde_switch"
 
         self.logger.info(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
@@ -122,4 +132,7 @@ class VLan:
         self.logger.info(f"kill vlan (pid {self.pid})")
         assert self.process.stdin is not None
         self.process.stdin.close()
+        if self.plug_process:
+            self.plug_process.terminate()
+            self.plug_process.wait()
         self.process.terminate()

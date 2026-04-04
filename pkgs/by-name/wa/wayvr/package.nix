@@ -75,6 +75,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals withOpenVR [ "openvr" ];
 
+  postInstall = ''
+    install -D wayvr/wayvr.desktop -t $out/share/applications
+    install -D wayvr/wayvr.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
   passthru = {
     tests.testVersion = testers.testVersion { package = wayvr; };
 

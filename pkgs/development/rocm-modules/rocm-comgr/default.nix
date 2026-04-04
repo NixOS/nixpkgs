@@ -40,12 +40,24 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2c1e44fc3eacadcafdd4ada3e3184a092b6f26c5.patch";
       relative = "amd/comgr";
     })
+    # Fix: CCOB compat patch used coerced (featureless) name for output filename,
+    # causing CLR's code_obj_map key to miss when looking up device ISA with features
+    ./fix-ccob-compat-output-filename.patch
   ];
 
-  postPatch = ''
-    substituteInPlace cmake/opencl_header.cmake \
-      --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
-  '';
+  postPatch =
+    # Fix relative path assumption for libllvm
+    ''
+      substituteInPlace cmake/opencl_header.cmake \
+        --replace-fail "\''${CLANG_CMAKE_DIR}/../../../" "${llvm.clang-unwrapped.lib}"
+    ''
+    # Bake LLVM root for cfg/includes or HIPRTC can't find C++ stdlib headers (e.g. <type_traits>).
+    + ''
+      substituteInPlace src/comgr-env.cpp \
+        --replace-fail \
+          'return EnvLLVMPath;' \
+          'return EnvLLVMPath ? EnvLLVMPath : "${llvm.rocm-toolchain}";'
+    '';
 
   nativeBuildInputs = [
     cmake

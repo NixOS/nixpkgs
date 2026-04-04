@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "style50";
-  version = "2.10.4";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "style50";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-59V3QZMYH5edBXv1GNdoaQxerDfKmLKUZ7VL3cvDvuE=";
+    hash = "sha256-THmxq69peJwT3XQKEpT+ooBYaDDkn1HHGVH5rvM/FF8=";
   };
 
   build-system = [

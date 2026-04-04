@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nomore403";
-  version = "1.1.8";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "devploit";
     repo = "nomore403";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hbhVpk6Zn7FMbsNnUbHdE8Ox5EzpIeB78MBvudpkabI=";
+    hash = "sha256-7rtmLBHv7QcfrD5+y6+r1uX1vB3VlxJzXQeBYUW6tK8=";
   };
 
-  vendorHash = "sha256-17bXTAXntWlaT4nCrqovW/bowml6KUJDlgjq0b9jmWA=";
+  vendorHash = "sha256-zAkS0o+wOQLmCil7Lh7DIZCcHYiceb1KwiK/vkSYYwk=";
 
   ldflags = [
     "-s"

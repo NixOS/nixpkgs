@@ -176,6 +176,29 @@ with haskellLib;
     }
   );
 
+  # Stack uses pure nix-shells for certain operations including HTTPS requests
+  # This patch makes stack add pkgs.cacert, so the certificate DB is available.
+  # https://github.com/commercialhaskell/stack/pull/6854 krank:ignore-line
+  stack =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "stack-add-cacert-to-pure-shells.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/e869263cbd84a9e59ce1fa467e82993c8e7fb1dd.patch";
+          hash = "sha256-O7GaNgcGBY6m6GHqVtejqOu2HCWWKWXARPnr/upT1RQ=";
+          includes = [ "src/Stack/Nix.hs" ];
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          # Stack's source files use CRLF
+          prePatch = ''
+            ${drv.prePatch or ""}
+            sed -i -e 's/\r$//' src/Stack/Nix.hs
+          '';
+        }) super.stack
+      );
+
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
   extensions = doJailbreak (
@@ -459,6 +482,21 @@ with haskellLib;
   # Infinite recursion with test enabled.
   # 2025-02-14: Too strict bounds on attoparsec < 0.14
   attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
+
+  # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
+  # https://github.com/haskell/attoparsec/issues/232
+  attoparsec = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.buf.t_iter\""
+    ];
+  }) super.attoparsec;
+  attoparsec-isotropic = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.leftToRight.buf.t_iter\""
+    ];
+  }) super.attoparsec-isotropic;
 
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = lib.pipe super.ghc-heap-view [
@@ -1054,6 +1092,14 @@ with haskellLib;
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
 
+  # Test in question times out on Hydra builders.
+  grisette = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-t"
+      "!mrgAsum/semantics"
+    ];
+  }) super.grisette;
+
   # Allow template-haskell 2.22
   # https://github.com/well-typed/ixset-typed/pull/23
   ixset-typed =
@@ -1265,18 +1311,6 @@ with haskellLib;
   # Too strict bounds on bytestring (<0.12) on the test suite
   # https://github.com/emilypi/Base32/issues/24
   base32 = doJailbreak super.base32;
-
-  # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
-  # https://github.com/augustss/djinn/pull/8
-  djinn = overrideSrc {
-    version = "unstable-2023-11-20";
-    src = pkgs.fetchFromGitHub {
-      owner = "augustss";
-      repo = "djinn";
-      rev = "69b3fbad9f42f0b1b2c49977976b8588c967d76e";
-      hash = "sha256-ibxn6DXk4pqsOsWhi8KcrlH/THnuMWvIu5ENOn3H3So=";
-    };
-  } super.djinn;
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -2653,6 +2687,13 @@ with haskellLib;
   # Test suite doesn't compile anymore
   twitter-types = dontCheck super.twitter-types;
 
+  secp256k1-haskell = appendPatch (pkgs.fetchpatch {
+    # https://github.com/jprupp/secp256k1-haskell/pull/51
+    name = "remove-deprecated-aliases";
+    url = "https://github.com/jprupp/secp256k1-haskell/commit/68318be6ac5271639e3e982a9a5b194dc1f926c2.patch";
+    sha256 = "sha256-l9WPdV5D8C/t6YXg7Cf6RyNx0cnJKp78VLk02On1Zt4=";
+  }) super.secp256k1-haskell;
+
   # Tests open file "data/test_vectors_aserti3-2d_run01.txt" but it doesn't exist
   haskoin-core = dontCheck super.haskoin-core;
 
@@ -2740,12 +2781,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.5";
+          version = "14.7";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-qeFBq+d8AjwXp4YleOa0hLnBppI5+Tm1OEgB1QHWqY8=";
+            hash = "sha256-Kr06TefPaeL4Nk1GKDbGFGgYQcS/e0A+Pn7pqGfdAlQ=";
           };
         })
       ];
@@ -3611,13 +3652,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.10.1";
+    version = "1.11.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
+      hash = "sha256-CWhnwL2M83/ItapPVeJqCevRoQttesYxJ1h0Mo6ZCXs=";
     };
   in
   {
@@ -3631,9 +3672,6 @@ with haskellLib;
         inherit version;
         src = src + "/cachix";
       })
-      (addBuildDepends [
-        self.pqueue
-      ])
       (
         drv:
         drv.override {

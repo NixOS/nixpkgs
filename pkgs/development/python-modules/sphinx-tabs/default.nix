@@ -17,9 +17,9 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-tabs";
-  version = "3.4.7-unstable-2026-01-24";
+  version = "3.5.0";
   pyproject = true;
 
   outputs = [
@@ -30,8 +30,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-tabs";
-    rev = "d613cb7b6bff083227e35e9b3a4c56b24f6c6ad4";
-    hash = "sha256-aYlc9bs37Mu4Beuggx0dgVdoRa+X65oDNnYg3Wa4dgc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OuGrrlCEkTxu3WueCPHHuEeMGXPf/lrETbTP/9uVWbU=";
   };
 
   nativeBuildInputs = [
@@ -58,4 +58,4 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

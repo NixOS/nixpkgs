@@ -3,7 +3,7 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
-  pnpm,
+  pnpm_10_29_2,
   pnpmConfigHook,
   nodejs,
   electron,
@@ -15,12 +15,12 @@
 
 let
   executableName = "vikunja-desktop";
-  version = "2.1.0";
+  version = "2.2.2";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-R9PNhH5s3W9c1qHYmV9H5CkBvUtUFU+yzF+eEU2ybdo=";
+    hash = "sha256-+Tqo9z+QXzcYNWZl+DoHaClkMokTa6a2S1FlazZBDyI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version src;
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
-  pnpmInstallFlags = [ "--shamefully-hoist" ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -37,10 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      pnpmInstallFlags
       ;
-    fetcherVersion = 1;
-    hash = "sha256-yiVlEr1gi2g3m+hkYfDv6qd/wRlwwknM6lAaIeR58Ok=";
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-/dPjUxD01G1H3nRZfW8x046x33OaiChYuiLhZYOPrTo=";
   };
 
   env = {
@@ -50,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm
+    pnpm_10_29_2
     pnpmConfigHook
     vikunja.passthru.frontend
   ];

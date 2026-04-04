@@ -82,7 +82,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/matplotlib/jupyter-matplotlib";
     maintainers = with lib.maintainers; [
       jluttine
-      fabiangd
     ];
     license = lib.licenses.bsd3;
   };

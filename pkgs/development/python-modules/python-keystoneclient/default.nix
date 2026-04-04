@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "5.7.0";
+  version = "5.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_keystoneclient";
     inherit version;
-    hash = "sha256-jOe/HIzdym1xQPx2kYtE7d8dZAQKYMuP9wWRNhBNTOs=";
+    hash = "sha256-PKh8Z8QEKYzoYjELVp9UWlis91zVaFCUyC81Mgs6NV0=";
   };
 
   build-system = [ setuptools ];

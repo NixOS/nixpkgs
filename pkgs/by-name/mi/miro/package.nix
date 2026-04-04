@@ -2,11 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  libcosmicAppHook,
   pkg-config,
   fontconfig,
-  wayland,
-  libxkbcommon,
-  libglvnd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -26,25 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    libcosmicAppHook
     pkg-config
   ];
 
   buildInputs = [
-    wayland
     fontconfig
-    libxkbcommon
-    libglvnd
   ];
-
-  env.RUSTFLAGS = toString (
-    map (a: "-C link-arg=${a}") [
-      "-Wl,--push-state,--no-as-needed"
-      "-lEGL"
-      "-lwayland-client"
-      "-lxkbcommon"
-      "-Wl,--pop-state"
-    ]
-  );
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

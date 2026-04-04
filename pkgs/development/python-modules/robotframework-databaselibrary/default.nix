@@ -5,6 +5,7 @@
   setuptools,
   robotframework,
   robotframework-assertion-engine,
+  sqlparse,
   pytestCheckHook,
 }:
 
@@ -20,14 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-RGTx5Xn40MHr5M6DUb3dkR2OU7B0JKuFYP1o18o3Ct4=";
   };
 
-  nativeBuildInputs = [
-    robotframework
+  build-system = [
     setuptools
   ];
 
   propagatedBuildInputs = [
     robotframework
     robotframework-assertion-engine
+    sqlparse
   ];
 
   pythonImportsCheck = [ "DatabaseLibrary" ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    changelog = "https://github.com/MarketSquare/Robotframework-Database-Library/releases/tag/${src.tag}";
     description = "Database Library contains utilities meant for Robot Framework";
     homepage = "https://github.com/MarketSquare/Robotframework-Database-Library";
     license = lib.licenses.asl20;

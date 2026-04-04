@@ -142,7 +142,6 @@ let
           mit
         ]; # based on upstream opam file
         maintainers = [
-          lib.maintainers.marcweber
           lib.maintainers.locallycompact
           lib.maintainers.logo
           lib.maintainers.bwkam

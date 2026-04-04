@@ -22,7 +22,7 @@
   jdk,
 
   withOdbc ? true,
-  unixODBC,
+  unixodbc,
 
   withPcre ? true,
   pcre2,
@@ -97,7 +97,7 @@ let
     [ ]
     ++ (lib.optional withDb db)
     ++ (lib.optional withJava jdk)
-    ++ (lib.optional withOdbc unixODBC)
+    ++ (lib.optional withOdbc unixodbc)
     ++ (lib.optional withPcre pcre2)
     ++ (lib.optional withPython python3)
     ++ (lib.optional withYaml libyaml)

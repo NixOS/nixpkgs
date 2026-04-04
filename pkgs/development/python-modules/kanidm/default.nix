@@ -1,18 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # build
   pdm-backend,
 
   # propagates
   aiohttp,
+  aiohttp-retry,
   authlib,
   pydantic,
+  python-dateutil,
   toml,
+  typing-extensions,
 
   # tests
+  openapi-spec-validator,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -20,34 +24,41 @@
 
 buildPythonPackage rec {
   pname = "kanidm";
-  version = "1.8.5";
+  version = "1.3.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "kanidm";
-    repo = "kanidm";
-    tag = "v${version}";
-    hash = "sha256-lJX/eObXi468iFOzeFjAnNkPiQ8VbBnfqD1518LDm2s=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-KlUxW/bJByQnzPdRd9Z5pStH27SpWrCijZc5jlVT5jE=";
   };
-
-  sourceRoot = "${src.name}/pykanidm";
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     aiohttp
+    aiohttp-retry
     authlib
     pydantic
+    python-dateutil
     toml
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    openapi-spec-validator
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
-  disabledTestMarks = [ "network" ];
+  disabledTests = [
+    "test_tokenstuff"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "openapi"
+  ];
 
   pythonImportsCheck = [ "kanidm" ];
 

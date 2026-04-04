@@ -8,7 +8,7 @@
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10_29_2,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -16,13 +16,13 @@
 }:
 let
   pname = "feishin";
-  version = "1.6.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-PICVNItpMALffpJvQQXLlHcYu1yDtEUclGYjO25f6ew=";
+    hash = "sha256-LcSe7aEtTDs4JIk50zI0IFgN4ZCSJ6NClfk02uO2Sg8=";
   };
 
   electron = electron_39;
@@ -41,14 +41,15 @@ buildNpmPackage {
       version
       src
       ;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
-    hash = "sha256-K9mwEJA0fZXI2OnVo5y4Zmox3mwO8qLvgLiBaoyYAkg=";
+    hash = "sha256-XhBcZRa66QdkjXxbefzsBUdvPIEshorq1uqzoWMXuTc=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm
+    pnpm_10_29_2
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
@@ -78,18 +79,14 @@ buildNpmPackage {
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
       cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-
-      # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
-      sed -i "/afterSign/d" package.json
     ''
     + ''
       npm exec electron-builder -- \
         --dir \
         -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false
+        -c.npmRebuild=false \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
     '';
 
   installPhase = ''
@@ -119,6 +116,8 @@ buildNpmPackage {
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
+
+    install -Dm644 org.jeffvli.feishin.metainfo.xml $out/share/metainfo/org.jeffvli.feishin.metainfo.xml
 
     for size in 32 64 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps

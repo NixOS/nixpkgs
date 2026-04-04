@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -11,7 +12,6 @@
   pyside6,
   pyyaml,
   requests,
-  sentencepiece,
   tqdm,
 
   # tests
@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "8147";
+  version = "8545";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-/r/lWt+G14BsNqTBqeK4Po4QHU0GkpEBbIvt5rqB4jc=";
+    hash = "sha256-sb0fSpzwyl2Ws270if/4Ts75J3E6mGEJ/N5GDjzgg6A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/gguf-py";
@@ -36,16 +36,25 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     numpy
-    pyside6
     pyyaml
     requests
-    sentencepiece
     tqdm
   ];
+
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gguf" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
 
   meta = {
     description = "Module for writing binary files in the GGUF format";

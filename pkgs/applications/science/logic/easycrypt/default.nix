@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easycrypt";
-  version = "2026.02";
+  version = "2026.03";
 
   src = fetchFromGitHub {
     owner = "easycrypt";
     repo = "easycrypt";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-ii/msqNUPZ7jQXG2fEkEpsGXc4sw6DcyaTIw21lrl7M=";
+    hash = "sha256-GkZSsVLnJg0/P5nRAHrmj64NmpT99jc2tvK0B/6FE7s=";
   };
 
   nativeBuildInputs =

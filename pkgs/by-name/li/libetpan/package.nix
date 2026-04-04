@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mail Framework for the C Language";
     homepage = "https://www.etpan.org/libetpan.html";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

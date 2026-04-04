@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.5";
 
   src = fetchurl {
-    url = "http://research.cs.wisc.edu/mist/safefile/releases/safefile-${finalAttrs.version}.tar.gz";
+    url = "https://research.cs.wisc.edu/mist/safefile/releases/safefile-${finalAttrs.version}.tar.gz";
     sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
   };
 

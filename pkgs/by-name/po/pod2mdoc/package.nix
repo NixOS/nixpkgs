@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.2";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
+    url = "https://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
     hash = "sha256-dPH+MfYdyHauClcD7N1zwjw4EPdtt9uQGCUh9OomsPw=";
   };
 

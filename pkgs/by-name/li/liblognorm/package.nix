@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.0.9";
 
   src = fetchurl {
-    url = "http://www.liblognorm.com/files/download/liblognorm-${finalAttrs.version}.tar.gz";
+    url = "https://www.liblognorm.com/files/download/liblognorm-${finalAttrs.version}.tar.gz";
     hash = "sha256-dsfMLLdqPVjncy4M/yORgPg/O2NQAriqBIZciBKFd5M=";
   };
 

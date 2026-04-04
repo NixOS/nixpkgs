@@ -1,29 +1,56 @@
 {
   lib,
-  flutter338,
+  flutter341,
   fetchFromGitHub,
+  cmake,
   copyDesktopItems,
   makeDesktopItem,
+  libx11,
+  libxcursor,
+  libxinerama,
+  libxi,
+  libxext,
+  libxrandr,
+  libxtst,
+  sqlite,
 }:
 
-flutter338.buildFlutterApplication rec {
+flutter341.buildFlutterApplication (finalAttrs: {
   pname = "windsend";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
-    tag = "v${version}";
-    hash = "sha256-KCtYV7z+QqufXiHzuEoX8XVIPfNPBdp0F1FLiPq+PDM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zpbCtiGPjGLkcZ98uN0y0modMnhucV4g4Sc9P6cRPIw=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  sourceRoot = "${src.name}/flutter/wind_send";
+  sourceRoot = "${finalAttrs.src.name}/flutter/wind_send";
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+  ];
+
+  buildInputs = [
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
+    libxext
+    libxtst
+    sqlite
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   desktopItems = [
     (makeDesktopItem {
@@ -48,4 +75,4 @@ flutter338.buildFlutterApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

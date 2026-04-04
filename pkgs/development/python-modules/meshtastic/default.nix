@@ -47,6 +47,7 @@ buildPythonPackage (finalAttrs: {
     "bleak"
     "packaging"
     "protobuf"
+    "tabulate"
   ];
 
   build-system = [ poetry-core ];

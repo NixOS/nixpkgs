@@ -34,6 +34,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Bluetooth Low Energy Swiss-army knife";
     mainProgram = "btlejack";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 })

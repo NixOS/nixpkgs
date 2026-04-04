@@ -1,30 +1,36 @@
 {
+  cmake,
   fetchFromGitHub,
   fetchurl,
-  ffmpeg_4,
+  ffmpeg,
   fontconfig,
-  gtk2,
+  freetype,
   lib,
   libconfig,
   libGL,
+  libx11,
+  libxext,
   libxpm,
+  libxrandr,
   makeFontsConf,
   makeWrapper,
   nanum,
   openal,
+  openvr,
   pkg-config,
   stdenv,
+  zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sview";
-  version = "20_08";
+  version = "26_02";
 
   src = fetchFromGitHub {
     owner = "gkv311";
     repo = "sview";
     tag = version;
-    hash = "sha256-mbEacdBQchziXoZ5vJUiEpa/iHeXeaozte2aXs50/Fo=";
+    hash = "sha256-UIA8bDGYVN8Zw23PkKprYrvcMubHzoquaSArLShu+aw=";
   };
 
   droidSansFallback = fetchurl {
@@ -33,17 +39,31 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    cmake
     makeWrapper
     pkg-config
   ];
 
+  cmakeFlags = [
+    "-DUSE_UPDATER=OFF"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_INSTALL_LIBDIR=/lib"
+    "-DCMAKE_INSTALL_BINDIR=/bin"
+    "-DCMAKE_INSTALL_DATAROOTDIR=/share"
+  ];
+
   buildInputs = [
-    ffmpeg_4
-    gtk2
+    freetype
+    ffmpeg
+    fontconfig
     libconfig
     libGL
+    libx11
+    libxext
     libxpm
+    libxrandr
     openal
+    openvr
   ];
 
   fontsConf = makeFontsConf {
@@ -55,7 +75,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    make install APP_PREFIX=$out DISABLE_UPDATER=1
+    make & make install
     mkdir -p $out/share/sView/fonts
     cp ${droidSansFallback} $out/share/sView/fonts/DroidSansFallbackFull.ttf
     cp '${fontsConf}' $out/share/sView/fonts/fonts.conf
@@ -66,7 +86,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/sView/fonts/fonts.conf \
       --replace-warn "placeholder" "$out/share/sView/fonts/";
     wrapProgram $out/bin/sView \
-      --set StShare $out/share/sView \
+      --prefix PATH : "${zenity}/bin" \
       --set FONTCONFIG_FILE $out/share/sView/fonts/fonts.conf
   '';
 

@@ -1,6 +1,7 @@
 {
   android-tools,
   clang,
+  dbus,
   expat,
   fetchFromGitHub,
   fontconfig,
@@ -56,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/uad-ng --prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath (
         [
+          dbus
           fontconfig
           freetype
           libglvnd

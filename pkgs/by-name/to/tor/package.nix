@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.9.5";
+  version = "0.4.9.6";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yUnC+Gs0jmSJGXb2seScF3ZVsj35cZMEm/G4zTCZ4Xk=";
+    hash = "sha256-qJq6lwUumWOmVLQN8tRr4H6Ka24k5UN5F/2BrNkKcBc=";
   };
 
   outputs = [

@@ -9,7 +9,7 @@
   ruby_3_3,
   writeShellScript,
   brotli,
-  python311,
+  python3,
 
   # Allow building a fork or custom version of Mastodon:
   pname ? "mastodon",
@@ -23,7 +23,6 @@
 }:
 let
   nodejs-slim = nodejs-slim_22;
-  python3 = python311;
   ruby = ruby_3_3;
   yarn-berry = yarn-berry_4.override { nodejs = nodejs-slim; };
 in

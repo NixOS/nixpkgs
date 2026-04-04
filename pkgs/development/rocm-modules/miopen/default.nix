@@ -43,7 +43,7 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.2.0";
+  version = "7.2.1";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -64,14 +64,6 @@ let
     "gfx1200"
     "gfx1201"
   ] gpuTargets;
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "MIOpen";
-    rev = "rocm-${version}";
-    hash = "sha256-OwBFzUruHHeJD7n3zLs/NsU5cNEjwkwFgim4m2/1hR0=";
-    fetchSubmodules = true;
-  };
 
   latex = lib.optionalAttrs buildDocs (
     texliveSmall.withPackages (
@@ -103,7 +95,9 @@ let
       } > $out
     '';
 
-  kdbs = lib.mapAttrs fetchKdb (import ./kdbs.nix);
+  kdbs = lib.mapAttrs fetchKdb (
+    lib.filterAttrs (name: _: lib.elem name supportedTargets) (import ./kdbs.nix)
+  );
 
   linkKDBsTo =
     targetPath:
@@ -114,8 +108,21 @@ let
     );
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit version src;
+  inherit version;
   pname = "miopen";
+
+  src = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "rocm-libraries";
+    rev = "rocm-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/miopen"
+      "shared"
+    ];
+    fetchSubmodules = true;
+    hash = "sha256-plZpBTbEBVMa5CasjfbUsu45xP/BYstrEpWKK2H7QQ4=";
+  };
+  sourceRoot = "${finalAttrs.src.name}/projects/miopen";
 
   env.CFLAGS = cFlags;
   env.CXXFLAGS = cFlags;
@@ -235,6 +242,9 @@ stdenv.mkDerivation (finalAttrs: {
       return()'
 
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
+
+    substituteInPlace src/comgr.cpp \
+      --replace-fail '"/opt/rocm"' '"${clr}"'
   ''
   + linkKDBsTo "src/kernels"
   + ''
@@ -274,6 +284,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.impureTests = {
+    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv)
+    conv = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "conv";
+      testScript = "MIOpenDriver conv -n 1 -c 1 -H 4 -W 4 -k 1 -y 3 -x 3 -p 0 -q 0 -V 0";
+    };
+    pool = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "pool";
+      testScript = "MIOpenDriver pool -W 1x1x4x4 -y 2 -x 2 -p 0 -q 0 -F 1 -V 0";
+    };
+  };
   passthru.tests = {
     # Ensure all .tn.model files can be loaded by whatever version of frugally-deep we have
     # This is otherwise hard to verify as MIOpen will only use these models on specific,
@@ -289,7 +312,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Machine intelligence library for ROCm";
-    homepage = "https://github.com/ROCm/MIOpen";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

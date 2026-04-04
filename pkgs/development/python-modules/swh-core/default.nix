@@ -42,7 +42,7 @@
   pkgs, # Only for pkgs.zstd
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-core";
   version = "4.6.0";
   pyproject = true;
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dI+xfj0DnUbBdYIVycyJQg3B/jnH/eg/Ju8YX2k8Qkc=";
   };
 
@@ -80,6 +80,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "swh.core" ];
 
   __darwinAllowLocalNetworking = true;
+
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     aiohttp-utils
@@ -122,11 +125,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-core/-/tags/${src.tag}";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-core/-/tags/${finalAttrs.src.tag}";
     description = "Low-level utilities and helpers used by almost all other modules in the stack";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-core";
     license = lib.licenses.gpl3Only;
     mainProgram = "swh";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

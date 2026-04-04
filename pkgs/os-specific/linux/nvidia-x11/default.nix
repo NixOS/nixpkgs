@@ -61,6 +61,11 @@ let
     stripLen = 1;
     extraPrefix = "kernel/";
   };
+
+  kernel_6_19_patch = fetchpatch {
+    url = "https://github.com/CachyOS/CachyOS-PKGBUILDS/raw/d5629d64ac1f9e298c503e407225b528760ffd37/nvidia/nvidia-utils/kernel-6.19.patch";
+    hash = "sha256-YuJjSUXE6jYSuZySYGnWSNG5sfVei7vvxDcHx3K+IN4=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -72,12 +77,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
   production = generic {
-    version = "580.126.18";
-    sha256_64bit = "sha256-p3gbLhwtZcZYCRTHbnntRU0ClF34RxHAMwcKCSqatJ0=";
-    sha256_aarch64 = "sha256-pruxWQlLurymRL7PbR24NA6dNowwwX35p6j9mBIDcNs=";
-    openSha256 = "sha256-1Q2wuDdZ6KiA/2L3IDN4WXF8t63V/4+JfrFeADI1Cjg=";
-    settingsSha256 = "sha256-QMx4rUPEGp/8Mc+Bd8UmIet/Qr0GY8bnT/oDN8GAoEI=";
-    persistencedSha256 = "sha256-ZBfPZyQKW9SkVdJ5cy0cxGap2oc7kyYRDOeM0XyfHfI=";
+    version = "595.58.03";
+    sha256_64bit = "sha256-jA1Plnt5MsSrVxQnKu6BAzkrCnAskq+lVRdtNiBYKfk=";
+    sha256_aarch64 = "sha256-hzzIKY1Te8QkCBWR+H5k1FB/HK1UgGhai6cl3wEaPT8=";
+    openSha256 = "sha256-6LvJyT0cMXGS290Dh8hd9rc+nYZqBzDIlItOFk8S4n8=";
+    settingsSha256 = "sha256-2vLF5Evl2D6tRQJo0uUyY3tpWqjvJQ0/Rpxan3NOD3c=";
+    persistencedSha256 = "sha256-AtjM/ml/ngZil8DMYNH+P111ohuk9mWw5t4z7CHjPWw=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -87,6 +92,7 @@ rec {
     openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
     settingsSha256 = "sha256-NWsqUciPa4f1ZX6f0By3yScz3pqKJV1ei9GvOF8qIEE=";
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
+    patchesOpen = [ kernel_6_19_patch ];
   });
 
   beta = selectHighestVersion latest (generic {
@@ -101,25 +107,36 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "580.94.18";
-    persistencedVersion = "580.95.05";
-    settingsVersion = "580.95.05";
-    sha256_64bit = "sha256-FcbmHcwyrUt+1k31UgmX2WZNLLJ4BB5L3pbYUMrwtYo=";
-    openSha256 = "sha256-1Zt8DY2P43L+k2u90rfGCK1dFLnlnaASqoe+qyVNw7k=";
-    settingsSha256 = "sha256-F2wmUEaRrpR1Vz0TQSwVK4Fv13f3J9NJLtBe4UP2f14=";
-    persistencedSha256 = "sha256-QCwxXQfG/Pa7jSTBB0xD3lsIofcerAWWAHKvWjWGQtg=";
+    version = "595.44.03";
+    persistencedVersion = "595.45.04";
+    settingsVersion = "595.45.04";
+    sha256_64bit = "sha256-hKRUCKRnBlydG5Qe9pYjSCKWvSc8cb5K8L2tiup3Q+0=";
+    openSha256 = "sha256-zSnUuqxsFGLzDLC5BLKr1zljfbDiOqc/K5MusBeoP54=";
+    settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
+    persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
   };
 
   # data center driver compatible with current default cudaPackages
-  dc = dc_570;
+  dc = dc_580;
 
-  dc_535 = generic rec {
-    version = "535.288.01";
+  dc_590 = generic rec {
+    version = "590.48.01";
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
-    sha256_64bit = "sha256-8gwy/W7NH3BcbfJ5fAwIQlPs9/9I8sNH+Co5YZiC7OE=";
-    persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
-    fabricmanagerSha256 = "sha256-mIFlY4JHPIkTH18mpciU+ueH8Nj6Ts+2g2xv+BfyUEI=";
+    sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
+    persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
+    fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+  };
+
+  dc_580 = generic rec {
+    version = "580.126.09";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-TKxT5I+K3/Zh1HyHiO0kBZokjJ/YCYzq/QiKSYmG7CY=";
+    persistencedSha256 = "sha256-J1UwS0o/fxz45gIbH9uaKxARW+x4uOU1scvAO4rHU5Y=";
+    fabricmanagerSha256 = "sha256-tyCHKIr8nxVfZIqcWKAwRoMLzmGlsOUhDlO5V/9W97Y=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -139,6 +156,16 @@ rec {
   # Update note:
   # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
   # adding to the `nvidia_x11_legacy*` entries.
+
+  # LTSB supported until Aug 2028
+  legacy_580 = generic {
+    version = "580.142";
+    sha256_64bit = "sha256-IJFfzz/+icNVDPk7YKBKKFRTFQ2S4kaOGRGkNiBEdWM=";
+    sha256_aarch64 = "sha256-jntr88SpTYR648P1rizQjB/8KleBoa14Ay12vx8XETM=";
+    openSha256 = "sha256-v968LbRqy8jB9+yHy9ceP2TDdgyqfDQ6P41NsCoM2AY=";
+    settingsSha256 = "sha256-BnrIlj5AvXTfqg/qcBt2OS9bTDDZd3uhf5jqOtTMTQM=";
+    persistencedSha256 = "sha256-il403KPFAnDbB+dITnBGljhpsUPjZwmLjGt8iPKuBqw=";
+  };
 
   # Last one without the bug reported here:
   # https://bbs.archlinux.org/viewtopic.php?pid=2155426#p2155426

@@ -6,13 +6,13 @@
 }:
 vimUtils.buildVimPlugin rec {
   pname = "rainbow-delimiters.nvim";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     owner = "HiPhish";
     repo = "rainbow-delimiters.nvim";
     tag = "v${version}";
-    hash = "sha256-E0ZPi9Vzc3TwhNHsGyABY+sgn/vO6Oyun6eRd7/RFgU=";
+    hash = "sha256-zQgnNN8QvboOHWaMcLw1uRt/9AxV1asvTnpCcJ/qVS4=";
   };
 
   nvimSkipModules = [

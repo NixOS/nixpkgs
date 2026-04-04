@@ -38,6 +38,7 @@ let
 
       bignums = callPackage ../development/rocq-modules/bignums { };
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
+      iris = callPackage ../development/rocq-modules/iris { };
       mathcomp = callPackage ../development/rocq-modules/mathcomp { };
       mathcomp-boot = self.mathcomp.boot;
       mathcomp-order = self.mathcomp.order;
@@ -46,12 +47,19 @@ let
       mathcomp-solvable = self.mathcomp.solvable;
       mathcomp-field = self.mathcomp.field;
       mathcomp-character = self.mathcomp.character;
+      mathcomp-analysis = callPackage ../development/rocq-modules/mathcomp-analysis { };
+      mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-bigenough = callPackage ../development/rocq-modules/mathcomp-bigenough { };
+      mathcomp-classical = self.mathcomp-analysis.classical;
+      mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
+      mathcomp-reals = self.mathcomp-analysis.reals;
+      mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
+      stdpp = callPackage ../development/rocq-modules/stdpp { };
       vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;
@@ -108,6 +116,6 @@ rec {
   rocqPackages_9_1 = mkRocqPackages rocq-core_9_1;
   rocqPackages_9_2 = mkRocqPackages rocq-core_9_2;
 
-  rocqPackages = lib.recurseIntoAttrs rocqPackages_9_0;
+  rocqPackages = lib.recurseIntoAttrs rocqPackages_9_1;
   rocq-core = rocqPackages.rocq-core;
 }

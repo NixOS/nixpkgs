@@ -419,10 +419,23 @@ stdenv.mkDerivation (
         check_version patch ${patch}
       '';
 
-    # E.g. Mesa uses the build-id as a cache key (see #93946):
-    env = lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
-      LDFLAGS = "-Wl,--build-id=sha1";
-    };
+    env =
+      # E.g. Mesa uses the build-id as a cache key (see #93946):
+      lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
+        LDFLAGS = "-Wl,--build-id=sha1";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        # This test was introduced by https://github.com/llvm/llvm-project/pull/158719 to check
+        # for a Windows-specific quirk.
+        # It is also unconditionally run on other platforms because running binaries
+        # without any environment variables should work, but as the test binaries link against
+        # our libLLVM.dylib that has not been installed at this point, and the `DYLD_LIBRARY_PATH`
+        # we set for tests to work around this issue is cleared away by the test itself,
+        # it will fail.
+        # Unfortunately "fixing" the test to pass just `DYLD_LIBRARY_PATH` would void the purpose
+        # of the test itself, so we skip it instead.
+        GTEST_FILTER = "-ProgramEnvTest.TestExecuteEmptyEnvironment";
+      };
 
     cmakeBuildType = "Release";
 

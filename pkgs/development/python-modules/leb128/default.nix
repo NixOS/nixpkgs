@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   lib,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-X3iBYiANzM97M91dCyjEU/Onhqcid3MMsNzzKtcRcyA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

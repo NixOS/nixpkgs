@@ -70,17 +70,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-I2dGn4Ld5lZeML8GePcLPssplBZ+4weNR6uBEqFdZVg=";
+    hash = "sha256-+xMmPKb32NP9U35dHCXfXWwa6exfiL5TezfXERVDfe4=";
     sparseCheckout = [
       "projects/hipblaslt"
       "shared"
     ];
+    # Compress the 5ish GiB of yaml files so this .src is under output size limit
+    postFetch = ''
+      find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${lib.getExe zstd} --rm {} \;
+    '';
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipblaslt";
   env.CXX = compiler;
@@ -121,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./TensileCreateLibrary-refactor.patch
     ./Tensile-interning.patch
   ];
+
+  preConfigure = ''
+    find . -name '*.yaml.zst' -path '*/Tensile/Logic/*' -exec zstd -d --rm {} \;
+  '';
 
   postPatch = ''
     # git isn't needed and we have no .git
@@ -237,13 +245,10 @@ stdenv.mkDerivation (finalAttrs: {
   # and are fine ignoring it at runtime if it's not supported
   # so we have to support building an empty hipblaslt
   passthru.supportsTargetArches = supportsTargetArches;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
   meta = {
     description = "Library that provides general matrix-matrix operations with a flexible API";
-    homepage = "https://github.com/ROCm/hipBLASlt";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblaslt";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

@@ -23,7 +23,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-secrets";
-  version = "12.0";
+  version = "12.3";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "secrets";
     tag = finalAttrs.version;
-    hash = "sha256-U+ez/rhaXROcLdXhFY992YzIRBCkR05hxkAYbWIpa/A=";
+    hash = "sha256-ypkzswfX/qdVtMja2oky8Gein2BO1gzDvjbtcd3Javc=";
   };
 
   postPatch = ''

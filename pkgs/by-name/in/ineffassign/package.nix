@@ -7,20 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ineffassign";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "gordonklaus";
     repo = "ineffassign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JVrAIspRL6XvDd/AnPFt9IJPQ0hY1KPwXvldAfwYkzU=";
+    hash = "sha256-3bn13aQCz7Zn7DUmOTawFYI/xHUqabXrrVOYlOC5J/g=";
   };
 
-  patches = [
-    ./0001-fix-build.patch # run go get -u. Old dependency can't run correctly on go 1.23
-  ];
-
-  vendorHash = "sha256-WpX5I9PK7xuln6BkIEW2qIF1K/BgaEu/gkJsz+ThVk0=";
+  vendorHash = "sha256-h6r13xxPRTlSdTwi88ITra7SizU1z4pXWsmqlG2frU8=";
 
   passthru.updateScript = nix-update-script { };
 

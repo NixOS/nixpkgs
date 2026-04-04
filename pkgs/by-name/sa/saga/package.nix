@@ -36,7 +36,7 @@
   netcdf,
   poppler,
   sqlite,
-  unixODBC,
+  unixodbc,
 
   cudaSupport ? config.cudaSupport,
 }:
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     netcdf
     poppler
     sqlite
-    unixODBC
+    unixodbc
   ];
 
   cmakeFlags = [

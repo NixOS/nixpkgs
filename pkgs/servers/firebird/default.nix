@@ -29,7 +29,6 @@ let
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
         bbenno
-        marcweber
       ];
     };
 

@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "4.5.0";
+  version = "4.8.4";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-/mI11ldbYa051WA2hkV7fnc8CJOb0jHra0FJ+eVCqVs=";
+    hash = "sha256-k90JxFxXL3vEGBMkgbQABUCK99utJ88E/v9Zcj/2oBo=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-g71OGg0PAo60h0bC+oOyvLvPOCg0pYXuYD8vsR5X9/k=";
+      hash = "sha256-Fd9HJ7c7fh8YYZrfzRK7BnlnHAXeyeQ9UBabnRlA+w0=";
     };
 
     nativeBuildInputs = [
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
   inherit version src;
 
-  sourceRoot = "source/src/backend";
+  sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
     # Support configuration throught environment variables for SECURE_*
@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-storages
       django-timezone-field
       django-treebeard
+      django-waffle
       djangorestframework
       drf-spectacular
       drf-spectacular-sidecar
@@ -104,12 +105,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       openai
       psycopg
       pycrdt
+      pydantic-ai-slim
       pyjwt
       pyopenssl
       python-magic
       redis
       requests
       sentry-sdk
+      uvicorn
       whitenoise
     ]
     ++ celery.optional-dependencies.redis
@@ -143,6 +146,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
       mkdir -p $out/${python3.sitePackages}/core/templates
       ln -sv ${mail-templates}/ $out/${python3.sitePackages}/core/templates/mail
+
+      cp -r impress/configuration $out/${python3.sitePackages}/impress/configuration
     '';
 
   passthru.tests = {
@@ -154,7 +159,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/suitenumerique/docs";
     changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     mainProgram = "docs";
     platforms = lib.platforms.all;
   };

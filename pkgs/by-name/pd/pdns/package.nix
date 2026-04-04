@@ -17,7 +17,7 @@
   openldap,
   geoip,
   curl,
-  unixODBC,
+  unixodbc,
   lmdb,
   tinycdb,
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
     libsodium
     curl
-    unixODBC
+    unixodbc
     openssl
     systemd
     lmdb

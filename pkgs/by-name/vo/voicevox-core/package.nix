@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
     substitute ${./openjtalk.patch} ./openjtalk.patch \
       --replace-fail "@openjtalk_src@" "$(pwd)/openjtalk"
-    patch -d $cargoDepsCopy/open_jtalk-sys-* -p1 < ./openjtalk.patch
+    patch -d $cargoDepsCopy/*/open_jtalk-sys-* -p1 < ./openjtalk.patch
   '';
 
   cargoBuildFlags = [ "-p voicevox_core_c_api" ];

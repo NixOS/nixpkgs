@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7";
 
   src = fetchurl {
-    url = "http://archive.debian.org/debian/pool/main/d/dog/dog_${finalAttrs.version}.orig.tar.gz";
+    url = "https://archive.debian.org/debian/pool/main/d/dog/dog_${finalAttrs.version}.orig.tar.gz";
     sha256 = "3ef25907ec5d1dfb0df94c9388c020b593fbe162d7aaa9bd08f35d2a125af056";
   };
 

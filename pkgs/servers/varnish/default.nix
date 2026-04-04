@@ -31,7 +31,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
+        url = "https://vinyl-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
 
@@ -68,26 +68,32 @@ let
       buildFlags = [ "localstatedir=/var/run" ];
 
       patches =
-        lib.optionals (stdenv.isDarwin && lib.versionAtLeast version "7.7") [
-          # Fix VMOD section attribute on macOS
-          # Unreleased commit on master
-          (fetchpatch2 {
-            url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
-            hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
-          })
-          # Fix endian.h compatibility on macOS
-          # PR: https://github.com/varnishcache/varnish-cache/pull/4339
-          ./patches/0001-fix-endian-h-compatibility-on-macos.patch
-        ]
+        lib.optionals
+          (stdenv.isDarwin && lib.versionAtLeast version "7.7" && lib.versionOlder version "8.0")
+          [
+            # Fix VMOD section attribute on macOS
+            # Unreleased commit on master
+            (fetchpatch2 {
+              url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
+              hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
+            })
+            # Fix endian.h compatibility on macOS
+            # PR: https://github.com/varnishcache/varnish-cache/pull/4339
+            ./patches/0001-fix-endian-h-compatibility-on-macos.patch
+          ]
         ++ lib.optionals (stdenv.isDarwin && lib.versionOlder version "7.6") [
           # Fix duplicate OS_CODE definitions on macOS
           # PR: https://github.com/varnishcache/varnish-cache/pull/4347
           ./patches/0002-fix-duplicate-os-code-definitions-on-macos.patch
         ];
 
-      postPatch = ''
-        substituteInPlace bin/varnishtest/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
-      '';
+      postPatch =
+        lib.optionalString (lib.versionOlder version "8.0") ''
+          substituteInPlace bin/varnishtest/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
+        ''
+        + lib.optionalString (lib.versionAtLeast version "8.0") ''
+          substituteInPlace bin/varnishtest/vtest2/src/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
+        '';
 
       postConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         # prevent cache invalidation
@@ -141,18 +147,27 @@ let
           lib.maintainers.osnyx
         ];
         platforms = lib.platforms.unix;
+        knownVulnerabilities = lib.optionals (lib.versions.major version == "7") [
+          "VSV00018: https://vinyl-cache.org/security/VSV00018.html"
+        ];
+        broken = stdenv.isDarwin && version == "8.0.1"; # https://github.com/NixOS/nixpkgs/issues/495368
       };
     };
 in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.16";
-    hash = "sha256-ZVJxDHp9LburwlJ1LCR5CKPRaSbNixiEch/l3ZP0QyQ=";
+    version = "6.0.17";
+    hash = "sha256-CVmHd1hCDFE/WIZqjc1TfX1O2RqFetdNSO4ihmXoL5k=";
   };
   # EOL 2026-03-15
   varnish77 = common {
     version = "7.7.3";
     hash = "sha256-6W7q/Ez+KlWO0vtU8eIr46PZlfRvjADaVF1YOq74AjY=";
+  };
+  # EOL 2026-09-15
+  varnish80 = common {
+    version = "8.0.1";
+    hash = "sha256-n1oi1YrNvqw3GhY9683TYSG+XuS8hKoYfrfNDDGP5oI=";
   };
 }

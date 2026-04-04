@@ -23,16 +23,16 @@
 }:
 
 let
-  version = "2.0.2";
+  version = "2.0.6";
   devenvNixVersion = "2.32";
-  devenvNixRev = "7eb6c427c7a86fdc3ebf9e6cbf2a84e80e8974fd";
+  devenvNixRev = "e127c1c94cefe02d8ca4cca79ef66be4c527510e";
 
   nix_components =
     (nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
       owner = "cachix";
       repo = "nix";
       rev = devenvNixRev;
-      hash = "sha256-H26FQmOyvIGnedfAioparJQD8Oe+/byD6OpUpnI/hkE=";
+      hash = "sha256-MRNVInSmvhKIg3y0UdogQJXe+omvKijGszFtYpd5r9k=";
     })).overrideScope
       (
         finalScope: prevScope: {
@@ -48,16 +48,20 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-38crLoAfEOdnEDDZD2NyAEDVlBSFn+MlZyLwztAsC8Q=";
+    hash = "sha256-i1G6n/7Z5fO9RhplzXQSTiLyh1Cs0GhoCoEStFLARtA=";
   };
 
-  cargoHash = "sha256-e56HmkS+p8P/X7vS+hTT78lfQ2YDCuONM+6yW0RIfSE=";
+  cargoHash = "sha256-p5kI7HlG6RVxCCEb/J0L2gh36jkm/atAV98ny3h4vqo=";
+
+  # Upstream tagged v2.0.6 with Cargo.toml already bumped to 2.0.7
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail 'version = "2.0.7"' 'version = "${version}"'
+  '';
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
-    VERGEN_IDEMPOTENT = "1";
-    DEVENV_ON_RELEASE_TAG = true;
+    DEVENV_IS_RELEASE = true;
   };
 
   cargoBuildFlags = [
@@ -79,7 +83,6 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
-    boehmgc
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c

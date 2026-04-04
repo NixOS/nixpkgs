@@ -12,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shrinkray";
-  version = "26.2.20.0";
+  version = "26.3.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DRMacIver";
     repo = "shrinkray";
     tag = "v${version}";
-    hash = "sha256-KsIWFR5gyFt35yLz/102hET+JMhEU0ukhzwb9MzewSs=";
+    hash = "sha256-1sdUfgT/2fC6zpFR20okmaueqdjJ5nWwUl3n8nsGXTU=";
   };
   postPatch = ''
     substituteInPlace tests/test_main.py \

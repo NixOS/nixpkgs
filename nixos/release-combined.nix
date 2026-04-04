@@ -44,12 +44,12 @@ rec {
     }
   );
 
-  nixpkgs = removeAttrs (removeMaintainers (
+  nixpkgs = removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
     }
-  )) [ "unstable" ];
+  );
 
   tested =
     let
@@ -87,6 +87,7 @@ rec {
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems [ "x86_64-linux" ] "nixos.tests.docker")
         (onFullSupported "nixos.tests.env")
+        (onSystems [ "x86_64-linux" "aarch64-linux" ] "nixos.tests.ec2-userdata")
 
         # Way too many manual retries required on Hydra.
         #  Apparently it's hard to track down the cause.
@@ -191,6 +192,8 @@ rec {
         (onFullSupported "nixpkgs.jdk")
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
+          # Include all release-critical jobs from nixpkgs-unstable channel
+          "nixpkgs.unstable"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]

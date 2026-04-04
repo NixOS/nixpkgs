@@ -67,7 +67,8 @@ lib.extendMkDerivation {
           "[${lib.concatStringsSep "," options}]";
 
         beamModuleName = args.name;
-      };
+      }
+      // (args.env or { });
 
       setupHook = writeText "setupHook.sh" ''
         addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"

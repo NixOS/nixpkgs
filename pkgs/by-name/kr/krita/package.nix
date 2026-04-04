@@ -1,6 +1,4 @@
 {
-  lib,
-  libsForQt5,
   symlinkJoin,
   krita-plugin-gmic,
   binaryPlugins ? [

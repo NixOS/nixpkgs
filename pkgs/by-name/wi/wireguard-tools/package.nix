@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireguard-tools";
-  version = "1.0.20250521";
+  version = "1.0.20260223";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-V9yKf4ZvxpOoVCFkFk18+130YBMhyeMt0641tn0O0e0=";
+    sha256 = "sha256-jOFEE9CcCjU52nPO/+ib72rqki7H1qkIinv7Z8yWQBA=";
   };
 
   outputs = [
@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zx2c4
       ma27
+      kaynetik
     ];
     mainProgram = "wg";
     platforms = lib.platforms.unix;

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   sphinx,
-  setuptools,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -18,15 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-OW+MNQbPfJa8+jcpWZxTKD+EAv1gyo5tmcYAGba4u3c=";
   };
 
-  postPatch = ''
-    # Fixes "packaging.version.InvalidVersion: Invalid version: 'main'"
-    substituteInPlace setup.py \
-      --replace-fail 'version = "main"' 'version = "${version}"'
-  '';
-
-  build-system = [
-    setuptools
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     sphinx

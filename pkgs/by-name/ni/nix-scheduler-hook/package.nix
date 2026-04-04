@@ -1,8 +1,9 @@
 {
   fetchFromGitHub,
+  fetchFromCodeberg,
   stdenv,
   lib,
-  nix,
+  nixVersions,
   meson,
   cmake,
   ninja,
@@ -13,6 +14,7 @@
   openpbs,
   symlinkJoin,
   slurm,
+  gitUpdater,
 }:
 let
   restclient-cpp = fetchFromGitHub {
@@ -28,16 +30,17 @@ let
       slurm.dev
     ];
   };
+  nix = nixVersions.nix_2_34;
 in
 stdenv.mkDerivation rec {
   pname = "nix-scheduler-hook";
-  version = "0.6.1";
+  version = "0.7.3";
 
-  src = fetchFromGitHub {
-    owner = "lisanna-dettwyler";
+  src = fetchFromCodeberg {
+    owner = "lisanna";
     repo = "nix-scheduler-hook";
     tag = "v${version}";
-    hash = "sha256-pB42rjqkASgdYQJD9nPqFSM0JAUIko1FN4d0J52BUsc=";
+    hash = "sha256-r8ybbPxQK+ohsaz4+brrsivj77fCqrrHPskfyrp6R2A=";
   };
 
   sourceRoot = "source/src";
@@ -69,8 +72,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mv nsh $out/bin
     mkdir -p $out/lib
-    mv subprojects/restclient-cpp/librestclient_cpp.so $out/lib
+    shopt -s extglob
+    mv subprojects/restclient-cpp/librestclient_cpp.so!(*p) $out/lib
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = {
     description = "Nix build hook that forwards builds to job schedulers";

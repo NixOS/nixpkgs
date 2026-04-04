@@ -55,7 +55,7 @@ php.buildComposerProject2 (finalAttrs: {
   # use together with the version from this package to keep the
   # bootstrap phar file up-to-date together with the end user composer
   # package.
-  passthru.pharHash = "sha256-Oz+VA6LUZZAXDkXt0pc0GX55fOpUWzltCygjysjvRkM=";
+  passthru.pharHash = "sha256-yGzmA/6Da/CGGjjJOsVmyPHmmsRLJEXZt6ahfqLplyo=";
 
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";

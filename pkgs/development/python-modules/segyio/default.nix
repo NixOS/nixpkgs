@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   scikit-build,
@@ -15,18 +14,7 @@ buildPythonPackage rec {
   version = "1.9.14";
   pyproject = false; # Built with cmake
 
-  patches = [
-    # Bump minimum CMake version to 3.11
-    (fetchpatch {
-      url = "https://github.com/equinor/segyio/commit/3e2cbe6ca6d4bc7d4f4d95666f5d2983836e8461.patch?full_index=1";
-      hash = "sha256-sOBHi8meMSkxEZy0AXwebAnIVPatpwQHd+4Co5zIhLQ=";
-    })
-  ];
-
   postPatch = ''
-    # Removing unecessary build dependency
-    substituteInPlace python/setup.py --replace "'pytest-runner'," ""
-
     # Fixing bug making one test fail in the python 3.10 build
     substituteInPlace python/segyio/open.py --replace \
     "cube_metrics = f.xfd.cube_metrics(iline, xline)" \

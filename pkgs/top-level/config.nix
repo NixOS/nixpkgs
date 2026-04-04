@@ -393,6 +393,21 @@ let
       '';
     };
 
+    recursionMode = mkOption {
+      type = types.uniq (
+        types.enum [
+          "hydra"
+          "eval"
+          "search"
+        ]
+      );
+      default = "eval";
+      description = ''
+        In which way to recurse through Nixpkgs. In most cases you want keep this as the default.
+        You can use this to emulate how `hydra` and `search` are going through Nixpkgs.
+      '';
+    };
+
     hashedMirrors = mkOption {
       type = types.listOf types.str;
       default = [ "https://tarballs.nixos.org" ];
@@ -498,6 +513,10 @@ in
     # Put the default value for matchers in here (as in, not as an *actual* mkDefault default value),
     # to force it being merged with any custom values instead of being overridden.
     problems.matchers = [
+      {
+        kind = "broken";
+        handler = "error";
+      }
       # Be loud and clear about package removals
       {
         kind = "removal";

@@ -6,6 +6,7 @@
   installShellFiles,
   nix-update-script,
   tzdata,
+  fuse,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,7 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-osVyOFO+vHbcXEp44VH7XI8y4Ir8/IkCr/cF0FMPQvQ=";
 
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mount" ];
+  checkFeatures = lib.subtractLists [ "mount" ] finalAttrs.buildFeatures; # we do not want `mount` during unit tests because it breaks rustic's test snapshots
+
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
 
   nativeCheckInputs = [ tzdata ];
 
@@ -46,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/rustic-rs/rustic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.all;
     license = [
       lib.licenses.mit
       lib.licenses.asl20

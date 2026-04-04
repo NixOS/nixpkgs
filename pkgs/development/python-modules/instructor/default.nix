@@ -103,6 +103,9 @@ buildPythonPackage (finalAttrs: {
     # pydantic validation mismatch
     "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
     "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
+
+    # Upstream bug: test expects TypeError but code raises ConfigurationError
+    "test_openai_schema_raises_error"
   ];
 
   disabledTestPaths = [

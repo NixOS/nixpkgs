@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Kilo-Org";
-    repo = "kilocode";
+    repo = "kilocode-legacy";
     tag = "cli-v${finalAttrs.version}";
     hash = "sha256-XlJ9/9FABLpKVJXdIRzbzOpJVXdIzgFvPPeER1LRsuk=";
   };

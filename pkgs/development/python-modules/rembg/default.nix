@@ -33,8 +33,12 @@
 
   # tests
   versionCheckHook,
+  pocl,
 
   withCli ? false,
+  config,
+  cudaSupport ? config.cudaSupport,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -42,14 +46,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "rembg";
-  version = "2.0.72";
+  version = "2.0.74";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KYpqRuC7EjgH0UqgIoMaeHF3oQSI87j6J3bcqU+43Wo=";
+    hash = "sha256-bCwteS0OJThIAIXxWjzol33p+EH1Gy+CBjKNDwcH7p8=";
   };
 
   env.POETRY_DYNAMIC_VERSIONING_BYPASS = finalAttrs.version;
@@ -100,9 +104,24 @@ buildPythonPackage (finalAttrs: {
   postInstall = lib.optionalString (!withCli) "rm -r $out/bin";
 
   # not running python tests, as they require network access
-  nativeCheckInputs = lib.optionals withCli [
-    versionCheckHook
-  ];
+  nativeCheckInputs =
+    lib.optionals
+      (
+        withCli
+        # Crashes in the sandbox as no drivers are available
+        # opencl._cl.RuntimeError: no CL platforms available to ICD loader
+        && (!cudaSupport)
+      )
+      [
+        versionCheckHook
+      ]
+    ++ lib.optionals cudaSupport [
+      # Provides a CPU-based OpenCL ICD so that pyopencl's module-level
+      # cl.create_some_context() succeeds without GPU hardware.
+      pocl
+      # pocl needs a writable $HOME for its kernel cache directory.
+      writableTmpDirAsHomeHook
+    ];
   versionCheckKeepEnvironment = [
     # Otherwise, fail with:
     # RuntimeError: cannot cache function '_make_tree': no locator available for file

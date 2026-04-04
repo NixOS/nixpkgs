@@ -17,7 +17,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "rclone";
-  version = "1.73.1";
+  version = "1.73.3";
 
   outputs = [
     "out"
@@ -28,10 +28,10 @@ buildGoModule (finalAttrs: {
     owner = "rclone";
     repo = "rclone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DzyfG14c2ca/Nw8rVL1SJ0fp9CWvus/9jDtwSqYN6F8=";
+    hash = "sha256-jPY+sPNQwashbbrjt4RewFRc5FwsvCZBQwMy+kLpCUQ=";
   };
 
-  vendorHash = "sha256-mMkntyRAYFrzp0HqlD0FBmzztCMc9gL/Cs/drq8U4K0=";
+  vendorHash = "sha256-XRIwSMwq8SwgZuIXNHJtasFtUbE3U2YgdVjN+DiXDlg=";
 
   subPackages = [ "." ];
 

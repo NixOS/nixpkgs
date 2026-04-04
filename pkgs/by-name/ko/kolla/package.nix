@@ -54,7 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     stestr
     oslotest
     hacking
-    coverage
     bashate
   ];
 

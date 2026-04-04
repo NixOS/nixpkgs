@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gotmplfmt";
-  version = "1.0.22";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "miekg";
     repo = "gotmplfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-87TcSEV4tJXf7a9Sml5H7mdVGYd4z7yJRxdkZFYm5DQ=";
+    hash = "sha256-mJkQP2nAVGqvxthrkLU4MmydPE/h+hcHM9c5/SRLj+4=";
   };
 
   vendorHash = "sha256-uPqabZgQGQulf+F3BvMLhv4O0h5jOq12F7K60u5xjtA=";

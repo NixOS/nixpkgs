@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/stun/";
     license = lib.licenses.vsl10;
     maintainers = with lib.maintainers; [
-      marcweber
       obadz
     ];
     platforms = lib.platforms.linux;

@@ -7,26 +7,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "verifpal";
-  version = "0.27.4";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "symbolicsoft";
     repo = "verifpal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kBeQ7U97Ezj85A/FbNnE1dXR7VJzx0EUrDbzwOgKl8E=";
+    hash = "sha256-k8SGCo36tk4Etg4jt0NDeEj1BmSYjaZZptNNnrOXs4E=";
   };
 
-  vendorHash = "sha256-FvboLGdT+/W5on7NSzRp9QfV2peNVICypSFWAGFakLU=";
+  vendorHash = "sha256-Vg375DBPvurRpwl918AGQU+wJGnB1tYisgch9FA+Y/g=";
 
   nativeBuildInputs = [ pigeon ];
 
   subPackages = [ "cmd/verifpal" ];
-
-  # goversioninfo is for Windows only and can be skipped during go generate
-  preBuild = ''
-    substituteInPlace cmd/verifpal/main.go --replace "go:generate goversioninfo" "(disabled goversioninfo)"
-    go generate verifpal.com/cmd/verifpal
-  '';
 
   meta = {
     homepage = "https://verifpal.com/";

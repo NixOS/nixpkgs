@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-sZk7OEkJdBZRU9ysRDCetzv09XrK5GhPaxxEBD8k5rw=";
+    hash = "sha256-aYgTdHrorLNBYVNwVyYSTfAqtvn1JB0FBAkoem0vNSU=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts
+    yarn install --offline --frozen-lockfile --no-progress --non-interactive --ignore-scripts
     patchShebangs node_modules
 
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
@@ -60,6 +60,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Frontend for Mealie";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ litchipi ];
+    maintainers = with lib.maintainers; [
+      litchipi
+      esch
+    ];
   };
 }

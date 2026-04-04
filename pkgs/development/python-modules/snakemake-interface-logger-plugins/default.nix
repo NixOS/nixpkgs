@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-logger-plugins";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-logger-plugins";
     tag = "v${version}";
-    hash = "sha256-GPf8FdoBHpyQADWvJ7jOF4PpLk6/Ui+nXIE/rUSIAg8=";
+    hash = "sha256-yvEjd4xBjjCocGK/HD1j5jcuy+syyXcEJGdsEFA0H40=";
   };
 
   nativeBuildInputs = [ hatchling ];

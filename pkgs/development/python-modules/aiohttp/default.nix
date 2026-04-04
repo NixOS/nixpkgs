@@ -132,6 +132,9 @@ buildPythonPackage rec {
     "test_invalid_idna"
     # don't run benchmarks
     "test_import_time"
+    "test_cookie_pattern_performance"
+    "test_forwarded_re_performance"
+    "test_regex_performance"
     # racy
     "test_uvloop_secure_https_proxy"
     # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]

@@ -27,7 +27,6 @@
   graphicsmagick,
   gtk3,
   icu,
-  ilmbase,
   isocodes,
   jasper,
   json-glib,
@@ -114,7 +113,6 @@ stdenv.mkDerivation rec {
     graphicsmagick
     gtk3
     icu
-    ilmbase
     isocodes
     jasper
     json-glib
@@ -122,7 +120,7 @@ stdenv.mkDerivation rec {
     lensfun
     lerc
     libaom
-    #libavif # TODO re-enable once cmake files are fixed (#425306)
+    libavif
     libdatrie
     libepoxy
     libexif

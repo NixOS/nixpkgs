@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
-  version = "3.12.0-unstable-2025-12-07";
+  version = "3.18.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "0da97ce1ea0255ddabe18537cfd78a4935237859";
-    hash = "sha256-fVItooES2PNoWGP8RfRo5Ibqi6d/ZyuRXUfud2uHg5Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s9rHuZsNHQLCXqqF8VJPgiTHkHHXro97mUTvLB9WKfI=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -45,9 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Build scripts assume to be used within a Git repository checkout
-    sed -E -i '/^let commitHash =/,/;$/clet commitHash = "${
-      builtins.substring 0 7 finalAttrs.src.rev
-    }";' \
+    sed -E -i '/^let commitHash =/,/;$/clet commitHash = "${finalAttrs.src.rev}";' \
       build/webpack.prod.conf.js
   '';
 

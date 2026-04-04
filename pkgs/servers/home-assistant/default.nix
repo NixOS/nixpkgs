@@ -4,7 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  python313,
+  python314,
   replaceVars,
   ffmpeg-headless,
   inetutils,
@@ -223,16 +223,6 @@ let
         doCheck = false;
       });
 
-      wolf-comm = super.wolf-comm.overridePythonAttrs rec {
-        version = "0.0.23";
-        src = fetchFromGitHub {
-          owner = "janrothkegel";
-          repo = "wolf-comm";
-          tag = version;
-          hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
-        };
-      };
-
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -244,7 +234,7 @@ let
     })
   ];
 
-  python = python313.override {
+  python = python314.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
@@ -263,18 +253,18 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.2.3";
+  hassVersion = "2026.4.0";
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
   version =
-    assert (componentPackages.version == hassVersion);
+    #assert (componentPackages.version == hassVersion);
     hassVersion;
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.13";
+  disabled = python.pythonOlder "3.14";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -284,13 +274,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-BEE27D1P3cbxjQMRh3VHL6KDXa7bZDfqK316VQg0/SM=";
+    hash = "sha256-K/PK2i8yOqLm/GJNz5LZG8DZRKXziPzDPaguIMcKMpY=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-UkIxZx3IU0IZh8gbjZ9xRkEZS97UW85FT5isNyPyiHQ=";
+    hash = "sha256-rSckOYhEYZnmZNCfajGW3b52SMMnXvvSP+O/3jw/GuU=";
   };
 
   build-system = with python.pkgs; [
@@ -306,6 +296,9 @@ python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    # https://github.com/home-assistant/core/pull/165143
+    ./pyjwt-2.11.patch
+
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
@@ -332,6 +325,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiogithubapi
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -422,6 +416,7 @@ python.pkgs.buildPythonApplication rec {
       "assist_pipeline"
       "frontend"
       "hue"
+      "infrared"
       "mobile_app"
     ];
 

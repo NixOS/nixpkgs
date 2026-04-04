@@ -25,6 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-uGHN/l3FjzuK+sewppc9XXsstgjdD2JT0WuO6Or23xE=";
   };
 
+  postPatch = ''
+    # https://github.com/pnuckowski/aioresponses/pull/278
+    substituteInPlace aioresponses/core.py \
+      --replace-fail asyncio.iscoroutinefunction inspect.iscoroutinefunction
+  '';
+
   nativeBuildInputs = [
     pbr
     setuptools

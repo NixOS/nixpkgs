@@ -76,6 +76,69 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "module-services-tdarr": [
+    "index.html#module-services-tdarr"
+  ],
+  "module-services-tdarr-advanced": [
+    "index.html#module-services-tdarr-advanced"
+  ],
+  "module-services-tdarr-advanced-datadir": [
+    "index.html#module-services-tdarr-advanced-datadir"
+  ],
+  "module-services-tdarr-advanced-node-datadir": [
+    "index.html#module-services-tdarr-advanced-node-datadir"
+  ],
+  "module-services-tdarr-advanced-plugins": [
+    "index.html#module-services-tdarr-advanced-plugins"
+  ],
+  "module-services-tdarr-authentication": [
+    "index.html#module-services-tdarr-authentication"
+  ],
+  "module-services-tdarr-basic-usage": [
+    "index.html#module-services-tdarr-basic-usage"
+  ],
+  "module-services-tdarr-distributed": [
+    "index.html#module-services-tdarr-distributed"
+  ],
+  "module-services-tdarr-distributed-nodes": [
+    "index.html#module-services-tdarr-distributed-nodes"
+  ],
+  "module-services-tdarr-distributed-server": [
+    "index.html#module-services-tdarr-distributed-server"
+  ],
+  "module-services-tdarr-networking": [
+    "index.html#module-services-tdarr-networking"
+  ],
+  "module-services-tdarr-networking-firewall": [
+    "index.html#module-services-tdarr-networking-firewall"
+  ],
+  "module-services-tdarr-networking-ipv6": [
+    "index.html#module-services-tdarr-networking-ipv6"
+  ],
+  "module-services-tdarr-networking-ports": [
+    "index.html#module-services-tdarr-networking-ports"
+  ],
+  "module-services-tdarr-nodes": [
+    "index.html#module-services-tdarr-nodes"
+  ],
+  "module-services-tdarr-nodes-multiple": [
+    "index.html#module-services-tdarr-nodes-multiple"
+  ],
+  "module-services-tdarr-nodes-only": [
+    "index.html#module-services-tdarr-nodes-only"
+  ],
+  "module-services-tdarr-nodes-path-translators": [
+    "index.html#module-services-tdarr-nodes-path-translators"
+  ],
+  "module-services-tdarr-nodes-types": [
+    "index.html#module-services-tdarr-nodes-types"
+  ],
+  "module-services-tdarr-nodes-workers": [
+    "index.html#module-services-tdarr-nodes-workers"
+  ],
+  "module-services-tdarr-server-only": [
+    "index.html#module-services-tdarr-server-only"
+  ],
   "module-virtualisation-xen": [
     "index.html#module-virtualisation-xen"
   ],
@@ -88,6 +151,9 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "sec-nixos-test-vms-vs-containers": [
+    "index.html#sec-nixos-test-vms-vs-containers"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
@@ -99,6 +165,54 @@
   ],
   "sec-wireless-imperative": [
     "index.html#sec-wireless-imperative"
+  ],
+  "sec-test-container-ssh-access": [
+    "index.html#sec-test-container-ssh-access"
+  ],
+  "sec-test-vm-ssh-access": [
+    "index.html#sec-test-vm-ssh-access"
+  ],
+  "ssec-all-machine-objects": [
+    "index.html#ssec-all-machine-objects"
+  ],
+  "ssec-nixos-test-machines": [
+    "index.html#ssec-nixos-test-machines"
+  ],
+  "ssec-nixos-test-nspawn-containers": [
+    "index.html#ssec-nixos-test-nspawn-containers"
+  ],
+  "ssec-nixos-test-qemu-vms": [
+    "index.html#ssec-nixos-test-qemu-vms"
+  ],
+  "ssec-nspawn-machine-objects": [
+    "index.html#ssec-nspawn-machine-objects"
+  ],
+  "ssec-qemu-machine-objects": [
+    "index.html#ssec-qemu-machine-objects"
+  ],
+  "ssec-test-script": [
+    "index.html#ssec-test-script"
+  ],
+  "ssec-test-script-checks": [
+    "index.html#ssec-test-script-checks"
+  ],
+  "ssec-testing-user-units": [
+    "index.html#ssec-testing-user-units"
+  ],
+  "test-opt-containerDefaults": [
+    "index.html#test-opt-containerDefaults"
+  ],
+  "test-opt-containers": [
+    "index.html#test-opt-containers"
+  ],
+  "test-opt-extraBaseModules": [
+    "index.html#test-opt-extraBaseModules"
+  ],
+  "test-opt-nodeDefaults": [
+    "index.html#test-opt-nodeDefaults"
+  ],
+  "test-opt-pythonTestDriverPackage": [
+    "index.html#test-opt-pythonTestDriverPackage"
   ],
   "test-opt-rawTestDerivationArg": [
     "index.html#test-opt-rawTestDerivationArg"
@@ -717,12 +831,6 @@
   ],
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
-  ],
-  "module-services-immich": [
-    "index.html#module-services-immich"
-  ],
-  "module-services-immich-vectorchord-migration": [
-    "index.html#module-services-immich-vectorchord-migration"
   ],
   "module-services-paisa": [
     "index.html#module-services-paisa"
@@ -1686,7 +1794,8 @@
   "sec-profile-graphical": [
     "index.html#sec-profile-graphical"
   ],
-  "sec-profile-hardened": [
+  "sec-release-26.05-incompatibilities-profiles-hardened-removed": [
+    "release-notes.html#sec-release-26.05-incompatibilities-profiles-hardened-removed",
     "index.html#sec-profile-hardened"
   ],
   "sec-profile-headless": [
@@ -2043,7 +2152,8 @@
   "sec-call-nixos-test-outside-nixos": [
     "index.html#sec-call-nixos-test-outside-nixos"
   ],
-  "sec-nixos-test-nodes": [
+  "sec-nixos-test-machines-config": [
+    "index.html#sec-nixos-test-machines-config",
     "index.html#sec-nixos-test-nodes"
   ],
   "ssec-machine-objects": [
@@ -2076,8 +2186,8 @@
   "test-opt-enableOCR": [
     "index.html#test-opt-enableOCR"
   ],
-  "test-opt-extraBaseModules": [
-    "index.html#test-opt-extraBaseModules"
+  "test-opt-extraBaseNodeModules": [
+    "index.html#test-opt-extraBaseNodeModules"
   ],
   "test-opt-extraDriverArgs": [
     "index.html#test-opt-extraDriverArgs"

@@ -115,20 +115,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.5.6";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F6lF0wQ2acq0MEoFNnKU68LH5cq1WwRKvsCJB+pEirE=";
+    hash = "sha256-7N11eqKxrSO7+KRvwbYG7VaMrcDNru12DXJHe+G6gj8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-VzlcVHCJCD1Ree0Sy2PFKZSjHBowLoIRqpUKdF2Ph+c=";
+    hash = "sha256-Tsb1sdKeyP1Bhw2l+L0jDQF6AaWqTEgrOOvTsAyt9dQ=";
   };
 
   postPatch = ''
@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
+      inherit (nixosTests) immich immich-vectorchord-reindex;
     };
 
     machine-learning = immich-machine-learning.override {

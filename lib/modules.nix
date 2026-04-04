@@ -1246,6 +1246,8 @@ let
             allInvalid = filter (def: !type.check def.value) defsFinal;
           in
           throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+      else if type.emptyValue ? value then
+        type.emptyValue.value
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
@@ -1320,13 +1322,24 @@ let
     : 1\. Function argument
   */
   pushDownProperties =
+    let
+      mapAttrsIfAttrs =
+        f: val:
+        if isAttrs val then
+          mapAttrs f val
+        else
+          # This does not actually work, since arriving here means we have e.g.
+          # (lib.mkIf cond nonAttrs), while an attrset is expected. However,
+          # avoiding the mapAttrs call here gives better errors later.
+          val;
+    in
     cfg:
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     # FIXME: handle mkOrder?
     else
       [ cfg ];

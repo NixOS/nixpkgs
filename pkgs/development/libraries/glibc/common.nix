@@ -33,6 +33,7 @@
   libpng ? null,
   libidn2,
   bison,
+  gettext,
   python3Minimal,
 }:
 
@@ -237,6 +238,7 @@ stdenv.mkDerivation (
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [
       bison
+      gettext
       python3Minimal
     ]
     ++ extraNativeBuildInputs;
@@ -352,6 +354,7 @@ stdenv.mkDerivation (
             ma27
             connorbaker
           ];
+          teams = [ lib.teams.security-review ];
           platforms = lib.platforms.linux;
         }
         // (args.meta or { });

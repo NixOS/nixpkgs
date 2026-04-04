@@ -66,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ];
 
+  # bazaar needs bazaar-dl-worker in path
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : $out/bin
+    )
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };

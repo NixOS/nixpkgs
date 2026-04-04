@@ -162,12 +162,12 @@ flutter329.buildFlutterApplication rec {
   postPatch = ''
     cd flutter
     if [ $cargoDepsCopy ]; then # That will be inherited to buildDartPackage and it doesn't have cargoDepsCopy
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
-      sed -i 's/static=//g' $cargoDepsCopy/hwcodec-*/build.rs
-      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
-      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+      sed -i 's/static=//g' $cargoDepsCopy/*/hwcodec-*/build.rs
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
     fi
 
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""

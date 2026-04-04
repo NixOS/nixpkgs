@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoconf,
   bison,
   bzip2,
@@ -19,23 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iverilog";
-  version = "12.0";
+  version = "13.0";
 
   src = fetchFromGitHub {
     owner = "steveicarus";
     repo = "iverilog";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
+    hash = "sha256-SfODx7K3UrDHMoKCbMFpxo4t9j9vG1oWF0RFS3dSUm4=";
   };
-
-  patches = [
-    # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix
-    (fetchpatch {
-      name = "format-security";
-      url = "https://github.com/steveicarus/iverilog/commit/23e51ef7a8e8e4ba42208936e0a6a25901f58c65.patch";
-      hash = "sha256-fMWfBsCl2fuXe+6AR10ytb8QpC84bXlP5RSdrqsWzEk=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -84,7 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    sh .github/test.sh
+    # PLI1 is not enabled in the build (ENABLE_PLI1=no), so skip PLI1 VPI tests
+    # which would fail at runtime with "Failed - running vvp".
+    sh .github/test.sh no-pli1
 
     runHook postInstallCheck
   '';

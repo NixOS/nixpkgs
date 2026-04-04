@@ -3393,6 +3393,44 @@ runTests {
     ];
   };
 
+  testEmptyValueOption = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options = {
+              "empty-value" = lib.mkOption {
+                type = lib.mkOptionType {
+                  name = "propagate-empty-value-to-default";
+                  emptyValue.value = 2;
+                };
+              };
+            };
+          };
+        eval = evalModules {
+          modules = [ module ];
+        };
+      in
+      filter (o: o.name == "empty-value") (optionAttrSetToDocList eval.options);
+    expected = [
+      {
+        declarations = [ ];
+        default = {
+          _type = "literalExpression";
+          text = "2";
+        };
+        description = null;
+        internal = false;
+        loc = [ "empty-value" ];
+        name = "empty-value";
+        readOnly = false;
+        type = "propagate-empty-value-to-default";
+        visible = true;
+      }
+    ];
+  };
+
   testDocOptionVisiblity = {
     expr =
       let
@@ -4786,6 +4824,58 @@ runTests {
             h = "h";
           };
         };
+      };
+    };
+
+  # Check that makeScope provides a default callPackage
+  testMakeScopeDefaultCallPackage =
+    let
+      scope = lib.makeScope lib.callPackageWith (self: {
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value";
+    };
+
+  # Check that callPackage can be overridden by the scope function
+  testMakeScopeOverrideCallPackage =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value-custom";
+    };
+
+  # Check that overriding callPackage persists through overrideScope
+  testMakeScopeOverrideCallPackagePersistsThroughOverrideScope =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+      overridden = scope.overrideScope (
+        _final: _prev: {
+          bar = scope.callPackage ({ }: "bar-value") { };
+        }
+      );
+    in
+    {
+      expr = { inherit (overridden) foo bar; };
+      expected = {
+        foo = "foo-value-custom";
+        bar = "bar-value-custom";
       };
     };
 

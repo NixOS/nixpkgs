@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nemorosa";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyokoMiki";
     repo = "nemorosa";
     tag = finalAttrs.version;
-    hash = "sha256-AqFjpEakEZ21iXmIIxhX+ez2aI/RMsLaUoECipQcaM4=";
+    hash = "sha256-1mP+sdAScXAFp4wjPiSCez6BvzCDgOt/MtGWQv0PD0E=";
   };
 
   # Upstream uses overly strict, fresh version specifiers
@@ -29,24 +29,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies =
     with python3Packages;
     [
+      aiohttp
       aiolimiter
+      anyio
+      apprise
       apscheduler
+      asyncer
       beautifulsoup4
       defusedxml
       deluge-client
       fastapi
-      httpx
       humanfriendly
       msgspec
       platformdirs
       qbittorrent-api
       reflink-copy
       sqlalchemy
+      tenacity
       torf
       transmission-rpc
       uvicorn
       uvloop
     ]
+    ++ aiohttp.optional-dependencies.speedups
     ++ beautifulsoup4.optional-dependencies.lxml
     ++ msgspec.optional-dependencies.yaml
     ++ sqlalchemy.optional-dependencies.aiosqlite

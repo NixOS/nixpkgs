@@ -7,7 +7,6 @@
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
-  pythonAtLeast,
   qcs-api-client-common,
   quil,
   rustPlatform,
@@ -16,25 +15,22 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.22";
+  version = "0.26.0";
   pyproject = true;
-
-  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
-  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
-    tag = "python/v${version}";
-    hash = "sha256-uaoXSkc8yg+WZONgvRkOARaf9kvLKv6S+K5yMDuXbbA=";
+    tag = "lib/v${version}";
+    hash = "sha256-A404lYKGAigzsnqWO4BAphOK/Juj4Fa2EHXQO8N1U9I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-/SkYzQisSACTedC4FsEp4rXXdWV5f64gA33I/Ubu80E=";
+    hash = "sha256-NAcCZks5N1KPqeA5v72NAcJqHGexRU99yXQHg21vkPA=";
   };
 
-  buildAndTestSubdir = "crates/python";
+  buildAndTestSubdir = "crates/lib";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -71,11 +67,11 @@ buildPythonPackage rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    rev-prefix = "python/v";
+    rev-prefix = "lib/v";
   };
 
   meta = {
-    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/crates/python/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/${buildAndTestSubdir}/CHANGELOG.md";
     description = "Python interface for the QCS Rust SDK";
     homepage = "https://github.com/rigetti/qcs-sdk-rust/tree/main/crates/python";
     license = lib.licenses.asl20;

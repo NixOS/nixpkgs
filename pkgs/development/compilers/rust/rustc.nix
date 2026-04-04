@@ -458,6 +458,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
+    mainProgram = "rustc";
     teams = [ lib.teams.rust ];
     license = [
       lib.licenses.mit

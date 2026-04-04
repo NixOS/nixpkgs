@@ -49,11 +49,11 @@
 assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.58.1";
+  version = "1.58.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/FN9a7qx/6dpct99ShgZsMD+GevR3+gkIdHzLhS13Ds=";
+    hash = "sha256-5xJL7HJOJlrQ7gC6on2NUVzx3dzxAmOL5nueJZybBA0=";
   };
 
   patches = [
@@ -143,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddnssd=false"
   ]
   ++ lib.optionals (samba == null) [
-    # Xfce don't want samba
     "-Dsmb=false"
   ];
 

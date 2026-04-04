@@ -15,13 +15,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sub-store";
-  version = "2.21.40";
+  version = "2.21.64";
 
   src = fetchFromGitHub {
     owner = "sub-store-org";
     repo = "Sub-Store";
     tag = finalAttrs.version;
-    hash = "sha256-CAV4by6ijJTyZ5VtWvuM+AVEtKdMfkEheVxS6CmWZvQ=";
+    hash = "sha256-aCDGOCtIojNnPK33GWGhYKZMmByrC5ywjxr6QVlemrM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
@@ -41,7 +41,7 @@ buildNpmPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-VsK6qvBeOF2smXRFmMk4gWxQgAD1GG/ExvZdIERdz9g=";
+    hash = "sha256-4RFzky/KaRSNvBizH717KtiwavO+KB69AwPKAAnTmh4=";
   };
 
   npmConfigHook = pnpmConfigHook;

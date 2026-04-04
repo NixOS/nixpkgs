@@ -2,8 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
+  jq,
 
   # build-system
   hatchling,
@@ -32,24 +32,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gradio-client";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   # no tests on pypi
-  src = fetchFromGitHub {
-    owner = "gradio-app";
-    repo = "gradio";
-    # not to be confused with @gradio/client@${version}
-    # tag = "gradio_client@${finalAttrs.version}";
-    # TODO: switch back to a tag next release, if they tag it.
-    rev = "8b03393a51e1e03fb04cb0a41b9a5dc3266a58aa"; # 2.2.0
-    sparseCheckout = [
-      "client/python"
-      "gradio/media_assets"
-    ];
-    hash = "sha256-LkTZwPyHe1w8D5unEMW7dBGKNHxM7gWJ7I+4HwiexKk=";
-  };
-
+  # they've stopped tagging "gradio_client@.*" and "@gradio/client@.*" tags on github
+  inherit (gradio) src;
   sourceRoot = "${finalAttrs.src.name}/client/python";
 
   # Because we set sourceRoot above, the folders "client/python"
@@ -58,6 +46,20 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace test/conftest.py \
       --replace-fail 'from client.python.test import media_data' 'import media_data'
   '';
+
+  preConfigure = ''
+    # sanity check
+    if [[ "$(jq <gradio_client/package.json .version -r)" != "$version" ]]; then
+      echo >&2 "ERROR: version mismatch with package.json:"
+      echo >&2 "version = $version"
+      (set -x; cat >&2 gradio_client/package.json)
+      false
+    fi
+  '';
+
+  nativeBuildInputs = [
+    jq
+  ];
 
   build-system = [
     hatchling
@@ -118,16 +120,15 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "gradio_client@";
-    ignoredVersions = ".*-(beta|dev).*";
+  passthru = {
+    inherit (gradio) updateScript;
   };
 
   meta = {
     description = "Lightweight library to use any Gradio app as an API";
     homepage = "https://www.gradio.app/";
     downloadPage = "https://github.com/gradio-app/gradio/tree/main/client/python";
-    # changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}"; TODO: uncomment if the tag exists
+    changelog = "https://github.com/gradio-app/gradio/blob/${finalAttrs.src.tag}/client/python/gradio_client/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };

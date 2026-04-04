@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitfetch";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matars";
     repo = "gitfetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HAZUdGCITr4in0K/LOSZaMHZpPjrHxcg7kAF1J0vl1I=";
+    hash = "sha256-dVJdc0iqcl/+s3v+ui6XtKRlOuYoFVYWlG0GtTZLr5o=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -23,6 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     requests
     readchar
+    webcolors
   ];
 
   makeWrapperArgs = [

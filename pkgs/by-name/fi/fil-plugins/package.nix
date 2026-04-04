@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.0";
 
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/FIL-plugins-${finalAttrs.version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/FIL-plugins-${finalAttrs.version}.tar.bz2";
     hash = "sha256-HAvycSEZZfZwoVp3g7QWcwfbdyZKwWJKBuVmeWTajuk=";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ ladspa-header ];
 
   postPatch = ''
     substituteInPlace Makefile \

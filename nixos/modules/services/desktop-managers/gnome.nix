@@ -82,7 +82,7 @@ in
 {
   meta = {
     doc = ./gnome.md;
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   imports = [

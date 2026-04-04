@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   openssl,
   pkgsCross,
   buildPackages,
@@ -39,13 +38,13 @@ let
       rec {
 
         pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-        version = "2.13.0";
+        version = "2.14.0";
 
         src = fetchFromGitHub {
           owner = "ARM-software";
           repo = "arm-trusted-firmware";
           tag = "v${version}";
-          hash = "sha256-rxm5RCjT/MyMCTxiEC8jQeFMrCggrb2DRbs/qDPXb20=";
+          hash = "sha256-7imeQocGMSyGXTEhNs4s0bcDxZpbLSSkOyI7c5UxqVs=";
         };
 
         patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -64,9 +63,10 @@ let
           openssl # For fiptool
         ];
 
-        # Make the new toolchain guessing (from 2.11+) happy
-        # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
-        rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
+        # Make the new toolchain guessing (from 2.14+) happy
+        # https://github.com/ARM-software/arm-trusted-firmware/blob/1d5aa939bc8d3d892e2ed9945fa50e36a1a924cc/make_helpers/toolchain.mk#L370
+        # https://github.com/ARM-software/arm-trusted-firmware/blob/1d5aa939bc8d3d892e2ed9945fa50e36a1a924cc/make_helpers/toolchains/rk3399-m0.mk#L22
+        rk3399-m0-oc-parameter = "rk3399-m0-oc-default";
 
         buildInputs = [ openssl ];
 

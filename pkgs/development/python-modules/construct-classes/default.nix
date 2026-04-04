@@ -1,34 +1,25 @@
 {
   lib,
   buildPythonPackage,
+  flit-core,
   construct,
   fetchFromGitHub,
-  fetchpatch2,
   pytestCheckHook,
-  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "construct-classes";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matejcik";
     repo = "construct-classes";
     tag = "v${version}";
-    hash = "sha256-goOQMt/nVjWXYltpnKHtJaLOhR+gRTmtoUh7zVb7go4=";
+    hash = "sha256-xRYf6Tg4XyQN+g8uOaws46KKb0abD/M/5Q+SlnzEp/8=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/matejcik/construct-classes/commit/d1ecacc0cf5cb332ffe6ed85ce9dfc552f77231f.patch?full_index=1";
-      hash = "sha256-VeifL8bER0mIRNXKTA+/cje8AxWJKg/q8ipmf3gTeiw=";
-    })
-  ];
-
-  build-system = [ uv-build ];
+  build-system = [ flit-core ];
 
   dependencies = [ construct ];
 

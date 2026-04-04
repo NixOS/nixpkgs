@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scim2-models";
-  version = "0.5.1";
+  version = "0.6.6";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "python-scim";
     repo = "scim2-models";
     tag = finalAttrs.version;
-    hash = "sha256-ahwHmWsM9IoK+yq0Qd0c2+kagMlXGi80/rAB4UQsf6U=";
+    hash = "sha256-pYINB8avoYt1VUgvyDTXw3ejSBoZDFEQK0F4flTeyaY=";
   };
 
   postPatch = ''

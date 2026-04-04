@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "linear-algebra";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1wwjpxp9vjc6lszh0z3kgy4hyzpib8rvvh6b74ijh9qk9r9nmvjk";
+    sha256 = "sha256-Sc2FpNZxKKo2xRSOshcUPxTg69VgNQvQttJPkGMIsoo=";
   };
 
   meta = {

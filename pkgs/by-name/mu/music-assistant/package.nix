@@ -40,21 +40,16 @@ let
 
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
-
-assert
-  (lib.elem "airplay" providers)
-  -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
-
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.7.9";
+  version = "2.7.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-c6WTalpjaZcUvppyYaTP03ErX5b+k7fUbphj58FVBS8=";
+    hash = "sha256-HLd7PAYdBzpzdfCRPc4elPq3KfzusIXYXTV8fRmo1lU=";
   };
 
   patches = [
@@ -65,6 +60,12 @@ python.pkgs.buildPythonApplication rec {
 
     # Look up librespot from PATH at runtime
     ./librespot.patch
+
+    # Look up shairport-sync from PATH at runtime
+    ./shairport-sync.patch
+
+    # Look up cliraop/cliap2 from PATH at runtime
+    ./cliraop-cliap2.patch
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
@@ -91,7 +92,16 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail "get-mac" "getmac"
 
-    rm -rv music_assistant/providers/spotify/bin
+    rm -rv \
+      music_assistant/providers/airplay/bin/{cliap2-*,cliraop-*} \
+      music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
+      music_assistant/providers/spotify/bin
+
+    found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
+    if [[ -n $found_bins ]]; then
+      echo "Found binaries that should be replaced with packages built from source: $found_bins"
+      exit 2
+    fi
   '';
 
   build-system = with python.pkgs; [
@@ -107,6 +117,7 @@ python.pkgs.buildPythonApplication rec {
     "cryptography"
     "getmac"
     "mashumaro"
+    "numpy"
     "orjson"
     "pillow"
     "podcastparser"
@@ -130,7 +141,6 @@ python.pkgs.buildPythonApplication rec {
     aiortc
     aiorun
     aiosqlite
-    aiovban
     awesomeversion
     brotli
     certifi
@@ -191,11 +201,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
-
-  postFixup = ''
-    # binary native code, segfaults when autopatchelf'd, requires openssl 1.1 to build
-    rm $out/${python3.sitePackages}/music_assistant/providers/airplay/bin/cliraop-*
-  '';
 
   passthru = {
     inherit

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   models-dev,
+  nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
@@ -12,14 +13,16 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.2.17";
+  version = "1.3.13";
+
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4I243hvqQjPU09GsIyQu/3Cv+THKFf5QTbC3x0aO83Q=";
+    hash = "sha256-P6Md0WzHK2/oAZ6VbpYnabVJyVcqwuYizoOqbxaf+lU=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -44,8 +47,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       bun install \
         --cpu="*" \
         --frozen-lockfile \
-        --filter ./packages/opencode \
+        --filter ./packages/app \
         --filter ./packages/desktop \
+        --filter ./packages/opencode \
         --ignore-scripts \
         --no-progress \
         --os="*"
@@ -68,13 +72,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-orNyesv8Y3vooV1upr+X1CKHUdygyDQ3hmyPVlHC6Zk=";
+    outputHash = "sha256-fWc9xVn6HbNxnJ9S8Q+hdlYQYkdGk+4RWWbYaB+L09Q=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
     bun
+    nodejs
     installShellFiles
     makeBinaryWrapper
     models-dev
@@ -92,6 +97,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preConfigure
 
     cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
 
     runHook postConfigure
   '';
@@ -161,8 +168,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       delafthi
-      graham33
       DuskyElf
+      graham33
+      superherointj
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
@@ -172,5 +180,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-darwin"
     ];
     mainProgram = "opencode";
+    badPlatforms = [
+      # Broken as 2026-04-23, errors as:
+      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
+      "x86_64-darwin"
+    ];
   };
 })

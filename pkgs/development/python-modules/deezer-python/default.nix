@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/browniebroke/deezer-python";
     changelog = "https://github.com/browniebroke/deezer-python/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
   };
 }

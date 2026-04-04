@@ -101,7 +101,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.11.6";
+    version = "0.12.0";
 
     __structuredAttrs = true;
 
@@ -109,7 +109,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-GdfCaKNe/qPaUV2NJPXY+ATnQNWnyFTFnkOYDyLhTNg=";
+      hash = "sha256-uWhrGAwQ2nnAkyJ46qGkYxJ5K1jtyUIQOAVu3yTlquk=";
     };
 
     strictDeps = true;
@@ -123,18 +123,31 @@ stdenv.mkDerivation (
 
     inherit lua;
     treesitter-parsers =
-      treesitter-parsers
-      // {
-        markdown = treesitter-parsers.markdown // {
-          location = "tree-sitter-markdown";
-        };
-      }
-      // {
-        markdown_inline = treesitter-parsers.markdown // {
-          language = "markdown_inline";
-          location = "tree-sitter-markdown-inline";
-        };
-      };
+      lib.mapAttrs
+        (
+          language: grammar:
+          tree-sitter.buildGrammar {
+            inherit (grammar) src;
+            version = "neovim-${finalAttrs.version}";
+            language = grammar.language or language;
+            location = grammar.location or null;
+          }
+        )
+        (
+          treesitter-parsers
+
+          // {
+            markdown = treesitter-parsers.markdown // {
+              location = "tree-sitter-markdown";
+            };
+          }
+          // {
+            markdown_inline = treesitter-parsers.markdown // {
+              language = "markdown_inline";
+              location = "tree-sitter-markdown-inline";
+            };
+          }
+        );
 
     buildInputs = [
       libuv
@@ -226,14 +239,7 @@ stdenv.mkDerivation (
     + lib.concatStrings (
       lib.mapAttrsToList (language: grammar: ''
         ln -s \
-          ${
-            tree-sitter.buildGrammar {
-              inherit (grammar) src;
-              version = "neovim-${finalAttrs.version}";
-              language = grammar.language or language;
-              location = grammar.location or null;
-            }
-          }/parser \
+          ${grammar}/parser \
           $out/lib/nvim/parser/${language}.so
       '') finalAttrs.treesitter-parsers
     );

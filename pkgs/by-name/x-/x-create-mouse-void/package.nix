@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Creates an undecorated black window and prevents the mouse from entering that window";
     platforms = lib.platforms.unix;
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ eigengrau ];
+    maintainers = [ ];
     mainProgram = "x-create-mouse-void";
   };
 }

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0pre4";
 
   src = fetchurl {
-    url = "http://ex-parrot.com/pdw/iftop/download/iftop-${finalAttrs.version}.tar.gz";
+    url = "https://ex-parrot.com/pdw/iftop/download/iftop-${finalAttrs.version}.tar.gz";
     sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
   };
 

@@ -5789,10 +5789,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "00q33rm7lpfc319pf6him05ak76gfy7i04iiddrz317q7swbq55i";
+      sha256 = "0g817hjx1rh4zhvcpb9m6lr6l8yyq3n8vnjm9x1rc5wr51hv6d9n";
       type = "gem";
     };
-    version = "3.16.13";
+    version = "3.16.16";
   };
   oj-introspect = {
     dependencies = [ "oj" ];
@@ -5800,10 +5800,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0r4jgnw44qvswidfd8fh4s7pkdg34bmmrxn2wn0lhab0klq1bfsw";
+      sha256 = "0kw38qahkkbj3pmn89dss1vwbhamc74pww5p5f8371sfcms4kbxp";
       type = "gem";
     };
-    version = "0.8.0";
+    version = "0.9.0";
   };
   omniauth = {
     dependencies = [
@@ -7105,10 +7105,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0fgpa9qm5qgza69fjnagg2alxs2wmj41aq7z4kj5yib50wpzgqhl";
+      sha256 = "0hj5yq200wlq1clpdvh44pqwllbxll0k3gjajxnrcn95hxzhpky5";
       type = "gem";
     };
-    version = "2.2.21";
+    version = "2.2.22";
   };
   rack-accept = {
     dependencies = [ "rack" ];

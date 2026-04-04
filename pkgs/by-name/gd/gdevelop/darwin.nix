@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}-universal-mac.zip";
-    hash = "sha256-3C++qdbngBdIVyyFV7VaOzH+rQBDEYp9wDcBVBjsrSc=";
+    hash = "sha256-Aem0VbIEPrC1yS48KdmBmttQoM8E/7GqKSbOwTCom18=";
   };
 
   sourceRoot = ".";

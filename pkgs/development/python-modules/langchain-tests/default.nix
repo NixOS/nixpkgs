@@ -26,19 +26,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-tests";
-  version = "1.1.2";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-tests==${version}";
-    hash = "sha256-g5s7zL4l/kIUoIu7/3+Ve3SXW3O9tj8f2N3bZ0gbBts=";
+    tag = "langchain-tests==${finalAttrs.version}";
+    hash = "sha256-HyPJ3binXV3ypksvpyz1t6B1Zdz3NY6z4Ttq7K4yo+g=";
   };
 
-  sourceRoot = "${src.name}/libs/standard-tests";
+  sourceRoot = "${finalAttrs.src.name}/libs/standard-tests";
 
   build-system = [ hatchling ];
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
     license = lib.licenses.mit;
@@ -93,4 +93,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

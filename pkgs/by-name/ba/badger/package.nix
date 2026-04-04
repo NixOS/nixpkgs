@@ -26,6 +26,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/dgraph-io/badger";
     license = lib.licenses.asl20;
     mainProgram = "badger";
-    maintainers = with lib.maintainers; [ farcaller ];
+    maintainers = [ ];
   };
 })

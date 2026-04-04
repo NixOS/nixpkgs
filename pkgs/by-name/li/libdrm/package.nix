@@ -47,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "intel" withIntel)
     (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "valgrind" withValgrind)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch [
-    "-Dtegra=enabled"
+    (lib.mesonEnable "tegra" stdenv.hostPlatform.isLinux)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Detnaviv=disabled"

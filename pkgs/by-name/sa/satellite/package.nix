@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "satellite";
-  version = "0.9.1";
+  version = "0.9.2";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "tpikonen";
     repo = "satellite";
     tag = finalAttrs.version;
-    hash = "sha256-E/OKdVB+JDP/01ydEgA/B6+GMiVYB4jlPI70TW8HBDU=";
+    hash = "sha256-DubLxsqJsvCbfFD9jNkKHGd2Ur/bT7Ea5bHLijciwtI=";
   };
 
   nativeBuildInputs = [

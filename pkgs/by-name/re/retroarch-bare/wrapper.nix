@@ -3,22 +3,16 @@
   libretro,
   makeBinaryWrapper,
   retroarch-bare,
-  runCommand,
+  writeText,
   symlinkJoin,
   cores ? [ ],
   settings ? { },
 }:
 
 let
-  settingsPath =
-    runCommand "declarative-retroarch.cfg"
-      {
-        value = lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n} = \"${v}\"") settings);
-        passAsFile = [ "value" ];
-      }
-      ''
-        cp "$valuePath" "$out"
-      '';
+  settingsPath = writeText "declarative-retroarch.cfg" (
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n} = \"${v}\"") settings)
+  );
 
   # All cores should be located in the same path after symlinkJoin,
   # but let's be safe here

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nvidia-ml-py";
-  version = "13.590.48";
+  version = "13.595.45";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "nvidia_ml_py";
     inherit (finalAttrs) version;
-    hash = "sha256-gYTRvlKRSsfwmRzRwNlGxl3IioQMdUzRLCdLd7iHYN0=";
+    hash = "sha256-yfNIl/4EQf81vI81uvgPgwogsPTmznHgoyW8Dmas8Hk=";
   };
 
   patches = [

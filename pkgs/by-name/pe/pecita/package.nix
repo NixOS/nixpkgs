@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation {
   version = "5.4";
 
   src = fetchurl {
-    url = "http://pecita.eu/b/Pecita.otf";
+    url = "https://pecita.eu/b/Pecita.otf";
     hash = "sha256-D9IZ+p4UFHUNt9me7D4vv0x6rMK9IaViKPliCEyX6t4=";
   };
 

@@ -9,6 +9,7 @@
   fetchPnpmDeps,
   makeWrapper,
   nix-update-script,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "turborepo-remote-cache";
@@ -73,7 +74,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) turborepo-remote-cache; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/ducktors/turborepo-remote-cache";

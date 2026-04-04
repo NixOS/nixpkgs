@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.13";
+  version = "2.0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
     tag = "release-v${version}";
-    hash = "sha256-n65tkACZi1G4qS/VQWB5ghopzCd5QHRyp9qit+yENIs=";
+    hash = "sha256-pb7AWkCOLfoH2kLNNwIxxHyGsxCpq72Qzid4aCYu9XM=";
   };
 
   build-system = [

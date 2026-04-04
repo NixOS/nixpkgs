@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch2,
   fetchNpmDeps,
   fetchzip,
   fetchFromGitHub,
@@ -10,8 +9,8 @@
   nodejs,
 }:
 let
-  pdfjsVersion = "5.4.394"; # see update script
-  pdfjsHash = "sha256-pd7xwfvR9U1bHT5eblszYU3YJQwQwhuyDDiNj+fnyaQ=";
+  pdfjsVersion = "5.5.207"; # see update script
+  pdfjsHash = "sha256-HikisEa6L+BqsG6imgWhV+4J46BluU5zqU1nFZAG0eM=";
   pdfjs = fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-dist.zip";
     hash = pdfjsHash;
@@ -28,18 +27,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfding-frontend";
-  version = "1.5.1";
+  version = "1.7.1";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PXkD+2k8/LmMWzZAj8qEK4mLoOKS4mDWcqe8AgoCdBU=";
+    hash = "sha256-T3Y9eWwBVxGPISZ3EZndAR6mwsq4g67RRCPpoZPuh+0=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "pdfding-frontend-${finalAttrs.version}-npm-deps";
-    hash = "sha256-SgL8QhRGONGhJBu6b8HSVqZPzJ+NojhVClBEH5ajCcc=";
+    hash = "sha256-an4KKKx65ehCm1YAlwLWYAW8pQMgB4HdDERqC/hfQi0=";
   };
 
   nativeBuildInputs = [

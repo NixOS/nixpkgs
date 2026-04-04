@@ -112,7 +112,7 @@ let
         ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
           imports = [
             arg
-            readOnlyPkgs
+            ./read-only-pkgs.nix
           ];
         }).config.result;
       findTests =
@@ -140,24 +140,6 @@ let
     runTestOn
     ;
 
-  # Using a single instance of nixpkgs makes test evaluation faster.
-  # To make sure we don't accidentally depend on a modified pkgs, we make the
-  # related options read-only. We need to test the right configuration.
-  #
-  # If your service depends on a nixpkgs setting, first try to avoid that, but
-  # otherwise, you can remove the readOnlyPkgs import and test your service as
-  # usual.
-  readOnlyPkgs =
-    # TODO: We currently accept this for nixosTests, so that the `pkgs` argument
-    #       is consistent with `pkgs` in `pkgs.nixosTests`. Can we reinitialize
-    #       it with `allowAliases = false`?
-    # warnIf pkgs.config.allowAliases "nixosTests: pkgs includes aliases."
-    {
-      _file = "${__curPos.file} readOnlyPkgs";
-      _class = "nixosTest";
-      node.pkgs = pkgs.pkgsLinux;
-    };
-
 in
 {
 
@@ -168,6 +150,7 @@ in
     node-name = runTest ./nixos-test-driver/node-name.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
     console-log = runTest ./nixos-test-driver/console-log.nix;
+    containers = runTest ./nixos-test-driver/containers.nix;
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {
@@ -253,6 +236,7 @@ in
   atuin = runTest ./atuin.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
   audit = runTest ./audit.nix;
+  audit-testsuite = runTest ./audit-testsuite.nix;
   auth-mysql = runTest ./auth-mysql.nix;
   authelia = runTest ./authelia.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
@@ -505,9 +489,8 @@ in
   early-mount-options = runTest ./early-mount-options.nix;
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
   easytier = runTest ./easytier.nix;
-  ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;
-  ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
+  ec2-userdata = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).ec2-userdata or { };
   echoip = runTest ./echoip.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
@@ -518,7 +501,14 @@ in
   enlightenment = runTest ./enlightenment.nix;
   ente = runTest ./ente;
   env = runTest ./env.nix;
-  envfs = runTest ./envfs.nix;
+  envfs = runTest {
+    imports = [ ./envfs.nix ];
+    _module.args.systemdStage1 = false;
+  };
+  envfs-systemd-stage-1 = runTest {
+    imports = [ ./envfs.nix ];
+    _module.args.systemdStage1 = true;
+  };
   envoy = runTest {
     imports = [ ./envoy.nix ];
     _module.args.envoyPackage = pkgs.envoy;
@@ -577,6 +567,7 @@ in
     _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
   firefox-syncserver = runTest ./firefox-syncserver.nix;
+  firefox_decrypt = runTest ./firefox_decrypt.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;
   firejail = runTest ./firejail.nix;
   firewall = runTest {
@@ -681,6 +672,7 @@ in
   gotenberg = runTest ./gotenberg.nix;
   gotify-server = runTest ./gotify-server.nix;
   gotosocial = runTest ./web-apps/gotosocial.nix;
+  goupile = runTest ./web-apps/goupile;
   grafana = handleTest ./grafana { };
   graphite = runTest ./graphite.nix;
   grav = runTest ./web-apps/grav.nix;
@@ -709,7 +701,6 @@ in
     package = pkgs.hadoop_3_3;
   };
   haproxy = runTest ./haproxy.nix;
-  hardened = runTest ./hardened.nix;
   harmonia = runTest ./harmonia.nix;
   haste-server = runTest ./haste-server.nix;
   hbase2 = runTest {
@@ -764,7 +755,6 @@ in
   immich = runTest ./web-apps/immich.nix;
   immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
-  immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   immichframe = runTest ./web-apps/immichframe.nix;
   incron = runTest ./incron.nix;
@@ -803,7 +793,6 @@ in
   isso = runTest ./isso.nix;
   jackett = runTest ./jackett.nix;
   jellyfin = runTest ./jellyfin.nix;
-  jellyseerr = runTest ./jellyseerr.nix;
   jenkins = runTest ./jenkins.nix;
   jenkins-cli = runTest ./jenkins-cli.nix;
   jibri = runTest ./jibri.nix;
@@ -1002,7 +991,7 @@ in
   moonraker = runTest ./moonraker.nix;
   moosefs = runTest ./moosefs.nix;
   mopidy = runTest ./mopidy.nix;
-  morph-browser = runTest ./morph-browser.nix;
+  morph-browser = discoverTests (import ./morph-browser.nix);
   mosquitto = runTest ./mosquitto.nix;
   movim = import ./web-apps/movim {
     inherit runTest;
@@ -1063,9 +1052,8 @@ in
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
-  netbox_4_2 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_2; };
-  netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
   netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
+  netbox_4_5 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_5; };
   netdata = runTest ./netdata.nix;
   networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
   networking.networkmanager = handleTest ./networking/networkmanager.nix { };
@@ -1137,7 +1125,6 @@ in
   nixpkgs-config-allow-unfree-packages-and-predicate =
     pkgs.callPackage ../../pkgs/stdenv/generic/check-meta-test.nix
       { };
-  nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nohang = runTest ./nohang.nix;
@@ -1167,14 +1154,17 @@ in
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix { };
   octoprint = runTest ./octoprint.nix;
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
-  odoo = runTest ./odoo.nix;
-  odoo16 = runTest {
-    imports = [ ./odoo.nix ];
-    _module.args.package = pkgs.odoo16;
-  };
   odoo17 = runTest {
     imports = [ ./odoo.nix ];
     _module.args.package = pkgs.odoo17;
+  };
+  odoo18 = runTest {
+    imports = [ ./odoo.nix ];
+    _module.args.package = pkgs.odoo18;
+  };
+  odoo19 = runTest {
+    imports = [ ./odoo.nix ];
+    _module.args.package = pkgs.odoo19;
   };
   oh-my-zsh = runTest ./oh-my-zsh.nix;
   oku = runTest ./oku.nix;
@@ -1230,6 +1220,7 @@ in
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-pgsql = runTest ./pam/pam-pgsql.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
+  pam-u2f-polkit = runTest ./pam/pam-u2f-polkit.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pangolin = runTest ./pangolin.nix;
@@ -1357,7 +1348,6 @@ in
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
-  pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
   qemu-vm-credentials-fwcfg = runTest {
@@ -1459,6 +1449,7 @@ in
   sdl3 = runTest ./sdl3.nix;
   searx = runTest ./searx.nix;
   seatd = runTest ./seatd.nix;
+  seerr = runTest ./seerr.nix;
   send = runTest ./send.nix;
   service-runner = runTest ./service-runner.nix;
   servo = runTest ./servo.nix;
@@ -1470,6 +1461,7 @@ in
   shadps4 = runTest ./shadps4.nix;
   sharkey = runTest ./web-apps/sharkey.nix;
   shattered-pixel-dungeon = runTest ./shattered-pixel-dungeon.nix;
+  shelfmark = runTest ./shelfmark.nix;
   shiori = runTest ./shiori.nix;
   shoko = import ./shoko.nix { inherit runTest; };
   signal-desktop = runTest ./signal-desktop.nix;
@@ -1480,6 +1472,7 @@ in
   slimserver = runTest ./slimserver.nix;
   slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
+  slurm-pam = runTest ./slurm-pam.nix;
   smokeping = runTest ./smokeping.nix;
   snapcast = runTest ./snapcast.nix;
   snapper = runTest ./snapper.nix;
@@ -1513,6 +1506,7 @@ in
   stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix { };
   static-web-server = runTest ./web-servers/static-web-server.nix;
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
+  stirling-pdf-desktop = runTest ./stirling-pdf-desktop.nix;
   stratis = handleTest ./stratis { };
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
@@ -1628,6 +1622,7 @@ in
   taskchampion-sync-server = runTest ./taskchampion-sync-server.nix;
   taskserver = runTest ./taskserver.nix;
   tayga = runTest ./tayga.nix;
+  tdarr = runTest ./tdarr.nix;
   technitium-dns-server = runTest ./technitium-dns-server.nix;
   teeworlds = runTest ./teeworlds.nix;
   telegraf = runTest ./telegraf.nix;
@@ -1635,6 +1630,7 @@ in
   teleports = runTest ./teleports.nix;
   temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
+  test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
   thelounge = handleTest ./thelounge.nix { };
   tiddlywiki = runTest ./tiddlywiki.nix;
@@ -1643,6 +1639,7 @@ in
   timezone = runTest ./timezone.nix;
   timidity = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./timidity { };
   tinc = handleTest ./tinc { };
+  tinyauth = runTest ./tinyauth.nix;
   tinydns = runTest ./tinydns.nix;
   tinyproxy = runTest ./tinyproxy.nix;
   tinywl = runTest ./tinywl.nix;
@@ -1668,6 +1665,7 @@ in
   tuliprox = runTest ./tuliprox.nix;
   tuned = runTest ./tuned.nix;
   tuptime = runTest ./tuptime.nix;
+  turborepo-remote-cache = runTest ./turborepo-remote-cache.nix;
   turbovnc-headless-server = runTest ./turbovnc-headless-server.nix;
   turn-rs = runTest ./turn-rs.nix;
   tusd = runTest ./tusd/default.nix;
@@ -1703,6 +1701,7 @@ in
   userborn-mutable-users = runTest ./userborn-mutable-users.nix;
   userborn-static = runTest ./userborn-static.nix;
   ustreamer = runTest ./ustreamer.nix;
+  utils = import ./utils { inherit runTest; };
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
   varnish60 = runTest {
@@ -1712,6 +1711,10 @@ in
   varnish77 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish77;
+  };
+  varnish80 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish80;
   };
   vault = runTest ./vault.nix;
   vault-agent = runTest ./vault-agent.nix;
@@ -1743,6 +1746,7 @@ in
   wg-access-server = runTest ./wg-access-server.nix;
   whisparr = runTest ./whisparr.nix;
   whoami = runTest ./whoami.nix;
+  whois = runTest ./whois.nix;
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
   windmill = import ./windmill {

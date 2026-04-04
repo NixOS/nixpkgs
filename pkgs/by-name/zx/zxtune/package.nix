@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromBitbucket,
+  fetchpatch2,
+  dos2unix,
   nix-update-script,
   boost,
   zlib,
@@ -77,7 +79,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = staticBuildInputs ++ dlopenBuildInputs;
 
+  prePatch = ''
+    # update-vgm.patch : Hunk #1 FAILED at 18 (different line endings)
+    find 3rdparty/vgm/ -type f -exec ${dos2unix}/bin/dos2unix {} \;
+  '';
   patches = [
+    # fix https://hydra.nixos.org/build/317966891
+    (fetchpatch2 {
+      name = "xmp-fix-for-gcc-15.patch";
+      url = "https://github.com/vitamin-caig/zxtune/commit/7f853a38924f78a25b86ac674b41e2f0fd2524a5.patch?full_index=1";
+      hash = "sha256-F6gD+w4lFymSRHXgDngYX/dZI26f7onOmYFlHkPKms8=";
+    })
+    (fetchpatch2 {
+      name = "update-vgm.patch";
+      url = "https://github.com/vitamin-caig/zxtune/commit/31e3ff7a8d13b72e6f72caecd15ae87cefca0465.patch?full_index=1";
+      hash = "sha256-uEa2LY/r/jVWHHEpFtsQba66YdIjA82fDlm+StKp/EI=";
+    })
     ./disable_updates.patch
   ];
 
@@ -176,7 +193,10 @@ stdenv.mkDerivation rec {
     # zxtune supports mac and windows, but more work will be needed to
     # integrate with the custom make system (see platformName above)
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ EBADBEEF ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      EBADBEEF
+    ];
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }

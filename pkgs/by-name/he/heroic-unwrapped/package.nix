@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -21,7 +21,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_29_2;
   electron = electron_39;
 
   legendary = callPackage ./legendary.nix { };

@@ -11,8 +11,8 @@
   },
   {
     "pname": "AudibleApi",
-    "version": "10.1.2.1",
-    "hash": "sha256-DRI37m+uWOpmtq0+ivRfqzLFAqfYzQvyvi6GP7sCWpQ="
+    "version": "10.1.4.1",
+    "hash": "sha256-5sHQ7IwVTL+GsX0bp7H3imKxIAfngM9SiNC65hc3+8Y="
   },
   {
     "pname": "Avalonia",
@@ -151,8 +151,8 @@
   },
   {
     "pname": "Google.Protobuf",
-    "version": "3.33.4",
-    "hash": "sha256-0XlseTCX3deAoElf8gicq7ZEjql1NSGYaQwgtX1+BbY="
+    "version": "3.33.5",
+    "hash": "sha256-d0aye/ePsKvLCtt4b39q1o060Y/wCf2h5n8bQpq+ork="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -771,7 +771,7 @@
   },
   {
     "pname": "WebViewControlAvaloniaFree",
-    "version": "11.3.15",
-    "hash": "sha256-Bp93SS9iabK+nHzqDu/MP9L+zyvdgFKPVTLzNHR0oJE="
+    "version": "11.3.16",
+    "hash": "sha256-3Ibi3e7E6zTPS/hUQtsegCNsBd//o0p5pFkwHnUEYbs="
   }
 ]

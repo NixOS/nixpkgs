@@ -79,7 +79,7 @@ buildNpmPackage (finalAttrs: {
     (makeDesktopItem {
       name = "vrcx";
       icon = "vrcx";
-      exec = "vrcx";
+      exec = "vrcx %u";
       terminal = false;
       desktopName = "VRCX";
       comment = "Friendship management tool for VRChat";

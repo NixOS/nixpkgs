@@ -8,7 +8,6 @@
   libGL,
   openal,
   luajit,
-  lua5_1,
   freetype,
   physfs,
   libmodplug,
@@ -22,14 +21,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "love";
   version = "11.5";
 
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-wZktNh4UB3QH2wAIIlnYUlNoXbjEDwUmPnT4vesZNm0=";
   };
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     openal
-    (if stdenv.isDarwin then lua5_1 else luajit)
+    luajit
     freetype
     physfs
     libmodplug
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     which
     libtool
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11 # SDL2 optional depend, for SDL_syswm.h
     libGLU
     libGL
@@ -61,9 +60,10 @@ stdenv.mkDerivation rec {
   # On Darwin, autotools doesn't compile macOS-specific module (src/common/macosx.mm),
   # leading to stubbed functions and segfaults
   cmakeFlags = [
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" # Required by LÖVE's CMakeLists.txt
-    "-DCMAKE_SKIP_BUILD_RPATH=ON" # Don't include build directory in RPATH
-    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" # Use install RPATH even during build
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # Required by LÖVE's CMakeLists.txt
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # Don't include build directory in RPATH
+    (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_RPATH" true) # Use install RPATH even during build
+    (lib.cmakeBool "LOVE_JIT" true) # Enable LuaJIT support even though it is warned about for Apple
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     cp $src/platform/unix/love.6 $out/share/man/man1/love.1
     gzip -9n $out/share/man/man1/love.1
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Install Linux-specific files (desktop, mime, icons)
     mkdir -p $out/share/applications
     mkdir -p $out/share/mime/packages
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.raskin ];
   };
-}
+})

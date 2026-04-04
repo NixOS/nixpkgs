@@ -132,7 +132,7 @@ jobs:
             core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
-        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
+        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
       - name: Load supported versions
         id: versions
@@ -154,7 +154,7 @@ jobs:
     # to not interrupt main Eval's compare step.
     continue-on-error: ${{ matrix.version != '' }}
     name: ${{ matrix.system }}${{ matrix.version && format(' @ {0} ({1})', matrix.version, needs.versions.outputs.ciPinBumpCommitShort) || '' }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       # This is not supposed to be used and just acts as a fallback.
       # Without swap, when Eval runs OOM, it will fail badly with a
@@ -180,9 +180,9 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
+        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
-      - uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1 # v16
+      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
         continue-on-error: true
         with:
           # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
@@ -263,14 +263,14 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: ${{ inputs.artifact-prefix }}diff-*
           path: diff
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
+        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
       - name: Combine all output paths and eval stats
         run: |
@@ -353,7 +353,7 @@ jobs:
     needs: [versions, eval]
     steps:
       - name: Download output paths and eval stats for all versions
-        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: "*-diff-*"
           path: versions
@@ -451,7 +451,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
+        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
       - name: Ensure flake outputs on all systems still evaluate
         run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'

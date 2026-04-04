@@ -171,6 +171,8 @@ checkConfigError() {
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
+checkConfigError "In module .*test-push-down-non-attrs.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config ./test-push-down-non-attrs.nix
+
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 
 # Check that a module argument is passed, also when a default is available
@@ -673,6 +675,17 @@ checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
 checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
+
+## defaults
+checkConfigOutput "\[\]" config.list ./defaults.nix
+checkConfigOutput "{}" config.attrs ./defaults.nix
+checkConfigOutput "{}" config.attrsOf ./defaults.nix
+checkConfigOutput "null" config.null ./defaults.nix
+checkConfigOutput "{}" config.submodule ./defaults.nix
+checkConfigOutput "\[\]" config.unique ./defaults.nix
+checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
+# These types don't have empty values
+checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
 
 # types.unique
 #   requires a single definition

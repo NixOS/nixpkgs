@@ -19,7 +19,6 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libpng,
   mpfr,
   nanosvg,
@@ -78,6 +77,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
     ./allow_wayland.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -119,7 +120,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
-    ilmbase
     libpng
     mpfr
     nanosvg-fltk
@@ -202,10 +202,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/lib"
     mv -v $out/bin/*.* $out/lib/
-
-    mkdir -p "$out/share/pixmaps/"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
 
     mkdir -p "$out"/share/mime/packages
     cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml

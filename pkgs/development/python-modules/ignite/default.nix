@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   pytest-xdist,
   torchvision,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-0lQe5fWR4t3uAJVfGVebkxiWHx8TvgNQzJylKNmjjo0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     packaging

@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "2026.2.2";
+  version = "2026.3.3";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wZEpoUlDEbObXD5d2uA5vNBRrFOw4A6VLAc/MVNC4EE=";
+    hash = "sha256-hGyUoAR0Pv6mkImRDlrnfYAucgJwg2phj6moxewf3aY=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ilys
       FlameFlag
+      isabelroses
     ];
   };
 })

@@ -44,7 +44,7 @@
   retroarch-assets,
   retroarch-bare,
   retroarch-joypad-autoconfig,
-  runCommand,
+  writeText,
   symlinkJoin,
   # params
   enableNvidiaCgToolkit ? false,
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
           libretro
           makeBinaryWrapper
           retroarch-bare
-          runCommand
+          writeText
           symlinkJoin
           cores
           ;

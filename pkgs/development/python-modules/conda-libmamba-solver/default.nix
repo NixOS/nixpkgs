@@ -6,6 +6,9 @@
   hatch-vcs,
   boltons,
   libmambapy,
+  msgpack,
+  requests,
+  zstandard,
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";
@@ -28,6 +31,9 @@ buildPythonPackage rec {
   dependencies = [
     boltons
     libmambapy
+    msgpack
+    requests
+    zstandard
   ];
 
   # this package depends on conda for the import to run successfully, but conda depends on this package to execute.

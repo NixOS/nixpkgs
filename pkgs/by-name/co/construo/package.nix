@@ -11,6 +11,7 @@
   libGLU,
   withLibglut ? !stdenv.hostPlatform.isDarwin,
   libglut,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,12 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withLibGL libGL
   ++ lib.optional withLibGLU libGLU
-  ++ lib.optional withLibglut libglut;
+  ++ lib.optional withLibglut libglut
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace-fail \
+      '-I/System/Library/Frameworks/GLUT.framework/Headers/' \
+      '-I${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/GLUT.framework/Headers/'
+  '';
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \
       --replace games bin
   '';
+
+  env.CXXFLAGS = "-std=c++98";
 
   meta = {
     description = "Masses and springs simulation game";

@@ -91,28 +91,28 @@
   },
   {
     "pname": "LTRData.DiscUtils.Core",
-    "version": "1.0.75",
-    "hash": "sha256-dFzYHFPKqCJ24L3AE4rnOxwFIVoJJ/taKpk4/rU5sFA="
+    "version": "1.0.77",
+    "hash": "sha256-9wJQxJvLQGJ19GB16jaRkvbEmjOtgqGHeZFVogh7aVg="
   },
   {
     "pname": "LTRData.DiscUtils.Iso9660",
-    "version": "1.0.75",
-    "hash": "sha256-/HOdWfZbOH3k8hfbOI7BI6j5EUvtJN8xmlfZVhXq+qU="
+    "version": "1.0.77",
+    "hash": "sha256-EgQEDy0ABQQLdKQZ7xn+tSlkUfojzJ58vo+qmePDKC8="
   },
   {
     "pname": "LTRData.DiscUtils.OpticalDisk",
-    "version": "1.0.75",
-    "hash": "sha256-9hB9S0ELamuoslKOa5FevFEh9aE4KGyad2pSn7n5bVU="
+    "version": "1.0.77",
+    "hash": "sha256-a3wMaOTGSHQ5sFhisG+B3vUhmTgmMkpUvr66ZmpbxNw="
   },
   {
     "pname": "LTRData.DiscUtils.Streams",
-    "version": "1.0.75",
-    "hash": "sha256-htHflwJY4FDqu0azD75wf+sSclnDnXXZ+3K/j9h6sz8="
+    "version": "1.0.77",
+    "hash": "sha256-cmP+ormQoxRvxbSnjxz3zmyk8kRb02g3yO7W/CyCmMg="
   },
   {
     "pname": "LTRData.DiscUtils.Udf",
-    "version": "1.0.75",
-    "hash": "sha256-QWuQZgkikoKik4mRaMoLMlTn2p6WMLg9NaKKiKbIrPM="
+    "version": "1.0.77",
+    "hash": "sha256-jMUr7o+jsGZxKEFMpC8js+sYZsVuj4gmoEa923Ce144="
   },
   {
     "pname": "LTRData.Extensions",
@@ -171,8 +171,8 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "10.0.3",
-    "hash": "sha256-IK2hZpaQysKYAoM0AbEVgTwla5hhqaop7360Tb2tZzk="
+    "version": "10.0.5",
+    "hash": "sha256-iZrjJEZU+GnKBWYLi0+NUc+yYKrCSQkaLmQrGDQyyeE="
   },
   {
     "pname": "Tmds.DBus.Protocol",

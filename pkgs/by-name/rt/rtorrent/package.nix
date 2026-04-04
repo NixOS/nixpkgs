@@ -1,4 +1,5 @@
 {
+  _experimental-update-script-combinators,
   autoreconfHook,
   cppunit,
   curl,
@@ -9,8 +10,8 @@
   libtorrent-rakshasa,
   lua5_4_compat,
   ncurses,
-  nixosTests,
   nix-update-script,
+  nixosTests,
   openssl,
   pkg-config,
   stdenv,
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtorrent";
-  version = "0.16.6";
+  version = "0.16.8";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y8LFysyfOsgsMmbLFcf+SjKKDdTFBwDPQU0hW6hiXII=";
+    hash = "sha256-TG5wEJwOPhgmKNcpjTuSu6MNk91t9sR33mXIUueR4yA=";
   };
 
   outputs = [
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit libtorrent-rakshasa;
     tests = { inherit (nixosTests) rtorrent; };
-    updateScript = nix-update-script { };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { attrPath = "libtorrent-rakshasa"; })
+      (nix-update-script { })
+    ];
   };
 
   meta = {

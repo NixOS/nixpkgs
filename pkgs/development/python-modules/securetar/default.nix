@@ -3,25 +3,29 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  pynacl,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2025.2.1";
+  version = "2026.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "securetar";
     tag = version;
-    hash = "sha256-uVzyVgS8bWxS7jhwVyv7wTNF8REW+dJIhkRaS/8/FmY=";
+    hash = "sha256-76JZN0Y9uW0+HUX+j1aCIz9qOjogZ0KXOXXK8rR8Z/4=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+    pynacl
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

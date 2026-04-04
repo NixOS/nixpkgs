@@ -51,7 +51,6 @@ in
 makeEc2Test {
   name = "image-contents";
   inherit image;
-  userData = null;
   script = ''
     machine.start()
     # Test that if contents includes a file, it is copied to the target.

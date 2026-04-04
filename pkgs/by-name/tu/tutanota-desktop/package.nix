@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "tutanota-desktop";
-  version = "325.260127.0";
+  version = "338.260318.0";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-WZYJ5C8xVoD+XMbjcKcIQw3C8YObinK6wBWBMd6bssU=";
+    hash = "sha256-VDdUHTvOBuC7TNGnJxNRkAgRsc0ykKVTUSFO2E1A8hA=";
   };
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
@@ -46,10 +46,7 @@ appimageTools.wrapType2 rec {
     changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [
-      da157
-      s0ssh
-    ];
+    maintainers = with lib.maintainers; [ s0ssh ];
     mainProgram = "tutanota-desktop";
     platforms = [ "x86_64-linux" ];
   };

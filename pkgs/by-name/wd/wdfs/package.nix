@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://noedler.de/projekte/wdfs/wdfs-${finalAttrs.version}.tar.gz";
+    url = "https://noedler.de/projekte/wdfs/wdfs-${finalAttrs.version}.tar.gz";
     sha256 = "fcf2e1584568b07c7f3683a983a9be26fae6534b8109e09167e5dff9114ba2e5";
   };
   nativeBuildInputs = [

@@ -8,6 +8,7 @@
   fontforge,
   potrace,
   texlive,
+  fetchpatch2,
 }:
 
 /*
@@ -33,6 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "release/${finalAttrs.version}";
     sha256 = "02ik25aczkbi10jrjlnxby3fmixxrwm2k5r4fkfif3bjfym7nqbc";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "gcc-15.patch";
+      url = "https://salsa.debian.org/debian/mftrace/-/raw/628987e5ce8bdab737f9fbc730a75fdd29ce81d2/debian/patches/gcc-15.patch";
+      hash = "sha256-eTDohSGzy2hxZmpAXiYaAk3DBnrXduNum0fO6bHGUQw=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper

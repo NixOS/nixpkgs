@@ -1,23 +1,26 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
   alembic,
   boto3,
   botorch,
   bottle,
+  buildPythonPackage,
   cmaes,
   colorlog,
+  fetchFromGitHub,
+  httpx,
   moto,
   numpy,
+  openai,
   optuna,
   packaging,
   plotly,
   pytestCheckHook,
-  setuptools,
+  respx,
   scikit-learn,
   scipy,
+  setuptools,
   streamlit,
   tqdm,
 }:
@@ -53,8 +56,11 @@ buildPythonPackage rec {
     pytestCheckHook
     boto3
     botorch
+    httpx
     moto
+    openai
     plotly
+    respx
     streamlit
   ];
 

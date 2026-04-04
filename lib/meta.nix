@@ -434,8 +434,9 @@ rec {
   getLicenseFromSpdxId =
     licstr:
     getLicenseFromSpdxIdOr licstr (
-      lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}" {
+      lib.warn "getLicenseFromSpdxId: No license with the given SPDX ID found: ${licstr}" {
         shortName = licstr;
+        spdxId = licstr;
       }
     );
 

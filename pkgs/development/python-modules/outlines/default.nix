@@ -31,6 +31,7 @@
   google-genai,
   iso3166,
   jax,
+  lmstudio,
   llama-cpp-python,
   mistralai,
   ollama,
@@ -41,26 +42,41 @@
   tensorflow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "outlines";
-  version = "1.2.9";
+  version = "1.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
     repo = "outlines";
-    tag = version;
-    hash = "sha256-QuS8IokiOPJeh59+W4FLoE9dvBCChf2li70+Ex3aIwg=";
+    tag = finalAttrs.version;
+    hash = "sha256-DPxtvaEbPv3go2WD9lqXB6AfTSmIA+MsqZwxXVcpyXk=";
   };
+
+  # Fix mistralai>=2.0 compatibility
+  postPatch = ''
+    substituteInPlace tests/models/test_mistral_type_adapter.py \
+      --replace-fail \
+        "from mistralai import (" \
+        "from mistralai.client.models import ("
+
+    substituteInPlace outlines/models/mistral.py \
+      --replace-fail \
+        "from mistralai import UserMessage" \
+        "from mistralai.client.models import UserMessage"
+
+    substituteInPlace outlines/models/mistral.py tests/models/test_mistral.py \
+      --replace-fail \
+        "from mistralai import Mistral" \
+        "from mistralai.client import Mistral"
+  '';
 
   build-system = [
     setuptools
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "outlines_core"
-  ];
   dependencies = [
     cloudpickle
     datasets
@@ -94,6 +110,7 @@ buildPythonPackage rec {
     iso3166
     jax
     llama-cpp-python
+    lmstudio
     mistralai
     ollama
     openai
@@ -109,11 +126,17 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Incompatible with latest mistralai (AssertionError: assert False)
+    "test_mistral_type_adapter_input_chat"
+    "test_mistral_type_adapter_input_list"
+    "test_mistral_type_adapter_input_text"
+
     # Try to dowload models from Hugging Face Hub
     "test_application_callable_call"
     "test_application_generator_reuse"
     "test_application_template_call"
     "test_application_template_error"
+    "test_check_hf_chat_template"
     "test_generator_black_box_async_processor"
     "test_generator_black_box_sync_processor"
     "test_generator_init_multiple_output_type"
@@ -226,8 +249,8 @@ buildPythonPackage rec {
   meta = {
     description = "Structured text generation";
     homepage = "https://github.com/outlines-dev/outlines";
-    changelog = "https://github.com/dottxt-ai/outlines/releases/tag/${version}";
+    changelog = "https://github.com/dottxt-ai/outlines/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lach ];
   };
-}
+})

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bella";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "josephmawa";
     repo = "Bella";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ePzDnaoGPa5Hku7Rpced989QB6uOXN/jfXgTwtlE7rQ=";
+    hash = "sha256-IjRjo5zKoXFK+4F7OtSYuk62Pif7HDAi0E/3+t9rjv4=";
   };
 
   strictDeps = true;

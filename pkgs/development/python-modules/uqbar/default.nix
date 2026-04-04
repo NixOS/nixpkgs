@@ -57,6 +57,11 @@ buildPythonPackage (finalAttrs: {
     # assert not ["\x1b[91mWARNING: dot command 'dot' cannot be run (needed for
     # graphviz output), check the graphviz_dot setting\x1b[39;49;00m"]
     "test_sphinx_style_latex"
+    # Fails with line wrapping differences
+    "test_sphinx_api_2"
+    # Fails with changed wording in the summary (but semantically equivalent output)
+    # https://github.com/supriya-project/uqbar/issues/107
+    "SummarizingRootDocumenter"
   ]
   ++ lib.optional (pythonAtLeast "3.11") [
     # assert not '\x1b[91m/build/uqbar-0.7.0/tests/fake_package/enums.py:docstring

@@ -17,6 +17,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-dLBgdcrIp5QM2TVIa86qX7m1c5n+qOIQJtqJPGvIZ+0=";
   };
 
+  # Temporary fix to get build to pass until https://github.com/moghtech/komodo/pull/1122
+  patches = [
+    ./rustc-1_9_2-fixes.patch
+  ];
+
   cargoHash = "sha256-jf/Jp28g3inGn5jQp3cACdhl//tbXTMc1vP1K3g/CyQ=";
 
   # disable for check. document generation is fail

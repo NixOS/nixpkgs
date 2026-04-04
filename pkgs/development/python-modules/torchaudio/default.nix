@@ -1,143 +1,145 @@
 {
   lib,
-  symlinkJoin,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-  ninja,
-
   # buildInputs
-  pybind11,
-  sox,
-  torch,
   llvmPackages,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  torch,
+  torchcodec,
+
+  # tests
+  inflect,
+  parameterized,
+  pytestCheckHook,
+  pytorch-lightning,
+  scipy,
+  sentencepiece,
+  unidecode,
+
+  # passthru
+  torchaudio,
 
   cudaSupport ? torch.cudaSupport,
   cudaPackages,
   rocmSupport ? torch.rocmSupport,
-  rocmPackages,
-
-  gpuTargets ? [ ],
 }:
 
-let
-  # TODO: Reuse one defined in torch?
-  # Some of those dependencies are probably not required,
-  # but it breaks when the store path is different between torch and torchaudio
-  rocmtoolkit_joined = symlinkJoin {
-    name = "rocm-merged";
-
-    paths = with rocmPackages; [
-      rocm-core
-      clr
-      rccl
-      miopen
-      rocrand
-      rocblas
-      rocsparse
-      hipsparse
-      rocthrust
-      rocprim
-      hipcub
-      roctracer
-      rocfft
-      rocsolver
-      hipfft
-      hipsolver
-      hipblas-common
-      hipblas
-      rocminfo
-      rocm-comgr
-      rocm-device-libs
-      rocm-runtime
-      clr.icd
-      hipify
-    ];
-
-    # Fix `setuptools` not being found
-    postBuild = ''
-      rm -rf $out/nix-support
-    '';
-  };
-  # Only used for ROCm
-  gpuTargetString = lib.strings.concatStringsSep ";" (
-    if gpuTargets != [ ] then
-      # If gpuTargets is specified, it always takes priority.
-      gpuTargets
-    else if rocmSupport then
-      rocmPackages.clr.gpuTargets
-    else
-      throw "No GPU targets specified"
-  );
-  stdenv = torch.stdenv;
-in
-buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchaudio";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b1sjHVFXdNFDbdtXWSM2KisSRE/8IbzJI4rvzYQ4UMg=";
+    hash = "sha256-TncROn9wfn5HOaIvupS2/KD9JCgwfHyfnbZRc+SiqJ0=";
   };
-
-  patches = [
-    ./0001-setup.py-propagate-cmakeFlags.patch
-  ];
-
-  postPatch = lib.optionalString rocmSupport ''
-    # There is no .info/version-dev, only .info/version
-    substituteInPlace cmake/LoadHIP.cmake \
-      --replace-fail "/.info/version-dev" "/.info/version"
-  '';
 
   env = {
+    # CTC seems to be missing no matter what. No obvious flag to force its compilation.
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CTC_DECODER = 1;
+
+    # CUDA
+    USE_CUDA = cudaSupport;
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
-    BUILD_SOX = 0;
-    BUILD_KALDI = 0;
-    BUILD_RNNT = 0;
-    BUILD_CTC_DECODER = 0;
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUCTC_DECODER = 1;
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 1;
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MULTIGPU_CUDA = 1;
+
+    # ROCM
+    USE_ROCM = rocmSupport;
+    PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport torch.gpuTargetString;
+    ROCM_PATH = lib.optionalString rocmSupport torch.rocmtoolkit_joined;
+
+    # demucs is not packaged in nixpkgs and is archived anyway
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MOD_demucs = true;
+
+    # fairseq is unmaintained and broken in nixpkgs
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MOD_fairseq = true;
+
+    # Fails even on python>3.10 with:
+    #   RuntimeError: Test is known to fail for Python 3.10, disabling for now
+    #   See: https://github.com/pytorch/audio/pull/2224#issuecomment-1048329450
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_ON_PYTHON_310 = true;
+
+    # Fails on aarch64-linux with:
+    #   RuntimeError: `fbgemm` is not available
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION =
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    ninja
-  ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
-  ++ lib.optionals rocmSupport (
-    with rocmPackages;
-    [
-      clr
-      rocblas
-      hipblas
+  build-system = [
+    setuptools
+  ];
+
+  nativeBuildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
+
+  buildInputs =
+    lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
     ]
-  );
+    ++ lib.optionals torch.stdenv.cc.isClang [
+      llvmPackages.openmp
+    ];
 
-  buildInputs = [
-    pybind11
-    sox
-    torch.cxxdev
-  ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
-
-  dependencies = [ torch ];
-
-  preConfigure = lib.optionalString rocmSupport ''
-    export ROCM_PATH=${rocmtoolkit_joined}
-    export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-  '';
-
-  dontUseCmakeConfigure = true;
-
-  doCheck = false; # requires sox backend
+  dependencies = [
+    torch
+    torchcodec
+  ];
 
   pythonImportsCheck = [ "torchaudio" ];
+
+  nativeCheckInputs = [
+    inflect
+    parameterized
+    pytestCheckHook
+    pytorch-lightning
+    scipy
+    sentencepiece
+    unidecode
+  ];
+
+  disabledTestPaths = [
+    # Require internet access
+    "test/integration_tests"
+  ];
+
+  disabledTests = [
+    # AssertionError: Tensor-likes are not close!
+    # Mismatched elements: 1070 / 32800 (3.3%)
+    "test_amplitude_to_DB"
+    "test_amplitude_to_DB_power"
+
+    # Very long to run
+    "AutogradCPUTest"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: Tensor-likes are not close!
+    "test_batch_inverse_spectrogram"
+    "test_batch_pitch_shift"
+    "test_batch_spectrogram"
+    "test_griffinlim_0_99"
+  ];
+
+  passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
+    pname = "${finalAttrs.pname}-gpuCheck";
+    requiredSystemFeatures = [ "cuda" ];
+
+    env = (old.env or { }) // {
+      TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUCTC_DECODER = 0;
+      TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 0;
+    };
+  });
 
   meta = {
     description = "PyTorch audio library";
@@ -148,6 +150,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      caniko
       junjihashimoto
     ];
   };

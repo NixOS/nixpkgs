@@ -65,9 +65,6 @@ let
     }
   );
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface: "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
-
   addrOpts =
     v:
     assert v == 4 || v == 6;
@@ -750,10 +747,9 @@ in
       default = "";
       example = "text=anything; echo You can put $text here.";
       description = ''
-        Shell commands to be executed at the end of the
-        `network-setup` systemd service.  Note that if
-        you are using DHCP to obtain the network configuration,
-        interfaces may not be fully configured yet.
+        Shell commands to be executed after all the network
+        interfaces have been created, but not necessarily
+        fully configured.
       '';
     };
 
@@ -1062,6 +1058,54 @@ in
               type = types.nullOr types.str;
               example = "vepa";
               description = "The mode of the macvlan device.";
+            };
+
+          };
+
+        });
+    };
+
+    networking.ipvlans = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          wan = {
+            interface = "enp2s0";
+            mode = "l2";
+            flags = "vepa";
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define ipvlan interfaces which should
+        be automatically created.
+      '';
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+
+            interface = mkOption {
+              example = "enp4s0";
+              type = types.str;
+              description = "The interface the ipvlan will transmit packets through.";
+            };
+
+            mode = mkOption {
+              default = "l2";
+              type = types.enum [
+                "l2"
+                "l3"
+                "l3s"
+              ];
+              description = "The mode of the interface.";
+            };
+
+            flags = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              example = "vepa";
+              description = "The flags of the ipvlan device.";
             };
 
           };
@@ -1806,6 +1850,20 @@ in
         '';
       };
     };
+
+    networking.localCommands = lib.mkIf config.networking.resolvconf.enable ''
+      # Set the static DNS configuration, if given.
+      ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
+      ${optionalString (cfg.nameservers != [ ] && cfg.domain != null) ''
+        domain ${cfg.domain}
+      ''}
+      ${optionalString (cfg.search != [ ]) ("search " + concatStringsSep " " cfg.search)}
+      ${flip concatMapStrings cfg.nameservers (ns: ''
+        nameserver ${ns}
+      '')}
+      EOF
+    '';
+
     services.mstpd = mkIf needsMstpd { enable = true; };
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };

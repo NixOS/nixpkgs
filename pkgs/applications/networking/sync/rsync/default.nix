@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     mainProgram = "rsync";
     maintainers = [
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
     identifiers.cpeParts = {
       vendor = "samba";

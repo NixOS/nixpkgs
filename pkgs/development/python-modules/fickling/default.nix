@@ -5,6 +5,7 @@
   pythonOlder,
   hatchling,
   numpy,
+  py7zr,
   pytestCheckHook,
   stdlib-list,
   torch,
@@ -13,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fickling";
-  version = "0.1.7";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uirVOJ6CI7gBu9lOoPtpjUZeBmIhBMI0tjSDI/ASy7w=";
+    hash = "sha256-hpVcYWoIH9sCQDha2aX0kzYHwpNcZ6US+4N/q70tQyA=";
   };
 
   build-system = [
@@ -42,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    py7zr
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;

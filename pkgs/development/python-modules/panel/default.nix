@@ -4,9 +4,14 @@
   fetchPypi,
   bleach,
   bokeh,
+  linkify-it-py,
+  markdown,
+  markdown-it-py,
+  mdit-py-plugins,
+  narwhals,
+  pandas,
   param,
   pyviz-comms,
-  markdown,
   pyct,
   requests,
   setuptools,
@@ -36,7 +41,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bleach
     bokeh
+    linkify-it-py
     markdown
+    markdown-it-py
+    mdit-py-plugins
+    narwhals
+    pandas
     param
     pyct
     pyviz-comms
@@ -57,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ locnide ];
   };
 }

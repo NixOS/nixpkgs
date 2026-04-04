@@ -54,10 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/JohnnyMorganz/luau-lsp/releases/tag/${finalAttrs.version}";
     changelog = "https://github.com/JohnnyMorganz/luau-lsp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      anninzy
-      HeitorAugustoLN
-    ];
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "luau-lsp";
     platforms = lib.platforms.all;
     badPlatforms = [

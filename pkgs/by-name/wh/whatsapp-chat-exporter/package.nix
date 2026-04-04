@@ -19,7 +19,9 @@ python3Packages.buildPythonApplication {
     hash = "sha256-nD8rpA1BbKbHpjAuIDdhaiMUjQCypDuo0pNAYbkoOxo=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     bleach
     javaobj-py3
     jinja2

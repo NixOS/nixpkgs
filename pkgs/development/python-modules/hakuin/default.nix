@@ -6,6 +6,7 @@
   hatchling,
   jinja2,
   nltk,
+  sqlglot,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     aiohttp
     jinja2
     nltk
+    sqlglot
   ];
 
   # Module has no test

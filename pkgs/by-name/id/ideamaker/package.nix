@@ -76,7 +76,7 @@ stdenv.mkDerivation {
       $out/share/mime/packages/ideamaker.xml
 
     install -D usr/share/ideamaker/icons/ideamaker-icon.png \
-      $out/share/pixmaps/ideamaker.png
+      $out/share/icons/hicolor/128x128/apps/ideamaker.png
 
     ln -sf $out/usr/lib/x86_64-linux-gnu/ideamaker/ideamaker $out/bin/ideamaker
 

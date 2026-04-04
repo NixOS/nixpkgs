@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
         make -f Makefile.SSE3.PTHREADS.gcc
       '';
 
+  # Fix build with gcc15 (-std=gnu23)
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+
   installPhase =
     if useMpi then
       ''

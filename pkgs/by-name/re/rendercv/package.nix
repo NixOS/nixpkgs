@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rendercv";
-  version = "2.6";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rendercv";
     repo = "rendercv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lGeZt/ctNmZu6kSTpH4JTmgOwR9gS6RVkWu0gr4FK4k=";
+    hash = "sha256-2ClS/RwfAhjo+bh1fTiir1YCVelDJPOjp+Z3GHVzF4E=";
   };
 
   build-system = with python3Packages; [ uv-build ];
@@ -26,19 +26,28 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pycountry
     pydantic-extra-types
     ruamel-yaml
-    packaging
+    markdown
     # full
     typer
-    markdown
     watchdog
     typst
     rendercv-fonts
+    packaging
   ];
 
   pythonRelaxDeps = [
     "phonenumbers"
-    "pydantic-extra-types"
+    "markdown"
   ];
+
+  patches = [
+    ./fix_theme_directory_permissions.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.3,<0.11.0" "uv_build"
+  '';
 
   pythonImportsCheck = [ "rendercv" ];
 
@@ -51,6 +60,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # It fails due to missing internet resources
     "tests/renderer/test_pdf_png.py"
     "tests/cli/render_command/test_render_command.py"
+    "tests/test_pyodide.py"
   ];
 
   doCheck = true;
@@ -58,7 +68,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Typst-based CV/resume generator";
     homepage = "https://rendercv.com";
-    changelog = "https://docs.rendercv.com/changelog/#26-december-23-2025";
+    changelog = "https://docs.rendercv.com/changelog/#27-march-6-2026";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "rendercv";

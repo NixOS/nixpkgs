@@ -196,6 +196,16 @@ lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
       extraRustcOptsForBuildRs,
+      # The lint level cap passed to rustc via `--cap-lints`.
+      # See <https://doc.rust-lang.org/rustc/lints/levels.html#capping-lints>.
+      #
+      # rustc honours only the first `--cap-lints` it sees, so appending a
+      # second one via `extraRustcOpts` has no effect. Use this parameter
+      # instead if you need lints to fire (e.g. when running clippy).
+      #
+      # Example: "warn"
+      # Default: "allow"
+      capLints,
       # Whether to enable building tests.
       # Use true to enable.
       # Default: false
@@ -249,12 +259,14 @@ lib.makeOverridable
         "buildTests"
         "codegenUnits"
         "links"
+        "capLints"
       ];
       extraDerivationAttrs = removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
+      capLints_ = capLints;
       buildTests_ = buildTests;
 
       # crate2nix has a hack for the old bash based build script that did split
@@ -383,6 +395,7 @@ lib.makeOverridable
           lib.optionals (crate ? extraRustcOptsForBuildRs) crate.extraRustcOptsForBuildRs
           ++ extraRustcOptsForBuildRs_
           ++ (lib.optional (edition != null) "--edition ${edition}");
+        capLints = crate.capLints or capLints_;
 
         configurePhase = configureCrate {
           inherit
@@ -403,6 +416,7 @@ lib.makeOverridable
             crateLinks
             extraLinkFlags
             extraRustcOptsForBuildRs
+            capLints
             crateLicense
             crateLicenseFile
             crateReadme
@@ -433,6 +447,7 @@ lib.makeOverridable
             extraRustcOpts
             buildTests
             codegenUnits
+            capLints
             ;
         };
         dontStrip = !release;
@@ -472,6 +487,7 @@ lib.makeOverridable
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];
     extraRustcOptsForBuildRs = [ ];
+    capLints = "allow";
     features = [ ];
     nativeBuildInputs = [ ];
     buildInputs = [ ];

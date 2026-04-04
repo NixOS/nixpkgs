@@ -144,9 +144,7 @@ let
 
       passthru = { inherit tests; };
 
-      # The recursiveUpdate below breaks default meta.position, so manually override it.
-      pos = __curPos;
-      meta = lib.recursiveUpdate {
+      meta = {
         homepage = "https://hadoop.apache.org/";
         description = "Framework for distributed processing of large data sets across clusters of computers";
         license = lib.licenses.asl20;
@@ -165,7 +163,7 @@ let
         '';
         maintainers = with lib.maintainers; [ illustris ];
         platforms = lib.attrNames platformAttrs;
-      } (lib.attrByPath [ stdenv.system "meta" ] { } platformAttrs);
+      };
     });
 in
 {
