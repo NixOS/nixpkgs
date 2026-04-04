@@ -17,6 +17,7 @@
   roctracer,
   rocminfo,
   rocm-smi,
+  rocprofiler-register,
   symlinkJoin,
   numactl,
   libffi,
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     zstd
     zlib
+    rocprofiler-register
   ];
 
   propagatedBuildInputs = [
@@ -136,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
     "-DROCM_PATH=${rocminfo}"
     "-DBUILD_ICD=ON"
-    "-DHIP_ENABLE_ROCPROFILER_REGISTER=OFF" # circular dep - may need -minimal and -full builds?
     "-DAMD_ICD_LIBRARY_DIR=${khronos-ocl-icd-loader}"
 
     # Temporarily set variables to work around upstream CMakeLists issue
