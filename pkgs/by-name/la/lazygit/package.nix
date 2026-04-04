@@ -46,6 +46,7 @@ buildGoModule (finalAttrs: {
       khaneliman
       starsep
       sigmasquadron
+      kaynetik
     ];
     mainProgram = "lazygit";
   };
