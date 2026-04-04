@@ -10,7 +10,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boomerang";
   version = "0.5.2";
   # NOTE: When bumping version beyond 0.5.2, you likely need to remove
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BoomerangDecompiler";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0xncdp0z8ry4lkzmvbj5d7hlzikivghpwicgywlv47spgh8ny0ix";
+    repo = "boomerang";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PQJvEXxXH7Ip949FfuHbccZP4WlFrl3/pMRn9MFtzHY=";
   };
 
   # Boomerang usually compiles with -Werror but has not been updated for newer
@@ -35,15 +35,17 @@ stdenv.mkDerivation rec {
     flex
     qt5.wrapQtAppsHook
   ];
+
   buildInputs = [
     qt5.qtbase
     capstone
   ];
+
   patches = [
     (fetchpatch {
       name = "include-missing-cstdint.patch";
       url = "https://github.com/BoomerangDecompiler/boomerang/commit/3342b0eac6b7617d9913226c06c1470820593e74.patch";
-      sha256 = "sha256-941IydcV3mqj7AWvXTM6GePW5VgawEcL0wrBCXqeWvc=";
+      hash = "sha256-941IydcV3mqj7AWvXTM6GePW5VgawEcL0wrBCXqeWvc=";
     })
   ];
 
@@ -53,4 +55,4 @@ stdenv.mkDerivation rec {
     description = "General, open source, retargetable decompiler";
     maintainers = [ ];
   };
-}
+})
