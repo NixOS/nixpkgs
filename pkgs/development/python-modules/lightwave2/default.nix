@@ -3,19 +3,22 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lightwave2";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7NFzfUDIDa36VfOsqcaAx8AbWHftfwTyYr0hu6VyAtI=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
@@ -28,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
