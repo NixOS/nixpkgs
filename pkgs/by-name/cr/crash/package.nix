@@ -27,6 +27,7 @@
   zlib,
   zstd,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -118,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage crash.8
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.crash = nixosTests.crash;
+  };
 
   meta = {
     description = "Linux kernel crash utility";

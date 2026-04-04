@@ -516,6 +516,7 @@ in
   };
   coturn = runTest ./coturn.nix;
   couchdb = runTest ./couchdb.nix;
+  crash = runTest ./crash.nix;
   credentials-fwcfg = runTest {
     imports = [ ./credentials.nix ];
     _module.args.mechanism = "fw_cfg";
