@@ -106,6 +106,12 @@ stdenv.mkDerivation rec {
         harfbuzz
         vulkan-loader
 
+        # Unity Editor 2017 and 2018 specific dependencies
+        libcap
+        libGLU
+        gtk2
+        gnome2.GConf
+
         # Unity Bug Reporter specific dependencies
         libice
         libsm
