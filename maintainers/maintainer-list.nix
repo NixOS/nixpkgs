@@ -13718,12 +13718,6 @@
     githubId = 32744028;
     keys = [ { fingerprint = "7577 13A4 9609 0C2F 51C4  018C B5C8 89A2 F195 28F6"; } ];
   };
-  KarlJoad = {
-    email = "karl@hallsby.com";
-    github = "KarlJoad";
-    githubId = 34152449;
-    name = "Karl Hallsby";
-  };
   karpfediem = {
     name = "Karpfen";
     github = "karpfediem";
@@ -22539,6 +22533,12 @@
     github = "ratsclub";
     githubId = 25647735;
     name = "Victor Freire";
+  };
+  ravenjoad = {
+    email = "raven@hallsby.com";
+    github = "ravenjoad";
+    githubId = 34152449;
+    name = "Raven Hallsby";
   };
   ravenz46 = {
     email = "goldraven0406@gmail.com";
