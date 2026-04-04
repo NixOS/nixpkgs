@@ -2,6 +2,7 @@
   lib,
   flutter338,
   fetchFromGitHub,
+  fetchurl,
   yq-go,
   pkg-config,
   libsecret,
@@ -10,7 +11,9 @@
   libass,
   keybinder3,
   ffmpeg,
-  sdl3,
+  zlib,
+  libevdev,
+  jdk,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
@@ -20,15 +23,27 @@
   dart,
 }:
 
+let
+  simdutf = fetchurl {
+    url = "https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip";
+    hash = "sha256-n+TW9RVySlXI3oj+5EY+CJChq+ImfNoTxLXSRdWAOeY=";
+  };
+
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
+  '';
+in
 flutter338.buildFlutterApplication rec {
   pname = "plezy";
-  version = "1.17.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-bJ/Qho6hkjbGOFUJj3J4XKk4Eq+3PU1VFGxik5ht16c=";
+    hash = "sha256-9bB9L9f2s0i2xF4JIe4vlEpt/bmF1gf3gxcoHdCrYqc=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -48,14 +63,20 @@ flutter338.buildFlutterApplication rec {
     libass
     keybinder3
     ffmpeg
-    sdl3
+    zlib
+    libevdev
+    jdk
   ];
 
+  env = {
+    ZLIB_ROOT = zlib-root;
+    JAVA_HOME = "${jdk}/lib/openjdk";
+  };
+
   postPatch = ''
-    # Avoid FetchContent download of SDL3 during build.
     substituteInPlace linux/CMakeLists.txt \
-      --replace-fail "set(BUNDLE_SDL3 ON CACHE BOOL \"\" FORCE)" \
-                     "set(BUNDLE_SDL3 OFF CACHE BOOL \"\" FORCE)"
+      --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
+                     "URL file://${simdutf}"
   '';
 
   desktopItems = [
