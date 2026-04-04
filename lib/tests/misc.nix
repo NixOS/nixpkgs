@@ -2949,7 +2949,7 @@ runTests {
 
   testRenderOptionValueMultilineStringWithQuotes = {
     # `''` would produce `'''` in `''...''` form
-    expr = lib.options.renderOptionValue ("line with '' quotes\nmore\n");
+    expr = lib.options.renderOptionValue "line with '' quotes\nmore\n";
     expected = {
       _type = "literalMD";
       text = "```nix\nline with '' quotes\nmore\n```";
