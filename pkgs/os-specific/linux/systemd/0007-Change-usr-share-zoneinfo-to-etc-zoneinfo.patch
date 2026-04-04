@@ -5,12 +5,12 @@ Subject: [PATCH] Change /usr/share/zoneinfo to /etc/zoneinfo
 
 NixOS uses this path.
 ---
- man/localtime.xml         | 4 ++--
- src/basic/time-util.c     | 8 ++++----
- src/firstboot/firstboot.c | 9 +++------
- src/nspawn/nspawn.c       | 4 ++--
- src/timedate/timedated.c  | 8 ++++----
- 5 files changed, 15 insertions(+), 18 deletions(-)
+ man/localtime.xml         |  4 ++--
+ src/basic/time-util.c     |  8 ++++----
+ src/firstboot/firstboot.c |  9 +++------
+ src/nspawn/nspawn.c       |  4 ++--
+ src/timedate/timedated.c  | 15 +++++++++------
+ 5 files changed, 20 insertions(+), 20 deletions(-)
 
 diff --git a/man/localtime.xml b/man/localtime.xml
 index 3a13e04a27..4fd58068a1 100644
@@ -35,7 +35,7 @@ index 3a13e04a27..4fd58068a1 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index 5dd00af952..e682337ef0 100644
+index 5dd00af952..b97a41f6ac 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
 @@ -1443,7 +1443,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
@@ -70,7 +70,7 @@ index 5dd00af952..e682337ef0 100644
                  return r; /* Return EINVAL if not a symlink */
  
 -        const char *e = PATH_STARTSWITH_SET(t, "/usr/share/zoneinfo/", "../usr/share/zoneinfo/");
-+        const char *e = PATH_STARTSWITH_SET(t, "/etc/zoneinfo/", "../etc/zoneinfo/", "zoneinfo/");
++        const char *e = PATH_STARTSWITH_SET(t, "/etc/zoneinfo/", "../etc/zoneinfo/");
          if (!e)
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
@@ -103,7 +103,7 @@ index ae1899593c..20d3071114 100644
                  return log_error_errno(r, "Failed to create /etc/localtime symlink: %m");
  
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index a0052c1c88..39f2b1f1e5 100644
+index a0052c1c88..cd4a48c9ef 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -1856,8 +1856,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
@@ -112,13 +112,13 @@ index a0052c1c88..39f2b1f1e5 100644
                          path,
 -                        "../usr/share/zoneinfo/",
 -                        "/usr/share/zoneinfo/");
-+                        "../etc/zoneinfo/", "zoneinfo/",
++                        "../etc/zoneinfo/",
 +                        "/etc/zoneinfo/");
  }
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 1455830cba..532fe3684b 100644
+index 1455830cba..6849ada033 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -268,7 +268,7 @@ static int context_read_data(Context *c) {
@@ -139,7 +139,7 @@ index 1455830cba..532fe3684b 100644
  
                          if (unlink(etc_localtime()) < 0 && errno != ENOENT)
                                  return -errno;
-@@ -300,9 +300,9 @@ static int context_write_data_timezone(Context *c) {
+@@ -300,17 +300,20 @@ static int context_write_data_timezone(Context *c) {
                          return 0;
                  }
  
@@ -151,3 +151,16 @@ index 1455830cba..532fe3684b 100644
                  if (!p)
                          return -ENOMEM;
  
+                 source = p;
+         }
+ 
+-        return symlinkat_atomic_full(source, AT_FDCWD, etc_localtime(),
+-                                     !secure_getenv("SYSTEMD_ETC_LOCALTIME"));
++        /* With zoneinfo being at /etc/zoneinfo instead of /usr/share/zoneinfo on NixOS, and etc_localtime() left untouched
++         * at /etc/localtime, a relative symlink would look like zoneinfo/UTC instead of ../usr/share/zoneinfo/UTC. This is
++         * an issue because not just systemd itself (src/basic/time-util.c @@ get_timezone), but also others like icu::TimeZone
++         * reject such symlinks. Forcing the symlink to be absolute (/etc/zoneinfo/UTC) takes care of at least both of them. */
++        return symlinkat_atomic_full(source, AT_FDCWD, etc_localtime(), /* flags */ 0);
+ }
+ 
+ static const char* etc_adjtime(void) {
