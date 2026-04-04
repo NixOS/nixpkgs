@@ -11,7 +11,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/QIDITECH/QIDIStudio/releases/download/v${version}/QIDIStudio_v0${version}_Ubuntu24.AppImage";
-    hash = "sha256-ikLqTei2smj++AbzNOOwW5PGy2zxmdAvXUQJ1YQ4zMU=";
+    hash = "sha256-bjQsLWuBcA9rWwX8UICgh0SKJ3zQe1oZWcqf7buoe6E=";
   };
 
   appimageContents = appimageTools.extract {

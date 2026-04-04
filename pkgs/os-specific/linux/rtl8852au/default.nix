@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     # FIX: error: invalid initializer
-    broken = (kernel.kernelOlder "6" && kernel.isHardened) || kernel.kernelAtLeast "6.17";
+    broken = kernel.kernelAtLeast "6.17";
     maintainers = with lib.maintainers; [ lonyelon ];
   };
 })

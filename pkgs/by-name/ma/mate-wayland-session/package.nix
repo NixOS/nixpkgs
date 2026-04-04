@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mate-wayland-session";
-  version = "1.28.4";
+  version = "1.28.5";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-wayland-session";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jcYkiJOo1k0bMP/LkBW+QIrSyoj6qi8zZMTxqmuNQd0=";
+    hash = "sha256-YWuBAzsLrvnwGgXbcDzIZtQIscIl37Y3wIRCOKidtYo=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace session/mate-wayland-components.sh \
       --replace-fail "polkit-mate-authentication-agent-1" "${mate-polkit}/libexec/polkit-mate-authentication-agent-1" \
       --replace-fail "mate-notification-daemon" "${mate-notification-daemon}/libexec/mate-notification-daemon" \
-      --replace-fail "mate-settings-daemon" "${mate-settings-daemon}/libexec/mate-settings-daemon" \
-      --replace-fail "cat /usr/bin/blueman-applet" "command -v blueman-applet" \
-      --replace-fail "cat /usr/bin/gnome-keyring-daemon" "command -v gnome-keyring-daemon"
+      --replace-fail "mate-settings-daemon" "${mate-settings-daemon}/libexec/mate-settings-daemon"
 
     substituteInPlace session/mate-wayland.sh \
       --replace-fail "/usr/share/doc/wayfire/examples/wayfire.ini" "${wayfire.src}/wayfire.ini"
@@ -43,7 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "MATE" ];
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      odd-unstable = true;
+    };
   };
 
   meta = {

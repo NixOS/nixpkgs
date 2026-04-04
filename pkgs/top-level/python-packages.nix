@@ -1110,8 +1110,6 @@ self: super: with self; {
 
   async-cache = callPackage ../development/python-modules/async-cache { };
 
-  async-dns = callPackage ../development/python-modules/async-dns { };
-
   async-generator = callPackage ../development/python-modules/async-generator { };
 
   async-interrupt = callPackage ../development/python-modules/async-interrupt { };
@@ -2195,8 +2193,6 @@ self: super: with self; {
   bnunicodenormalizer = callPackage ../development/python-modules/bnunicodenormalizer { };
 
   boa-api = callPackage ../development/python-modules/boa-api { };
-
-  boiboite-opener-framework = callPackage ../development/python-modules/boiboite-opener-framework { };
 
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
@@ -5597,8 +5593,6 @@ self: super: with self; {
 
   flake8-docstrings = callPackage ../development/python-modules/flake8-docstrings { };
 
-  flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
-
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
 
   flake8-length = callPackage ../development/python-modules/flake8-length { };
@@ -7091,8 +7085,6 @@ self: super: with self; {
   hole = callPackage ../development/python-modules/hole { };
 
   holidays = callPackage ../development/python-modules/holidays { };
-
-  hologram = callPackage ../development/python-modules/hologram { };
 
   holoviews = callPackage ../development/python-modules/holoviews { };
 

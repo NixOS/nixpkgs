@@ -146,6 +146,5 @@ stdenv.mkDerivation {
       andersk
       spacefrogg
     ];
-    broken = kernel.isHardened;
   };
 }
