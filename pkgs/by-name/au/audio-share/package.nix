@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp bin/as-cmd $out/bin/as-cmd
-    chmod +x $out/bin/as-cmd
+    cp bin/as-cmd $out/bin/audio-share
+    chmod +x $out/bin/audio-share
   '';
 
   meta = with lib; {
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [wetrustinprize];
     platforms = ["x86_64-linux"];
-    mainProgram = "as-cmd";
+    mainProgram = "audio-share";
   };
 }

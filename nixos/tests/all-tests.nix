@@ -235,6 +235,7 @@ in
   attr = pkgs.callPackage ./attr.nix { };
   atuin = runTest ./atuin.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
+  audio-share = runTest ./audio-share.nix;
   audit = runTest ./audit.nix;
   audit-testsuite = runTest ./audit-testsuite.nix;
   auth-mysql = runTest ./auth-mysql.nix;
