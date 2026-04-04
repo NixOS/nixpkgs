@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "gitlike-commands";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "gitlike-commands";
     tag = "v${version}";
-    hash = "sha256-Z0l8nCKov1iMJvI3YTHvg0ey+oPju3rgaKtmk6OX44g=";
+    hash = "sha256-7z6JJgTbELWor8GodtWRg51/oeakLcb9rAdT6K0/JQs=";
   };
 
   nativeBuildInputs = [ poetry-core ];
