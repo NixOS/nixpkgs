@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtquickcontrols,
+  libsForQt5,
   makeDesktopItem,
 }:
 
@@ -25,13 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtquickcontrols
+    libsForQt5.qtbase
+    libsForQt5.qtquickcontrols
   ];
 
   desktopItem = makeDesktopItem {
@@ -80,6 +77,6 @@ stdenv.mkDerivation rec {
     mainProgram = "tensor";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ peterhoeg ];
-    inherit (qtbase.meta) platforms;
+    platforms = libsForQt5.qtbase.meta.platforms;
   };
 }
