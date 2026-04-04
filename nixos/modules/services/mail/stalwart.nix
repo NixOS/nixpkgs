@@ -11,6 +11,7 @@ let
   useLegacyStorage = lib.versionOlder cfg.stateVersion "24.11";
   pre2605 = lib.versionOlder cfg.stateVersion "26.05";
   stalwartIdentifier = if pre2605 then "stalwart-mail" else "stalwart";
+  stalwartIdentifierText = ''if lib.versionOlder config.services.stalwart.stateVersion "26.05" then "stalwart-mail" else "stalwart"'';
 
   parsePorts =
     listeners:
@@ -65,6 +66,7 @@ in
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/${stalwartIdentifier}";
+      defaultText = lib.literalExpression "/var/lib/\${${stalwartIdentifierText}}";
       description = ''
         Data directory for stalwart
       '';
@@ -73,6 +75,7 @@ in
     user = lib.mkOption {
       type = lib.types.str;
       default = stalwartIdentifier;
+      defaultText = lib.literalExpression stalwartIdentifierText;
       description = ''
         User ownership of service
       '';
@@ -81,6 +84,7 @@ in
     group = lib.mkOption {
       type = lib.types.str;
       default = stalwartIdentifier;
+      defaultText = lib.literalExpression stalwartIdentifierText;
       description = ''
         Group ownership of service
       '';
