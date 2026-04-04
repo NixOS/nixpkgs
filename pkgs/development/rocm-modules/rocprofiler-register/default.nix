@@ -9,9 +9,7 @@
   rocmUpdateScript,
   cmake,
   clang,
-  clr,
   python3Packages,
-  gpuTargets ? clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pandas
   ];
   cmakeFlags = [
-    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     "-DBUILD_TEST=OFF"
     "-DROCPROFILER_BUILD_TESTS=0"
     "-DROCPROFILER_BUILD_SAMPLES=0"
