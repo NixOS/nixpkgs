@@ -43,7 +43,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/containers/podman-compose";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.sikmir ];
+    maintainers = with lib.maintainers; [
+      sikmir
+      kaynetik
+    ];
     teams = [ lib.teams.podman ];
     mainProgram = "podman-compose";
   };
