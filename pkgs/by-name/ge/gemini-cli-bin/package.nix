@@ -76,19 +76,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ++ lib.optionals (with stdenvNoCC.hostPlatform; isDarwin && isx86_64) [
     sysctl
   ];
-  # versionCheckHook cannot be used because the reported version might be incorrect (e.g., 0.6.1 returns 0.6.0).
+
+  # versionCheckHook cannot be used because it assumes the executable is hermetic,
+  # but we need `nativeInstallCheckInputs`
   installCheckPhase = ''
     runHook preInstallCheck
 
-    "$out/bin/gemini" -v
+    "$out/bin/gemini" -v | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script {
-    # Ignore `preview` and `nightly` tags
-    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
