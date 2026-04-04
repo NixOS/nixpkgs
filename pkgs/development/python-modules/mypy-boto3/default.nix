@@ -610,8 +610,8 @@ in
       "sha256-rb8qotqFW+ZcesRS0TUl+NMsrOS7CTQosZ633jSE38k=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.42.45"
-      "sha256-q8toJ7n/MSEt+w/n21rBEXHV7JAMJEno32RBmznPcKY=";
+    buildMypyBoto3Package "imagebuilder" "1.42.83"
+      "sha256-SKqhvfHPmhOOYLnr7LkTClB2lB/3iQHqcefbsVsvk60=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.42.3"
