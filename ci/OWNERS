@@ -294,9 +294,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/databases/mysql.nix     @6543
 /nixos/modules/services/backup/mysql-backup.nix @6543
 
-# Hardened profile & related modules
-/pkgs/os-specific/linux/kernel/hardened/        @fabianhjr
-
 # Home Automation
 /nixos/modules/services/home-automation/home-assistant.nix @mweinelt
 /nixos/modules/services/home-automation/zigbee2mqtt.nix @mweinelt
