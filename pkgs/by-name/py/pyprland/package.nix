@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyprland";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
     tag = finalAttrs.version;
-    hash = "sha256-h7eoNn8ygdtg5rp9S2PSgCa9HSTgDZOjFvGl6KRbAtY=";
+    hash = "sha256-a4DT/lb9ZQo/4Rqb7tteuJ6ngdM7lav8BABvdhevri8=";
   };
 
   build-system = [ python3Packages.hatchling ];

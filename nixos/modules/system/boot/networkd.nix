@@ -821,6 +821,8 @@ let
           ])
           (assertInt "FirewallMark")
           (assertRange "FirewallMark" 1 4294967295)
+          (assertInt "RouteMetric")
+          (assertRange "RouteMetric" 0 4294967295)
         ];
 
         # NOTE Check whether the key starts with an @, in which case it is
@@ -842,6 +844,8 @@ let
           ])
           (assertInt "PersistentKeepalive")
           (assertRange "PersistentKeepalive" 0 65535)
+          (assertInt "RouteMetric")
+          (assertRange "RouteMetric" 0 4294967295)
         ];
 
         sectionBond = checkUnitConfig "Bond" [
@@ -1303,6 +1307,7 @@ let
           0
         ])
         (assertInt "RouteMetric")
+        (assertRange "RouteMetric" 0 4294967295)
         (assertValueOneOf "HomeAddress" boolValues)
         (assertValueOneOf "DuplicateAddressDetection" [
           "ipv4"
@@ -1454,6 +1459,7 @@ let
         (assertValueOneOf "FastOpenNoCookie" boolValues)
         (assertByteFormat "MTUBytes")
         (assertByteFormat "TCPAdvertisedMaximumSegmentSize")
+        (assertInt "TCPRetransmissionTimeoutSec")
         (assertRange "NextHop" 1 4294967295)
       ];
 
@@ -1512,6 +1518,19 @@ let
           "NetLabel"
           "NFTSet"
           "BlackList" # removed
+          "UseCaptivePortal"
+          "SendVendorOption"
+          "IPServiceType"
+          "SocketPriority"
+          "BOOTP"
+          "RoutesToNTP"
+          "QuickAck"
+          "InitialCongestionWindow"
+          "InitialAdvertisedReceiveWindow"
+          "UnassignedSubnetPolicy"
+          "ServerPort"
+          "DenyList"
+          "AllowList"
         ])
         (assertRemoved "BlackList" "Use DenyList instead")
         (assertValueOneOf "SendHostname" boolValues)
@@ -1566,6 +1585,26 @@ let
         (assertPort "ServerPort")
         (assertValueOneOf "SendRelease" boolValues)
         (assertValueOneOf "SendDecline" boolValues)
+        (assertValueOneOf "Use6RD" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "IPServiceType" [
+          "none"
+          "CS6"
+          "CS4"
+        ])
+        (assertInt "SocketPriority")
+        (assertValueOneOf "BOOTP" boolValues)
+        (assertValueOneOf "RoutesToNTP" boolValues)
+        (assertValueOneOf "QuickAck" boolValues)
+        (assertValueOneOf "UnassignedSubnetPolicy" [
+          "none"
+          "unreachable"
+          "prohibit"
+          "blackhole"
+          "throw"
+        ])
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
+        (assertPort "ServerPort")
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
@@ -1597,6 +1636,8 @@ let
           "SendRelease"
           "NFTSet"
           "WithoutRA"
+          "UseCaptivePortal"
+          "UnassignedSubnetPolicy"
         ])
         (assertInt "IAID")
         (assertRange "SendOption" 1 65536)
@@ -1624,6 +1665,18 @@ let
           "solicit"
           "information-request"
         ])
+        (assertRange "SendOption" 1 65536)
+        (assertInt "IAID")
+        (assertValueOneOf "UseDelegatedPrefix" boolValues)
+        (assertValueOneOf "SendRelease" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UnassignedSubnetPolicy" [
+          "none"
+          "unreachable"
+          "prohibit"
+          "blackhole"
+          "throw"
+        ])
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -1641,6 +1694,7 @@ let
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
         (assertValueOneOf "ManageTemporaryAddress" boolValues)
+        (assertInt "RouteMetric")
         (assertRange "RouteMetric" 0 4294967295)
         (assertValueOneOf "WithoutRA" [
           "no"
@@ -1678,12 +1732,19 @@ let
           "DHCPv6Client"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
+          "UseRedirect"
+          "UseHopLimit"
+          "UseReachableTime"
+          "UseRetransmissionTime"
+          "QuickAck"
         ])
         (assertValueOneOf "UseRedirect" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
+        (assertInt "RouteMetric")
         (assertRange "RouteMetric" 0 4294967295)
         (assertValueOneOf "QuickAck" boolValues)
         (assertValueOneOf "UseMTU" boolValues)
@@ -1697,6 +1758,7 @@ let
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
         (assertValueOneOf "UseOnLinkPrefix" boolValues)
         (assertValueOneOf "DHCPv6Client" (boolValues ++ [ "always" ]))
+        (assertValueOneOf "QuickAck" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -1763,6 +1825,7 @@ let
             (assertOnlyFields [
               "MACAddress"
               "Address"
+              "Hostname"
             ])
             (assertHasField "MACAddress")
             (assertHasField "Address")
@@ -1774,6 +1837,7 @@ let
           "Managed"
           "OtherInformation"
           "RouterLifetimeSec"
+          "ReachableTimeSec"
           "RetransmitSec"
           "RouterPreference"
           "HopLimit"

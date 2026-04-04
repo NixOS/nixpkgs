@@ -16,6 +16,7 @@ let
     DEBUG = "0";
     DEBUG_TOOLBAR = "0";
     MEDIA_ROOT = "${stateDir}${lib.optionalString useNewMediaRoot "/media"}";
+    ALLOWED_HOSTS = cfg.address;
   }
   // lib.optionalAttrs (config.time.timeZone != null) {
     TZ = config.time.timeZone;
