@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+export RELEASE=@VERSION@
+export NODE_ENV=production
+
+[[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
+
+# Drizzle will look for configuration in the working directory
+cd "@KARAKEEP_LIB_PATH@"/packages/db
+
+exec "@KARAKEEP_LIB_PATH@"/node_modules/.bin/drizzle-kit migrate

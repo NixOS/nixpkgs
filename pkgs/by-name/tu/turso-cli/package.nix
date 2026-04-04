@@ -1,0 +1,52 @@
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+}:
+buildGoModule (finalAttrs: {
+  pname = "turso-cli";
+  version = "1.0.18";
+
+  src = fetchFromGitHub {
+    owner = "tursodatabase";
+    repo = "turso-cli";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mWX7cJK4TX2JXHYQ4d5WaS/ZwlEkXJaiNM7zx/w+n9c=";
+  };
+
+  vendorHash = "sha256-Cb4/KA9jfI/pNHbJqLWtm9oEXfMHGBS46J9o3lL4/Tk=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [
+    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turso \
+      --bash <($out/bin/turso completion bash) \
+      --fish <($out/bin/turso completion fish) \
+      --zsh <($out/bin/turso completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "CLI for Turso";
+    homepage = "https://turso.tech";
+    mainProgram = "turso";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      zestsystem
+      kashw2
+      fryuni
+    ];
+  };
+})

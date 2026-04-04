@@ -1,0 +1,21 @@
+--- a/ActiveSync/NSData+ActiveSync.m
++++ b/ActiveSync/NSData+ActiveSync.m
+@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #import <NGExtensions/NGBase64Coding.h>
+ #import <NGExtensions/NSObject+Logs.h>
+ 
+-#include <wbxml/wbxml.h>
++#include <libwbxml-1.1/wbxml/wbxml.h>
+ 
+ #define WBXMLDEBUG 0
+ 
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -11,6 +11,7 @@ SUBPROJECTS = \
+ 	UI		\
+ 	Tools		\
+ 	Tests/Unit	\
++	ActiveSync	\
+ 
+ 
+ include $(GNUSTEP_MAKEFILES)/aggregate.make

@@ -1,0 +1,78 @@
+diff --git a/package.json b/package.json
+index 3a001b5..c6ba849 100644
+--- a/package.json
++++ b/package.json
+@@ -14,6 +14,8 @@
+   "repository": "https://github.com/koodo-reader/koodo-reader",
+   "private": false,
+   "resolutions": {
++    "nan": "2.24.0",
++    "node-abi": "3.85.0",
+     "//": "See https://github.com/facebook/create-react-app/issues/11773",
+     "react-error-overlay": "6.0.9"
+   },
+@@ -22,7 +24,7 @@
+     "adm-zip": "^0.5.2",
+     "axios": "^0.19.2",
+     "basic-ftp": "^5.0.5",
+-    "better-sqlite3": "^11.6.0",
++    "better-sqlite3": "^12.4.5",
+     "buffer": "^6.0.3",
+     "chardet": "^2.0.0",
+     "copy-text-to-clipboard": "^2.2.0",
+diff --git a/yarn.lock b/yarn.lock
+index 83cf080..0dda6d2 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -5358,10 +5358,10 @@ bcrypt-pbkdf@^1.0.0, bcrypt-pbkdf@^1.0.2:
+   dependencies:
+     tweetnacl "^0.14.3"
+ 
+-better-sqlite3@^11.6.0:
+-  version "11.6.0"
+-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-11.6.0.tgz#e50736956e6fe1c30dc94f1bc94a9c15d63b7b6b"
+-  integrity sha512-2J6k/eVxcFYY2SsTxsXrj6XylzHWPxveCn4fKPKZFv/Vqn/Cd7lOuX4d7rGQXT5zL+97MkNL3nSbCrIoe3LkgA==
++better-sqlite3@^12.4.5:
++  version "12.5.0"
++  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.5.0.tgz#c570873d9635b5d56baa52f7e72634c2c589f35f"
++  integrity sha512-WwCZ/5Diz7rsF29o27o0Gcc1Du+l7Zsv7SYtVPG0X3G/uUI1LqdxrQI7c9Hs2FWpqXXERjW9hp6g3/tH7DlVKg==
+   dependencies:
+     bindings "^1.5.0"
+     prebuild-install "^7.1.1"
+@@ -10853,10 +10853,10 @@ mz@^2.7.0:
+     object-assign "^4.0.1"
+     thenify-all "^1.0.0"
+ 
+-nan@^2.19.0, nan@^2.20.0:
+-  version "2.22.0"
+-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.22.0.tgz#31bc433fc33213c97bad36404bb68063de604de3"
+-  integrity sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==
++nan@2.24.0, nan@^2.19.0, nan@^2.20.0:
++  version "2.24.0"
++  resolved "https://registry.yarnpkg.com/nan/-/nan-2.24.0.tgz#a8919b36e692aa5b260831910e4f81419fc0a283"
++  integrity sha512-Vpf9qnVW1RaDkoNKFUvfxqAbtI8ncb8OJlqZ9wwpXzWPEsvsB1nvdUi6oYrHIkQ1Y/tMDnr1h4nczS0VB9Xykg==
+ 
+ nanoid@^3.3.6:
+   version "3.3.6"
+@@ -10906,17 +10906,10 @@ no-case@^3.0.4:
+     lower-case "^2.0.2"
+     tslib "^2.0.3"
+ 
+-node-abi@^3.0.0, node-abi@^3.3.0:
+-  version "3.71.0"
+-  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.71.0.tgz#52d84bbcd8575efb71468fbaa1f9a49b2c242038"
+-  integrity sha512-SZ40vRiy/+wRTf21hxkkEjPJZpARzUMVcJoQse2EF8qkUWbbO2z7vd5oA/H6bVH6SZQ5STGcu0KRDS7biNRfxw==
+-  dependencies:
+-    semver "^7.3.5"
+-
+-node-abi@^3.45.0:
+-  version "3.74.0"
+-  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.74.0.tgz#5bfb4424264eaeb91432d2adb9da23c63a301ed0"
+-  integrity sha512-c5XK0MjkGBrQPGYG24GBADZud0NCbznxNx0ZkS+ebUTrmV1qTDxPxSL8zEAPURXSbLRWVexxmP4986BziahL5w==
++node-abi@3.85.0, node-abi@^3.0.0, node-abi@^3.3.0, node-abi@^3.45.0:
++  version "3.85.0"
++  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.85.0.tgz#b115d575e52b2495ef08372b058e13d202875a7d"
++  integrity sha512-zsFhmbkAzwhTft6nd3VxcG0cvJsT70rL+BIGHWVq5fi6MwGrHwzqKaxXE+Hl2GmnGItnDKPPkO5/LQqjVkIdFg==
+   dependencies:
+     semver "^7.3.5"
+ 

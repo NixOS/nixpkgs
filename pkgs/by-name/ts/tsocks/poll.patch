@@ -1,0 +1,26 @@
+From Ingo Hadan <ingo.hadan@sdm.de> Fri, 02 Apr 2010 21:08:50 +0200
+From: Julien Moutinho <julm+tsocks@autogeree.net>
+Date: Fri, 26 Apr 2013 01:57:26 +0200
+Subject: tsocks fails if socksified application uses poll(2) (e.g. subversion-1.5)
+
+---
+diff --git a/tsocks.c b/tsocks.c
+index 9cfdfff..470babd 100644
+--- a/tsocks.c
++++ b/tsocks.c
+@@ -657,10 +657,11 @@ int poll(POLL_SIGNATURE) {
+              * be ready for writing), otherwise we'll just let the select loop
+              * come around again (since we can't flag it for read, we don't know
+              * if there is any data to be read and can't be bothered checking) */
+-            if (conn->selectevents & WRITE) {
+-               setevents |= POLLOUT; 
++            if (conn->selectevents & POLLOUT) {
++               ufds[i].revents |= POLLOUT; 
+                nevents++;
+             }
++            ufds[i].events = conn->selectevents;
+          }
+       }
+    } while (nevents == 0);
+
+

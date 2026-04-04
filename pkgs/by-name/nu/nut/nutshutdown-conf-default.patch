@@ -1,0 +1,10 @@
+diff --git a/scripts/systemd/nutshutdown.in b/scripts/systemd/nutshutdown.in
+index ace2485b3..9dee869bb 100755
+--- a/scripts/systemd/nutshutdown.in
++++ b/scripts/systemd/nutshutdown.in
+@@ -1,4 +1,5 @@
+ #!/bin/sh
++export NUT_CONFPATH="${NUT_CONFPATH-/etc/nut}"
+ 
+ # This script requires both nut-server (drivers)
+ # and nut-client (upsmon) to be present locally
