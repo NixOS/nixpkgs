@@ -2,22 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  olm,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "picoclaw";
-  version = "0.2.1";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "sipeed";
     repo = "picoclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JvcvpaGPPBiABK28rQhe63chYm7MRdfU6uflZosNRKg=";
+    hash = "sha256-Cn3ibZw2HscSAXYKICHTIHMiO9PIFRMphw75bH/s+qI=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-K9LssS1Hff19dv6oa8EaFOUZIRnOtAqC5jgnY5HuWTk=";
+  vendorHash = "sha256-vECQmX9p+CsVZkZ120ShOS4itRrDL+ua7fe2eEh8nV0=";
+
+  buildInputs = [ olm ];
 
   preBuild = ''
     go generate ./...
@@ -26,7 +29,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sipeed/picoclaw/cmd/picoclaw/internal.version=${finalAttrs.version}"
+    "-X github.com/sipeed/picoclaw/pkg/config.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
