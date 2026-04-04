@@ -430,7 +430,7 @@ def install_bootloader() -> None:
             partition formatted as FAT.
         '''))
 
-    if config('secureBoot', 'enable') and not config('secureBoot', 'createAndEnrollKeys') and not os.path.exists("/var/lib/sbctl"):
+    if config('secureBoot', 'enable') and not config('secureBoot', 'autoGenerateKeys') and not os.path.exists("/var/lib/sbctl"):
         print("There are no sbctl secure boot keys present. Please generate some.")
         sys.exit(1)
 
@@ -557,18 +557,21 @@ def install_bootloader() -> None:
 
         if config('secureBoot', 'enable'):
             sbctl = os.path.join(str(config('secureBoot', 'sbctl')), 'bin', 'sbctl')
-            if config('secureBoot', 'createAndEnrollKeys'):
-                print("TEST MODE: creating and enrolling keys")
+            if not os.path.exists("/var/lib/sbctl") and config('secureBoot', 'autoGenerateKeys'):
+                print('auto generating keys')
                 try:
                     subprocess.run([sbctl, 'create-keys'])
                 except:
                     print('error: failed to create keys', file=sys.stderr)
                     sys.exit(1)
-                try:
-                    subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
-                except:
-                    print('error: failed to enroll keys', file=sys.stderr)
-                    sys.exit(1)
+                if config('secureBoot', 'autoEnrollKeys', 'enable'):
+                    try:
+                        command = [sbctl, 'enroll-keys']
+                        command.extend(config('secureBoot', 'autoEnrollKeys', 'extraArgs'))
+                        subprocess.run(command)
+                    except:
+                        print('error: failed to enroll keys', file=sys.stderr)
+                        sys.exit(1)
 
             print('signing limine...')
             try:

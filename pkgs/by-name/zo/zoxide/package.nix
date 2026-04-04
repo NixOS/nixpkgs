@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       SuperSandro2000
       matthiasbeyer
       ryan4yin
+      kaynetik
     ];
     mainProgram = "zoxide";
   };

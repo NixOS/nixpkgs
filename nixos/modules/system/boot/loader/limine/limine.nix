@@ -224,16 +224,22 @@ in
         '';
       };
 
-      createAndEnrollKeys = lib.mkEnableOption null // {
-        internal = true;
-        description = ''
-          Creates secure boot signing keys and enrolls them during bootloader installation.
+      autoGenerateKeys = lib.mkEnableOption null // {
+        description = "Generate keys automatically when none exists during bootloader installation";
+      };
 
-          ::: {.note}
-          This is used for automated nixos tests.
-          NOT INTENDED to be used on a real system.
-          :::
-        '';
+      autoEnrollKeys = {
+        enable = lib.mkEnableOption null // {
+          description = "Enroll automatically generated keys";
+        };
+        extraArgs = lib.mkOption {
+          default = [
+            "--microsoft"
+            "--firmware-builtin"
+          ];
+          type = lib.types.listOf lib.types.str;
+          description = "Extra arguments passed to sbctl";
+        };
       };
 
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
@@ -483,6 +489,16 @@ in
       services.fwupd.uefiCapsuleSettings = {
         DisableShimForSecureBoot = true;
       };
+    })
+    (lib.mkIf (cfg.enable && cfg.secureBoot.enable && cfg.secureBoot.autoEnrollKeys.enable) {
+      assertions = [
+        {
+          assertion = cfg.secureBoot.autoGenerateKeys;
+          message = "autoEnrollKeys doesn't do anything without autoGenerateKeys.";
+        }
+      ];
+
+      boot.loader.limine.secureBoot.autoGenerateKeys = true;
     })
   ];
 }
