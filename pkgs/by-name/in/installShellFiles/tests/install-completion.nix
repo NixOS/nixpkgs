@@ -16,12 +16,14 @@ runCommandLocal "install-shell-files--install-completion"
     echo qux > qux.zsh
     echo quux > quux
     echo quokka > quokka
+    echo corge > corge.ps1
 
     installShellCompletion \
       --bash foo bar \
       --zsh baz qux.zsh \
       --fish quux \
-      --nushell quokka
+      --nushell quokka \
+      --powershell corge.ps1
 
     cmp foo $out/share/bash-completion/completions/foo
     cmp bar $out/share/bash-completion/completions/bar
@@ -29,4 +31,5 @@ runCommandLocal "install-shell-files--install-completion"
     cmp qux.zsh $out/share/zsh/site-functions/_qux
     cmp quux $out/share/fish/vendor_completions.d/quux
     cmp quokka $out/share/nushell/vendor/autoload/quokka
+    cmp corge.ps1 $out/share/powershell/corge.Completion.ps1
   ''
