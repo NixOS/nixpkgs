@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       kranzes
       vtuan10
       adamcstephens
+      kaynetik
     ];
   };
 })

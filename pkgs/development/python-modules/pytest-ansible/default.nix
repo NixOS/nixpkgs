@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-ansible";
-  version = "26.2.0";
+  version = "26.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3pppBAgAfkwJNPRsI6CH4UDMqyZ45+mFNejlQwX5bCg=";
+    hash = "sha256-HC5kipVIHga1nBWK6QQ2wGv9wPz0cVmRyby46JT6+Hg=";
   };
 
   postPatch = ''

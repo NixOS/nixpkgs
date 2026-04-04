@@ -127,8 +127,8 @@ in
       "sha256-Mvf3bBhrRRR+hoAsBPq7p9COJqVxV9LL+GrnikrHX2g=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.42.79"
-      "sha256-EG6G33/7BTIjlEXxSa0ygnT80WytlAMCM/bAI9jz3Jg=";
+    buildMypyBoto3Package "appstream" "1.42.82"
+      "sha256-DNHMac7P5RG1JXnX2/RkTqtPXm0zVi4Zi8hjXGpsAaQ=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.42.6"
@@ -255,8 +255,8 @@ in
       "sha256-S2NgrjralqxjjGo39TwaUSStqspnhI/E2/BLXUGP0Hc=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.42.56"
-      "sha256-Z5GriV29LChx+MDWhq5a2zlBjb1GUVmW4sgKWWZNDc8=";
+    buildMypyBoto3Package "cloudwatch" "1.42.82"
+      "sha256-tdiMpHrllPI131hNYD4kPI6TD/XhbKMElNovOF5BryA=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.42.3"
@@ -335,8 +335,8 @@ in
       "sha256-UNxmIK9UD6AVmT4nyQzunNAKjp2YmV1wQ5oloHOwcXw=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.68"
-      "sha256-jppL6jpw0/Wb+cOW3GQ62h65l+/ZX8c6OFvyJfzVLtA=";
+    buildMypyBoto3Package "connect" "1.42.82"
+      "sha256-PGrhF5ZXOD7Koi5ConyVwPMJuqnmgbla22xZxOO4HGY=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -559,8 +559,8 @@ in
       "sha256-NqNGcL3HfJgx2ScPLKMNNwpVS3bO4Cu7JpYlenSJwJg=";
 
   mypy-boto3-gamelift =
-    buildMypyBoto3Package "gamelift" "1.42.79"
-      "sha256-IYvjnVdbVYFkX7Qu3Sr9iaRFMeq/F7njuPW3EBWldlE=";
+    buildMypyBoto3Package "gamelift" "1.42.82"
+      "sha256-4sWx8fog6KbXwh29KzzsoqYoej7IFYCjcSW0D+dw5+M=";
 
   mypy-boto3-glacier =
     buildMypyBoto3Package "glacier" "1.42.30"
@@ -806,8 +806,8 @@ in
       "sha256-VGQzgnrUynTDjfYpEk+FR+PrljbULl0UpbeqbaPKqSc=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.42.79"
-      "sha256-CPFaU1Cz1OfBiOSh5jfPWIU64cV4k8Mf5cCM1S7ZlXw=";
+    buildMypyBoto3Package "logs" "1.42.82"
+      "sha256-xZxyCo7+tTU69IfNy2p6ECx+fXI9CsnAx8V9neRB818=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.42.3"
@@ -1050,8 +1050,8 @@ in
       "sha256-55tgrwAp2iMnve5aq+EStZ4BROxWZNA3VTZi5UdZu3o=";
 
   mypy-boto3-pricing =
-    buildMypyBoto3Package "pricing" "1.42.3"
-      "sha256-EY1rb0i7iYzr+JmXvDVfPcxCyNWs0DW0YQdlDsVcb04=";
+    buildMypyBoto3Package "pricing" "1.42.82"
+      "sha256-oo2K5E+2+mbJgcq8FjBJdbuuWF3x8IRPrCEZU+Ml0hE=";
 
   mypy-boto3-privatenetworks =
     buildMypyBoto3Package "privatenetworks" "1.38.0"

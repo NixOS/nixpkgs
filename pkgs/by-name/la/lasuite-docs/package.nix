@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "4.8.1";
+  version = "4.8.4";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-R8DO7hsWt8+aKnHFEoZ06f1f+r8dNmNoPZRVBfr9VCY=";
+    hash = "sha256-k90JxFxXL3vEGBMkgbQABUCK99utJ88E/v9Zcj/2oBo=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-ag9+g48dWl5Ww/78qqgtcKwiyPVlpNiJ7w7+DPaar2U=";
+      hash = "sha256-Fd9HJ7c7fh8YYZrfzRK7BnlnHAXeyeQ9UBabnRlA+w0=";
     };
 
     nativeBuildInputs = [
@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-storages
       django-timezone-field
       django-treebeard
+      django-waffle
       djangorestframework
       drf-spectacular
       drf-spectacular-sidecar
@@ -145,6 +146,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
       mkdir -p $out/${python3.sitePackages}/core/templates
       ln -sv ${mail-templates}/ $out/${python3.sitePackages}/core/templates/mail
+
+      cp -r impress/configuration $out/${python3.sitePackages}/impress/configuration
     '';
 
   passthru.tests = {
@@ -156,7 +159,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/suitenumerique/docs";
     changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     mainProgram = "docs";
     platforms = lib.platforms.all;
   };

@@ -78,6 +78,7 @@ buildGoModule (finalAttrs: {
       qjoly
       devusb
       ryan4yin
+      kaynetik
     ];
   };
 })

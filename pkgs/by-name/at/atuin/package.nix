@@ -70,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       sciencentistguy
       _0x4A6F
       rvdp
+      kaynetik
     ];
     mainProgram = "atuin";
   };

@@ -75,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       cafkafk
       _9glenda
       sigmasquadron
+      kaynetik
     ];
     platforms = with lib.platforms; unix ++ windows;
   };

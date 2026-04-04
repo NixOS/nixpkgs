@@ -14,6 +14,7 @@ in
   meta.maintainers = with lib.maintainers; [
     philandstuff
     rawkode
+    kaynetik
   ];
 
   options = {
