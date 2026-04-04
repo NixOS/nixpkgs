@@ -156,6 +156,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
     mkdir ./src;
     touch ./src/__init__.py;
     mv run.py tkinter_fix.py modules ./src/;
+    mv ./src/{run.py,${finalAttrs.pname}}
 
     tee setup.py <<'EOF'
     from setuptools import setup
@@ -169,7 +170,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
         author='${finalAttrs.src.owner}',
         description='${finalAttrs.meta.description}',
         install_requires=install_requires,
-        scripts=[ 'src/run.py' ],
+        scripts=[ 'src/${finalAttrs.pname}' ],
     )
     EOF
   '';
