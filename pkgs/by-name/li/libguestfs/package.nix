@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   pkg-config,
   autoreconfHook,
   makeWrapper,
@@ -182,6 +183,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/libguestfs/libguestfs";
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = {
     description = "Tools for accessing and modifying virtual machine disk images";
