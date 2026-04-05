@@ -11,6 +11,7 @@
   jdk,
   ctestCheckHook,
   mpiCheckPhaseHook,
+  testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   cppSupport ? !(mpiSupport || threadsafe),
@@ -20,7 +21,6 @@
   threadsafe ? false,
   allowUnsupported ? false,
   apiVersion ? "v200",
-  testers,
 }:
 
 assert (cppSupport && mpiSupport) -> allowUnsupported;
