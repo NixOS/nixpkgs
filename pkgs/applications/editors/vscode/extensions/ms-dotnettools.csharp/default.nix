@@ -155,7 +155,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Official C# support for Visual Studio Code";
     homepage = "https://github.com/dotnet/vscode-csharp";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
