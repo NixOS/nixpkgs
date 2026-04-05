@@ -113,4 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "wings";
   };
+
+  __structuredAttrs = true;
 })
