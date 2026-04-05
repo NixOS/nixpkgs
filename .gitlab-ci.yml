@@ -19,4 +19,3 @@ build_mac:
     - bash xzar-install.sh
     - bash xzar.sh
   stage: build
-
