@@ -19,7 +19,4 @@ build_mac:
     - bash xzar-install.sh
     - bash xzar.sh
   stage: build
-  artifacts:
-    paths:
-      - nixpkgs.tar.xz
 
