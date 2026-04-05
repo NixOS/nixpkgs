@@ -46,7 +46,7 @@ let
     sd-card = {
       imports =
         let
-          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.qemuArch}.nix";
+          module = ../. + "/installer/sd-card/sd-image-${pkgs.stdenv.targetPlatform.qemuArch}.nix";
         in
         if builtins.pathExists module then
           [ module ]
