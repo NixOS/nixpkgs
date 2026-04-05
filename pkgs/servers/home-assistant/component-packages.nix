@@ -2527,11 +2527,12 @@
         fnv-hash-fast
         ha-ffmpeg
         hap-python
+        homekit-audio-proxy
         ifaddr
         pyqrcode
         pyturbojpeg
         zeroconf
-      ]; # missing inputs: homekit-audio-proxy
+      ];
     "homekit_controller" =
       ps: with ps; [
         aioesphomeapi
@@ -7733,6 +7734,7 @@
     "homeassistant_sky_connect"
     "homeassistant_yellow"
     "homee"
+    "homekit"
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
