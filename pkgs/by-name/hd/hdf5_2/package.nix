@@ -22,7 +22,7 @@
 }:
 
 assert (cppSupport && mpiSupport) -> allowUnsupported;
-assert (threadsafe && (cppSupport || mpiSupport || fortranSupport)) -> allowUnsupported;
+assert (threadsafe && (cppSupport || fortranSupport || mpiSupport)) -> allowUnsupported;
 
 # See https://github.com/HDFGroup/hdf5/blob/develop/CMakeLists.txt
 # for valid versions
