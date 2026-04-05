@@ -85,8 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional fortranSupport gfortran;
 
   buildInputs =
-    optional fortranSupport gfortran
-    ++ optionals szipSupport [
+    optionals szipSupport [
       szip
       libaec
     ]
