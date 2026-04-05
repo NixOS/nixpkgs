@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-command-source";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-command-source";
     rev = version;
-    sha256 = "sha256-yrzY4pHSupkkdRlx725oSVtQTH1Ci9zFolHN3i2Vm28=";
+    sha256 = "sha256-z5TKVA0WI/pqfca1VCXfDvYHxDG2EoD6PFCV7pSXe7c=";
   };
 
   nativeBuildInputs = [ cmake ];
