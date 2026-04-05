@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   nix-update-script,
   pkg-config,
@@ -14,19 +13,20 @@
   openssl,
   unixodbc,
   libmysqlclient,
+  libpng,
   writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.14.2";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    hash = "sha256-koREkrfAHWfpqITN5afiXwZg37Wve2Ftx8sr8t2bSV4=";
-    rev = "poco-${version}-release";
+    hash = "sha256-JyjEs5aecKSdrNEaSs4Dzs3mAu2rhhBNAG93VLHdU3E=";
+    tag = "poco-${version}-release";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     unixodbc
     libmysqlclient
+    libpng
   ];
 
   propagatedBuildInputs = [
@@ -79,23 +80,13 @@ stdenv.mkDerivation rec {
       (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
     ];
 
-  patches = [
-    # Remove on next release
-    (fetchpatch {
-      name = "disable-included-pcre-if-pcre-is-linked-staticly";
-      # this happens when building pkgsStatic.poco
-      url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
-      hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
-    })
-    # https://github.com/pocoproject/poco/issues/4977
-    ./disable-flaky-tests.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./disable-broken-tests-darwin.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    ./disable-broken-tests-linux.patch
-  ];
+  patches =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      ./disable-broken-tests-darwin.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      ./disable-broken-tests-linux.patch
+    ];
 
   doCheck = true;
   nativeCheckInputs = [
