@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "boulder";
-  version = "0.20251118.0";
+  version = "0.20260331.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
@@ -23,7 +23,7 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-JVkIu8Fh5F8WQXa45I0hnSedAaIQIOFidtWVpVHbAWA=";
+    hash = "sha256-2kYZp/cU9OuXmy8EDoX7htqlM7NpAl45Nf2S5MTVn6Y=";
   };
 
   vendorHash = null;
@@ -35,6 +35,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/boulder" ];
 
+  excludedPackages = [ "test/integration" ];
+
   ldflags = [
     "-s"
     "-w"
@@ -45,6 +47,8 @@ buildGoModule rec {
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${version} +$(cat COMMIT)\""
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [ minica ];
 
@@ -109,6 +113,7 @@ buildGoModule rec {
     "TestCountPendingAuthorizations2"
     "TestCountRegistrationsByIP"
     "TestCountRegistrationsByIPRange"
+    "TestCreateAndFetchRegistrations"
     "TestDbSettings"
     "TestDeactivateAccount"
     "TestDeactivateAuthorization"
