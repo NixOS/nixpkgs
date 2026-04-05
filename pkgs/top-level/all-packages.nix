@@ -1560,8 +1560,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
-
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   androidenv = callPackage ../development/mobile/androidenv { };
@@ -12379,7 +12377,33 @@ with pkgs;
 
   hy = with python3Packages; toPythonApplication hy;
 
-  ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { };
+  ghc-standalone-archive =
+    {
+      haskellPackages,
+      src,
+      deps ? p: [ ],
+      name,
+    }:
+    let
+      inherit (haskellPackages) ghc ghcWithPackages;
+      with-env = ghcWithPackages deps;
+      ghcName = "${ghc.targetPrefix}ghc";
+    in
+    runCommand name
+      {
+        buildInputs = [
+          with-env
+          cctools
+        ];
+      }
+      ''
+        mkdir -p $out/lib
+        mkdir -p $out/include
+        ${ghcName} ${src} -staticlib -outputdir . -o $out/lib/${name}.a -stubdir $out/include
+        for file in ${ghc}/lib/${ghcName}-${ghc.version}/include/*; do
+          ln -sv $file $out/include
+        done
+      '';
 
   vdr = callPackage ../applications/video/vdr { };
   vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
