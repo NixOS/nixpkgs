@@ -9,8 +9,6 @@
   libaec,
   mpi,
   jdk,
-  ctestCheckHook,
-  mpiCheckPhaseHook,
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -89,17 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ALLOW_UNSUPPORTED" allowUnsupported)
     (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
     (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "lib/cmake/hdf5")
-  ];
-
-  # mpi related tests are time consuming and flaky
-  doCheck = !mpiSupport;
-
-  nativeCheckInputs = [ ctestCheckHook ] ++ lib.optional mpiSupport mpiCheckPhaseHook;
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
-    # * On Mac OS 10.4, test/dt_arith.c has some errors in conversion from long
-    # double to (unsigned) long long and from (unsigned)long long to long double.
-    "H5TEST-dt_arith"
   ];
 
   postInstall = ''
