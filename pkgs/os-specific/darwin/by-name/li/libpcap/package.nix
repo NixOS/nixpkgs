@@ -1,8 +1,8 @@
 {
   lib,
-  apple-sdk_15,
   bison,
   bluez,
+  fetchFromGitHub,
   flex,
   mkAppleDerivation,
   stdenv,
@@ -14,7 +14,13 @@
 }:
 
 let
-  xnu = apple-sdk_15.sourceRelease "xnu";
+  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
+  xnu = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "xnu";
+    rev = "xnu-11417.121.6";
+    hash = "sha256-o4tCuCAIgAYg/Li3wTs12mVWr5C/4vbwu1zi+kJ9d6w=";
+  };
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "libpcap-deps-private-headers";
