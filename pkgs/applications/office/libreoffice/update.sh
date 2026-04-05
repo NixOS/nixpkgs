@@ -83,6 +83,7 @@ case $variant in
     rev=$(grep --perl-regexp --only-matching --max-count=1 \
         '\Krefs/tags/cp-\d+\.\d+\.\d+-\d+$' <<< "$all_tags")
     full_version=${rev#refs/tags/cp-}
+    tag=${rev#refs/tags/}
     echoerr full version is $full_version
     echo \"$full_version\" > version.nix
 
@@ -98,7 +99,7 @@ case $variant in
         echo "{ fetchgit, ... }:" > $t.nix
         echo "fetchgit {" >> $t.nix
         echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
-        echo "  rev = \"$rev\";" >> $t.nix
+        echo "  tag = \"$tag\";" >> $t.nix
         echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
         echo "}" >> "$t.nix"
     done

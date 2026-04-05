@@ -25,13 +25,13 @@
 }:
 
 let
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-6QJCv1geDff4noSaurVsO0Gz0g5+cdobG9DpKBcrMkA=";
+    hash = "sha256-1g38ry6+iWiRBLVbgLNaotc/jlsG5LLVYvzJbmEjIdA=";
   };
 
   metaCommon = {

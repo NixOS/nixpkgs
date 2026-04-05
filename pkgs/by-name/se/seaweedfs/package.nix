@@ -1,76 +1,126 @@
 {
-  lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  libredirect,
   iana-etc,
-  testers,
-  seaweedfs,
+  installShellFiles,
+  lib,
+  libredirect,
+  nix-update-script,
+  stdenv,
+  versionCheckHook,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.17";
+  version = "4.18";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
     tag = finalAttrs.version;
-    hash = "sha256-xy3gXw3cbFO3OkzgEmIecvxPJT15tn58FI4ppibckzE=";
+    leaveDotGit = true;
+    postFetch = ''
+      pushd "$out"
+      git rev-parse --short HEAD 2>/dev/null >$out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+      popd
+    '';
+    hash = "sha256-X0/BCdLpM7Cs2Q7goW9JHw8tA+ztlm+qxusn+OIQ/qg=";
   };
 
-  vendorHash = "sha256-XbfKYftKfbJDkbp9DwVAs56w5lMvqdlW5cwhhivniBM=";
+  postPatch = ''
+    # Remove unmaintained code that's not used and generates various issues.
+    rm -rf unmaintained
+  '';
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
+  vendorHash = "sha256-W5fRmE89IBP5h11+Op3mkCQw9WkUgAtXduEHBdHiQVI=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libredirect.hook
+  ];
 
   subPackages = [ "weed" ];
-
-  ldflags = [
-    "-s"
-    "-X github.com/seaweedfs/seaweedfs/weed/util.COMMIT=N/A"
-  ];
 
   tags = [
     "elastic"
     "gocdk"
+    "rclone"
     "sqlite"
-    "ydb"
+    "tarantool"
     "tikv"
+    "ydb"
   ];
 
+  ldflags = [
+    "-s"
+    "-extldflags=-static"
+  ];
+
+  env = {
+    CGO_ENABLED = 0;
+    GODEBUG = "http2client=0";
+  };
+
   preBuild = ''
-    export GODEBUG=http2client=0
+    ldflags+=" -X \"github.com/seaweedfs/seaweedfs/weed/util/version.COMMIT=$(<COMMIT)\""
   '';
 
   preCheck = ''
     # Test all targets.
     unset subPackages
-    # Remove unmaintained tests and those that require additional services.
-    rm -rf unmaintained test/s3 test/fuse_integration test/kafka test/sftp test/tus test/volume_server
-    # TestECEncodingVolumeLocationTimingBug, TestECEncodingMasterTimingRaceCondition: weed binary not found
-    export PATH=$PATH:$NIX_BUILD_TOP/go/bin
+
+    # Remove tests that require specialized environment or additional setup
+    # that's not possible to achieve inside a sandbox.
+    for i in test/{fuse_integration,kafka,s3,sftp,volume_server}; do
+      find "$i" -name '*_test.go' -delete
+    done
+
+    # Required for reusing build artifacts in tests.
+    export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+  ''
+  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
+    # Depends on CGO.
+    rm -rf weed/mq/offset/{benchmark,end_to_end,sql_storage}_test.go
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
   '';
 
-  __darwinAllowLocalNetworking = true;
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion \
+        --cmd weed \
+        --$shell <($out/bin/weed autocomplete $shell)
+    done
+  '';
 
-  passthru.tests.version = testers.testVersion {
-    package = seaweedfs;
-    command = "weed version";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Simple and highly scalable distributed file system";
-    homepage = "https://github.com/chrislusf/seaweedfs";
+    longDescription = ''
+      SeaweedFS is a versatile and efficient storage system designed to meet the
+      needs of modern sysadmins managing a mix of blob, object, file, and data
+      warehouse storage requirements. Its architecture guarantees fast access
+      times, with constant-time (O(1)) disk seeks, regardless of the size of the
+      dataset. This makes it an excellent choice for environments where speed
+      and efficiency are critical.
+    '';
+    homepage = "https://github.com/seaweedfs/seaweedfs";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       azahi
       cmacrae
       wozeparrot
     ];
     mainProgram = "weed";
-    license = lib.licenses.asl20;
   };
 })

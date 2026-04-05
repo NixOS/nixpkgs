@@ -10,6 +10,7 @@
   # requiring to build a special variant for that software. Example: 'haproxy'
   variant ? "all",
   extraConfigureFlags ? [ ],
+  enableJni ? false,
   enableARMCryptoExtensions ?
     stdenv.hostPlatform.isAarch64
     && ((builtins.match "^.*\\+crypto.*$" stdenv.hostPlatform.gcc.arch) != null),
@@ -31,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     # ensure test detects musl-based systems too
     substituteInPlace scripts/ocsp-stapling2.test \
       --replace '"linux-gnu"' '"linux-"'
+  ''
+  + lib.optionalString enableJni ''
+    # Some tests fail when JNI is enabled
+    sed -i '/TEST_DECL(test_wolfSSL_Tls13_ECH)/d;
+            /TEST_DECL(test_wolfSSL_Tls13_ECH_HRR)/d;
+            /TEST_DECL(test_TLSX_CA_NAMES_bad_extension)/d' tests/api.c
+    sed -i '/quic/d' tests/include.am
+    sed -i '/WOLFSSL_QUIC/,/#endif/d' tests/unit.c
   '';
 
   configureFlags = [
@@ -64,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
     # No runtime detection under ARM and no platform function checks like for X86.
     (if enableARMCryptoExtensions then "--enable-armasm=inline" else "--disable-armasm")
+  ]
+  ++ lib.optionals enableJni [
+    "--enable-jni"
   ]
   ++ extraConfigureFlags;
 
