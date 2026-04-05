@@ -4601,6 +4601,8 @@ self: super: with self; {
 
   dohq-artifactory = callPackage ../development/python-modules/dohq-artifactory { };
 
+  doipclient = callPackage ../development/python-modules/doipclient { };
+
   doit = callPackage ../development/python-modules/doit { };
 
   doit-py = callPackage ../development/python-modules/doit-py { };
@@ -20372,6 +20374,8 @@ self: super: with self; {
   ucsmsdk = callPackage ../development/python-modules/ucsmsdk { };
 
   udatetime = callPackage ../development/python-modules/udatetime { };
+
+  udsoncan = callPackage ../development/python-modules/udsoncan { };
 
   ueagle = callPackage ../development/python-modules/ueagle { };
 
