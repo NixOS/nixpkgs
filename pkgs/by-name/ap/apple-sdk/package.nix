@@ -34,7 +34,7 @@ let
       (callPackage ./common/add-core-symbolication.nix { })
       (callPackage ./common/derivation-options.nix { })
       (callPackage ./common/passthru-private-frameworks.nix { inherit sdkVersion; })
-      (callPackage ./common/passthru-source-release-files.nix { inherit sdkVersion; })
+      (callPackage ./common/passthru-source-release-files.nix { })
       (callPackage ./common/remove-disallowed-packages.nix { })
       (callPackage ./common/process-stubs.nix { })
     ]
