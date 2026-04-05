@@ -3,13 +3,9 @@
   stdenv,
   fetchurl,
   pkg-config,
-  wrapQtAppsHook,
   libxml2,
   libdatovka,
-  qmake,
-  qtbase,
-  qtwebsockets,
-  qtsvg,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,16 +19,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     libdatovka
-    qmake
-    qtbase
-    qtsvg
+    libsForQt5.qmake
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     libxml2
-    qtwebsockets
+    libsForQt5.qtwebsockets
   ];
 
   meta = {

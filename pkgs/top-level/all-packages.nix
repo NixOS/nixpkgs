@@ -1694,8 +1694,6 @@ with pkgs;
 
   datasette = with python3Packages; toPythonApplication datasette;
 
-  datovka = libsForQt5.callPackage ../applications/networking/datovka { };
-
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
