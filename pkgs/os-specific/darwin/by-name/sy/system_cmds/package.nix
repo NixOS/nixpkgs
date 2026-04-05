@@ -2,25 +2,36 @@
   lib,
   AvailabilityVersions,
   apple-sdk,
-  apple-sdk_15,
+  fetchFromGitHub,
   libutil,
   mkAppleDerivation,
   ncurses,
   openpam,
   pkg-config,
+  sourceRelease,
   stdenv,
   stdenvNoCC,
 }:
 
 let
-  libdispatch = apple-sdk.sourceRelease "libdispatch"; # Has to match the version of the SDK
+  # TODO(reckenrode): Remove on after the `sourceRelease` migration has been merged.
+  # system_cmds does not actually require private libdispatch APIs.
+  libdispatch = sourceRelease "libdispatch"; # Has to match the version of the SDK
 
-  Libc = apple-sdk.sourceRelease "Libc";
-  libmalloc = apple-sdk.sourceRelease "libmalloc";
-  OpenDirectory = apple-sdk.sourceRelease "OpenDirectory";
+  Libc = sourceRelease "Libc";
+  libmalloc = sourceRelease "libmalloc";
+  OpenDirectory = sourceRelease "OpenDirectory";
 
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk_15.sourceRelease "xnu"; # Needed for `posix_spawn_secflag_options`
+  libplatform = sourceRelease "libplatform";
+
+  # Needed for `posix_spawn_secflag_options`
+  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
+  xnu = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "xnu";
+    rev = "xnu-11417.121.6";
+    hash = "sha256-o4tCuCAIgAYg/Li3wTs12mVWr5C/4vbwu1zi+kJ9d6w=";
+  };
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "system_cmds-deps-private-headers";
