@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://pixi.sh/latest/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      esteve
       xiaoxiangmoe
     ];
     mainProgram = "pixi";

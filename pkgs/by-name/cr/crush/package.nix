@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGo126Module,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -25,6 +27,10 @@ buildGo126Module (finalAttrs: {
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   checkFlags =
     let
       # these tests fail in the sandbox
@@ -43,6 +49,13 @@ buildGo126Module (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd crush \
+      --bash <($out/bin/crush completion bash) \
+      --fish <($out/bin/crush completion fish) \
+      --zsh <($out/bin/crush completion zsh)
+  '';
 
   updateScript = nix-update-script { };
 

@@ -6,8 +6,9 @@ let
     }:
     makeTest (
       { pkgs, lib, ... }:
+      assert lib.assertMsg withQt6 "`lomiri.morph-browser` has been dropped, cannot test it.";
       {
-        name = "morph-browser-${if withQt6 then "qt6" else "qt5"}-standalone";
+        name = "morph-browser-qt6-standalone";
         meta.maintainers = lib.teams.lomiri.members;
 
         nodes.machine =
@@ -24,7 +25,7 @@ let
             services.xserver.enable = true;
 
             environment = {
-              systemPackages = with (if withQt6 then pkgs.lomiri-qt6 else pkgs.lomiri); [
+              systemPackages = with pkgs.lomiri-qt6; [
                 suru-icon-theme
                 morph-browser
               ];
@@ -76,6 +77,6 @@ let
     );
 in
 {
-  qt5 = generic { withQt6 = false; };
+  qt5 = throw "`lomiri.morph-browser` has been removed because it relied on the known-vulnerable `libsForQt5.qtwebengine`. For testing the Qt6 version of Morph, please use `nixosTests.morph-browser.qt6` instead."; # Added on 2026-03-31
   qt6 = generic { withQt6 = true; };
 }
