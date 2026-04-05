@@ -14,19 +14,19 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
-    rev = "e05365077e13a1d86ffe77acfb1a835b7aa78422";
-    hash = "sha256-yvZ5AZTPUA6nsD3xpFC0VLthiu2CxVto66RTXBXXeJM=";
+    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
+    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "124";
+  version = "126";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-tkvO0gNESliRV6FOpXDQd7ZKujGe6q1mGX5V+twcE1o=";
+    hash = "sha256-6KnPVIEtguuMHopm2vf6s+KZ3Ymf2rjFE/aXy1Kbn5E=";
   };
 
   nativeBuildInputs = [
@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      asppsa
       willcohen
     ];
     license = lib.licenses.asl20;
