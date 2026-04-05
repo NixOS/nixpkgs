@@ -5643,6 +5643,11 @@
     githubId = 148147150;
     name = "Curran McConnell";
   };
+  CuSO4Deposit = {
+    github = "CuSO4Deposit";
+    githubId = 87959312;
+    name = "cuso4d";
+  };
   cust0dian = {
     email = "serg@effectful.software";
     github = "cust0dian";
