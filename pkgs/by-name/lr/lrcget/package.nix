@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     # needed to not attempt codesigning on darwin
     ./remove-signing-identity.patch
 
-    # Update NPM package versions to fix https://github.com/tranxuanthang/lrcget/issues/309
+    # Update npm package versions to fix https://github.com/tranxuanthang/lrcget/issues/309
     ./fix-tauri-version-mismatch.patch
   ];
 

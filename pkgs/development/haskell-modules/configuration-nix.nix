@@ -706,7 +706,7 @@ builtins.intersectAttrs super {
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
 
-  # Tests attempt to use NPM to install from the network into
+  # Tests attempt to use npm to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
