@@ -2595,7 +2595,8 @@
       ];
     "hr_energy_qube" =
       ps: with ps; [
-      ]; # missing inputs: python-qube-heatpump
+        python-qube-heatpump
+      ];
     "html5" =
       ps: with ps; [
         py-vapid
@@ -7740,6 +7741,7 @@
     "homewizard"
     "homeworks"
     "honeywell"
+    "hr_energy_qube"
     "html5"
     "http"
     "huawei_lte"
