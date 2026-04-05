@@ -16,7 +16,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/ocl/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Use OpenCL for parallelization";
     longDescription = ''
       Package using OpenCL for parallelization, mostly suitable to

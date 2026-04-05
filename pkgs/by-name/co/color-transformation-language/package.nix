@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctl";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "ampas";
     repo = "CTL";
     rev = "ctl-${finalAttrs.version}";
-    hash = "sha256-jG+38jsPw+4CEAbOG+hudfPBPbZLG+Om7PszkFa6DuI=";
+    hash = "sha256-X6W6IXZUMBTZJTzpAk7FmoEhSPELTmhYv68dZmqUJ2g=";
   };
 
   nativeBuildInputs = [

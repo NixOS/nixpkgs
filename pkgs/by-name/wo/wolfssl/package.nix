@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
     platforms = lib.platforms.all;
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       fab
       vifino

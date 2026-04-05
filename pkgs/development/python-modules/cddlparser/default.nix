@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "cddlparser";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tidoust";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-Hrf6u5HeCICffgPAOcbb1FhybEVhgre7EXzQZhS8D9o=";
+    sha256 = "sha256-LcIxU77bYpsuE4j1QgzdD3d7CO/EUEA9xwn+uIV68Oc=";
   };
 
   build-system = [

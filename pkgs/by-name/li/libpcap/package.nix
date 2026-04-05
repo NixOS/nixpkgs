@@ -10,7 +10,9 @@
   libnl,
   libxcrypt,
   pkg-config,
+  rdma-core,
   withBluez ? false,
+  withRdma ? false,
   withRemote ? false,
 
   # for passthru.tests
@@ -46,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     bash
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+  ++ lib.optionals withRdma [ rdma-core ]
   ++ lib.optionals withRemote [ libxcrypt ]
   ++ lib.optionals withBluez [ bluez ];
 
@@ -62,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-universal"
+  ]
+  ++ lib.optionals withRdma [
+    "--enable-rdma"
   ]
   ++ lib.optionals withRemote [
     "--enable-remote"
