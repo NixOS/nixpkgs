@@ -22,6 +22,8 @@ buildPythonPackage (finalAttrs: {
   patches = [
     # https://github.com/spoqa/sqlalchemy-utc/pull/20
     ./sqlalchemy2-compat.patch
+    # https://github.com/spoqa/sqlalchemy-utc/pull/21\
+    ./python314-compat.patch
   ];
 
   build-system = [
