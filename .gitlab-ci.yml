@@ -14,7 +14,7 @@ build:
 build_mac:
   timeout: 10h
   tags:
-  - nix
+  - macos
   script:
     - bash xzar-install.sh
     - bash xzar.sh
