@@ -17,6 +17,7 @@
   jdk,
   threadsafe ? false,
   apiVersion ? "v200",
+  testers,
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -50,24 +51,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vhsBjOQgzvz6+RbPrR6rRFBXFGkWJNCFjdzWFbu1/ik=";
   };
 
-  outputs = [
-    "out"
-    "dev"
-    "bin"
-  ];
-
   nativeBuildInputs = [
     removeReferencesTo
     cmake
   ]
   ++ lib.optional fortranSupport gfortran;
 
-  buildInputs = [
+  buildInputs = lib.optional javaSupport jdk;
+
+  propagatedBuildInputs = [
+    zlib
     libaec
   ]
-  ++ lib.optional javaSupport jdk;
-
-  propagatedBuildInputs = [ zlib ] ++ lib.optional mpiSupport mpi;
+  ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
@@ -81,18 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeFeature "DEFAULT_API_VERSION" apiVersion)
-    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake")
+    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/hdf5")
   ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    moveToOutput 'bin/' "''${!outputBin}"
-    moveToOutput 'bin/h5cc' "''${!outputDev}"
-    moveToOutput 'bin/h5c++' "''${!outputDev}"
-    moveToOutput 'bin/h5fc' "''${!outputDev}"
-    moveToOutput 'bin/h5pcc' "''${!outputDev}"
-    moveToOutput 'bin/h5hlcc' "''${!outputDev}"
-    moveToOutput 'bin/h5hlc++' "''${!outputDev}"
   ''
   +
     lib.optionalString enableShared
@@ -114,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
       mpiSupport
       mpi
       ;
+
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "hdf5" ];
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
