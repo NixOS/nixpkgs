@@ -13177,6 +13177,8 @@ self: super: with self; {
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
+  py-unifi-access = callPackage ../development/python-modules/py-unifi-access { };
+
   py-vapid = callPackage ../development/python-modules/py-vapid { };
 
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
