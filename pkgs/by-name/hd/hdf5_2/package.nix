@@ -84,18 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-  ''
-  +
-    lib.optionalString enableShared
-      # The shared build creates binaries with -shared suffixes,
-      # so we remove these suffixes.
-      ''
-        pushd ''${!outputBin}/bin
-        for file in *-shared; do
-          mv "$file" "''${file%%-shared}"
-        done
-        popd
-      '';
+  '';
 
   passthru = {
     inherit
