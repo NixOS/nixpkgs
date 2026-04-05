@@ -122,8 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
         versionCheck = true;
       };
       cmake-config = testers.hasCmakeConfigModules {
-        moduleNames = [ "hdf5" ];
         package = finalAttrs.finalPackage;
+        moduleNames = [ "hdf5" ];
         versionCheck = true;
       };
     };
