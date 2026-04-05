@@ -1500,7 +1500,7 @@ in
   squid = runTest ./squid.nix;
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
   ssh-audit = runTest ./ssh-audit.nix;
-  sshpiper = handleTest ./sshpiper.nix { };
+  sshpiper = runTest ./sshpiper.nix;
   sshwifty = runTest ./web-apps/sshwifty/default.nix;
   sslh = handleTest ./sslh.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
