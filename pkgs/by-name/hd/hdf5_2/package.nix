@@ -84,10 +84,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
     (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
+    (lib.cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+    ))
     (lib.cmakeBool "HDF5_ALLOW_UNSUPPORTED" allowUnsupported)
+    # (lib.cmakeBool "HDF5_USE_GNU_DIRS" true)
     (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
     (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "lib/cmake/hdf5")
   ];
+
+  doCheck = true;
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
