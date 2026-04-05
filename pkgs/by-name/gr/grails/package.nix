@@ -24,13 +24,13 @@ let
     ++ lib.optional (grailsJdk != null) grailsJdk
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grails";
   version = "7.0.0-M3";
 
   src = fetchurl {
-    url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "sha256-BM3fxmf86o+Ob63bE9aSCBh2MlkIS4AsYj7CZr/PVWU=";
+    url = "https://github.com/grails/grails-core/releases/download/v${finalAttrs.version}/grails-${finalAttrs.version}.zip";
+    hash = "sha256-BM3fxmf86o+Ob63bE9aSCBh2MlkIS4AsYj7CZr/PVWU=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})
