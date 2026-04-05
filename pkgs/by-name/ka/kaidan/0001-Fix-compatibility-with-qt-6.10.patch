@@ -1,0 +1,29 @@
+From df4f62ed4c4e54d528950f9204623ec3054d3ff9 Mon Sep 17 00:00:00 2001
+From: eljamm <fedi.jamoussi@protonmail.ch>
+Date: Thu, 4 Dec 2025 10:29:49 +0100
+Subject: [PATCH] Fix compatibility with qt 6.10
+
+See: https://doc.qt.io/qt-6/whatsnew610.html#build-system-changes
+From: https://invent.kde.org/network/kaidan/-/commit/26942b401070
+---
+ CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 027530bc..ee57c6f6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,6 +59,10 @@ if (NOT ANDROID)
+    find_package(KF6WindowSystem ${KF_MIN_VERSION} CONFIG REQUIRED)
+ endif()
+ 
++if(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0" AND NOT WIN32 AND NOT APPLE)
++    find_package(Qt6GuiPrivate ${QT_MIN_VERSION} REQUIRED NO_MODULE)
++endif()
++
+ find_package(KF6KirigamiAddons 1.4.0 REQUIRED)
+ find_package(QXmppQt6 1.11.0 REQUIRED COMPONENTS Omemo)
+ 
+-- 
+2.50.1
+

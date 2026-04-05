@@ -1,0 +1,16 @@
+--- a/src/qml/jsruntime/qv4qobjectwrapper.cpp
++++ b/src/qml/jsruntime/qv4qobjectwrapper.cpp
+@@ -1583,10 +1583,9 @@
+                     o->deleteLater();
+             } else {
+                 // If the object is C++-owned, we still have to release the weak reference we have
+-                // to it.
+-                ddata->jsWrapper.clear();
+-                if (lastCall && ddata->propertyCache)
+-                    ddata->propertyCache.reset();
++                // to it. If the "main" wrapper is not ours, we should leave it alone, though.
++                if (ddata->jsWrapper.as<QObjectWrapper>() == this)
++                    ddata->jsWrapper.clear();
+             }
+         }
+     }

@@ -1,0 +1,12 @@
+diff --git a/deps.edn b/deps.edn
+index 195de4e..02098e5 100644
+--- a/deps.edn
++++ b/deps.edn
+@@ -1,5 +1,6 @@
+ {:paths ["src"]
+- :deps {binaryage/devtools {:mvn/version "1.0.7"}
++ :deps {org.clojure/clojure {:mvn/version "1.12.4"}
++        binaryage/devtools {:mvn/version "1.0.7"}
+         camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.3"}
+         clj-kdtree/clj-kdtree {:git/url "https://github.com/abscondment/clj-kdtree.git"
+                                :sha "5ec321c5e8006db00fa8b45a8ed9eb0b8f3dd56d"

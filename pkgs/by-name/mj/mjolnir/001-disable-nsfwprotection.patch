@@ -1,0 +1,246 @@
+diff --git a/src/protections/NsfwProtection.ts b/src/protections/NsfwProtection.ts
+deleted file mode 100644
+index a6f45b2..0000000
+--- a/src/protections/NsfwProtection.ts
++++ /dev/null
+@@ -1,115 +0,0 @@
+-/*
+-Copyright 2024 The Matrix.org Foundation C.I.C.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-*/
+-
+-import { Protection } from "./IProtection";
+-import { Mjolnir } from "../Mjolnir";
+-import * as nsfw from "nsfwjs";
+-import { LogLevel, LogService } from "@vector-im/matrix-bot-sdk";
+-import { node } from "@tensorflow/tfjs-node";
+-
+-export class NsfwProtection extends Protection {
+-    settings = {};
+-    // @ts-ignore
+-    private model: any;
+-
+-    constructor() {
+-        super();
+-    }
+-
+-    async initialize() {
+-        this.model = await nsfw.load();
+-    }
+-
+-    public get name(): string {
+-        return "NsfwProtection";
+-    }
+-
+-    public get description(): string {
+-        return (
+-            "Scans all images sent into a protected room to determine if the image is " +
+-            "NSFW. If it is, the image will automatically be redacted."
+-        );
+-    }
+-
+-    public async handleEvent(mjolnir: Mjolnir, roomId: string, event: any): Promise<any> {
+-        if (event["type"] === "m.room.message") {
+-            let content = JSON.stringify(event["content"]);
+-            if (!content.toLowerCase().includes("mxc")) {
+-                return;
+-            }
+-            // try and grab a human-readable alias for more helpful management room output
+-            const maybeAlias = await mjolnir.client.getPublishedAlias(roomId);
+-            const room = maybeAlias ? maybeAlias : roomId;
+-
+-            const mxcs = content.match(/(mxc?:\/\/[^\s'"]+)/gim);
+-            if (!mxcs) {
+-                //something's gone wrong with the regex
+-                await mjolnir.managementRoomOutput.logMessage(
+-                    LogLevel.ERROR,
+-                    "NSFWProtection",
+-                    `Unable to find any mxcs in  ${event["event_id"]} in ${room}`,
+-                );
+-                return;
+-            }
+-
+-            // @ts-ignore - see null check immediately above
+-            for (const mxc of mxcs) {
+-                const image = await mjolnir.client.downloadContent(mxc);
+-
+-                let decodedImage;
+-                try {
+-                    decodedImage = await node.decodeImage(image.data, 3);
+-                } catch (e) {
+-                    LogService.error("NsfwProtection", `There was an error processing an image: ${e}`);
+-                    continue;
+-                }
+-
+-                const predictions = await this.model.classify(decodedImage);
+-
+-                for (const prediction of predictions) {
+-                    if (["Hentai", "Porn"].includes(prediction["className"])) {
+-                        if (prediction["probability"] > mjolnir.config.nsfwSensitivity) {
+-                            try {
+-                                await mjolnir.client.redactEvent(roomId, event["event_id"]);
+-                            } catch (err) {
+-                                await mjolnir.managementRoomOutput.logMessage(
+-                                    LogLevel.ERROR,
+-                                    "NSFWProtection",
+-                                    `There was an error redacting ${event["event_id"]} in ${room}: ${err}`,
+-                                );
+-                            }
+-                            let eventId = event["event_id"];
+-                            let body = `Redacted an image in ${room} ${eventId}`;
+-                            let formatted_body = `<details>
+-                                                  <summary>Redacted an image in ${room}</summary>
+-                                                  <pre>${eventId}</pre>  <pre>${room}</pre>
+-                                                  </details>`;
+-                            const msg = {
+-                                msgtype: "m.notice",
+-                                body: body,
+-                                format: "org.matrix.custom.html",
+-                                formatted_body: formatted_body,
+-                            };
+-                            await mjolnir.client.sendMessage(mjolnir.managementRoomId, msg);
+-                            break;
+-                        }
+-                    }
+-                }
+-                decodedImage.dispose();
+-            }
+-        }
+-    }
+-}
+diff --git a/src/protections/ProtectionManager.ts b/src/protections/ProtectionManager.ts
+index 485f05e..6ffb0d1 100644
+--- a/src/protections/ProtectionManager.ts
++++ b/src/protections/ProtectionManager.ts
+@@ -31,7 +31,6 @@ import { htmlEscape } from "../utils";
+ import { ERROR_KIND_FATAL, ERROR_KIND_PERMISSION } from "../ErrorCache";
+ import { RoomUpdateError } from "../models/RoomUpdateError";
+ import { LocalAbuseReports } from "./LocalAbuseReports";
+-import { NsfwProtection } from "./NsfwProtection";
+ import { MentionSpam } from "./MentionSpam";
+ 
+ const PROTECTIONS: Protection[] = [
+@@ -44,7 +43,6 @@ const PROTECTIONS: Protection[] = [
+     new DetectFederationLag(),
+     new JoinWaveShortCircuit(),
+     new LocalAbuseReports(),
+-    new NsfwProtection(),
+     new MentionSpam(),
+ ];
+ 
+@@ -106,9 +104,6 @@ export class ProtectionManager {
+             protection.settings[key].setValue(value);
+         }
+         if (protection.enabled) {
+-            if (protection.name === "NsfwProtection") {
+-                (protection as NsfwProtection).initialize();
+-            }
+             for (let roomId of this.mjolnir.protectedRoomsTracker.getProtectedRooms()) {
+                 await protection.startProtectingRoom(this.mjolnir, roomId);
+             }
+diff --git a/test/integration/nsfwProtectionTest.ts b/test/integration/nsfwProtectionTest.ts
+deleted file mode 100644
+index ed215e0..0000000
+--- a/test/integration/nsfwProtectionTest.ts
++++ /dev/null
+@@ -1,89 +0,0 @@
+-import { newTestUser } from "./clientHelper";
+-
+-import { MatrixClient } from "@vector-im/matrix-bot-sdk";
+-import { getFirstReaction } from "./commands/commandUtils";
+-import { strict as assert } from "assert";
+-import { readFileSync } from "fs";
+-
+-describe("Test: NSFW protection", function () {
+-    let client: MatrixClient;
+-    let room: string;
+-    this.beforeEach(async function () {
+-        client = await newTestUser(this.config.homeserverUrl, { name: { contains: "nsfw-protection" } });
+-        await client.start();
+-        const mjolnirId = await this.mjolnir.client.getUserId();
+-        room = await client.createRoom({ invite: [mjolnirId] });
+-        await client.joinRoom(room);
+-        await client.joinRoom(this.config.managementRoom);
+-        await client.setUserPowerLevel(mjolnirId, room, 100);
+-    });
+-    this.afterEach(async function () {
+-        await client.stop();
+-    });
+-
+-    function delay(ms: number) {
+-        return new Promise((resolve) => setTimeout(resolve, ms));
+-    }
+-
+-    it("Nsfw protection doesn't redact sfw images", async function () {
+-        this.timeout(20000);
+-
+-        await client.sendMessage(this.mjolnir.managementRoomId, {
+-            msgtype: "m.text",
+-            body: `!mjolnir rooms add ${room}`,
+-        });
+-        await getFirstReaction(client, this.mjolnir.managementRoomId, "✅", async () => {
+-            return await client.sendMessage(this.mjolnir.managementRoomId, {
+-                msgtype: "m.text",
+-                body: `!mjolnir enable NsfwProtection`,
+-            });
+-        });
+-
+-        const data = readFileSync("test_tree.jpg");
+-        const mxc = await client.uploadContent(data, "image/png");
+-        let content = { msgtype: "m.image", body: "test.jpeg", url: mxc };
+-        let imageMessage = await client.sendMessage(room, content);
+-
+-        await delay(500);
+-        let processedImage = await client.getEvent(room, imageMessage);
+-        assert.equal(Object.keys(processedImage.content).length, 3, "This event should not have been redacted");
+-    });
+-
+-    it("Nsfw protection redacts nsfw images", async function () {
+-        this.timeout(20000);
+-        // dial the sensitivity on the protection way up so that all images are flagged as NSFW
+-        this.mjolnir.config.nsfwSensitivity = 0.0;
+-
+-        await client.sendMessage(this.mjolnir.managementRoomId, {
+-            msgtype: "m.text",
+-            body: `!mjolnir rooms add ${room}`,
+-        });
+-        await getFirstReaction(client, this.mjolnir.managementRoomId, "✅", async () => {
+-            return await client.sendMessage(this.mjolnir.managementRoomId, {
+-                msgtype: "m.text",
+-                body: `!mjolnir enable NsfwProtection`,
+-            });
+-        });
+-
+-        const data = readFileSync("test_tree.jpg");
+-        const mxc = await client.uploadContent(data, "image/png");
+-        let content = { msgtype: "m.image", body: "test.jpeg", url: mxc };
+-        let imageMessage = await client.sendMessage(room, content);
+-
+-        let formatted_body = `<img src=${mxc} />`;
+-        let htmlContent = {
+-            msgtype: "m.image",
+-            body: formatted_body,
+-            format: "org.matrix.custom.html",
+-            formatted_body: formatted_body,
+-        };
+-        let htmlMessage = await client.sendMessage(room, htmlContent);
+-
+-        await delay(500);
+-        let processedImage = await client.getEvent(room, imageMessage);
+-        assert.equal(Object.keys(processedImage.content).length, 0, "This event should have been redacted");
+-
+-        let processedHtml = await client.getEvent(room, htmlMessage);
+-        assert.equal(Object.keys(processedHtml.content).length, 0, "This html image event should have been redacted");
+-    });
+-});

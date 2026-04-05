@@ -1,0 +1,31 @@
+diff --git a/src/btfs.cc b/src/btfs.cc
+index eaac245..6bae7c0 100644
+--- a/src/btfs.cc
++++ b/src/btfs.cc
+@@ -19,6 +19,10 @@ along with BTFS.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ #define FUSE_USE_VERSION 31
+ 
++#ifdef __APPLE__
++#define FUSE_DARWIN_ENABLE_EXTENSIONS 0
++#endif
++
+ #include <cstdlib>
+ #include <iostream>
+ #include <fstream>
+@@ -733,15 +737,9 @@ btfs_listxattr(const char *path, char *data, size_t len) {
+ 	return xattrslen;
+ }
+ 
+-#ifdef __APPLE__
+-static int
+-btfs_getxattr(const char *path, const char *key, char *value, size_t len,
+-		uint32_t position) {
+-#else
+ static int
+ btfs_getxattr(const char *path, const char *key, char *value, size_t len) {
+ 	uint32_t position = 0;
+-#endif
+ 	char xattr[16];
+ 	int xattrlen = 0;
+ 

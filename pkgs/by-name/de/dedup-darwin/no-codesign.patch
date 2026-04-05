@@ -1,0 +1,18 @@
+Entitlements & code signature are only needed 
+for ASAN and other debugging tools.
+See official README for more details.
+
+diff --git a/Makefile b/Makefile
+index c9c56ec..36b81e0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -63,9 +63,6 @@ dedup.x86_64: CFLAGS += -target x86_64-apple-macos11
+ 
+ dedup dedup.arm dedup.x86_64: $(OBJECTS)
+ 	$(CC) $(CFLAGS) -o $@ $^
+-	mv $@ $@.unsigned
+-	codesign -s - -v -f $(ENTITLEMENT_FLAGS) $@.unsigned
+-	mv $@.unsigned $@
+ 
+ dedup.universal:
+ 	rm -f *.o

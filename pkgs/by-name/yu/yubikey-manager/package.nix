@@ -1,0 +1,90 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  installShellFiles,
+  procps,
+
+  buildPackages,
+}:
+
+python3Packages.buildPythonPackage rec {
+  pname = "yubikey-manager";
+  version = "5.9.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubikey-manager";
+    tag = version;
+    hash = "sha256-8SWuhuFeMRIskJRxeb67gA3gdhSDf/vnrYHra6t71Bc=";
+  };
+
+  postPatch = ''
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace-fail 'pkill' '${if stdenv.hostPlatform.isLinux then procps else "/usr"}/bin/pkill'
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  build-system = with python3Packages; [
+    poetry-core
+  ];
+
+  dependencies = with python3Packages; [
+    click
+    cryptography
+    fido2
+    keyring
+    pyscard
+    python-pskc
+  ];
+
+  postInstall = ''
+    installManPage man/ykman.1
+  ''
+  + (
+    let
+      compOpts =
+        x:
+        if stdenv.buildPlatform.canExecute python3Packages.stdenv.hostPlatform then
+          "--${x} <(_YKMAN_COMPLETE=${x}_source ${placeholder "out"}/bin/ykman)"
+        else
+          ''--${x} <(_YKMAN_COMPLETE=${x}_source PYTHONPATH= "${buildPackages.yubikey-manager}/bin/ykman")'';
+    in
+    ''
+      installShellCompletion --cmd ykman ${
+        lib.strings.concatMapStringsSep " " compOpts [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      }
+    ''
+  );
+
+  nativeCheckInputs = with python3Packages; [
+    astroid
+    makefun
+    pytestCheckHook
+  ];
+
+  meta = {
+    homepage = "https://developers.yubico.com/yubikey-manager";
+    changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${src.tag}";
+    description = "Command line tool for configuring any YubiKey over all USB transports";
+
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      benley
+      lassulus
+      pinpox
+      nickcao
+    ];
+    mainProgram = "ykman";
+  };
+}

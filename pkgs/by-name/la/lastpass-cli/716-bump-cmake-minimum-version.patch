@@ -1,0 +1,27 @@
+From 31a4ad5f735933ff8e96403103d5b4f61faee945 Mon Sep 17 00:00:00 2001
+From: Yaksh Bariya <yakshbari4@gmail.com>
+Date: Wed, 11 Jun 2025 06:37:27 +0530
+Subject: [PATCH] fix builds with cmake 4.x
+
+---
+ CMakeLists.txt | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index efc6ba0..cd693f4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,8 +1,10 @@
+-if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1)
++if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_GREATER_EQUAL 4.0)
++  cmake_minimum_required(VERSION 4.0)
++elseif(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_GREATER_EQUAL 3.1)
++  cmake_minimum_required(VERSION 3.1)
++else()
+   set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake > 2.8.4 is required
+   cmake_minimum_required(VERSION 2.8)
+-else()
+-  cmake_minimum_required(VERSION 3.1)
+ endif()
+ 
+ project(lpass)

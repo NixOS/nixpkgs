@@ -1,0 +1,13 @@
+diff --git a/usr.bin/su/Makefile b/usr.bin/su/Makefile
+index f6d95defa195..b43d7592ef89 100644
+--- a/usr.bin/su/Makefile
++++ b/usr.bin/su/Makefile
+@@ -10,7 +10,7 @@ LIBADD+=	bsm
+ .endif
+ 
+ BINOWN=	root
+-BINMODE=4555
++BINMODE=0555
+ PRECIOUSPROG=
+ 
+ .include <bsd.prog.mk>
