@@ -26,6 +26,12 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # tests try to open sockets
+    "test_manual_flow_ac_device"
+    "test_manual_flow_cc_device"
+  ];
+
   meta = {
     changelog = "https://github.com/mill1000/midea-ac-py/releases/tag/${src.tag}";
     description = "Home Assistant custom integration to control Midea (and associated brands) air conditioners via LAN";
