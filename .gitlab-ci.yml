@@ -11,3 +11,15 @@ build:
     paths:
       - nixpkgs.tar.xz
 
+build_mac:
+  timeout: 10h
+  tags:
+  - nix
+  script:
+    - bash xzar-install.sh
+    - bash xzar.sh
+  stage: build
+  artifacts:
+    paths:
+      - nixpkgs.tar.xz
+
