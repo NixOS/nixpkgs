@@ -4,21 +4,15 @@
   fetchFromGitHub,
 }:
 
-let
-  srcInfo = lib.importJSON ./src.json;
-in
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chroma";
   version = "2.22.0";
 
-  # To update:
-  # nix-prefetch-git --rev v${version} https://github.com/alecthomas/chroma.git > src.json
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = "chroma";
-    rev = "v${version}";
-    inherit (srcInfo) sha256;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9T7PBmv8cEPcb09gFhOp5yiODevcpTzzMAkrvmjvm/I=";
   };
 
   vendorHash = "sha256-kzlXrIMSa5C4UFt+BiMh6NedelQG49OxYbreeWhCb80=";
@@ -27,12 +21,9 @@ buildGoModule rec {
 
   # substitute version info as done in goreleaser builds
   ldflags = [
-    "-X"
-    "main.version=${version}"
-    "-X"
-    "main.commit=${srcInfo.rev}"
-    "-X"
-    "main.date=${srcInfo.date}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.tag}"
+    "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
   meta = {
@@ -42,4 +33,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "chroma";
   };
-}
+})
