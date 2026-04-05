@@ -22,6 +22,7 @@
 }:
 
 assert (cppSupport && mpiSupport) -> allowUnsupported;
+assert (threadsafe && (cppSupport || mpiSupport || fortranSupport)) -> allowUnsupported;
 
 # See https://github.com/HDFGroup/hdf5/blob/develop/CMakeLists.txt
 # for valid versions
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_BUILD_WITH_INSTALL_NAME" stdenv.hostPlatform.isDarwin)
     (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
     (lib.cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
+    (lib.cmakeBool "HDF5_BUILD_HL_LIB" !threadsafe)
     (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
     (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" true)
     (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
