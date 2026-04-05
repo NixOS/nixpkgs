@@ -3,19 +3,18 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
-  boulder,
   minica,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "boulder";
   version = "0.20260331.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -44,7 +43,7 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${version} +$(cat COMMIT)\""
+    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${finalAttrs.version} +$(cat COMMIT)\""
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
   '';
 
@@ -330,7 +329,7 @@ buildGoModule rec {
   ];
 
   checkFlags = [
-    "-skip ${lib.strings.concatStringsSep "|" disabledTests}"
+    "-skip ${lib.strings.concatStringsSep "|" finalAttrs.disabledTests}"
   ];
 
   postInstall = ''
@@ -341,8 +340,8 @@ buildGoModule rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = boulder;
-      inherit version;
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.version;
     };
     updateScript = nix-update-script { };
   };
@@ -361,4 +360,4 @@ buildGoModule rec {
     mainProgram = "boulder";
     maintainers = [ ];
   };
-}
+})
