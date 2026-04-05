@@ -6623,7 +6623,8 @@
       ];
     "trmnl" =
       ps: with ps; [
-      ]; # missing inputs: trmnl
+        trmnl
+      ];
     "tts" =
       ps: with ps; [
         ha-ffmpeg
@@ -8326,6 +8327,7 @@
     "transport_nsw"
     "trend"
     "triggercmd"
+    "trmnl"
     "tts"
     "tuya"
     "twentemilieu"
