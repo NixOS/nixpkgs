@@ -4992,6 +4992,8 @@ self: super: with self; {
 
   emv = callPackage ../development/python-modules/emv { };
 
+  en_core_web_lg = spacy-models.en_core_web_lg;
+
   enaml = callPackage ../development/python-modules/enaml { };
 
   enamlx = callPackage ../development/python-modules/enamlx { };
@@ -12790,6 +12792,10 @@ self: super: with self; {
   presenterm-export = callPackage ../development/python-modules/presenterm-export { };
 
   preshed = callPackage ../development/python-modules/preshed { };
+
+  presidio-analyzer = callPackage ../development/python-modules/presidio-analyzer { };
+
+  presidio-anonymizer = callPackage ../development/python-modules/presidio-anonymizer { };
 
   presto-python-client = callPackage ../development/python-modules/presto-python-client { };
 
@@ -21250,6 +21256,8 @@ self: super: with self; {
   xeger = callPackage ../development/python-modules/xeger { };
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
+
+  xetrack = callPackage ../development/python-modules/xetrack { };
 
   xformers = callPackage ../development/python-modules/xformers {
     inherit (pkgs.llvmPackages) openmp;
