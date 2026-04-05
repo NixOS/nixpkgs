@@ -9,6 +9,7 @@ let
   efi = config.boot.loader.efi;
   limineInstallConfig = pkgs.writeText "limine-install.json" (
     builtins.toJSON {
+      inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
       efiBootMgrPath = pkgs.efibootmgr;
       liminePath = cfg.package;
@@ -432,7 +433,6 @@ in
           replacements = {
             python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
             configPath = limineInstallConfig;
-            inherit (config.system.nixos) distroName;
           };
         };
       };
