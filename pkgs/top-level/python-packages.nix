@@ -18010,6 +18010,8 @@ self: super: with self; {
 
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
+  solarman-opendata = callPackage ../development/python-modules/solarman-opendata { };
+
   solax = callPackage ../development/python-modules/solax { };
 
   solc-select = callPackage ../development/python-modules/solc-select { };
