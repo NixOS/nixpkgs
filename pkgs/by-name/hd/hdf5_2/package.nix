@@ -21,7 +21,7 @@
   testers,
 }:
 
-assert (cppSupport && mpiSupport) && allowUnsupported;
+assert (cppSupport && mpiSupport) -> allowUnsupported;
 
 # See https://github.com/HDFGroup/hdf5/blob/develop/CMakeLists.txt
 # for valid versions
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
     (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
-    (lib.cmakeBool "ALLOW_UNSUPPORTED" allowUnsupported)
+    (lib.cmakeBool "HDF5_ALLOW_UNSUPPORTED" allowUnsupported)
     (lib.cmakeFeature "DEFAULT_API_VERSION" apiVersion)
     (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/hdf5")
   ];
