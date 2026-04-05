@@ -272,6 +272,7 @@ mapAliases {
   jaraco_stream = throw "'jaraco_stream' has been renamed to/replaced by 'jaraco-stream'"; # Converted to throw 2025-10-29
   jaraco_text = throw "'jaraco_text' has been renamed to/replaced by 'jaraco-text'"; # Converted to throw 2025-10-29
   JayDeBeApi = throw "'JayDeBeApi' has been renamed to/replaced by 'jaydebeapi'"; # Converted to throw 2025-10-29
+  jfx-bridge = throw "'jfx-bridge' has been removed as it was unmaintained upstream"; # Added 2026-04-05
   jinja2_pluralize = throw "'jinja2_pluralize' has been renamed to/replaced by 'jinja2-pluralize'"; # Converted to throw 2025-10-29
   jinja2_time = throw "'jinja2_time' has been renamed to/replaced by 'jinja2-time'"; # Converted to throw 2025-10-29
   JPype1 = throw "'JPype1' has been renamed to/replaced by 'jpype1'"; # Converted to throw 2025-10-29
