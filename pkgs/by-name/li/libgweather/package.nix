@@ -103,11 +103,6 @@ stdenv.mkDerivation rec {
       "dependency('vapigen', native: true, required: enable_vala == 'true')"
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   strictDeps = true;
 
   passthru = {

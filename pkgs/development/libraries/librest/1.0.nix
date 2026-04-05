@@ -54,11 +54,6 @@ stdenv.mkDerivation rec {
     "-Dca_certificates_path=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   separateDebugInfo = true;
 
   passthru = {

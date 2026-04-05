@@ -80,17 +80,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postFixup = ''
-    # Move developer documentation to devdoc output.
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    if [[ -d "$out/share/doc" ]]; then
-        find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
-          | while IFS= read -r -d ''' file; do
-            moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
-        done
-    fi
-  '';
-
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.json-glib;

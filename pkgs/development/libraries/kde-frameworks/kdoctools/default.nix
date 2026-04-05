@@ -52,7 +52,6 @@ mkDerivation {
     "-DDocBookXSL_DIR=${docbook_xsl_ns}/xml/xsl/docbook"
   ];
   postFixup = ''
-    moveToOutput "share/doc" "$dev"
     moveToOutput "share/man" "$dev"
   '';
 }
