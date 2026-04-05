@@ -15,13 +15,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-mqtt";
   # nixpkgs-update: no auto update
-  version = "0.13.3";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-mqtt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Nf8c5iVl+NOPZFjsAPCMOGq2e7D8e7PafuMQh6t0DYw=";
+    hash = "sha256-50b8TLQvaSaawKsGbm4fSCRoTfolAlF7ZwMdNmZ8wQo=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
+  doCheck = true;
+
   passthru.tests = {
     inherit nix;
   };
@@ -48,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C99 implementation of the MQTT 3.1.1 specification";
     homepage = "https://github.com/awslabs/aws-c-mqtt";
+    changelog = "https://github.com/awslabs/aws-c-mqtt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];
