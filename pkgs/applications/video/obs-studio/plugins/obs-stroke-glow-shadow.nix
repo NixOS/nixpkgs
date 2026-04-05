@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-stroke-glow-shadow";
-  version = "v1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-stroke-glow-shadow";
-    rev = version;
-    sha256 = "sha256-+2hb4u+6UG7IV9pAvPjp4wvDYhYnxe98U5QQjUcdD/k=";
+    tag = "v${version}";
+    sha256 = "sha256-PbN6Wdb6MzPe5918Y31UuYY49yuJp4W/2kfAOVJTMdo=";
   };
 
   nativeBuildInputs = [ cmake ];

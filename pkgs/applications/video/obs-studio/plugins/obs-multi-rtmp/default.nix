@@ -5,28 +5,18 @@
   obs-studio,
   cmake,
   qtbase,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-multi-rtmp";
-  version = "0.6.0.1";
+  version = "0.7.3.2";
 
   src = fetchFromGitHub {
     owner = "sorayuki";
     repo = "obs-multi-rtmp";
-    rev = version;
-    sha256 = "sha256-MRBQY9m6rj8HVdn58mK/Vh07FSm0EglRUaP20P3FFO4=";
+    tag = version;
+    sha256 = "sha256-edhJU06sT+pPovGcMJu4gAYbyaBKZBwSNifvXW06Ui8=";
   };
-
-  patches = [
-    # Fix finding QT. Remove after next release.
-    (fetchpatch {
-      url = "https://github.com/sorayuki/obs-multi-rtmp/commit/a1289fdef404b08a7acbbf0d6d0f93da4c9fc087.patch";
-      hash = "sha256-PDkR315y0iem1+LAqGmiqBFUiMBeEgnFW/xd1W2bAu4=";
-      includes = [ "CMakeLists.txt" ];
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -42,12 +32,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  # install dirs changed after 0.5.0.3-OBS30
   postInstall = ''
-    mkdir -p $out/{lib,share/obs/obs-plugins/}
-    mv $out/dist/obs-multi-rtmp/data $out/share/obs/obs-plugins/obs-multi-rtmp
-    mv $out/dist/obs-multi-rtmp/bin/64bit $out/lib/obs-plugins
-    rm -rf $out/dist
+    rm -rf $out/obs-plugins $out/data
   '';
 
   meta = {
