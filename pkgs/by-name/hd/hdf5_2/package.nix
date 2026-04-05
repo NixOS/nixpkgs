@@ -9,6 +9,7 @@
   libaec,
   mpi,
   jdk,
+  mpiCheckPhaseHook,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   cppSupport ? !(mpiSupport || threadsafe),
@@ -81,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
     (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "lib/cmake/hdf5")
   ];
+
+  # the mpi related tests are time consuming and flaky
+  doCheck = !mpiSupport;
+
+  nativeCheckInputs = lib.optional mpiSupport mpiCheckPhaseHook;
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
