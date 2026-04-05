@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vhsBjOQgzvz6+RbPrR6rRFBXFGkWJNCFjdzWFbu1/ik=";
   };
 
-  # make build reproducible, note CMAKE_HOST_SYSTEM a read-only internal variable
+  # make build reproducible, note CMAKE_HOST_SYSTEM is a read-only internal variable
   # and we cannot override it via CMAKE variables
   postPatch = ''
     substituteInPlace src/H5build_settings.cmake.c.in src/libhdf5.settings.in \
