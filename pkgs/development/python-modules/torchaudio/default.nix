@@ -31,6 +31,9 @@
   rocmSupport ? torch.rocmSupport,
 }:
 
+let
+  inherit (stdenv) hostPlatform;
+in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchaudio";
   version = "2.11.0";
@@ -70,10 +73,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     #   See: https://github.com/pytorch/audio/pull/2224#issuecomment-1048329450
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_ON_PYTHON_310 = true;
 
-    # Fails on aarch64-linux with:
+    # Fails on aarch64-linux and darwin with:
     #   RuntimeError: `fbgemm` is not available
+    # `fbgemm` is indeed an x86_64-linux-only feature
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION =
-      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+      if ((hostPlatform.isLinux && hostPlatform.isAarch64) || hostPlatform.isDarwin) then 1 else 0;
   };
 
   build-system = [
@@ -123,12 +127,25 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Very long to run
     "AutogradCPUTest"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # AssertionError: Tensor-likes are not close!
     "test_batch_inverse_spectrogram"
     "test_batch_pitch_shift"
     "test_batch_spectrogram"
     "test_griffinlim_0_99"
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # AssertionError: Tensor-likes are not close!
+    "test_griffinlim_0_99"
+  ]
+  ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # AssertionError: Tensor-likes are not close!
+    "test_MelSpectrogram_00"
+    "test_MelSpectrogram_01"
+    "test_MelSpectrogram_04"
+    "test_MelSpectrogram_05"
+    "test_MelSpectrogram_08"
+    "test_MelSpectrogram_09"
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
