@@ -5,7 +5,7 @@ let
 
   inherit (lib) mkOption types;
 
-  portable-lib = import ./lib.nix { inherit lib; };
+  portable-lib = lib.services;
 
   configured = portable-lib.configure {
     serviceManagerPkgs = throw "do not use pkgs in this test";

@@ -89,6 +89,7 @@ let
 
       # domain-specific
       fetchers = callLibs ./fetchers.nix;
+      services = callLibs ./services/lib.nix;
 
       # Eval-time filesystem handling
       path = callLibs ./path;
