@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       cppSupport
       fortranSupport
-      gfortran
       mpiSupport
       mpi
       ;
