@@ -16,12 +16,6 @@ let
       inherit (self) callPackage;
     in
     {
-      #### Core Apps
-      morph-browser = callPackage ./applications/morph-browser {
-        # get_target_property() called with non-existent target "Qt6::qdoc".
-        withDocumentation = !useQt6;
-      };
-
       #### Data
       lomiri-schemas = callPackage ./data/lomiri-schemas { };
       lomiri-sounds = callPackage ./data/lomiri-sounds { };
@@ -55,6 +49,13 @@ let
       };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
+    }
+    // lib.optionalAttrs useQt6 {
+      #### Core Apps
+      morph-browser = callPackage ./applications/morph-browser {
+        # get_target_property() called with non-existent target "Qt6::qdoc".
+        withDocumentation = !useQt6;
+      };
     }
     // lib.optionalAttrs (!useQt6) {
       #### Core Apps
@@ -105,5 +106,6 @@ lib.makeScope qtPackages.newScope packages
   content-hub = lib.warnOnInstantiate "`content-hub` was renamed to `lomiri-content-hub`." pkgs.lomiri.lomiri-content-hub; # Added on 2024-09-11
   history-service = lib.warnOnInstantiate "`history-service` was renamed to `lomiri-history-service`." pkgs.lomiri.lomiri-history-service; # Added on 2024-11-11
   lomiri-system-settings-security-privacy = lib.warnOnInstantiate "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
+  morph-browser = throw "`lomiri.morph-browser` has been removed because it relied on the known-vulnerable `libsForQt5.qtwebengine`. Please use `lomiri-qt6.morph-browser` instead."; # Added on 2026-03-31
   telephony-service = lib.warnOnInstantiate "`telephony-service` was renamed to `lomiri-telephony-service`." pkgs.lomiri.lomiri-telephony-service; # Adder on 2025-01-15
 }
