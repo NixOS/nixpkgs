@@ -2608,33 +2608,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5 = callPackage ../tools/misc/hdf5 {
-    fortranSupport = false;
-    fortran = gfortran;
-  };
-
-  hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
-
-  hdf5-mpi = hdf5.override {
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
-  hdf5-cpp = hdf5.override { cppSupport = true; };
-
-  hdf5-fortran = hdf5.override { fortranSupport = true; };
-
-  hdf5-fortran-mpi = hdf5.override {
-    fortranSupport = true;
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
-  hdf5-threadsafe = hdf5.override {
-    cppSupport = false;
-    threadsafe = true;
-  };
-
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };

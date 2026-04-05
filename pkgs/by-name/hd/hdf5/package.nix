@@ -5,9 +5,9 @@
   fetchpatch,
   cmake,
   removeReferencesTo,
-  cppSupport ? true,
+  cppSupport ? false,
   fortranSupport ? false,
-  fortran,
+  gfortran,
   zlibSupport ? true,
   zlib,
   szipSupport ? false,
@@ -29,6 +29,7 @@ assert !cppSupport || !mpiSupport;
 
 let
   inherit (lib) optional optionals;
+  fortran = gfortran;
 in
 
 stdenv.mkDerivation rec {
