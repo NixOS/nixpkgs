@@ -122,8 +122,7 @@ in
     extraRuntimes = mkOption {
       type = with types; listOf package;
       # keep the default in sync with the podman package
-      default = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ];
-      defaultText = lib.literalExpression "lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ]";
+      default = [ ];
       example = lib.literalExpression ''
         [
           pkgs.gvisor
