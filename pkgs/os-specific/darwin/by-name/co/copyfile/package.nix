@@ -1,12 +1,11 @@
 {
-  lib,
-  apple-sdk,
   mkAppleDerivation,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  xnu = apple-sdk.sourceRelease "xnu";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "copyfile-deps-private-headers";
