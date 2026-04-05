@@ -1000,6 +1000,7 @@
   ./services/misc/unpackerr.nix
   ./services/misc/wastebin.nix
   ./services/misc/weechat.nix
+  ./services/misc/wings.nix
   ./services/misc/workout-tracker.nix
   ./services/misc/xmrig.nix
   ./services/misc/yarr.nix

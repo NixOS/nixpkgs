@@ -187,6 +187,15 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "module-wings": [
+    "index.html#module-wings"
+  ],
+  "module-wings-setup": [
+    "index.html#module-wings-setup"
+  ],
+  "module-wings-traefik": [
+    "index.html#module-wings-traefik"
+  ],
   "sec-boot-problems-scripted-stage-1": [
     "index.html#sec-boot-problems-scripted-stage-1"
   ],
