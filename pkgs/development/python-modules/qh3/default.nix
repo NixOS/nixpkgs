@@ -61,9 +61,11 @@ buildPythonPackage rec {
     rm -r qh3
   '';
 
-  disabledTests = lib.optionals stdenv.buildPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # ConnectionError
     "test_connect_and_serve_ipv4"
+    "test_ech_accepted"
+    "test_grease_ech_no_rejection"
   ];
 
   meta = {
