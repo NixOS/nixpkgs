@@ -218,6 +218,7 @@ in
       security.pam.services.xrdp-sesman = {
         allowNullPassword = true;
         startSession = true;
+        enableUMask = true;
       };
 
     })
