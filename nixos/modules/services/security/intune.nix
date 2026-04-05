@@ -30,6 +30,11 @@ in
 
     systemd.tmpfiles.packages = [ pkgs.intune-portal ];
     services.dbus.packages = [ pkgs.microsoft-identity-broker ];
+
+    systemd.services.microsoft-identity-device-broker.wantedBy = [ "multi-user.target" ];
+    systemd.sockets.intune-daemon.wantedBy = [ "sockets.target" ];
+    systemd.user.services.microsoft-identity-broker.wantedBy = [ "default.target" ];
+    systemd.user.services.intune-agent.wantedBy = [ "default.target" ];
   };
 
   meta = {
