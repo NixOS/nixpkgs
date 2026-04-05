@@ -134,7 +134,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Official Visual Studio Code extension for C# from Microsoft";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
