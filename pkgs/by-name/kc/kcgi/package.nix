@@ -6,6 +6,7 @@
   bmake,
   zlib,
   libbsd,
+  curl,
   nix-update-script,
 }:
 
@@ -30,6 +31,18 @@ stdenv.mkDerivation (finalAttrs: {
     bmake
   ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ];
+
+  nativeCheckInputs = [ bmake ];
+  checkInputs = [ curl ];
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    bmake regress
+
+    runHook postCheck
+  '';
 
   dontAddPrefix = true;
 
