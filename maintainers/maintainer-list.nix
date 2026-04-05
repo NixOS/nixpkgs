@@ -29514,13 +29514,6 @@
     github = "xdHampus";
     githubId = 16954508;
   };
-  xe = {
-    email = "me@christine.website";
-    matrix = "@withoutwithin:matrix.org";
-    github = "Xe";
-    githubId = 529003;
-    name = "Christine Dodrill";
-  };
   xeals = {
     email = "dev@xeal.me";
     github = "xeals";
