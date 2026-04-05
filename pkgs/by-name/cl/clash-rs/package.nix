@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg tokio_unstable -A stable_features";
-    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
   buildFeatures = [ "plus" ];
