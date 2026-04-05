@@ -11290,6 +11290,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-dap-ruby = buildVimPlugin {
+    pname = "nvim-dap-ruby";
+    version = "0-unstable-2025-07-08";
+    src = fetchFromGitHub {
+      owner = "suketa";
+      repo = "nvim-dap-ruby";
+      rev = "ba36f9905ca9c6d89e5af5467a52fceeb2bbbf6d";
+      hash = "sha256-57BBhdrikDEswZe2QW+jHMSgfXIjauc6iDNpWS0YUaU=";
+    };
+    meta.homepage = "https://github.com/suketa/nvim-dap-ruby/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-dap-ui = buildVimPlugin {
     pname = "nvim-dap-ui";
     version = "4.0.0-unstable-2026-04-03";
