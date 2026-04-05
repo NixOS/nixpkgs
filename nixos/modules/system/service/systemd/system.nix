@@ -61,7 +61,9 @@ let
     ) service.services;
 
   modularServiceConfiguration = portable-lib.configure {
-    serviceManagerPkgs = pkgs;
+    baseModules = [
+      (lib.modules.importApply ../../../../../lib/services/service.nix { inherit pkgs; })
+    ];
     extraRootModules = [
       ./service.nix
       ./config-data-path.nix
