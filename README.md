@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://nixos.org">
+  <a href="https://www.nixos.org">
     <picture>
       <source media="(prefers-color-scheme: light)" srcset="https://brand.nixos.org/logos/nixos-logo-default-gradient-black-regular-horizontal-minimal.svg">
       <source media="(prefers-color-scheme: dark)" srcset="https://brand.nixos.org/logos/nixos-logo-default-gradient-white-regular-horizontal-minimal.svg">
