@@ -3,15 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   filelock,
-  ghidra-bridge,
-  jfx-bridge,
   networkx,
   platformdirs,
   ply,
   prompt-toolkit,
   psutil,
   pycparser,
-  pyhidra,
+  pyghidra,
   pytestCheckHook,
   setuptools,
   toml,
@@ -28,7 +26,7 @@ let
     hash = "sha256-P7+BTJgdC9W8cC/7xQduFYllF+0ds1dSlm59/BFvZ2g=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libbs";
   version = "3.3.0";
   pyproject = true;
@@ -36,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xe47JZPkbROHFlqc2o/htqvZWjknsv5KekJBqXA44O4=";
   };
 
@@ -44,15 +42,13 @@ buildPythonPackage rec {
 
   dependencies = [
     filelock
-    ghidra-bridge
-    jfx-bridge
     networkx
     platformdirs
     ply
     prompt-toolkit
     psutil
     pycparser
-    pyhidra
+    pyghidra
     toml
     tqdm
   ];
@@ -81,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for writing plugins in any decompiler: includes API lifting, common data formatting, and GUI abstraction";
     homepage = "https://github.com/binsync/libbs";
-    changelog = "https://github.com/binsync/libbs/releases/tag/${src.tag}";
+    changelog = "https://github.com/binsync/libbs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
-}
+})
