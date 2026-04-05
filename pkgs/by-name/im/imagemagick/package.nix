@@ -41,6 +41,8 @@
   pango,
   libtiffSupport ? true,
   libtiff,
+  libultrahdrSupport ? true,
+  libultrahdr,
   libxml2Support ? true,
   libxml2,
   openjpegSupport ? !stdenv.hostPlatform.isMinGW,
@@ -115,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
+    (lib.withFeature libultrahdrSupport "uhdr")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
     (lib.withFeature fftwSupport "fftw")
@@ -141,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libraqmSupport libraqm
   ++ lib.optional librawSupport libraw
   ++ lib.optional libtiffSupport libtiff
+  ++ lib.optional libultrahdrSupport libultrahdr
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libheifSupport libheif
   ++ lib.optional djvulibreSupport djvulibre
