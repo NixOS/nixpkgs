@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "10.46";
 
   src = fetchurl {
-    url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
+    url = "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
     hash = "sha256-FfvFq6a+7gsXrssEYCrjlDI5OroevY45t8q/fbiDKZ8=";
   };
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.pcre.org/";
+    changelog = "https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-${version}";
     description = "Perl Compatible Regular Expressions";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ttuegel ];
