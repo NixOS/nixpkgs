@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data";
     homepage = "https://github.com/biobakery/MetaPhlAn";
     license = lib.licenses.mit;
-    changelog = "https://github.com/biobakery/MetaPhlAn/releases/tag/${finalAttrs.tag}";
+    changelog = "https://github.com/biobakery/MetaPhlAn/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "metaphlan";
     maintainers = with lib.maintainers; [ artur-sannikov ];
   };
