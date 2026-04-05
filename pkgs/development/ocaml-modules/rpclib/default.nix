@@ -12,14 +12,14 @@
 
 buildDunePackage rec {
   pname = "rpclib";
-  version = "9.0.0";
+  version = "10.2.0";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-rpc/releases/download/${version}/rpclib-${version}.tbz";
-    hash = "sha256-ziPrdWwCjZN0vRmCMpa923wjfT8FVFLTDRz30VIW6WM=";
+    hash = "sha256-N+xKTdU/yy042EZBXTpFl21aeMFTHm2HbbJDbpRxcvM=";
   };
 
   buildInputs = [
