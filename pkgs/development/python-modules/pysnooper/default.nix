@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -21,6 +22,11 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # timing-sensitive and often breaks on x86_64-darwin
+    "test_relative_time"
+  ];
 
   pythonImportsCheck = [ "pysnooper" ];
 

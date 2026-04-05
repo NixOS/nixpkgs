@@ -432,6 +432,7 @@ in
           replacements = {
             python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
             configPath = limineInstallConfig;
+            inherit (config.system.nixos) distroName;
           };
         };
       };

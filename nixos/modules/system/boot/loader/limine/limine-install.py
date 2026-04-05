@@ -492,12 +492,12 @@ def install_bootloader() -> None:
     config_file += option_from_config('term_margin_gradient', ['style', 'graphicalTerminal', 'marginGradient'])
 
     config_file += textwrap.dedent('''
-        # NixOS boot entries start here
+        # @distroName@ boot entries start here
     ''')
 
     for (profile, gens) in profiles:
         group_name = 'default profile' if profile == 'system' else f"profile '{profile}'"
-        config_file += f'/+NixOS {group_name}\n'
+        config_file += f'/+@distroName@ {group_name}\n'
 
         isFirst = True
 
@@ -506,7 +506,7 @@ def install_bootloader() -> None:
             isFirst = False
 
     config_file_path = os.path.join(limine_install_dir, 'limine.conf')
-    config_file += '\n# NixOS boot entries end here\n\n'
+    config_file += '\n# @distroName@ boot entries end here\n\n'
 
     config_file += str(config('extraEntries'))
 
