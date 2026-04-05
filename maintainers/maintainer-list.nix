@@ -21703,12 +21703,11 @@
     keys = [ { fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E"; } ];
   };
   preArcMed821 = {
-    email = "228732420+preArcMed821@users.noreply.github.com";
     github = "preArcMed821";
     githubId = 228732420;
     name = "preArcMed821";
-    keys = [ { fingrerprint = "0FF1 4046 5246 E4FB 6C5D  0302 8454 3F17 ADB9 6273"; }];
-  }
+    keys = [ { fingerprint = "0FF1 4046 5246 E4FB 6C5D  0302 8454 3F17 ADB9 6273"; } ];
+  };
   preisschild = {
     email = "florian@florianstroeger.com";
     github = "Preisschild";
