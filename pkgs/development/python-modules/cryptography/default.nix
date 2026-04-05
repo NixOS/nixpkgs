@@ -24,6 +24,8 @@ buildPythonPackage rec {
   version = "46.0.5";
   pyproject = true;
 
+  env.FOO = "hi";
+
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
