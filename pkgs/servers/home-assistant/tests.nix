@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   home-assistant,
 }:
 
@@ -135,9 +136,13 @@ let
   };
 
   extraDisabledTests = {
-    conversation = [
-      # intent fixture mismatch
+    conversation = lib.optionals stdenv.hostPlatform.isAarch64 [
+      # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
+    ];
+    ecovacs = [
+      # Translation not found for vacuum
+      "test_raise_segment_changed_issue"
     ];
     homeassistant_sky_connect = [
       # 2026.5.0: after reload device is in loaded state instead of retry state
