@@ -8,14 +8,14 @@
   go,
 }:
 let
-  version = "4.7.0";
+  version = "4.8.0";
   templatesVersion = "3.1.1648";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-functions-core-tools";
     tag = version;
-    hash = "sha256-2Bs1jxJmZzzShSrUK3XP+cNdXlczPEr6UCnh4oQRaoA=";
+    hash = "sha256-OY2FPzST1ejU+OPccv7Qvd8cM3gtiiL2CQNj2APDIx0=";
   };
 
   templates = fetchurl {

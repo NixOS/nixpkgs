@@ -1729,6 +1729,7 @@
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/pairdrop.nix
+  ./services/web-apps/papra.nix
   ./services/web-apps/part-db.nix
   ./services/web-apps/pdfding.nix
   ./services/web-apps/peering-manager.nix
