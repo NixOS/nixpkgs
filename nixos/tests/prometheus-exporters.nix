@@ -1446,6 +1446,22 @@ let
         '';
       };
 
+    podman =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+        };
+        metricProvider = {
+          virtualisation.podman.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("prometheus-podman-exporter.service")
+          wait_for_open_port(9156)
+          wait_until_succeeds("curl -sSf http://localhost:9156/metrics | grep prometheus_podman_exporter_build_info")
+        '';
+      };
+
     postfix =
       { ... }:
       {
@@ -1457,6 +1473,7 @@ let
         };
         exporterTest = ''
           wait_for_unit("prometheus-postfix-exporter.service")
+          wait_for_open_port(8020, "0.0.0.0", 300)
           wait_for_file("/var/lib/postfix/queue/public/showq")
           wait_for_open_port(9154)
           wait_until_succeeds(
