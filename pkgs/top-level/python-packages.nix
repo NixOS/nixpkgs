@@ -21149,6 +21149,8 @@ self: super: with self; {
 
   wifi = callPackage ../development/python-modules/wifi { };
 
+  wiim = callPackage ../development/python-modules/wiim { };
+
   wikipedia = callPackage ../development/python-modules/wikipedia { };
 
   wikipedia-api = callPackage ../development/python-modules/wikipedia-api { };
