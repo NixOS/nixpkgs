@@ -17,6 +17,7 @@ build_aarch64-darwin:
   - macos
   script:
     - 'nix profile install nixpkgs#gnutar'
+    - 'nix profile install nixpkgs#coreutils'
     - bash build.sh
     - bash xzar-install.sh
     - bash xzar.sh
