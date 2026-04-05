@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ ctestCheckHook ] ++ lib.optional mpiSupport mpiCheckPhaseHook;
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
     # * On Mac OS 10.4, test/dt_arith.c has some errors in conversion from long
     # double to (unsigned) long long and from (unsigned)long long to long double.
     "H5TEST-dt_arith"
