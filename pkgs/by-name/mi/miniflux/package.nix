@@ -9,16 +9,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.18";
+  version = "2.2.19";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = finalAttrs.version;
-    hash = "sha256-r5MFYdWV17u2ogxN01w9FpP/ErgqQmTEl5Nizg9FzCY=";
+    hash = "sha256-/zAO6LgT4BKGaLJNgfm2c0VCtpc/9jQmM6zmfnpJtYo=";
   };
 
-  vendorHash = "sha256-F1FbenWzokNnF6xiZeqpu5HWs1PZo0WtlZX/ePTvBTE=";
+  vendorHash = "sha256-zQURNCImYB66agRnorqLzvQKNNZb1o9ZVOVuETjQ0RE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,6 +30,8 @@ buildGo126Module (finalAttrs: {
     "-w"
     "-X miniflux.app/v2/internal/version.Version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux
