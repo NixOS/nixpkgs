@@ -67,6 +67,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+  postInstall = ''
+    mkdir -p "$out/share/applications"
+    mv openfreebuds_qt/assets/pw.mmk.OpenFreebuds.desktop "$out/share/applications"
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

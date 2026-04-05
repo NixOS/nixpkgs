@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/pixmaps/osmium.png
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/osmium.png
 
+    ln -s "$desktopItem/share/applications" $out/share
+
     runHook postInstall
   '';
 

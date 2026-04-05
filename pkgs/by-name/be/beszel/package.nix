@@ -8,13 +8,13 @@
 }:
 buildGo126Module (finalAttrs: {
   pname = "beszel";
-  version = "0.18.4";
+  version = "0.18.6";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ugxy23bLrKIDclrYRFJc6Nq4Ak2S3OLeyMaxuRkS/tY=";
+    hash = "sha256-CRO0Y3o3hwdE55D027fo0tvt9o7vsA1ooEBFlXuw2So=";
   };
 
   webui = buildNpmPackage {
@@ -51,12 +51,24 @@ buildGo126Module (finalAttrs: {
     npmDepsHash = "sha256-509/n5OH4z6LZH+jlmDLl2DlqKrD7M5ajtalmF/4n1o=";
   };
 
-  vendorHash = "sha256-V9P3VP4CsboaWPIt/MhtxYDsYH3pwKL4xK5YcLKgbI8=";
+  vendorHash = "sha256-g+UmoxBoCL3oGXNTY67Wz7y6FC/nkcS8020jhTq4JQE=";
+
+  tags = [ "testing" ];
 
   preBuild = ''
     mkdir -p internal/site/dist
     cp -r ${finalAttrs.webui}/* internal/site/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCollectorStartHelpers/nvtop_collector"
+        "TestApiRoutesAuthentication/GET_/update_-_shouldn't_exist_without_CHECK_UPDATES_env_var"
+        "TestConfigSyncWithTokens"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent

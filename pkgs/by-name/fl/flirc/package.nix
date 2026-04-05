@@ -3,11 +3,9 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  wrapQtAppsHook,
   hidapi,
   readline,
-  qtsvg,
-  qtxmlpatterns,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation {
@@ -21,14 +19,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     hidapi
     readline
-    qtsvg
-    qtxmlpatterns
+    libsForQt5.qtsvg
+    libsForQt5.qtxmlpatterns
   ];
 
   dontConfigure = true;

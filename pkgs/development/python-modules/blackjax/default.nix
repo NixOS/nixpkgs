@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,8 +9,6 @@
   setuptools-scm,
 
   # dependencies
-  fastprogress,
-  ipython,
   jax,
   jaxlib,
   numpy,
@@ -17,22 +16,25 @@
   scipy,
   typing-extensions,
 
+  # optional-dependencies
+  fastprogress,
+
   # checks
   chex,
-  pytestCheckHook,
   pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.4";
+  version = "1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = finalAttrs.version;
-    hash = "sha256-x/K/M7C+XNhqMdRZdDPpKmGgmnrjGsruDL3lFia2ioQ=";
+    hash = "sha256-tKJfukTqSiW2Xg3/8DakxtxlwGpJ14S/7qUE1OGM97I=";
   };
 
   build-system = [
@@ -41,8 +43,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    fastprogress
-    ipython
     jax
     jaxlib
     numpy
@@ -51,11 +51,18 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    progress = [
+      fastprogress
+    ];
+  };
+
   nativeCheckInputs = [
     chex
     pytestCheckHook
     pytest-xdist
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.progress;
 
   disabledTestPaths = [
     "tests/test_benchmarks.py"
@@ -78,6 +85,10 @@ buildPythonPackage (finalAttrs: {
     "test_nuts__without_device"
     "test_nuts__without_jit"
     "test_smc_waste_free__with_jit"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: Not equal to tolerance rtol=1e-07, atol=1e-05
+    "test_equal_matrices"
   ];
 
   pythonImportsCheck = [ "blackjax" ];

@@ -185,6 +185,7 @@ mapAliases {
   dogpile_cache = throw "'dogpile_cache' has been renamed to/replaced by 'dogpile-cache'"; # Converted to throw 2025-10-29
   duckduckgo-search = throw "duckduckgo-search was renamed to ddgs, use ddgs instead"; # added 2025-10-20
   dukpy = throw "'dukpy' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
+  dynd = throw "'dynd' has been removed due to lack of maintenance"; # added 2026-03-24
   easyeda2ato = throw "easyeda2ato as been removed in favor of atopile-easyda2kicad"; # added 2025-06-08
   EasyProcess = throw "'EasyProcess' has been renamed to/replaced by 'easyprocess'"; # Converted to throw 2025-10-29
   editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04

@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installManPage pimsync.1 pimsync.conf.5 pimsync-migration.7
+    installShellCompletion --zsh contrib/_pimsync
   '';
 
   nativeInstallCheckInputs = [

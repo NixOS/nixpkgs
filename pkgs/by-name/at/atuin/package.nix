@@ -25,10 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "ai"
     "client"
-    "sync"
     "clipboard"
     "daemon"
+    "hex"
+    "sync"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

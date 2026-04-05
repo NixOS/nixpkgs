@@ -78,7 +78,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "8548";
+  version = "8664";
 
   outputs = [
     "out"
@@ -89,7 +89,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-DBsTZBkngCnPbSZzs9zqWgIN1+tn8xTJ8EkNYg3xaLE=";
+    hash = "sha256-JTQg8A+8S7O/GSnRTDmvQuwDSuss+ydv6JDrNxWNeK8=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -98,10 +98,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [ ];
-
-  postPatch = ''
-    rm tools/server/public/index.html.gz
-  '';
 
   nativeBuildInputs = [
     cmake

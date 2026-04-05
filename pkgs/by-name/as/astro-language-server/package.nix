@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.3";
+  version = "2.16.6";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
-    rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-ONpSW6VMoiW1Q0Aa5Dp1pZx3LAQ2Kzv5YHKxHOxbXdo=";
+    tag = "@astrojs/language-server@${finalAttrs.version}";
+    hash = "sha256-xuAkfTVF+do7Tmk6LUOFkS7yunhVRkl+ZGpsOC7Ob4M=";
   };
 
   # https://pnpm.io/filtering#--filter-package_name-1
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-Kqw4W3ZWRHWNnJYLGks9IHjCYAYEIigskwb//yKvb6c=";
+    hash = "sha256-QJSFRJ3U7M0B7ukiU+BYY2KdrcNUpyiOcGA7G3xja3I=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
     changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };
