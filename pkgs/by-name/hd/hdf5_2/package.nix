@@ -7,9 +7,7 @@
   cppSupport ? true,
   fortranSupport ? false,
   gfortran,
-  zlibSupport ? true,
   zlib,
-  szipSupport ? true,
   libaec,
   mpiSupport ? false,
   mpi,
@@ -52,19 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vhsBjOQgzvz6+RbPrR6rRFBXFGkWJNCFjdzWFbu1/ik=";
   };
 
-  passthru = {
-    inherit
-      cppSupport
-      fortranSupport
-      gfortran
-      zlibSupport
-      zlib
-      szipSupport
-      mpiSupport
-      mpi
-      ;
-  };
-
   outputs = [
     "out"
     "dev"
@@ -77,13 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional fortranSupport gfortran;
 
-  buildInputs =
-    lib.optionals szipSupport [
-      libaec
-    ]
-    ++ lib.optional javaSupport jdk;
+  buildInputs = [
+    libaec
+  ]
+  ++ lib.optional javaSupport jdk;
 
-  propagatedBuildInputs = lib.optional zlibSupport zlib ++ lib.optional mpiSupport mpi;
+  propagatedBuildInputs = [ zlib ] ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
@@ -92,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
     (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
     (lib.cmakeBool "HDF5_ENABLE_FORTRAN" fortranSupport)
-    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
-    (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" zlibSupport)
+    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" true)
+    (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
     (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeFeature "DEFAULT_API_VERSION" apiVersion)
@@ -121,6 +105,16 @@ stdenv.mkDerivation (finalAttrs: {
         done
         popd
       '';
+
+  passthru = {
+    inherit
+      cppSupport
+      fortranSupport
+      gfortran
+      mpiSupport
+      mpi
+      ;
+  };
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";
