@@ -358,6 +358,6 @@ buildGoModule (finalAttrs: {
     '';
     license = lib.licenses.mpl20;
     mainProgram = "boulder";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })
