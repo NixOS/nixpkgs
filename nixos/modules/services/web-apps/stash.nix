@@ -514,7 +514,7 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
+                  password=${optionalString (cfg.passwordFile != null) "$(< ${cfg.passwordFile})"} \
                   jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
                   sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
                   ${lib.getExe pkgs.yq-go} '
