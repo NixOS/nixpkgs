@@ -2547,6 +2547,14 @@ with pkgs;
 
   gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
+  gradient-cli = callPackage ../development/tools/continuous-integration/gradient/cli.nix { };
+
+  gradient-frontend =
+    callPackage ../development/tools/continuous-integration/gradient/frontend.nix
+      { };
+
+  gradient-server = callPackage ../development/tools/continuous-integration/gradient/server.nix { };
+
   grails = callPackage ../development/web/grails { jdk = null; };
 
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
