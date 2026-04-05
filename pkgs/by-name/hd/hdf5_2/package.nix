@@ -110,12 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals threadsafe [
     "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
     "-DHDF5_BUILD_HL_LIB=OFF"
-  ]
-  # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
-  # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
-  ++ lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF";
+  ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
