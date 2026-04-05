@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeBool "HDF5_ALLOW_UNSUPPORTED" allowUnsupported)
     (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
-    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "out"}/lib/cmake/hdf5")
+    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "lib/cmake/hdf5")
   ];
 
   postInstall = ''
@@ -95,9 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
       mpi
       ;
 
-    tests.cmake-config = testers.hasCmakeConfigModules {
-      moduleNames = [ "hdf5" ];
-      package = finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        moduleNames = [ "hdf5" ];
+        versionCheck = true;
+      };
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "hdf5" ];
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
   };
 
