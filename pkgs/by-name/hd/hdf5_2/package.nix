@@ -89,20 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = lib.optional zlibSupport zlib ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [
-    "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
-    "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
-    "-DDEFAULT_API_VERSION=${apiVersion}"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
-  ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
-  ++ lib.optional fortranSupport "-DHDF5_ENABLE_FORTRAN=ON"
-  ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
-  ++ lib.optional zlibSupport "-DHDF5_ENABLE_ZLIB_SUPPORT=ON"
-  ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
-  ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
-  ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
-  ++ lib.optionals threadsafe [
-    "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
+    (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "HDF5_BUILD_WITH_INSTALL_NAME" stdenv.hostPlatform.isDarwin)
+    (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
+    (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
+    (lib.cmakeBool "HDF5_ENABLE_FORTRAN" fortranSupport)
+    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
+    (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" zlibSupport)
+    (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
+    (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
+    (lib.cmakeFeature "DEFAULT_API_VERSION" apiVersion)
+    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake")
   ];
 
   postInstall = ''
