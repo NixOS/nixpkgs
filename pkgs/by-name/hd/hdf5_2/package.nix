@@ -19,7 +19,7 @@
   javaSupport ? false,
   jdk,
   threadsafe ? false,
-  apiVersion ? null,
+  apiVersion ? "v200",
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -35,7 +35,6 @@ assert lib.elem apiVersion [
   "v112"
   "v114"
   "v200"
-  null
 ];
 
 stdenv.mkDerivation (finalAttrs: {
@@ -92,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
     "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
+    "-DDEFAULT_API_VERSION=${apiVersion}"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
   ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
   ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
   ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
-  ++ lib.optional (apiVersion != null) "-DDEFAULT_API_VERSION=${apiVersion}"
   ++ lib.optionals threadsafe [
     "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
     "-DHDF5_BUILD_HL_LIB=OFF"
