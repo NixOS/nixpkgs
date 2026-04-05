@@ -13900,8 +13900,6 @@ self: super: with self; {
 
   pyhibp = callPackage ../development/python-modules/pyhibp { };
 
-  pyhidra = callPackage ../development/python-modules/pyhidra { };
-
   pyhik = callPackage ../development/python-modules/pyhik { };
 
   pyhive-integration = callPackage ../development/python-modules/pyhive-integration { };
