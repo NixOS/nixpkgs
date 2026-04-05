@@ -3587,7 +3587,8 @@
       ];
     "lojack" =
       ps: with ps; [
-      ]; # missing inputs: lojack-api
+        lojack-api
+      ];
     "london_air" =
       ps: with ps; [
       ];
@@ -7877,6 +7878,7 @@
     "logbook"
     "logentries"
     "logger"
+    "lojack"
     "london_air"
     "london_underground"
     "lookin"
