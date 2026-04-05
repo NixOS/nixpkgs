@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  nix-update-script,
   pkg-config,
   zlib,
   pcre2,
@@ -108,6 +109,10 @@ stdenv.mkDerivation rec {
         --replace-quiet "$"'{_IMPORT_PREFIX}/include' ""
     done
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=poco-(.*)-release" ];
+  };
 
   meta = {
     homepage = "https://pocoproject.org/";
