@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform C++ libraries with a network/internet focus";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [
+      hythera
       tomodachi94
     ];
     platforms = lib.platforms.unix;
