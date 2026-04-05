@@ -1,6 +1,5 @@
 {
   lib,
-  apple-sdk,
   bzip2,
   libmd,
   libresolv,
@@ -10,17 +9,26 @@
   ncurses,
   pkg-config,
   shell_cmds,
+  pkgs,
   stdenvNoCC,
   xz,
   zlib,
 }:
 
 let
-  Libc = apple-sdk.sourceRelease "Libc";
+  f =
+    pkgs: prev:
+    if !pkgs.stdenv.hostPlatform.isDarwin || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin" then
+      prev.darwin.sourceRelease
+    else
+      f pkgs.stdenv.__bootPackages pkgs;
+  bootstrapSourceRelease = f pkgs pkgs;
+  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
+  Libc = bootstrapSourceRelease "Libc";
 
-  CommonCrypto = apple-sdk.sourceRelease "CommonCrypto";
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk.sourceRelease "xnu";
+  CommonCrypto = bootstrapSourceRelease "CommonCrypto";
+  libplatform = bootstrapSourceRelease "libplatform";
+  xnu = bootstrapSourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "text_cmds-deps-private-headers";
