@@ -19708,6 +19708,8 @@ self: super: with self; {
     }
   );
 
+  trmnl = callPackage ../development/python-modules/trmnl { };
+
   troi = callPackage ../development/python-modules/troi { };
 
   troposphere = callPackage ../development/python-modules/troposphere { };
