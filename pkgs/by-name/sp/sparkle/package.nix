@@ -3,8 +3,7 @@
   stdenvNoCC,
   buildGoModule,
   fetchFromGitHub,
-  pnpm_10,
-  pnpm ? pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -38,6 +37,8 @@ let
 
     meta.mainProgram = "sparkle-service";
   };
+
+  pnpm = pnpm_10_29_2;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {

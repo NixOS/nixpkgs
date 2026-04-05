@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioslimproto";
-    tag = "v${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-xHdwikriA6mcb7tmElqa6suINYxeyyGZQ5iO+P7dRCo=";
   };
 

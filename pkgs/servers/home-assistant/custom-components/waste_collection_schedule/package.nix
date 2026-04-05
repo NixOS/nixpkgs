@@ -3,34 +3,49 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   beautifulsoup4,
-  cloudscraper,
+  curl-cffi,
+  homeassistant,
   icalendar,
   icalevents,
+  jinja2,
   lxml,
+  pdfminer-six,
   pycryptodome,
   pypdf,
+  pytestCheckHook,
+  pyyaml,
+  requests,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "waste_collection_schedule";
-  version = "2.12.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hacs_waste_collection_schedule";
     tag = version;
-    hash = "sha256-mR8UCDQDQBMYCxIA8DKLhD+u9utfMx+woS5L2E7mxXM=";
+    hash = "sha256-L7SHqBCBFmcegCUl88L8DrNXPGbY9CDKqlvLSOWCQ+g=";
   };
 
   dependencies = [
     beautifulsoup4
-    cloudscraper
+    curl-cffi
     icalendar
     icalevents
     lxml
+    pdfminer-six
     pycryptodome
     pypdf
+  ];
+
+  nativeCheckInputs = [
+    homeassistant
+    jinja2
+    pytestCheckHook
+    pyyaml
+    requests
   ];
 
   meta = {

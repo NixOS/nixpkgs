@@ -14,17 +14,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8qSjr/VsJX6p6/sBRr9jlu2jjPhr1ZpdPe9WZofL/ug=";
+    hash = "sha256-XeJeBNfIFo2XowIRGgxixAtfz1saeKxt93/EK7EF5tA=";
   };
 
   npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-nmydorBc1r7OA/oXvetKw7ivyeqSppScINFXEpPYES0=";
+  npmDepsHash = "sha256-UeEldKIcCS7km1nuyfLlSawDVBQDn+k97wxe9ZgaHtM=";
 
   # npm 11 incompatible with fetchNpmDeps
   # https://github.com/NixOS/nixpkgs/issues/474535
@@ -76,7 +76,11 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # Build web-templates package first (required by main bundle)
+    # Build several internal packages first (required by main bundle)
+    npm run build --workspace=@qwen-code/channel-base
+    npm run build --workspace=@qwen-code/channel-telegram
+    npm run build --workspace=@qwen-code/channel-weixin
+    npm run build --workspace=@qwen-code/channel-dingtalk
     npm run build --workspace=@qwen-code/web-templates
 
     npm run generate
