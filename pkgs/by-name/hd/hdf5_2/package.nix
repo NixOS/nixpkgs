@@ -103,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
   ++ lib.optionals threadsafe [
     "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
-    "-DHDF5_BUILD_HL_LIB=OFF"
   ];
 
   postInstall = ''
