@@ -13762,6 +13762,8 @@ self: super: with self; {
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
+  pyfreshr = callPackage ../development/python-modules/pyfreshr { };
+
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
 
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
