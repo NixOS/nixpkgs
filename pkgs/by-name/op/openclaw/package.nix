@@ -128,7 +128,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/openclaw/openclaw/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "openclaw";
-    maintainers = with lib.maintainers; [ chrisportela ];
+    maintainers = with lib.maintainers; [
+      chrisportela
+      mkg20001
+    ];
     platforms = with lib.platforms; linux ++ darwin;
     knownVulnerabilities = [
       "Project uses LLMs to parse untrusted content, making it vulnerable to prompt injection, while having full access to system by default."
