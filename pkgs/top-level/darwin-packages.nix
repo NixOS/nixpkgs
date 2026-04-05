@@ -95,6 +95,8 @@ makeScopeWithSplicing' {
         bintools = self.binutilsDualAs-unwrapped;
       };
 
+      sourceRelease = self.callPackage ../os-specific/darwin/sourceRelease { };
+
       inherit (self.file_cmds) xattr;
 
       # Note: Not in `packages.nix` because it’s a package set not a derivation.
