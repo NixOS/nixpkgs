@@ -2,9 +2,14 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  stdenv,
   pkg-config,
   openssl,
   fontconfig,
+
+  libGL,
+  libxkbcommon,
+  wayland,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emissary";
@@ -26,6 +31,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     fontconfig
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/bin/emissary-cli \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libxkbcommon
+          wayland
+          libGL
+        ]
+      }
+  '';
 
   __darwinAllowLocalNetworking = true;
 
