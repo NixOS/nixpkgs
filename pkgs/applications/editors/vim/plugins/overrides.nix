@@ -867,6 +867,7 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
+      "conjure-spec.client.clojure.nrepl.server_spec"
       "conjure-spec.client.common-lisp.swank_spec"
       "conjure-spec.client.fennel.nfnl_spec"
       "conjure-spec.client.guile.socket_spec"
@@ -1534,6 +1535,11 @@ assertNoAdditions {
       # https://github.com/NixOS/nixpkgs/issues/431458
       "himalaya.folder.pickers.fzflua"
     ];
+  };
+
+  hotpot-nvim = super.hotpot-nvim.overrideAttrs {
+    # NOTE: Vim:E919: Directory not found in 'packpath': "pack/*/opt/hotpot-fennel-update"
+    doCheck = false;
   };
 
   hover-nvim = super.hover-nvim.overrideAttrs {

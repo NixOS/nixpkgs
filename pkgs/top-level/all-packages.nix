@@ -1517,10 +1517,6 @@ with pkgs;
 
   libfx2 = with python3Packages; toPythonApplication fx2;
 
-  flirc = libsForQt5.callPackage ../applications/video/flirc {
-    readline = readline70;
-  };
-
   foxdot = with python3Packages; toPythonApplication foxdot;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
@@ -1620,8 +1616,6 @@ with pkgs;
     charles4
     charles5
     ;
-
-  tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 

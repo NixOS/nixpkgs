@@ -2908,12 +2908,16 @@
   };
 
   vue = {
-    version = "0.2.1-unstable-2021-04-04";
-    url = "github:ikatyang/tree-sitter-vue";
-    rev = "91fe2754796cd8fba5f229505a23fa08f3546c06";
-    hash = "sha256-NeuNpMsKZUP5mrLCjJEOSLD6tlJpNO4Z/rFUqZLHE1A=";
+    version = "0.1.0";
+    url = "github:tree-sitter-grammars/tree-sitter-vue";
+    # NOTE: no upstream tag; using commit from 2026-01-24
+    rev = "ce8011a414fdf8091f4e4071752efc376f4afb08";
+    hash = "sha256-pCoyDRuRCpfpJh7vQIM8yZz5aPcqrdYlTJGM/K5oQFs=";
     meta = {
       license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        jeafleohj
+      ];
     };
   };
 
