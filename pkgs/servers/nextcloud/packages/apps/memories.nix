@@ -18,6 +18,11 @@ let
       srcHash = "sha256-KyUfrKHnRO3lMin0seSNFRnRRTPo12NbbvbkSpxSMQE=";
     };
     "32" = latestVersionForNc."31";
+    "33" = {
+      version = "8.0.1";
+      appHash = "sha256-B+O78qjBQbmMnFAvH/5a+YBive+rkBG9AKTX7G3qNR0=";
+      srcHash = "sha256-t/DiGJzSey9YpV5GkepKSGjr5gXc9KWDBtSY5UPRlEU=";
+    };
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
