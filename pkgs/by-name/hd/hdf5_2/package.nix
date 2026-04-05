@@ -11,7 +11,7 @@
   jdk,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  cppSupport ? true,
+  cppSupport ? !(mpiSupport || threadsafe),
   fortranSupport ? false,
   mpiSupport ? false,
   javaSupport ? false,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_BUILD_WITH_INSTALL_NAME" stdenv.hostPlatform.isDarwin)
     (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
     (lib.cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
-    (lib.cmakeBool "HDF5_BUILD_HL_LIB" !threadsafe)
+    (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe))
     (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
     (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" true)
     (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeBool "HDF5_ALLOW_UNSUPPORTED" allowUnsupported)
     (lib.cmakeFeature "DEFAULT_API_VERSION" apiVersion)
-    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/hdf5")
+    (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "out"}/lib/cmake/hdf5")
   ];
 
   postInstall = ''
