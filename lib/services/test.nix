@@ -1,7 +1,7 @@
 # Run:
-#   nix-instantiate --eval nixos/modules/system/service/portable/test.nix
+#   nix-instantiate --eval lib/services/test.nix
 let
-  lib = import ../../../../../lib;
+  lib = import ../.;
 
   inherit (lib) mkOption types;
 

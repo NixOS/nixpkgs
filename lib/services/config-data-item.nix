@@ -1,4 +1,4 @@
-# Tests in: ../../../../tests/modular-service-etc/test.nix
+# Tests in: ../../nixos/tests/modular-service-etc/test.nix
 # This file is a function that returns a module.
 pkgs:
 {
