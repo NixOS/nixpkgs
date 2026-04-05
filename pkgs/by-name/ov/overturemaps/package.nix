@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "overturemaps";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y91x+S6YKBldy7OWIXCJQ5HuR3KrFRdfBkfMmkaeXy8=";
+    hash = "sha256-rvc1MpqCdRGuMWS5CSDev9SFgyVX8VczopXU/lWAyxg=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -22,6 +22,7 @@ python3Packages.buildPythonPackage rec {
     click
     geopandas
     numpy
+    orjson
     pyarrow
     shapely
   ];
