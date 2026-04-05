@@ -1,19 +1,19 @@
 {
   lib,
-  apple-sdk,
   bison,
   flex,
   libxo,
   mkAppleDerivation,
   ncurses,
   pkg-config,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  Libc = apple-sdk.sourceRelease "Libc";
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk.sourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  libplatform = sourceRelease "libplatform";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "adv_cmds-deps-private-headers";
