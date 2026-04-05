@@ -30,13 +30,30 @@ let
     else
       toString value;
 
+  toKeyValue = generators.toKeyValue {
+    mkKeyValue = generators.mkKeyValueDefault { } " = ";
+  };
+
+  toPhpIni =
+    v: if isString v then v else toKeyValue (filterAttrs (_: v: v != null) v);
+
+  # Combine global and pool-specific phpOptions, supporting both the
+  # deprecated string format and the new attribute set format, including
+  # mixed usage during the migration period.
+  poolPhpIni =
+    poolOpts:
+    if isAttrs cfg.phpOptions && isAttrs poolOpts.phpOptions then
+      toPhpIni (cfg.phpOptions // poolOpts.phpOptions)
+    else
+      (optionalString (toPhpIni cfg.phpOptions != "") (toPhpIni cfg.phpOptions + "\n"))
+      + toPhpIni poolOpts.phpOptions;
+
   fpmCfgFile =
     pool: poolOpts:
     pkgs.writeText "phpfpm-${pool}.conf" ''
       [global]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
-
       [${pool}]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}
@@ -47,7 +64,8 @@ let
     poolOpts:
     pkgs.runCommand "php.ini"
       {
-        inherit (poolOpts) phpOptions;
+        inherit (poolOpts) phpPackage;
+        phpOptions = poolPhpIni poolOpts;
         preferLocalBuild = true;
         __structuredAttrs = true;
       }
@@ -96,9 +114,36 @@ let
         };
 
         phpOptions = mkOption {
-          type = types.lines;
+          type =
+            with types;
+            either lines (attrsOf (nullOr (oneOf [
+              bool
+              int
+              float
+              str
+            ])));
+          default = { };
+          example = literalExpression ''
+            {
+              "date.timezone" = "CET";
+            }
+          '';
           description = ''
-            "Options appended to the PHP configuration file {file}`php.ini` used for this PHP-FPM pool."
+            Structured options appended to the PHP configuration file
+            {file}`php.ini` used for this PHP-FPM pool.
+
+            For backwards compatibility, a string in
+            {file}`php.ini` format is also accepted, but deprecated.
+            It will be removed in a future release. Please migrate to
+            the attribute set format:
+
+            ```nix
+            {
+              services.phpfpm.pools.<name>.phpOptions = {
+                "date.timezone" = "CET";
+              };
+            }
+            ```
           '';
         };
 
@@ -169,7 +214,6 @@ let
       config = {
         socket = if poolOpts.listen == "" then "${runtimeDir}/${name}.sock" else poolOpts.listen;
         group = mkDefault poolOpts.user;
-        phpOptions = mkBefore cfg.phpOptions;
 
         settings = mapAttrs (name: mkDefault) {
           listen = poolOpts.socket;
@@ -222,13 +266,36 @@ in
       phpPackage = mkPackageOption pkgs "php" { };
 
       phpOptions = mkOption {
-        type = types.lines;
-        default = "";
-        example = ''
-          date.timezone = "CET"
+        type =
+          with types;
+          either lines (attrsOf (nullOr (oneOf [
+            bool
+            int
+            float
+            str
+          ])));
+        default = { };
+        example = literalExpression ''
+          {
+            "date.timezone" = "CET";
+          }
         '';
         description = ''
-          Options appended to the PHP configuration file {file}`php.ini`.
+          Structured options appended to the PHP configuration file
+          {file}`php.ini`.
+
+          For backwards compatibility, a string in
+          {file}`php.ini` format is also accepted, but deprecated.
+          It will be removed in a future release. Please migrate to
+          the attribute set format:
+
+          ```nix
+          {
+            services.phpfpm.phpOptions = {
+              "date.timezone" = "CET";
+            };
+          }
+          ```
         '';
       };
 
@@ -270,7 +337,13 @@ in
       '') (filterAttrs (pool: poolOpts: poolOpts.extraConfig != null) cfg.pools)
       ++ optional (cfg.extraConfig != null) ''
         Using config.services.phpfpm.extraConfig is deprecated and will become unsupported in a future release. Please migrate your configuration to config.services.phpfpm.settings.
-      '';
+      ''
+      ++ optional (isString cfg.phpOptions) ''
+        Using a string for `services.phpfpm.phpOptions` is deprecated and will become unsupported in a future release. Please migrate to the attribute set format, e.g. `services.phpfpm.phpOptions = { "date.timezone" = "CET"; };`.
+      ''
+      ++ mapAttrsToList (pool: poolOpts: ''
+        Using a string for `services.phpfpm.pools.${pool}.phpOptions` is deprecated and will become unsupported in a future release. Please migrate to the attribute set format, e.g. `services.phpfpm.pools.${pool}.phpOptions = { "date.timezone" = "CET"; };`.
+      '') (filterAttrs (pool: poolOpts: isString poolOpts.phpOptions) cfg.pools);
 
     services.phpfpm.settings = {
       error_log = "syslog";
