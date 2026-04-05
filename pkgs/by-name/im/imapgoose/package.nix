@@ -27,6 +27,8 @@ buildGoModule rec {
   postInstall = ''
     installManPage imapgoose.1
     installManPage imapgoose.conf.5
+
+    installShellCompletion --zsh contrib/_imapgoose
   '';
 
   meta = {
