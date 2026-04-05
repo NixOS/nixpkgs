@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeBool "HDF5_ALLOW_UNSUPPORTED" allowUnsupported)
-    (lib.cmakeFeature "DEFAULT_API_VERSION" apiVersion)
+    (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
     (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "${placeholder "out"}/lib/cmake/hdf5")
   ];
 
