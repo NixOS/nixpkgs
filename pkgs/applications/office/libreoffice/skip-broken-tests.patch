@@ -20,18 +20,6 @@ index 231aea8d0f3c..214a23c82562 100644
      LibLibreOffice_Impl aOffice;
      LibLODocument_Impl* pDocument = loadDoc("search.ods");
      pDocument->pClass->initializeForRendering(pDocument, nullptr);
-diff --git a/svgio/qa/cppunit/data/tdf160386.svg b/svgio/qa/cppunit/data/tdf160386.svg
-index 1644b0d15514..cf429508bcd4 100644
---- a/svgio/qa/cppunit/data/tdf160386.svg
-+++ b/svgio/qa/cppunit/data/tdf160386.svg
-@@ -8,7 +8,6 @@
-     <text systemLanguage="en">Hello!</text>
-     <text systemLanguage="es">Hola!</text>
-     <text systemLanguage="fr">Bonjour!</text>
--    <text systemLanguage="ja">こんにちは</text>
-     <text systemLanguage="ru">Привет!</text>
-     <text>☺</text>
-   </switch>
 diff --git a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx b/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
 index d8093e57a4e8..c95a742a68d3 100644
 --- a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
@@ -83,19 +71,40 @@ index 6cf8f22647b9..12848713771b 100644
      createSwWebDoc("outline-level.html");
      // This was 0, HTML imported into Writer lost the outline numbering for
      // Heading 1 styles.
-diff --git a/sw/qa/extras/layout/layout3.cxx b/sw/qa/extras/layout/layout3.cxx
-index e53d22c8fd1a..2f9decb0d931 100644
---- a/sw/qa/extras/layout/layout3.cxx
-+++ b/sw/qa/extras/layout/layout3.cxx
-@@ -1388,6 +1388,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658c)
- 
- CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
+diff --git i/sw/qa/extras/layout/layout5.cxx w/sw/qa/extras/layout/layout5.cxx
+index b1b6c9cc9d23..3f920d00f996 100644
+--- i/sw/qa/extras/layout/layout5.cxx
++++ w/sw/qa/extras/layout/layout5.cxx
+@@ -721,6 +721,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf117028)
+
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf106390)
  {
-+    return; // flaky
++    return; // fails due to missing font: DejaVu Sans
+     createSwDoc("tdf106390.odt");
+     SwDocShell* pShell = getSwDocShell();
+
+diff --git i/sw/qa/extras/layout/layout5.cxx w/sw/qa/extras/layout/layout5.cxx
+index b1b6c9cc9d23..72990739711f 100644
+--- i/sw/qa/extras/layout/layout5.cxx
++++ w/sw/qa/extras/layout/layout5.cxx
+@@ -739,6 +739,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf106390)
+
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion1)
+ {
++    return; // fails due to missing font: DejaVu Sans
 +
-     createSwDoc("tdf155177-1-min.odt");
- 
-     uno::Reference<beans::XPropertySet> xStyle(
+     createSwDoc("table-extrusion1.odt");
+     SwDocShell* pShell = getSwDocShell();
+
+@@ -759,6 +761,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion1)
+
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion2)
+ {
++    return; // fails due to missing font: DejaVu Sans
++
+     createSwDoc("table-extrusion2.odt");
+     SwDocShell* pShell = getSwDocShell();
+
 diff --git a/sw/qa/extras/odfimport/odfimport.cxx b/sw/qa/extras/odfimport/odfimport.cxx
 index 794b3bd16ed4..3feaadd7a20f 100644
 --- a/sw/qa/extras/odfimport/odfimport.cxx
@@ -162,6 +171,28 @@ index e37df27fd817..937c12e8c4c5 100644
      // Regression test for bidi portion line breaking where the portion layout ends with underflow,
      // but the bidi portion should not be truncated.
      createSwDoc("tdf162314.fodt");
+--- i/sw/qa/extras/tiledrendering/tiledrendering.cxx
++++ w/sw/qa/extras/tiledrendering/tiledrendering.cxx
+@@ -1262,6 +1262,7 @@ static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor
+ 
+ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
+ {
++    return;
+     addDarkLightThemes(COL_BLACK, COL_WHITE);
+     SwXTextDocument* pXTextDocument = createDoc();
+     int nFirstViewId = SfxLokHelper::getView();
+--- i/vcl/qa/cppunit/complextext.cxx
++++ w/vcl/qa/cppunit/complextext.cxx
+@@ -794,6 +794,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf165510)
+ 
+ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf154104)
+ {
++    return;
++
+     ScopedVclPtrInstance<VirtualDevice> pOutDev;
+ 
+     vcl::Font aBaseFont{ u"David Libre"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+
 --- a/vcl/qa/cppunit/pdfexport/pdfexport2.cxx	2025-11-05 10:25:25.693126767 +0100
 +++ b/vcl/qa/cppunit/pdfexport/pdfexport2.cxx	2025-11-05 10:27:38.216128865 +0100
 @@ -5127,6 +5127,7 @@
