@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   # mpi related tests are time consuming and flaky
   doCheck = !mpiSupport;
 
-  nativeCheckInputs = [ ctestCheckHook ] + lib.optional mpiSupport mpiCheckPhaseHook;
+  nativeCheckInputs = [ ctestCheckHook ] ++ lib.optional mpiSupport mpiCheckPhaseHook;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # * On Mac OS 10.4, test/dt_arith.c has some errors in conversion from long
