@@ -132,12 +132,15 @@ def _rollback_system(
 ) -> Path:
     match action:
         case Action.SWITCH | Action.BOOT:
-            path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
+            path_to_config = nix.rollback(
+                profile, target_host, sudo=args.sudo, run0=args.run0
+            )
         case Action.TEST | Action.BUILD:
             maybe_path_to_config = nix.rollback_temporary_profile(
                 profile,
                 target_host,
                 sudo=args.sudo,
+                run0=args.run0,
             )
             if maybe_path_to_config:
                 path_to_config = maybe_path_to_config
@@ -232,12 +235,14 @@ def _activate_system(
                 path_to_config,
                 target_host=target_host,
                 sudo=args.sudo,
+                run0=args.run0,
             )
             nix.switch_to_configuration(
                 path_to_config,
                 action,
                 target_host=target_host,
                 sudo=args.sudo,
+                run0=args.run0,
                 specialisation=args.specialisation,
                 install_bootloader=args.install_bootloader,
             )
@@ -248,6 +253,7 @@ def _activate_system(
                 action,
                 target_host=target_host,
                 sudo=args.sudo,
+                run0=args.run0,
                 specialisation=args.specialisation,
                 install_bootloader=args.install_bootloader,
             )

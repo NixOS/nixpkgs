@@ -454,6 +454,7 @@ def get_generations_from_nix_env(
     profile: Profile,
     target_host: Remote | None = None,
     sudo: bool = False,
+    run0: bool = False,
 ) -> list[Generation]:
     """Get all NixOS generations from profile with nix-env. Needs root.
 
@@ -469,6 +470,7 @@ def get_generations_from_nix_env(
         stdout=PIPE,
         remote=target_host,
         sudo=sudo,
+        run0=run0,
     )
 
     def parse_line(line: str) -> Generation:
@@ -600,12 +602,15 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     )
 
 
-def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
+def rollback(
+    profile: Profile, target_host: Remote | None, sudo: bool, run0: bool
+) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
     run_wrapper(
         ["nix-env", "--rollback", "-p", profile.path],
         remote=target_host,
         sudo=sudo,
+        run0=run0,
     )
     # Rollback config PATH is the own profile
     return profile.path
@@ -615,10 +620,11 @@ def rollback_temporary_profile(
     profile: Profile,
     target_host: Remote | None,
     sudo: bool,
+    run0: bool,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
     generations = get_generations_from_nix_env(
-        profile, target_host=target_host, sudo=sudo
+        profile, target_host=target_host, sudo=sudo, run0=run0
     )
     previous_gen_id = None
     for generation in generations:
@@ -636,6 +642,7 @@ def set_profile(
     path_to_config: Path,
     target_host: Remote | None,
     sudo: bool,
+    run0: bool,
 ) -> None:
     "Set a path as the current active Nix profile."
     if not os.environ.get(
@@ -669,6 +676,7 @@ def set_profile(
         ["nix-env", "-p", profile.path, "--set", path_to_config],
         remote=target_host,
         sudo=sudo,
+        run0=run0,
     )
 
 
@@ -677,6 +685,7 @@ def switch_to_configuration(
     action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
     sudo: bool,
+    run0: bool,
     install_bootloader: bool = False,
     specialisation: str | None = None,
 ) -> None:
@@ -717,6 +726,7 @@ def switch_to_configuration(
         },
         remote=target_host,
         sudo=sudo,
+        run0=run0,
         # switch-to-configuration is not expected to produce meaningful
         # stdout, but if it (or any of its children) does, it would leak
         # into our stdout and break the "only the store path on stdout"
@@ -726,16 +736,18 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
+def upgrade_channels(
+    all_channels: bool = False, sudo: bool = False, run0: bool = False
+) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
-    if not sudo and os.geteuid() != 0:
+    if not sudo and not run0 and os.geteuid() != 0:
         raise NixOSRebuildError(
             "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
-            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+            "also pass '--sudo', '--run0', or run the command as root (e.g., with sudo)"
         )
 
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
@@ -748,4 +760,5 @@ def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
                 ["nix-channel", "--update", channel_path.name],
                 check=False,
                 sudo=sudo,
+                run0=run0,
             )

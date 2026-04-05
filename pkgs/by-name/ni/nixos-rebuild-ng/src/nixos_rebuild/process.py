@@ -131,6 +131,7 @@ def run_wrapper(
     append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
     sudo: bool = False,
+    run0: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
@@ -163,6 +164,8 @@ def run_wrapper(
                 process_input = remote.sudo_password + "\n"
             else:
                 remote_run_args = ["sudo", *sudo_args, *remote_run_args]
+        if run0:
+            remote_run_args = ["run0", *remote_run_args]
 
         ssh_args: list[Arg] = [
             "ssh",

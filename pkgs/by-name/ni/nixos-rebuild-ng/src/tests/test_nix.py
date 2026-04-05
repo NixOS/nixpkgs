@@ -532,6 +532,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             stdout=PIPE,
             remote=None,
             sudo=False,
+            run0=False,
         )
 
     remote = m.Remote("user@host", [], "password", "ssh")
@@ -550,6 +551,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             stdout=PIPE,
             remote=remote,
             sudo=True,
+            run0=False,
         )
 
 
@@ -640,19 +642,21 @@ def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
 
     profile = m.Profile("system", path)
 
-    assert n.rollback(profile, None, False) == profile.path
+    assert n.rollback(profile, None, False, False) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
         remote=None,
         sudo=False,
+        run0=False,
     )
 
     target_host = m.Remote("user@localhost", [], None, "ssh")
-    assert n.rollback(profile, target_host, True) == profile.path
+    assert n.rollback(profile, target_host, True, False) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
         remote=target_host,
         sudo=True,
+        run0=False,
     )
 
 
@@ -672,7 +676,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
                 """),
         )
         assert (
-            n.rollback_temporary_profile(m.Profile("system", path), None, False)
+            n.rollback_temporary_profile(m.Profile("system", path), None, False, False)
             == path.parent / "system-2083-link"
         )
         mock_run.assert_called_with(
@@ -685,11 +689,14 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             stdout=PIPE,
             remote=None,
             sudo=False,
+            run0=False,
         )
 
         target_host = m.Remote("user@localhost", [], None, "ssh")
         assert (
-            n.rollback_temporary_profile(m.Profile("foo", path), target_host, True)
+            n.rollback_temporary_profile(
+                m.Profile("foo", path), target_host, True, False
+            )
             == path.parent / "foo-2083-link"
         )
         mock_run.assert_called_with(
@@ -702,11 +709,12 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             stdout=PIPE,
             remote=target_host,
             sudo=True,
+            run0=False,
         )
 
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         mock_run.return_value = CompletedProcess([], 0, stdout="")
-        assert n.rollback_temporary_profile(profile, None, False) is None
+        assert n.rollback_temporary_profile(profile, None, False, False) is None
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
@@ -720,12 +728,14 @@ def test_set_profile(mock_run: Mock) -> None:
         config_path,
         target_host=None,
         sudo=False,
+        run0=False,
     )
 
     mock_run.assert_called_with(
         ["nix-env", "-p", profile_path, "--set", config_path],
         remote=None,
         sudo=False,
+        run0=False,
     )
 
     mock_run.return_value = CompletedProcess([], 1)
@@ -736,6 +746,7 @@ def test_set_profile(mock_run: Mock) -> None:
             config_path,
             target_host=None,
             sudo=False,
+            run0=False,
         )
     assert str(e.value).startswith(
         "error: your NixOS configuration path seems to be missing essential files."
@@ -757,6 +768,7 @@ def test_switch_to_configuration_without_systemd_run(
             profile_path,
             m.Action.SWITCH,
             sudo=False,
+            run0=False,
             target_host=None,
             specialisation=None,
             install_bootloader=False,
@@ -769,6 +781,7 @@ def test_switch_to_configuration_without_systemd_run(
             "NIXOS_INSTALL_BOOTLOADER": "0",
         },
         sudo=False,
+        run0=False,
         remote=None,
         stdout=sys.stderr,
     )
@@ -778,6 +791,7 @@ def test_switch_to_configuration_without_systemd_run(
             config_path,
             m.Action.BOOT,
             sudo=False,
+            run0=False,
             target_host=None,
             specialisation="special",
         )
@@ -796,6 +810,7 @@ def test_switch_to_configuration_without_systemd_run(
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
+            run0=False,
             target_host=target_host,
             install_bootloader=True,
             specialisation="special",
@@ -811,6 +826,7 @@ def test_switch_to_configuration_without_systemd_run(
             "NIXOS_INSTALL_BOOTLOADER": "1",
         },
         sudo=True,
+        run0=False,
         remote=target_host,
         stdout=sys.stderr,
     )
@@ -831,6 +847,7 @@ def test_switch_to_configuration_with_systemd_run(
             profile_path,
             m.Action.SWITCH,
             sudo=False,
+            run0=False,
             target_host=None,
             specialisation=None,
             install_bootloader=False,
@@ -847,6 +864,7 @@ def test_switch_to_configuration_with_systemd_run(
             "NIXOS_INSTALL_BOOTLOADER": "0",
         },
         sudo=False,
+        run0=False,
         remote=None,
         stdout=sys.stderr,
     )
@@ -861,6 +879,7 @@ def test_switch_to_configuration_with_systemd_run(
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
+            run0=False,
             target_host=target_host,
             install_bootloader=True,
             specialisation="special",
@@ -877,6 +896,7 @@ def test_switch_to_configuration_with_systemd_run(
             "NIXOS_INSTALL_BOOTLOADER": "1",
         },
         sudo=True,
+        run0=False,
         remote=target_host,
         stdout=sys.stderr,
     )
@@ -901,25 +921,41 @@ def test_upgrade_channels(
     mock_glob: Mock,
 ) -> None:
     with pytest.raises(m.NixOSRebuildError) as e:
-        n.upgrade_channels(all_channels=False, sudo=False)
+        n.upgrade_channels(all_channels=False, sudo=False, run0=False)
     assert str(e.value) == (
         "error: if you pass the '--upgrade' or '--upgrade-all' flag, you must "
-        "also pass '--sudo' or run the command as root (e.g., with sudo)"
+        "also pass '--sudo', '--run0', or run the command as root (e.g., with sudo)"
     )
 
-    n.upgrade_channels(all_channels=False, sudo=True)
+    n.upgrade_channels(all_channels=False, sudo=True, run0=False)
     mock_run.assert_called_once_with(
-        ["nix-channel", "--update", "nixos"], check=False, sudo=True
+        ["nix-channel", "--update", "nixos"],
+        check=False,
+        sudo=True,
+        run0=False,
     )
 
     mock_geteuid.return_value = 0
-    n.upgrade_channels(all_channels=True, sudo=False)
+    n.upgrade_channels(all_channels=True, sudo=False, run0=False)
     mock_run.assert_has_calls(
         [
-            call(["nix-channel", "--update", "nixos"], check=False, sudo=False),
             call(
-                ["nix-channel", "--update", "nixos-hardware"], check=False, sudo=False
+                ["nix-channel", "--update", "nixos"],
+                check=False,
+                sudo=False,
+                run0=False,
             ),
-            call(["nix-channel", "--update", "home-manager"], check=False, sudo=False),
+            call(
+                ["nix-channel", "--update", "nixos-hardware"],
+                check=False,
+                sudo=False,
+                run0=False,
+            ),
+            call(
+                ["nix-channel", "--update", "home-manager"],
+                check=False,
+                sudo=False,
+                run0=False,
+            ),
         ]
     )

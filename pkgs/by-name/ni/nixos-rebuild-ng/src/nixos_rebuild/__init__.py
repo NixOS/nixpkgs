@@ -172,6 +172,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--sudo", action="store_true", help="Prefixes activation commands with sudo"
     )
     main_parser.add_argument(
+        "--run0", action="store_true", help="Prefixes activation commmands with run0"
+    )
+    main_parser.add_argument(
         "--use-remote-sudo",
         action="store_true",
         help="Deprecated, use '--sudo' instead",
@@ -298,6 +301,9 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
+    if args.sudo and args.run0:
+        parser.error(f"--run0 and --sudo are mutually exclusive")
+
     if args.store_path:
         if args.rollback:
             parser.error("--store-path and --rollback are mutually exclusive")
@@ -321,7 +327,7 @@ def execute(argv: list[str]) -> None:
     args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(args.upgrade_all, args.sudo)
+        nix.upgrade_channels(args.upgrade_all, args.sudo, args.run0)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
