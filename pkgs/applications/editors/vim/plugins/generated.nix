@@ -11006,6 +11006,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-ansible = buildVimPlugin {
+    pname = "nvim-ansible";
+    version = "0-unstable-2026-02-09";
+    src = fetchFromGitHub {
+      owner = "mfussenegger";
+      repo = "nvim-ansible";
+      rev = "c7f595d568b588942d4d0c37b5cd6cae3764a148";
+      hash = "sha256-Ykp610LPF0tWidHM16UqeaU8sJxcr5OXJdHkjWCYUTU=";
+    };
+    meta.homepage = "https://github.com/mfussenegger/nvim-ansible/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-autopairs = buildVimPlugin {
     pname = "nvim-autopairs";
     version = "0.10.0-unstable-2026-01-30";
