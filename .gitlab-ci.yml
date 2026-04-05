@@ -1,7 +1,7 @@
 build:
   timeout: 10h
   tags:
-    - ${RUNNER_TAG}
+  - nix
   script:
     - bash build.sh
     - bash xzar-install.sh
@@ -10,7 +10,4 @@ build:
   artifacts:
     paths:
       - nixpkgs.tar.xz
-  parallel:
-    matrix:
-      - RUNNER_TAG: [macos, nix]
 
