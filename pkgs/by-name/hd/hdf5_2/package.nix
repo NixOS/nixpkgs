@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "HDF5_INSTALL_CMAKE_DIR" "lib/cmake/hdf5")
   ];
 
-  # the mpi related tests are time consuming and flaky
+  # mpi related tests are time consuming and flaky
   doCheck = !mpiSupport;
 
   nativeCheckInputs = [ ctestCheckHook ] + lib.optional mpiSupport mpiCheckPhaseHook;
