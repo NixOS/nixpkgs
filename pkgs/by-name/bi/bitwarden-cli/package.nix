@@ -117,6 +117,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       dotlambda
+      caverav
     ];
   };
 })
