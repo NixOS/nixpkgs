@@ -38,10 +38,6 @@ assert lib.elem apiVersion [
   null
 ];
 
-let
-  inherit (lib) optional optionals;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   version = "2.1.1";
   pname =
@@ -82,16 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
     cmake
   ]
-  ++ optional fortranSupport gfortran;
+  ++ lib.optional fortranSupport gfortran;
 
   buildInputs =
-    optionals szipSupport [
+    lib.optionals szipSupport [
       szip
       libaec
     ]
-    ++ optional javaSupport jdk;
+    ++ lib.optional javaSupport jdk;
 
-  propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
+  propagatedBuildInputs = lib.optional zlibSupport zlib ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
