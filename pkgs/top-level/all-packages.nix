@@ -1935,11 +1935,6 @@ with pkgs;
 
   roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
 
-  rsyslog = callPackage ../tools/system/rsyslog {
-    withHadoop = false; # Currently Broken
-    withKsi = false; # Currently Broken
-  };
-
   rsyslog-light = rsyslog.override {
     withKrb5 = false;
     withSystemd = false;

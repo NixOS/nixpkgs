@@ -39,13 +39,13 @@
   openssl,
   withRelp ? true,
   librelp,
-  withKsi ? true,
+  withKsi ? false, # Currently Broken
   libksi,
   withLogging ? true,
   liblogging,
   withNet ? true,
   libnet,
-  withHadoop ? true,
+  withHadoop ? false, # Currently Broken
   hadoop,
   withRdkafka ? true,
   rdkafka,
