@@ -28213,6 +28213,12 @@
     githubId = 17836748;
     name = "Mason Mackaman";
   };
+  username-generic = {
+    name = "username-generic";
+    email = "username-generic@tuta.io";
+    github = "username-generic";
+    githubId = 202454830;
+  };
   usertam = {
     name = "Samuel Tam";
     email = "code@usertam.dev";
