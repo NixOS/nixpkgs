@@ -9,6 +9,7 @@
   libaec,
   mpi,
   jdk,
+  ctestCheckHook,
   mpiCheckPhaseHook,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -93,7 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
   # the mpi related tests are time consuming and flaky
   doCheck = !mpiSupport;
 
-  nativeCheckInputs = lib.optional mpiSupport mpiCheckPhaseHook;
+  nativeCheckInputs = [ ctestCheckHook ] + lib.optional mpiSupport mpiCheckPhaseHook;
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # * On Mac OS 10.4, test/dt_arith.c has some errors in conversion from long
+    # double to (unsigned) long long and from (unsigned)long long to long double.
+    "H5TEST-dt_arith"
+  ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
