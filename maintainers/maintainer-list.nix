@@ -19833,6 +19833,12 @@
     githubId = 1839979;
     name = "Niklas Thörne";
   };
+  nttis = {
+    email = "nttis@duck.com";
+    github = "nttis";
+    githubId = 42465069;
+    name = "Nguyễn Thế Triết";
+  };
   nudelsalat = {
     email = "nudelsalat@clouz.de";
     name = "Fabian Dreßler";
