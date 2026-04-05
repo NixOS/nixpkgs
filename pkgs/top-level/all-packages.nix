@@ -2541,8 +2541,6 @@ with pkgs;
 
   gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
-  grails = callPackage ../development/web/grails { jdk = null; };
-
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
   inherit

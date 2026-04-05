@@ -3,9 +3,10 @@
   stdenv,
   fetchurl,
   unzip,
-  # If jdk is null, require JAVA_HOME in runtime environment, else store
-  # JAVA_HOME=${jdk.home} into grails.
-  jdk ? null,
+  # Renamed from 'jdk' to avoid callPackage auto-injecting pkgs.jdk.
+  # If grailsJdk is null, require JAVA_HOME in runtime environment,
+  # else store JAVA_HOME=${grailsJdk.home} into grails.
+  grailsJdk ? null,
   coreutils,
   ncurses,
   gnused,
@@ -20,7 +21,7 @@ let
       gnused
       gnugrep
     ]
-    ++ lib.optional (jdk != null) jdk
+    ++ lib.optional (grailsJdk != null) grailsJdk
   );
 in
 stdenv.mkDerivation rec {
@@ -44,9 +45,9 @@ stdenv.mkDerivation rec {
     # Improve purity
     sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
   ''
-  + lib.optionalString (jdk != null) ''
+  + lib.optionalString (grailsJdk != null) ''
     # Inject JDK path into grails
-    sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
+    sed -i -e '2iJAVA_HOME=${grailsJdk.home}' "$out"/bin/grails
   '';
 
   preferLocalBuild = true;
