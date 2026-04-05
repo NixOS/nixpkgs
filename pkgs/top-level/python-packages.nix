@@ -380,6 +380,8 @@ self: super: with self; {
 
   aiokem = callPackage ../development/python-modules/aiokem { };
 
+  aiolichess = callPackage ../development/python-modules/aiolichess { };
+
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
   aiolifx-connection = callPackage ../development/python-modules/aiolifx-connection { };
