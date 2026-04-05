@@ -9,8 +9,7 @@
   gfortran,
   zlibSupport ? true,
   zlib,
-  szipSupport ? false,
-  szip,
+  szipSupport ? true,
   libaec,
   mpiSupport ? false,
   mpi,
@@ -61,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
       zlibSupport
       zlib
       szipSupport
-      szip
       mpiSupport
       mpi
       ;
@@ -81,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals szipSupport [
-      szip
       libaec
     ]
     ++ lib.optional javaSupport jdk;
