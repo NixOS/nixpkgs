@@ -134,7 +134,7 @@ let
     inherit
       (evalModules {
         modules = [
-          (modules.importApply ../../modules/system/service/portable/service.nix {
+          (modules.importApply ../../../lib/services/service.nix {
             pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
           })
         ];

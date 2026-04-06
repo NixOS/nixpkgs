@@ -16,8 +16,8 @@ in
   # https://nixos.org/manual/nixos/unstable/#modular-services
   _class = "service";
   imports = [
-    ../../../../../modules/generic/meta-maintainers.nix
-    ../../../misc/assertions.nix
+    ../../modules/generic/meta-maintainers.nix
+    ../../nixos/modules/misc/assertions.nix
     (lib.modules.importApply ./config-data.nix { inherit pkgs; })
   ];
   options = {

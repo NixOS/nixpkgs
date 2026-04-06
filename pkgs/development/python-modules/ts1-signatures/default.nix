@@ -36,6 +36,6 @@ buildPythonPackage {
     description = "TLS and HTTP signature and fingerprint library";
     homepage = "https://github.com/yifeikong/th1";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
   };
 }

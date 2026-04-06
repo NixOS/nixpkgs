@@ -116,7 +116,10 @@ let
           && (t == "directory" -> baseNameOf n != "tests")
           && (t == "file" -> hasSuffix ".nix" n)
         );
-        prefixRegex = "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos)($|/.*))";
+        prefixRegex =
+          "^"
+          + lib.strings.escapeRegex (toString pkgs.path)
+          + "($|/(modules|nixos|lib/services)($|/.*)|/lib)";
         filteredModules = builtins.path {
           name = "source";
           inherit (pkgs) path;

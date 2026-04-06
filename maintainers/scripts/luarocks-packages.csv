@@ -52,6 +52,8 @@ lrexlib-pcre,,,,,,
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,5.1,gepbird
 lsqlite3,,,,,,
+ltreesitter-ts,,,,,,
+ltreesitter,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
@@ -95,6 +97,7 @@ luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
 luarocks-build-rust-mlua,,,,,,mrcjkb
+luarocks-build-tree-sitter-cli,,,,,,
 luarocks-build-treesitter-parser,,,,,,mrcjkb
 luarocks-build-treesitter-parser-cpp,,,,,,mrcjkb
 luasec,,,,,,flosse
@@ -156,16 +159,18 @@ sqlite,,,,,,
 std._debug,,,,,,
 std.normalize,,,,,,
 stdlib,,,,41.2.2,,
-teal-language-server,,,,0.0.5-1,,
+teal-language-server,,,,,,
 telescope-manix,,,,,,
 telescope.nvim,,,,,5.1,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
+tree-sitter-cli,,,,,,
 tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb
 tree-sitter-orgmode,,,,,5.1,
 utf8,,,,,,
+tree-sitter-teal,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
 xml2lua,,,,,,teto

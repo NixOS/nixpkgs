@@ -292,6 +292,8 @@ self: super: with self; {
 
   aioftp = callPackage ../development/python-modules/aioftp { };
 
+  aioghost = callPackage ../development/python-modules/aioghost { };
+
   aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
 
   aiogram = callPackage ../development/python-modules/aiogram { };
@@ -379,6 +381,8 @@ self: super: with self; {
   aiokef = callPackage ../development/python-modules/aiokef { };
 
   aiokem = callPackage ../development/python-modules/aiokem { };
+
+  aiolichess = callPackage ../development/python-modules/aiolichess { };
 
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
@@ -5051,6 +5055,8 @@ self: super: with self; {
   envs = callPackage ../development/python-modules/envs { };
 
   enzyme = callPackage ../development/python-modules/enzyme { };
+
+  epaper-dithering = callPackage ../development/python-modules/epaper-dithering { };
 
   epc = callPackage ../development/python-modules/epc { };
 
@@ -10785,6 +10791,8 @@ self: super: with self; {
 
   nampa = callPackage ../development/python-modules/nampa { };
 
+  nanoarrow = callPackage ../development/python-modules/nanoarrow { zstd-c = pkgs.zstd; };
+
   nanobind = callPackage ../development/python-modules/nanobind { };
 
   nanoeigenpy = callPackage ../development/python-modules/nanoeigenpy { };
@@ -11461,6 +11469,8 @@ self: super: with self; {
   onnxscript = callPackage ../development/python-modules/onnxscript { };
 
   onnxslim = callPackage ../development/python-modules/onnxslim { };
+
+  onvif-parsers = callPackage ../development/python-modules/onvif-parsers { };
 
   onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
 
@@ -13143,6 +13153,8 @@ self: super: with self; {
 
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
 
+  py-opendisplay = callPackage ../development/python-modules/py-opendisplay { };
+
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
   py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
@@ -13174,6 +13186,8 @@ self: super: with self; {
   py-tes = callPackage ../development/python-modules/py-tes { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
+
+  py-unifi-access = callPackage ../development/python-modules/py-unifi-access { };
 
   py-vapid = callPackage ../development/python-modules/py-vapid { };
 
@@ -19711,6 +19725,8 @@ self: super: with self; {
       python3Packages = self;
     }
   );
+
+  trmnl = callPackage ../development/python-modules/trmnl { };
 
   troi = callPackage ../development/python-modules/troi { };
 

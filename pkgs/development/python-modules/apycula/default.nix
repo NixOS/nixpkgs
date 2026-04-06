@@ -1,24 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  crc,
   fetchPypi,
+
+  # build-system
   setuptools-scm,
+
+  # dependencies
+  fastcrc,
+  msgspec,
+  numpy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "apycula";
-  version = "0.29";
+  version = "0.31";
   pyproject = true;
 
+  # The Pypi archive contains necessary files generated with proprietary tools.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-awhGSmGQDQ0Pi+4y9KoR1Yw6UZjM/CTxAV0jdfen6Qw=";
+    hash = "sha256-77pr4HbS2adFeEI3Q3KzcCfJMi4UomOtKnuGAxobxF0=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ crc ];
+  dependencies = [
+    fastcrc
+    msgspec
+    numpy
+  ];
 
   # Tests require a physical FPGA
   doCheck = false;

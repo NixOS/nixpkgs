@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -61,7 +62,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "torch"
     "torchaudio"
+    "torchcodec"
   ];
   dependencies = [
     asteroid-filterbanks
@@ -121,13 +124,22 @@ buildPythonPackage rec {
     "test_audio_resample"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Crashes the interpreter
-    # - On aarch64-darwin: Trace/BPT trap: 5
-    # - On x86_64-darwin: Fatal Python error: Illegal instruction
-    "tests/inference_test.py"
-    "tests/test_train.py"
-  ];
+  disabledTestPaths =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # Crashes the interpreter
+      # - On aarch64-darwin: Trace/BPT trap: 5
+      # - On x86_64-darwin: Fatal Python error: Illegal instruction
+      "tests/inference_test.py"
+      "tests/test_train.py"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.14") [
+      # RuntimeError: Please call `iter(combined_loader)` first.
+      # https://github.com/Lightning-AI/pytorch-lightning/issues/20641
+      "tests/inference_test.py"
+      "tests/test_train.py"
+      # PicklingError: Can't pickle <class 'pyannote.database.registry.Debug'>
+      "tests/tasks/test_reproducibility.py"
+    ];
 
   meta = {
     description = "Neural building blocks for speaker diarization: speech activity detection, speaker change detection, overlapped speech detection, speaker embedding";

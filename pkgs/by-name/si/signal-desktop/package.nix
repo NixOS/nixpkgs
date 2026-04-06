@@ -23,6 +23,9 @@
 
   withAppleEmojis ? false,
 }:
+assert lib.warnIf (commandLineArgs != "")
+  "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
+  true;
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10_29_2;
@@ -115,12 +118,23 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
-  buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
   patches = [
     ./force-90-days-expiration.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
+    # Signal ships the Apple emoji set without a licence via an npm
+    # package and upstream does not seem terribly interested in fixing
+    # this; see:
+    #
+    # * <https://github.com/signalapp/Signal-Android/issues/5862>
+    # * <https://whispersystems.discoursehosting.net/t/signal-is-likely-violating-apple-license-terms-by-using-apple-emoji-in-the-sticker-creator-and-android-and-desktop-apps/52883>
+    #
+    # We work around this by replacing it with the Noto Color Emoji
+    # set, which is available under a FOSS licence and more likely to
+    # be used on a NixOS machine anyway. The Apple emoji are removed
+    # before `fetchPnpmDeps` to ensure that the build doesn’t cache the
+    # unlicensed emoji files.
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
       noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
     }
@@ -137,9 +151,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
 
-    # https://github.com/signalapp/Signal-Desktop/issues/7667
-    substituteInPlace ts/util/version.std.ts \
-      --replace-fail 'isAdhoc(version)' 'true'
+    # Disable auto-updater https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace config/production.json \
+      --replace-fail '"updatesEnabled": true' '"updatesEnabled": false'
 
     # Nix builds do not need upstream release hooks (notarization and
     # language-pack postprocessing), and they expect a different macOS
@@ -274,7 +288,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + ''

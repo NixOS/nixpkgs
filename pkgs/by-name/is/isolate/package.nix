@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isolate";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "ioi";
     repo = "isolate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AacKIRS/Ah1KoE+bz+lK2GPbS3F3ifBGXvvCFWMd7hs=";
+    hash = "sha256-z/23k6F9XHbJDFld9tjIafUZzbUDEWAnbLvAoaEAilQ=";
   };
 
   nativeBuildInputs = [

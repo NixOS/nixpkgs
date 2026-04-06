@@ -225,7 +225,6 @@ with lib.maintainers;
     members = [
       mdarocha
       corngood
-      ggg
       raphaelr
       jamiemagee
       anpin

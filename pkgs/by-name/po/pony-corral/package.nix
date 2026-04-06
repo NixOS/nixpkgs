@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isx86_64 then
       "x86-64"
     else if stdenv.hostPlatform.isAarch64 then
-      "armv8-a"
+      "generic"
     else
       lib.warn ''
         architecture '${stdenv.hostPlatform.system}' compiles with native optimizations,
