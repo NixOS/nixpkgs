@@ -727,7 +727,9 @@ in
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
-  hibernate = handleTestOn [ "x86_64-linux" ] ./hibernate.nix { };
+  hibernate = handleTestOn [ "x86_64-linux" ] ./hibernate.nix {
+    systemdStage1 = false;
+  };
   hibernate-systemd-stage-1 = handleTestOn [ "x86_64-linux" ] ./hibernate.nix {
     systemdStage1 = true;
   };
