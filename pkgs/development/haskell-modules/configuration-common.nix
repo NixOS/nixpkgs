@@ -1697,6 +1697,10 @@ with haskellLib;
     })
   ] super.hledger-web;
 
+  # Allow hledger 1.52
+  # https://github.com/peti/hledger-interest/issues/27
+  hledger-interest = doJailbreak super.hledger-interest;
+
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
     # 2025-02-13: Too strict bounds on lens < 5.3 and vector < 0.13
