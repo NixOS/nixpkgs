@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pythonBindings [
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHON_PKG_DIR" "${placeholder "python"}/${python3Packages.python.sitePackages}")
-    (lib.cmakeFeature "Python3_EXECUTABLE" "${lib.getExe python3Packages.python}")
+    (lib.cmakeFeature "Python3_EXECUTABLE" python3Packages.python.pythonOnBuildForHost.interpreter)
   ]
   ++ lib.optionals javaBindings [
     (lib.cmakeFeature "Z3_JAVA_JNI_LIB_INSTALLDIR" "${placeholder "java"}/lib")

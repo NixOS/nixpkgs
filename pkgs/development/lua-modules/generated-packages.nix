@@ -1912,6 +1912,64 @@ final: prev: {
     }
   ) { };
 
+  ltreesitter = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter";
+      version = "0.2.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-0.2.0-1.rockspec";
+          sha256 = "0qhmx73hkskzmf5s3yv843234ri8n3gqj4dad79b018j5ilwiria";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "euclidianAce";
+        repo = "ltreesitter";
+        tag = "v0.2.0";
+        hash = "sha256-PYM6UAwp8w0qZxua5G6RFXI78Q6L3Vlc3eolXlNrN8k=";
+      };
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/ltreesitter";
+        description = "Treesitter bindings to Lua";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
+  ltreesitter-ts = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter-ts";
+      version = "0.0.1-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-ts-0.0.1-1.rockspec";
+          sha256 = "064nn3h6wi8z5ply35ig78jjkpy527nc5qxisbkvv8s3s345h82r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "ltreesitter-ts";
+        tag = "0.0.1";
+        hash = "sha256-HFBOYFadw+lwQYk39vrFtAn/HGjfXzCxjN1RLBp4yKA=";
+      };
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/ltreesitter-ts";
+        description = "Treesitter parsing library bindings for Lua";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
   lua-cjson = callPackage (
     {
       buildLuarocksPackage,
@@ -3504,6 +3562,38 @@ final: prev: {
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
         description = "A LuaRocks build backend for Lua modules written in Rust using mlua";
+      };
+    }
+  ) { };
+
+  luarocks-build-tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luarocks-build-tree-sitter-cli";
+      version = "0.0.3-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luarocks-build-tree-sitter-cli-0.0.3-1.rockspec";
+          sha256 = "0yy04svrll85zn334mhhnzzdqymsbiqymnr6iaj23h436v3gcq38";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "luarocks-build-tree-sitter-cli";
+        tag = "0.0.3";
+        hash = "sha256-Chc0eKvKyL9JM6MNX5GcRes1YA2+W842NDrX1nNMQ+E=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/luarocks-build-tree-sitter-cli";
+        description = "A LuaRocks build backend to install the tree-sitter CLI";
+        license.fullName = "MIT";
       };
     }
   ) { };
@@ -5682,38 +5772,46 @@ final: prev: {
     {
       argparse,
       buildLuarocksPackage,
-      dkjson,
       fetchFromGitHub,
       fetchurl,
       inspect,
+      ltreesitter-ts,
+      lua-cjson,
       luafilesystem,
+      luarocks-build-treesitter-parser,
       lusc_luv,
       luv,
       tl,
+      tree-sitter-cli,
+      tree-sitter-teal,
     }:
     buildLuarocksPackage {
       pname = "teal-language-server";
-      version = "0.0.5-1";
+      version = "0.1.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/teal-language-server-0.0.5-1.rockspec";
-          sha256 = "11ps1hgkgli4sf9gcj7pin4kbc5w0yck0daig1ghqssn2q9m2x5l";
+          url = "mirror://luarocks/teal-language-server-0.1.1-1.rockspec";
+          sha256 = "1dhhqm2dwl1i27dni8yd6l7qjd1xhz16b772jp96aj66rizhkvcr";
         }).outPath;
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "teal-language-server";
-        rev = "main";
-        hash = "sha256-TbNvYG2aRt27+sfXvZOlq/F7Gy6sQtoDz6satC+Qqss=";
+        tag = "0.1.1";
+        hash = "sha256-UgN3BOdsxUIsn1HAXEmAzHns1ZKylxUo7owI2uYsNlA=";
       };
 
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
       propagatedBuildInputs = [
         argparse
-        dkjson
         inspect
+        ltreesitter-ts
+        lua-cjson
         luafilesystem
         lusc_luv
         luv
         tl
+        tree-sitter-cli
+        tree-sitter-teal
       ];
 
       meta = {
@@ -5911,6 +6009,38 @@ final: prev: {
     }
   ) { };
 
+  tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luarocks-build-tree-sitter-cli,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-cli";
+      version = "0.26.5-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-cli-0.26.5-1.rockspec";
+          sha256 = "1bd9lz72gvi7djzcy0z6yja045ycm4byiyjpwa3m6zgh1h4mp30r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "tree-sitter-cli";
+        rev = "d8e1eb4ae406b75db0f50fae8be5dff636dbb4da";
+        hash = "sha256-J73buMI+DzrQ4Qx7G6rW2xFxiOYJBy4rGVDsnfNEgzQ=";
+      };
+
+      nativeBuildInputs = [ luarocks-build-tree-sitter-cli ];
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/tree-sitter-cli";
+        description = "Install tree-sitter CLI binaries";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
   tree-sitter-http = callPackage (
     {
       buildLuarocksPackage,
@@ -6000,6 +6130,38 @@ final: prev: {
         homepage = "https://github.com/nvim-orgmode/tree-sitter-org";
         license.fullName = "MIT";
         description = "A fork of tree-sitter-org, for use with the orgmode Neovim plugin";
+      };
+    }
+  ) { };
+
+  tree-sitter-teal = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-teal";
+      version = "0.0.35-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-teal-0.0.35-1.rockspec";
+          sha256 = "06g2i3y3gmyz17v9gxwswa9db544nyhd5mx4zq3lihrshbbf6r10";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/euclidianAce/tree-sitter-teal/archive/05d276e737055e6f77a21335b7573c9d3c091e2f.zip";
+        sha256 = "1g1zk47a8jcwac0j60mlfv56mhlhbf6f77vjkx4vsfbrryprcfi4";
+      };
+
+      disabled = luaOlder "5.1";
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/tree-sitter-teal";
+        description = "tree-sitter parser for teal";
+        license.fullName = "UNKNOWN";
       };
     }
   ) { };
