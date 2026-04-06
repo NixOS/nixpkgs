@@ -29,6 +29,10 @@ let
 
   upstreamUnits = [
     "basic.target"
+    "breakpoint-pre-udev.service"
+    "breakpoint-pre-basic.service"
+    "breakpoint-pre-mount.service"
+    "breakpoint-pre-switch-root.service"
     "ctrl-alt-del.target"
     "debug-shell.service"
     "emergency.service"
