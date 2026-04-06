@@ -18,6 +18,7 @@ lib: pkgs: actuallySplice:
 
 let
   inherit (lib.customisation) mapCrossIndex renameCrossIndexFrom;
+  inherit (lib) mapAttrs;
 
   spliceReal =
     inputs:
@@ -31,8 +32,6 @@ let
         # The same pkgs sets one probably intends
         // inputs.buildHost
         // inputs.hostTarget;
-      # perf: mapAttrs defers merge calls until a key is selected, avoiding
-      # ~60k eager closures that listToAttrs+map would create.
       merge =
         name: defaultValue:
         let
@@ -66,7 +65,7 @@ let
           # `__functor__` for functions instead.
           defaultValue;
     in
-    builtins.mapAttrs merge mash;
+    mapAttrs merge mash;
 
   splicePackages =
     {
