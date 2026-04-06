@@ -1,21 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unixodbc";
-  version = "2.3.12";
+  version = "2.3.14";
 
-  # TODO: build from source https://github.com/lurcher/unixODBC
-  src = fetchurl {
-    urls = [
-      "ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-${finalAttrs.version}.tar.gz"
-      "https://www.unixodbc.org/unixODBC-${finalAttrs.version}.tar.gz"
-    ];
-    sha256 = "sha256-8hBQFEXOIb9ge6Ue+MEl4Q4i3/3/7Dd2RkYt9fAZFew=";
+  src = fetchFromGitHub {
+    owner = "lurcher";
+    repo = "unixODBC";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2WhUnpiNTtsoOJ4rvdxaadcW1ROWfdoSVA8Crj8rpo8=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   configureFlags = [
     "--disable-gui"
@@ -23,9 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    changelog = "https://github.com/lurcher/unixODBC/releases/tag/v${finalAttrs.version}";
     description = "ODBC driver manager for Unix";
     homepage = "https://www.unixodbc.org/";
     license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.unix;
   };
 })
