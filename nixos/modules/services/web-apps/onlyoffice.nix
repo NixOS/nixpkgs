@@ -271,7 +271,7 @@ in
         serviceConfig = {
           # needs to be ran wrapped in FHS for now
           # because the default config refers to many FHS paths
-          ExecStart = "${lib.getExe cfg.package.fhs} ${cfg.package.fileconverter}/bin/fileconverter";
+          ExecStart = "${lib.getExe cfg.package.fhs} ${lib.getExe cfg.package.fileconverter}";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
