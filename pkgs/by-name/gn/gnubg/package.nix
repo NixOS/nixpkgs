@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  flex,
   glib,
   python3,
   gtk2,
@@ -13,17 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnubg";
-  version = "1.07.001";
+  version = "1.08.003";
 
   src = fetchurl {
     url = "mirror://gnu/gnubg/gnubg-release-${version}-sources.tar.gz";
-    hash = "sha256-cjmXKUGcrZ8RLDBmoS0AANpFCkVq3XsJTYkVUGnWgh4=";
+    hash = "sha256-b32WmxPP/3hvupD/jMXl1WS5f08Kppr+Tzg48YxEWXk=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
     python3
+    flex
     glib
   ];
 
