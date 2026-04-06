@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mediafile";
   version = "0.16.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "mediafile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GKEm2LKR3F9uy3FdhvpLPE9Auca8+40Zp53yaLk45XE=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to the metadata tags for many audio file formats";
     homepage = "https://github.com/beetbox/mediafile";
-    changelog = "https://github.com/beetbox/mediafile/releases/tag/${src.tag}";
+    changelog = "https://github.com/beetbox/mediafile/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})
