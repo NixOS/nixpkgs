@@ -741,6 +741,10 @@ in
       path = [ pkgs.util-linux ];
       overrideStrategy = "asDropin";
     };
+    systemd.services."modprobe@" = {
+      restartIfChanged = false;
+      serviceConfig.ExecSearchPath = lib.makeBinPath [ pkgs.kmod ];
+    };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
