@@ -663,7 +663,7 @@ let
         let
           commonConfig = {
             # builds stuff in the VM, needs more juice
-            virtualisation.diskSize = 8 * 1024;
+            virtualisation.diskSize = 12 * 1024;
             virtualisation.cores = 8;
             virtualisation.memorySize = 2048;
 
@@ -700,7 +700,7 @@ let
               # Use a small /dev/vdb as the root disk for the
               # installer. This ensures the target disk (/dev/vda) is
               # the same during and after installation.
-              virtualisation.emptyDiskImages = [ 512 ];
+              virtualisation.emptyDiskImages = [ 1024 ];
               virtualisation.rootDevice = "/dev/vdb";
 
               nix.package = selectNixPackage pkgs;
