@@ -18,6 +18,7 @@ lib: pkgs: actuallySplice:
 
 let
   inherit (lib.customisation) mapCrossIndex renameCrossIndexFrom;
+  inherit (lib) mapAttrs;
 
   spliceReal =
     inputs:
@@ -66,7 +67,7 @@ let
           # `__functor__` for functions instead.
           defaultValue;
     in
-    builtins.mapAttrs merge mash;
+    mapAttrs merge mash;
 
   splicePackages =
     {
