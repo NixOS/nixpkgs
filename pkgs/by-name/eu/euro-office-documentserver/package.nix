@@ -112,7 +112,7 @@ let
     # creates temporary files next to sources...
     mkdir working
     cp ${x2t.components.sdkjs}/slide/themes/src/* working
-    ${x2t.components.allthemesgen}/bin/allthemesgen \
+    ${lib.getExe x2t.components.allthemesgen} \
       --converter-dir="$out/bin"\
       --src="working"\
       --output="$out/images"
