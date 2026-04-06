@@ -950,7 +950,8 @@
       ];
     "chess_com" =
       ps: with ps; [
-      ]; # missing inputs: chess-com-api
+        chess-com-api
+      ];
     "cisco_ios" =
       ps: with ps; [
         pexpect
@@ -7499,6 +7500,7 @@
     "ccm15"
     "cert_expiry"
     "chacon_dio"
+    "chess_com"
     "clicksend_tts"
     "climate"
     "cloud"
