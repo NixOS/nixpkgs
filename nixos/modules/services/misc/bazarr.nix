@@ -6,6 +6,9 @@
 }:
 let
   cfg = config.services.bazarr;
+
+  settingsFormat = pkgs.formats.yaml { };
+  configFile = settingsFormat.generate "bazarr-config.yaml" cfg.settings;
 in
 {
   options = {
@@ -43,6 +46,51 @@ in
         default = "bazarr";
         description = "Group under which bazarr runs.";
       };
+
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            general.hostname = lib.mkOption {
+              type = lib.types.str;
+              default = config.networking.hostName;
+              defaultText = lib.literalExpression "config.networking.hostName";
+              description = "Hostname for Bazarr.";
+            };
+
+            analytics.enabled = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Enable Bazarr analytics.";
+            };
+          };
+        };
+        default = { };
+        example = lib.literalExpression ''
+          {
+            general = {
+              instance_name = "NixOS Bazarr";
+            };
+          }
+        '';
+        description = ''
+          Bazarr configuration.
+
+          ::: {.note}
+          On start and if {option}`mutableSettings` is `true`,
+          these options are merged into the configuration file on start, taking
+          precedence over configuration changes made on the web interface.
+          :::
+        '';
+      };
+
+      mutableSettings = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Allow changes made on the Bazarr web interface to persist between service restarts.
+        '';
+      };
     };
   };
 
@@ -56,6 +104,17 @@ in
       description = "Bazarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+
+      preStart = ''
+        mkdir -p '${cfg.dataDir}/config'
+        if [ -e '${cfg.dataDir}/config/config.yaml' ] && [ "${toString cfg.mutableSettings}" = "1" ]; then
+          ${lib.getExe pkgs.yaml-merge} '${cfg.dataDir}/config/config.yaml' '${configFile}' > '${cfg.dataDir}/config/config.yaml.tmp'
+          mv '${cfg.dataDir}/config/config.yaml.tmp' '${cfg.dataDir}/config/config.yaml'
+        else
+          cp -f '${configFile}' '${cfg.dataDir}/config/config.yaml'
+        fi
+        chmod 600 '${cfg.dataDir}/config/config.yaml'
+      '';
 
       serviceConfig = {
         Type = "simple";
