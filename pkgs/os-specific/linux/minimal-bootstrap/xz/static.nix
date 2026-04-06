@@ -39,7 +39,7 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    disallowedReferences = [ musl ];
+    disallowedReferences = [ gcc ];
 
     passthru.tests.get-version =
       result:
