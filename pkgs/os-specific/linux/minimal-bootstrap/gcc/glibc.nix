@@ -124,9 +124,6 @@ bash.runCommand "${pname}-${version}"
     ln -s ../isl-${islVersion} isl
 
     # Configure
-    export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
-    export CXX="g++ -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
-
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

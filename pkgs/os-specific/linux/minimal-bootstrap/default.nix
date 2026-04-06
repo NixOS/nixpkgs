@@ -154,10 +154,18 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
-        gcc-latest = callPackage ./gcc/latest.nix {
+        gcc-latest-unwrapped = callPackage ./gcc/latest.nix {
           gcc = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+        };
+        gcc-latest = callPackage ./gcc/wrapper.nix {
+          bash-build = bash;
+          gcc-unwrapped = gcc-latest-unwrapped;
+          targetPlatform = hostPlatform;
+          libc = musl;
+          libgcc = gcc-latest-unwrapped;
+          libstdcxx = gcc-latest-unwrapped;
         };
 
         gnugrep = callPackage ./gnugrep {
@@ -384,7 +392,7 @@ lib.makeScope
             echo ${gcc46.tests.get-version}
             echo ${gcc46-cxx.tests.hello-world}
             echo ${gcc10.tests.hello-world}
-            echo ${gcc-latest.tests.hello-world}
+            echo ${gcc-latest-unwrapped.tests.hello-world}
             echo ${gnugrep.tests.get-version}
             echo ${gnugrep-static.tests.get-version}
             echo ${gnum4.tests.get-version}
@@ -426,7 +434,7 @@ lib.makeScope
         };
 
         glibc = callPackage ./glibc {
-          gcc = gcc-latest;
+          gcc = gcc-latest-unwrapped;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
           gnugrep = gnugrep-static;
