@@ -18468,6 +18468,8 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
+  stac-validator = callPackage ../development/python-modules/stac-validator { };
+
   stack-data = callPackage ../development/python-modules/stack-data { };
 
   stackprinter = callPackage ../development/python-modules/stackprinter { };

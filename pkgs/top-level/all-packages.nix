@@ -1636,6 +1636,8 @@ with pkgs;
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
 
+  stac-validator = with python3Packages; toPythonApplication stac-validator;
+
   stack2nix =
     with haskell.lib;
     overrideCabal (justStaticExecutables haskellPackages.stack2nix) (_: {
