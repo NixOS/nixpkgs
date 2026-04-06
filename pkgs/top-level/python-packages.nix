@@ -4591,6 +4591,8 @@ self: super: with self; {
 
   docutils = callPackage ../development/python-modules/docutils { };
 
+  docutils-stubs = callPackage ../development/python-modules/docutils-stubs { };
+
   docx2python = callPackage ../development/python-modules/docx2python { };
 
   docx2txt = callPackage ../development/python-modules/docx2txt { };
