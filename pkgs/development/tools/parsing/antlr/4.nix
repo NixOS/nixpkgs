@@ -50,13 +50,16 @@ let
           ln -s "$src" "$out/share/java/antlr-${version}-complete.jar"
 
           echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
-          echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
+          echo "if [ -n \"\$JAVA_HOME\" ]; then JAVA_BIN=\"\$JAVA_HOME/bin/java\"; else JAVA_BIN=\"${jre}/bin/java\"; fi" >> "$out/bin/antlr"
+          echo "\"\$JAVA_BIN\" -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
 
           echo "#! ${stdenv.shell}" >> "$out/bin/antlr-parse"
-          echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.gui.Interpreter \"\$@\"" >> "$out/bin/antlr-parse"
+          echo "if [ -n \"\$JAVA_HOME\" ]; then JAVA_BIN=\"\$JAVA_HOME/bin/java\"; else JAVA_BIN=\"${jre}/bin/java\"; fi" >> "$out/bin/antlr-parse"
+          echo "\"\$JAVA_BIN\" -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.gui.Interpreter \"\$@\"" >> "$out/bin/antlr-parse"
 
           echo "#! ${stdenv.shell}" >> "$out/bin/grun"
-          echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' org.antlr.v4.gui.TestRig \"\$@\"" >> "$out/bin/grun"
+          echo "if [ -n \"\$JAVA_HOME\" ]; then JAVA_BIN=\"\$JAVA_HOME/bin/java\"; else JAVA_BIN=\"${jre}/bin/java\"; fi" >> "$out/bin/grun"
+          echo "\"\$JAVA_BIN\" -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' org.antlr.v4.gui.TestRig \"\$@\"" >> "$out/bin/grun"
 
           chmod a+x "$out/bin/antlr" "$out/bin/antlr-parse" "$out/bin/grun"
           ln -s "$out/bin/antlr"{,4}

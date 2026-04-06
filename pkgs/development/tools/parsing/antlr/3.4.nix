@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/lib/antlr/antlr-${version}-complete.jar"
 
     echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
-    echo "'${jre}/bin/java' -cp '$out/lib/antlr/antlr-${version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
+    echo "if [ -n \"\$JAVA_HOME\" ]; then JAVA_BIN=\"\$JAVA_HOME/bin/java\"; else JAVA_BIN=\"${jre}/bin/java\"; fi" >> "$out/bin/antlr"
+    echo "\"\$JAVA_BIN\" -cp '$out/lib/antlr/antlr-${version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
 
     chmod a+x "$out/bin/antlr"
     ln -s "$out/bin/antlr"{,3}
