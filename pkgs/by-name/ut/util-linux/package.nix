@@ -43,11 +43,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.3";
+  version = "2.41.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MzDYc/D861VguJp9wU5PMoi72IDpaQPtm1DsK1eZ5Ys=";
+    hash = "sha256-qMITzAYEiGJgKkKy0pmzQAAfbQXEQHtUnz4DUh34Nog=";
   };
 
   patches = [
@@ -60,12 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     # see https://github.com/NixOS/nixpkgs/issues/493934
     ./pam_lastlog2-add-lpam-to-Makemodule.am.patch
 
-    # bits: only build when cpu_set_t is available
-    # Otherwise, the build fails on macOS
     (fetchurl {
-      name = "bits-only-build-when-cpu_set_t-is-available.patch";
-      url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
-      hash = "sha256-G7Cdv8636wJEjgt9am7PaDI8bpSF8sO9bFWEIiAL25A=";
+      name = "CVE-2026-3184.patch";
+      url = "https://github.com/util-linux/util-linux/commit/8b29aeb081e297e48c4c1ac53d88ae07e1331984.patch";
+      hash = "sha256-bCITNB/k3CPcAYK4BXYFr1RWOsQ09PpgQw16SDZJES4=";
     })
   ];
 
