@@ -100,6 +100,12 @@ in
         # ~/.config/Yubico/u2f_keys (the default key file location)
         ProtectHome = "read-only";
       })
+      (lib.mkIf config.security.pam.zfs.enable {
+        PrivateDevices = false;
+        DeviceAllow = [
+          "/dev/zfs rw"
+        ];
+      })
     ];
 
     # The polkit daemon reads action/rule files

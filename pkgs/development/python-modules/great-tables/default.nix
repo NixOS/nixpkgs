@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -82,6 +83,11 @@ buildPythonPackage rec {
     "test_save_custom_webdriver"
     "test_save_image_file"
     "test_save_non_png"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails due to added newline in HTML output
+    # https://github.com/posit-dev/great-tables/issues/826
+    "test_html_string_generated_inline_css"
   ];
 
   __darwinAllowLocalNetworking = true;

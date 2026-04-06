@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       mdaniels5757
-      raskin
     ];
     teams = [ lib.teams.security-review ];
     pkgConfigModules = [ "libsodium" ];

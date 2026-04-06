@@ -80,7 +80,6 @@ in
           # without these some components that are loaded anyway fail to find
           # their dependencies
           default_config = { };
-          infrared = { };
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
