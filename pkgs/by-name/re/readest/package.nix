@@ -18,10 +18,6 @@
   moreutils,
   jq,
   gst_all_1,
-
-  # NOTE: this is enabled by default for better compatibility, but it may slow
-  # down performance.
-  withNvidiaFix ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
@@ -93,15 +89,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = ''
     # set up pdfjs and simplecc
     pnpm setup-vendors
-  '';
-
-  preFixup = lib.optionalString withNvidiaFix ''
-    # fix Nvidia issues with Tauri
-    # https://github.com/tauri-apps/tauri/issues/9394
-    # https://github.com/tauri-apps/tauri/issues/9304
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-    )
   '';
 
   passthru.updateScript = nix-update-script { };

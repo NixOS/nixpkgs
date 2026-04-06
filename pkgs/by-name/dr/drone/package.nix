@@ -5,15 +5,15 @@
   enableUnfree ? true,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";
   version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "harness";
     repo = "drone";
-    rev = "v${version}";
-    sha256 = "sha256-p4fsQu46HX8Gc2W/RCvvjI1KZGcN2S/3ZOLty0MHmfg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p4fsQu46HX8Gc2W/RCvvjI1KZGcN2S/3ZOLty0MHmfg=";
   };
 
   vendorHash = "sha256-6a4Xdp8lcPq+GPewQmEPzr9hXjSrqHR7kqw7pqHzjXE=";
@@ -35,4 +35,4 @@ buildGoModule rec {
     ];
     license = with lib.licenses; if enableUnfree then unfreeRedistributable else asl20;
   };
-}
+})
