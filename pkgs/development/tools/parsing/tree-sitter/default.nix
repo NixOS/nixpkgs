@@ -112,17 +112,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.25.10";
+  version = "0.26.8";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
+    hash = "sha256-fcFEfoALrbpBD6rWogxJ7FNVlvDQgswoX9ylRgko+8Q=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-4R5Y9yancbg/w3PhACtsWq0+gieUd2j8YnmEj/5eqkg=";
+  cargoHash = "sha256-9FeWnWWPUWmMF15Psmul8GxGv2JceHWc2WZPmOr81gw=";
 
   buildInputs = [
     installShellFiles
@@ -131,6 +131,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
     which
   ]
   ++ lib.optionals webUISupport [
