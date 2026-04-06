@@ -27,6 +27,7 @@
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
   },
+  ...
 }:
 
 let
