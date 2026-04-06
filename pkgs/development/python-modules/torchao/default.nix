@@ -345,5 +345,9 @@ buildPythonPackage (finalAttrs: {
       GaetanLepage
       sarahec
     ];
+    badPlatforms = [
+      # Many tests failing and hanging indefinitely
+      "aarch64-linux"
+    ];
   };
 })
