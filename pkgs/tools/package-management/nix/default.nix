@@ -228,7 +228,13 @@ lib.makeExtensible (
             hash = "sha256-WPuGqMQGepXoRYjtRudMAMHEoLsIObw2x4sVfho5feA=";
           };
         }).appendPatches
-          patches_common;
+          (
+            patches_common
+            ++ [
+              ./patches/ghsa-g3g9-5vj6-r3gj-2.34.patch
+              ./patches/CVE-2025-46416-2.34.patch
+            ]
+          );
 
       nix_2_34 = addTests "nix_2_34" self.nixComponents_2_34.nix-everything;
 
