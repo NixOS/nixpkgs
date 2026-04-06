@@ -266,7 +266,7 @@ update() {
         return 1
     fi
 
-    : ${output:="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"/$sem_version/releases.nix}
+    : ${output:="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"/../$sem_version/releases.nix}
     echo "Generating $output"
 
     # Make sure the x.y version is properly passed to .NET release metadata url.
@@ -413,6 +413,7 @@ in rec {
         )> "$result"
 
     nixfmt "$result"
+    mkdir -p "$(dirname -- "$output")"
     cp "$result" "$output"
     echo "Generated $output"
 }
