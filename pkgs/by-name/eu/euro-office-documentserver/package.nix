@@ -161,7 +161,7 @@ let
       # equivalent of usr/bin/documentserver-flush-cache.sh,
       # busts cache also when fonts collection changes
       mkdir $out/var/www/onlyoffice/documentserver/web-apps
-      ${lndir}/bin/lndir -silent ${x2t.components.web-apps} $out/var/www/onlyoffice/documentserver/web-apps
+      ${lib.getExe lndir} -silent ${x2t.components.web-apps} $out/var/www/onlyoffice/documentserver/web-apps
       mv $out/var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js{,.orig}
       sed -e "s/{{HASH_POSTFIX}}/$(basename $out | cut -d '-' -f 1)/" $out/var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js.orig > $out/var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js
 
