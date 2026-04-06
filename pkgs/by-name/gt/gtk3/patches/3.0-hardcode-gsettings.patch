@@ -1,0 +1,98 @@
+diff --git a/gtk/gtkcolorchooserwidget.c b/gtk/gtkcolorchooserwidget.c
+index 9fca31d..b37057b 100644
+--- a/gtk/gtkcolorchooserwidget.c
++++ b/gtk/gtkcolorchooserwidget.c
+@@ -545,7 +545,28 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
+   gtk_color_swatch_set_selectable (GTK_COLOR_SWATCH (button), FALSE);
+   gtk_container_add (GTK_CONTAINER (box), button);
+
+-  cc->priv->settings = g_settings_new ("org.gtk.Settings.ColorChooser");
++  {
++    GSettingsSchemaSource *default_schema_source;
++    g_autoptr(GSettingsSchemaSource) schema_source = NULL;
++    g_autoptr(GSettingsSchema) schema = NULL;
++
++    default_schema_source = g_settings_schema_source_get_default ();
++    if (default_schema_source != NULL)
++      schema = g_settings_schema_source_lookup (default_schema_source,
++                                                "org.gtk.Settings.ColorChooser",
++                                                TRUE);
++
++    if (schema == NULL)
++      {
++        schema_source = g_settings_schema_source_new_from_directory ("@gtk@", NULL, TRUE, NULL);
++        schema = g_settings_schema_source_lookup (schema_source,
++                                                  "org.gtk.Settings.ColorChooser",
++                                                  FALSE);
++      }
++
++    cc->priv->settings = g_settings_new_full (schema, NULL, NULL);
++  }
++
+   variant = g_settings_get_value (cc->priv->settings, "custom-colors");
+   g_variant_iter_init (&iter, variant);
+   i = 0;
+diff --git a/gtk/gtkemojichooser.c b/gtk/gtkemojichooser.c
+index 1ef9e51..16de780 100644
+--- a/gtk/gtkemojichooser.c
++++ b/gtk/gtkemojichooser.c
+@@ -851,7 +851,25 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
+ {
+   GtkAdjustment *adj;
+
+-  chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
++  {
++    GSettingsSchemaSource *default_schema_source;
++    g_autoptr(GSettingsSchemaSource) schema_source = NULL;
++    g_autoptr(GSettingsSchema) schema = NULL;
++
++    default_schema_source = g_settings_schema_source_get_default ();
++    if (default_schema_source != NULL)
++      schema = g_settings_schema_source_lookup (default_schema_source,
++                                                "org.gtk.Settings.EmojiChooser",
++                                                TRUE);
++
++    if (schema == NULL)
++      {
++        schema_source = g_settings_schema_source_new_from_directory ("@gtk@", NULL, TRUE, NULL);
++        schema = g_settings_schema_source_lookup (schema_source, "org.gtk.Settings.EmojiChooser", FALSE);
++      }
++
++    chooser->settings = g_settings_new_full (schema, NULL, NULL);
++  }
+ 
+   gtk_widget_init_template (GTK_WIDGET (chooser));
+
+   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
+diff --git a/gtk/gtkfilechooserutils.c b/gtk/gtkfilechooserutils.c
+index 7965ab0..865a4fc 100644
+--- a/gtk/gtkfilechooserutils.c
++++ b/gtk/gtkfilechooserutils.c
+@@ -455,7 +455,26 @@ _gtk_file_chooser_get_settings_for_widget (GtkWidget *widget)
+
+   if (G_UNLIKELY (settings == NULL))
+     {
+-      settings = g_settings_new ("org.gtk.Settings.FileChooser");
++      GSettingsSchemaSource *default_schema_source;
++      g_autoptr(GSettingsSchemaSource) schema_source = NULL;
++      g_autoptr(GSettingsSchema) schema = NULL;
++
++      default_schema_source = g_settings_schema_source_get_default ();
++      if (default_schema_source != NULL)
++        schema = g_settings_schema_source_lookup (default_schema_source,
++                                                  "org.gtk.Settings.FileChooser",
++                                                  TRUE);
++
++      if (schema == NULL)
++        {
++          schema_source = g_settings_schema_source_new_from_directory ("@gtk@", NULL, TRUE, NULL);
++          schema = g_settings_schema_source_lookup (schema_source,
++                                                    "org.gtk.Settings.FileChooser",
++                                                    FALSE);
++        }
++
++      settings = g_settings_new_full (schema, NULL, NULL);
++
+       g_settings_delay (settings);
+
+       g_object_set_qdata_full (G_OBJECT (gtksettings),

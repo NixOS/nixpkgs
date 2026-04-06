@@ -215,6 +215,14 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
   env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
+  # The patch needs build-time substitution because it hardcodes GTK's own
+  # compiled schema directory in the final $out as a fallback lookup path.
+  prePatch = ''
+    substitute ${./patches/3.0-hardcode-gsettings.patch} hardcode-gsettings.patch \
+      --subst-var-by gtk ${glib.makeSchemaPath "$out" "${finalAttrs.pname}-${finalAttrs.version}"}
+    patches="$patches $PWD/hardcode-gsettings.patch"
+  '';
+
   postPatch = ''
     # See https://github.com/NixOS/nixpkgs/issues/132259
     substituteInPlace meson.build \
