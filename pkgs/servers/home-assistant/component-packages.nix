@@ -6697,7 +6697,8 @@
       ];
     "unifi_access" =
       ps: with ps; [
-      ]; # missing inputs: py-unifi-access
+        py-unifi-access
+      ];
     "unifi_direct" =
       ps: with ps; [
         unifi-ap
@@ -8344,6 +8345,7 @@
     "uk_transport"
     "ukraine_alarm"
     "unifi"
+    "unifi_access"
     "unifiprotect"
     "universal"
     "upb"
