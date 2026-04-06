@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow";
-  version = "0.299.0";
+  version = "0.305.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ohGqzTI0TW92lsM9fqJv8iRk3SZkKT03Ek+15Lj2RYU=";
+    hash = "sha256-yXC/liSwqEzPdNPUR86sEBzAPGVeN2q8wBxjMvkQrJU=";
   };
 
   patches = [
@@ -82,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/facebook/flow/blob/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      miniharinn
+    ];
   };
 })

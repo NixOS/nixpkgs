@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "15.4.0";
+  version = "15.6.1";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
     repo = "rime_wanxiang";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-MbPTW+Bams2Zze8PjSHsNnUzpyvZ/l7xS8wnCTQn8MA=";
+    hash = "sha256-h33dhVBI14JARrGIpPPy7AAXHZs4F6s5AtUm9ZafR3Y=";
   };
 
   installPhase = ''
