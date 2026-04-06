@@ -3,6 +3,7 @@
   python3Packages,
   cargo,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   rustc,
   SDL2,
@@ -20,24 +21,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-+SitYe2HFA6rwqk5lipcKFdBy69zdAhw3Q+Nb0iBx6s=";
   };
 
-  postPatch = ''
-    cp ${./Cargo.lock} crates/Cargo.lock
-    chmod u+w crates/Cargo.lock
-  '';
+  patches = [
+    (fetchpatch {
+      name = "add-Cargo.lock.patch";
+      url = "https://github.com/kitao/pyxel/commit/821286112ea0c26141aa64b25aaa076611a2a91d.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-XtFdtmprPKrdjFOzEsNMJjc4PpNv6KDtWX2Hes2IKe0=";
+    })
+  ];
 
   cargoRoot = "crates";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
       src
+      patches
       pname
       version
       cargoRoot
       ;
-    postPatch = ''
-      cp ${./Cargo.lock} crates/Cargo.lock
-    '';
-    hash = "sha256-UEN66yygcyOJt8fROClfBi1V5F7/I7P4j4vkPzKJ7jY=";
+    hash = "sha256-SGrQmGZeM2NcooDqCTO2HOXgLg7h+VvDIierDacqSFs=";
   };
 
   buildAndTestSubdir = "python";
