@@ -225,7 +225,7 @@ let
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
       homepage = "https://github.com/Euro-Office/DocumentServer";
-      license = lib.licenses.agpl3Plus;
+      license = lib.licenses.agpl3Only;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
