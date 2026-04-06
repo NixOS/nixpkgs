@@ -5930,7 +5930,8 @@
       ];
     "solarman" =
       ps: with ps; [
-      ]; # missing inputs: solarman-opendata
+        solarman-opendata
+      ];
     "solax" =
       ps: with ps; [
         solax
@@ -8227,6 +8228,7 @@
     "snooz"
     "solaredge"
     "solarlog"
+    "solarman"
     "solax"
     "soma"
     "somfy_mylink"
