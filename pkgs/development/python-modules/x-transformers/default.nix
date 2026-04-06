@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "x-transformers";
   version = "2.16.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "x-transformers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QnNNzPK1lLRpG/Z5tdZKME7tkfvn1lgo7zGUaK/Q548=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
       A simple but complete full-attention transformer with a set of promising experimental features from various papers.
     '';
     homepage = "https://github.com/lucidrains/x-transformers";
-    changelog = "https://github.com/lucidrains/x-transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/lucidrains/x-transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ByteSudoer ];
   };
-}
+})
