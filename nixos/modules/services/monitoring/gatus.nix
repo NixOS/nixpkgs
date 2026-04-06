@@ -115,12 +115,16 @@ in
         Restart = "on-failure";
         ExecStart = getExe cfg.package;
         StateDirectory = "gatus";
+        WorkingDirectory = "/var/lib/gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         # see https://github.com/prometheus-community/pro-bing#linux
         AmbientCapabilities = "CAP_NET_RAW";
         CapabilityBoundingSet = "CAP_NET_RAW";
         NoNewPrivileges = true;
+        PrivateTmp = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
       };
 
       environment = {
