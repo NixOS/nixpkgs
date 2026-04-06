@@ -32,8 +32,6 @@ let
         # The same pkgs sets one probably intends
         // inputs.buildHost
         // inputs.hostTarget;
-      # perf: mapAttrs defers merge calls until a key is selected, avoiding
-      # ~60k eager closures that listToAttrs+map would create.
       merge =
         name: defaultValue:
         let
