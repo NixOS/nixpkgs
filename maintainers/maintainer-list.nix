@@ -25244,6 +25244,15 @@
     githubId = 617130;
     keys = [ { fingerprint = "C4F7 46C7 B560 38D8 210F  0288 5877 DEE9 7428 557F"; } ];
   };
+  skewballfox = {
+    # Required
+    name = "Joshua Ferguson";
+    github = "skewballfox";
+    githubId = 29311431;
+
+    email = "joshua.fergson.273@gmail.com";
+    keys = [ { fingerprint = "36CD F972 E044 DB6D 68E3  162D F92A FF72 AFCE 13A8"; } ];
+  };
   skohtv = {
     name = "Skoh";
     email = "contact@skoh.dev";
