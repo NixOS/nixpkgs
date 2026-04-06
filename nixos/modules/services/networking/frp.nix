@@ -76,6 +76,24 @@ in
                   ];
                 };
               };
+
+              extraConfig = lib.mkOption {
+                type = lib.types.lines;
+                default = "";
+                description = ''
+                  Extra frp TOML configuration included at the end of the generated configuration file.
+                  Especially useful for [port range mapping](https://github.com/fatedier/frp?tab=readme-ov-file#port-range-mapping).
+                '';
+                example = ''
+                  {{- range $_, $v := parseNumberRangePair "6000-6006,6007" "6000-6006,6007" }}
+                  [[proxies]]
+                  name = "tcp-{{ $v.First }}"
+                  type = "tcp"
+                  localPort = {{ $v.First }}
+                  remotePort = {{ $v.Second }}
+                  {{- end }}
+                '';
+              };
             };
           }
         );
@@ -94,7 +112,18 @@ in
       instance: options:
       let
         serviceName = "frp" + lib.optionalString (instance != "") ("-" + instance);
-        configFile = settingsFormat.generate "${serviceName}.toml" options.settings;
+        baseConfigFile = settingsFormat.generate "${serviceName}-base.toml" options.settings;
+        configFile =
+          if options.extraConfig == "" then
+            baseConfigFile
+          else
+            pkgs.writeText "${serviceName}.toml" ''
+              # Nixos Module settings
+              ${builtins.readFile baseConfigFile}
+
+              # Nixos Module extraConfig
+              ${options.extraConfig}
+            '';
         isClient = (options.role == "client");
         isServer = (options.role == "server");
         serviceCapability = lib.optionals isServer [ "CAP_NET_BIND_SERVICE" ];
