@@ -90,21 +90,21 @@ stdenv.mkDerivation rec {
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
     "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
-  ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
-  ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
-  ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
-  ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
-  ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
-  ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
-  ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
-  ++ lib.optionals threadsafe [
+  ++ optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
+  ++ optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
+  ++ optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
+  ++ optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
+  ++ optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
+  ++ optional enableShared "-DBUILD_SHARED_LIBS=ON"
+  ++ optional javaSupport "-DHDF5_BUILD_JAVA=ON"
+  ++ optional usev110Api "-DDEFAULT_API_VERSION=v110"
+  ++ optionals threadsafe [
     "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
     "-DHDF5_BUILD_HL_LIB=OFF"
   ]
   # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
   # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
-  ++ lib.optional (
+  ++ optional (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF";
 
