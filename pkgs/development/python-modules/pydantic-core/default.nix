@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   cargo,
   rustPlatform,
   rustc,
@@ -21,19 +21,18 @@
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.41.5";
+    version = "2.45.0";
     pyproject = true;
 
-    src = fetchFromGitHub {
-      owner = "pydantic";
-      repo = "pydantic-core";
-      tag = "v${version}";
-      hash = "sha256-oIYHLSep8tWOXEaUybXG8Gv9WBoPGQ1Aj7QyqYksvMw=";
+    src = fetchPypi {
+      pname = "pydantic_core";
+      inherit version;
+      hash = "sha256-o/9lkhfcs9E0Qu00jhLhLtbIdnkRVKV13vH+qbtmfY4=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit pname version src;
-      hash = "sha256-Kvc0a34C6oGc9oS/iaPaazoVUWn5ABUgrmPa/YocV+Y=";
+      hash = "sha256-OD2nw4tf5Xt75tfp5faaWz5BjEVsFSyLSqSeEXIZWl4=";
     };
 
     nativeBuildInputs = [
@@ -64,7 +63,6 @@ let
     ];
 
     meta = {
-      changelog = "https://github.com/pydantic/pydantic-core/releases/tag/${src.tag}";
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
       license = lib.licenses.mit;
