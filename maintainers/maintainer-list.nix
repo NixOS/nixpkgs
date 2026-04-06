@@ -16292,6 +16292,12 @@
     githubId = 85435692;
     name = "Maxwell Berg";
   };
+  maaslalani = {
+    email = "maas@lalani.dev";
+    github = "maaslalani";
+    githubId = 42545625;
+    name = "Maas Lalani";
+  };
   mahe = {
     email = "matthias.mh.herrmann@gmail.com";
     github = "2chilled";
