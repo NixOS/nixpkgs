@@ -279,10 +279,13 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
+    (lib.cmakeOptionType "path" "CMAKE_INSTALL_DATADIR" "${placeholder "lib"}/lib")
 
-    "-DWITH_CEPHFS_SHELL:BOOL=ON"
-    "-DWITH_SYSTEMD:BOOL=${if withSystemd then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_CEPHFS_SHELL" true)
+    (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
+    # Providing a type with this (as is the case with `lib.cmakeOptionType`) triggers an edge case.
+    # This requires an upstream fix/patch as soon as upstream raises the minimum CMake version to 3.21 or higher.
+    # See also: https://github.com/NixOS/nixpkgs/pull/494583#issuecomment-4195176699
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
     # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
     #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
@@ -302,32 +305,33 @@ stdenv.mkDerivation {
     # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
     # So it's probably not worth trying to fix that for this Ceph version,
     # and instead just disable Ceph's Jaeger support.
-    "-DWITH_JAEGER:BOOL=OFF"
-    "-DWITH_TESTS:BOOL=OFF"
+    (lib.cmakeBool "WITH_JAEGER" false)
+    (lib.cmakeBool "WITH_TESTS" false)
 
     # Use our own libraries, where possible
-    "-DWITH_SYSTEM_ARROW:BOOL=ON" # Only used if other options enable Arrow support.
-    "-DWITH_SYSTEM_BOOST:BOOL=ON"
-    "-DWITH_SYSTEM_GTEST:BOOL=ON"
-    "-DWITH_SYSTEM_ROCKSDB:BOOL=ON"
-    "-DWITH_SYSTEM_UTF8PROC:BOOL=ON"
-    "-DWITH_SYSTEM_ZSTD:BOOL=ON"
+    (lib.cmakeBool "WITH_SYSTEM_ARROW" true) # Only used if other options enable Arrow support.
+    (lib.cmakeBool "WITH_SYSTEM_BOOST" true)
+    (lib.cmakeBool "WITH_SYSTEM_GTEST" true)
+    (lib.cmakeBool "WITH_SYSTEM_ROCKSDB" true)
+    (lib.cmakeBool "WITH_SYSTEM_UTF8PROC" true)
+    (lib.cmakeBool "WITH_SYSTEM_ZSTD" true)
 
     # Use our own python libraries too, see:
     #     https://github.com/NixOS/nixpkgs/pull/344993#issuecomment-2391046329
-    "-DCEPHADM_BUNDLED_DEPENDENCIES=none"
+    (lib.cmakeFeature "CEPHADM_BUNDLED_DEPENDENCIES" "none")
 
     # Upstream enables UADK by default on aarch64, but not other platforms.
     # This causes issues when it tries to fetch the repository on aarch64.
     # We disable this by default on all platforms, with future PRs adding proper with<Pkg> flags.
-    "-DWITH_UADK:BOOL=OFF"
+    (lib.cmakeBool "WITH_UADK" false)
 
     # TODO breaks with sandbox, tries to download stuff with npm
-    "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
+    (lib.cmakeBool "WITH_MGR_DASHBOARD_FRONTEND" false)
     # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
-    "-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_XFS" (optLibxfs != null))
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+  # TODO: investigate setting this to false on other platforms
+  ++ lib.optional stdenv.hostPlatform.isLinux (lib.cmakeBool "WITH_SYSTEM_LIBURING" true);
 
   preBuild =
     # The legacy-option-headers target is not correctly empbedded in the build graph.
