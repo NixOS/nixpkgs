@@ -1975,7 +1975,8 @@
       ];
     "freshr" =
       ps: with ps; [
-      ]; # missing inputs: pyfreshr
+        pyfreshr
+      ];
     "fressnapf_tracker" =
       ps: with ps; [
         fressnapftracker
@@ -7653,6 +7654,7 @@
     "freebox"
     "freedns"
     "freedompro"
+    "freshr"
     "fressnapf_tracker"
     "fritz"
     "fritzbox"
