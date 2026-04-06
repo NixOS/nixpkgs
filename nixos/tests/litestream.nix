@@ -17,7 +17,7 @@ in
         settings = {
           socket = {
             enabled = true;
-            path = "${socketPath}";
+            path = socketPath;
           };
           dbs = [
             {
@@ -34,10 +34,18 @@ in
       };
       # Litestream 0.5.x writes to the database (_litestream_seq table),
       # so grafana's data directory must be group-writable.
-      systemd.tmpfiles.rules = [
-        "d /var/lib/grafana 0750 grafana grafana -"
-        "d /var/lib/grafana/data 2770 grafana grafana -"
-      ];
+      systemd.tmpfiles.settings."10-litestream" = {
+        "/var/lib/grafana".d = {
+          mode = "0750";
+          user = "grafana";
+          group = "grafana";
+        };
+        "/var/lib/grafana/data".d = {
+          mode = "2770";
+          user = "grafana";
+          group = "grafana";
+        };
+      };
       systemd.services.grafana.serviceConfig = {
         ExecStartPre = lib.mkAfter "+${pkgs.sqlite}/bin/sqlite3 ${dbPath} 'PRAGMA journal_mode=WAL;'";
         UMask = lib.mkForce "0007";
