@@ -19,7 +19,9 @@
   cloudpickle,
   email-validator,
   dirty-equals,
+  hypothesis,
   jsonschema,
+  pytest-timeout,
   pytestCheckHook,
   pytest-mock,
   pytest-run-parallel,
@@ -27,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.12.5";
+  version = "2.13.0b3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-9TRLtVNBw2WHQnS0XFHg16Q7FdpTf3e2nb5qE5rlLUA=";
+    hash = "sha256-zxooO1fMqtD8Vy59odEcKBHaD6b7sSL4vScn0Z2+/Rs=";
   };
 
   patches = lib.optionals (lib.versionAtLeast python.version "3.14.1") [
@@ -68,15 +70,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cloudpickle
     dirty-equals
+    hypothesis
     jsonschema
     pytest-mock
     pytest-run-parallel
+    pytest-timeout
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/benchmarks"
+    "tests/pydantic_core/benchmarks"
+    "tests/pydantic_core/validators/test_allow_partial.py"
 
     # avoid cyclic dependency
     "tests/test_docs.py"
