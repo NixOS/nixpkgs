@@ -1608,7 +1608,10 @@ in
   systemd-pstore = runTest ./systemd-pstore.nix;
   systemd-repart = handleTest ./systemd-repart.nix { };
   systemd-resolved = runTest ./systemd-resolved.nix;
-  systemd-shutdown = runTest ./systemd-shutdown.nix;
+  systemd-shutdown = runTest {
+    imports = [ ./systemd-shutdown.nix ];
+    _module.args.systemdStage1 = false;
+  };
   systemd-ssh-proxy = runTest ./systemd-ssh-proxy.nix;
   systemd-sysupdate = runTest ./systemd-sysupdate.nix;
   systemd-sysusers-immutable = runTest ./systemd-sysusers-immutable.nix;
