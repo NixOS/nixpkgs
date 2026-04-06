@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgtcalc";
-  version = "0-unstable-2025-10-11";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "mattjgalloway";
