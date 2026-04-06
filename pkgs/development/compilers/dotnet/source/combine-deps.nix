@@ -2,7 +2,7 @@
   list,
   baseRid,
   otherRids,
-  pkgs ? import ../../../.. { },
+  pkgs ? import ../../../../.. { },
 }:
 let
   inherit (pkgs) writeText;

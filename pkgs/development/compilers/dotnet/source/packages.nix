@@ -178,7 +178,11 @@ let
       '';
 
     passthru = {
-      inherit (vmr) icu targetRid hasILCompiler;
+      inherit (vmr)
+        icu
+        targetRid
+        hasILCompiler
+        ;
 
       inherit
         packages
