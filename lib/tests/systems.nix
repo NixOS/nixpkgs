@@ -254,6 +254,27 @@ lib.runTests (
     };
   }
 
+  // {
+    # equals.functionNames must list exactly the function-valued attrs of an
+    # elaborated system, so that removeFunctions stays correct without iterating.
+    test_equals_functionNames_in_sync =
+      let
+        sys = lib.systems.elaborate "x86_64-linux";
+        actual = lib.filter (n: builtins.isFunction sys.${n}) (builtins.attrNames sys);
+        expected = lib.sort lib.lessThan [
+          "canExecute"
+          "emulator"
+          "emulatorAvailable"
+          "isCompatible"
+          "staticEmulatorAvailable"
+        ];
+      in
+      {
+        expr = lib.sort lib.lessThan actual;
+        inherit expected;
+      };
+  }
+
   # Generate test cases to assert that a change in any non-function attribute makes a platform unequal
   //
     lib.concatMapAttrs

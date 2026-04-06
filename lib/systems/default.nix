@@ -3,11 +3,9 @@
 let
   inherit (lib)
     any
-    filterAttrs
     foldl
     hasInfix
     isAttrs
-    isFunction
     isList
     mapAttrs
     optional
@@ -43,9 +41,16 @@ let
   */
   equals =
     let
-      # perf: avoid lib.isFunction because system attrs are never __functor-style attrsets.
-      removeFunctions =
-        a: removeAttrs a (builtins.filter (n: builtins.isFunction a.${n}) (builtins.attrNames a));
+      # Elaborated systems have a fixed set of function-valued attrs.
+      # Listing them explicitly avoids iterating over all attr names.
+      functionNames = [
+        "canExecute"
+        "emulator"
+        "emulatorAvailable"
+        "isCompatible"
+        "staticEmulatorAvailable"
+      ];
+      removeFunctions = a: removeAttrs a functionNames;
     in
     a: b: removeFunctions a == removeFunctions b;
 
