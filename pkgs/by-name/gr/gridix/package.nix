@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gridix";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "MCB-SMART-BOY";
     repo = "Gridix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I0I6OgSS9iviM77ddHRdVAwRk6Mhl4qZyeAj/gnCvT4=";
+    hash = "sha256-Y+2dwAm9LHTvCsHeZNY78vnOSC+m5b1xVnG+sj0V04c=";
   };
 
-  cargoHash = "sha256-XgF0gRJWvFg4obaBNBXc117q7pf5hWDZ3T6T46gRB+Y=";
+  cargoHash = "sha256-u+AAurOE6Ie9A81sdz9CI4Huw98sNUk2DsmIRmIz0DE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     xdotool
   ];
+
+  preCheck = ''
+    export RUST_TEST_THREADS=1
+  '';
 
   meta = {
     description = "Fast, secure database management tool with Helix/Vim keybindings";
