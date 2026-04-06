@@ -77,10 +77,18 @@ in
           };
         };
 
-        tmpfiles.rules = [
-          "d /var/backup 0755 root root -"
-          "d ${backupPath} 0755 litestream litestream -"
-        ];
+        tmpfiles.settings."10-vaultwarden-litestream" = {
+          "/var/backup".d = {
+            mode = "0755";
+            user = "root";
+            group = "root";
+          };
+          ${backupPath}.d = {
+            mode = "0755";
+            user = "litestream";
+            group = "litestream";
+          };
+        };
       };
 
       environment.systemPackages = with pkgs; [
