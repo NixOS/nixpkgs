@@ -4536,11 +4536,12 @@
         home-assistant-intents
         ifaddr
         mutagen
+        py-opendisplay
         pymicro-vad
         pyserial
         pyspeex-noise
         zeroconf
-      ]; # missing inputs: py-opendisplay
+      ];
     "openerz" =
       ps: with ps; [
         openerz-api
@@ -8018,6 +8019,7 @@
     "open_router"
     "openai_conversation"
     "openalpr_cloud"
+    "opendisplay"
     "openerz"
     "openevse"
     "openexchangerates"

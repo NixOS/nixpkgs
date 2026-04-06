@@ -5054,6 +5054,8 @@ self: super: with self; {
 
   enzyme = callPackage ../development/python-modules/enzyme { };
 
+  epaper-dithering = callPackage ../development/python-modules/epaper-dithering { };
+
   epc = callPackage ../development/python-modules/epc { };
 
   ephem = callPackage ../development/python-modules/ephem { };
@@ -13146,6 +13148,8 @@ self: super: with self; {
   py-nymta = callPackage ../development/python-modules/py-nymta { };
 
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
+
+  py-opendisplay = callPackage ../development/python-modules/py-opendisplay { };
 
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
