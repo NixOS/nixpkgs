@@ -11,7 +11,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docx2python";
   version = "3.6.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "docx2python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1/v8slL7EYwXM8ybcJKIdjLBKNBxHgdF4gQHDYyJg6w=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
     homepage = "https://github.com/ShayHill/docx2python";
-    changelog = "https://github.com/ShayHill/docx2python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ShayHill/docx2python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
