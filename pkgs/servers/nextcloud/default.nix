@@ -53,8 +53,8 @@ let
 in
 {
   nextcloud32 = generic {
-    version = "32.0.7";
-    hash = "sha256-RQtPKybIO+TXuGgiKafYaOKAL9VK6PPuY2dhiZVjenY=";
+    version = "32.0.8";
+    hash = "sha256-WK2N34YNdaKUuXqOPjlWLeyH/2UMuRwRRYmzdEqx3g0=";
     packages = nextcloud32Packages;
   };
 
