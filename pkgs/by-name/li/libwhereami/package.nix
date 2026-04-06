@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt --replace-fail \
       "cmake_minimum_required(VERSION 3.2.2)" \
       "cmake_minimum_required(VERSION 3.10)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'list(APPEND BOOST_COMPONENTS filesystem regex system thread)' \
+      'list(APPEND BOOST_COMPONENTS filesystem regex thread)'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
