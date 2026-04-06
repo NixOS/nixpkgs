@@ -826,8 +826,8 @@ let
             "${name}: token, tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'"
           )
           ++ (lib.optional (
-            cfg.role == "agent" && !(cfg.agentTokenFile != null || cfg.agentToken != "")
-          ) "${name}: agentToken and agentToken should not be set if role is 'agent'");
+            cfg.role == "agent" && (cfg.agentTokenFile != null || cfg.agentToken != "")
+          ) "${name}: agentToken and agentTokenFile should not be set if role is 'agent'");
 
         environment.systemPackages = [ config.services.${name}.package ];
 
