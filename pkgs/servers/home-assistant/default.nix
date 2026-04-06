@@ -349,6 +349,7 @@ python.pkgs.buildPythonApplication rec {
     home-assistant-bluetooth
     httpx
     ifaddr
+    infrared-protocols
     jinja2
     lru-dict
     orjson
@@ -416,7 +417,6 @@ python.pkgs.buildPythonApplication rec {
       "assist_pipeline"
       "frontend"
       "hue"
-      "infrared"
       "mobile_app"
     ];
 

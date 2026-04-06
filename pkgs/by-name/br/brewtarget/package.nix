@@ -10,7 +10,8 @@
   pkg-config,
   xercesc,
   xalanc,
-  qt6Packages,
+  qt6,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,27 +41,37 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    qt6Packages.wrapQtAppsHook
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
     pandoc
   ];
+
   buildInputs = [
     boost
-    qt6Packages.qtbase
-    qt6Packages.qttools
-    qt6Packages.qtmultimedia
-    qt6Packages.qtsvg
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtsvg
+    qt6.qttools
     xercesc
     xalanc
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "Open source beer recipe creation tool";
     mainProgram = "brewtarget";
-    homepage = "http://www.brewtarget.org/";
+    homepage = "https://www.brewtarget.beer";
     license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       avnik
       mmahut
+      ilkecan
     ];
   };
 })
