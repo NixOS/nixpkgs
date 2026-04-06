@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "betterdisplay";
-  version = "4.0.4";
+  version = "4.2.3";
 
   src = fetchurl {
     url = "https://github.com/waydabber/BetterDisplay/releases/download/v${finalAttrs.version}/BetterDisplay-v${finalAttrs.version}.dmg";
-    hash = "sha256-njk1epuekOiBN8Exkxs9J2OHVP4xu4on42F+TPlW75M=";
+    hash = "sha256-keJkdMDO213DUl2LAVqtx1joAmcUpU336Tj8AldCoKo=";
   };
 
   dontPatch = true;
