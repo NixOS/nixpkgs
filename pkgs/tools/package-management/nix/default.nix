@@ -190,6 +190,7 @@ lib.makeExtensible (
                 hash = "sha256-r2ZF1zBZDKMvyX6X4VsaTMrg0zdjn59Jf6Hqg56r29E=";
               })
               lowdown30PatchOld
+              ./patches/ghsa-g3g9-5vj6-r3gj-2.30.patch
             ]
           );
 
