@@ -18,6 +18,7 @@ with pkgs.lib;
         virtualisation.fileSystems."/test-bind-dir/bind" = {
           device = "/";
           neededForBoot = true;
+          fsType = "none";
           options = [ "bind" ];
         };
 
@@ -25,6 +26,7 @@ with pkgs.lib;
           depends = [ "/nix/store" ];
           device = builtins.toFile "empty" "";
           neededForBoot = true;
+          fsType = "none";
           options = [ "bind" ];
         };
       };
