@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cwl-upgrader";
-  version = "1.2.14";
+  version = "1.2.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-upgrader";
     tag = "v${version}";
-    hash = "sha256-bkICax7HIEo8ypttXgDmCl82JfVkV2T11fLRK1/0hz8=";
+    hash = "sha256-7gmwz3a3IYky/Eof4fnSp3P5oSAko91drcX7i9CwZUY=";
   };
 
   postPatch = ''
