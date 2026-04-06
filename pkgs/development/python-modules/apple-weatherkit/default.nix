@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "apple-weatherkit";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tjhorner";
     repo = "python-weatherkit";
     tag = "v${version}";
-    hash = "sha256-JvN8GmlTxz9VGttIFVG6q//c+BhP2pt1tBOhnJhNwJg=";
+    hash = "sha256-6dln/599XTJrIY2wL8n9WdHEjJ75goYeZC5szQ6WNsk=";
   };
 
   build-system = [ poetry-core ];
