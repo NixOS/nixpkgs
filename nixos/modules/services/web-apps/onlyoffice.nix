@@ -361,7 +361,7 @@ in
             NODE_ENV = "production-linux";
           };
           serviceConfig = {
-            ExecStart = "${lib.getExe cfg.package.fhs} ${cfg.package.docservice}/bin/docservice";
+            ExecStart = "${lib.getExe cfg.package.fhs} ${lib.getExe cfg.package.docservice}";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
