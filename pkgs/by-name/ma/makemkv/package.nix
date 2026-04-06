@@ -43,7 +43,10 @@ stdenv.mkDerivation (
 
     srcs = lib.attrValues finalAttrs.passthru.srcs;
     sourceRoot = "makemkv-oss-${version}";
-    patches = [ ./r13y.patch ];
+    patches = [
+      ./r13y.patch
+      ./fix-app-id.patch
+    ];
 
     enableParallelBuilding = true;
     nativeBuildInputs = [
