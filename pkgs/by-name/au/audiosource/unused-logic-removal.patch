@@ -1,5 +1,5 @@
 diff --git a/audiosource b/audiosource
-index b06127a..0bccddf 100755
+index e2f034c..787076e 100755
 --- a/audiosource
 +++ b/audiosource
 @@ -2,15 +2,7 @@
@@ -16,18 +16,25 @@ index b06127a..0bccddf 100755
 -
 -AUDIOSOURCE_APK=${AUDIOSOURCE_APK:-"$AUDIOSOURCE_DEFAULT_APK"}
 +AUDIOSOURCE_APK=${AUDIOSOURCE_APK:-"@apkPath@"}
+ AUDIOSOURCE_PKG='fr.dzx.audiosource'
  ANDROID_SERIAL=${ANDROID_SERIAL:-}
  
- PYSOCAT="$(cat <<EOF
-@@ -81,22 +73,12 @@ install() {
+@@ -57,14 +49,6 @@ if __name__ == '__main__':
+ EOF
+ )"
  
- 	echo '[+] Installing Audio Source'
- 
--	adb install -rtg "$AUDIOSOURCE_APK" || {
-+	adb install -r -t -g "$AUDIOSOURCE_APK" || {
- 		adb uninstall fr.dzx.audiosource
--		adb install -tg "$AUDIOSOURCE_APK"
-+		adb install -t -g "$AUDIOSOURCE_APK"
+-build() {
+-	if [ "$AUDIOSOURCE_PROFILE" = 'release' ]; then
+-		./gradlew assembleRelease
+-	else
+-		./gradlew assembleDebug
+-	fi
+-}
+-
+ install() {
+ 	if ! command -v adb &> /dev/null; then
+ 		echo "Error: adb not found"
+@@ -88,16 +72,6 @@ install() {
  	}
  }
  
@@ -44,7 +51,7 @@ index b06127a..0bccddf 100755
  _unload() {
  	for id in `pactl list modules short | sed -n "/module-pipe-source\tsource_name=$AUDIOSOURCE_NAME/p" | cut -f1`; do
  		pactl unload-module "$id"
-@@ -146,7 +128,7 @@ volume() {
+@@ -189,7 +163,7 @@ volume() {
  
  main_help() {
  	cat <<-EOF
@@ -53,15 +60,15 @@ index b06127a..0bccddf 100755
  
  		Options:
  
-@@ -154,15 +136,13 @@ main_help() {
+@@ -197,7 +171,6 @@ main_help() {
  
  		Commands:
  
--		   build         Build Audio Source APK (default: debug)
--		   install       Install Audio Source to Android device (default: debug)
-+		   install       Install Audio Source to Android device
- 		   run           Run Audio Source and start forwarding
- 		   volume LEVEL  Set volume to LEVEL (for example, 250%)
+-		   build         Build Audio Source APK
+ 		   install       Install Audio Source to Android device
+ 		   run [-r]      Run Audio Source and start forwarding
+ 		                 (-r will automatically restart)
+@@ -205,8 +178,7 @@ main_help() {
  
  		Environment:
  
@@ -71,7 +78,7 @@ index b06127a..0bccddf 100755
  		   AUDIOSOURCE_NAME     Name of the PulseAudio source (default: android-<serial-hash>)
  		   ANDROID_SERIAL       Device serial number to connect to (default: unset)
  	EOF
-@@ -200,7 +180,7 @@ main() {
+@@ -244,7 +216,7 @@ main() {
  	shift
  
  	case "$cmd" in

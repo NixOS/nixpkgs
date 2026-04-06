@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
       curl
       mit
     ];
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate";
   };
