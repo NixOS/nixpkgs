@@ -51,20 +51,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    pkg-config
     makeBinaryWrapper
+    pkg-config
   ];
 
   buildInputs = lib.optionals (withGui && stdenv.hostPlatform.isLinux) [
-    vulkan-loader
-    wayland
-    libxkbcommon
-    libx11
-    libxcursor
-    libxrandr
-    libxi
     fontconfig
     freetype
+    libx11
+    libxcursor
+    libxi
+    libxkbcommon
+    libxrandr
+    vulkan-loader
+    wayland
   ];
 
   postInstall = ''
