@@ -1,24 +1,22 @@
 {
+  config,
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   fetchurl,
   autoPatchelfHook,
   unzip,
-  go_1_25,
   stdenv,
   vulkan-loader,
   zlib,
 
   # Feature flags (all enabled by default, set slim = true to disable all optional deps)
   slim ? false,
-  enableCuda ? !slim && stdenv.hostPlatform.isLinux,
-  enableFfmpeg ? !slim && stdenv.hostPlatform.isLinux,
+  enableCuda ? !slim && stdenv.hostPlatform.isLinux && config.cudaSupport,
   enableVulkan ? !slim && stdenv.hostPlatform.isLinux,
 
   # Optional dependencies
   cudaPackages,
-  ffmpeg_4,
   gfortran,
   pcre2,
   darwinMinVersionHook,
@@ -30,7 +28,7 @@
 }:
 
 let
-  bridgeVersion = "v1.0.45-rc1";
+  bridgeVersion = "1.0.45-rc1";
 
   bridge = fetchurl {
     url =
@@ -41,19 +39,19 @@ let
             aarch64-linux = "linux_arm64";
             aarch64-darwin = "macos_arm64";
           }
-          .${stdenv.hostPlatform.system};
+          .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       in
-      "https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexasdk/${bridgeVersion}/${platformDir}/nexasdk-bridge.zip";
+      "https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexasdk/v${bridgeVersion}/${platformDir}/nexasdk-bridge.zip";
     hash =
       {
         x86_64-linux = "sha256-bvULCeGXNd8Alu7V32M5Me23Rh6of6L7hdPYrkOlxB0=";
         aarch64-linux = "sha256-KaHNmq776FtE4tF8jROV43QIyUNaYz/V1kkgMwwjcBo=";
         aarch64-darwin = "sha256-QVh5HutaB/BfCYRgwXdtMVWtDcYzfL9N9qW2GhcK2aY=";
       }
-      .${stdenv.hostPlatform.system};
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 in
-(buildGoModule.override { go = go_1_25; }) (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "nexa";
   version = "0.2.73";
 
@@ -88,9 +86,6 @@ in
     ++ lib.optionals enableVulkan [
       vulkan-loader
     ]
-    ++ lib.optionals enableFfmpeg [
-      ffmpeg_4.lib
-    ]
     ++ lib.optionals enableCuda [
       cudaPackages.cuda_cudart
       cudaPackages.libcublas
@@ -106,7 +101,7 @@ in
       "libcublas.so.12"
       "libcublasLt.so.12"
     ]
-    ++ lib.optionals (!enableFfmpeg) [
+    ++ [
       "libavformat.so.58"
       "libavfilter.so.7"
       "libavcodec.so.58"
