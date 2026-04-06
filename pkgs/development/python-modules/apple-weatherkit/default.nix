@@ -8,7 +8,7 @@
   pyjwt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apple-weatherkit";
   version = "1.2.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tjhorner";
     repo = "python-weatherkit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6dln/599XTJrIY2wL8n9WdHEjJ75goYeZC5szQ6WNsk=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Apple WeatherKit";
     homepage = "https://github.com/tjhorner/python-weatherkit";
-    changelog = "https://github.com/tjhorner/python-weatherkit/releases/tag/v${version}";
+    changelog = "https://github.com/tjhorner/python-weatherkit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
