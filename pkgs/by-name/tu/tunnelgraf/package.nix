@@ -40,6 +40,7 @@ py.pkgs.buildPythonApplication rec {
     "psutil"
     "pydantic"
     "python-hosts"
+    "wcwidth"
   ];
 
   build-system = with py.pkgs; [ hatchling ];
