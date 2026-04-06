@@ -41,7 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ prusnak ];
+    maintainers = with lib.maintainers; [
+      prusnak
+      miniharinn
+    ];
     mainProgram = "rustpython";
   };
 })
