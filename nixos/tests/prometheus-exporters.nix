@@ -1540,26 +1540,6 @@ let
         '';
       };
 
-    rspamd =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          services.rspamd.enable = true;
-        };
-        exporterTest = ''
-          wait_for_unit("rspamd.service")
-          wait_for_unit("prometheus-rspamd-exporter.service")
-          wait_for_open_port(11334)
-          wait_for_open_port(7980)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:7980/probe?target=http://localhost:11334/stat' | grep 'rspamd_scanned{host=\"rspamd\"} 0'"
-          )
-        '';
-      };
-
     rtl_433 =
       { ... }:
       {

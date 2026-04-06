@@ -37,6 +37,9 @@ let
 
     pythonRemoveDeps = [
       "importlib-resources"
+      "tree-sitter-c-sharp"
+      "tree-sitter-embedded-template"
+      "tree-sitter-yaml"
     ];
 
     build-system = with python3Packages; [ setuptools-scm ];
@@ -200,6 +203,10 @@ let
       "test_main_exit_calls_version_check"
       # AssertionError: assert 2 == 1
       "test_simple_send_non_retryable_error"
+      # Upstream tests incompatible with current litellm version
+      "test_max_context_tokens"
+      "test_cmd_tokens_output"
+      "test_cmd_read_only_with_image_file"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Tests fails on darwin

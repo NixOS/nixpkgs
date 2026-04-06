@@ -25,6 +25,7 @@
   evaluate,
   parameterized,
   pytestCheckHook,
+  torchvision,
   transformers,
   config,
   cudatoolkit,
@@ -62,6 +63,7 @@ buildPythonPackage (finalAttrs: {
     evaluate
     parameterized
     pytestCheckHook
+    torchvision
     transformers
     writableTmpDirAsHomeHook
   ];

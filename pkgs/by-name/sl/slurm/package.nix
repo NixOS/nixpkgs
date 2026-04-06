@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   runCommand,
   config,
   pkg-config,
@@ -62,18 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace src/common/env.c \
-        --replace "/bin/echo" "${lib.getExe' coreutils "echo"}"
+        --replace-fail "/bin/echo" "${lib.getExe' coreutils "echo"}"
 
     # Autoconf does not support split packages for pmix (libs and headers).
     # Fix the path to the pmix libraries, so dlopen can find it.
     substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
-        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
-                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
+        --replace-fail 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                       'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
 
   ''
   + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
-        --replace '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
+        --replace-fail '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
   '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'

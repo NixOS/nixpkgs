@@ -110,7 +110,6 @@ let
         "rasdaemon"
         "redis"
         "restic"
-        "rspamd"
         "rtl_433"
         "sabnzbd"
         "scaphandre"
@@ -397,6 +396,10 @@ in
         '')
         (lib.mkRemovedOptionModule [ "tor" ] ''
           The Tor exporter has been removed, as it was broken and unmaintained.
+        '')
+        (lib.mkRemovedOptionModule [ "rspamd" ] ''
+          The Rspamd exporter has been removed. You can use the Rspamd /metrics endpoint directly instead:
+          https://docs.rspamd.com/developers/protocol#controller-http-endpoints
         '')
       ];
     };
