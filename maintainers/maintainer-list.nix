@@ -29235,6 +29235,12 @@
     githubId = 42300264;
     name = "wishfort36";
   };
+  wishstudio = {
+    email = "wishstudio@gmail.com";
+    github = "wishstudio";
+    githubId = 946459;
+    name = "Xiangyan Sun";
+  };
   witchof0x20 = {
     name = "Jade";
     email = "jade@witchof.space";
