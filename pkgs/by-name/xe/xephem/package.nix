@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/etc
     echo "XEphem.ShareDir: $out/share/xephem" > $out/etc/XEphem
     installManPage xephem.1
-    install -Dm644 XEphem.png -t $out/share/pixmaps
+    install -Dm644 XEphem.png -t $out/share/icons/hicolor/128x128/apps
     runHook postInstall
   '';
 
