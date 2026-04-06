@@ -57,6 +57,8 @@
   cups,
   broadwaySupport ? true,
   wayland-scanner,
+  _experimental-update-script-combinators,
+  makeHardcodeGsettingsPatch,
   testers,
 }:
 
@@ -281,11 +283,32 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gtk";
-      attrPath = "gtk3";
-      freeze = true;
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
+        "org.gtk.Settings.ColorChooser" = "gtk";
+        "org.gtk.Settings.EmojiChooser" = "gtk";
+        "org.gtk.Settings.FileChooser" = "gtk";
+        "org.gtk.Demo" = "gtk";
+        "org.gtk.exampleapp" = "gtk"; # Not actually installed.
+      };
+      inherit (finalAttrs) src;
+      preferDefaultSchemaSource = true;
     };
+
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "gtk";
+          attrPath = "gtk3";
+          freeze = true;
+        };
+        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "gtk3.hardcodeGsettingsPatch" ./patches/3.0-hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updatePatch
+      ];
+
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
