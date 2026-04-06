@@ -97,7 +97,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     changelog = "https://github.com/Yus314/kasane/releases/tag/v${finalAttrs.version}";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ yus314 ];
     mainProgram = "kasane";
   };
