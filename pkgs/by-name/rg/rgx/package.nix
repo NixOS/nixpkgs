@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pcre2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-hTR4eZKUOxvib5lAV/l76GZQPQ6s+Hgl3DT2kaGlaGg=";
+
+  buildInputs = [ pcre2 ];
+
+  buildFeatures = [ "pcre2-engine" ];
 
   meta = {
     homepage = "https://github.com/brevity1swos/rgx";
