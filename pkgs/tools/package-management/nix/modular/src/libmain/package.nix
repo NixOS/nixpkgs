@@ -7,6 +7,7 @@
   nix-util,
   nix-store,
   nix-expr,
+  mimalloc,
 
   # Configuration Options
 
@@ -27,6 +28,7 @@ mkMesonLibrary (finalAttrs: {
       nix-util
       nix-store
       openssl
+      mimalloc
     ];
 
   meta = {
