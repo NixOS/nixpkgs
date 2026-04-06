@@ -250,7 +250,13 @@ lib.makeExtensible (
             hash = "sha256-fybp46IQmRN7lEUTChc3MTqxmRutmDO4RNSPEQfJQsQ=";
           };
         }).appendPatches
-          patches_common;
+          (
+            patches_common
+            ++ [
+              ./patches/ghsa-g3g9-5vj6-r3gj-git.patch
+              ./patches/CVE-2025-46416-git.patch
+            ]
+          );
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
