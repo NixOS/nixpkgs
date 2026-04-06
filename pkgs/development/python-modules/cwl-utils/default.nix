@@ -4,6 +4,7 @@
   cwl-upgrader,
   cwlformat,
   fetchFromGitHub,
+  hatchling,
   jsonschema,
   packaging,
   pytest-mock,
@@ -13,22 +14,21 @@
   requests,
   ruamel-yaml,
   schema-salad,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.40";
+  version = "0.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-utils";
     tag = "v${version}";
-    hash = "sha256-A9+JvtSTPfXK/FGJ8pplT06kkuatZu1fgjjmg74oTvE=";
+    hash = "sha256-78Kx+LCEcPE7qsV6MFtfSY6tVj5KZhifFOib7beCU2c=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     cwl-upgrader
@@ -60,15 +60,6 @@ buildPythonPackage rec {
     "test_remote_packing"
     "test_remote_packing_github_soft_links"
     "test_cwl_inputs_to_jsonschema"
-  ];
-
-  disabledTestPaths = [
-    # Tests require podman
-    "tests/test_docker_extract.py"
-    # Tests requires singularity
-    "tests/test_js_sandbox.py"
-    # Circular dependencies
-    "tests/test_graph_split.py"
   ];
 
   meta = {
