@@ -3477,7 +3477,8 @@
       ];
     "lichess" =
       ps: with ps; [
-      ]; # missing inputs: aiolichess
+        aiolichess
+      ];
     "lidarr" =
       ps: with ps; [
         aiopyarr
@@ -7855,6 +7856,7 @@
     "lg_soundbar"
     "lg_thinq"
     "libre_hardware_monitor"
+    "lichess"
     "lidarr"
     "liebherr"
     "life360"
