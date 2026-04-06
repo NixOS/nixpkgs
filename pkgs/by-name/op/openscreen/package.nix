@@ -17,16 +17,16 @@ buildNpmPackage (finalAttrs: {
   inherit nodejs;
 
   pname = "openscreen";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "siddharthvaddem";
     repo = "openscreen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9vtX6rEwRADbi8bSXOi995UvO6wI3z8ai580nhsXJEM=";
+    hash = "sha256-0L+SGbhKNvSH5IpjHjS5G1uhnoWV5oIaSs2mRSAl/mM=";
   };
 
-  npmDepsHash = "sha256-wYKw8fNuRVJOzR+KMa3DVN3bcT3R5GhKe/xWEH+nt0U=";
+  npmDepsHash = "sha256-pKfOxRzVfMNVHxA9oM9naWz024api8jxiTJwy0+6W9A=";
 
   npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent running `node-gyp build`
 
