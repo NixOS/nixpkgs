@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://git.zx2c4.com/cgit/snapshot/cgit-1.2.3.tar.xz";
-    sha256 = "193d990ym10qlslk0p8mjwp2j6rhqa7fq0y1iff65lvbyv914pss";
+    hash = "sha256-5G0VCIO2b2U/2Y6/ndSk7AEJTUzJK0xdmHaG1yuwjkw=";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
     url = "mirror://kernel/software/scm/git/git-2.25.1.tar.xz";
-    sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
+    hash = "sha256-IieWzG478vn9dl+PCX2qPDmZu3hlrIioyXTZgYLinyY=";
   };
 
   separateDebugInfo = true;
