@@ -6,13 +6,18 @@
 
 ceph-python.pkgs.buildPythonPackage {
   pname = "ceph-common";
-  format = "setuptools";
   inherit (ceph-src) version;
   src = ceph-src;
 
+  pyproject = true;
+
   sourceRoot = "${ceph-src.name}/src/python-common";
 
-  propagatedBuildInputs = with ceph-python.pkgs; [
+  build-system = with ceph-python.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with ceph-python.pkgs; [
     pyyaml
   ];
 
