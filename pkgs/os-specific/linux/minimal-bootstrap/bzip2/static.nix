@@ -1,9 +1,10 @@
 {
   lib,
   fetchurl,
+  buildPlatform,
+  hostPlatform,
   bash,
   gcc,
-  musl,
   binutils,
   findutils,
   gnumake,
@@ -18,6 +19,10 @@ let
     url = "https://sourceware.org/pub/bzip2/bzip2-${version}.tar.gz";
     sha256 = "0s92986cv0p692icqlw1j42y9nld8zd83qwhzbqd61p1dqbh6nmb";
   };
+
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -25,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       findutils
       gnumake
@@ -56,14 +60,15 @@ bash.runCommand "${pname}-${version}"
     # Build
     make \
       -j $NIX_BUILD_CORES \
-      CC=musl-gcc \
-      CFLAGS=-static \
-      bzip2 bzip2recover
+      bzip2 bzip2recover \
+      CC=${hostPlatform.config}-gcc \
+      AR=${binutilsTargetPrefix}ar \
+      RANLIB=${binutilsTargetPrefix}ranlib
 
     # Install
     make install -j $NIX_BUILD_CORES PREFIX=$out
 
     # Strip
     # Ignore failures, because strip may fail on non-elf files.
-    find $out/{bin,lib} -type f -exec strip --strip-debug {} + || true
+    find $out/{bin,lib} -type f -exec ${binutilsTargetPrefix}strip --strip-debug {} + || true
   ''

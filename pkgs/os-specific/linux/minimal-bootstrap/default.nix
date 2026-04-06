@@ -48,6 +48,7 @@ lib.makeScope
         };
 
         bash-static = callPackage ./bash/static.nix {
+          gcc-buildbuild = gcc-latest;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
@@ -60,6 +61,7 @@ lib.makeScope
         };
 
         binutils-static = callPackage ./binutils/static.nix {
+          gcc-buildbuild = gcc-latest;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
@@ -251,6 +253,7 @@ lib.makeScope
         };
 
         gzip-static = callPackage ./gzip/static.nix {
+          libc = musl;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
@@ -299,6 +302,7 @@ lib.makeScope
         };
 
         musl-static = callPackage ./musl/static.nix {
+          libgcc = gcc-latest;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
         };

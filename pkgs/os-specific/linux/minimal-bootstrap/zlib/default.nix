@@ -3,7 +3,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -26,7 +25,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -49,7 +47,6 @@ bash.runCommand "${pname}-${version}"
     cd zlib-${version}
 
     # Configure
-    export CC=musl-gcc
     bash ./configure --prefix=$out
 
     # Build
