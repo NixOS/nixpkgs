@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "SeedLink client for data stream inspection, data collection and server testing";
     homepage = "https://github.com/EarthScope/slinktool";
-    changelog = "https://github.com/EarthScope/slinktool/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/EarthScope/slinktool/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ BIOS9 ];
     platforms = lib.platforms.all;
