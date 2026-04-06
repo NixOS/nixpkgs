@@ -14,6 +14,12 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-rDleT/07Y7hqJC79Z5JXUD5GNEW6n5ibUU2dOzQsRWo=";
   };
 
+  patches = [
+    # NixOS runs the update script on every start as we might need to run some migrations.
+    # Normally this clears all active sessions, for usability we do not do that.
+    ./keep-session-object-cache.diff
+  ];
+
   postPatch = ''
     substituteInPlace includes/Installer/CliInstaller.php \
       --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
