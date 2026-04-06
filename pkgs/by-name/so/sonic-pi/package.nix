@@ -32,14 +32,15 @@
   gl3w,
   SDL2,
   fmt,
-}@args:
+}:
 
 let
-  ruby = args.ruby.withPackages (ps: [
+  rubyEnv = ruby.withPackages (ps: [
     ps.prime
     ps.racc
     ps.rake
     ps.rexml
+    ps.mutex_m
   ]);
 in
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     cmake
     pkg-config
-    ruby
+    rubyEnv
     beamPackages.erlang
     beamPackages.elixir
     beamPackages.hex
@@ -122,6 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix shebangs on files in app and bin scripts
   postPatch = ''
     patchShebangs app bin
+
+    # Boost 1.89+ dropped the dummy compiled boost_system library.
+    # We need to remove references to it so CMake doesn't fail.
+    sed -i 's/COMPONENTS filesystem system thread/COMPONENTS filesystem thread/g' app/api/CMakeLists.txt
   '';
 
   preConfigure =
