@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiocurrencylayer";
-  version = "1.0.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "aiocurrencylayer";
     tag = version;
-    hash = "sha256-VOzgWN+dDPaGEcahFPSWjBR989b9eNkx4zcnI9o2Xiw=";
+    hash = "sha256-l9M9ejcaXLkIFtD3Qz3dkTR4xDIZuT94OT4yg/6ipYA=";
   };
 
   nativeBuildInputs = [ poetry-core ];
