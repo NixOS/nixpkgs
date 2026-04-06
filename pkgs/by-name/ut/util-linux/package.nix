@@ -55,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
+
+    # Fix compile of 2.42+ on Darwin.
+    # https://lore.kernel.org/util-linux/CAEUYr6ZjVX1bd-xcBGtFN_ZYwQnXDYsw7d1-7sTpF2BbgfrR+g@mail.gmail.com/T/#u
+    ./include-correct-struct-statfs-header.patch
   ];
 
   # We separate some of the utilities into their own outputs. This
