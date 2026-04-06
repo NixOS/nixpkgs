@@ -393,6 +393,10 @@ with haskellLib;
       hash = "sha256-21qkRFnRF6nuM1BILps8o5A/QvaVQ6SkKxO0u2goXos=";
     })
   ] super.socket;
+  # https://github.com/flip111/haskell-socket-unix/issues/1
+  socket-unix = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [ "-j1" ];
+  }) super.socket-unix;
 
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
