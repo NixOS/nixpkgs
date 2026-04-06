@@ -210,6 +210,8 @@ lib.makeExtensible (
         }).appendPatches
           [
             lowdown30Patch
+            ./patches/ghsa-g3g9-5vj6-r3gj-2.31.patch
+            ./patches/landlock-abstract-socket-hardening-2.31.patch
           ];
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
