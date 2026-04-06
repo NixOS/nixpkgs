@@ -55,6 +55,8 @@ default-package-overrides:
   - lsp-types < 2.4
   # Needs to match microlens == 0.4.* in Stackage LTS 24
   - microlens-pro < 0.2.0.4
+  # 2026-04-06: 4.0.10 merely adjusts to dependencies that are incompatible with our LTS
+  - mighttpd2 < 4.0.10
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
   # this no longer works with later versions.
   - pandoc-crossref == 0.3.21
