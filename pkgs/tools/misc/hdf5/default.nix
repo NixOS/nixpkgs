@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "reproducible-build.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hdf5/-/raw/main/hdf5-make-reproducible.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hdf5/-/raw/721d33408db902ff738db18f1e977611d49b4ba8/hdf5-make-reproducible.patch";
       hash = "sha256-Z31dCsLjYpqjoGXooOXI81EPjPwyTK8890xCENTh8aM=";
     })
   ];

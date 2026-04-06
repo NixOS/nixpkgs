@@ -1,21 +1,21 @@
 {
-  "version": "3.194.0",
+  "version": "3.198.0",
   "assets": {
     "x86_64-linux": {
-      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.194.0/mirrord_linux_x86_64",
-      "hash": "sha256-6coP0EiDrTv0HNk+55C37d+eKhsOm25rQy42mRkoTy0="
+      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.198.0/mirrord_linux_x86_64",
+      "hash": "sha256-JrfS4KGARmNGAWDLzmCkafjyPgk3NHIALEWMpoBmbWc="
     },
     "aarch64-linux": {
-      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.194.0/mirrord_linux_aarch64",
-      "hash": "sha256-k8/kkhYYk+eHdekIwi2wFmn6mX7WiKuKtaOC3soBT6U="
+      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.198.0/mirrord_linux_aarch64",
+      "hash": "sha256-As0ybf+UQ4+q0lCkpM+6VkvTWMt8mtfMKmrPm3eZIcY="
     },
     "aarch64-darwin": {
-      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.194.0/mirrord_mac_universal",
-      "hash": "sha256-VwcqBf3Jq9H3wgNz5o/7oJ5Pz0nXBRkzDA7D51hIWe0="
+      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.198.0/mirrord_mac_universal",
+      "hash": "sha256-uvAvNF1KKIfvjzgwmwVacXA/bEwHolCCqFoou5L8pXw="
     },
     "x86_64-darwin": {
-      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.194.0/mirrord_mac_universal",
-      "hash": "sha256-VwcqBf3Jq9H3wgNz5o/7oJ5Pz0nXBRkzDA7D51hIWe0="
+      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.198.0/mirrord_mac_universal",
+      "hash": "sha256-uvAvNF1KKIfvjzgwmwVacXA/bEwHolCCqFoou5L8pXw="
     }
   }
 }

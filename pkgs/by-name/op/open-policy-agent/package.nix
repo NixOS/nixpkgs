@@ -14,13 +14,13 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IzgqQ52nTkcQLg1w9yn3op5Q2P/7rVMNh3IgVYb5sFI=";
+    hash = "sha256-TUFVyrRX0eqXCY+wOYA9yAFTzsupBO4d7bHmQXRRGDE=";
   };
 
   vendorHash = "sha256-l2HrTap6qZeKOvvCY6d+issQT2pL6TPU0pIdDN8vfVc=";

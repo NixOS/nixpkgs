@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-online";
-  version = "24.04.17-3";
+  version = "25.04.9-4";
 
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
     repo = "online";
     tag = "cp-${finalAttrs.version}";
-    hash = "sha256-KJ5E5jvV0MrWdpU4pU+9Y4ngRJ/kk3lcBntbWdQZFqY=";
+    hash = "sha256-+9dGNNduWq4+jxlVd49PDllIyI7vfYmFlly/t70eNtg=";
   };
 
   nativeBuildInputs = [
@@ -68,12 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-file-server-regex.patch
-    # https://github.com/CollaboraOnline/online/pull/11464/
-    (fetchpatch {
-      name = "fix-testPreProcessedFileSubstitution";
-      url = "https://github.com/CollaboraOnline/online/commit/76a4b64297d721d66603dc63f525324475036917.patch";
-      hash = "sha256-PGys1dpHLFsUKKA1YyxkJpbBbc2prySdGH/CZni90kI=";
-    })
   ];
 
   postPatch = ''
@@ -81,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
-    substituteInPlace coolwsd-systemplate-setup --replace-fail /bin/pwd pwd
   '';
 
   # Copy dummy self-signed certificates provided for testing.
@@ -96,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-LzXU1WdayfXhkDOlKEtZ/pgYfFPNPml5TNXS9sJp2yI=";
+    hash = "sha256-c78C5yt/RH4jmjZpaBskV+1u4wTTVJoWjFqq6eNUVOA=";
   };
 
   npmRoot = "browser";

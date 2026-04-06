@@ -4848,6 +4848,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  duck-nvim = buildVimPlugin {
+    pname = "duck.nvim";
+    version = "1.0.0-unstable-2024-03-07";
+    src = fetchFromGitHub {
+      owner = "tamton-aquib";
+      repo = "duck.nvim";
+      rev = "d8a6b08af440e5a0e2b3b357e2f78bb1883272cd";
+      hash = "sha256-97QSkZHpHLq1XyLNhPz88i9VuWy6ux7ZFNJx/g44K2A=";
+    };
+    meta.homepage = "https://github.com/tamton-aquib/duck.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   earthly-vim = buildVimPlugin {
     pname = "earthly.vim";
     version = "0-unstable-2024-04-02";
@@ -5484,6 +5497,19 @@ final: prev: {
       hash = "sha256-tOYxOUKa6Zn2Yq5peqGDEdCkpl+b+VKkSmZx7+kHZJ0=";
     };
     meta.homepage = "https://github.com/projectfluent/fluent.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  fluoromachine-nvim = buildVimPlugin {
+    pname = "fluoromachine.nvim";
+    version = "0-unstable-2025-10-21";
+    src = fetchFromGitHub {
+      owner = "maxmx03";
+      repo = "fluoromachine.nvim";
+      rev = "a279f667168e742df059caf1f1f4daf1de24f4f8";
+      hash = "sha256-alZBQYmo9jrsKYTL7dnObaP2op4SMQQRiEZBdhxUZiI=";
+    };
+    meta.homepage = "https://github.com/maxmx03/fluoromachine.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10980,6 +11006,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-ansible = buildVimPlugin {
+    pname = "nvim-ansible";
+    version = "0-unstable-2026-02-09";
+    src = fetchFromGitHub {
+      owner = "mfussenegger";
+      repo = "nvim-ansible";
+      rev = "c7f595d568b588942d4d0c37b5cd6cae3764a148";
+      hash = "sha256-Ykp610LPF0tWidHM16UqeaU8sJxcr5OXJdHkjWCYUTU=";
+    };
+    meta.homepage = "https://github.com/mfussenegger/nvim-ansible/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-autopairs = buildVimPlugin {
     pname = "nvim-autopairs";
     version = "0.10.0-unstable-2026-01-30";
@@ -11248,6 +11287,19 @@ final: prev: {
       hash = "sha256-YIsmiWsdiUfnM+syZQqsa+wgP+aR35/IbgYeywqY1to=";
     };
     meta.homepage = "https://github.com/jonboh/nvim-dap-rr/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-dap-ruby = buildVimPlugin {
+    pname = "nvim-dap-ruby";
+    version = "0-unstable-2025-07-08";
+    src = fetchFromGitHub {
+      owner = "suketa";
+      repo = "nvim-dap-ruby";
+      rev = "ba36f9905ca9c6d89e5af5467a52fceeb2bbbf6d";
+      hash = "sha256-57BBhdrikDEswZe2QW+jHMSgfXIjauc6iDNpWS0YUaU=";
+    };
+    meta.homepage = "https://github.com/suketa/nvim-dap-ruby/";
     meta.hydraPlatforms = [ ];
   };
 

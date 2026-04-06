@@ -1270,8 +1270,8 @@ let
         mktplcRef = {
           publisher = "denoland";
           name = "vscode-deno";
-          version = "3.51.0";
-          hash = "sha256-iEwguP0qL8WHIMuJDPPPUp5ka9S4g7XHOl0i2++jgi8=";
+          version = "3.52.0";
+          hash = "sha256-0Qkruo7Eh86JRm58G7XhyceUpCJDmhoYaPjUKJQjFiU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
@@ -1729,8 +1729,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.33.0";
-          hash = "sha256-xeZp75qnxnW2LNtRz0IUzrBjBe5Po3VHGTta+6VCLvQ=";
+          version = "0.35.0";
+          hash = "sha256-5tjSXwjiNMC8NlGAa0NQ5uWw+wTEPePL1GgRhnBAtUo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -3552,8 +3552,8 @@ let
         mktplcRef = {
           name = "vscode-just-syntax";
           publisher = "nefrob";
-          version = "0.10.0";
-          hash = "sha256-dBNftT+yhyfXutDtRvihwl1WrgFENR61eFh9ONqjjq0=";
+          version = "0.10.1";
+          hash = "sha256-s/JxIALrYb/dew1CdvvM1UmnewyRcJPB/ETJ/Ai2QJA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/nefrob.vscode-just-syntax/changelog";
@@ -3766,8 +3766,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "31.6.0";
-          hash = "sha256-jbcAB3IeUrdWTVV+8ssMumHd5aeXJH6tivWGezJ7amU=";
+          version = "31.8.0";
+          hash = "sha256-xSkT6VlRrC36jnuB16V+eDozDutrv2ksqxatU/KIgS0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -4497,8 +4497,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "109.14.2";
-          hash = "sha256-yY1iVbTz4Yq6ZgNVaSpukxnKLlg2XccEPWzuGoGMkmM=";
+          version = "109.15.0";
+          hash = "sha256-/1we+6X3l7MCx96ELz7wg6oDDAcYCJBt7XJ4X0ihwx0=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -5221,8 +5221,8 @@ let
         mktplcRef = {
           name = "gitblame";
           publisher = "waderyan";
-          version = "13.0.0";
-          sha256 = "sha256-I6b4GDM8Ogf+ZH2lD2g4fUkQY9ktuO1xqxfSH6vAMVk=";
+          version = "13.0.1";
+          sha256 = "sha256-N0UgWdwGj3NW4x0Ea+jKL5Jvp0YE+HfK5tkUjmynPuY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";

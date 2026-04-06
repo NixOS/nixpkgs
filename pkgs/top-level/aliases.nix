@@ -505,6 +505,7 @@ mapAliases {
   cloudlogoffline = throw "cloudlogoffline has been removed"; # Added 2025-05-18
   clucene_core = warnAlias "'clucene_core' has been renamed to 'clucene-core'" clucene-core; # Added 2026-01-12
   clucene_core_2 = warnAlias "'clucene_core_2' has been renamed to 'clucene-core_2'" clucene-core_2; # Added 2026-01-12
+  cmtk = throw "'cmtk' has been dropped due to being broken since September 2025, with no complaints by any users of the package."; # Added 2026-04-05
   coc-sumneko-lua = throw "'coc-sumneko-lua' has been removed due to unmaintained and broken package. 'lua_ls' can be used as a replacement"; # Added 2026-02-04
   cockroachdb-bin = throw "'cockroachdb-bin' has been renamed to/replaced by 'cockroachdb'"; # Converted to throw 2025-10-27
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
@@ -827,6 +828,7 @@ mapAliases {
   glfw-wayland-minecraft = throw "'glfw-wayland-minecraft' has been renamed to/replaced by 'glfw3-minecraft'"; # Converted to throw 2025-10-27
   glxinfo = throw "'glxinfo' has been renamed to/replaced by 'mesa-demos'"; # Converted to throw 2025-10-27
   gmnisrv = throw "'gmnisrv' has been removed due to lack of maintenance upstream"; # Added 2025-06-07
+  gmu = throw "'gmu' has been removed as it was broken and unmaintained in Nixpkgs"; # Added 2026-04-04
   gnat11 = throw "gnat11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnat12 = throw "gnat12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gnat12Packages = throw "gnat12Packages has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
@@ -1605,6 +1607,7 @@ mapAliases {
   pidgin-window-merge = throw "'pidgin-window-merge' has been renamed to/replaced by 'pidginPackages.pidgin-window-merge'"; # Converted to throw 2025-10-27
   pidgin-xmpp-receipts = throw "'pidgin-xmpp-receipts' has been renamed to/replaced by 'pidginPackages.pidgin-xmpp-receipts'"; # Converted to throw 2025-10-27
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
+  pinecone = throw "'pinecone' has been removed, as it is unmaintained and obsolete"; # Added 2026-03-31
   pinentry = throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'"; # Converted to throw 2025-10-26
   pingvin-share = throw "'pingvin-share' has been removed as it was broken and archived upstream"; # Added 2025-11-08
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
@@ -1644,6 +1647,7 @@ mapAliases {
   powwow = throw "'powwow' has been removed, since it's unmaintained since 2021 and doesn't build with glibc 2.42"; # Added 2025-09-28
   prboom-plus = throw "'prboom-plus' has been removed since it is unmaintained upstream."; # Added 2025-09-14
   preload = throw "'preload' has been removed due to lack of usage and being broken since its introduction into nixpkgs"; # Added 2025-11-29
+  premid = throw "'premid' has been removed, as it has been archived upstream since July 2024. Consider using the browser extension instead."; # Added 2026-04-04
   presage = throw "presage has been removed, as it has been unmaintained since 2018"; # Added 2025-06-19
   preserves-nim = throw "'preserves-nim' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   primusLib = warnAlias "'primusLib' has been renamed to 'primus-lib'" primus-lib; # Added 2026-02-12
@@ -1777,6 +1781,7 @@ mapAliases {
   rust-synapse-state-compress = throw "'rust-synapse-state-compress' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
   rustc-wasm32 = throw "'rustc-wasm32' has been renamed to/replaced by 'rustc'"; # Converted to throw 2025-10-27
   rustic-rs = throw "'rustic-rs' has been renamed to/replaced by 'rustic'"; # Converted to throw 2025-10-27
+  rx = throw "'rx' has been dropped due to being broken since September 2025, with no complaints by any users of the package."; # Added 2026-04-05
   ryujinx = throw "'ryujinx' has been replaced by 'ryubing' as the new upstream"; # Added 2025-07-30
   ryujinx-greemdev = throw "'ryujinx-greemdev' has been renamed to/replaced by 'ryubing'"; # Converted to throw 2025-10-27
   scantailor = throw "'scantailor' has been renamed to/replaced by 'scantailor-advanced'"; # Converted to throw 2025-10-27

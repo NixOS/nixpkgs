@@ -23,16 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.is32bit || stdenv.hostPlatform.isDarwin) {
-    NIX_CFLAGS_COMPILE = toString [
-      # iscsi-discard.c:223:57: error: format specifies type 'unsigned long' but the argument has type 'uint64_t' (aka 'unsigned long long') [-Werror,-Wformat]
-      "-Wno-error=format"
-      # multithreading.c:257:16: error: 'sem_init' is deprecated [-Werror,-Wdeprecated-declarations]
-      "-Wno-error=deprecated-declarations"
-      # scsi-lowlevel.c:1244:11: error: cast from 'uint8_t *' (aka 'unsigned char *') to 'uint16_t *' (aka 'unsigned short *') increases required alignment from 1 to 2 [-Werror,-Wcast-align]
-      "-Wno-error=cast-align"
-    ];
-  };
+  env =
+    lib.optionalAttrs
+      (stdenv.hostPlatform.is32bit || stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isRiscV)
+      {
+        NIX_CFLAGS_COMPILE = toString [
+          # iscsi-discard.c:223:57: error: format specifies type 'unsigned long' but the argument has type 'uint64_t' (aka 'unsigned long long') [-Werror,-Wformat]
+          "-Wno-error=format"
+          # multithreading.c:257:16: error: 'sem_init' is deprecated [-Werror,-Wdeprecated-declarations]
+          "-Wno-error=deprecated-declarations"
+          # scsi-lowlevel.c:1244:11: error: cast from 'uint8_t *' (aka 'unsigned char *') to 'uint16_t *' (aka 'unsigned short *') increases required alignment from 1 to 2 [-Werror,-Wcast-align]
+          "-Wno-error=cast-align"
+        ];
+      };
 
   meta = {
     description = "iSCSI client library and utilities";

@@ -112,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd ./packages/opencode
     bun --bun ./script/build.ts --single --skip-install
-    bun --bun ./script/schema.ts schema.json
+    bun --bun ./script/schema.ts config.json tui.json
 
     runHook postBuild
   '';
@@ -133,7 +133,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        )
      }
 
-    install -Dm644 schema.json $out/share/opencode/schema.json
+    install -Dm644 config.json $out/share/opencode/config.json
+    install -Dm644 tui.json $out/share/opencode/tui.json
 
     runHook postInstall
   '';
@@ -153,7 +154,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    jsonschema = "${placeholder "out"}/share/opencode/schema.json";
+    jsonschema = {
+      config = "${placeholder "out"}/share/opencode/config.json";
+      tui = "${placeholder "out"}/share/opencode/tui.json";
+    };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
