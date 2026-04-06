@@ -217,20 +217,20 @@ lib.makeExtensible (
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            rev = "53ab7375a110825814837005aaf5a256edea6eae";
-            hash = "sha256-ILPe+2GSPjmsZvEegUh0lJ1yWSsQnU1eJvfvIdJ8ins=";
+            owner = "mkg20001";
+            repo = "nix-1";
+            rev = "c65675dfb12e4e5cf8df1606b52c841435255793";
+            hash = "sha256-JslapBqX0eYqTkmDpX5WPyD8ETjHwXb7IAXr9kU5Fbo=";
           };
         }).appendPatches
           patches_common;
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_34;
+      latest = self.git;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_34;
+      stable = self.git;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (
