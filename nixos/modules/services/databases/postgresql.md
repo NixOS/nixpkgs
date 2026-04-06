@@ -285,7 +285,7 @@ A complete list of options for the PostgreSQL module may be found [here](#opt-se
 
 The collection of plugins for each PostgreSQL version can be accessed with `.pkgs`. For example, for the `pkgs.postgresql_15` package, its plugin collection is accessed by `pkgs.postgresql_15.pkgs`:
 ```ShellSession
-$ nix repl '<nixpkgs>'
+$ nix repl -f '<nixpkgs>'
 
 Loading '<nixpkgs>'...
 Added 10574 variables.

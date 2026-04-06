@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
   # set ldflag for kubectlVersion since it is needed for argo
   # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
   prePatch = ''
-    export KUBECTL_VERSION=$(grep 'k8s.io/kubectl v' go.mod | cut -f 2 -d " " | cut -f 1 -d "=" )
+    export KUBECTL_VERSION=$(go list -m -f '{{.Version}}' k8s.io/kubectl)
     echo using $KUBECTL_VERSION
     ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v3/common.kubectlVersion=''${KUBECTL_VERSION}"
   '';

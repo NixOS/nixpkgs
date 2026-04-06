@@ -39,7 +39,7 @@ let
     ];
     emulated_kasa = getComponentDeps "camera" ++ getComponentDeps "conversation";
     environment_canada = getComponentDeps "camera";
-    esphome = getComponentDeps "camera" ++ getComponentDeps "infrared";
+    esphome = getComponentDeps "camera";
     fan = getComponentDeps "conversation";
     fish_audio = getComponentDeps "tts";
     foscam = getComponentDeps "camera";
@@ -60,7 +60,7 @@ let
       ibeacon-ble
     ];
     gpslogger = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
-    group = getComponentDeps "camera" ++ getComponentDeps "conversation" ++ getComponentDeps "infrared";
+    group = getComponentDeps "camera" ++ getComponentDeps "conversation";
     hassio = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_yellow";
     hikvision = getComponentDeps "camera";
     homeassistant = getComponentDeps "camera" ++ getComponentDeps "conversation";
@@ -77,7 +77,6 @@ let
     image_processing = getComponentDeps "conversation";
     intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
-    kitchen_sink = getComponentDeps "infrared";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";
     locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";

@@ -3488,6 +3488,11 @@
     githubId = 30630233;
     name = "Timo Triebensky";
   };
+  BIOS9 = {
+    name = "NightFish";
+    github = "BIOS9";
+    githubId = 15035908;
+  };
   birdee = {
     name = "birdee";
     github = "BirdeeHub";
@@ -16158,6 +16163,11 @@
     github = "m3l6h";
     githubId = 8094643;
     keys = [ { fingerprint = "BAA9 7711 58CA D457 B4AE  8B06 8188 423D 2FA2 0A65"; } ];
+  };
+  m7medvision = {
+    name = "Mohammed";
+    github = "m7medVision";
+    githubId = 88824957;
   };
   ma27 = {
     email = "maximilian@mbosch.me";

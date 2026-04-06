@@ -1045,7 +1045,7 @@ rec {
         passthru = extraPassthru // finalAttrs.src.passthru or { };
 
         # Carry (and merge) information from the underlying `src` if present.
-        meta = lib.optionalAttrs (src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
+        meta = lib.optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
       };
   };
 

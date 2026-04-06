@@ -1204,6 +1204,7 @@
   ./services/networking/frr.nix
   ./services/networking/g3proxy.nix
   ./services/networking/gdomap.nix
+  ./services/networking/geph.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix

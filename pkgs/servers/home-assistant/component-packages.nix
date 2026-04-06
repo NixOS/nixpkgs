@@ -3587,7 +3587,8 @@
       ];
     "lojack" =
       ps: with ps; [
-      ]; # missing inputs: lojack-api
+        lojack-api
+      ];
     "london_air" =
       ps: with ps; [
       ];
@@ -5929,7 +5930,8 @@
       ];
     "solarman" =
       ps: with ps; [
-      ]; # missing inputs: solarman-opendata
+        solarman-opendata
+      ];
     "solax" =
       ps: with ps; [
         solax
@@ -7877,6 +7879,7 @@
     "logbook"
     "logentries"
     "logger"
+    "lojack"
     "london_air"
     "london_underground"
     "lookin"
@@ -8225,6 +8228,7 @@
     "snooz"
     "solaredge"
     "solarlog"
+    "solarman"
     "solax"
     "soma"
     "somfy_mylink"
