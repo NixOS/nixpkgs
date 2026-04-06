@@ -773,7 +773,9 @@ in
     imports = [ ./initrd-luks-empty-passphrase.nix ];
     _module.args.systemdStage1 = false;
   };
-  initrd-network-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn { };
+  initrd-network-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn {
+    systemdStage1 = false;
+  };
   initrd-network-ssh = handleTest ./initrd-network-ssh { };
   initrd-secrets = handleTest ./initrd-secrets.nix { };
   initrd-secrets-changing = handleTest ./initrd-secrets-changing.nix { };
