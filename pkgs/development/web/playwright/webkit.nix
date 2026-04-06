@@ -11,14 +11,19 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
+  gdk-pixbuf,
   glib,
   glib-networking,
+  graphene,
   gst_all_1,
+  gtk4,
   harfbuzz,
   harfbuzzFull,
+  hyphen,
   icu74,
   lcms,
   libavif,
@@ -29,8 +34,10 @@
   libgcrypt,
   libgpg-error,
   libjpeg8,
+  libmanette,
   libopus,
   libpng,
+  libsecret,
   libsoup_3,
   libtasn1,
   libvpx,
@@ -41,10 +48,13 @@
   libxml2,
   libxslt,
   libgbm,
+  pango,
   sqlite,
   systemdLibs,
+  vulkan-loader,
   wayland-scanner,
   woff2,
+  libx11,
   zlib,
   revision,
   system,
@@ -133,17 +143,22 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
+      gdk-pixbuf
       glib
+      graphene
       brotli
       libjxl'
       gst_all_1.gst-plugins-bad
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
+      gtk4
       harfbuzz
       harfbuzzFull
+      hyphen
       icu74
       lcms
       libavif
@@ -154,8 +169,10 @@ let
       libgcrypt
       libgpg-error
       libjpeg8
+      libmanette
       libopus
       libpng
+      libsecret
       libsoup_3
       libtasn1
       libwebp
@@ -165,11 +182,14 @@ let
       libxml2
       libxslt
       libgbm
+      pango
       sqlite
       systemdLibs
+      vulkan-loader
       wayland-scanner
       woff2.lib
       libxkbcommon
+      libx11
       zlib
     ];
 
@@ -177,12 +197,14 @@ let
     buildPhase = ''
       cp -R . $out
 
-      # remove unused gtk browser
-      rm -rf $out/minibrowser-gtk
       # remove bundled libs
+      rm -rf $out/minibrowser-gtk/sys
       rm -rf $out/minibrowser-wpe/sys
 
-      # TODO: still fails on ubuntu trying to find libEGL_mesa.so.0
+      wrapProgram $out/minibrowser-gtk/bin/MiniBrowser \
+        --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
+        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-gtk/lib
+
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
         --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
