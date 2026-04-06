@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     description = "Natural language date parser and interactive terminal calendar";
     homepage = "https://github.com/zachthieme/wen";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ zachthieme ];
     mainProgram = "wen";
   };
 })

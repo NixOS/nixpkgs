@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "Terminal dashboard showing nightly host upgrade quota to hit a deadline";
     homepage = "https://github.com/zachthieme/tick";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ zachthieme ];
     mainProgram = "tick";
   };
 })

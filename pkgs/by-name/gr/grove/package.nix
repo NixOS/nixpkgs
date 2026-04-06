@@ -50,7 +50,7 @@ buildGoModule {
     description = "Interactive web-based org chart planner with CSV/XLSX import and drag-and-drop editing";
     homepage = "https://github.com/zachthieme/grove";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ zachthieme ];
     mainProgram = "grove";
   };
 }

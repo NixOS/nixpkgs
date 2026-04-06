@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     description = "Task extraction tool that scans markdown files for checkboxes and tagged items";
     homepage = "https://github.com/zachthieme/pike";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ zachthieme ];
     mainProgram = "pike-md";
   };
 })
