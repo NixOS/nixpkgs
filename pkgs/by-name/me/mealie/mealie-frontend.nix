@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-aYgTdHrorLNBYVNwVyYSTfAqtvn1JB0FBAkoem0vNSU=";
+    hash = "sha256-F1dhdBHfT9N1Ejk7WLyz2BbKlTPfqqEDNi7ZTL3phWY=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     runHook preBuild
 
     export NUXT_TELEMETRY_DISABLED=1
-    yarn --offline generate --env production
+    yarn --offline generate
     runHook postBuild
   '';
 
