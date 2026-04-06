@@ -4484,9 +4484,10 @@
     "onvif" =
       ps: with ps; [
         ha-ffmpeg
+        onvif-parsers
         onvif-zeep-async
         wsdiscovery
-      ]; # missing inputs: onvif_parsers
+      ];
     "open_meteo" =
       ps: with ps; [
         open-meteo
@@ -8015,6 +8016,7 @@
     "onedrive_for_business"
     "onewire"
     "onkyo"
+    "onvif"
     "open_meteo"
     "open_router"
     "openai_conversation"

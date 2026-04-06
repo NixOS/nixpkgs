@@ -11468,6 +11468,8 @@ self: super: with self; {
 
   onnxslim = callPackage ../development/python-modules/onnxslim { };
 
+  onvif-parsers = callPackage ../development/python-modules/onvif-parsers { };
+
   onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
 
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
