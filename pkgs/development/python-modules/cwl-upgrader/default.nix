@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cwl-upgrader";
   version = "1.2.15";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-upgrader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7gmwz3a3IYky/Eof4fnSp3P5oSAko91drcX7i9CwZUY=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library to upgrade CWL syntax to a newer version";
     homepage = "https://github.com/common-workflow-language/cwl-upgrader";
-    changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/${src.tag}";
+    changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cwl-upgrader";
   };
-}
+})
