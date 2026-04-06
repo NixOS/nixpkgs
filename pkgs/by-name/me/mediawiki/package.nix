@@ -26,6 +26,10 @@ stdenvNoCC.mkDerivation rec {
       '';
       hash = "sha256-bhfw5CW4EEpr2GTGda3va+EmM/vK6AqBfyoCcsSiqNQ=";
     })
+
+    # NixOS runs the update script on every start as we might need to run some migrations.
+    # Normally this clears all active sessions, for usability we do not do that.
+    ./keep-session-object-cache.diff
   ];
 
   postPatch = ''
