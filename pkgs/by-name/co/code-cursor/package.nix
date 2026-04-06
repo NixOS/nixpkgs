@@ -11,7 +11,6 @@
 
 let
   inherit (stdenv) hostPlatform;
-  finalCommandLineArgs = "--update=false " + commandLineArgs;
 
   sourcesJson = lib.importJSON ./sources.json;
   sources = lib.mapAttrs (
@@ -24,9 +23,8 @@ let
   source = sources.${hostPlatform.system};
 in
 buildVscode rec {
-  inherit useVSCodeRipgrep;
+  inherit commandLineArgs useVSCodeRipgrep;
   inherit (sourcesJson) version vscodeVersion;
-  commandLineArgs = finalCommandLineArgs;
 
   pname = "cursor";
 
