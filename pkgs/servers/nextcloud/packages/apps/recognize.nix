@@ -17,11 +17,6 @@
 let
   nodejs = nodejs_22;
   latestVersionForNc = {
-    "31" = {
-      version = "9.0.9";
-      appHash = "sha256-JyxECdAjg+f62hccPUuQ7dFknzETs/JvTB6y5hkbH1M=";
-      modelHash = "sha256-xqCYMJYCk1fZ9ZnIW+hmB0AWrn9APNdu1hk6id6MQQY=";
-    };
     "32" = {
       version = "10.0.7";
       appHash = "sha256-quuH9ZNQhvlJ6SsFeboVIrMtF9K6ckpQkXb9OXDvFm8=";
