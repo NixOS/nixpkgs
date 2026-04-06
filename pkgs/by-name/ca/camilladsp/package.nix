@@ -12,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "camilladsp";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "HEnquist";
     repo = "camilladsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JBqjFpk+KVc2ajTqkC2ompbs7oQEsba+n2zNOwxL2Uo=";
+    hash = "sha256-PedaOmrvvE9Kxux0XwwDJfKq0fncsV/sUzZhnAp++DM=";
   };
 
   cargoLock = {

@@ -64,12 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         $out/share/applications/Cinny.desktop
     '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
-    )
-  '';
-
   nativeBuildInputs = [
     cargo-tauri.hook
   ]

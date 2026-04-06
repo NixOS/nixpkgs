@@ -796,6 +796,7 @@ in
           "/dev/disk/by-label/${config.isoImage.volumeID}"
         else
           "/dev/root";
+      fsType = "iso9660";
       neededForBoot = true;
       noCheck = true;
     };

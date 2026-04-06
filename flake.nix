@@ -144,6 +144,7 @@
                         nixpkgs.hostPlatform = "x86_64-linux";
                         boot.loader.grub.enable = false;
                         fileSystems."/".device = "nodev";
+                        fileSystems."/".fsType = "none";
                         # See https://search.nixos.org/options?show=system.stateVersion&query=stateversion
                         system.stateVersion = lib.trivial.release; # DON'T do this in real configs!
                       }

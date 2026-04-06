@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fna3d";
-  version = "26.03";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-P28rm36xG3/IydUKFk6Q7m0D9jpcMtAlfdLpXOrISs4=";
+    hash = "sha256-DZZuJ0bppyoXgewAOrtDnOHi4rKKc9PNxKif1BIN2Zk=";
   };
 
   cmakeFlags = [

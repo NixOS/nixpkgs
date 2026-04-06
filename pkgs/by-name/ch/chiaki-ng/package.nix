@@ -32,23 +32,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";
-  version = "1.9.9";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7pDQnlElnBkW+Nr6R+NaylZbsGH8dB31nd7jxYD66yQ=";
+    hash = "sha256-se60wu1rwk/w5QG+pFvdtKD+zsJQdOmBole2WY2KCxw=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix for building with Qt >= 6.10 -- remove when updating past 1.9.9
-    (fetchpatch {
-      url = "https://github.com/streetpea/chiaki-ng/commit/fe5bfd87998c7ca67ade76436e31ab9924000c8b.patch";
-      hash = "sha256-7Eo5tcmhgbQszBrgtTGrnH34GewJXXAYSKqvqGN/viI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
