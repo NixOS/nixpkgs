@@ -194,6 +194,7 @@ buildMattermost rec {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         versionInfo.regex
       ]
