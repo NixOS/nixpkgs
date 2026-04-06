@@ -205,15 +205,6 @@ mkWrapper type (
         );
         targetPackages = lib.mapAttrs (_: map forceSDKEval) targetPackages;
         inherit runtime aspnetcore;
-
-        updateScript =
-          let
-            majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
-          in
-          [
-            ./update.sh
-            majorVersion
-          ];
       }
     );
 

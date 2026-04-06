@@ -4,12 +4,13 @@
   callPackage,
   lib,
   fetchurl,
-  dir ? null,
+  channel,
+  featureBand ? "1xx",
+  dir ? ../. + ("/" + channel),
   releaseManifestFile ? dir + "/release.json",
   releaseInfoFile ? dir + "/release-info.json",
   bootstrapSdkFile ? dir + "/bootstrap-sdk.nix",
   bootstrapSdk ? null,
-  allowPrerelease ? false,
   depsFile ? dir + "/deps.json",
   pkgsBuildHost,
   buildDotnetSdk,
@@ -22,22 +23,16 @@
 assert bootstrapSdk != null || bootstrapSdkFile != null;
 
 let
-  inherit (lib.importJSON releaseManifestFile)
-    sdkVersion
-    ;
-
   suffix =
     let
-      parts = lib.take 3 (lib.splitVersion sdkVersion);
-      patch = lib.elemAt parts 2;
-      band = lib.substring 0 (lib.stringLength patch - 2) patch;
+      parts = lib.splitVersion channel;
       major = lib.elemAt parts 0;
-      channel = lib.concatStringsSep "_" (lib.take 2 parts);
-      sdk = lib.concatStringsSep "_" (lib.replaceElemAt parts 2 "${band}xx");
+      sdk = lib.concatStringsSep "_" (parts ++ [ featureBand ]);
     in
     {
-      source = if band == "1" then major else sdk;
-      inherit major channel sdk;
+      source = if featureBand == "1xx" then major else sdk;
+      channel = lib.concatStringsSep "_" (lib.take 2 parts);
+      inherit major sdk;
     };
 
   releaseInfo = (lib.importJSON releaseInfoFile);
@@ -96,23 +91,7 @@ let
         inherit vmr fallbackTargetPackages;
       };
     in
-    lib.recurseIntoAttrs (
-      pkgs
-      // {
-        vmr = pkgs.vmr.overrideAttrs (old: {
-          passthru = old.passthru // {
-            updateScript = pkgsBuildHost.callPackage ./update.nix {
-              inherit
-                releaseManifestFile
-                releaseInfoFile
-                bootstrapSdkFile
-                allowPrerelease
-                ;
-            };
-          };
-        });
-      }
-    );
+    lib.recurseIntoAttrs pkgs;
 
   source =
     vmrPackages
@@ -222,6 +201,7 @@ in
         callPackage ./default.nix (
           attrs
           // {
+            inherit featureBand;
             dir = dir + "/${featureBand}";
             withBinary = false;
             bootstrapSdk = vmrPackages.sdk;

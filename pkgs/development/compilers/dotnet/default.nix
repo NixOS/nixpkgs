@@ -84,30 +84,29 @@ let
     // (
       let
         dotnet_6 = callPackage ./dotnet.nix {
-          dir = ./6.0;
+          channel = "6.0";
           withVMR = false;
         };
 
         dotnet_7 = callPackage ./dotnet.nix {
-          dir = ./7.0;
+          channel = "7.0";
           withVMR = false;
         };
 
         dotnet_8 = callPackage ./dotnet.nix {
-          dir = ./8.0;
+          channel = "8.0";
         };
 
         dotnet_9 = callPackage ./dotnet.nix {
-          dir = ./9.0;
+          channel = "9.0";
         };
 
         dotnet_10 = callPackage ./dotnet.nix {
-          dir = ./10.0;
+          channel = "10.0";
         };
 
         dotnet_11 = callPackage ./dotnet.nix {
-          dir = ./11.0;
-          allowPrerelease = true;
+          channel = "11.0";
         };
       in
       lib.optionalAttrs config.allowAliases {
