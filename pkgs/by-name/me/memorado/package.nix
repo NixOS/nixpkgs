@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "memorado";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "wbernard";
     repo = "Memorado";
     tag = finalAttrs.version;
-    hash = "sha256-pHbZ8zBfgAHLmCaMRS4MS/awFat41OG++hSSHz3k2KM=";
+    hash = "sha256-/AGrtVULG8rnfdd3dYqftv2YU+SjhdCQMQSlc8oY8zI=";
   };
 
   nativeBuildInputs = [
