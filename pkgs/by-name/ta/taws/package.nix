@@ -5,11 +5,11 @@
   pkg-config,
   openssl,
   makeWrapper,
-  ssm-session-manager-plugin  ? null,
+  ssm-session-manager-plugin ? null,
   stdenv,
   testers,
   nix-update-script,
-  taws
+  taws,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,9 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/taws \
       --prefix PATH : ${lib.makeBinPath [ ssm-session-manager-plugin ]}
   '';
-
-
-  
 
   # adapting the test from k9s since it's a similar tool
   passthru = {
