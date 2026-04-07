@@ -3,6 +3,7 @@
   pkgs,
   lib,
   options,
+  utils,
   ...
 }:
 
@@ -12,17 +13,58 @@ let
   defaultDatabase = "firefox_syncserver";
   defaultUser = "firefox-syncserver";
 
+  # unfortunately the default for MySQL to have distinct database name and user names is not
+  # compatible with NixOS PostgreSQL requiring the user and database name to be identical
+  # to grant correct owner permissions
+  dbName =
+    if cfg.database.type == "pgsql" && cfg.database.name == defaultDatabase then
+      defaultUser
+    else
+      cfg.database.name;
+
+  # shorthand for deciding whether to use local UDS access
   dbIsLocal = cfg.database.host == "localhost";
-  dbURL = "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}${lib.optionalString dbIsLocal "?socket=/run/mysqld/mysqld.sock"}";
+
+  # escaped database URI
+  dbURL =
+    let
+      dbHostEscaped =
+        if lib.strings.match "[A-Za-z0-9]*:[A-Za-z0-9:%]+" cfg.database.host != null then # IPv6 address
+          "[${cfg.database.host}]"
+        # hostname, IPv4 address or path
+        else
+          lib.strings.escapeURL cfg.database.host;
+      dbNameEscaped = lib.strings.escapeURL dbName;
+      dbUserEscaped = lib.strings.escapeURL cfg.database.user;
+    in
+    if cfg.database.type == "mysql" then
+      "mysql://${dbUserEscaped}@${dbHostEscaped}/${dbNameEscaped}${lib.optionalString dbIsLocal "?socket=/run/mysqld/mysqld.sock"}"
+    else if cfg.database.type == "pgsql" then
+      "postgres://${dbUserEscaped}@${dbHostEscaped}/${dbNameEscaped}${lib.optionalString dbIsLocal "?host=/run/postgresql"}"
+    else
+      throw "Unexpected database type: ${cfg.database.type}";
 
   format = pkgs.formats.toml { };
   settings = {
     human_logs = true;
     syncstorage = {
+      node_type =
+        if cfg.database.type == "mysql" then
+          "mysql"
+        else if cfg.database.type == "pgsql" then
+          "postgres"
+        else
+          throw "Unexpected database type: ${cfg.database.type}";
       database_url = dbURL;
     };
     tokenserver = {
-      node_type = "mysql";
+      node_type =
+        if cfg.database.type == "mysql" then
+          "mysql"
+        else if cfg.database.type == "pgsql" then
+          "postgres"
+        else
+          throw "Unexpected database type: ${cfg.database.type}";
       database_url = dbURL;
       fxa_email_domain = "api.accounts.firefox.com";
       fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
@@ -41,44 +83,57 @@ let
     };
   };
   configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
-  setupScript = pkgs.writeShellScript "firefox-syncserver-setup" ''
-    set -euo pipefail
-    shopt -s inherit_errexit
-
-    schema_configured() {
-      mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
-    }
-
-    update_config() {
-      mysql ${cfg.database.name} <<"EOF"
-        BEGIN;
-
-        INSERT INTO `services` (`id`, `service`, `pattern`)
-          VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
-          ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
-        INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-                             `capacity`, `downed`, `backoff`)
-          VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
-          0, ${toString cfg.singleNode.capacity}, 0, 0)
-          ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
-
-        COMMIT;
-    EOF
-    }
-
-
-    for (( try = 0; try < 60; try++ )); do
-      if ! schema_configured; then
-        sleep 2
+  setupScript =
+    with if cfg.database.type == "mysql" then
+      {
+        databaseExecCommand = "${config.services.mysql.package}/bin/mysql '${dbName}'";
+        databaseListTables = "${config.services.mysql.package}/bin/mysql '${dbName}' -Ne 'SHOW TABLES'";
+      }
+      else if cfg.database.type == "pgsql" then
+        {
+          databaseExecCommand = "${pkgs.util-linux}/bin/runuser -u postgres -- ${config.services.postgresql.package}/bin/psql -d '${dbName}'";
+          databaseListTables = "${pkgs.util-linux}/bin/runuser -u postgres -- ${config.services.postgresql.package}/bin/psql -d '${dbName}' -tc '\d'";
+        }
       else
-        update_config
-        exit 0
-      fi
-    done
+        throw "Unexpected database type: ${cfg.database.type}";
+    pkgs.writeShellScript "firefox-syncserver-setup" ''
+      set -euo pipefail
+      shopt -s inherit_errexit
 
-    echo "Single-node setup failed"
-    exit 1
-  '';
+      schema_configured() {
+        ${databaseListTables} | grep -q services
+      }
+
+      update_config() {
+        # Please use only standard SQL here (no MySQL-isms!)
+        ${databaseExecCommand} <<"EOF"
+          BEGIN;
+
+          INSERT INTO services (id, service, pattern)
+            VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+            ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
+          INSERT INTO nodes (id, service, node, available, current_load,
+                               capacity, downed, backoff)
+            VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+            0, ${toString cfg.singleNode.capacity}, 0, 0)
+            ON DUPLICATE KEY UPDATE node='${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
+
+          COMMIT;
+      EOF
+      }
+
+      for (( try = 0; try < 60; try++ )); do
+        if ! schema_configured; then
+          sleep 2
+        else
+          update_config
+          exit 0
+        fi
+      done
+
+      echo "Single-node setup failed"
+      exit 1
+    '';
 in
 
 {
@@ -92,16 +147,44 @@ in
         by running
 
         ```
-          INSERT INTO `services` (`id`, `service`, `pattern`) VALUES ('1', 'sync-1.5', '{node}/1.5/{uid}');
-          INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-              `capacity`, `downed`, `backoff`)
+          INSERT INTO services (id, service, pattern) VALUES ('1', 'sync-1.5', '{node}/1.5/{uid}');
+          INSERT INTO nodes (id, service, node, available, current_load,
+              capacity, downed, backoff)
             VALUES ('1', '1', 'https://mydomain.tld', '1', '0', '10', '0', '0');
         ```
 
         {option}`${opt.singleNode.enable}` does this automatically when enabled
       '';
 
-      package = lib.mkPackageOption pkgs "syncstorage-rs" { };
+      package = lib.mkOption {
+        type = lib.types.nullOr lib.types.package;
+        description = ''
+          Syncstorage server package.
+        '';
+        default = null;
+        defaultText = lib.literalExpression ''
+          if services.firefox-syncserver.database.type == "mysql" then
+            pkgs.syncstorage-rs-mysql
+          else
+            pkgs.syncstorage-rs-pgsql
+        '';
+      };
+
+      database.type = lib.mkOption (
+        {
+          type = lib.types.enum [
+            "mysql"
+            "pgsql"
+          ];
+          description = ''
+            Database system to use for storage.
+          '';
+        }
+        // lib.optionalAttrs (builtins.compareVersions config.system.stateVersion "26.05" < 0) {
+          # before 26.05 mysql was the only supported backend and assumed by default
+          default = "mysql";
+        }
+      );
 
       database.name = lib.mkOption {
         # the mysql module does not allow `-quoting without resorting to shell
@@ -237,75 +320,117 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.mysql = lib.mkIf cfg.database.createLocally {
+    services.mysql =
+      lib.mkIf (cfg.database.createLocally && dbIsLocal && cfg.database.type == "mysql")
+        {
+          enable = true;
+          ensureDatabases = [ dbName ];
+          ensureUsers = [
+            {
+              name = cfg.database.user;
+              ensurePermissions = {
+                "${dbName}.*" = "all privileges";
+              };
+            }
+          ];
+        };
+
+    services.postgresql = lib.mkIf (dbIsLocal && cfg.database.type == "pgsql") {
       enable = true;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
+      ensureDatabases = lib.mkIf cfg.database.createLocally [ dbName ];
+      ensureUsers = lib.mkIf cfg.database.createLocally [
         {
           name = cfg.database.user;
-          ensurePermissions = {
-            "${cfg.database.name}.*" = "all privileges";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };
 
     systemd.services.firefox-syncserver = {
       wantedBy = [ "multi-user.target" ];
-      requires = lib.mkIf dbIsLocal [ "mysql.service" ];
-      after = lib.mkIf dbIsLocal [ "mysql.service" ];
+      requires = lib.mkIf dbIsLocal (
+        if cfg.database.type == "mysql" then
+          [ "mysql.service" ]
+        else if cfg.database.type == "pgsql" then
+          [ "postgresql.service" ]
+        else
+          throw "Unexpected database type: ${cfg.database.type}"
+      );
+      after = lib.mkIf dbIsLocal (
+        if cfg.database.type == "mysql" then
+          [ "mysql.service" ]
+        else if cfg.database.type == "pgsql" then
+          [ "postgresql.target" ]
+        else
+          throw "Unexpected database type: ${cfg.database.type}"
+      );
       restartTriggers = lib.optional cfg.singleNode.enable setupScript;
       environment.RUST_LOG = cfg.logLevel;
-      serviceConfig = {
-        User = defaultUser;
-        Group = defaultUser;
-        ExecStart = "${cfg.package}/bin/syncserver --config ${configFile}";
-        EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
+      serviceConfig =
+        let
+          package =
+            if cfg.package != null then
+              cfg.package
+            else if cfg.database.type == "mysql" then
+              pkgs.syncstorage-rs-mysql
+            else if cfg.database.type == "pgsql" then
+              pkgs.syncstorage-rs-pgsql
+            else
+              throw "Unexpected database type: ${cfg.database.type}";
+        in
+        {
+          User = defaultUser;
+          Group = defaultUser;
+          ExecStart = utils.escapeSystemdExecArgs [
+            "${package}/bin/syncserver"
+            "--config"
+            configFile
+          ];
+          EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
 
-        # hardening
-        RemoveIPC = true;
-        CapabilityBoundingSet = [ "" ];
-        DynamicUser = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        ProtectClock = true;
-        ProtectKernelLogs = true;
-        ProtectControlGroups = true;
-        ProtectKernelModules = true;
-        SystemCallArchitectures = "native";
-        # syncstorage-rs uses python-cffi internally, and python-cffi does not
-        # work with MemoryDenyWriteExecute=true
-        MemoryDenyWriteExecute = false;
-        RestrictNamespaces = true;
-        RestrictSUIDSGID = true;
-        ProtectHostname = true;
-        LockPersonality = true;
-        ProtectKernelTunables = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        RestrictRealtime = true;
-        ProtectSystem = "strict";
-        ProtectProc = "invisible";
-        ProcSubset = "pid";
-        ProtectHome = true;
-        PrivateUsers = true;
-        PrivateTmp = true;
-        SystemCallFilter = [
-          "@system-service"
-          "~ @privileged @resources"
-        ];
-        UMask = "0077";
-      };
+          # hardening
+          RemoveIPC = true;
+          CapabilityBoundingSet = [ "" ];
+          DynamicUser = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          # syncstorage-rs uses python-cffi internally, and python-cffi does not
+          # work with MemoryDenyWriteExecute=true
+          MemoryDenyWriteExecute = false;
+          RestrictNamespaces = true;
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictRealtime = true;
+          ProtectSystem = "strict";
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          ProtectHome = true;
+          PrivateUsers = true;
+          PrivateTmp = true;
+          SystemCallFilter = [
+            "@system-service"
+            "~ @privileged @resources"
+          ];
+          UMask = "0077";
+        };
     };
 
     systemd.services.firefox-syncserver-setup = lib.mkIf cfg.singleNode.enable {
       wantedBy = [ "firefox-syncserver.service" ];
-      requires = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
-      after = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
-      path = [ config.services.mysql.package ];
+      requires = [ "firefox-syncserver.service" ];
+      after = [ "firefox-syncserver.service" ];
       serviceConfig.ExecStart = [ "${setupScript}" ];
     };
 
@@ -322,6 +447,17 @@ in
         };
       };
     };
+
+    assertions = [
+      {
+        assertion =
+          !cfg.database.createLocally
+          || !dbIsLocal
+          || cfg.database.type != "pgsql"
+          || cfg.database.user == dbName;
+        message = "`services.firefox-syncserver.database.name` must match `services.firefox-syncserver.database.user` when creating local database";
+      }
+    ];
   };
 
   meta = {
