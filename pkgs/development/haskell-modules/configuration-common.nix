@@ -1203,6 +1203,10 @@ with haskellLib;
   # https://github.com/bos/snappy/pull/10
   snappy = dontCheck super.snappy;
 
+  # 2026-04-07: jailbreak for time 1.15
+  # https://github.com/mchav/snappy-hs/issues/2
+  snappy-hs = doJailbreak super.snappy-hs;
+
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
