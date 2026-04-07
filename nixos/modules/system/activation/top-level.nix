@@ -283,11 +283,15 @@ in
 
     system.name = mkOption {
       type = types.str;
-      default = if config.networking.hostName == "" then "unnamed" else config.networking.hostName;
+      default =
+        if (config.networking.hostName or config.system.nixos.distroId) == "" then
+          "unnamed"
+        else
+          config.networking.hostName or config.system.nixos.distroId;
       defaultText = literalExpression ''
-        if config.networking.hostName == ""
+        if (config.networking.hostName or config.system.nixos.distroId) == ""
         then "unnamed"
-        else config.networking.hostName;
+        else config.networking.hostName or config.system.nixos.distroId;
       '';
       description = ''
         The name of the system used in the {option}`system.build.toplevel` derivation.
