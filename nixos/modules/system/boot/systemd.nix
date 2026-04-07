@@ -905,6 +905,17 @@ in
         ];
       };
     }
+    (lib.optionalAttrs (options ? security.polkit.extraConfig) {
+      # Remove with systemd 259.4
+      security.polkit.extraConfig = mkIf config.security.polkit.enable ''
+        polkit.addRule(function(action, subject) {
+            if (action.id == "org.freedesktop.machine1.register-machine" &&
+                subject.user != "root") {
+                return polkit.Result.AUTH_ADMIN_KEEP;
+            }
+        });
+      '';
+    })
     (lib.optionalAttrs (options ? services.logrotate) {
       services.logrotate.settings = {
         "/var/log/btmp" = mapAttrs (_: mkDefault) {
