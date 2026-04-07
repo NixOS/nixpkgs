@@ -10,7 +10,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netdata";
   version = "1.4.0";
   pyproject = true;
@@ -18,13 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-netdata";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rffqpvqVvCi7CKjDchgRzUWDNxsA7C37UHvbELewR0E=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     yarl
   ];
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for interacting with Netdata";
     homepage = "https://github.com/home-assistant-ecosystem/python-netdata";
-    changelog = "https://github.com/home-assistant-ecosystem/python-netdata/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/home-assistant-ecosystem/python-netdata/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
