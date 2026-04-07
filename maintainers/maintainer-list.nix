@@ -24008,6 +24008,12 @@
     githubId = 226872;
     name = "Samuel Ainsworth";
   };
+  SamuelBozeman = {
+    email = "sbozeman@proton.me";
+    github = "SamuelBozeman";
+    githubId = 110150973;
+    name = "Samuel Bozeman";
+  };
   samuelefacenda = {
     name = "Samuele Facenda";
     email = "samuele.facenda@gmail.com";
