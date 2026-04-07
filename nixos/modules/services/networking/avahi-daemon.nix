@@ -283,6 +283,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = [
+      (lib.mkIf cfg.wideArea "Enabling `services.avahi.wideArea` exposes this system to `CVE-2024-52615`.")
+    ];
+
     users.users.avahi = {
       description = "avahi-daemon privilege separation user";
       home = "/var/empty";
