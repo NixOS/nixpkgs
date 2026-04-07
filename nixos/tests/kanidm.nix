@@ -77,6 +77,8 @@ in
 
       networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ serverDomain ];
 
+      programs.fish.enable = true;
+
       security.pki.certificateFiles = [ certs.ca.cert ];
     };
 
@@ -126,7 +128,7 @@ in
           client.wait_for_unit("getty@tty1.service")
           client.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
           client.succeed("kanidm person create testuser TestUser")
-          client.succeed("kanidm person posix set --shell \"$SHELL\" testuser")
+          client.succeed("kanidm person posix set --shell \"/run/current-system/sw/bin/fish\" testuser")
           client.send_chars("kanidm person posix set-password testuser\n")
           client.wait_until_tty_matches("1", "Enter new")
           client.send_chars("${testCredentials.password}\n")
@@ -150,8 +152,10 @@ in
           client.wait_until_tty_matches("2", "Password: ")
           client.send_chars("${testCredentials.password}\n")
           client.wait_until_succeeds("systemctl is-active user@$(id -u testuser).service")
-          client.send_chars("touch done\n")
-          client.wait_for_file("/home/testuser@${serverDomain}/done")
+          client.send_chars("echo -n $SHELL > shell\n")
+          client.wait_for_file("/home/testuser@${serverDomain}/shell")
+          user_shell = client.succeed("cat /home/testuser@${serverDomain}/shell").strip()
+          assert user_shell == "/run/current-system/sw/bin/fish", f"Invalid user shell, expected /run/current-system/sw/bin/fish, got {user_shell}"
 
       server.shutdown()
       client.shutdown()
