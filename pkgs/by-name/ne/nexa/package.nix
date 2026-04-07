@@ -25,6 +25,8 @@
   lame,
   mpg123,
   llvmPackages,
+  pcaudiolib,
+  sonic,
 }:
 
 let
@@ -79,6 +81,9 @@ buildGo125Module (finalAttrs: {
       zlib
       pcre2
       gfortran.cc.lib
+      openssl
+      pcaudiolib
+      sonic
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (darwinMinVersionHook "12.0")
@@ -123,6 +128,7 @@ buildGo125Module (finalAttrs: {
   '';
 
   env.CGO_ENABLED = "1";
+  env.CGO_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lssl -lcrypto";
 
   ldflags = [
     "-s"
