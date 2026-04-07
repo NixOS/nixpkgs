@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.7.4";
+  version = "0.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-luftdaten";
     rev = version;
-    hash = "sha256-nOhJKlUJ678DJ/ilyRHaiQ2fGfoCl+x6l9lsczVLAGw=";
+    hash = "sha256-KZ89ufU7wWPFp1zthmao/cSFbUDWlJY4iBNQ19fgIBQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];
