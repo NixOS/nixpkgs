@@ -11,6 +11,7 @@ buildGo125Module {
   vendorHash = "sha256-vpBvSaqbbJ8sHNMm299z/3Qb7FKMWbr62amtKT3acYk=";
 
   env = {
+    CGO_ENABLED = 0;
     GOOS = "windows";
     GOARCH = "amd64";
     PACKAGE = "winboat-server";
