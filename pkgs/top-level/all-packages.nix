@@ -12465,4 +12465,8 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  syncstorage-rs-mysql = callPackage ../by-name/sy/syncstorage-rs/mysql.nix { };
+  syncstorage-rs-pgsql = callPackage ../by-name/sy/syncstorage-rs/pgsql.nix { };
+  syncstorage-rs = callPackage ../by-name/sy/syncstorage-rs/mysql.nix { }; # Compatibility alias
 }
