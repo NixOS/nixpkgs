@@ -1543,6 +1543,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  better-diagnostic-virtual-text = buildVimPlugin {
+    pname = "better-diagnostic-virtual-text";
+    version = "0-unstable-2024-07-27";
+    src = fetchFromGitHub {
+      owner = "sontungexpt";
+      repo = "better-diagnostic-virtual-text";
+      rev = "eb3a77e714aa6c295bdb4f074fccbda637090f6e";
+      hash = "sha256-x6DYr+w0FIwVgrXgip8/wSrUDqkRkAs5HxXdwjY76/I=";
+    };
+    meta.homepage = "https://github.com/sontungexpt/better-diagnostic-virtual-text/";
+    meta.hydraPlatforms = [ ];
+  };
+
   better-escape-nvim = buildVimPlugin {
     pname = "better-escape.nvim";
     version = "2.3.3-unstable-2025-04-29";
@@ -5771,6 +5784,19 @@ final: prev: {
       hash = "sha256-85mScXLgGp5SJSIPwVOt0RYTP4esV5SjzDD6dhox83U=";
     };
     meta.homepage = "https://github.com/NTBBloodbath/galaxyline.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  garbage-day-nvim = buildVimPlugin {
+    pname = "garbage-day.nvim";
+    version = "1.4.0-unstable-2026-02-25";
+    src = fetchFromGitHub {
+      owner = "Zeioth";
+      repo = "garbage-day.nvim";
+      rev = "2fcc56556281de8ee871a5f3beb9db7ab747ef32";
+      hash = "sha256-GabA9whTRQpBbQjc5pyGGVnehBG2i+lwiqJLx31tTLE=";
+    };
+    meta.homepage = "https://github.com/Zeioth/garbage-day.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14136,6 +14162,19 @@ final: prev: {
       hash = "sha256-f9VEXT3bG4ESYpGGwUDONgL/Lsq4IToZEwaZyC2vG+4=";
     };
     meta.homepage = "https://github.com/ccarpita/rtorrent-syntax-file/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  runner-nvim = buildVimPlugin {
+    pname = "runner-nvim";
+    version = "0-unstable-2026-02-11";
+    src = fetchFromGitHub {
+      owner = "TheLazyCat00";
+      repo = "runner-nvim";
+      rev = "fff7bc209c0c1effa17c326eed3a2a64939ee009";
+      hash = "sha256-EqWwQ/8BAC7RdS0mowxOtcJoGFu7YD/XrKSAbjQtHTg=";
+    };
+    meta.homepage = "https://github.com/TheLazyCat00/runner-nvim/";
     meta.hydraPlatforms = [ ];
   };
 

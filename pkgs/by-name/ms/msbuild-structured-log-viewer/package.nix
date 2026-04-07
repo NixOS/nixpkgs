@@ -20,8 +20,6 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-HTWPsVl/pMi+lMSax5JNtbPXHeqD8QxfvLp2bhVxfPs=";
   };
 
-  env.AVALONIA_TELEMETRY_OPTOUT = "1";
-
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
