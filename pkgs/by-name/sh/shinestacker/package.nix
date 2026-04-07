@@ -38,12 +38,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tqdm
   ];
 
-  optional-dependencies = with python3.pkgs; {
-    dev = [
-      pytest
-    ];
-  };
-
   pythonImportsCheck = [
     "shinestacker"
   ];
