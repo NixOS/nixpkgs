@@ -213,23 +213,17 @@ lib.makeExtensible (
 
       nixComponents_git =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35pre20260328_${lib.substring 0 8 src.rev}";
+          version = "2.35pre20260407_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "7edcd0a24dc71abb7caa600527833ef540c1bc86";
-            hash = "sha256-fybp46IQmRN7lEUTChc3MTqxmRutmDO4RNSPEQfJQsQ=";
+            rev = "a37db9d249afd61a81ae26368696f60e065d6f61";
+            hash = "sha256-RpfExg4DcWZ/SanVuwVbdijqPylsjvtMrHTQHemE+t8=";
           };
         }).appendPatches
-          (
-            patches_common
-            ++ [
-              ./patches/ghsa-g3g9-5vj6-r3gj-git.patch
-              ./patches/landlock-abstract-socket-hardening-git.patch
-            ]
-          );
+          patches_common;
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
