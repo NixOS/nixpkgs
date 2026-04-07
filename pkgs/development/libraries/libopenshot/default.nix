@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zroTnJRYIIglhha6jQvaVNTgnIV6kUWcu7s5zEvgH6Q=";
+    hash = "sha256-d4F1cJApeklDYJhXZz127CbNbvOnZCfrdM49ceMv+Qc=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
