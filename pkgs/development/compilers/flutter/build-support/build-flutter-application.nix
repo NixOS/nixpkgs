@@ -89,7 +89,6 @@ lib.extendMkDerivation {
           }/bin/dart"
 
           export HOME="$NIX_BUILD_TOP"
-          # flutter config --no-analytics &>/dev/null # mute first-run
           flutter config --enable-linux-desktop >/dev/null
         '';
 
@@ -131,21 +130,23 @@ lib.extendMkDerivation {
         };
 
         # https://github.com/flutter/flutter/blob/edada7c56edf4a183c1735310e123c7f923584f1/packages/flutter_tools/lib/src/dart/pub.dart#L804
-        extraPackageConfigSetup = lib.optionalString (lib.versionOlder flutter.version "3.34.0") ''
-          if [ "$("${lib.getExe buildPackages.yq}" '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
-            if ! "${lib.getExe buildPackages.jq}" -e '.packages[] | select(.name == "flutter_gen")' "$out" >/dev/null 2>&1; then
-              export TEMP_PACKAGES=$(mktemp)
-              "${lib.getExe buildPackages.jq}" '.packages |= . + [{
-                name: "flutter_gen",
-                rootUri: "flutter_gen",
-                languageVersion: "2.12"
-              }]' "$out" > "$TEMP_PACKAGES"
-              cp "$TEMP_PACKAGES" "$out"
-              rm "$TEMP_PACKAGES"
-              unset TEMP_PACKAGES
+        preBuild =
+          (lib.optionalString (lib.versionOlder flutter.version "3.34.0") ''
+            if [ "$("${lib.getExe buildPackages.yq-go}" '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
+              if ! "${lib.getExe buildPackages.jq}" -e '.packages[] | select(.name == "flutter_gen")' .dart_tool/package_config.json >/dev/null 2>&1; then
+                export TEMP_PACKAGES=$(mktemp)
+                "${lib.getExe buildPackages.jq}" '.packages |= . + [{
+                  name: "flutter_gen",
+                  rootUri: "flutter_gen",
+                  languageVersion: "2.12"
+                }]' .dart_tool/package_config.json > "$TEMP_PACKAGES"
+                cp "$TEMP_PACKAGES" .dart_tool/package_config.json
+                rm "$TEMP_PACKAGES"
+                unset TEMP_PACKAGES
+              fi
             fi
-          fi
-        '';
+          '')
+          + (args.preBuild or "");
       };
     in
     {

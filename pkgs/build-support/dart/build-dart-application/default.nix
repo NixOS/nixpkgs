@@ -11,7 +11,7 @@
   nodejs,
   darwin,
   jq,
-  yq,
+  yq-go,
 }:
 
 lib.extendMkDerivation {
@@ -28,14 +28,15 @@ lib.extendMkDerivation {
     finalAttrs:
     args@{
       src,
-      sourceRoot ? "source",
-      packageRoot ? (lib.removePrefix "/" (lib.removePrefix "source" sourceRoot)),
+      sourceRoot ? src.name,
+      packageRoot ? (
+        (p: if p == "" then "." else p) (lib.removePrefix "/" (lib.removePrefix src.name sourceRoot))
+      ),
       gitHashes ? { },
       sdkSourceBuilders ? { },
       customSourceBuilders ? { },
 
       sdkSetupScript ? "",
-      extraPackageConfigSetup ? "",
 
       # Output type to produce. Can be any kind supported by dart
       # https://dart.dev/tools/dart-compile#types-of-output
@@ -55,11 +56,11 @@ lib.extendMkDerivation {
       # Set to null to disable wrapping.
       dartRuntimeCommand ?
         if dartOutputType == "aot-snapshot" then
-          "${dart}/bin/dartaotruntime"
+          (lib.getExe' dart "dartaotruntime")
         else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then
-          "${dart}/bin/dart"
+          (lib.getExe dart)
         else if dartOutputType == "js" then
-          "${nodejs}/bin/node"
+          (lib.getExe nodejs)
         else
           null,
 
@@ -75,15 +76,12 @@ lib.extendMkDerivation {
             "The pubspec.lock file could not be found!";
           lib.importJSON (
             runCommand "${lib.getName args}-pubspec-lock-json" {
-              nativeBuildInputs = [ yq ];
-            } ''yq . '${autoPubspecLock}' > "$out"''
+              nativeBuildInputs = [ yq-go ];
+            } ''yq eval --output-format=json --prettyPrint '${autoPubspecLock}' > "$out"''
           ),
       ...
     }:
     let
-      generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
-
-      pubspecLockFile = builtins.toJSON pubspecLock;
       pubspecLockData = pub2nix.readPubspecLock {
         inherit
           src
@@ -99,7 +97,7 @@ lib.extendMkDerivation {
             runCommand "dart-sdk-${name}" { passthru.packageRoot = "."; } ''
               for path in '${dart}/pkg/${name}'; do
                 if [ -d "$path" ]; then
-                  ln -s "$path" "$out"
+                  ln --symbolic "$path" "$out"
                   break
                 fi
               done
@@ -111,25 +109,6 @@ lib.extendMkDerivation {
             '';
         }
         // sdkSourceBuilders;
-      };
-      packageConfig = generators.linkPackageConfig {
-        inherit pubspecLock;
-        packageConfig = pub2nix.generatePackageConfig {
-          pname = if args.pname != null then "${args.pname}-${args.version}" else null;
-
-          dependencies =
-            # Ideally, we'd only include the main dependencies and their transitive
-            # dependencies.
-            #
-            # The pubspec.lock file does not contain information about where
-            # transitive dependencies come from, though, and it would be weird to
-            # include the transitive dependencies of dev and override dependencies
-            # without including the dev and override dependencies themselves.
-            builtins.concatLists (builtins.attrValues pubspecLockData.dependencies);
-
-          inherit (pubspecLockData) dependencySources;
-        };
-        extraSetupCommands = extraPackageConfigSetup;
       };
 
       inherit (dartHooks.override { inherit dart; })
@@ -152,8 +131,6 @@ lib.extendMkDerivation {
     ])
     // {
       inherit
-        pubspecLockFile
-        packageConfig
         sdkSetupScript
         dartCompileCommand
         dartOutputType
@@ -190,9 +167,31 @@ lib.extendMkDerivation {
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           darwin.sigtool
         ]
-        ++
-          # Ensure that we inherit the propagated build inputs from the dependencies.
-          builtins.attrValues pubspecLockData.dependencySources;
+        ++ (lib.filter (d: d ? setupHook || d ? propagatedBuildInputs) (
+          lib.attrValues pubspecLockData.dependencySources
+        ));
+
+      env = (args.env or { }) // {
+        pubDeps = writeText "pub-dependencies.json" (
+          builtins.toJSON (
+            lib.genAttrs
+              (
+                # Ideally, we'd only include the main dependencies and their transitive
+                # dependencies.
+                #
+                # The pubspec.lock file does not contain information about where
+                # transitive dependencies come from, though, and it would be weird to
+                # include the transitive dependencies of dev and override dependencies
+                # without including the dev and override dependencies themselves.
+                builtins.concatLists (builtins.attrValues pubspecLockData.dependencies)
+              )
+              (dependency: {
+                src = "${pubspecLockData.dependencySources.${dependency}}";
+                inherit (pubspecLockData.dependencySources.${dependency}) packageRoot;
+              })
+          )
+        );
+      };
 
       # When stripping, it seems some ELF information is lost and the dart VM cli
       # runs instead of the expected program. Don't strip if it's an exe output.

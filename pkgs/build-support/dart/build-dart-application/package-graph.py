@@ -1,10 +1,8 @@
-"""
-https://github.com/dart-lang/pub/issues/4522
+"""https://github.com/dart-lang/pub/issues/4522
 This script generates a package_graph.json file.
 """
 
 import json
-import os
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
@@ -37,17 +35,20 @@ def main() -> None:
             get_package(Path(unquote(urlparse(data["rootUri"]).path)) / "pubspec.yaml")
         )
     package_graph.append(root_package)
-    print(
-        json.dumps(
+    out_dir = Path(".dart_tool")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    with (out_dir / "package_graph.json").open("w", encoding="utf-8") as f:
+        json.dump(
             {
                 "roots": [root_package["name"]],
                 "packages": package_graph,
                 "configVersion": 1,
             },
+            f,
+            sort_keys=True,
             indent=2,
             ensure_ascii=False,
         )
-    )
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ dartInstallHook() {
     runHook preInstall
 
     # Install snapshots and executables.
-    mkdir -p "$out"
+    mkdir --parents "$out"
     while IFS=$'\t' read -ra target; do
         dest="${target[0]}"
         # Wrap with runtime command, if it's defined
@@ -15,7 +15,7 @@ dartInstallHook() {
             makeWrapper "$dartRuntimeCommand" "$out/$dest" \
                 --add-flags "$out/share/$dest"
         else
-            install -Dm755 "$dest" "$out/$dest"
+            install -D --mode=0755 "$dest" "$out/$dest"
         fi
     done < <(_getDartEntryPoints)
 
@@ -28,7 +28,7 @@ dartInstallCacheHook() {
     echo "Executing dartInstallCacheHook"
 
     # Install the package_config.json file.
-    mkdir -p "$pubcache"
+    mkdir --parents "$pubcache"
     cp .dart_tool/package_config.json "$pubcache/package_config.json"
 
     echo "Finished dartInstallCacheHook"

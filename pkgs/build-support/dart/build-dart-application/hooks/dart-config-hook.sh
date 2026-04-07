@@ -7,12 +7,9 @@ dartConfigHook() {
     eval "$sdkSetupScript"
 
     echo "Installing dependencies"
-    mkdir -p .dart_tool
-    cp "$packageConfig" .dart_tool/package_config.json
-    chmod u+w .dart_tool/package_config.json
-    @python3@ @workspacePackageConfigScript@
-    chmod u-w .dart_tool/package_config.json
-    @python3@ @packageGraphScript@ > .dart_tool/package_graph.json
+    mkdir --parents .dart_tool
+    @python3@ @packageConfigScript@
+    @python3@ @packageGraphScript@
 
     packagePath() {
         jq --raw-output --arg name "$1" '.packages.[] | select(.name == $name) .rootUri | sub("file://"; "")' .dart_tool/package_config.json
@@ -64,7 +61,7 @@ dartConfigHook() {
           shift
         fi
 
-        fileName="$(@yq@ --raw-output --arg name "$executableName" '.executables.[$name] // $name' "$(packagePath "$name")/pubspec.yaml")"
+        fileName="$(executableName="$executableName" @yq@ '.executables.[env(executableName)] // env(executableName)' "$(packagePath "$name")/pubspec.yaml")"
         packageRunCustom "$name" "$fileName" -- "$@"
     }
 

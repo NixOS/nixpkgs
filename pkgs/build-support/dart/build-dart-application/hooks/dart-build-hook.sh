@@ -3,12 +3,12 @@
 # Outputs line-separated "${dest}\t${source}"
 _getDartEntryPoints() {
     if [ -n "$dartEntryPoints" ]; then
-        @jq@ -r '(to_entries | map(.key + "\t" + .value) | join("\n"))' "$dartEntryPoints"
+        @jq@ --raw-output '(to_entries | map(.key + "\t" + .value) | join("\n"))' "$dartEntryPoints"
     else
         # The pubspec executables section follows the pattern:
         # <output-bin-name>: [source-file-name]
         # Where source-file-name defaults to output-bin-name if omited
-        @yq@ -r '(.executables | to_entries | map("bin/" + .key + "\t" + "bin/" + (.value // .key) + ".dart") | join("\n"))' pubspec.yaml
+        @yq@ '(.executables // {}) | to_entries | .[] | "bin/" + .key + "	" + "bin/" + (.value // .key) + ".dart"' pubspec.yaml
     fi
 }
 

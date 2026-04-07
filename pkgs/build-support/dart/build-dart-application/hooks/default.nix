@@ -2,7 +2,7 @@
   lib,
   makeSetupHook,
   dart,
-  yq,
+  yq-go,
   jq,
   python3,
 }:
@@ -10,16 +10,20 @@
 {
   dartConfigHook = makeSetupHook {
     name = "dart-config-hook";
-    substitutions.yq = "${yq}/bin/yq";
-    substitutions.jq = "${jq}/bin/jq";
-    substitutions.python3 = lib.getExe (python3.withPackages (ps: with ps; [ pyyaml ]));
-    substitutions.packageGraphScript = ../../pub2nix/package-graph.py;
-    substitutions.workspacePackageConfigScript = ../workspace-package-config.py;
+    substitutions = {
+      yq = lib.getExe yq-go;
+      jq = lib.getExe jq;
+      python3 = lib.getExe (python3.withPackages (ps: with ps; [ pyyaml ]));
+      packageGraphScript = ../package-graph.py;
+      packageConfigScript = ../package-config.py;
+    };
   } ./dart-config-hook.sh;
   dartBuildHook = makeSetupHook {
     name = "dart-build-hook";
-    substitutions.yq = "${yq}/bin/yq";
-    substitutions.jq = "${jq}/bin/jq";
+    substitutions = {
+      yq = lib.getExe yq-go;
+      jq = lib.getExe jq;
+    };
   } ./dart-build-hook.sh;
   dartInstallHook = makeSetupHook {
     name = "dart-install-hook";

@@ -44,15 +44,9 @@ let
     "transitive" = "transitive";
   };
 
-  dependencies = lib.foldlAttrs (
-    dependencies: name: details:
-    dependencies
-    // {
-      ${dependencyTypes.${details.dependency}} =
-        dependencies.${dependencyTypes.${details.dependency}}
-        ++ [ name ];
-    }
-  ) (lib.genAttrs (builtins.attrValues dependencyTypes) (dependencyType: [ ])) pubspecLock.packages;
+  dependencies = lib.groupBy (name: dependencyTypes.${pubspecLock.packages.${name}.dependency}) (
+    builtins.attrNames pubspecLock.packages
+  );
 
   # fetchTarball fails with "tarball contains an unexpected number of top-level files". This is a workaround.
   # https://discourse.nixos.org/t/fetchtarball-with-multiple-top-level-directories-fails/20556
@@ -66,8 +60,8 @@ let
       };
     in
     runCommand "pub-${name}-${details.version}" { passthru.packageRoot = "."; } ''
-      mkdir -p "$out"
-      tar xf '${archive}' -C "$out"
+      mkdir --parents "$out"
+      tar --extract --file='${archive}' --directory="$out"
     '';
 
   mkGitDependencySource =
@@ -80,39 +74,27 @@ let
         gitHashes.${name}
           or (throw "A Git hash is required for ${name}! Set to an empty string to obtain it.");
     }).overrideAttrs
-      (
-        {
-          passthru ? { },
-          ...
-        }:
-        {
-          passthru = passthru // {
-            packageRoot = details.description.path;
-          };
-        }
-      );
+      (oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          packageRoot = details.description.path;
+        };
+      });
 
   mkPathDependencySource =
     name: details:
     assert lib.assertMsg details.description.relative
-      "Only relative paths are supported - ${name} has an absolue path!";
+      "Only relative paths are supported - ${name} has an absolute path!";
     (
       if lib.isDerivation src then
         src
       else
-        (runCommand "pub-${name}-${details.version}" { } ''cp -r '${src}' "$out"'')
+        (runCommand "pub-${name}-${details.version}" { } ''ln --symbolic ${lib.escapeShellArg src} "$out"'')
     ).overrideAttrs
-      (
-        {
-          passthru ? { },
-          ...
-        }:
-        {
-          passthru = passthru // {
-            packageRoot = "${packageRoot}/${details.description.path}";
-          };
-        }
-      );
+      (oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          packageRoot = "${packageRoot}/${details.description.path}";
+        };
+      });
 
   mkSdkDependencySource =
     name: details:
@@ -123,14 +105,11 @@ let
 
   addDependencySourceUtils =
     dependencySource: details:
-    dependencySource.overrideAttrs (
-      { passthru, ... }:
-      {
-        passthru = passthru // {
-          inherit (details) version;
-        };
-      }
-    );
+    dependencySource.overrideAttrs (oldAttrs: {
+      passthru = (oldAttrs.passthru or { }) // {
+        inherit (details) version;
+      };
+    });
 
   sourceBuilders =
     callPackage ../../../development/compilers/dart/package-source-builders { } // customSourceBuilders;
@@ -138,25 +117,45 @@ let
   dependencySources = lib.filterAttrs (name: src: src != null) (
     builtins.mapAttrs (
       name: details:
-      (sourceBuilders.${name} or ({ src, ... }: src)) {
-        inherit (details) version source;
-        src = (
-          (addDependencySourceUtils (
-            (
-              {
-                "hosted" = mkHostedDependencySource;
-                "git" = mkGitDependencySource;
-                "path" = mkPathDependencySource;
-                "sdk" = mkSdkDependencySource;
-              }
-              .${details.source}
-              name
-            )
-              details
-          ))
+      if
+        (
+          details.source == "path"
+          && details.description.relative
+          && (
+            (lib.foldl' (
+              d: p:
+              if d < 0 then
+                d
+              else if p == ".." then
+                d - 1
+              else if p == "." || p == "" then
+                d
+              else
+                d + 1
+            ) 0 (lib.splitString "/" ((lib.removeSuffix "/" packageRoot) + "/" + details.description.path))) < 0
+          )
+        )
+      then
+        {
+          outPath = details.description.path;
+          __toString = self: self.outPath;
+          packageRoot = ".";
+        }
+      else
+        (sourceBuilders.${name} or ({ src, ... }: src)) {
+          inherit (details) version source;
+          src = addDependencySourceUtils (
+            {
+              "hosted" = mkHostedDependencySource;
+              "git" = mkGitDependencySource;
+              "path" = mkPathDependencySource;
+              "sdk" = mkSdkDependencySource;
+            }
+            .${details.source}
+            name
             details
-        );
-      }
+          ) details;
+        }
     ) pubspecLock.packages
   );
 in
