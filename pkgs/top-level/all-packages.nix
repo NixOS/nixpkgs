@@ -9921,7 +9921,6 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
   kuma-experimental = callPackage ../applications/networking/cluster/kuma {
     isFull = true;
     enableGateway = true;
