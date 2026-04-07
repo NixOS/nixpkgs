@@ -10,7 +10,7 @@ use std::{
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
-    sync::OnceLock,
+    sync::{LazyLock, OnceLock},
     time::Duration,
 };
 
@@ -92,6 +92,19 @@ const DAEMON_RELOAD_TIMEOUT: Duration = Duration::from_secs(180);
 
 // Used during times of waiting for D-Bus to process messages.
 const DBUS_PROCESS_TIME: Duration = Duration::from_millis(500);
+
+// Matches a templated unit instance (e.g. `foo@bar.service`), capturing the
+// template name and the unit-type suffix.
+// FIXME: instance names may contain `.`; this regex predates this file and is
+// kept as-is to avoid behaviour changes here. Revisit separately.
+static TEMPLATE_UNIT_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(.*)@[^\.]*\.(.*)$").expect("systemd template-unit regex is valid")
+});
+
+// Matches a unit name, capturing everything up to the type suffix.
+static UNIT_NAME_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(.*)\.[[:lower:]]*$").expect("systemd unit-name regex is valid")
+});
 
 #[derive(Debug, Clone, PartialEq)]
 enum Action {
@@ -925,6 +938,155 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
     }
 }
 
+/// Iterate over currently active units, compare each unit's file in
+/// /etc/systemd/system against the one in the new toplevel, and populate the
+/// action maps accordingly.
+///
+/// Units whose FragmentPath does not live under /etc/systemd/system are
+/// skipped; this avoids touching generator output in /run/systemd/generator*.
+fn collect_unit_changes(
+    toplevel: &Path,
+    current_active_units: &HashMap<String, UnitState>,
+    units_to_stop: &mut HashMap<String, ()>,
+    units_to_start: &mut HashMap<String, ()>,
+    units_to_reload: &mut HashMap<String, ()>,
+    units_to_restart: &mut HashMap<String, ()>,
+    units_to_skip: &mut HashMap<String, ()>,
+    units_to_filter: &mut HashMap<String, ()>,
+) -> Result<()> {
+    for (unit, unit_state) in current_active_units {
+        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
+        // /run/systemd/generator*)
+        if !unit_state
+            .proxy
+            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
+            .unwrap_or_default()
+        {
+            continue;
+        }
+
+        let current_unit_file = Path::new("/etc/systemd/system").join(unit);
+        let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
+
+        let mut base_unit = unit.clone();
+        let mut current_base_unit_file = current_unit_file.clone();
+        let mut new_base_unit_file = new_unit_file.clone();
+
+        // Detect template instances
+        if let Some((Some(template_name), Some(template_instance))) =
+            TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
+                (
+                    captures.get(1).map(|c| c.as_str()),
+                    captures.get(2).map(|c| c.as_str()),
+                )
+            })
+        {
+            if !current_unit_file.exists() && !new_unit_file.exists() {
+                base_unit = format!("{template_name}@.{template_instance}");
+                current_base_unit_file = Path::new("/etc/systemd/system").join(&base_unit);
+                new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
+            }
+        }
+
+        let mut base_name = base_unit.as_str();
+        if let Some(Some(new_base_name)) = UNIT_NAME_RE
+            .captures(&base_unit)
+            .map(|capture| capture.get(1).map(|first| first.as_str()))
+        {
+            base_name = new_base_name;
+        }
+
+        if current_base_unit_file.exists()
+            && (unit_state.state == "active" || unit_state.state == "activating")
+        {
+            if new_base_unit_file
+                .canonicalize()
+                .map(|full_path| full_path == Path::new("/dev/null"))
+                .unwrap_or(true)
+            {
+                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
+                if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
+                    _ = units_to_stop.insert(unit.to_string(), ());
+                }
+            } else if unit.ends_with(".target") {
+                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
+
+                // Cause all active target units to be restarted below. This should start most
+                // changed units we stop here as well as any new dependencies (including new mounts
+                // and swap devices).  FIXME: the suspend target is sometimes active after the
+                // system has resumed, which probably should not be the case.  Just ignore it.
+                if !(matches!(
+                    unit.as_str(),
+                    "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "RefuseManualStart",
+                    false,
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-OnlyManualStart",
+                    false,
+                )) {
+                    units_to_start.insert(unit.to_string(), ());
+                    record_unit(START_LIST_FILE, unit);
+                    // Don't spam the user with target units that always get started.
+                    if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
+                        units_to_filter.insert(unit.to_string(), ());
+                    }
+                }
+
+                // Stop targets that have X-StopOnReconfiguration set. This is necessary to respect
+                // dependency orderings involving targets: if unit X starts after target Y and
+                // target Y starts after unit Z, then if X and Z have both changed, then X should
+                // be restarted after Z.  However, if target Y is in the "active" state, X and Z
+                // will be restarted at the same time because X's dependency on Y is already
+                // satisfied.  Thus, we need to stop Y first. Stopping a target generally has no
+                // effect on other units (unless there is a PartOf dependency), so this is just a
+                // bookkeeping thing to get systemd to do the right thing.
+                if parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-StopOnReconfiguration",
+                    false,
+                ) {
+                    units_to_stop.insert(unit.to_string(), ());
+                }
+            } else {
+                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
+                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
+                match compare_units(&current_unit_info, &new_unit_info) {
+                    UnitComparison::UnequalNeedsRestart => {
+                        handle_modified_unit(
+                            toplevel,
+                            unit,
+                            base_name,
+                            &new_unit_file,
+                            &new_base_unit_file,
+                            Some(&new_unit_info),
+                            current_active_units,
+                            units_to_stop,
+                            units_to_start,
+                            units_to_reload,
+                            units_to_restart,
+                            units_to_skip,
+                        )?;
+                    }
+                    UnitComparison::UnequalNeedsReload if !units_to_restart.contains_key(unit) => {
+                        units_to_reload.insert(unit.clone(), ());
+                        record_unit(RELOAD_LIST_FILE, unit);
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    Ok(())
+}
+
 /// Performs switch-to-configuration functionality for a single non-root user
 fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     if Path::new(&parent_exe)
@@ -1173,140 +1335,16 @@ won't take effect until you reboot the system.
 
     let current_active_units = get_active_units(&systemd)?;
 
-    let template_unit_re = Regex::new(r"^(.*)@[^\.]*\.(.*)$")
-        .context("Invalid regex for matching systemd template units")?;
-    let unit_name_re = Regex::new(r"^(.*)\.[[:lower:]]*$")
-        .context("Invalid regex for matching systemd unit names")?;
-
-    for (unit, unit_state) in &current_active_units {
-        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
-        // /run/systemd/generator*)
-        if !unit_state
-            .proxy
-            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
-            .unwrap_or_default()
-        {
-            continue;
-        }
-
-        let current_unit_file = Path::new("/etc/systemd/system").join(unit);
-        let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
-
-        let mut base_unit = unit.clone();
-        let mut current_base_unit_file = current_unit_file.clone();
-        let mut new_base_unit_file = new_unit_file.clone();
-
-        // Detect template instances
-        if let Some((Some(template_name), Some(template_instance))) =
-            template_unit_re.captures(unit).map(|captures| {
-                (
-                    captures.get(1).map(|c| c.as_str()),
-                    captures.get(2).map(|c| c.as_str()),
-                )
-            })
-        {
-            if !current_unit_file.exists() && !new_unit_file.exists() {
-                base_unit = format!("{template_name}@.{template_instance}");
-                current_base_unit_file = Path::new("/etc/systemd/system").join(&base_unit);
-                new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
-            }
-        }
-
-        let mut base_name = base_unit.as_str();
-        if let Some(Some(new_base_name)) = unit_name_re
-            .captures(&base_unit)
-            .map(|capture| capture.get(1).map(|first| first.as_str()))
-        {
-            base_name = new_base_name;
-        }
-
-        if current_base_unit_file.exists()
-            && (unit_state.state == "active" || unit_state.state == "activating")
-        {
-            if new_base_unit_file
-                .canonicalize()
-                .map(|full_path| full_path == Path::new("/dev/null"))
-                .unwrap_or(true)
-            {
-                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
-                if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
-                    _ = units_to_stop.insert(unit.to_string(), ());
-                }
-            } else if unit.ends_with(".target") {
-                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
-
-                // Cause all active target units to be restarted below. This should start most
-                // changed units we stop here as well as any new dependencies (including new mounts
-                // and swap devices).  FIXME: the suspend target is sometimes active after the
-                // system has resumed, which probably should not be the case.  Just ignore it.
-                if !(matches!(
-                    unit.as_str(),
-                    "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
-                ) || parse_systemd_bool(
-                    Some(&new_unit_info),
-                    "Unit",
-                    "RefuseManualStart",
-                    false,
-                ) || parse_systemd_bool(
-                    Some(&new_unit_info),
-                    "Unit",
-                    "X-OnlyManualStart",
-                    false,
-                )) {
-                    units_to_start.insert(unit.to_string(), ());
-                    record_unit(START_LIST_FILE, unit);
-                    // Don't spam the user with target units that always get started.
-                    if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
-                        units_to_filter.insert(unit.to_string(), ());
-                    }
-                }
-
-                // Stop targets that have X-StopOnReconfiguration set. This is necessary to respect
-                // dependency orderings involving targets: if unit X starts after target Y and
-                // target Y starts after unit Z, then if X and Z have both changed, then X should
-                // be restarted after Z.  However, if target Y is in the "active" state, X and Z
-                // will be restarted at the same time because X's dependency on Y is already
-                // satisfied.  Thus, we need to stop Y first. Stopping a target generally has no
-                // effect on other units (unless there is a PartOf dependency), so this is just a
-                // bookkeeping thing to get systemd to do the right thing.
-                if parse_systemd_bool(
-                    Some(&new_unit_info),
-                    "Unit",
-                    "X-StopOnReconfiguration",
-                    false,
-                ) {
-                    units_to_stop.insert(unit.to_string(), ());
-                }
-            } else {
-                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
-                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
-                match compare_units(&current_unit_info, &new_unit_info) {
-                    UnitComparison::UnequalNeedsRestart => {
-                        handle_modified_unit(
-                            &toplevel,
-                            unit,
-                            base_name,
-                            &new_unit_file,
-                            &new_base_unit_file,
-                            Some(&new_unit_info),
-                            &current_active_units,
-                            &mut units_to_stop,
-                            &mut units_to_start,
-                            &mut units_to_reload,
-                            &mut units_to_restart,
-                            &mut units_to_skip,
-                        )?;
-                    }
-                    UnitComparison::UnequalNeedsReload if !units_to_restart.contains_key(unit) => {
-                        units_to_reload.insert(unit.clone(), ());
-                        record_unit(RELOAD_LIST_FILE, unit);
-                    }
-                    _ => {}
-                }
-            }
-        }
-    }
+    collect_unit_changes(
+        &toplevel,
+        &current_active_units,
+        &mut units_to_stop,
+        &mut units_to_start,
+        &mut units_to_reload,
+        &mut units_to_restart,
+        &mut units_to_skip,
+        &mut units_to_filter,
+    )?;
 
     // Compare the previous and new fstab to figure out which filesystems need a remount or need to
     // be unmounted. New filesystems are mounted automatically by starting local-fs.target.
@@ -1447,7 +1485,7 @@ won't take effect until you reboot the system.
 
             // Detect template instances.
             if let Some((Some(template_name), Some(template_instance))) =
-                template_unit_re.captures(unit).map(|captures| {
+                TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
                     (
                         captures.get(1).map(|c| c.as_str()),
                         captures.get(2).map(|c| c.as_str()),
@@ -1461,7 +1499,7 @@ won't take effect until you reboot the system.
             }
 
             let mut base_name = base_unit.as_str();
-            if let Some(Some(new_base_name)) = unit_name_re
+            if let Some(Some(new_base_name)) = UNIT_NAME_RE
                 .captures(&base_unit)
                 .map(|capture| capture.get(1).map(|first| first.as_str()))
             {
@@ -1617,7 +1655,7 @@ won't take effect until you reboot the system.
 
         // Detect template instances.
         if let Some((Some(template_name), Some(template_instance))) =
-            template_unit_re.captures(unit).map(|captures| {
+            TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
                 (
                     captures.get(1).map(|c| c.as_str()),
                     captures.get(2).map(|c| c.as_str()),
@@ -1631,7 +1669,7 @@ won't take effect until you reboot the system.
         }
 
         let mut base_name = base_unit.as_str();
-        if let Some(Some(new_base_name)) = unit_name_re
+        if let Some(Some(new_base_name)) = UNIT_NAME_RE
             .captures(&base_unit)
             .map(|capture| capture.get(1).map(|first| first.as_str()))
         {
