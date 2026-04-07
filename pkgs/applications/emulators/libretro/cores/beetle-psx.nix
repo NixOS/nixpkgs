@@ -8,13 +8,13 @@
 }:
 mkLibretroCore {
   core = "mednafen-psx" + lib.optionalString withHw "-hw";
-  version = "0-unstable-2026-03-28";
+  version = "0-unstable-2026-04-03";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "beetle-psx-libretro";
-    rev = "8fcb04d617b55c00f3255287c530242acf3855dc";
-    hash = "sha256-ihS0F/mbHkhrrEiI3bERQxwIgupBiZo2irpzSSWtexE=";
+    rev = "f339f6363de238adcf7c259bff8b0771c9a46399";
+    hash = "sha256-+JV/QQWiAK980ybM63jk6ljsJJWtdVszAFaIWGmzV/4=";
   };
 
   extraBuildInputs = lib.optionals withHw [

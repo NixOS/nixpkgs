@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bsky-cli";
-  version = "0.0.77";
+  version = "0.0.78";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "bsky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cO2Ub9DVkDcz9+x+EskJsfgJ3xnTba5rWYsxmXfQ2a0=";
+    hash = "sha256-+LZCVF1slJ7Nypi8MogbqXH5GSfcsKJDGKNm4EfLpFY=";
   };
 
   vendorHash = "sha256-WFGViuC+8Ba6NCU//Z+MTcwNPJbYzpXeCbf4M9mBFPM=";
