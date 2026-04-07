@@ -378,6 +378,10 @@ assertNoAdditions {
       "catppuccin.groups.integrations.noice"
       "catppuccin.groups.integrations.feline"
       "catppuccin.lib.vim.init"
+
+      # TODO(@mrcjkb): re-enable when https://github.com/catppuccin/nvim/pull/995
+      # has been merged and released.
+      "catppuccin.lib.detect_integrations"
     ];
   };
 

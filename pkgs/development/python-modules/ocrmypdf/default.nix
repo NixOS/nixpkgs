@@ -45,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-2gghArOylldrCcTrOi1XtfdIwRw7AUpf0PQ6hvKInMk=";
+    hash = "sha256-H/XuMQu52b6dOEUK2zGZWaEVVws80NTCuZQSR4euM7E=";
   };
 
   patches = [

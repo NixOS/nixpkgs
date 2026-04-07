@@ -238,7 +238,12 @@ in
     checkPhase = ''
       runHook preCheck
       # feel free to disable/adjust the tests
-      rm tests/base/test_apply.lua tests/base/test_vimscript_interpreter.lua
+      rm \
+        tests/base/test_apply.lua \
+        tests/base/test_vimscript_interpreter.lua \
+        # screenshot tests are brittle, as they are meant to be run against very
+        # specific Neovim/ripgrep/ast-grep versions.
+        tests/screenshot/*
 
       # Dependencies needed in special location
       mkdir -p deps/{ripgrep,astgrep}
