@@ -109,6 +109,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
+  patches = [
+    ./skills-in-store.patch
+  ];
+
   meta = {
     description = "Self-hosted, open-source AI assistant/agent";
     longDescription = ''

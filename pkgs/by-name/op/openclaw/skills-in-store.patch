@@ -1,0 +1,28 @@
+From 0e130762f790845aff0bcbadaf826b25cb5566ab Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Tue, 7 Apr 2026 21:39:18 +0200
+Subject: [PATCH] Skills: allow /nix/store paths in containment check
+
+---
+ src/agents/skills/workspace.ts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/agents/skills/workspace.ts b/src/agents/skills/workspace.ts
+index 2b51a6d80b..bdb8228458 100644
+--- a/src/agents/skills/workspace.ts
++++ b/src/agents/skills/workspace.ts
+@@ -167,6 +167,11 @@ function resolveContainedSkillPath(params: {
+   if (isPathInside(params.rootRealPath, candidateRealPath)) {
+     return candidateRealPath;
+   }
++  // Allow Nix store paths: skills installed via Nix resolve outside their
++  // configured root through /nix/store symlinks, which is expected.
++  if (candidateRealPath.startsWith("/nix/store/")) {
++    return candidateRealPath;
++  }
+   warnEscapedSkillPath({
+     source: params.source,
+     rootDir: params.rootDir,
+-- 
+2.53.0
+
