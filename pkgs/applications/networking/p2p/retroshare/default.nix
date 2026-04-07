@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
     # Update cmake version for supportlibs to fix build with newer cmake
     substituteInPlace supportlibs/udp-discovery-cpp/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.5)"
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   postInstall = ''
