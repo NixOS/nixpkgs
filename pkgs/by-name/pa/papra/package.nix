@@ -11,6 +11,7 @@
   vips,
   pkg-config,
   python3,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -91,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source document management platform designed to help you organize, secure, and archive your files effortlessly.";
