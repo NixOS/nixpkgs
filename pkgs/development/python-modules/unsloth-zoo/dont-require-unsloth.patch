@@ -21,17 +21,3 @@ index 8c4404c..dc1666f 100644
  try:
      print("🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.")
  except:
-diff --git a/unsloth_zoo/device_type.py b/unsloth_zoo/device_type.py
-index 11136fb..8f8dafc 100644
---- a/unsloth_zoo/device_type.py
-+++ b/unsloth_zoo/device_type.py
-@@ -209,6 +209,9 @@ def get_device_type():
-         return "cuda"
-     elif hasattr(torch, "xpu") and torch.xpu.is_available():
-         return "xpu"
-+    else:
-+        # Allow import during tests
-+        return None
-     # Check torch.accelerator
-     if hasattr(torch, "accelerator"):
-         if not torch.accelerator.is_available():

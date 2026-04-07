@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "sptlrx";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "raitonoberu";
     repo = "sptlrx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b8ALhEjolH0RH+I9HVQeOagPBi2isLNUxqKdj5u2O9s=";
+    hash = "sha256-X1nDvhW8F4UDWIeP0W6EtwB+0Ytf/d76oB/SJV9/neg=";
   };
 
-  vendorHash = "sha256-pExSQcYjqliZZg/91t52yk6UJ4QCbpToMpONIFUNkwc=";
+  vendorHash = "sha256-2QbGrQwFA+YeoVt4se2silLYbg7cQGY/fCTQb2bXWAM=";
 
   ldflags = [
     "-s"

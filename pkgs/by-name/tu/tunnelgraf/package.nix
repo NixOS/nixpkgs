@@ -22,7 +22,7 @@ let
     };
   };
 in
-py.pkgs.buildPythonApplication rec {
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "tunnelgraf";
   version = "1.0.6";
   pyproject = true;
@@ -30,7 +30,7 @@ py.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "denniswalker";
     repo = "tunnelgraf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6t/rUdz0RyxWxZM0QO1ynRTNQq4GZMIAxMYBB2lfA54=";
   };
 
@@ -40,6 +40,7 @@ py.pkgs.buildPythonApplication rec {
     "psutil"
     "pydantic"
     "python-hosts"
+    "wcwidth"
   ];
 
   build-system = with py.pkgs; [ hatchling ];
@@ -64,9 +65,9 @@ py.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to manage SSH tunnel hops to many endpoints";
     homepage = "https://github.com/denniswalker/tunnelgraf";
-    changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/${src.tag}";
+    changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tunnelgraf";
   };
-}
+})

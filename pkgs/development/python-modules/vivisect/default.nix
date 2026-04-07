@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sI/xlbodbud5GJ3s9atmDS1KOD7VYs7B3OdYCx1NgE4=";
+    hash = "sha256-UQryZ4aGVEr5vRLElmTwRNtgi3h6CPzzq5n+E58tuo8=";
   };
 
   pythonRelaxDeps = [

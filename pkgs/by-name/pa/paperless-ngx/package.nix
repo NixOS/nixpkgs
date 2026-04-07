@@ -179,6 +179,7 @@ python.pkgs.buildPythonApplication rec {
     "gotenberg-client"
     "redis"
     "scikit-learn"
+    "tika-client"
     # requested by maintainer
     "ocrmypdf"
   ];

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switchres";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "antonioginer";
     repo = "switchres";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/21RcpumWYNBPck7gpH6krwC3Thz/rKDPgeJblN2BDA=";
+    hash = "sha256-s4OTnq46lvYoxB5Q2CkYNcMbsNdy7kg4rbovbVXJUMs=";
   };
 
   nativeBuildInputs = [

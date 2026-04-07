@@ -6,17 +6,17 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mqtt-randompub";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabaff";
     repo = "mqtt-randompub";
     tag = finalAttrs.version;
-    hash = "sha256-X9gITmzyUNtYW8IMTcBiubPscBEO5OGjdxot9wRD/BY=";
+    hash = "sha256-6R40dEJSi3i2UxJNXLk+GWA/iykzbGVLFccF8ncymKw=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [ paho-mqtt ];
 

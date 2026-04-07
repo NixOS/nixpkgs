@@ -25,19 +25,19 @@
 
 stdenv.mkDerivation {
   pname = "cgit";
-  version = "1.2.3";
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://git.zx2c4.com/cgit/snapshot/cgit-1.2.3.tar.xz";
-    sha256 = "193d990ym10qlslk0p8mjwp2j6rhqa7fq0y1iff65lvbyv914pss";
+    url = "https://git.zx2c4.com/cgit/snapshot/cgit-1.3.tar.xz";
+    sha256 = "836b6edbc7f99e11037a8b928d609ce346ed77a55545e17fff8cea59b5b7aa42";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
   # IMPORTANT: Remember to check which git version cgit needs on every version
   # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url = "mirror://kernel/software/scm/git/git-2.25.1.tar.xz";
-    sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
+    url = "mirror://kernel/software/scm/git/git-2.53.0.tar.xz";
+    hash = "sha256-WBi9fYCwYbu9/sikM9YJ3IgYoFmR9zH/xKVh4soYxlM=";
   };
 
   separateDebugInfo = true;
@@ -92,15 +92,9 @@ stdenv.mkDerivation {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  # Install manpage.
   postInstall = ''
-    # xmllint fails:
-    #make install-man
-
-    # bypassing xmllint works:
-    a2x --no-xmllint -f manpage cgitrc.5.txt
-    mkdir -p "$out/share/man/man5"
-    cp cgitrc.5 "$out/share/man/man5"
+    # Install manpage.
+    make install-man $makeFlags
 
     wrapPythonProgramsIn "$out/lib/cgit/filters" "$out ''${pythonPath[*]}"
 
