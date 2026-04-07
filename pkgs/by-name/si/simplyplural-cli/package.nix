@@ -4,14 +4,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "simplyplural-cli";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "SiteRelEnby";
     repo = "simplyplural-cli";
-    rev = "v0.1.1";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-D4w4sBpAbPrquSvUHteEKGMoW7/oRR1leeevKfl5izA=";
   };
 
@@ -29,4 +29,4 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ oricat ];
   };
-}
+})
