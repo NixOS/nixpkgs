@@ -154,6 +154,30 @@
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
+  "module-services-traefik": [
+    "index.html#module-services-traefik"
+  ],
+  "module-services-traefik-environment": [
+    "index.html#module-services-traefik-environment"
+  ],
+  "module-services-traefik-plugins": [
+    "index.html#module-services-traefik-plugins"
+  ],
+  "module-services-traefik-plugins-custom": [
+    "index.html#module-services-traefik-plugins-custom"
+  ],
+  "module-services-traefik-usage": [
+    "index.html#module-services-traefik-usage"
+  ],
+  "module-services-traefik-usage-dynamic": [
+    "index.html#module-services-traefik-usage-dynamic"
+  ],
+  "module-services-traefik-usage-static": [
+    "index.html#module-services-traefik-usage-static"
+  ],
+  "module-services-traefik-migrating-to-26.05": [
+    "index.html#module-services-traefik-migrating-to-26.05"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
