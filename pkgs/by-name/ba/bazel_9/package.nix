@@ -211,6 +211,11 @@ stdenv.mkDerivation rec {
     (replaceVars ./patches/usr_bin_env.patch {
       usrBinEnv = "${coreutils}/bin/env";
     })
+
+    # Bazel tries to run "/bin/true" to test if linux-sandbox works.
+    (replaceVars ./patches/linux_sandbox.patch {
+      binTrue = "${coreutils}/bin/true";
+    })
   ];
 
   meta = {
