@@ -11037,11 +11037,6 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoind = callPackage ../applications/blockchains/bitcoin {
-    withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   bitcoin-knots = libsForQt5.callPackage ../applications/blockchains/bitcoin-knots {
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
