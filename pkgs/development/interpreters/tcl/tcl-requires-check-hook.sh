@@ -5,9 +5,9 @@ tclRequiresCheckPhase () {
     echo "Executing tclRequiresCheckPhase"
 
     if [ -n "$tclRequiresCheck" ]; then
-        echo "Check whether the following packages can be required: $tclRequiresCheck"
+        echo "Check whether the following packages can be required: ${tclRequiresCheck[*]}"
         export TCLLIBPATH="$out/lib $TCLLIBPATH" # Redundant if tcl-package-hook is also used
-        tclsh <<<'exit [catch {foreach req $env(tclRequiresCheck) {package require $req}}]'
+        tclRequiresCheck="${tclRequiresCheck[@]}" tclsh <<<'exit [catch {foreach req $env(tclRequiresCheck) {package require $req}}]'
     fi
 }
 
