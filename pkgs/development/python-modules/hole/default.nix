@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hole";
   version = "0.9.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-hole";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rIKb6GeULi2ooNtWD2a23JQxO9HkXiUYy0AroYeVeKU=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for interacting with a Pihole instance";
     homepage = "https://github.com/home-assistant-ecosystem/python-hole";
-    changelog = "https://github.com/home-assistant-ecosystem/python-hole/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-ecosystem/python-hole/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
