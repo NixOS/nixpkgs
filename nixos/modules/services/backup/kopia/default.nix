@@ -13,10 +13,12 @@
     ./web-service.nix
   ];
 
-  options.services.kopia.package = lib.mkPackageOption pkgs "kopia" { };
+  options = {
+    services.kopia = {
+      package = lib.mkPackageOption pkgs "kopia" { };
 
-  options.services.kopia.backups = lib.mkOption {
-    description = ''
+       backups = lib.mkOption {
+         description = ''
       Periodic backups to create with Kopia.
     '';
     type = lib.types.attrsOf (
