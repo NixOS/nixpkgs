@@ -10,7 +10,7 @@
   systemrdl-compiler,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peakrdl-cheader";
   version = "1.0.0";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SystemRDL";
     repo = "PeakRDL-cheader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1LxKGCea5ClKmrArl+CM6ZRpiTh2ThbYSe9TYYHjRlY=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})
