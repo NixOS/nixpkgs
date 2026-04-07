@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
       ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${kyodialog_version}-0_${platform}.deb" data.tar.gz | tar -xz
     '';
 
+  patches = [
+    ./pypdf.patch
+  ];
+
   nativeBuildInputs = [
     autoPatchelfHook
     python3Packages.wrapPython
@@ -89,22 +93,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/cups/model
     mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
 
+    # patch Nix-specific config path before installing the filter
+    substituteInPlace ./usr/lib/cups/filter/kyofilter_pre_H \
+    --replace-fail 'CONFIG_DIR = "/usr/share/kyocera/"' 'CONFIG_DIR = "'"$out"'/share/kyocera/"'
+
     # remove absolute path prefixes to filters in ppd
     find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
-
-
     mkdir -p $out/lib/cups/
     mv ./usr/lib/cups/filter/ $out/lib/cups/
-    substituteInPlace $out/lib/cups/filter/kyofilter_pre_H \
-      --replace-fail 'from PyPDF3 import PdfFileWriter, PdfFileReader' 'from pypdf import PdfWriter, PdfReader' \
-      --replace-fail 'CONFIG_DIR = "/usr/share/kyocera/"' 'CONFIG_DIR = "'"$out"'/share/kyocera/"' \
-      --replace-fail 'PdfFileReader' 'PdfReader' \
-      --replace-fail 'PdfFileWriter()' 'PdfWriter()' \
-      --replace-fail 'base_pdf.getNumPages()' 'len(base_pdf.pages)' \
-      --replace-fail 'watermark_pdf.getPage(0)' 'watermark_pdf.pages[0]' \
-      --replace-fail 'base_pdf.getPage(p)' 'base_pdf.pages[p]' \
-      --replace-fail 'page.mergePage(watermark)' 'page.merge_page(watermark)' \
-      --replace-fail 'new_pdf.addPage(page)' 'new_pdf.add_page(page)'
     # for lib/cups/filter/kyofilter_pre_H
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
