@@ -154,4 +154,9 @@ with haskellLib;
 
   # Fails to compile with GHC 9.14 https://github.com/snoyberg/mono-traversable/pull/261
   mono-traversable = dontCheck super.mono-traversable;
+
+  # Too strict bound on containers in test suite
+  # https://github.com/jaspervdj/blaze-markup/issues/69
+  blaze-markup = doJailbreak super.blaze-markup;
+
 }
