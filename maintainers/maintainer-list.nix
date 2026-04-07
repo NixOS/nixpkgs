@@ -9867,6 +9867,13 @@
     name = "Adrian Groh";
     keys = [ { fingerprint = "62BD BF30 83E9 7076 9665 B60B 3AA3 153E 98B0 D771"; } ];
   };
+  goblinkingdev = {
+    email = "goblinking_f@proton.me";
+    github = "goblinkingdev";
+    githubId = 68219518;
+    name = "Jareth Gallardo";
+    keys = [ { fingerprint = "6AB8 CB49 07CD 2FDB AB6F  F366 9C56 81B7 100E 8E70"; } ];
+  };
   goertzenator = {
     email = "daniel.goertzen@gmail.com";
     github = "goertzenator";
