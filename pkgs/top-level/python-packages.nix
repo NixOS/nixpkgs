@@ -21778,7 +21778,9 @@ self: super: with self; {
 
   types-jsonschema = callPackage ../development/python-modules/types-jsonschema { };
 
-  types-lxml = callPackage ../development/python-modules/types-lxml { };
+  types-lxml = callPackage ../development/python-modules/types-lxml {
+    inherit (pkgs) basedpyright pyrefly;
+  };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
 
