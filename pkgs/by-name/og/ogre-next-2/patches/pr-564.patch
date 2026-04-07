@@ -1,0 +1,13 @@
+diff --git a/OgreMain/include/OgreMemorySTLAllocator.h b/OgreMain/include/OgreMemorySTLAllocator.h
+index 5cba9e160a..f734636855 100644
+--- a/OgreMain/include/OgreMemorySTLAllocator.h
++++ b/OgreMain/include/OgreMemorySTLAllocator.h
+@@ -100,7 +100,7 @@ namespace Ogre
+         };
+ 
+         /// ctor
+-        inline explicit STLAllocator()
++        inline STLAllocator()
+         { }
+ 
+         /// dtor
