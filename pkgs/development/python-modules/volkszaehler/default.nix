@@ -1,33 +1,33 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "volkszaehler";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-volkszaehler";
     tag = version;
-    hash = "sha256-2XOV+Cft7xLIDNDpwNc+F8VasCYD8XEkxnwW0iS/p9U=";
+    hash = "sha256-DgsP3ol6VcOnoUJF1eQjNWR45SokElNosyfgvPZVihU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    aiohttp
-    async-timeout
+  dependencies = [ aiohttp ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
-
-  # no tests are present
-  doCheck = false;
 
   pythonImportsCheck = [ "volkszaehler" ];
 
