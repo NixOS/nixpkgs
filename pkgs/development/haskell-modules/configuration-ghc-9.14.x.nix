@@ -158,5 +158,7 @@ with haskellLib;
   # Too strict bound on containers in test suite
   # https://github.com/jaspervdj/blaze-markup/issues/69
   blaze-markup = doJailbreak super.blaze-markup;
+  # https://github.com/jaspervdj/blaze-html/issues/151
+  blaze-html = doJailbreak super.blaze-html;
 
 }
