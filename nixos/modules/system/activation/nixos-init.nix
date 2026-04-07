@@ -51,7 +51,7 @@ in
           message = "nixos-init can only be used with system.etc.overlay.enable";
         }
         {
-          assertion = config.services.userborn.enable || config.systemd.sysusers.enable;
+          assertion = (config.services.userborn.enable or false) || (config.systemd.sysusers.enable or false);
           message = "nixos-init can only be used with services.userborn.enable or systemd.sysusers.enable";
         }
         {
