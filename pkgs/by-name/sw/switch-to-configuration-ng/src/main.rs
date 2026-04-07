@@ -142,6 +142,49 @@ impl From<&Action> for &'static str {
     }
 }
 
+/// Scope of systemd unit management. System units live in /etc/systemd/system and
+/// are managed via the system bus; user units live in /etc/systemd/user and are
+/// managed via each logged-in user's session bus.
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum UnitScope {
+    System,
+}
+
+impl UnitScope {
+    /// Path relative to a toplevel (or to /) where this scope's NixOS-managed
+    /// unit files live.
+    fn etc_dir(&self) -> &'static str {
+        match self {
+            UnitScope::System => "etc/systemd/system",
+        }
+    }
+
+    /// Absolute path to the currently-active unit directory for this scope.
+    fn current_dir(&self) -> &'static Path {
+        Path::new(match self {
+            UnitScope::System => "/etc/systemd/system",
+        })
+    }
+
+    /// Directory where unit action lists are persisted for
+    /// resume-after-interrupt.
+    fn list_dir(&self) -> PathBuf {
+        match self {
+            UnitScope::System => PathBuf::from("/run/nixos"),
+        }
+    }
+
+    fn start_list_file(&self) -> PathBuf {
+        self.list_dir().join("start-list")
+    }
+    fn restart_list_file(&self) -> PathBuf {
+        self.list_dir().join("restart-list")
+    }
+    fn reload_list_file(&self) -> PathBuf {
+        self.list_dir().join("reload-list")
+    }
+}
+
 // Allow for this switch-to-configuration to remain consistent with the perl implementation.
 // Perl's "die" uses errno to set the exit code: https://perldoc.perl.org/perlvar#%24%21
 fn die() -> ! {
@@ -572,6 +615,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
 // figures out of what units are to be stopped, restarted, reloaded, started, and skipped.
 fn handle_modified_unit(
     toplevel: &Path,
+    scope: UnitScope,
     unit: &str,
     base_name: &str,
     new_unit_file: &Path,
@@ -584,6 +628,9 @@ fn handle_modified_unit(
     units_to_restart: &mut HashMap<String, ()>,
     units_to_skip: &mut HashMap<String, ()>,
 ) -> Result<()> {
+    let start_list = scope.start_list_file();
+    let restart_list = scope.restart_list_file();
+    let reload_list = scope.reload_list_file();
     let use_restart_as_stop_and_start = new_unit_info.is_none();
 
     if matches!(
@@ -604,10 +651,10 @@ fn handle_modified_unit(
         // crashing it.
         if unit == "-.mount" || unit == "nix.mount" {
             units_to_reload.insert(unit.to_string(), ());
-            record_unit(RELOAD_LIST_FILE, unit);
+            record_unit(&reload_list, unit);
         } else {
             units_to_restart.insert(unit.to_string(), ());
-            record_unit(RESTART_LIST_FILE, unit);
+            record_unit(&restart_list, unit);
         }
     } else if unit.ends_with(".socket") {
         // FIXME: do something?
@@ -631,7 +678,7 @@ fn handle_modified_unit(
             })
         {
             units_to_reload.insert(unit.to_string(), ());
-            record_unit(RELOAD_LIST_FILE, unit);
+            record_unit(&reload_list, unit);
         } else if !parse_systemd_bool(new_unit_info, "Service", "X-RestartIfChanged", true)
             || parse_systemd_bool(new_unit_info, "Unit", "RefuseManualStop", false)
             || parse_systemd_bool(new_unit_info, "Unit", "X-OnlyManualStart", false)
@@ -645,11 +692,11 @@ fn handle_modified_unit(
             {
                 // This unit should be restarted instead of stopped and started.
                 units_to_restart.insert(unit.to_string(), ());
-                record_unit(RESTART_LIST_FILE, unit);
+                record_unit(&restart_list, unit);
                 // Remove from units to reload so we don't restart and reload
                 if units_to_reload.contains_key(unit) {
                     units_to_reload.remove(unit);
-                    unrecord_unit(RELOAD_LIST_FILE, unit);
+                    unrecord_unit(&reload_list, unit);
                 }
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
@@ -686,13 +733,13 @@ fn handle_modified_unit(
                             }
 
                             // Only restart sockets that actually exist in new configuration:
-                            if toplevel.join("etc/systemd/system").join(socket).exists() {
+                            if toplevel.join(scope.etc_dir()).join(socket).exists() {
                                 if use_restart_as_stop_and_start {
                                     units_to_restart.insert(socket.to_string(), ());
-                                    record_unit(RESTART_LIST_FILE, socket);
+                                    record_unit(&restart_list, socket);
                                 } else {
                                     units_to_start.insert(socket.to_string(), ());
-                                    record_unit(START_LIST_FILE, socket);
+                                    record_unit(&start_list, socket);
                                 }
 
                                 socket_activated = true;
@@ -701,7 +748,7 @@ fn handle_modified_unit(
                             // Remove from units to reload so we don't restart and reload
                             if units_to_reload.contains_key(unit) {
                                 units_to_reload.remove(unit);
-                                unrecord_unit(RELOAD_LIST_FILE, unit);
+                                unrecord_unit(&reload_list, unit);
                             }
                         }
                     }
@@ -719,10 +766,10 @@ fn handle_modified_unit(
                 if !socket_activated {
                     if use_restart_as_stop_and_start {
                         units_to_restart.insert(unit.to_string(), ());
-                        record_unit(RESTART_LIST_FILE, unit);
+                        record_unit(&restart_list, unit);
                     } else {
                         units_to_start.insert(unit.to_string(), ());
-                        record_unit(START_LIST_FILE, unit);
+                        record_unit(&start_list, unit);
                     }
                 }
 
@@ -734,7 +781,7 @@ fn handle_modified_unit(
                 // Remove from units to reload so we don't restart and reload
                 if units_to_reload.contains_key(unit) {
                     units_to_reload.remove(unit);
-                    unrecord_unit(RELOAD_LIST_FILE, unit);
+                    unrecord_unit(&reload_list, unit);
                 }
             }
         }
@@ -938,14 +985,24 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
     }
 }
 
-/// Iterate over currently active units, compare each unit's file in
-/// /etc/systemd/system against the one in the new toplevel, and populate the
+/// Iterate over currently active units in the given scope, compare the unit
+/// file in `old_unit_dir` against the one in `new_unit_dir`, and populate the
 /// action maps accordingly.
 ///
-/// Units whose FragmentPath does not live under /etc/systemd/system are
-/// skipped; this avoids touching generator output in /run/systemd/generator*.
+/// Units whose FragmentPath does not live under the scope's NixOS-managed
+/// directory (`scope.current_dir()`) are skipped; this avoids touching
+/// generated units and, for the user scope, units that are shadowed by files
+/// in the user's home directory (e.g. those managed by home-manager).
+///
+/// `old_unit_dir` and `new_unit_dir` are taken explicitly rather than derived
+/// from the scope because by the time the user-scope child runs, /etc has
+/// already been switched to the new configuration, so the caller must supply
+/// a captured reference to the pre-switch unit directory.
 fn collect_unit_changes(
     toplevel: &Path,
+    scope: UnitScope,
+    old_unit_dir: &Path,
+    new_unit_dir: &Path,
     current_active_units: &HashMap<String, UnitState>,
     units_to_stop: &mut HashMap<String, ()>,
     units_to_start: &mut HashMap<String, ()>,
@@ -954,20 +1011,28 @@ fn collect_unit_changes(
     units_to_skip: &mut HashMap<String, ()>,
     units_to_filter: &mut HashMap<String, ()>,
 ) -> Result<()> {
+    let fragment_prefix = scope
+        .current_dir()
+        .to_str()
+        .expect("scope dir is valid UTF-8");
+    let start_list = scope.start_list_file();
+    let reload_list = scope.reload_list_file();
+
     for (unit, unit_state) in current_active_units {
-        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
-        // /run/systemd/generator*)
+        // Don't touch units that are not loaded from the NixOS-managed
+        // directory. For system scope this skips generator output; for user
+        // scope it additionally skips units shadowed by ~/.config/systemd/user.
         if !unit_state
             .proxy
             .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
+            .map(|fragment_path: String| fragment_path.starts_with(fragment_prefix))
             .unwrap_or_default()
         {
             continue;
         }
 
-        let current_unit_file = Path::new("/etc/systemd/system").join(unit);
-        let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
+        let current_unit_file = old_unit_dir.join(unit);
+        let new_unit_file = new_unit_dir.join(unit);
 
         let mut base_unit = unit.clone();
         let mut current_base_unit_file = current_unit_file.clone();
@@ -984,8 +1049,8 @@ fn collect_unit_changes(
         {
             if !current_unit_file.exists() && !new_unit_file.exists() {
                 base_unit = format!("{template_name}@.{template_instance}");
-                current_base_unit_file = Path::new("/etc/systemd/system").join(&base_unit);
-                new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
+                current_base_unit_file = old_unit_dir.join(&base_unit);
+                new_base_unit_file = new_unit_dir.join(&base_unit);
             }
         }
 
@@ -1031,7 +1096,7 @@ fn collect_unit_changes(
                     false,
                 )) {
                     units_to_start.insert(unit.to_string(), ());
-                    record_unit(START_LIST_FILE, unit);
+                    record_unit(&start_list, unit);
                     // Don't spam the user with target units that always get started.
                     if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
                         units_to_filter.insert(unit.to_string(), ());
@@ -1061,6 +1126,7 @@ fn collect_unit_changes(
                     UnitComparison::UnequalNeedsRestart => {
                         handle_modified_unit(
                             toplevel,
+                            scope,
                             unit,
                             base_name,
                             &new_unit_file,
@@ -1076,7 +1142,7 @@ fn collect_unit_changes(
                     }
                     UnitComparison::UnequalNeedsReload if !units_to_restart.contains_key(unit) => {
                         units_to_reload.insert(unit.clone(), ());
-                        record_unit(RELOAD_LIST_FILE, unit);
+                        record_unit(&reload_list, unit);
                     }
                     _ => {}
                 }
@@ -1337,6 +1403,9 @@ won't take effect until you reboot the system.
 
     collect_unit_changes(
         &toplevel,
+        UnitScope::System,
+        UnitScope::System.current_dir(),
+        &toplevel.join(UnitScope::System.etc_dir()),
         &current_active_units,
         &mut units_to_stop,
         &mut units_to_start,
@@ -1514,6 +1583,7 @@ won't take effect until you reboot the system.
 
             handle_modified_unit(
                 &toplevel,
+                UnitScope::System,
                 unit,
                 base_name,
                 &new_unit_file,
@@ -1685,6 +1755,7 @@ won't take effect until you reboot the system.
 
         handle_modified_unit(
             &toplevel,
+            UnitScope::System,
             unit,
             base_name,
             &new_unit_file,
