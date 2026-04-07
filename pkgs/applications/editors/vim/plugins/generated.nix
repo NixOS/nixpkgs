@@ -5774,6 +5774,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  garbage-day-nvim = buildVimPlugin {
+    pname = "garbage-day.nvim";
+    version = "1.4.0-unstable-2026-02-25";
+    src = fetchFromGitHub {
+      owner = "Zeioth";
+      repo = "garbage-day.nvim";
+      rev = "2fcc56556281de8ee871a5f3beb9db7ab747ef32";
+      hash = "sha256-GabA9whTRQpBbQjc5pyGGVnehBG2i+lwiqJLx31tTLE=";
+    };
+    meta.homepage = "https://github.com/Zeioth/garbage-day.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gbprod-nord = buildVimPlugin {
     pname = "gbprod-nord";
     version = "1.1.0-unstable-2025-10-15";
