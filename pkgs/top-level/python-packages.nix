@@ -20941,7 +20941,9 @@ self: super: with self; {
 
   types-jinja2 = callPackage ../development/python-modules/types-jinja2 { };
 
-  types-lxml = callPackage ../development/python-modules/types-lxml { };
+  types-lxml = callPackage ../development/python-modules/types-lxml {
+    inherit (pkgs) basedpyright pyrefly;
+  };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
 
