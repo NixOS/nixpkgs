@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "imapgoose";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "ImapGoose";
     tag = "v${version}";
-    hash = "sha256-Zu2cHCTl6RyZzndFrLM7xTeD/T3isVerIB8D6vD3jIU=";
+    hash = "sha256-H+6S+jAZT4jj1R8sJeLzFjyNkZqo0WlTLVfu1BH+RM4=";
   };
 
-  vendorHash = "sha256-6mh6KsJlijXn+bLzmtJSC4lcYFChQdyBKEjFzbQMIM0=";
+  vendorHash = "sha256-75dP0iB3Tu1GQfi9w+H1dgWHZh7X9FJOlsLbC3Baqjg=";
 
   subPackages = [
     "cmd/imapgoose"

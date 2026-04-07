@@ -18,27 +18,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "particl-core";
-  version = "23.2.7.0";
+  version = "23.2.9.0";
 
   src = fetchFromGitHub {
     owner = "particl";
     repo = "particl-core";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RxkLt+7u+r5jNwEWiArTUpZ8ykYwWtvIDFXTSKhGN/w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g/RNr2IxipoDlPfkzE8ou1wOTFrUYp7MuNoWklsyBjU=";
   };
-
-  patches = [
-    # upnp: fix build with miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
-      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
+
   buildInputs = [
     openssl
     db48
