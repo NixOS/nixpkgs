@@ -104,7 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://eli-project.sourceforge.net/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ timokau ];
+    maintainers = with lib.maintainers; [
+      timokau
+      lordkekz
+    ];
     platforms = lib.platforms.linux;
   };
 })
