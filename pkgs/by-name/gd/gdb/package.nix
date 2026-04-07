@@ -5,6 +5,7 @@
 
   # Build time
   fetchurl,
+  fetchpatch,
   pkg-config,
   perl,
   texinfo,
@@ -21,7 +22,7 @@
   dejagnu,
   sourceHighlight,
   libiconv,
-  xxHash,
+  xxhash,
 
   withTui ? true,
   ncurses,
@@ -86,6 +87,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./debug-info-from-env.patch
+
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://inbox.sourceware.org/gdb-patches/20260324164527.1446549-2-sunilkumar.dora@windriver.com/raw";
+      hash = "sha256-FC4DDVS4wtE/HXtbUqvkxu9+e7nE3DYi1zIuQP9yQO8=";
+    })
+    (fetchpatch {
+      name = "musl-aarch64.patch";
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=1ccc3f6a2e28fa1f3357826374cba165b3ba3ff7";
+      hash = "sha256-Q2oTo2b+9yNN3PSsxqgxV4/9/05uFE/JMLe1CPs9Y7I=";
+    })
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     ./darwin-target-match.patch
@@ -107,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     xz
     sourceHighlight
-    xxHash
+    xxhash
     dejagnu # for tests
   ]
   ++ optional withTui ncurses
@@ -181,10 +193,8 @@ stdenv.mkDerivation (finalAttrs: {
     (withFeatureAs true "auto-load-safe-path" (builtins.concatStringsSep ":" safePaths))
     (withFeature enableDebuginfod "debuginfod")
     (enableFeature (!stdenv.hostPlatform.isMusl) "nls")
-    (enableFeature (
-      !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isLoongArch64
-    ) "inprocess-agent")
   ]
+  ++ optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
   ++ optional (!hostCpuOnly) "--enable-targets=all"
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
   ++ optional (

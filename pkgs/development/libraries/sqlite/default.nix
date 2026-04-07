@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
     (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
+    # Enabling limit-on-update/delete by adding -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT to NIX_CFLAGS_COMPILE does not work: the lemon parser generator (built early in buildPhase) doesn't receive the flag when it's invoked, as it's not been wrapped with Nix magic.
+    "--enable-update-limit"
   ]
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.

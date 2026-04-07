@@ -32,11 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gokkh6Aa1nszTsqDtUMXp8hqA6ic+trP71IR8RpdBTY=";
   };
 
-  patches = [
-    # patch from: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
-    ./darwin.patch
-  ];
-
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
   '';

@@ -14,11 +14,11 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "10.2p1";
+    version = "10.3p1";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
+      hash = "sha256-VmgqNruS3PS08Bb9jsjnQFm3mo3iXBXWcNcx59GORfQ=";
     };
 
     extraPatches = [
@@ -96,8 +96,8 @@ in
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.1p1-1/debian/patches/gssapi.patch";
-        hash = "sha256-/wJ3AA+RscHjFRSeL0LENviKlCglpOi7HNuCxidpQV8=";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.2p1-6/debian/patches/gssapi.patch";
+        hash = "sha256-mYrJJrE6l0r/VYLWlOTGkKLzj9Dj4wOLgJyW/NLGaeo=";
       })
     ];
 

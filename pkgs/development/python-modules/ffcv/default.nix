@@ -40,7 +40,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail "'assertpy'," "" \
       --replace-fail "'fastargs'," "" \
-      --replace-fail "'psutil'," "" \
+      --replace-fail "'psutil'," ""
   '';
 
   build-system = [ setuptools ];

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
-      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}' \
+      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
   '';
 
   nativeBuildInputs = [

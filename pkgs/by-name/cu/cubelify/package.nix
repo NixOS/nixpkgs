@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
       install -Dm444 ${contents}/cubelify-overlay.desktop -t $out/share/applications/
       install -Dm444 ${contents}/cubelify-overlay.png -t $out/share/pixmaps/
       substituteInPlace $out/share/applications/cubelify-overlay.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify' \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify'
     '';
 
   passthru.updateScript = ./update.sh;

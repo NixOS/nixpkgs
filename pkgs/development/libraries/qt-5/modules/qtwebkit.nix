@@ -51,7 +51,9 @@ qtModule {
     qtsensors
     qtwebchannel
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin qtmultimedia;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    qtmultimedia
+  ];
   buildInputs = [
     fontconfig
     libwebp
@@ -90,12 +92,16 @@ qtModule {
       "-Wno-expansion-to-defined"
     ]
     # with gcc8, -Wclass-memaccess became part of -Wall and this too exceeds the logging limit
-    ++ lib.optional stdenv.cc.isGNU "-Wno-class-memaccess"
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-Wno-class-memaccess"
+    ]
     # with clang this warning blows the log over Hydra's limit
-    ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-inconsistent-missing-override"
-    ++ lib.optional (
-      !stdenv.hostPlatform.isDarwin
-    ) ''-DNIXPKGS_LIBUDEV="${lib.getLib systemd}/lib/libudev"''
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-inconsistent-missing-override"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      ''-DNIXPKGS_LIBUDEV="${lib.getLib systemd}/lib/libudev"''
+    ]
   );
 
   doCheck = false; # fails 13 out of 13 tests (ctest)

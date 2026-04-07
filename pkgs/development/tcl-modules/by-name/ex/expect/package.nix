@@ -62,6 +62,8 @@ tcl.mkTclDerivation rec {
     ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
   '';
 
+  tclRequiresCheck = [ "Expect" ];
+
   outputs = [
     "out"
     "dev"

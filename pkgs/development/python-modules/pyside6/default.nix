@@ -60,13 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/sources/pyside6";
 
   patches = [
-    # revert commit that breaks generated cmake files
-    (fetchpatch {
-      url = "https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=05e328476f2d6ef8a0f3f44aca1e5b1cdb7499fc";
-      revert = true;
-      stripLen = 2;
-      hash = "sha256-PPLV5K+xp7ZdG0Tah1wpBdNWN7fsXvZh14eBzO0R55c=";
-    })
+    ./fix-paths.patch
   ];
 
   # Qt Designer plugin moved to a separate output to reduce closure size
@@ -120,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ shiboken6 ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-Dis_pyside6_superproject_build=1"
+  ];
 
   dontWrapQtApps = true;
 

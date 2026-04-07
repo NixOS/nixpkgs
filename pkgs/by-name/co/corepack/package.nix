@@ -3,7 +3,7 @@
   stdenvNoCC,
   cacert,
   yarn-berry,
-  nodejs-slim, # no need for NPM
+  nodejs-slim, # no need for npm
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,

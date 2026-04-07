@@ -25,7 +25,7 @@
   re2,
   re-flex,
   uni-algo,
-  xxHash,
+  xxhash,
   zstd,
 
   # Build tools
@@ -151,7 +151,7 @@ stdenv.mkDerivation {
     cp -r --no-preserve=mode,ownership ${mimalloc224} build/deps-nixpkgs/mimalloc224
     cp -r --no-preserve=mode,ownership ${pugixml.src} build/deps-nixpkgs/pugixml
     cp -r --no-preserve=mode,ownership ${re-flex.src} build/deps-nixpkgs/reflex
-    cp -r --no-preserve=mode,ownership ${xxHash.src} build/deps-nixpkgs/xxhash
+    cp -r --no-preserve=mode,ownership ${xxhash.src} build/deps-nixpkgs/xxhash
     cp -r --no-preserve=mode,ownership ${zstd.src} build/deps-nixpkgs/zstd
 
     # c-ares is provided as a tarball, extract it

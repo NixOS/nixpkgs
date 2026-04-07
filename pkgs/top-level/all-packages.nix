@@ -2477,8 +2477,6 @@ with pkgs;
 
   gnused = callPackage ../tools/text/gnused { };
 
-  gnutar = callPackage ../tools/archivers/gnutar { };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates
@@ -7867,15 +7865,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_0 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.0"; };
-
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_1 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.1"; };
     faslExt = "fasl";
@@ -7884,7 +7873,16 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_1;
+  sbcl_2_6_3 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.3"; };
+
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_3;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -11574,18 +11572,9 @@ with pkgs;
 
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
-  openblas =
-    callPackage
-      (
-        # FIXME: migrate everything off make.nix on mass rebuild.
-        if stdenv.system == "aarch64-darwin" then
-          ../development/libraries/science/math/openblas
-        else
-          ../development/libraries/science/math/openblas/make.nix
-      )
-      {
-        inherit (llvmPackages) openmp;
-      };
+  openblas = callPackage ../development/libraries/science/math/openblas {
+    inherit (llvmPackages) openmp;
+  };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.

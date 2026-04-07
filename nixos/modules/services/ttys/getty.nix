@@ -163,20 +163,15 @@ in
       ];
       environment.TTY = "%I";
       restartIfChanged = false;
+      # logind hardcodes spawning autovt@ttyN.service on VT switch. Upstream
+      # declares this alias via [Install] Alias=, which NixOS does not process.
+      aliases = [ "autovt@.service" ];
     };
 
     systemd.services."serial-getty@" = {
       serviceConfig.ExecStart = [
         "" # override upstream default with an empty ExecStart
         (gettyCmd "%I --keep-baud $TERM")
-      ];
-      restartIfChanged = false;
-    };
-
-    systemd.services."autovt@" = {
-      serviceConfig.ExecStart = [
-        "" # override upstream default with an empty ExecStart
-        (gettyCmd "--noclear %I $TERM")
       ];
       restartIfChanged = false;
     };

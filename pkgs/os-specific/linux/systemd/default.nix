@@ -202,17 +202,17 @@ let
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1766012573";
+  releaseTimestamp = "1773777352";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "259.3";
+  version = "260.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OmJUIaPwoQFAwTHihP9bM0BJ/KWetyEgZp5jjEwRExY=";
+    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -240,15 +240,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./0014-core-don-t-taint-on-unmerged-usr.patch
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-    ./0017-meson.build-do-not-create-systemdstatedir.patch
 
     # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
     # if the install prefix is not /usr, but that does not work for us
     # because we include the config snippet manually
-    ./0018-meson-Don-t-link-ssh-dropins.patch
+    ./0017-meson-Don-t-link-ssh-dropins.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0019-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
@@ -432,10 +431,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "system-uid-max" "999")
     (lib.mesonOption "system-gid-max" "999")
 
-    # SysVinit
-    (lib.mesonOption "sysvinit-path" "")
-    (lib.mesonOption "sysvrcnd-path" "")
-
     # Login
     (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
     (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
@@ -503,7 +498,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
     (lib.mesonEnable "libcurl" wantCurl)
-    (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
@@ -557,6 +551,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
     (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
   ]
+  ++ lib.optionals withKexectools [
+    (lib.mesonOption "kexec-path" "${kexec-tools}/bin/kexec")
+  ]
   ++ lib.optionals withKmod [
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
@@ -595,7 +592,6 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-run.xml"
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
-            "src/test/test-fileio.c"
             "src/test/test-load-fragment.c"
           ];
         }
@@ -604,23 +600,12 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "${coreutils}/bin/cat";
           where = [
             "test/test-execute/exec-noexecpaths-simple.service"
-            "src/journal/cat.c"
           ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ]
-      ++ lib.optionals withNspawn [
-        {
-          # we only need to patch getent when nspawn will actually be built/installed
-          # as of systemd 257.x, nspawn will not be installed on systemdLibs, so we don't need to patch it
-          # patching getent unconditionally here introduces infinite recursion on musl
-          search = "/usr/bin/getent";
-          replacement = "${getent}/bin/getent";
-          where = [ "src/nspawn/nspawn-setuid.c" ];
         }
       ]
       ++ lib.optionals withImportd [
@@ -634,7 +619,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "\\\"${gnutar}/bin/tar\\\"";
           where = [
             "src/import/export-tar.c"
-            "src/import/import-common.c"
             "src/import/import-tar.c"
           ];
           ignore = [
@@ -645,8 +629,10 @@ stdenv.mkDerivation (finalAttrs: {
             "src/import/export.c"
             "src/import/import.c"
             "src/import/importd.c"
-            # runs `tar` but also also creates a temporary directory with the string
+            # runs `tar` but also creates a temporary directory with the string
             "src/import/pull-tar.c"
+            # pull-oci.c has tar references handled in postPatch
+            "src/import/pull-oci.c"
             # tar referenced as file suffix
             "src/shared/import-util.c"
           ];
@@ -654,8 +640,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optionals withKmod [
         {
-          search = "/sbin/modprobe";
-          replacement = "${lib.getBin kmod}/sbin/modprobe";
+          search = "ExecStart=-modprobe";
+          replacement = "ExecStart=-${lib.getBin kmod}/bin/modprobe";
           where = [ "units/modprobe@.service" ];
         }
       ];
@@ -706,7 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
-      substituteInPlace src/import/pull-tar.c \
+      substituteInPlace src/import/pull-tar.c src/import/pull-oci.c \
         --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
@@ -714,23 +700,10 @@ stdenv.mkDerivation (finalAttrs: {
   # warning messages
   postConfigure = ''
     substituteInPlace config.h \
-      --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
-      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
-    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-    # lead to a cyclic dependency.
-    "-UPOLKIT_AGENT_BINARY_PATH"
-    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
-
-    # Set the release_agent on /sys/fs/cgroup/systemd to the
-    # currently running systemd (/run/current-system/systemd) so
-    # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENTS_PATH"
-    "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
-
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
   ];
@@ -927,6 +900,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-nspawn-configfile
             systemd-oomd
             systemd-portabled
+            systemd-pstore
             systemd-resolved
             systemd-shutdown
             systemd-sysupdate

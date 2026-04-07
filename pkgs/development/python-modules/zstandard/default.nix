@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "cffi~=" "cffi>=" \
+      --replace-fail "cffi~=" "cffi>="
   '';
 
   build-system = [

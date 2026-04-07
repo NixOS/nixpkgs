@@ -170,7 +170,7 @@ buildDotnetModule rec {
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
   '';
 
   postFixup = ''

@@ -136,19 +136,21 @@ let
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filteredModules + "/nixos";
-          NIX_ABORT_ON_WARN = warningsAreErrors;
+          env.NIX_ABORT_ON_WARN = warningsAreErrors;
           modules =
             "[ "
             + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
             + " ]";
-          passAsFile = [ "modules" ];
           disallowedReferences = [
             filteredModules
             libPath
             pkgsLibPath
           ];
+          __structuredAttrs = true;
         }
         ''
+          modulesPath="$TMPDIR/modules"
+          printf "%s" "$modules" > "$modulesPath"
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
           ${pkgs.buildPackages.nix}/bin/nix-instantiate \

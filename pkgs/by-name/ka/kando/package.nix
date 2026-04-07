@@ -22,7 +22,7 @@
 }:
 
 let
-  nodejs = nodejs_22; # NPM v11 included in nodejs_24 doesn't work with the current lockfile
+  nodejs = nodejs_22; # npm v11 included in nodejs_24 doesn't work with the current lockfile
 in
 buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";

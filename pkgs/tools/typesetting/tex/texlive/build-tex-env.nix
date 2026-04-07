@@ -44,28 +44,6 @@ lib.fix (
   }@args:
 
   let
-    ### buildEnv with custom attributes
-    buildEnv' =
-      args:
-      (buildEnv (
-        {
-          inherit pname version;
-
-          inherit (args) paths;
-        }
-        // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
-        // lib.optionalAttrs (args ? pathsToLink) { inherit (args) pathsToLink; }
-      )).overrideAttrs
-        (
-          removeAttrs args [
-            "extraOutputsToInstall"
-            "pathsToLink"
-            "name"
-            "paths"
-            "pkgs"
-          ]
-        );
-
     ### texlive.combine backward compatibility
     # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
     isOldPkgList = p: !p.outputSpecified or false && p ? pkgs && builtins.all (p: p ? tlType) p.pkgs;
@@ -230,7 +208,7 @@ lib.fix (
 
     name = "${pname}-${version}";
 
-    texmfdist = buildEnv' {
+    texmfdist = buildEnv {
       name = "${name}-texmfdist";
 
       # remove fake derivations (without 'outPath') to avoid undesired build dependencies
@@ -299,19 +277,21 @@ lib.fix (
     # other outputs
     nonEnvOutputs = lib.genAttrs pkgList.nonEnvOutputs (
       outName:
-      buildEnv' {
+      buildEnv {
         inherit name;
-        outputs = [ outName ];
         paths = builtins.catAttrs "outPath" (
           pkgList.otherOutputs.${outName} or [ ] ++ pkgList.specifiedOutputs.${outName} or [ ]
         );
-        # force the output to be ${outName} or nix-env will not work
-        nativeBuildInputs = [
-          (writeShellScript "force-output.sh" ''
-            export out="''${${outName}-}"
-          '')
-        ];
-        inherit meta passthru;
+        derivationArgs = {
+          outputs = [ outName ];
+          nativeBuildInputs = [
+            # force the output to be ${outName} or nix-env will not work
+            (writeShellScript "force-output.sh" ''
+              export out="''${${outName}-}"
+            '')
+          ];
+          inherit meta passthru;
+        };
       }
     );
 
@@ -429,79 +409,80 @@ lib.fix (
 
     updmapLines = { pname, fontMaps, ... }: [ "# from ${pname}:" ] ++ fontMaps;
 
-    out =
-      # no indent for git diff purposes
-      buildEnv' {
-
-        inherit name;
-
-        # use attrNames, attrValues to ensure the two lists are sorted in the same way
-        outputs = [
-          "out"
-        ]
-        ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
-        otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
-          builtins.attrValues nonEnvOutputs
-        );
-
-        # remove fake derivations (without 'outPath') to avoid undesired build dependencies
-        paths =
-          builtins.catAttrs "outPath" pkgList.bin
-          ++ lib.optionals (!__combine && __formatsOf == null) pkgList.formats
-          ++ lib.optional __combine doc;
-        pathsToLink = [
-          "/"
-          "/share/texmf-var/scripts"
-          "/share/texmf-var/tex/generic/config"
-          "/share/texmf-var/web2c"
-          "/share/texmf-config"
-          "/bin" # ensure these are writeable directories
-        ];
-
-        nativeBuildInputs = [
-          makeWrapper
-          libfaketime
-          tl."texlive.infra" # mktexlsr
-          tl.texlive-scripts # fmtutil, updmap
-          tl.texlive-scripts-extra # texlinks
-          perl
-        ];
-
-        buildInputs = [
-          coreutils
-          gawk
-          gnugrep
-          gnused
-        ]
-        ++ lib.optional needsGhostscript ghostscript;
-
-        inherit meta passthru __combine;
-        __formatsOf = __formatsOf.pname or null;
-
-        inherit texmfdist texmfroot;
-
-        fontconfigFile = makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; };
-
-        fmtutilCnf = assembleConfigLines fmtutilLines pkgList.sortedFormatPkgs;
-        updmapCfg = assembleConfigLines updmapLines pkgList.sortedFontMaps;
-
-        languageDat = assembleConfigLines langDatLines pkgList.sortedHyphenPatterns;
-        languageDef = assembleConfigLines langDefLines pkgList.sortedHyphenPatterns;
-        languageLua = assembleConfigLines langLuaLines pkgList.sortedHyphenPatterns;
-
-        postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
-
-        postBuild = ''
-          . "${./build-tex-env.sh}"
-        '';
-
-        allowSubstitutes = true;
-        preferLocalBuild = false;
-      };
   in
-  # outputsToInstall must be set *after* overrideAttrs (used in buildEnv') or it fails the checkMeta tests
-  if __combine || __formatsOf != null then
-    out
-  else
-    lib.addMetaAttrs { inherit (pkgList) outputsToInstall; } out
+  buildEnv {
+
+    inherit name;
+
+    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+    paths =
+      builtins.catAttrs "outPath" pkgList.bin
+      ++ lib.optionals (!__combine && __formatsOf == null) pkgList.formats
+      ++ lib.optional __combine doc;
+    pathsToLink = [
+      "/"
+      "/share/texmf-var/scripts"
+      "/share/texmf-var/tex/generic/config"
+      "/share/texmf-var/web2c"
+      "/share/texmf-config"
+      "/bin" # ensure these are writeable directories
+    ];
+
+    postBuild = ''
+      . "${./build-tex-env.sh}"
+    '';
+
+    derivationArgs = {
+      # use attrNames, attrValues to ensure the two lists are sorted in the same way
+      outputs = [
+        "out"
+      ]
+      ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
+      otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
+        builtins.attrValues nonEnvOutputs
+      );
+
+      nativeBuildInputs = [
+        makeWrapper
+        libfaketime
+        tl."texlive.infra" # mktexlsr
+        tl.texlive-scripts # fmtutil, updmap
+        tl.texlive-scripts-extra # texlinks
+        perl
+      ];
+
+      buildInputs = [
+        coreutils
+        gawk
+        gnugrep
+        gnused
+      ]
+      ++ lib.optional needsGhostscript ghostscript;
+
+      inherit passthru __combine;
+      __formatsOf = __formatsOf.pname or null;
+
+      inherit texmfdist texmfroot;
+
+      fontconfigFile = makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; };
+
+      fmtutilCnf = assembleConfigLines fmtutilLines pkgList.sortedFormatPkgs;
+      updmapCfg = assembleConfigLines updmapLines pkgList.sortedFontMaps;
+
+      languageDat = assembleConfigLines langDatLines pkgList.sortedHyphenPatterns;
+      languageDef = assembleConfigLines langDefLines pkgList.sortedHyphenPatterns;
+      languageLua = assembleConfigLines langLuaLines pkgList.sortedHyphenPatterns;
+
+      postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
+
+      allowSubstitutes = true;
+      preferLocalBuild = false;
+
+      meta =
+        meta
+        // lib.optionalAttrs (!__combine && __formatsOf == null) {
+          inherit (pkgList) outputsToInstall;
+        };
+    };
+  }
 )
