@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "luftdaten";
   version = "0.7.5";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-luftdaten";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-KZ89ufU7wWPFp1zthmao/cSFbUDWlJY4iBNQ19fgIBQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ httpx ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -36,10 +36,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for interacting with luftdaten.info";
     homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
+    changelog = "https://github.com/home-assistant-ecosystem/python-luftdaten/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
       fab
     ];
   };
-}
+})
