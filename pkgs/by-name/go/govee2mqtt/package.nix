@@ -42,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/wez/govee2mqtt";
     changelog = "https://github.com/wez/govee2mqtt/blob/${finalAttrs.version}/addon/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      niklaskorz
+    ];
     mainProgram = "govee";
   };
 })
