@@ -1767,9 +1767,7 @@ rec {
 
     :::
   */
-  commonPrefix =
-    list1: list2:
-    take (commonPrefixLength list1 list2) list1;
+  commonPrefix = list1: list2: take (commonPrefixLength list1 list2) list1;
 
   /**
     Returns the length of the common prefix of two lists,

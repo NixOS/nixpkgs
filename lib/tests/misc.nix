@@ -1809,7 +1809,10 @@ runTests {
     expected = 3;
   };
   testListCommonPrefixLengthLazy = {
-    expr = lists.commonPrefixLength [ 1 ] [ 1 (abort "lib.lists.commonPrefixLength shouldn't evaluate this") ];
+    expr =
+      lists.commonPrefixLength
+        [ 1 ]
+        [ 1 (abort "lib.lists.commonPrefixLength shouldn't evaluate this") ];
     expected = 1;
   };
   testListCommonPrefixLengthLong =
