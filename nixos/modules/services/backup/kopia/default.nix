@@ -29,7 +29,7 @@
             passwordFile = lib.mkOption {
               type = lib.types.str;
               description = ''
-                Path to a file containing the repository password (KOPIA_PASSWORD).
+                Path to a file containing the repository password, passed in via `KOPIA_PASSWORD`.
               '';
               example = "/run/secrets/kopia-password";
             };
