@@ -165,6 +165,7 @@ lib.makeExtensible (
             hash = "sha256-vFv/D08x9urtoIE9wiC7Lln4Eq3sgNBwU7TBE1iyrfI=";
           })
           lowdown30PatchOld
+          ./patches/ghsa-g3g9-5vj6-r3gj-2.28.patch
         ];
       };
 
@@ -189,6 +190,7 @@ lib.makeExtensible (
                 hash = "sha256-r2ZF1zBZDKMvyX6X4VsaTMrg0zdjn59Jf6Hqg56r29E=";
               })
               lowdown30PatchOld
+              ./patches/ghsa-g3g9-5vj6-r3gj-2.30.patch
             ]
           );
 
@@ -208,6 +210,8 @@ lib.makeExtensible (
         }).appendPatches
           [
             lowdown30Patch
+            ./patches/ghsa-g3g9-5vj6-r3gj-2.31.patch
+            ./patches/landlock-abstract-socket-hardening-2.31.patch
           ];
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
@@ -224,7 +228,13 @@ lib.makeExtensible (
             hash = "sha256-WPuGqMQGepXoRYjtRudMAMHEoLsIObw2x4sVfho5feA=";
           };
         }).appendPatches
-          patches_common;
+          (
+            patches_common
+            ++ [
+              ./patches/ghsa-g3g9-5vj6-r3gj-2.34.patch
+              ./patches/landlock-abstract-socket-hardening-2.34.patch
+            ]
+          );
 
       nix_2_34 = addTests "nix_2_34" self.nixComponents_2_34.nix-everything;
 
@@ -240,7 +250,13 @@ lib.makeExtensible (
             hash = "sha256-fybp46IQmRN7lEUTChc3MTqxmRutmDO4RNSPEQfJQsQ=";
           };
         }).appendPatches
-          patches_common;
+          (
+            patches_common
+            ++ [
+              ./patches/ghsa-g3g9-5vj6-r3gj-git.patch
+              ./patches/landlock-abstract-socket-hardening-git.patch
+            ]
+          );
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 

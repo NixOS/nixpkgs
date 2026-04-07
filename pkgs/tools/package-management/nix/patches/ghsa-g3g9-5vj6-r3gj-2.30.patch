@@ -1,0 +1,126 @@
+From 4d0a078f1dae9a07d04e1a72e7e62fbf2ca249e0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Mon, 6 Apr 2026 16:49:13 +0200
+Subject: [PATCH] Fixes for GHSA-g3g9-5vj6-r3gj
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Squashed commit of the following:
+
+commit a8e5b27728e3b18e63c2503a83afd04031994623
+Author: Sergei Zimmerman <sergei@zimmerman.foo>
+Date:   Fri Apr 3 00:21:31 2026 +0300
+
+    derivation-builder: Don't use copyFile for FOD output copying, put the output in a temporary directory in the store
+
+commit 49ff4d6779ec20c5339b237dec9b240c3eabf535
+Author: Sergei Zimmerman <sergei@zimmerman.foo>
+Date:   Fri Apr 3 00:21:21 2026 +0300
+
+    libstore: Make temporary in-store directory not world-readable
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ src/libstore/include/nix/store/local-store.hh |  2 ++
+ src/libstore/local-store.cc                   |  5 +--
+ src/libstore/unix/build/derivation-builder.cc | 36 ++++++++++++++-----
+ 3 files changed, 33 insertions(+), 10 deletions(-)
+
+diff --git a/src/libstore/include/nix/store/local-store.hh b/src/libstore/include/nix/store/local-store.hh
+index 5f3a249f8..74fa1c2e8 100644
+--- a/src/libstore/include/nix/store/local-store.hh
++++ b/src/libstore/include/nix/store/local-store.hh
+@@ -446,6 +446,8 @@ private:
+     friend struct PathSubstitutionGoal;
+     friend struct SubstitutionGoal;
+     friend struct DerivationGoal;
++    /* Only used for createTempDirInStore. */
++    friend class DerivationBuilderImpl;
+ };
+ 
+ } // namespace nix
+diff --git a/src/libstore/local-store.cc b/src/libstore/local-store.cc
+index 49c499e3f..5f897856f 100644
+--- a/src/libstore/local-store.cc
++++ b/src/libstore/local-store.cc
+@@ -1316,8 +1316,9 @@ std::pair<std::filesystem::path, AutoCloseFD> LocalStore::createTempDirInStore()
+     do {
+         /* There is a slight possibility that `tmpDir' gets deleted by
+            the GC between createTempDir() and when we acquire a lock on it.
+-           We'll repeat until 'tmpDir' exists and we've locked it. */
+-        tmpDirFn = createTempDir(config->realStoreDir, "tmp");
++           We'll repeat until 'tmpDir' exists and we've locked it.
++           Make the directory accessible only to the current user.*/
++        tmpDirFn = createTempDir(config->realStoreDir, "tmp", /*mode=*/0700);
+         tmpDirFd = openDirectory(tmpDirFn);
+         if (!tmpDirFd) {
+             continue;
+diff --git a/src/libstore/unix/build/derivation-builder.cc b/src/libstore/unix/build/derivation-builder.cc
+index 5f9dafb57..609d88a79 100644
+--- a/src/libstore/unix/build/derivation-builder.cc
++++ b/src/libstore/unix/build/derivation-builder.cc
+@@ -1581,6 +1581,13 @@ SingleDrvOutputs DerivationBuilderImpl::registerOutputs()
+         assert(output && scratchPath);
+         auto actualPath = realPathInSandbox(store.printStorePath(*scratchPath));
+ 
++        /* An optional file descriptor of a directory used for intermediate
++           operations. */
++        AutoCloseFD tempDirFd;
++        /* RAII cleanup of a temporary directory inside the store that is used
++           for intermediate operations. */
++        std::optional<AutoDelete> delTempDir;
++
+         auto finish = [&](StorePath finalStorePath) {
+             /* Store the final path */
+             finalOutputs.insert_or_assign(outputName, finalStorePath);
+@@ -1715,6 +1722,25 @@ SingleDrvOutputs DerivationBuilderImpl::registerOutputs()
+             return newInfo0;
+         };
+ 
++        auto moveOutputToTempDir = [&]() -> void {
++            std::filesystem::path tempDir;
++            std::tie(tempDir, tempDirFd) = getLocalStore(store).createTempDirInStore();
++            delTempDir.emplace(tempDir);
++
++            auto tmpOutput = tempDir / "x";
++
++            /* Serialise and create a fresh copy of the output to break
++               any stale writable file descriptors. Copy through the
++               serialisation/deserialisation. TODO: Use copyRecursive here and
++               make use of reflinking. */
++            auto source = sinkToSource([&](Sink & nextSink) { dumpPath(actualPath, nextSink); });
++            restorePath(tmpOutput, *source, settings.fsyncStorePaths);
++            /* This makes it slightly harder to make sense of the control flow. The rule
++               of thumb is that actualPath points to the current location of the stuff
++               that we'll end up registering. */
++            actualPath = std::move(tmpOutput);
++        };
++
+         ValidPathInfo newInfo = std::visit(
+             overloaded{
+ 
+@@ -1742,14 +1768,7 @@ SingleDrvOutputs DerivationBuilderImpl::registerOutputs()
+ 
+                 [&](const DerivationOutput::CAFixed & dof) {
+                     auto & wanted = dof.ca.hash;
+-
+-                    // Replace the output by a fresh copy of itself to make sure
+-                    // that there's no stale file descriptor pointing to it
+-                    Path tmpOutput = actualPath + ".tmp";
+-                    copyFile(std::filesystem::path(actualPath), std::filesystem::path(tmpOutput), true);
+-
+-                    std::filesystem::rename(tmpOutput, actualPath);
+-
++                    moveOutputToTempDir();
+                     auto newInfo0 = newInfoFromCA(
+                         DerivationOutput::CAFloating{
+                             .method = dof.ca.method,
+@@ -1790,6 +1809,7 @@ SingleDrvOutputs DerivationBuilderImpl::registerOutputs()
+                 },
+ 
+                 [&](const DerivationOutput::Impure & doi) {
++                    moveOutputToTempDir();
+                     return newInfoFromCA(
+                         DerivationOutput::CAFloating{
+                             .method = doi.method,
