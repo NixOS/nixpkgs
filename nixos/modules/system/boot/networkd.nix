@@ -1,7 +1,7 @@
 {
   config,
-  lib,
   options,
+  lib,
   utils,
   ...
 }:
@@ -4166,52 +4166,57 @@ let
 
       { environment.etc = unitFiles; }
 
-      (mkIf config.systemd.network.enable {
+      (
+        mkIf config.systemd.network.enable {
 
-        users.users.systemd-network.group = "systemd-network";
+          users.users.systemd-network.group = "systemd-network";
 
-        systemd.additionalUpstreamSystemUnits = [
-          "systemd-networkd-wait-online.service"
-          "systemd-networkd-wait-online@.service"
-          "systemd-networkd.service"
-          "systemd-networkd.socket"
-          "systemd-networkd-persistent-storage.service"
-        ];
+          systemd.additionalUpstreamSystemUnits = [
+            "systemd-networkd-wait-online.service"
+            "systemd-networkd-wait-online@.service"
+            "systemd-networkd.service"
+            "systemd-networkd.socket"
+            "systemd-networkd-persistent-storage.service"
+          ];
 
-        environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
+          environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
-        systemd.services.systemd-networkd =
-          let
-            isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
-            reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
-            nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
-            unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
-          in
-          {
-            wantedBy = [ "multi-user.target" ];
-            reloadTriggers = unitFileSources reloadableUnitFiles;
-            restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
-              config.environment.etc."systemd/networkd.conf".source
-            ];
-            aliases = [ "dbus-org.freedesktop.network1.service" ];
-            notSocketActivated = true;
-            stopIfChanged = false;
+          systemd.services.systemd-networkd =
+            let
+              isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
+              reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+              nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
+              unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
+            in
+            {
+              wantedBy = [ "multi-user.target" ];
+              reloadTriggers = unitFileSources reloadableUnitFiles;
+              restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
+                config.environment.etc."systemd/networkd.conf".source
+              ];
+              aliases = [ "dbus-org.freedesktop.network1.service" ];
+              notSocketActivated = true;
+              stopIfChanged = false;
+            };
+
+        }
+        // lib.optionalAttrs (options ? networking.iproute2) {
+          networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
+            enable = mkDefault true;
+            rttablesExtraConfig = ''
+
+              # Extra tables defined in NixOS systemd.networkd.config.routeTables.
+              ${concatStringsSep "\n" (
+                mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables
+              )}
+            '';
           };
+        }
+        // {
+          services.resolved.enable = mkDefault true;
 
-        networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
-          enable = mkDefault true;
-          rttablesExtraConfig = ''
-
-            # Extra tables defined in NixOS systemd.networkd.config.routeTables.
-            ${concatStringsSep "\n" (
-              mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables
-            )}
-          '';
-        };
-
-        services.resolved.enable = mkDefault true;
-
-      })
+        }
+      )
     ];
 
   stage1Options = {
