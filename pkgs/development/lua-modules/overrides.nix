@@ -450,8 +450,10 @@ in
         --replace-fail '"tree-sitter/lib/include",' '"${tree-sitter}/include"' \
         --replace-fail '"tree-sitter/lib/src"' ""
     '';
-    NIX_CFLAGS_COMPILE = "-I${tree-sitter}/include";
-    NIX_LDFLAGS = "-L${tree-sitter}/lib -ltree-sitter";
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-I${tree-sitter}/include";
+      NIX_LDFLAGS = "-L${tree-sitter}/lib -ltree-sitter";
+    };
   });
 
   ltreesitter-ts = prev.ltreesitter-ts.overrideAttrs (old: {
@@ -465,8 +467,10 @@ in
       hash = "sha256-hKM5HQU7A08mA004ZMV7hIVq/2WR3KocMatnTplM8uU=";
     };
     nativeBuildInputs = old.nativeBuildInputs ++ [ icu ];
-    NIX_CFLAGS_COMPILE = "-I${lib.getDev icu}/include";
-    NIX_LDFLAGS = "-L${lib.getLib icu}/lib -licuuc -licui18n -licudata";
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev icu}/include";
+      NIX_LDFLAGS = "-L${lib.getLib icu}/lib -licuuc -licui18n -licudata";
+    };
   });
 
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
