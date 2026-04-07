@@ -97,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://papra.app/";
     changelog = "https://github.com/papra-hq/papra/releases";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ wariuccio ];
+    maintainers = with lib.maintainers; [
+      wariuccio
+      miniharinn
+    ];
   };
 })
