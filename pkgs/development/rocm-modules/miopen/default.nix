@@ -23,6 +23,7 @@
   half,
   boost,
   sqlite,
+  symlinkJoin,
   bzip2,
   lbzip2,
   nlohmann_json,
@@ -81,6 +82,15 @@ let
       ]
     )
   );
+
+  # for hiprtcCompileProgram (dropout kernels require rocrand in -I at runtime)
+  hiprtcCompileRocmPath = symlinkJoin {
+    name = "miopen-hiprtc-compile-rocm-path";
+    paths = [
+      clr
+      rocrand
+    ];
+  };
 
   # Kernel databases moved from Git LFS to DVC (anonymous s3 bucket s3://therock-dvc/rocm-libraries)
   fetchKdb =
@@ -243,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
 
     substituteInPlace src/comgr.cpp \
-      --replace-fail '"/opt/rocm"' '"${clr}"'
+      --replace-fail '"/opt/rocm"' '"${hiprtcCompileRocmPath}"'
   ''
   + linkKDBsTo "src/kernels"
   + ''
