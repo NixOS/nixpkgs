@@ -635,8 +635,8 @@ in
         lib.nameValuePair (helpers.mkUnitBaseName "repository" name) {
           description = "Kopia repository connection for ${name}";
           restartIfChanged = false;
-          wants = lib.optional needsNetwork "network-online.target";
-          after = lib.optional needsNetwork "network-online.target";
+          wants = lib.mkIf needsNetwork [ "network-online.target" ];
+          after = lib.mkIf needsNetwork [ "network-online.target" ];
           environment = helpers.mkKopiaEnvironment name;
           serviceConfig = helpers.mkBaseServiceConfig name backup // {
             RemainAfterExit = true;
