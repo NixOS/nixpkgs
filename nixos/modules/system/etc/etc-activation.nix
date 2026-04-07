@@ -29,7 +29,7 @@
         {
           assertion =
             (!config.system.etc.overlay.mutable)
-            -> (config.systemd.sysusers.enable || config.services.userborn.enable);
+            -> ((config.systemd.sysusers.enable or false) || (config.services.userborn.enable or false));
           message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
