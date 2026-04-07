@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   ...
 }:
 
@@ -18,168 +19,174 @@
       ] config.system.build.etcActivationCommands;
     }
 
-    (lib.mkIf config.system.etc.overlay.enable {
+    # The overlay block sets boot.initrd.* and system.requiredKernelConfig,
+    # which are defined in system/boot/stage-1.nix and system/boot/kernel.nix.
+    # Wrap with optionalAttrs so etc-activation works without stage-1 loaded
+    # (e.g. for container profiles).
+    (lib.optionalAttrs (options ? boot.initrd.availableKernelModules) (
+      lib.mkIf config.system.etc.overlay.enable {
 
-      assertions = [
-        {
-          assertion = config.boot.initrd.systemd.enable;
-          message = "`system.etc.overlay.enable` requires `boot.initrd.systemd.enable`";
-        }
-        {
-          assertion =
-            (!config.system.etc.overlay.mutable)
-            -> (config.systemd.sysusers.enable || config.services.userborn.enable);
-          message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
-        }
-        {
-          assertion =
-            (config.system.switch.enable)
-            -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
-          message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
-        }
-      ];
-
-      boot.initrd.availableKernelModules = [
-        "loop"
-        "erofs"
-        "overlay"
-      ];
-
-      system.requiredKernelConfig = with config.lib.kernelConfig; [
-        (isEnabled "EROFS_FS")
-      ];
-
-      boot.initrd.systemd = {
-        storePaths = lib.mkIf config.system.etc.overlay.mutable [
-          "${config.system.nixos-init.package}/bin/clear-etc-opaque"
-        ];
-        mounts = [
+        assertions = [
           {
-            where = "/run/nixos-etc-metadata";
-            what = "/etc-metadata-image";
-            type = "erofs";
-            options = "loop,ro,nodev,nosuid";
-            unitConfig = {
-              # Since this unit depends on the nix store being mounted, it cannot
-              # be a dependency of local-fs.target, because if it did, we'd have
-              # local-fs.target ordered after the nix store mount which would cause
-              # things like network.target to only become active after the nix store
-              # has been mounted.
-              # This breaks for instance setups where sshd needs to be up before
-              # any encrypted disks can be mounted.
-              DefaultDependencies = false;
-              RequiresMountsFor = [
-                "/sysroot/nix/store"
-              ];
-              # find-etc only creates this symlink for a NixOS init. For a
-              # non-NixOS init= (e.g. init=/bin/sh) it is absent, so skip the
-              # mount instead of failing the whole initrd.
-              ConditionPathExists = "/etc-metadata-image";
-            };
-            requires = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ];
-            after = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ];
-            requiredBy = [ "initrd-fs.target" ];
-            before = [ "initrd-fs.target" ];
+            assertion = config.boot.initrd.systemd.enable;
+            message = "`system.etc.overlay.enable` requires `boot.initrd.systemd.enable`";
           }
           {
-            where = "/sysroot/etc";
-            what = "overlay";
-            type = "overlay";
-            options = lib.concatStringsSep "," (
-              [
-                "nodev"
-                "nosuid"
-                "relatime"
-                "redirect_dir=on"
-                "metacopy=on"
-                "lowerdir=/run/nixos-etc-metadata::/etc-basedir"
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                "rw"
-                "upperdir=/sysroot/.rw-etc/upper"
-                "workdir=/sysroot/.rw-etc/work"
-              ]
-              ++ lib.optionals (!config.system.etc.overlay.mutable) [
-                "ro"
-              ]
-            );
-            requiredBy = [ "initrd-fs.target" ];
-            before = [ "initrd-fs.target" ];
-            requires = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ]
-            ++ lib.optionals config.system.etc.overlay.mutable [
-              config.boot.initrd.systemd.services."rw-etc".name
-            ];
-            after = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ]
-            ++ lib.optionals config.system.etc.overlay.mutable [
-              config.boot.initrd.systemd.services."rw-etc".name
-            ];
-            unitConfig = {
-              RequiresMountsFor = [
-                "/sysroot/nix/store"
-                "/run/nixos-etc-metadata"
-              ];
-              DefaultDependencies = false;
-              # Skip for a non-NixOS init=, see the metadata mount above.
-              ConditionPathExists = "/etc-basedir";
-            };
+            assertion =
+              (!config.system.etc.overlay.mutable)
+              -> (config.systemd.sysusers.enable || config.services.userborn.enable);
+            message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
+          }
+          {
+            assertion =
+              (config.system.switch.enable)
+              -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
+            message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
           }
         ];
-        services = lib.mkMerge [
-          (lib.mkIf config.system.etc.overlay.mutable {
-            rw-etc = {
-              requiredBy = [ "initrd-fs.target" ];
-              before = [ "initrd-fs.target" ];
+
+        boot.initrd.availableKernelModules = [
+          "loop"
+          "erofs"
+          "overlay"
+        ];
+
+        system.requiredKernelConfig = with config.lib.kernelConfig; [
+          (isEnabled "EROFS_FS")
+        ];
+
+        boot.initrd.systemd = {
+          storePaths = lib.mkIf config.system.etc.overlay.mutable [
+            "${config.system.nixos-init.package}/bin/clear-etc-opaque"
+          ];
+          mounts = [
+            {
+              where = "/run/nixos-etc-metadata";
+              what = "/etc-metadata-image";
+              type = "erofs";
+              options = "loop,ro,nodev,nosuid";
               unitConfig = {
+                # Since this unit depends on the nix store being mounted, it cannot
+                # be a dependency of local-fs.target, because if it did, we'd have
+                # local-fs.target ordered after the nix store mount which would cause
+                # things like network.target to only become active after the nix store
+                # has been mounted.
+                # This breaks for instance setups where sshd needs to be up before
+                # any encrypted disks can be mounted.
                 DefaultDependencies = false;
                 RequiresMountsFor = [
-                  "/sysroot"
-                  # Needed so we can clear stale opaque markers from the
-                  # upperdir based on the contents of the new metadata layer
-                  # before the overlay is mounted.
-                  "/run/nixos-etc-metadata"
+                  "/sysroot/nix/store"
                 ];
-                # Skip for a non-NixOS init=, see the metadata mount above.
+                # find-etc only creates this symlink for a NixOS init. For a
+                # non-NixOS init= (e.g. init=/bin/sh) it is absent, so skip the
+                # mount instead of failing the whole initrd.
                 ConditionPathExists = "/etc-metadata-image";
               };
-              serviceConfig = {
-                Type = "oneshot";
-                ExecStart = [
-                  "/bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work"
-                  "${config.system.nixos-init.package}/bin/clear-etc-opaque /run/nixos-etc-metadata /sysroot/.rw-etc/upper"
-                ];
-              };
-            };
-          })
-          {
-            initrd-find-etc = {
-              description = "Find the path to the etc metadata image and based dir";
-              before = [ "shutdown.target" ];
-              conflicts = [ "shutdown.target" ];
-              requiredBy = [ "initrd.target" ];
-              path = [ config.system.nixos-init.package ];
+              requires = [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ];
+              after = [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ];
+              requiredBy = [ "initrd-fs.target" ];
+              before = [ "initrd-fs.target" ];
+            }
+            {
+              where = "/sysroot/etc";
+              what = "overlay";
+              type = "overlay";
+              options = lib.concatStringsSep "," (
+                [
+                  "nodev"
+                  "nosuid"
+                  "relatime"
+                  "redirect_dir=on"
+                  "metacopy=on"
+                  "lowerdir=/run/nixos-etc-metadata::/etc-basedir"
+                ]
+                ++ lib.optionals config.system.etc.overlay.mutable [
+                  "rw"
+                  "upperdir=/sysroot/.rw-etc/upper"
+                  "workdir=/sysroot/.rw-etc/work"
+                ]
+                ++ lib.optionals (!config.system.etc.overlay.mutable) [
+                  "ro"
+                ]
+              );
+              requiredBy = [ "initrd-fs.target" ];
+              before = [ "initrd-fs.target" ];
+              requires = [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                config.boot.initrd.systemd.services."rw-etc".name
+              ];
+              after = [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                config.boot.initrd.systemd.services."rw-etc".name
+              ];
               unitConfig = {
+                RequiresMountsFor = [
+                  "/sysroot/nix/store"
+                  "/run/nixos-etc-metadata"
+                ];
                 DefaultDependencies = false;
-                RequiresMountsFor = "/sysroot/nix/store";
+                # Skip for a non-NixOS init=, see the metadata mount above.
+                ConditionPathExists = "/etc-basedir";
               };
-              serviceConfig = {
-                Type = "oneshot";
-                RemainAfterExit = true;
-                ExecStart = "${config.system.nixos-init.package}/bin/find-etc";
+            }
+          ];
+          services = lib.mkMerge [
+            (lib.mkIf config.system.etc.overlay.mutable {
+              rw-etc = {
+                requiredBy = [ "initrd-fs.target" ];
+                before = [ "initrd-fs.target" ];
+                unitConfig = {
+                  DefaultDependencies = false;
+                  RequiresMountsFor = [
+                    "/sysroot"
+                    # Needed so we can clear stale opaque markers from the
+                    # upperdir based on the contents of the new metadata layer
+                    # before the overlay is mounted.
+                    "/run/nixos-etc-metadata"
+                  ];
+                  # Skip for a non-NixOS init=, see the metadata mount above.
+                  ConditionPathExists = "/etc-metadata-image";
+                };
+                serviceConfig = {
+                  Type = "oneshot";
+                  ExecStart = [
+                    "/bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work"
+                    "${config.system.nixos-init.package}/bin/clear-etc-opaque /run/nixos-etc-metadata /sysroot/.rw-etc/upper"
+                  ];
+                };
               };
-            };
-          }
-        ];
-      };
+            })
+            {
+              initrd-find-etc = {
+                description = "Find the path to the etc metadata image and based dir";
+                before = [ "shutdown.target" ];
+                conflicts = [ "shutdown.target" ];
+                requiredBy = [ "initrd.target" ];
+                path = [ config.system.nixos-init.package ];
+                unitConfig = {
+                  DefaultDependencies = false;
+                  RequiresMountsFor = "/sysroot/nix/store";
+                };
+                serviceConfig = {
+                  Type = "oneshot";
+                  RemainAfterExit = true;
+                  ExecStart = "${config.system.nixos-init.package}/bin/find-etc";
+                };
+              };
+            }
+          ];
+        };
 
-    })
+      }
+    ))
 
     (lib.mkIf (config.system.etc.overlay.enable && !config.system.etc.overlay.mutable) {
       # An empty regular file means systemd will bind mount /run/machine-id
