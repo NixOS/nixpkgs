@@ -949,10 +949,6 @@ with haskellLib;
   ];
 
   pandoc = overrideCabal (drv: {
-    # Work around test suite race condition(s) due to tasty >= 1.5.4
-    # https://github.com/jgm/pandoc/issues/11566
-    testFlags = drv.testFlags or [ ] ++ [ "-j1" ];
-
     patches = drv.patches or [ ] ++ [
       # Adjust test fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
       (pkgs.fetchpatch {
@@ -967,6 +963,13 @@ with haskellLib;
         url = "https://github.com/jgm/pandoc/commit/cab682ba58f2eb7e940d1af508e196ff6b1c1112.patch";
         hash = "sha256-lpddKGa8xs+Lhi62HhBgV04fUq2kkippA1xX2/b2ukM=";
         includes = [ "test/Tests/Writers/HTML.hs" ];
+      })
+      # Resolve test suite race condition(s) due to tasty >= 1.5.4 and
+      # inDirectory, https://github.com/jgm/pandoc/issues/11566 krank:ignore-line
+      (pkgs.fetchpatch {
+        name = "pandoc-tests-fix-race-condition.patch";
+        url = "https://github.com/jgm/pandoc/commit/134296c54145ef8ea7de523774837055239e0b3d.patch";
+        hash = "sha256-s3v6ukoVZm8cvh9mAp0U+cQDT3p8QSu1F0oQD4Ks9F8=";
       })
     ];
   }) super.pandoc;
