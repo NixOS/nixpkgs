@@ -664,6 +664,7 @@ package-maintainers:
   utdemir:
     - nix-tree
   wolfgangwalther:
+    - hpc-codecov
     - postgres-websockets
     - postgrest
   zowoq:
