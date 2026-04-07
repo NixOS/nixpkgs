@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-include-markdown-plugin";
-  version = "7.2.1";
+  version = "7.2.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mkdocs_include_markdown_plugin";
     inherit version;
-    hash = "sha256-XZTbh7Bs0wNhnbrrul9/Q6Pe1/13CUUdJvCMF2N2/+w=";
+    hash = "sha256-8FLMt0Hsz0mBFrgmwdeKLXYcVnRzcllHCUQc7glj+8k=";
   };
 
   build-system = [
