@@ -202,6 +202,7 @@ in
   preFixup ? null,
   postFixup ? null,
   shellHook ? "",
+  setupHooks ? [ ],
   coreSetup ? false, # Use only core packages to build Setup.hs.
   useCpphs ? false,
   hardeningDisable ? null,
@@ -1063,7 +1064,7 @@ lib.fix (
             ghcCommandCaps = lib.toUpper ghcCommand';
           in
           runCommandCC name {
-            inherit shellHook;
+            inherit shellHook setupHooks;
 
             depsBuildBuild = lib.optional isCross ghcEnvForBuild;
             nativeBuildInputs = [
@@ -1137,5 +1138,6 @@ lib.fix (
     // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinAllowLocalNetworking) {
       inherit __darwinAllowLocalNetworking;
     }
+    // optionalAttrs (args ? setupHooks) { inherit setupHooks; }
   )
 )

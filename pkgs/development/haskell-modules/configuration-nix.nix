@@ -876,6 +876,26 @@ builtins.intersectAttrs super {
       ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)) [
         self.unbounded-delays
       ];
+
+    setupHooks = drv.setupHooks or [ ] ++ [
+      (pkgs.makeSetupHook
+        {
+          name = "tasty-set-parallelism-hook";
+          substitutions.shell = pkgs.bash + pkgs.bash.shellPath;
+        }
+        (
+          pkgs.writeScript "tasty-set-parallelism-hook.sh" ''
+            #!@shell@
+
+            _tastySetParallelismHook() {
+              prependToVar checkFlagsArray -j$NIX_BUILD_CORES
+            }
+
+            preCheckHooks+=(_tastySetParallelismHook)
+          ''
+        )
+      )
+    ];
   }) super.tasty;
 
   tasty-discover = overrideCabal (drv: {
