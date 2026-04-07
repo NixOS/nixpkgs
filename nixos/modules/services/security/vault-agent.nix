@@ -21,7 +21,7 @@ let
         with lib.types;
         attrsOf (
           submodule (
-            { name, ... }:
+            { name, config, ... }:
             {
               options = {
                 enable = lib.mkEnableOption "this ${flavour} instance" // {
@@ -46,13 +46,20 @@ let
                   '';
                 };
 
+                serviceName = lib.mkOption {
+                  type = types.str;
+                  default = "${flavour}-${name}";
+                  defaultText = "${flavour}-<name>";
+                  description = "Systemd service name";
+                };
+
                 settings = lib.mkOption {
                   type = types.submodule {
                     freeformType = format.type;
 
                     options = {
                       pid_file = lib.mkOption {
-                        default = "/run/${flavour}-${name}/pid";
+                        default = "/run/${config.serviceName}/pid";
                         type = types.str;
                         description = ''
                           Path to use for the pid file.
@@ -106,7 +113,7 @@ let
       serviceConfig = {
         User = instance.user;
         Group = instance.group;
-        RuntimeDirectory = "${flavour}-${name}";
+        RuntimeDirectory = instance.serviceName;
         ExecStart = "${lib.getExe instance.package} ${
           lib.optionalString (flavour == "vault-agent") "agent"
         } -config ${configFile}";
@@ -136,7 +143,7 @@ in
         lib.mkIf (cfg.instances != { }) {
           systemd.services = lib.mapAttrs' (
             name: instance:
-            lib.nameValuePair "${flavour}-${name}" (createAgentInstance {
+            lib.nameValuePair instance.serviceName (createAgentInstance {
               inherit name instance flavour;
             })
           ) cfg.instances;
