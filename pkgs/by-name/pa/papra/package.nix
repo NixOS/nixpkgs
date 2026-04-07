@@ -26,6 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wQdDBS+QRarZhEIRmLQ4VRtq73I5YFIN2P3ZtAZWvxw=";
   };
 
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-8k8hzpyOQuHAPF+zzIhW+5vo6lHSyZeKAY+tYIf6jKU=";
+    pnpmWorkspaces = [
+      "@papra/app-client..."
+      "@papra/app-server..."
+    ];
+  };
+
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
@@ -80,17 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-8k8hzpyOQuHAPF+zzIhW+5vo6lHSyZeKAY+tYIf6jKU=";
-    pnpmWorkspaces = [
-      "@papra/app-client..."
-      "@papra/app-server..."
-    ];
-  };
 
   meta = {
     description = "Open-source document management platform designed to help you organize, secure, and archive your files effortlessly.";
