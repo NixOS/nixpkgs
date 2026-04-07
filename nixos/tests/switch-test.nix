@@ -60,6 +60,14 @@ in
         environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
         users.mutableUsers = false;
 
+        # A lingering user so the user systemd instance is running and
+        # switch-to-configuration can exercise the user-unit path.
+        users.users.usertest = {
+          isNormalUser = true;
+          uid = 1001;
+          linger = true;
+        };
+
         # Test that no boot loader still switches, e.g. in the ISO
         boot.loader.grub.enable = false;
 
@@ -646,6 +654,46 @@ in
                 EOF
               '';
             };
+
+          simpleUserService.configuration = {
+            systemd.user.services.usertest = {
+              wantedBy = [ "default.target" ];
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = "${pkgs.coreutils}/bin/true";
+                ExecReload = "${pkgs.coreutils}/bin/true";
+              };
+            };
+          };
+
+          simpleUserServiceModified.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.serviceConfig.X-Test = "1";
+          };
+
+          simpleUserServiceNostop.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.stopIfChanged = false;
+          };
+
+          simpleUserServiceReload.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest = {
+              reloadIfChanged = true;
+              serviceConfig.X-Test = "1";
+            };
+          };
+
+          simpleUserServiceReloadTrigger.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.reloadTriggers = [ "/dev/null" ];
+          };
+
+          simpleUserServiceFailing.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.serviceConfig.ExecStart = lib.mkForce "${pkgs.coreutils}/bin/false";
+          };
 
           no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
 
@@ -1612,5 +1660,63 @@ in
           out = switch_to_specialisation("${machine}", "")
           # Assert switching to a different generation doesn't touch units created by generators
           machine.succeed("systemctl is-active simple-generated.service")
+
+      with subtest("user services"):
+          machine.wait_for_unit("user@1001.service")
+          user_env = "XDG_RUNTIME_DIR=/run/user/1001"
+
+          def user_systemctl(args):
+              return machine.succeed(f"sudo -u usertest {user_env} systemctl --user {args}")
+
+          # Add a user service — starting default.target should pull it in via
+          # the WantedBy dependency.
+          out = switch_to_specialisation("${machine}", "simpleUserService")
+          user_systemctl("is-active usertest.service")
+
+          # No-op switch does nothing
+          out = switch_to_specialisation("${machine}", "simpleUserService")
+          assert_lacks(out, "user units:")
+
+          # Modifying the unit stop-starts it (default stopIfChanged=true)
+          out = switch_to_specialisation("${machine}", "simpleUserServiceModified")
+          assert_contains(out, "stopping the following user units: usertest.service")
+          assert_contains(out, "starting the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # stopIfChanged=false restarts instead
+          out = switch_to_specialisation("${machine}", "simpleUserServiceNostop")
+          assert_lacks(out, "stopping the following user units:")
+          assert_contains(out, "restarting the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # reloadIfChanged=true reloads instead
+          out = switch_to_specialisation("${machine}", "simpleUserServiceReload")
+          assert_lacks(out, "stopping the following user units:")
+          assert_lacks(out, "restarting the following user units:")
+          assert_contains(out, "reloading the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # reloadTriggers change triggers a reload
+          switch_to_specialisation("${machine}", "simpleUserService")
+          user_systemctl("is-active usertest.service")
+          out = switch_to_specialisation("${machine}", "simpleUserServiceReloadTrigger")
+          assert_contains(out, "reloading the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # A failing user unit propagates a non-zero exit to the parent so
+          # the overall switch reports failure.
+          out = switch_to_specialisation("${machine}", "simpleUserServiceFailing", fail=True)
+          assert_contains(out, "stopping the following user units: usertest.service")
+          assert_contains(out, "Failed to start user unit usertest.service")
+          assert_contains(out, "warning: the following user units failed: usertest.service")
+          assert_contains(out, "warning: user activation for usertest failed")
+          # Recover for the removal assertion below.
+          switch_to_specialisation("${machine}", "simpleUserService")
+          user_systemctl("is-active usertest.service")
+
+          # Removing the unit stops it
+          out = switch_to_specialisation("${machine}", "")
+          assert_contains(out, "stopping the following user units: usertest.service")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active usertest.service")
     '';
 }
