@@ -136,7 +136,7 @@ in
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
     services.getty.helpLine = mkIf (
-      config.documentation.nixos.enable && config.documentation.doc.enable
+      (config.documentation.nixos.enable or false) && (config.documentation.doc.enable or false)
     ) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.additionalUpstreamSystemUnits = [
