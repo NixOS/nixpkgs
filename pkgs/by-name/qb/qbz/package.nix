@@ -22,23 +22,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qbz";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "vicrodh";
     repo = "qbz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KTnOK1cergq48UiPR7pCfXNk8MsC3eUaLe3JclCCLjE=";
+    hash = "sha256-B9nnjsuC//9b4HmFjHHRvDaEkUWSfNZRyiek6aU0Gd4=";
   };
 
-  cargoHash = "sha256-H9leYEYTy7H/I84/lrVBbyiETAmiGj9anPccgq3rRNg=";
+  cargoHash = "sha256-6Rv+wE2FMg58A7TDRly1wC96VmbgITX8/fh073tPuPA=";
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   npmDeps = fetchNpmDeps {
     name = "qbz-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-Bpb91QV0cZFX9DzTmPKy2KupPRFnidUi9Ka90AXxZ3I=";
+    hash = "sha256-ErO+ulCe+nx4OEHki0zKyq4HWtKfKt04VIWsDFJfCCk=";
   };
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
