@@ -11037,11 +11037,6 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   bitcoind = callPackage ../applications/blockchains/bitcoin {
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
