@@ -3,30 +3,31 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+  hatchling,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hole";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-hole";
     tag = version;
-    hash = "sha256-yyqLbnW49R7f8C0IBL8z9Sq69TtaS5Ng2VQLJofNqcI=";
+    hash = "sha256-rIKb6GeULi2ooNtWD2a23JQxO9HkXiUYy0AroYeVeKU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ aiohttp ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "hole" ];
 
