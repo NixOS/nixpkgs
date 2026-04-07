@@ -333,7 +333,7 @@ let
           && !sd.randomEncryption.enable
           # Don't include zram devices
           && !(hasPrefix "/dev/zram" sd.device)
-        ) config.swapDevices
+        ) (config.swapDevices or [ ])
       );
 
       fsInfo =
