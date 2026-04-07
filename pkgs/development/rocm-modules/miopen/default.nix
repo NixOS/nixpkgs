@@ -295,6 +295,11 @@ stdenv.mkDerivation (finalAttrs: {
       name = "conv";
       testScript = "MIOpenDriver conv -n 1 -c 1 -H 4 -W 4 -k 1 -y 3 -x 3 -p 0 -q 0 -V 0";
     };
+    dropout = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "dropout";
+      testScript = "MIOpenDriver dropout -d 64,32,14,14";
+    };
     pool = callPackage ./test-runtime-compilation.nix {
       miopen = finalAttrs.finalPackage;
       name = "pool";
