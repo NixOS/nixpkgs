@@ -142,12 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   env = {
-    JAVA_HOME = jetbrains.jdk;
+    JAVA_HOME = jetbrains.jdk-21;
     ANDROID_SDK_HOME = "$(pwd)";
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jetbrains.jdk}"
+    "-Dorg.gradle.java.home=${jetbrains.jdk-21}"
   ];
 
   nativeBuildInputs = [
