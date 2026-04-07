@@ -2509,6 +2509,8 @@ self: super: with self; {
     }
   );
 
+  casatools = callPackage ../development/python-modules/casatools { };
+
   case-converter = callPackage ../development/python-modules/case-converter { };
 
   cashaddress = callPackage ../development/python-modules/cashaddress { };
