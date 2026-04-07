@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "volkszaehler";
   version = "0.6.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-volkszaehler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DgsP3ol6VcOnoUJF1eQjNWR45SokElNosyfgvPZVihU=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for interacting with the Volkszahler API";
     homepage = "https://github.com/home-assistant-ecosystem/python-volkszaehler";
-    changelog = "https://github.com/home-assistant-ecosystem/python-volkszaehler/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-ecosystem/python-volkszaehler/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
