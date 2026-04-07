@@ -54,6 +54,45 @@ let
         mkKeyValueDefault { } sep k v;
   };
   configFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
+
+  pbkdf2Script = pkgs.writers.writePython3 "qbittorrent-pbkdf2" { } ''
+    import base64
+    import configparser
+    import hashlib
+    import os
+    import sys
+
+    password_file = sys.argv[1]
+    config_file = sys.argv[2]
+
+    with open(password_file) as f:
+        password = f.read().rstrip('\n')
+
+    if not password:
+        print("Error: password file is empty", file=sys.stderr)
+        sys.exit(1)
+
+    salt = os.urandom(16)
+    dk = hashlib.pbkdf2_hmac(
+        'sha512', password.encode('utf-8'), salt, 100000, dklen=64
+    )
+    salt_b64 = base64.b64encode(salt).decode()
+    dk_b64 = base64.b64encode(dk).decode()
+    pbkdf2 = f"@ByteArray({salt_b64}:{dk_b64})"
+
+    config = configparser.RawConfigParser()
+    config.optionxform = str
+    config.read(config_file)
+
+    if not config.has_section('Preferences'):
+        config.add_section('Preferences')
+    config.set('Preferences', 'WebUI\\Password_PBKDF2', pbkdf2)
+
+    with open(config_file, 'w') as f:
+        config.write(f, space_around_delimiters=False)
+  '';
+
+  configPath = "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf";
 in
 {
   options.services.qbittorrent = {
@@ -131,6 +170,16 @@ in
       '';
     };
 
+    webuiPasswordFile = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        Path to a file containing the plaintext WebUI password.
+        The password is hashed using PBKDF2-HMAC-SHA512 and injected
+        into the config at service startup.
+      '';
+    };
+
     extraArgs = mkOption {
       type = listOf str;
       default = [ ];
@@ -167,15 +216,21 @@ in
         wantedBy = [ "multi-user.target" ];
         restartTriggers = optionals (cfg.serverConfig != { }) [ configFile ];
 
+        # qBittorrent expects a writable config file, so copy the generated
+        # config into the profile before startup and optionally inject the
+        # hashed WebUI password.
+        preStart = mkIf (cfg.serverConfig != { } || cfg.webuiPasswordFile != null) ''
+          ${pkgs.coreutils}/bin/install -Dm600 ${configFile} "${configPath}"
+
+          ${lib.optionalString (cfg.webuiPasswordFile != null) ''
+            ${pbkdf2Script} "$CREDENTIALS_DIRECTORY/webui-password" "${configPath}"
+          ''}
+        '';
+
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
-
-          # the config file has to be writable, so we have to do this weird dance
-          ExecStartPre = lib.mkIf (cfg.serverConfig != { }) ''
-            ${pkgs.coreutils}/bin/install -Dm600 ${configFile} "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"
-          '';
 
           ExecStart = utils.escapeSystemdExecArgs (
             [
@@ -186,6 +241,9 @@ in
             ++ optionals (cfg.torrentingPort != null) [ "--torrenting-port=${toString cfg.torrentingPort}" ]
             ++ cfg.extraArgs
           );
+          LoadCredential = mkIf (cfg.webuiPasswordFile != null) [
+            "webui-password:${cfg.webuiPasswordFile}"
+          ];
           TimeoutStopSec = 1800;
 
           # https://github.com/qbittorrent/qBittorrent/pull/6806#discussion_r121478661
