@@ -9921,11 +9921,6 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kuma-dp = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kuma-dp" ];
-    pname = "kuma-dp";
-  };
-
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
