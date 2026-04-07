@@ -530,7 +530,7 @@ in
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
 
         # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
-        "/etc/hostname".text = config.networking.hostName;
+        "/etc/hostname".text = config.networking.hostName or config.system.nixos.distroId;
 
       }
       // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
