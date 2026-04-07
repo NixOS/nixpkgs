@@ -22,5 +22,4 @@ fi
 
 $(nix-build -A archisteamfarm.fetch-deps --no-out-link)
 
-cd "$asf_path/web-ui"
-./update.sh
+"$asf_path/web-ui/update.sh"
