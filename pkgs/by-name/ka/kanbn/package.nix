@@ -30,6 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${plus-jakarta-sans}/share/fonts/truetype/PlusJakartaSans-Regular.ttf \
       apps/web/src/fonts/PlusJakartaSans.ttf
 
+    # The upstream middleware redirects "/" -> "/login" using a URL built from
+    # `request.url`, which yields a *relative* `Location` header. Browsers then
+    # resolve it against whatever host the user typed (often localhost), so a
+    # request via the public hostname can end up on localhost. Anchor the
+    # redirect on NEXT_PUBLIC_BASE_URL when it is set so we always emit an
+    # absolute URL pointing at the configured public origin.
+    substituteInPlace apps/web/src/middleware.ts \
+      --replace-fail \
+        'const loginUrl = new URL("/login", request.url);' \
+        'const loginUrl = new URL("/login", env("NEXT_PUBLIC_BASE_URL") ?? request.url);'
+
     substituteInPlace apps/web/src/pages/_app.tsx \
       --replace-fail \
         'import { Plus_Jakarta_Sans } from "next/font/google";' \
