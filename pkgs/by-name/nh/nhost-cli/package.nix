@@ -1,26 +1,28 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "nhost-cli";
-  version = "1.31.3";
+  version = "1.42.1";
 
   src = fetchFromGitHub {
     owner = "nhost";
-    repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-hUltJCehmlIDRLdJNGC/Oyjl6rnQHzjxSjrQEaDCdAo=";
+    repo = "nhost";
+    tag = "cli@${finalAttrs.version}";
+    hash = "sha256-n61YgU1/Ad1NMZr/1/jnmuZpN8PemPUW/gomf+ETvRw=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   vendorHash = null;
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.Version=v${version}"
+    "-X=main.Version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -30,12 +32,15 @@ buildGoModule rec {
   # require network access
   checkFlags = [ "-skip=^TestMakeJSONRequest$" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Tool for setting up a local development environment for Nhost";
     homepage = "https://github.com/nhost/cli";
-    changelog = "https://github.com/nhost/cli/releases/tag/v${version}";
+    changelog = "https://github.com/nhost/nhost/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nhost";
   };
-}
+})
