@@ -1246,11 +1246,35 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
     let current_active_units = get_active_units(&systemd)?;
 
+    let new_unit_dir = toplevel.join(scope.etc_dir());
+    let fragment_prefix = scope
+        .current_dir()
+        .to_str()
+        .expect("scope dir is valid UTF-8");
+
+    // Units that are currently running from a non-/etc location (typically
+    // ~/.config/systemd/user, i.e. home-manager) but that the new NixOS
+    // configuration also defines. Pass 1 will skip these because of the
+    // FragmentPath filter; if the per-user activation (sd-switch) later drops
+    // its copy, we need a second pass to bring the NixOS-owned definition up.
+    let migration_candidates: Vec<String> = current_active_units
+        .iter()
+        .filter(|(unit, _)| new_unit_dir.join(unit).exists())
+        .filter(|(_, unit_state)| {
+            !unit_state
+                .proxy
+                .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+                .map(|p: String| p.starts_with(fragment_prefix))
+                .unwrap_or(false)
+        })
+        .map(|(unit, _)| unit.clone())
+        .collect();
+
     collect_unit_changes(
         &toplevel,
         scope,
         &old_toplevel.join(scope.etc_dir()),
-        &toplevel.join(scope.etc_dir()),
+        &new_unit_dir,
         &current_active_units,
         &mut units_to_stop,
         &mut units_to_start,
@@ -1359,11 +1383,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     // have been brought up to date. This matches the system → user layering.
     // Toplevels with system.activatable = false do not ship this unit; mirror
     // the system scope's tolerance for a missing activate script.
-    if toplevel
-        .join(scope.etc_dir())
-        .join("nixos-activation.service")
-        .exists()
-    {
+    if new_unit_dir.join("nixos-activation.service").exists() {
         match systemd.restart_unit("nixos-activation.service", "replace") {
             Ok(_) => {
                 log::debug!("waiting for nixos activation to finish");
@@ -1378,6 +1398,80 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 exit_code = 4;
             }
         }
+    }
+
+    // Second pass: handle units that migrated from another manager to NixOS.
+    // The per-user activation may have removed ~/.config/systemd/user/<unit>
+    // and stopped it (sd-switch); now that the /etc copy is no longer
+    // shadowed, take ownership.
+    if !migration_candidates.is_empty() {
+        // Ensure systemd's view reflects any unit-file removals done by the
+        // per-user activation, in case it did not daemon-reload itself.
+        _ = systemd.reload();
+
+        let active_after = get_active_units(&systemd)?;
+
+        let mut to_restart = HashMap::new();
+        let mut to_start = HashMap::new();
+
+        for unit in &migration_candidates {
+            match active_after.get(unit) {
+                Some(unit_state) => {
+                    let now_etc = unit_state
+                        .proxy
+                        .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+                        .map(|p: String| p.starts_with(fragment_prefix))
+                        .unwrap_or(false);
+                    if now_etc {
+                        // Still running with the previous manager's binary;
+                        // restart so the /etc definition takes effect.
+                        to_restart.insert(unit.clone(), ());
+                    }
+                    // else: still shadowed by ~/.config, leave it alone.
+                }
+                None => {
+                    // Stopped by the previous manager; start the /etc copy.
+                    to_start.insert(unit.clone(), ());
+                }
+            }
+        }
+
+        // Re-start active targets so any other newly-unmasked dependencies are
+        // pulled in as well.
+        for unit in units_to_start.keys() {
+            if unit.ends_with(".target") {
+                to_start.insert(unit.clone(), ());
+            }
+        }
+
+        print_units("restarting (post-activation)", &to_restart);
+        for unit in to_restart.keys() {
+            match systemd.restart_unit(unit, "replace") {
+                Ok(job_path) => {
+                    submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
+                }
+                Err(err) => {
+                    eprintln!("Failed to restart user unit {unit}: {err}");
+                    exit_code = 4;
+                }
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs);
+
+        let to_start_filtered = filter_units(&units_to_filter, &to_start);
+        print_units("starting (post-activation)", &to_start_filtered);
+        for unit in to_start.keys() {
+            match systemd.start_unit(unit, "replace") {
+                Ok(job_path) => {
+                    submitted_jobs.borrow_mut().insert(job_path, Job::Start);
+                }
+                Err(err) => {
+                    eprintln!("Failed to start user unit {unit}: {err}");
+                    exit_code = 4;
+                }
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs);
     }
 
     let finished = finished_jobs.borrow();
