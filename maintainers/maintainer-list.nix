@@ -27205,6 +27205,12 @@
     githubId = 7709;
     name = "Thomaz Leite";
   };
+  thngz = {
+    email = "georgkivivali7@gmail.com";
+    github = "thngz";
+    githubId = 54536253;
+    name = "Georg Kiviväli";
+  };
   tholo = {
     email = "ali0mhmz@gmail.com";
     github = "tholoo";
