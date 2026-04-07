@@ -5,6 +5,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
 
     # Inherit arguments given in mkDerivation
     qtWrapperArgs=(${qtWrapperArgs-})
+    qtWrapperArgs+=(--unset NIXPKGS_QT6_QML_IMPORT_PATH)
 
     qtHostPathSeen=()
 
