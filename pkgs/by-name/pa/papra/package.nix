@@ -17,12 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "papra";
-  version = "26.2.2";
+  version = "26.4.0";
+
   src = fetchFromGitHub {
     owner = "papra-hq";
     repo = "papra";
     tag = "@papra/app@${finalAttrs.version}";
-    hash = "sha256-0MIar+fBwXRE8LlVLZDx/C0GOYVpobDTqFwkMs2k06Y=";
+    hash = "sha256-wQdDBS+QRarZhEIRmLQ4VRtq73I5YFIN2P3ZtAZWvxw=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm;
     fetcherVersion = 3;
-    hash = "sha256-NQakyRlL6deG13yt+FlmVcVvEkNWHW0Lhf/3NecfwaE=";
+    hash = "sha256-8k8hzpyOQuHAPF+zzIhW+5vo6lHSyZeKAY+tYIf6jKU=";
     pnpmWorkspaces = [
       "@papra/app-client..."
       "@papra/app-server..."
