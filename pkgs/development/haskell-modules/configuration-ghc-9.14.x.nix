@@ -87,6 +87,7 @@ with haskellLib;
   parallel = doDistribute self.parallel_3_3_0_0;
   tagged = doDistribute self.tagged_0_8_10;
   unordered-containers = doDistribute self.unordered-containers_0_2_21;
+  HTTP = doDistribute self.HTTP_4000_5_0;
 
   #
   # Jailbreaks
