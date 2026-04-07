@@ -34,7 +34,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyside6
     rawpy
     scipy
-    setuptools-scm
     tifffile
     tqdm
   ];
