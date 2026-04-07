@@ -14,8 +14,33 @@
   fftwFloat,
   readline,
   gsl,
+  mpi,
+  adios2,
+  hdf5,
+  llvmPackages,
+  mpiSupport ? false,
+  adios2Support ? false,
+  hdf5Support ? false,
 }:
-
+let
+  casacorePackages = {
+    adios2 = adios2.override {
+      inherit mpi mpiSupport;
+    };
+    fftw = fftw.override {
+      inherit mpi;
+      enableMpi = mpiSupport;
+    };
+    fftwFloat = fftwFloat.override {
+      inherit mpi;
+      enableMpi = mpiSupport;
+    };
+    hdf5 = hdf5.override {
+      inherit mpi mpiSupport;
+      cppSupport = !mpiSupport;
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "casacore";
   version = "3.8.0";
@@ -27,31 +52,55 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NOxuHMCuHGk9XuWXMwQTN6kOFDI0QuHMgfNRDdlPw44=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     gfortran
     flex
     bison
-  ];
+  ]
+  ++ lib.optional mpiSupport mpi;
+
+  propagatedBuildInputs = [
+    wcslib
+    cfitsio
+  ]
+  ++ lib.optional hdf5Support casacorePackages.hdf5
+  ++ lib.optional mpiSupport mpi
+  ++ lib.optional adios2Support casacorePackages.adios2;
 
   buildInputs = [
     blas
     lapack
-    cfitsio
-    wcslib
-    fftw
-    fftwFloat
+    casacorePackages.fftw
+    casacorePackages.fftwFloat
     readline
     gsl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
+
+  patches = [
+    # Fix the generated .pc file: set Requires from a variable instead of
+    # leaving it empty, and remove hardcoded absolute cmake build paths from
+    # Cflags (which would embed /nix/store paths from the build environment).
+    ./casacore-pkgconfig.patch
   ];
 
   enableParallelBuilding = true;
 
-  strictDeps = true;
-
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_SHARED" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "BUILD_PYTHON3" false) # TODO: If/when we package python-casacore, this will change
+    (lib.cmakeBool "BUILD_PYTHON3" false)
+    (lib.cmakeBool "USE_OPENMP" true)
+    (lib.cmakeBool "USE_ADIOS2" adios2Support)
+    (lib.cmakeBool "USE_HDF5" hdf5Support)
+    (lib.cmakeBool "USE_MPI" mpiSupport)
+    (lib.cmakeBool "PORTABLE" true)
+    (lib.cmakeBool "USE_PCH" false)
+    (lib.cmakeBool "BUILD_FFTPACK_DEPRECATED" true) # Needed for casacpp
   ];
 
   meta = {
