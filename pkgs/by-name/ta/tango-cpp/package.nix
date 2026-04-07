@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tango Distributed Control System - C++ library";
     homepage = "https://gitlab.com/tango-controls/cppTango";
+    changelog = "https://gitlab.com/tango-controls/cppTango/-/blob/${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.gilice ];
