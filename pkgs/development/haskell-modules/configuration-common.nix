@@ -2090,8 +2090,14 @@ with haskellLib;
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  # Test suite does not compile.
-  feed = dontCheck super.feed;
+  # Test suite `readme` does not compile.
+  # https://github.com/haskell-party/feed/issues/77
+  # `readme-doctests` are also broken (can't find a variety of imports)
+  feed = overrideCabal {
+    buildTarget = "tests";
+    testTargets = [ "tests" ];
+    jailbreak = true;
+  } super.feed;
 
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
