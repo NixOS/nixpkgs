@@ -694,8 +694,6 @@ in
           "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
         };
 
-      services.dbus.enable = true;
-
       users.users.systemd-network = {
         uid = config.ids.uids.systemd-network;
         group = "systemd-network";
@@ -905,6 +903,9 @@ in
         ];
       };
     }
+    (lib.optionalAttrs (options ? services.dbus) {
+      services.dbus.enable = true;
+    })
     (lib.optionalAttrs (options ? security.polkit.extraConfig) {
       # Remove with systemd 259.4
       security.polkit.extraConfig = mkIf config.security.polkit.enable ''
