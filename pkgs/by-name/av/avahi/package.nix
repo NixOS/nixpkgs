@@ -150,6 +150,34 @@ stdenv.mkDerivation rec {
         hash = "sha256-rW6jmKg9oH44rRZow0zE4z6lfTlD8wpFUC8DaI/gruA=";
       })
     */
+    # https://github.com/avahi/avahi/pull/806 merged 2025-12-17
+    (fetchpatch {
+      name = "CVE-2025-68276.patch"; # AKA GHSA-mhf3-865v-g5rc
+      url = "https://github.com/avahi/avahi/commit/0c013e2e819be3bda74cecf48b5f64956cf8a760.patch";
+      hash = "sha256-kNOwl2DC2FR7CFvPQBBEYaSUSbFnR/ETH9JNGMwzzLE=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-68468.patch"; # AKA GHSA-cp79-r4x9-vf52
+      url = "https://github.com/avahi/avahi/commit/f66be13d7f31a3ef806d226bf8b67240179d309a.patch";
+      hash = "sha256-HkbKSN2LYqPfVnij1/n6ToN4vKugex3ZPxjHz6pN8eA=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-68471.patch"; # AKA GHSA-56rf-42xr-qmmg
+      url = "https://github.com/avahi/avahi/commit/9c6eb53bf2e290aed84b1f207e3ce35c54cc0aa1.patch";
+      hash = "sha256-V0OiC0UkZXhUnOUcrPZ+Xvph7MJMQ9DEXgVafoshSi4=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-24401.patch"; # AKA GHSA-h4vp-5m8j-f6w3
+      url = "https://github.com/avahi/avahi/commit/78eab31128479f06e30beb8c1cbf99dd921e2524.patch";
+      hash = "sha256-Iq7ghHS8gTJ5OeD6Bemis+wPJzKXb2P44qbtTaAaWZI=";
+    })
+    # https://github.com/avahi/avahi/pull/891 merged 2026-04-01
+    (fetchpatch {
+      name = "CVE-2026-34933.patch"; # AKA GHSA-w65r-6gxh-vhvc
+      url = "https://github.com/avahi/avahi/compare/0ccadca425af151ebb67f276e5cc88e50266a8e6%5E%5E...0ccadca425af151ebb67f276e5cc88e50266a8e6.patch";
+      hash = "sha256-yi40iuQmTAW+nLsOIJhh7kg4vG/lqT/PCaSEBPfF2mw=";
+    })
+
   ];
 
   depsBuildBuild = [
