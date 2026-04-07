@@ -81,6 +81,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       developer-guy
       jk
+      miniharinn
     ];
     platforms = lib.platforms.linux;
   };
