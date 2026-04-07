@@ -248,7 +248,7 @@ let
     "factory-reset.target.wants"
   ];
 
-  proxy_env = config.networking.proxy.envVars;
+  proxy_env = config.networking.proxy.envVars or { };
 
   json = pkgs.formats.json { };
 
