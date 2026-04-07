@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "neocd";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-03-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "neocd_libretro";
-    rev = "5eca2c8fd567b5261251c65ecafa8cf5b179d1d2";
-    hash = "sha256-72tmPCb7AXsamaQsMAPiYpgDR8DER2GTz4hcbN8wy7g=";
+    rev = "9216ca226f24e01e77fc2670035e97da154f3de4";
+    hash = "sha256-Mq9UOuPwmG2Di68jWUgCbBvG3jUCEMON8Kfly/aCdH4=";
   };
 
   makefile = "Makefile";

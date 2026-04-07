@@ -950,7 +950,8 @@
       ];
     "chess_com" =
       ps: with ps; [
-      ]; # missing inputs: chess-com-api
+        chess-com-api
+      ];
     "cisco_ios" =
       ps: with ps; [
         pexpect
@@ -1975,7 +1976,8 @@
       ];
     "freshr" =
       ps: with ps; [
-      ]; # missing inputs: pyfreshr
+        pyfreshr
+      ];
     "fressnapf_tracker" =
       ps: with ps; [
         fressnapftracker
@@ -2528,11 +2530,12 @@
         fnv-hash-fast
         ha-ffmpeg
         hap-python
+        homekit-audio-proxy
         ifaddr
         pyqrcode
         pyturbojpeg
         zeroconf
-      ]; # missing inputs: homekit-audio-proxy
+      ];
     "homekit_controller" =
       ps: with ps; [
         aioesphomeapi
@@ -4911,7 +4914,8 @@
       ];
     "prana" =
       ps: with ps; [
-      ]; # missing inputs: prana-api-client
+        prana-api-client
+      ];
     "private_ble_device" =
       ps: with ps; [
         aioesphomeapi
@@ -7497,6 +7501,7 @@
     "ccm15"
     "cert_expiry"
     "chacon_dio"
+    "chess_com"
     "clicksend_tts"
     "climate"
     "cloud"
@@ -7652,6 +7657,7 @@
     "freebox"
     "freedns"
     "freedompro"
+    "freshr"
     "fressnapf_tracker"
     "fritz"
     "fritzbox"
@@ -7743,6 +7749,7 @@
     "homeassistant_sky_connect"
     "homeassistant_yellow"
     "homee"
+    "homekit"
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
@@ -8086,6 +8093,7 @@
     "powerfox"
     "powerfox_local"
     "powerwall"
+    "prana"
     "private_ble_device"
     "probe_plus"
     "profiler"
