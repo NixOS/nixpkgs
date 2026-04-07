@@ -1,0 +1,13 @@
+diff --git a/CMake/Templates/OGRE.pc.in b/CMake/Templates/OGRE.pc.in
+index ce726134a9..9bc70db444 100644
+--- a/CMake/Templates/OGRE.pc.in
++++ b/CMake/Templates/OGRE.pc.in
+@@ -2,7 +2,7 @@ prefix=@OGRE_PREFIX_PATH@
+ exec_prefix=${prefix}
+ libdir=${prefix}/@OGRE_LIB_DIRECTORY@
+ includedir=${prefix}/include
+-plugindir=${libdir}/@OGRE_NEXT_PREFIX@
++plugindir=${libdir}@OGRE_PLUGIN_PATH@
+ 
+ Name: @OGRE_NEXT_PREFIX@ 
+ Description: Object-Oriented Graphics Rendering Engine
