@@ -1,6 +1,6 @@
 {
   lib,
-  python313,
+  python314,
   fetchFromGitLab,
   callPackage,
   stdenv,
@@ -9,7 +9,7 @@
 }:
 
 let
-  python = python313.override {
+  python = python314.override {
     self = python;
     packageOverrides = final: prev: {
       django = final.django_6;
@@ -21,6 +21,8 @@ let
     [
       aiohttp
       anonymizeip
+      arro3-core
+      arro3-io
       boto3
       brotli
       cxxfilt
@@ -38,7 +40,6 @@ let
       django-postgres-partition
       django-prometheus
       django-storages
-      django-valkey
       django-vcache
       django-vtasks
       duckdb
@@ -56,15 +57,12 @@ let
       uwsgi-chunked
       whitenoise
     ]
-    ++ lib.optional (pythonOlder "3.14") zstandard
     ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ django-storages.optional-dependencies.boto3
     ++ django-storages.optional-dependencies.azure
     ++ django-storages.optional-dependencies.google
-    ++ django-valkey.optional-dependencies.libvalkey
-    ++ django-valkey.optional-dependencies.lz4
     ++ django-vtasks.optional-dependencies.valkey
     ++ granian.optional-dependencies.reload
     ++ granian.optional-dependencies.uvloop
@@ -78,14 +76,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "6.0.9";
+  version = "6.1.4";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cv83nqoJob8rvBOFDUIr8kVSZQesG/ml+6n7yuZqP90=";
+    hash = "sha256-wju/QbIwdtNYQmRppCfjoaqb++spFZbqAsvBwwZyeUM=";
   };
 
   postPatch = ''
