@@ -79,11 +79,13 @@ buildPythonPackage (finalAttrs: {
     "test_barker"
     "test_mclmc"
     "test_mcse4"
+    "test_mean_and_std"
     "test_normal_univariate"
     "test_nuts__with_device"
     "test_nuts__with_jit"
     "test_nuts__without_device"
     "test_nuts__without_jit"
+    "test_smc__with_jit"
     "test_smc_waste_free__with_jit"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
