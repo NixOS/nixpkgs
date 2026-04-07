@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   gitMinimal,
+  icu,
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -11,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "beads";
-  version = "0.42.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "steveyegge";
+    owner = "gastownhall";
     repo = "beads";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3t+pm7vuFj3PH1oCJ/AnwbGupqleimNQnP2bRSBHrSg=";
+    hash = "sha256-D2jShGpkOWKx9aRmRvV5bmV8t0/Y2eAE8q0m54QrRN0=";
   };
 
-  vendorHash = "sha256-ovG0EWQFtifHF5leEQTFvTjGvc+yiAjpAaqaV0OklgE=";
+  vendorHash = "sha256-7DJgqJX2HDa9gcGD8fLNHLIXvGAEivYeDYx3snCUyCE=";
 
   subPackages = [ "cmd/bd" ];
 
@@ -31,15 +32,31 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = [ icu ];
+
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
   ];
 
-  # Skip security tests on Darwin - they check for /etc/passwd which isn't available in sandbox
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-skip=TestCleanupMergeArtifacts_CommandInjectionPrevention"
-  ];
+  # TestCheckMetadataVersionTracking: fails because the version jump from
+  # 0.55.0 (hardcoded in test fixture) to 1.0.0 triggers a "very old" warning
+  # instead of the expected "ok" status.
+  # TestAutoMigrateOnVersionBump_NoDatabase: expects a dolt database to exist
+  # for auto-migration, which is unavailable in the sandbox.
+  # TestCleanupMergeArtifacts_CommandInjectionPrevention: checks /etc/passwd
+  # which isn't available in the Darwin sandbox.
+  checkFlags =
+    let
+      skipTests = [
+        "TestCheckMetadataVersionTracking"
+        "TestAutoMigrateOnVersionBump_NoDatabase"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestCleanupMergeArtifacts_CommandInjectionPrevention"
+      ];
+    in
+    [ "-skip=${lib.concatStringsSep "|" skipTests}" ];
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
@@ -61,7 +78,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Lightweight memory system for AI coding agents with graph-based issue tracking";
-    homepage = "https://github.com/steveyegge/beads";
+    homepage = "https://github.com/gastownhall/beads";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kedry ];
     mainProgram = "bd";
