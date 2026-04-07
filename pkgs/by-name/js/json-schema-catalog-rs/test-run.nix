@@ -12,6 +12,23 @@ let
     }
   );
 
+  expectedOutput = builtins.toFile "expected-output" ''
+    {
+      "groups": [
+        {
+          "baseLocation": "/nix/store",
+          "name": "Example Schema",
+          "schemas": [
+            {
+              "id": "https://example.com/example-2.9.json",
+              "location": "${baseNameOf sample}"
+            }
+          ]
+        }
+      ],
+      "name": "Catalog"
+    }
+  '';
 in
 runCommand "json-schema-catalog-rs-test-run"
   {
@@ -19,26 +36,6 @@ runCommand "json-schema-catalog-rs-test-run"
       json-schema-catalog-rs
     ];
     inherit sample;
-    expectedOutput = ''
-      {
-        "groups": [
-          {
-            "baseLocation": "/nix/store",
-            "name": "Example Schema",
-            "schemas": [
-              {
-                "id": "https://example.com/example-2.9.json",
-                "location": "${baseNameOf sample}"
-              }
-            ]
-          }
-        ],
-        "name": "Catalog"
-      }
-    '';
-    passAsFile = [
-      "expectedOutput"
-    ];
   }
   ''
     set -u
@@ -48,7 +45,7 @@ runCommand "json-schema-catalog-rs-test-run"
 
     # Test a simple command
     json-schema-catalog new "$sample" > out.json
-    diff -U3 "$expectedOutputPath" out.json
+    diff -U3 "${expectedOutput}" out.json
 
     touch $out
   ''
