@@ -15,7 +15,7 @@
   qtwayland,
   kcoreaddons,
   lz4,
-  xxHash,
+  xxhash,
   ffmpeg_6,
   protobuf,
   openal-soft,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     lz4
-    xxHash
+    xxhash
     ffmpeg_6
     openal-soft
     minizip-ng

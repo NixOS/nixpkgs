@@ -4,7 +4,7 @@
   cmake,
   fetchFromGitHub,
   openssl,
-  xxHash,
+  xxhash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    xxHash
+    xxhash
   ];
 
   postPatch = ''

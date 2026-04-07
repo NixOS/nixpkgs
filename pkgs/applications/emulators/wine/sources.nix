@@ -92,6 +92,14 @@ let
     })
   ];
 
+  patches-add-dll-accept-device-paths-wine-older-than-11_1 = [
+    (pkgs.fetchpatch {
+      name = "add-dll-accept-device-paths";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/401910ae25a11032f2da7baa1666d71e8bca2496.patch";
+      hash = "sha256-2726u9/vhhx39Tq7vOw24hslmeyZZEbxRRqe7JMFvCU";
+    })
+  ];
+
   inherit (pkgs) writeShellScript;
 in
 rec {
@@ -123,7 +131,8 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ];
+    ]
+    ++ patches-add-dll-accept-device-paths-wine-older-than-11_1;
 
     updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}

@@ -86,7 +86,7 @@ buildPythonPackage rec {
     installShellCompletion --cmd poetry \
       --bash <($out/bin/poetry completions bash) \
       --fish <($out/bin/poetry completions fish) \
-      --zsh <($out/bin/poetry completions zsh) \
+      --zsh <($out/bin/poetry completions zsh)
   '';
 
   nativeCheckInputs = [

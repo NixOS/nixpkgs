@@ -23,7 +23,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   preBuild = ''
-    # Don't use NPM to fetch assets. Assets are included in sdist.
+    # Don't use npm to fetch assets. Assets are included in sdist.
     export CI=1
   '';
 

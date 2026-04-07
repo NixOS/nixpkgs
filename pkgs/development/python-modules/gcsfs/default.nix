@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2026.1.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "gcsfs";
     tag = version;
-    hash = "sha256-WAHRaLsb6znzfuTOtulDhI0rQOOmmcgv9UEEMujPgkE=";
+    hash = "sha256-eTIAGPin7Ej+aar5ZXATeYfqQJrGnyWfUdBIfq5eq/c=";
   };
 
   build-system = [
