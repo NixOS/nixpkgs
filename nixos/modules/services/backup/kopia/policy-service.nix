@@ -11,122 +11,140 @@ in
 {
   options.services.kopia.backups = lib.mkOption {
     type = lib.types.attrsOf (
-      lib.types.submodule (
-        { ... }:
-        {
-          options.policy = {
-            retention = {
-              keepLatest = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Number of latest snapshots to keep.";
-              };
-              keepHourly = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Number of hourly snapshots to keep.";
-              };
-              keepDaily = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Number of daily snapshots to keep.";
-              };
-              keepWeekly = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Number of weekly snapshots to keep.";
-              };
-              keepMonthly = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Number of monthly snapshots to keep.";
-              };
-              keepAnnual = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Number of annual snapshots to keep.";
-              };
-            };
-
-            compression = lib.mkOption {
-              type = with lib.types; nullOr str;
+      lib.types.submodule {
+        options.policy = {
+          retention = {
+            keepLatest = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
               default = null;
-              description = ''
-                Compression algorithm for snapshots.
-                Run `kopia policy set --help` for the list of supported algorithms.
-              '';
-              example = "zstd";
+              description = "Number of latest snapshots to keep.";
             };
-
-            files = {
-              ignore = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-                description = "List of glob patterns to ignore.";
-                example = [
-                  "*.tmp"
-                  "*.log"
-                ];
-              };
-              ignoreDotFiles = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-                description = "List of dot-ignore files to source ignore patterns from.";
-                example = [
-                  ".gitignore"
-                  ".kopiaignore"
-                ];
-              };
-              ignoreCacheDirs = lib.mkOption {
-                type = with lib.types; nullOr bool;
-                default = null;
-                description = "Whether to ignore cache directories.";
-              };
-              maxFileSize = lib.mkOption {
-                type = with lib.types; nullOr int;
-                default = null;
-                description = "Maximum file size (in bytes) to include in backup.";
-              };
-              oneFileSystem = lib.mkOption {
-                type = with lib.types; nullOr bool;
-                default = null;
-                description = "Whether to stay within one filesystem when finding files.";
-              };
-              noParentIgnore = lib.mkOption {
-                type = with lib.types; nullOr bool;
-                default = null;
-                description = "Whether to not inherit ignore patterns from parent directories.";
-              };
+            keepHourly = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
+              default = null;
+              description = "Number of hourly snapshots to keep.";
             };
-
-            errorHandling = {
-              ignoreFileErrors = lib.mkOption {
-                type = with lib.types; nullOr bool;
-                default = null;
-                description = "Whether to ignore errors reading files.";
-              };
-              ignoreDirectoryErrors = lib.mkOption {
-                type = with lib.types; nullOr bool;
-                default = null;
-                description = "Whether to ignore errors reading directories.";
-              };
-              ignoreUnknownTypes = lib.mkOption {
-                type = with lib.types; nullOr bool;
-                default = null;
-                description = "Whether to ignore unknown file types.";
-              };
+            keepDaily = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
+              default = null;
+              description = "Number of daily snapshots to keep.";
             };
-
-            splitter = {
-              algorithm = lib.mkOption {
-                type = with lib.types; nullOr str;
-                default = null;
-                description = "Splitter algorithm to use.";
-              };
+            keepWeekly = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
+              default = null;
+              description = "Number of weekly snapshots to keep.";
+            };
+            keepMonthly = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
+              default = null;
+              description = "Number of monthly snapshots to keep.";
+            };
+            keepAnnual = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
+              default = null;
+              description = "Number of annual snapshots to keep.";
             };
           };
-        }
-      )
+
+          compression = lib.mkOption {
+            type =
+              with lib.types;
+              nullOr (enum [
+                "none"
+                "deflate-best-compression"
+                "deflate-best-speed"
+                "deflate-default"
+                "gzip"
+                "gzip-best-compression"
+                "gzip-best-speed"
+                "pgzip"
+                "pgzip-best-compression"
+                "pgzip-best-speed"
+                "s2-better"
+                "s2-default"
+                "s2-parallel-4"
+                "s2-parallel-8"
+                "zstd"
+                "zstd-better-compression"
+                "zstd-fastest"
+              ]);
+            default = null;
+            description = ''
+              Compression algorithm for snapshots.
+              Run `kopia policy set --help` for the list of supported algorithms.
+            '';
+            example = "zstd";
+          };
+
+          files = {
+            ignore = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "List of glob patterns to ignore.";
+              example = [
+                "*.tmp"
+                "*.log"
+              ];
+            };
+            ignoreDotFiles = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "List of dot-ignore files to source ignore patterns from.";
+              example = [
+                ".gitignore"
+                ".kopiaignore"
+              ];
+            };
+            ignoreCacheDirs = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = "Whether to ignore cache directories.";
+            };
+            maxFileSize = lib.mkOption {
+              type = with lib.types; nullOr ints.positive;
+              default = null;
+              description = "Maximum file size (in bytes) to include in backup.";
+            };
+            oneFileSystem = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = "Whether to stay within one filesystem when finding files.";
+            };
+            noParentIgnore = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = "Whether to not inherit ignore patterns from parent directories.";
+            };
+          };
+
+          errorHandling = {
+            ignoreFileErrors = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = "Whether to ignore errors reading files.";
+            };
+            ignoreDirectoryErrors = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = "Whether to ignore errors reading directories.";
+            };
+            ignoreUnknownTypes = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = "Whether to ignore unknown file types.";
+            };
+          };
+
+          splitter = {
+            algorithm = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = "Splitter algorithm to use.";
+            };
+          };
+        };
+      }
+
     );
   };
 
@@ -230,7 +248,7 @@ in
         let
           kopiaExe = lib.getExe cfg.package;
           policyArgs = lib.concatStringsSep " " (mkPolicyArgs backup);
-          policyScript = pkgs.writeShellScript "kopia-policy-${name}" ''
+          policyScript = ''
             set -euo pipefail
             export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
 
@@ -243,13 +261,12 @@ in
           description = "Kopia policy for ${name}";
           requires = [ (helpers.mkUnitQualifiedName "repository" name) ];
           after = [ (helpers.mkUnitQualifiedName "repository" name) ];
-          before = lib.optional (backup.paths != [ ]) (helpers.mkUnitQualifiedName "snapshot" name);
-          wantedBy = lib.optional (backup.paths != [ ]) (helpers.mkUnitQualifiedName "snapshot" name);
+          before = lib.mkIf (backup.paths != [ ]) [ (helpers.mkUnitQualifiedName "snapshot" name) ];
+          wantedBy = lib.mkIf (backup.paths != [ ]) [ (helpers.mkUnitQualifiedName "snapshot" name) ];
           environment = helpers.mkKopiaEnvironment name;
           restartIfChanged = false;
-          serviceConfig = helpers.mkBaseServiceConfig name backup // {
-            ExecStart = policyScript;
-          };
+          serviceConfig = helpers.mkBaseServiceConfig name backup;
+          script = policyScript;
         }
       ) (lib.filterAttrs (_: b: helpers.hasPolicySet b) cfg.backups);
     };

@@ -303,44 +303,41 @@ in
 {
   options.services.kopia.backups = lib.mkOption {
     type = lib.types.attrsOf (
-      lib.types.submodule (
-        { ... }:
-        {
-          options = {
-            repository = lib.mkOption {
-              type = lib.types.attrTag {
-                filesystem = lib.mkOption {
-                  type = filesystemSubmodule;
-                  description = ''
-                    Local filesystem repository backend.
-                  '';
-                };
-                s3 = lib.mkOption {
-                  type = s3Submodule;
-                  description = ''
-                    S3 repository backend.
-                  '';
-                };
-                sftp = lib.mkOption {
-                  type = sftpSubmodule;
-                  description = ''
-                    SFTP repository backend.
-                  '';
-                };
-                webdav = lib.mkOption {
-                  type = webdavSubmodule;
-                  description = ''
-                    WebDAV repository backend.
-                  '';
-                };
+      lib.types.submodule {
+        options = {
+          repository = lib.mkOption {
+            type = lib.types.attrTag {
+              filesystem = lib.mkOption {
+                type = filesystemSubmodule;
+                description = ''
+                  Local filesystem repository backend.
+                '';
               };
-              description = ''
-                Repository backend configuration. Exactly one backend must be selected.
-              '';
+              s3 = lib.mkOption {
+                type = s3Submodule;
+                description = ''
+                  S3 repository backend.
+                '';
+              };
+              sftp = lib.mkOption {
+                type = sftpSubmodule;
+                description = ''
+                  SFTP repository backend.
+                '';
+              };
+              webdav = lib.mkOption {
+                type = webdavSubmodule;
+                description = ''
+                  WebDAV repository backend.
+                '';
+              };
             };
+            description = ''
+              Repository backend configuration. Exactly one backend must be selected.
+            '';
           };
-        }
-      )
+        };
+      }
     );
   };
 
