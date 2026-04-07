@@ -6,16 +6,7 @@
 {
   meta.maintainers = with lib.maintainers; [ efficacy38 ];
 
-  imports = [
-    ./repository-service.nix
-    ./policy-service.nix
-    ./snapshot-service.nix
-    ./web-service.nix
-  ];
-
-  options = {
-    services.kopia = {
-      package = lib.mkPackageOption pkgs "kopia" { };
+  options.services.kopia.package = lib.mkPackageOption pkgs "kopia" { };
 
        backups = lib.mkOption {
          description = ''
