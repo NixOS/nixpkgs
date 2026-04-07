@@ -11,75 +11,72 @@ in
 {
   options.services.kopia.backups = lib.mkOption {
     type = lib.types.attrsOf (
-      lib.types.submodule (
-        { ... }:
-        {
-          options.web = {
-            enable = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = ''
-                Whether to enable the Kopia web UI server.
-              '';
-            };
-
-            address = lib.mkOption {
-              type = lib.types.str;
-              default = "127.0.0.1:51515";
-              description = ''
-                Address and port for the Kopia web server to listen on.
-              '';
-            };
-
-            serverUsername = lib.mkOption {
-              type = lib.types.str;
-              default = "kopia";
-              description = ''
-                Username for the Kopia web server (basic auth).
-              '';
-            };
-
-            serverPassword = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = ''
-                Password for the Kopia web server (basic auth).
-                Mutually exclusive with {option}`web.serverPasswordFile`.
-
-                ::: {.warning}
-                This password will be stored in the Nix store in plain text.
-                Prefer {option}`web.serverPasswordFile` instead.
-                :::
-              '';
-            };
-
-            serverPasswordFile = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = ''
-                Path to a file containing the password for the Kopia web
-                server. Mutually exclusive with {option}`web.serverPassword`.
-              '';
-            };
-
-            tlsCertFile = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = ''
-                Path to a TLS certificate file for the Kopia web server.
-              '';
-            };
-
-            tlsKeyFile = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = ''
-                Path to a TLS key file for the Kopia web server.
-              '';
-            };
+      lib.types.submodule {
+        options.web = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to enable the Kopia web UI server.
+            '';
           };
-        }
-      )
+
+          address = lib.mkOption {
+            type = lib.types.str;
+            default = "127.0.0.1:51515";
+            description = ''
+              Address and port for the Kopia web server to listen on.
+            '';
+          };
+
+          serverUsername = lib.mkOption {
+            type = lib.types.str;
+            default = "kopia";
+            description = ''
+              Username for the Kopia web server (basic auth).
+            '';
+          };
+
+          serverPassword = lib.mkOption {
+            type = with lib.types; nullOr str;
+            default = null;
+            description = ''
+              Password for the Kopia web server (basic auth).
+              Mutually exclusive with {option}`web.serverPasswordFile`.
+
+              ::: {.warning}
+              This password will be stored in the Nix store in plain text.
+              Prefer {option}`web.serverPasswordFile` instead.
+              :::
+            '';
+          };
+
+          serverPasswordFile = lib.mkOption {
+            type = with lib.types; nullOr str;
+            default = null;
+            description = ''
+              Path to a file containing the password for the Kopia web
+              server. Mutually exclusive with {option}`web.serverPassword`.
+            '';
+          };
+
+          tlsCertFile = lib.mkOption {
+            type = with lib.types; nullOr str;
+            default = null;
+            description = ''
+              Path to a TLS certificate file for the Kopia web server.
+            '';
+          };
+
+          tlsKeyFile = lib.mkOption {
+            type = with lib.types; nullOr str;
+            default = null;
+            description = ''
+              Path to a TLS key file for the Kopia web server.
+            '';
+          };
+        };
+      }
     );
   };
 
