@@ -1581,6 +1581,12 @@ with haskellLib;
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   }) super.hpc-coveralls;
 
+  hpc-codecov = overrideCabal (drv: {
+    # Work around test suite race condition due to tasty >= 1.5.4
+    # https://github.com/8c6794b6/hpc-codecov/issues/52
+    testFlags = drv.testFlags or [ ] ++ [ "-j1" ];
+  }) super.hpc-codecov;
+
   # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr = appendPatch ./patches/sexpr-0.2.1.patch (
     overrideCabal (drv: {
