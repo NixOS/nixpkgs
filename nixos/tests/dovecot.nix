@@ -11,9 +11,12 @@
       services.postfix.enable = true;
       services.dovecot2 = {
         enable = true;
+        enablePAM = true;
         settings = {
           dovecot_config_version = dovecot.version;
           dovecot_storage_version = dovecot.version;
+          mail_driver = "maildir";
+          mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
           protocols = [
             "imap"
             "pop3"
