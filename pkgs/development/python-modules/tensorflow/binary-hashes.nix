@@ -29,6 +29,10 @@
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp312-cp312-manylinux_2_27_x86_64.whl";
     sha256 = "1h0kpc9kflb1xr26ibw4xhbz6hp1rcsznf4rhcjvj3p7qi1mdfdk";
   };
+  x86_64-linux_313_gpu = {
+    url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp313-cp313-manylinux_2_27_x86_64.whl";
+    sha256 = "01jljjx1n46x57d6n33fgs86y09gmxqblcph8pxhwrdrra6xmn79";
+  };
   aarch64-linux_310 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp310-cp310-manylinux_2_27_aarch64.whl";
     sha256 = "0pcskswb7v82282w4mmj5smy5pmwbbw336b1x05chw6g4n5r75vw";
