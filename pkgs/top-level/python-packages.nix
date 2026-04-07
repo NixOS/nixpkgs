@@ -15438,6 +15438,10 @@ self: super: with self; {
 
   pytest-retry = callPackage ../development/python-modules/pytest-retry { };
 
+  pytest-revealtype-injector =
+    callPackage ../development/python-modules/pytest-revealtype-injector
+      { };
+
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
 
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
