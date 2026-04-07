@@ -285,7 +285,12 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.impureTests = {
-    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv)
+    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv) etc
+    bnorm = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "bnorm";
+      testScript = "MIOpenDriver bnorm -n 16 -c 16 -H 512 -W 512 -m 1 -F 1 -s 1 -r 1";
+    };
     conv = callPackage ./test-runtime-compilation.nix {
       miopen = finalAttrs.finalPackage;
       name = "conv";
