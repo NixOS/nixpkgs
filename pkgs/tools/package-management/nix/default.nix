@@ -187,21 +187,17 @@ lib.makeExtensible (
 
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.31.3";
+          version = "2.31.4";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-oe0YWe8f+pwQH4aYD2XXLW5iEHyXNUddurqJ5CUVCIk=";
+            hash = "sha256-f/haYfcI+9IiYVH+g6cjhF8cK7QWHAFfcPtF+57ujZ0=";
           };
         }).appendPatches
-          [
-            lowdown30Patch
-            ./patches/ghsa-g3g9-5vj6-r3gj-2.31.patch
-            ./patches/landlock-abstract-socket-hardening-2.31.patch
-          ];
+          [ ];
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
