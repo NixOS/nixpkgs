@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "tea";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "tea";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yaktVULY9eGRyWVqbwjZSo5d9DhHJMycfdEwZgxaLnw=";
+    sha256 = "sha256-fycLPF7JBkc9Cjw9mU4cikP9dJzXLa4WAkbZ/+aG6Yw=";
   };
 
-  vendorHash = "sha256-u4GTrdxmsfxC8s0LwQbsbky/zk1pW5VNSp4+7ZCIxzY=";
+  vendorHash = "sha256-tPlpNfBTcfBJGI0PFD2B1J1nH3wQwJ8uqGcje7wzKTo=";
 
   ldflags = [
     "-s"
