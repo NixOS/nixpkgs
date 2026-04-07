@@ -10,7 +10,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-mystrom";
   version = "2.7.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-mystrom";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zg/t2EQ6h8fThbV3U1h3Bs9pxOmlswicR3dREoQuuoY=";
   };
 
@@ -48,9 +48,9 @@ buildPythonPackage rec {
       There is support for bulbs, motion sensors, plugs and buttons.
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-mystrom";
-    changelog = "https://github.com/home-assistant-ecosystem/python-mystrom/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-ecosystem/python-mystrom/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mystrom";
   };
-}
+})
