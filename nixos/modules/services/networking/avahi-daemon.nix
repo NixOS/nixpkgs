@@ -155,8 +155,12 @@ in
 
     wideArea = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "Whether to enable wide-area service discovery.";
+      default = false;
+      description = ''
+        Whether to enable wide-area service discovery.
+
+        This is currently disabled by default as a mitigation for `CVE-2024-52615`/`GHSA-x6vp-f33h-h32g`.
+      '';
     };
 
     reflector = lib.mkOption {
