@@ -82,30 +82,24 @@ in
 
   config = lib.mkIf (cfg.backups != { }) {
     assertions = lib.flatten (
-      lib.mapAttrsToList (
-        name: backup:
-        let
-          prefix = "services.kopia.backups.${name}";
-        in
-        [
-          {
-            assertion =
-              backup.web.enable -> (backup.web.serverPassword != null || backup.web.serverPasswordFile != null);
-            message = "${prefix}: one of web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
-          }
-          (helpers.mkMutualExclusionAssertion {
-            inherit name;
-            optionA = "web.serverPassword";
-            optionB = "web.serverPasswordFile";
-            valueA = backup.web.serverPassword;
-            valueB = backup.web.serverPasswordFile;
-          })
-          {
-            assertion = (backup.web.tlsCertFile != null) == (backup.web.tlsKeyFile != null);
-            message = "${prefix}: both web.tlsCertFile and web.tlsKeyFile must be set together";
-          }
-        ]
-      ) cfg.backups
+      lib.mapAttrsToList (name: backup: [
+        {
+          assertion =
+            backup.web.enable -> (backup.web.serverPassword != null || backup.web.serverPasswordFile != null);
+          message = "services.kopia.backups.${name}: one of web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
+        }
+        (helpers.mkMutualExclusionAssertion {
+          inherit name;
+          optionA = "web.serverPassword";
+          optionB = "web.serverPasswordFile";
+          valueA = backup.web.serverPassword;
+          valueB = backup.web.serverPasswordFile;
+        })
+        {
+          assertion = (backup.web.tlsCertFile != null) == (backup.web.tlsKeyFile != null);
+          message = "services.kopia.backups.${name}: both web.tlsCertFile and web.tlsKeyFile must be set";
+        }
+      ]) cfg.backups
     );
 
     warnings = lib.flatten (
