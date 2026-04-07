@@ -116,6 +116,9 @@ with haskellLib;
   text-iso8601 = doJailbreak super.text-iso8601;
   aeson = doJailbreak super.aeson;
 
+  # https://github.com/haskell-party/feed/issues/76
+  feed = doJailbreak super.feed; # time<1.15, base<4.22
+
   # https://github.com/well-typed/cborg/issues/373
   cborg = doJailbreak super.cborg;
   serialise = doJailbreak (
