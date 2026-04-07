@@ -26,6 +26,7 @@ in
           openDefaultPorts = true;
           cert = "${idA}/cert.pem";
           key = "${idA}/key.pem";
+          guiAddress = "unix:///run/syncthing/syncthing.sock";
           settings = {
             devices.b.id = lib.fileContents "${idB}/id";
             devices.c.id = lib.fileContents "${idC}/id";
