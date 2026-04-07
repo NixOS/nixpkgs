@@ -9,6 +9,7 @@
   fetchurl,
   hostPlatform ? stdenv.hostPlatform,
   supportedTargetFlutterPlatforms,
+  stamps,
 }:
 
 let
@@ -33,12 +34,12 @@ let
   artifacts = {
     universal = [
       {
-        path = "flutter/fonts/3012db47f3130e62f7cc0beabff968a33cbec8d8/fonts.zip";
+        path = lib.removePrefix "flutter_infra_release/" stamps."material_fonts.stamp";
         target = "bin/cache/artifacts/material_fonts";
         hash = "sha256-5W+o6btFif3pZL495FHz5bJR5KHq+x3JjZSt0DTdWoY=";
       }
       {
-        path = "gradle-wrapper/fd5c1f2c013565a3bea56ada6df9d2b8e96d56aa/gradle-wrapper.tgz";
+        path = lib.removePrefix "flutter_infra_release/" stamps."gradle_wrapper.stamp";
         target = "bin/cache/artifacts/gradle_wrapper";
         hash = "sha256-MelCi68aKy9IXxEQxYmfhSZJsz1Goumwf50XdS1QGQo=";
       }
@@ -179,32 +180,36 @@ let
         target = "bin/cache/artifacts/engine/ios-release";
       }
       {
-        path = "ios-usb-dependencies/libimobiledevice/0bf0f9e941c85d06ce4b5909d7a61b3a4f2a6a05/libimobiledevice.zip";
+        path = "ios-usb-dependencies/libimobiledevice/${
+          stamps."libimobiledevice.stamp"
+        }/libimobiledevice.zip";
         target = "bin/cache/artifacts/libimobiledevice";
         hash = "sha256-EPzWDY5SYegep6DB9ESd/ApklzLtE8reEllMUPzmkLg=";
       }
       {
-        path = "ios-usb-dependencies/libusbmuxd/19d6bec393c9f9b31ccb090059f59268da32e281/libusbmuxd.zip";
+        path = "ios-usb-dependencies/libusbmuxd/${stamps."libusbmuxd.stamp"}/libusbmuxd.zip";
         target = "bin/cache/artifacts/libusbmuxd";
         hash = "sha256-RQT0Kq8rKKgokp1haASMZ8K84+M2ZbaJcs/MunZ7/L0=";
       }
       {
-        path = "ios-usb-dependencies/libplist/cf5897a71ea412ea2aeb1e2f6b5ea74d4fabfd8c/libplist.zip";
+        path = "ios-usb-dependencies/libplist/${stamps."libplist.stamp"}/libplist.zip";
         target = "bin/cache/artifacts/libplist";
         hash = "sha256-cx5758EQb/0SkrVusXGFzH2dUChzFd5dFpMKxlxKbS8=";
       }
       {
-        path = "ios-usb-dependencies/openssl/22dbb176deef7d9a80f5c94f57a4b518ea935f50/openssl.zip";
+        path = "ios-usb-dependencies/openssl/${stamps."openssl.stamp"}/openssl.zip";
         target = "bin/cache/artifacts/openssl";
         hash = "sha256-erz3j0oIZm2IqvFD41APkTgz7YZaaDReokMwGhFCsmA=";
       }
       {
-        path = "ios-usb-dependencies/libimobiledeviceglue/050ff3bf8fdab6ce53a2ddc6ae49b11b1c02a168/libimobiledeviceglue.zip";
+        path = "ios-usb-dependencies/libimobiledeviceglue/${
+          stamps."libimobiledeviceglue.stamp"
+        }/libimobiledeviceglue.zip";
         target = "bin/cache/artifacts/libimobiledeviceglue";
         hash = "sha256-4rXsfBxIaByVcIuzs05G5RergFZrgaBs1XBmu7ibwAA=";
       }
       {
-        path = "ios-usb-dependencies/ios-deploy/7a29ab0b6d611f2bf5de4b6f929a82a091866307/ios-deploy.zip";
+        path = "ios-usb-dependencies/ios-deploy/${stamps."ios-deploy.stamp"}/ios-deploy.zip";
         target = "bin/cache/artifacts/ios-deploy";
         hash = "sha256-1p6agbzur4xFai4ZzzjHp4ZvRv+VWcPygBgBYQdQ2Vw=";
       }

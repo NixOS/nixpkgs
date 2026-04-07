@@ -1,5 +1,6 @@
 {
   scope,
+  stamps,
   lib,
   stdenv,
   dart,
@@ -191,7 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
           channel = channel;
           repositoryUrl = "https://github.com/flutter/flutter.git";
           frameworkRevision = "nixpkgs000000000000000000000000000000000";
+          engineContentHash = "nixpkgs000000000000000000000000000000000";
           frameworkCommitDate = "1970-01-01 00:00:00";
+          engineCommitDate = "1970-01-01 00:00:00";
+          engineBuildDate = "1970-01-01 00:00:00";
           engineRevision = engineVersion;
           dartSdkVersion = dartVersion;
         };
@@ -199,18 +203,31 @@ stdenv.mkDerivation (finalAttrs: {
     } bin/cache/flutter.version.json
     jq --arg version "$(jq --raw-output .version ${dart}/bin/resources/devtools/version.json)" '. + {devToolsVersion: $version}' bin/cache/flutter.version.json | sponge bin/cache/flutter.version.json
     echo "${engineVersion}" > bin/cache/engine.stamp
+    touch bin/cache/engine.realm
+    cp ${
+      writeTextFile {
+        name = "engine_stamp.json";
+        text = builtins.toJSON {
+          content_hash = "nixpkgs000000000000000000000000000000000";
+          git_revision = "nixpkgs000000000000000000000000000000000";
+          build_date = "1970-01-01 00:00:00";
+          build_time_ms = 0;
+          git_revision_date = "1970-01-01 00:00:00";
+        };
+      }
+    } bin/cache/engine_stamp.json
+    ${lib.concatStringsSep "" (
+      lib.mapAttrsToList (name: value: ''
+        echo "${value}" > bin/cache/${name}
+      '') stamps
+    )}
   ''
   # Suppress a small error now that `.gradle`'s location changed.
   # Location changed because of the patch "gradle-flutter-tools-wrapper.patch".
   + ''
     mkdir --parents packages/flutter_tools/gradle/.gradle
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
+  ''
+  + ''
     ${lib.concatMapStrings (artifact: ''
       ${lib.optionalString (
         artifact.target == "bin/cache/flutter_web_sdk"
@@ -249,6 +266,12 @@ stdenv.mkDerivation (finalAttrs: {
         rm --recursive --force "$temp_path"
       fi
     '') artifacts}
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
 
     cp --recursive . $out
     ln --symbolic --force ${dart} $out/bin/cache/dart-sdk
@@ -315,7 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     $out/bin/flutter config --android-studio-dir $HOME
     $out/bin/flutter config --android-sdk $HOME
-    $out/bin/flutter --version | fgrep --quiet '${builtins.substring 0 10 engineVersion}'
+    $out/bin/flutter --version | grep -F --quiet '${builtins.substring 0 10 engineVersion}'
 
     runHook postInstallCheck
   '';

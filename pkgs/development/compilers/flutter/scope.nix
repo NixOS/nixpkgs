@@ -94,6 +94,8 @@ lib.makeScope newScope (
         inherit outputs;
       };
 
+    stamps = import ./stamps.nix;
+
     host-artifacts = self.callPackage ./host-artifacts.nix { };
 
     all-artifacts = self.callPackage ./all-artifacts.nix { };
