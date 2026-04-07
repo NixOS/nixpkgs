@@ -12,6 +12,8 @@
   pook,
   pyright,
   pytestCheckHook,
+  pytest-revealtype-injector,
+  rnc2rng,
   typeguard,
   types-html5lib,
   typing-extensions,
@@ -20,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-lxml";
-  version = "2026.01.01";
+  version = "2026.02.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = finalAttrs.version;
-    hash = "sha256-odkIwuh2VxDliRd6cPTCBSz19zxIBOBlVN0Sisngkn0=";
+    hash = "sha256-bjJnVBFLjkuM/czbsEAcwWGbiuTyr9nyx9TCVLn/U+Y=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];
@@ -53,6 +55,8 @@ buildPythonPackage (finalAttrs: {
     lxml
     pook
     pytestCheckHook
+    pytest-revealtype-injector
+    rnc2rng
     typeguard
     urllib3
   ]
@@ -60,25 +64,24 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "lxml-stubs" ];
 
+  pytestFlags = [
+    "--revealtype-disable-adapter=basedpyright"
+    "--revealtype-disable-adapter=pyrefly"
+    "--revealtype-disable-adapter=ty"
+    "--revealtype-mypy-config=tests/mypy.ini"
+  ];
+
   # there may only be one conftest.py
   preCheck = ''
     rm -r tests/static
     mv tests/runtime/* tests/
     rmdir tests/runtime
     substituteInPlace tests/conftest.py \
-      --replace-fail '"pytest-revealtype-injector",' "" \
       --replace-fail 'runtime.register_strategy' 'tests.register_strategy'
   '';
 
   disabledTests = [
-    "test_single_ns_all_tag_2"
-    "test_default_ns"
-    # Tests require network access
-    "TestRelaxNGInput"
-    "TestXmldtdid"
-    "TestIddict"
-    "TestParseid"
-    # BaseExceptionGroup: Hypothesis found 5 distinct failures. (5 sub-exceptions)
+    # BaseExceptionGroup: Hypothesis found multiple distinct failures.
     "test_start_arg_bad_1"
     "test_stop_arg_bad_1"
     "test_index_arg_bad_1"
