@@ -12,7 +12,7 @@
   config,
   enableCuda ? config.cudaSupport,
   cudaPackages,
-  openmp ? null,
+  llvmPackages,
 }@inputs:
 
 let
@@ -36,14 +36,13 @@ effectiveStdenv.mkDerivation rec {
     sha256 = "sha256-Anen1YtXsSPhk8DpA4JtADIz9m8oXFl9umlkb4iImf8=";
   };
 
-  nativeBuildInputs = [
-  ]
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_nvcc
+    ];
 
   # Use compatible indexing for lapack and blas used
   buildInputs =
@@ -57,7 +56,7 @@ effectiveStdenv.mkDerivation rec {
       mpfr
     ]
     ++ lib.optionals effectiveStdenv.cc.isClang [
-      openmp
+      llvmPackages.openmp
     ]
     ++ lib.optionals enableCuda [
       cudaPackages.cuda_cudart
