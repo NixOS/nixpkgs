@@ -24,6 +24,20 @@ let
 
     cargoHash = "sha256-ylQtZa3ZRs38mhge5tLLCRpnUdHYSjuZOwU+/6TO8Cw=";
 
+    cargoBuildFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
+
+    cargoCheckFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
+
     nativeBuildInputs = [
       pkg-config
       perl

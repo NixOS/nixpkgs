@@ -16,6 +16,7 @@
   sqlite,
   lld,
   writableTmpDirAsHomeHook,
+  fetchpatch,
 
   # Test deps
   curl,
@@ -46,6 +47,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # Fix c_char mismatch on aarch64-linux
+    # PR at https://github.com/denoland/deno/pull/33179
+    (fetchpatch {
+      url = "https://github.com/denoland/deno/commit/fd331552de39501d47c43dc4b0c637b969402ab1.patch";
+      hash = "sha256-AIqLbTnBO2VUFiTumEZFORqSyfzB6chdvJQq8HeAM30=";
+    })
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
