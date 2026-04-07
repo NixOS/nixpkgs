@@ -9921,10 +9921,6 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kuma-cp = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kuma-cp" ];
-    pname = "kuma-cp";
-  };
   kuma-dp = callPackage ../applications/networking/cluster/kuma {
     components = [ "kuma-dp" ];
     pname = "kuma-dp";
