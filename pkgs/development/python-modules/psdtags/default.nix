@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Read and write layered TIFF ImageSourceData and ImageResources tags";
-    homepage = "https://pypi.org/project/psdtags";
+    homepage = "https://github.com/cgohlke/psdtags";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ paperdigits ];
   };
