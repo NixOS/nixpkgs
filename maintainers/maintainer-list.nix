@@ -27989,6 +27989,12 @@
     githubId = 787843;
     keys = [ { fingerprint = "E631 8869 586F 99B4 F6E6  D785 5942 58F0 389D 2802"; } ];
   };
+  twig = {
+    name = "Twig";
+    github = "justtemmie";
+    githubId = 47639983;
+    email = "git@beaver.mom";
+  };
   twitchy0 = {
     email = "code@nitinpassa.com";
     github = "twitchy0";
