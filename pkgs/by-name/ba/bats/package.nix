@@ -208,6 +208,9 @@ resholve.mkDerivation rec {
     upstream = bats.unresholved.overrideAttrs (old: {
       name = "${bats.name}-tests";
       dontInstall = true; # just need the build directory
+      # after 411981, make-symlinks-relative breaks a parallelization test:
+      # "setup_file is not over parallelized"
+      dontRewriteSymlinks = true;
       nativeInstallCheckInputs = [
         ncurses
         parallel # skips some tests if it can't detect
