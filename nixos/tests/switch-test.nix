@@ -695,6 +695,50 @@ in
             systemd.user.services.usertest.serviceConfig.ExecStart = lib.mkForce "${pkgs.coreutils}/bin/false";
           };
 
+          # A unit that NixOS defines while a copy already exists in
+          # ~/.config/systemd/user (e.g. home-manager). The home copy shadows
+          # /etc, so switch-to-configuration must leave it alone.
+          userServiceMigratedShadowed.configuration = {
+            systemd.user.services.migrated = {
+              wantedBy = [ "default.target" ];
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = "${pkgs.runtimeShell} -c 'echo nixos > %t/migrated-owner'";
+              };
+            };
+          };
+
+          # As above, but the per-user activation removes the home copy and
+          # stops the unit (mimicking home-manager/sd-switch dropping it).
+          # switch-to-configuration must then start the now-unmasked
+          # /etc/systemd/user copy in a second pass.
+          userServiceMigratedToNixos.configuration = {
+            imports = [ userServiceMigratedShadowed.configuration ];
+            system.userActivationScripts.fakeSdSwitch = ''
+              if [ -e "$HOME/.config/systemd/user/migrated.service" ]; then
+                rm -f "$HOME/.config/systemd/user/migrated.service"
+                rm -f "$HOME/.config/systemd/user/default.target.wants/migrated.service"
+                ${pkgs.systemd}/bin/systemctl --user daemon-reload
+                ${pkgs.systemd}/bin/systemctl --user stop migrated.service || true
+              fi
+            '';
+          };
+
+          # As above, but the previous manager leaves the unit running instead
+          # of stopping it. switch-to-configuration must restart it so the
+          # /etc definition takes effect.
+          userServiceMigratedToNixosNoStop.configuration = {
+            imports = [ userServiceMigratedShadowed.configuration ];
+            system.userActivationScripts.fakeSdSwitch = ''
+              if [ -e "$HOME/.config/systemd/user/migrated.service" ]; then
+                rm -f "$HOME/.config/systemd/user/migrated.service"
+                rm -f "$HOME/.config/systemd/user/default.target.wants/migrated.service"
+                ${pkgs.systemd}/bin/systemctl --user daemon-reload
+              fi
+            '';
+          };
+
           no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
 
           inhibitors.configuration.system.switch.inhibitors = lib.mkForce {
@@ -757,6 +801,15 @@ in
           "broker" = "dbus-broker.service";
         }
         .${nodes.machine.services.dbus.implementation};
+
+      # Unit file placed in ~/.config/systemd/user to simulate a unit managed
+      # by home-manager (see the userServiceMigrated* specialisations).
+      homeMigratedUnit = pkgs.writeText "migrated.service" ''
+        [Service]
+        Type=oneshot
+        RemainAfterExit=true
+        ExecStart=${pkgs.runtimeShell} -c 'echo home > %t/migrated-owner'
+      '';
     in
     # python
     ''
@@ -1718,5 +1771,64 @@ in
           out = switch_to_specialisation("${machine}", "")
           assert_contains(out, "stopping the following user units: usertest.service")
           machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active usertest.service")
+
+          # Migration from a home-directory manager to NixOS: pre-seed a unit
+          # in ~/.config/systemd/user and start it, then switch to a config
+          # that defines the same unit in /etc/systemd/user and whose user
+          # activation removes the ~/.config copy (mimicking sd-switch).
+          def seed_home_unit():
+              machine.succeed(
+                  "sudo -u usertest mkdir -p ~usertest/.config/systemd/user/default.target.wants",
+                  "sudo -u usertest cp ${homeMigratedUnit} ~usertest/.config/systemd/user/migrated.service",
+                  "sudo -u usertest ln -sfn ../migrated.service ~usertest/.config/systemd/user/default.target.wants/migrated.service",
+              )
+              user_systemctl("daemon-reload")
+              user_systemctl("start migrated.service")
+              user_systemctl("is-active migrated.service")
+              out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+              assert_contains(out, "home")
+              out = user_systemctl("show -p FragmentPath migrated.service")
+              assert_contains(out, "/.config/systemd/user/migrated.service")
+
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedToNixos")
+          # Pass 1 must not touch it (still owned by ~/.config at that point)
+          assert_lacks(out, "stopping the following user units: migrated.service")
+          # Pass 2 starts the now-unmasked /etc copy after sd-switch stopped it
+          assert_contains(out, "starting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/etc/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "nixos")
+
+          # Reset and test the variant where the previous manager leaves the
+          # unit running: pass 2 must restart it.
+          switch_to_specialisation("${machine}", "")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active migrated.service")
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedToNixosNoStop")
+          assert_contains(out, "restarting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/etc/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "nixos")
+
+          # Units that remain shadowed by ~/.config must be left alone in both
+          # passes even though /etc now also defines them.
+          switch_to_specialisation("${machine}", "")
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedShadowed")
+          assert_lacks(out, "migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/.config/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "home")
+          # Clean up
+          machine.succeed("sudo -u usertest rm -rf ~usertest/.config/systemd")
+          user_systemctl("daemon-reload")
+          user_systemctl("stop migrated.service")
+          switch_to_specialisation("${machine}", "")
     '';
 }
