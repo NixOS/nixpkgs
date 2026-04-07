@@ -9996,9 +9996,6 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  lxi-tools = callPackage ../tools/networking/lxi-tools { };
-  lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
-
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
