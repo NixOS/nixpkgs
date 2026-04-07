@@ -17,12 +17,12 @@ buildGoModule (
   in
   {
     pname = "fmd-server";
-    version = "0.14.1";
+    version = "0.14.2";
     src = fetchFromGitLab {
       owner = "fmd-foss";
       repo = "fmd-server";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-UmiYtriLC9qztv7nW+1tFpYv9I0NAOsApAJWP72OINg=";
+      hash = "sha256-zAGwKOfPu7AEYhaDxx1P3EoA1K9p/f3Vwh7GrynqKho=";
     };
 
     pnpmDeps = fetchPnpmDeps {

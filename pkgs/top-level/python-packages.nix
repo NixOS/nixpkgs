@@ -2693,6 +2693,8 @@ self: super: with self; {
 
   chess = callPackage ../development/python-modules/chess { };
 
+  chess-com-api = callPackage ../development/python-modules/chess-com-api { };
+
   chevron = callPackage ../development/python-modules/chevron { };
 
   chex = callPackage ../development/python-modules/chex { };
@@ -4590,6 +4592,8 @@ self: super: with self; {
   docstring-to-markdown = callPackage ../development/python-modules/docstring-to-markdown { };
 
   docutils = callPackage ../development/python-modules/docutils { };
+
+  docutils-stubs = callPackage ../development/python-modules/docutils-stubs { };
 
   docx2python = callPackage ../development/python-modules/docx2python { };
 
@@ -7110,6 +7114,8 @@ self: super: with self; {
 
   homeconnect = callPackage ../development/python-modules/homeconnect { };
 
+  homekit-audio-proxy = callPackage ../development/python-modules/homekit-audio-proxy { };
+
   homelink-integration-api = callPackage ../development/python-modules/homelink-integration-api { };
 
   homematicip = callPackage ../development/python-modules/homematicip { };
@@ -9280,6 +9286,8 @@ self: super: with self; {
   logutils = callPackage ../development/python-modules/logutils { };
 
   logzero = callPackage ../development/python-modules/logzero { };
+
+  lojack-api = callPackage ../development/python-modules/lojack-api { };
 
   lomond = callPackage ../development/python-modules/lomond { };
 
@@ -12769,6 +12777,8 @@ self: super: with self; {
 
   pq = callPackage ../development/python-modules/pq { };
 
+  prana-api-client = callPackage ../development/python-modules/prana-api-client { };
+
   prance = callPackage ../development/python-modules/prance { };
 
   praw = callPackage ../development/python-modules/praw { };
@@ -13773,6 +13783,8 @@ self: super: with self; {
   pyformlang = callPackage ../development/python-modules/pyformlang { };
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
+
+  pyfreshr = callPackage ../development/python-modules/pyfreshr { };
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
 
@@ -15884,6 +15896,8 @@ self: super: with self; {
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
+  python-qube-heatpump = callPackage ../development/python-modules/python-qube-heatpump { };
+
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
@@ -17832,6 +17846,8 @@ self: super: with self; {
 
   slixmpp = callPackage ../development/python-modules/slixmpp { inherit (pkgs) gnupg; };
 
+  slixmpp-omemo = callPackage ../development/python-modules/slixmpp-omemo { };
+
   slob = callPackage ../development/python-modules/slob { };
 
   slovnet = callPackage ../development/python-modules/slovnet { };
@@ -18007,6 +18023,8 @@ self: super: with self; {
   solaredge-web = callPackage ../development/python-modules/solaredge-web { };
 
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
+
+  solarman-opendata = callPackage ../development/python-modules/solarman-opendata { };
 
   solax = callPackage ../development/python-modules/solax { };
 
@@ -19587,6 +19605,18 @@ self: super: with self; {
   trampoline = callPackage ../development/python-modules/trampoline { };
 
   transaction = callPackage ../development/python-modules/transaction { };
+
+  transformer-engine = callPackage ../development/python-modules/transformer-engine { };
+
+  transformer-engine-jax = transformer-engine.override {
+    withJax = true;
+    withPytorch = false;
+  };
+
+  transformer-engine-pytorch = transformer-engine.override {
+    withJax = false;
+    withPytorch = true;
+  };
 
   transformers = callPackage ../development/python-modules/transformers { };
 

@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logboth";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "logboth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R4FrZK8yxCZ5BFBFp/Fj/WyWa6+rIM6GHl3HZGgp5TI=";
+    hash = "sha256-sPt0Xdh2i71riP3L2knXvL25Q08vtnhfzGnDrKqdXtQ=";
   };
 
   build-system = [ setuptools ];

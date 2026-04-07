@@ -1807,6 +1807,16 @@
     };
   };
 
+  opam = {
+    version = "0-unstable-2026-04-05";
+    url = "github:tmcgilchrist/tree-sitter-opam";
+    rev = "8869773f9cef795cc02da3b98cfafcaf9febc6b0";
+    hash = "sha256-q/BLM4d3H+dw93CbFLtynCJ1K4I4hJ9XBM4yaG2Z5Rk=";
+    meta = {
+      license = lib.licenses.mit;
+    };
+  };
+
   opencl = {
     version = "0-unstable-2023-03-30";
     url = "github:lefp/tree-sitter-opencl";
@@ -2551,9 +2561,9 @@
   };
 
   t32 = {
-    version = "7.2.5";
+    version = "7.2.6";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-ysdKgzF5VFV0BeeXlV8gZ5pW7WzYJtYnyBE+MaxG3Jo=";
+    hash = "sha256-r89C29D8N8E+MJi+RUxTE0+Y/e4ykLzIDaw/AQHegLc=";
     meta = {
       maintainers = with lib.maintainers; [
         aciceri

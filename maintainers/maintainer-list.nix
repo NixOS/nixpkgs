@@ -2992,6 +2992,12 @@
     githubId = 127523;
     name = "Herman Fries";
   };
+  barrettruth = {
+    email = "br@barrettruth.com";
+    github = "barrettruth";
+    githubId = 62671086;
+    name = "Barrett Ruth";
+  };
   BarrOff = {
     name = "BarrOff";
     github = "BarrOff";
@@ -3494,6 +3500,11 @@
     github = "binsky08";
     githubId = 30630233;
     name = "Timo Triebensky";
+  };
+  BIOS9 = {
+    name = "NightFish";
+    github = "BIOS9";
+    githubId = 15035908;
   };
   birdee = {
     name = "birdee";
@@ -16165,6 +16176,11 @@
     github = "m3l6h";
     githubId = 8094643;
     keys = [ { fingerprint = "BAA9 7711 58CA D457 B4AE  8B06 8188 423D 2FA2 0A65"; } ];
+  };
+  m7medvision = {
+    name = "Mohammed";
+    github = "m7medVision";
+    githubId = 88824957;
   };
   ma27 = {
     email = "maximilian@mbosch.me";
@@ -29226,6 +29242,12 @@
     githubId = 42300264;
     name = "wishfort36";
   };
+  wishstudio = {
+    email = "wishstudio@gmail.com";
+    github = "wishstudio";
+    githubId = 946459;
+    name = "Xiangyan Sun";
+  };
   witchof0x20 = {
     name = "Jade";
     email = "jade@witchof.space";
@@ -29520,13 +29542,6 @@
     name = "Hampus";
     github = "xdHampus";
     githubId = 16954508;
-  };
-  xe = {
-    email = "me@christine.website";
-    matrix = "@withoutwithin:matrix.org";
-    github = "Xe";
-    githubId = 529003;
-    name = "Christine Dodrill";
   };
   xeals = {
     email = "dev@xeal.me";

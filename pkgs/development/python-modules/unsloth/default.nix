@@ -11,6 +11,7 @@
   bitsandbytes,
   numpy,
   packaging,
+  psutil,
   torch,
   unsloth-zoo,
   xformers,
@@ -53,15 +54,39 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "unsloth";
-  version = "2026.3.8";
+  version = "2026.4.1";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit (finalAttrs) version;
-    hash = "sha256-2HXsaYhsMxNEm6ctKDZDrA9MY/fUKhAo0EPYC5RwBNc=";
+    hash = "sha256-RGpVxrcFzKbHxV7o0/OYaADo/Pqxx/c+FaxcV05gHGU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires = ["setuptools==80.9.0", "setuptools-scm==9.2.0"]' \
+                     'requires = ["setuptools", "setuptools-scm"]'
+
+    # Upstream's datasets guard says only 4.4.0 and 4.4.1 recurse, but the
+    # current check blocks the whole 4.4.0 .. 4.5.0 range. Narrow it to the
+    # versions the upstream comment actually calls out.
+    substituteInPlace unsloth/import_fixes.py \
+      --replace-fail 'if (datasets_version <= Version("4.5.0")) and (' \
+                     'if (datasets_version <= Version("4.4.1")) and ('
+
+    # Strip AGPL-licensed CLI, Studio, and grouped-GEMM sources from the
+    # Apache-licensed Python package.
+    rm -rf \
+      unsloth_cli \
+      studio \
+      unsloth/kernels/moe \
+      COPYING
+
+    # Drop the entry point after removing the CLI package above.
+    sed -i '/^\[project\.scripts\]/,/^$/d' pyproject.toml
+  '';
 
   build-system = [
     setuptools
@@ -72,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     bitsandbytes
     numpy
     packaging
+    psutil
     torch
     unsloth-zoo
     xformers
@@ -90,14 +116,24 @@ buildPythonPackage (finalAttrs: {
     torchvision
   ];
 
-  # pyproject.toml requires an obsolete version of protobuf,
-  # but it is not used.
+  # pyproject.toml pins obsolete versions for several runtime deps.
   # Upstream issue: https://github.com/unslothai/unsloth-zoo/pull/68
   pythonRelaxDeps = [
     "datasets"
     "protobuf"
     "transformers"
     "torch"
+  ];
+
+  # Upstream currently lists CLI/studio dependencies as runtime requirements,
+  # but they are not part of the packaged library here.
+  pythonRemoveDeps = [
+    "tyro"
+    "wheel"
+    "typer"
+    "pydantic"
+    "pyyaml"
+    "nest-asyncio"
   ];
 
   # The source repository contains no test
@@ -107,8 +143,8 @@ buildPythonPackage (finalAttrs: {
   # NotImplementedError: Unsloth: No NVIDIA GPU found? Unsloth currently only supports GPUs!
   dontUsePythonImportsCheck = true;
 
-  passthru.tests = {
-    qlora-train-and-merge =
+  passthru.tests = rec {
+    cuda =
       # FIXME: Replace python3.pkgs with python3Packages once possible, as to unbeak splicing.
       # Cf. https://github.com/NixOS/nixpkgs/pull/394838#issuecomment-3319287038
       cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }
@@ -135,6 +171,8 @@ buildPythonPackage (finalAttrs: {
               run_name="__main__"
           )
         '';
+
+    qlora-train-and-merge = cuda;
   };
 
   meta = {
