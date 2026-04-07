@@ -20421,6 +20421,8 @@ self: super: with self; {
 
   udatetime = callPackage ../development/python-modules/udatetime { };
 
+  udtools = callPackage ../development/python-modules/udtools { };
+
   ueagle = callPackage ../development/python-modules/ueagle { };
 
   ueberzug = callPackage ../development/python-modules/ueberzug {
