@@ -100,13 +100,19 @@ buildPythonPackage (finalAttrs: {
   ++ fonttools.optional-dependencies.unicode
   ++ fonttools.optional-dependencies.woff;
 
+  postInstall = ''
+    # clean up the install directory
+    # 5.0.0 release revamps the build system and hopefully makes this unnecessary
+    rm -r $out/{_skbuild,c,tests}
+  '';
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin
 
     # Remove build artifacts to prevent them from messing with the tests
-    rm -rf _skbuild
+    rm -r _skbuild
   '';
 
   disabledTests = [
