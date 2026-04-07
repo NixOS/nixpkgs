@@ -17,6 +17,7 @@ url_and_key_list=(
 "x86_64-linux_310_gpu $bucket/tensorflow-${version}-cp310-cp310-manylinux_2_27_x86_64.whl"
 "x86_64-linux_311_gpu $bucket/tensorflow-${version}-cp311-cp311-manylinux_2_27_x86_64.whl"
 "x86_64-linux_312_gpu $bucket/tensorflow-${version}-cp312-cp312-manylinux_2_27_x86_64.whl"
+"x86_64-linux_313_gpu $bucket/tensorflow-${version}-cp313-cp313-manylinux_2_27_x86_64.whl"
 "aarch64-linux_310 $bucket/tensorflow-${version}-cp310-cp310-manylinux_2_27_aarch64.whl"
 "aarch64-linux_311 $bucket/tensorflow-${version}-cp311-cp311-manylinux_2_27_aarch64.whl"
 "aarch64-linux_312 $bucket/tensorflow-${version}-cp312-cp312-manylinux_2_27_aarch64.whl"
