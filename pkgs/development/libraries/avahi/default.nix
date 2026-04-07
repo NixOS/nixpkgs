@@ -140,6 +140,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/avahi/avahi/commit/366e3798bdbd6b7bf24e59379f4a9a51af575ce9.patch";
       hash = "sha256-9AdhtzrimmcpMmeyiFcjmDfG5nqr/S8cxWTaM1mzCWA=";
     })
+    # https://github.com/avahi/avahi/pull/662 merged 2025-06-19
+    # NOTE: CVE-2024-52615 is mitigated by the default NixOS configuration.
+    # NOTE: CVE-2025-59529 is introduced by 4e2e1ea0908d7e6ad7f38ae04fdcdf2411f8b942.
+    /*
+      (fetchpatch {
+        name = "CVE-2024-52615.patch"; # AKA GHSA-x6vp-f33h-h32g
+        url = "https://github.com/avahi/avahi/commit/4e2e1ea0908d7e6ad7f38ae04fdcdf2411f8b942.patch";
+        hash = "sha256-rW6jmKg9oH44rRZow0zE4z6lfTlD8wpFUC8DaI/gruA=";
+      })
+    */
   ];
 
   depsBuildBuild = [
