@@ -519,8 +519,10 @@ in
         # Filesystems.
         ${makeFstabEntries fileSystems { }}
 
-        ${optionalString (config.swapDevices != [ ]) "# Swap devices."}
-        ${flip concatMapStrings config.swapDevices (sw: "${sw.realDevice} none swap ${swapOptions sw}\n")}
+        ${optionalString ((config.swapDevices or [ ]) != [ ]) "# Swap devices."}
+        ${flip concatMapStrings (config.swapDevices or [ ]) (
+          sw: "${sw.realDevice} none swap ${swapOptions sw}\n"
+        )}
       '';
 
     boot.initrd.systemd.storePaths = [ initrdFstab ];
