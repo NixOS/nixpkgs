@@ -46,11 +46,11 @@ let
     cargoTestFlags = final.cargoBuildFlags;
 
     postInstall = ''
-      install -Dm644 distribution/linux/me3-launch.desktop \
+      install -Dm444 distribution/linux/me3-launch.desktop \
         $out/share/applications/me3-launch.desktop
-      install -Dm644 distribution/linux/me3.xml \
+      install -Dm444 distribution/linux/me3.xml \
         $out/share/mime/packages/me3.xml
-      install -Dm644 distribution/assets/me3.png \
+      install -Dm444 distribution/assets/me3.png \
         $out/share/icons/hicolor/128x128/apps/me3.png
     '';
   });
