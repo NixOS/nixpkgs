@@ -1788,6 +1788,39 @@ runTests {
       expected = longList;
     };
 
+  testListCommonPrefixLengthExample1 = {
+    expr = lists.commonPrefixLength [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
+    expected = 2;
+  };
+  testListCommonPrefixLengthExample2 = {
+    expr = lists.commonPrefixLength [ 1 2 3 ] [ 1 2 3 4 5 ];
+    expected = 3;
+  };
+  testListCommonPrefixLengthExample3 = {
+    expr = lists.commonPrefixLength [ 1 2 3 ] [ 4 5 6 ];
+    expected = 0;
+  };
+  testListCommonPrefixLengthEmpty = {
+    expr = lists.commonPrefixLength [ ] [ 1 2 3 ];
+    expected = 0;
+  };
+  testListCommonPrefixLengthSame = {
+    expr = lists.commonPrefixLength [ 1 2 3 ] [ 1 2 3 ];
+    expected = 3;
+  };
+  testListCommonPrefixLengthLazy = {
+    expr = lists.commonPrefixLength [ 1 ] [ 1 (abort "lib.lists.commonPrefixLength shouldn't evaluate this") ];
+    expected = 1;
+  };
+  testListCommonPrefixLengthLong =
+    let
+      longList = genList (n: n) 100000;
+    in
+    {
+      expr = lists.commonPrefixLength longList longList;
+      expected = 100000;
+    };
+
   testSort = {
     expr = sort builtins.lessThan [
       40
