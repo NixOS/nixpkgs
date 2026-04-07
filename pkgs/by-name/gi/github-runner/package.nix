@@ -157,7 +157,9 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = true;
 
+  # tests fail with sandboxing under darwin
   __darwinAllowLocalNetworking = true;
+  __noChroot = true;
 
   # Fully qualified name of disabled tests
   disabledTests = [
