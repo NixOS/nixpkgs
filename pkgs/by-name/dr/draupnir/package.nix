@@ -2,67 +2,53 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs_22,
+  nodejs_24,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
   srcOnly,
   removeReferencesTo,
-  fetchYarnDeps,
+  buildNpmPackage,
   stdenv,
   cctools,
   nixosTests,
-  yarnBuildHook,
-  yarnConfigHook,
   nix-update-script,
 }:
 let
-  nodeSources = srcOnly nodejs_22;
+  nodeSources = srcOnly nodejs_24;
 in
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "draupnir";
-  version = "2.9.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j5UEW9JpIHhFWGMEwrPE1v0hdFAw5Z4CImRYEm56I4k=";
+    hash = "sha256-WrMYak6ztIy3KqjcVuN2OmIy1uxlIVNvHPGw7e3LRw0=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     sqlite
     python3
-    yarnConfigHook
-    yarnBuildHook
-    nodejs_22
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
-  offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-Ck6Ba/qDlEW5jqKUX8tyB0QbiVXU8+ND2tvhftmYktY=";
-  };
+  npmDepsHash = "sha256-CnSeg7sGFzPD+VQl8sWXtiBfuSdeieNhDrLFjWlHcUs=";
 
   preBuild = ''
-    # install proper version info
-    echo "${finalAttrs.version}-nix" > version.txt
+    # install proper version and branch info
+    echo "${finalAttrs.version}-nix" > apps/draupnir/version.txt
+    echo "main" > apps/draupnir/branch.txt
 
-    # makes network requests
-    sed -i 's/corepack //g' package.json
-  '';
-
-  postBuild = ''
-    yarn --offline run copy-assets
+    # we already set the version and branch above
+    substituteInPlace apps/draupnir/package.json \
+      --replace-fail " && npm run describe-version && npm run describe-branch" ""
   '';
 
   postInstall = ''
-    # Re-install only production dependencies
-    yarn install --frozen-lockfile --force --production --offline --non-interactive \
-      --ignore-engines --ignore-platform --ignore-scripts --no-progress
-
     # Replace matrix-sdk-crypto-nodejs with nixpkgs version
     nodeCryptoPath="node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
     rm -rf "$nodeCryptoPath"
@@ -83,12 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/draupnir
     mkdir $out/bin
     # Install outputs
-    mv ./lib ./version.txt ./node_modules ./package.json $out/lib/node_modules/draupnir
+    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/version.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
+    # Fix dangling symlink pointing to relative path ../apps/draupnir
+    rm $out/lib/node_modules/draupnir/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs_24} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
-      --add-flags "$out/lib/node_modules/draupnir/lib/index.js"
+      --add-flags "$out/lib/node_modules/draupnir/dist/index.js"
 
   '';
 
