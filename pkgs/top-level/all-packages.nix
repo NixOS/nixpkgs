@@ -9605,10 +9605,6 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kumactl = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kumactl" ];
-    pname = "kumactl";
-  };
   kuma-cp = callPackage ../applications/networking/cluster/kuma {
     components = [ "kuma-cp" ];
     pname = "kuma-cp";
