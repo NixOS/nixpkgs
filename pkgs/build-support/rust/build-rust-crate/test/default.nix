@@ -458,6 +458,74 @@ rec {
             "test flat_test ... ok"
           ];
         };
+        rustBinTestsCargoBinExe = {
+          # Integration tests locate the crate's own binary via
+          # `env!("CARGO_BIN_EXE_<name>")`, which cargo sets automatically.
+          crateName = "my-crate";
+          src = symlinkJoin {
+            name = "rust-bin-tests-cargo-bin-exe";
+            paths = [
+              (mkFile "src/main.rs" ''
+                fn main() { println!("hello from my-crate"); }
+              '')
+              (mkFile "tests/run_bin.rs" ''
+                #[test]
+                fn runs_binary() {
+                    let bin = env!("CARGO_BIN_EXE_my-crate");
+                    let out = std::process::Command::new(bin)
+                        .output()
+                        .expect("spawn");
+                    assert!(out.status.success());
+                    assert_eq!(
+                        String::from_utf8_lossy(&out.stdout).trim(),
+                        "hello from my-crate"
+                    );
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test runs_binary ... ok"
+          ];
+        };
+        rustBinTestsCargoBinExeAutoDetect = {
+          # Verify CARGO_BIN_EXE_<name> is also set for auto-detected
+          # src/bin/*.rs binaries, not just src/main.rs or explicit
+          # crateBin entries.
+          crateName = "multi-bin";
+          src = symlinkJoin {
+            name = "rust-bin-tests-cargo-bin-exe-auto";
+            paths = [
+              (mkFile "src/lib.rs" "")
+              (mkFile "src/bin/tool-a.rs" ''
+                fn main() { println!("tool-a ran"); }
+              '')
+              (mkFile "src/bin/tool-b.rs" ''
+                fn main() { println!("tool-b ran"); }
+              '')
+              (mkFile "tests/run_tools.rs" ''
+                #[test]
+                fn runs_both() {
+                    for (bin, want) in [
+                        (env!("CARGO_BIN_EXE_tool-a"), "tool-a ran"),
+                        (env!("CARGO_BIN_EXE_tool-b"), "tool-b ran"),
+                    ] {
+                        let out = std::process::Command::new(bin)
+                            .output()
+                            .expect("spawn");
+                        assert!(out.status.success());
+                        assert_eq!(String::from_utf8_lossy(&out.stdout).trim(), want);
+                    }
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test runs_both ... ok"
+          ];
+        };
         linkAgainstRlibCrate = {
           crateName = "foo";
           src = mkFile "src/main.rs" ''
