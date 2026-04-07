@@ -79,6 +79,14 @@ buildGoModule rec {
       "CVE-2026-29061"
       "CVE-2026-29084"
       "CVE-2026-28682"
+      (
+        "The following vulnerabilities have been fixed in gokapi 2.2.4 "
+        + "(which is in Nixpkgs unstable), but cannot be included in the stable "
+        + "release due to breaking changes:"
+      )
+      "CVE-2026-30955"
+      "CVE-2026-30961"
+      "CVE-2026-30943"
     ];
     mainProgram = "gokapi";
   };
