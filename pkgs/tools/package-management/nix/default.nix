@@ -155,17 +155,11 @@ lib.makeExtensible (
   (
     {
       nix_2_28 = commonMeson {
-        version = "2.28.5";
-        hash = "sha256-oIfAHxO+BCtHXJXLHBnsKkGl1Pw+Uuq1PwNxl+lZ+Oc=";
+        version = "2.28.6";
+        hash = "sha256-jg2YDTFt8CY4kMg4ha3UK5C+mQY+Zg67nwNy+CmTk5w=";
         self_attribute_name = "nix_2_28";
         patches = patches_common ++ [
-          (fetchpatch2 {
-            name = "nix-2.28-14764-mdbook-0.5-support.patch";
-            url = "https://github.com/NixOS/nix/commit/5a64138e862fe364e751c5c286e8db8c466aaee7.patch?full_index=1";
-            hash = "sha256-vFv/D08x9urtoIE9wiC7Lln4Eq3sgNBwU7TBE1iyrfI=";
-          })
           lowdown30PatchOld
-          ./patches/ghsa-g3g9-5vj6-r3gj-2.28.patch
         ];
       };
 
