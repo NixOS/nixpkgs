@@ -1484,6 +1484,7 @@ in
   smokeping = runTest ./smokeping.nix;
   snapcast = runTest ./snapcast.nix;
   snapper = runTest ./snapper.nix;
+  snid = runTest ./snid.nix;
   snipe-it = runTest ./web-apps/snipe-it.nix;
   snips-sh = runTest ./snips-sh.nix;
   snmpd = runTest ./snmpd.nix;

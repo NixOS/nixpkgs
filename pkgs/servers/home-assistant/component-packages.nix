@@ -7051,7 +7051,8 @@
       ];
     "wiim" =
       ps: with ps; [
-      ]; # missing inputs: wiim
+        wiim
+      ];
     "wilight" =
       ps: with ps; [
         pywilight
@@ -8426,6 +8427,7 @@
     "whirlpool"
     "whois"
     "wiffi"
+    "wiim"
     "wilight"
     "window"
     "withings"
