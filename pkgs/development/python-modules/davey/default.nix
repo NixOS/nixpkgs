@@ -6,20 +6,19 @@
   maturin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "davey";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "Snazzah";
     repo = "davey";
-    tag = "py-${version}";
+    tag = "py-${finalAttrs.version}";
     hash = "sha256-WR8OBYZXNxFfToVn0ZNkacZPN04w/y3tCK6/xCP50gI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-kLLOuwGCfkByXt6LW8vGxS1JYQW+r/tW7dOiKx6M4k4=";
   };
 
@@ -39,9 +38,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "davey" ];
 
   meta = {
-    description = "A Discord Audio & Video End-to-End Encryption (DAVE) Protocol Rust implementation";
+    description = "Discord Audio & Video End-to-End Encryption (DAVE) Protocol Rust implementation";
     homepage = "https://github.com/Snazzah/davey";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twig ];
   };
-}
+})
