@@ -296,7 +296,10 @@ Some of them are as follows:
 
 You can find information about all of these attributes in the [official specification](https://csrc.nist.gov/projects/security-content-automation-protocol/specifications/cpe/naming) (heading 5.3.3, pages 11-13).
 
-Any fields that don't have a value are set to either `-` if the value is not available or `*` when the field can match any value.
+Any fields that don't have a value are set to either:
+
+* `*` (ANY) when the field can match any value
+* `-` (NA) when the value is not meaningful or not used in the description
 
 For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40:1:*:*:*:*:*:*`.
 
