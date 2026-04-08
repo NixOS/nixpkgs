@@ -125,6 +125,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/lightgbm-org/LightGBM";
     changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh ];
+    maintainers = with lib.maintainers; [
+      flokli
+      teh
+    ];
   };
 }
