@@ -8,7 +8,7 @@
   ncurses,
   libcap,
   libnl,
-  sensorsSupport ? stdenv.hostPlatform.isLinux,
+  sensorsSupport ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic),
   lm_sensors,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
