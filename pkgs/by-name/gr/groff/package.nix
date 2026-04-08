@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
     "--enable-year2038"
   ]
+  ++ lib.optionals (stdenv.cc.isClang) [
+    "CFLAGS=-std=gnu11" # https://github.com/NixOS/nixpkgs/pull/481765
+  ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "gl_cv_func_signbit=yes"
   ]
