@@ -738,6 +738,7 @@ def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
             "also pass '--sudo' or run the command as root (e.g., with sudo)"
         )
 
+    channel_updated = False
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
             all_channels
@@ -749,3 +750,7 @@ def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
                 check=False,
                 sudo=sudo,
             )
+            channel_updated = True
+
+    if not channel_updated:
+        logger.warning("'--upgrade(-all)' flag passed but no channels to update")
