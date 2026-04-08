@@ -1,4 +1,5 @@
 {
+  binutils,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -7,6 +8,22 @@
   testers,
 }:
 
+let
+  # (same workaround as in capnproto package)
+  #
+  # HACK: work around https://github.com/NixOS/nixpkgs/issues/177129
+  # Though this is an issue between Clang and GCC,
+  # so it may not get fixed anytime soon...
+  empty-libgcc_eh = stdenv.mkDerivation {
+    pname = "empty-libgcc_eh";
+    version = "0";
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p "$out"/lib
+      "${binutils}"/bin/ar r "$out"/lib/libgcc_eh.a
+    '';
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
   version = "1.5.3";
@@ -36,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
   ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isStatic [ empty-libgcc_eh ];
 
   configureFlags = [
     "--disable-arch-native"
