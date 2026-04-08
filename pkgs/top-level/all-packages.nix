@@ -11033,11 +11033,6 @@ with pkgs;
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
-  elementsd = callPackage ../applications/blockchains/elements {
-    withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
     boost = boost179;
   };
