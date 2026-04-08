@@ -181,11 +181,6 @@ let
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        # We wait for the udev events queue to empty in the *hope* that the
-        # devices needed by the pool become available. This is terribly broken
-        # and essentially no better than a random sleep(), but we can't do any
-        # better, see upstream issue https://github.com/openzfs/zfs/issues/10891
-        ExecStartPre = "${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
       };
       environment.ZFS_FORCE = lib.optionalString force "-f";
       script =
