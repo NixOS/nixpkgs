@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "arc4";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "manicmaniac";
     repo = "arc4";
     rev = version;
-    hash = "sha256-DlZIygf5v3ZNY2XFmrKOA15ccMo3Rv0kf6hZJ0CskeQ=";
+    hash = "sha256-kEgyZQmVdOmD/KkmEKxgZb9Hj0jGJswCJI7Np5TI1K4=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
