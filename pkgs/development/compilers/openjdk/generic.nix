@@ -1,6 +1,5 @@
 {
   featureVersion,
-
   lib,
   stdenv,
 
@@ -59,11 +58,13 @@
   openjfx17,
   openjfx21,
   openjfx25,
+  openjfx26,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
       "25" = openjfx25;
+      "26" = openjfx26;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
@@ -77,6 +78,7 @@
   temurin-bin-17,
   temurin-bin-21,
   temurin-bin-25,
+  temurin-bin-26,
   jdk-bootstrap ?
     {
       "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
@@ -84,6 +86,7 @@
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
       "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
+      "26" = temurin-bin-26.__spliced.buildBuild or temurin-bin-26;
     }
     .${featureVersion},
 }:
@@ -100,6 +103,7 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
   atLeast25 = lib.versionAtLeast featureVersion "25";
+  atLeast26 = lib.versionAtLeast featureVersion "26";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -143,7 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (
-      if atLeast25 then
+      if atLeast26 then
+        { }
+      else if atLeast25 then
         ./25/patches/fix-java-home-jdk25.patch
       else if atLeast21 then
         ./21/patches/fix-java-home-jdk21.patch
