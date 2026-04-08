@@ -27,6 +27,14 @@ let
         map <Leader>$ <Cmd>Obsession<CR>
       '';
     }
+    {
+      plugin = vim-obsession;
+      type = "lua";
+      config = ''
+        -- this is a comment
+        vim.g.nixpkgs_test_value = 42
+      '';
+    }
   ];
 
   packagesWithSingleLineConfigs = with vimPlugins; [
@@ -415,6 +423,12 @@ pkgs.lib.recurseIntoAttrs rec {
   rocks_install_plenary = runTest nvim_with_rocks_nvim ''
     nvim -V3rocks-log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
   '';
+
+  can_load_lua_config = runTest nvim_with_plugins ''
+    if ! nvim --headless -V3lua-config-log.txt -i NONE -c 'lua if vim.g.nixpkgs_test_value ~= 42 then os.exit(42) end' +quit! -e; then
+      echo "Failed to find plugin config"
+      exit 1
+    fi
   '';
 
   inherit (vimPlugins) corePlugins;

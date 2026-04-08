@@ -14,7 +14,6 @@
   neovimUtils,
   perl,
   lndir,
-  vimUtils,
   runCommand,
 }:
 
