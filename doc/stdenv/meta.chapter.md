@@ -292,7 +292,7 @@ Some of them are as follows:
 * *product* - name of the package
 * *version* - version of the package
 * *update* - name of the latest update, can be a patch version for semantically versioned packages
-* *edition* - any additional specification about the version
+* *edition* - deprecated and should be set to `*`
 
 You can find information about all of these attributes in the [official specification](https://csrc.nist.gov/projects/security-content-automation-protocol/specifications/cpe/naming) (heading 5.3.3, pages 11-13).
 
