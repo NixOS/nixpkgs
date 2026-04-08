@@ -19104,6 +19104,12 @@
     githubId = 349360;
     name = "Brandon Bennett";
   };
+  neo = {
+    github = "chojs23";
+    githubId = 55792153;
+    name = "neo";
+    email = "chojs990222@gmail.com";
+  };
   neosimsim = {
     email = "me@abn.sh";
     github = "neosimsim";
