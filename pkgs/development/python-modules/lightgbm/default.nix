@@ -55,18 +55,6 @@ buildPythonPackage rec {
     hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
   };
 
-  # Patch dll search path to fix proper discovery of lib_lightgbm.so
-  #   Exception: Cannot find lightgbm library file in following paths:
-  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lib_lightgbm.so
-  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/bin/lib_lightgbm.so
-  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/lib/lib_lightgbm.so
-  postPatch = ''
-    substituteInPlace lightgbm/libpath.py \
-      --replace-fail \
-        'curr_path.parents[0] / "lib",' \
-        'curr_path.parents[1] / "lib",'
-  '';
-
   build-system = [
     scikit-build-core
   ];
@@ -102,6 +90,9 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeBool "USE_GPU" gpuSupport)
     (lib.cmakeBool "USE_CUDA" cudaSupport)
+    # Set in pyproject.toml for `cmake.args` in `[tool.scikit-build]`,
+    # but not set by our hooks.
+    (lib.cmakeBool "__BUILD_FOR_PYTHON" true)
   ];
 
   optional-dependencies = {
