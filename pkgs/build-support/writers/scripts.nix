@@ -1113,7 +1113,7 @@ rec {
       ''
         # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
         awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
-        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
+        gixy --skips hsts_header $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
   /**
