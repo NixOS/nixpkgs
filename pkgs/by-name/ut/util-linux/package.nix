@@ -59,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix compile of 2.42+ on Darwin.
     # https://lore.kernel.org/util-linux/CAEUYr6ZjVX1bd-xcBGtFN_ZYwQnXDYsw7d1-7sTpF2BbgfrR+g@mail.gmail.com/T/#u
     ./include-correct-struct-statfs-header.patch
-
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Musl does not define AT_HANDLE_FID, hard-code it.
     # https://github.com/util-linux/util-linux/pull/4203
     ./fix-musl-nsenter.patch
