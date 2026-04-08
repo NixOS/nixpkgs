@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
+  libayatana-appindicator,
   webkitgtk_4_1,
   xdotool,
   zenity,
@@ -42,6 +43,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=dns::client::tests::test_tcp_client"
     "--skip=dns::client::tests::test_udp_client"
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
 
   postInstall = lib.optionalString (withGui && stdenv.hostPlatform.isLinux) ''
     wrapProgram $out/bin/alfis \
