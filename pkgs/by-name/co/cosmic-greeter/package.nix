@@ -19,17 +19,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.8";
+  version = "1.0.9";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-U0JrxvMWzISSA0tP8moasN7iN7TfZreEwbvWZGHRn8E=";
+    hash = "sha256-wLTvxXn5g1JnEJ8V/fTC4o/eOPNBThAfIOyhbdpv2EI=";
   };
 
-  cargoHash = "sha256-J5ycaeKZsEBPcI9JH8bHsOAcXXwcx/D21GlVhJZbGwM=";
+  cargoHash = "sha256-Cc/q8Z6LiuvhTyEdz+biuSi351h/RReVZpYHCD8HFrQ=";
 
   env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
