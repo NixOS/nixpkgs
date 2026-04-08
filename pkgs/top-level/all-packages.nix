@@ -11033,11 +11033,6 @@ with pkgs;
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
-  groestlcoin = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   groestlcoind = callPackage ../applications/blockchains/groestlcoin {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
