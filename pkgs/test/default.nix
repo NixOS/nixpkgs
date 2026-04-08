@@ -178,6 +178,7 @@ in
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });
+  importNpmLock = recurseIntoAttrs (callPackage ../build-support/node/test/import-npm-lock { });
 
   vim = callPackage ./vim { };
 
