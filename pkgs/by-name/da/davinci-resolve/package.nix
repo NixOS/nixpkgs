@@ -455,6 +455,7 @@ buildFHSEnv {
       amarshall
       XBagon
       toXel
+      cafkafk
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
