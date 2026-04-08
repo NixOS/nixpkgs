@@ -1015,10 +1015,10 @@
   };
 
   gren = {
-    version = "2.0.0-unstable-2025-05-03";
+    version = "2.0.0-unstable-2026-03-31";
     url = "github:MaeBrooks/tree-sitter-gren";
-    rev = "c36aac51a915fdfcaf178128ba1e9c2205b25930";
-    hash = "sha256-XtLP2ncpwAiubHug6k4sJCYRZo5f+Nu02tho/4tVD/k=";
+    rev = "cecd8ce9b18f1803d37682f33b6224978fd04d31";
+    hash = "sha256-E96GzFmQDEb3Uq6sEThxqpRwqEH+JwE/hJ0xM1r2VjI=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
