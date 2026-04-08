@@ -158,15 +158,15 @@ lib.fix (self: {
       {
         inherit pname version;
 
-        package = toFile (toJSON packageJSON');
-        packageLock = toFile (toJSON packageLock');
+        package = toJSON packageJSON';
+        packageLock = toJSON packageLock';
 
         __structuredAttrs = true;
       }
       ''
         mkdir $out
-        cp "${package}" > $out/package.json
-        cp "${packageLock}" > $out/package-lock.json
+        printf "%s" "$package" > $out/package.json
+        printf "%s" "$packageLock" > $out/package-lock.json
       '';
 
   # Build node modules from package.json & package-lock.json
