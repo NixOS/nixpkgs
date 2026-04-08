@@ -1,86 +1,87 @@
-alias Domain.{Repo, Accounts, Auth, Actors, Tokens}
+alias Portal.{Repo, Account, Auth, Actor, ClientToken, GatewayToken, RelayToken, Crypto}
+import Ecto.Query
 
 mappings = case File.read("provision-uuids.json") do
-{:ok, content} ->
-  case Jason.decode(content) do
-    {:ok, mapping} -> mapping
-    _ -> %{"accounts" => %{}}
-  end
-_ -> %{"accounts" => %{}}
+  {:ok, content} ->
+    case Jason.decode(content) do
+      {:ok, mapping} -> mapping
+      _ -> %{"accounts" => %{}}
+    end
+  _ -> %{"accounts" => %{}}
 end
 
 IO.puts("INFO: Fetching account")
-{:ok, account} = Accounts.fetch_account_by_id_or_slug("main")
+account = case Repo.get_by(Account, slug: "main") do
+  nil -> raise "Account 'main' not found"
+  account -> account
+end
 
-IO.puts("INFO: Fetching email provider")
-{:ok, email_provider} = Auth.Provider.Query.not_disabled()
-  |> Auth.Provider.Query.by_adapter(:email)
-  |> Auth.Provider.Query.by_account_id(account.id)
-  |> Repo.fetch(Auth.Provider.Query, [])
+IO.puts("INFO: Fetching service account actor")
+actor_id = get_in(mappings, ["accounts", "main", "actors", "client"])
+actor = case Repo.get_by(Actor, account_id: account.id, id: actor_id) do
+  nil -> raise "Actor '#{actor_id}' not found"
+  actor -> actor
+end
 
-temp_admin_actor_email = "firezone-provision@localhost.local"
-temp_admin_actor_context = %Auth.Context{
-  type: :browser,
-  user_agent: "Unspecified/0.0",
-  remote_ip: {127, 0, 0, 1},
-  remote_ip_location_region: "N/A",
-  remote_ip_location_city: "N/A",
-  remote_ip_location_lat: 0.0,
-  remote_ip_location_lon: 0.0
-}
+# Create relay token (global, no account association)
+IO.puts("INFO: Creating relay token")
+relay_secret_fragment = Crypto.random_token(32, encoder: :hex32)
+relay_secret_salt = Crypto.random_token(16)
+relay_secret_hash = Crypto.hash(:sha3_256, "" <> relay_secret_fragment <> relay_secret_salt)
 
-{:ok, temp_admin_actor} =
-  Actors.create_actor(account, %{
-    type: :account_admin_user,
-    name: "Token Provisioning"
-  })
+{:ok, relay_token} = Repo.insert(%RelayToken{
+  secret_fragment: relay_secret_fragment,
+  secret_salt: relay_secret_salt,
+  secret_hash: relay_secret_hash
+})
 
-{:ok, temp_admin_actor_email_identity} =
-  Auth.create_identity(temp_admin_actor, email_provider, %{
-    provider_identifier: temp_admin_actor_email,
-    provider_identifier_confirmation: temp_admin_actor_email
-  })
+relay_encoded_token = Auth.encode_fragment!(relay_token)
+IO.puts("Created relay token: #{relay_encoded_token}")
+File.write("relay_token.txt", relay_encoded_token)
 
-{:ok, temp_admin_actor_token} =
-  Auth.create_token(temp_admin_actor_email_identity, temp_admin_actor_context, "temporarynonce", DateTime.utc_now() |> DateTime.add(1, :hour))
+# Create gateway token
+IO.puts("INFO: Creating gateway token")
+site_id = get_in(mappings, ["accounts", "main", "sites", "site"])
+gateway_secret_fragment = Crypto.random_token(32, encoder: :hex32)
+gateway_secret_salt = Crypto.random_token(16)
+gateway_secret_hash = Crypto.hash(:sha3_256, "" <> gateway_secret_fragment <> gateway_secret_salt)
 
-{:ok, temp_admin_subject} =
-  Auth.build_subject(temp_admin_actor_token, temp_admin_actor_context)
+{:ok, gateway_token} = Repo.insert(%GatewayToken{
+  account_id: account.id,
+  site_id: site_id,
+  secret_fragment: gateway_secret_fragment,
+  secret_salt: gateway_secret_salt,
+  secret_hash: gateway_secret_hash
+})
 
-{:ok, relay_group_token} =
-  Tokens.create_token(%{
-    "type" => :relay_group,
-	"expires_at" => DateTime.utc_now() |> DateTime.add(1, :hour),
-    "secret_fragment" => Domain.Crypto.random_token(32, encoder: :hex32),
-    "relay_group_id" => get_in(mappings, ["accounts", "main", "relay_groups", "my-relays"])
-  })
+gateway_encoded_token = Auth.encode_fragment!(gateway_token)
+IO.puts("Created gateway token: #{gateway_encoded_token}")
+File.write("gateway_token.txt", gateway_encoded_token)
 
-relay_group_encoded_token = Tokens.encode_fragment!(relay_group_token)
-IO.puts("Created relay token: #{relay_group_encoded_token}")
-File.write("relay_token.txt", relay_group_encoded_token)
+# Create client token
+IO.puts("INFO: Creating client token for service account")
+# Get the userpass auth provider
+auth_provider = Repo.one!(
+  from p in Portal.Userpass.AuthProvider,
+  join: base in Portal.AuthProvider, on: base.id == p.id,
+  where: base.account_id == ^account.id,
+  select: p
+)
 
-{:ok, gateway_group_token} =
-  Tokens.create_token(%{
-    "type" => :gateway_group,
-    "expires_at" => DateTime.utc_now() |> DateTime.add(1, :hour),
-    "secret_fragment" => Domain.Crypto.random_token(32, encoder: :hex32),
-    "account_id" => get_in(mappings, ["accounts", "main", "id"]),
-    "gateway_group_id" => get_in(mappings, ["accounts", "main", "gateway_groups", "site"])
-  }, temp_admin_subject)
+client_secret_fragment = Crypto.random_token(32, encoder: :hex32)
+client_secret_salt = Crypto.random_token(16)
+client_secret_hash = Crypto.hash(:sha3_256, "" <> client_secret_fragment <> client_secret_salt)
 
-gateway_group_encoded_token = Tokens.encode_fragment!(gateway_group_token)
-IO.puts("Created gateway group token: #{gateway_group_encoded_token}")
-File.write("gateway_token.txt", gateway_group_encoded_token)
+{:ok, client_token} = Repo.insert(%ClientToken{
+  account_id: account.id,
+  actor_id: actor.id,
+  auth_provider_id: auth_provider.id,
+  secret_fragment: client_secret_fragment,
+  secret_salt: client_secret_salt,
+  secret_hash: client_secret_hash,
+  expires_at: DateTime.utc_now() |> DateTime.add(1, :hour)
+})
 
-{:ok, service_account_actor_token} =
-  Tokens.create_token(%{
-    "type" => :client,
-    "expires_at" => DateTime.utc_now() |> DateTime.add(1, :hour),
-    "secret_fragment" => Domain.Crypto.random_token(32, encoder: :hex32),
-    "account_id" => get_in(mappings, ["accounts", "main", "id"]),
-    "actor_id" => get_in(mappings, ["accounts", "main", "actors", "client"])
-  })
-
-service_account_actor_encoded_token = Tokens.encode_fragment!(service_account_actor_token)
-IO.puts("Created service actor token: #{service_account_actor_encoded_token}")
-File.write("client_token.txt", service_account_actor_encoded_token)
+client_encoded_token = Auth.encode_fragment!(client_token)
+IO.puts("Created client token: #{client_encoded_token}")
+File.write("client_token.txt", client_encoded_token)
