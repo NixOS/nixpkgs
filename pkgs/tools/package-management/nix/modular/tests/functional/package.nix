@@ -72,9 +72,11 @@ mkMesonDerivation (
 
     # Test contains invocation of `script` broken by util-linux regression:
     # https://github.com/util-linux/util-linux/commit/70507ab9eaed10b8dd77b77d4ea25c11ee726bed
-    preCheck = assert util-linux.version == "2.42"; ''
-      echo "exit 77" > ../json.sh
-    '';
+    preCheck =
+      assert util-linux.version == "2.42";
+      ''
+        echo "exit 77" > ../json.sh
+      '';
 
     mesonCheckFlags = [
       "--print-errorlogs"
