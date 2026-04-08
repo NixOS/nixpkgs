@@ -14,8 +14,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "peco";
     repo = "peco";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jvjqk1t2mTxkcGFWpynf3/J5VR3G1lhOBpIFqh6OoS0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jvjqk1t2mTxkcGFWpynf3/J5VR3G1lhOBpIFqh6OoS0=";
   };
 
   vendorHash = "sha256-EvLi1v3c1Myx9GVvenXiZb2V5foloQzPc35VVjVLuiU=";
