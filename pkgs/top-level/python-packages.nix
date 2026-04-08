@@ -3318,8 +3318,6 @@ self: super: with self; {
 
   crossandra = callPackage ../development/python-modules/crossandra { };
 
-  crossplane = callPackage ../development/python-modules/crossplane { };
-
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
   crownstone-core = callPackage ../development/python-modules/crownstone-core { };
@@ -11023,6 +11021,8 @@ self: super: with self; {
   nftables = callPackage ../os-specific/linux/nftables/python.nix { inherit (pkgs) nftables; };
 
   nglview = callPackage ../development/python-modules/nglview { };
+
+  ngxparse = callPackage ../development/python-modules/ngxparse { };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 

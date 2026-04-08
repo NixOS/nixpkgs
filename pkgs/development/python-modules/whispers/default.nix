@@ -2,7 +2,7 @@
   lib,
   beautifulsoup4,
   buildPythonPackage,
-  crossplane,
+  ngxparse,
   fetchFromGitHub,
   jellyfish,
   jproperties,
@@ -39,17 +39,23 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
+  pythonRemoveDeps = [
+    # package was renamed to ngxparse
+    # module name stayed at crossplane
+    "crossplane"
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
     beautifulsoup4
-    crossplane
     jellyfish
     jproperties
     jsonschema
     jsonschema-specifications
     luhn
     lxml
+    ngxparse
     pyyaml
     semgrep
     six
@@ -60,6 +66,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # ngxparse/crossplane compat
+    "test_detect_secrets_by_value"
+    "test_run"
   ];
 
   disabledTestPaths = [

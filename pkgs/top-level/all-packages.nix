@@ -1682,8 +1682,6 @@ with pkgs;
 
   cot = with python3Packages; toPythonApplication cot;
 
-  crossplane = with python3Packages; toPythonApplication crossplane;
-
   csv2md = with python3Packages; toPythonApplication csv2md;
 
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
