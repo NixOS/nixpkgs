@@ -112,6 +112,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # macOS iconv implementation is slightly broken since Sonoma
+    # https://github.com/Homebrew/homebrew-core/pull/199639
+    # https://savannah.gnu.org/bugs/index.php?66541
+    am_cv_func_iconv_works = "yes";
+  };
+
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
 
