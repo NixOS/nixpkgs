@@ -15,11 +15,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils-musl";
-  version = "9.9";
+  version = "9.10";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.gz";
-    hash = "sha256-kacZ/Pkj3mhgFvLI0ISovh95PzQXOGEnPEZo98Za+Uo=";
+    hash = "sha256-4L3h+2hQlEf8cjzyUX6KjH+kZ2mRm7dJDtNQoukjhWI=";
   };
 
   configureFlags = [
@@ -32,9 +32,6 @@ let
     # Disable PATH_MAX for better reproducibility
     "gl_cv_func_getcwd_path_max=\"no, but it is partly working\""
     "gl_cv_have_unlimited_file_name_length=no"
-
-    # test crashes bash-2.05b?
-    "gl_cv_func_pthread_rwlock_good_waitqueue=no"
 
     # depends on linux/version.h, which is not present at this stage
     "gl_cv_func_copy_file_range=no"
