@@ -93,6 +93,12 @@ let
             SDL2_mixer
           ];
           extraNativeBuildInputs = [ bison ];
+          # `label()` was removed in protobuf 34
+          # <https://github.com/protocolbuffers/protobuf/commit/b76faa921fdd244f374c7be0bddd4050fc42c292>
+          postPatch = ''
+            substituteInPlace src/network/nProtoBuf.cpp \
+              --replace-fail 'field->label() == FieldDescriptor::LABEL_REPEATED' 'field->is_repeated()'
+          '';
         };
 
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
@@ -144,6 +150,8 @@ let
     stdenv.mkDerivation {
       pname = mainProgram;
       inherit (resolvedParams) version src;
+
+      postPatch = resolvedParams.postPatch or "";
 
       # Build works fine; install has a race.
       enableParallelBuilding = true;
