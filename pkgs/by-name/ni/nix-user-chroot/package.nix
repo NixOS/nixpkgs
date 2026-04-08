@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  NIX_USER_CHROOT_TEST_BUSYBOX = "${pkgsStatic.busybox}/bin/busybox";
+  env.NIX_USER_CHROOT_TEST_BUSYBOX = "${pkgsStatic.busybox}/bin/busybox";
   checkFlags = [
     "--skip=run_nix_install" # Test requires network
   ];
