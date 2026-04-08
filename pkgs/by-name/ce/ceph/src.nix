@@ -6,11 +6,11 @@
 
 applyPatches (final: {
   pname = "ceph-src";
-  version = "20.2.0";
+  version = "20.2.1";
 
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${final.version}.tar.gz";
-    hash = "sha256-jeBk1pgx7zJzOVOfIzx47IJ/o1HEDO2amRbwtBdMZoU=";
+    hash = "sha256-3neaoBQYOTiLsgHgqdYiuEM5guHE17/DrGEXt2OXJUI=";
   };
 
   patches = [
@@ -22,20 +22,6 @@ applyPatches (final: {
       extraPrefix = "src/s3select/";
       stripLen = 1;
       hash = "sha256-0jn5X4jIdluCufFXWHeO6skMz6XQpliHkC1tPLK6dbk=";
-    })
-    # allows ceph-mgr to run on python 3.12
-    # See: https://github.com/ceph/ceph/pull/66794
-    (fetchurl {
-      name = "ceph-upstream-pyo3-workaround.patch";
-      url = "https://github.com/ceph/ceph/pull/66794.diff?full_index=1";
-      hash = "sha256-+OrG9JpMOfZwtzAPJkBrzt+8BGKKiNjQMMpkJSHpGFo=";
-    })
-    # fix prometheus metrics without orchestrator
-    # See: https://github.com/ceph/ceph/pull/65906
-    (fetchurl {
-      name = "ceph-prometheus-fix.diff";
-      url = "https://github.com/ceph/ceph/pull/65906.diff?full_index=1";
-      hash = "sha256-3QEtrsVJYUFvq1eT16v8fsmjpZMqOZ8AAoH+Sv7YyYA=";
     })
     # fixes issues when python3 is not on the PATH
     # See: https://github.com/ceph/ceph/pull/67904
