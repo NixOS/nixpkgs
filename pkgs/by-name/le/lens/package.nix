@@ -17,15 +17,15 @@ let
   sources = {
     x86_64-linux = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.x86_64.AppImage";
-      hash = "sha256-8wSJ46njHtC2qhCRNMmVwI/YNs06qoVQn5qkXICACy4=";
+      hash = "sha512-q0vb6sl4XqoNhV83z16TWoqGNLA6J6wAyVmz28cBzzA5O9xSpMDIMiQPwQlgAnbCnCDaWc//HhXMmobaKWAUxA==";
     };
     x86_64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.dmg";
-      hash = "sha256-Je5+MjhedffRyKFjoh1hJedHXDUASvXZKVd1saLwacc=";
+      hash = "sha512-rnbhxhL7pMED4uN7+8iVEY1a65FvweNwDxtbKwRZf9sRMntzFSVxhME9dqQKGIgHVZbGppC20ZAHX9JSG0iPXQ==";
     };
     aarch64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest-arm64.dmg";
-      hash = "sha256-jJRlz4l5hMnk/bDvRuSVVuoe2SMQuZdAZ3RnGaUuvhU=";
+      hash = "sha512-FBVF1OtQCGlmMLSOCTMQjwFswV5P7chZEz9WhEIaKwjD/DIA9d4Id9kLsG02KDytOfVjeQFxYrRSpzkLepe6wA==";
     };
   };
 
