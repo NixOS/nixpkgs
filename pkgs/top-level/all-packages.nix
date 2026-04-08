@@ -11044,10 +11044,6 @@ with pkgs;
     teos-watchtower-plugin
     ;
 
-  vertcoind = callPackage ../applications/blockchains/vertcoin {
-    withGui = false;
-  };
-
   beancount = with python3.pkgs; toPythonApplication beancount;
 
   beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
