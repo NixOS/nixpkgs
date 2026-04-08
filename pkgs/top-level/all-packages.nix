@@ -2875,8 +2875,6 @@ with pkgs;
 
   op-geth = callPackage ../applications/blockchains/optimism/geth.nix { };
 
-  optimism = callPackage ../applications/blockchains/optimism { };
-
   pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
