@@ -19,8 +19,8 @@ in
   description = "GNU Compiler Collection, version ${version}";
   longDescription = ''
     The GNU Compiler Collection includes compiler front ends for C, C++,
-    Objective-C, Fortran, OpenMP for C/C++/Fortran, and Ada, as well as
-    libraries for these languages (libstdc++, libgomp,...).
+    Objective-C, Fortran, OpenMP for C/C++/Fortran, Ada, Go, Rust and Cobol,
+    as well as libraries for these languages (libstdc++, libgomp,...).
 
     GCC development is a part of the GNU Project, aiming to improve the
     compiler used in the GNU system including the GNU/Linux variant.
