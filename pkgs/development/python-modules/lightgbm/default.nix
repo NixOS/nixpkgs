@@ -18,7 +18,7 @@
 
   # buildInputs
   llvmPackages,
-  boost,
+  boost187,
   ocl-icd,
   opencl-headers,
 
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   buildInputs =
     (lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ])
     ++ (lib.optionals gpuSupport [
-      boost
+      boost187
       ocl-icd
       opencl-headers
     ])
