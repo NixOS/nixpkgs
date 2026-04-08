@@ -89,6 +89,12 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert 'a string!' == 'a metadata!'
     "test_save_load_memmap"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_to"
+    "test_casts"
+    "test_td_params_cast"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs due to the use of a pool
     "test_chunksize_num_chunks"
