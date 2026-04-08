@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5m5nNVsaBabUuKPHErBr+LQWfCvjG9b2CjwdK9mASF0=";
+    hash = "sha256-rnMp0u3sl9zqIKNp3OoM9PmE/468YCwqTY4rdDHxamw=";
   };
 
   postPatch = ''
