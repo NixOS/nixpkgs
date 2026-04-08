@@ -11485,8 +11485,7 @@ with pkgs;
     lapack = lapack-ilp64;
   };
 
-  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse { };
-  suitesparse = suitesparse_5_3;
+  suitesparse = callPackage ../development/libraries/science/math/suitesparse { };
 
   trilinos-mpi = trilinos.override { withMPI = true; };
 
