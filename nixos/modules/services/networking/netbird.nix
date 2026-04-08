@@ -780,7 +780,7 @@ in
                 refresh_status
                 <"$status_file" sed 's/^/STATUS:PRE-CONNECT : /g'
 
-                until refresh_status && <"$status_file" grep --quiet 'Connected\|NeedsLogin' ; do
+                until refresh_status && <"$status_file" grep --quiet 'Management: Connected\|NeedsLogin' ; do
                   sleep 1
                 done
                 <"$status_file" sed 's/^/STATUS:POST-CONNECT: /g'
