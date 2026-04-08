@@ -77,14 +77,14 @@ let
   # The geodata website is not versioned, so we use the internet archive
   geodata =
     let
-      timestamp = "20250818205425";
+      timestamp = "20260408011516";
       date =
         "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
         + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-zZHAomW1C4qReFbhme5dkVnTiLw+jmhZhzuYvoBVBCY=";
+        outputHash = "sha256-WSKaTn54+8ckXPsk3jsOJ4yCsO0jLKf3y+apqwNlHc4=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -115,20 +115,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.6.3";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7N11eqKxrSO7+KRvwbYG7VaMrcDNru12DXJHe+G6gj8=";
+    hash = "sha256-I3+pmG6tO01tT9H/WyEVB+FRT+78yllIJfVT+fEIo2c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-Tsb1sdKeyP1Bhw2l+L0jDQF6AaWqTEgrOOvTsAyt9dQ=";
+    hash = "sha256-Xyhsxyk7ZZD9KgqYAAiJPtgEC6SqqT4dIjthInFkO+Q=";
   };
 
   postPatch = ''

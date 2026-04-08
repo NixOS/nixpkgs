@@ -10,7 +10,6 @@
   libgbm,
   pango,
   udev,
-  shaderc,
   libglvnd,
   vulkan-loader,
   autoPatchelfHook,
@@ -20,18 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mm2bXxl9TaKwmeCwFz3IKznqjsfY8RKEVU/RK4zd63U=";
+    sha256 = "sha256-JOt3xEONGDmLovk72hX0d3De01zTd51d2/J4HziBE9I=";
   };
 
-  cargoHash = "sha256-T7053eAH3IqkAxNZpYHdC6Z7JZtArrOqGMjoIccjemI=";
-
-  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  cargoHash = "sha256-wK9v3YwP067etFAu6Ca9Sts+QrD4uL48chbL6tZKFkk=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -46,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
     udev
     libinput
-    shaderc
   ];
 
   runtimeDependencies = [

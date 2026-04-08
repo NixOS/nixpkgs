@@ -159,7 +159,7 @@ buildDotnetModule (finalAttrs: {
 
   # tests fail with sandboxing under darwin
   __darwinAllowLocalNetworking = true;
-  __noChroot = true;
+  __noChroot = stdenv.hostPlatform.isDarwin;
 
   # Fully qualified name of disabled tests
   disabledTests = [
