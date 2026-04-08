@@ -3874,6 +3874,12 @@
     githubId = 86652;
     name = "Bram Duvigneau";
   };
+  brancengregory = {
+    name = "Brancen Gregory";
+    email = "brancengregory@gmail.com";
+    github = "brancengregory";
+    githubId = 13408602;
+  };
   brancz = {
     email = "frederic.branczyk@polarsignals.com";
     name = "Frederic Branczyk";
