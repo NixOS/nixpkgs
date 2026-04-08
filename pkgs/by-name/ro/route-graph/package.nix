@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "route-graph";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "route-graph";
     tag = finalAttrs.version;
-    hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
+    hash = "sha256-NxATrPx1JzEripu4x2UkFSAgrJUYQ7P7U2C6EmNuY5g=";
   };
 
   pythonRelaxDeps = [
