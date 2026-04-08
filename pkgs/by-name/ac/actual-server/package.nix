@@ -130,7 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) offlineCache;
+    inherit translations;
     tests = nixosTests.actual;
+    updateScript = ./update.sh;
   };
 
   meta = {
