@@ -55,6 +55,14 @@ in
               Enabling this option will skip systemd tracking and its setup in NixOS.
             '';
           };
+          SKIP_GPU = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to disable GPU monitoring.
+              Enabling this option will skip GPU tracking.
+            '';
+          };
         };
       };
       default = { };
@@ -131,15 +139,17 @@ in
       path =
         cfg.extraPath
         ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
-        ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
-          (lib.getBin config.hardware.nvidia.package)
-        ]
-        ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
-          (lib.getBin pkgs.rocmPackages.rocm-smi)
-        ]
-        ++ lib.optionals (builtins.elem "intel" config.services.xserver.videoDrivers) [
-          (lib.getBin pkgs.intel-gpu-tools)
-        ];
+        ++ lib.optionals (!cfg.environment.SKIP_GPU) (
+          lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
+            (lib.getBin config.hardware.nvidia.package)
+          ]
+          ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
+            (lib.getBin pkgs.rocmPackages.rocm-smi)
+          ]
+          ++ lib.optionals (builtins.elem "intel" config.services.xserver.videoDrivers) [
+            (lib.getBin pkgs.intel-gpu-tools)
+          ]
+        );
 
       serviceConfig = {
         ExecStart = ''
@@ -176,7 +186,7 @@ in
 
         LockPersonality = true;
         NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable;
+        PrivateDevices = !cfg.smartmon.enable && cfg.environment.SKIP_GPU;
         PrivateTmp = true;
         PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD;
         ProtectClock = true;
