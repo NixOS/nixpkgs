@@ -10459,13 +10459,8 @@ with pkgs;
 
   gridcoin-researchd = gridcoin-research.override { withGui = false; };
 
-  groestlcoin = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  groestlcoind = callPackage ../applications/blockchains/groestlcoin {
-    inherit (darwin) autoSignDarwinBinariesHook;
+  groestlcoind = groestlcoin.override {
+    withGui = false;
   };
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
