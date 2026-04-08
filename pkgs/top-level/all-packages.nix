@@ -11033,10 +11033,6 @@ with pkgs;
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
-  elements = libsForQt5.callPackage ../applications/blockchains/elements {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
   elementsd = callPackage ../applications/blockchains/elements {
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
