@@ -22028,6 +22028,12 @@
     github = "pulsation";
     githubId = 1838397;
   };
+  puneetmatharu = {
+    email = "puneet.matharu@hotmail.co.uk";
+    github = "puneetmatharu";
+    githubId = 25821489;
+    name = "Puneet Matharu";
+  };
   purcell = {
     email = "steve@sanityinc.com";
     github = "purcell";
