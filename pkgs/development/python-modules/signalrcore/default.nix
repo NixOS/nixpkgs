@@ -66,12 +66,10 @@ buildPythonPackage rec {
 
   meta = {
     mainProgram = "signalrcore";
-
-    description = "A complete Python client for ASP.NET Core SignalR — supporting all transports, encodings, authentication, and reconnection strategies.";
+    description = "Complete Python client for ASP.NET Core SignalR — supporting all transports, encodings, authentication, and reconnection strategies";
     homepage = "https://mandrewcito.github.io/signalrcore";
     changelog = "https://github.com/mandrewcito/signalrcore/releases/tag/${version}";
     license = lib.licenses.mit;
-
     maintainers = with lib.maintainers; [ vaisriv ];
   };
 }
