@@ -574,6 +574,23 @@ let
         compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
+
+      # MicroHs
+      array = [
+        compilerNames.microhs
+      ];
+      ghc-compat = [
+        compilerNames.microhs
+      ];
+      hscolour = [
+        compilerNames.microhs
+      ];
+      MicroCabal = [
+        compilerNames.microhs
+      ];
+      random = [
+        compilerNames.microhs
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
