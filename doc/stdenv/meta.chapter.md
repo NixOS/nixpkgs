@@ -317,14 +317,13 @@ It is up to the package author to make sure all parts are correct and match expe
 Following functions help with filling out `version` and `update` fields:
 
 * [`lib.meta.cpeFullVersionWithVendor`](#function-library-lib.meta.cpeFullVersionWithVendor)
-* [`lib.meta.cpePatchVersionInUpdateWithVendor`](#function-library-lib.meta.cpePatchVersionInUpdateWithVendor)
 
 For many packages to make CPE available it should be enough to specify only:
 
 ```nix
 {
   # ...
-  meta.identifiers.cpeParts = lib.meta.cpePatchVersionInUpdateWithVendor vendor version;
+  meta.identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor vendor version;
 }
 ```
 
