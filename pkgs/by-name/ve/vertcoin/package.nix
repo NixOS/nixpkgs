@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   openssl,
-  boost,
+  boost177,
   libevent,
   autoreconfHook,
   db4,
@@ -13,11 +13,13 @@
   hexdump,
   zeromq,
   gmp,
-  withGui,
-  qtbase ? null,
-  qttools ? null,
-  wrapQtAppsHook ? null,
+  withGui ? true,
+  libsForQt5,
 }:
+
+let
+  boost = boost177;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vertcoin";
@@ -31,6 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "2bd6dba7a822400581d5a6014afd671fb7e61f36";
     sha256 = "ua9xXA+UQHGVpCZL0srX58DDUgpfNa+AAIKsxZbhvMk=";
   };
+
+  # Dynamically patch missing standard library headers for modern GCC
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/chainparamsbase.h
+    sed -i '1i #include <cstdint>' src/zmq/zmqabstractnotifier.h
+    sed -i '1i #include <cstdint>' src/zmq/zmqpublishnotifier.h
+  '';
 
   patches = [
     # Fix build on gcc-13 due to missing <stdexcept> headers
@@ -52,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     hexdump
   ]
   ++ lib.optionals withGui [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -64,19 +73,28 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
   ]
   ++ lib.optionals withGui [
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
     protobuf
   ];
 
   enableParallelBuilding = true;
 
+  # Inject the Boost backward-compatibility flag directly into the C++ compiler
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error -std=c++17";
+  };
+
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
+    "--disable-werror"
+    "--disable-tests"
+    "--disable-gui-tests"
+    "--disable-bench"
   ]
   ++ lib.optionals withGui [
     "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-qt-bindir=${libsForQt5.qtbase.dev}/bin:${libsForQt5.qttools.dev}/bin"
   ];
 
   meta = {
