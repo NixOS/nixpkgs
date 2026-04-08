@@ -11037,8 +11037,6 @@ with pkgs;
 
   napari = with python312Packages; toPythonApplication napari;
 
-  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
-
   pycoin = with python3Packages; toPythonApplication pycoin;
 
   inherit (callPackages ../applications/blockchains/teos { })

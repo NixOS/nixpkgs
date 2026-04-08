@@ -5,10 +5,9 @@
   fetchpatch,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
   boost,
   libGL,
-  qtbase,
+  libsForQt5,
   python3,
 }:
 
@@ -43,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
         BOOST_ROOT = boost;
         RAIBLOCKS_GUI = "ON";
         RAIBLOCKS_TEST = "ON";
-        Qt5_DIR = "${qtbase.dev}/lib/cmake/Qt5";
-        Qt5Core_DIR = "${qtbase.dev}/lib/cmake/Qt5Core";
-        Qt5Gui_INCLUDE_DIRS = "${qtbase.dev}/include/QtGui";
-        Qt5Widgets_INCLUDE_DIRS = "${qtbase.dev}/include/QtWidgets";
+        Qt5_DIR = "${libsForQt5.qtbase.dev}/lib/cmake/Qt5";
+        Qt5Core_DIR = "${libsForQt5.qtbase.dev}/lib/cmake/Qt5Core";
+        Qt5Gui_INCLUDE_DIRS = "${libsForQt5.qtbase.dev}/include/QtGui";
+        Qt5Widgets_INCLUDE_DIRS = "${libsForQt5.qtbase.dev}/include/QtWidgets";
       };
       optionToFlag = name: value: "-D${name}=${value}";
     in
@@ -55,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     boost
     libGL
-    qtbase
+    libsForQt5.qtbase
   ];
 
   strictDeps = true;
