@@ -9450,6 +9450,11 @@
     githubId = 293586;
     name = "Adam Gamble";
   };
+  gamebeaker = {
+    github = "gamebeaker";
+    githubId = 9269847;
+    name = "gamebeaker";
+  };
   gamedungeon = {
     github = "GameDungeon";
     githubId = 60719255;
