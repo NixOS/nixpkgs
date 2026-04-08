@@ -12,12 +12,25 @@
   gcc-unwrapped,
   binutils,
   bash,
+
+  # FIXME: targetPlatform may be a fake platform, until
+  # cross-compilation infrastructure is properly in place.
+  dynamicLinkerOverride ? null,
 }:
 let
+  common = import ./common.nix {
+    inherit
+      lib
+      bash
+      fetchurl
+      gnutar
+      xz
+      ;
+  };
   pname = "gcc-wrapper";
-  extraFlags = "-static-libgcc ";
-  # only supports musl for now
-  dynamicLinkerGlob = "${libc}/lib/libc.so";
+  extraFlags = (lib.optionalString (!libgcc.sharedAvailable) "-static-libgcc ");
+  # adapted from bintools-wrapper
+  dynamicLinkerGlob = if dynamicLinkerOverride != null then dynamicLinkerOverride else common.dynamicLinkerGlob targetPlatform libc;
 in
 bash-build.runCommand "${pname}-${gcc-unwrapped.version}"
   {
