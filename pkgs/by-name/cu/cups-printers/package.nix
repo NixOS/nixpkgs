@@ -38,8 +38,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Tool for interacting with a CUPS server";
-    homepage = "https://github.com/audiusGmbH/cups-printers";
-    changelog = "https://github.com/audiusGmbH/cups-printers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/audius/cups-printers";
+    changelog = "https://github.com/audius/cups-printers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cups-printers";
