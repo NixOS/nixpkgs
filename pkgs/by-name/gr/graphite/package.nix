@@ -31,13 +31,13 @@
 }:
 
 let
-  version = "0-unstable-2026-03-13";
-  rev = "eb30ee78bcf8971dc0098f07bdef1fef9d4a7e19";
+  version = "0-unstable-2026-03-29";
+  rev = "203910a92f20b9bc4127eac4c5bb4a5492c8c293";
 
-  srcHash = "sha256-cQ6dLoFoNyiFFD/JVZ+U9kHrk2ZTcBxBCf8c3sMjCfQ=";
+  srcHash = "sha256-WBPRI5FQ17ZioSHzOZf0ChuxVtyniuez1OaSo66KqGg=";
   shaderHash = "sha256-uc6FU0df5Xqp6YXEwODULhgUjSQvjRFGvdk+uFB7II0=";
-  cargoHash = "sha256-GvKUZrrLYR2J4CnAbMs4TS6eOxSCq4AMecPGp6+008s=";
-  npmHash = "sha256-r9jfk/fs6mL9L/7heelamOKzlCEu23UWId0kX35mOgE=";
+  cargoHash = "sha256-h6FtvgzAPCtdRaFoGZBVcXGDLOt12IFk1CSW8nwZB94=";
+  npmHash = "sha256-WF6MuiCIW/vWpTN9Jj5srClUNJTVIgxfqna6/y1N9kE=";
 
   brandingRev = "8ae15dc9c51a3855475d8cab1d0f29d9d9bc622c";
   brandingHash = "sha256-mHdwHK2lEeFQWNrjbusvRULEmm03dP+0JM5bnUgHcF8=";
