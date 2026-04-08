@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -18,12 +20,21 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-TprfPZ/clb7PLMAkxF0y78bCef4XarhgHlIhIPn1nQA=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [
     "-s"
     "-X github.com/hmans/beans/cmd.version=${finalAttrs.version}"
     "-X github.com/hmans/beans/cmd.commit=${finalAttrs.src.rev}"
     "-X github.com/hmans/beans/cmd.date=unknown"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd beans \
+      --bash <($out/bin/beans completion bash) \
+      --fish <($out/bin/beans completion fish) \
+      --zsh <($out/bin/beans completion zsh)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
