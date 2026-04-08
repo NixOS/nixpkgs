@@ -11640,6 +11640,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-jump = buildVimPlugin {
+    pname = "nvim-jump";
+    version = "0-unstable-2026-04-08";
+    src = fetchFromGitHub {
+      owner = "yorickpeterse";
+      repo = "nvim-jump";
+      rev = "79c91e5860b856c66187107d8d3c8d0950261f2c";
+      hash = "sha256-P6PU3nFc02i52mzJUDG136z1YD3DXU0UFqtunmgUhuc=";
+    };
+    meta.homepage = "https://github.com/yorickpeterse/nvim-jump/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-k8s-crd = buildVimPlugin {
     pname = "nvim-k8s-crd";
     version = "0-unstable-2026-02-16";
