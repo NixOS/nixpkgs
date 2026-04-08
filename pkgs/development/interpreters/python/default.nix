@@ -92,9 +92,9 @@
         major = "3";
         minor = "15";
         patch = "0";
-        suffix = "a7";
+        suffix = "a8";
       };
-      hash = "sha256-j1kMQot/DUBt+Si4Vzfno6+ijt3U0UGUEOqAloftHqc=";
+      hash = "sha256-KPG2NYYJBC68yBSI7CRWlRn1CAS7B9wjzHB7KBsDHGk=";
       inherit passthruFun;
     };
 
