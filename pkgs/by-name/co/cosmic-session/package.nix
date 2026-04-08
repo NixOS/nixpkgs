@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.8";
+  version = "1.0.9";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-PJkr2etwcgzTELzsAVb2agof8tRZGEnDTKJ+1/9Q3bU=";
+    hash = "sha256-iprN4TDMBlg4QqprlAT+6NrNe2WC3gVA8EPvduvyjAs=";
   };
 
   cargoHash = "sha256-wFh9AYQRZB9qK0vCrhW9Zk61Yg+VY3VPAqJRD47NbK4=";
