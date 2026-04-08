@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wavelog";
-  version = "2.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "wavelog";
     repo = "wavelog";
     tag = finalAttrs.version;
-    hash = "sha256-ELCLVZ0CiXcefxDKpE3AODDzDCgnljXY/ooy0U+ut54=";
+    hash = "sha256-L6FJsU1vjnLukrw1qspVWE7OcZts9qcX/yM6tJQKuvQ=";
   };
 
   installPhase = ''
