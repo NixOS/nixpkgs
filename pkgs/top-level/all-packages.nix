@@ -10453,13 +10453,8 @@ with pkgs;
     withGui = false;
   };
 
-  elements = libsForQt5.callPackage ../applications/blockchains/elements {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-  elementsd = callPackage ../applications/blockchains/elements {
+  elementsd = elements.override {
     withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   gridcoin-researchd = gridcoin-research.override { withGui = false; };
