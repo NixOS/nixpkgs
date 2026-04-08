@@ -25,7 +25,7 @@
   stdenv,
   writers,
   writeScript,
-  x2t,
+  onlyoffice-documentserver,
   grunt-cli,
 }:
 
@@ -50,21 +50,21 @@ let
     "QMAKE_LFLAGS+=-licudata"
     "QMAKE_LFLAGS+=-L${icu}/lib"
   ];
-  # see core/Common/3dParty/html/fetch.py
+  # see DocumentServer/core/Common/3dParty/html/fetch.py
   gumbo-parser-src = fetchFromGitHub {
     owner = "google";
     repo = "gumbo-parser";
     rev = "aa91b27b02c0c80c482e24348a457ed7c3c088e0";
     hash = "sha256-+607iXJxeWKoCwb490pp3mqRZ1fWzxec0tJOEFeHoCs=";
   };
-  # see core/Common/3dParty/html/fetch.sh
+  # see DocumentServer/core/Common/3dParty/html/fetch.py
   katana-parser-src = fetchFromGitHub {
     owner = "jasenhuang";
     repo = "katana-parser";
     rev = "be6df458d4540eee375c513958dcb862a391cdd1";
     hash = "sha256-SYJFLtrg8raGyr3zQIEzZDjHDmMmt+K0po3viipZW5c=";
   };
-  # see build_tools scripts/core_common/modules/googletest.py
+  # see build_tools/scripts/core_common/modules/googletest.py
   googletest-src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
@@ -72,49 +72,49 @@ let
     hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
   };
   # 'latest' version
-  # (see build_tools scripts/core_common/modules/hyphen.py)
+  # (see build_tools/scripts/core_common/modules/hyphen.py)
   hyphen-src = fetchFromGitHub {
     owner = "hunspell";
     repo = "hyphen";
     rev = "73dd2967c8e1e4f6d7334ee9e539a323d6e66cbd";
     hash = "sha256-WIHpSkOwHkhMvEKxOlgf6gsPs9T3xkzguD8ONXARf1U=";
   };
-  # core/Common/3dParty/md/fetch.py
+  # see DocumentServer/core/Common/3dParty/md/fetch.py
   md4c-src = fetchFromGitHub {
     owner = "mity";
     repo = "md4c";
     rev = "481fbfbdf72daab2912380d62bb5f2187d438408";
     hash = "sha256-zhInM3R0CJUqnzh6wRxMwlUdErovplbZQ5IwXe9XzZ4=";
   };
-  # core/Common/3dParty/apple/fetch.py
+  # see DocumentServer/core/Common/3dParty/apple/fetch.py
   glm-src = fetchFromGitHub {
     owner = "g-truc";
     repo = "glm";
     rev = "33b4a621a697a305bc3a7610d290677b96beb181";
     hash = "sha256-wwGI17vlQzL/x1O0ANr5+KgU1ETnATpLw3njpKfjnKQ=";
   };
-  # core/Common/3dParty/apple/fetch.py
+  # see DocumentServer/core/Common/3dParty/apple/fetch.py
   mdds-src = fetchFromGitHub {
     owner = "kohei-us";
     repo = "mdds";
     rev = "0783158939c6ce4b0b1b89e345ab983ccb0f0ad0";
     hash = "sha256-HMGMxMRO6SadisUjZ0ZNBGQqksNDFkEh3yaQGet9rc0=";
   };
-  # core/Common/3dParty/apple/fetch.py
+  # see DocumentServer/core/Common/3dParty/apple/fetch.py
   librevenge-src = fetchFromGitHub {
     owner = "DistroTech";
     repo = "librevenge";
     rev = "becd044b519ab83893ad6398e3cbb499a7f0aaf4";
     hash = "sha256-2YRxuMYzKvvQHiwXH08VX6GRkdXnY7q05SL05Vbn0Vs=";
   };
-  # core/Common/3dParty/apple/fetch.py
+  # see DocumentServer/core/Common/3dParty/apple/fetch.py
   libodfgen-src = fetchFromGitHub {
     owner = "DistroTech";
     repo = "libodfgen";
     rev = "8ef8c171ebe3c5daebdce80ee422cf7bb96aa3bc";
     hash = "sha256-Bv/smZFmZn4PEAcOlXD2Z4k96CK7A7YGDHFDsqZpuiE=";
   };
-  # core/Common/3dParty/apple/fetch.py
+  # see DocumentServer/core/Common/3dParty/apple/fetch.py
   libetonyek-src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
@@ -127,14 +127,14 @@ let
 
   # x2t is not 'directly' versioned, so we version it after the version
   # of documentserver it's pulled into as a submodule
-  version = "9.2.1";
-  core-rev = "a22f0bfb6032e91f218951ef1c0fc29f6d1ceb36";
+  version = "9.3.1";
+  core-rev = "7043b3609328e917a4791aec8f3e8fca3225120f";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-RSoCRcUGnavcNdZEfmBdtxJbEXhiOvbA8IwSeGBkWcs=";
+    hash = "sha256-tCYc5R0dlEBoEaUo3DY6GCDJjoBZIaz8Syik0Z30s/s=";
   };
   # mini implementation of https://github.com/kentcdodds/cross-env
   # because that was not trivial to package and we don't need most
@@ -156,8 +156,8 @@ let
     subprocess.run(cmd, env=env)
   '';
   # rev that the 'web-apps' submodule in documentserver points at
-  web-apps-rev = "c2074bbff69902490d49fa7fb511801a11c581f4";
-  web-apps-hash = "sha256-i+m8a1b8RaVmyUAC+FiEdSyXmPWse9XaJaaLL7iq73o=";
+  web-apps-rev = "1c8ca9987876bada73c0bde21367da09c0e1ed83";
+  web-apps-hash = "sha256-1OniYHaf5kMVYJbEThkeuWfJPxaJoaYqiHaBTi/euAc=";
   web-apps-mobile = buildNpmPackage (finalAttrs: {
     name = "web-apps-mobile";
 
@@ -257,6 +257,12 @@ let
       # for device_scale.js
       chmod u+rwx ../..
       ln -s ${sdkjs.src} ../../sdkjs
+
+      echo "Merging and checking translation files"
+      cd ../translation
+      chmod u+rwx ../apps/*/main/locale/*
+      ${python3}/bin/python3 merge_and_check.py
+      cd -
     '';
 
     postBuild = ''
@@ -275,6 +281,9 @@ let
 
       mv ../deploy/web-apps $out
 
+      # e.g. formats@2.5x.svg
+      cp -r ../apps/common/main/resources/img/doc-formats/* $out/apps/common/main/resources/img/doc-formats
+
       for component in documenteditor spreadsheeteditor presentationeditor visioeditor; do
         ln -s ${web-apps-mobile}/$component/mobile/css $out/apps/$component/mobile/css
         rm -r $out/apps/$component/mobile/dist
@@ -291,8 +300,8 @@ let
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "1e81e7e844fcc602c639067cce7d7726749dc11b";
-      hash = "sha256-9vDGU8paLUAk3GtLbawhog2EDtCVHzNPBjkryxyg6Gs=";
+      rev = "aa78926242b3da023255d9c7e9180e5a3294167b";
+      hash = "sha256-wZh4TH7+f1dr8sx2C3k3U8zRWLBxmKx8MocLBbPdhJA=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -465,6 +474,7 @@ let
       libheif.lib
       x265
       libde265
+      boost
     ];
     preConfigure = ''
       ln -s ${katana-parser-src} $BUILDRT/Common/3dParty/html/katana-parser
@@ -519,9 +529,6 @@ let
     buildInputs = [ boost ];
   };
   xlsformatlib = buildCoreComponent "MsBinaryFile/Projects/XlsFormatLib/Linux" {
-    patches = [
-      ./MsBinaryFile-pragma-regions.patch
-    ];
     buildInputs = [ boost ];
   };
   docformatlib = buildCoreComponent "MsBinaryFile/Projects/DocFormatLib/Linux" {
@@ -585,8 +592,25 @@ let
   odfformatlib = buildCoreComponent "OdfFile/Projects/Linux" {
     buildInputs = [ boost ];
   };
+  starmath = buildCoreComponent "OdfFile/Reader/Converter/StarMath2OOXML" {
+    buildInputs = [
+      kernel
+      boost
+    ];
+    preConfigure = ''
+      source ${fixIcu}
+    '';
+    passthru.tests = buildCoreTests "OdfFile/Reader/Converter/StarMath2OOXML/TestSMConverter" {
+      buildInputs = [ starmath ];
+      preConfigure = ''
+        source ${fixIcu}
+        ln -s ${googletest-src} $BUILDRT/Common/3dParty/googletest/googletest
+      '';
+    };
+  };
   hwpfile = buildCoreComponent "HwpFile" {
     buildInputs = [
+      starmath
       cryptopp
       kernel
       unicodeConverter
@@ -805,6 +829,26 @@ let
       '';
     };
   };
+  ooxmlsignature = buildCoreComponent "DesktopEditor/xmlsec/src" {
+    buildInputs = [
+      kernel
+    ];
+    preConfigure = ''
+      mkdir -p $BUILDRT/Common/3dParty/openssl/build/linux_64/lib
+      for i in ${openssl'.out}/lib/*; do
+        ln -s $i $BUILDRT/Common/3dParty/openssl/build/linux_64/lib/$(basename $i)
+      done
+    '';
+    passthru.tests = buildCoreTests "DesktopEditor/xmlsec/src/test" {
+      buildInputs = [
+        kernel
+        ooxmlsignature
+      ];
+      preConfigure = ''
+        source ${fixIcu}
+      '';
+    };
+  };
   allfontsgen = buildCoreComponent "DesktopEditor/AllFontsGen" {
     buildInputs = [
       unicodeConverter
@@ -906,6 +950,8 @@ buildCoreComponent "X2tConverter/build/Qt" {
     ofdfile
     vbaformatlib
     odfformatlib
+    starmath
+    ooxmlsignature
   ];
   qmakeFlags = qmakeFlags ++ icuQmakeFlags ++ [ "X2tConverter.pro" ];
   preConfigure = ''
@@ -946,8 +992,10 @@ buildCoreComponent "X2tConverter/build/Qt" {
     docxrenderer = docxrenderer.tests;
     doctrenderer = doctrenderer.tests;
     ofdfile = ofdfile.tests;
+    starmath = starmath.tests;
+    ooxmlsignature = ooxmlsignature.tests;
     x2t = runCommand "x2t-test" { } ''
-      (${x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
+      (${onlyoffice-documentserver.x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
     '';
     nixos-module = nixosTests.onlyoffice;
   };
