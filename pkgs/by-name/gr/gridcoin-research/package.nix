@@ -3,14 +3,12 @@
   stdenv,
   lib,
   openssl,
-  boost,
+  boost179,
   curl,
   libevent,
   libzip,
   qrencode,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   autoreconfHook,
   pkg-config,
   libtool,
@@ -18,6 +16,10 @@
   hexdump,
   fetchpatch2,
 }:
+
+let
+  boost = boost179;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gridcoin-research";
@@ -39,15 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     autoreconfHook
     libtool
     hexdump
   ];
 
   buildInputs = [
-    qttools
-    qtbase
+    libsForQt5.qttools
+    libsForQt5.qtbase
     qrencode
     libevent
     libzip
@@ -59,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-qt-bindir=${libsForQt5.qtbase.dev}/bin:${libsForQt5.qttools.dev}/bin"
     "--with-qrencode"
     "--with-boost-libdir=${boost.out}/lib"
   ];

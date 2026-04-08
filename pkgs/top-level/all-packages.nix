@@ -11033,10 +11033,6 @@ with pkgs;
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
-  gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
-    boost = boost179;
-  };
-
   groestlcoin = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
