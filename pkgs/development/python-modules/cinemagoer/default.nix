@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "cinemagoer";
-  version = "2025.12.31";
+  version = "2023.05.01";
   pyproject = true;
 
   src = fetchFromGitHub {
