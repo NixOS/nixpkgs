@@ -168,8 +168,10 @@ let
           cp "$default_settings_file" "$settings_file"
         fi
 
-        cat < ${appendSettings hostName} >> "$settings_file"
-        chmod 644 "$settings_file"
+        if ! grep -qF "require dirname(__FILE__) . '/settings.nixos-${hostName}.php';" ${cfg.stateDir}/sites/default/settings.php; then
+          echo "Appending NixOS generated settings..."
+          cat < ${appendSettings hostName} >> "$settings_file"
+        fi
 
         # Link the NixOS-managed settings file to the state directory.
         ln -sf ${drupalSettings hostName cfg} ${cfg.stateDir}/sites/default/settings.nixos-${hostName}.php
