@@ -42,7 +42,7 @@
 assert gpuSupport -> !cudaSupport;
 assert cudaSupport -> !gpuSupport;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (pkgs.lightgbm)
     pname
     version
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
   };
 
@@ -123,11 +123,11 @@ buildPythonPackage rec {
   meta = {
     description = "Fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/lightgbm-org/LightGBM";
-    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${version}";
+    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       flokli
       teh
     ];
   };
-}
+})
