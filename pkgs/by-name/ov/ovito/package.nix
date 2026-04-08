@@ -64,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtwayland
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # manually create a desktop file
   desktopItems = [
     (makeDesktopItem {
