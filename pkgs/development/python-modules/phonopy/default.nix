@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "3.2.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JSLwABXVYhGm9nb4W9M0AKCU98grBpfyHp5JB8KcIJc=";
+    hash = "sha256-pCBCZzVSthExY6NhmQKyGj7aFgvHLyztUToYGL4Y3Jo=";
   };
 
   postPatch = ''
