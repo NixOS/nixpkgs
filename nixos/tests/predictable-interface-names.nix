@@ -63,18 +63,20 @@ pkgs.lib.listToAttrs (
             # Check if predictable interface names are working in stage-1
             boot.initrd.postDeviceCommands = lib.mkIf (!systemdStage1) script;
 
-            boot.initrd.systemd = lib.mkIf systemdStage1 {
-              enable = true;
-              initrdBin = [ pkgs.iproute2 ];
-              services.systemd-udev-settle.wantedBy = [ "initrd.target" ];
-              services.check-interfaces = {
-                requiredBy = [ "initrd.target" ];
-                after = [ "systemd-udev-settle.service" ];
-                serviceConfig.Type = "oneshot";
-                path = [ pkgs.iproute2 ];
-                inherit script;
-              };
-            };
+            boot.initrd.systemd = lib.mkMerge [
+              { enable = systemdStage1; }
+              (lib.mkIf systemdStage1 {
+                initrdBin = [ pkgs.iproute2 ];
+                services.systemd-udev-settle.wantedBy = [ "initrd.target" ];
+                services.check-interfaces = {
+                  requiredBy = [ "initrd.target" ];
+                  after = [ "systemd-udev-settle.service" ];
+                  serviceConfig.Type = "oneshot";
+                  path = [ pkgs.iproute2 ];
+                  inherit script;
+                };
+              })
+            ];
           };
 
         testScript = ''

@@ -149,6 +149,10 @@ The first steps to all these are the same:
     `NIXOS_LUSTRATE`:
     :::
 
+    ::: {.warning}
+    The lustrate process will not work if the [](#opt-boot.initrd.systemd.enable) option is set to `true`, which is now the default. Setting this to `false` is deprecated and scheduled for removal in NixOS 26.11, along with `NIXOS_LUSTRATE`. Other installation methods, such as the one outlined above, or installing from [kexec](#sec-booting-via-kexec), are recommended instead.
+    :::
+
     Generate your NixOS configuration:
 
     ```ShellSession
@@ -165,11 +169,6 @@ The first steps to all these are the same:
     In NixOS, by default, both [systemd-boot](https://systemd.io/BOOT/) and [grub](https://www.gnu.org/software/grub/index.html) expect it to be mounted on `/boot`.
     However, the configuration generator bases its [](#opt-fileSystems) configuration on the current mount points at the time it is run.
     If the current system and NixOS's bootloader configuration don't agree on where the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition) is to be mounted, you'll need to manually alter the mount point in `hardware-configuration.nix` before building the system closure.
-    :::
-
-    ::: {.note}
-    The lustrate process will not work if the [](#opt-boot.initrd.systemd.enable) option is set to `true`.
-    If you want to use this option, wait until after the first boot into the NixOS system to enable it and rebuild.
     :::
 
     You'll likely want to set a root password for your first boot using
