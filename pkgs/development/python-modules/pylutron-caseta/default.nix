@@ -13,7 +13,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylutron-caseta";
   version = "0.28.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = "pylutron-caseta";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0HH+tEZoMTmvD3z67nJWauQfxoQ/IK1Bxlu1XbWGqI4=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to control Lutron Caseta devices";
     homepage = "https://github.com/gurumitts/pylutron-caseta";
-    changelog = "https://github.com/gurumitts/pylutron-caseta/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gurumitts/pylutron-caseta/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
