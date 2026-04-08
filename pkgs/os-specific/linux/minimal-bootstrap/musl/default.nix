@@ -78,6 +78,12 @@ bash.runCommand "${pname}-${version}"
     sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
       src/misc/wordexp.c
 
+    # See: https://gitlab.alpinelinux.org/alpine/aports/-/blob/cd7cc21cfae56585beb41ed96844d44b60020c13/main/musl/APKBUILD
+    cat <<EOF > __stack_chk_fail_local.c
+      extern void __stack_chk_fail(void);
+      void __attribute__((visibility ("hidden"))) __stack_chk_fail_local(void) { __stack_chk_fail(); }
+    EOF
+
     # Configure
     bash ./configure \
       --prefix=$out \
@@ -88,6 +94,8 @@ bash.runCommand "${pname}-${version}"
 
     # Build
     make -j $NIX_BUILD_CORES
+    gcc -c __stack_chk_fail_local.c -o __stack_chk_fail_local.o
+    ar r libssp_nonshared.a __stack_chk_fail_local.o
 
     # Install
     make -j $NIX_BUILD_CORES install
@@ -97,4 +105,6 @@ bash.runCommand "${pname}-${version}"
     mkdir -p $bin
     mv $out/bin $bin/bin
     ln -s $out/lib/libc.so $bin/bin/ldd
+
+    cp libssp_nonshared.a $out/lib/
   ''
