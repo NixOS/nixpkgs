@@ -11,19 +11,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "skills";
-  version = "1.4.6";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "skills";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H2ZUOjYbG2I2OBV4J8dil84cAhSh+j9ovJFbT88JVEo=";
+    hash = "sha256-P7sHiKqeThQGIOfJ1nfjiECZnhQh+U2HuLex2sg8k5E=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-pwPJ4CRHEtCXpt5b6g/7EbDsUc2KCjOtpiVED0tqoMk=";
+    hash = "sha256-0CS6BTjTj/TAnMNahTk4Vt/0/2eMxmCGUV9PwI8l4Ao=";
   };
 
   nativeBuildInputs = [
