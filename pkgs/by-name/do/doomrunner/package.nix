@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Youda008";
     repo = "DoomRunner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkLW3og51e2sydWUiMDr2DOr1uHxzv4Z3rr/WRys5bY=";
+    hash = "sha256-jEXY0RoSKLE3fpdAygyUahaLRlz4X8Xnq+talZwrSRM=";
   };
 
   buildInputs = [

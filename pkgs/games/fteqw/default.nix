@@ -17,6 +17,7 @@
   speex,
   libopus,
   libxscrnsaver,
+  libxcb,
   libxrandr,
   libxcursor,
   libGL,
@@ -46,6 +47,7 @@
         vulkan-loader
         speex
         libopus
+        libxcb
         libxrandr
         libxcursor
         libxscrnsaver
