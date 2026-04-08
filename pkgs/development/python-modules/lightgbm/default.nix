@@ -93,6 +93,10 @@ buildPythonPackage rec {
     # Set in pyproject.toml for `cmake.args` in `[tool.scikit-build]`,
     # but not set by our hooks.
     (lib.cmakeBool "__BUILD_FOR_PYTHON" true)
+  ]
+  ++ lib.optionals cudaSupport [
+    # build fails otherwise
+    (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
   ];
 
   optional-dependencies = {
