@@ -231,11 +231,11 @@ in
     environment.systemPackages = [ pkgs.xwininfo ];
 
     # Log everything to the serial console.
-    services.journald.extraConfig = ''
-      ForwardToConsole=yes
-      TTYPath=/dev/${qemu-common.qemuSerialDevice}
-      MaxLevelConsole=debug
-    '';
+    services.journald.settings.Journal = {
+      ForwardToConsole = true;
+      TTYPath = "/dev/${qemu-common.qemuSerialDevice}";
+      MaxLevelConsole = "debug";
+    };
 
     systemd.settings.Manager = managerSettings;
     systemd.user.extraConfig = ''
