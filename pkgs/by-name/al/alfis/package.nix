@@ -6,6 +6,7 @@
   pkg-config,
   makeWrapper,
   webkitgtk_4_1,
+  xdotool,
   zenity,
   withGui ? true,
 }:
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_1;
+  buildInputs = lib.optionals (withGui && stdenv.hostPlatform.isLinux) [
+    webkitgtk_4_1
+    xdotool
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
