@@ -989,7 +989,6 @@ in
             "AF_INET6"
             "AF_UNIX"
           ];
-          TemporaryFileSystem = "/:ro";
         }
       ];
     };
@@ -1031,7 +1030,6 @@ in
             "AF_INET6"
             "AF_UNIX"
           ];
-          TemporaryFileSystem = "/:ro";
         }
       ];
       environment.RUST_LOG = "info";
@@ -1083,7 +1081,6 @@ in
         # Need access to home directories
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
-        TemporaryFileSystem = "/:ro";
         Restart = "on-failure";
       };
       environment.RUST_LOG = "info";

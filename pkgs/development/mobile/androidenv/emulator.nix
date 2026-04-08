@@ -37,6 +37,7 @@ deployAndroidPackage {
         nspr
         alsa-lib
         waylandpp.lib
+        libgbm
       ]
     )
     ++ (with pkgs; [

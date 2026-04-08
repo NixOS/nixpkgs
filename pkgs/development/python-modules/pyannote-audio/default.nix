@@ -25,7 +25,6 @@
   pyannoteai-sdk,
   pytorch-metric-learning,
   safetensors,
-  soundfile,
   speechbrain,
   tensorboardx,
   torch,
@@ -43,17 +42,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannote-audio";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-tgXYcqkmMaEgFU55TQ5ESMNrZiBQkiVLmIoR1bhCOKI=";
+    hash = "sha256-mns5ooODnJBTfFlM4b0GOoWqeTeD2CEhMikby6WdIM4=";
   };
 
   build-system = [
@@ -82,7 +81,6 @@ buildPythonPackage rec {
     pyannoteai-sdk
     pytorch-metric-learning
     safetensors
-    soundfile
     speechbrain
     tensorboardx
     torch
@@ -144,10 +142,10 @@ buildPythonPackage rec {
   meta = {
     description = "Neural building blocks for speaker diarization: speech activity detection, speaker change detection, overlapped speech detection, speaker embedding";
     homepage = "https://github.com/pyannote/pyannote-audio";
-    changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyannote/pyannote-audio/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
     ];
   };
-}
+})

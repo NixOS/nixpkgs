@@ -485,7 +485,7 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 
 # Darwin
 /pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
-/pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
+/pkgs/os-specific/darwin                       @NixOS/darwin-core
 /pkgs/stdenv/darwin                            @NixOS/darwin-core
 
 # BEAM

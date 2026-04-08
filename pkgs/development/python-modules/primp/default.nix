@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "primp";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3NAu8hAHdazsV+KEH7gUms8XGKW84nasHnygIz5jRa8=";
+    hash = "sha256-AOMlf7Qo9CJFyEUXdtQuwnFQVBzejHTc6UHie/OlHOo=";
   };
 
   # The Cargo.lock is not pushed upstream
