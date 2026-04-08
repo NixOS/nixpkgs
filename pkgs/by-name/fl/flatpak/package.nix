@@ -80,7 +80,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.16.3";
+  version = "1.16.4";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PWvT9fiUDoDAhyhso+QhgvxjDXgIlFNlEfzSz/wSz1s=";
+    hash = "sha256-dh/zugDJmib5FMaZnpCxKlTKsZzqWIhBPxfkbuYY2P4=";
   };
 
   patches = [
