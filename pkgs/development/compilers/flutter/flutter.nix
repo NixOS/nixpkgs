@@ -248,6 +248,13 @@ stdenv.mkDerivation (finalAttrs: {
       if [ "${artifact.path}" != "$temp_path" ]; then
         rm --recursive --force "$temp_path"
       fi
+      ${
+        # Gradle Wrapper requires some files to be removed
+        # https://github.com/flutter/flutter/blob/81c87ea165df95681eb3a07e1f442983bf0e0e17/packages/flutter_tools/lib/src/flutter_cache.dart#L562-L563
+        lib.optionalString (
+          artifact.target == "bin/cache/artifacts/gradle_wrapper"
+        ) ''rm "$target_path/NOTICE" "$target_path/gradle/wrapper/gradle-wrapper.properties"''
+      }
     '') artifacts}
 
     cp --recursive . $out
