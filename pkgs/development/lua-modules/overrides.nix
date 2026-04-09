@@ -836,24 +836,6 @@ in
     ];
   };
 
-  lze = prev.lze.overrideAttrs {
-    doCheck = lua.luaversion == "5.1";
-    nativeCheckInputs = [
-      final.nlua
-      final.bustedCheckHook
-      writableTmpDirAsHomeHook
-    ];
-  };
-
-  lzextras = prev.lzextras.overrideAttrs {
-    doCheck = lua.luaversion == "5.1";
-    nativeCheckInputs = [
-      final.nlua
-      lua.pkgs.bustedCheckHook
-      final.lze
-    ];
-  };
-
   magick = prev.magick.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       imagemagick
