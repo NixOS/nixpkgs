@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -31,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -64,14 +62,14 @@ bash.runCommand "${pname}-${version}"
     cd diffutils-${version}
 
     # Configure
+    # Manually set strcasecmp_works, because we might be cross-compiling
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CC=musl-gcc \
-      CFLAGS=-static \
-      ac_cv_path_PR_PROGRAM=pr
+      ac_cv_path_PR_PROGRAM=pr \
+      gl_cv_func_strcasecmp_works=y
 
     # Build
     make -j $NIX_BUILD_CORES

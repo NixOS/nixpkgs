@@ -5,6 +5,7 @@
   fetchurl,
   bash,
   gcc,
+  libgcc,
   binutils,
   gnumake,
   gnugrep,
@@ -35,28 +36,30 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    passthru.tests.hello-world =
-      result:
-      bash.runCommand "${pname}-simple-program-${version}"
-        {
-          nativeBuildInputs = [
-            gcc
-            binutils
-            result
-          ];
-        }
-        ''
-          cat <<EOF >> test.c
-          #include <stdio.h>
-          int main() {
-            printf("Hello World!\n");
-            return 0;
+    passthru = {
+      tests.hello-world =
+        result:
+        bash.runCommand "${pname}-simple-program-${version}"
+          {
+            nativeBuildInputs = [
+              gcc
+              binutils
+              result
+            ];
           }
-          EOF
-          musl-gcc -o test test.c
-          ./test
-          mkdir $out
-        '';
+          ''
+            cat <<EOF >> test.c
+            #include <stdio.h>
+            int main() {
+              printf("Hello World!\n");
+              return 0;
+            }
+            EOF
+            musl-gcc -o test test.c
+            ./test
+            mkdir $out
+          '';
+    };
   }
   ''
     # Unpack
@@ -73,6 +76,12 @@ bash.runCommand "${pname}-${version}"
     sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
       src/misc/wordexp.c
 
+    # See: https://gitlab.alpinelinux.org/alpine/aports/-/blob/cd7cc21cfae56585beb41ed96844d44b60020c13/main/musl/APKBUILD
+    cat <<EOF > __stack_chk_fail_local.c
+      extern void __stack_chk_fail(void);
+      void __attribute__((visibility ("hidden"))) __stack_chk_fail_local(void) { __stack_chk_fail(); }
+    EOF
+
     # Configure
     bash ./configure \
       --prefix=$out \
@@ -80,6 +89,8 @@ bash.runCommand "${pname}-${version}"
       --host=${hostPlatform.config} \
       --syslibdir=$out/lib \
       --enable-wrapper
+    gcc -c __stack_chk_fail_local.c -o __stack_chk_fail_local.o
+    ar r libssp_nonshared.a __stack_chk_fail_local.o
 
     # Build
     make -j $NIX_BUILD_CORES
@@ -88,4 +99,5 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES install
     sed -i 's|/bin/sh|${bash}/bin/bash|' $out/bin/*
     ln -s ../lib/libc.so $out/bin/ldd
+    cp libssp_nonshared.a $out/lib/
   ''

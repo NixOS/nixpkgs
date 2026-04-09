@@ -1438,7 +1438,7 @@ with pkgs;
         crossSystem = if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
       }
     else if stdenv.hostPlatform.isLinux then
-      callPackage ../stdenv/linux/make-bootstrap-tools.nix { }
+      make-minimal-bootstrap-sources
     else if stdenv.hostPlatform.isFreeBSD then
       callPackage ../stdenv/freebsd/make-bootstrap-tools.nix { }
     else
@@ -8710,21 +8710,32 @@ with pkgs;
 
   mdadm = mdadm4;
 
-  # minimal-bootstrap packages aren't used for anything but bootstrapping our
-  # stdenv. They should not be used for any other purpose and therefore not
-  # show up in search results or repository tracking services that consume our
-  # packages.json https://github.com/NixOS/nixpkgs/issues/244966
-  minimal-bootstrap = recurseIntoAttrsWith { search = false; } (
-    import ../os-specific/linux/minimal-bootstrap {
-      inherit (stdenv) buildPlatform hostPlatform;
-      inherit lib config;
-      fetchurl = import ../build-support/fetchurl/boot.nix {
-        inherit (stdenv.buildPlatform) system;
-        inherit (config) rewriteURL;
-      };
-      checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
-    }
-  );
+  minimal-bootstrap =
+    let
+      supportedNatively = stdenv.buildPlatform.isMusl && stdenv.buildPlatform.isx86;
+      minbootBuildPlatform = lib.systems.elaborate (
+        {
+          i686-linux = "i686-unknown-linux-musl";
+          x86_64-linux = "x86_64-unknown-linux-musl";
+        }
+        .${stdenv.buildPlatform.system} or "x86_64-unknown-linux-musl"
+      );
+    in
+    recurseIntoAttrs (
+      import ../os-specific/linux/minimal-bootstrap {
+        inherit (stdenv) hostPlatform;
+        buildPlatform = minbootBuildPlatform;
+        inherit lib config;
+        fetchurl = import ../build-support/fetchurl/boot.nix {
+          inherit (minbootBuildPlatform) system;
+          inherit (config) rewriteURL;
+        };
+        checkMetaBuild = callPackage ../stdenv/generic/check-meta.nix {
+          hostPlatform = minbootBuildPlatform;
+        };
+        checkMetaHost = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
+      }
+    );
   minimal-bootstrap-sources =
     callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix
       {
