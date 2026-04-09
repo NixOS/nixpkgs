@@ -67,7 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex '${tag-prefix}@(.*)'" ];
+    extraArgs = [
+      "--version-regex"
+      "${tag-prefix}@(.*)"
+    ];
   };
 
   meta = {
