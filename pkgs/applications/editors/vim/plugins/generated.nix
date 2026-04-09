@@ -23266,19 +23266,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  windsurf-nvim = buildVimPlugin {
-    pname = "windsurf.nvim";
-    version = "0-unstable-2025-04-30";
-    src = fetchFromGitHub {
-      owner = "Exafunction";
-      repo = "windsurf.nvim";
-      rev = "821b570b526dbb05b57aa4ded578b709a704a38a";
-      hash = "sha256-TWezce2+XrkzaiW/V3VgfX3FMdS8qFE8/FfPEK/Ii84=";
-    };
-    meta.homepage = "https://github.com/Exafunction/windsurf.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   windsurf-vim = buildVimPlugin {
     pname = "windsurf.vim";
     version = "1.20.8-unstable-2026-01-22";

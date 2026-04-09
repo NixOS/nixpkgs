@@ -9818,7 +9818,7 @@ with self;
     };
 
     nativeBuildInputs = [
-      pkgs.mysql80 # for mysql_config
+      pkgs.mysql84 # for mysql_config
     ];
     buildInputs = [
       DevelChecklib
@@ -9828,6 +9828,7 @@ with self;
       pkgs.libmysqlconnectorcpp
       pkgs.libxcrypt
       pkgs.openssl
+      pkgs.zlib
       pkgs.zstd
     ];
     propagatedBuildInputs = [ DBI ];
