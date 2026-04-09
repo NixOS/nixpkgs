@@ -4265,6 +4265,9 @@ with pkgs;
         haskell.compiler.ghc910
     );
 
+  # TODO(@NixOS/haskell): deprecate this alias?
+  microhs = targetPackages.haskell.packages.microhs.ghc or haskell.compiler.microhs;
+
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
   happy = haskell.lib.compose.justStaticExecutables haskellPackages.happy;
