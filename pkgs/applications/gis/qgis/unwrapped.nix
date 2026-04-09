@@ -241,13 +241,19 @@ stdenv.mkDerivation rec {
               file "$f" | grep -q "Mach-O" || return 0  # spellok
 
               # QGIS core libraries
-              local qgis_libs=(core gui analysis 3d native app python)
+              local qgis_libs=(core gui analysis 3d native app)
               for lib in "''${qgis_libs[@]}"; do
                 install_name_tool \
                   -change "$out/lib/libqgis_$lib.${version}.dylib" \
                           "$FRAMEWORKS/libqgis_$lib.${version}.dylib" \
                   "$f" 2>/dev/null || true
               done
+
+              # libqgispython (no underscore, unlike the other qgis libs)
+              install_name_tool \
+                -change "$out/lib/libqgispython.${version}.dylib" \
+                        "$FRAMEWORKS/libqgispython.${version}.dylib" \
+                "$f" 2>/dev/null || true
 
               # QGIS frameworks
               local qgis_frameworks=(core gui analysis 3d native)
