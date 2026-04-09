@@ -30,7 +30,7 @@ lib.checkListOfEnum "vimix-icon-theme: color variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "vimix-icon-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-HNwEqp6G9nZDIJo9b6FD4d5NSXUx523enENM0NVwviA=";
     };
 
