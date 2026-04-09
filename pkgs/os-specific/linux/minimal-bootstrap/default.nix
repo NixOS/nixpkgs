@@ -490,6 +490,13 @@ lib.makeScope
           gnutar = gnutar-latest;
           gnugrep = gnugrep-static;
         };
+
+        glibc-headers = callPackage ./glibc/headers.nix {
+          gcc = gcc-latest;
+          binutils-build = binutils;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
       }
     )
   )
