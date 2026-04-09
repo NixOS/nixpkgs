@@ -20,6 +20,7 @@ let
   modularServicesModule = {
     options = {
       "<imports = [ pkgs.ghostunnel.services.default ]>" = fakeSubmodule pkgs.ghostunnel.services.default;
+      "<imports = [ pkgs.ktls-utils.services.default ]>" = fakeSubmodule pkgs.ktls-utils.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;
       "<imports = [ pkgs.snid.services.default ]>" = fakeSubmodule pkgs.snid.services.default;
     };
