@@ -263,6 +263,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
     (lib.mesonEnable "plugin_modem_manager" true)
+    # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
+    # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
+    (lib.mesonEnable "hsi" isx86)
     (lib.mesonBool "vendor_metadata" true)
     (lib.mesonBool "plugin_uefi_capsule_splash" false)
     # TODO: what should this be?
