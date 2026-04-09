@@ -219,6 +219,7 @@ in
   angie-api = runTest ./angie-api.nix;
   angrr = runTest ./angrr.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
+  antlr = runTest ./antlr.nix;
   anubis = runTest ./anubis.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
   apcupsd = runTest ./apcupsd.nix;
