@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "route-graph";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audius";
     repo = "route-graph";
     tag = finalAttrs.version;
-    hash = "sha256-NxATrPx1JzEripu4x2UkFSAgrJUYQ7P7U2C6EmNuY5g=";
+    hash = "sha256-aLTzej4YtKkQE5q8LKxIBe+aqrjwrG+2pbonzlWhLvU=";
   };
 
   pythonRelaxDeps = [
@@ -33,8 +33,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     typing-extensions
   ]);
 
-  # Project has no tests
-  doCheck = false;
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "route_graph" ];
 
