@@ -11,6 +11,7 @@
   systemd,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.tlshd;
+    services.default = {
+      imports = [ (lib.modules.importApply ./service.nix { }) ];
+      tlshd.package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "TLS handshake utilities for in-kernel TLS consumers";
