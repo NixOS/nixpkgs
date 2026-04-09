@@ -1,37 +1,39 @@
 {
-  lib,
-  stdenv,
   fetchurl,
-  python3,
-  pkg-config,
-  vala,
   glib,
   gobject-introspection,
+  lib,
+  pkg-config,
+  python3,
+  stdenv,
+  vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlbird";
   version = "1.2.15";
 
   src = fetchurl {
-    url = "https://birdfont.org/${pname}-releases/lib${pname}-${version}.tar.xz";
-    sha256 = "sha256-8GX4ijF+AxaGGFlSxRPOAoUezRG6592jOrifz/mWTRM=";
+    url = "https://birdfont.org/xmlbird-releases/libxmlbird-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8GX4ijF+AxaGGFlSxRPOAoUezRG6592jOrifz/mWTRM=";
   };
 
   nativeBuildInputs = [
-    python3
-    pkg-config
-    vala
     gobject-introspection
+    pkg-config
+    python3
+    vala
   ];
 
   buildInputs = [ glib ];
 
   postPatch = ''
     substituteInPlace configure \
-      --replace 'platform.dist()[0]' '"nix"'
+      --replace-fail 'platform.version()' '"Nix"'
     patchShebangs .
   '';
+
+  configureFlags = [ "--cc=${stdenv.cc.targetPrefix}cc" ];
 
   buildPhase = "./build.py";
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "XML parser for Vala and C programs";
     homepage = "https://birdfont.org/xmlbird.php";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})
