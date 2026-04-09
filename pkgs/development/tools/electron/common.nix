@@ -131,6 +131,9 @@ in
     ]
     ++ lib.optionals (lib.versions.major info.version == "39") [
       ./39-angle-patchdir.patch
+    ]
+    ++ lib.optionals (lib.versions.major info.version == "40") [
+      ./40-angle-patchdir.patch
     ];
 
   postPatch = ''
