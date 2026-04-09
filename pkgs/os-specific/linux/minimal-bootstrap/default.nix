@@ -322,6 +322,12 @@ lib.makeScope
           gnumake = gnumake-musl;
         };
 
+        musl-headers = callPackage ./musl/headers.nix {
+          gcc = gcc46;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         musl-static = callPackage ./musl/static.nix {
           libgcc = gcc-latest-unwrapped;
           gcc = gcc-latest;
