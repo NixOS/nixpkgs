@@ -6,7 +6,7 @@
   makeWrapper,
   openjdk21,
   libGL,
-  libX11,
+  libx11,
   fontconfig,
   freetype,
   libxext,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    libX11
+    libx11
     fontconfig
     freetype
     libxext
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libGL
-          libX11
+          libx11
           fontconfig
           freetype
           libxext
