@@ -28,13 +28,31 @@ in
       };
 
       settings = lib.mkOption {
-        type = lib.types.submodule { freeformType = configFormat.type; };
-        default = {
-          host = "127.0.0.1";
-          port = 7474;
-          checkForUpdates = true;
+        type = lib.types.submodule {
+          freeformType = configFormat.type;
+          options = {
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1";
+              description = "The host address autobrr listens on.";
+            };
+
+            port = lib.mkOption {
+              type = lib.types.port;
+              default = 7474;
+              description = "The port autobrr listens on.";
+            };
+
+            checkForUpdates = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Whether autobrr needs to check for updates.";
+            };
+          };
         };
+        default = { };
         example = {
+          port = 7654;
           logLevel = "DEBUG";
         };
         description = ''
