@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
-    rev = version;
+    tag = version;
     hash = "sha256-nYlBmKQ9TD5EAVvNwo8YzqAd5IUCpTU3kBTqUH21IxQ=";
   };
 
