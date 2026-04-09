@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytest-asyncio,
   pytestCheckHook,
   setuptools-scm,
@@ -12,27 +11,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tenacity";
-  version = "9.1.2";
+  version = "9.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jd";
     repo = "tenacity";
     tag = finalAttrs.version;
-    hash = "sha256-RmoW3gwblwoM4L9QTuc/7gLJJOSxMUYv7FmWxdf/KxE=";
+    hash = "sha256-JiWfIlStps3HZQw4KEohKAUWWZtMAuluXXzvqU+p8V4=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/jd/tenacity/commit/eed7d785e667df145c0e3eeddff59af64e4e860d.patch";
-      includes = [
-        "tenacity/__init__.py"
-        "tests/test_asyncio.py"
-        "tests/test_issue_478.py"
-      ];
-      hash = "sha256-TMhBjRmG7pBP3iKq83RQzkV9yO2TEcA+3mo9cz6daxs=";
-    })
-  ];
 
   build-system = [ setuptools-scm ];
 
