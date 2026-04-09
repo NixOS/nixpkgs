@@ -42,7 +42,10 @@
 assert gpuSupport -> !cudaSupport;
 assert cudaSupport -> !gpuSupport;
 
-buildPythonPackage (finalAttrs: {
+let
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   inherit (pkgs.lightgbm)
     pname
     version
