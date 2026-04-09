@@ -1,9 +1,10 @@
 {
   lib,
   mattermost,
-}:
+  ...
+}@args:
 
-mattermost.withoutTests.server.overrideAttrs (prev: {
+(mattermost.override args).withoutTests.server.overrideAttrs (prev: {
   pname = "mmctl";
   subPackages = [ "cmd/mmctl" ];
 
