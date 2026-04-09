@@ -13910,6 +13910,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  rainbow-delimiters-nvim = buildVimPlugin {
+    pname = "rainbow-delimiters.nvim";
+    version = "0.12.0-unstable-2026-04-06";
+    src = fetchgit {
+      url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim";
+      rev = "aab6caaffd79b8def22ec4320a5344f7c42f58d2";
+      hash = "sha256-aQM0Ay5GZZwcTnZ2PV4iucyBmoik98EAeIPIIJSxuYk=";
+    };
+    meta.homepage = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   rainbow_csv = buildVimPlugin {
     pname = "rainbow_csv";
     version = "4.3.0-unstable-2024-07-05";

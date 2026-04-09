@@ -3179,6 +3179,15 @@ assertNoAdditions {
     ];
   };
 
+  rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # rainbow-delimiters.types.lua
+      "rainbow-delimiters.types"
+      # Test that requires an unpackaged dependency
+      "rainbow-delimiters._test.highlight"
+    ];
+  };
+
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
     dependencies = [ self.cmd-parser-nvim ];
   };
