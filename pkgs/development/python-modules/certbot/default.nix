@@ -103,7 +103,7 @@ buildPythonPackage rec {
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = lib.platforms.unix;
     mainProgram = "certbot";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     license = with lib.licenses; [ asl20 ];
   };
 }
