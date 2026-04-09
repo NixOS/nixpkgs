@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "json-fortran";
-  version = "9.2.1";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "jacobwilliams";
     repo = "json-fortran";
     rev = finalAttrs.version;
-    hash = "sha256-ykvGdCWGXrMn3w1T2xJQQABHNiK1dojW25urKY6yqz4=";
+    hash = "sha256-shSMIiA2laNxqRmnsBBOgJDhWdXr/ULEWVkugHCEs+0=";
   };
 
   nativeBuildInputs = [

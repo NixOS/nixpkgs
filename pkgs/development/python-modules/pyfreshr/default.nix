@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyfreshr";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {

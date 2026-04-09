@@ -128,7 +128,7 @@ pkgs.mkShell rec {
           packages=(
             "build-tools" "cmdline-tools" \
             "platform-tools" "platforms;android-${toString latestSdkVersion}" \
-            "system-images;android-${toString latestSdkVersion};google_apis;x86_64"
+            "system-images;android-${toString latestSdkVersion};google_apis_ps16k;x86_64"
           )
           ${lib.optionalString emulatorSupported ''packages+=("emulator")''}
 
@@ -158,7 +158,6 @@ pkgs.mkShell rec {
           for x in $(seq 1 ${lib.versions.major (toString latestSdkVersion)}); do
             excluded_packages+=(
               "platforms;android-$x"
-              "sources;android-$x"
               "system-images;android-$x"
             )
           done
@@ -188,7 +187,7 @@ pkgs.mkShell rec {
             mkdir -p $ANDROID_USER_HOME
 
             avdmanager delete avd -n testAVD || true
-            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdkVersion};google_apis;x86_64'
+            { echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdkVersion};google_apis_ps16k;x86_64'; }
             result=$(avdmanager list avd)
 
             if [[ ! $result =~ "Name: testAVD" ]]; then

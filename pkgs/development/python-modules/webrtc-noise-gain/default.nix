@@ -27,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
   };
 
+  patches = [
+    ./0001-fix-missing-cstdint-include.patch
+  ];
+
   postPatch = with stdenv.hostPlatform.uname; ''
     # Configure the correct host platform for cross builds
     substituteInPlace setup.py --replace-fail \

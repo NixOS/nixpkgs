@@ -187,10 +187,6 @@ pkgs.mkShell rec {
             "extras;google;gcm"
           )
 
-          for x in $(seq ${toString firstSdkVersion} ${toString latestSdkVersion}); do
-            packages+=("sources;android-$x")
-          done
-
           ${lib.optionalString includeAuto ''packages+=("extras;google;auto")''}
 
           for package in "''${packages[@]}"; do
