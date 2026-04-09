@@ -40,6 +40,7 @@ rec {
     homepage = "https://www.vim.org";
     license = lib.licenses.vim;
     maintainers = with lib.maintainers; [
+      caverav
       das_j
       equirosa
       philiptaron
