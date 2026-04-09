@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nix-update-script,
+  versionCheckHook,
 
   nodejs,
   pnpm,
@@ -62,25 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    echo "Executing custom version check for MCP stdio server..."
-
-    output=$(< /dev/null $out/bin/context7-mcp 2>&1 || true)
-
-    if echo "$output" | grep -Fq "v${finalAttrs.version}"; then
-      echo "versionCheckPhase: found version v${finalAttrs.version}"
-    else
-      echo "versionCheckPhase: failed to find version v${finalAttrs.version}"
-      echo "Output was:"
-      echo "$output"
-      exit 1
-    fi
-
-    runHook postInstallCheck
-  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex '${tag-prefix}@(.*)'" ];
