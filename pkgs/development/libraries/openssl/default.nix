@@ -483,18 +483,10 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-
-      # Don't cause ELF ABI mismatch on powerpc64
-      # https://github.com/openssl/openssl/issues/29815
-      ./3.5/openssl-aes-gcm-ppc-remove-localentry-directive.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
-    ]
-    ++
-      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
-      # and also https://github.com/openssl/openssl/pull/29321
-      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+    ];
 
     withDocs = true;
 
@@ -523,20 +515,7 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-
-      # Don't cause ELF ABI mismatch on powerpc64
-      # https://github.com/openssl/openssl/issues/29815
-      ./3.5/openssl-aes-gcm-ppc-remove-localentry-directive.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      # Fix from https://github.com/openssl/openssl/pull/29826
-      # Merged, will be in 3.6.2
-      ./3.6/mingw-define-netreset.patch
-    ]
-    ++
-      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
-      # and also https://github.com/openssl/openssl/pull/29321
-      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+    ];
 
     withDocs = true;
 
