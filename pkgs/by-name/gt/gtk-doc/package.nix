@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-doc";
-    rev = version;
+    tag = version;
     hash = "sha256-EqU7lnBnOn3gR3hT95yjdTUb3cqX2XJK5UAKsFw2Q10=";
   };
 
