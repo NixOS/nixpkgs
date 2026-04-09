@@ -46,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "tianshou";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thu-ml";
     repo = "tianshou";
     tag = "v${version}";
-    hash = "sha256-loE2klM989yZbPZ3Uun3xnGsDHrEZhzk1R0/PcH/1nM=";
+    hash = "sha256-JLVdW3batThynbMGOevaBSnWxK4BcBcrONJK+FWJhF4=";
   };
 
   pythonRelaxDeps = [
