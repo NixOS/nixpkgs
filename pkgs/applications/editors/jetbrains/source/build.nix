@@ -63,6 +63,7 @@ let
   bazelArgs = [
     #"--verbose_failures"
     #"--sandbox_debug"
+    "--enable_bzlmod"
     "--extra_toolchains=@@rules_java++toolchains+local_jdk//:all"
     # more flags are patched into the bazelrc files below
   ];
@@ -308,6 +309,7 @@ bazel.package {
   targets = [ bazelTarget ];
   registry = bazelRegistry;
   commandArgs = bazelArgs;
+  fetchAll = true;
 
   #patches = [
   #../patches/no-download.patch
@@ -372,7 +374,7 @@ bazel.package {
     outputHash =
       {
         aarch64-linux = ""; # TODO
-        x86_64-linux = "sha256-ZohckA5lbdvA5kIK9wQn1l9Z9W64KMRJF69J2tmBu0Q=";
+        x86_64-linux = "";
       }
       .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
