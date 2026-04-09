@@ -4,19 +4,19 @@
   fetchurl,
   cctools,
   fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
+  darwin,
   replaceVars,
   buildPackages,
   binutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lp_solve";
   version = "5.5.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/lpsolve/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
-    sha256 = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
+    url = "mirror://sourceforge/project/lpsolve/lpsolve/${finalAttrs.version}/lp_solve_${finalAttrs.version}_source.tar.gz";
+    hash = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
   };
 
   nativeBuildInputs =
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       fixDarwinDylibNames
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
+      darwin.autoSignDarwinBinariesHook
     ];
 
   env = {
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
