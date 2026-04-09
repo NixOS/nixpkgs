@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ftrvxmtrx";
     repo = "9pfs";
     tag = finalAttrs.version;
-    sha256 = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
+    hash = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
   };
 
   postPatch = ''

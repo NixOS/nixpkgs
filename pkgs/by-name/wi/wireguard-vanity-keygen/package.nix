@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "wireguard-vanity-keygen";
-    rev = version;
+    tag = version;
     hash = "sha256-vAHVhW2BYND1Lz8WEFbbuJRMP7dXzZXQR8/bewb/ZUg=";
   };
 

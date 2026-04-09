@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lvc";
     repo = "abi-dumper";
     tag = finalAttrs.version;
-    sha256 = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
+    hash = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
   };
 
   patchPhase = ''

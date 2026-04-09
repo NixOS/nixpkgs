@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-desktop";
-    rev = version;
+    tag = version;
     hash = "sha256-oF2bXmb6oBXNUj91WtuDTWGrwB5JCuzBtuhfDBHIIKA=";
   };
 

@@ -140,6 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
         freebsd
         illumos
       ];
-    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${finalAttrs.src.rev}/ChangeLog";
+    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${finalAttrs.src.tag}/ChangeLog";
   };
 })

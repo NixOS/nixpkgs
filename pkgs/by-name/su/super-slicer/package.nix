@@ -83,7 +83,7 @@ let
         owner = "supermerill";
         repo = "SuperSlicer";
         inherit hash;
-        rev = version;
+        tag = version;
         fetchSubmodules = true;
       };
 
