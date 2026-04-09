@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "zimward";
     repo = "pid-fan-controller";
-    rev = version;
+    tag = version;
     hash = "sha256-ALR9Qa0AhcGyc3+7x5CEG/72+bJzhaEoIvQNL+QjldY=";
   };
   cargoHash = "sha256-Y57VSheI94b43SwNCDdFvcNxzkA16KObBvzZ6ywYAyU=";
