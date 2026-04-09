@@ -284,6 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex
+      caverav
     ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
