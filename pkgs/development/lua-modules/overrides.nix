@@ -255,8 +255,8 @@ in
 
       # Update dependency check to respect packaged version
       substituteInPlace lua/grug-far/test/dependencies.lua \
-        --replace-fail "local RG_VERSION = '14.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
-        --replace-fail "local SG_VERSION = '0.35.0'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
+        --replace-fail "local RG_VERSION = '15.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
+        --replace-fail "local SG_VERSION = '0.41.1'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
 
       make test dir=base
       runHook postCheck

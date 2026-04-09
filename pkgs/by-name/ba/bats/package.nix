@@ -208,6 +208,9 @@ resholve.mkDerivation rec {
     upstream = bats.unresholved.overrideAttrs (old: {
       name = "${bats.name}-tests";
       dontInstall = true; # just need the build directory
+      # after 411981, make-symlinks-relative breaks a parallelization test:
+      # "setup_file is not over parallelized"
+      dontRewriteSymlinks = true;
       nativeInstallCheckInputs = [
         ncurses
         parallel # skips some tests if it can't detect
@@ -243,13 +246,15 @@ resholve.mkDerivation rec {
     # to see when updates would break things, include packages
     # that use nixpkgs' bats for testing (as long as they
     # aren't massive builds)
-    inherit bash-preexec locate-dominating-file packcc;
+    inherit bash-preexec locate-dominating-file;
     resholve = resholve.tests.cli;
   }
   // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    # TODO: kikit's kicad dependency is marked broken on darwin atm
-    # may be able to fold this up if that resolves.
-    inherit kikit;
+    # TODO:
+    # - kikit's kicad dependency is marked broken on darwin atm
+    #   may be able to fold this up if that resolves.
+    # - packcc's tests currently broken on darwin (apr 2026)
+    inherit kikit packcc;
   };
 
   meta = {

@@ -34,7 +34,7 @@
 }:
 
 let
-  version = "2024.1.4";
+  version = "2024.1.5";
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
@@ -43,7 +43,7 @@ let
       owner = "flightgear";
       repo = "fgdata";
       tag = version;
-      hash = "sha256-0cIOyQhw/+jqwO1OddBC09ZnvrmtyjSoMhcu1tuwx4k=";
+      hash = "sha256-8B5wSYjkWuPEySpqBiprZ+jrHy01HA9+iX70wNAn81s=";
     };
 
     dontUnpack = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     owner = "flightgear";
     repo = "flightgear";
     tag = version;
-    hash = "sha256-s897bsHsVP0OAcrwDVRTPz3YNJkynyErJpH18oLPl3Y=";
+    hash = "sha256-sORiO0SDChIVWIhGKelm7IE/cZ40gMqlZ1OoZZna7kI=";
   };
 
   nativeBuildInputs = [

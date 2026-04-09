@@ -29,13 +29,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "downkyicore";
-  version = "1.0.23";
+  version = "1.0.24";
 
   src = fetchFromGitHub {
     owner = "yaobiao131";
     repo = "downkyicore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1APolFe2eq7aIZdg3Sl4DI/6lnvaAgX/GDcHx3M+o/I=";
+    hash = "sha256-fE4n/PMMkt6m/CuQrPlIIIMPgWiwtN1oh1q5AijlaS8=";
   };
 
   projectFile = "DownKyi/DownKyi.csproj";
