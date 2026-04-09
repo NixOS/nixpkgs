@@ -37,7 +37,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yadm-dev";
     repo = "yadm";
-    rev = version;
+    tag = version;
     hash = "sha256-hDo6zs70apNhKmuvR+eD51FzuTLj3SL/wHQXqLMD9QE=";
   };
 
