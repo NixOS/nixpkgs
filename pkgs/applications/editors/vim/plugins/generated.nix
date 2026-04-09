@@ -8346,6 +8346,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lsp_lines-nvim = buildVimPlugin {
+    pname = "lsp_lines.nvim";
+    version = "3.0.0-unstable-2024-12-21";
+    src = fetchgit {
+      url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
+      rev = "a92c755f182b89ea91bd8a6a2227208026f27b4d";
+      hash = "sha256-jHiIZemneQACTDYZXBJqX2/PRTBoxq403ILvt1Ej1ZM=";
+    };
+    meta.homepage = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   lsp_signature-nvim = buildVimPlugin {
     pname = "lsp_signature.nvim";
     version = "0.3.1-unstable-2026-04-07";
