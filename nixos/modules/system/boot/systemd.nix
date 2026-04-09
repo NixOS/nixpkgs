@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   utils,
@@ -671,8 +672,6 @@ in
         "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
       };
 
-    services.dbus.enable = true;
-
     users.users.systemd-network = {
       uid = config.ids.uids.systemd-network;
       group = "systemd-network";
@@ -843,6 +842,34 @@ in
     # https://github.com/systemd/systemd/pull/12226
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
 
+    # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
+    # part, run0 would fail to run the command even if authentication is successful and the user has
+    # permission to run the command. This next part is only enabled if polkit is enabled because the
+    # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
+    # enabled, run0 will fail before it even tries to run the command.
+    security.pam.services = mkIf config.security.polkit.enable {
+      systemd-run0 = {
+        # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
+        setLoginUid = true;
+        pamMount = false;
+      };
+    };
+  }
+  // lib.optionalAttrs (options ? services.dbus) {
+    services.dbus.enable = true;
+  }
+  // lib.optionalAttrs (options ? security.polkit.extraConfig) {
+    # Remove with systemd 259.4
+    security.polkit.extraConfig = mkIf config.security.polkit.enable ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.machine1.register-machine" &&
+              subject.user != "root") {
+              return polkit.Result.AUTH_ADMIN_KEEP;
+          }
+      });
+    '';
+  }
+  // lib.optionalAttrs (options ? services.logrotate) {
     services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {
         frequency = "monthly";
@@ -855,29 +882,6 @@ in
         rotate = 1;
         create = "0664 root ${config.users.groups.utmp.name}";
         minsize = "1M";
-      };
-    };
-
-    # Remove with systemd 259.4
-    security.polkit.extraConfig = mkIf config.security.polkit.enable ''
-      polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.machine1.register-machine" &&
-              subject.user != "root") {
-              return polkit.Result.AUTH_ADMIN_KEEP;
-          }
-      });
-    '';
-
-    # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
-    # part, run0 would fail to run the command even if authentication is successful and the user has
-    # permission to run the command. This next part is only enabled if polkit is enabled because the
-    # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
-    # enabled, run0 will fail before it even tries to run the command.
-    security.pam.services = mkIf config.security.polkit.enable {
-      systemd-run0 = {
-        # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
-        setLoginUid = true;
-        pamMount = false;
       };
     };
   };

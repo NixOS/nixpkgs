@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -81,8 +82,6 @@ in
 
     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
 
-    services.geoclue2.enable = lib.mkIf (lcfg.provider == "geoclue2") true;
-
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;
 
@@ -106,6 +105,9 @@ in
         LOCAL
       '';
     };
+  }
+  // lib.optionalAttrs (options ? services.geoclue2) {
+    services.geoclue2.enable = lib.mkIf (lcfg.provider == "geoclue2") true;
   };
 
 }
