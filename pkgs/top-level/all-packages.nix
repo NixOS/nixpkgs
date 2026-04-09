@@ -1161,8 +1161,6 @@ with pkgs;
 
   bump2version = with python3Packages; toPythonApplication bump2version;
 
-  cgit = callPackage ../applications/version-management/cgit { };
-
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
