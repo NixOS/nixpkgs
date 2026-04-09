@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "redis-cli";
   };
 })
