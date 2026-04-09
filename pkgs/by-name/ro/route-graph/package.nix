@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "route-graph";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "audiusGmbH";
+    owner = "audius";
     repo = "route-graph";
     tag = finalAttrs.version;
-    hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
+    hash = "sha256-NxATrPx1JzEripu4x2UkFSAgrJUYQ7P7U2C6EmNuY5g=";
   };
 
   pythonRelaxDeps = [
@@ -22,9 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "typing-extensions"
   ];
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = [
     graphviz
@@ -38,14 +36,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "route_graph"
-  ];
+  pythonImportsCheck = [ "route_graph" ];
 
   meta = {
     description = "CLI tool for creating graphs of routes";
-    homepage = "https://github.com/audiusGmbH/route-graph";
-    changelog = "https://github.com/audiusGmbH/route-graph/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/audius/route-graph";
+    changelog = "https://github.com/audius/route-graph/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "route-graph";
