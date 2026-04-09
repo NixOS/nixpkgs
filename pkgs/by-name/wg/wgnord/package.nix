@@ -19,7 +19,7 @@ resholve.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = "wgnord";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 
