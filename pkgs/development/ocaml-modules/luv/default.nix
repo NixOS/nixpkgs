@@ -26,9 +26,7 @@ let
       patches = lib.optional (lib.versionOlder version "0.5.14") ./incompatible-pointer-type-fix.diff;
 
       postConfigure = ''
-        for f in src/c/vendor/configure/{ltmain.sh,configure}; do
-          substituteInPlace "$f" --replace /usr/bin/file file
-        done
+        substituteInPlace "src/c/vendor/configure/ltmain.sh" --replace-fail /usr/bin/file file
       '';
 
       nativeBuildInputs = [ file ];
