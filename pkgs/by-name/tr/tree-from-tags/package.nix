@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "dbrock";
     repo = "bongo";
-    rev = version;
+    tag = version;
     hash = "sha256-G+6rRJLNBECxGc8WuaesXhrYqvEDy2Chpw4lWxO8X9s=";
   };
 
