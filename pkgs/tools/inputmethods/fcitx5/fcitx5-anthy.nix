@@ -6,7 +6,7 @@
   extra-cmake-modules,
   pkg-config,
   fcitx5,
-  anthy,
+  anthy-unicode,
   gettext,
   zstd,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     fcitx5
-    anthy
+    anthy-unicode
   ];
 
   meta = {

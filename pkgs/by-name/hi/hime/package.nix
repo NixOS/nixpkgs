@@ -10,7 +10,7 @@
   lib,
   libchewing,
   unixtools,
-  anthy,
+  anthy-unicode,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     qt5.qtbase
     libchewing
-    anthy
+    anthy-unicode
   ];
 
   preConfigure = "patchShebangs configure";
