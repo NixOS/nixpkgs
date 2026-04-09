@@ -4,24 +4,24 @@
   fetchFromGitHub,
   bun,
   nodejs-slim,
+  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "navbar-card";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "joseluis9595";
     repo = "lovelace-navbar-card";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jyG0QGt8kC4M6iFBpV5mhH2AKYC2n/t80XqOwbmwLnE=";
   };
 
-  # Create node_modules as a separate derivation
   node_modules = stdenv.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
     nativeBuildInputs = [
       bun
@@ -62,10 +62,6 @@ let
     outputHashMode = "recursive";
   };
 
-in
-stdenv.mkDerivation {
-  inherit pname version src;
-
   nativeBuildInputs = [
     bun
     nodejs-slim
@@ -75,7 +71,7 @@ stdenv.mkDerivation {
     runHook preConfigure
 
     # Copy node_modules from the separate derivation
-    cp -R ${node_modules}/node_modules .
+    cp -R ${finalAttrs.node_modules}/node_modules .
 
     runHook postConfigure
   '';
@@ -98,13 +94,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.entrypoint = "navbar-card.js";
+  passthru = {
+    entrypoint = "navbar-card.js";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+  };
 
   meta = {
     description = "Navbar Card for Home Assistant's Lovelace UI - easily navigate through dashboards";
     homepage = "https://github.com/joseluis9595/lovelace-navbar-card";
-    changelog = "https://github.com/joseluis9595/lovelace-navbar-card/releases/tag/v${version}";
+    changelog = "https://github.com/joseluis9595/lovelace-navbar-card/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})
