@@ -7392,6 +7392,8 @@ self: super: with self; {
 
   ignite = callPackage ../development/python-modules/ignite { };
 
+  ignorant = callPackage ../development/python-modules/ignorant { };
+
   igraph = callPackage ../development/python-modules/igraph { inherit (pkgs) igraph; };
 
   ihcsdk = callPackage ../development/python-modules/ihcsdk { };
