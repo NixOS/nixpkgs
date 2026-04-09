@@ -5,6 +5,7 @@
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
+  nixosTests,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
@@ -86,11 +87,14 @@ buildGoModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/autobrrctl";
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "autobrr-web"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "autobrr-web"
+      ];
+    };
+    tests.testService = nixosTests.autobrr;
   };
 
   meta = {
