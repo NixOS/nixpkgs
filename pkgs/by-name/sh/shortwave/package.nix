@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
-    rev = version;
+    tag = version;
     hash = "sha256-MiaozChp5QF/Q0fCTCgnyGJLyIftTkMAbmfRQ/73QP8=";
   };
 
