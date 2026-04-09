@@ -62,6 +62,11 @@ mkMesonDerivation (
       nix-expr
     ];
 
+    env = lib.optionalAttrs (test-daemon != null) {
+      NIX_DAEMON_PACKAGE = test-daemon;
+      _NIX_TEST_CLIENT_VERSION = nix-cli.version;
+    };
+
     preConfigure =
       # TEMP hack for Meson before make is gone, where
       # `src/nix-functional-tests` is during the transition a symlink and
@@ -92,9 +97,5 @@ mkMesonDerivation (
       platforms = lib.platforms.unix;
     };
 
-  }
-  // lib.optionalAttrs (test-daemon != null) {
-    NIX_DAEMON_PACKAGE = test-daemon;
-    _NIX_TEST_CLIENT_VERSION = nix-cli.version;
   }
 )
