@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "JorySeverijnse";
     repo = "rustlock";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mfQcMCUDncEZ/4qzMna//uzhtrow4axnuTnF88wnvi0=";
   };
 
@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A high-performance Wayland screen locker written in Rust";
     homepage = "https://github.com/JorySeverijnse/rustlock";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ JorySeverijnse ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ JorySeverijnse ];
     mainProgram = "rustlock";
   };
 })
