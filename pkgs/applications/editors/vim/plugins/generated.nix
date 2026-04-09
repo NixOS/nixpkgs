@@ -6058,6 +6058,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  gitlab-vim = buildVimPlugin {
+    pname = "gitlab.vim";
+    version = "1.1.0-unstable-2026-03-17";
+    src = fetchgit {
+      url = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
+      rev = "cb750761acf8dc17f4f1051d1b4ade6c0aaeb432";
+      hash = "sha256-rhYz3Z1Dcffvo8E3390gOBcqfFclWJ19wTKwp6L/874=";
+    };
+    meta.homepage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
+    meta.hydraPlatforms = [ ];
+  };
+
   gitlineage-nvim = buildVimPlugin {
     pname = "gitlineage.nvim";
     version = "0-unstable-2026-02-14";
