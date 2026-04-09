@@ -92,6 +92,7 @@
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = lib.licenses.gpl2;
+      maintainers = with lib.maintainers; [ hythera ];
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
   });
