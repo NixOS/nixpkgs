@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Remove broken symlinks created by pnpm workspace linking in extensions
     find $libdir/extensions -xtype l -delete
     # Remove symlinks pointing back to the build sandbox
-    find $libdir/dist/extensions -type l -lname '/build/*' -delete
+    find $libdir/dist/extensions -type l -lname "$NIX_BUILD_TOP/*" -delete
 
     makeWrapper ${lib.getExe nodejs_22} $out/bin/openclaw \
       --add-flags "$libdir/dist/index.js" \
