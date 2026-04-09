@@ -4,7 +4,7 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  mysql80,
+  mysql84,
   openssl,
   pkgs,
 }:
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   format = "setuptools";
 
   setupPyBuildFlags = [
-    "--with-mysql-capi=${mysql80}"
+    "--with-mysql-capi=${mysql84}"
     "--with-openssl-include-dir=${openssl.dev}/include"
     "--with-openssl-lib-dir=${lib.getLib openssl}/lib"
     "-L"
-    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib"
+    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql84}/lib"
   ];
 
   src = fetchFromGitHub {
@@ -40,14 +40,18 @@ buildPythonPackage rec {
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
   ];
 
-  nativeBuildInputs = [ mysql80 ];
+  nativeBuildInputs = [ mysql84 ];
+
+  buildInputs = [
+    mysql84
+    openssl
+    pkgs.zlib
+    pkgs.zstd
+  ];
 
   propagatedBuildInputs = [
     dnspython
     protobuf
-    mysql80
-    openssl
-    pkgs.zstd
   ];
 
   pythonImportsCheck = [ "mysql" ];
