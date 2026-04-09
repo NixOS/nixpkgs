@@ -10,7 +10,7 @@ callPackage ../generic.nix rec {
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Rat-King-Adventure";
-    rev = version;
+    tag = version;
     hash = "sha256-6KmJRcYUjEdFym8nkCtg841CyKKYV1gACMJv/zOQ2Oc=";
   };
 
