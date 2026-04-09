@@ -15972,6 +15972,12 @@
     githubId = 41804945;
     name = "Luke Schenk";
   };
+  luke-elsdon = {
+    email = "luke.elsdon@gmail.com";
+    github = "Luke-Elsdon";
+    githubId = 20634389;
+    name = "Luke Elsdon";
+  };
   lukebfox = {
     email = "lbentley-fox1@sheffield.ac.uk";
     github = "lukebfox";

@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Model Railway CAD program ";
     mainProgram = "xtrkcad";
     license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ luke-elsdon ];
     platforms = lib.platforms.linux;
   };
 })
