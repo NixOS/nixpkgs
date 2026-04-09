@@ -21,18 +21,19 @@
 
   cudaSupport ? torch.cudaSupport,
   cudaPackages,
+  rocmSupport ? torch.rocmSupport,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2uo2HtA5hh8s7F1Z8SS78bMwyOvw2H2j4p0Znan552I=";
+    hash = "sha256-VKpwKV+B2e5z1V1XAdvk6K4/4C3ISPsSiwZ05w5XTBU=";
   };
 
   postPatch = ''
@@ -93,6 +94,12 @@ buildPythonPackage (finalAttrs: {
     I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION = true;
 
     ENABLE_CUDA = cudaSupport;
+  }
+  // lib.optionalAttrs rocmSupport {
+    ROCM_PATH = torch.rocmtoolkit_joined;
+    ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
+    PYTORCH_ROCM_ARCH = torch.gpuTargetString;
+    CMAKE_CXX_FLAGS = "-I${torch.rocmtoolkit_joined}/include";
   };
 
   pythonImportsCheck = [ "torchcodec" ];

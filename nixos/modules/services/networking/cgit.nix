@@ -300,7 +300,7 @@ in
       lib.mapAttrsToList (name: cfg: {
         ${cfg.nginx.virtualHost} = {
           locations =
-            (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
+            (genAttrs' [ "cgit.css" "cgit.js" "cgit.png" "favicon.ico" "robots.txt" ] (
               fileName:
               lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
                 alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";

@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-vet";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nixpkgs-vet";
     tag = finalAttrs.version;
-    hash = "sha256-TxQkD9jPoONec87qGXOIQNh+lZ7kyFM6q1RtlgxEqy4=";
+    hash = "sha256-Rk1p6qAqAtl5bwg9dNZ0yc4m1yOOxybWvTwfuNcOkFQ=";
   };
 
-  cargoHash = "sha256-Wx8AwgUENVbxv9GgB/DTH5aGIRznAslABjxRu/X0l2s=";
+  cargoHash = "sha256-GaQ2ldsGabsDMx1bHuZwnSvtPp1LgPkj2C07cnEBdDY=";
 
   doCheck = false;
 

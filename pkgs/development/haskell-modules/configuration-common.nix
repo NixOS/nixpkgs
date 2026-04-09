@@ -176,6 +176,29 @@ with haskellLib;
     }
   );
 
+  # Stack uses pure nix-shells for certain operations including HTTPS requests
+  # This patch makes stack add pkgs.cacert, so the certificate DB is available.
+  # https://github.com/commercialhaskell/stack/pull/6854 krank:ignore-line
+  stack =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "stack-add-cacert-to-pure-shells.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/e869263cbd84a9e59ce1fa467e82993c8e7fb1dd.patch";
+          hash = "sha256-O7GaNgcGBY6m6GHqVtejqOu2HCWWKWXARPnr/upT1RQ=";
+          includes = [ "src/Stack/Nix.hs" ];
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          # Stack's source files use CRLF
+          prePatch = ''
+            ${drv.prePatch or ""}
+            sed -i -e 's/\r$//' src/Stack/Nix.hs
+          '';
+        }) super.stack
+      );
+
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
   extensions = doJailbreak (
@@ -2758,12 +2781,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.7";
+          version = "14.8";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-Kr06TefPaeL4Nk1GKDbGFGgYQcS/e0A+Pn7pqGfdAlQ=";
+            hash = "sha256-/tRYc6uIViHXnSMoNXElsgW6E+lNXesYk1LOKS6Tdkg=";
           };
         })
       ];

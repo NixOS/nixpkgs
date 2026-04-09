@@ -253,7 +253,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.3.4";
+  hassVersion = "2026.4.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -274,13 +274,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-FONng6GaitzvGyXthBSPK8MioQeoDu8IRoAbXXOaS4Q=";
+    hash = "sha256-Cowd0vNtWeh5XTNZQxkLqZtYZjfbdw/6FhuIGs1cNQ4=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-aK0RMnL54uwak9JCNB79iU6D+HUPRSW4a/BqKqpe8cg=";
+    hash = "sha256-5nEhbXFZp4u8zTw00fd2W3PBafPhynPzpmF6Dj+G7Mo=";
   };
 
   build-system = with python.pkgs; [
@@ -349,6 +349,7 @@ python.pkgs.buildPythonApplication rec {
     home-assistant-bluetooth
     httpx
     ifaddr
+    infrared-protocols
     jinja2
     lru-dict
     orjson

@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pygsl/pygsl";
     changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

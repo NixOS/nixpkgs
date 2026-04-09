@@ -21,6 +21,7 @@
   webkitgtk_4_1,
 
   nix-update-script,
+  nixosTests,
 
   isDesktopVariant ? false,
   buildWithFrontend ? !isDesktopVariant,
@@ -35,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nsC/U+9kJo0i5Sh2u+OrjzDO6YREKjVAe+1KBKgtybY=";
+    hash = "sha256-5MZwwBT8Qi1kO+DAO/3JIm0/yAFtQLBo1UXDRZUjK7s=";
   };
 
   patches = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-uMWc/yoOWFtP2JTMr69V/nRPu9YfrGxqvBnOw2DZkQQ=";
+    hash = "sha256-HyQok7Cd1kfWKCtaeHAhvZgxSvaKCk32bdJoNKj//rA=";
   };
 
   cargoRoot = "frontend/src-tauri";
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-JvrZKgTmPGP6m95GBr/UJo1FLaR86KSmJ9LzLlzQhfE=";
+    hash = "sha256-t6TBUsfOadn3KNLxva6iajlhg21dFqxgH962e1bIRLI=";
   };
 
   mitmCache = gradle.fetchDeps {
@@ -166,7 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${jre} "$res_dir/runtime/jre"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) stirling-pdf-desktop; };
+  };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";

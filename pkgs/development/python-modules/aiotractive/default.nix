@@ -10,17 +10,21 @@
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiotractive";
     tag = "v${version}";
-    hash = "sha256-pU6Ugd4l9+oUWJAd1hT3oBPfXK5NEjOg+k3YN52C3B8=";
+    hash = "sha256-DP0dFDXaa0PyaERmhL6dNCOpiNs+N7ojMIapcajfMrk=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "orjson"
+  ];
 
   dependencies = [
     aiohttp

@@ -20,7 +20,7 @@ buildOctavePackage rec {
       lgpl3Plus
     ];
     # They claim to have a FreeBSD license, but none of their code seems to have it.
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Additional linear algebra code, including matrix functions";
   };
 }

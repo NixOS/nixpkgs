@@ -127,7 +127,7 @@ minimal.overrideAttrs (
         libraries support applications from web servers and databases to
         GUIs and charts.
       '';
-      platforms = lib.platforms.unix;
+      badPlatforms = [ ];
     };
   }
 )

@@ -106,12 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
-  postConfigure = lib.optionalString (lib.strings.versionAtLeast version "2.4") ''
-    substituteInPlace src/lib-regex/Makefile --replace-fail \
-      "test_regex_DEPENDENCIES = libdregex.la \$(LIBPCRE_LIBS)" \
-      "test_regex_DEPENDENCIES = libdregex.la"
-  '';
-
   postPatch = ''
     sed -i -E \
       -e 's!/bin/sh\b!${stdenv.shell}!g' \
@@ -174,6 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lucene"
     "--with-icu"
     "--with-textcat"
+    "--with-lua=${lib.boolToYesNo withLua}"
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "i_cv_epoll_works=${lib.boolToYesNo stdenv.hostPlatform.isLinux}"
@@ -195,7 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-static"
   ++ lib.optional withLDAP "--with-ldap"
   ++ lib.optional withPCRE2 "--with-pcre2"
-  ++ lib.optional withLua "--with-lua"
   ++ lib.optional withMySQL "--with-mysql"
   ++ lib.optional withPgSQL "--with-pgsql"
   ++ lib.optional withSQLite "--with-sqlite";

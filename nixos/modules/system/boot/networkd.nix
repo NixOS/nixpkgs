@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
@@ -10,6 +9,9 @@ with utils.systemdUtils.unitOptions;
 with utils.systemdUtils.lib;
 with utils.systemdUtils.network.units;
 with lib;
+
+# When updating this file please use the same ording of options/sections as
+# in the man pages / documentation. This makes future updates easier.
 
 let
 
@@ -24,9 +26,9 @@ let
           "ManageForeignRoutes"
           "ManageForeignNextHops"
           "RouteTable"
-          "IPv6PrivacyExtensions"
           "IPv4Forwarding"
           "IPv6Forwarding"
+          "IPv6PrivacyExtensions"
           "UseDomains"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
@@ -46,24 +48,52 @@ let
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
       ];
 
+      sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
+        (assertOnlyFields [
+          "UseDomains"
+        ])
+        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
+      ];
+
+      sectionIPv6AddressLabel = checkUnitConfig "IPv6AddressLabel" [
+        (assertOnlyFields [
+          "Name"
+          "Prefix"
+        ])
+        (assertHasField "Label")
+        (assertHasField "Prefix")
+        (assertRange "Label" 1 4294967295)
+      ];
+
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
           "ClientIdentifier"
           "DUIDType"
           "DUIDRawData"
+          "UseDomains"
         ])
         (assertValueOneOf "ClientIdentifier" [
           "mac"
           "duid"
           "duid-only"
         ])
+        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
           "DUIDType"
           "DUIDRawData"
+          "UseDomains"
         ])
+        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
+      ];
+
+      sectionDHCPServer = checkUnitConfig "DHCPServer" [
+        (assertOnlyFields [
+          "PersistLeases"
+        ])
+        (assertValueOneOf "PersistLeases" (boolValues ++ [ "runtime" ]))
       ];
     };
 
@@ -72,6 +102,9 @@ let
       sectionLink = checkUnitConfig "Link" [
         (assertOnlyFields [
           "Description"
+          "Property"
+          "ImportProperty"
+          "UnsetProperty"
           "Alias"
           "MACAddressPolicy"
           "MACAddress"
@@ -79,11 +112,15 @@ let
           "Name"
           "AlternativeNamesPolicy"
           "AlternativeName"
+          "TransmitQueues"
+          "ReceiveQueues"
+          "TransmitQueueLength"
           "MTUBytes"
           "BitsPerSecond"
           "Duplex"
           "AutoNegotiation"
           "WakeOnLan"
+          "WakeOnLanPassword"
           "Port"
           "Advertise"
           "ReceiveChecksumOffload"
@@ -91,20 +128,58 @@ let
           "TCPSegmentationOffload"
           "TCP6SegmentationOffload"
           "GenericSegmentationOffload"
+          "PartialGenericSegmentationOffload"
           "GenericReceiveOffload"
+          "GenericReceiveOffloadHardware"
           "LargeReceiveOffload"
+          "ReceivePacketSteeringCPUMask"
+          "ReceiveVLANCTAGHardwareAcceleration"
+          "TransmitVLANCTAGHardwareAcceleration"
+          "ReceiveVLANCTAGFilter"
+          "TransmitVLANSTAGHardwareAcceleration"
+          "NTupleFilter"
+          "ReceiveFCS"
+          "ReceiveAll"
           "RxChannels"
           "TxChannels"
           "OtherChannels"
           "CombinedChannels"
+          "Property"
+          "ImportProperty"
+          "UnsetProperty"
           "RxBufferSize"
+          "RxMiniBufferSize"
+          "RxJumboBufferSize"
           "TxBufferSize"
-          "ReceiveQueues"
-          "TransmitQueues"
-          "TransmitQueueLength"
           "RxFlowControl"
           "TxFlowControl"
           "AutoNegotiationFlowControl"
+          "GenericSegmentOffloadMaxBytes"
+          "GenericSegmentOffloadMaxSegments"
+          "UseAdaptiveRxCoalesce"
+          "UseAdaptiveTxCoalesce"
+          "RxCoalesceSec"
+          "RxCoalesceIrqSec"
+          "RxCoalesceLowSec"
+          "RxCoalesceHighSec"
+          "TxCoalesceSec"
+          "TxCoalesceIrqSec"
+          "TxCoalesceLowSec"
+          "TxCoalesceHighSec"
+          "RxMaxCoalescedFrames"
+          "RxMaxCoalescedIrqFrames"
+          "RxMaxCoalescedLowFrames"
+          "RxMaxCoalescedHighFrames"
+          "TxMaxCoalescedFrames"
+          "TxMaxCoalescedIrqFrames"
+          "TxMaxCoalescedLowFrames"
+          "TxMaxCoalescedHighFrames"
+          "CoalescePacketRateLow"
+          "CoalescePacketRateHigh"
+          "CoalescePacketRateSampleIntervalSec"
+          "StatisticsBlockCoalesceSec"
+          "MDI"
+          "SR-IOVVirtualFunctions"
         ])
         (assertValueOneOf "MACAddressPolicy" [
           "persistent"
@@ -112,6 +187,9 @@ let
           "none"
         ])
         (assertMacAddress "MACAddress")
+        (assertRange "ReceiveQueues" 1 16384)
+        (assertRange "TransmitQueues" 1 16384)
+        (assertRange "TransmitQueueLength" 1 4294967294)
         (assertByteFormat "MTUBytes")
         (assertByteFormat "BitsPerSecond")
         (assertValueOneOf "Duplex" [
@@ -140,11 +218,17 @@ let
         (assertValueOneOf "TCPSegmentationOffload" boolValues)
         (assertValueOneOf "TCP6SegmentationOffload" boolValues)
         (assertValueOneOf "GenericSegmentationOffload" boolValues)
+        (assertValueOneOf "PartialGenericSegmentationOffload" boolValues)
         (assertValueOneOf "GenericReceiveOffload" boolValues)
+        (assertValueOneOf "GenericReceiveOffloadHardware" boolValues)
         (assertValueOneOf "LargeReceiveOffload" boolValues)
-        (assertValueOneOf "RxFlowControl" boolValues)
-        (assertValueOneOf "TxFlowControl" boolValues)
-        (assertValueOneOf "AutoNegotiationFlowControl" boolValues)
+        (assertValueOneOf "ReceiveVLANCTAGHardwareAcceleration" boolValues)
+        (assertValueOneOf "TransmitVLANCTAGHardwareAcceleration" boolValues)
+        (assertValueOneOf "ReceiveVLANCTAGFilter" boolValues)
+        (assertValueOneOf "TransmitVLANSTAGHardwareAcceleration" boolValues)
+        (assertValueOneOf "NTupleFilter" boolValues)
+        (assertValueOneOf "ReceiveFCS" boolValues)
+        (assertValueOneOf "ReceiveAll" boolValues)
         (assertInt "RxChannels")
         (assertRange "RxChannels" 1 4294967295)
         (assertInt "TxChannels")
@@ -155,10 +239,79 @@ let
         (assertRange "CombinedChannels" 1 4294967295)
         (assertInt "RxBufferSize")
         (assertInt "TxBufferSize")
-        (assertRange "ReceiveQueues" 1 4096)
-        (assertRange "TransmitQueues" 1 4096)
-        (assertRange "TransmitQueueLength" 1 4294967294)
+        (assertRangeOrOneOf "RxBufferSize" 0 4294967295 [ "max" ])
+        (assertRangeOrOneOf "RxMiniBufferSize" 0 4294967295 [ "max" ])
+        (assertRangeOrOneOf "RxJumboBufferSize" 0 4294967295 [ "max" ])
+        (assertRangeOrOneOf "TxBufferSize" 0 4294967295 [ "max" ])
+        (assertValueOneOf "RxFlowControl" boolValues)
+        (assertValueOneOf "TxFlowControl" boolValues)
+        (assertValueOneOf "AutoNegotiationFlowControl" boolValues)
+        (assertRange "GenericSegmentOffloadMaxBytes" 1 65536)
+        (assertRange "GenericSegmentOffloadMaxSegments" 1 65536)
+        (assertValueOneOf "UseAdaptiveRxCoalesce" boolValues)
+        (assertValueOneOf "UseAdaptiveTxCoalesce" boolValues)
+        (assertInt "RxMaxCoalescedFrames")
+        (assertInt "RxMaxCoalescedIrqFrames")
+        (assertInt "RxMaxCoalescedLowFrames")
+        (assertInt "RxMaxCoalescedHighFrames")
+        (assertInt "TxMaxCoalescedFrames")
+        (assertInt "TxMaxCoalescedIrqFrames")
+        (assertInt "TxMaxCoalescedLowFrames")
+        (assertInt "TxMaxCoalescedHighFrames")
+        (assertInt "CoalescePacketRateLow")
+        (assertInt "CoalescePacketRateHigh")
+        (assertInt "CoalescePacketRateSampleIntervalSec")
+        (assertRange "StatisticsBlockCoalesceSec" 1 4294967295)
+        (assertValueOneOf "MDI" [
+          "straight"
+          "mdi"
+          "crossover"
+          "mdi-x"
+          "mdix"
+          "auto"
+        ])
+        (assertRange "SR-IOVVirtualFunctions" 0 2147483647)
       ];
+
+      sectionSR-IOV = checkUnitConfig "SR-IOV" [
+        (assertOnlyFields [
+          "VirtualFunction"
+          "VLANId"
+          "QualityOfService"
+          "VLANProtocol"
+          "MACSpoofCheck"
+          "QueryReceiveSideScaling"
+          "Trust"
+          "LinkState"
+          "MACAddress"
+        ])
+        (assertHasField "VirtualFunction")
+        (assertRange "VirtualFunction" 0 2147483646)
+        (assertRange "VLANId" 1 4095)
+        (assertRange "QualityOfService" 1 4294967294)
+        (assertValueOneOf "VLANProtocol" [
+          "802.1Q"
+          "802.1ad"
+        ])
+        (assertValueOneOf "MACSpoofCheck" boolValues)
+        (assertValueOneOf "QueryReceiveSideScaling" boolValues)
+        (assertValueOneOf "Trust" boolValues)
+        (assertValueOneOf "LinkState" (boolValues ++ [ "auto" ]))
+        (assertMacAddress "MACAddress")
+      ];
+
+      sectionEnergyEfficientEthernet = checkUnitConfig "EnergyEfficientEthernet" [
+        (assertOnlyFields [
+          "Enable"
+          "TxLowPowerIdle"
+          "TxLowPowerIdleSec"
+          "LinkMode"
+        ])
+        (assertValueOneOf "Enable" boolValues)
+        (assertValueOneOf "TxLowPowerIdle" boolValues)
+        (assertInt "TxLowPowerIdleSec")
+      ];
+
     };
 
     netdev =
@@ -177,6 +330,25 @@ let
           (assertValueOneOf "PacketInfo" boolValues)
           (assertValueOneOf "VNetHeader" boolValues)
           (assertValueOneOf "KeepCarrier" boolValues)
+        ];
+
+        # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BMACVLAN%5D%20Section%20Options
+        macVlanVtapChecks = [
+          (assertOnlyFields [
+            "Mode"
+            "SourceMACAddress"
+            "BroadcastMulticastQueueLength"
+            "BroadcastQueueThreshold"
+          ])
+          (assertValueOneOf "Mode" [
+            "private"
+            "vepa"
+            "bridge"
+            "passthru"
+            "source"
+          ])
+          (assertRange "BroadcastMulticastQueueLength" 0 4294967294)
+          (assertRangeOrOneOf "BroadcastQueueThreshold" 0 2147483647 [ "no" ])
         ];
 
         # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
@@ -233,19 +405,21 @@ let
             "vti6"
             "vxlan"
             "geneve"
+            "hsr"
             "l2tp"
             "macsec"
-            "wlan"
             "vrf"
             "vcan"
             "vxcan"
             "wireguard"
-            "netdevsim"
             "nlmon"
             "fou"
             "xfrm"
             "ifb"
+            "bareudp"
             "batadv"
+            "ipoib"
+            "wlan"
           ])
           (assertByteFormat "MTUBytes")
           (assertNetdevMacAddress "MACAddress")
@@ -266,6 +440,8 @@ let
             "VLANProtocol"
             "STP"
             "MulticastIGMPVersion"
+            "FDBMaxLearned"
+            "LinkLocalLearning"
           ])
           (assertInt "HelloTimeSec")
           (assertInt "MaxAgeSec")
@@ -286,6 +462,8 @@ let
             2
             3
           ])
+          (assertInt "FDBMaxLearned")
+          (assertValueOneOf "LinkLocalLearning" boolValues)
         ];
 
         sectionVLAN = checkUnitConfig "VLAN" [
@@ -311,21 +489,13 @@ let
           (assertValueOneOf "ReorderHeader" boolValues)
         ];
 
+        sectionMACVLAN = checkUnitConfig "MACVLAN" macVlanVtapChecks;
+
+        sectionMACVTAP = checkUnitConfig "MACVTAP" macVlanVtapChecks;
+
         sectionIPVLAN = checkUnitConfig "IPVLAN" ipVlanVtapChecks;
 
         sectionIPVTAP = checkUnitConfig "IPVTAP" ipVlanVtapChecks;
-
-        sectionMACVLAN = checkUnitConfig "MACVLAN" [
-          (assertOnlyFields [
-            "Mode"
-          ])
-          (assertValueOneOf "Mode" [
-            "private"
-            "vepa"
-            "bridge"
-            "passthru"
-          ])
-        ];
 
         sectionVXLAN = checkUnitConfig "VXLAN" [
           (assertOnlyFields [
@@ -354,9 +524,12 @@ let
             "FlowLabel"
             "IPDoNotFragment"
             "Independent"
+            "External"
+            "VNIFilter"
           ])
           (assertInt "VNI")
           (assertRange "VNI" 1 16777215)
+          (assertRange "TTL" 0 255)
           (assertValueOneOf "MacLearning" boolValues)
           (assertInt "MaximumFDBEntries")
           (assertValueOneOf "ReduceARPProxy" boolValues)
@@ -374,85 +547,64 @@ let
           (assertRange "FlowLabel" 0 1048575)
           (assertValueOneOf "IPDoNotFragment" (boolValues + [ "inherit" ]))
           (assertValueOneOf "Independent" boolValues)
+          (assertValueOneOf "External" boolValues)
+          (assertValueOneOf "VNIFilter" boolValues)
         ];
 
-        sectionTunnel = checkUnitConfig "Tunnel" [
+        sectionGENEVE = checkUnitConfig "GENEVE" [
           (assertOnlyFields [
-            "Local"
+            "Id"
             "Remote"
             "TOS"
             "TTL"
-            "DiscoverPathMTU"
-            "IgnoreDontFragment"
-            "IPv6FlowLabel"
-            "CopyDSCP"
-            "EncapsulationLimit"
-            "Key"
-            "InputKey"
-            "OutputKey"
-            "Mode"
-            "Independent"
-            "AssignToLoopback"
-            "AllowLocalRemote"
-            "FooOverUDP"
-            "FOUDestinationPort"
-            "FOUSourcePort"
-            "Encapsulation"
-            "IPv6RapidDeploymentPrefix"
-            "ISATAP"
-            "SerializeTunneledPackets"
-            "ERSPANIndex"
+            "UDPChecksum"
+            "UDP6ZeroChecksumTx"
+            "UDP6ZeroChecksumRx"
+            "DestinationPort"
+            "FlowLabel"
+            "IPDoNotFragment"
+            "InheritInnerProtocol"
           ])
-          (assertInt "TTL")
+          (assertInt "Id")
+          (assertRange "Id" 0 16777215)
+          (assertRange "TOS" 0 255)
           (assertRange "TTL" 0 255)
-          (assertValueOneOf "DiscoverPathMTU" boolValues)
-          (assertValueOneOf "IgnoreDontFragment" boolValues)
-          (assertValueOneOf "CopyDSCP" boolValues)
-          (assertValueOneOf "Mode" [
-            "ip6ip6"
-            "ipip6"
-            "any"
-          ])
-          (assertValueOneOf "Independent" boolValues)
-          (assertValueOneOf "AssignToLoopback" boolValues)
-          (assertValueOneOf "AllowLocalRemote" boolValues)
-          (assertValueOneOf "FooOverUDP" boolValues)
-          (assertPort "FOUDestinationPort")
-          (assertPort "FOUSourcePort")
-          (assertValueOneOf "Encapsulation" [
-            "FooOverUDP"
-            "GenericUDPEncapsulation"
-          ])
-          (assertValueOneOf "ISATAP" boolValues)
-          (assertValueOneOf "SerializeTunneledPackets" boolValues)
-          (assertInt "ERSPANIndex")
-          (assertRange "ERSPANIndex" 1 1048575)
+          (assertValueOneOf "UDPChecksum" boolValues)
+          (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+          (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+          (assertPort "DestinationPort")
+          (assertValueOneOf "IPDoNotFragment" (boolValues + [ "inherit" ]))
+          (assertValueOneOf "InheritInnerProtocol" boolValues)
         ];
 
-        sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
+        sectionHSR = checkUnitConfig "GENEVE" [
           (assertOnlyFields [
-            "Port"
-            "Encapsulation"
+            "Ports"
             "Protocol"
+            "Supervision"
           ])
-          (assertPort "Port")
-          (assertValueOneOf "Encapsulation" [
-            "FooOverUDP"
-            "GenericUDPEncapsulation"
+          (assertValueOneOf "Protocol" [
+            "hsr"
+            "prp"
           ])
+          (assertRange "Supervision" 0 255)
         ];
 
-        sectionPeer = checkUnitConfig "Peer" [
+        sectionBareUDP = checkUnitConfig "BareUDP" [
           (assertOnlyFields [
-            "Name"
-            "MACAddress"
+            "DestinationPort"
+            "EtherType"
+            "MinSourcePort"
           ])
-          (assertMacAddress "MACAddress")
+          (assertPort "DestinationPort")
+          (assertValueOneOf "EtherType" [
+            "ipv4"
+            "ipv6"
+            "mpls-uc"
+            "mpls-mc"
+          ])
+          (assertRange "MinSourcePort" 1 65535)
         ];
-
-        sectionTun = checkUnitConfig "Tun" tunChecks;
-
-        sectionTap = checkUnitConfig "Tap" tunChecks;
 
         sectionL2TP = checkUnitConfig "L2TP" [
           (assertOnlyFields [
@@ -502,6 +654,157 @@ let
           ])
         ];
 
+        sectionMACsec = checkUnitConfig "MACsec" [
+          (assertOnlyFields [
+            "Port"
+            "Encrypt"
+          ])
+          (assertRange "Port" 1 65535)
+          (assertValueOneOf "Encrypt" boolValues)
+        ];
+
+        sectionMACsecReceiveChannel = checkUnitConfig "MACsecReceiveChannel" [
+          (assertOnlyFields [
+            "Port"
+            "MACAddress"
+          ])
+          (assertRange "Port" 1 65535)
+          (assertMacAddress "MACAddress")
+          (assertHasField "Port")
+          (assertHasField "MACAddress")
+        ];
+
+        sectionMACsecTransmitAssociation = checkUnitConfig "MACsecTransmitAssociation" [
+          (assertOnlyFields [
+            "PacketNumber"
+            "KeyId"
+            "Key"
+            "KeyFile"
+            "Activate"
+            "UseForEncoding"
+          ])
+          (assertRange "PacketNumber" 1 4294967295)
+          (assertRange "KeyId" 0 255)
+          (assertValueOneOf "Activate" boolValues)
+          (assertValueOneOf "UseForEncoding" boolValues)
+        ];
+
+        sectionMACsecReceiveAssociation = checkUnitConfig "MACsecReceiveAssociation" [
+          (assertOnlyFields [
+            "Port"
+            "MACAddress"
+            "PacketNumber"
+            "KeyId"
+            "Key"
+            "KeyFile"
+            "Activate"
+          ])
+          (assertRange "Port" 1 65535)
+          (assertMacAddress "MACAddress")
+          (assertRange "PacketNumber" 1 4294967295)
+          (assertRange "KeyId" 0 255)
+          (assertValueOneOf "Activate" boolValues)
+        ];
+
+        sectionTunnel = checkUnitConfig "Tunnel" [
+          (assertOnlyFields [
+            "External"
+            "Local"
+            "Remote"
+            "TOS"
+            "TTL"
+            "DiscoverPathMTU"
+            "IgnoreDontFragment"
+            "IPv6FlowLabel"
+            "CopyDSCP"
+            "EncapsulationLimit"
+            "Key"
+            "InputKey"
+            "OutputKey"
+            "Mode"
+            "Independent"
+            "AssignToLoopback"
+            "AllowLocalRemote"
+            "FooOverUDP"
+            "FOUDestinationPort"
+            "FOUSourcePort"
+            "Encapsulation"
+            "IPv6RapidDeploymentPrefix"
+            "ISATAP"
+            "SerializeTunneledPackets"
+            "ERSPANVersion"
+            "ERSPANIndex"
+            "ERSPANDirection"
+            "ERSPANHardwareId"
+          ])
+          (assertValueOneOf "External" boolValues)
+          (assertInt "TTL")
+          (assertRange "TTL" 0 255)
+          (assertValueOneOf "DiscoverPathMTU" boolValues)
+          (assertValueOneOf "IgnoreDontFragment" boolValues)
+          (assertValueOneOf "CopyDSCP" boolValues)
+          (assertValueOneOf "Mode" [
+            "ip6ip6"
+            "ipip6"
+            "any"
+          ])
+          (assertValueOneOf "Independent" boolValues)
+          (assertValueOneOf "AssignToLoopback" boolValues)
+          (assertValueOneOf "AllowLocalRemote" boolValues)
+          (assertValueOneOf "FooOverUDP" boolValues)
+          (assertPort "FOUDestinationPort")
+          (assertPort "FOUSourcePort")
+          (assertValueOneOf "Encapsulation" [
+            "FooOverUDP"
+            "GenericUDPEncapsulation"
+          ])
+          (assertValueOneOf "ISATAP" boolValues)
+          (assertValueOneOf "SerializeTunneledPackets" boolValues)
+          (assertRange "ERSPANVersion" 0 2)
+          (assertInt "ERSPANIndex")
+          (assertRange "ERSPANIndex" 1 1048575)
+          (assertValueOneOf "ERSPANDirection" [
+            "ingress"
+            "egress"
+          ])
+          (assertRange "ERSPANHardwareId" 0 63)
+        ];
+
+        sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
+          (assertOnlyFields [
+            "Encapsulation"
+            "Port"
+            "PeerPort"
+            "Protocol"
+            "Peer"
+            "Local"
+          ])
+          (assertPort "Port")
+          (assertValueOneOf "Encapsulation" [
+            "FooOverUDP"
+            "GenericUDPEncapsulation"
+          ])
+          (assertPort "PeerPort")
+        ];
+
+        sectionPeer = checkUnitConfig "Peer" [
+          (assertOnlyFields [
+            "Name"
+            "MACAddress"
+          ])
+          (assertMacAddress "MACAddress")
+        ];
+
+        sectionVXCAN = checkUnitConfig "VXCAN" [
+          (assertOnlyFields [
+            "Peer"
+          ])
+        ];
+
+        sectionTun = checkUnitConfig "Tun" tunChecks;
+
+        sectionTap = checkUnitConfig "Tap" tunChecks;
+
         # NOTE Check whether the key starts with an @, in which case it is
         # interpreted as the name of the credential from which the actual key
         # shall be read by systemd-creds.
@@ -518,6 +821,8 @@ let
           ])
           (assertInt "FirewallMark")
           (assertRange "FirewallMark" 1 4294967295)
+          (assertInt "RouteMetric")
+          (assertRange "RouteMetric" 0 4294967295)
         ];
 
         # NOTE Check whether the key starts with an @, in which case it is
@@ -539,6 +844,8 @@ let
           ])
           (assertInt "PersistentKeepalive")
           (assertRange "PersistentKeepalive" 0 65535)
+          (assertInt "RouteMetric")
+          (assertRange "RouteMetric" 0 4294967295)
         ];
 
         sectionBond = checkUnitConfig "Bond" [
@@ -547,6 +854,7 @@ let
             "TransmitHashPolicy"
             "LACPTransmitRate"
             "MIIMonitorSec"
+            "PeerNotifyDelaySec"
             "UpDelaySec"
             "DownDelaySec"
             "LearnPacketIntervalSec"
@@ -566,6 +874,7 @@ let
             "AllSlavesActive"
             "DynamicTransmitLoadBalancing"
             "MinLinks"
+            "ARPMissedMax"
           ])
           (assertValueOneOf "Mode" [
             "balance-rr"
@@ -587,6 +896,7 @@ let
             "slow"
             "fast"
           ])
+          (assertRange "PeerNotifyDelaySec" 0 300)
           (assertValueOneOf "AdSelect" [
             "stable"
             "bandwidth"
@@ -626,6 +936,8 @@ let
           (assertValueOneOf "DynamicTransmitLoadBalancing" boolValues)
           (assertInt "MinLinks")
           (assertMinimum "MinLinks" 0)
+          (assertInt "ARPMissedMax")
+          (assertMinimum "ARPMissedMax" 0)
         ];
 
         sectionXfrm = checkUnitConfig "Xfrm" [
@@ -644,30 +956,6 @@ let
           ])
           (assertInt "Table")
           (assertMinimum "Table" 0)
-        ];
-
-        sectionWLAN = checkUnitConfig "WLAN" [
-          (assertOnlyFields [
-            "PhysicalDevice" # systemd supports both strings ("phy0") and indexes (0) here.
-            "Type"
-            "WDS"
-          ])
-          # See https://github.com/systemd/systemd/blob/main/src/basic/linux/nl80211.h#L3382
-          (assertValueOneOf "Type" [
-            "ad-hoc"
-            "station"
-            "ap"
-            "ap-vlan"
-            "wds"
-            "monitor"
-            "mesh-point"
-            "p2p-client"
-            "p2p-go"
-            "p2p-device"
-            "ocb"
-            "nan"
-          ])
-          (assertValueOneOf "WDS" boolValues)
         ];
 
         sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
@@ -699,6 +987,43 @@ let
             "batman-iv"
           ])
         ];
+
+        sectionIPoIB = checkUnitConfig "IPoIB" [
+          (assertOnlyFields [
+            "PartitionKey"
+            "Mode"
+            "IgnoreUserspaceMulticastGroups"
+          ])
+          (assertValueOneOf "Mode" [
+            "datagram"
+            "connected"
+          ])
+          (assertValueOneOf "IgnoreUserspaceMulticastGroups" boolValues)
+        ];
+
+        sectionWLAN = checkUnitConfig "WLAN" [
+          (assertOnlyFields [
+            "PhysicalDevice" # systemd supports both strings ("phy0") and indexes (0) here.
+            "Type"
+            "WDS"
+          ])
+          # See https://github.com/systemd/systemd/blob/main/src/basic/linux/nl80211.h#L3382
+          (assertValueOneOf "Type" [
+            "ad-hoc"
+            "station"
+            "ap"
+            "ap-vlan"
+            "wds"
+            "monitor"
+            "mesh-point"
+            "p2p-client"
+            "p2p-go"
+            "p2p-device"
+            "ocb"
+            "nan"
+          ])
+          (assertValueOneOf "WDS" boolValues)
+        ];
       };
 
     network = {
@@ -710,12 +1035,12 @@ let
           "ARP"
           "Multicast"
           "AllMulticast"
+          "Promiscuous"
           "Unmanaged"
           "Group"
           "RequiredForOnline"
           "RequiredFamilyForOnline"
           "ActivationPolicy"
-          "Promiscuous"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
@@ -765,6 +1090,32 @@ let
         ])
       ];
 
+      sectionSR-IOV = checkUnitConfig "SR-IOV" [
+        (assertOnlyFields [
+          "VirtualFunction"
+          "VLANId"
+          "QualityOfService"
+          "VLANProtocol"
+          "MACSpoofCheck"
+          "QueryReceiveSideScaling"
+          "Trust"
+          "LinkState"
+          "MACAddress"
+        ])
+        (assertRange "VirtualFunction" 0 2147483646)
+        (assertRange "VLANId" 1 4095)
+        (assertRange "QualityOfService" 1 4294967294)
+        (assertValueOneOf "VLANProtocol" [
+          "802.1Q"
+          "802.1ad"
+        ])
+        (assertValueOneOf "MACSpoofCheck" boolValues)
+        (assertValueOneOf "QueryReceiveSideScaling" boolValues)
+        (assertValueOneOf "Trust" boolValues)
+        (assertValueOneOf "LinkState" (boolValues ++ [ "auto" ]))
+        (assertMacAddress "MACAddress")
+      ];
+
       sectionNetwork = checkUnitConfig "Network" [
         (assertOnlyFields [
           "Description"
@@ -800,7 +1151,9 @@ let
           "IPv6DuplicateAddressDetection"
           "IPv6HopLimit"
           "IPv6RetransmissionTimeSec"
+          "IPv4DuplicateAddressDetectionTimeoutSec"
           "IPv4ReversePathFilter"
+          "MulticastIGMPVersion"
           "IPv4AcceptLocal"
           "IPv4RouteLocalnet"
           "IPv4ProxyARP"
@@ -810,25 +1163,27 @@ let
           "IPv6SendRA"
           "DHCPPrefixDelegation"
           "IPv6MTUBytes"
+          "MPLSRouting"
           "KeepMaster"
+          "BatmanAdvanced"
           "Bridge"
           "Bond"
           "VRF"
-          "VLAN"
+          "IPoIB"
           "IPVLAN"
           "IPVTAP"
+          "MACsec"
           "MACVLAN"
           "MACVTAP"
-          "VXLAN"
           "Tunnel"
-          "MACsec"
+          "VLAN"
+          "VXLAN"
+          "Xfrm"
           "ActiveSlave"
           "PrimarySlave"
           "ConfigureWithoutCarrier"
           "IgnoreCarrierLoss"
-          "Xfrm"
           "KeepConfiguration"
-          "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
         (assertValueOneOf "DHCP" (
@@ -844,8 +1199,6 @@ let
           ++ [
             "ipv4"
             "ipv6"
-            "fallback"
-            "ipv4-fallback"
           ]
         ))
         (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" [
@@ -900,6 +1253,12 @@ let
           "strict"
           "loose"
         ])
+        (assertValueOneOf "MulticastIGMPVersion" [
+          "no"
+          "v1"
+          "v2"
+          "v3"
+        ])
         (assertValueOneOf "IPv4AcceptLocal" boolValues)
         (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
@@ -908,6 +1267,7 @@ let
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
+        (assertValueOneOf "MPLSRouting" boolValues)
         (assertValueOneOf "KeepMaster" boolValues)
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
@@ -947,6 +1307,7 @@ let
           0
         ])
         (assertInt "RouteMetric")
+        (assertRange "RouteMetric" 0 4294967295)
         (assertValueOneOf "HomeAddress" boolValues)
         (assertValueOneOf "DuplicateAddressDetection" [
           "ipv4"
@@ -959,6 +1320,20 @@ let
         (assertValueOneOf "AutoJoin" boolValues)
       ];
 
+      sectionNeighbor = checkUnitConfig "Neighbor" [
+        (assertOnlyFields [
+          "Address"
+          "LinkLayerAddress"
+        ])
+      ];
+
+      sectionIPv6AddressLabel = checkUnitConfig "IPv6AddressLabel" [
+        (assertOnlyFields [
+          "Label"
+          "Prefix"
+        ])
+      ];
+
       sectionRoutingPolicyRule =
         checkUnitConfigWithLegacyKey "routingPolicyRuleConfig" "RoutingPolicyRule"
           [
@@ -969,6 +1344,7 @@ let
               "FirewallMark"
               "Table"
               "Priority"
+              "GoTo"
               "IncomingInterface"
               "OutgoingInterface"
               "L3MasterDevice"
@@ -979,13 +1355,14 @@ let
               "Family"
               "User"
               "SuppressPrefixLength"
-              "Type"
               "SuppressInterfaceGroup"
+              "Type"
             ])
             (assertInt "TypeOfService")
             (assertRange "TypeOfService" 0 255)
             (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
             (assertInt "Priority")
+            (assertRange "GoTo" 1 4294967295)
             (assertValueOneOf "L3MasterDevice" boolValues)
             (assertPortOrPortRange "SourcePort")
             (assertPortOrPortRange "DestinationPort")
@@ -997,13 +1374,31 @@ let
             ])
             (assertInt "SuppressPrefixLength")
             (assertRange "SuppressPrefixLength" 0 128)
+            (assertRange "SuppressInterfaceGroup" 0 2147483647)
             (assertValueOneOf "Type" [
               "blackhole"
               "unreachable"
               "prohibit"
             ])
-            (assertRange "SuppressInterfaceGroup" 0 2147483647)
           ];
+
+      sectionNextHop = checkUnitConfig "NextHop" [
+        (assertOnlyFields [
+          "Id"
+          "Gateway"
+          "Family"
+          "OnLink"
+          "Blackhole"
+          "Group"
+        ])
+        (assertRange "Id" 1 4294967295)
+        (assertValueOneOf "Family" [
+          "ipv4"
+          "ipv6"
+        ])
+        (assertValueOneOf "OnLink" boolValues)
+        (assertValueOneOf "Blackhole" boolValues)
+      ];
 
       sectionRoute = checkUnitConfigWithLegacyKey "routeConfig" "Route" [
         (assertOnlyFields [
@@ -1016,16 +1411,19 @@ let
           "Scope"
           "PreferredSource"
           "Table"
+          "HopLimit"
           "Protocol"
           "Type"
           "InitialCongestionWindow"
           "InitialAdvertisedReceiveWindow"
           "QuickAck"
           "FastOpenNoCookie"
-          "TTLPropagate"
           "MTUBytes"
-          "IPServiceType"
+          "TCPAdvertisedMaximumSegmentSize"
+          "TCPCongestionControlAlgorithm"
+          "TCPRetransmissionTimeoutSec"
           "MultiPathRoute"
+          "NextHop"
         ])
         (assertValueOneOf "GatewayOnLink" boolValues)
         (assertInt "Metric")
@@ -1041,6 +1439,7 @@ let
           "host"
           "nowhere"
         ])
+        (assertRange "HopLimit" 1 255)
         (assertValueOneOf "Type" [
           "unicast"
           "local"
@@ -1054,136 +1453,213 @@ let
           "nat"
           "xresolve"
         ])
+        (assertRange "InitialCongestionWindow" 1 1023)
+        (assertRange "InitialAdvertisedReceiveWindow" 1 1023)
         (assertValueOneOf "QuickAck" boolValues)
         (assertValueOneOf "FastOpenNoCookie" boolValues)
-        (assertValueOneOf "TTLPropagate" boolValues)
         (assertByteFormat "MTUBytes")
-        (assertValueOneOf "IPServiceType" [
-          "CS6"
-          "CS4"
-        ])
+        (assertByteFormat "TCPAdvertisedMaximumSegmentSize")
+        (assertInt "TCPRetransmissionTimeoutSec")
+        (assertRange "NextHop" 1 4294967295)
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
-          "UseDNS"
-          "UseDNR"
-          "RoutesToDNS"
-          "UseNTP"
-          "UseSIP"
-          "UseMTU"
-          "Anonymize"
+          "RequestAddress"
           "SendHostname"
-          "UseHostname"
           "Hostname"
-          "UseDomains"
-          "UseGateway"
-          "UseRoutes"
-          "UseTimezone"
-          "IPv6OnlyMode"
+          "MUDURL"
           "ClientIdentifier"
           "VendorClassIdentifier"
           "UserClass"
-          "MaxAttempts"
           "DUIDType"
           "DUIDRawData"
           "IAID"
-          "RequestAddress"
-          "RequestBroadcast"
-          "RouteMetric"
           "RapidCommit"
-          "RouteTable"
-          "RouteMTUBytes"
-          "ListenPort"
-          "SendRelease"
-          "SendDecline"
-          "BlackList"
+          "Anonymize"
           "RequestOptions"
           "SendOption"
-          "FallbackLeaseLifetimeSec"
+          "SendVendorOption"
+          "IPServiceType"
+          "SocketPriority"
+          "BOOTP"
           "Label"
+          "UseDNS"
+          "RoutesToDNS"
+          "UseNTP"
+          "RoutesToNTP"
+          "UseSIP"
+          "UseCaptivePortal"
+          "UseDNR"
+          "UseMTU"
+          "UseHostname"
+          "UseDomains"
+          "UseRoutes"
+          "RouteMetric"
+          "RouteTable"
+          "RouteMTUBytes"
+          "QuickAck"
+          "InitialCongestionWindow"
+          "InitialAdvertisedReceiveWindow"
+          "UseGateway"
+          "UseTimezone"
           "Use6RD"
+          "UnassignedSubnetPolicy"
+          "IPv6OnlyMode"
+          "FallbackLeaseLifetimeSec"
+          "RequestBroadcast"
+          "MaxAttempts"
+          "ListenPort"
+          "ServerPort"
+          "DenyList"
+          "AllowList"
+          "SendRelease"
+          "SendDecline"
           "NetLabel"
           "NFTSet"
+          "BlackList" # removed
           "UseCaptivePortal"
+          "SendVendorOption"
+          "IPServiceType"
+          "SocketPriority"
+          "BOOTP"
+          "RoutesToNTP"
+          "QuickAck"
+          "InitialCongestionWindow"
+          "InitialAdvertisedReceiveWindow"
+          "UnassignedSubnetPolicy"
+          "ServerPort"
+          "DenyList"
+          "AllowList"
         ])
-        (assertValueOneOf "UseDNS" boolValues)
-        (assertValueOneOf "UseDNR" boolValues)
-        (assertValueOneOf "RoutesToDNS" boolValues)
-        (assertValueOneOf "UseNTP" boolValues)
-        (assertValueOneOf "UseSIP" boolValues)
-        (assertValueOneOf "UseMTU" boolValues)
-        (assertValueOneOf "Anonymize" boolValues)
+        (assertRemoved "BlackList" "Use DenyList instead")
         (assertValueOneOf "SendHostname" boolValues)
-        (assertValueOneOf "UseHostname" boolValues)
-        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
-        (assertValueOneOf "UseGateway" boolValues)
-        (assertValueOneOf "UseRoutes" boolValues)
-        (assertValueOneOf "UseTimezone" boolValues)
-        (assertValueOneOf "IPv6OnlyMode" boolValues)
         (assertValueOneOf "ClientIdentifier" [
           "mac"
           "duid"
-          "duid-only"
         ])
         (assertInt "IAID")
-        (assertValueOneOf "RequestBroadcast" boolValues)
-        (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
-        (assertInt "RouteTable")
-        (assertRange "RouteTable" 0 4294967295)
+        (assertValueOneOf "Anonymize" boolValues)
+        (assertValueOneOf "IPServiceType" [
+          "none"
+          "CS6"
+          "CS4"
+        ])
+        (assertRange "SocketPriority" 0 255)
+        (assertValueOneOf "BOOTP" boolValues)
+        (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "RoutesToDNS" boolValues)
+        (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "RoutesToNTP" boolValues)
+        (assertValueOneOf "UseSIP" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
+        (assertValueOneOf "UseMTU" boolValues)
+        (assertValueOneOf "UseHostname" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
+        (assertValueOneOf "UseRoutes" boolValues)
+        (assertInt "RouteMetric")
+        (assertRange "RouteMetric" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
-        (assertPort "ListenPort")
-        (assertValueOneOf "SendRelease" boolValues)
-        (assertValueOneOf "SendDecline" boolValues)
+        (assertValueOneOf "QuickAck" boolValues)
+        (assertRange "InitialCongestionWindow" 1 1023)
+        (assertRange "InitialAdvertisedReceiveWindow" 1 1023)
+        (assertValueOneOf "UseGateway" boolValues)
+        (assertValueOneOf "UseTimezone" boolValues)
+        (assertValueOneOf "Use6RD" boolValues)
+        (assertValueOneOf "UnassignedSubnetPolicy" [
+          "none"
+          "unreachable"
+          "prohibit"
+          "blackhole"
+          "throw"
+        ])
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
         (assertValueOneOf "FallbackLeaseLifetimeSec" [
           "forever"
           "infinity"
         ])
+        (assertValueOneOf "RequestBroadcast" boolValues)
+        (assertPort "ListenPort")
+        (assertPort "ServerPort")
+        (assertValueOneOf "SendRelease" boolValues)
+        (assertValueOneOf "SendDecline" boolValues)
         (assertValueOneOf "Use6RD" boolValues)
         (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "IPServiceType" [
+          "none"
+          "CS6"
+          "CS4"
+        ])
+        (assertInt "SocketPriority")
+        (assertValueOneOf "BOOTP" boolValues)
+        (assertValueOneOf "RoutesToNTP" boolValues)
+        (assertValueOneOf "QuickAck" boolValues)
+        (assertValueOneOf "UnassignedSubnetPolicy" [
+          "none"
+          "unreachable"
+          "prohibit"
+          "blackhole"
+          "throw"
+        ])
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
+        (assertPort "ServerPort")
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
+          "MUDURL"
+          "IAID"
+          "DUIDType"
+          "DUIDRawData"
+          "RequestOptions"
+          "SendOption"
+          "SendVendorOption"
+          "UserClass"
+          "VendorClass"
+          "PrefixDelegationHint"
+          "UnassignedSubnetPolicy"
+          "RapidCommit"
+          "SendHostname"
+          "Hostname"
           "UseAddress"
+          "UseCaptivePortal"
+          "UseDelegatedPrefix"
           "UseDNS"
           "UseDNR"
           "UseNTP"
           "UseSIP"
-          "SendHostname"
           "UseHostname"
-          "Hostname"
           "UseDomains"
-          "RouteMetric"
-          "RapidCommit"
-          "MUDURL"
-          "RequestOptions"
-          "SendVendorOption"
-          "PrefixDelegationHint"
-          "WithoutRA"
-          "SendOption"
-          "UserClass"
-          "VendorClass"
-          "DUIDType"
-          "DUIDRawData"
-          "IAID"
-          "UseDelegatedPrefix"
-          "SendRelease"
           "NetLabel"
+          "SendRelease"
           "NFTSet"
+          "WithoutRA"
           "UseCaptivePortal"
+          "UnassignedSubnetPolicy"
         ])
+        (assertInt "IAID")
+        (assertRange "SendOption" 1 65536)
+        (assertValueOneOf "UnassignedSubnetPolicy" [
+          "none"
+          "unreachable"
+          "prohibit"
+          "blackhole"
+          "throw"
+        ])
+        (assertValueOneOf "RapidCommit" boolValues)
+        (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseAddress" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UseDelegatedPrefix" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertValueOneOf "UseSIP" boolValues)
-        (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
-        (assertInt "RouteMetric")
-        (assertValueOneOf "RapidCommit" boolValues)
+        (assertValueOneOf "SendRelease" boolValues)
         (assertValueOneOf "WithoutRA" [
           "no"
           "solicit"
@@ -1194,6 +1670,13 @@ let
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
         (assertValueOneOf "SendRelease" boolValues)
         (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UnassignedSubnetPolicy" [
+          "none"
+          "unreachable"
+          "prohibit"
+          "blackhole"
+          "throw"
+        ])
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -1211,15 +1694,33 @@ let
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
         (assertValueOneOf "ManageTemporaryAddress" boolValues)
+        (assertInt "RouteMetric")
         (assertRange "RouteMetric" 0 4294967295)
+        (assertValueOneOf "WithoutRA" [
+          "no"
+          "solicit"
+          "information-request"
+        ])
       ];
 
       sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
         (assertOnlyFields [
+          "UseRedirect"
+          "Token"
           "UseDNS"
           "UseDNR"
           "UseDomains"
           "RouteTable"
+          "RouteMetric"
+          "QuickAck"
+          "UseMTU"
+          "UseHopLimit"
+          "UseReachableTime"
+          "UseRetransmissionTime"
+          "UseGateway"
+          "UseRoutePrefix"
+          "UseCaptivePortal"
+          "UsePREF64"
           "UseAutonomousPrefix"
           "UseOnLinkPrefix"
           "RouterDenyList"
@@ -1229,12 +1730,6 @@ let
           "RouteDenyList"
           "RouteAllowList"
           "DHCPv6Client"
-          "RouteMetric"
-          "UseMTU"
-          "UseGateway"
-          "UseRoutePrefix"
-          "Token"
-          "UsePREF64"
           "NetLabel"
           "NFTSet"
           "UseCaptivePortal"
@@ -1242,23 +1737,28 @@ let
           "UseHopLimit"
           "UseReachableTime"
           "UseRetransmissionTime"
+          "QuickAck"
         ])
+        (assertValueOneOf "UseRedirect" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
-        (assertValueOneOf "UseAutonomousPrefix" boolValues)
-        (assertValueOneOf "UseOnLinkPrefix" boolValues)
-        (assertValueOneOf "DHCPv6Client" (boolValues ++ [ "always" ]))
+        (assertInt "RouteMetric")
+        (assertRange "RouteMetric" 0 4294967295)
+        (assertValueOneOf "QuickAck" boolValues)
         (assertValueOneOf "UseMTU" boolValues)
-        (assertValueOneOf "UseGateway" boolValues)
-        (assertValueOneOf "UseRoutePrefix" boolValues)
-        (assertValueOneOf "UsePREF64" boolValues)
-        (assertValueOneOf "UseCaptivePortal" boolValues)
-        (assertValueOneOf "UseRedirect" boolValues)
         (assertValueOneOf "UseHopLimit" boolValues)
         (assertValueOneOf "UseReachableTime" boolValues)
         (assertValueOneOf "UseRetransmissionTime" boolValues)
+        (assertValueOneOf "UseGateway" boolValues)
+        (assertValueOneOf "UseRoutePrefix" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UsePREF64" boolValues)
+        (assertValueOneOf "UseAutonomousPrefix" boolValues)
+        (assertValueOneOf "UseOnLinkPrefix" boolValues)
+        (assertValueOneOf "DHCPv6Client" (boolValues ++ [ "always" ]))
+        (assertValueOneOf "QuickAck" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -1285,17 +1785,21 @@ let
           "Router"
           "EmitTimezone"
           "Timezone"
+          "EmitDomain"
+          "Domain"
+          "BootServerAddress"
+          "BootServerName"
+          "BootFilename"
+          "IPv6OnlyPreferredSec"
           "SendOption"
           "SendVendorOption"
           "BindToInterface"
           "RelayTarget"
           "RelayAgentCircuitId"
           "RelayAgentRemoteId"
-          "BootServerAddress"
-          "BootServerName"
-          "BootFilename"
-          "IPv6OnlyPreferredSec"
+          "RapidCommit"
           "PersistLeases"
+          "LocalLeaseDomain"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -1309,15 +1813,31 @@ let
         (assertValueOneOf "EmitLPR" boolValues)
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
+        (assertValueOneOf "EmitDomain" boolValues)
         (assertValueOneOf "BindToInterface" boolValues)
+        (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "PersistLeases" (boolValues ++ [ "runtime" ]))
       ];
+
+      sectionDHCPServerStaticLease =
+        checkUnitConfigWithLegacyKey "dhcpServerStaticLeaseConfig" "DHCPServerStaticLease"
+          [
+            (assertOnlyFields [
+              "MACAddress"
+              "Address"
+              "Hostname"
+            ])
+            (assertHasField "MACAddress")
+            (assertHasField "Address")
+            (assertMacAddress "MACAddress")
+          ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
         (assertOnlyFields [
           "Managed"
           "OtherInformation"
           "RouterLifetimeSec"
+          "ReachableTimeSec"
           "RetransmitSec"
           "RouterPreference"
           "HopLimit"
@@ -1347,14 +1867,6 @@ let
         (assertInt "HomeAgentPreference")
       ];
 
-      sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [
-        (assertOnlyFields [
-          "Prefix"
-          "LifetimeSec"
-        ])
-        (assertInt "LifetimeSec")
-      ];
-
       sectionIPv6Prefix = checkUnitConfigWithLegacyKey "ipv6PrefixConfig" "IPv6Prefix" [
         (assertOnlyFields [
           "AddressAutoconfiguration"
@@ -1364,32 +1876,37 @@ let
           "ValidLifetimeSec"
           "Assign"
           "Token"
+          "RouteMetric"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
         (assertValueOneOf "Assign" boolValues)
+        (assertInt "RouteMetric")
+        (assertRange "RouteMetric" 0 4294967295)
       ];
 
       sectionIPv6RoutePrefix = checkUnitConfigWithLegacyKey "ipv6RoutePrefixConfig" "IPv6RoutePrefix" [
         (assertOnlyFields [
           "Route"
           "LifetimeSec"
+          "Preference"
         ])
         (assertHasField "Route")
         (assertInt "LifetimeSec")
+        (assertValueOneOf "Preference" [
+          "high"
+          "medium"
+          "low"
+        ])
       ];
 
-      sectionDHCPServerStaticLease =
-        checkUnitConfigWithLegacyKey "dhcpServerStaticLeaseConfig" "DHCPServerStaticLease"
-          [
-            (assertOnlyFields [
-              "MACAddress"
-              "Address"
-            ])
-            (assertHasField "MACAddress")
-            (assertHasField "Address")
-            (assertMacAddress "MACAddress")
-          ];
+      sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [
+        (assertOnlyFields [
+          "Prefix"
+          "LifetimeSec"
+        ])
+        (assertInt "LifetimeSec")
+      ];
 
       sectionBridge = checkUnitConfig "Bridge" [
         (assertOnlyFields [
@@ -1408,6 +1925,9 @@ let
           "MulticastRouter"
           "Cost"
           "Priority"
+          "Locked"
+          "MACAuthenticationBypass"
+          "VLANTunnel"
         ])
         (assertValueOneOf "UnicastFlood" boolValues)
         (assertValueOneOf "MulticastFlood" boolValues)
@@ -1431,6 +1951,9 @@ let
         (assertRange "Cost" 1 65535)
         (assertInt "Priority")
         (assertRange "Priority" 0 63)
+        (assertValueOneOf "Locked" boolValues)
+        (assertValueOneOf "MACAuthenticationBypass" boolValues)
+        (assertValueOneOf "VLANTunnel" boolValues)
       ];
 
       sectionBridgeFDB = checkUnitConfigWithLegacyKey "bridgeFDBConfig" "BridgeFDB" [
@@ -1671,8 +2194,8 @@ let
           "FirewallMark"
           "Wash"
           "SplitGSO"
-          "AckFilter"
           "RTTSec"
+          "AckFilter"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -1839,6 +2362,20 @@ let
         ])
       ];
 
+      sectionClassfulMultiQueueing = checkUnitConfig "ClassfulMultiQueueing" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+        ])
+      ];
+
+      sectionBandMultiQueueing = checkUnitConfig "BandMultiQueueing" [
+        (assertOnlyFields [
+          "Parent"
+          "Handle"
+        ])
+      ];
+
       sectionHeavyHitterFilter = checkUnitConfig "HeavyHitterFilter" [
         (assertOnlyFields [
           "Parent"
@@ -1887,7 +2424,7 @@ let
       description = ''
         Whether to manage network configuration using {command}`systemd-network`.
 
-        This also enables {option}`systemd.networkd.enable`.
+        This also enables {option}`systemd.network.enable`.
       '';
     };
 
@@ -2046,6 +2583,31 @@ let
       '';
     };
 
+    macvlanConfig = mkOption {
+      default = { };
+      example = {
+        Mode = "private";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVLAN;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[MACVLAN]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    macvtapConfig = mkOption {
+      default = { };
+      example = {
+        Mode = "private";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVTAP;
+      description = ''
+        Each attribute in this set specifies an option in the `[MACVTAP]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
     ipvlanConfig = mkOption {
       default = { };
       example = {
@@ -2072,25 +2634,155 @@ let
       '';
     };
 
-    macvlanConfig = mkOption {
-      default = { };
-      example = {
-        Mode = "private";
-      };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVLAN;
-      description = ''
-        Each attribute in this set specifies an option in the
-        `[MACVLAN]` section of the unit.  See
-        {manpage}`systemd.netdev(5)` for details.
-      '';
-    };
-
     vxlanConfig = mkOption {
       default = { };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
         `[VXLAN]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    geneveConfig = mkOption {
+      default = { };
+      example = {
+        Id = 1;
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionGENEVE;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[GENEVE]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    hsrConfig = mkOption {
+      default = { };
+      example = {
+        Ports = [
+          "eth1"
+          "eth2"
+        ];
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionHSR;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[HSR]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    bareUDPConfig = mkOption {
+      default = { };
+      example = {
+        DestinationPort = 1234;
+        EtherType = "ipv4";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBareUDP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[BareUDP]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    l2tpConfig = mkOption {
+      default = { };
+      example = {
+        TunnelId = 10;
+        PeerTunnelId = 12;
+        Local = "static";
+        Remote = "192.168.30.101";
+        EncapsulationType = "ip";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[L2TP]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    l2tpSessions = mkOption {
+      default = [ ];
+      example = [
+        {
+          SessionId = 25;
+          PeerSessionId = 26;
+          Name = "l2tp-sess";
+        }
+      ];
+      type = types.listOf (mkSubsectionType "l2tpSessionConfig" check.netdev.sectionL2TPSession);
+      description = ''
+        Each item in this array specifies an option in the
+        `[L2TPSession]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    macsecConfig = mkOption {
+      default = { };
+      example = {
+        Port = 1234;
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsec;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[MACsec]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    macsecReceiveChannels = mkOption {
+      default = [ ];
+      example = [
+        {
+          Port = 1234;
+          MACAddress = "ab:cd:de:ef:ab:cd";
+        }
+      ];
+      type = types.listOf (
+        mkSubsectionType "macsecReceiveConfig" check.netdev.sectionMACsecReceiveChannel
+      );
+      description = ''
+        Each item in this array specifies an option in the
+        `[MACsecReceiveChannel]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    macsecTransmitAssociations = mkOption {
+      default = [ ];
+      example = [
+        {
+          Activate = true;
+        }
+      ];
+      type = types.listOf (
+        mkSubsectionType "TransmitAssociationConfig" check.netdev.sectionMACsecTransmitAssociation
+      );
+      description = ''
+        Each item in this array specifies an option in the
+        `[MACsecTransmitAssociation]` section of the unit. See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    macsecReceiveAssociations = mkOption {
+      default = [ ];
+      example = [
+        {
+          Port = 1234;
+          MACAddress = "ab:cd:de:ef:ab:cd";
+        }
+      ];
+      type = types.listOf (
+        mkSubsectionType "ReceiveAssociationConfig" check.netdev.sectionMACsecReceiveAssociation
+      );
+      description = ''
+        Each item in this array specifies an option in the
+        `[MACsecReceiveAssociation]` section of the unit. See
         {manpage}`systemd.netdev(5)` for details.
       '';
     };
@@ -2134,6 +2826,19 @@ let
       '';
     };
 
+    vxcanConfig = mkOption {
+      default = { };
+      example = {
+        Peer = "vxcanpeer";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXCAN;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[VXCAN]` section of the unit.  See
+        {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
     tunConfig = mkOption {
       default = { };
       example = {
@@ -2156,40 +2861,6 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         `[Tap]` section of the unit.  See
-        {manpage}`systemd.netdev(5)` for details.
-      '';
-    };
-
-    l2tpConfig = mkOption {
-      default = { };
-      example = {
-        TunnelId = 10;
-        PeerTunnelId = 12;
-        Local = "static";
-        Remote = "192.168.30.101";
-        EncapsulationType = "ip";
-      };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TP;
-      description = ''
-        Each attribute in this set specifies an option in the
-        `[L2TP]` section of the unit. See
-        {manpage}`systemd.netdev(5)` for details.
-      '';
-    };
-
-    l2tpSessions = mkOption {
-      default = [ ];
-      example = [
-        {
-          SessionId = 25;
-          PeerSessionId = 26;
-          Name = "l2tp-sess";
-        }
-      ];
-      type = types.listOf (mkSubsectionType "l2tpSessionConfig" check.netdev.sectionL2TPSession);
-      description = ''
-        Each item in this array specifies an option in the
-        `[L2TPSession]` section of the unit. See
         {manpage}`systemd.netdev(5)` for details.
       '';
     };
@@ -2275,19 +2946,6 @@ let
       '';
     };
 
-    wlanConfig = mkOption {
-      default = { };
-      example = {
-        PhysicalDevice = 0;
-        Type = "station";
-      };
-      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
-      description = ''
-        Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
-        See {manpage}`systemd.netdev(5)` for details.
-      '';
-    };
-
     batmanAdvancedConfig = mkOption {
       default = { };
       example = {
@@ -2299,6 +2957,31 @@ let
         Each attribute in this set specifies an option in the
         `[BatmanAdvanced]` section of the unit. See
         {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipoibConfig = mkOption {
+      default = { };
+      example = {
+        PartitionKey = 1;
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPoIB;
+      description = ''
+        Each attribute in this set specifies an option in the `[IPoIB]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    wlanConfig = mkOption {
+      default = { };
+      example = {
+        PhysicalDevice = 0;
+        Type = "station";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
+      description = ''
+        Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -2319,6 +3002,20 @@ let
       '';
     };
 
+    sriovConfig = mkOption {
+      default = { };
+      example = {
+        VirtualFunction = 1;
+        VLANId = 1;
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionSR-IOV;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[SR-IOV]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     networkConfig = mkOption {
       default = { };
       example = {
@@ -2328,6 +3025,91 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         `[Network]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    addresses = mkOption {
+      default = [ ];
+      example = [ { Address = "192.168.0.100/24"; } ];
+      type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
+      description = ''
+        A list of `[Address]` sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    neighbors = mkOption {
+      default = [ ];
+      example = [
+        {
+          Address = "192.168.0.100/24";
+          LinkLayerAddress = "aa:bb:cc:dd:ee:ff";
+        }
+      ];
+      type = types.listOf (mkSubsectionType "neighborConfig" check.network.sectionNeighbor);
+      description = ''
+        A list of `[Neighbor]` sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipv6AddressLabels = mkOption {
+      default = [ ];
+      example = [
+        {
+          Label = 0;
+          Prefix = "3fff::/20";
+        }
+      ];
+      type = types.listOf (
+        mkSubsectionType "ipv6AddressLabelConfig" check.network.sectionIPv6AddressLabel
+      );
+      description = ''
+        A list of `[IPv6AddressLabel]` sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    routingPolicyRules = mkOption {
+      default = [ ];
+      example = [
+        {
+          Table = 10;
+          IncomingInterface = "eth1";
+          Family = "both";
+        }
+      ];
+      type = types.listOf (
+        mkSubsectionType "routingPolicyRuleConfig" check.network.sectionRoutingPolicyRule
+      );
+      description = ''
+        A list of routing policy rules sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    nextHops = mkOption {
+      default = [ ];
+      example = [
+        {
+          Id = 10;
+          Gateway = "192.168.1.1";
+        }
+      ];
+      type = types.listOf (mkSubsectionType "nextHopConfig" check.network.sectionNextHop);
+      description = ''
+        A list of NextHop sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    routes = mkOption {
+      default = [ ];
+      example = [ { Gateway = "192.168.0.1"; } ];
+      type = types.listOf (mkSubsectionType "routeConfig" check.network.sectionRoute);
+      description = ''
+        A list of route sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -2366,13 +3148,6 @@ let
         `[DHCPv6]` section of the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
-    };
-
-    dhcpV6PrefixDelegationConfig = mkOption {
-      visible = false;
-      apply =
-        _:
-        throw "The option `systemd.network.networks.<name>.dhcpV6PrefixDelegationConfig` has been renamed to `systemd.network.networks.<name>.dhcpPrefixDelegationConfig`.";
     };
 
     dhcpPrefixDelegationConfig = mkOption {
@@ -2417,6 +3192,30 @@ let
       '';
     };
 
+    dhcpServerStaticLeases = mkOption {
+      default = [ ];
+      example = [
+        {
+          MACAddress = "65:43:4a:5b:d8:5f";
+          Address = "192.168.1.42";
+        }
+      ];
+      type = types.listOf (
+        mkSubsectionType "dhcpServerStaticLeaseConfig" check.network.sectionDHCPServerStaticLease
+      );
+      description = ''
+        A list of DHCPServerStaticLease sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    dhcpV6PrefixDelegationConfig = mkOption {
+      visible = false;
+      apply =
+        _:
+        throw "The option `systemd.network.networks.<name>.dhcpV6PrefixDelegationConfig` has been renamed to `systemd.network.networks.<name>.dhcpPrefixDelegationConfig`.";
+    };
+
     # systemd.network.networks.*.ipv6PrefixDelegationConfig has been deprecated
     # in 247 in favor of systemd.network.networks.*.ipv6SendRAConfig.
     ipv6PrefixDelegationConfig = mkOption {
@@ -2437,35 +3236,6 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         `[IPv6SendRA]` section of the unit.  See
-        {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
-    ipv6PREF64Prefixes = mkOption {
-      default = [ ];
-      example = [ { Prefix = "64:ff9b::/96"; } ];
-      type = types.listOf (
-        mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix
-      );
-      description = ''
-        A list of IPv6PREF64Prefix sections to be added to the unit. See
-        {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
-    dhcpServerStaticLeases = mkOption {
-      default = [ ];
-      example = [
-        {
-          MACAddress = "65:43:4a:5b:d8:5f";
-          Address = "192.168.1.42";
-        }
-      ];
-      type = types.listOf (
-        mkSubsectionType "dhcpServerStaticLeaseConfig" check.network.sectionDHCPServerStaticLease
-      );
-      description = ''
-        A list of DHCPServerStaticLease sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -2496,6 +3266,18 @@ let
       type = types.listOf (mkSubsectionType "ipv6RoutePrefixConfig" check.network.sectionIPv6RoutePrefix);
       description = ''
         A list of ipv6RoutePrefix sections to be added to the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipv6PREF64Prefixes = mkOption {
+      default = [ ];
+      example = [ { Prefix = "64:ff9b::/96"; } ];
+      type = types.listOf (
+        mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix
+      );
+      description = ''
+        A list of IPv6PREF64Prefix sections to be added to the unit. See
         {manpage}`systemd.network(5)` for details.
       '';
     };
@@ -2888,6 +3670,32 @@ let
       '';
     };
 
+    classfulMultiQueueingConfig = mkOption {
+      default = { };
+      example = {
+        Parent = "root";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionClassfulMultiQueueing;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[ClassfulMultiQueueing]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    bandMultiQueueingConfig = mkOption {
+      default = { };
+      example = {
+        Parent = "root";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBandMultiQueueing;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[BandMultiQueueing]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     heavyHitterFilterConfig = mkOption {
       default = { };
       example = {
@@ -3086,44 +3894,6 @@ let
       description = ''
         A list of xfrm interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
-    addresses = mkOption {
-      default = [ ];
-      example = [ { Address = "192.168.0.100/24"; } ];
-      type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
-      description = ''
-        A list of address sections to be added to the unit.  See
-        {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
-    routingPolicyRules = mkOption {
-      default = [ ];
-      example = [
-        {
-          Table = 10;
-          IncomingInterface = "eth1";
-          Family = "both";
-        }
-      ];
-      type = types.listOf (
-        mkSubsectionType "routingPolicyRuleConfig" check.network.sectionRoutingPolicyRule
-      );
-      description = ''
-        A list of routing policy rules sections to be added to the unit.  See
-        {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
-    routes = mkOption {
-      default = [ ];
-      example = [ { Gateway = "192.168.0.1"; } ];
-      type = types.listOf (mkSubsectionType "routeConfig" check.network.sectionRoute);
-      description = ''
-        A list of route sections to be added to the unit.  See
-        {manpage}`systemd.network(5)` for details.
       '';
     };
 

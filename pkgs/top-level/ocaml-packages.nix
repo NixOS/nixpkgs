@@ -76,6 +76,8 @@ let
 
         atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+        atdml = callPackage ../development/ocaml-modules/atdml { };
+
         augeas = callPackage ../development/ocaml-modules/augeas {
           inherit (pkgs) augeas;
         };
@@ -220,6 +222,8 @@ let
         caqti-eio = callPackage ../development/ocaml-modules/caqti/eio.nix { };
 
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
+
+        caqti-miou = callPackage ../development/ocaml-modules/caqti/miou.nix { };
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
@@ -1143,9 +1147,12 @@ let
 
         lutils = callPackage ../development/ocaml-modules/lutils { };
 
-        luv = callPackage ../development/ocaml-modules/luv {
-          inherit (pkgs) file;
-        };
+        inherit
+          (callPackage ../development/ocaml-modules/luv {
+          })
+          luv-0-5-12
+          luv
+          ;
 
         lwd = callPackage ../development/ocaml-modules/lwd { };
 
@@ -2103,6 +2110,12 @@ let
         terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
         terml = callPackage ../development/ocaml-modules/terml { };
+
+        testo = callPackage ../development/ocaml-modules/testo { };
+
+        testo-diff = callPackage ../development/ocaml-modules/testo/diff.nix { };
+
+        testo-util = callPackage ../development/ocaml-modules/testo/util.nix { };
 
         tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 

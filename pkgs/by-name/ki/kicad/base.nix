@@ -43,9 +43,11 @@
 
   swig,
   python,
+  poppler,
   wxPython,
   opencascade-occt_7_6,
   libngspice,
+  libspnav,
   valgrind,
   protobuf_29,
   nng,
@@ -171,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     swig
     python
+    poppler
     unixodbc
     libdeflate
     opencascade-occt
@@ -178,6 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # This would otherwise cause a linking requirement for mbedtls.
     (nng.override { mbedtlsSupport = false; })
+  ]
+  ++ optionals (stdenv.hostPlatform.isLinux) [
+    libspnav
   ]
   ++ optionals withScripting [ wxPython ]
   ++ optionals withNgspice [ libngspice ]

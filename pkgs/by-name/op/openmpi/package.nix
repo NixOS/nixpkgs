@@ -114,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.hostPlatform.isLinux "libnl" (lib.getDev libnl))
+    # From some reason, without this the darwin build fails with cyclic
+    # references between $dev and $out
     "--with-pmix=${lib.getDev pmix}"
     "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
@@ -198,6 +200,10 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+      # Fortran .mod files end up in bin output.
+      # Force all headers into the dev output .
+      moveToOutput "include/" "''${!outputDev}"
 
       # The main wrapper that all the rest of the commonly used binaries are
       # symlinked to

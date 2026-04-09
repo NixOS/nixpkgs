@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  typescript-go,
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -11,16 +10,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.62.0";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "badlogic";
     repo = "pi-mono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nUK7R9kPkULg8eP9lwyqUpzPGRJeSRv3mDgBkHacf8I=";
+    hash = "sha256-knCfmoTjq5RADkGRcX7AAxTBhW+2GL4pDtgvMH8pMoY=";
   };
 
-  npmDepsHash = "sha256-mzFtHU3xGFZxIaQ1XTkYLmQ4UCcn9HhPVfNJ0DHi7Ps=";
+  npmDepsHash = "sha256-dzBmtAhm0X4TsKW9nwKVyhvYlMLphzNtKkDvubWQFPk=";
 
   npmWorkspace = "packages/coding-agent";
 
@@ -28,7 +27,6 @@ buildNpmPackage (finalAttrs: {
   npmRebuildFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
-    typescript-go
     makeBinaryWrapper
   ];
 
@@ -39,9 +37,9 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    tsgo -p packages/ai/tsconfig.build.json
-    tsgo -p packages/tui/tsconfig.build.json
-    tsgo -p packages/agent/tsconfig.build.json
+    npx tsgo -p packages/ai/tsconfig.build.json
+    npx tsgo -p packages/tui/tsconfig.build.json
+    npx tsgo -p packages/agent/tsconfig.build.json
     npm run build --workspace=packages/coding-agent
 
     runHook postBuild

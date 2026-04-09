@@ -62,7 +62,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/NabuCasa/snitun/releases/tag/${src.tag}";
     homepage = "https://github.com/nabucasa/snitun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

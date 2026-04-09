@@ -36,7 +36,7 @@ mkCoqDerivation {
 
     lib.switch coq.coq-version [
       {
-        case = "9.0";
+        case = lib.versions.isGe "9.0";
         out = "9.0.0";
       }
       {

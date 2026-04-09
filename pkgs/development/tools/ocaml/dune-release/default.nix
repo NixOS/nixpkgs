@@ -42,11 +42,11 @@ let
 in
 buildDunePackage (finalAttrs: {
   pname = "dune-release";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/dune-release/releases/download/${finalAttrs.version}/dune-release-${finalAttrs.version}.tbz";
-    hash = "sha256-VxwXtG+n1TeVFp4CsAWmG7X3unbIAK09konm+KTW8G4=";
+    hash = "sha256-A0es0mk6aEMdKvweVfffkaezfgIi1DWAr3dLmNwGOTo=";
   };
 
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;

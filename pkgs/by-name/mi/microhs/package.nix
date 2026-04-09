@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "microhs";
-  version = "0.15.3.0";
+  version = "0.15.4.0";
 
   src = fetchFromGitHub {
     owner = "augustss";
     repo = "MicroHs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JuqdArVzziJC4/QZLfPguXbd+ZiPD3bgf1mGYghkxy0=";
+    hash = "sha256-V3Of72rpXvImV90sSoYz02H06o1J3FqHDQNbB+M6/8A=";
   };
 
   # mcabal doesn't seem to respect the make flag and fails with /homeless-shelter

@@ -640,6 +640,7 @@ in
           listen 127.0.0.1:5000;
 
           # vod settings
+          vod_hls_version 6;
           vod_base_url "";
           vod_segments_base_url "";
           vod_mode mapped;

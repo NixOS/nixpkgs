@@ -53,6 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://litecli.com";
     changelog = "https://github.com/dbcli/litecli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 })

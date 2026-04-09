@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ defelo ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "cib";
   };
 })

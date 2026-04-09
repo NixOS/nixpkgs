@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "devbox";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "jetify-com";
     repo = "devbox";
     tag = finalAttrs.version;
-    hash = "sha256-bW37yUZSqSYZeGHbWEFom5EjHdFhr/cFAhLX908zKRM=";
+    hash = "sha256-WwNbbrBm3/iWNCdHh0f+ey06BlibCPkCRXgBoyaJffU=";
   };
 
   ldflags = [
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   # integration tests want file system access
   doCheck = false;
 
-  vendorHash = "sha256-xrN5AGc/f9CaI6WDfEFpJrRbPuBfxsjTGrEG4RbxVtM=";
+  vendorHash = "sha256-zZUE0J6w1QbdMAKOt1xH3ql4G5FbaUgtD4Xpsw/tmIk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -13,19 +13,19 @@
 
 let
   # The version of ocaml fstar uses.
-  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_4;
 
   fstarZ3 = callPackage ./z3 { };
 in
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
-  version = "2025.12.15";
+  version = "2026.03.24";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UuwDX6178YMhEQqpEOATswzoUNpEECq7Nyh2yk5gKRg=";
+    hash = "sha256-b+LQ6X1yHUdBlQp+bA9KbRu6vhB3CwipN7pAxWxR2Nk=";
   };
 
   nativeBuildInputs = [
@@ -105,7 +105,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(\\d{4}\\.\\d{2}\\.\\d{2})$"
+        "^v([0-9]{4}\\.[0-9]{2}\\.[0-9]{2})$"
       ];
     };
     z3 = fstarZ3;

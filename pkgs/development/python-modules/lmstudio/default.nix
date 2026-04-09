@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lmstudio";
-  version = "1.5.0";
+  version = "1.6.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmstudio-ai";
     repo = "lmstudio-python";
     tag = finalAttrs.version;
-    hash = "sha256-3LOoCWoQ7eXRPXHRio9Rtle07HcV3ZrWkrtVVY6mvfI=";
+    hash = "sha256-QJNVlkSmwinoJ/cMCDpYzYDmd6Q8AGiLHHdk36Fqtk8=";
   };
 
   build-system = [

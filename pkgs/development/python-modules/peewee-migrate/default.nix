@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  uv-build,
 
   # runtime
   click,
@@ -17,21 +17,24 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     tag = version;
-    hash = "sha256-WO6XTlHenEh8gO1eYJHaysQFMMmAOAdHYcISBZaNcrE=";
+    hash = "sha256-AFZW4vVHAuvdjA3t37YcOqVmwhZ1sU25L+YVP7BvMhQ=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.2,<0.11.0" uv_build
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ uv-build ];
 
   propagatedBuildInputs = [
     peewee

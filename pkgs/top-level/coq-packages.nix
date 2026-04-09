@@ -253,10 +253,6 @@ let
               with lib.versions;
               lib.switch self.coq.version [
                 {
-                  case = range "8.19" "8.20";
-                  out = "3.15";
-                }
-                {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
                 }
@@ -363,6 +359,6 @@ rec {
   coq_9_1 = coqPackages_9_1.coq;
   coq_9_2 = coqPackages_9_2.coq;
 
-  coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_1;
   coq = coqPackages.coq;
 }

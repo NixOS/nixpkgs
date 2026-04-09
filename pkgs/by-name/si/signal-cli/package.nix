@@ -12,12 +12,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.14.1";
+  version = "0.14.2";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${finalAttrs.version}/signal-cli-${finalAttrs.version}.tar.gz";
-    hash = "sha256-zs2ksSxCwYhEZ/Oh8BN3U2ISwqXPshCl82HoL4wWNug=";
+    hash = "sha256-riu8b8ZomoqyPVfmN9fpzbtDQpN72xtU1M9rVkDfHg0=";
   };
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [

@@ -9,13 +9,13 @@
   # dependencies
   datasets,
   fastapi,
+  miniaudio,
   mlx,
   mlx-lm,
   numpy,
   opencv-python,
   pillow,
   requests,
-  soundfile,
   tqdm,
   transformers,
   uvicorn,
@@ -24,37 +24,35 @@
   psutil,
   pytestCheckHook,
   rich,
+  sentencepiece,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlx-vlm";
-  version = "0.3.9";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blaizzy";
     repo = "mlx-vlm";
-    tag = "v${version}";
-    hash = "sha256-L+llrfFo4C++JZ3GjpZi16wMZNXtKrYh3pxhZ5N1n/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-08cSwN8IkERxUaXyT9qAg9vmLw7FvU5qDygAkDsOxpU=";
   };
 
   build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "opencv-python"
-  ];
   dependencies = [
     datasets
     fastapi
+    miniaudio
     mlx
     mlx-lm
     numpy
     opencv-python
     pillow
     requests
-    soundfile
     tqdm
     transformers
     uvicorn
@@ -66,6 +64,7 @@ buildPythonPackage rec {
     psutil
     pytestCheckHook
     rich
+    sentencepiece
   ];
 
   disabledTests = [
@@ -91,11 +90,11 @@ buildPythonPackage rec {
   meta = {
     description = "Inference and fine-tuning of Vision Language Models (VLMs) on your Mac using MLX";
     homepage = "https://github.com/Blaizzy/mlx-vlm";
-    changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/${src.tag}";
+    changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = [
       "aarch64-darwin"
     ];
   };
-}
+})

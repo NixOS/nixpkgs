@@ -1,7 +1,7 @@
 diff --git a/src/terminal.rs b/src/terminal.rs
 --- a/src/terminal.rs
 +++ b/src/terminal.rs
-@@ -787,6 +787,7 @@
+@@ -803,6 +803,7 @@ mod tests {
          SgrTerminalCommand::ExitAttributeMode,
      };
 
@@ -9,7 +9,7 @@ diff --git a/src/terminal.rs b/src/terminal.rs
      #[test]
      fn sgr_combining() {
          // No style, no content
-@@ -823,6 +824,7 @@
+@@ -838,6 +839,7 @@ mod tests {
          assert_eq!(String::from_utf8_lossy(outp.contents()), "\u{1b}[30;40m");
      }
 
@@ -17,3 +17,11 @@ diff --git a/src/terminal.rs b/src/terminal.rs
      #[test]
      fn sgr_max_length() {
          // Cut at max length
+@@ -892,6 +894,7 @@ mod tests {
+         );
+     }
+
++    #[ignore]
+     #[test]
+     fn resettable_style_attribute() {
+         type RS = crate::text_face::ResettableStyle<()>;

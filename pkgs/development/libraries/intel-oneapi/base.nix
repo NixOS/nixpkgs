@@ -67,14 +67,14 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
   pname = "intel-oneapi-base-toolkit";
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/3b7a16b3-a7b0-460f-be16-de0d64fa6b1e/intel-oneapi-base-toolkit-2025.2.1.44_offline.sh";
-    hash = "sha256-oVURJZG6uZ3YvYefUuqeakbaVR47ZgWduBV6bS6r5Dk=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6caa93ca-e10a-4cc5-b210-68f385feea9e/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh";
+    hash = "sha256-xXV6FP4t1ChSi/bcDFpkmMexNejPTtk2Nay/PmSpCFA=";
   };
 
   versionYear = "2025";
-  versionMajor = "2";
+  versionMajor = "3";
   versionMinor = "1";
-  versionRel = "44";
+  versionRel = "36";
 
   inherit components;
 
@@ -180,6 +180,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
     "libffi.so.6"
     "libgdbm.so.4"
     "libopencl-clang.so.14"
+    "libreadline.so.6"
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {

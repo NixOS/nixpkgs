@@ -11,6 +11,7 @@
   enableDarwinSandbox ? true,
   # for passthru.tests
   nix,
+  lix,
   lowdown-unsandboxed,
 }:
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
-  version = "2.0.4";
+  version = "3.0.1";
 
   outputs = [
     "out"
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "649a508b7727df6e7e1203abb3853e05f167b64832fd5e1271f142ccf782e600b1de73c72dc02673d7b175effdc54f2c0f60318208a968af9f9763d09cf4f9ef";
+    sha512 = "fe68e1b7ff23f3992398356d7aa9a330dfd7b72e22bea9a91eeef74182b209ecea0c9f3e2b2216e1a07b2358da2b746238ec9cbbdeebdd3551cef14dd2d79f46";
   };
 
   # https://github.com/kristapsdz/lowdown/pull/171
@@ -41,12 +42,6 @@ stdenv.mkDerivation rec {
     bmake # Uses FreeBSD's dialect
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
-
-  postPatch = ''
-    # fails test, some column width mismatch
-    rm regress/table-footnotes.md
-    rm regress/table-styles.md
-  '';
 
   # The Darwin sandbox calls fail inside Nix builds, presumably due to
   # being nested inside another sandbox.
@@ -103,7 +98,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     echo '# TEST' > test.md
-    $out/bin/lowdown test.md
+    $out/bin/lowdown test.md | grep '[hH]1'
 
     runHook postInstallCheck
   '';
@@ -113,7 +108,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     # most important consumers in nixpkgs
-    inherit nix lowdown-unsandboxed;
+    inherit nix lix lowdown-unsandboxed;
   };
 
   meta = {

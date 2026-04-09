@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2026.3.0";
+  version = "2026.4.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xVlg24EaHyfrpdfnCk4Wupi33BVKwisvg0hN5Q/dNC4=";
+    hash = "sha256-/FT5UP+Usd1vyAyRnXOBs5iT76sqdiSBhoyC4bGKmEw=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       diogotcorreia
-      Profpatsch
     ];
     platforms = lib.platforms.linux;
   };

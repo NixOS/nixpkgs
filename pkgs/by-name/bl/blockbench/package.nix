@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
   imagemagick,
   copyDesktopItems,
@@ -13,14 +12,21 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.0.7";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-JXOO2+UPMOGSuvez8ektbD5waPKatMggKn+MuH9Qkrs=";
+    hash = "sha256-fU38Exv83cKaPFA26zmwYZlkscCbAEz/7Gch5j/qHjk=";
   };
+
+  patches = [
+    # On linux we're running Blockbench by giving the path to the app.asar file to the electron executable,
+    # but Blockbench assumes paths at the and og the argv are files to be opened
+    # This patch disables trying to open the app.asar file
+    ./dont-assume-opening-app-asar.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -30,16 +36,7 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  patches = [
-    (fetchpatch {
-      # fixes https://github.com/JannisX11/blockbench/issues/3237
-      name = "bump-electron-builder.patch";
-      url = "https://github.com/JannisX11/blockbench/commit/dee9ae271f252d4bb3f98c13c4a1abaaeedd1feb.patch";
-      hash = "sha256-XpdqeCKoWsUieOMWhxVsEQ2r0qR+iiXKnVRfNYERDQs=";
-    })
-  ];
-
-  npmDepsHash = "sha256-T3yenZCkOrGOWJBxqe0RG39jWYfpsXStblf5Jx4dtF0=";
+  npmDepsHash = "sha256-0FdPTyoVNrsx0LJYcpfZPKZwUKzyJaU6XNnm2bY9F/s=";
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

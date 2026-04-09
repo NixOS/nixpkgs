@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  nix-update-script,
   renode,
   lib,
 }:
@@ -15,15 +14,17 @@ let
 in
 renode.overrideAttrs (old: rec {
   pname = "renode-unstable";
-  version = "1.16.0-unstable-2025-12-11";
+  version = "1.16.1-unstable-2026-04-03";
 
   src = fetchFromGitHub {
     owner = "renode";
     repo = "renode";
-    rev = "e61a4063ec362b099704e6d8f9734cdf792aeeb0";
-    hash = "sha256-ucQguZZSNKa0nEOTCdcLyDlaBnRgi/7Yb6VunNG/iSg=";
+    rev = "a5e76fbb6f3b2a15e6b1e3bfe021fdc2619f773a";
+    hash = "sha256-FCeZ/6Dp/IgFgaKu589rMAOk0NIisR4uJyCKcuSsM90=";
     fetchSubmodules = true;
   };
+
+  nugetDeps = ./deps.json;
 
   prePatch = ''
     sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${normalizedVersion version}.0")/g' src/Renode/Properties/AssemblyInfo.template
@@ -32,10 +33,6 @@ renode.overrideAttrs (old: rec {
   '';
 
   passthru = old.passthru // {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version=branch"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 })

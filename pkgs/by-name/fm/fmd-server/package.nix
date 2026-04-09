@@ -2,37 +2,93 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
+  fetchPnpmDeps,
   nix-update-script,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
+  stdenv,
   versionCheckHook,
 }:
-let
-  version = "0.13.0";
-in
-buildGoModule {
-  pname = "fmd-server";
-  inherit version;
-  src = fetchFromGitLab {
-    owner = "fmd-foss";
-    repo = "fmd-server";
-    tag = "v${version}";
-    hash = "sha256-pIVsdoen45YWG/V8qW/DE/yet4o+8MqpVHgHh70Fty8=";
-  };
+buildGoModule (
+  finalAttrs:
+  let
+    inherit (finalAttrs.finalPackage.passthru) ui;
+  in
+  {
+    pname = "fmd-server";
+    version = "0.14.2";
+    src = fetchFromGitLab {
+      owner = "fmd-foss";
+      repo = "fmd-server";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-zAGwKOfPu7AEYhaDxx1P3EoA1K9p/f3Vwh7GrynqKho=";
+    };
 
-  vendorHash = "sha256-d8QP6k7vEX0jBcpIMZymgOFYyKqGhND4Xa+mANg172s=";
+    pnpmDeps = fetchPnpmDeps {
+      inherit (ui) pname src;
+      inherit pnpm_10;
+      sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
+      fetcherVersion = 3;
+      hash = "sha256-fgqNaFQ4+uJxXzDJJq+D0+EFaLaYR+WUzi5kGq5ezjs=";
+    };
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "version";
+    vendorHash = "sha256-cFIg9mOSQbrYHW4kg4aTeTaF+gy1jNpAlg8qepb81Jc=";
 
-  doInstallCheck = true;
-  passthru.updateScript = nix-update-script { };
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgramArg = "version";
 
-  meta = {
-    description = "Server to communicate with the FindMyDevice app and save the latest (encrypted) location";
-    homepage = "https://fmd-foss.org/";
-    downloadPage = "https://gitlab.com/fmd-foss/fmd-server";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ j0hax ];
-    teams = [ lib.teams.ngi ];
-    mainProgram = "fmd-server";
-  };
-}
+    doInstallCheck = true;
+    passthru.updateScript = nix-update-script { };
+
+    passthru.ui = stdenv.mkDerivation {
+      inherit (finalAttrs) version src pnpmDeps;
+      pname = "${finalAttrs.pname}-web-ui";
+
+      pnpmRoot = "web";
+      distRoot = "dist";
+
+      nativeBuildInputs = [
+        nodejs
+        pnpmConfigHook
+        pnpm_10
+      ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        pushd web
+        pnpm build
+        popd
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$out"
+        cp -r '${ui.pnpmRoot}/${ui.distRoot}' "$out"
+
+        runHook postInstall
+      '';
+    };
+
+    postUnpack = ''
+      cp -r ${ui}/${ui.distRoot} /build/source/web/
+    '';
+
+    meta = {
+      description = "Server to communicate with the FindMyDevice app and save the latest (encrypted) location";
+      homepage = "https://fmd-foss.org/";
+      downloadPage = "https://gitlab.com/fmd-foss/fmd-server";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [
+        j0hax
+        jthulhu
+      ];
+      teams = [ lib.teams.ngi ];
+      mainProgram = "fmd-server";
+    };
+  }
+)

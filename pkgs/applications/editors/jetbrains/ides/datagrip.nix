@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2025.3.5.tar.gz";
-      hash = "sha256-s9Zw7SUhmAzjhTf52nEerXNaP0l7kO/6J35xFtKf6TQ=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1.tar.gz";
+      hash = "sha256-XX5Gh+wTep4EqW7pP1nBVtxmSpuYRFg7xK+AUV0qPt4=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2025.3.5-aarch64.tar.gz";
-      hash = "sha256-75OME+CICrLNkUT0tFqzUe/qAGtCGNKC6kAGeTuSK6w=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1-aarch64.tar.gz";
+      hash = "sha256-B/0W4u41PUJzF1Lrpkq5I+ZFwTmszFjBTCZncwiNCi0=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2025.3.5.dmg";
-      hash = "sha256-FkTK5hu3GloxzzlAuXJUI3G5w84YvzIYtfa0h6hDZ5w=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1.dmg";
+      hash = "sha256-NcfFMsdTIcsp4fd8PjchO+FdIYo3+Zy2nqrJPjsH5LQ=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2025.3.5-aarch64.dmg";
-      hash = "sha256-lE0b8s37mBHJ7e0iHfKSW/9vpE95d/+wpjIgkcGDcr8=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1-aarch64.dmg";
+      hash = "sha256-W5fpsJp9QlKaVTEoanOf0tbLhhka3OkI4pdQPsdUauU=";
     };
   };
   # update-script-end: urls
@@ -39,8 +39,8 @@ mkJetBrainsProduct {
   product = "DataGrip";
 
   # update-script-start: version
-  version = "2025.3.5";
-  buildNumber = "253.31033.21";
+  version = "2026.1.1";
+  buildNumber = "261.22158.354";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

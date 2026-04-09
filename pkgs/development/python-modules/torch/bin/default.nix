@@ -27,6 +27,7 @@
   typing-extensions,
   triton,
 
+  config,
   callPackage,
 }:
 
@@ -135,7 +136,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ../tests { };
+  passthru.tests = callPackage ../tests {
+    inherit (config) rocmSupport cudaSupport;
+  };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

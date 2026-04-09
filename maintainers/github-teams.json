@@ -41,7 +41,6 @@
     "description": "Maintenance of https://bazel.build/ and related packages",
     "id": 5468470,
     "maintainers": {
-      "Profpatsch": 3153638
     },
     "members": {
       "aherrmann": 732652,
@@ -65,7 +64,6 @@
       "ankhers": 750786,
       "gleber": 33185,
       "minijackson": 1200507,
-      "savtrip": 42227195,
       "yurrriq": 1866448
     },
     "name": "Beam"
@@ -278,7 +276,7 @@
     "name": "darwin-maintainers"
   },
   "documentation-team": {
-    "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
+    "description": "Owns the standards, tooling, and processes that keep NixOS documentation reliable.",
     "id": 6590023,
     "maintainers": {
       "hsjobeki": 50398876
@@ -838,6 +836,19 @@
       "peterhoeg": 722550
     },
     "name": "Qt-KDE"
+  },
+  "radicle": {
+    "description": "Maintain Radicle related packages, modules, and tests",
+    "id": 16784086,
+    "maintainers": {
+      "Defelo": 41747605,
+      "lorenzleutgeb": 542154
+    },
+    "members": {
+      "ju1m": 21160136,
+      "matthiasbeyer": 427866
+    },
+    "name": "Radicle"
   },
   "reproducible": {
     "description": "Team that is interested in reproducible builds",

@@ -10,19 +10,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kiosk-mode";
-  version = "10.0.1";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "nemesisre";
     repo = "kiosk-mode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y8ck4Y8tmZkUv35n78u+PRc+i6wF6iuhYbQJ7wQPVqE=";
+    hash = "sha256-aAZkqTSzH3JXLhp7QGfTYLTMLCe2TrqvonPQrVyeC7w=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-4pTI5d1Mn/GtbjkOAyemxXN2k2rRj8kYS4t2C6OLVSc=";
+    hash = "sha256-aubBpCupXGemYmeO+Sao9nsUtCm01M7fALbpd4qe7cA=";
   };
 
   nativeBuildInputs = [

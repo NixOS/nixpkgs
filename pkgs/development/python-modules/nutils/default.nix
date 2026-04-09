@@ -69,6 +69,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 }

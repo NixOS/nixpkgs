@@ -1,64 +1,82 @@
-{ pkgs, lib, ... }:
-{
-  name = "morph-browser-standalone";
-  meta.maintainers = lib.teams.lomiri.members;
-
-  nodes.machine =
-    { config, pkgs, ... }:
+let
+  makeTest = import ./make-test-python.nix;
+  generic =
     {
-      imports = [
-        ./common/x11.nix
-      ];
+      withQt6,
+    }:
+    makeTest (
+      { pkgs, lib, ... }:
+      assert lib.assertMsg withQt6 "`lomiri.morph-browser` has been dropped, cannot test it.";
+      {
+        name = "morph-browser-qt6-standalone";
+        meta.maintainers = lib.teams.lomiri.members;
 
-      services.xserver.enable = true;
+        nodes.machine =
+          {
+            config,
+            pkgs,
+            ...
+          }:
+          {
+            imports = [
+              ./common/x11.nix
+            ];
 
-      environment = {
-        systemPackages = with pkgs.lomiri; [
-          suru-icon-theme
-          morph-browser
-        ];
-        variables = {
-          UITK_ICON_THEME = "suru";
-        };
-      };
+            services.xserver.enable = true;
 
-      i18n.supportedLocales = [ "all" ];
+            environment = {
+              systemPackages = with pkgs.lomiri-qt6; [
+                suru-icon-theme
+                morph-browser
+              ];
+              variables = {
+                UITK_ICON_THEME = "suru";
+              };
+            };
 
-      fonts.packages = with pkgs; [
-        # Intended font & helps with OCR
-        ubuntu-classic
-      ];
-    };
+            i18n.supportedLocales = [ "all" ];
 
-  enableOCR = true;
+            fonts.packages = with pkgs; [
+              # Intended font & helps with OCR
+              ubuntu-classic
+            ];
+          };
 
-  testScript = ''
-    machine.wait_for_x()
+        enableOCR = true;
 
-    with subtest("morph browser launches"):
-        machine.succeed("morph-browser >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
-        machine.wait_for_text(r"Web Browser|New|sites|Bookmarks")
-        machine.screenshot("morph_open")
+        testScript = ''
+          machine.wait_for_x()
 
-    with subtest("morph browser displays HTML"):
-        machine.send_chars("file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html\n")
-        machine.wait_for_text("Valgrind Documentation")
-        machine.screenshot("morph_htmlcontent")
+          with subtest("morph browser launches"):
+              machine.succeed("morph-browser >&2 &")
+              machine.sleep(10)
+              machine.send_key("alt-f10")
+              machine.sleep(5)
+              machine.wait_for_text(r"Web Browser|New|sites|Bookmarks")
+              machine.screenshot("morph_open")
 
-    machine.succeed("pkill -f morph-browser")
+          with subtest("morph browser displays HTML"):
+              machine.send_chars("file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html\n")
+              machine.wait_for_text("Valgrind Documentation")
+              machine.screenshot("morph_htmlcontent")
 
-    # Get rid of saved tabs, to show localised start page
-    machine.succeed("rm -r /root/.local/share/morph-browser")
+          machine.succeed("pkill -f morph-browser")
 
-    with subtest("morph browser localisation works"):
-        machine.succeed("env LANG=de_DE.UTF-8 morph-browser >&2 &")
-        machine.sleep(10)
-        machine.send_key("alt-f10")
-        machine.sleep(5)
-        machine.wait_for_text(r"Web-Browser|Neuer|Seiten|Lesezeichen")
-        machine.screenshot("morph_localised")
-  '';
+          # Get rid of saved tabs, to show localised start page
+          machine.succeed("rm -r /root/.local/share/morph-browser")
+
+          with subtest("morph browser localisation works"):
+              machine.succeed("env LANG=de_DE.UTF-8 morph-browser >&2 &")
+              machine.sleep(10)
+              machine.send_key("alt-f10")
+              machine.sleep(5)
+              machine.wait_for_text(r"Web-Browser|Neuer|Seiten|Lesezeichen")
+              machine.screenshot("morph_localised")
+        '';
+      }
+    );
+in
+{
+  qt5 = throw "`lomiri.morph-browser` has been removed because it relied on the known-vulnerable `libsForQt5.qtwebengine`. For testing the Qt6 version of Morph, please use `nixosTests.morph-browser.qt6` instead."; # Added on 2026-03-31
+  qt6 = generic { withQt6 = true; };
 }

@@ -349,10 +349,6 @@ let
 
       passthru.interpreterName = "nodejs";
 
-      passthru.pkgs = callPackage ../../node-packages/default.nix {
-        nodejs = self;
-      };
-
       setupHook = ./setup-hook.sh;
 
       pos = builtins.unsafeGetAttrPos "version" args;

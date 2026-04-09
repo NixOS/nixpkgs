@@ -430,7 +430,10 @@
     "index.html#katamari-tarballs",
     "index.html#individual-tarballs",
     "index.html#generating-nix-expressions",
-    "index.html#overriding-the-generator"
+    "index.html#overriding-the-generator",
+    "index.html#javascript-node2nix",
+    "index.html#javascript-node2nix-preparation",
+    "index.html#javascript-node2nix-pitfalls"
   ],
   "sec-nixpkgs-release-26.05-lib": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib"
@@ -1565,6 +1568,9 @@
   ],
   "lib.sourceTypes.binaryBytecode": [
     "index.html#lib.sourceTypes.binaryBytecode"
+  ],
+  "lib.sourceTypes.obfuscatedCode": [
+    "index.html#lib.sourceTypes.obfuscatedCode"
   ],
   "chap-passthru": [
     "index.html#chap-passthru"
@@ -3576,6 +3582,9 @@
   "sec-language-java": [
     "index.html#sec-language-java"
   ],
+  "sec-language-lean4": [
+    "index.html#sec-language-lean4"
+  ],
   "language-javascript": [
     "index.html#language-javascript"
   ],
@@ -3641,15 +3650,6 @@
   ],
   "javascript-corepack": [
     "index.html#javascript-corepack"
-  ],
-  "javascript-node2nix": [
-    "index.html#javascript-node2nix"
-  ],
-  "javascript-node2nix-preparation": [
-    "index.html#javascript-node2nix-preparation"
-  ],
-  "javascript-node2nix-pitfalls": [
-    "index.html#javascript-node2nix-pitfalls"
   ],
   "javascript-pnpm": [
     "index.html#javascript-pnpm"
@@ -3743,6 +3743,18 @@
   ],
   "julia-withpackage-arguments": [
     "index.html#julia-withpackage-arguments"
+  ],
+  "lean4-buildLakePackage": [
+    "index.html#lean4-buildLakePackage"
+  ],
+  "lean4-dev-shells": [
+    "index.html#lean4-dev-shells"
+  ],
+  "lean4-history": [
+    "index.html#lean4-history"
+  ],
+  "lean4-leanPackages": [
+    "index.html#lean4-leanPackages"
   ],
   "lisp": [
     "index.html#lisp"

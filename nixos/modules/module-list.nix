@@ -61,6 +61,7 @@
   ./hardware/cpu/amd-ryzen-smu.nix
   ./hardware/cpu/amd-sev.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/cpu/intel-npu.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/cpu/x86-msr.nix
   ./hardware/decklink.nix
@@ -357,6 +358,7 @@
   ./programs/wayland/wayfire.nix
   ./programs/wayland/wayvnc.nix
   ./programs/weylus.nix
+  ./programs/whois.nix
   ./programs/winbox.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
@@ -745,7 +747,6 @@
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
   ./services/logging/logstash.nix
-  ./services/logging/promtail.nix
   ./services/logging/rsyslogd.nix
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
@@ -957,6 +958,7 @@
   ./services/misc/servarr/sonarr.nix
   ./services/misc/servarr/whisparr.nix
   ./services/misc/serviio.nix
+  ./services/misc/shelfmark.nix
   ./services/misc/shoko.nix
   ./services/misc/sickbeard.nix
   ./services/misc/snapper.nix
@@ -1203,6 +1205,7 @@
   ./services/networking/frr.nix
   ./services/networking/g3proxy.nix
   ./services/networking/gdomap.nix
+  ./services/networking/geph.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix
@@ -1346,7 +1349,6 @@
   ./services/networking/pptpd.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  ./services/networking/pyload.nix
   ./services/networking/quassel.nix
   ./services/networking/quicktun.nix
   ./services/networking/r53-ddns.nix
@@ -1587,6 +1589,7 @@
   ./services/video/go2rtc/default.nix
   ./services/video/mediamtx.nix
   ./services/video/mirakurun.nix
+  ./services/video/motioneye.nix
   ./services/video/photonvision.nix
   ./services/video/ustreamer.nix
   ./services/video/v4l2-relayd.nix
@@ -1730,6 +1733,7 @@
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/pairdrop.nix
+  ./services/web-apps/papra.nix
   ./services/web-apps/part-db.nix
   ./services/web-apps/pdfding.nix
   ./services/web-apps/peering-manager.nix

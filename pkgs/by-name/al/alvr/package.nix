@@ -11,7 +11,7 @@
   brotli,
   bzip2,
   celt,
-  ffmpeg,
+  ffmpeg_7,
   gmp,
   jack2,
   lame,
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-finding-libs.patch {
-      ffmpeg = lib.getDev ffmpeg;
+      ffmpeg = lib.getDev ffmpeg_7;
       x264 = lib.getDev x264;
     })
   ];
@@ -107,7 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     brotli
     bzip2
     celt
-    ffmpeg
+    ffmpeg_7
     gmp
     jack2
     lame

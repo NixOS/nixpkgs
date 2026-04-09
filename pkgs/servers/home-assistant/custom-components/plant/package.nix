@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "plant";
-  version = "2026.2.1";
+  version = "2026.3.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-plant";
     tag = "v${version}";
-    hash = "sha256-nWZFywMTw3seEAERekzMeLRPceqMl1s7VXujNz0+6zI=";
+    hash = "sha256-na3T60v4HRmdf8NFIqnLdSQjFfg0Jlny0tse5nx21Zs=";
   };
 
   dependencies = [

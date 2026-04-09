@@ -44,10 +44,8 @@ let
   drivers = [
     "razerkbd"
     "razermouse"
-    "razerfirefly"
     "razerkraken"
-    "razermug"
-    "razercore"
+    "razeraccessory"
   ];
 in
 {

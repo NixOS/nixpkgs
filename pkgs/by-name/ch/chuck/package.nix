@@ -6,7 +6,6 @@
   flex,
   pkg-config,
   darwin,
-  xcbuild,
   libsndfile,
   alsa-lib,
   libjack2,
@@ -32,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
-    xcbuild
   ];
 
   buildInputs = [

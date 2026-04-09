@@ -156,6 +156,16 @@ in
 
                       server.succeed(f"incus exec {instance_name} -- test -e /dev/tpm0")
                       server.succeed(f"incus exec {instance_name} -- test -e /dev/tpmrm0")
+
+                  with subtest("[${image_id}] default configuration.nix is created on first boot"):
+                      server.succeed(f"incus exec {instance_name} -- test -f /etc/nixos/configuration.nix")
+
+                  with subtest("[${image_id}] configuration.nix create service does not overwrite existing config"):
+                      server.succeed(f"incus exec {instance_name} -- systemctl restart incus-create-nixos-config.service")
+                      status = server.succeed(
+                          f"incus exec {instance_name} -- systemctl show -p ActiveState incus-create-nixos-config.service"
+                      ).strip()
+                      assert "inactive" in status, f"Expected inactive (ConditionPathExists should prevent start), got {status}"
                 ''
                 #
                 # container specific
@@ -164,6 +174,21 @@ in
                   lib.optionalString (config.type == "container")
                     # python
                     ''
+                      with subtest("[${image_id}] switch-to-configuration updates /sbin/init via installBootLoader"):
+                          # Remove /sbin/init so we can verify installBootLoader recreates it
+                          server.succeed(f"incus exec {instance_name} -- rm -f /sbin/init")
+                          server.fail(f"incus exec {instance_name} -- test -e /sbin/init")
+
+                          server.succeed(
+                              f"incus exec {instance_name} -- /run/current-system/bin/switch-to-configuration switch"
+                          )
+
+                          # Verify installBootLoader recreated /sbin/init pointing to the system's init
+                          server.succeed(f"incus exec {instance_name} -- test -x /sbin/init")
+                          target = server.succeed(f"incus exec {instance_name} -- readlink -f /sbin/init").strip()
+                          current = server.succeed(f"incus exec {instance_name} -- readlink -f /run/current-system/init").strip()
+                          assert target == current, f"/sbin/init -> {target}, expected {current}"
+
                       # TODO troubleshoot VM hot memory resizing which was introduced in 6.12
                       with subtest("[${image_id}] memory limits can be hotplug changed"):
                           server.set_instance_config(instance_name, "limits.memory 512MB")

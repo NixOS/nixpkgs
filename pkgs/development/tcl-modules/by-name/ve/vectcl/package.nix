@@ -15,9 +15,7 @@ mkTclDerivation rec {
     hash = "sha256-nPs16Jy6KMEdupWJNhgYqosuW5Dlpb/dxxTrLpRbYf0=";
   };
 
-  makeFlags = [
-    "CFLAGS=-Wno-implicit-function-declaration"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -std=gnu17";
 
   meta = {
     homepage = "https://auriocus.github.io/VecTcl/";

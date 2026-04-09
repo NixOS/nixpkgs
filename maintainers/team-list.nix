@@ -225,7 +225,6 @@ with lib.maintainers;
     members = [
       mdarocha
       corngood
-      ggg
       raphaelr
       jamiemagee
       anpin
@@ -685,6 +684,10 @@ with lib.maintainers;
     scope = "Maintain the R programming language and related packages.";
     shortName = "R";
     enableFeatureFreezePing = true;
+  };
+
+  radicle = {
+    github = "radicle";
   };
 
   rocm = {

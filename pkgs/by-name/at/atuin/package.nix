@@ -25,10 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "ai"
     "client"
-    "sync"
     "clipboard"
     "daemon"
+    "hex"
+    "sync"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -70,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       sciencentistguy
       _0x4A6F
       rvdp
+      kaynetik
     ];
     mainProgram = "atuin";
   };
