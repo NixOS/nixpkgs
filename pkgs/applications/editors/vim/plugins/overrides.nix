@@ -194,7 +194,9 @@ assertNoAdditions {
 
   aider-nvim = super.aider-nvim.overrideAttrs {
     patches = [
-      (replaceVars ./patches/aider-nvim/bin.patch { aider = lib.getExe' aider-chat "aider"; })
+      (replaceVars ./patches/aider-nvim/bin.patch {
+        aider = lib.getExe aider-chat;
+      })
     ];
   };
 
