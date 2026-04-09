@@ -471,9 +471,6 @@ in
         else
           ./3.6/use-etc-ssl-certs.patch
       )
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./3.6/mingw-define-netreset.patch
     ];
 
     withDocs = true;
