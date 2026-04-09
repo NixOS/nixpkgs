@@ -23,7 +23,7 @@ let
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
-    rev = version;
+    tag = version;
     hash = "sha256-8yg5CtvBtSKRaOUj9f+Db7rruXIVuF2cR50vZ+WUU6A=";
   };
 
