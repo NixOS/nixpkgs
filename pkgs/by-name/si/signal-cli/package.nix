@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           --set JAVA_HOME "${openjdk25_headless}" \
           --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
           --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
+          --add-flags "--enable-native-access=ALL-UNNAMED" \
           --add-flags "org.asamk.signal.Main"
       ''
     else
