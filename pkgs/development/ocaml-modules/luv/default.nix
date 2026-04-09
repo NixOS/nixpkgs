@@ -1,7 +1,6 @@
 {
   lib,
   buildDunePackage,
-  ocaml,
   fetchurl,
   ctypes,
   result,
@@ -18,8 +17,6 @@ let
     buildDunePackage rec {
       pname = "luv";
       inherit version;
-
-      minimalOCamlVersion = "4.03";
 
       src = fetchurl {
         url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
@@ -40,8 +37,7 @@ let
         result
       ];
       checkInputs = [ alcotest ];
-      # Alcotest depends on fmt that needs 4.08 or newer
-      doCheck = lib.versionAtLeast ocaml.version "4.08";
+      doCheck = true;
 
       meta = {
         homepage = "https://github.com/aantron/luv";
