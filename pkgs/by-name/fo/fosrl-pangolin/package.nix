@@ -29,32 +29,42 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.15.3";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
-    tag = finalAttrs.version;
-    hash = "sha256-UGfwbFbuQ0ljipCjnPxZ/Is2hh1vjZJb97Lo/43sWeg=";
+    rev = finalAttrs.version;
+    hash = "sha256-pWD2VinfkCiSSP6/einXgduKQ8lzWdHlrj2eqUU/x6Y=";
   };
 
-  npmDepsHash = "sha256-kfgwU5QusUNWVcRXlYCS3ES1Av/phCHG8nFBj0yjz2Q=";
+  npmDepsHash = "sha256-CwS26eRAIuxJ2fekRRapDWYAOHXPV0mIX/by4uW2ZOM=";
+
+  npmFlags = [
+    "--legacy-peer-deps"
+  ];
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
   postPatch = ''
+    # 1.16.2 release has wrong version set to 1.16.0 so patch it
+    # TODO remove this for the 1.17.0 update
+    substituteInPlace server/lib/consts.ts --replace-fail \
+      'export const APP_VERSION = "1.16.0";' \
+      'export const APP_VERSION = "1.16.2";'
+
+    # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
+    # Based on pkgs.nextjs-ollama-llm-ui.
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Geist, Inter, Manrope, Open_Sans } from \"next/font/google\"" \
+      "{ Inter } from \"next/font/google\"" \
       "localFont from \"next/font/local\""
 
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "const font = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
-      "const font = localFont({ src: './Inter.ttf' });"
+      "const inter = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
+      "const inter = localFont({ src: './Inter.ttf' });"
 
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
   '';
@@ -62,7 +72,7 @@ buildNpmPackage (finalAttrs: {
   preBuild = ''
     npm run set:${db false}
     npm run set:oss
-    npm run db:${db false}:generate
+    npm run db:generate
   '';
 
   buildPhase = ''
@@ -84,6 +94,7 @@ buildNpmPackage (finalAttrs: {
     cp -r .next/static $out/share/pangolin/.next/static
     cp -r dist $out/share/pangolin/dist
     cp -r server/migrations $out/share/pangolin/dist/init
+
     cp package.json $out/share/pangolin/package.json
 
     cp server/db/names.json $out/share/pangolin/dist/names.json
@@ -121,7 +132,9 @@ buildNpmPackage (finalAttrs: {
                dir:
                "test -f ${dir}/.nix_skip_setup || { rm -${lib.optionalString (dir == ".next") "r"}f ${dir} && ${
                  if (dir == ".next") then "cp -rd" else "ln -s"
-               } ${placeholder "out"}/share/pangolin/${dir} .; }"
+               } ${placeholder "out"}/share/pangolin/${dir} .; ${
+                 lib.optionalString (dir == ".next") "chmod -R 755 .next;"
+               } }"
              )
              [
                ".next"
