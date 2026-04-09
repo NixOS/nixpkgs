@@ -2,8 +2,10 @@
   cmake,
   fetchFromGitHub,
   lib,
+  lld,
   perl,
   rustPlatform,
+  stdenv,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,7 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
   strictDeps = true;
 
   useNextest = true;
