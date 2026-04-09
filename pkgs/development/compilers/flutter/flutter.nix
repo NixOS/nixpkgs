@@ -178,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir --parents packages/flutter_tools/.dart_tool
     ln --symbolic ${flutter-tools.pubcache}/package_config.json packages/flutter_tools/.dart_tool/package_config.json
   ''
-  + lib.optionalString (lib.versionOlder version "3.33") ''
+  + lib.optionalString (lib.versionOlder version "3.36") ''
     echo -n "${version}" > version
   ''
   + ''
