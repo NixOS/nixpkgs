@@ -1,11 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
   installShellFiles,
   buildkit,
-  cni-plugins,
+  cni-plugins ? null,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   extraPackages ? [ ],
@@ -50,13 +51,14 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/nerdctl \
-      --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}" \
-      --prefix CNI_PATH : "${cni-plugins}/bin"
+      --prefix PATH : "${lib.makeBinPath ([ buildkit ] ++ extraPackages)}"${lib.optionalString stdenv.hostPlatform.isLinux '' \
+      --prefix CNI_PATH : "${cni-plugins}/bin"''}
 
+    mkdir -p "$TMPDIR/nerdctl-data"
     installShellCompletion --cmd nerdctl \
-      --bash <($out/bin/nerdctl completion bash) \
-      --fish <($out/bin/nerdctl completion fish) \
-      --zsh <($out/bin/nerdctl completion zsh)
+      --bash <($out/bin/nerdctl --data-root "$TMPDIR/nerdctl-data" completion bash) \
+      --fish <($out/bin/nerdctl --data-root "$TMPDIR/nerdctl-data" completion fish) \
+      --zsh <($out/bin/nerdctl --data-root "$TMPDIR/nerdctl-data" completion zsh)
   '';
 
   doInstallCheck = true;
@@ -82,6 +84,6 @@ buildGoModule (finalAttrs: {
       developer-guy
       jk
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
