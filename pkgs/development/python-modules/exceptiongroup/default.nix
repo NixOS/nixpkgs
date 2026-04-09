@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flit-scm,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  isPy313,
   typing-extensions,
 }:
 
@@ -22,14 +22,19 @@ buildPythonPackage rec {
     hash = "sha256-3WInufN+Pp6vB/Gik6e8V1a34Dr/oiH3wDMB+2lHRMM=";
   };
 
-  # CPython fixed https://github.com/python/cpython/issues/141732 in
-  # https://github.com/python/cpython/pull/141736, but exceptiongroup 1.3.1,
-  # including its test suite, still matches the old repr behavior.
-  # The CPython fix has only been backported to 3.13 so far, where it was
-  # first included in version 3.13.12, so we only need to patch for 3.13
-  # and 3.15+.
-  # Upstream issue: https://github.com/agronholm/exceptiongroup/issues/154
-  patches = lib.optional (isPy313 || pythonAtLeast "3.15") ./match-repr-fix.patch;
+  patches = [
+    # CPython fixed https://github.com/python/cpython/issues/141732 in
+    # https://github.com/python/cpython/pull/141736 (backported to Python 3.13+),
+    # but exceptiongroup 1.3.1, including its test suite, still matches the old
+    # repr behavior.
+    # Upstream issue: https://github.com/agronholm/exceptiongroup/issues/154
+    # Upstream PR: https://github.com/agronholm/exceptiongroup/pull/155
+    (fetchpatch {
+      name = "match-repr-fix.patch";
+      url = "https://github.com/agronholm/exceptiongroup/commit/0c6cfbf677f6b50df17311cfdad01e9ff17310aa.patch";
+      hash = "sha256-EeYu1/JKYRDwdq8+n38RrdogipNzX0ate1trDs1Z3c0=";
+    })
+  ];
 
   build-system = [ flit-scm ];
 
