@@ -488,7 +488,6 @@ dont-distribute-packages:
  - cmptype
  - cmv
  - cnc-spec-compiler
- - co-feldspar
  - Coadjute
  - cobot-io
  - codec
@@ -945,7 +944,6 @@ dont-distribute-packages:
  - fei-modelzoo
  - fei-nn
  - feldspar-compiler
- - feldspar-language
  - FermatsLastMargin
  - festung
  - ffmpeg-tutorials
@@ -1054,7 +1052,6 @@ dont-distribute-packages:
  - functor-monad
  - funflow
  - funflow-nix
- - fungll-combinators
  - funion
  - funsat
  - fwgl-glfw
@@ -1305,7 +1302,6 @@ dont-distribute-packages:
  - happstack-state
  - happybara-webkit
  - haquil
- - hardware-edsl
  - HaRe
  - hark
  - harmony
@@ -1383,14 +1379,9 @@ dont-distribute-packages:
  - haskgame
  - hasklepias
  - haskoin-bitcoind
- - haskoin-core
  - haskoin-crypto
- - haskoin-node
  - haskoin-protocol
  - haskoin-script
- - haskoin-store
- - haskoin-store-data
- - haskoin-wallet
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
@@ -1800,8 +1791,6 @@ dont-distribute-packages:
  - imj-measure-stdout
  - immutaball-core
  - imparse
- - imperative-edsl
- - imperative-edsl-vhdl
  - importify
  - imprevu-happstack
  - improve
@@ -1938,7 +1927,6 @@ dont-distribute-packages:
  - karakuri
  - katip-rollbar
  - keelung
- - keera-hails-i18n
  - keera-hails-mvc-environment-gtk
  - keera-hails-mvc-model-lightmodel
  - keera-hails-mvc-model-protectedmodel
@@ -2220,7 +2208,6 @@ dont-distribute-packages:
  - mellon-web
  - memcache-conduit
  - memory-cd
- - memory-hexstring
  - merkle-patricia-db
  - message-db-temp
  - meta-par-accelerate
@@ -2243,8 +2230,6 @@ dont-distribute-packages:
  - microformats2-types
  - MicrosoftTranslator
  - midimory
- - mig-rio
- - mig-server
  - mighttpd
  - minecraft-data
  - minesweeper
@@ -2500,7 +2485,6 @@ dont-distribute-packages:
  - oops-examples
  - opc-xml-da-client
  - open-adt-tutorial
- - open-typerep
  - OpenAFP-Utils
  - OpenGLCheck
  - openpgp-Crypto
@@ -2706,14 +2690,11 @@ dont-distribute-packages:
  - postgresql-common-persistent
  - postgresql-pure
  - postgresql-simple-ltree
- - postgresql-simple-postgresql-types
  - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
- - postgresql-types
- - postgresql-types-algebra
  - postmark
  - potoki
  - potoki-cereal
@@ -2790,7 +2771,6 @@ dont-distribute-packages:
  - qhull
  - qnap-decrypt
  - qr-repa
- - qrcode-juicypixels
  - qtah-cpp-qt5
  - qtah-cpp-qt6
  - qtah-examples
@@ -2859,7 +2839,6 @@ dont-distribute-packages:
  - rasa-ext-views
  - rasa-ext-vim
  - rascal
- - raw-feldspar
  - razom-text-util
  - rbr
  - rc
@@ -2886,7 +2865,6 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-classhss
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
@@ -2925,7 +2903,6 @@ dont-distribute-packages:
  - repr
  - representable-tries
  - reserve
- - resin
  - resource-pool-catchio
  - resource-simple
  - rest-client
@@ -2987,9 +2964,6 @@ dont-distribute-packages:
  - rollbar-wai
  - rollbar-yesod
  - RollingDirectory
- - ron-rdt
- - ron-schema
- - ron-storage
  - rose-trie
  - roshask
  - rosmsg-bin
@@ -3185,7 +3159,6 @@ dont-distribute-packages:
  - si-clock
  - sibe
  - sigma-ij
- - signals
  - signify-hs
  - silvi
  - simgi
@@ -3720,14 +3693,6 @@ dont-distribute-packages:
  - web-routes-regular
  - web-routing
  - web-view-colonnade
- - web3
- - web3-bignum
- - web3-crypto
- - web3-ethereum
- - web3-polkadot
- - web3-provider
- - web3-solidity
- - web3-tools
  - WebBits-Html
  - WebBits-multiplate
  - WebCont
