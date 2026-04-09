@@ -32,17 +32,22 @@ index 2365b1ee..b1b6bcec 100644
  	char		 exec[_POSIX_ARG_MAX];
  	int		 execr;
  
-@@ -1455,8 +1462,12 @@ fork_filter_process(const char *name, const char *command, const char *user, con
- 	if (command[0] == '/')
- 		execr = snprintf(exec, sizeof(exec), "exec %s", command);
- 	else
+@@ -1455,7 +1462,12 @@ fork_filter_process(const char *name, const char *command, const char *user, con
+-	if (command[0] == '/')
+-		execr = snprintf(exec, sizeof(exec), "exec %s", command);
+-	else
+-		execr = snprintf(exec, sizeof(exec), "exec %s/%s", 
+-		    PATH_LIBEXEC, command);
++	if (command[0] == '/') {
++		execr = snprintf(exec, sizeof(exec), "exec %s", command);
++	} else {
 +		proc_path = getenv("OPENSMTPD_PROC_PATH");
 +		if (proc_path == NULL) {
 +			proc_path = PATH_LIBEXEC;
 +		}
- 		execr = snprintf(exec, sizeof(exec), "exec %s/%s", 
--		    PATH_LIBEXEC, command);
++		execr = snprintf(exec, sizeof(exec), "exec %s/%s",
 +		    proc_path, command);
++	}
  	if (execr >= (int) sizeof(exec))
  		fatalx("%s: exec path too long", name);
  

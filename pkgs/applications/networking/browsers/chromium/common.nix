@@ -622,6 +622,10 @@ let
         decode = "base64 -d";
         hash = "sha256-iDhDdVscy0tinQCRKXOghrn4ZRwlc8YjPZ0xPv0UMEU=";
       })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "147" && lib.versionOlder llvmVersion "23") [
+      # clang++: error: unknown argument: '-fno-lifetime-dse'
+      ./patches/chromium-147-llvm-22.patch
     ];
 
     postPatch =

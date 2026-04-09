@@ -1330,8 +1330,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.28.3";
-          hash = "sha256-4GRwqcuZJ3hAM58tUyOyCNEUq2cAIk17wscqAeJ0gSg=";
+          version = "2.28.4";
+          hash = "sha256-9m3Oi6w1GoVQatiMShmQAlsXDOauW3JBmNi3o78LFys=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.132.2";
-          hash = "sha256-1wBo1PaSZ0xNRIgdGAPQ7Jm4ywx4qc4kflZxHVAt2EA=";
+          version = "0.134.0";
+          hash = "sha256-gzzFCGSuV4Qofs7BI9ihd6lBGN8zOCvFntgKfS0bIIA=";
         };
         meta = {
           license = lib.licenses.mit;

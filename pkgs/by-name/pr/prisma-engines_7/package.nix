@@ -11,7 +11,7 @@
 # function correctly.
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prisma-engines_7";
-  version = "7.6.0";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "prisma";

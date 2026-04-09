@@ -1,12 +1,9 @@
 {
-  stdenv,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
   lib,
   envoy,
-  npmHooks,
-  fetchNpmDeps,
-  nodejs,
   nixosTests,
   pomerium-cli,
 }:
@@ -31,26 +28,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-EYXmeS4jtueI9FwVQdMlsYX3CSRGH9Dft0Syf88nf7o=";
 
-  ui = stdenv.mkDerivation {
+  ui = buildNpmPackage {
     pname = "pomerium-ui";
     inherit version;
     src = "${src}/ui";
 
-    npmDeps = fetchNpmDeps {
-      src = "${src}/ui";
-      hash = "sha256-2fzINp3LBPHPJlzJnUggPWUZHrjuX9TYPD2XvioonSw=";
-    };
-
-    nativeBuildInputs = [
-      npmHooks.npmConfigHook
-      nodejs
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-      npm run build
-      runHook postBuild
-    '';
+    npmDepsHash = "sha256-2fzINp3LBPHPJlzJnUggPWUZHrjuX9TYPD2XvioonSw=";
 
     installPhase = ''
       runHook preInstall

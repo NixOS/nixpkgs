@@ -108,9 +108,5 @@ buildPythonPackage rec {
     homepage = "https://xgrammar.mlc.ai";
     changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    badPlatforms = [
-      # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
-      "aarch64-linux"
-    ];
   };
 }

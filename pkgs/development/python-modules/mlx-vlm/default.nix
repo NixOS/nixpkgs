@@ -24,18 +24,19 @@
   psutil,
   pytestCheckHook,
   rich,
+  sentencepiece,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mlx-vlm";
-  version = "0.4.2";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blaizzy";
     repo = "mlx-vlm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GmeMcANmztICfYR9Ca5wQfLOugOlK1mt5j3q616n6TQ=";
+    hash = "sha256-08cSwN8IkERxUaXyT9qAg9vmLw7FvU5qDygAkDsOxpU=";
   };
 
   build-system = [
@@ -63,6 +64,7 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytestCheckHook
     rich
+    sentencepiece
   ];
 
   disabledTests = [
