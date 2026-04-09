@@ -43,9 +43,10 @@ pkgs.lib.listToAttrs (
         meta = { };
 
         nodes.machine =
-          { lib, ... }:
+          { pkgs, lib, ... }:
           let
             script = ''
+              ${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180
               ip link
               if ${lib.optionalString predictable "!"} ip link show eth0; then
                 echo Success
