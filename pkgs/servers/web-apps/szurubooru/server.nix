@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication {
 
   src = "${src}/server";
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools ];
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+  dependencies = with python3.pkgs; [
     certifi
     coloredlogs
     legacy-cgi
@@ -50,6 +50,7 @@ python3.pkgs.buildPythonApplication {
       szurubooru.server
     ];
   });
+
   # Waitress is used to run the serer.
   passthru.waitress = python3.pkgs.waitress.overrideAttrs (old: {
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
