@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
     changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ miniharinn ];
+    maintainers = with lib.maintainers; [
+      miniharinn
+      god464
+    ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };
