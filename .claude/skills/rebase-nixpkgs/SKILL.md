@@ -63,16 +63,16 @@ Read the package's nix expression and find its `fetchFromGitHub` (or equivalent)
 
 ### 4.2 Find the latest release version
 
-Use the GitHub API to find the latest release tag:
+Use the `gh` CLI to find the latest release tag:
 
 ```bash
-curl -sL "https://api.github.com/repos/<owner>/<repo>/releases/latest" | jq -r '.tag_name'
+gh release view --repo <owner>/<repo> --json tagName -q '.tagName'
 ```
 
-If the repo doesn't use GitHub Releases (the above returns `null`), fall back to the latest tag:
+If the repo doesn't use GitHub Releases (the above errors), fall back to the latest tag:
 
 ```bash
-curl -sL "https://api.github.com/repos/<owner>/<repo>/tags?per_page=1" | jq -r '.[0].name'
+gh api repos/<owner>/<repo>/tags --jq '.[0].name'
 ```
 
 Strip the leading `v` prefix if the nix expression's `version` field doesn't include one (most don't).
