@@ -29,6 +29,7 @@
   ./config/shells-environment.nix
   ./config/stevenblack.nix
   ./config/stub-ld.nix
+  ./config/subids.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/sysfs.nix
