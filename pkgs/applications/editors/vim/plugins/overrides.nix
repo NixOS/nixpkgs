@@ -1568,6 +1568,14 @@ assertNoAdditions {
     '';
   };
 
+  jsonfly-nvim = super.jsonfly-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      maintainers = old.meta.maintainers or [ ] ++ [
+        lib.maintainers.myzel394
+      ];
+    };
+  });
+
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
