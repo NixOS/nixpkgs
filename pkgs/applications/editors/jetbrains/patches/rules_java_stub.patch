@@ -1,0 +1,48 @@
+--- a/java/bazel/rules/java_stub_template.txt
++++ b/java/bazel/rules/java_stub_template.txt
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@bash@
+ # Copyright 2014 The Bazel Authors. All rights reserved.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+diff --git a/toolchains/BUILD b/toolchains/BUILD
+index 0f3ef2b..1f51353 100644
+--- a/toolchains/BUILD
++++ b/toolchains/BUILD
+@@ -199,7 +199,7 @@ cc_library(
+ 
+ alias(
+     name = "ijar",
+-    actual = ":ijar_prebuilt_binary_or_cc_binary",
++    actual = "@remote_java_tools//:ijar_cc_binary",
+ )
+ 
+ alias(
+@@ -227,7 +227,7 @@ alias(
+ 
+ alias(
+     name = "singlejar",
+-    actual = ":singlejar_prebuilt_or_cc_binary",
++    actual = "@remote_java_tools//:singlejar_cc_bin",
+ )
+ 
+ alias(
+@@ -283,7 +283,7 @@ alias(
+ 
+ alias(
+     name = "turbine_direct",
+-    actual = ":turbine_direct_graal_or_java",
++    actual = "@remote_java_tools//:TurbineDirect",
+ )
+ 
+ alias(
+@@ -387,7 +387,7 @@ RELEASES = (8, 9, 10, 11, 17, 21, 25)
+ 
+ default_java_toolchain(
+     name = "prebuilt_toolchain",
+-    configuration = PREBUILT_TOOLCHAIN_CONFIGURATION,
++    configuration = DEFAULT_TOOLCHAIN_CONFIGURATION,
+     toolchain_definition = False,
+ )
+

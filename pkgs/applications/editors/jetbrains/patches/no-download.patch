@@ -59,15 +59,25 @@
      return jdkHome
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
-@@ -62,7 +62,7 @@
+@@ -71,7 +71,7 @@
    /**
-    * If `true`, a separate `*[org.jetbrains.intellij.build.impl.LinuxDistributionBuilder.NO_RUNTIME_SUFFIX].tar.gz` artifact without a runtime will be produced.
+    * If `true`, a separate `*[org.jetbrains.intellij.build.impl.NO_RUNTIME_SUFFIX].tar.gz` artifact without a runtime will be produced.
     */
 -  var buildArtifactWithoutRuntime: Boolean = false
 +  var buildArtifactWithoutRuntime: Boolean = true
  
    /**
-    * Set both properties if a .snap package should be produced.
+    * Add an instance of [LinuxDistributionCustomizer.Snap] if a .snap package should be produced.
+@@ -215,7 +215,7 @@
+   /**
+    * If `true`, a separate `*[org.jetbrains.intellij.build.impl.NO_RUNTIME_SUFFIX].tar.gz` artifact without a runtime will be produced.
+    */
+-  var buildArtifactWithoutRuntime: Boolean = false
++  var buildArtifactWithoutRuntime: Boolean = true
+ 
+   @Deprecated(message = "IJI-2568", replaceWith = ReplaceWith("snaps += Snap(name = value, description = TODO())"))
+   var snapName: String? = null
+
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
 @@ -70,7 +70,7 @@
