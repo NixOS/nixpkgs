@@ -9,6 +9,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   apr,
   aprutil,
   zlib,
@@ -81,7 +82,18 @@ let
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl;
 
-      patches = [ ./apr-1.patch ] ++ extraPatches;
+      patches = [
+        ./apr-1.patch
+
+        # swig-4.4 support:
+        #   https://lists.apache.org/thread/7rtyfcmg737bnmnrwf6bjmlxx4wpq2og
+        (fetchpatch {
+          name = "swig-4.4.patch";
+          url = "https://github.com/apache/subversion/commit/bf72420e86059a894fa3aacbbd6e3bee9286e46e.patch";
+          hash = "sha256-0X9y/0qDDctKo1vu86pKu3k79zIqhOhQU9rvyG4v6jg=";
+        })
+      ]
+      ++ extraPatches;
 
       # remove vendored swig-3 files as these will shadow the swig provided
       # ones and result in compile errors
