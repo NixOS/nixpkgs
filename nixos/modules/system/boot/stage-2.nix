@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -9,7 +10,11 @@ with lib;
 
 let
 
-  useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
+  useHostResolvConf =
+    options ? networking.resolvconf
+    && options ? networking.useHostResolvConf
+    && config.networking.resolvconf.enable
+    && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.replaceVarsWith {
     src = ./stage-2-init.sh;
