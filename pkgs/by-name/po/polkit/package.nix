@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "polkit-org";
     repo = "polkit";
-    rev = version;
+    tag = version;
     hash = "sha256-YTugETy0rqu/bv53jV1UeGqSK79bRXR52EJNcTblvzo=";
   };
 
