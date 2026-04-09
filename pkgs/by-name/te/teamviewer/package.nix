@@ -16,13 +16,13 @@
   libsm,
   libxfixes,
   coreutils,
-  wrapQtAppsHook,
+  libsForQt5,
   icu63,
   nss,
   minizip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
 
   src =
     let
-      base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major version}x";
+      base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major finalAttrs.version}x";
     in
     {
       x86_64-linux = fetchurl {
-        url = "${base_url}/teamviewer_${version}_amd64.deb";
+        url = "${base_url}/teamviewer_${finalAttrs.version}_amd64.deb";
         hash = "sha256-7QQlGzIr3BBFaur8ycGY0VuYz21cJI+EfCsRuCAr8XA=";
       };
       aarch64-linux = fetchurl {
-        url = "${base_url}/teamviewer_${version}_arm64.deb";
+        url = "${base_url}/teamviewer_${finalAttrs.version}_arm64.deb";
         hash = "sha256-prz3RaeMykgLrK9ai3/ivzRsUFT1dyWP1xymEl3s4eA=";
       };
     }
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     minizip
@@ -164,4 +164,4 @@ stdenv.mkDerivation rec {
       c4patino
     ];
   };
-}
+})

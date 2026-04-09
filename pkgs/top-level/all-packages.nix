@@ -3491,8 +3491,6 @@ with pkgs;
     youtube-dl = yt-dlp;
   };
 
-  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
-
   buildTeleport = callPackage ../build-support/teleport { };
 
   telepresence = callPackage ../tools/networking/telepresence {
