@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commitlint";
-  version = "20.5.0";
+  version = "20.5.1";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "commitlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AVc3uToQ3hvpesWkhIdYfvawoIJmDW+T5pHonujaL/s=";
+    hash = "sha256-kOZym07WOcUszUxYWy10+08+wjsPQ8FdiJdyJOUXOgk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-SOUweX/dvA67E6Vjpq3WLITbh6bevErV0wGZgWQ3U7o=";
+    hash = "sha256-oo0KWaDCQhZ7xWvKcfqi5QySb7Hq1C0CH037/8V60yU=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     makeBinaryWrapper
   ];
+
+  postPatch = ''
+    # Patch the CLI manifest to 20.5.1 so commitlint --version reports the correct version.
+    # Keep this intentionally specific so the next update fails and can drop this patch.
+    substituteInPlace @commitlint/cli/package.json \
+      --replace-fail '"version": "20.5.0"' '"version": "20.5.1"'
+  '';
 
   buildPhase = ''
     runHook preBuild
