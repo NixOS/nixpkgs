@@ -37,7 +37,7 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "qogir-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-LS1BE2jR08/JW2+rixYhTmctAfK2yZVWIE4QnAX9PDQ=";
     };
 
