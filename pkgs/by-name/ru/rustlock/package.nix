@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/JorySeverijnse/rustlock";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ JorySeverijnse ];
     mainProgram = "rustlock";
   };
 })
