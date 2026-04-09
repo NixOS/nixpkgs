@@ -22,19 +22,18 @@
   # tests
   mock,
   pytest-xdist,
-  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "1.3.24";
+  version = "1.3.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-6qAjyqMVrugABHssAQuql3z1YHTAOSm5hARJuJXJJvo=";
+    hash = "sha256-hWA0/f7rQpEfYTg10i0rBK3qeJbw3p6HW7S59rLnD0Q=";
   };
 
   postPatch = ''
@@ -62,13 +61,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
     mock
   ];
 
   disabledTestPaths = [
-    # typing correctness, not interesting
-    "test/ext/mypy"
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];
