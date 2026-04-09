@@ -35,7 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    kdePackages.qtsvg
+    # avoid .dev outputs propagation
+    kdePackages.qtsvg.out
   ];
 
   postPatch = ''
@@ -89,11 +90,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''}
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    mkdir -p $out/nix-support
-    echo ${kdePackages.qtsvg} >> $out/nix-support/propagated-user-env-packages
   '';
 
   meta = {
