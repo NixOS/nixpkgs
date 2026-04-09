@@ -216,6 +216,7 @@ buildGoModule (finalAttrs: {
       fpletz
       Frostman
       jpds
+      miniharinn
     ];
     mainProgram = "prometheus";
   };
