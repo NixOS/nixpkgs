@@ -301,11 +301,18 @@ in
                     find -L $package/share/man -type f | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
                   fi
                 '';
+            packages =
+              if config.documentation.nixos.enable && config.documentation.man.enable then
+                builtins.filter (pkg: pkg != config.system.build.manual.nixos-configuration-reference-manpage) (
+                  cfge.systemPackages ++ cfg.extraCompletionPackages
+                )
+              else
+                cfge.systemPackages ++ cfg.extraCompletionPackages;
           in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = map generateCompletions (config.environment.systemPackages ++ cfg.extraCompletionPackages);
+            paths = map generateCompletions packages;
           };
       })
 
