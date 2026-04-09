@@ -6,6 +6,7 @@
   mpv,
   makeDesktopItem,
   copyDesktopItems,
+  imagemagick,
 }:
 
 flutter332.buildFlutterApplication rec {
@@ -28,6 +29,7 @@ flutter332.buildFlutterApplication rec {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [ mpv ];
@@ -45,6 +47,9 @@ flutter332.buildFlutterApplication rec {
 
   postInstall = ''
     install -Dm644 assets/logo.png $out/share/icons/hicolor/1024x1024/apps/simple-live-app.png
+
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert assets/logo.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/simple-live-app.png
   '';
 
   extraWrapProgramArgs = ''

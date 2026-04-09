@@ -15,6 +15,7 @@
   makeDesktopItem,
   makeWrapper,
   wrapGAppsHook3,
+  imagemagick,
   writeScript,
   udev,
 }:
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     squashfsTools
     wrapGAppsHook3
+    imagemagick
   ];
 
   unpackPhase = ''
@@ -82,6 +84,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons/hicolor/1024x1024/apps
     ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/hicolor/1024x1024/apps/tk-safe.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert $out/opt/tk-safe/meta/gui/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/tk-safe.png
 
     runHook postInstall
   '';

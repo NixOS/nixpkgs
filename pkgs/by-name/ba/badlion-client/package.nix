@@ -3,6 +3,7 @@
   fetchurl,
   appimageTools,
   makeWrapper,
+  imagemagick,
 }:
 
 appimageTools.wrapAppImage rec {
@@ -19,11 +20,16 @@ appimageTools.wrapAppImage rec {
     };
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    imagemagick
+  ];
 
   extraInstallCommands = ''
     install -Dm444 ${src}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
     install -Dm444 ${src}/BadlionClient.png -t $out/share/icons/hicolor/1024x1024/apps
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert ${src}/BadlionClient.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/BadlionClient.png
     substituteInPlace $out/share/applications/BadlionClient.desktop \
       --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=badlion-client"
     wrapProgram $out/bin/badlion-client \

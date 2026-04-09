@@ -16,6 +16,7 @@
   makeDesktopItem,
   makeWrapper,
   wrapGAppsHook3,
+  imagemagick,
   gcc-unwrapped,
   udev,
 }:
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     squashfsTools
     wrapGAppsHook3
+    imagemagick
   ];
 
   unpackPhase = ''
@@ -94,6 +96,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons/hicolor/1024x1024/apps
     ln -s $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png $out/share/icons/hicolor/1024x1024/apps/bluemail.png
+
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/bluemail.png
 
     runHook postInstall
   '';

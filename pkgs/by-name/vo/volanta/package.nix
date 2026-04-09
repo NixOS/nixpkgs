@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   makeWrapper,
+  imagemagick,
   writeShellScript,
   common-updater-scripts,
   nix-update,
@@ -20,13 +21,18 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    imagemagick
+  ];
 
   # Note: Volanta needs the env variable APPIMAGE=true to be set in order to work at all.
   extraInstallCommands = ''
     install -m 444 -D ${appImageContents}/volanta.desktop $out/share/applications/volanta.desktop
     install -m 444 -D ${appImageContents}/volanta.png \
       $out/share/icons/hicolor/1024x1024/apps/volanta.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert ${appImageContents}/volanta.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/volanta.png
     substituteInPlace $out/share/applications/volanta.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=env APPIMAGE=true volanta'
     wrapProgram $out/bin/volanta \

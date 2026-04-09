@@ -11,6 +11,7 @@
   copyDesktopItems,
   makeDesktopItem,
   wrapGAppsHook4,
+  imagemagick,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     copyDesktopItems
     wrapGAppsHook4
+    imagemagick
   ];
 
   buildInputs = [
@@ -42,6 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dm644 icons/app_icon.png $out/share/icons/hicolor/1024x1024/apps/airgorah.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert icons/app_icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/airgorah.png
   '';
 
   desktopItems = [

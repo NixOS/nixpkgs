@@ -12,6 +12,7 @@
   libxcursor,
   makeDesktopItem,
   copyDesktopItems,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
+    imagemagick
   ];
   buildInputs = [
     alsa-lib
@@ -60,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $out/share/ShowMIDI/themes Themes/*
 
     install -D Design/icon.png $out/share/icons/hicolor/1024x1024/apps/show-midi.png
+
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert Design/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/show-midi.png
 
     mkdir -p $out/bin $out/lib/lv2 $out/lib/vst3
     cd Builds/LinuxMakefile/build/

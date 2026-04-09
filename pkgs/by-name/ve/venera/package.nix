@@ -10,6 +10,7 @@
   _experimental-update-script-combinators,
   nix-update-script,
   dart,
+  imagemagick,
 }:
 
 flutter341.buildFlutterApplication (finalAttrs: {
@@ -27,7 +28,10 @@ flutter341.buildFlutterApplication (finalAttrs: {
 
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick
+  ];
 
   buildInputs = [ webkitgtk_4_1 ];
 
@@ -51,6 +55,8 @@ flutter341.buildFlutterApplication (finalAttrs: {
 
   postInstall = ''
     install -D --mode=0644 debian/gui/venera.png $out/share/icons/hicolor/1024x1024/apps/venera.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert debian/gui/venera.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/venera.png
   '';
 
   extraWrapProgramArgs = ''

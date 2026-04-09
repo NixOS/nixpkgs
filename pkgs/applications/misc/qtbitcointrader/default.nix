@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libsForQt5,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-u3+Kwn8KunYUpWCd55TQuVVfoSp8hdti93d6hk7Uqx8=";
   };
 
-  nativeBuildInputs = [ libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux imagemagick;
 
   buildInputs = [
     libsForQt5.qtbase
@@ -36,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
       QtBitcoinTrader_Desktop.pro
 
     runHook postConfigure
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert QtBitcoinTrader.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/QtBitcoinTrader.png
   '';
 
   meta = {

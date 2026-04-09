@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install -Dm644 blackvoxel.png $out/share/icons/hicolor/1024x1024/apps/blackvoxel.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert blackvoxel.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/blackvoxel.png
   '';
 
   desktopItems = [

@@ -22,6 +22,7 @@
   xdg-utils,
   copyDesktopItems,
   makeDesktopItem,
+  imagemagick,
 }:
 
 let
@@ -168,6 +169,7 @@ buildGoModule {
     pkg-config
     autoPatchelfHook
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
@@ -207,6 +209,8 @@ buildGoModule {
 
   postInstall = ''
     install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert ../assets/app.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/wox.png
   '';
 
   meta = metaCommon // {

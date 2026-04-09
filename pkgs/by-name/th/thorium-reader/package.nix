@@ -7,6 +7,7 @@
   electron,
   copyDesktopItems,
   makeDesktopItem,
+  imagemagick,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -28,10 +29,13 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   postInstall = ''
     install -Dpm644 resources/icon.png $out/share/icons/hicolor/1024x1024/apps/thorium-reader.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert resources/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/thorium-reader.png
 
     cp -r dist/* $out/lib/node_modules/EDRLab.ThoriumReader/
 

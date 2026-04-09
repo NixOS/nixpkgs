@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
+  imagemagick,
   SDL2,
   pkg-config,
   libxrandr,
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    imagemagick
   ];
 
   buildInputs = [
@@ -45,6 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $out/bin/snow_frontend_egui $out/bin/snowemu
 
     install -Dm644 assets/snow_icon.png $out/share/icons/hicolor/1024x1024/apps/snowemu.png
+
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert assets/snow_icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/snowemu.png
 
     wrapProgram $out/bin/snowemu \
       --prefix LD_LIBRARY_PATH : ${

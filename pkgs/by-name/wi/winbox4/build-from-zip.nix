@@ -14,6 +14,7 @@
   makeWrapper,
   stdenvNoCC,
   unzip,
+  imagemagick,
   writeShellApplication,
   libxcb-wm,
   libxcb-render-util,
@@ -42,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # makeBinaryWrapper does not support --run
     makeWrapper
     unzip
+    imagemagick
   ];
 
   buildInputs = [
@@ -62,6 +64,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 "assets/img/winbox.png" -t "$out/share/icons/hicolor/1024x1024/apps"
+
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert "assets/img/winbox.png" -resize 512x512 "$out/share/icons/hicolor/512x512/apps/winbox.png"
+
     install -Dm755 "WinBox" "$out/bin/WinBox"
 
     wrapProgram "$out/bin/WinBox" --run "${lib.getExe finalAttrs.migrationScript}"

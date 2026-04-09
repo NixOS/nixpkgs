@@ -8,6 +8,7 @@
   yq-go,
   nix-update-script,
   _experimental-update-script-combinators,
+  imagemagick,
 }:
 
 flutter341.buildFlutterApplication (finalAttrs: {
@@ -34,7 +35,10 @@ flutter341.buildFlutterApplication (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick
+  ];
 
   preBuild = ''
     echo 'SUPABASE_URL=https://pdrmmvvtindfbpxlcdps.supabase.co' > .env
@@ -43,6 +47,8 @@ flutter341.buildFlutterApplication (finalAttrs: {
 
   postInstall = ''
     install -m 444 -D assets/icon/tts_mod_vault_icon.png $out/share/icons/hicolor/1024x1024/apps/tts_mod_vault.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert assets/icon/tts_mod_vault_icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/tts_mod_vault.png
   '';
 
   passthru = {

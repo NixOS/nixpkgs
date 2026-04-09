@@ -14,6 +14,7 @@
   makeBinaryWrapper,
   nix-update-script,
   nodejs,
+  imagemagick,
   electron,
   gnum4,
   pkgsStatic,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     yarnInstallHook
     nodejs
+    imagemagick
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.autoSignDarwinBinariesHook;
 
@@ -92,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
       --inherit-argv0
 
     install -Dm444 build/icon.png $out/share/icons/hicolor/1024x1024/apps/graphest.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert build/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/graphest.png
     install -Dm444 ${./mime.xml} $out/share/mime/packages/graphest.xml
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -13,6 +13,7 @@
   wrapGAppsHook3,
   writeScript,
   sqlite,
+  imagemagick,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     squashfsTools
     makeWrapper
     wrapGAppsHook3
+    imagemagick
   ];
 
   buildInputs = [
@@ -76,6 +78,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
     install -Dm644 meta/gui/icon.png $out/share/icons/hicolor/1024x1024/termius-app.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert meta/gui/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/termius-app.png
 
     runHook postInstall
   '';

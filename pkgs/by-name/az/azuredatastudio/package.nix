@@ -29,6 +29,7 @@
   pango,
   systemd,
   wrapGAppsHook3,
+  imagemagick,
   libxrandr,
   libxfixes,
   libxext,
@@ -118,6 +119,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     copyDesktopItems
     wrapGAppsHook3
+    imagemagick
   ];
 
   buildInputs = [
@@ -130,6 +132,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D ${targetPath}/resources/app/resources/linux/code.png $out/share/icons/hicolor/1024x1024/apps/azuredatastudio.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert ${targetPath}/resources/app/resources/linux/code.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/azuredatastudio.png
 
     runHook postInstall
   '';

@@ -2,6 +2,7 @@
   lib,
   appimageTools,
   fetchurl,
+  imagemagick,
 }:
 
 appimageTools.wrapType2 rec {
@@ -13,6 +14,8 @@ appimageTools.wrapType2 rec {
     hash = "sha256-cQP1QkF2uWGsCjYjVdxPFLL8atAjT6rPQbPqeNX0QqQ=";
   };
 
+  nativeBuildInputs = [ imagemagick ];
+
   extraInstallCommands =
     let
       appimageContents = appimageTools.extract { inherit pname version src; };
@@ -20,6 +23,9 @@ appimageTools.wrapType2 rec {
     ''
       install -Dm 444 ${appimageContents}/clockify.desktop -t $out/share/applications
       install -Dm 444 ${appimageContents}/clockify.png -t $out/share/icons/hicolor/1024x1024/apps
+
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      magick convert ${appimageContents}/clockify.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/clockify.png
 
       substituteInPlace $out/share/applications/clockify.desktop \
         --replace-fail 'Exec=AppRun' 'Exec=${pname}'

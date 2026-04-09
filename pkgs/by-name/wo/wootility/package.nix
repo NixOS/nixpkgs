@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   makeWrapper,
+  imagemagick,
 }:
 
 let
@@ -17,7 +18,10 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    imagemagick
+  ];
 
   extraInstallCommands =
     let
@@ -29,6 +33,8 @@ appimageTools.wrapType2 {
 
       install -Dm444 ${contents}/wootility.desktop -t $out/share/applications
       install -Dm444 ${contents}/wootility.png -t $out/share/icons/hicolor/1024x1024/apps
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      magick convert ${contents}/wootility.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/wootility.png
       substituteInPlace $out/share/applications/wootility.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
     '';

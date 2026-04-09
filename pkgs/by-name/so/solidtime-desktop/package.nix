@@ -4,6 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   copyDesktopItems,
+  imagemagick,
   makeDesktopItem,
   makeWrapper,
   electron,
@@ -25,6 +26,7 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+    imagemagick
   ];
 
   npmDepsHash = "sha256-y4bO2Rcr+JXkS+q1EbSjg3nNd3GCrB8A+t9ePJsE2L4=";
@@ -36,6 +38,9 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/1024x1024
     cp -a build/icon.png $out/share/icons/hicolor/1024x1024/solidtime-desktop.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert build/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/solidtime-desktop.png
+
     cp -a . $out/share/solidtime-desktop
 
     makeWrapper ${lib.getExe electron} $out/bin/solidtime-desktop \

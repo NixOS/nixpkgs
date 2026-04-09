@@ -48,7 +48,9 @@ flutter341.buildFlutterApplication (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/1024x1024/apps
-    magick assets/alisthelper.png -resize 1024x1024 $out/share/icons/hicolor/1024x1024/apps/alisthelper.png
+    magick convert assets/alisthelper.png -resize 1024x1024 $out/share/icons/hicolor/1024x1024/apps/alisthelper.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert assets/alisthelper.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/alisthelper.png
   '';
 
   passthru = {

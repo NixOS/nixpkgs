@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
   autoPatchelfHook,
+  imagemagick,
   fontconfig,
   freetype,
   libGL,
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
     makeWrapper
     autoPatchelfHook
+    imagemagick
   ];
 
   buildInputs = [
@@ -80,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     install -Dm644 $out/app/windterm/license.txt $out/share/licenses/windterm/license.txt
     install -Dm644 $out/app/windterm/windterm.png -t $out/share/icons/hicolor/1024x1024/apps
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert $out/app/windterm/windterm.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/windterm.png
     substituteInPlace $out/app/windterm/windterm.desktop \
       --replace-fail "/usr/bin/" ""
     install -Dm644 $out/app/windterm/windterm.desktop $out/share/applications/windterm.desktop

@@ -2,6 +2,7 @@
   lib,
   appimageTools,
   fetchurl,
+  imagemagick,
 }:
 
 let
@@ -24,9 +25,10 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/zoho-mail-desktop.desktop \
       $out/share/applications/zoho-mail-desktop.desktop
-
-    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/zoho-mail-desktop.png \
-      $out/share/icons/hicolor/1024x1024/apps/zoho-mail-desktop.png
+    for size in 16 32 48 64 128 256 512 1024; do
+      install -Dm444 ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/zoho-mail-desktop.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/zoho-mail-desktop.png
+    done
 
     substituteInPlace $out/share/applications/zoho-mail-desktop.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'

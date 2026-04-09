@@ -14,6 +14,7 @@
   autoPatchelfHook,
   copyDesktopItems,
   writeShellApplication,
+  imagemagick,
   commandLineArgs ? "",
   genericUpdater,
 }:
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     copyDesktopItems
     makeBinaryWrapper
+    imagemagick
   ];
 
   desktopItems = [
@@ -88,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-d $out/share/bombsquad"
 
     install -Dm755 ${bombsquadIcon} $out/share/icons/hicolor/1024x1024/apps/bombsquad.png
+
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick convert ${bombsquadIcon} -resize 512x512 $out/share/icons/hicolor/512x512/apps/bombsquad.png
 
     runHook postInstall
   '';
