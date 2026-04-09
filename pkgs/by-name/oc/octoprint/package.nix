@@ -98,7 +98,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
-            rev = version;
+            tag = version;
             hash = "sha256-X9+o3EpTtKAFiSmjOumRCDKNwBc9LVjvqyZqun3yDi8=";
           };
 
