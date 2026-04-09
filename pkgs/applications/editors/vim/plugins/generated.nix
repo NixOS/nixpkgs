@@ -2258,6 +2258,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  clangd_extensions-nvim = buildVimPlugin {
+    pname = "clangd_extensions.nvim";
+    version = "0-unstable-2026-01-12";
+    src = fetchgit {
+      url = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
+      rev = "997d20e6bc83ea1a6223c08d2b9db76943abf56b";
+      hash = "sha256-5XES8qyl3tdMmsT+mkVcJ1sC5AKJDpHI/elsoB8XE/8=";
+    };
+    meta.homepage = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   claude-code-nvim = buildVimPlugin {
     pname = "claude-code.nvim";
     version = "0.4.3-unstable-2026-02-04";
