@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.all;
   };
 })
