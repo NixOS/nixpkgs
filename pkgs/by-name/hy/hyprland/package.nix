@@ -33,6 +33,7 @@
   re2,
   systemd,
   tomlplusplus,
+  uwsm,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -100,6 +101,9 @@ customStdenv.mkDerivation (finalAttrs: {
       --replace-fail  "@PREFIX@/" ""
     substituteInPlace example/hyprland.desktop.in \
       --replace-fail  "@PREFIX@/" ""
+    substituteInPlace systemd/hyprland-uwsm.desktop \
+      --replace-fail "Exec=uwsm " "Exec=${lib.getExe uwsm} " \
+      --replace-fail "TryExec=uwsm" "TryExec=${lib.getExe uwsm}"
   '';
 
   # variables used by CMake, and shown in `hyprctl version`
