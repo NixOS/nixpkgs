@@ -11,7 +11,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-tray-bridge";
-  version = "0.1.0-unstable-2026-02-16";
+  version = "0-unstable-2026-02-16";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
