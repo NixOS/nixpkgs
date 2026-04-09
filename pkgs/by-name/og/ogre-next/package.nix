@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
+  testers,
 
   cmake,
   ninja,
@@ -75,11 +76,22 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OGRE_CONFIG_ENABLE_STBI" true)
   ];
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    versionCheck = true;
+  };
+
   meta = {
     description = "3D Object-Oriented Graphics Rendering Engine";
     homepage = "https://www.ogre3d.org/";
     maintainers = with lib.maintainers; [
       marcin-serwin
+    ];
+    pkgConfigModules = [
+      "OGRE"
+      "OGRE-Hlms"
+      "OGRE-MeshLodGenerator"
+      "OGRE-Overlay"
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
