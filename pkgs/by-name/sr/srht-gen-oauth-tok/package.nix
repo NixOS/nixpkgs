@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "entropic.network";
     owner = "~nessdoor";
     repo = "srht-gen-oauth-tok";
-    rev = version;
+    tag = version;
     hash = "sha256-GcqP3XbVw2sR5n4+aLUmA4fthNkuVAGnhV1h7suJYdI=";
   };
 
