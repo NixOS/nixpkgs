@@ -1582,6 +1582,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  bitbake = buildVimPlugin {
+    pname = "bitbake";
+    version = "2.12.0-unstable-2026-04-08";
+    src = fetchFromGitHub {
+      owner = "openembedded";
+      repo = "bitbake";
+      rev = "5d722b5d65e4eef7befe6376983385421e993f86";
+      hash = "sha256-nOnNIXRUxsYNaEBhWuzCMTg37C9/S4ekxNbCpvBe+TU=";
+    };
+    meta.homepage = "https://github.com/openembedded/bitbake/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blame-nvim = buildVimPlugin {
     pname = "blame.nvim";
     version = "0-unstable-2026-02-12";

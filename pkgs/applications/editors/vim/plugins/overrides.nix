@@ -304,6 +304,10 @@ assertNoAdditions {
     ];
   };
 
+  bitbake = super.bitbake.overrideAttrs {
+    sourceRoot = "source/contrib/vim";
+  };
+
   blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
