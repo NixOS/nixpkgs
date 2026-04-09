@@ -13,7 +13,7 @@ let
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "domain-list-community";
-      rev = version;
+      tag = version;
       hash = "sha256-3iDOpqVPFXxqc2VyrIU2hPLCzS8nvpgJAMFOToeEqBE=";
     };
     vendorHash = "sha256-9tXv+rDBowxDN9gH4zHCr4TRbic4kijco3Y6bojJKRk=";
