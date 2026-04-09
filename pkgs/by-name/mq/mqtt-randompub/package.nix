@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mqtt-randompub";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabaff";
     repo = "mqtt-randompub";
     tag = finalAttrs.version;
-    hash = "sha256-6R40dEJSi3i2UxJNXLk+GWA/iykzbGVLFccF8ncymKw=";
+    hash = "sha256-L59wqMAw+/ZERGwq+Iyw+qGE+W6WQP0HtrZH36sJUKo=";
   };
 
   build-system = with python3.pkgs; [ hatchling ];
