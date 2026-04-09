@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
+  # workaround gcc >= 14 incompatibilities
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=incompatible-pointer-types";
+
   buildPhase = "./build.py";
 
   installPhase = "./install.py";
