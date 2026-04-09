@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "VERSION=${finalAttrs.version}"
     "exif=1"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "verscmp=0"
