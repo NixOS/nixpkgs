@@ -131,9 +131,6 @@ in
     ]
     ++ lib.optionals (lib.versions.major info.version == "39") [
       ./39-angle-patchdir.patch
-    ]
-    ++ lib.optionals (lib.versions.major info.version == "41") [
-      ./41-skia-patchdir.patch
     ];
 
   postPatch = ''
