@@ -274,6 +274,13 @@ lib.makeScope
 
         heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+        libgmp = callPackage ./gcc/gmp.nix {
+          gcc-buildbuild = gcc-latest;
+          gcc = gcc-latest;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         linux-headers = callPackage ./linux-headers {
           gcc = gcc-latest;
           gnumake = gnumake-musl;
