@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-RZGaOq8hmkwekCs1fKshDrx3vmHdJl/wI3IO9ZLH5rc=";
   };
 
-  # https://github.com/mypyc/librt/blob/v0.7.8/.github/workflows/buildwheels.yml#L90-L93
+  # https://github.com/mypyc/librt/blob/v0.9.0/.github/workflows/buildwheels.yml#L90-L93
   postPatch = ''
     cp -rv lib-rt/* .
   '';
