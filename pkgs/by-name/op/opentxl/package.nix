@@ -4,6 +4,7 @@
   callPackage,
   fetchurl,
   nix-update-script,
+  runtimeShellPackage,
 }:
 let
   osOption =
@@ -20,6 +21,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentxl";
   version = "11.3.7";
+  strictDeps = true;
 
   # The code generation part of the upstream build system relies on an x86-only binary,
   # so the generated code is fetched from the GitHub release instead
@@ -27,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/CordyJ/OpenTxl/releases/download/v${finalAttrs.version}/OpenTxl-${finalAttrs.version}-csrc.tar.gz";
     hash = "sha256-qIvxQqo1yCVJImjUvNNinzhoywVgaq9s0E+Ab+QStc0=";
   };
+
+  # Required for patchShebangs to find the right shell for runtime scripts.
+  # Optional check is to make sure that it is not added on platforms
+  # that can't run a POSIX shell (e.g. MinGW)
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage) runtimeShellPackage;
 
   # Using -std=gnu89 to prevent errors that occur with default args
   env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-int-conversion";
