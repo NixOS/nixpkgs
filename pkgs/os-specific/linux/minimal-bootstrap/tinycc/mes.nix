@@ -6,6 +6,7 @@
 
 {
   lib,
+  buildPlatform,
   fetchurl,
   callPackage,
   kaem,
@@ -14,12 +15,17 @@
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes;
 
-  version = "unstable-2025-12-03";
-  rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
+  version = "unstable-2026-02-04";
+  rev = "2125026688ba461af889ae20ff59f74abaaa767c";
+
+  #tarball = fetchurl {
+  #  url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
+  #  hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+  #};
 
   tarball = fetchurl {
-    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
-    hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+    url = "https://codeberg.org/aleksi/tinycc/archive/${rev}.tar.gz";
+    hash = "sha256-XcF0Bct24gj4kQuxjKDivvTel3m89YclO+q6Bg4o7uc=";
   };
   src =
     (kaem.runCommand "tinycc-${version}-source" { } ''
@@ -29,7 +35,7 @@ let
       untar --file ''${NIX_BUILD_TOP}/tinycc.tar
 
       # Patch
-      cd tinycc-${builtins.substring 0 7 rev}
+      cd tinycc
       # Static link by default
       replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
       replace --file i386-asm.c --output i386-asm.c --match-on "switch(size)" --replace-with "if (reg >= 8) { cstr_printf(add_str, \"%%r%d%c\", reg, (size == 1) ? 'b' : ((size == 2) ? 'w' : ((size == 4) ? 'd' : ' '))); return; } switch(size)"
@@ -37,7 +43,7 @@ let
       # If performing ptr + (-1) for example, the offset should be ptrdiff_t and not size_t
       replace --file tccgen.c --output tccgen.c --match-on "vpush_type_size(pointed_type(&vtop[-1].type), &align);" --replace-with "vpush_type_size(pointed_type(&vtop[-1].type), &align); if (!(vtop[-1].type.t & VT_UNSIGNED)) gen_cast_s(VT_PTRDIFF_T);"
     '')
-    + "/tinycc-${builtins.substring 0 7 rev}";
+    + "/tinycc";
 
   meta = {
     description = "Small, fast, and embeddable C compiler and interpreter";
@@ -45,6 +51,7 @@ let
     license = lib.licenses.lgpl21Only;
     teams = [ lib.teams.minimal-bootstrap ];
     platforms = [
+      "aarch64-linux"
       "i686-linux"
       "x86_64-linux"
     ];
@@ -64,9 +71,26 @@ let
     catm ''${out}/tccdefs_.h tccdefs_.h ${config_h}
   '';
 
+  libtccSources = [
+    "${src}/lib/libtcc1.c"
+    "${src}/lib/alloca.S"
+  ]
+  ++ (lib.optional buildPlatform.isAarch64 "${src}/lib/lib-arm64.c");
+  libtccObjects = [
+    "libtcc1.o"
+    "alloca.o"
+  ]
+  ++ (lib.optional buildPlatform.isAarch64 "lib-arm64.o");
+
   tinycc-mes-boot = buildTinyccMes {
     pname = "tinycc-mes-boot";
-    inherit src version meta;
+    inherit
+      src
+      version
+      meta
+      libtccSources
+      libtccObjects
+      ;
     prev = tinycc-bootstrappable;
     buildOptions = [
       "-D HAVE_BITFIELD=1"
@@ -76,14 +100,6 @@ let
       "-D CONFIG_TCC_PREDEFS=1"
       "-I ${tccdefs}"
       "-D CONFIG_TCC_SEMLOCK=0"
-    ];
-    libtccSources = [
-      "${src}/lib/libtcc1.c"
-      "${src}/lib/alloca.S"
-    ];
-    libtccObjects = [
-      "libtcc1.o"
-      "alloca.o"
     ];
     libtccBuildOptions = [
       "-D HAVE_FLOAT=1"
@@ -96,7 +112,13 @@ let
 in
 buildTinyccMes {
   pname = "tinycc-mes";
-  inherit src version meta;
+  inherit
+    src
+    version
+    meta
+    libtccSources
+    libtccObjects
+    ;
   prev = tinycc-mes-boot;
   buildOptions = [
     "-std=c99"
@@ -107,14 +129,6 @@ buildTinyccMes {
     "-D CONFIG_TCC_PREDEFS=1"
     "-I ${tccdefs}"
     "-D CONFIG_TCC_SEMLOCK=0"
-  ];
-  libtccSources = [
-    "${src}/lib/libtcc1.c"
-    "${src}/lib/alloca.S"
-  ];
-  libtccObjects = [
-    "libtcc1.o"
-    "alloca.o"
   ];
   libtccBuildOptions = [
     "-D HAVE_FLOAT=1"

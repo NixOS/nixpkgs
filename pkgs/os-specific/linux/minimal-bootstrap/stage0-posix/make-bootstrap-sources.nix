@@ -28,6 +28,7 @@ fetchFromGitHub {
   repo = "stage0-posix";
   sha256 = expected.outputHash;
   fetchSubmodules = true;
+  deepClone = true;
   postFetch = ''
     # Seed binaries will be fetched separately
     echo "Removing seed binaries"
@@ -40,6 +41,12 @@ fetchFromGitHub {
       $out/M2-Planet/M2libc \
       $out/mescc-tools/M2libc \
       $out/mescc-tools-extra/M2libc
+
+    echo "Removing Git history"
+    rm -rf $out/.git $out/*.git
+
+    echo "Patching mescc-tools for aarch64-mes support"
+    sed -i 's/if\(\(Architecture == RISCV32/if((Architecture == AARM64) || (Architecture == RISCV32/' $out/mescc-tools/hex2.c
   '';
 
   meta = {

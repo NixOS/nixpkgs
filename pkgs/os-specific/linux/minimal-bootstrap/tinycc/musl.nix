@@ -11,18 +11,19 @@
 }:
 let
   pname = "tinycc-musl";
-  version = "unstable-2025-12-03";
-  rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
+  version = "unstable-2026-02-04";
+  rev = "2125026688ba461af889ae20ff59f74abaaa767c";
 
   src = fetchurl {
-    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
-    hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+    url = "https://codeberg.org/aleksi/tinycc/archive/${rev}.tar.gz";
+    hash = "sha256-XcF0Bct24gj4kQuxjKDivvTel3m89YclO+q6Bg4o7uc=";
   };
 
   tccTarget =
     {
       i686-linux = "I386";
       x86_64-linux = "X86_64";
+      aarch64-linux = "ARM64";
     }
     .${buildPlatform.system};
 
@@ -38,6 +39,7 @@ let
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
   };
 
@@ -56,14 +58,10 @@ let
       ''
         # Unpack
         tar xzf ${src}
-        cd tinycc-${builtins.substring 0 7 rev}
+        cd tinycc
 
         # Patch
         ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
-        replace --file i386-asm.c --output i386-asm.c --match-on "switch(size)" --replace-with "if (reg >= 8) { cstr_printf(add_str, \"%%r%d%c\", reg, (size == 1) ? 'b' : ((size == 2) ? 'w' : ((size == 4) ? 'd' : ' '))); return; } switch(size)"
-
-        # If performing ptr + (-1) for example, the offset should be ptrdiff_t and not size_t
-        replace --file tccgen.c --output tccgen.c --match-on "vpush_type_size(pointed_type(&vtop[-1].type), &align);" --replace-with "vpush_type_size(pointed_type(&vtop[-1].type), &align); if (!(vtop[-1].type.t & VT_UNSIGNED)) gen_cast_s(VT_PTRDIFF_T);"
 
         # Configure
         touch config.h
@@ -135,7 +133,12 @@ let
         rm -f libtcc1.a
         ./tcc-musl -c -D HAVE_CONFIG_H=1 lib/libtcc1.c
         ./tcc-musl -c -D HAVE_CONFIG_H=1 lib/alloca.S
-        ./tcc-musl -ar cr libtcc1.a libtcc1.o alloca.o
+        if [ aarch64-linux = "${buildPlatform.system}" ]; then
+          ./tcc-musl -g -c -D HAVE_CONFIG_H=1 lib/lib-arm64.c
+          ./tcc-musl -ar cr libtcc1.a libtcc1.o alloca.o lib-arm64.o
+        else
+          ./tcc-musl -ar cr libtcc1.a libtcc1.o alloca.o
+        fi
 
         # Install
         install -D tcc-musl $out/bin/tcc

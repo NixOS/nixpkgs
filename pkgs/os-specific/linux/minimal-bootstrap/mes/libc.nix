@@ -13,6 +13,7 @@ let
 
   arch =
     {
+      aarch64-linux = "aarch64";
       i686-linux = "x86";
       x86_64-linux = "x86_64";
     }
@@ -44,6 +45,7 @@ kaem.runCommand "${pname}-${version}"
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = [
+        "aarch64-linux"
         "i686-linux"
         "x86_64-linux"
       ];

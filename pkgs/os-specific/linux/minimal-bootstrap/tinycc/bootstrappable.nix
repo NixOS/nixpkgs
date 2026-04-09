@@ -19,11 +19,12 @@
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes recompileLibc;
 
-  version = "unstable-2024-07-07";
-  rev = "ea3900f6d5e71776c5cfabcabee317652e3a19ee";
+  version = "unstable-2026-02-04";
+  rev = "014116c4350085132005871e43363c29bbb1777a";
 
   arch =
     {
+      aarch64-linux = "aarch64";
       i686-linux = "x86";
       x86_64-linux = "x86_64";
     }
@@ -31,14 +32,15 @@ let
 
   tccTarget =
     {
+      aarch64-linux = "ARM64";
       i686-linux = "I386";
       x86_64-linux = "X86_64";
     }
     .${buildPlatform.system};
 
   tarball = fetchurl {
-    url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
-    sha256 = "sha256-16JBGJATAWP+lPylOi3+lojpdv0SR5pqyxOV2PiVx0A=";
+    url = "https://codeberg.org/aleksi/tinycc-bootstrappable/archive/${rev}.tar.gz";
+    hash = "sha256-Z0S9KtEN0L5+bINscb6llmPVaD12fgPLBKK/W6WUQbg=";
   };
   src =
     (kaem.runCommand "tinycc-bootstrappable-${version}-source" { } ''
@@ -48,42 +50,14 @@ let
       untar --file ''${NIX_BUILD_TOP}/tinycc.tar
 
       # Patch
-      cd tinycc-${rev}
+      cd tinycc-bootstrappable
 
       cp ${mes-libc}/lib/libtcc1.c lib/libtcc1.c
 
       # Static link by default
       replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
-
-      # TODO: may not need following patches for mes 0.28.
-      # Or maybe we don't need tinycc-bootstrappable for mes 0.28?
-
-      # mes-libc depends on max_align_t in stddef.h, which is not provided by tinycc-boot
-      replace --file include/stddef.h --output include/stddef.h --match-on "void *alloca" --replace-with "
-        typedef union { long double ld; long long ll; } max_align_t;
-        void *alloca
-      "
-      # VLA is broken in mescc 0.27.1. alloca is not available either. Let's just use malloc and leak on x86_64.
-      replace --file x86_64-gen.c --output x86_64-gen.c --match-on "char _onstack[nb_args], *onstack = _onstack;" --replace-with "char *onstack = tcc_malloc(nb_args);"
-
-      # Abort is not provided by mescc
-      replace --file x86_64-gen.c --output x86_64-gen.c --match-on "abort();" --replace-with "/* abort(); */"
-
-      # Work around bug in mescc.
-      replace --file x86_64-gen.c --output x86_64-gen.c --match-on "g(vtop->c.i & (ll ? 63 : 31));" --replace-with "if (ll) g(vtop->c.i & 63); else g(vtop->c.i & 31);"
-
-      # Normally tinycc only performs relocations on the PLT when creating a dynamically-linked executable.
-      # This is fine for most targets because a PLT is not generated. But on x86_64 we do generate a PLT and hence
-      # we must assure plt->got references are appropriately relocated.
-      # This patch is applied even if we aren't targeting x86_64. Because there's no PLT outside x86_64, it's basically a no-op.
-      replace --file tccelf.c --output tccelf.c --match-on "fill_got(s1);" --replace-with "
-      {
-        fill_got(s1);
-        relocate_plt(s1);
-      }
-      "
     '')
-    + "/tinycc-${rev}";
+    + "/tinycc-bootstrappable";
 
   meta = {
     description = "Tiny C Compiler's bootstrappable fork";
@@ -91,6 +65,7 @@ let
     license = lib.licenses.lgpl21Only;
     teams = [ lib.teams.minimal-bootstrap ];
     platforms = [
+      "aarch64-linux"
       "i686-linux"
       "x86_64-linux"
     ];
@@ -144,10 +119,23 @@ let
             tcc.s
         '';
 
+    extraSources = lib.optional buildPlatform.isAarch64 "${src}/lib/lib-arm64.c";
+    extraObjects = lib.optional buildPlatform.isAarch64 "lib-arm64.o";
+
     libs = recompileLibc {
       inherit pname version src;
       tcc = compiler;
       libtccOptions = mes-libc.CFLAGS + " -DTCC_TARGET_${tccTarget}=1";
+      libtccSources = [
+        "${src}/lib/libtcc1.c"
+        "${src}/lib/va_list.c"
+      ]
+      ++ extraSources;
+      libtccObjects = [
+        "libtcc1.o"
+        "va_list.o"
+      ]
+      ++ extraObjects;
     };
   };
 

@@ -51,6 +51,20 @@ let
     url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
     hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
   };
+
+  # see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95129
+  # HACK: Changing the platforms however breaks i686-linux,
+  # so we only do it for aarch64-linux.
+  fakeBuildPlatform =
+    if buildPlatform.system == "aarch64-linux" then
+      lib.systems.elaborate "${buildPlatform.parsed.cpu.name}-unknown-linux-musl"
+    else
+      buildPlatform;
+  fakeHostPlatform =
+    if hostPlatform.system == "aarch64-linux" then
+      lib.systems.elaborate "${hostPlatform.parsed.cpu.name}-unknown-linux-musl"
+    else
+      hostPlatform;
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -129,8 +143,9 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
+      --build=${fakeBuildPlatform.config} \
+      --host=${fakeHostPlatform.config} \
+      --target=${fakeHostPlatform.config} \
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
@@ -139,7 +154,9 @@ bash.runCommand "${pname}-${version}"
       --disable-libsanitizer \
       --disable-lto \
       --disable-multilib \
-      --disable-plugin
+      --disable-plugin \
+      --disable-libssp \
+      --with-specs="-fno-stack-protector"
 
     # Build
     make -j $NIX_BUILD_CORES

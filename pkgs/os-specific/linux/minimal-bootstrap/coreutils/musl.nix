@@ -39,6 +39,11 @@ let
     # depends on linux/version.h, which is not present at this stage
     "gl_cv_func_copy_file_range=no"
     "gl_cv_onwards_func_copy_file_range=no"
+
+    # tcc handles linking poorly and can't deal with linking strtold without
+    # linking memmove etc.
+    # So we bypass this test.
+    "ac_cv_func_strtold=yes"
   ];
 in
 bash.runCommand "${pname}-${version}"

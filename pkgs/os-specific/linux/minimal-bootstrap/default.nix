@@ -35,6 +35,7 @@ lib.makeScope
         supportedSystems = [
           "i686-linux"
           "x86_64-linux"
+          "aarch64-linux"
         ];
 
         bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
@@ -136,20 +137,20 @@ lib.makeScope
           bootGawk = gawk-mes;
         };
 
-        gcc46 = callPackage ./gcc/4.6.nix {
+        gcc4 = callPackage ./gcc/4.nix {
           tinycc = tinycc-musl;
           gnumake = gnumake-musl;
           gnutar = gnutar-musl;
         };
 
-        gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
-          gcc = gcc46;
+        gcc4-cxx = callPackage ./gcc/4.cxx.nix {
+          gcc = gcc4;
           gnumake = gnumake-musl;
-          gnutar = gnutar-musl;
+          gnutar = gnutar-latest;
         };
 
         gcc10 = callPackage ./gcc/10.nix {
-          gcc = gcc46-cxx;
+          gcc = gcc4-cxx;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
@@ -225,7 +226,7 @@ lib.makeScope
 
         # FIXME: better package naming scheme
         gnutar-latest = callPackage ./gnutar/latest.nix {
-          gcc = gcc46;
+          gcc = gcc4;
           gnumake = gnumake-musl;
           gnutarBoot = gnutar-musl;
         };
@@ -286,7 +287,7 @@ lib.makeScope
         };
 
         musl = callPackage ./musl {
-          gcc = gcc46;
+          gcc = gcc4;
           gnumake = gnumake-musl;
         };
 
@@ -381,8 +382,8 @@ lib.makeScope
             echo ${gawk.tests.get-version}
             echo ${gawk-mes.tests.get-version}
             echo ${gawk-static.tests.get-version}
-            echo ${gcc46.tests.get-version}
-            echo ${gcc46-cxx.tests.hello-world}
+            echo ${gcc4.tests.get-version}
+            echo ${gcc4-cxx.tests.hello-world}
             echo ${gcc10.tests.hello-world}
             echo ${gcc-latest.tests.hello-world}
             echo ${gnugrep.tests.get-version}

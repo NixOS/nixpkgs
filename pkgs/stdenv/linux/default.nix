@@ -68,7 +68,6 @@
           armv5tel-linux = import ./bootstrap-files/armv5tel-unknown-linux-gnueabi.nix;
           armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-gnueabihf.nix;
           armv7l-linux = import ./bootstrap-files/armv7l-unknown-linux-gnueabihf.nix;
-          aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-gnu.nix;
           mipsel-linux = import ./bootstrap-files/mipsel-unknown-linux-gnu.nix;
           mips64el-linux = import (
             if localSystem.isMips64n32 then
@@ -88,7 +87,6 @@
           loongarch64-linux = import ./bootstrap-files/loongarch64-unknown-linux-gnu.nix;
         };
         musl = {
-          aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-musl.nix;
           armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-musleabihf.nix;
         };
       };

@@ -110,6 +110,12 @@ bootBash.runCommand "${pname}-${version}"
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     export AR="tcc -ar"
+
+    # tcc handles linking poorly and can't deal with linking strtod without
+    # linking memmove etc.
+    # So we bypass this test.
+    export ac_cv_func_strtod=yes
+
     export LD=tcc
     bash ./configure \
       --prefix=$out \
