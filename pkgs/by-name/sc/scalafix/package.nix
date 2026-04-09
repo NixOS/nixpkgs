@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "scalafix";
   version = "0.12.0";
   deps = stdenv.mkDerivation {
-    name = "${finalAttrs.pname}-deps-${finalAttrs.version}";
+    name = "scalafix-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
       ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.13.13:${finalAttrs.version} > deps
@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
   dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
+    makeWrapper ${jre}/bin/java $out/bin/scalafix \
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
 
-    installShellCompletion --cmd ${finalAttrs.pname} \
-      --bash <($out/bin/${finalAttrs.pname} --bash) \
-      --zsh  <($out/bin/${finalAttrs.pname} --zsh)
+    installShellCompletion --cmd scalafix \
+      --bash <($out/bin/scalafix --bash) \
+      --zsh  <($out/bin/scalafix --zsh)
   '';
 
   passthru.tests = {

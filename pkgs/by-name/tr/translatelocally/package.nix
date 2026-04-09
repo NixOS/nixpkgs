@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     cli-translate =
-      runCommand "${finalAttrs.pname}-test-cli-translate"
+      runCommand "translatelocally-test-cli-translate"
         {
           nativeBuildInputs = [
             translatelocally

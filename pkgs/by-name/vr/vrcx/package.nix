@@ -94,7 +94,7 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     backend = buildDotnetModule {
       inherit (finalAttrs) version src;
-      pname = "${finalAttrs.pname}-backend";
+      pname = "vrcx-backend";
 
       dotnet-sdk = dotnet.sdk;
       dotnet-runtime = dotnet.runtime;

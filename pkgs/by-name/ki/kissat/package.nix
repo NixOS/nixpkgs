@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdir=${placeholder "lib"}/lib
     includedir=\''${prefix}/include
 
-    Name: ${finalAttrs.pname}
+    Name: kissat
     Description: ${meta.description}
     Version: ${finalAttrs.version}
     Libs: -L\''${libdir} -lkissat

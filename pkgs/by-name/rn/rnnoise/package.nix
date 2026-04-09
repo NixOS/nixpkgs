@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       -sL "https://api.github.com/repos/xiph/rnnoise/tags?per_page=1")"
 
     version="$(echo $res | jq '.[0].name | split("v") | .[1]' --raw-output)"
-    update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
+    update-source-version rnnoise "$version" --ignore-same-hash
 
     model_version=$(curl -sL "https://raw.githubusercontent.com/xiph/rnnoise/v$version/model_version")
     model_url="https://media.xiph.org/rnnoise/models/rnnoise_data-$model_version.tar.gz"

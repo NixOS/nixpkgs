@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.tests = {
-    simple = runCommand "${finalAttrs.pname}-test" { } ''
+    simple = runCommand "mafft-test" { } ''
       mkdir $out
       cd ${finalAttrs.src}/test
       ${lib.getExe mafft} sample > $out/test.fftns2

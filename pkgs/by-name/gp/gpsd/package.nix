@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.27.5";
 
   src = fetchurl {
-    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://savannah/gpsd/gpsd-${finalAttrs.version}.tar.gz";
     hash = "sha256-QJhz9QSEYu8axBOlGrNcqotQsxvmKzNHvuHMKZTnxkk=";
   };
 

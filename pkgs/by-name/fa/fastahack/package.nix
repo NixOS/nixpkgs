@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.tests = {
-    simple = runCommand "${finalAttrs.pname}-test" { } ''
+    simple = runCommand "fastahack-test" { } ''
       mkdir $out
       cp ${fastahack.src}/tests/* $out
       grep -v ERROR <(${lib.getExe fastahack} $out/correct.fasta 2>&1)

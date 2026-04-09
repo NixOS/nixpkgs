@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     magick ${finalAttrs.icon} icon.png
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      magick icon-0.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/${finalAttrs.pname}.png
+      magick icon-0.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/sm64coopdx.png
     done
 
     # coopdx always tries to load resources from the binary's directory, with no obvious way to change. Thus this small wrapper script to always run from the /share directory that has all the resources

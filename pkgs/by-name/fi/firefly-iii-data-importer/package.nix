@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-npm-deps";
+    name = "firefly-iii-data-importer-npm-deps";
     hash = "sha256-BQglXnIlocZDTtAmSuga5dbB/m8AI5z1F/+VQ1kLzQc=";
   };
 

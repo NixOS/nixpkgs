@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      start-ok = runCommand "${finalAttrs.pname}-test" { } ''
+      start-ok = runCommand "angular-language-server-test" { } ''
         ${lib.getExe angular-language-server} --stdio --help &> $out
         cat $out | grep "Angular Language Service that implements the Language Server Protocol (LSP)"
       '';

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru.tests = {
-    ctest = runCommand "${finalAttrs.pname}-test" { } ''
+    ctest = runCommand "bowtie2-test" { } ''
       mkdir $out
       ${lib.getExe bowtie2} -x ${finalAttrs.src}/example/index/lambda_virus ${finalAttrs.src}/example/reads/longreads.fq -u 10
       ${bowtie2}/bin/bowtie2-build-s -c GGGCGGCGACCTCGCGGGTTTTCGCTA $out/small

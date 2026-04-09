@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-npm-deps";
+    name = "speedtest-tracker-npm-deps";
     hash = "sha256-qWBVonPKqyB6OrDkR1ihtVac/b0Qd++Q/W4nk/VPm9E=";
   };
 

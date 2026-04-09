@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   yarnCache = stdenv.mkDerivation {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
+    name = "code-server-${finalAttrs.version}-${system}-yarn-cache";
     inherit (finalAttrs) src;
 
     nativeBuildInputs = [

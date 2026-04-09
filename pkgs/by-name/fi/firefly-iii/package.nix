@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-npm-deps";
+    name = "firefly-iii-npm-deps";
     hash = "sha256-pu8dxL0NRB1cyqlQEf2zT2wdVp2fbe+Vp85qMs7f6s0=";
   };
 

@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "samira-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     hash = "sha256-l6lgJsrBtnxdWFJUhm2ftrRA8yBw47EY0QA4xNYhG6c=";
   };

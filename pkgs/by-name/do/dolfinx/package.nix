@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     unittests = stdenv.mkDerivation {
-      pname = "${finalAttrs.pname}-unittests";
+      pname = "dolfinx-unittests";
       inherit (finalAttrs) version src;
 
       cmakeDir = "../cpp/test";

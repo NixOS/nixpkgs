@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "20251207";
 
   src = fetchurl {
-    url = "https://www.draisberghof.de/usb_modeswitch/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-data-${finalAttrs.version}.tar.bz2";
     hash = "sha256-C7EtZK7l5GfDGvYaU/uCj/eqWcVKgsqF7u3kxWkL+mY=";
   };
 
