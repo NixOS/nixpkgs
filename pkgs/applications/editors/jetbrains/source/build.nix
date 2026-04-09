@@ -260,6 +260,10 @@ let
       bazelRunArgs = lib.join " " bazelArgs;
       registry = bazelRegistry;
     })
+    (replaceVars ../patches/jps-to-bazel-env-bash.patch {
+      bazelRunArgs = lib.join " " bazelArgs;
+      registry = bazelRegistry;
+    })
   ];
 
   refreshedLockfile = bazel.derivation {
