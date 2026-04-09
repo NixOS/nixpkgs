@@ -196,6 +196,46 @@ class GroupedNixArgs:
         )
 
 
+@dataclass
+class NixOSRebuildArgs:
+    # The fields in this class are equivalent to CLI arguments.
+    #
+    # However, this list is not exhaustive and there are many arguments that
+    # are not present here. Instead, we prefer to only include the ones that are
+    # relevant for the logic of the program, and pass the rest as flags to the
+    # Nix commands (see `GroupedNixArgs`).
+
+    v: int
+    help: bool
+    debug: bool
+    file: str | None
+    attr: str | None
+    flake: str | bool | None
+    install_bootloader: bool
+    profile_name: str
+    specialisation: str | None
+    rollback: bool
+    store_path: str | None
+    upgrade: bool
+    upgrade_all: bool
+    json: bool
+    ask_sudo_password: bool
+    sudo: bool
+    no_reexec: bool
+    build_host: str | None
+    target_host: str | None
+    image_variant: str | None
+    diff: bool
+    action: Action | None
+
+    # Deprecated options
+    install_grub: bool
+    use_remote_sudo: bool
+    no_ssh_tty: bool
+    fast: bool
+    no_build_nix: bool
+
+
 @dataclass(frozen=True)
 class Profile:
     name: str
