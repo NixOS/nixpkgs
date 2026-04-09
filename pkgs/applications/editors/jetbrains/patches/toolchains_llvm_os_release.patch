@@ -1,0 +1,10 @@
+--- a/toolchain/internal/common.bzl
++++ b/toolchain/internal/common.bzl
+@@ -89,6 +89,7 @@
+ ]
+ 
+ def _linux_dist(rctx):
++    return "nixos", "build"
+     info = {}
+     for line in rctx.read("/etc/os-release").splitlines():
+         parts = line.split("=", 1)
