@@ -23,44 +23,45 @@ let
       numpy
     ]
   );
-
-  # Pure data repositories
-  moleculesRepo = fetchFromGitHub {
-    owner = "OpenChemistry";
-    repo = "molecules";
-    tag = "1.103.0";
-    hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
-  };
-  crystalsRepo = fetchFromGitHub {
-    owner = "OpenChemistry";
-    repo = "crystals";
-    tag = "1.103.0";
-    hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
-  };
-  fragmentsRepo = fetchFromGitHub {
-    owner = "OpenChemistry";
-    repo = "fragments";
-    tag = "1.103.0";
-    hash = "sha256-jH8k+qPlyU3Tset63uxrDlMFLdcWh8JhJoe5sl1pJ2E=";
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "avogadrolibs";
-  version = "1.103.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadrolibs";
     tag = finalAttrs.version;
-    hash = "sha256-2SuSNaZnY3LXcUuGboc8ZRCCeoClENoYtWmNNahdor4=";
+    hash = "sha256-Un1TSXFucCFmHq8DoWQS7RaNgtXiD2JcXGueavugU64=";
   };
 
-  postUnpack = ''
-    cp -r ${moleculesRepo} molecules
-    cp -r ${crystalsRepo} crystals
-    cp -r ${fragmentsRepo} fragments
-  '';
+  postUnpack =
+    let
+      # Pure data repositories
+      moleculesRepo = fetchFromGitHub {
+        owner = "OpenChemistry";
+        repo = "molecules";
+        tag = finalAttrs.version;
+        hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
+      };
+      crystalsRepo = fetchFromGitHub {
+        owner = "OpenChemistry";
+        repo = "crystals";
+        tag = finalAttrs.version;
+        hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
+      };
+      fragmentsRepo = fetchFromGitHub {
+        owner = "OpenChemistry";
+        repo = "fragments";
+        tag = finalAttrs.version;
+        hash = "sha256-OLLcQX3a9j9rEJtBziEU4fCZB2DiDDzql2mr2KfSp70=";
+      };
+    in
+    ''
+      cp -r ${moleculesRepo} molecules
+      cp -r ${crystalsRepo} crystals
+      cp -r ${fragmentsRepo} fragments
+    '';
 
   nativeBuildInputs = [
     cmake
