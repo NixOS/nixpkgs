@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "radcli";
     repo = "radcli";
     tag = finalAttrs.version;
-    hash = "sha256-PpPKNH9gDE9FewDCeBCog3p5C6FBBYBPVnhahVHYKnA=";
+    hash = "sha256-Q+rcNhYmQpEE5LYC/zvbh4RIxx2g9djuWmrSUdh00+c=";
   };
 
   postUnpack = ''
