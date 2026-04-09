@@ -242,11 +242,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0014-core-don-t-taint-on-unmerged-usr.patch
-
-    # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
-    # if the install prefix is not /usr, but that does not work for us
-    # because we include the config snippet manually
-    ./0017-meson-Don-t-link-ssh-dropins.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
