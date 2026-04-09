@@ -11022,6 +11022,13 @@
     githubId = 6109326;
     name = "David Hummel";
   };
+  hunterwilkins2 = {
+    email = "hunter.wilkins2@gmail.com";
+    github = "hunterwilkins2";
+    githubId = 25823814;
+    name = "Hunter Wilkins";
+    keys = [ { fingerprint = "9B79 A09C 931E 7133 7251  2FAD A779 5001 1DE3 1C9E"; } ];
+  };
   husjon = {
     name = "Jon Erling Hustadnes";
     email = "jonerling.hustadnes+nixpkgs@proton.me";
