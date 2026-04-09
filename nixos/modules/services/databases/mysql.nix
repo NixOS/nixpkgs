@@ -9,7 +9,7 @@ let
   cfg = config.services.mysql;
 
   isMariaDB = lib.getName cfg.package == lib.getName pkgs.mariadb;
-  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql80;
+  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql84;
   # Oracle MySQL has supported "notify" service type since 8.0
   hasNotify = isMariaDB || (isOracle && lib.versionAtLeast cfg.package.version "8.0");
 
