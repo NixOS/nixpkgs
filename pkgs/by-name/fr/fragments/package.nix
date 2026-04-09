@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Fragments";
-    rev = version;
+    tag = version;
     hash = "sha256-lTOO6ZQWImaFqYZ3qerYYHWj/eOLYU/2k2Wh/ju9Njw=";
   };
 
