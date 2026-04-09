@@ -8,21 +8,19 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-plugin-prometheus-sd";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
-    tag = "v${version}";
-    hash = "sha256-L5kJnaY9gKpsWAgwkjVRQQauL2qViinqk7rHLXTVzT4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2SVfWkw6/AkDihWp9chU8rTqLiSn9ax4uLaK1xydfGM=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
     substituteInPlace netbox_prometheus_sd/__init__.py \
       --replace-fail "from extras.plugins import PluginConfig" "from netbox.plugins import PluginConfig"
   '';
@@ -45,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery";
     homepage = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd";
-    changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/${src.tag}";
+    changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xanderio ];
   };
-}
+})

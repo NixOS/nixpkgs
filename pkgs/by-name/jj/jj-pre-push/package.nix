@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jj-pre-push";
-  version = "0.3.4";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acarapetis";
     repo = "jj-pre-push";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sj1JM2gcwTRMeEXSozI73LCwxSf69t4u/SmovV7Cyeg=";
+    hash = "sha256-T9IKPFGswwrszGkBCIz8et2vTgRpQ2l6ta2UfojGj7A=";
   };
 
   postPatch = ''

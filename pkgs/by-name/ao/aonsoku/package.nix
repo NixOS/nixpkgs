@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aonsoku";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "victoralvesf";
     repo = "aonsoku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jpBO5MqOc18KGncpOWB/3IjCgkWb2zFfNxTpkcayZwo=";
+    hash = "sha256-Rbte0qYcZQ70E6ib8rj0YsNP5SMNO8eC3MEvWcT7N08=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-B5bEAj6Ii/c7ZZobQmc8nHFbpBX9n/eYwRZ7lsLs3fk=";
+    hash = "sha256-oBwqYOx2KEtF0qdMKEIgdArZ4xs/AyeOqFoU4nHl3xY=";
   };
 
   nativeBuildInputs = [

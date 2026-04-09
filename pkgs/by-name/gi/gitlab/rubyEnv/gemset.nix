@@ -4309,14 +4309,19 @@ src: {
       "http-form_data"
       "llhttp-ffi"
     ];
-    groups = [ "default" ];
+    groups = [
+      "default"
+      "development"
+      "monorepo"
+      "test"
+    ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1bzb8p31kzv6q5p4z5xq88mnqk414rrw0y5rkhpnvpl29x5c3bpw";
+      sha256 = "0z8x4c2bcg05x7ffrjy47cwarfqzlg8kcfxchk5jcfdyx7c04265";
       type = "gem";
     };
-    version = "5.1.1";
+    version = "5.3.1";
   };
   http-accept = {
     groups = [ "default" ];
@@ -4948,14 +4953,19 @@ src: {
       "ffi-compiler"
       "rake"
     ];
-    groups = [ "default" ];
+    groups = [
+      "default"
+      "development"
+      "monorepo"
+      "test"
+    ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "00dh6zmqdj59rhcya0l4b9aaxq6n8xizfbil93k0g06gndyk5xz5";
+      sha256 = "1g57iw0l3y7x50132x6a1jyssxa6pw7srh69g0d6j7ri37yaf9cs";
       type = "gem";
     };
-    version = "0.4.0";
+    version = "0.5.1";
   };
   locale = {
     groups = [
