@@ -83,4 +83,6 @@ in
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
   };
+
+  meta.maintainers = with lib.maintainers; [ av-gal ];
 }
