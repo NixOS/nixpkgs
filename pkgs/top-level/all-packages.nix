@@ -1994,9 +1994,6 @@ with pkgs;
 
   binlore = callPackage ../development/tools/analysis/binlore { };
 
-  birdfont = callPackage ../tools/misc/birdfont { };
-  xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { };
-
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
