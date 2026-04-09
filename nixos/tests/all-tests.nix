@@ -1073,6 +1073,7 @@ in
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
+  nginx-forcessl = runTest ./nginx-forcessl.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nginx-mime = runTest ./nginx-mime.nix;
