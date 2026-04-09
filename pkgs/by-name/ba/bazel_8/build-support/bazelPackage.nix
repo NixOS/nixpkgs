@@ -16,6 +16,7 @@
   startupArgs ? [ ],
   commandArgs ? [ ],
   env ? { },
+  patches ? [ ],
   serverJavabase ? null,
   registry ? null,
   bazelRepoCacheFOD ? {
@@ -26,10 +27,12 @@
     outputHash = null;
     outputHashAlgo = "sha256";
   },
+  bazelPreBuild ? "",
   installPhase,
   buildInputs ? [ ],
   nativeBuildInputs ? [ ],
   autoPatchelfIgnoreMissingDeps ? null,
+  passthru ? { },
 }:
 let
   # FOD produced by `bazel fetch`
@@ -49,6 +52,7 @@ let
           version
           sourceRoot
           env
+          patches
           buildInputs
           nativeBuildInputs
           ;
@@ -62,7 +66,7 @@ let
         command = "fetch";
         outputHashMode = "recursive";
         commandArgs = [ "--repository_cache=repo_cache" ] ++ commandArgs;
-        bazelPreBuild = ''
+        bazelPreBuild = bazelPreBuild + ''
           mkdir repo_cache
         '';
         installPhase = ''
@@ -92,6 +96,7 @@ let
               version
               sourceRoot
               env
+              patches
               buildInputs
               nativeBuildInputs
               ;
@@ -106,7 +111,7 @@ let
             command = "vendor";
             outputHashMode = "recursive";
             commandArgs = [ "--vendor_dir=vendor_dir" ] ++ commandArgs;
-            bazelPreBuild = ''
+            bazelPreBuild = bazelPreBuild + ''
               mkdir vendor_dir
             '';
             bazelPostBuild = ''
@@ -146,10 +151,16 @@ let
       version
       sourceRoot
       env
+      patches
       buildInputs
       nativeBuildInputs
       ;
-    inherit registry bazelRepoCache bazelVendorDeps;
+    inherit
+      registry
+      bazelRepoCache
+      bazelVendorDeps
+      bazelPreBuild
+      ;
     inherit
       bazel
       targets
@@ -159,6 +170,10 @@ let
       ;
     inherit installPhase;
     command = "build";
+
+    passthru = passthru // {
+      inherit bazelRepoCache bazelVendorDeps;
+    };
   };
 in
-package // { passthru = { inherit bazelRepoCache bazelVendorDeps; }; }
+package

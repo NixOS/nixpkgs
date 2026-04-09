@@ -1,0 +1,36 @@
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -6,11 +6,19 @@
+ bazel_dep(name = "rules_kotlin", version = "2.2.2")
+ archive_override(
+     module_name = "rules_kotlin",
+-    sha256 = "45a8f73fd663df02dfd2925cf7be02a03b075dd14f8b473dd454feeaa28e54d0",
+     strip_prefix = "rules_kotlin-@rulesKotlinRev@",
+-    url = "https://github.com/JetBrains/rules_kotlin/archive/@rulesKotlinRev@.zip",
++    url = "file://@rulesKotlin@",
+ )
+ bazel_dep(name = "rules_java", version = "9.3.0")
++single_version_override(
++    module_name = "rules_java",
++    patch_strip = 1,
++    patches = [
++        "//build:rules_java_toolchains.patch",
++        "//build:rules_java_stub.patch",
++    ],
++)
++
+ bazel_dep(name = "rules_jvm", version = "0.0.1")
+ bazel_dep(name = "protobuf", version = "33.4")
+ single_version_override(
+@@ -64,7 +72,10 @@
+ single_version_override(
+     module_name = "toolchains_llvm",
+     patch_strip = 1,
+-    patches = ["//build:toolchains_llvm-windows_support.patch"],  # Add Windows support, patch of https://github.com/bazel-contrib/toolchains_llvm/pull/642
++    patches = [
++        "//build:toolchains_llvm-windows_support.patch",  # Add Windows support, patch of https://github.com/bazel-contrib/toolchains_llvm/pull/642
++        "//build:toolchains_llvm_os_release.patch"
++    ],
+ )
+ 
+ llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)  # `dev_dependency = True` to avoid leaking the extension in modules using that module, see https://github.com/bazel-contrib/toolchains_llvm/issues/569

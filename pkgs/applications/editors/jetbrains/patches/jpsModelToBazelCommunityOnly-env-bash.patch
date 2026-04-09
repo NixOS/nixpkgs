@@ -1,0 +1,11 @@
+--- a/build/jpsModelToBazelCommunityOnly.cmd
++++ b/build/jpsModelToBazelCommunityOnly.cmd
+@@ -9,7 +9,7 @@
+ 
+ script_dir="$(cd "$(dirname "$0")"; pwd)"
+ cd "$script_dir/../platform/build-scripts/bazel"
+-exec /bin/bash "../../../bazel.cmd" run "$@" //:jps-to-bazel
++exec bazel run @bazelRunArgs@ --registry=file://@registry@ --repository_cache=repo_cache "$@" //:jps-to-bazel
+ 
+ :CMDSCRIPT
+ 

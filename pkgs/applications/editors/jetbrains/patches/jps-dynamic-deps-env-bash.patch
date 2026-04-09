@@ -1,0 +1,11 @@
+--- a/build/jps_dynamic_deps_community.bzl
++++ b/build/jps_dynamic_deps_community.bzl
+@@ -82,7 +82,7 @@
+         # proper quoting of the script path is important in the case of whitespace in the path, see https://ss64.com/nt/cmd.html
+         res = ctx.execute(["cmd.exe", "/c", '""%s""' % script], quiet = False)
+     else:
+-        res = ctx.execute(["/bin/bash", script], quiet = False)
++        res = ctx.execute(["@bashPath@", script], quiet = False)
+ 
+     if res.return_code != 0:
+         fail("jps-to-bazel failed (%d): %s" % (res.return_code, res.stderr))
