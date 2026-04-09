@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "ping_exporter";
-    rev = version;
+    tag = version;
     hash = "sha256-H+HcwDMnRgvEnbaI/tcS457Ir2Xtq30g44EYo4UPCE0=";
   };
 
