@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
-  mesonFlags = [
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
     # This is required to support CPUs with feature-sets earlier than x86-64-v2
     # (before 2009). This will still build optimizations for newer features, but
     # allow for importing with older machines. See:
