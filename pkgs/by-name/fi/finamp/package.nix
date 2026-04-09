@@ -23,7 +23,7 @@ flutter341.buildFlutterApplication {
   src = fetchFromGitHub {
     owner = "UnicornsOnLSD";
     repo = "finamp";
-    rev = version;
+    tag = version;
     hash = "sha256-N1+6rB16geFMYMbfiF7eppnXfXC/pqv90I9aY/57lKI=";
   };
 
