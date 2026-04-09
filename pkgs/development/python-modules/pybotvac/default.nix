@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pybotvac";
-  version = "0.0.28";
+  version = "0.0.29";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XIGG8HmjI3dSq42co2e05xHIYjIM39qVanMJLDqWFCg=";
+    hash = "sha256-9mapPFzdAAzHJFuFaxiyGh0utznzTSXzRa6AZRj/Oq8=";
   };
 
   build-system = [ setuptools ];
