@@ -998,34 +998,34 @@ let
       };
     };
 
-    vod = {
+    vod = rec {
       name = "vod";
+      version = "1.7.0";
+
       src = applyPatches {
         name = "vod";
         src = fetchFromGitHub {
-          owner = "kaltura";
+          owner = "dio-az";
           repo = "nginx-vod-module";
-          tag = "1.33";
-          hash = "sha256-hf4iprkdNP7lVlrm/7kMkrp/8440PuTZiL1hv/Icfm4=";
+          tag = "v${version}";
+          hash = "sha256-IcXbbmAs16F9qOEJWgH6XqP5sBMYszclGByVghj0eBM=";
         };
+
         postPatch = ''
           substituteInPlace vod/media_set.h \
             --replace-fail "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
-          substituteInPlace vod/subtitle/dfxp_format.c \
-            --replace-fail '(!ctxt->wellFormed && !ctxt->recovery))' '!ctxt->wellFormed)'
-          # https://github.com/kaltura/nginx-vod-module/pull/1593
-          substituteInPlace ngx_http_vod_module.c \
-            --replace-fail 'ngx_http_vod_exit_process()' 'ngx_http_vod_exit_process(ngx_cycle_t *cycle)'
         '';
       };
 
       inputs = [
-        ffmpeg_6-headless
+        ffmpeg-headless
         fdk_aac
         openssl
         libxml2
         libiconv
       ];
+
+      passthru.tests = nixosTests.frigate;
 
       meta = {
         description = "VOD packager";
