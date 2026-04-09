@@ -8,20 +8,25 @@
   jdk_headless,
   callPackage,
   zlib,
+  libxi,
+  libxtst,
+  alsa-lib,
+  libxrender,
+  libxcrypt-legacy,
 }:
 let
   bazelPackage = callPackage ./build-support/bazelPackage.nix { };
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "722299976c97e5191045c8016b7c8532189fc3f6";
-    sha256 = "sha256-hi5BKI94am2LCXD93GBeT0gsODxGeSsd0OrhTwpNAgM=";
+    rev = "5b592bb7e0cf107a2680a417db97db52bcd1afa3";
+    sha256 = "sha256-Qn4KKZr5qY16XZWMaDc3YUywzj4YXE0qh2oleGtsP44=";
   };
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "examples";
-    rev = "9d6a2e67d29b8b6208d22d70cb22880345bb6803";
-    sha256 = "sha256-NQqXsmX7hyTqLINkz1rnavx15jQTdIKpotw42rGc5mc=";
+    rev = "daadf13928d9e091ff0c26ce53aea3099a8fc6a3";
+    sha256 = "sha256-ekX3TWwAbE/oFpfejLKyiJS1JfgYNZAn9n2k0V2W12Q=";
   };
 in
 {
@@ -29,11 +34,23 @@ in
     inherit src registry;
     sourceRoot = "source/java-tutorial";
     name = "java-tutorial";
-    targets = [ "//:ProjectRunner" ];
+    targets = [
+      "//:ProjectRunner"
+      "@@rules_java+//toolchains:platformclasspath"
+    ];
+    autoPatchelfVendorDirs = [
+      "rules_java++toolchains+remotejdk11_linux"
+      "rules_java++toolchains+remotejdk21_linux"
+    ];
     bazel = bazel_8;
-    commandArgs = [
-      "--extra_toolchains=@@rules_java++toolchains+local_jdk//:all"
-      "--tool_java_runtime_version=local_jdk_21"
+    buildInputs = lib.optional (stdenv.hostPlatform.isLinux) [
+      zlib
+      stdenv.cc.cc
+      libxi
+      libxtst
+      alsa-lib
+      libxrender
+      libxcrypt-legacy
     ];
     env = {
       JAVA_HOME = jdk_headless.home;
@@ -47,10 +64,10 @@ in
     bazelRepoCacheFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-FwHsg9P65Eu/n8PV7UW90bvBNG+U67zizRy6Krk32Yg=";
-          aarch64-linux = "sha256-W8h2tCIauGnEvPpXje19bZUE/izHaCQ0Wj4nMaP3nkc=";
-          x86_64-darwin = "sha256-XIrGRmYDDRN3Kkt1dFWex1bPRMeIHAR+XWLqB/PpOAM=";
-          x86_64-linux = "sha256-VBckTQAK5qeyi2ublk+Dcga5O5XZg3bfHR6Yaw6vSp0=";
+          aarch64-darwin = "sha256-PpPOAD2dGGzcp9iYYyojVb+7hz7MxehPrhHkLtN9/+k=";
+          aarch64-linux = "sha256-UZTMZXRhaIwGxF8MEKT7DWkhEayfoBA8tZ/iCksFaks=";
+          x86_64-darwin = "sha256-XOcf0p/IwGjS1EmTyIX+P8UJNggs715R7MymF4XlDtc=";
+          x86_64-linux = "sha256-R7wuLuV9KYWo2tTmVtYtuW0Hr5Q4b+WbSFbNG7iW9hc=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -77,10 +94,10 @@ in
     bazelRepoCacheFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          aarch64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          x86_64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          x86_64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
+          aarch64-darwin = "sha256-jFZX2FYuhj9OAOkH2jLXAdDHBP/baxeqZzg6dPH+vGI=";
+          aarch64-linux = "sha256-jFZX2FYuhj9OAOkH2jLXAdDHBP/baxeqZzg6dPH+vGI=";
+          x86_64-darwin = "sha256-jFZX2FYuhj9OAOkH2jLXAdDHBP/baxeqZzg6dPH+vGI=";
+          x86_64-linux = "sha256-jFZX2FYuhj9OAOkH2jLXAdDHBP/baxeqZzg6dPH+vGI=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -105,13 +122,13 @@ in
     ];
     nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
     autoPatchelfIgnoreMissingDeps = [ "librustc_driver-*.so" ];
-    bazelVendorDepsFOD = {
+    bazelRepoCacheFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-50cAS1okGT1Mq3+TNLk2dk6OdBOAF2LdcskcYuVNOSY=";
-          aarch64-linux = "sha256-2Oia7+2nzLrWeo/bK/5L7du5Y30DY+S0jit6e1ixJXw=";
-          x86_64-darwin = "sha256-+vgvj3ABm+vvXT7U7JxjuzIMwVAiUh1gcWZnFNzcmY0=";
-          x86_64-linux = "sha256-kBnSlFRfYsotZTRMrTNhk8/106+BLzwuU6MIRXlD1jE=";
+          aarch64-darwin = "sha256-eMGz1DpQuA33lRe9RyvbGZUXL1sLUUd/r6w2W+Nl6HI=";
+          aarch64-linux = " sha256-ruz7i2JLQHOU9bfwlCyKv8qOsJjUeEK8LXwBl+4XtO8=";
+          x86_64-darwin = "sha256-9uPoSyWgwZF/jLoM1NscEqqYlfXDkVbpK/Ve2VNElAc=";
+          x86_64-linux = "sha256-dcDCZYMByMBdAXhvgu8EkP4f1bqMvSiMsA+0F3ShIaw=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
