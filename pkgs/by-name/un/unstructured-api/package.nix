@@ -157,7 +157,7 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-api";
-    rev = version;
+    tag = version;
     hash = "sha256-+OAq1cOpv/w2pF2SwP6ByvH8NNaPqOKK/rxclROuHS0=";
   };
 
