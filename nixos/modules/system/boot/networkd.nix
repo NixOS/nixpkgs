@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   utils,
   ...
 }:
@@ -4219,7 +4220,7 @@ let
         with types;
         attrsOf (submodule {
           # Default in initrd is dhcp-on-stop, which is correct if flushBeforeStage2 = false
-          config = mkIf config.boot.initrd.network.flushBeforeStage2 {
+          config = mkIf (options ? boot.initrd.network && config.boot.initrd.network.flushBeforeStage2) {
             networkConfig.KeepConfiguration = mkDefault false;
           };
         });
@@ -4234,7 +4235,9 @@ let
       (commonConfig config.boot.initrd)
 
       {
-        systemd.network.enable = mkDefault config.boot.initrd.network.enable;
+        systemd.network.enable = mkDefault (
+          options ? boot.initrd.network && config.boot.initrd.network.enable
+        );
         systemd.contents = mkUnitFiles "/etc/" cfg;
 
         # Networkd link files are used early by udev to set up interfaces early.
@@ -4301,16 +4304,16 @@ in
   config = mkMerge [
     stage2Config
     (mkIf config.boot.initrd.systemd.enable {
-      assertions = [
-        {
-          assertion =
-            !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [ ];
-          message = ''
-            systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
-            DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
-          '';
-        }
-      ];
+      # Only assert against the legacy udhcpc options if initrd-network.nix is loaded;
+      # they don't exist otherwise.
+      assertions = lib.optional (options ? boot.initrd.network) {
+        assertion =
+          !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [ ];
+        message = ''
+          systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
+          DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
+        '';
+      };
 
       boot.initrd = stage1Config;
     })
