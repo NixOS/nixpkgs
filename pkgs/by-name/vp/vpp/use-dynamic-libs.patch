@@ -14,14 +14,21 @@
 
 --- a/plugins/rdma/CMakeLists.txt
 +++ b/plugins/rdma/CMakeLists.txt
-@@ -18,8 +18,8 @@ if (NOT IBVERBS_INCLUDE_DIR)
+@@ -18,7 +18,7 @@ if (NOT IBVERBS_INCLUDE_DIR)
    return()
  endif()
  
 -vpp_plugin_find_library(rdma IBVERBS_LIB libibverbs.a)
--vpp_plugin_find_library(rdma MLX5_LIB libmlx5.a)
 +vpp_plugin_find_library(rdma IBVERBS_LIB ibverbs)
-+vpp_plugin_find_library(rdma MLX5_LIB mlx5)
+ if (NOT IBVERBS_LIB)
+   vpp_plugin_find_library(rdma IBVERBS_LIB libibverbs.so)
+   if (NOT IBVERBS_LIB)
+@@ -28,7 +28,7 @@ if (NOT IBVERBS_LIB)
+   message(WARNING "-- linking rdma plugin against ibverbs shared libs")
+ endif()
  
- if (NOT IBVERBS_LIB OR NOT MLX5_LIB)
-   message(WARNING "rdma plugin - ibverbs not found - rdma plugin disabled")
+-vpp_plugin_find_library(rdma MLX5_LIB libmlx5.a)
++vpp_plugin_find_library(rdma MLX5_LIB mlx5)
+ if (MLX5_LIB)
+   string_append(RDMA_LINK_FLAGS "-Wl,--whole-archive,${MLX5_LIB},--no-whole-archive -Wl,--exclude-libs,ALL")
+ else()
