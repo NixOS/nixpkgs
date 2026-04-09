@@ -25,7 +25,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";
-    rev = version;
+    tag = version;
     hash = "sha256-Fuq2whUFwidLd2pk1c1+jumik3IO13CwGLJraGvHHIA=";
   };
 
