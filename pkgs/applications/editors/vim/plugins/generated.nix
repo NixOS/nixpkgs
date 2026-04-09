@@ -11725,6 +11725,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-julia-autotest = buildVimPlugin {
+    pname = "nvim-julia-autotest";
+    version = "0-unstable-2022-10-31";
+    src = fetchgit {
+      url = "https://gitlab.com/usmcamp0811/nvim-julia-autotest";
+      rev = "b74e2f9c961e604cb56cc23f87188348bfa0f33f";
+      hash = "sha256-IaNsbBe5q7PB9Q/N/Z9nEnP6jlkQ6+xlkC0TCFnJpkk=";
+    };
+    meta.homepage = "https://gitlab.com/usmcamp0811/nvim-julia-autotest";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-jump = buildVimPlugin {
     pname = "nvim-jump";
     version = "0-unstable-2026-04-08";
