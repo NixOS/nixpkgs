@@ -281,6 +281,12 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
+        libmpfr = callPackage ./gcc/mpfr.nix {
+          gcc = gcc-latest;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         linux-headers = callPackage ./linux-headers {
           gcc = gcc-latest;
           gnumake = gnumake-musl;
