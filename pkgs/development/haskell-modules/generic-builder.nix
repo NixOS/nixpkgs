@@ -46,14 +46,8 @@ let
           in
           buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
             set -euo pipefail
-            PORT=$((5000 + $RANDOM % 5000))
             ${lib.optionalString stdenv.hostPlatform.isWindows "export WINEDEBUG=-all WINEPREFIX=$TMP"}
-            (>&2 echo "---> Starting interpreter on port $PORT")
-            ${emulator} ${hostProxy} tmp $PORT &
-            RISERV_PID="$!"
-            trap "kill $RISERV_PID" EXIT # Needs cleanup when building without sandbox
-            ${buildProxy} $@ 127.0.0.1 "$PORT"
-            (>&2 echo "---> killing interpreter...")
+            ${buildProxy} $@ --pipe ${emulator} ${hostProxy} tmp --stdio
           '';
 
         # GHC will add `-prof` to the external interpreter when doing a profiled build.
@@ -262,8 +256,7 @@ in
   __onlyPropagateKnownPkgConfigModules ? false,
   enableExternalInterpreter ?
     isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
-  # iserv-proxy needs local network access
-  __darwinAllowLocalNetworking ? stdenv.hostPlatform.isDarwin && enableExternalInterpreter,
+  __darwinAllowLocalNetworking ? false,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
