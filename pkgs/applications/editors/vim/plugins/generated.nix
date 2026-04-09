@@ -14821,6 +14821,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  sonarlint-nvim = buildVimPlugin {
+    pname = "sonarlint.nvim";
+    version = "0-unstable-2026-01-19";
+    src = fetchgit {
+      url = "https://gitlab.com/schrieveslaach/sonarlint.nvim";
+      rev = "acd09b78969ddc965a7ddf59abb9d9eec5ecd94f";
+      hash = "sha256-71emILbp291AZmh9Rc0S92mbkcZ88zjCvPTaumEM7Qg=";
+    };
+    meta.homepage = "https://gitlab.com/schrieveslaach/sonarlint.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   sonarqube-nvim = buildVimPlugin {
     pname = "sonarqube.nvim";
     version = "0-unstable-2025-06-24";

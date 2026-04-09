@@ -3387,6 +3387,14 @@ assertNoAdditions {
     ];
   };
 
+  sonarlint-nvim = super.sonarlint-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      maintainers = old.meta.maintainers or [ ] ++ [
+        lib.maintainers.sinics
+      ];
+    };
+  });
+
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
     # Optional telescope integration
     nvimSkipModules = "spaceman.adapters.telescope";
