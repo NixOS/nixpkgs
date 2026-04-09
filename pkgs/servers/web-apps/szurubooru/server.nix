@@ -21,6 +21,7 @@ let
         };
         doCheck = false;
       });
+      sqlalchemy = self.sqlalchemy_1_3;
     })
   ];
 
