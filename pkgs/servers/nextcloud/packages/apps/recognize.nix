@@ -27,6 +27,11 @@ let
       appHash = "sha256-quuH9ZNQhvlJ6SsFeboVIrMtF9K6ckpQkXb9OXDvFm8=";
       modelHash = "sha256-Q862f4mNWE6V4ZUpfNFZrs4kwRF/29uETCroyie0+zA=";
     };
+    "33" = {
+      version = "11.0.1";
+      appHash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
+      modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
+    };
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
@@ -124,7 +129,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ beardhatcode ];
+    maintainers = with lib.maintainers; [
+      beardhatcode
+      griffi-gh
+    ];
     longDescription = ''
       Nextcloud app that does Smart media tagging and face recognition with on-premises machine learning models.
       This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.
