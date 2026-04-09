@@ -786,6 +786,5 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 }
