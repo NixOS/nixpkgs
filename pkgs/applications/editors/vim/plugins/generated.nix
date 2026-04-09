@@ -6500,6 +6500,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  hare-vim = buildVimPlugin {
+    pname = "hare.vim";
+    version = "0-unstable-2026-02-05";
+    src = fetchgit {
+      url = "https://git.sr.ht/~sircmpwn/hare.vim";
+      rev = "cbc1195ce25b853788d3006c34ff6be0aba6483d";
+      hash = "sha256-zueMmX8rHXMpnv6ukrcFcTIWVOoYrBC/0Tn2+5fTRlU=";
+    };
+    meta.homepage = "https://git.sr.ht/~sircmpwn/hare.vim";
+    meta.hydraPlatforms = [ ];
+  };
+
   harpoon = buildVimPlugin {
     pname = "harpoon";
     version = "0-unstable-2024-08-29";
