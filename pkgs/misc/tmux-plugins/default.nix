@@ -384,12 +384,12 @@ in
   harpoon = mkTmuxPlugin {
     pluginName = "harpoon";
     rtpFilePath = "harpoon.tmux";
-    version = "0.4.0";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner = "chaitanyabsprip";
       repo = "tmux-harpoon";
-      rev = "v0.4.0";
-      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+      rev = "v0.5.0";
+      hash = "sha256-eqzf3hEaliF1t7zwZlj1YDGvn0jKdbBTgy5PoOPVMEU=";
     };
     meta = {
       homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
