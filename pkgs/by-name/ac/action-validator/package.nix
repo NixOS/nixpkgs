@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail 'version = "0.0.0-git"' 'version = "${finalAttrs.version}"'
+  '';
+
   nativeBuildInputs = [ makeWrapper ];
 
   nativeCheckInputs = [ gitMinimal ];
