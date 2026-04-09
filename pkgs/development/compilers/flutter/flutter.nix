@@ -42,7 +42,6 @@
   wrapGAppsHook3,
   writableTmpDirAsHomeHook,
   fd,
-  cacert,
   moreutils,
   writeTextFile,
   supportedTargetFlutterPlatforms,
@@ -297,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)
       }' \
       ''${gappsWrapperArgs[@]} \
-      --add-flags "--disable-dart-dev --packages='${flutter-tools.pubcache}/package_config.json' --root-certs-file='${cacert}/etc/ssl/certs/ca-bundle.crt' $out/bin/cache/flutter_tools.snapshot"
+      --add-flags "--disable-dart-dev --packages='${flutter-tools.pubcache}/package_config.json' $out/bin/cache/flutter_tools.snapshot"
 
     runHook postInstall
   '';
