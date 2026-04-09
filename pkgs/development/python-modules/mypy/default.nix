@@ -121,6 +121,11 @@ buildPythonPackage rec {
     "mypyc/test/test_commandline.py"
     # fails to find hatchling
     "mypy/test/testpep561.py"
+    # A change to the base64 decoder in CPython 3.13.13 and 3.14.4 causes this
+    # test to fail. At the time of writing, upstream skips the test.
+    # Upstream issue: https://github.com/python/mypy/issues/21120
+    # CPython issue: https://github.com/python/cpython/issues/145264
+    "mypyc/test/test_run.py::TestRun::run-base64.test::testAllBase64Features_librt_experimental"
   ]
   ++ lib.optionals stdenv.hostPlatform.isi686 [
     # https://github.com/python/mypy/issues/15221
