@@ -5,7 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   powershell,
-  autoSignDarwinBinariesHook,
+  darwin,
   glibcLocales,
 }:
 buildDotnetModule (finalAttrs: {
@@ -15,7 +15,7 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YkZEStCI6Omu8HgClm5qHnXxm5pKJVILtbydY8vAFic=";
   };
 
@@ -23,7 +23,7 @@ buildDotnetModule (finalAttrs: {
     powershell
   ]
   ++ lib.optionals (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991
@@ -42,7 +42,7 @@ buildDotnetModule (finalAttrs: {
     description = "Tool for decompiling .NET assemblies and generating portable PDBs";
     mainProgram = "ilspycmd";
     homepage = "https://github.com/icsharpcode/ILSpy";
-    changelog = "https://github.com/icsharpcode/ILSpy/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/icsharpcode/ILSpy/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       mit
       # third party dependencies
