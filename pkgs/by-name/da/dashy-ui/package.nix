@@ -12,24 +12,26 @@
   nodejs_20,
   nodejs-slim_20,
   remarshal_0_17,
+  nix-update-script,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "3.1.1-unstable-2025-09-12";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
-    rev = "e70ade555fdccf4e723a90f8a2d46fcf83645c4f";
-    hash = "sha256-edsGHc6Hi306aq+TA2g5FL/ZYNfExbcgHS5PWF9O0+0=";
+    tag = finalAttrs.version;
+    hash = "sha256-Xc6zwnR0J+0DuTKNW3eHyJRvUgJgEeL3jA26wzNTMN0=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-r36w3Cz/V7E/xPYYpvfQsdk2QXfCVDYE9OxiFNyKP2s=";
+    hash = "sha256-EMns5J8rM4qOfrACoX6lttOXh/RUtZjaKtd+BpsS6Xs=";
   };
 
-  passthru.tests = {
-    dashy = nixosTests.dashy;
+  passthru = {
+    tests.dashy = nixosTests.dashy;
+    updateScript = nix-update-script { };
   };
 
   # - If no settings are passed, use the default config provided by upstream
