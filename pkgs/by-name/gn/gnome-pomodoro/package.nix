@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gnome-pomodoro";
     repo = "gnome-pomodoro";
-    rev = version;
+    tag = version;
     hash = "sha256-1G0Sv6uR4rE+/TZqEM57mCdBaXoJNpC0cznY4pnPEa4=";
   };
 
