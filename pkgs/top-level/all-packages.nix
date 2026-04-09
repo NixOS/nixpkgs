@@ -1529,8 +1529,6 @@ with pkgs;
 
   gistyc = with python3Packages; toPythonApplication gistyc;
 
-  glances = python3Packages.callPackage ../applications/system/glances { };
-
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
   go2tv-lite = go2tv.override { withGui = false; };
