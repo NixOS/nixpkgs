@@ -8,8 +8,7 @@
 let
   cfg = config.services.autobrr;
   configFormat = pkgs.formats.toml { };
-  configTemplate = configFormat.generate "autobrr.toml" cfg.settings;
-  templaterCmd = ''${lib.getExe pkgs.dasel} put -f '${configTemplate}' -v "$(${config.systemd.package}/bin/systemd-creds cat sessionSecret)" -o %S/autobrr/config.toml "sessionSecret"'';
+  configFile = configFormat.generate "autobrr.toml" cfg.settings;
 in
 {
   options = {
@@ -79,23 +78,35 @@ in
       }
     ];
 
-    systemd.services.autobrr = {
-      description = "Autobrr";
-      after = [
-        "syslog.target"
-        "network-online.target"
-      ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd = {
+      tmpfiles.settings = {
+        "10-autobrr" = {
+          # DynamicUser uses /var/lib/private/
+          "/var/lib/private/autobrr/config.toml"."L+" = {
+            argument = "${configFile}";
+          };
+        };
+      };
 
-      serviceConfig = {
-        Type = "simple";
-        DynamicUser = true;
-        LoadCredential = "sessionSecret:${cfg.secretFile}";
-        StateDirectory = "autobrr";
-        ExecStartPre = "${lib.getExe pkgs.bash} -c '${templaterCmd}'";
-        ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
-        Restart = "on-failure";
+      services.autobrr = {
+        description = "Autobrr";
+        after = [
+          "syslog.target"
+          "network-online.target"
+        ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ configFile ];
+
+        serviceConfig = {
+          Type = "simple";
+          DynamicUser = true;
+          LoadCredential = "sessionSecret:${cfg.secretFile}";
+          Environment = [ "AUTOBRR__SESSION_SECRET_FILE=%d/sessionSecret" ];
+          StateDirectory = "autobrr";
+          ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
+          Restart = "on-failure";
+        };
       };
     };
 
