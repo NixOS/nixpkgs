@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dn42-registry-wizard";
-  version = "0.4.19";
+  version = "0.4.20";
 
   src = fetchFromGitHub {
     owner = "Kioubit";
     repo = "dn42_registry_wizard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-axtNkBX0OTm/3HwpZATsAefW/LEFDtTODLJgHJiFws8=";
+    hash = "sha256-WFU1K0Ib1ETSib2WJkwus3zHYJXoVOtFDqv4/QNiP7E=";
   };
 
-  cargoHash = "sha256-VfdxsS8VIgDDyhNXML5jVl+9uxwHa83aWB6nJ7mHflI=";
+  cargoHash = "sha256-o8MF6uqk8f0Zc2fjBqLGElh56TKjLRRtNxrll5nY+bM=";
 
   postInstall = ''
     mv $out/bin/{registry_wizard,dn42-registry-wizard}

@@ -136,8 +136,5 @@
 
       systemd.packages = [ pkgs.distrobuilder.generator ];
 
-      system.activationScripts.installInitScript = lib.mkForce ''
-        ln -fs $systemConfig/init /sbin/init
-      '';
     };
 }

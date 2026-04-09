@@ -24,7 +24,7 @@ let
         ptmap
         camlp5
         sha
-        luv
+        luv-0-5-12
         extlib
       ]
     else
@@ -37,7 +37,7 @@ let
         ptmap
         camlp5
         sha
-        luv
+        luv-0-5-12
         extlib-1-7-7
       ];
 

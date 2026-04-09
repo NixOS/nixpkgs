@@ -1147,9 +1147,12 @@ let
 
         lutils = callPackage ../development/ocaml-modules/lutils { };
 
-        luv = callPackage ../development/ocaml-modules/luv {
-          inherit (pkgs) file;
-        };
+        inherit
+          (callPackage ../development/ocaml-modules/luv {
+          })
+          luv-0-5-12
+          luv
+          ;
 
         lwd = callPackage ../development/ocaml-modules/lwd { };
 

@@ -1,22 +1,22 @@
 {
-  "version": "1.21.9",
+  "version": "1.22.2",
   "vscodeVersion": "1.107.0",
   "sources": {
     "x86_64-linux": {
-      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.21.9-4905428782546944/linux-x64/Antigravity.tar.gz",
-      "sha256": "85ea4d55f52d32fbbf9d92fddc747f10e8d04c1bd00a07721b571fa7f2ef5226"
+      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.22.2-5206900187463680/linux-x64/Antigravity.tar.gz",
+      "sha256": "85c6b2decfefef2c6e0adaf161b602da7c1ecb2db6157ec0a4caffcfe4811209"
     },
     "aarch64-linux": {
-      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.21.9-4905428782546944/linux-arm/Antigravity.tar.gz",
-      "sha256": "76d56462e0fad95a98efaf25d06be9c4789e3b8551fe5b936a6858b14c723364"
+      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.22.2-5206900187463680/linux-arm/Antigravity.tar.gz",
+      "sha256": "601fe7d97bf49fe06ebde331f1385e9e7e58269d23667808ae58256a87929a23"
     },
     "x86_64-darwin": {
-      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.21.9-4905428782546944/darwin-x64/Antigravity.zip",
-      "sha256": "a8ebdbf3b18c75d39b876541904c95576422e281fd92e45f7f7f4e7231ac769c"
+      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.22.2-5206900187463680/darwin-x64/Antigravity.zip",
+      "sha256": "14686d6b15741b33abaf52b19a10f18e8427796461efa285a2fa2ddb30e0dcad"
     },
     "aarch64-darwin": {
-      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.21.9-4905428782546944/darwin-arm/Antigravity.zip",
-      "sha256": "f9ec42d0a791cc13cbb57a1f7c36b2421e67f180cd0bdfb01fd8fa23ad87440b"
+      "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.22.2-5206900187463680/darwin-arm/Antigravity.zip",
+      "sha256": "51e1f488da34f4e38c63806eed28a6b4bd5b583c275907945871710bed0f85d5"
     }
   }
 }
