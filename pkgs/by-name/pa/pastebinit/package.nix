@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pastebinit";
     repo = "pastebinit";
-    rev = version;
+    tag = version;
     hash = "sha256-vuAWkHlQM6QTWarThpSbY0qrxzej0GvLU0jT2JOS/qc=";
   };
 
