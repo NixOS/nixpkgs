@@ -575,20 +575,53 @@ let
         compilerNames.ghc9123
       ] released;
 
-      # MicroHs
-      array = [
-        compilerNames.microhs
-      ];
+      # MicroHs core packages
       ghc-compat = [
-        compilerNames.microhs
-      ];
-      hscolour = [
         compilerNames.microhs
       ];
       MicroCabal = [
         compilerNames.microhs
       ];
+
+      # GHC boot packages known to be compatible with MicroHs
+      containers = [
+        compilerNames.microhs
+      ];
+      exceptions = [
+        compilerNames.microhs
+      ];
+      filepath = [
+        compilerNames.microhs
+      ];
+      mtl = [
+        compilerNames.microhs
+      ];
+      os-string = [
+        compilerNames.microhs
+      ];
+      parsec = [
+        compilerNames.microhs
+      ];
+      terminfo = [
+        compilerNames.microhs
+      ];
+      time = [
+        compilerNames.microhs
+      ];
+      transformers = [
+        compilerNames.microhs
+      ];
+
+      # MicroHs-specific replacement packages
+      array = [
+        compilerNames.microhs
+      ];
       random = [
+        compilerNames.microhs
+      ];
+
+      # MicroHs upstream tested
+      hscolour = [
         compilerNames.microhs
       ];
     })
