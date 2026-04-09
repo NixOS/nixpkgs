@@ -510,6 +510,10 @@ assertNoAdditions {
     ];
   };
 
+  cmp-async-path = super.cmp-async-path.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-beancount = super.cmp-beancount.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };

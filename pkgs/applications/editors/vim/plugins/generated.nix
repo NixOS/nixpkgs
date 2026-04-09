@@ -2439,6 +2439,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  cmp-async-path = buildVimPlugin {
+    pname = "cmp-async-path";
+    version = "0-unstable-2026-01-28";
+    src = fetchgit {
+      url = "https://codeberg.org/FelipeLema/cmp-async-path/";
+      rev = "f8af3f726e07f2e9d37672eaa9102581aefce149";
+      hash = "sha256-ALMK7TnEB7/UZibVgOl4r6/gYsHCo6YAZcAR536VL4g=";
+    };
+    meta.homepage = "https://codeberg.org/FelipeLema/cmp-async-path/";
+    meta.hydraPlatforms = [ ];
+  };
+
   cmp-beancount = buildVimPlugin {
     pname = "cmp-beancount";
     version = "0-unstable-2025-11-26";
