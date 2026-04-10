@@ -9904,6 +9904,12 @@
     name = "Adrian Groh";
     keys = [ { fingerprint = "62BD BF30 83E9 7076 9665 B60B 3AA3 153E 98B0 D771"; } ];
   };
+  god464 = {
+    github = "god464";
+    githubId = 36400459;
+    name = "god464";
+    keys = [ { fingerprint = "089E 1560 7145 FE93 2C00  2942 D7A7 2706 FC8D E569"; } ];
+  };
   goertzenator = {
     email = "daniel.goertzen@gmail.com";
     github = "goertzenator";

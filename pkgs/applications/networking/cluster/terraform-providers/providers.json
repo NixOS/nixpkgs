@@ -1310,11 +1310,11 @@
     "vendorHash": "sha256-omxEb+ntQuHDfS2Rmt0rj0BF0Q2T8DLhobLua2uU/0o="
   },
   "tencentcloudstack_tencentcloud": {
-    "hash": "sha256-xsYh5gDneL3nQDUIHe3fRjObFTGp3ssPq8wlqPWsq7Y=",
+    "hash": "sha256-JA8urZd08fyGkFZMCF9aVJ9UEGx+aPreGqiAuFTqA84=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.82.82",
+    "rev": "v1.82.84",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1499,12 +1499,12 @@
     "vendorHash": "sha256-Z4DfoG4ApXbPNXZs9YvBWQj1bH7moLNI6P+nKDHt/Jc="
   },
   "yandex-cloud_yandex": {
-    "hash": "sha256-F2nbu/MImDXHSYPjo3O6K0tsZJ4PTrmB14Ghfvnp5sc=",
+    "hash": "sha256-gCzM7pfQaez/Zw6JAJcw4bVSpqVhxxiQyjqP/FeldJQ=",
     "homepage": "https://registry.terraform.io/providers/yandex-cloud/yandex",
     "owner": "yandex-cloud",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.195.0",
+    "rev": "v0.197.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-lSpDmhzCed9NUJkQ35tsrUbMIzx6wnEJ20UFMPbwhWE="
+    "vendorHash": "sha256-Prtwe3JPfWpx+yO37lT31VsqQ6E2aDLI7fAbYYq7gSE="
   }
 }
