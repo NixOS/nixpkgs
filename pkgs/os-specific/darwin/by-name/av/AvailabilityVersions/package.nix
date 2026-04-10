@@ -3,25 +3,13 @@
   bashNonInteractive,
   buildPackages,
   mkAppleDerivation,
-  pkgs,
+  sourceRelease,
   unifdef,
 }:
 
 let
   inherit (buildPackages) gnused python3;
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  xnu = bootstrapSourceRelease "xnu";
+  xnu = sourceRelease "xnu";
 in
 mkAppleDerivation (finalAttrs: {
   releaseName = "AvailabilityVersions";
