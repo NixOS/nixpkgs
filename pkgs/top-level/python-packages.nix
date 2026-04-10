@@ -6970,6 +6970,8 @@ self: super: with self; {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
+  heartpy = callPackage ../development/python-modules/heartpy { };
+
   heatmiserv3 = callPackage ../development/python-modules/heatmiserv3 { };
 
   heatshrink2 = callPackage ../development/python-modules/heatshrink2 { };
