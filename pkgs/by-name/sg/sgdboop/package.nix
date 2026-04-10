@@ -5,6 +5,7 @@
   curl,
   pkg-config,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgdboop";
@@ -47,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Applying custom artwork to Steam, using SteamGridDB";
