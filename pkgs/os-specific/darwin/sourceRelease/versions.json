@@ -220,8 +220,8 @@
     "version": "93"
   },
   "libutil": {
-    "hash": "sha256-tUsl22Z0HUVSkSoohFXkhicNFCW+RARvpTS0q6yaQFk=",
-    "version": "72"
+    "hash": "sha256-64+1CIRpYBon7skJRKdaXcxucPh9GrhAbUERhL2PLXA=",
+    "version": "73"
   },
   "mDNSResponder": {
     "hash": "sha256-Wa6IM6qz/gjO1GwER7KkPEiknEJbkntA2Q92Bc/YMoY=",
