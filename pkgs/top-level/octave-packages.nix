@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      cgi = callPackage ../development/octave-modules/cgi { };
-
       communications = callPackage ../development/octave-modules/communications { };
 
       control = callPackage ../development/octave-modules/control { };
