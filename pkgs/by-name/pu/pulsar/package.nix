@@ -259,10 +259,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeShellScript "update-pulsar" ''
     set -euo pipefail
-    PATH="${lib.getBin curl}:$PATH"
-    PATH="${lib.getBin jq}:$PATH"
-    PATH="${lib.getBin coreutils}:$PATH"
-    PATH="${lib.getBin nix-update}:$PATH"
+    export PATH="${
+      lib.makeBinPath [
+        coreutils
+        curl
+        jq
+        nix-update
+      ]
+    }"
     version="$(curl https://api.github.com/repos/pulsar-edit/pulsar/releases/latest | jq ".tag_name" -r | tr -d 'v')"
     nix-update pkgsCross.gnu64.pulsar --version "$version"
     nix-update pkgsCross.aarch64-multiplatform.pulsar --version skip
