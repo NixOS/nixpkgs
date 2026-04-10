@@ -1,6 +1,7 @@
 {
   lib,
   bison,
+  fetchpatch2,
   flex,
   libxo,
   mkAppleDerivation,
@@ -36,6 +37,19 @@ mkAppleDerivation {
     "out"
     "ps"
     "man"
+  ];
+
+  patches = [
+    # We need `colldef` and `mklocale` due to building old locale data. Revert their removal.
+    (fetchpatch2 {
+      url = "https://github.com/apple-oss-distributions/adv_cmds/commit/6bed8737a34dbb54782a18f47dccf933a9967a12.patch?full_index=1";
+      includes = [
+        "colldef/*"
+        "mklocale/*"
+      ];
+      revert = true;
+      hash = "sha256-zDXYuYRak9t9ZnAacl3h5i36g7Law/fLdTKf+YDeRUk=";
+    })
   ];
 
   xcodeHash = "sha256-L27TYv2zdKx0WKTBgHSv9Q0FCwrW4o83EmtDyqFM1fs=";
