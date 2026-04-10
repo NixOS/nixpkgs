@@ -70,7 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       globin
       ma27
       zowoq
-      kaynetik
     ];
     mainProgram = "rg";
     platforms = lib.platforms.all;

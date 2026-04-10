@@ -854,8 +854,8 @@ in
       "sha256-1cIpxNx/Q1C89D27DO0PTsFRhZvSok7L1e+B6WjPXvs=";
 
   mypy-boto3-mediaconnect =
-    buildMypyBoto3Package "mediaconnect" "1.42.37"
-      "sha256-NYn/N65sVAUxA4kTCi/IJNP/QQeutFjH8S7N2AeK3g8=";
+    buildMypyBoto3Package "mediaconnect" "1.42.87"
+      "sha256-JxR2l3AZarl6nr9l6UiBxTC7638DvVwNQmm6a0dxpsI=";
 
   mypy-boto3-mediaconvert =
     buildMypyBoto3Package "mediaconvert" "1.42.71"
@@ -1094,8 +1094,8 @@ in
       "sha256-hQyZdqznZ8uJVoiwuiVRQRG8fDVWykuyWGJ6BOEc0bE=";
 
   mypy-boto3-redshift-data =
-    buildMypyBoto3Package "redshift-data" "1.42.3"
-      "sha256-Mby+hQJcBXqmDY5wC1Uut4EQex1PmjT8bgB81rT5NKU=";
+    buildMypyBoto3Package "redshift-data" "1.42.87"
+      "sha256-KjFXEK3rcYOgaN1unw0mFxqW8VKPzsYT95KQO4DTZp8=";
 
   mypy-boto3-redshift-serverless =
     buildMypyBoto3Package "redshift-serverless" "1.42.28"
@@ -1170,8 +1170,8 @@ in
       "sha256-juVfwdjPDNPaT5tvyXpzDtomugqxeu++AERLkVtFIxw=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.42.79"
-      "sha256-HSSrvBgXk0HwS8ys2e8+euzupPc075axwh7WAduvvR8=";
+    buildMypyBoto3Package "sagemaker" "1.42.87"
+      "sha256-w1mjZjHC65uJ+pkfhBcn7wwhhmaZ4AQPKATS2mXYfkU=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.42.3"

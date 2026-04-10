@@ -117,7 +117,9 @@ python.pkgs.buildPythonApplication rec {
         git
       ]
     }"
-    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
+    # The dashboard requires esphome to be importable
+    # dependencies are added to show better error messages
+    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
     # https://github.com/NixOS/nixpkgs/issues/362193

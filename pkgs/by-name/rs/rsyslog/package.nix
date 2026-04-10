@@ -39,13 +39,13 @@
   openssl,
   withRelp ? true,
   librelp,
-  withKsi ? true,
+  withKsi ? false, # Currently Broken
   libksi,
   withLogging ? true,
   liblogging,
   withNet ? true,
   libnet,
-  withHadoop ? true,
+  withHadoop ? false, # Currently Broken
   hadoop,
   withRdkafka ? true,
   rdkafka,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "8.2512.0";
 
   src = fetchurl {
-    url = "https://www.rsyslog.com/files/download/rsyslog/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
     hash = "sha256-k8UAJdkLbHlfo1DVaj2DK/zkUEPqm9aCQNnCqTlLxik=";
   };
 

@@ -66,7 +66,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       Scrumplex
       mic92
-      kaynetik
     ];
     license = lib.licenses.mpl20;
   };

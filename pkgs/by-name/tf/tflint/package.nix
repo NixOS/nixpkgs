@@ -61,9 +61,6 @@ buildGo125Module (finalAttrs: {
     homepage = "https://github.com/terraform-linters/tflint";
     changelog = "https://github.com/terraform-linters/tflint/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      momeemt
-      kaynetik
-    ];
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 })

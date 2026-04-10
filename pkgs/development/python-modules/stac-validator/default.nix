@@ -1,32 +1,41 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
-}:
+  buildPythonPackage,
 
-python3Packages.buildPythonPackage rec {
+  # build systems
+  setuptools,
+  # runtime deps
+  click,
+  jsonschema,
+  pyyaml,
+  requests,
+  tqdm,
+}:
+buildPythonPackage rec {
   pname = "stac-validator";
-  version = "3.11.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-5wcnEdk8+/stdJVQ97Me/+H3GrS7DA+Nd0OQtPEXDl4=";
+    hash = "sha256-qO1DRYpPn+zarHTj2mZQ2LJ2uhmS1bax6Yxy035ZEUA=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "click"
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     click
     jsonschema
     pyyaml
     requests
+    tqdm
   ];
 
   pythonImportsCheck = [ "stac_validator" ];

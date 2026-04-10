@@ -41,7 +41,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       elasticdog
-      kaynetik
     ];
     teams = [ lib.teams.bazel ];
   };
