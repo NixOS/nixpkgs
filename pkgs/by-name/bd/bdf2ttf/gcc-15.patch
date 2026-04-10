@@ -1,0 +1,38 @@
+Fetched as:
+$ curl -L https://patch-diff.githubusercontent.com/raw/koron/bdf2ttf/pull/9.patch
+
+From 87d9f987517c78c444d1d425e33c9a5f06ced3ce Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Thu, 22 Jan 2026 06:35:12 +0000
+Subject: [PATCH] bdf.c: fix the build against -std=c23
+
+`gcc-15` switched to `c23` by default and `bdf2tff`
+started to fail the build as:
+
+````
+src/bdf.c:131:1: error: conflicting types for 'glyph_open'; have 'bdf_glyph_t *(int,  int)' {aka 'struct _bdf_glyph_t *(int,  int)'}
+  131 | glyph_open(int width, int height)
+      | ^~~~~~~~~~
+src/bdf.c:60:25: note: previous declaration of 'glyph_open' with type 'bdf_glyph_t *(void)' {aka 'struct _bdf_glyph_t *(void)'}
+   60 | static bdf_glyph_t*     glyph_open();
+      |                         ^~~~~~~~~~
+````
+
+THe change fixed explicit prototype for a forward declaration.
+---
+ src/bdf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/bdf.c b/src/bdf.c
+index 0832092..08272ed 100644
+--- a/src/bdf.c
++++ b/src/bdf.c
+@@ -57,7 +57,7 @@ static width_table_t cell_width_table[] = {
+ 
+ static int	bdf_load_fh(bdf_t* font, FILE* fp);
+ static void	count_validglyph(bdf_t* font);
+-static bdf_glyph_t*	glyph_open();
++static bdf_glyph_t*	glyph_open(int width, int height);
+ static void		glyph_close(bdf_glyph_t *glyph);
+ static char*	iscmd(char* target, char* keyword);
+ static int	atoi_next(char** str);

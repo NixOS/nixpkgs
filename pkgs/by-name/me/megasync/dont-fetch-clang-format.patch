@@ -1,0 +1,10 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b04f57067..0f6e7b163 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,5 +63,3 @@ include(desktopapp_configuration)
+ # Load the MEGA targets
+ add_subdirectory(src)
+ 
+-include(get_clang_format)
+-get_clang_format()

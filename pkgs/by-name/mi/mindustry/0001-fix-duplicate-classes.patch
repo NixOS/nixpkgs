@@ -1,0 +1,37 @@
+diff --git a/arc-core/build.gradle b/arc-core/build.gradle
+index ca6244fa..8541bf3e 100644
+--- a/Arc/arc-core/build.gradle
++++ b/Arc/arc-core/build.gradle
+@@ -2,23 +2,12 @@ sourceSets.main.java.srcDirs = ["src"]
+ sourceSets.test.java.srcDirs = ["test"]
+ sourceSets.test.resources.srcDirs = ["test/resources"]
+
+-configurations{
+-    extraLibs
+-}
+-
+ dependencies{
+     testImplementation libraries.junit
+     testImplementation aproj(":natives:natives-desktop")
+     testImplementation files("unsafe/unsafe.jar")
+     //file generated from UnsafeBuffers.java
+     compileOnly files("unsafe/unsafe.jar")
+-    extraLibs files("unsafe/unsafe.jar")
+-}
+-
+-jar{
+-    from{
+-        configurations.extraLibs.collect{ it.isDirectory() ? it : zipTree(it) }
+-    }
+ }
+
+ //now, you may ask: why don't I make this a new module? why do I include JARs in the repository? why don't I make this a separate build step?
+@@ -120,6 +109,8 @@ tasks.register('copyUnsafeStuff'){
+     }
+ }
+
++jar.dependsOn copyUnsafeStuff
++
+ getTasksByName("jnigen", true).each{
+     it.dependsOn copyUnsafeStuff
+ }

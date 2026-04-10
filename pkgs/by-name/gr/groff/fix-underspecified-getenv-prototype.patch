@@ -1,0 +1,24 @@
+commit e49b934b77a76443005f92a737dae7370b50e5f7
+Author: G. Branden Robinson <g.branden.robinson@gmail.com>
+Date:   Tue Jan 23 19:39:03 2024 -0600
+
+    [libgroff]: Fix underspecified getenv() prototype.
+
+    * src/libs/libgroff/getopt.c: Do it.  Seen when building groff on a
+      non-glibc-based system (clang 17 complains).
+
+---
+Link: https://lists.libreplanet.org/archive/html/groff-commit/2024-01/msg00103.html
+diff --git a/src/libs/libgroff/getopt.c b/src/libs/libgroff/getopt.c
+index 6d4ee5b3a..77f8da1ed 100644
+--- a/src/libs/libgroff/getopt.c
++++ b/src/libs/libgroff/getopt.c
+@@ -124,7 +124,7 @@ static struct _getopt_data getopt_data;
+    whose names are inconsistent.  */
+ 
+ #ifndef getenv
+-extern char *getenv ();
++extern char *getenv (const char *);
+ #endif
+ 
+ #endif /* not __GNU_LIBRARY__ */

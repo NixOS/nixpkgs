@@ -1,0 +1,36 @@
+From df28165c0955ab963aeda41ffda86651115f4efb Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Tue, 24 Feb 2026 21:04:37 +0100
+Subject: [PATCH] tests/authentication-test.cpp: Fix compat with libnotify
+ 0.8.8
+
+---
+ tests/authentication-test.cpp | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tests/authentication-test.cpp b/tests/authentication-test.cpp
+index 8c74867..2fee42d 100644
+--- a/tests/authentication-test.cpp
++++ b/tests/authentication-test.cpp
+@@ -245,12 +245,16 @@ TEST_F(AuthenticationTest, BasicRequest)
+     EXPECT_EQ("Cancel", dialogs[0].actions[3]);
+ 
+     /* Hints */
+-#if (NOTIFY_VERSION_MAJOR >= 0) && (NOTIFY_VERSION_MINOR >= 8)
++#if NOTIFY_CHECK_VERSION(0, 8, 0)
++#if NOTIFY_CHECK_VERSION(0, 8, 8)
++    EXPECT_EQ(4, dialogs[0].hints.size());
++#else
+     EXPECT_EQ(3, dialogs[0].hints.size());
++#endif // NOTIFY_CHECK_VERSION(0, 8, 8)
+     EXPECT_NE(dialogs[0].hints.end(), dialogs[0].hints.find("sender-pid"));
+ #else
+     EXPECT_EQ(2, dialogs[0].hints.size());
+-#endif
++#endif // NOTIFY_CHECK_VERSION(0, 8, 0)
+     EXPECT_NE(dialogs[0].hints.end(), dialogs[0].hints.find("x-lomiri-snap-decisions"));
+     EXPECT_NE(dialogs[0].hints.end(), dialogs[0].hints.find("x-lomiri-private-menu-model"));
+ 
+-- 
+2.51.2
+

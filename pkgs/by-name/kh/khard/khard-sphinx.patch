@@ -1,0 +1,13 @@
+diff '--color=auto' -u -r khard-0.20.1/doc/source/conf.py new/doc/source/conf.py
+--- khard-0.20.1/doc/source/conf.py	2025-07-29 04:47:18.000000000 +0800
++++ new/doc/source/conf.py	2026-03-29 12:53:42.904389827 +0800
+@@ -52,8 +52,8 @@
+     'sphinx.ext.autodoc',  # https://pypi.org/project/sphinx-autodoc-typehints/
+     'sphinx.ext.autosectionlabel',
+     'sphinx.ext.todo',
+-    'sphinx_autodoc_typehints',  # https://pypi.org/project/sphinx-autodoc-typehints/
+     'sphinxarg.ext',
++    'sphinx_autodoc_typehints',  # https://pypi.org/project/sphinx-autodoc-typehints/
+ ]
+ 
+ autoapi_type = 'python'

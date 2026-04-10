@@ -1,0 +1,18 @@
+diff --git a/Gemfile.lock b/Gemfile.lock
+index 9a7c7500..9215d45a 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -191,12 +191,7 @@ GEM
+     faraday-net_http (3.4.2)
+       net-http (~> 0.5)
+     ffaker (2.25.0)
+-    ffi (1.17.2-aarch64-linux-gnu)
+-    ffi (1.17.2-arm-linux-gnu)
+-    ffi (1.17.2-arm64-darwin)
+-    ffi (1.17.2-x86-linux-gnu)
+-    ffi (1.17.2-x86_64-darwin)
+-    ffi (1.17.2-x86_64-linux-gnu)
++    ffi (1.17.2)
+     fit4ruby (3.13.0)
+       bindata (~> 2.4.14)
+     foreman (0.90.0)

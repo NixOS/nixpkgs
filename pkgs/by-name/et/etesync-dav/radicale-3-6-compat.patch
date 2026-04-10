@@ -1,0 +1,72 @@
+diff --git a/etesync_dav/radicale/storage.py b/etesync_dav/radicale/storage.py
+index d6312b1..8d4b0e1 100644
+--- a/etesync_dav/radicale/storage.py
++++ b/etesync_dav/radicale/storage.py
+@@ -22,6 +22,8 @@ from contextlib import contextmanager
+ 
+ import etesync as api
+ import vobject
++import radicale
++from packaging.version import Version
+ from radicale import pathutils
+ from radicale.item import Item, get_etag
+ from radicale.storage import (
+@@ -421,7 +423,10 @@ class Collection(BaseCollection):
+             href_mapper = HrefMapper(content=etesync_item._cache_obj, href=href)
+             href_mapper.save(force_insert=True)
+ 
+-        return self._get(href)
++        uploaded = self._get(href)
++        if Version(radicale.VERSION) >= Version("3.5.5"):
++            return (uploaded, item)
++        return uploaded
+ 
+     def delete(self, href=None):
+         """Delete an item.
+diff --git a/etesync_dav/radicale/storage_etebase_collection.py b/etesync_dav/radicale/storage_etebase_collection.py
+index 1ccc6dd..0f68561 100644
+--- a/etesync_dav/radicale/storage_etebase_collection.py
++++ b/etesync_dav/radicale/storage_etebase_collection.py
+@@ -1,6 +1,8 @@
+ import re
+ 
+ import vobject
++import radicale
++from packaging.version import Version
+ from radicale import pathutils
+ from radicale.item import Item
+ from radicale.storage import (
+@@ -294,7 +296,10 @@ class Collection(BaseCollection):
+             href_mapper = HrefMapper(content=etesync_item.cache_item, href=href)
+             href_mapper.save(force_insert=True)
+ 
+-        return self._get(href)
++        uploaded = self._get(href)
++        if Version(radicale.VERSION) >= Version("3.5.5"):
++            return (uploaded, item)
++        return uploaded
+ 
+     def delete(self, href=None):
+         """Delete an item.
+diff --git a/etesync_dav/radicale/web.py b/etesync_dav/radicale/web.py
+index 869624f..6b4c515 100644
+--- a/etesync_dav/radicale/web.py
++++ b/etesync_dav/radicale/web.py
+@@ -12,6 +12,8 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program. If not, see <http://www.gnu.org/licenses/>.
+ 
++import radicale
++from packaging.version import Version
+ from radicale import web
+ 
+ from etesync_dav.mac_helpers import has_ssl
+@@ -31,6 +33,8 @@ class Web(web.BaseWeb):
+             environ["wsgi.url_scheme"] = "https"
+         body = list(app(environ, start_response))[0]
+         ret_response.append(body)
++        if Version(radicale.VERSION) >= Version("3.5.10"):
++            ret_response.append(None)  # xml_request field
+         return tuple(ret_response)
+ 
+     def get(self, environ, base_prefix, path, user):

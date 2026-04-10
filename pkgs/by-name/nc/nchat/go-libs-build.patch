@@ -1,0 +1,48 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index a1928ee3..26157e56 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -126,10 +126,6 @@ message(STATUS "Static Go: ${HAS_STATICGOLIB}")
+ 
+ # Check Golang version for whatsmeow minimum requirement
+ set(GO_VERSION_MIN 1.23)
+-execute_process(COMMAND bash "-c" "go version 2> /dev/null | cut -c14- | cut -d' ' -f1 | tr -d '\n'" OUTPUT_VARIABLE GO_VERSION)
+-if((HAS_WHATSAPP OR HAS_SIGNAL) AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))
+-  message(FATAL_ERROR "Go version ${GO_VERSION} (need >= ${GO_VERSION_MIN} to build WhatsApp or Signal).")
+-endif()
+ 
+ # Check Little/Big Endian for tdlib requirement
+ test_big_endian(IS_BIG_ENDIAN)
+diff --git i/lib/tgchat/ext/td/CMakeLists.txt w/lib/tgchat/ext/td/CMakeLists.txt
+index 795f1f4b..7e41549c 100644
+--- i/lib/tgchat/ext/td/CMakeLists.txt
++++ w/lib/tgchat/ext/td/CMakeLists.txt
+@@ -140,7 +140,6 @@ if (CLANG OR GCC)
+ endif()
+ 
+ include(GetGitRevisionDescription)
+-get_git_head_revision(TD_GIT_REFSPEC TD_GIT_COMMIT_HASH)
+ message(STATUS "Git state: ${TD_GIT_COMMIT_HASH}")
+ 
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/td/telegram/GitCommitHash.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/td/telegram/GitCommitHash.cpp" @ONLY)
+diff --git i/lib/wmchat/CMakeLists.txt w/lib/wmchat/CMakeLists.txt
+index 84a42ef9..556df050 100644
+--- i/lib/wmchat/CMakeLists.txt
++++ w/lib/wmchat/CMakeLists.txt
+@@ -20,8 +20,8 @@ install(TARGETS wmchat DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ target_common_config(wmchat)
+ 
+ # Dependency libraries
+-add_subdirectory(go)
+-add_dependencies(wmchat ref-cgowm)
++set(GO_LIBRARIES @libcgowm@/libcgowm.a)
++target_include_directories(wmchat PRIVATE @libcgowm@)
+ 
+ # Platform specifics
+ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+@@ -44,4 +44,4 @@ set_target_properties(wmchat PROPERTIES COMPILE_FLAGS
+ 
+ # Linking
+ message(STATUS "Go libraries: ${GO_LIBRARIES}")
+-target_link_libraries(wmchat PUBLIC ref-cgowm ncutil ${GO_LIBRARIES})
++target_link_libraries(wmchat PUBLIC @libcgowm@/libcgowm.a ncutil ${GO_LIBRARIES})

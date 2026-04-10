@@ -1,0 +1,14 @@
+--- a/tests/test_helper.py
++++ b/tests/test_helper.py
+@@ -269,9 +269,9 @@
+     print("subprocess:", " ".join(cmd))  # very useful on failure
+     env = {
+         # We may need to find nanoemoji and other pip-installed cli tools
+-        "PATH": str(Path(shutil.which("nanoemoji")).parent),
++        "PATH": str(Path(shutil.which("nanoemoji")).parent) + ":" + os.environ["PATH"],
+         # We may need to find test modules
+-        "PYTHONPATH": os.pathsep.join((str(Path(__file__).parent),)),
++        "PYTHONPATH": os.pathsep.join((str(Path(__file__).parent),)) + ":" + os.environ["PYTHONPATH"],
+     }
+     # Needed for windows CI to function; ref https://github.com/appveyor/ci/issues/1995
+     if "SYSTEMROOT" in os.environ:

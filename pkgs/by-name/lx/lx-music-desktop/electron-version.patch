@@ -1,0 +1,73 @@
+diff --git a/package-lock.json b/package-lock.json
+index 2d9324c..d3324fc 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -60,7 +60,7 @@
+         "css-loader": "^7.1.3",
+         "css-minimizer-webpack-plugin": "^7.0.4",
+         "del": "^6.1.1",
+-        "electron": "37.6.1",
++        "electron": "40.0.0",
+         "electron-builder": "^26.8.0",
+         "electron-debug": "^3.2.0",
+         "electron-devtools-installer": "github:lyswhut/electron-devtools-installer#64596d615c1fc891eefd8aef1dfcb2c87aaadf03",
+@@ -7539,15 +7539,15 @@
+       }
+     },
+     "node_modules/electron": {
+-      "version": "37.6.1",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-37.6.1.tgz",
+-      "integrity": "sha512-aHtJVNjqf0lk7dlPoc1X+fMBpZtLn+XGvP6IYc3gooTwsD1D/Ic2SBRC9SnIk6LkWTsDaSF9jgH1d9Q7eABy/Q==",
++      "version": "40.0.0",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-40.0.0.tgz",
++      "integrity": "sha512-UyBy5yJ0/wm4gNugCtNPjvddjAknMTuXR2aCHioXicH7aKRKGDBPp4xqTEi/doVcB3R+MN3wfU9o8d/9pwgK2A==",
+       "dev": true,
+       "hasInstallScript": true,
+       "license": "MIT",
+       "dependencies": {
+         "@electron/get": "^2.0.0",
+-        "@types/node": "^22.7.7",
++        "@types/node": "^24.9.0",
+         "extract-zip": "^2.0.1"
+       },
+       "bin": {
+@@ -7868,15 +7868,22 @@
+       }
+     },
+     "node_modules/electron/node_modules/@types/node": {
+-      "version": "22.19.11",
+-      "resolved": "https://registry.npmjs.org/@types/node/-/node-22.19.11.tgz",
+-      "integrity": "sha512-BH7YwL6rA93ReqeQS1c4bsPpcfOmJasG+Fkr6Y59q83f9M1WcBRHR2vM+P9eOisYRcN3ujQoiZY8uk5W+1WL8w==",
++      "version": "24.10.13",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.10.13.tgz",
++      "integrity": "sha512-oH72nZRfDv9lADUBSo104Aq7gPHpQZc4BTx38r9xf9pg5LfP6EzSyH2n7qFmmxRQXh7YlUXODcYsg6PuTDSxGg==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+-        "undici-types": "~6.21.0"
++        "undici-types": "~7.16.0"
+       }
+     },
++    "node_modules/electron/node_modules/undici-types": {
++      "version": "7.16.0",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.16.0.tgz",
++      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==",
++      "dev": true,
++      "license": "MIT"
++    },
+     "node_modules/emoji-regex": {
+       "version": "8.0.0",
+       "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz",
+diff --git a/package.json b/package.json
+index 4a17ca0..6e03adf 100644
+--- a/package.json
++++ b/package.json
+@@ -133,7 +133,7 @@
+     "css-loader": "^7.1.3",
+     "css-minimizer-webpack-plugin": "^7.0.4",
+     "del": "^6.1.1",
+-    "electron": "37.6.1",
++    "electron": "40.0.0",
+     "electron-builder": "^26.8.0",
+     "electron-debug": "^3.2.0",
+     "electron-devtools-installer": "github:lyswhut/electron-devtools-installer#64596d615c1fc891eefd8aef1dfcb2c87aaadf03",

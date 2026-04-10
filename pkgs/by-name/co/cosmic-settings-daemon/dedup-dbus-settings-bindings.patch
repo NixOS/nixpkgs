@@ -1,0 +1,31 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index e8a98ee..3902dcf 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -912,7 +912,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-dbus-a11y"
+ version = "0.1.0"
+-source = "git+https://github.com/pop-os/dbus-settings-bindings#3b86984332be2c930a3536ab714b843c851fa8ca"
++source = "git+https://github.com/pop-os/dbus-settings-bindings#0fa672f8dadb884001ef9a251b149ed432879629"
+ dependencies = [
+  "zbus",
+ ]
+@@ -3160,7 +3160,7 @@ checksum = "f5e54036fe321fd421e10d732f155734c4e4afd610dd556d9a82833ab3ee0bed"
+ [[package]]
+ name = "locale1"
+ version = "0.1.0"
+-source = "git+https://github.com/pop-os/dbus-settings-bindings#3b86984332be2c930a3536ab714b843c851fa8ca"
++source = "git+https://github.com/pop-os/dbus-settings-bindings#0fa672f8dadb884001ef9a251b149ed432879629"
+ dependencies = [
+  "zbus",
+ ]
+@@ -5577,7 +5577,7 @@ checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
+ [[package]]
+ name = "upower_dbus"
+ version = "0.3.2"
+-source = "git+https://github.com/pop-os/dbus-settings-bindings#3b86984332be2c930a3536ab714b843c851fa8ca"
++source = "git+https://github.com/pop-os/dbus-settings-bindings#0fa672f8dadb884001ef9a251b149ed432879629"
+ dependencies = [
+  "serde",
+  "serde_repr",

@@ -1,0 +1,13 @@
+diff --git a/contrib/udev.in b/contrib/udev.in
+index 0625952..a6c940e 100644
+--- a/contrib/udev.in
++++ b/contrib/udev.in
+@@ -1,4 +1,4 @@
+-ACTION=="add", SUBSYSTEM=="backlight", RUN+="/bin/chgrp @group@ /sys/class/backlight/%k/brightness"
+-ACTION=="add", SUBSYSTEM=="backlight", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"
+-ACTION=="add", SUBSYSTEM=="leds", RUN+="/bin/chgrp @group@ /sys/class/leds/%k/brightness"
+-ACTION=="add", SUBSYSTEM=="leds", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"
++ACTION=="add", SUBSYSTEM=="backlight", RUN+="@coreutils@/bin/chgrp @group@ /sys/class/backlight/%k/brightness"
++ACTION=="add", SUBSYSTEM=="backlight", RUN+="@coreutils@/bin/chmod g+w /sys/class/backlight/%k/brightness"
++ACTION=="add", SUBSYSTEM=="leds", RUN+="@coreutils@/bin/chgrp @group@ /sys/class/leds/%k/brightness"
++ACTION=="add", SUBSYSTEM=="leds", RUN+="@coreutils@/bin/chmod g+w /sys/class/leds/%k/brightness"

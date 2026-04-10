@@ -1,0 +1,89 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  chardet,
+  colorama,
+  distutils,
+  fetchFromGitHub,
+  netaddr,
+  pycurl,
+  pyparsing,
+  pytestCheckHook,
+  setuptools,
+  six,
+  fetchpatch2,
+  legacy-cgi,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "wfuzz";
+  version = "3.1.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "xmendez";
+    repo = "wfuzz";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OYMZHo0ujRzwOcE+EKRNPxffxVbbiMHe+AqBz7q/u2A=";
+  };
+
+  patches = [
+    # replace use of imp module for Python 3.12
+    # https://github.com/xmendez/wfuzz/pull/365
+    (fetchpatch2 {
+      url = "https://github.com/xmendez/wfuzz/commit/f4c028b9ada4c36dabf3bc752f69f6ddc110920f.patch?full_index=1";
+      hash = "sha256-t7pUMcdFmwAsGUNBRdZr+Jje/yR0yzeGIgeYNEq4hFE=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    chardet
+    distutils # src/wfuzz/plugin_api/base.py
+    legacy-cgi
+    pycurl
+    six
+    setuptools
+    pyparsing
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
+
+  nativeCheckInputs = [
+    netaddr
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # The tests are requiring a local web server
+    "tests/test_acceptance.py"
+    "tests/acceptance/test_saved_filter.py"
+    # depends on imp module removed from Python 3.12
+    "tests/test_moduleman.py"
+  ];
+
+  pythonImportsCheck = [ "wfuzz" ];
+
+  postInstall = ''
+    mkdir -p $out/share/wordlists/wfuzz
+    cp -R -T "wordlist" "$out/share/wordlists/wfuzz"
+  '';
+
+  meta = {
+    changelog = "https://github.com/xmendez/wfuzz/releases/tag/${finalAttrs.src.tag}";
+    description = "Web content fuzzer to facilitate web applications assessments";
+    longDescription = ''
+      Wfuzz provides a framework to automate web applications security assessments
+      and could help you to secure your web applications by finding and exploiting
+      web application vulnerabilities.
+    '';
+    homepage = "https://wfuzz.readthedocs.io";
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ pamplemousse ];
+  };
+})

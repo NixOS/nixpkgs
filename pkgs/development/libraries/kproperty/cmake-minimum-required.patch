@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2d589d5..0e1390f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ set(KPROPERTY_GENERATE_PRI TRUE)
+-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ find_package(ECM 1.8.0 REQUIRED NO_MODULE)
+ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+ include(SetKPropertyCMakePolicies NO_POLICY_SCOPE)
+diff --git a/cmake/modules/SetKPropertyCMakePolicies.cmake b/cmake/modules/SetKPropertyCMakePolicies.cmake
+index bc28d8a..85370c2 100644
+--- a/cmake/modules/SetKPropertyCMakePolicies.cmake
++++ b/cmake/modules/SetKPropertyCMakePolicies.cmake
+@@ -9,7 +9,7 @@ cmake_policy(SET CMP0053 NEW) # TODO remove, temporary fix for a bug in Qt 5.8's
+                               # "Simplify variable reference and escape sequence evaluation"
+ 
+ if(POLICY CMP0059) # Don’t treat DEFINITIONS as a built-in directory property.
+-    cmake_policy(SET CMP0059 OLD)
++    cmake_policy(SET CMP0059 NEW)
+ endif()
+ if(POLICY CMP0063) # Honor visibility properties for all target types (since cmake 3.3)
+     cmake_policy(SET CMP0063 NEW)

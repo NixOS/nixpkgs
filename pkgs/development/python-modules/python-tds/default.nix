@@ -1,0 +1,71 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  six,
+  pytestCheckHook,
+  pyopenssl,
+  pyspnego,
+  namedlist,
+  pydes,
+  cryptography,
+}:
+
+buildPythonPackage rec {
+  pname = "python-tds";
+  version = "1.17.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "denisenkom";
+    repo = "pytds";
+    tag = version;
+    hash = "sha256-W9Sk2X2bSMjtRu1XPnjWXOLjVVa+MYC7+ttrZc48c4I=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version.get_git_version()" '"${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyopenssl
+    pyspnego
+    namedlist
+    pydes
+    cryptography
+  ];
+
+  disabledTests = [
+    # ImportError: To use NTLM authentication you need to install ntlm-auth module
+    # ntlm-auth has been removed from nixpkgs
+    "test_ntlm"
+
+    # TypeError: CertificateBuilder.add_extension() got an unexpected keyword argument 'extension'
+    # Tests are broken for pyOpenSSL>=23.0.0
+    # https://github.com/denisenkom/pytds/blob/1.13.0/test_requirements.txt
+    "test_with_simple_server_req_encryption"
+    "test_both_server_and_client_encryption_on"
+    "test_server_has_enc_on_but_client_is_off"
+    "test_only_login_encrypted"
+    "test_server_encryption_not_supported"
+    "test_server_with_bad_name_in_cert"
+    "test_cert_with_san"
+    "test_encrypted_socket"
+  ];
+
+  pythonImportsCheck = [ "pytds" ];
+
+  meta = {
+    description = "Python DBAPI driver for MSSQL using pure Python TDS (Tabular Data Stream) protocol implementation";
+    homepage = "https://python-tds.readthedocs.io/";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+  };
+}

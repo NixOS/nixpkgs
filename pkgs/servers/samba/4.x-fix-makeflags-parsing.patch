@@ -1,0 +1,11 @@
+--- a/buildtools/wafsamba/samba_utils.py	2019-04-08 01:13:47.525306574 +0000
++++ b/buildtools/wafsamba/samba_utils.py	2019-04-08 01:14:34.805245676 +0000
+@@ -495,7 +495,7 @@
+                 Logs.zones = ['runner']
+             if Logs.verbose > 2:
+                 Logs.zones = ['*']
+-        elif opt[0].isupper() and opt.find('=') != -1:
++        elif opt[0] and opt.find('=') != -1:
+             # this allows us to set waf options on the make command line
+             # for example, if you do "make FOO=blah", then we set the
+             # option 'FOO' in Options.options, to blah. If you look in wafsamba/wscript

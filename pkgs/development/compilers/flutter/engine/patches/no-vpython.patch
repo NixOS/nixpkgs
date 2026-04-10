@@ -1,0 +1,11 @@
+--- a/engine/src/.gn
++++ b/engine/src/.gn
+@@ -3,7 +3,7 @@
+ 
+ # Use vpython3 from depot_tools for exec_script() calls.
+ # See `gn help dotfile` for details.
+-script_executable = "vpython3"
++script_executable = "python3"
+ 
+ # The location of the build configuration file.
+ buildconfig = "//build/config/BUILDCONFIG.gn"

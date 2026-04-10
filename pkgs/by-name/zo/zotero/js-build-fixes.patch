@@ -1,0 +1,42 @@
+diff --git a/js-build/note-editor.js b/js-build/note-editor.js
+index 1435730342..bfd552f863 100644
+--- a/js-build/note-editor.js
++++ b/js-build/note-editor.js
+@@ -36,9 +36,6 @@ async function getZoteroNoteEditor(signatures) {
+ 			await fs.remove(path.join(targetDir, 'zotero'));
+ 		}
+ 		catch (e) {
+-			console.error(e);
+-			await exec('npm ci', { cwd: modulePath });
+-			await exec('npm run build', { cwd: modulePath });
+ 			await fs.copy(path.join(modulePath, 'build', 'zotero'), targetDir);
+ 		}
+ 		signatures['note-editor'] = { hash };
+diff --git a/js-build/pdf-worker.js b/js-build/pdf-worker.js
+index b820304f3a..aafb6b1ef5 100644
+--- a/js-build/pdf-worker.js
++++ b/js-build/pdf-worker.js
+@@ -33,9 +33,6 @@ async function getPDFWorker(signatures) {
+ 			);
+ 		}
+ 		catch (e) {
+-			console.error(e);
+-			await exec('npm ci', { cwd: modulePath });
+-			await exec('npm run build', { cwd: modulePath });
+ 			await fs.copy(path.join(modulePath, 'build', 'worker.js'), path.join(targetDir, 'worker.js'));
+ 		}
+ 		signatures['pdf-worker'] = { hash };
+diff --git a/js-build/reader.js b/js-build/reader.js
+index 67a02a3ad2..5de2f3ada8 100644
+--- a/js-build/reader.js
++++ b/js-build/reader.js
+@@ -36,9 +36,6 @@ async function getReader(signatures) {
+ 			await fs.remove(path.join(targetDir, 'zotero'));
+ 		}
+ 		catch (e) {
+-			console.error(e);
+-			await exec('npm ci', { cwd: modulePath });
+-			await exec('npm run build', { cwd: modulePath });
+ 			await fs.copy(path.join(modulePath, 'build', 'zotero'), targetDir);
+ 		}
+ 		signatures['reader'] = { hash };
