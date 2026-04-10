@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      ncarray = callPackage ../development/octave-modules/ncarray { };
-
       netcdf = callPackage ../development/octave-modules/netcdf {
         inherit (pkgs) netcdf;
       };
