@@ -29,29 +29,6 @@ with haskellLib;
 
 # To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 {
-  # Hackage's accelerate is from 2020 and incompatible with our GHC.
-  # The existing derivation also has missing dependencies
-  # compared to the source from github.
-  # https://github.com/AccelerateHS/accelerate/issues/553
-  accelerate = lib.pipe super.accelerate [
-    (warnAfterVersion "1.3.0.0")
-    (addBuildDepends [
-      self.double-conversion
-      self.formatting
-      self.microlens
-    ])
-
-    (overrideCabal (drv: {
-      version = "1.3.0.0-unstable-2026-01-30";
-      src = pkgs.fetchFromGitHub {
-        owner = "AccelerateHS";
-        repo = "accelerate";
-        rev = "c22387ed2e00b00a6c79dcec5d22b53874da91fc";
-        sha256 = "sha256-AtKdxeCytRbmOIFe7OPbSMlhFhJnrgMuIqLFIeqnBGU";
-      };
-    }))
-  ];
-
   # Make sure that Cabal_* can be built as-is
   Cabal_3_10_3_0 = doDistribute (
     super.Cabal_3_10_3_0.override {
