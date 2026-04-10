@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   # Octave's Python (Python 3)
-  python,
+  octave,
 }:
 
 let
@@ -11,8 +11,9 @@ let
     ps.sympy
     ps.mpmath
   ]);
-
+  inherit (octave) python;
 in
+
 buildOctavePackage rec {
   pname = "symbolic";
   version = "3.2.1";
