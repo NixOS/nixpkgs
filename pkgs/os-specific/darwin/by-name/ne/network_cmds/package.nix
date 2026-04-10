@@ -5,6 +5,7 @@
   mkAppleDerivation,
   openssl,
   pkg-config,
+  file_cmds,
   sourceRelease,
   stdenvNoCC,
   unifdef,
@@ -21,11 +22,8 @@ let
 
     buildCommand = ''
       # Different strategies are needed to make private headers available to network_cmds:
-      # - If the headers can be used as-is, copy them;
-      # - If the required symbols are hidden behind a 'PRIVATE' define, `unifdef` is used to expose only those symbols
-      #   for that header. Processing the header avoids exposing unwanted private symbols and requiring more headers;
-      # - If the symbol is hidden behind a kernel-related define, grep them out of the header. Otherwise,
-      #   the required headers can conflict with system-related headers and require many, many more headers be copied.
+      # - If the headers are available in xnuHeaders, copy them; or
+      # - If the headers are not included in the private headers build, copy them from the source.
 
       install -D -t "$out/include" \
         '${xnuHeaders}/include/kern/cs_blobs.h'
@@ -160,17 +158,24 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-1RJ/s9vnfCGY2Vc2XH8dg8rB+0lwK2IBC7zIx4PuXWQ=";
+  xcodeHash = "sha256-OIYpa71CvCOL8Ln7s8wUqWj9yD9lEeRifkj5gPvD78Y=";
 
   patches = [
     # Some private headers depend on corecrypto, which we can’t use.
     # Use the headers from the ld64 port, which delegates to OpenSSL.
-    ./patches/0007-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
+    ./patches/0001-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
+    # Fix unknown type name 'pid_t' error
+    ./patches/0002-Add-missing-sys-types_h.patch
   ];
 
   postPatch = ''
     # Fix invalid pointer conversion error from trying to pass `NULL` to a `size_t`.
-    substituteInPlace ndp.tproj/ndp.c --replace-fail 'NULL, NULL);' 'NULL, 0);'
+    substituteInPlace ndp.tproj/ndp.c \
+      --replace-fail 'NULL, NULL);' 'NULL, 0);'
+
+    # Fix invalid pointer conversion error. These parameters seem to be in the wrong order …
+    substituteInPlace netstat.tproj/main.c \
+      --replace-fail 'tp->pr_name, tp->pr_protocol' 'tp->pr_protocol, tp->pr_name'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";

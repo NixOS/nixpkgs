@@ -1,10 +1,10 @@
-From 36767c7345161baf0ab125f95c8557f8e24f25db Mon Sep 17 00:00:00 2001
+From dc917b5729184398268cdfdc4ac180fb0306c1cc Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
-Date: Tue, 9 Apr 2024 19:28:17 -0400
-Subject: [PATCH 7/8] Add OpenSSL-based CoreCrypto digest functions
+Date: Fri, 10 Apr 2026 23:08:32 -0400
+Subject: [PATCH] Add-OpenSSL-based-CoreCrypto-digest-functions
 
 ---
- compat/CommonCrypto/CommonDigest.h    |  6 +++
+ compat/CommonCrypto/CommonDigest.h    |  5 +++
  compat/CommonCrypto/CommonDigestSPI.c | 21 +++++++++++
  compat/CommonCrypto/CommonDigestSPI.h | 14 +++++++
  compat/corecrypto/api_defines.h       | 10 +++++
@@ -14,7 +14,7 @@ Subject: [PATCH 7/8] Add OpenSSL-based CoreCrypto digest functions
  compat/corecrypto/ccsha1.c            | 22 +++++++++++
  compat/corecrypto/ccsha1.h            |  9 +++++
  compat/corecrypto/ccsha2.c            | 22 +++++++++++
- compat/corecrypto/ccsha2.h            |  9 +++++
+ compat/corecrypto/ccsha2.h            | 10 +++++
  11 files changed, 212 insertions(+)
  create mode 100644 compat/CommonCrypto/CommonDigest.h
  create mode 100644 compat/CommonCrypto/CommonDigestSPI.c
@@ -30,7 +30,7 @@ Subject: [PATCH 7/8] Add OpenSSL-based CoreCrypto digest functions
 
 diff --git a/compat/CommonCrypto/CommonDigest.h b/compat/CommonCrypto/CommonDigest.h
 new file mode 100644
-index 0000000..a60eba7
+index 0000000..531bb05
 --- /dev/null
 +++ b/compat/CommonCrypto/CommonDigest.h
 @@ -0,0 +1,5 @@
@@ -292,7 +292,7 @@ index 0000000..6504503
 +}
 diff --git a/compat/corecrypto/ccsha2.h b/compat/corecrypto/ccsha2.h
 new file mode 100644
-index 0000000..9f30e03
+index 0000000..7e889b7
 --- /dev/null
 +++ b/compat/corecrypto/ccsha2.h
 @@ -0,0 +1,10 @@
@@ -307,5 +307,5 @@ index 0000000..9f30e03
 +
 +EXTERN_C const struct ccdigest_info* ccsha256_di(void);
 -- 
-2.44.1
+2.51.2
 
