@@ -23,18 +23,6 @@ mkAppleDerivation (finalAttrs: {
   buildInputs = [ bashNonInteractive ];
   nativeBuildInputs = [ unifdef ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    declare -a unifdef_sources=(
-      os_availability.modulemap
-      os_availability_private.modulemap
-    )
-    unifdef -x2 -UBUILD_FOR_DRIVERKIT -m $(for x in "''${unifdef_sources[@]}"; do echo templates/$x; done)
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
@@ -101,7 +89,6 @@ mkAppleDerivation (finalAttrs: {
       done
     fi
 
-    cp "$out/share/availability/templates/os_availability.modulemap" "\$dest/include/"
     SCRIPT
     chmod a+x "$out/bin/gen-headers"
 
