@@ -3,6 +3,7 @@
   fetchurl,
   mkTclDerivation,
   openssl,
+  tcl,
 }:
 
 mkTclDerivation rec {
@@ -28,5 +29,6 @@ mkTclDerivation rec {
     maintainers = [ lib.maintainers.agbrooks ];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
+    broken = tcl.isTcl9;
   };
 }

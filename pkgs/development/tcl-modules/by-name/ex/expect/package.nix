@@ -81,5 +81,6 @@ tcl.mkTclDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "expect";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    broken = tcl.isTcl9;
   };
 }
