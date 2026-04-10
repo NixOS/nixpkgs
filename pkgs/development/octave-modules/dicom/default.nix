@@ -11,13 +11,13 @@
 
 buildOctavePackage rec {
   pname = "dicom";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-dicom";
     tag = "release-${version}";
-    sha256 = "sha256-NNdcnIeHXDRmZZp0WvwGtfMJ4BSR6+aK6FVS0BG51U8=";
+    sha256 = "sha256-6FcHxNUOTvSzYqknD89G3IyKVQs/dH+heoA/5Sx4lyg=";
   };
 
   nativeBuildInputs = [
