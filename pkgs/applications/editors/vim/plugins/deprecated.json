@@ -83,6 +83,10 @@
         "date": "2026-02-04",
         "new": "bats-vim"
     },
+    "bitbake-vim": {
+        "date": "2026-04-09",
+        "new": "bitbake"
+    },
     "calendar": {
         "date": "2026-02-04",
         "new": "calendar-vim"

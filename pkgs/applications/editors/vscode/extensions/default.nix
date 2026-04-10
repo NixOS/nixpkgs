@@ -3073,8 +3073,8 @@ let
         mktplcRef = {
           name = "compare-folders";
           publisher = "moshfeu";
-          version = "0.28.0";
-          hash = "sha256-QoaZ/P2lIaJQjD9RF7+pUJkOneR9olCe6xuT/9vsiZ4=";
+          version = "0.29.0";
+          hash = "sha256-oX4182qaoHbvZC9MdzzARBlW4MbtE7H0Fg687K5h2XQ=";
         };
 
         meta = {

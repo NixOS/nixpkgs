@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ctlptl";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
     repo = "ctlptl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vbg3gaVCFkQ6jKguNq6ClstEKpTrk9ryUG572emEY4U=";
+    hash = "sha256-0Y1baXkb37UKtT/lcoFdunRkxIpSCh+zfkjkZZ9SfXU=";
   };
 
   vendorHash = "sha256-b9lzCNjO0rrK/kJlw5dssuQD/cyf/Wu/LJ2YNQ645LE=";
