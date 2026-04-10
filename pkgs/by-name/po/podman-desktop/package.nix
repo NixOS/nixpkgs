@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   electron_39,
-  nodejs,
+  nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -21,6 +21,8 @@
 }:
 
 let
+  nodejs = nodejs_24;
+  pnpm = pnpm_10.override { inherit nodejs; };
   electron = electron_39;
   appName = "Podman Desktop";
 in
@@ -64,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-nBjAmXzjR0qGCM91UAonQKP0NG7+DXImueSbhbnMK/k=";
   };
@@ -79,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
+    pnpm
     pnpmConfigHook
-    pnpm_10
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
