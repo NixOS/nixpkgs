@@ -1,40 +1,46 @@
 {
   lib,
+  amd-aiter,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  packaging,
-  psutil,
-  pybind11,
   einops,
+  fetchFromGitHub,
   ninja,
   numpy,
+  packaging,
   pandas,
+  psutil,
+  pybind11,
+  python,
   rocmPackages,
+  runCommand,
+  setuptools,
+  setuptools-scm,
   torch,
   writableTmpDirAsHomeHook,
-
-  gpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
-  # From validate_and_update_archs at https://github.com/ROCm/aiter/blob/main/aiter/jit/core.py
-  supportedGpuTargets ? [
-    "gfx90a"
-    "gfx940"
-    "gfx941"
-    "gfx942"
-    "gfx1100"
-    "gfx1101"
-    "gfx1102"
-    "gfx1103"
-    "gfx1150"
-    "gfx1151"
-    "gfx1152"
-    "gfx1153"
-    "gfx1200"
-    "gfx1201"
-    "gfx950"
-  ],
 }:
+let
+  # Provide a default set of include paths needed by aiter at runtime for JIT modules
+  defaultRocmIncl = lib.makeIncludePath (
+    (with rocmPackages; [
+      clr
+      hipblas
+      hipblas-common
+      hipblaslt
+      hipcub
+      hipfft
+      hipsolver
+      hipsparse
+      rocblas
+      rocprim
+      rocsolver
+      rocsparse
+      rocthrust
+    ])
+    ++ [
+      pybind11
+    ]
+  );
+in
 buildPythonPackage (finalAttrs: {
   pname = "amd-aiter";
   version = "0.1.11.post1";
@@ -51,7 +57,6 @@ buildPythonPackage (finalAttrs: {
     rmdir 3rdparty/composable_kernel
     ln -sf ${rocmPackages.composable_kernel.src} 3rdparty/composable_kernel
 
-    # python relax deps hook?
     substituteInPlace pyproject.toml \
       --replace-fail '"flydsl==0.0.1.dev95158637"' ""
 
@@ -61,6 +66,13 @@ buildPythonPackage (finalAttrs: {
       --replace-fail \
         'commit_id = get_git_commit_id_short()' \
         'commit_id = "${finalAttrs.version}"'
+
+    # NIX_AITER_ROCM_INCL is a colon-separated list of include dirs
+    # defaults to packages known to be needed by aiter
+    substituteInPlace aiter/jit/utils/cpp_extension.py \
+      --replace-fail \
+        'paths.append(_join_rocm_home("include"))' \
+        'paths.append(_join_rocm_home("include")); paths.extend(os.environ.get("NIX_AITER_ROCM_INCL", "${defaultRocmIncl}").split(":"))'
 
     # setuptools runs setup.py twice (metadata + wheel). prepare_packaging()
     # copies 3rdparty/ (with nix store read-only files) into aiter_meta/, then
@@ -75,22 +87,20 @@ buildPythonPackage (finalAttrs: {
   '';
 
   env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-    PREBUILD_KERNELS = "0";
     BUILD_TARGET = "rocm";
+    PREBUILD_KERNELS = "0";
     ROCM_PATH = "${rocmPackages.clr}";
-    # FIXME does it even matter when PREBUILD_KERNELS is off?
-    GPU_ARCHS = lib.concatStringsSep ";" (lib.lists.intersectLists gpuTargets supportedGpuTargets);
+    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    ninja
     packaging
+    pandas
     psutil
     pybind11
-    ninja
-    pandas
+    setuptools
+    setuptools-scm
   ];
 
   buildInputs = [ rocmPackages.clr ];
@@ -99,8 +109,6 @@ buildPythonPackage (finalAttrs: {
     rocmPackages.hipcc
     writableTmpDirAsHomeHook
   ];
-
-  pythonImportsCheck = [ "aiter" ];
 
   dependencies = [
     einops
@@ -113,11 +121,49 @@ buildPythonPackage (finalAttrs: {
     torch
   ];
 
-  # Import requires writable $HOME (JIT cache) and ROCm GPU
-  # pythonImportsCheck = [ "aiter" ];
-
-  # Most of the tests require gpu
+  # Most tests and imports require a GPU and writable $HOME for JIT cache
   doCheck = false;
+
+  # Test JIT module builds for CDNA3 iff rocm enabled for torch
+  passthru.tests = lib.optionalAttrs torch.rocmSupport (
+    let
+      mkJitTest =
+        name: moduleName:
+        runCommand "amd-aiter-jit-${name}"
+          {
+            nativeBuildInputs = [
+              (python.withPackages (_: [ amd-aiter ]))
+              rocmPackages.clr
+              writableTmpDirAsHomeHook
+            ];
+            env = {
+              CXX = "amdclang++";
+              GPU_ARCHS = "gfx942";
+              PYTORCH_ROCM_ARCH = "gfx942";
+            };
+          }
+          ''
+            export AITER_JIT_DIR=$(mktemp -d)
+            python3 -c "
+            from aiter.jit.core import get_args_of_build, build_module
+            args = get_args_of_build('${moduleName}')
+            build_module(
+                '${moduleName}',
+                args['srcs'], args['flags_extra_cc'], args['flags_extra_hip'],
+                args['blob_gen_cmd'], args['extra_include'], args['extra_ldflags'],
+                args['verbose'], args['is_python_module'], args['is_standalone'],
+                args['torch_exclude'],
+            )
+            print('JIT compile of ${moduleName} finished')
+            "
+            touch $out
+          '';
+    in
+    {
+      jit-module-opus-sort = mkJitTest "opus-sort" "module_moe_sorting_opus";
+      jit-module-mhc = mkJitTest "mhc" "module_mhc";
+    }
+  );
 
   meta = {
     description = "AI Tensor Engine for ROCm";
