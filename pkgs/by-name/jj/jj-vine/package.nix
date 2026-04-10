@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jj-vine";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchFromCodeberg {
     owner = "abrenneke";
     repo = "jj-vine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vvNbeQvP205snAGiql/i8yFGyMw23YkSU4/uxOSnycY=";
+    hash = "sha256-//hBF2KoDe3bNzXQVxfB26cI8Cc6lZUwkDOZJ2clprI=";
   };
 
-  cargoHash = "sha256-vcpaKlNeORnDpVqXxu0TrXWaWNfaK9QPVJOrty9WmcQ=";
+  cargoHash = "sha256-ICBwMJMeGdpPNWXxBRKk+TNe1kubB0U/XgxXdeYirLA=";
 
   nativeCheckInputs = [
     jujutsu
