@@ -4,18 +4,22 @@
   lib,
 }:
 
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "readwise-cli";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "readwiseio";
     repo = "readwise-cli";
-    rev = "v0.5.5";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oPyhsKyaZRogn5y1JIJH0js0yrk5E298QEpIC9/4xXc=";
   };
 
   npmDepsHash = "sha256-eupjqOEE77pNzY9DBJdYdDraJtUVhbojaG/QCW+m+jw=";
+
+  prePatch = "export npmDeps";
 
   meta = {
     description = "Command-line interface for Readwise and Reader";
@@ -26,4 +30,4 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [ o-love ];
     platforms = lib.platforms.all;
   };
-}
+})
