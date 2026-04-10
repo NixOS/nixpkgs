@@ -31,7 +31,17 @@ stdenv.mkDerivation rec {
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
     ./setup-hook.sh
+  patches = [
+    # Add support for the UTF-8-MAC encoding. This is needed for correct behavior of applications that interact with
+    # the filesystem on Darwin because it uses a variant of NFD to store filenames.
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/ce1083dbec406fcea0f2678308ae85639798aa6e/textproc/libiconv/files/patch-utf8mac.diff";
+      hash = "sha256-aqoTDIunKnWLHPizdWbU6eCDZXaj2s+GJwtg6Spzfio=";
+    })
   ];
+
+  # The patch for UTF-8-MAC requires -p0. It can’t use `fetchpatch2` because that results in an infinite recursion.
+  patchFlags = [ "-p0" ];
 
   postPatch =
     lib.optionalString
@@ -81,6 +91,12 @@ stdenv.mkDerivation rec {
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870.
   # remove after gnulib is updated
   ++ lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
+
+  preBuild = ''
+    # The UTF-8-MAC patch requires regenerating `flags.h`
+    make -C lib genflags
+    lib/genflags > lib/flags.h
+  '';
 
   passthru = { inherit setupHooks; };
 
