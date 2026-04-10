@@ -1,10 +1,12 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchurl,
   rustPlatform,
   cmake,
   ninja,
+  makeBinaryWrapper,
   wrapGAppsHook4,
   glib-networking,
   gst_all_1,
@@ -20,8 +22,9 @@
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
-  fetchpatch,
   pipewire,
+  apple-sdk_15,
+  darwin,
 }:
 
 let
@@ -39,52 +42,36 @@ let
     };
   };
 in
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.12.0";
+  version = "6.12.2";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pykmoSiV3iSaD/V/Sd5GSV/BZWhk9XVg8io1j8wZv5k=";
+    hash = "sha256-aPYQOec4D0I4N/6nmSwodXsh3pvcHnlD37fUIw5kMjo=";
   };
-
-  patches = [
-    # https://github.com/SpikeHD/Dorion/issues/419
-    (fetchpatch {
-      url = "https://github.com/SpikeHD/Dorion/commit/98d50dadd1a7fb018698a3fe61ac104cbe89b5d4.patch";
-      hash = "sha256-1VbB2CVMUWw18lWC4EL83VS4SdC03AxDUKRq/hQNAAg=";
-    })
-  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-FJ4gQKgZkYqvjcqcRapJ8IQWP52kIg4uOTxifKG8zyo=";
+  cargoHash = "sha256-3FS8w9K3Wx7KbT7iy+0pAMdmreZnL+ZFMSAnwesnS7Y=";
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      patches
-      ;
+    inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-qSmIyLv8A+JDbTVG+Qcvq3gqBXBGtfbH4/tN+CvEmd8=";
+    hash = "sha256-E45X3JEns1TE+SVbtbBEl+RzwRgTiGN7/N4OgJ5o63o=";
   };
 
-  # CMake (webkit extension)
+  # CMake (webkit extension, Linux only)
   cmakeDir = ".";
   cmakeBuildDir = "src-tauri/extension_webkit";
   dontUseCmakeConfigure = true;
   dontUseNinjaBuild = true;
   dontUseNinjaCheck = true;
   dontUseNinjaInstall = true;
-  # cmake's supposed to set this automatically
-  # ... but the detection is based on the presence of ninja build hook
   cmakeFlags = [
     "-GNinja"
   ];
@@ -95,15 +82,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
     nodejs
     pkg-config
-    wrapGAppsHook4
     yq-go
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
     desktop-file-utils
     cmake
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1'
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -114,14 +109,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libsysprof-capture
     libayatana-appindicator
     pipewire
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
   ];
 
   postPatch = ''
     # remove updater
     rm -rf updater
-
-    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
     # disable pre-build script and disable auto-updater
     yq -iPo=json '
@@ -129,36 +124,50 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ' src-tauri/tauri.conf.json
 
     # link shelter injection
-    ln -s ${shelter} src-tauri/injection/shelter.js
+    ln -s "${shelter}" src-tauri/injection/shelter.js
 
     # link html/frontend data
-    ln -s $(pwd)/src src-tauri/html
+    ln -s "$(pwd)/src" src-tauri/html
+  ''
+  # disable Tauri's built-in codesigning
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    yq -iPo=json '
+      .bundle.macOS.signingIdentity = null
+    ' src-tauri/tauri.conf.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   configurePhase = ''
     runHook preConfigure
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     cmakeConfigurePhase
+  ''
+  + ''
     pnpmConfigHook
-
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    ninjaBuildPhase
-    cd ../..
-    tauriBuildHook
-  '';
+  buildPhase =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      ninjaBuildPhase
+      cd ../..
+    ''
+    + ''
+      tauriBuildHook
+    '';
 
   postInstall = ''
-    # Set up the resource directories
-    mkdir -p $out/lib/Dorion
-    ln -s $out/lib/Dorion $out/lib/dorion
-    rm -rf $out/lib/Dorion/injection
-    cp -r src-tauri/injection $out/lib/Dorion
-    cp -r src $out/lib/Dorion
-
-    # Modify the desktop file
+    mkdir -p "$out/lib/Dorion"
+    ln -s "$out/lib/Dorion" "$out/lib/dorion"
+    rm -rf "$out/lib/Dorion/injection"
+    cp -r src-tauri/injection "$out/lib/Dorion"
+    cp -r src "$out/lib/Dorion"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     desktop-file-edit \
       --set-comment "Tiny alternative Discord client" \
       --set-key="Exec" --set-value="Dorion %U" \
@@ -169,7 +178,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set-key="Keywords" --set-value="dorion;discord;vencord;chat;im;vc;ds;dc;dsc;tauri;" \
       --set-key="Terminal" --set-value="false" \
       --set-key="MimeType" --set-value="x-scheme-handler/discord" \
-      $out/share/applications/Dorion.desktop
+      "$out/share/applications/Dorion.desktop"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeBinaryWrapper "$out/Applications/Dorion.app/Contents/MacOS/Dorion" "$out/bin/Dorion"
   '';
 
   # error: failed to run custom build command for `Dorion v6.5.3 (/build/source/src-tauri)`
@@ -200,7 +212,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       griffi-gh
       getchoo
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     sourceProvenance = [
       lib.sourceTypes.binaryBytecode # actually, minified JS
       lib.sourceTypes.fromSource
