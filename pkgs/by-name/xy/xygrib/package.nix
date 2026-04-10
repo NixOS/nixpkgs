@@ -2,15 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wrapQtAppsHook,
   cmake,
   bzip2,
-  qtbase,
-  qttools,
   libnova,
   proj,
   libpng,
   openjpeg,
+  qt5,
 }:
 
 stdenv.mkDerivation {
@@ -21,17 +19,17 @@ stdenv.mkDerivation {
     owner = "opengribs";
     repo = "XyGrib";
     rev = "88c425ca2d7f4ba5d7ab75bfa25e177bee02d310";
-    sha256 = "sha256-qMMeRYIQqJpVRE3YjbXIiXHwS/CHs9l2QihszwQIr/A=";
+    hash = "sha256-qMMeRYIQqJpVRE3YjbXIiXHwS/CHs9l2QihszwQIr/A=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     bzip2
-    qtbase
+    qt5.qtbase
     libnova
     proj
     openjpeg
