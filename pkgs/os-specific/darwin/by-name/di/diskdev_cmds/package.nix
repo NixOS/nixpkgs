@@ -48,7 +48,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-P2dg3B5pU2ayasMHIM5nI0iG+YDdYQNcEpnJzZxm1kw=";
+  xcodeHash = "sha256-qyQM+48PKKWUmdoBprpDf4DXIVAtd3EKCU+ZD/EhNXQ=";
 
   postPatch =
     # Fix incompatible pointer to integer conversion. The last parameter is size_t not a pointer.
