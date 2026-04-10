@@ -67,6 +67,23 @@ let
     # TODO: Refactor `hardware.graphics` to ease referencing the closure
     # NOTE: A naive implementation may e.g. introduce a conditional infinite recursion (https://github.com/NixOS/nixpkgs/pull/488199)
     nvidia-gpu.unsafeFollowSymlinks = true;
+
+    zluda = {
+      onFeatures = [
+        "cuda"
+      ];
+      paths = [
+        pkgs.addDriverRunpath.driverLink
+        "/dev/dri"
+        "/dev/kfd"
+        "/sys/devices/virtual/kfd"
+        # As per https://www.kernel.org/doc/Documentation/admin-guide/devices.txt
+        # 226 is the major ID for "Direct Rendering Infrastructure (DRI)" devices
+        "/sys/dev/char/226:*"
+      ]
+      ++ config.hardware.graphics.extraPackages;
+      unsafeFollowSymlinks = true;
+    };
   };
 in
 {
@@ -82,6 +99,16 @@ in
       You may extend or override the exposed paths via the
       `programs.nix-required-mounts.allowedPatterns.nvidia-gpu.paths` option.
     '';
+
+    presets.zluda.enable = lib.mkEnableOption ''
+      Same as `programs.nix-required-mounts.presets.nvidia-gpu` but adds paths
+      to the sandbox that are needed for running CUDA applications on top of
+      the ZLUDA translation layer combined with AMD GPUs.
+
+      You may extend or override the exposed paths via the
+      `programs.nix-required-mounts.allowedPatterns.zluda.paths` option.
+    '';
+
     allowedPatterns =
       with lib.types;
       lib.mkOption {
@@ -120,6 +147,14 @@ in
         nix.settings.system-features = cfg.allowedPatterns.nvidia-gpu.onFeatures;
         programs.nix-required-mounts.allowedPatterns = {
           inherit (defaults) nvidia-gpu;
+        };
+      })
+      (lib.mkIf cfg.presets.zluda.enable {
+        hardware.graphics.enable = lib.mkDefault true;
+        hardware.amdgpu.zluda.enable = lib.mkDefault true;
+        nix.settings.system-features = cfg.allowedPatterns.zluda.onFeatures;
+        programs.nix-required-mounts.allowedPatterns = {
+          inherit (defaults) zluda;
         };
       })
     ]

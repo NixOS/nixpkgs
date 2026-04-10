@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdk8s-cli";
-  version = "2.205.6";
+  version = "2.206.3";
 
   src = fetchFromGitHub {
     owner = "cdk8s-team";
     repo = "cdk8s-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZHorjCZbZ8Lu7DwhAbCC/uKNrg+rYwL75NCjKskh/JM=";
+    hash = "sha256-ezxwAhSxDSmP4DhT4vF8nuO+TcnWgLk5szJb3RIv1xg=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-VAy3k99JB2j4MUCwXKyxSl+9OmGC1/xoJBF1/Xvuc54=";
+    hash = "sha256-fkG7gre4OOpoZf/vQAJU0Lnbl7eDsgZy0H/+4C7aWvI=";
   };
 
   nativeBuildInputs = [

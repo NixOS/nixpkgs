@@ -26,13 +26,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "open-scq30";
-  version = "2.5.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XBK7KxuksQoYZs/uVkh6+8S20G05W9ftK9pviUFNJ8s=";
+    hash = "sha256-4K/3kulUbUa21YbWh1nYXeeHAIVD/FX8VtWArpij0JQ=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxi
   ];
 
-  cargoHash = "sha256-P4r1MoFCkG80X0dJ1MpmjgedcpQ/HDTC3XikNUDKRaQ=";
+  cargoHash = "sha256-1Ccbi/21jTyTPt9WqhnwpBFuD0f90PabwyVRwZI1l0k=";
 
   env.INSTALL_PREFIX = placeholder "out";
 

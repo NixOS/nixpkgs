@@ -54,13 +54,13 @@
     "vendorHash": "sha256-Kk0YeStlev8AurZasORMe/42Rd3ZPFoFMat/rMpZFbE="
   },
   "aminueza_minio": {
-    "hash": "sha256-aWsMTUNIDwBzI/qsy78uA3ELnzUA+c4jP2jGD7QqrvI=",
+    "hash": "sha256-Qt51J0DcwrpJ9+8s8KwngGhhFhZQQYv3dAwFGOYvavo=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v3.28.1",
+    "rev": "v3.30.0",
     "spdx": "AGPL-3.0",
-    "vendorHash": "sha256-kg6RylB2sW5XLWxJLmIDq3h54rzQoCKrxVu7L76lvCE="
+    "vendorHash": "sha256-Mm7IwFX51hsG3ducCbanRoelgkyK6pe+9K8d18U01Z8="
   },
   "argoproj-labs_argocd": {
     "hash": "sha256-c6+WY4oXL8evvPk/RzVrwtgq4XLB/LzAH5tpjErbE60=",
@@ -274,13 +274,13 @@
     "vendorHash": "sha256-3o6YRDrq4rQhNAFyqiGJrAoxuAykWw85OExRGSE3kGI="
   },
   "datadog_datadog": {
-    "hash": "sha256-Is1XgOFmRl1Ieua5ZlBI/4bHal4AhsPhbl95r97bYN4=",
+    "hash": "sha256-WMggvZAgj36OyelTSE8I/1GRoTivs7q9szUbAFi6XdY=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v4.3.0",
+    "rev": "v4.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4A7qf+1RZYWyA5G/qSFhOjDR4GUtGzkh6m81n3Nvads="
+    "vendorHash": "sha256-2uj7Ff8g43s2T+zQIbTYFxxuaLpFxPQRo2z/0HNmh9k="
   },
   "datadrivers_nexus": {
     "hash": "sha256-yfxlDln4brI8QTFnhVsNOO3vRiqft3YWytvy2GMNBdY=",
@@ -364,13 +364,13 @@
     "vendorHash": "sha256-RtS88NqkO1nG/8znM0sQqsAIfDc+sOMy8N4T4hmvaVA="
   },
   "e-breuninger_netbox": {
-    "hash": "sha256-a9YE3zbMPLKyrD2hG31ymKxI780ONzKfzEPHCN2NhyA=",
+    "hash": "sha256-hY3XZFMP1qT4mHJpxsVSGsyd025NOeJogbh2m9hk7qE=",
     "homepage": "https://registry.terraform.io/providers/e-breuninger/netbox",
     "owner": "e-breuninger",
     "repo": "terraform-provider-netbox",
-    "rev": "v5.2.1",
+    "rev": "v5.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/kTRJnHbr9crrzdKsDz0q7svYTmiuDbSW/6kBfGgyZY="
+    "vendorHash": "sha256-5IZeoZpZj4vgAlyxbycs+IPeOEBS1tw3tM/7zoT4DCg="
   },
   "equinix_equinix": {
     "hash": "sha256-Tn8CnLx2ibkj7qlzpYCX7Cm+yoTcZujVELMJSbG+/ec=",

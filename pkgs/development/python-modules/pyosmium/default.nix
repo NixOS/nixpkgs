@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = isPyPy;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "osmcode";
     repo = "pyosmium";
     tag = "v${version}";
-    hash = "sha256-baLa3Zy67kbUBGoDqJjfO/ICSbr7cNYY8bUuVfcy3yQ=";
+    hash = "sha256-lEkT+3R6200XarMW1oZcOzMLPviDcpG8kQilXVWOyu0=";
   };
 
   build-system = [
