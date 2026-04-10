@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      doctest = callPackage ../development/octave-modules/doctest { };
-
       econometrics = callPackage ../development/octave-modules/econometrics { };
 
       fits = callPackage ../development/octave-modules/fits { };
