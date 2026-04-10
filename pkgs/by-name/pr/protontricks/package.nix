@@ -4,7 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   writeShellScript,
-  steam-run-free,
+  steam,
   fetchpatch2,
   winetricks,
   yad,
@@ -12,6 +12,17 @@
   extraCompatPaths ? "",
 }:
 
+let
+  steam-run =
+    (steam.override {
+      extraLibraries =
+        p: with p; [
+          # Fixes installing vcrun2022
+          # https://github.com/Matoking/protontricks/issues/461
+          freetype
+        ];
+    }).run-free;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
   version = "1.14.0";
@@ -27,9 +38,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     # Use steam-run to run Proton binaries
     (replaceVars ./steam-run.patch {
-      steamRun = lib.getExe steam-run-free;
+      steamRun = lib.getExe steam-run;
       bash = writeShellScript "steam-run-bash" ''
-        exec ${lib.getExe steam-run-free} bash "$@"
+        exec ${lib.getExe steam-run} bash "$@"
       '';
     })
 
