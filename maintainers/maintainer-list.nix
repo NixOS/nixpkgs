@@ -23902,6 +23902,12 @@
     githubId = 40308458;
     name = "rwxd";
   };
+  rxda = {
+    email = "sxfscool@gmail.com";
+    github = "rxda";
+    githubId = 19545808;
+    name = "rxda";
+  };
   rxiao = {
     email = "ben.xiao@me.com";
     github = "benxiao";
