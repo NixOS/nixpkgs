@@ -25,14 +25,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
-  version = "1.14.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
     tag = finalAttrs.version;
-    hash = "sha256-36Yst8j5xhXulNp/YGO3pDnvxpyT4ZuEjwSvJIESUSw=";
+    hash = "sha256-pTBpzSBGFUmol3Osb78yhyZup2DogLpNaBg/kF0dVGI=";
   };
 
   patches = [
