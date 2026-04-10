@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,10 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sha256 = "sha256-B4TwTPX1dsq6rB4YunY6q2yx2OJhNhmn3an/dJwDPJc=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/
-    mv *.ttf $out/share/fonts/
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "MOE Standard Kai Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
