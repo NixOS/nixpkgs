@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      optim = callPackage ../development/octave-modules/optim { };
-
       optiminterp = callPackage ../development/octave-modules/optiminterp { };
 
       quaternion = callPackage ../development/octave-modules/quaternion { };
