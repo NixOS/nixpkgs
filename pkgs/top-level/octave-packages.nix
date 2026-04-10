@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      financial = callPackage ../development/octave-modules/financial { };
-
       fpl = callPackage ../development/octave-modules/fpl { };
 
       fuzzy-logic-toolkit = callPackage ../development/octave-modules/fuzzy-logic-toolkit { };
