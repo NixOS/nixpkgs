@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohomematic-config";
-  version = "2026.3.5";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sukramj";
     repo = "aiohomematic-config";
     tag = finalAttrs.version;
-    hash = "sha256-OGpGtF+BH+WWIGGfpS6myJ7fPi1wuWYjeSS9y9LhXGY=";
+    hash = "sha256-I75OPUA/gdLdMAJU0iYYQUk54f5cQQ5UWsRQHayqpyo=";
   };
 
   build-system = [ setuptools ];
