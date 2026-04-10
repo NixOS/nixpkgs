@@ -7,6 +7,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "giff";
   version = "1.2.0";
 
