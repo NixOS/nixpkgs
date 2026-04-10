@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dtschema";
-  version = "2025.12";
+  version = "2026.04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devicetree-org";
     repo = "dt-schema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DCkZDI0/W/4IkMzaa769vKJxlSMWoEsLIdlyChYd+Mk=";
+    hash = "sha256-U86h0FVmsYfoKMOaS3DRwKOUjpsm4uNTbUm2YJehaFs=";
   };
 
   build-system = [ setuptools-scm ];
