@@ -164,7 +164,6 @@ buildPythonPackage (finalAttrs: {
       of other rich features.  Inspired by manim (3Blue1Brown's animation engine).
     '';
     homepage = "https://github.com/jkjkil4/JAnim";
-    documentation = "https://janim.rtfd.io";
     changelog = "https://github.com/jkjkil4/JAnim/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
