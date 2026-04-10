@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      bsltl = callPackage ../development/octave-modules/bsltl { };
-
       cgi = callPackage ../development/octave-modules/cgi { };
 
       communications = callPackage ../development/octave-modules/communications { };
