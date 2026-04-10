@@ -8,7 +8,7 @@
   openssl,
   pkg-config,
   pkgsBuildHost,
-  pkgs,
+  sourceRelease,
   stdenvNoCC,
 }:
 
@@ -20,23 +20,11 @@ let
     hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
   };
 
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  launchd = bootstrapSourceRelease "launchd";
-  Libc = bootstrapSourceRelease "Libc";
-  libplatform = bootstrapSourceRelease "libplatform";
-  libpthread = bootstrapSourceRelease "libpthread";
-  xnu = bootstrapSourceRelease "xnu";
+  launchd = sourceRelease "launchd";
+  Libc = sourceRelease "Libc";
+  libplatform = sourceRelease "libplatform";
+  libpthread = sourceRelease "libpthread";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "dyld-deps-private-headers";
