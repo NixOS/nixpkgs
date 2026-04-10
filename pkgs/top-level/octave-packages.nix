@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      generate_html = callPackage ../development/octave-modules/generate_html { };
-
       geometry = callPackage ../development/octave-modules/geometry { };
 
       gsl = callPackage ../development/octave-modules/gsl {
