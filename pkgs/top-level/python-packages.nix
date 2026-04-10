@@ -17061,6 +17061,8 @@ self: super: with self; {
 
   rowan = callPackage ../development/python-modules/rowan { };
 
+  rpatool = callPackage ../development/python-modules/rpatool { };
+
   rpcq = callPackage ../development/python-modules/rpcq { };
 
   rpdb = callPackage ../development/python-modules/rpdb { };
