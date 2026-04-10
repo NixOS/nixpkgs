@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
   hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
-  setupHooks = [
-    ../../../build-support/setup-hooks/role.bash
-    ./setup-hook.sh
+  setupHooks =
+    # Match the default behavior on Darwin, which does not automatically link libiconv.
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      ../../../build-support/setup-hooks/role.bash
+      ./setup-hook.sh
+    ];
+
   patches = [
     # Add support for the UTF-8-MAC encoding. This is needed for correct behavior of applications that interact with
     # the filesystem on Darwin because it uses a variant of NFD to store filenames.
