@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   utils,
   ...
@@ -4165,52 +4166,57 @@ let
 
       { environment.etc = unitFiles; }
 
-      (mkIf config.systemd.network.enable {
+      (
+        mkIf config.systemd.network.enable {
 
-        users.users.systemd-network.group = "systemd-network";
+          users.users.systemd-network.group = "systemd-network";
 
-        systemd.additionalUpstreamSystemUnits = [
-          "systemd-networkd-wait-online.service"
-          "systemd-networkd-wait-online@.service"
-          "systemd-networkd.service"
-          "systemd-networkd.socket"
-          "systemd-networkd-persistent-storage.service"
-        ];
+          systemd.additionalUpstreamSystemUnits = [
+            "systemd-networkd-wait-online.service"
+            "systemd-networkd-wait-online@.service"
+            "systemd-networkd.service"
+            "systemd-networkd.socket"
+            "systemd-networkd-persistent-storage.service"
+          ];
 
-        environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
+          environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
-        systemd.services.systemd-networkd =
-          let
-            isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
-            reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
-            nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
-            unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
-          in
-          {
-            wantedBy = [ "multi-user.target" ];
-            reloadTriggers = unitFileSources reloadableUnitFiles;
-            restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
-              config.environment.etc."systemd/networkd.conf".source
-            ];
-            aliases = [ "dbus-org.freedesktop.network1.service" ];
-            notSocketActivated = true;
-            stopIfChanged = false;
+          systemd.services.systemd-networkd =
+            let
+              isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
+              reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+              nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
+              unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
+            in
+            {
+              wantedBy = [ "multi-user.target" ];
+              reloadTriggers = unitFileSources reloadableUnitFiles;
+              restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
+                config.environment.etc."systemd/networkd.conf".source
+              ];
+              aliases = [ "dbus-org.freedesktop.network1.service" ];
+              notSocketActivated = true;
+              stopIfChanged = false;
+            };
+
+        }
+        // lib.optionalAttrs (options ? networking.iproute2) {
+          networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
+            enable = mkDefault true;
+            rttablesExtraConfig = ''
+
+              # Extra tables defined in NixOS systemd.networkd.config.routeTables.
+              ${concatStringsSep "\n" (
+                mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables
+              )}
+            '';
           };
+        }
+        // {
+          services.resolved.enable = mkDefault true;
 
-        networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
-          enable = mkDefault true;
-          rttablesExtraConfig = ''
-
-            # Extra tables defined in NixOS systemd.networkd.config.routeTables.
-            ${concatStringsSep "\n" (
-              mapAttrsToList (name: number: "${toString number} ${name}") cfg.config.routeTables
-            )}
-          '';
-        };
-
-        services.resolved.enable = mkDefault true;
-
-      })
+        }
+      )
     ];
 
   stage1Options = {
@@ -4219,7 +4225,7 @@ let
         with types;
         attrsOf (submodule {
           # Default in initrd is dhcp-on-stop, which is correct if flushBeforeStage2 = false
-          config = mkIf config.boot.initrd.network.flushBeforeStage2 {
+          config = mkIf (options ? boot.initrd.network && config.boot.initrd.network.flushBeforeStage2) {
             networkConfig.KeepConfiguration = mkDefault false;
           };
         });
@@ -4234,7 +4240,9 @@ let
       (commonConfig config.boot.initrd)
 
       {
-        systemd.network.enable = mkDefault config.boot.initrd.network.enable;
+        systemd.network.enable = mkDefault (
+          options ? boot.initrd.network && config.boot.initrd.network.enable
+        );
         systemd.contents = mkUnitFiles "/etc/" cfg;
 
         # Networkd link files are used early by udev to set up interfaces early.
@@ -4301,16 +4309,16 @@ in
   config = mkMerge [
     stage2Config
     (mkIf config.boot.initrd.systemd.enable {
-      assertions = [
-        {
-          assertion =
-            !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [ ];
-          message = ''
-            systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
-            DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
-          '';
-        }
-      ];
+      # Only assert against the legacy udhcpc options if initrd-network.nix is loaded;
+      # they don't exist otherwise.
+      assertions = lib.optional (options ? boot.initrd.network) {
+        assertion =
+          !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [ ];
+        message = ''
+          systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
+          DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
+        '';
+      };
 
       boot.initrd = stage1Config;
     })

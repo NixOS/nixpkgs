@@ -136,7 +136,7 @@ in
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
     services.getty.helpLine = mkIf (
-      config.documentation.nixos.enable && config.documentation.doc.enable
+      (config.documentation.nixos.enable or false) && (config.documentation.doc.enable or false)
     ) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.additionalUpstreamSystemUnits = [
@@ -151,7 +151,7 @@ in
     # We can't just rely on 'Conflicts=autovt@tty1.service' because
     # 'switch-to-configuration switch' will start 'autovt@tty1.service'
     # and kill the display manager.
-    systemd.targets.getty.wants = lib.mkIf (!config.services.displayManager.enable) [
+    systemd.targets.getty.wants = lib.mkIf (!(config.services.displayManager.enable or false)) [
       "autovt@tty1.service"
     ];
 
@@ -196,7 +196,7 @@ in
       ];
       serviceConfig.Restart = "always";
       restartIfChanged = false;
-      enable = mkDefault config.boot.isContainer;
+      enable = mkDefault (config.boot.isContainer or false);
     };
 
     environment.etc.issue = mkDefault {

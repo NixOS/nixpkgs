@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -245,134 +246,140 @@ in
   };
 
   ###### implementation
-  config = lib.mkIf config.security.enableWrappers {
-
-    assertions = lib.mapAttrsToList (name: opts: {
-      assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
-      message = ''
-        The security.wrappers.${name} wrapper is not valid:
-            setuid/setgid and capabilities are mutually exclusive.
-      '';
-    }) wrappers;
-
-    security.wrappers =
-      let
-        mkSetuidRoot = source: {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          inherit source;
-        };
-      in
+  config = lib.mkIf config.security.enableWrappers (
+    lib.mkMerge [
       {
-        # These are mount related wrappers that require the +s permission.
-        mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
-        umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
-      };
 
-    # Make sure our wrapperDir exports to the PATH env variable when
-    # initializing the shell
-    environment.extraInit = ''
-      # Wrappers override other bin directories.
-      export PATH="${wrapperDir}:$PATH"
-    '';
+        assertions = lib.mapAttrsToList (name: opts: {
+          assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+          message = ''
+            The security.wrappers.${name} wrapper is not valid:
+                setuid/setgid and capabilities are mutually exclusive.
+          '';
+        }) wrappers;
 
-    security.apparmor.includes = lib.mapAttrs' (
-      wrapName: wrap:
-      lib.nameValuePair "nixos/security.wrappers/${wrapName}" ''
-        include "${
-          pkgs.apparmorRulesFromClosure { name = "security.wrappers.${wrapName}"; } [
-            (securityWrapper wrap.source)
-          ]
-        }"
-        mrpx ${wrap.source},
-      ''
-    ) wrappers;
+        security.wrappers =
+          let
+            mkSetuidRoot = source: {
+              setuid = true;
+              owner = "root";
+              group = "root";
+              inherit source;
+            };
+          in
+          {
+            # These are mount related wrappers that require the +s permission.
+            mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
+            umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
+          };
 
-    systemd.mounts = [
-      {
-        where = parentWrapperDir;
-        what = "tmpfs";
-        type = "tmpfs";
-        options = lib.concatStringsSep "," [
-          "nodev"
-          "mode=755"
-          "size=${config.security.wrapperDirSize}"
+        # Make sure our wrapperDir exports to the PATH env variable when
+        # initializing the shell
+        environment.extraInit = ''
+          # Wrappers override other bin directories.
+          export PATH="${wrapperDir}:$PATH"
+        '';
+
+        systemd.mounts = [
+          {
+            where = parentWrapperDir;
+            what = "tmpfs";
+            type = "tmpfs";
+            options = lib.concatStringsSep "," [
+              "nodev"
+              "mode=755"
+              "size=${config.security.wrapperDirSize}"
+            ];
+          }
         ];
-      }
-    ];
 
-    systemd.services.suid-sgid-wrappers = {
-      description = "Create SUID/SGID Wrappers";
-      wantedBy = [ "sysinit.target" ];
-      before = [
-        "sysinit.target"
-        "shutdown.target"
-      ];
-      conflicts = [ "shutdown.target" ];
-      after = [ "systemd-sysusers.service" ];
-      unitConfig.DefaultDependencies = false;
-      unitConfig.RequiresMountsFor = [
-        "/nix/store"
-        "/run/wrappers"
-      ];
-      serviceConfig.RestrictSUIDSGID = false;
-      serviceConfig.Type = "oneshot";
-      script = ''
-        chmod 755 "${parentWrapperDir}"
+        systemd.services.suid-sgid-wrappers = {
+          description = "Create SUID/SGID Wrappers";
+          wantedBy = [ "sysinit.target" ];
+          before = [
+            "sysinit.target"
+            "shutdown.target"
+          ];
+          conflicts = [ "shutdown.target" ];
+          after = [ "systemd-sysusers.service" ];
+          unitConfig.DefaultDependencies = false;
+          unitConfig.RequiresMountsFor = [
+            "/nix/store"
+            "/run/wrappers"
+          ];
+          serviceConfig.RestrictSUIDSGID = false;
+          serviceConfig.Type = "oneshot";
+          script = ''
+            chmod 755 "${parentWrapperDir}"
 
-        # We want to place the tmpdirs for the wrappers to the parent dir.
-        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-        chmod a+rx "$wrapperDir"
+            # We want to place the tmpdirs for the wrappers to the parent dir.
+            wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+            chmod a+rx "$wrapperDir"
 
-        ${lib.concatStringsSep "\n" mkWrappedPrograms}
+            ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
-        if [ -L ${wrapperDir} ]; then
-          # Atomically replace the symlink
-          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-          old=$(readlink -f ${wrapperDir})
-          if [ -e "${wrapperDir}-tmp" ]; then
-            rm --force --recursive "${wrapperDir}-tmp"
-          fi
-          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-          rm --force --recursive "$old"
-        else
-          # For initial setup
-          ln --symbolic "$wrapperDir" "${wrapperDir}"
-        fi
-      '';
-    };
-
-    ###### wrappers consistency checks
-    system.checks = lib.singleton (
-      pkgs.runCommand "ensure-all-wrappers-paths-exist"
-        {
-          preferLocalBuild = true;
-        }
-        ''
-          # make sure we produce output
-          mkdir -p $out
-
-          echo -n "Checking that Nix store paths of all wrapped programs exist... "
-
-          declare -A wrappers
-          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
-
-          for name in "''${!wrappers[@]}"; do
-            path="''${wrappers[$name]}"
-            if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
-              test -t 1 && echo -ne '\033[1;31m'
-              echo "FAIL"
-              echo "The path $path does not exist!"
-              echo 'Please, check the value of `security.wrappers."'$name'".source`.'
-              test -t 1 && echo -ne '\033[0m'
-              exit 1
+            if [ -L ${wrapperDir} ]; then
+              # Atomically replace the symlink
+              # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+              old=$(readlink -f ${wrapperDir})
+              if [ -e "${wrapperDir}-tmp" ]; then
+                rm --force --recursive "${wrapperDir}-tmp"
+              fi
+              ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+              mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+              rm --force --recursive "$old"
+            else
+              # For initial setup
+              ln --symbolic "$wrapperDir" "${wrapperDir}"
             fi
-          done
+          '';
+        };
 
-          echo "OK"
-        ''
-    );
-  };
+        ###### wrappers consistency checks
+        system.checks = lib.singleton (
+          pkgs.runCommand "ensure-all-wrappers-paths-exist"
+            {
+              preferLocalBuild = true;
+            }
+            ''
+              # make sure we produce output
+              mkdir -p $out
+
+              echo -n "Checking that Nix store paths of all wrapped programs exist... "
+
+              declare -A wrappers
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
+
+              for name in "''${!wrappers[@]}"; do
+                path="''${wrappers[$name]}"
+                if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
+                  test -t 1 && echo -ne '\033[1;31m'
+                  echo "FAIL"
+                  echo "The path $path does not exist!"
+                  echo 'Please, check the value of `security.wrappers."'$name'".source`.'
+                  test -t 1 && echo -ne '\033[0m'
+                  exit 1
+                fi
+              done
+
+              echo "OK"
+            ''
+        );
+      }
+
+      (lib.optionalAttrs (options ? security.apparmor.includes) {
+        security.apparmor.includes = lib.mapAttrs' (
+          wrapName: wrap:
+          lib.nameValuePair "nixos/security.wrappers/${wrapName}" ''
+            include "${
+              pkgs.apparmorRulesFromClosure { name = "security.wrappers.${wrapName}"; } [
+                (securityWrapper wrap.source)
+              ]
+            }"
+            mrpx ${wrap.source},
+          ''
+        ) wrappers;
+      })
+    ]
+  );
 }
