@@ -29,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/bahdotsh/giff";
     changelog = "https://github.com/bahdotsh/giff/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      kpbaks
+    ];
     mainProgram = "giff";
   };
 })
