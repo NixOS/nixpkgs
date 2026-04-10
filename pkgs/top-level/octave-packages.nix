@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      ocl = callPackage ../development/octave-modules/ocl { };
-
       octclip = callPackage ../development/octave-modules/octclip { };
 
       octproj = callPackage ../development/octave-modules/octproj { };
