@@ -1,0 +1,21 @@
+diff --git a/packages/flutter_tools/lib/src/android/gradle.dart b/packages/flutter_tools/lib/src/android/gradle.dart
+index 13a0be4ca25..fd7b0980579 100644
+--- a/packages/flutter_tools/lib/src/android/gradle.dart
++++ b/packages/flutter_tools/lib/src/android/gradle.dart
+@@ -477,6 +477,16 @@ class AndroidGradleBuilder implements AndroidBuilder {
+       return;
+     }
+ 
++    assert(
++      globals.platform.environment['NIX_AAPT2_BINARY_PATH']!.isNotEmpty,
++      'The environment variable NIX_AAPT2_BINARY_PATH is unset!',
++    );
++
++    // Force Gradle to use a custom `aapt2` binary, instead of letting it build its own.
++    options.add(
++      '-Pandroid.aapt2FromMavenOverride=${globals.platform.environment['NIX_AAPT2_BINARY_PATH']}',
++    );
++
+     // Assembly work starts here.
+     final BuildInfo buildInfo = androidBuildInfo.buildInfo;
+     final String assembleTask = isBuildingBundle

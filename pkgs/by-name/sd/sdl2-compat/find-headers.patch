@@ -1,0 +1,31 @@
+diff --git a/SDL2Config.cmake.in b/SDL2Config.cmake.in
+index 80c1b99..54f50e6 100644
+--- a/SDL2Config.cmake.in
++++ b/SDL2Config.cmake.in
+@@ -45,7 +45,8 @@ endif()
+ set(SDL2_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+ set(SDL2_EXEC_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+ set(SDL2_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_FULL_INCLUDEDIR@/SDL2")
+-set(SDL2_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_FULL_INCLUDEDIR@;@PACKAGE_CMAKE_INSTALL_FULL_INCLUDEDIR@/SDL2")
++set(SDL2_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_FULL_INCLUDEDIR@;@PACKAGE_CMAKE_INSTALL_FULL_INCLUDEDIR@/SDL2" $ENV{SDL2_PATH})
++separate_arguments(SDL2_INCLUDE_DIRS)
+ set(SDL2_BINDIR "@PACKAGE_CMAKE_INSTALL_FULL_BINDIR@")
+ set(SDL2_LIBDIR "@PACKAGE_CMAKE_INSTALL_FULL_LIBDIR@")
+ set(SDL2_LIBRARIES SDL2::SDL2)
+diff --git a/sdl2-config.in b/sdl2-config.in
+index d21b1b2..bb0d624 100644
+--- a/sdl2-config.in
++++ b/sdl2-config.in
+@@ -50,7 +50,11 @@ while test $# -gt 0; do
+       echo @PROJECT_VERSION@
+       ;;
+     --cflags)
+-      echo -I${includedir}/SDL2 @SDL_CFLAGS@
++      SDL_CFLAGS=""
++      for i in @includedir@/SDL2 $SDL2_PATH; do
++        SDL_CFLAGS="$SDL_CFLAGS -I$i"
++      done
++      echo $SDL_CFLAGS @SDL_CFLAGS@
+       ;;
+ @ENABLE_SHARED_TRUE@    --libs)
+ @ENABLE_SHARED_TRUE@      echo -L${libdir} @SDL_RLD_FLAGS@ @SDL_LIBS@

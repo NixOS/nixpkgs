@@ -1,0 +1,183 @@
+diff --git a/usrsctplib/netinet/sctp_cc_functions.c b/usrsctplib/netinet/sctp_cc_functions.c
+index 57bcdaa..70cf8b7 100755
+--- a/usrsctplib/netinet/sctp_cc_functions.c
++++ b/usrsctplib/netinet/sctp_cc_functions.c
+@@ -764,7 +764,7 @@ sctp_cwnd_update_after_sack_common(struct sctp_tcb *stcb,
+ #if defined(__FreeBSD__) && !defined(__Userspace__)
+ 	int old_cwnd;
+ #endif
+-	uint32_t t_ssthresh, t_cwnd, incr;
++	uint32_t t_ssthresh, incr;
+ 	uint64_t t_ucwnd_sbw;
+ 	uint64_t t_path_mptcp;
+ 	uint64_t mptcp_like_alpha;
+@@ -773,7 +773,6 @@ sctp_cwnd_update_after_sack_common(struct sctp_tcb *stcb,
+ 
+ 	/* MT FIXME: Don't compute this over and over again */
+ 	t_ssthresh = 0;
+-	t_cwnd = 0;
+ 	t_ucwnd_sbw = 0;
+ 	t_path_mptcp = 0;
+ 	mptcp_like_alpha = 1;
+@@ -783,7 +782,6 @@ sctp_cwnd_update_after_sack_common(struct sctp_tcb *stcb,
+ 		max_path = 0;
+ 		TAILQ_FOREACH(net, &stcb->asoc.nets, sctp_next) {
+ 			t_ssthresh += net->ssthresh;
+-			t_cwnd += net->cwnd;
+ 			/* lastsa>>3;  we don't need to devide ...*/
+ 			srtt = net->lastsa;
+ 			if (srtt > 0) {
+diff --git a/usrsctplib/netinet/sctp_indata.c b/usrsctplib/netinet/sctp_indata.c
+index 3bce9e9..42ce111 100755
+--- a/usrsctplib/netinet/sctp_indata.c
++++ b/usrsctplib/netinet/sctp_indata.c
+@@ -3320,7 +3320,6 @@ sctp_strike_gap_ack_chunks(struct sctp_tcb *stcb, struct sctp_association *asoc,
+ 	struct sctp_tmit_chunk *tp1;
+ 	int strike_flag = 0;
+ 	struct timeval now;
+-	int tot_retrans = 0;
+ 	uint32_t sending_seq;
+ 	struct sctp_nets *net;
+ 	int num_dests_sacked = 0;
+@@ -3691,7 +3690,6 @@ sctp_strike_gap_ack_chunks(struct sctp_tcb *stcb, struct sctp_association *asoc,
+ 			}
+ 
+ 			tp1->rec.data.doing_fast_retransmit = 1;
+-			tot_retrans++;
+ 			/* mark the sending seq for possible subsequent FR's */
+ 			/*
+ 			 * SCTP_PRINTF("Marking TSN for FR new value %x\n",
+diff --git a/usrsctplib/netinet/sctp_output.c b/usrsctplib/netinet/sctp_output.c
+index 6a7dff9..a914b3b 100755
+--- a/usrsctplib/netinet/sctp_output.c
++++ b/usrsctplib/netinet/sctp_output.c
+@@ -9970,7 +9970,7 @@ sctp_chunk_retransmission(struct sctp_inpcb *inp,
+ 	struct mbuf *m, *endofchain;
+ 	struct sctp_nets *net = NULL;
+ 	uint32_t tsns_sent = 0;
+-	int no_fragmentflg, bundle_at, cnt_thru;
++	int no_fragmentflg, bundle_at;
+ 	unsigned int mtu;
+ 	int error, i, one_chunk, fwd_tsn, ctl_cnt, tmr_started;
+ 	struct sctp_auth_chunk *auth = NULL;
+@@ -10046,7 +10046,6 @@ sctp_chunk_retransmission(struct sctp_inpcb *inp,
+ 		}
+ 	}
+ 	one_chunk = 0;
+-	cnt_thru = 0;
+ 	/* do we have control chunks to retransmit? */
+ 	if (m != NULL) {
+ 		/* Start a timer no matter if we succeed or fail */
+@@ -10368,7 +10367,6 @@ sctp_chunk_retransmission(struct sctp_inpcb *inp,
+ 			/* (void)SCTP_GETTIME_TIMEVAL(&net->last_sent_time); */
+ 
+ 			/* For auto-close */
+-			cnt_thru++;
+ 			if (*now_filled == 0) {
+ 				(void)SCTP_GETTIME_TIMEVAL(&asoc->time_last_sent);
+ 				*now = asoc->time_last_sent;
+@@ -13416,7 +13414,7 @@ sctp_lower_sosend(struct socket *so,
+ 	struct epoch_tracker et;
+ #endif
+ 	ssize_t sndlen = 0, max_len, local_add_more;
+-	int error, len;
++	int error;
+ 	struct mbuf *top = NULL;
+ 	int queue_only = 0, queue_only_for_init = 0;
+ 	int free_cnt_applied = 0;
+@@ -14035,7 +14033,6 @@ sctp_lower_sosend(struct socket *so,
+ 		 */
+ 		local_add_more = sndlen;
+ 	}
+-	len = 0;
+ 	if (non_blocking) {
+ 		goto skip_preblock;
+ 	}
+@@ -14265,7 +14262,6 @@ skip_preblock:
+ 				}
+ 				sctp_snd_sb_alloc(stcb, sndout);
+ 				atomic_add_int(&sp->length, sndout);
+-				len += sndout;
+ 				if (sinfo_flags & SCTP_SACK_IMMEDIATELY) {
+ 					sp->sinfo_flags |= SCTP_SACK_IMMEDIATELY;
+ 				}
+diff --git a/usrsctplib/netinet/sctp_pcb.c b/usrsctplib/netinet/sctp_pcb.c
+index 89a66bc..a952921 100755
+--- a/usrsctplib/netinet/sctp_pcb.c
++++ b/usrsctplib/netinet/sctp_pcb.c
+@@ -7943,7 +7943,7 @@ sctp_drain_mbufs(struct sctp_tcb *stcb)
+ }
+ 
+ void
+-sctp_drain()
++sctp_drain(void)
+ {
+ 	/*
+ 	 * We must walk the PCB lists for ALL associations here. The system
+diff --git a/usrsctplib/netinet/sctp_sysctl.c b/usrsctplib/netinet/sctp_sysctl.c
+index bb49e17..8b77f7e 100755
+--- a/usrsctplib/netinet/sctp_sysctl.c
++++ b/usrsctplib/netinet/sctp_sysctl.c
+@@ -61,7 +61,7 @@ FEATURE(sctp, "Stream Control Transmission Protocol");
+  */
+ 
+ void
+-sctp_init_sysctls()
++sctp_init_sysctls(void)
+ {
+ 	SCTP_BASE_SYSCTL(sctp_sendspace) = SCTPCTL_MAXDGRAM_DEFAULT;
+ 	SCTP_BASE_SYSCTL(sctp_recvspace) = SCTPCTL_RECVSPACE_DEFAULT;
+diff --git a/usrsctplib/user_socket.c b/usrsctplib/user_socket.c
+index 513a5a9..89e9eb2 100755
+--- a/usrsctplib/user_socket.c
++++ b/usrsctplib/user_socket.c
+@@ -2857,7 +2857,6 @@ sctp_userspace_ip_output(int *result, struct mbuf *o_pak,
+ 	struct mbuf *m_orig;
+ 	int iovcnt;
+ 	int len;
+-	int send_count;
+ 	struct ip *ip;
+ 	struct udphdr *udp;
+ 	struct sockaddr_in dst;
+@@ -2930,16 +2929,13 @@ sctp_userspace_ip_output(int *result, struct mbuf *o_pak,
+ 		m_adj(m, sizeof(struct ip) + sizeof(struct udphdr));
+ 	}
+ 
+-	send_count = 0;
+ 	for (iovcnt = 0; m != NULL && iovcnt < MAXLEN_MBUF_CHAIN; m = m->m_next, iovcnt++) {
+ #if !defined(_WIN32)
+ 		send_iovec[iovcnt].iov_base = (caddr_t)m->m_data;
+ 		send_iovec[iovcnt].iov_len = SCTP_BUF_LEN(m);
+-		send_count += send_iovec[iovcnt].iov_len;
+ #else
+ 		send_iovec[iovcnt].buf = (caddr_t)m->m_data;
+ 		send_iovec[iovcnt].len = SCTP_BUF_LEN(m);
+-		send_count += send_iovec[iovcnt].len;
+ #endif
+ 	}
+ 
+@@ -3002,7 +2998,6 @@ void sctp_userspace_ip6_output(int *result, struct mbuf *o_pak,
+ 	struct mbuf *m_orig;
+ 	int iovcnt;
+ 	int len;
+-	int send_count;
+ 	struct ip6_hdr *ip6;
+ 	struct udphdr *udp;
+ 	struct sockaddr_in6 dst;
+@@ -3076,16 +3071,13 @@ void sctp_userspace_ip6_output(int *result, struct mbuf *o_pak,
+ 	  m_adj(m, sizeof(struct ip6_hdr));
+ 	}
+ 
+-	send_count = 0;
+ 	for (iovcnt = 0; m != NULL && iovcnt < MAXLEN_MBUF_CHAIN; m = m->m_next, iovcnt++) {
+ #if !defined(_WIN32)
+ 		send_iovec[iovcnt].iov_base = (caddr_t)m->m_data;
+ 		send_iovec[iovcnt].iov_len = SCTP_BUF_LEN(m);
+-		send_count += send_iovec[iovcnt].iov_len;
+ #else
+ 		send_iovec[iovcnt].buf = (caddr_t)m->m_data;
+ 		send_iovec[iovcnt].len = SCTP_BUF_LEN(m);
+-		send_count += send_iovec[iovcnt].len;
+ #endif
+ 	}
+ 	if (m != NULL) {

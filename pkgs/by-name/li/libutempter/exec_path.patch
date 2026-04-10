@@ -1,0 +1,32 @@
+diff --git a/libutempter/iface.c b/libutempter/iface.c
+index 37c74a8..6f44c9a 100644
+--- a/libutempter/iface.c
++++ b/libutempter/iface.c
+@@ -43,7 +43,7 @@
+        __result; }))
+ #endif
+ 
+-#define UTEMPTER_DEFAULT_PATHNAME	LIBEXECDIR "/utempter/utempter"
++#define UTEMPTER_DEFAULT_PATHNAME	"utempter"
+ 
+ static const char *utempter_pathname;
+ static int saved_fd = -1;
+@@ -57,8 +57,8 @@ do_child(int master_fd, const char *path, char *const *argv)
+ 		_exit(EXIT_FAILURE);
+ 	}
+ 
+-	execv(path, argv);
+-	print_dbg("execv: %s", strerror(errno));
++	execvp(path, argv);
++	print_dbg("execvp: %s", strerror(errno));
+ 
+ 	while (EACCES == errno) {
+ 		/* try saved group ID */
+@@ -73,7 +73,7 @@ do_child(int master_fd, const char *path, char *const *argv)
+ 		if (setgid(sgid))
+ 			break;
+ 
+-		(void) execv(path, argv);
++		(void) execvp(path, argv);
+ 		break;
+ 	}

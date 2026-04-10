@@ -1,0 +1,28 @@
+Upstream PR: https://github.com/r00t0v3rr1d3/armitage/pull/1
+diff --git a/armitage/build.gradle b/armitage/build.gradle
+index 43a5d08..50ae084 100644
+--- a/armitage/build.gradle
++++ b/armitage/build.gradle
+@@ -19,7 +19,7 @@ jar {
+     from {
+         configurations.compileClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+     }
+-    archiveName 'armitage.jar'
++    archiveFileName.set 'armitage.jar'
+ }
+ 
+ dependencies {
+diff --git a/cortana/build.gradle b/cortana/build.gradle
+index c7d08bb..aa54635 100644
+--- a/cortana/build.gradle
++++ b/cortana/build.gradle
+@@ -19,7 +19,8 @@ jar {
+     from {
+         configurations.compileClasspath.filter { it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+     }
+-    archiveName 'cortana.jar'
++    duplicatesStrategy DuplicatesStrategy.INCLUDE
++    archiveFileName.set 'cortana.jar'
+ }
+ 
+ dependencies {

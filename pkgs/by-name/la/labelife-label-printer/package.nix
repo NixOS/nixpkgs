@@ -1,0 +1,76 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  cups,
+  autoPatchelfHook,
+}:
+
+let
+  archAttrset = {
+    aarch64-linux = "aarch64";
+    armv6l-linux = "arm";
+    armv7l-linux = "armhf";
+    i686-linux = "i386";
+    x86_64-linux = "x86_64";
+  };
+  archiveSnapshot = "20260804054912";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "labelife-label-printer";
+  version = "2.3.2.002";
+
+  arch =
+    archAttrset.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  src = fetchurl {
+    url = "https://web.archive.org/web/${archiveSnapshot}/https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
+    hash = "sha256-UJ2wHQllvj1nY/rwrINwBzyCQP/KwwTSrlyuNXguq5o=";
+  };
+
+  nativeBuildInputs = [
+    unzip
+    autoPatchelfHook
+  ];
+  buildInputs = [ cups ];
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    # Extract outer ZIP file, flattening paths (so the inner tarball lands in cwd)
+    unzip -qj ${finalAttrs.src}
+
+    # Extract inner tar.gz with --strip-components=1 to remove the version-prefixed top directory
+    tar -xzf *.tar.gz --strip-components=1
+
+    runHook postUnpack
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    # Install the CUPS filter with executable permissions
+    install -Dm755 ./${finalAttrs.arch}/rastertolabeltspl $out/lib/cups/filter/rastertolabeltspl
+
+    # Install all PPD files with read and write permissions for owner, and read for group and others
+    for ppd in ./ppds/*.ppd; do
+      install -Dm644 "$ppd" "$out/share/cups/model/label/$(basename "$ppd")"
+    done
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "CUPS driver for Labelife-compatible thermal label printers";
+    downloadPage = "https://labelife.net/#/chart";
+    homepage = "https://labelife.net";
+    license = lib.licenses.unfree;
+    longDescription = ''
+      Supports printers from Phomemo, Itari, Omezizy, and Aimo.
+    '';
+    maintainers = with lib.maintainers; [ daniel-fahey ];
+    platforms = lib.attrNames archAttrset;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+})

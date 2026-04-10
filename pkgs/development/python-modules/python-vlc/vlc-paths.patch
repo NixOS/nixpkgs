@@ -1,0 +1,13 @@
+diff --git a/vlc.py b/vlc.py
+index ce535be..d3edd69 100644
+--- a/vlc.py
++++ b/vlc.py
+@@ -179,7 +179,7 @@ def find_lib():
+ 
+     else:
+         # All other OSes (linux, freebsd...)
+-        p = find_library("vlc")
++        p = "@libvlc@"
+         try:
+             dll = ctypes.CDLL(p)
+         except OSError:  # may fail

@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 30 Oct 2024 20:19:20 -0400
+Subject: [PATCH 20/20] Fall back to readlink on Linux
+
+---
+ xar/lib/archive.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/xar/lib/archive.c b/xar/lib/archive.c
+index b7f9cbf..3a79c74 100644
+--- a/xar/lib/archive.c
++++ b/xar/lib/archive.c
+@@ -507,10 +507,31 @@ xar_t xar_fdopen_digest_verify(int fd, int32_t flags, void *expected_toc_digest,
+ 	// If there are hardlinks, the path we pick is the most recently opened by
+ 	// the filesystem; which is effectively random.
+ 	char path_buff[PATH_MAX];
++#if defined(__APPLE__)
+ 	if (fcntl(fd, F_GETPATH, path_buff) < 0) {
+ 		close(fd);
+ 		return NULL;
+ 	}
++#elif defined(__linux__)
++	// Linux has to get the path to the file via `/proc`.
++	char proc_buff[PATH_MAX];
++	if (snprintf(proc_buff, PATH_MAX, "/proc/self/fd/%i", fd) < 0) {
++		close(fd);
++		return NULL;
++	}
++	if (readlink(proc_buff, &path_buff, PATH_MAX) < 0) {
++		close(fd);
++		return NULL;
++	}
++	// The filename is the file’s when the fd was created. Check to make sure it still exists.
++	struct stat stat_buff;
++	if (stat(path_buff, &stat_buff) < 0) {
++		close(fd);
++		return NULL;
++	}
++#else
++#error "Unknown platform. Please update with an implementation of `F_GETPATH`."
++#endif
+ 	
+ 	// Don't trust the position of the descriptor we were given, reset it back to 0
+ 	if (lseek(fd, 0, SEEK_SET) != 0) {
+-- 
+2.47.0
+

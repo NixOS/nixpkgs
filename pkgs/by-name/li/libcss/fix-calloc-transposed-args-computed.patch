@@ -1,0 +1,11 @@
+--- a/src/select/computed.c
++++ b/src/select/computed.c
+@@ -73,7 +73,7 @@
+ 	if (result == NULL)
+ 		return CSS_BADPARM;
+ 
+-	s = calloc(sizeof(css_computed_style), 1);
++	s = calloc(1, sizeof(css_computed_style));
+ 	if (s == NULL)
+ 		return CSS_NOMEM;
+ 

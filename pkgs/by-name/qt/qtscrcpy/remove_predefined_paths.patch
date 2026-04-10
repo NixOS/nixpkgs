@@ -1,0 +1,28 @@
+diff --git a/QtScrcpy/main.cpp b/QtScrcpy/main.cpp
+index aa9dd18..6605005 100644
+--- a/QtScrcpy/main.cpp
++++ b/QtScrcpy/main.cpp
+@@ -58,23 +58,12 @@ int main(int argc, char *argv[])
+
+     // set env
+ #ifdef Q_OS_WIN32
+-    qputenv("QTSCRCPY_ADB_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/win/adb.exe");
+-    qputenv("QTSCRCPY_SERVER_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
+ #endif
+
+ #ifdef Q_OS_MACOS
+-    qputenv("QTSCRCPY_ADB_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/mac/adb");
+-    qputenv("QTSCRCPY_SERVER_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
+ #endif
+
+ #ifdef Q_OS_LINUX
+-    // Only set environment variables if they are not already set (e.g., by AppImage AppRun)
+-    if (qgetenv("QTSCRCPY_ADB_PATH").isEmpty()) {
+-        qputenv("QTSCRCPY_ADB_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/linux/adb");
+-    }
+-    if (qgetenv("QTSCRCPY_SERVER_PATH").isEmpty()) {
+-        qputenv("QTSCRCPY_SERVER_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
+-    }
+ #endif
+
+     g_msgType = covertLogLevel(Config::getInstance().getLogLevel());

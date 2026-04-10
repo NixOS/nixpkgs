@@ -1,0 +1,26 @@
+diff --git a/Libraries/xcsdk/Sources/SDK/Product.cpp b/Libraries/xcsdk/Sources/SDK/Product.cpp
+index f291d475c7..bc339f567c 100644
+--- a/Libraries/xcsdk/Sources/SDK/Product.cpp
++++ b/Libraries/xcsdk/Sources/SDK/Product.cpp
+@@ -33,7 +33,7 @@
+     auto PBV  = unpack.cast <plist::String> ("ProductBuildVersion");
+     auto PC   = unpack.cast <plist::String> ("ProductCopyright");
+ 
+-    if (!unpack.complete(true)) {
++    if (!unpack.complete(false)) {
+         fprintf(stderr, "%s", unpack.errorText().c_str());
+     }
+ 
+diff --git a/Libraries/xcsdk/Sources/SDK/Target.cpp b/Libraries/xcsdk/Sources/SDK/Target.cpp
+index 523c1e4cbd..2197b1d6d1 100644
+--- a/Libraries/xcsdk/Sources/SDK/Target.cpp
++++ b/Libraries/xcsdk/Sources/SDK/Target.cpp
+@@ -86,7 +86,7 @@
+     /* Ignored: seems to be a typo. */
+     (void)unpack.cast <plist::String> ("isBaseSDK");
+ 
+-    if (!unpack.complete(true)) {
++    if (!unpack.complete(false)) {
+         fprintf(stderr, "%s", unpack.errorText().c_str());
+     }
+ 

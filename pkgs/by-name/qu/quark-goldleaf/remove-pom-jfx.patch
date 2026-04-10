@@ -1,0 +1,93 @@
+diff --git a/pom.xml b/pom.xml
+index 51ce56b..44dcd09 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -15,72 +15,6 @@
+   </properties>
+ 
+     <dependencies>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-controls</artifactId>
+-            <version>17</version>
+-            <classifier>linux</classifier>
+-            <scope>compile</scope>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-controls</artifactId>
+-            <version>17</version>
+-            <classifier>win</classifier>
+-            <scope>compile</scope>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-controls</artifactId>
+-            <version>17</version>
+-            <classifier>mac</classifier>
+-            <scope>compile</scope>
+-        </dependency>
+-
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>17</version>
+-            <classifier>linux</classifier>
+-            <scope>compile</scope> 
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>17</version>
+-            <classifier>win</classifier>
+-            <scope>compile</scope> 
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>17</version>
+-            <classifier>mac</classifier>
+-            <scope>compile</scope> 
+-        </dependency>
+-
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-graphics</artifactId>
+-            <version>17</version>
+-            <classifier>linux</classifier>
+-            <scope>compile</scope>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-graphics</artifactId>
+-            <version>17</version>
+-            <classifier>win</classifier>
+-            <scope>compile</scope>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-graphics</artifactId>
+-            <version>17</version>
+-            <classifier>mac</classifier>
+-            <scope>compile</scope>
+-        </dependency>
+-
+         <dependency>
+             <groupId>org.usb4java</groupId>
+             <artifactId>usb4java-javax</artifactId>
+@@ -123,15 +57,6 @@
+                 </executions>
+             </plugin>
+             
+-            <plugin>
+-                <groupId>org.openjfx</groupId>
+-                <artifactId>javafx-maven-plugin</artifactId>
+-                <version>0.0.8</version>
+-                <configuration>
+-                    <mainClass>xortroll.goldleaf.quark.Main</mainClass>
+-                </configuration>
+-            </plugin>
+-
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-assembly-plugin</artifactId>

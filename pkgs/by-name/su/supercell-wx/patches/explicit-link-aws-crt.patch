@@ -1,0 +1,12 @@
+diff --git a/wxdata/wxdata.cmake b/wxdata/wxdata.cmake
+index 0624971d..1df079de 100644
+--- a/wxdata/wxdata.cmake
++++ b/wxdata/wxdata.cmake
+@@ -363,6 +363,7 @@ endif()
+ 
+ target_link_libraries(wxdata PUBLIC aws-cpp-sdk-core
+                                     aws-cpp-sdk-s3
++                                    aws-crt-cpp
+                                     cpr::cpr
+                                     LibXml2::LibXml2
+                                     libzip::zip

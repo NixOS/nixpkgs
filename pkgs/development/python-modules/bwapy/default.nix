@@ -1,0 +1,50 @@
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchPypi,
+  bwa,
+  cffi,
+  zlib,
+}:
+
+buildPythonPackage rec {
+  pname = "bwapy";
+  version = "0.1.4";
+  format = "setuptools";
+
+  # uses the removed imp module
+  disabled = pythonAtLeast "3.12";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-/NrQxzEXU9VQs6Ou+8Jhk4Dn41566qOG/UkcukfnGCQ=";
+  };
+  postPatch = ''
+    # replace bundled bwa
+    rm -r bwa/*
+    cp ${bwa}/lib/*.a ${bwa}/include/*.h bwa/
+
+    substituteInPlace setup.py \
+      --replace 'setuptools>=49.2.0' 'setuptools'
+  '';
+
+  buildInputs = [
+    zlib
+    bwa
+  ];
+
+  propagatedBuildInputs = [ cffi ];
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "bwapy" ];
+
+  meta = {
+    homepage = "https://github.com/ACEnglish/bwapy";
+    description = "Python bindings to bwa mem aligner";
+    mainProgram = "bwamempy";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ ris ];
+  };
+}

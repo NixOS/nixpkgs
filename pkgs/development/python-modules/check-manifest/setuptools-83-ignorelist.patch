@@ -1,0 +1,30 @@
+Backport of upstream fix for setuptools >= 83
+
+ref:
+https://github.com/mgedmin/check-manifest/commit/5cdb776d4ad547518002ab33528b880b51378b48
+
+diff --git a/check_manifest.py b/check_manifest.py
+--- a/check_manifest.py
++++ b/check_manifest.py
+@@ -592,10 +592,19 @@ class IgnoreList:
+         self._regexps = []
+ 
+     def __repr__(self):
+-        return 'IgnoreList(%r)' % (self._regexps)
++        return 'IgnoreList(%r)' % (
++            [getattr(p, '_pattern', p) for p in self._regexps]
++        )
+ 
+     def __eq__(self, other):
+-        return isinstance(other, IgnoreList) and self._regexps == other._regexps
++        return (
++            isinstance(other, IgnoreList)
++            and len(self._regexps) == len(other._regexps)
++            and all(
++                getattr(a, '_pattern', a) == getattr(b, '_pattern', b)
++                for a, b in zip(self._regexps, other._regexps)
++            )
++        )
+ 
+     def __iadd__(self, other):
+         assert isinstance(other, IgnoreList)

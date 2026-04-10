@@ -1,0 +1,109 @@
+From e616648213b75f60703bd68e028f0af78199a565 Mon Sep 17 00:00:00 2001
+From: Leah Amelia Chen <hi@pluie.me>
+Date: Mon, 6 May 2024 10:43:56 +0200
+Subject: [PATCH] Update gerber-types to 0.3.0
+
+Required to update num-bigint to ^0.3.3, in order to compile on modern
+Rust versions with a native `div_ceil` on unsigned integers.
+---
+ Cargo.lock | 26 ++++++++++++++++----------
+ Cargo.toml |  2 +-
+ 2 files changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 1b15393..41cd500 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -387,7 +387,7 @@ dependencies = [
+  "log",
+  "memmap2",
+  "ttf-parser",
+- "uuid",
++ "uuid 0.8.2",
+ ]
+
+ [[package]]
+@@ -471,15 +471,15 @@ dependencies = [
+
+ [[package]]
+ name = "gerber-types"
+-version = "0.2.0"
++version = "0.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c7badd25c55b207eb6607600b73293d9627587b2dc0608031aa8de50e63810d3"
++checksum = "aecf78a269d7b4f73953f30174b18f52c1bb44f7d58f4d830a76c0ea023ad8bc"
+ dependencies = [
+  "chrono",
+  "conv",
+  "num-rational",
+  "thiserror",
+- "uuid",
++ "uuid 1.8.0",
+ ]
+
+ [[package]]
+@@ -780,9 +780,9 @@ dependencies = [
+
+ [[package]]
+ name = "num-bigint"
+-version = "0.3.2"
++version = "0.4.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7d0a3d5e207573f948a9e5376662aa743a2ea13f7c50a554d7af443a73fbfeba"
++checksum = "608e7659b5c3d7cba262d894801b9ec9d00de989e8a82bd4bef91d08da45cdc0"
+ dependencies = [
+  "autocfg",
+  "num-integer",
+@@ -801,9 +801,9 @@ dependencies = [
+
+ [[package]]
+ name = "num-rational"
+-version = "0.3.2"
++version = "0.4.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "12ac428b1cb17fce6f731001d307d351ec70a6d202fc2e60f7d4c5e42d8f4f07"
++checksum = "0638a1c9d0a3c0914158145bc76cff373a75a627e6ecbfb71cbe6f453a5a19b0"
+ dependencies = [
+  "autocfg",
+  "num-bigint",
+@@ -813,9 +813,9 @@ dependencies = [
+
+ [[package]]
+ name = "num-traits"
+-version = "0.2.14"
++version = "0.2.19"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9a64b1ec5cda2586e284722486d802acf1f7dbdc623e2bfc57e65ca1cd099290"
++checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
+ dependencies = [
+  "autocfg",
+ ]
+@@ -1379,6 +1379,12 @@ dependencies = [
+  "getrandom 0.2.2",
+ ]
+
++[[package]]
++name = "uuid"
++version = "1.8.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
++
+ [[package]]
+ name = "vec_map"
+ version = "0.8.2"
+diff --git a/Cargo.toml b/Cargo.toml
+index 2f9e8ea..09f0410 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -13,7 +13,7 @@ geo-booleanop = "0.3.2"
+ geo = "0.16"
+ usvg = { version = "0.12", default-features = false }
+ resvg = { version = "0.12", default-features = false }
+-gerber-types = "0.2"
++gerber-types = "0.3"
+ #{ git = "https://github.com/twitchyliquid64/gerber-types-rs", rev = "e927ed2ff68d9e8629dbc36d5f1e5626da472376" }
+ structopt = "0.3"
+ zip = { version = "0.5", default-features = false }
+--
+2.44.0
+

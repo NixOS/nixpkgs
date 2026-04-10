@@ -1,0 +1,24 @@
+diff --git a/src/js_misc.ml b/src/js_misc.ml
+index 65f7b44..bfef103 100644
+--- a/src/js_misc.ml
++++ b/src/js_misc.ml
+@@ -28,17 +28,11 @@ type rows_or_columns =
+ [@@deriving sexp, bin_io, variants, compare]
+ 
+ let innerHeight () =
+-  Js.Optdef.case
+-    Dom_html.window##.innerHeight
+-    (fun () -> Dom_html.document##.documentElement##.clientHeight)
+-    Fn.id
++  Dom_html.window##.innerHeight
+ ;;
+ 
+ let innerWidth () =
+-  Js.Optdef.case
+-    Dom_html.window##.innerWidth
+-    (fun () -> Dom_html.document##.documentElement##.clientWidth)
+-    Fn.id
++  Dom_html.window##.innerWidth
+ ;;
+ 
+ let element_is_in_viewport (elt : Dom_html.element Js.t) =

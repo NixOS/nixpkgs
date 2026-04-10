@@ -1,0 +1,13 @@
+diff --git a/cmd/dlv/main.go b/cmd/dlv/main.go
+index 2207708e..a7e8a3c2 100644
+--- a/cmd/dlv/main.go
++++ b/cmd/dlv/main.go
+@@ -21,6 +21,8 @@ func main() {
+ 		version.DelveVersion.Build = Build
+ 	}
+ 
++	os.Setenv("disableHardening", "fortify "+os.Getenv("disableHardening"))
++
+ 	const cgoCflagsEnv = "CGO_CFLAGS"
+ 	if os.Getenv(cgoCflagsEnv) == "" {
+ 		os.Setenv(cgoCflagsEnv, "-O0 -g")

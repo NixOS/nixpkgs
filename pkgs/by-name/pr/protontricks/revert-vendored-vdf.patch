@@ -1,0 +1,35 @@
+diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
+index 9cff490..4e6f069 100644
+--- a/src/protontricks/steam.py
++++ b/src/protontricks/steam.py
+@@ -11,7 +11,6 @@ from pathlib import Path
+ 
+ import vdf
+ 
+-from ._vdf import binary_loads as vendored_binary_loads
+ from .util import is_arm64, is_steam_deck, is_steam_frame, lower_dict
+ 
+ __all__ = (
+@@ -651,19 +650,9 @@ def iter_appinfo_sections(path):
+ 
+             i += section_size
+ 
+-            try:
+-                vdf_d = vdf.binary_loads(
+-                    data[i:i+vdf_section_size], key_table=key_table
+-                )
+-            except TypeError:
+-                # System 'vdf' is too old and does not support 'key_table',
+-                # use the bundled one instead. This is cursed, but it's
+-                # so far the only reasonable option without a proper maintained
+-                # release on PyPI.
+-                vdf_d = vendored_binary_loads(
+-                    data[i:i+vdf_section_size], key_table=key_table
+-                )
+-
++            vdf_d = vdf.binary_loads(
++                data[i:i+vdf_section_size], key_table=key_table
++            )
+             vdf_d = lower_dict(vdf_d)
+             yield vdf_d
+ 

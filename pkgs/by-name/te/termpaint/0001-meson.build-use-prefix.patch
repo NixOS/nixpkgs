@@ -1,0 +1,25 @@
+From 6275687b748bed9a6148164b085b82840b5e09c6 Mon Sep 17 00:00:00 2001
+From: laalsaas <laalsaas@systemli.org>
+Date: Sun, 18 Aug 2024 11:59:13 +0200
+Subject: [PATCH] meson.build: use-prefix
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 8a0c39c..5eb2435 100644
+--- a/meson.build
++++ b/meson.build
+@@ -111,7 +111,7 @@ main_lib_files = [
+ ]
+ 
+ main_lib_cargs += '-DTERMPAINT_RESCUE_EMBEDDED'
+-main_lib_cargs += '-DTERMPAINT_RESCUE_PATH="@0@"'.format(get_option('ttyrescue-path'))
++main_lib_cargs += '-DTERMPAINT_RESCUE_PATH="@0@"'.format(get_option('prefix') / get_option('ttyrescue-path'))
+ main_lib = library('termpaint', main_lib_files,
+   dependencies: lib_rt,
+   c_args: main_lib_cargs,
+-- 
+2.45.1
+

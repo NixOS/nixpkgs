@@ -1,0 +1,11 @@
+--- mtools/sysincludes.h.orig	2017-04-01 20:59:46.083196540 +0100
++++ mtools/sysincludes.h	2017-04-01 20:59:12.855030456 +0100
+@@ -103,7 +103,7 @@
+ # define PACKED __attribute__ ((packed))
+ # if __GNUC__ == 2 && __GNUC_MINOR__ > 6 || __GNUC__ >= 3
+ /* gcc 2.6.3 doesn't have "unused" */		/* mool */
+-#  define UNUSED(x) x __attribute__ ((unused));x
++#  define UNUSED(x) x
+ #  define UNUSEDP __attribute__ ((unused))
+ # else
+ #  define UNUSED(x) x

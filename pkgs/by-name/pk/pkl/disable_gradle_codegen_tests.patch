@@ -1,0 +1,86 @@
+diff --git a/pkl-gradle/src/test/kotlin/org/pkl/gradle/JavaCodeGeneratorsTest.kt b/pkl-gradle/src/test/kotlin/org/pkl/gradle/JavaCodeGeneratorsTest.kt
+--- a/pkl-gradle/src/test/kotlin/org/pkl/gradle/JavaCodeGeneratorsTest.kt
++++ b/pkl-gradle/src/test/kotlin/org/pkl/gradle/JavaCodeGeneratorsTest.kt
+@@ -18,9 +18,11 @@
+ import kotlin.io.path.listDirectoryEntries
+ import kotlin.io.path.readText
+ import org.assertj.core.api.Assertions.assertThat
++import org.junit.jupiter.api.Disabled;
+ import org.junit.jupiter.api.Test
+ 
+ class JavaCodeGeneratorsTest : AbstractTest() {
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `generate code`() {
+     writeBuildFile()
+@@ -68,6 +70,7 @@
+     )
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `compile generated code`() {
+     writeBuildFile()
+@@ -84,6 +87,7 @@
+     assertThat(addressClassFile).exists()
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `is configuration cache compatible`() {
+     writeBuildFile()
+@@ -106,6 +110,7 @@
+     )
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `no source modules`() {
+     writeFile(
+@@ -129,6 +134,7 @@
+     assertThat(result.output).contains("No source modules specified.")
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `source set configured after pkl block`() {
+     writeFile(
+diff --git a/pkl-gradle/src/test/kotlin/org/pkl/gradle/KotlinCodeGeneratorsTest.kt b/pkl-gradle/src/test/kotlin/org/pkl/gradle/KotlinCodeGeneratorsTest.kt
+--- a/pkl-gradle/src/test/kotlin/org/pkl/gradle/KotlinCodeGeneratorsTest.kt
++++ b/pkl-gradle/src/test/kotlin/org/pkl/gradle/KotlinCodeGeneratorsTest.kt
+@@ -18,9 +18,11 @@
+ import kotlin.io.path.listDirectoryEntries
+ import kotlin.io.path.readText
+ import org.assertj.core.api.Assertions.assertThat
++import org.junit.jupiter.api.Disabled;
+ import org.junit.jupiter.api.Test
+ 
+ class KotlinCodeGeneratorsTest : AbstractTest() {
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `generate code`() {
+     writeBuildFile()
+@@ -69,6 +71,7 @@
+     )
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `compile generated code`() {
+     writeBuildFile()
+@@ -84,6 +87,7 @@
+     assertThat(addressClassFile).exists()
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `is configuration cache compatible`() {
+     writeBuildFile()
+@@ -95,6 +99,7 @@
+     assertThat(secondRun.output).contains(CONFIG_CACHE_REUSED)
+   }
+ 
++  @Disabled("runTask doesn't use the MITM cache")
+   @Test
+   fun `no source modules`() {
+     writeFile(

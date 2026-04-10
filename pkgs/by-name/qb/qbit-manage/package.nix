@@ -1,0 +1,67 @@
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  testers,
+  nix-update-script,
+  nixosTests,
+}:
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "qbit-manage";
+  version = "4.13.0";
+
+  src = fetchFromGitHub {
+    owner = "StuffAnThings";
+    repo = "qbit_manage";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Btj6Lavz5vcCURDKy7OTdEonTD5jwBbAwSMzK06lK3o=";
+  };
+
+  pyproject = true;
+  build-system = [ python3Packages.setuptools ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace "==" ">="
+  '';
+
+  dependencies = with python3Packages; [
+    argon2-cffi
+    bencode-py
+    croniter
+    fastapi
+    gitpython
+    humanize
+    pytimeparse2
+    qbittorrent-api
+    requests
+    retrying
+    ruamel-yaml
+    slowapi
+    uvicorn
+  ];
+
+  pythonRelaxDeps = [
+    "bencode.py"
+    "humanize"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "env HOME=$TMPDIR qbit-manage --version";
+      };
+      testService = nixosTests.qbit-manage;
+    };
+  };
+
+  meta = {
+    description = "This tool will help manage tedious tasks in qBittorrent and automate them";
+    homepage = "https://github.com/StuffAnThings/qbit_manage";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flyingpeakock ];
+    platforms = lib.platforms.all;
+    mainProgram = "qbit-manage";
+  };
+})

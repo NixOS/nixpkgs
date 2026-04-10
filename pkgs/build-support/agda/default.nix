@@ -1,0 +1,192 @@
+# Builder for Agda packages.
+
+{
+  stdenv,
+  lib,
+  self,
+  Agda,
+  runCommand,
+  makeWrapper,
+  writeText,
+  linkFarm,
+  ghcWithPackages,
+  nixosTests,
+}:
+
+let
+  inherit (lib)
+    attrValues
+    elem
+    filter
+    filterAttrs
+    isAttrs
+    isList
+    platforms
+    ;
+
+  inherit (lib.strings)
+    concatMapStrings
+    concatMapStringsSep
+    optionalString
+    ;
+
+  isMikan = Agda.meta.mainProgram == "mikan";
+
+  mkLibraryFile =
+    pkgs:
+    let
+      pkgs' = if isList pkgs then pkgs else pkgs self;
+    in
+    writeText "libraries" (concatMapStrings (p: "${p}/${p.libraryFile}\n") pkgs');
+
+  mkDefaultsFile =
+    pkgs:
+    let
+      pkgs' = if isList pkgs then pkgs else pkgs self;
+    in
+    writeText "defaults" (concatMapStrings (p: "${p.libraryName}\n") pkgs');
+
+  mkAgdaDir =
+    pkgs:
+    linkFarm "agda-dir" [
+      {
+        name = "libraries";
+        path = mkLibraryFile pkgs;
+      }
+      {
+        name = "defaults";
+        path = mkDefaultsFile pkgs;
+      }
+    ];
+
+  withPackages' =
+    {
+      pkgs,
+      ghc ? ghcWithPackages (p: with p; [ ieee754 ]),
+      extraFlags ? [ ],
+    }:
+    let
+      libraryFile = mkLibraryFile pkgs;
+      defaultsFile = mkDefaultsFile pkgs;
+      agdaDir = mkAgdaDir pkgs;
+      pname = "${Agda.meta.mainProgram}WithPackages";
+      version = Agda.version;
+    in
+    runCommand "${pname}-${version}"
+      {
+        inherit pname version;
+        nativeBuildInputs = [ makeWrapper ];
+        passthru = {
+          unwrapped = Agda;
+          inherit
+            withPackages
+            libraryFile
+            defaultsFile
+            agdaDir
+            ;
+          tests = {
+            inherit (nixosTests) agda;
+            allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
+          };
+        };
+        # Agda is a split package with multiple outputs; do not inherit them here.
+        meta = removeAttrs Agda.meta [ "outputsToInstall" ];
+      }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
+          ${lib.optionalString (ghc != null && !isMikan) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
+          --set-default AGDA_DIR ${agdaDir} \
+          --add-flags ${lib.escapeShellArg (lib.escapeShellArgs extraFlags)}
+        if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
+          ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
+        fi
+      '';
+
+  withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
+
+  extensions = [
+    "agda"
+    "agda-lib"
+    "agdai"
+    "mki"
+    "lagda"
+    "lagda.md"
+    "lagda.org"
+    "lagda.rst"
+    "lagda.tex"
+    "lagda.typ"
+  ];
+
+  defaults =
+    {
+      pname,
+      meta,
+      passthru ? { },
+      buildInputs ? [ ],
+      libraryName ? pname,
+      libraryFile ? "${libraryName}.agda-lib",
+      buildPhase ? null,
+      installPhase ? null,
+      extraExtensions ? [ ],
+      ...
+    }@args:
+    let
+      agdaWithPkgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
+    in
+    {
+      inherit libraryName libraryFile;
+
+      isAgdaDerivation = true;
+
+      buildInputs = buildInputs ++ [ agdaWithPkgs ];
+
+      buildPhase =
+        if buildPhase != null then
+          buildPhase
+        else
+          ''
+            runHook preBuild
+            ${lib.getExe agdaWithPkgs} --build-library
+            runHook postBuild
+          '';
+
+      installPhase =
+        if installPhase != null then
+          installPhase
+        else
+          ''
+            runHook preInstall
+            mkdir -p $out
+            find \( ${
+              concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)
+            } \) -exec cp -p --parents -t "$out" {} +
+            runHook postInstall
+          '';
+
+      env = args.env or { } // {
+        # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
+        # we need to set LC_ALL to an UTF-8-supporting locale. However, on
+        # darwin, it seems that there is no standard such locale; luckily,
+        # the referenced issue doesn't seem to surface on darwin. Hence let's
+        # set this only on non-darwin.
+        LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
+      };
+
+      meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
+
+      # Retrieve all packages from the finished package set that have the current package as a dependency and build them
+      passthru = passthru // {
+        tests =
+          passthru.tests or { }
+          // filterAttrs (
+            name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
+          ) self;
+      };
+    };
+in
+{
+  mkDerivation = args: stdenv.mkDerivation (args // defaults args);
+
+  inherit mkLibraryFile withPackages withPackages';
+}

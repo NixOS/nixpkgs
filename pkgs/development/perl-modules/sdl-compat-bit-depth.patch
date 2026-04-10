@@ -1,0 +1,16 @@
+diff --git a/t/core_surface.t b/t/core_surface.t
+index 897536b6..03efa859 100644
+--- a/t/core_surface.t
++++ b/t/core_surface.t
+@@ -51,7 +51,10 @@ is( $image->h, 32, 'image has height' );
+ 
+ my $pixel_format = $image->format;
+ isa_ok( $pixel_format, 'SDL::PixelFormat' );
+-is( $pixel_format->BitsPerPixel,  8,   ' BitsPerPixel' );
++# the bitmap has a bitdepth of 4
++# SDL_classic could not allocate less than full bytes per pixel
++# sdl12-compat returns the actual bit depth of the image here
++is( $pixel_format->BitsPerPixel,  4,   ' BitsPerPixel' );
+ is( $pixel_format->BytesPerPixel, 1,   ' BytesPerPixel' );
+ is( $pixel_format->Rloss,         8,   ' Rloss' );
+ is( $pixel_format->Gloss,         8,   ' Gloss' );

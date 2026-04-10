@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 19:28:09 +0300
+Subject: [PATCH 13/19] Enable extended attributes for btrfs
+
+---
+ xar/lib/linuxattr.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/xar/lib/linuxattr.c b/xar/lib/linuxattr.c
+index 58ee6a8..496dd82 100644
+--- a/xar/lib/linuxattr.c
++++ b/xar/lib/linuxattr.c
+@@ -80,6 +80,10 @@
+ #define XFS_SUPER_MAGIC 0x58465342
+ #endif
+ 
++#ifndef BTRFS_SUPER_MAGIC
++#define BTRFS_SUPER_MAGIC 0x9123683E
++#endif
++
+ #if defined(HAVE_SYS_XATTR_H) && defined(HAVE_LGETXATTR) && !defined(__APPLE__)
+ 
+ struct _linuxattr_context{
+@@ -175,6 +179,7 @@ TRYAGAIN:
+ 	case JFS_SUPER_MAGIC:  fsname = "jfs" ; break;
+ 	case REISERFS_SUPER_MAGIC:fsname = "reiser" ; break;
+ 	case XFS_SUPER_MAGIC:  fsname = "xfs" ; break;
++	case BTRFS_SUPER_MAGIC:  fsname = "btrfs" ; break;
+ 	default: retval=0; goto BAIL;
+ 	};
+ 
+@@ -236,6 +241,7 @@ int32_t xar_linuxattr_extract(xar_t x, xar_file_t f, const char* file, char *buf
+ 	case JFS_SUPER_MAGIC:  fsname = "jfs" ; break;
+ 	case REISERFS_SUPER_MAGIC:fsname = "reiser" ; break;
+ 	case XFS_SUPER_MAGIC:  fsname = "xfs" ; break;
++	case BTRFS_SUPER_MAGIC:fsname = "btrfs" ; break;
+ 	};
+ 
+ 	for(p = xar_prop_pfirst(f); p; p = xar_prop_pnext(p)) {
+-- 
+2.44.1
+

@@ -1,0 +1,50 @@
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  python3Packages,
+}:
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "markitdown-mcp";
+  version = "0.1.8";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "markitdown";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nOzhvIqyq5iV2pKeHqStKELFLRnTRF7+pbxHaV0XZ4s=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/markitdown-mcp";
+
+  build-system = [
+    python3Packages.hatchling
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      markitdown
+      mcp_2
+      requests
+    ]
+    ++ markitdown.optional-dependencies.all;
+
+  pythonImportsCheck = [
+    "markitdown_mcp"
+  ];
+
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
+    description = "MCP server for the markitdown library";
+    homepage = "https://github.com/microsoft/markitdown/tree/main/packages/markitdown-mcp";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = python3Packages.markitdown.meta.maintainers;
+    mainProgram = "markitdown-mcp";
+    platforms = lib.platforms.all;
+  };
+})
