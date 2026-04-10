@@ -10,30 +10,18 @@
   pkg-config,
   removefile,
   shell_cmds,
-  pkgs,
+  sourceRelease,
   stdenvNoCC,
   xz,
   zlib,
 }:
 
 let
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  Libc = bootstrapSourceRelease "Libc";
-  Libinfo = bootstrapSourceRelease "Libinfo";
-  CommonCrypto = bootstrapSourceRelease "CommonCrypto";
-  libplatform = bootstrapSourceRelease "libplatform";
-  xnu = bootstrapSourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  Libinfo = sourceRelease "Libinfo";
+  CommonCrypto = sourceRelease "CommonCrypto";
+  libplatform = sourceRelease "libplatform";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "file_cmds-deps-private-headers";
