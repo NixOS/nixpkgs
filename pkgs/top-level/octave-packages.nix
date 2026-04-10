@@ -69,10 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      io = callPackage ../development/octave-modules/io {
-        inherit (octave) enableJava;
-      };
-
       interval = callPackage ../development/octave-modules/interval { };
 
       linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
