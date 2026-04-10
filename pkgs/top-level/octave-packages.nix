@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      control = callPackage ../development/octave-modules/control { };
-
       data-smoothing = callPackage ../development/octave-modules/data-smoothing { };
 
       database = callPackage ../development/octave-modules/database { };
