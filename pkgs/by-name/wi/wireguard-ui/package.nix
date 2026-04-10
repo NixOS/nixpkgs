@@ -75,10 +75,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ngoduykhanh/wireguard-ui";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      bot-wxt1221
-      kaynetik
-    ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "wireguard-ui";
   };
 })
