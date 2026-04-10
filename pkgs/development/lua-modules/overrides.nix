@@ -109,7 +109,9 @@ in
       "${date}-${rev}";
     __intentionallyOverridingVersion = true;
 
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.5";
+    };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
       gnum4
@@ -323,7 +325,9 @@ in
 
     # Lua 5.4 support is experimental at the moment, see
     # https://github.com/lgi-devs/lgi/pull/249
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
   });
 
   ljsyscall = prev.ljsyscall.overrideAttrs (old: rec {
@@ -340,7 +344,9 @@ in
     preConfigure = ''
       sed -i 's/lua == 5.1/lua >= 5.1, < 5.3/' ${knownRockspec}
     '';
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.3";
+    };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
   });
@@ -409,7 +415,9 @@ in
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
-    meta.broken = isLuaJIT;
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+    };
   });
 
   lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs {
@@ -474,10 +482,12 @@ in
     };
   });
 
-  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs (old: {
     strictDeps = false;
-    meta.broken = isLuaJIT;
-  };
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+    };
+  });
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -524,12 +534,16 @@ in
 
     # ld: symbol(s) not found for architecture arm64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    meta.broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
+    meta = (old.meta or { }) // {
+      broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
+    };
   });
 
-  lua-subprocess = prev.lua-subprocess.overrideAttrs {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
-  };
+  lua-subprocess = prev.lua-subprocess.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
+  });
 
   lua-yajl = prev.lua-yajl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -605,7 +619,9 @@ in
         dep = libevent;
       }
     ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
   });
 
   luaexpat = prev.luaexpat.overrideAttrs (_: {
@@ -617,7 +633,7 @@ in
     ];
   });
 
-  luaffi = prev.luaffi.overrideAttrs {
+  luaffi = prev.luaffi.overrideAttrs (old: {
     # TODO Somehow automatically amend buildInputs for things that need luaffi
     # but are in luajitPackages?
 
@@ -629,8 +645,10 @@ in
       sha256 = "1nwx6sh56zfq99rcs7sph0296jf6a9z72mxknn0ysw9fd7m1r8ig";
     };
     knownRockspec = with prev.luaffi; "${pname}-${version}.rockspec";
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
-  };
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
+    };
+  });
 
   lualdap = prev.lualdap.overrideAttrs (_: {
     externalDeps = [
@@ -852,7 +870,9 @@ in
     '';
 
     # Requires ffi
-    meta.broken = !isLuaJIT;
+    meta = (old.meta or { }) // {
+      broken = !isLuaJIT;
+    };
   });
 
   mpack = prev.mpack.overrideAttrs (drv: {
@@ -1015,10 +1035,12 @@ in
     '';
   };
 
-  rest-nvim = prev.rest-nvim.overrideAttrs {
+  rest-nvim = prev.rest-nvim.overrideAttrs (old: {
     strictDeps = false;
-    meta.broken = luaAtLeast "5.5";
-  };
+    meta = (old.meta or { }) // {
+      broken = luaAtLeast "5.5";
+    };
+  });
 
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
@@ -1225,7 +1247,9 @@ in
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
-    meta.broken = lua.luaversion != "5.1";
+    meta = (old.meta or { }) // {
+      broken = lua.luaversion != "5.1";
+    };
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
@@ -1235,7 +1259,9 @@ in
     ];
 
     # should be fixed upstream
-    meta.broken = lua.luaversion != "5.1";
+    meta = (old.meta or { }) // {
+      broken = lua.luaversion != "5.1";
+    };
   });
 
   tree-sitter-teal = prev.tree-sitter-teal.overrideAttrs (old: {
@@ -1255,8 +1281,10 @@ in
     '';
   };
 
-  vstruct = prev.vstruct.overrideAttrs (_: {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+  vstruct = prev.vstruct.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
@@ -1266,9 +1294,11 @@ in
     '';
   });
 
-  xml2lua = prev.xml2lua.overrideAttrs {
-    meta.broken = luaAtLeast "5.5";
-  };
+  xml2lua = prev.xml2lua.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = luaAtLeast "5.5";
+    };
+  });
 
   # keep-sorted end
 }
