@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Baughn
-      ymarkus
       nullcube
     ];
     platforms = lib.platforms.all;
