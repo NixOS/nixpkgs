@@ -65,10 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      general = callPackage ../development/octave-modules/general {
-        nettle = pkgs.nettle;
-      };
-
       generate_html = callPackage ../development/octave-modules/generate_html { };
 
       geometry = callPackage ../development/octave-modules/geometry { };
