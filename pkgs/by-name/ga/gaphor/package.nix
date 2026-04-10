@@ -23,6 +23,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-0Z0RFQrN2g0beV2konZBfMroeNtbT+sPRsWlRvQFYBk=";
   };
 
+  patches = [
+    # from https://github.com/gaphor/gaphor/pull/4236
+    # please remove after next update
+    ./fix-dulwich-api.patch
+  ];
+
   pythonRelaxDeps = [
     "pydot"
     "pygobject"
