@@ -51,8 +51,13 @@ tcl.mkTclDerivation rec {
 
   strictDeps = true;
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -std=gnu17";
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # Needed to avoid errors when building with GCC 15.
+      lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
+      # Autoconf 2.73 defaults to C23, but Expect uses K&R style function declarations.
+      ++ [ "-std=gnu17" ]
+    );
   };
 
   hardeningDisable = [ "format" ];

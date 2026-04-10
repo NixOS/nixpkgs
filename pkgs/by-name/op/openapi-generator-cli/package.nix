@@ -28,8 +28,8 @@ let
     patches = [
       # Achieve reproducible mvnHash by pinning develocity plugin.
       (fetchpatch {
-        url = "https://github.com/OpenAPITools/openapi-generator/pull/23326.patch";
-        hash = "sha256-s68VoIXSFGvGCaFtCUYkeoq+CgC+2gIdDIIsmn8uqyk=";
+        url = "https://github.com/OpenAPITools/openapi-generator/commit/ff66e1bc7fe33dcee89de7296eb7bcd5e2a11cc6.patch";
+        hash = "sha256-E1VgtaIW1V+8ch2RpW850fVNl5Iqitjog+0b8DKFgZw=";
       })
     ];
 
