@@ -13,6 +13,8 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "tfenv";
   version = "3.0.0";
 
