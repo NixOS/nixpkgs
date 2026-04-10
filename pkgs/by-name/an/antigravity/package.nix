@@ -3,7 +3,6 @@
   stdenv,
   buildVscode,
   fetchurl,
-  jq,
   writeShellScript,
   coreutils,
   commandLineArgs ? "",
@@ -17,7 +16,7 @@ let
     information.sources."${hostPlatform.system}"
       or (throw "antigravity: unsupported system ${hostPlatform.system}");
 in
-(buildVscode {
+buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
   inherit (information) version vscodeVersion;
   pname = "antigravity";
@@ -75,15 +74,4 @@ in
       Zaczero
     ];
   };
-}).overrideAttrs
-  (oldAttrs: {
-    # Disable update checks
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ jq ];
-    postPatch = (oldAttrs.postPatch or "") + ''
-      productJson="${
-        if stdenv.hostPlatform.isDarwin then "Contents/Resources" else "resources"
-      }/app/product.json"
-      data=$(jq 'del(.updateUrl)' "$productJson")
-      echo "$data" > "$productJson"
-    '';
-  })
+}

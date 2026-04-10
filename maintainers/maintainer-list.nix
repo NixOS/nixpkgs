@@ -15173,6 +15173,12 @@
     name = "leo60228";
     keys = [ { fingerprint = "5BE4 98D5 1C24 2CCD C21A  4604 AC6F 4BA0 78E6 7833"; } ];
   };
+  leoflo = {
+    email = "noreply@leoflo.me";
+    github = "le0flo";
+    githubId = 128467278;
+    name = "Leonardo";
+  };
   leona = {
     email = "nix@leona.is";
     github = "leona-ya";

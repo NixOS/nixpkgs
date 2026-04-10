@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  replaceVars,
   meson,
   pkg-config,
   ninja,
@@ -13,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayqt";
-  version = "0.3.0-unstable-2026-01-05";
+  version = "0.3.0-unstable-2026-03-03";
 
   src = fetchFromGitLab {
     owner = "desktop-frameworks";
     repo = "wayqt";
-    rev = "2750cd93a3110bff6345f9e2a1a3090a3e3f7203";
-    hash = "sha256-WGIZ3OgeGkQWEzc/m0/Moo9Qgr3vg4dFfQhba2vx0do=";
+    rev = "a7dfc9c682dce2721ddd84c17738619a95a23998";
+    hash = "sha256-rC4Gdhr8mkL2V3bMWprMRo75AIhk9OJsoWjlBUnILEA=";
   };
 
   nativeBuildInputs = [
