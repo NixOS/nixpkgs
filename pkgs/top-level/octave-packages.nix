@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      mvn = callPackage ../development/octave-modules/mvn { };
-
       nan = callPackage ../development/octave-modules/nan { };
 
       ncarray = callPackage ../development/octave-modules/ncarray { };
