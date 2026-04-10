@@ -69,11 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      msh = callPackage ../development/octave-modules/msh {
-        # PLACEHOLDER until ravenjoad gets dolfin packaged.
-        dolfin = null;
-      };
-
       mvn = callPackage ../development/octave-modules/mvn { };
 
       nan = callPackage ../development/octave-modules/nan { };
