@@ -108,6 +108,7 @@ let
 
       passthru = {
         python = python3;
+        tests = nixosTests."vinyl-cache_${lib.versions.major version}";
       };
 
       meta = {
