@@ -20,6 +20,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-wHwjcpcum3ByBGYUxJ38Qi0RliQUmAIBYmE7t3gEonI=";
   };
 
+  patches = [ ./go-1.26-testdeps-modulepath.patch ];
+
   vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
 
   subPackages = [ "." ];
