@@ -69,15 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      image = callPackage ../development/octave-modules/image {
-        inherit (pkgs)
-          mesa
-          gnuplot
-          makeFontsConf
-          writableTmpDirAsHomeHook
-          ;
-      };
-
       image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
 
       instrument-control = callPackage ../development/octave-modules/instrument-control { };
