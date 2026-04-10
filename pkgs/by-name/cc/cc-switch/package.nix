@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage rec {
   pname = "cc-switch";
   version = "5.3.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "saladday";
     repo = "cc-switch-cli";
@@ -17,9 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
-  cargoLock = {
-    lockFile = "${src}/src-tauri/Cargo.lock";
-  };
+  cargoHash = "sha256-+I01hJIg7aG7dwDsXa1fpUWjl3xch2Nnx4ROAtPDV3Y=";
 
   preCheck = ''
     export HOME="$TMPDIR/home"
@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
     export CC_SWITCH_TEST_HOME="$HOME"
     export HOSTNAME="cc-switch-nix"
   '';
+
   # install_script tests spawn runtime-generated helper scripts with a hard-coded
   # /usr/bin/env shebang, which is unavailable in pure Nix sandboxes.
   checkFlags = [
