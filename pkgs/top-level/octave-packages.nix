@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      strings = callPackage ../development/octave-modules/strings { };
-
       struct = callPackage ../development/octave-modules/struct { };
 
       symbolic = callPackage ../development/octave-modules/symbolic {
