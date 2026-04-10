@@ -114,6 +114,8 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
     homepage = "https://www.meteor.com/";
