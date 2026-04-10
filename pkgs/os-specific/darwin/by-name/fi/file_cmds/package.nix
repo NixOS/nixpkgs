@@ -1,5 +1,6 @@
 {
   lib,
+  apple-sdk_26,
   bzip2,
   copyfile,
   less,
@@ -7,6 +8,7 @@
   libutil,
   libxo,
   mkAppleDerivation,
+  ncurses,
   pkg-config,
   removefile,
   shell_cmds,
@@ -91,13 +93,12 @@ mkAppleDerivation {
     "xattr"
   ];
 
-  xcodeHash = "sha256-KEZYuaDxLdprF+wGiszUdTXPQBfLNj0xP9Y0uarNjSs=";
+  xcodeHash = "sha256-O1eJGFrSVIZbZvBSonKkG4MeYZQ8W6izpYEcHIE+/DM=";
 
   patches = [
-    # Fixes build of ls
-    ./patches/0001-Add-missing-extern-unix2003_compat-to-ls.patch
-    # Add missing conditional to avoid using private APFS APIs that we lack headers for using.
-    ./patches/0002-Add-missing-ifdef-for-private-APFS-APIs.patch
+    # `O_RESOLVE_BENEATH` was added in macOS 26, but our default deployment target is older than that.
+    # Make its usage conditional.
+    ./patches/0001-Conditionalize-O_RESOLVE_BENEATH-usage.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -105,11 +106,13 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
+    apple-sdk_26 # For `O_RESOLVE_BENEATH` and `AT_RESOLVE_BENEATH`
     bzip2
     copyfile
     libmd
     libutil
     libxo
+    ncurses
     removefile
     xz
     zlib
