@@ -3635,6 +3635,11 @@
     githubId = 114744388;
     name = "bloominstrong";
   };
+  blooym = {
+    name = "Lyna";
+    github = "Blooym";
+    githubId = 19539165;
+  };
   bloveless = {
     email = "brennon.loveless@gmail.com";
     github = "bloveless";
