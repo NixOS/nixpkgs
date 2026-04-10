@@ -90,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zx2c4
       ma27
-      kaynetik
     ];
     mainProgram = "wg";
     platforms = lib.platforms.unix;
