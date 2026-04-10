@@ -132,7 +132,7 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = builtins.attrNames srcs;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "meteor";
   };
 }
