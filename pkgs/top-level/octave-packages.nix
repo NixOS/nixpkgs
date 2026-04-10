@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      tsa = callPackage ../development/octave-modules/tsa { };
-
       video = callPackage ../development/octave-modules/video { };
 
       windows = callPackage ../development/octave-modules/windows { };
