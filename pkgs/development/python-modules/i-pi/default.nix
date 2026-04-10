@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.1.11";
+  version = "3.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-9APlG1P+4G5GRZ7LG2Vvfr0l9ZcIxWkHW1M7wT7W1sk=";
+    hash = "sha256-FXDinbsM5sznXNn6lR85dLqy3p0YJESGCgvjkYoPCDc=";
   };
 
   build-system = [

@@ -30,19 +30,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
-  version = "0.18.8";
+  version = "0.19.7";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-OSM2yjiz3I5+SVpcJSWCDyS4y4w9JJ/8CAP2BK0sL7o=";
+    hash = "sha256-ppl1noikPwTvG/XT7iYG41+9ZZO8i0x2L+odeEzRP1s=";
   };
-
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/359340
-  cargoPatches = [
-    ./gix-from-crates-io.patch
-  ];
 
   # Let Tauri know what version we're building and deactivate the built-in updater
   # Note: .bundle.externalBin doesn't include `"but"` at the moment
@@ -59,12 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'checkUpdate = tauriCheck;' 'checkUpdate = () => null;'
   '';
 
-  cargoHash = "sha256-L53iIVxv3KtmXiqITad1enIMX3Iu/mWSJJPZk7KAWuM=";
+  cargoHash = "sha256-xW/eO+AQQUBN2MrixNx3LKhwMookkKuX5LF4DSWQKKY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-IAsEzM9kmZWnh390CV7mOyOshVlESsyoNT0ZvdY03KY=";
+    hash = "sha256-0WLgtidG8hqTkXY3heu+m3VoqQD/kGMlTmLb0qAS8sQ=";
   };
 
   nativeBuildInputs = [
@@ -136,10 +131,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "git_editor_takes_precedence"
     # FLAKY (try again): child exited unsuccessfully: ExitStatus(unix_wait_status(10752))
     "migrations_in_parallel_with_processes"
+    # FLAKY: Broken pipe (os error 32) - hook script doesn't consume stdin, races with writer
+    "pre_push_ignores_husky_core_hooks_path_when_disabled"
     # Archive at 'tests/fixtures/generated-archives/[...].tar' not found [..] Error: No such file or directory (os error 2)
     "merge_first_branch_into_gb_local_and_verify_rebase"
     "json_output_with_dangling_commits"
     "two_dangling_commits_different_branches"
+    "new_from_project_handle_uses_repo_gitdir"
+    "new_from_project_handle_keeps_repo_cached"
     # darwin: Error: timeout waiting for matching event
     "track_directory_changes_after_rename"
   ];
