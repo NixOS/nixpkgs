@@ -10,21 +10,9 @@
 # from justinwoo/easy-purescript-nix
 # https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
 
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
-
-  patchelf =
-    libPath:
-    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      chmod u+w $PURS
-      patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
-      chmod u-w $PURS
-    '';
-
-in
 stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.15.15";
+  version = "0.15.16";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
@@ -33,19 +21,19 @@ stdenv.mkDerivation rec {
       sources = {
         "x86_64-linux" = fetchurl {
           url = url + "linux64.tar.gz";
-          sha256 = "1w4jgjpfhaw3gkx9sna64lq9m030x49w4lwk01ik5ci0933imzj3";
+          sha256 = "08lfyddh914z7v2ph6im88g9hjvs6z60ldfmiyg5252fibxrxnj4";
         };
         "aarch64-linux" = fetchurl {
           url = url + "linux-arm64.tar.gz";
-          sha256 = "1ws5h337xq0l06zrs9010h6wj2hq5cqk5ikp9arq7hj7lxf43vn5";
+          sha256 = "1wr7m59v7nakyzgnq2rbm4a8x0dm8arlx0lhi9hwkn70qv2m7ldq";
         };
         "x86_64-darwin" = fetchurl {
           url = url + "macos.tar.gz";
-          sha256 = "178ix54k2yragcgn0j8z1cfa78s1qbh1bsx3v9jnngby8igr6yn3";
+          sha256 = "1djq37w7vhfmvk61cx8rmlckzkh90aywc2v60rqiq938ljvzsnwz";
         };
         "aarch64-darwin" = fetchurl {
           url = url + "macos-arm64.tar.gz";
-          sha256 = "0bi231z1yhb7kjfn228wjkj6rv9lgpagz9f4djr2wy3kqgck4xg0";
+          sha256 = "1i7w6a9j1k3v1c20g9jxd2v2jr7nsx54lp02zdhc5vr6w89mmwb3";
         };
       };
     in
@@ -64,7 +52,6 @@ stdenv.mkDerivation rec {
     PURS="$out/bin/purs"
 
     install -D -m555 -T purs $PURS
-    ${patchelf libPath}
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mkdir -p $out/share/bash-completion/completions
