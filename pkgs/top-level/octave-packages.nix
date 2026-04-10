@@ -25,205 +25,209 @@ let
   inherit (lib)
     catAttrs
     concatLists
+    extends
     filter
     makeScope
     unique
     ;
+  autoCalledPackages = import ./by-name-overlay.nix ../development/octave-modules/by-name;
 in
 
 makeScope newScope (
-  self:
-  let
-    callPackage = self.callPackage;
+  extends autoCalledPackages (
+    self:
+    let
+      callPackage = self.callPackage;
 
-    buildOctavePackage = callPackage ../development/interpreters/octave/build-octave-package.nix {
-      inherit lib stdenv;
-      inherit octave;
-      inherit computeRequiredOctavePackages;
-    };
+      buildOctavePackage = callPackage ../development/interpreters/octave/build-octave-package.nix {
+        inherit lib stdenv;
+        inherit octave;
+        inherit computeRequiredOctavePackages;
+      };
 
-    # Given a list of required Octave package derivations, get a list of
-    # ALL required Octave packages needed for the ones specified to run.
-    computeRequiredOctavePackages =
-      drvs:
-      let
-        # Check whether a derivation is an octave package
-        hasOctavePackage = drv: drv ? isOctavePackage;
-        packages = filter hasOctavePackage drvs;
-      in
-      unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
+      # Given a list of required Octave package derivations, get a list of
+      # ALL required Octave packages needed for the ones specified to run.
+      computeRequiredOctavePackages =
+        drvs:
+        let
+          # Check whether a derivation is an octave package
+          hasOctavePackage = drv: drv ? isOctavePackage;
+          packages = filter hasOctavePackage drvs;
+        in
+        unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
 
-  in
-  {
+    in
+    {
 
-    inherit buildOctavePackage computeRequiredOctavePackages;
+      inherit buildOctavePackage computeRequiredOctavePackages;
 
-    inherit (callPackage ../development/interpreters/octave/hooks { })
-      writeRequiredOctavePackagesHook
-      ;
-
-    arduino = callPackage ../development/octave-modules/arduino {
-      inherit (pkgs) arduino-core-unwrapped;
-    };
-
-    audio = callPackage ../development/octave-modules/audio { };
-
-    bim = callPackage ../development/octave-modules/bim { };
-
-    bsltl = callPackage ../development/octave-modules/bsltl { };
-
-    cgi = callPackage ../development/octave-modules/cgi { };
-
-    communications = callPackage ../development/octave-modules/communications { };
-
-    control = callPackage ../development/octave-modules/control { };
-
-    data-smoothing = callPackage ../development/octave-modules/data-smoothing { };
-
-    database = callPackage ../development/octave-modules/database { };
-
-    dataframe = callPackage ../development/octave-modules/dataframe { };
-
-    datatypes = callPackage ../development/octave-modules/datatypes { };
-
-    dicom = callPackage ../development/octave-modules/dicom { };
-
-    divand = callPackage ../development/octave-modules/divand { };
-
-    doctest = callPackage ../development/octave-modules/doctest { };
-
-    econometrics = callPackage ../development/octave-modules/econometrics { };
-
-    fits = callPackage ../development/octave-modules/fits { };
-
-    financial = callPackage ../development/octave-modules/financial { };
-
-    fpl = callPackage ../development/octave-modules/fpl { };
-
-    fuzzy-logic-toolkit = callPackage ../development/octave-modules/fuzzy-logic-toolkit { };
-
-    ga = callPackage ../development/octave-modules/ga { };
-
-    general = callPackage ../development/octave-modules/general {
-      nettle = pkgs.nettle;
-    };
-
-    generate_html = callPackage ../development/octave-modules/generate_html { };
-
-    geometry = callPackage ../development/octave-modules/geometry { };
-
-    gsl = callPackage ../development/octave-modules/gsl {
-      inherit (pkgs) gsl;
-    };
-
-    image = callPackage ../development/octave-modules/image {
-      inherit (pkgs)
-        mesa
-        gnuplot
-        makeFontsConf
-        writableTmpDirAsHomeHook
+      inherit (callPackage ../development/interpreters/octave/hooks { })
+        writeRequiredOctavePackagesHook
         ;
-    };
 
-    image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
+      arduino = callPackage ../development/octave-modules/arduino {
+        inherit (pkgs) arduino-core-unwrapped;
+      };
 
-    instrument-control = callPackage ../development/octave-modules/instrument-control { };
+      audio = callPackage ../development/octave-modules/audio { };
 
-    io = callPackage ../development/octave-modules/io {
-      inherit (octave) enableJava;
-    };
+      bim = callPackage ../development/octave-modules/bim { };
 
-    interval = callPackage ../development/octave-modules/interval { };
+      bsltl = callPackage ../development/octave-modules/bsltl { };
 
-    linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
+      cgi = callPackage ../development/octave-modules/cgi { };
 
-    lssa = callPackage ../development/octave-modules/lssa { };
+      communications = callPackage ../development/octave-modules/communications { };
 
-    ltfat = callPackage ../development/octave-modules/ltfat {
-      inherit (octave)
-        fftw
-        fftwSinglePrec
-        portaudio
-        jdk
-        ;
-      inherit (pkgs) fftwFloat fftwLongDouble;
-    };
+      control = callPackage ../development/octave-modules/control { };
 
-    mapping = callPackage ../development/octave-modules/mapping { };
+      data-smoothing = callPackage ../development/octave-modules/data-smoothing { };
 
-    matgeom = callPackage ../development/octave-modules/matgeom { };
+      database = callPackage ../development/octave-modules/database { };
 
-    miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
+      dataframe = callPackage ../development/octave-modules/dataframe { };
 
-    msh = callPackage ../development/octave-modules/msh {
-      # PLACEHOLDER until ravenjoad gets dolfin packaged.
-      dolfin = null;
-    };
+      datatypes = callPackage ../development/octave-modules/datatypes { };
 
-    mvn = callPackage ../development/octave-modules/mvn { };
+      dicom = callPackage ../development/octave-modules/dicom { };
 
-    nan = callPackage ../development/octave-modules/nan { };
+      divand = callPackage ../development/octave-modules/divand { };
 
-    ncarray = callPackage ../development/octave-modules/ncarray { };
+      doctest = callPackage ../development/octave-modules/doctest { };
 
-    netcdf = callPackage ../development/octave-modules/netcdf {
-      inherit (pkgs) netcdf;
-    };
+      econometrics = callPackage ../development/octave-modules/econometrics { };
 
-    nurbs = callPackage ../development/octave-modules/nurbs { };
+      fits = callPackage ../development/octave-modules/fits { };
 
-    ocl = callPackage ../development/octave-modules/ocl { };
+      financial = callPackage ../development/octave-modules/financial { };
 
-    octclip = callPackage ../development/octave-modules/octclip { };
+      fpl = callPackage ../development/octave-modules/fpl { };
 
-    octproj = callPackage ../development/octave-modules/octproj { };
+      fuzzy-logic-toolkit = callPackage ../development/octave-modules/fuzzy-logic-toolkit { };
 
-    optics = callPackage ../development/octave-modules/optics { };
+      ga = callPackage ../development/octave-modules/ga { };
 
-    optim = callPackage ../development/octave-modules/optim { };
+      general = callPackage ../development/octave-modules/general {
+        nettle = pkgs.nettle;
+      };
 
-    optiminterp = callPackage ../development/octave-modules/optiminterp { };
+      generate_html = callPackage ../development/octave-modules/generate_html { };
 
-    quaternion = callPackage ../development/octave-modules/quaternion { };
+      geometry = callPackage ../development/octave-modules/geometry { };
 
-    queueing = callPackage ../development/octave-modules/queueing { };
+      gsl = callPackage ../development/octave-modules/gsl {
+        inherit (pkgs) gsl;
+      };
 
-    signal = callPackage ../development/octave-modules/signal { };
+      image = callPackage ../development/octave-modules/image {
+        inherit (pkgs)
+          mesa
+          gnuplot
+          makeFontsConf
+          writableTmpDirAsHomeHook
+          ;
+      };
 
-    sockets = callPackage ../development/octave-modules/sockets { };
+      image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
 
-    stk = callPackage ../development/octave-modules/stk { };
+      instrument-control = callPackage ../development/octave-modules/instrument-control { };
 
-    splines = callPackage ../development/octave-modules/splines { };
+      io = callPackage ../development/octave-modules/io {
+        inherit (octave) enableJava;
+      };
 
-    statistics = callPackage ../development/octave-modules/statistics { };
+      interval = callPackage ../development/octave-modules/interval { };
 
-    strings = callPackage ../development/octave-modules/strings { };
+      linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
 
-    struct = callPackage ../development/octave-modules/struct { };
+      lssa = callPackage ../development/octave-modules/lssa { };
 
-    symbolic = callPackage ../development/octave-modules/symbolic {
-      inherit (octave) python;
-    };
+      ltfat = callPackage ../development/octave-modules/ltfat {
+        inherit (octave)
+          fftw
+          fftwSinglePrec
+          portaudio
+          jdk
+          ;
+        inherit (pkgs) fftwFloat fftwLongDouble;
+      };
 
-    tsa = callPackage ../development/octave-modules/tsa { };
+      mapping = callPackage ../development/octave-modules/mapping { };
 
-    video = callPackage ../development/octave-modules/video { };
+      matgeom = callPackage ../development/octave-modules/matgeom { };
 
-    windows = callPackage ../development/octave-modules/windows { };
+      miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
 
-    zeromq = callPackage ../development/octave-modules/zeromq {
-      inherit (pkgs) zeromq autoreconfHook;
-    };
+      msh = callPackage ../development/octave-modules/msh {
+        # PLACEHOLDER until ravenjoad gets dolfin packaged.
+        dolfin = null;
+      };
 
-  }
-  // lib.optionalAttrs config.allowAliases {
-    fem-fenics = throw "octavePackages.fem-fenics has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-    level-set = throw "octavePackages.level-set has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-    parallel = throw "octavePackages.parallel has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-    sparsersb = throw "octavePackages.sparsersb has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-    tisean = throw "octavePackages.tisean has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-    vibes = throw "octavePackages.vibes has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-    vrml = throw "octavePackages.vrml has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
-  }
+      mvn = callPackage ../development/octave-modules/mvn { };
+
+      nan = callPackage ../development/octave-modules/nan { };
+
+      ncarray = callPackage ../development/octave-modules/ncarray { };
+
+      netcdf = callPackage ../development/octave-modules/netcdf {
+        inherit (pkgs) netcdf;
+      };
+
+      nurbs = callPackage ../development/octave-modules/nurbs { };
+
+      ocl = callPackage ../development/octave-modules/ocl { };
+
+      octclip = callPackage ../development/octave-modules/octclip { };
+
+      octproj = callPackage ../development/octave-modules/octproj { };
+
+      optics = callPackage ../development/octave-modules/optics { };
+
+      optim = callPackage ../development/octave-modules/optim { };
+
+      optiminterp = callPackage ../development/octave-modules/optiminterp { };
+
+      quaternion = callPackage ../development/octave-modules/quaternion { };
+
+      queueing = callPackage ../development/octave-modules/queueing { };
+
+      signal = callPackage ../development/octave-modules/signal { };
+
+      sockets = callPackage ../development/octave-modules/sockets { };
+
+      stk = callPackage ../development/octave-modules/stk { };
+
+      splines = callPackage ../development/octave-modules/splines { };
+
+      statistics = callPackage ../development/octave-modules/statistics { };
+
+      strings = callPackage ../development/octave-modules/strings { };
+
+      struct = callPackage ../development/octave-modules/struct { };
+
+      symbolic = callPackage ../development/octave-modules/symbolic {
+        inherit (octave) python;
+      };
+
+      tsa = callPackage ../development/octave-modules/tsa { };
+
+      video = callPackage ../development/octave-modules/video { };
+
+      windows = callPackage ../development/octave-modules/windows { };
+
+      zeromq = callPackage ../development/octave-modules/zeromq {
+        inherit (pkgs) zeromq autoreconfHook;
+      };
+
+    }
+    // lib.optionalAttrs config.allowAliases {
+      fem-fenics = throw "octavePackages.fem-fenics has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+      level-set = throw "octavePackages.level-set has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+      parallel = throw "octavePackages.parallel has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+      sparsersb = throw "octavePackages.sparsersb has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+      tisean = throw "octavePackages.tisean has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+      vibes = throw "octavePackages.vibes has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+      vrml = throw "octavePackages.vrml has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    }
+  )
 )
