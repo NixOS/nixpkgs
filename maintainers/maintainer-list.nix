@@ -20073,6 +20073,12 @@
     githubId = 30825096;
     name = "Ning Zhang";
   };
+  o-love = {
+    email = "olabradalove@gmail.com";
+    github = "o-love";
+    githubId = 36935375;
+    name = "Oscar Love";
+  };
   o0th = {
     email = "o0th@pm.me";
     name = "Sabato Luca Guadagno";
