@@ -195,6 +195,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenMathLib/OpenBLAS/commit/7086a1b075ca317e12cfe79d40a32ad342a30496.patch";
       hash = "sha256-pA3HK2f2MJr/+h/uale7edIYk/KH194EscYFcsujPXY=";
     })
+    # Backport https://github.com/OpenMathLib/OpenBLAS/pull/5710
+    # Work around miscompilation of the ARM64 non-SVE DDOT kernel
+    (fetchpatch {
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/e3ce4623c299068bbd47c35ee87aab334bac73b1.patch";
+      hash = "sha256-j0zIJjNiAdIVPgdxB+pXiOrOtedDu6Yq+dgaJ/wCquk=";
+    })
   ];
 
   inherit blas64;
