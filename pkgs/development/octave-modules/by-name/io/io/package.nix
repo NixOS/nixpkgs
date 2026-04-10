@@ -2,10 +2,14 @@
   buildOctavePackage,
   lib,
   fetchurl,
-  enableJava,
+  octave,
   jdk,
   unzip,
 }:
+
+let
+  inherit (octave) enableJava;
+in
 
 buildOctavePackage rec {
   pname = "io";
