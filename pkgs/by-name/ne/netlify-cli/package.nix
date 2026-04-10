@@ -20,7 +20,7 @@ mkPackage (
 
       npmFetch.hash = "sha256-yKDLaNIofYLsoWvxaZUfY+LyVd/s4NGD+LEmd9Y7CAA=";
 
-      setup = {
+      stdenvArgs = {
         buildInputs = [ vips ];
         nativeBuildInputs = [ pkg-config ];
         src = fetchFromGitHub {

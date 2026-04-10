@@ -16,7 +16,7 @@ mkPackage (
       name = "hello";
       version = "2.12.3";
 
-      setup = old.setup or { } // {
+      stdenvArgs = old.stdenvArgs or { } // {
         src = fetchurl {
           url = "mirror://gnu/hello/hello-${this.version}.tar.gz";
           hash = "sha256-DV9gFUOC/uELEUocNOeF2LH0kgc64tOm97FHaHs2aqA=";
@@ -53,7 +53,7 @@ mkPackage (
         /**
           Fetched sources of GNU hello
         */
-        inherit (this.setup) src;
+        inherit (this.stdenvArgs) src;
       };
 
       meta = {

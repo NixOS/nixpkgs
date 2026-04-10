@@ -60,7 +60,7 @@ let
     drvPkg
     // {
       inherit (drvPkg.internals) drvAttrs;
-      outputs = drvPkg.internals.setup.outputs or [ "out" ];
+      outputs = drvPkg.internals.stdenvArgs.outputs or [ "out" ];
     };
 
   nginxArguments =
@@ -710,21 +710,23 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/alice
       chown 1000 ./home/alice
-      ln -s ${getGuts (
-        pkgs.hello.overrideAttrs (
-          finalAttrs: prevAttrs: {
-            # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-            configureFlags = prevAttrs.configureFlags or [ ] ++ [
-              " --program-prefix=layeredImageWithFakeRootCommands-"
-            ];
-            doCheck = false;
-            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-            meta = prevAttrs.meta // {
-              mainProgram = "layeredImageWithFakeRootCommands-hello";
-            };
-          }
+      ln -s ${
+        getGuts (
+          pkgs.hello.overrideAttrs (
+            finalAttrs: prevAttrs: {
+              # A unique `hello` to make sure that it isn't included via another mechanism by accident.
+              configureFlags = prevAttrs.configureFlags or [ ] ++ [
+                " --program-prefix=layeredImageWithFakeRootCommands-"
+              ];
+              doCheck = false;
+              versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+              meta = prevAttrs.meta // {
+                mainProgram = "layeredImageWithFakeRootCommands-hello";
+              };
+            }
+          )
         )
-      )} ./hello
+      } ./hello
     '';
   };
 

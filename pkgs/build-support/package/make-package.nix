@@ -92,14 +92,14 @@ let
           f:
           this.extend (
             this: old: {
-              setup =
-                old.setup
+              stdenvArgs =
+                old.stdenvArgs
                 // (lib.toExtension f) (
-                  this.setup or { }
+                  this.stdenvArgs or { }
                   // {
                     finalPackage = this.public;
                   }
-                ) old.setup or { };
+                ) old.stdenvArgs or { };
             }
           );
       };
@@ -134,7 +134,7 @@ let
               inherit (this) name;
             }
         )
-        // this.setup
+        // this.stdenvArgs
       );
       drvOutAttrs = builtins.derivationStrict this.drvAttrs;
       public =

@@ -48,15 +48,15 @@ in
       postPatch = "";
       prePatch = "";
     }
-    // builtins.intersectAttrs fetchInherited this.setup
+    // builtins.intersectAttrs fetchInherited this.stdenvArgs
     // old.npmFetch;
-  setup = old.setup or { } // {
+  stdenvArgs = old.stdenvArgs or { } // {
     inherit (deps) nodejs;
     npmDeps = fetchNpmDeps this.npmFetch;
-    npmPruneFlags = old.setup.npmPruneFlags or this.setup.npmInstallFlags or [ ];
+    npmPruneFlags = old.stdenvArgs.npmPruneFlags or this.stdenvArgs.npmInstallFlags or [ ];
     npmBuildScript = "build";
     nativeBuildInputs =
-      old.setup.nativeBuildInputs
+      old.stdenvArgs.nativeBuildInputs
       ++ [
         deps.nodejs
         deps.npmConfigHook
@@ -65,7 +65,7 @@ in
         deps.nodejs.python
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
-    buildInputs = old.setup.buildInputs or [ ] ++ [ deps.nodejs ];
+    buildInputs = old.stdenvArgs.buildInputs or [ ] ++ [ deps.nodejs ];
     strictDeps = true;
     # Stripping takes way too long with the amount of files required by a typical Node.js project.
     dontStrip = old.dontStrip or true;
