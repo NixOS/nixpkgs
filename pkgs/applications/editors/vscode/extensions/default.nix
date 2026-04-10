@@ -5374,6 +5374,8 @@ let
         };
       };
 
+      yoshi47.selection-path-copier = callPackage ./yoshi47.selection-path-copier { };
+
       yy0931.vscode-sqlite3-editor = callPackage ./yy0931.vscode-sqlite3-editor { };
 
       yzane.markdown-pdf = callPackage ./yzane.markdown-pdf { };
