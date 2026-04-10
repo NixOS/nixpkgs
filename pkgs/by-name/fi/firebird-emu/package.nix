@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nspire-emus/firebird/releases/tag/v${finalAttrs.version}";
     description = "Third-party multi-platform emulator of the ARM-based TI-Nspire™ calculators";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ pneumaticat ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
