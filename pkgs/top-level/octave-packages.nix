@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      interval = callPackage ../development/octave-modules/interval { };
-
       linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
 
       lssa = callPackage ../development/octave-modules/lssa { };
