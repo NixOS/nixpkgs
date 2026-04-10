@@ -8,7 +8,8 @@
   gmsh,
   gawk,
   pkg-config,
-  dolfin,
+  # PLACEHOLDER until ravenjoad gets dolfin packaged.
+  dolfin ? null,
   autoconf,
   automake,
 }:
