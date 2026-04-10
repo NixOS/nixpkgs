@@ -8657,6 +8657,12 @@ with pkgs;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
+  # User Mode Linux (uml)
+  linux_uml = linuxKernel.kernels.linux_uml;
+  linuxPackages_uml = linuxKernel.packages.linux_uml;
+  linux_uml_latest = linuxKernel.kernels.linux_uml_latest;
+  linuxPackages_uml_latest = linuxKernel.packages.linux_uml_latest;
+
   linux-doc = callPackage ../os-specific/linux/kernel/htmldocs.nix { };
 
   cryptodev = linuxPackages.cryptodev;

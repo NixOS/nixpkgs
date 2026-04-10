@@ -41,6 +41,75 @@ let
         };
       }
     );
+
+  umlKernelFor =
+    kernel:
+    let
+      subarch =
+        {
+          i386 = "i386";
+          # x86_64 is missing as a subarch when using clang and bindgen so x86
+          # (which detects whether to use 32 or 64 bits at build time) is used
+          # instead
+          x86_64 = "x86";
+        }
+        .${stdenv.hostPlatform.linuxArch} or stdenv.hostPlatform.linuxArch;
+    in
+    (kernel.override (
+      {
+        extraMakeFlags ? [ ],
+        ...
+      }:
+      {
+        extraMakeFlags = extraMakeFlags ++ [
+          # At the moment only 32 and 64 bit x86 is supported
+          "ARCH=um"
+          "SUBARCH=${subarch}"
+
+          # UML is a regular program requiring the wrappers
+          "LD=${lib.getExe' stdenv.cc.bintools "${stdenv.cc.targetPrefix}ld"}"
+          "CC=${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}"
+        ];
+        structuredExtraConfig = {
+          # Some config items require CONFIG_INPUT=y
+          INPUT = lib.kernel.yes;
+
+          # Don't add /lib and /lib64 to Linux's rpath
+          LD_SCRIPT_DYN_RPATH = lib.kernel.no;
+
+          # Enable vector (multi-message) network interfaces
+          UML_NET_VECTOR = lib.kernel.yes;
+        };
+
+        # Several config items don't work with UML so just ignore the errors
+        ignoreConfigErrors = true;
+      }
+    )).overrideAttrs
+      (
+        {
+          buildFlags ? [ ],
+          preInstall ? "",
+          ...
+        }:
+        {
+          # Remove bzLinux and any other architecture specific kernel target
+          # from the build flags
+          buildFlags =
+            if stdenv.hostPlatform.linux-kernel.target != "vmlinux" then
+              lib.remove stdenv.hostPlatform.linux-kernel.target buildFlags
+            else
+              buildFlags;
+          preInstall = preInstall + ''
+
+            # Add an install target to the Makefile
+            echo "PHONY += install" >> ../arch/um/Makefile
+            echo "install:" >> ../arch/um/Makefile
+            printf "\t\$(call cmd,install)\n" >> ../arch/um/Makefile
+          '';
+
+          meta.platforms = [ "x86_64-linux" ];
+        }
+      );
 in
 {
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
@@ -132,6 +201,10 @@ in
         linux_default = packageAliases.linux_default.kernel;
 
         linux_latest = packageAliases.linux_latest.kernel;
+
+        linux_uml = umlKernelFor packageAliases.linux_default.kernel;
+
+        linux_uml_latest = umlKernelFor packageAliases.linux_latest.kernel;
 
         linux_zen = callPackage ../os-specific/linux/kernel/zen-kernels.nix {
           kernelPatches = [
@@ -710,6 +783,8 @@ in
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
       linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
       linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
+      linux_uml = packagesFor kernels.linux_uml;
+      linux_uml_latest = packagesFor kernels.linux_uml_latest;
     }
     // lib.optionalAttrs config.allowAliases {
       linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
@@ -809,4 +884,6 @@ in
     };
 
   buildLinux = callPackage ../os-specific/linux/kernel/generic.nix { };
+
+  inherit umlKernelFor;
 }
