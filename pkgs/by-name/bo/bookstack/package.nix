@@ -43,7 +43,6 @@ php83.buildComposerProject2 (finalAttrs: {
     homepage = "https://www.bookstackapp.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      ymarkus
       savyajha
     ];
     platforms = lib.platforms.linux;
