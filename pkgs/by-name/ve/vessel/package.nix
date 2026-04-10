@@ -1,46 +1,38 @@
 {
   lib,
-  stdenv,
   requireFile,
-  SDL,
-  libpulseaudio,
-  alsa-lib,
-  runtimeShell,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "vessel";
   version = "12082012";
 
   goBuyItNow = ''
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${version}-bin" in the
+    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${finalAttrs.version}-bin" in the
     directory where you saved it.
   '';
 
-  src =
-    if (stdenv.hostPlatform.isi686) then
-      requireFile {
-        message = goBuyItNow;
-        name = "vessel-${version}-bin";
-        sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
-      }
-    else
-      throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
+  src = requireFile {
+    message = finalAttrs.goBuyItNow;
+    name = "vessel-${finalAttrs.version}-bin";
+    hash = "sha256-Jr39PPOIU7Jm4kv0os6EbGTPmJVjxQMH6VVYGmVm/O4=";
+  };
 
   ld_preload = ./isatty.c;
 
   libPath =
     lib.makeLibraryPath [
-      stdenv.cc.cc
-      stdenv.cc.libc
+      pkgsi686Linux.stdenv.cc.cc
+      pkgsi686Linux.stdenv.cc.libc
     ]
     + ":"
     + lib.makeLibraryPath [
-      SDL
-      libpulseaudio
-      alsa-lib
+      pkgsi686Linux.SDL
+      pkgsi686Linux.libpulseaudio
+      pkgsi686Linux.alsa-lib
     ];
 
   buildCommand = ''
@@ -79,7 +71,7 @@ stdenv.mkDerivation rec {
     done
 
     cat > $out/bin/Vessel << EOW
-    #!${runtimeShell}
+    #!${pkgsi686Linux.runtimeShell}
     cd $out/libexec/strangeloop/vessel/
     exec ./x86/vessel.x86
     EOW
@@ -100,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jcumming ];
   };
 
-}
+})
