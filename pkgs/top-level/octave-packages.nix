@@ -65,10 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      arduino = callPackage ../development/octave-modules/arduino {
-        inherit (pkgs) arduino-core-unwrapped;
-      };
-
       bsltl = callPackage ../development/octave-modules/bsltl { };
 
       cgi = callPackage ../development/octave-modules/cgi { };
