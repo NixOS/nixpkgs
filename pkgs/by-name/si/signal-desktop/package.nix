@@ -58,13 +58,13 @@ let
     '';
   });
 
-  version = "8.4.1";
+  version = "8.6.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-HjIU7L3iSr51w3KxzmaVzOI6qtAyyyWTlK1HygNyEzw=";
+    hash = "sha256-K6mufC7LFGWeCkIkrsYPO2n/0L1b6yBqiLcv7w7e57g=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -159,11 +159,11 @@ stdenv.mkDerivation (finalAttrs: {
     # language-pack postprocessing), and they expect a different macOS
     # app layout than nixpkgs' Electron provides.
     substituteInPlace package.json \
-      --replace-fail '"artifactBuildCompleted": "ts/scripts/artifact-build-completed.node.js",' "" \
-      --replace-fail '"afterSign": "ts/scripts/after-sign.node.js",' "" \
-      --replace-fail '"afterPack": "ts/scripts/after-pack.node.js",' "" \
-      --replace-fail '"sign": "./ts/scripts/sign-macos.node.js",' "" \
-      --replace-fail '"afterAllArtifactBuild": "ts/scripts/after-all-artifact-build.node.js",' ""
+      --replace-fail '"artifactBuildCompleted": "ts/scripts/artifact-build-completed.node.ts",' "" \
+      --replace-fail '"afterSign": "ts/scripts/after-sign.node.ts",' "" \
+      --replace-fail '"afterPack": "ts/scripts/after-pack.node.ts",' "" \
+      --replace-fail '"sign": "./ts/scripts/sign-macos.node.ts",' "" \
+      --replace-fail '"afterAllArtifactBuild": "ts/scripts/after-all-artifact-build.node.ts",' ""
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -177,15 +177,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 3;
     hash =
       if withAppleEmojis then
-        "sha256-QaYUL5/JcXqd564CFAR+4EMMG38h8a1dpls054iWDzU="
+        "sha256-d6ul6MTJhnM4PyxMlMaVovnvSPfYh3DmMjHjmOideB4="
       else
-        "sha256-NEUKdRT0aVznkXTZOJJ8TCUhidhTAiDdBxoukKvt4qs=";
+        "sha256-JymcPdFMi0wfceOJnPrwEBG4PnosIFnrxiIrTlcGf/g=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1774560637;
+    SOURCE_DATE_EPOCH = 1775687068;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Disable code signing during local macOS builds.
