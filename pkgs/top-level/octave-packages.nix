@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      database = callPackage ../development/octave-modules/database { };
-
       dataframe = callPackage ../development/octave-modules/dataframe { };
 
       datatypes = callPackage ../development/octave-modules/datatypes { };
