@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      matgeom = callPackage ../development/octave-modules/matgeom { };
-
       miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
 
       msh = callPackage ../development/octave-modules/msh {
