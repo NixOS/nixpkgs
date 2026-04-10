@@ -11516,6 +11516,11 @@
     name = "Andrew Plaza";
     keys = [ { fingerprint = "843D 72A9 EB79 A869 2C58  5B3A E773 8A7A 0F5C DB89"; } ];
   };
+  instable = {
+    github = "code-instable";
+    githubId = 68656923;
+    name = "Code Instable";
+  };
   Intuinewin = {
     email = "antoinelabarussias@gmail.com";
     github = "Intuinewin";
