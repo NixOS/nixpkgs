@@ -277,6 +277,7 @@ let
   sdkPackages = prevStage: {
     inherit (prevStage)
       bashNonInteractive
+      libiconvReal
       libpng
       libxml2
       libxo
@@ -291,7 +292,6 @@ let
       Csu
       adv_cmds
       copyfile
-      libiconv
       libresolv
       libsbuf
       libutil
@@ -556,9 +556,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
         cmake = self.cmakeMinimal;
-
-        # Use libiconvReal with gettext to break an infinite recursion.
-        gettext = super.gettext.override { libiconv = super.libiconvReal; };
 
         # Disable grep’s tests for now due to impure locale updates in
         # macOS 15.4 breaking them in the bootstrap.
@@ -1050,6 +1047,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ld64.lib
               ld64.out
               libffi.out
+              libiconv.out
               libxml2.out
               ncurses.dev
               ncurses.man
@@ -1076,7 +1074,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             binutils
             binutils.bintools
             libcxx
-            libiconv.out
             libresolv.out
             libsbuf.out
             libSystem
@@ -1192,8 +1189,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isFromNixpkgs prevStage.binutils-unwrapped.src;
     assert isBuiltByNixpkgsCompiler prevStage.curl;
 
-    # libiconv should be an alias for darwin.libiconv
-    assert prevStage.libiconv == prevStage.darwin.libiconv;
+    # libiconv should be an alias for libiconvReal
+    assert prevStage.libiconv == prevStage.libiconvReal;
 
     {
       inherit (prevStage) config overlays stdenv;
