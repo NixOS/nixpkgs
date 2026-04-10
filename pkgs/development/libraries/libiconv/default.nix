@@ -5,7 +5,7 @@
   updateAutotoolsGnuConfigScriptsHook,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  enableDarwinABICompat ? false,
+  enableDarwinABICompat ? stdenv.hostPlatform.isDarwin,
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
