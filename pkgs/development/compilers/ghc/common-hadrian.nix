@@ -238,17 +238,17 @@
           hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
         })
       ]
-      ++ lib.optionals (lib.versionOlder version "9.12.1") [
+      ++ lib.optionals (lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "ghc-ppc-support-elf-v2-on-powerpc64-big-endian.patch";
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/ead75532c9dc915bfa9ebaef0ef5d148e793cc0a.patch";
           # ghc-platform was split out of ghc-boot in ddcdd88c2c95445a87ee028f215d1e876939a4d9
-          postFetch = lib.optionalString (lib.versionOlder version "9.10.1") ''
+          postFetch = lib.optionalString (lib.versionOlder version "9.10") ''
             substituteInPlace $out \
               --replace-fail 'libraries/ghc-platform/src/GHC' 'libraries/ghc-boot/GHC'
           '';
           hash =
-            if lib.versionOlder version "9.10.1" then
+            if lib.versionOlder version "9.10" then
               "sha256-5SVSW1aYoItqHli5QjnudH4zGporYNLDeEo4gZksBZw="
             else
               "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
