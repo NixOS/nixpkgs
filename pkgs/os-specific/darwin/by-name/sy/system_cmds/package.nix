@@ -101,7 +101,7 @@ in
 mkAppleDerivation {
   releaseName = "system_cmds";
 
-  xcodeHash = "sha256-gdtn3zNIneZKy6+X0mQ51CFVLNM6JQYLbd/lotG5/Tw=";
+  xcodeHash = "sha256-/JFbwYJA2sx3F+ihyxemZX/LK3y5HLZSbQFDdvctzmQ=";
 
   patches = [
     # `posix_spawnattr_set_use_sec_transition_shims_np` is only available on macOS 15.2 or newer.
