@@ -280,7 +280,7 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
 
 def get_build_image_name(
     build_attr: BuildAttr,
-    image_variant: str,
+    attr: str,
     instantiate_flags: Args | None = None,
 ) -> str:
     path = (
@@ -300,7 +300,7 @@ def get_build_image_name(
               value = import {path};
               set = if builtins.isFunction value then value {{}} else value;
             in
-              set.{build_attr.to_attr("config.system.build.images", image_variant, "passthru", "filePath")}
+              set.{build_attr.to_attr(attr, "passthru", "filePath")}
             """),
             *dict_to_flags(instantiate_flags),
         ],
@@ -312,7 +312,7 @@ def get_build_image_name(
 
 def get_build_image_name_flake(
     flake: Flake,
-    image_variant: str,
+    attr: str,
     eval_flags: Args | None = None,
 ) -> str:
     r = run_wrapper(
@@ -321,9 +321,7 @@ def get_build_image_name_flake(
             *FLAKE_FLAGS,
             "eval",
             "--json",
-            flake.to_attr(
-                "config.system.build.images", image_variant, "passthru", "filePath"
-            ),
+            flake.to_attr(attr, "passthru", "filePath"),
             *dict_to_flags(eval_flags),
         ],
         stdout=PIPE,
