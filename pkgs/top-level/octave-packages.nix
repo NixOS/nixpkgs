@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
-
       lssa = callPackage ../development/octave-modules/lssa { };
 
       ltfat = callPackage ../development/octave-modules/ltfat {
