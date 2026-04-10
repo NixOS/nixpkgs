@@ -205,6 +205,24 @@ in
         '')
       ];
 
+      assertions =
+        concatMap (m: [
+          {
+            assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
+            message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
+          }
+          {
+            assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
+            message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
+          }
+        ]) cfg.listen
+        ++ [
+          {
+            assertion = cfg.package.pname == "vinyl-cache";
+            message = "services.vinyl-cache only supports Vinyl Cache. Please use services.varnish.";
+          }
+        ];
+    })
     (lib.mkIf (cfg.enable && cfg.enableFileLogging) {
       systemd.services = {
         vinylncsa = {
