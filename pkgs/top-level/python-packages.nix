@@ -5613,6 +5613,8 @@ self: super: with self; {
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
 
+  flash-mla = callPackage ../development/python-modules/flash-mla { };
+
   flashinfer = callPackage ../development/python-modules/flashinfer { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
