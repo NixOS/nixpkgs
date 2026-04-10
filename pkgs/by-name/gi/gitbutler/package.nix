@@ -131,6 +131,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "git_editor_takes_precedence"
     # FLAKY (try again): child exited unsuccessfully: ExitStatus(unix_wait_status(10752))
     "migrations_in_parallel_with_processes"
+    # FLAKY: Broken pipe (os error 32) - hook script doesn't consume stdin, races with writer
+    "pre_push_ignores_husky_core_hooks_path_when_disabled"
     # Archive at 'tests/fixtures/generated-archives/[...].tar' not found [..] Error: No such file or directory (os error 2)
     "merge_first_branch_into_gb_local_and_verify_rebase"
     "json_output_with_dangling_commits"
