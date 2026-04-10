@@ -10,25 +10,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "lightway";
-  version = "0-unstable-2026-01-02";
+  version = "0-unstable-2026-04-10";
 
   src = fetchFromGitHub {
     owner = "expressvpn";
     repo = "lightway";
-    rev = "8e21da7ab3a97ab75235264e85fa8615f7b0f33b";
-    hash = "sha256-1YpXaxPm1BMALhRU25FH5PLJ1IIRfcYA3W6e4c8Si+w=";
+    rev = "72a924935df9db641e7f4fe28cbeafaead59014f";
+    hash = "sha256-tygK2CQmbbynJiwGkMvYzt2dHoE17DCJeqD+jlai/m8=";
   };
 
-  cargoHash = "sha256-4SIE/kGRd2I3sqO+IgItO1PBQHeFv9N4erfVe/9re7A=";
-
-  # Backport fix for Darwin address calculation to vendored wolfSSL 5.8.2.
-  # https://github.com/wolfSSL/wolfssl/pull/9537
-  # Drop when Lightway bumps wolfSSL past commit 5c2c459, or > 5.8.4.
-  postPatch = ''
-    patch -Np1 \
-      -d $cargoDepsCopy/wolfssl-sys-2.0.0/wolfssl-src \
-      -i ${./backport-darwin-address-calc-fix.patch}
-  '';
+  cargoHash = "sha256-NdVOphyBW5sflv5jZPV/ShfAJXb3ZOyDRctmn/2JY38=";
 
   cargoBuildFlags = lib.cli.toCommandLineGNU { } {
     package = [
