@@ -52,6 +52,7 @@ let
         '${xnu}/bsd/sys/fsgetpath.h'
 
       install -D -m644 -t "$out/include" \
+        '${Libc}/include/_bounds.h' \
         '${libplatform}/private/_simple.h' \
         '${Libc}/darwin/libc_private.h' \
         '${Libc}/darwin/subsystem.h' \
@@ -78,6 +79,10 @@ let
       substituteInPlace "$out/include/os/lock_private.h" \
         --replace-fail ', bridgeos(4.0)' ""
 
+      install -D -m644 -t "$out/include/sys" \
+        '${xnu}/bsd/sys/kern_memorystatus.h' \
+        '${xnu}/bsd/sys/reason.h'
+
       # This file is part of ld-prime, which is unhelpfully not included in the dyld source release.
       # Fortunately, nothing in it is actually needed to build `dyld_info` and `dsc_extractor`.
       touch "$out/include/File.h"
@@ -95,24 +100,24 @@ mkAppleDerivation {
 
   propagatedBuildOutputs = [ ];
 
-  xcodeHash = "sha256-4yOJouk9AjEt7W3+0cQRMUDDqBhU+J9c16ZQSzUF5go=";
+  xcodeHash = "sha256-F/V1XzBP1qEDpUDTz+jyp5dbcfqdQp8s9NW2OBoU5x0=";
 
   patches = [
     # Disable use of private kdebug API
     ./patches/0001-Disable-kdebug-trace.patch
     # dyld_info tries to weakly link against libLTO using this macro.
-    ./patches/0003-Add-weaklinking_h.patch
+    ./patches/0002-Add-weaklinking_h.patch
     # The LLVMOpInfoCallback args comment out one of the args. Fix that for compatibility with nixpkgs LLVM.
-    ./patches/0004-Fix-llvm-op-info-callback-args.patch
+    ./patches/0003-Fix-llvm-op-info-callback-args.patch
     # Some private headers depend on corecrypto, which we can’t use.
     # Use the headers from the ld64 port, which delegates to OpenSSL.
-    ./patches/0005-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
+    ./patches/0004-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
     # `dsc_extractor` builds a dylib, but it includes a program that can perform cache extraction.
     # This extracts just the driver into a file to make building the actual program easier.
-    ./patches/0006-Add-dsc_extractor_bin_cpp.patch
+    ./patches/0005-Add-dsc_extractor_bin_cpp.patch
     # Fix missing symbol for `mach_o::ChainedFixups::PointerFormat::writeChainEntry`,
     # which isn’t actually needed by `dyld_info` or `dsc_extractor`.
-    ./patches/0007-Fix-missing-writeChainEntry.patch
+    ./patches/0006-Fix-missing-writeChainEntry.patch
   ];
 
   postPatch = ''

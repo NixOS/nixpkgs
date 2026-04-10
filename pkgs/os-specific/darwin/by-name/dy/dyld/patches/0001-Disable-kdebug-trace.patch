@@ -1,5 +1,14 @@
+From b37141e26eb2f3c5c383d7c29e8a7a7362f822ae Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 19:45:22 -0400
+Subject: [PATCH] Disable-kdebug-trace
+
+---
+ dyld/Tracing.h | 79 ++++++++++++--------------------------------------
+ 1 file changed, 19 insertions(+), 60 deletions(-)
+
 diff --git a/dyld/Tracing.h b/dyld/Tracing.h
-index 1e6e3027d9..bac62cf72d 100644
+index 9536f0b..aa8d373 100644
 --- a/dyld/Tracing.h
 +++ b/dyld/Tracing.h
 @@ -31,29 +31,25 @@
@@ -51,7 +60,7 @@ index 1e6e3027d9..bac62cf72d 100644
  
  #include "Defines.h"
  
-@@ -111,24 +107,10 @@
+@@ -118,24 +114,10 @@ struct VIS_HIDDEN kt_arg {
      uint64_t value() const { return _value; }
  private:
      void prepare(uint32_t code) {
@@ -76,7 +85,7 @@ index 1e6e3027d9..bac62cf72d 100644
      uint64_t _value;
      const char* _str;
  };
-@@ -168,29 +150,6 @@
+@@ -175,29 +157,6 @@ private:
      uint64_t current_trace_id = 0;
  };
  
@@ -106,3 +115,6 @@ index 1e6e3027d9..bac62cf72d 100644
  VIS_HIDDEN
  void syntheticBacktrace(const char *reason, bool enableExternally=false);
  
+-- 
+2.51.2
+

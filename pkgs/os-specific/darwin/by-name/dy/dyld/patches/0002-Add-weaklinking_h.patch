@@ -1,9 +1,19 @@
+From aa4ca805f1f13619056c4caf14eb863e0a37a51f Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 19:45:22 -0400
+Subject: [PATCH] Add-weaklinking_h
+
+---
+ include/SoftLinking/WeakLinking.h | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 include/SoftLinking/WeakLinking.h
+
 diff --git a/include/SoftLinking/WeakLinking.h b/include/SoftLinking/WeakLinking.h
 new file mode 100644
-index 0000000000..82755e2a43
+index 0000000..99ef8c8
 --- /dev/null
 +++ b/include/SoftLinking/WeakLinking.h
-@@ -1,0 +1,28 @@
+@@ -0,0 +1,28 @@
 +/*
 + * Copyright (C) 2017 Apple Inc. All rights reserved.
 + *
@@ -32,3 +42,6 @@ index 0000000000..82755e2a43
 +#pragma once
 +
 +#define WEAK_LINK_FORCE_IMPORT(sym) extern __attribute__((weak_import)) __typeof__(sym) sym
+-- 
+2.51.2
+
