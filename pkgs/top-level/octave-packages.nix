@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      splines = callPackage ../development/octave-modules/splines { };
-
       statistics = callPackage ../development/octave-modules/statistics { };
 
       strings = callPackage ../development/octave-modules/strings { };
