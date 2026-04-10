@@ -48,6 +48,7 @@ let
     scipy
     shiboken6
     vtk
+    networkx # for sheetmetal plugin
   ];
 
   freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
