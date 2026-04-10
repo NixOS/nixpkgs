@@ -18,6 +18,7 @@
   jq,
   gnugrep,
   podman,
+  testers,
 }:
 
 let
@@ -28,32 +29,39 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
   version = "1.26.2";
 
-  passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { })
-    (lib.getExe (writeShellApplication {
-      name = "podman-desktop-dependencies-updater";
-      runtimeInputs = [
-        nix
-        jq
-        gnugrep
-      ];
-      runtimeEnv = {
-        PNAME = "podman-desktop";
-        PKG_FILE = toString ./package.nix;
-      };
-      text = ''
-        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-        new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-        new_pnpm_major="$(jq '.packageManager' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
-        sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
-      '';
-    }))
-    (nix-update-script {
-      # Changing the pnpm version requires updating `pnpmDeps.hash`.
-      extraArgs = [ "--version=skip" ];
-    })
-  ];
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "HOME=$(mktemp -d) podman-desktop --version";
+    };
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (lib.getExe (writeShellApplication {
+        name = "podman-desktop-dependencies-updater";
+        runtimeInputs = [
+          nix
+          jq
+          gnugrep
+        ];
+        runtimeEnv = {
+          PNAME = "podman-desktop";
+          PKG_FILE = toString ./package.nix;
+        };
+        text = ''
+          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+          new_pnpm_major="$(jq '.packageManager' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+          sed -i -E "s/pnpm_[0-9_]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
+        '';
+      }))
+      (nix-update-script {
+        # Changing the pnpm version requires updating `pnpmDeps.hash`.
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
+  };
 
   src = fetchFromGitHub {
     owner = "containers";
@@ -117,37 +125,36 @@ stdenv.mkDerivation (finalAttrs: {
     let
       commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ podman ]}";
     in
-    (
-      ''
-        runHook preInstall
+    ''
+      runHook preInstall
 
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         mkdir -p "$out/Applications"
         mv dist/mac*/"${appName}.app" "$out/Applications"
 
         wrapProgram "$out/Applications/${appName}.app/Contents/MacOS/${appName}" \
           ${commonWrapperArgs}
-      ''
-      # Enforce X11 to avoid the Wayland dashboard issue.
-      # Revisit this once issue https://github.com/podman-desktop/podman-desktop/issues/14388 is resolved.
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        mkdir -p "$out/share/lib/podman-desktop"
-        cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
+      ''}
 
-        install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
+      ${
+        # Enforce X11 to avoid the Wayland dashboard issue.
+        # Revisit once https://github.com/podman-desktop/podman-desktop/issues/14388 is resolved.
+        lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+          mkdir -p "$out/share/lib/podman-desktop"
+          cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
 
-        makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
-          --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-          --set XDG_SESSION_TYPE 'x11' \
-          ${commonWrapperArgs} \
-          --inherit-argv0
-      ''
-      + ''
+          install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
-        runHook postInstall
-      ''
-    );
+          makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
+            --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
+            --set XDG_SESSION_TYPE 'x11' \
+            ${commonWrapperArgs} \
+            --inherit-argv0
+        ''
+      }
+
+      runHook postInstall
+    '';
 
   # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
   desktopItems = [
@@ -159,6 +166,14 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Desktop client for podman";
       comment = finalAttrs.meta.description;
       categories = [ "Utility" ];
+      keywords = [
+        "container"
+        "pod"
+        "image"
+        "volume"
+        "kubernetes"
+        "docker"
+      ];
       startupWMClass = appName;
     })
   ];
