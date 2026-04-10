@@ -8,18 +8,21 @@ mkPackage (
     lib,
     callPackage,
     versionCheckHook,
+    gnulib,
   }:
   [
     (layers.derivation { inherit stdenv; })
     (this: old: {
       name = "hello";
-      version = "2.12.1";
+      version = "2.12.3";
 
       setup = old.setup or { } // {
         src = fetchurl {
           url = "mirror://gnu/hello/hello-${this.version}.tar.gz";
-          hash = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";
+          hash = "sha256-DV9gFUOC/uELEUocNOeF2LH0kgc64tOm97FHaHs2aqA=";
         };
+
+        patches = lib.optional stdenv.hostPlatform.isCygwin gnulib.patches.memcpy-fix-backport-250512;
 
         doCheck = true;
         doInstallCheck = true;
@@ -65,6 +68,7 @@ mkPackage (
         maintainers = with lib.maintainers; [ stv0g ];
         mainProgram = "hello";
         platforms = lib.platforms.all;
+        identifiers.cpeParts.vendor = "gnu";
       };
     })
   ]

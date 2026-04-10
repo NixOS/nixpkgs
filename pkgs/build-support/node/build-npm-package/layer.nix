@@ -28,6 +28,7 @@ let
 in
 {
   deps = {
+    nodejs = nodejs;
     inherit (deps.nodejs) fetchNpmDeps;
     npmHooks = buildPackages.npmHooks.override {
       inherit (deps) nodejs;
