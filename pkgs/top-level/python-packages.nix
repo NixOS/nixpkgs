@@ -1116,6 +1116,8 @@ self: super: with self; {
 
   async-generator = callPackage ../development/python-modules/async-generator { };
 
+  async-geotiff = callPackage ../development/python-modules/async-geotiff { };
+
   async-interrupt = callPackage ../development/python-modules/async-interrupt { };
 
   async-lru = callPackage ../development/python-modules/async-lru { };
@@ -1123,6 +1125,8 @@ self: super: with self; {
   async-modbus = callPackage ../development/python-modules/async-modbus { };
 
   async-stagger = callPackage ../development/python-modules/async-stagger { };
+
+  async-tiff = callPackage ../development/python-modules/async-tiff { };
 
   async-timeout = callPackage ../development/python-modules/async-timeout { };
 
@@ -11320,6 +11324,8 @@ self: super: with self; {
   obsidian-callouts = callPackage ../development/python-modules/obsidian-callouts { };
 
   obsidian-media = callPackage ../development/python-modules/obsidian-media { };
+
+  obspec = callPackage ../development/python-modules/obspec { };
 
   obspy = callPackage ../development/python-modules/obspy { };
 
