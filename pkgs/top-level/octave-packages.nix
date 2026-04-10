@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      lssa = callPackage ../development/octave-modules/lssa { };
-
       ltfat = callPackage ../development/octave-modules/ltfat {
         inherit (octave)
           fftw
