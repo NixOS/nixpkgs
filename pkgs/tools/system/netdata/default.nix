@@ -67,13 +67,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.9.0";
+    version = "2.10.3";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-QA8YI1cHiPjrTZc9fy81i9YGgGTdE98Eo3xQtVn4/nY=";
+      hash = "sha256-ryX+C3zuY7vONPeB4ocXDPttU5aSYbj1ThTosCSxmys=";
       fetchSubmodules = true;
     };
 
@@ -147,10 +147,10 @@ stdenv.mkDerivation (
     ++ lib.optional withCloudUi (
       replaceVars ./dashboard-v3-add.patch {
         # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 04/01/2025 04:45:14
+        # last update 10/12/2025 21:25:17
         dashboardTarball = fetchurl {
-          url = "https://web.archive.org/web/20250401044514/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-NtmM1I3VrvFErMoBl+w63Nt0DzOOsaB98cxE/axm8mE=";
+          url = "https://web.archive.org/web/20251210212517/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-jBRiBW/rlaayvjSR7v991/46dj1IhIl0Ylgrp24HyVM=";
         };
       }
     );
@@ -308,7 +308,7 @@ stdenv.mkDerivation (
 
           sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-          vendorHash = "sha256-VBr6VZvTKh2GFtcVSHCVNhzS8gvl4VFTNLtrK81Y92I=";
+          vendorHash = "sha256-HRe1bcVIQVzwPZnGlAK5A8AO1VTcjFajkPwBVdl4UIA=";
           proxyVendor = true;
           doCheck = false;
 
@@ -361,7 +361,7 @@ stdenv.mkDerivation (
             src
             cargoRoot
             ;
-          hash = "sha256-M9XECeLu58vBTJE4hFkoshc/ze/HF6rBERcjbjAHOJ0=";
+          hash = "sha256-mxFpT95e+NMqjJOIRqM+yKHGQHfpWmIFHqFNiiiqXOY=";
         })
         (rustPlatform.fetchCargoVendor {
           pname = "${finalAttrs.pname}-nd-jf";
