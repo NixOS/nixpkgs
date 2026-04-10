@@ -1,0 +1,68 @@
+diff --git a/atop-pm.sh b/atop-pm.sh
+index 3ff4ab5..c433b1a 100755
+--- a/atop-pm.sh
++++ b/atop-pm.sh
+@@ -1,10 +1,10 @@
+ #!/bin/sh
+ 
+ case "$1" in
+-	pre)	/usr/bin/systemctl stop atop
++	pre)	@systemd@/bin/systemctl stop atop
+ 		exit 0
+ 		;;
+-	post)	/usr/bin/systemctl start atop
++	post)	@systemd@/bin/systemctl start atop
+ 		exit 0
+ 		;;
+  	*)	exit 1
+diff --git a/atop-rotate.service b/atop-rotate.service
+index dbe8e0f..4eaa84d 100644
+--- a/atop-rotate.service
++++ b/atop-rotate.service
+@@ -4,4 +4,4 @@ Documentation=man:atop(1)
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/usr/bin/systemctl restart atop.service
++ExecStart=@systemd@/bin/systemctl restart atop.service
+diff --git a/atop.service b/atop.service
+index 3e5bafd..6b11dea 100644
+--- a/atop.service
++++ b/atop.service
+@@ -12,8 +12,8 @@ EnvironmentFile=/etc/default/atop
+ ExecStartPre=/bin/sh -c 'test -d "${LOGPATH}" || mkdir -p "${LOGPATH}"'
+ ExecStartPre=/bin/sh -c 'test -n "$LOGINTERVAL" -a "$LOGINTERVAL" -eq "$LOGINTERVAL"'
+ ExecStartPre=/bin/sh -c 'test -n "$LOGGENERATIONS" -a "$LOGGENERATIONS" -eq "$LOGGENERATIONS"'
+-ExecStart=/bin/sh -c 'exec /usr/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
+-ExecStartPost=/usr/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
++ExecStart=/bin/sh -c 'exec @out@/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
++ExecStartPost=@findutils@/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
+ KillSignal=SIGUSR2
+ 
+ [Install]
+diff --git a/atopacct.service b/atopacct.service
+index 3aa529d..b95db43 100644
+--- a/atopacct.service
++++ b/atopacct.service
+@@ -7,7 +7,7 @@ Before=atop.service
+ Type=forking
+ PIDFile=/run/atopacctd.pid
+ ExecStartPre=/bin/sh -c 'if systemctl -q is-active acct psacct; then echo "Process accounting already in use by (ps)acct"; exit 1; fi'
+-ExecStart=/usr/sbin/atopacctd
++ExecStart=@out@/bin/atopacctd
+ 
+ [Install]
+ WantedBy=multi-user.target
+diff --git a/atopgpu.service b/atopgpu.service
+index 4839235..8aae1c5 100644
+--- a/atopgpu.service
++++ b/atopgpu.service
+@@ -4,7 +4,7 @@ Documentation=man:atopgpud(8)
+ Before=atop.service
+ 
+ [Service]
+-ExecStart=/usr/sbin/atopgpud
++ExecStart=@out@/bin/atopgpud
+ Type=oneshot
+ RemainAfterExit=yes
+ 

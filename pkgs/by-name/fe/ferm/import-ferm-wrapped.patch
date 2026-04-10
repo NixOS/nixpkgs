@@ -1,0 +1,14 @@
+--- old/src/import-ferm
++++ new/src/import-ferm
+@@ -42,9 +42,9 @@
+     # find the main "ferm" program
+     my $ferm;
+     if ($0 =~ /^(.*)\//) {
+-        $ferm = "$1/ferm";
++        $ferm = "$1/.ferm-wrapped";
+     } else {
+-        $ferm = 'ferm';
++        $ferm = '.ferm-wrapped';
+     }
+ 
+     # Perl 5.24 requires this prefix or else it will only look in @INC

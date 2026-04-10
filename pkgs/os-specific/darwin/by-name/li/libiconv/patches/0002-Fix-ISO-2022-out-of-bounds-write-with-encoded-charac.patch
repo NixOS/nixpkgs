@@ -1,0 +1,43 @@
+From 6a2c81d23558d19a68d5494f8f8618bd55c89405 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 27 May 2024 13:43:43 -0400
+Subject: [PATCH 2/2] Fix ISO-2022 out-of-bounds write with encoded characters
+
+---
+ libiconv_modules/ISO2022/citrus_iso2022.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libiconv_modules/ISO2022/citrus_iso2022.c b/libiconv_modules/ISO2022/citrus_iso2022.c
+index 46da1d6..c2eeaa8 100644
+--- a/libiconv_modules/ISO2022/citrus_iso2022.c
++++ b/libiconv_modules/ISO2022/citrus_iso2022.c
+@@ -1031,7 +1031,7 @@ _ISO2022_sputwchar(_ISO2022EncodingInfo * __restrict ei, wchar_t wc,
+ {
+ 	_ISO2022Charset cs;
+ 	char *p;
+-	char tmp[MB_LEN_MAX];
++	char tmp[MB_LEN_MAX + 4];
+ 	size_t len;
+ 	int bit8, i = 0, target;
+ 	unsigned char mask;
+@@ -1196,7 +1196,7 @@ _citrus_ISO2022_put_state_reset(_ISO2022EncodingInfo * __restrict ei,
+     size_t * __restrict nresult)
+ {
+ 	char *result;
+-	char buf[MB_LEN_MAX];
++	char buf[MB_LEN_MAX + 4];
+ 	size_t len;
+ 	int ret;
+ 
+@@ -1225,7 +1225,7 @@ _citrus_ISO2022_wcrtomb_priv(_ISO2022EncodingInfo * __restrict ei,
+     _ISO2022State * __restrict psenc, size_t * __restrict nresult)
+ {
+ 	char *result;
+-	char buf[MB_LEN_MAX];
++	char buf[MB_LEN_MAX + 4];
+ 	size_t len;
+ 	int ret;
+ 
+-- 
+2.44.1
+

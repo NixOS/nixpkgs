@@ -1,0 +1,53 @@
+diff --git a/src/Objects/DeviceFormatter.vala b/src/Objects/DeviceFormatter.vala
+index cf6a3b8..0de10a9 100644
+--- a/src/Objects/DeviceFormatter.vala
++++ b/src/Objects/DeviceFormatter.vala
+@@ -62,42 +62,42 @@ namespace Formatter {
+             string drive_identifier = drive.get_identifier ("unix-device");
+             switch (filesystem) {
+                 case Formatter.Filesystems.EXT4:
+-                    spawn_args = {"pkexec", "mkfs.ext4", drive_identifier, "-F"};
++                    spawn_args = {"pkexec", "@ext4@", drive_identifier, "-F"};
+                     if (label != "") {
+                         spawn_args += "-L";
+                         spawn_args += label;
+                     }
+                     break;
+                 case Formatter.Filesystems.EXFAT:
+-                    spawn_args = {"pkexec", "mkfs.exfat", drive_identifier};
++                    spawn_args = {"pkexec", "@exfat@", drive_identifier};
+                     if (label != "") {
+                         spawn_args += "-n";
+                         spawn_args += label;
+                     }
+                     break;
+                 case Formatter.Filesystems.FAT16:
+-                    spawn_args = {"pkexec", "mkfs.fat", "-F16", "-I", drive_identifier};
++                    spawn_args = {"pkexec", "@fat@", "-F16", "-I", drive_identifier};
+                     if (label != "") {
+                         spawn_args += "-n";
+                         spawn_args += label;
+                     }
+                     break;
+                 case Formatter.Filesystems.FAT32:
+-                    spawn_args = {"pkexec", "mkfs.fat", "-F32", "-I", drive_identifier};
++                    spawn_args = {"pkexec", "@fat@", "-F32", "-I", drive_identifier};
+                     if (label != "") {
+                         spawn_args += "-n";
+                         spawn_args += label;
+                     }
+                     break;
+                 case Formatter.Filesystems.NTFS:
+-                    spawn_args = {"pkexec", "mkfs.ntfs", drive_identifier, "-f", "-F"};
++                    spawn_args = {"pkexec", "@ntfs@", drive_identifier, "-f", "-F"};
+                     if (label != "") {
+                         spawn_args += "-L";
+                         spawn_args += label;
+                     }
+                     break;
+                 case Formatter.Filesystems.HFS_PLUS:
+-                    spawn_args = {"pkexec", "mkfs.hfsplus", drive_identifier};
++                    spawn_args = {"pkexec", "@hfsplus@", drive_identifier};
+                     if (label != "") {
+                         spawn_args += "-v";
+                         spawn_args += label;

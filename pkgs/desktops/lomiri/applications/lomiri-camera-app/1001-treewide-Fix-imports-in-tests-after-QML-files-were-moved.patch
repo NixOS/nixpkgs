@@ -1,0 +1,86 @@
+From 75a0baa32f434546c5d6cfaf8ae19d561aa8dddd Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 9 Jun 2025 20:00:40 +0200
+Subject: [PATCH] treewide: Fix imports in tests after QML files were moved out
+ of top-level dir
+
+---
+ CMakeLists.txt                               | 2 ++
+ tests/unittests/tst_BottomEdgeIndicators.qml | 3 +--
+ tests/unittests/tst_PhotogridView.qml        | 3 +--
+ tests/unittests/tst_StopWatch.qml            | 3 +--
+ tests/unittests/tst_ViewFinderGeometry.qml   | 3 +--
+ 5 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index faa998c..9d54fbe 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -191,6 +191,8 @@ install(DIRECTORY ${QML_DIR}
+     DESTINATION ${CAMERA_APP_DIR}
+     )
+ 
++# For tests
++file(COPY ${QML_DIR} DESTINATION ${CMAKE_BINARY_DIR})
+ 
+ set(ASSETS_DIR assets)
+ 
+diff --git a/tests/unittests/tst_BottomEdgeIndicators.qml b/tests/unittests/tst_BottomEdgeIndicators.qml
+index 129b840..3dd4c0c 100644
+--- a/tests/unittests/tst_BottomEdgeIndicators.qml
++++ b/tests/unittests/tst_BottomEdgeIndicators.qml
+@@ -17,8 +17,7 @@
+ 
+ import QtQuick 2.12
+ import QtTest 1.0
+-import "../../"
+-import "../../.." //Needed for out of source build
++import "../../qml/components"
+ 
+ TestCase {
+     name: "BottomEdgeIndicators"
+diff --git a/tests/unittests/tst_PhotogridView.qml b/tests/unittests/tst_PhotogridView.qml
+index 4c7404a..3f14840 100644
+--- a/tests/unittests/tst_PhotogridView.qml
++++ b/tests/unittests/tst_PhotogridView.qml
+@@ -17,8 +17,7 @@
+ 
+ import QtQuick 2.12
+ import QtTest 1.0
+-import "../../"
+-import "../../.." //Needed for out of source build
++import "../../qml/components"
+ 
+ TestCase {
+     name: "PhotogridView"
+diff --git a/tests/unittests/tst_StopWatch.qml b/tests/unittests/tst_StopWatch.qml
+index aac9c36..5ad29f8 100644
+--- a/tests/unittests/tst_StopWatch.qml
++++ b/tests/unittests/tst_StopWatch.qml
+@@ -17,8 +17,7 @@
+ 
+ import QtQuick 2.12
+ import QtTest 1.0
+-import "../../"
+-import "../../.." //Needed for out of source build
++import "../../qml/components"
+ 
+ TestCase {
+     name: "StopWatch"
+diff --git a/tests/unittests/tst_ViewFinderGeometry.qml b/tests/unittests/tst_ViewFinderGeometry.qml
+index 154437f..42aaacc 100644
+--- a/tests/unittests/tst_ViewFinderGeometry.qml
++++ b/tests/unittests/tst_ViewFinderGeometry.qml
+@@ -17,8 +17,7 @@
+ 
+ import QtQuick 2.12
+ import QtTest 1.0
+-import "../../"
+-import "../../.." //Needed for out of source build
++import "../../qml/Viewfinder"
+ 
+ TestCase {
+     name: "ViewFinderGeometry"
+-- 
+2.49.0
+
