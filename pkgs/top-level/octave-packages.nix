@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      fits = callPackage ../development/octave-modules/fits { };
-
       financial = callPackage ../development/octave-modules/financial { };
 
       fpl = callPackage ../development/octave-modules/fpl { };
