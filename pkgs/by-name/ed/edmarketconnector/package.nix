@@ -4,24 +4,15 @@
   stdenv,
   python3,
   makeWrapper,
+  rsync,
+  curlFull,
+  wmctrl,
+  libxcb-cursor,
+  libxkbcommon,
+  xwininfo,
+  xprop,
+  extraPluginDependencies ? [ ],
 }:
-let
-  pythonEnv = python3.buildEnv.override {
-    extraLibs = with python3.pkgs; [
-      tkinter
-      requests
-      pillow
-      (watchdog.overrideAttrs {
-        disabledTests = [
-          "test_select_fd" # Avoid `Too many open files` error. See https://github.com/gorakhargosh/watchdog/issues/1095
-        ];
-      })
-      semantic-version
-      psutil
-      tomli-w
-    ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "edmarketconnector";
   version = "6.1.2";
@@ -35,6 +26,41 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  pythonEnv = python3.buildEnv.override {
+    extraLibs = [
+      python3.pkgs.tkinter
+      python3.pkgs.requests
+      python3.pkgs.pillow
+      (python3.pkgs.watchdog.overrideAttrs {
+        disabledTests = [
+          "test_select_fd" # Avoid `Too many open files` error. See https://github.com/gorakhargosh/watchdog/issues/1095
+        ];
+      })
+      python3.pkgs.semantic-version
+      python3.pkgs.psutil
+      python3.pkgs.tomli-w
+
+      # Plugin (from Plugin Browser) dependencies
+      # EDMC-BioScan
+      python3.pkgs.sqlalchemy
+
+      # EDMCHotkeys
+      python3.pkgs.xlib
+      python3.pkgs.six
+      # KeyD cant run via just the package, to use this plugin set "services.keyd.enable" to true in your NixOS config
+
+      # EDMCModernOverlay
+      rsync
+      curlFull
+      wmctrl
+      libxcb-cursor
+      libxkbcommon
+      xwininfo
+      xprop
+    ]
+    ++ extraPluginDependencies;
+  };
+
   installPhase = ''
     runHook preInstall
 
@@ -44,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/applications/"
     ln -s "${finalAttrs.src}/io.edcd.EDMarketConnector.desktop" "$out/share/applications/"
 
-    makeWrapper ${pythonEnv}/bin/python $out/bin/edmarketconnector \
+    makeWrapper ${finalAttrs.pythonEnv}/bin/python $out/bin/edmarketconnector \
       --add-flags "${finalAttrs.src}/EDMarketConnector.py"
 
     runHook postInstall
