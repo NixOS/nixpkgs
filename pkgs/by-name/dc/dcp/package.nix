@@ -15,16 +15,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcp";
-  version = "0.22.11";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "dcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pf3vUmdUHUuPts7bwzjxGF3RXpWXz3HaHujz8UKSPbs=";
+    hash = "sha256-gpMH6oeFbfRuRiIoLXTeqCSyaGr6aS9Y1zq5x1bEiZw=";
   };
 
-  vendorHash = "sha256-n+F7YPU6/UfxN1nZ+K5UvIR7vav/trRPWdLc1izpNAU=";
+  vendorHash = "sha256-JO8++V4LyzX6aDdZNdzDD3EqdUdVvT4Jsjh/e6nqVgs=";
 
   # This is required so we:
   # - Delete an inconsistent vendor directory from upstream
