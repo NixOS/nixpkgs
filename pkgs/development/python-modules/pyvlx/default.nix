@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvlx";
-  version = "0.2.32";
+  version = "0.2.33";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
     tag = finalAttrs.version;
-    hash = "sha256-ArNWXvYZ/eZWPUvV8z/+6WsAcm5MTnKblMrUFj51JhM=";
+    hash = "sha256-CdBpXga/OxkNILUPDe8bna0wbwNk7GLzYgZJeScJ948=";
   };
 
   build-system = [

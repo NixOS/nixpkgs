@@ -1161,8 +1161,6 @@ with pkgs;
 
   bump2version = with python3Packages; toPythonApplication bump2version;
 
-  cgit = callPackage ../applications/version-management/cgit { };
-
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
@@ -1530,8 +1528,6 @@ with pkgs;
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
   gistyc = with python3Packages; toPythonApplication gistyc;
-
-  glances = python3Packages.callPackage ../applications/system/glances { };
 
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
@@ -2380,10 +2376,6 @@ with pkgs;
 
   fluentd = callPackage ../tools/misc/fluentd { };
 
-  lp_solve = callPackage ../applications/science/math/lp_solve {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   fpm = callPackage ../tools/package-management/fpm { };
 
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
@@ -2661,10 +2653,6 @@ with pkgs;
     ]);
 
     packages = config.ihaskell.packages or (_: [ ]);
-  };
-
-  ilspycmd = callPackage ../development/tools/ilspycmd {
-    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   incus-lts = callPackage ../by-name/in/incus/lts.nix { };
@@ -3493,8 +3481,6 @@ with pkgs;
     youtube-dl = yt-dlp;
   };
 
-  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
-
   buildTeleport = callPackage ../build-support/teleport { };
 
   telepresence = callPackage ../tools/networking/telepresence {
@@ -4262,6 +4248,9 @@ with pkgs;
       else
         haskell.compiler.ghc910
     );
+
+  # TODO(@NixOS/haskell): deprecate this alias?
+  microhs = targetPackages.haskell.packages.microhs.ghc or haskell.compiler.microhs;
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 

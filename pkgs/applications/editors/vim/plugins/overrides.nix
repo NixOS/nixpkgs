@@ -304,6 +304,10 @@ assertNoAdditions {
     ];
   };
 
+  bitbake = super.bitbake.overrideAttrs {
+    sourceRoot = "source/contrib/vim";
+  };
+
   blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
@@ -504,6 +508,10 @@ assertNoAdditions {
     dependencies = with self; [
       plenary-nvim
     ];
+  };
+
+  cmp-async-path = super.cmp-async-path.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-beancount = super.cmp-beancount.overrideAttrs {
@@ -1559,6 +1567,14 @@ assertNoAdditions {
       rm -rf assets/
     '';
   };
+
+  jsonfly-nvim = super.jsonfly-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      maintainers = old.meta.maintainers or [ ] ++ [
+        lib.maintainers.myzel394
+      ];
+    };
+  });
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
@@ -3163,6 +3179,15 @@ assertNoAdditions {
     ];
   };
 
+  rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # rainbow-delimiters.types.lua
+      "rainbow-delimiters.types"
+      # Test that requires an unpackaged dependency
+      "rainbow-delimiters._test.highlight"
+    ];
+  };
+
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
     dependencies = [ self.cmd-parser-nvim ];
   };
@@ -3361,6 +3386,14 @@ assertNoAdditions {
       "solarized-osaka.extra.fzf"
     ];
   };
+
+  sonarlint-nvim = super.sonarlint-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      maintainers = old.meta.maintainers or [ ] ++ [
+        lib.maintainers.sinics
+      ];
+    };
+  });
 
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
     # Optional telescope integration
