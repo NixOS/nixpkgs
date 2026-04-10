@@ -38,7 +38,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-QhkylTnnCy4qG8fpUMlKqDGKz58jysL0YF4lFGJzPzE=";
+  xcodeHash = "sha256-L27TYv2zdKx0WKTBgHSv9Q0FCwrW4o83EmtDyqFM1fs=";
 
   postPatch = ''
     # Meson generators require using @BASENAME@ in the output.
