@@ -10372,6 +10372,12 @@
     githubId = 9850776;
     name = "Hans-Jörg Schurr";
   };
+  haoxian = {
+    email = "haoxianhan@gmail.com";
+    github = "haoxianhan";
+    githubId = 3611408;
+    name = "haoxian";
+  };
   HaoZeke = {
     email = "r95g10@gmail.com";
     github = "HaoZeke";
