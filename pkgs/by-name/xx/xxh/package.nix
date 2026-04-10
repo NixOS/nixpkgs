@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xxh";
-  version = "0.8.14";
+  version = "0.8.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xxh";
     repo = "xxh";
     tag = finalAttrs.version;
-    hash = "sha256-Y1yTn0lZemQgWsW9wlW+aNndyTXGo46PCbCl0TGYspQ=";
+    hash = "sha256-9kFstE0XNkj026NHhxGM+Ccm8GT7Tr7p4oY4O89zWCU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
