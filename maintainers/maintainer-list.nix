@@ -11066,7 +11066,7 @@
     name = "Yugen";
   };
   i077 = {
-    email = "nixpkgs@imranhossa.in";
+    email = "nixpkgs@imranh.org";
     github = "i077";
     githubId = 2789926;
     name = "Imran Hossain";
