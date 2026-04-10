@@ -254,35 +254,23 @@
               "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
         })
       ]
-      ++
-        lib.optionals
-          (
-            (lib.versions.majorMinor version == "9.12" && lib.versionOlder version "9.12.3")
-            || (lib.versions.majorMinor version != "9.12" && lib.versionOlder version "9.14.1")
-          )
-          [
-            (fetchpatch {
-              name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
-              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
-              hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
-            })
-          ]
+      ++ lib.optionals (lib.versionOlder version "9.12") [
+        (fetchpatch {
+          name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
+          hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
+        })
+      ]
       # Fix build with gcc15
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
-      ++
-        lib.optionals
-          (
-            lib.versionOlder version "9.12.3"
-            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.12")
-          )
-          [
-            (fetchpatch {
-              name = "ghc-hp2ps-c-gnu17.patch";
-              url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
-              hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
-            })
-          ]
+      ++ lib.optionals (lib.versionOlder version "9.10") [
+        (fetchpatch {
+          name = "ghc-hp2ps-c-gnu17.patch";
+          url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
+          hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
+        })
+      ]
       # Fix subword division regression in 9.12.3 https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15264
       ++ lib.optionals (version == "9.12.3") [
         (fetchpatch {
