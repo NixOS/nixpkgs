@@ -8,7 +8,7 @@
 
 let
   pname = "p3x-onenote";
-  version = "2025.10.111";
+  version = "2026.4.132";
 
   plat =
     {
@@ -22,7 +22,7 @@ let
     {
       aarch64-linux = "sha256-sfnRzY+1flUdIM1ey9u00j9eiDa4u5bY/f3fupV+FKM=";
       armv7l-linux = "sha256-ZnFSJE1VmvqSKZHBsMtvBbypsbY35z9X5T4bYT0DytU=";
-      x86_64-linux = "sha256-lgZjVVBWPloqMWX0oryNB0lxgmJCBqC7pp0AjeUMjQM=";
+      x86_64-linux = "sha256-RUauH8F7D1K2Oq85nsLaGuPpZ1+T5lLcmHuFNUpVBGw=";
     }
     .${stdenv.hostPlatform.system};
 
