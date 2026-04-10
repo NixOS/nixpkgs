@@ -2,15 +2,21 @@
   buildOctavePackage,
   lib,
   fetchurl,
-  fftw,
-  fftwSinglePrec,
   fftwFloat,
   fftwLongDouble,
   lapack,
   blas,
-  portaudio,
-  jdk,
+  octave,
 }:
+
+let
+  inherit (octave)
+    fftw
+    fftwSinglePrec
+    portaudio
+    jdk
+    ;
+in
 
 buildOctavePackage rec {
   pname = "ltfat";

@@ -69,16 +69,6 @@ makeScope newScope (
         inherit (pkgs) gsl;
       };
 
-      ltfat = callPackage ../development/octave-modules/ltfat {
-        inherit (octave)
-          fftw
-          fftwSinglePrec
-          portaudio
-          jdk
-          ;
-        inherit (pkgs) fftwFloat fftwLongDouble;
-      };
-
       mapping = callPackage ../development/octave-modules/mapping { };
 
       matgeom = callPackage ../development/octave-modules/matgeom { };
