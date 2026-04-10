@@ -1,0 +1,23 @@
+diff --git a/humfsify/Makefile b/humfsify/Makefile
+index 61a283f..8816da7 100644
+--- a/humfsify/Makefile
++++ b/humfsify/Makefile
+@@ -4,7 +4,7 @@ all:
+ 
+ install:
+ 	install -d $(DESTDIR)$(BIN_DIR)
+-	install -o 0755 $(BIN) $(DESTDIR)$(BIN_DIR)
++	install -m 0755 $(BIN) $(DESTDIR)$(BIN_DIR)
+ 
+ clean:
+ 	rm -f *~
+diff --git a/uml_net/Makefile b/uml_net/Makefile
+index f877845..d0ca7ed 100644
+--- a/uml_net/Makefile
++++ b/uml_net/Makefile
+@@ -22,4 +22,4 @@ clean :
+ 
+ install : $(BIN)
+ 	install -d $(DESTDIR)$(BIN_DIR)
+-	install -s -m 04755 $(BIN) $(DESTDIR)$(BIN_DIR)
++	install -s -m 755 $(BIN) $(DESTDIR)$(BIN_DIR)
