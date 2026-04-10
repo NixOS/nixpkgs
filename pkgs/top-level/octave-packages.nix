@@ -69,8 +69,6 @@ makeScope newScope (
         inherit (pkgs) arduino-core-unwrapped;
       };
 
-      audio = callPackage ../development/octave-modules/audio { };
-
       bim = callPackage ../development/octave-modules/bim { };
 
       bsltl = callPackage ../development/octave-modules/bsltl { };
