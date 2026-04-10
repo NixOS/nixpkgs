@@ -216,8 +216,8 @@
     "version": "539.80.3"
   },
   "libresolv": {
-    "hash": "sha256-GtPVlL1mD58um5hOFd3HQKQ7pqutBe9jZKgQw8pOkPE=",
-    "version": "91"
+    "hash": "sha256-SDdF7foz8DFUXmXEznwusNMkXFHrPkdLWQM8xfxb0gc=",
+    "version": "93"
   },
   "libutil": {
     "hash": "sha256-tUsl22Z0HUVSkSoohFXkhicNFCW+RARvpTS0q6yaQFk=",

@@ -14,12 +14,14 @@ add_project_arguments(
 
 # Dependencies
 cc = meson.get_compiler('c')
+thread_dep = dependency('threads')
 
 
 # Libraries
 libresolv = library(
     'resolv',
     darwin_versions : '1',
+    dependencies : [ thread_dep ],
     install : true,
     sources : [
         'base64.c',
