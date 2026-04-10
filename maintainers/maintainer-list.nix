@@ -10328,6 +10328,12 @@
     githubId = 2192042;
     name = "Colin King";
   };
+  halfwhey = {
+    email = "thehalfwhey@gmail.com";
+    github = "halfwhey";
+    githubId = 269841589;
+    name = "halfwhey";
+  };
   hamburger1984 = {
     email = "hamburger1984@gmail.com";
     github = "hamburger1984";
