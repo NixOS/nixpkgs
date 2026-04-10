@@ -11357,9 +11357,15 @@ self: super: with self; {
 
   oddsprout = callPackage ../development/python-modules/oddsprout { };
 
+  odfdo = callPackage ../development/python-modules/odfdo { };
+
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
+
+  odsgenerator = callPackage ../development/python-modules/odsgenerator { };
+
+  odsparsator = callPackage ../development/python-modules/odsparsator { };
 
   oelint-data = callPackage ../development/python-modules/oelint-data { };
 
