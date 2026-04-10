@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      geometry = callPackage ../development/octave-modules/geometry { };
-
       gsl = callPackage ../development/octave-modules/gsl {
         inherit (pkgs) gsl;
       };
