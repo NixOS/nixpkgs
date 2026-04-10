@@ -73,10 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      symbolic = callPackage ../development/octave-modules/symbolic {
-        inherit (octave) python;
-      };
-
       tsa = callPackage ../development/octave-modules/tsa { };
 
       video = callPackage ../development/octave-modules/video { };
