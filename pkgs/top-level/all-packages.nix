@@ -3557,6 +3557,12 @@ with pkgs;
   varnishPackages = varnish80Packages;
   varnish = varnishPackages.varnish;
 
+  inherit (callPackages ../servers/vinyl-cache { })
+    vinyl-cache_9
+    ;
+
+  vinyl-cache = vinyl-cache_9;
+
   vncdo = with python3Packages; toPythonApplication vncdo;
 
   # An alias to work around the splicing incidents
