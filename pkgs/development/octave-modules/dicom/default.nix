@@ -3,6 +3,8 @@
   lib,
   fetchFromGitHub,
   gdcm,
+  autoreconfHook,
+  pkg-config,
   cmake,
   nix-update-script,
 }:
@@ -19,14 +21,25 @@ buildOctavePackage rec {
   };
 
   nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
     cmake
   ];
-
-  dontUseCmakeConfigure = true;
 
   propagatedBuildInputs = [
     gdcm
   ];
+
+  dontUseCmakeConfigure = true;
+
+  preAutoreconf = ''
+    pushd src
+    # Removed these so autoreconf actually fires for our environment.
+    rm config.*
+  '';
+  postAutoreconf = ''
+    popd
+  '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
 
