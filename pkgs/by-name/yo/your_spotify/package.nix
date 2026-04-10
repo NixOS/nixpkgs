@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_9,
   nodejs,
   makeWrapper,
   callPackage,
@@ -14,50 +14,47 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
-  version = "1.16.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
     tag = finalAttrs.version;
-    hash = "sha256-eVKBrYE6U80G1SS/7nIl4fZb2BELb9lQizKcdcEIJIM=";
+    hash = "sha256-zyvTahfOq7KXgVqD178hrlqO7YjsjLyuw+pm6PMhJt0=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-JP5enfy8yyMjZpp0U72S0uR5zJkhpvxog38icOBtQRQ=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-KI5ZFU8u1R4QKTXn6mGVi+ziAocgOyyutKqmUOIn+dI=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    yarnConfigHook
-    yarnBuildHook
+    pnpmConfigHook
+    pnpm_9
     nodejs
   ];
 
-  preBuild = ''
+  buildPhase = ''
+    runHook preBuild
     pushd ./apps/server/
-  '';
-  postBuild = ''
+    pnpm run build
     popd
-    rm -r node_modules
-    export NODE_ENV="production"
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/your_spotify
-    cp -r node_modules $out/share/your_spotify/node_modules
-    rm $out/share/your_spotify/node_modules/@your_spotify/{client,dev,server}
-    cp -r ./apps/server/{lib,package.json} $out
+    cp -r apps/server/build $out/share/your_spotify/
     mkdir -p $out/bin
     makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_migrate" \
-      --add-flags "$out/lib/migrations.js" --set NODE_PATH "$out/share/your_spotify/node_modules"
+      --add-flags "$out/share/your_spotify/build/index.js" --add-flags "--migrate"
     makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_server" \
-      --add-flags "$out/lib/index.js" --set NODE_PATH "$out/share/your_spotify/node_modules"
+      --add-flags "$out/share/your_spotify/build/index.js"
 
     runHook postInstall
   '';
@@ -67,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs)
         src
         version
-        offlineCache
+        pnpmDeps
         meta
         ;
     };

@@ -3,33 +3,39 @@
   src,
   version,
   meta,
-  offlineCache,
+  pnpmDeps,
   apiEndpoint ? "http://localhost:3000",
-  yarnConfigHook,
-  yarnBuildHook,
+  pnpmConfigHook,
+  pnpm_9,
   nodejs,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "your_spotify_client";
-  inherit version src offlineCache;
+  inherit version src pnpmDeps;
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    pnpmConfigHook
+    pnpm_9
     nodejs
   ];
 
   API_ENDPOINT = "${apiEndpoint}";
-  preBuild = ''
+
+  buildPhase = ''
+    runHook preBuild
+
     pushd ./apps/client/
-  '';
-  postBuild = ''
+    pnpm run build
+
+    export NODE_ENV=production
     substituteInPlace scripts/run/variables.sh --replace-quiet '/app/apps/client/' "./"
     chmod +x ./scripts/run/variables.sh
     patchShebangs --build ./scripts/run/variables.sh
     ./scripts/run/variables.sh
     popd
+
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -40,4 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   inherit meta;
-})
+}
