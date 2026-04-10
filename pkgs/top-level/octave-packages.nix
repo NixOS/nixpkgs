@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      octproj = callPackage ../development/octave-modules/octproj { };
-
       optics = callPackage ../development/octave-modules/optics { };
 
       optim = callPackage ../development/octave-modules/optim { };
