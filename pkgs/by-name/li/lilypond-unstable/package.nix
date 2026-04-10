@@ -14,6 +14,8 @@ lilypond.overrideAttrs (
       hash = "sha256-UFuL8TZ7uLZhXgFoMGxAye04dNcvrw1gqQMOnE4P2fc=";
     };
 
+    patches = [ ];
+
     passthru.updateScript = writeScript "update-lilypond-unstable" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts curl

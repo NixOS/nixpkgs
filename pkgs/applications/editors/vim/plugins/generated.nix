@@ -15003,6 +15003,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  spring-boot-nvim = buildVimPlugin {
+    pname = "spring-boot.nvim";
+    version = "0-unstable-2026-03-29";
+    src = fetchFromGitHub {
+      owner = "JavaHello";
+      repo = "spring-boot.nvim";
+      rev = "98c6ff1dcdda943d341bba3c00ae9d190a2e5f7d";
+      hash = "sha256-JkOWlqyVLcwW7hxOGj5jb8BpUge3bUHbSV0o5qOYW1c=";
+    };
+    meta.homepage = "https://github.com/JavaHello/spring-boot.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   sqlite-lua = buildVimPlugin {
     pname = "sqlite.lua";
     version = "1.2.2-unstable-2025-03-14";

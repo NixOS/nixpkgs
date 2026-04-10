@@ -12,29 +12,29 @@
   mesa,
 }:
 
-let
-  avogadroI18N = fetchFromGitHub {
-    owner = "OpenChemistry";
-    repo = "avogadro-i18n";
-    tag = "1.103.0";
-    hash = "sha256-gdr0Ed0UWjQB0LQq+6RvlAb8ZNFQAjV9mrgFLePG+CM=";
-  };
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "avogadro2";
-  version = "1.103.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = finalAttrs.version;
-    hash = "sha256-nmvK3R966Xv2Xs5wXDh/8itIZLIRqbXHFe8dffFiI+s=";
+    hash = "sha256-+/NZwLRrbrfrQqxLqgiqZk6324BGoN+qRfOq7G+UIBE=";
   };
 
-  postUnpack = ''
-    cp -r ${avogadroI18N} avogadro-i18n
-  '';
+  postUnpack =
+    let
+      avogadroI18N = fetchFromGitHub {
+        owner = "OpenChemistry";
+        repo = "avogadro-i18n";
+        tag = finalAttrs.version;
+        hash = "sha256-5eiOFJ5tbS+HFbnLbc6sjk62BvXDMQYpPsB4xFpVWXM=";
+      };
+    in
+    ''
+      cp -r ${avogadroI18N} avogadro-i18n
+    '';
 
   nativeBuildInputs = [
     cmake

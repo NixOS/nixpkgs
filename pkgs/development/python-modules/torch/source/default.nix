@@ -25,6 +25,7 @@
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
+  withNvshmem ? (cudaSupport && cudaPackages.libnvshmem.meta.available),
   MPISupport ? false,
   mpi,
   buildDocs ? false,
@@ -480,6 +481,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     USE_SYSTEM_NCCL = finalAttrs.env.USE_NCCL;
     USE_STATIC_NCCL = finalAttrs.env.USE_NCCL;
 
+    USE_NVSHMEM = setBool withNvshmem;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
@@ -588,6 +591,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       # Some platforms do not support NCCL (i.e., Jetson)
       (lib.getDev nccl) # Provides nccl.h
       (lib.getOutput "static" nccl) # Provides static library
+    ]
+    ++ lists.optionals withNvshmem [
+      cudaPackages.libnvshmem
     ]
     ++ [
       cuda_profiler_api # <cuda_profiler_api.h>

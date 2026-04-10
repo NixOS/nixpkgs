@@ -2,7 +2,11 @@
   stdenv,
   lib,
   coreutils,
+  gawk,
   gnugrep,
+  gnused,
+  glibc,
+  jq,
   copyDesktopItems,
   makeDesktopItem,
   unzip,
@@ -33,6 +37,7 @@
   openssl,
   webkitgtk_4_1,
   ripgrep,
+  which,
 
   # needed to fix "Save as Root"
   asar,
@@ -269,6 +274,7 @@ stdenv.mkDerivation (
       autoPatchelfHook
       asar
       copyDesktopItems
+      jq
       # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
       # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
@@ -352,9 +358,13 @@ stdenv.mkDerivation (
             # for moving files to trash
             glib
 
-            # for launcher script
+            # for launcher and bundled helper scripts
+            gawk
+            glibc.bin
             gnugrep
+            gnused
             coreutils
+            which
           ]
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
@@ -365,9 +375,15 @@ stdenv.mkDerivation (
     # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
     # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
     postPatch =
-      # this is a fix for "save as root" functionality
       lib.optionalString stdenv.hostPlatform.isLinux (
+        # disable update checks
         ''
+          tmpProductJson="$(mktemp)"
+          jq 'del(.updateUrl, .backupUpdateUrl)' resources/app/product.json > "$tmpProductJson"
+          mv "$tmpProductJson" resources/app/product.json
+        ''
+        # this is a fix for "save as root" functionality
+        + ''
           packed="resources/app/node_modules.asar"
           unpacked="resources/app/node_modules"
           asar extract "$packed" "$unpacked"

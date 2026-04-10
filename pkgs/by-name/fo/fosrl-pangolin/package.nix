@@ -29,21 +29,24 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.16.2";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-pWD2VinfkCiSSP6/einXgduKQ8lzWdHlrj2eqUU/x6Y=";
+    hash = "sha256-E0GfYznHj4CKsRWQm6zHTAJ8hJw9ieFoKIOT9tcumYQ=";
   };
 
-  npmDepsHash = "sha256-CwS26eRAIuxJ2fekRRapDWYAOHXPV0mIX/by4uW2ZOM=";
+  npmDepsHash = "sha256-DyPfylne9Ku7sEUNN0LLlN0EOnCjcklsh+F6YP+rXv4=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
+
+  # dependency resolution is borked
+  npmFlags = [ "--legacy-peer-deps" ];
 
   # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
   # Based on pkgs.nextjs-ollama-llm-ui.
@@ -57,7 +60,7 @@ buildNpmPackage (finalAttrs: {
       "const inter = localFont({ src: './Inter.ttf' });"
 
     substituteInPlace server/lib/consts.ts --replace-fail \
-      'export const APP_VERSION = "1.16.0";' \
+      'export const APP_VERSION = "1.17.0";' \
       'export const APP_VERSION = "${finalAttrs.version}";'
 
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf

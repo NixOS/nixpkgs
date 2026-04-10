@@ -88,6 +88,8 @@ let
         inherit (llvm) clang;
       };
 
+      rocprof-compute-viewer = self.callPackage ./rocprof-compute-viewer { };
+
       rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
 
       roctracer = self.callPackage ./roctracer { };

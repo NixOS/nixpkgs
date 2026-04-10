@@ -8191,6 +8191,8 @@ self: super: with self; {
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
+  kaldi-native-fbank = callPackage ../development/python-modules/kaldi-native-fbank { };
+
   kaleido = callPackage ../development/python-modules/kaleido { };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
@@ -11357,9 +11359,15 @@ self: super: with self; {
 
   oddsprout = callPackage ../development/python-modules/oddsprout { };
 
+  odfdo = callPackage ../development/python-modules/odfdo { };
+
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
+
+  odsgenerator = callPackage ../development/python-modules/odsgenerator { };
+
+  odsparsator = callPackage ../development/python-modules/odsparsator { };
 
   oelint-data = callPackage ../development/python-modules/oelint-data { };
 
@@ -17052,6 +17060,8 @@ self: super: with self; {
   rova = callPackage ../development/python-modules/rova { };
 
   rowan = callPackage ../development/python-modules/rowan { };
+
+  rpatool = callPackage ../development/python-modules/rpatool { };
 
   rpcq = callPackage ../development/python-modules/rpcq { };
 
