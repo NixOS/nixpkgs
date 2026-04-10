@@ -1781,6 +1781,18 @@
     };
   };
 
+  ocamllex = {
+    version = "0.25.0";
+    url = "github:314eter/tree-sitter-ocamllex";
+    hash = "sha256-mqp/qHr1zWMJinlMJ0HNAKuFUQ4NqQiLzKx0DoN4wGI=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        leungbk
+      ];
+    };
+  };
+
   odin = {
     version = "1.3.0-unstable-2025-01-12";
     url = "github:tree-sitter-grammars/tree-sitter-odin";

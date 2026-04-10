@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "requests-ratelimiter";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Uw6JPArOzKD7va6mthumCDW/G0Yn/C1d+1VflrJ/JY=";
+    hash = "sha256-73/B9PlkZOm51srTzDFP+VXxlE77Ge5Mt5iY5fVagkk=";
   };
 
   build-system = [ hatchling ];
