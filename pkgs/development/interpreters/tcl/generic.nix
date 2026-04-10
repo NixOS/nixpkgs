@@ -130,6 +130,7 @@ let
 
     passthru = rec {
       inherit release version;
+      isTcl9 = lib.versions.major version == "9";
       libPrefix = "tcl${release}";
       libdir = "lib/${libPrefix}";
       tclPackageHook = callPackage (

@@ -5249,8 +5249,21 @@ with pkgs;
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
   tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
 
-  # We don't need versioned package sets thanks to the tcl stubs mechanism
-  tclPackages = recurseIntoAttrs (callPackage ./tcl-packages.nix { });
+  tclPackages = dontRecurseIntoAttrs tcl8Packages;
+  # We don't need minor-versioned package sets thanks to the tcl stubs mechanism.
+  # Major versions have bigger incompatibilities and need package sets.
+  tcl8Packages = recurseIntoAttrs (
+    callPackage ./tcl-packages.nix {
+      tcl = tcl-8_6;
+      tk = tk-8_6;
+    }
+  );
+  tcl9Packages = recurseIntoAttrs (
+    callPackage ./tcl-packages.nix {
+      tcl = tcl-9_0;
+      tk = tk-9_0;
+    }
+  );
 
   tclreadline = tclPackages.tclreadline;
 
