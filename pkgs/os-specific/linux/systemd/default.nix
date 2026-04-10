@@ -215,6 +215,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
   };
 
+  # PATCH POLICY
+  #
+  # There are only two reasons we accept patches on systemd:
+  # 1. systemd functionality is fundamentally incompatible with how NixOS works
+  #    and workarounds are not possible.
+  # 2. Hotfixes that we want to apply before they have reached a systemd branch
+  #    we can use. If we come up with the fixes in Nixpkgs, they need to be
+  #    reported upstream and the upstream issue needs to be linked in the
+  #    commit message of the patch.
+  #
+  # Importantly, patches to improve usability, enable new features on NixOS or
+  # add entirely new features to systemd are not allowed.
+
   # On major changes, or when otherwise required, you *must* :
   # 1. reformat the patches,
   # 2. `git am path/to/00*.patch` them into a systemd worktree,
@@ -224,27 +237,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0003-Fix-NixOS-containers.patch
-    ./0004-Add-some-NixOS-specific-unit-directories.patch
-    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
     ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
     ./0014-core-don-t-taint-on-unmerged-usr.patch
-    ./0015-tpm2_context_init-fix-driver-name-checking.patch
-    ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-
-    # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
-    # if the install prefix is not /usr, but that does not work for us
-    # because we include the config snippet manually
-    ./0017-meson-Don-t-link-ssh-dropins.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
@@ -700,12 +697,22 @@ stdenv.mkDerivation (finalAttrs: {
   # warning messages
   postConfigure = ''
     substituteInPlace config.h \
-      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH"
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH" \
+      --replace-fail "SYSTEM_SLEEP_PATH" "_SYSTEM_SLEEP_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SHUTDOWN_PATH"
+    "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SLEEP_PATH"
+    "-DSYSTEM_SLEEP_PATH=\"/etc/systemd/system-sleep\""
   ];
 
   doCheck = false;
