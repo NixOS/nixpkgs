@@ -509,6 +509,13 @@ stdenv.mkDerivation (
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95";
           hash = "sha256-2NVkIhQVS1UQJVYuDdeH+ZvWYKVbtwW9Myu5gx7JnbA=";
         })
+      ]
+      ++ optionals (lib.versionAtLeast version "8.0" && lib.versionOlder version "8.1") [
+        (fetchpatch2 {
+          name = "fix-ffmpeg-8.0-vulkan-vp9.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/672635932684c0ee7cfbb7f9eef6999b4e72df4b.patch";
+          hash = "sha256-qT+ghGwpW9feV9aMVbc9pIAo4UR8qAX+M1u4EByV/tY=";
+        })
       ];
 
     configurePlatforms = [ ];
