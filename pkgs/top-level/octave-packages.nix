@@ -73,8 +73,6 @@ makeScope newScope (
         inherit (pkgs) netcdf;
       };
 
-      quaternion = callPackage ../development/octave-modules/quaternion { };
-
       queueing = callPackage ../development/octave-modules/queueing { };
 
       signal = callPackage ../development/octave-modules/signal { };
