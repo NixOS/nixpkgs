@@ -26,7 +26,9 @@ let
       unifdef -x 1 -DPRIVATE -o "$out/include/net/droptap.h" '${xnu}/bsd/net/droptap.h'
       unifdef -x 1 -DPRIVATE -o "$out/include/net/iptap.h" '${xnu}/bsd/net/iptap.h'
       unifdef -x 1 -DPRIVATE -o "$out/include/net/pktap.h" '${xnu}/bsd/net/pktap.h'
-      unifdef -x 1 -DPRIVATE -o "$out/include/net/bpf.h" '${xnu}/bsd/net/bpf.h'
+      unifdef -x 1 -DPRIVATE -UMODULES_SUPPORTED -o "$out/include/net/bpf.h" '${xnu}/bsd/net/bpf.h'
+      install -D -t "$out/include/net" \
+        '${xnu}/bsd/net/bpf_private.h'
 
       cat <<EOF > "$out/include/net/if.h"
       #pragma once

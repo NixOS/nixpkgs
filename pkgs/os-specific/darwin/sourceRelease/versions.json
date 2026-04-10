@@ -204,8 +204,8 @@
     "version": "792.80.2"
   },
   "libpcap": {
-    "hash": "sha256-DqINoombdui5N6lNHcZ07c7LrVum4f8fFK89ymdCd0c=",
-    "version": "140"
+    "hash": "sha256-G7CL3pCCmxOoZ+ouA+xfOeDgvLcT9AN9zyrx+cL2Ge4=",
+    "version": "144"
   },
   "libplatform": {
     "hash": "sha256-m1g1suIbEA4g7vWEKYR9x+g0aaXSjvR0IRy4jCU+y0w=",
