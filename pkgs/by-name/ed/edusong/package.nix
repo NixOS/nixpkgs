@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,10 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-+wH6I0sOfzytstDNT81LMuqknGQuYekl31e1tYaDvRg=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/
-    mv eduSong_Unicode*.ttf $out/share/fonts/eduSong_Unicode\(2024年12月\).ttf
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "MOE Song font, a Song-style Chinese character typeface";
