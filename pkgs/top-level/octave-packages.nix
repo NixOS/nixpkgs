@@ -65,8 +65,6 @@ makeScope newScope (
         writeRequiredOctavePackagesHook
         ;
 
-      ga = callPackage ../development/octave-modules/ga { };
-
       general = callPackage ../development/octave-modules/general {
         nettle = pkgs.nettle;
       };
