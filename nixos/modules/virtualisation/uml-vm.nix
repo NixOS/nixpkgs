@@ -180,6 +180,8 @@ in
         };
         kernelPackages = options.boot.kernelPackages // {
           default = pkgs.linuxPackages_uml;
+          defaultText = lib.literalExpression "pkgs.linuxPackages_uml";
+          exampleText = lib.literalExpression "pkgs.linuxPackages_uml_latest";
         };
         initrd = lib.mkOption {
           type = lib.types.str;

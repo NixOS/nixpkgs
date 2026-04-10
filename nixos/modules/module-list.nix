@@ -2021,6 +2021,7 @@
   {
     documentation.nixos.extraModules = [
       ./virtualisation/qemu-vm.nix
+      ./virtualisation/uml-vm.nix
       ./image/repart.nix
     ];
   }
