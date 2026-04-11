@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyrisco";
-  version = "0.6.7";
+  version = "0.6.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "pyrisco";
     tag = "v${version}";
-    hash = "sha256-mZzTFISw2CzGu6AhXSt6LtbXuKqCTc6B6wNKnI3pA4o=";
+    hash = "sha256-H55FoOTM6XEU47XLq4jksMW1tbmYCAdTDKY8Ag55Y3M=";
   };
 
   build-system = [ setuptools ];
