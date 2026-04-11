@@ -15,10 +15,10 @@
 let
   # Incorporates source from binutils
   # https://github.com/NationalSecurityAgency/ghidra/blob/7ab9bf6abffb6938d61d072040fc34ad3331332b/GPL/GnuDisassembler/build.gradle#L34-L35
-  binutils-version = "2.41";
+  binutils-version = "2.44";
   binutils-src = fetchurl {
     url = "mirror://gnu/binutils/binutils-${binutils-version}.tar.bz2";
-    sha256 = "sha256-pMS+wFL3uDcAJOYDieGUN38/SLVmGEGOpRBn9nqqsws=";
+    sha256 = "sha256-9mOQpmH6oRfQD6suec8tydCXtCzClr8/hnfR57RS3Do=";
   };
 in
 buildGhidraExtension {
@@ -29,6 +29,8 @@ buildGhidraExtension {
 
   postPatch = ''
     ln -s ${binutils-src} binutils-${binutils-version}.tar.bz2
+    substituteInPlace build.gradle \
+      --replace-fail 'ext.binutils = "binutils-2.41"' 'ext.binutils = "binutils-${binutils-version}"'
   '';
 
   # Don't modify ELF stub resources

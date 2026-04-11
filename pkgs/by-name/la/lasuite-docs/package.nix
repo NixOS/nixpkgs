@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "4.8.4";
+  version = "4.8.5";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-k90JxFxXL3vEGBMkgbQABUCK99utJ88E/v9Zcj/2oBo=";
+    hash = "sha256-zXV3gXUgN28a2J48EwS6RrYxkIgoj0IJ5lPTxvexYdA=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-Fd9HJ7c7fh8YYZrfzRK7BnlnHAXeyeQ9UBabnRlA+w0=";
+      hash = "sha256-B2vtdQYFhhsA7dK5nwAJl65kaedspfYySJJBjVwYeBM=";
     };
 
     nativeBuildInputs = [

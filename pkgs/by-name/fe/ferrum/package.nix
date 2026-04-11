@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -18,13 +19,7 @@ stdenvNoCC.mkDerivation {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://dotcolon.net/font/ferrum/";

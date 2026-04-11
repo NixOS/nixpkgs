@@ -7,6 +7,7 @@
   hatchling,
 
   # dependencies
+  aiofiles,
   aiosqlite,
   appdirs,
   chromadb,
@@ -54,14 +55,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.11.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-i2UBgni0XRRBijidLVvSDUljnXwgGy52L8bc5WJkV64=";
+    hash = "sha256-MwBcum9HX0emKPB0UpTCBTvZRnNP0YqU02YCEHZ4CeA=";
   };
 
   postPatch = ''
@@ -82,6 +83,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
+    "aiofiles"
     "chromadb"
     "click"
     "json-repair"
@@ -107,6 +109,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiofiles
     aiosqlite
     appdirs
     chromadb

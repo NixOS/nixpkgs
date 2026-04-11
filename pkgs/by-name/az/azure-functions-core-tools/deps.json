@@ -26,6 +26,11 @@
   },
   {
     "pname": "Azure.Core",
+    "version": "1.43.0",
+    "hash": "sha256-/AE7soQTyaXesI7TdGKjSlxKR6z8t9HpdlOaNUC7eEk="
+  },
+  {
+    "pname": "Azure.Core",
     "version": "1.44.1",
     "hash": "sha256-0su/ylZ68+FDZ6mgfp3qsm7qpfPtD5SW75HXbVhs5qk="
   },
@@ -71,13 +76,13 @@
   },
   {
     "pname": "Azure.Storage.Blobs",
-    "version": "12.21.2",
-    "hash": "sha256-DvdMGuophEbvvVtbRU3vsNwla0zTn5dn7HbW0Mr4P/o="
+    "version": "12.22.1",
+    "hash": "sha256-YPEJQ4MeV4rXoAwfroKVIaaXKZRvvQFJDyDaEawHxo0="
   },
   {
     "pname": "Azure.Storage.Common",
-    "version": "12.20.1",
-    "hash": "sha256-XBDyzAEt5iwdyB3jgoG5TLyx5NZ/MoiEerBR/7U7F4w="
+    "version": "12.21.0",
+    "hash": "sha256-yS7Kq9+Ne/2oXT0KCEHXykIFceaza6xpsL+lr1KrbvU="
   },
   {
     "pname": "Colors.Net",
@@ -141,8 +146,8 @@
   },
   {
     "pname": "Microsoft.ApplicationInsights",
-    "version": "2.22.0",
-    "hash": "sha256-mUQ63atpT00r49ca50uZu2YCiLg3yd6r3HzTryqcuEA="
+    "version": "2.23.0",
+    "hash": "sha256-5sf3bg7CZZjHseK+F3foOchEhmVeioePxMZVvS6Rjb0="
   },
   {
     "pname": "Microsoft.ApplicationInsights.AspNetCore",
@@ -151,8 +156,8 @@
   },
   {
     "pname": "Microsoft.ApplicationInsights.AspNetCore",
-    "version": "2.22.0",
-    "hash": "sha256-BIa8rILgulQ+ZztaP3P5cD467x7Jpd+uSUBZZu2eeGc="
+    "version": "2.23.0",
+    "hash": "sha256-Q5XayWR5vRKYX2IrPqQnW2/8dITGReC9fORSxUSOQq8="
   },
   {
     "pname": "Microsoft.ApplicationInsights.DependencyCollector",
@@ -161,28 +166,23 @@
   },
   {
     "pname": "Microsoft.ApplicationInsights.DependencyCollector",
-    "version": "2.22.0",
-    "hash": "sha256-TDh1aRFgrjfBxFWFyJ0xRHzxlc2z88ZI5ceizO0In9I="
+    "version": "2.23.0",
+    "hash": "sha256-7sinHYtyjfpO9EsyeFlvTcI2sIzmZkN2OBeJrUtyUdg="
   },
   {
     "pname": "Microsoft.ApplicationInsights.EventCounterCollector",
-    "version": "2.22.0",
-    "hash": "sha256-8pBA3ECv99HU8NlkEOSP5Y4kgPPzpCfVBKyNi+qip+Y="
+    "version": "2.23.0",
+    "hash": "sha256-aF+1pINoOKFjHUIalZFnEAmd3U3F5RaBBs26xOCWFeo="
   },
   {
     "pname": "Microsoft.ApplicationInsights.PerfCounterCollector",
-    "version": "2.21.0",
-    "hash": "sha256-hcU7tR9ZcytiwubRWwEKUCN04p5htNkZTmRaNVb8aA8="
-  },
-  {
-    "pname": "Microsoft.ApplicationInsights.PerfCounterCollector",
-    "version": "2.22.0",
-    "hash": "sha256-pOUi4ANSyfHPLS8Q+WFskVcazXrd28ijvm/iVjoIFiM="
+    "version": "2.23.0",
+    "hash": "sha256-GXYvx/cHoLhvBjyUdEG9ObZPSIwwTmYhT5KlbaI8pM4="
   },
   {
     "pname": "Microsoft.ApplicationInsights.SnapshotCollector",
-    "version": "1.4.4",
-    "hash": "sha256-oaxpiMbuHfDBIRjheo83iS7i+aAtqrlAvdnTXGHK4nk="
+    "version": "1.4.6",
+    "hash": "sha256-swprkO1f43DCGL4thcBDbdchgyKvB4fmS5Bfq5OrvRQ="
   },
   {
     "pname": "Microsoft.ApplicationInsights.WindowsServer",
@@ -191,8 +191,8 @@
   },
   {
     "pname": "Microsoft.ApplicationInsights.WindowsServer",
-    "version": "2.22.0",
-    "hash": "sha256-oaWcrMK/TCtExq9BrTRvVs98a0YnlnMEbntsMYZhrCI="
+    "version": "2.23.0",
+    "hash": "sha256-WQ1kNYXRYWiE34+EHimGd4FBX6Taq302OkiHY0gtkLc="
   },
   {
     "pname": "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel",
@@ -201,8 +201,8 @@
   },
   {
     "pname": "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel",
-    "version": "2.22.0",
-    "hash": "sha256-JkqPzRI+wdtefP1UulOenrA5kkGB0cWzZqa3SLP3p8w="
+    "version": "2.23.0",
+    "hash": "sha256-ljFMP7722wl6jWUtQQgJ2ZAvykeGL/qLT6IAW/LdPec="
   },
   {
     "pname": "Microsoft.AspNet.WebApi.Client",
@@ -582,9 +582,9 @@
   },
   {
     "pname": "Microsoft.Azure.Functions.PythonWorker",
-    "version": "4.40.2",
-    "hash": "sha256-XRH3J+iUr5Ox3jWb1dVwOeHEj4mQZC4RzNjfkj0zkhI=",
-    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.functions.pythonworker/4.40.2/microsoft.azure.functions.pythonworker.4.40.2.nupkg"
+    "version": "4.41.2",
+    "hash": "sha256-xxQvSgNl43VuJ2GoGzYHkwJh06ahiThsDvBYOmayqPU=",
+    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.functions.pythonworker/4.41.2/microsoft.azure.functions.pythonworker.4.41.2.nupkg"
   },
   {
     "pname": "Microsoft.Azure.Functions.Worker.ItemTemplates",
@@ -618,28 +618,23 @@
   },
   {
     "pname": "Microsoft.Azure.WebJobs",
-    "version": "3.0.37",
-    "hash": "sha256-C6ztW9QdUgxNTsYewOZDQGrl3Pxy99X7J8kQxUpivMk="
-  },
-  {
-    "pname": "Microsoft.Azure.WebJobs",
-    "version": "3.0.39",
-    "hash": "sha256-Ndym81F4BFIHsH4NF/weySuRdWgzQQM8hHsjTW8c1vs="
-  },
-  {
-    "pname": "Microsoft.Azure.WebJobs",
-    "version": "3.0.41",
-    "hash": "sha256-w5ojyAOq2qewkpP8NC1r7YV/GiC9eFbRrRC+keB4CDA="
-  },
-  {
-    "pname": "Microsoft.Azure.WebJobs",
     "version": "3.0.42",
     "hash": "sha256-pAAq5ZcRZVgX2v/SSoK84cAiBbUCn4R2KK0ME3FIqtg="
   },
   {
+    "pname": "Microsoft.Azure.WebJobs",
+    "version": "3.0.43",
+    "hash": "sha256-Bw1HhUdmmPIGLm2++4XrbSm2lxdvS8baUpOXvRN18HY="
+  },
+  {
+    "pname": "Microsoft.Azure.WebJobs",
+    "version": "3.0.44",
+    "hash": "sha256-U6y8iCcNtY2hZKgmRc86OgzbmVpZwOxGsR15KYfYYMg="
+  },
+  {
     "pname": "Microsoft.Azure.WebJobs.Core",
-    "version": "3.0.42",
-    "hash": "sha256-kIaV8zb9TO1M/Dac4P3Csa34CBDMaPRza534ll4FW7A="
+    "version": "3.0.44",
+    "hash": "sha256-qdkfPYChaUrSXnA+yPwEWDVf3NA5KquTUlNXjxRKMv0="
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Extensions",
@@ -668,8 +663,8 @@
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Host.Storage",
-    "version": "5.0.1",
-    "hash": "sha256-ZbjinILfgrME2Z+9LkdHD4fGoIwy44im9WJfDnANWng="
+    "version": "5.0.2",
+    "hash": "sha256-FOMP7w8YcOua4BDBuaIjzJ+z0duBOaivB8rvTG+f0g4="
   },
   {
     "pname": "Microsoft.Azure.WebJobs.ItemTemplates",
@@ -678,9 +673,8 @@
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Logging.ApplicationInsights",
-    "version": "3.0.42-12121",
-    "hash": "sha256-LHQL+cdP95W4l3jkPNIAIIqfWIDk9rEtvh71ZrosToc=",
-    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/1e0b47db-42dd-4931-a098-8cb031234dcc/nuget/v3/flat2/microsoft.azure.webjobs.logging.applicationinsights/3.0.42-12121/microsoft.azure.webjobs.logging.applicationinsights.3.0.42-12121.nupkg"
+    "version": "3.0.44",
+    "hash": "sha256-dvP7dzgpEKebtyrMj5ojzYeOp7HDYL3vSS6n7MJaUhY="
   },
   {
     "pname": "Microsoft.Azure.WebJobs.ProjectTemplates",
@@ -689,14 +683,14 @@
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Rpc.Core",
-    "version": "3.0.37",
-    "hash": "sha256-YXg+mFUP66g12KLz/UggGBOYW/LI3REzhS8f5Sd8usU="
+    "version": "3.0.44",
+    "hash": "sha256-AAPQ/qABYuVLZEO4+fVza6E62rdM2N3UhblgeWuuzx4="
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Script",
-    "version": "4.1045.200",
-    "hash": "sha256-OQJgJABMEtK+UMFNkQOyMuiYOe0CtiBVG1A5DA4MaIY=",
-    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.webjobs.script/4.1045.200/microsoft.azure.webjobs.script.4.1045.200.nupkg"
+    "version": "4.1046.100",
+    "hash": "sha256-urd7cB7bX5HFavRcwRYLIK9l9AUWWv/tvnnl/2iI10s=",
+    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.webjobs.script/4.1046.100/microsoft.azure.webjobs.script.4.1046.100.nupkg"
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Script.Abstractions",
@@ -705,15 +699,15 @@
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Script.Grpc",
-    "version": "4.1045.200",
-    "hash": "sha256-JA/mDxn6DR/PWED4Gieh9Gh0tGChIHNGIqINyZDL2P0=",
-    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.webjobs.script.grpc/4.1045.200/microsoft.azure.webjobs.script.grpc.4.1045.200.nupkg"
+    "version": "4.1046.100",
+    "hash": "sha256-s3jFYSGbF939VjBQFcRSg0nVfw0LM2WpqcZVFVVSEtg=",
+    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.webjobs.script.grpc/4.1046.100/microsoft.azure.webjobs.script.grpc.4.1046.100.nupkg"
   },
   {
     "pname": "Microsoft.Azure.WebJobs.Script.WebHost",
-    "version": "4.1045.200",
-    "hash": "sha256-jaf7HzuWFYYU1zqPnx7b/c2D9ASCzNvohpA/JBwPL94=",
-    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.webjobs.script.webhost/4.1045.200/microsoft.azure.webjobs.script.webhost.4.1045.200.nupkg"
+    "version": "4.1046.100",
+    "hash": "sha256-IxQORWQFt4H89iLnOI3TCVwuMQeFtRNcNg8DhTtB0jo=",
+    "url": "https://azfunc.pkgs.visualstudio.com/e6a70c92-4128-439f-8012-382fe78d6396/_packaging/eb652719-f36a-4e78-8541-e13a3cd655f9/nuget/v3/flat2/microsoft.azure.webjobs.script.webhost/4.1046.100/microsoft.azure.webjobs.script.webhost.4.1046.100.nupkg"
   },
   {
     "pname": "Microsoft.Azure.WebSites.DataProtection",
@@ -818,13 +812,8 @@
   },
   {
     "pname": "Microsoft.Extensions.Azure",
-    "version": "1.7.1",
-    "hash": "sha256-ZEOoC9sU7DL/IRk7P5Bnqe5V2xZ7/scnwST4oIsxZlU="
-  },
-  {
-    "pname": "Microsoft.Extensions.Caching.Abstractions",
-    "version": "1.0.0",
-    "hash": "sha256-TSbJFK4eRIe1AKnzJNTTon30Tg+IECwZ2zTKy+qTXEg="
+    "version": "1.7.5",
+    "hash": "sha256-VBS4Kqkvn2pw7zqqbqK2no5jXDGcZbyd9Gh4wd2gzKk="
   },
   {
     "pname": "Microsoft.Extensions.Caching.Abstractions",
@@ -913,6 +902,11 @@
   },
   {
     "pname": "Microsoft.Extensions.Configuration.Binder",
+    "version": "2.1.0",
+    "hash": "sha256-FNOrXx7bJbc6qrscne8RhRj28kxK3uq+3ltdXzhCKHQ="
+  },
+  {
+    "pname": "Microsoft.Extensions.Configuration.Binder",
     "version": "2.1.1",
     "hash": "sha256-FVdAa88PLAbWXTnEoa7AVSaC9AEjQ66LoxdtJ5nRIVk="
   },
@@ -968,8 +962,8 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "1.0.0",
-    "hash": "sha256-EW99BPB7ztVVd5nONd4Qjn9Ji+a1FX+nAe3Z/a+UnzA="
+    "version": "2.1.0",
+    "hash": "sha256-WgS/QtxbITCpVjs1JPCWuJRrZSoplOtY7VfOXjLqDDA="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -1213,6 +1207,11 @@
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "2.1.0",
+    "hash": "sha256-0i4YUnMQ4DE0KDp47pssJLUIw8YAsHf2NZN0xoOLb78="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
     "version": "2.1.1",
     "hash": "sha256-TzbYgz4EemrYKHMvB9HWDkFmq0BkTetKPUwBpYHk9+k="
   },
@@ -1263,8 +1262,8 @@
   },
   {
     "pname": "Microsoft.Extensions.Logging.ApplicationInsights",
-    "version": "2.22.0",
-    "hash": "sha256-nGGJRpZax8fv6NJSveHjNronvBYltEOFr4HU+zdc9vs="
+    "version": "2.23.0",
+    "hash": "sha256-ptN8Y3vyAW81he8VhJ5P7W/pxyBToKuBMEcQa9qXZjo="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Configuration",
@@ -1308,8 +1307,8 @@
   },
   {
     "pname": "Microsoft.Extensions.Options",
-    "version": "1.0.0",
-    "hash": "sha256-vU5mAhwBnf0EXQw1QMNwkt1aiEA0xjUMZmXOBo/MIz4="
+    "version": "2.1.0",
+    "hash": "sha256-ol0tKlHOyX1qAQqNWuag0thb2mMCU2JHNiw0nzUhJnE="
   },
   {
     "pname": "Microsoft.Extensions.Options",
@@ -2392,11 +2391,6 @@
     "hash": "sha256-fVfgcoP4AVN1E5wHZbKBIOPYZ/xBeSIdsNF+bdukIRM="
   },
   {
-    "pname": "System.Private.Uri",
-    "version": "4.3.2",
-    "hash": "sha256-jB2+W3tTQ6D9XHy5sEFMAazIe1fu2jrENUO0cb48OgU="
-  },
-  {
     "pname": "System.Reactive",
     "version": "5.0.0",
     "hash": "sha256-M5Z8pw8rVb8ilbnTdaOptzk5VFd5DlKa7zzCpuytTtE="
@@ -2532,11 +2526,6 @@
     "hash": "sha256-neARSpLPUzPxEKhJRwoBzhPxK+cKIitLx7WBYncsYgo="
   },
   {
-    "pname": "System.Runtime.CompilerServices.Unsafe",
-    "version": "6.0.0",
-    "hash": "sha256-bEG1PnDp7uKYz/OgLOWs3RWwQSVYm+AnPwVmAmcgp2I="
-  },
-  {
     "pname": "System.Runtime.Extensions",
     "version": "4.1.0",
     "hash": "sha256-X7DZ5CbPY7jHs20YZ7bmcXs9B5Mxptu/HnBUvUnNhGc="
@@ -2577,11 +2566,6 @@
     "hash": "sha256-MYpl6/ZyC6hjmzWRIe+iDoldOMW1mfbwXsduAnXIKGA="
   },
   {
-    "pname": "System.Runtime.Loader",
-    "version": "4.3.0",
-    "hash": "sha256-syG1GTFjYbwX146BD/L7t55j+DZqpHDc6z28kdSNzx0="
-  },
-  {
     "pname": "System.Runtime.Numerics",
     "version": "4.0.1",
     "hash": "sha256-1pJt5ZGxLPTX1mjOi8qZPXyyOMkYV0NstoUCv91HYPg="
@@ -2615,6 +2599,11 @@
     "pname": "System.Security.AccessControl",
     "version": "6.0.0",
     "hash": "sha256-qOyWEBbNr3EjyS+etFG8/zMbuPjA+O+di717JP9Cxyg="
+  },
+  {
+    "pname": "System.Security.Claims",
+    "version": "4.3.0",
+    "hash": "sha256-Fua/rDwAqq4UByRVomAxMPmDBGd5eImRqHVQIeSxbks="
   },
   {
     "pname": "System.Security.Cryptography.Algorithms",
@@ -2747,6 +2736,11 @@
     "hash": "sha256-/MMvtFWGN/vOQfjXdOhet1gsnMgh6lh5DCHimVsnVEs="
   },
   {
+    "pname": "System.Security.Principal",
+    "version": "4.3.0",
+    "hash": "sha256-rjudVUHdo8pNJg2EVEn0XxxwNo5h2EaYo+QboPkXlYk="
+  },
+  {
     "pname": "System.Security.Principal.Windows",
     "version": "4.3.0",
     "hash": "sha256-mbdLVUcEwe78p3ZnB6jYsizNEqxMaCAWI3tEQNhRQAE="
@@ -2845,11 +2839,6 @@
     "pname": "System.Threading",
     "version": "4.3.0",
     "hash": "sha256-ZDQ3dR4pzVwmaqBg4hacZaVenQ/3yAF/uV7BXZXjiWc="
-  },
-  {
-    "pname": "System.Threading.Channels",
-    "version": "8.0.0",
-    "hash": "sha256-c5TYoLNXDLroLIPnlfyMHk7nZ70QAckc/c7V199YChg="
   },
   {
     "pname": "System.Threading.Tasks",

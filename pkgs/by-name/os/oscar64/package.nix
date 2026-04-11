@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar64";
-  version = "1.32.268";
+  version = "1.32.270";
 
   src = fetchFromGitHub {
     owner = "drmortalwombat";
     repo = "oscar64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZpXC8G7PUWCW5m9JnEuq2jt2YeMK/t9XzWqjZAjOqqc=";
+    hash = "sha256-KOXX+utLRhU9Zls28uXdbmBRMJ3AVM1sjyLq+wLrls8=";
   };
 
   postPatch = ''

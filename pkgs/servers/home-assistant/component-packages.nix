@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.4.0";
+  version = "2026.4.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -950,7 +950,8 @@
       ];
     "chess_com" =
       ps: with ps; [
-      ]; # missing inputs: chess-com-api
+        chess-com-api
+      ];
     "cisco_ios" =
       ps: with ps; [
         pexpect
@@ -1975,7 +1976,8 @@
       ];
     "freshr" =
       ps: with ps; [
-      ]; # missing inputs: pyfreshr
+        pyfreshr
+      ];
     "fressnapf_tracker" =
       ps: with ps; [
         fressnapftracker
@@ -2139,7 +2141,8 @@
       ];
     "ghost" =
       ps: with ps; [
-      ]; # missing inputs: aioghost
+        aioghost
+      ];
     "gios" =
       ps: with ps; [
         gios
@@ -2527,11 +2530,12 @@
         fnv-hash-fast
         ha-ffmpeg
         hap-python
+        homekit-audio-proxy
         ifaddr
         pyqrcode
         pyturbojpeg
         zeroconf
-      ]; # missing inputs: homekit-audio-proxy
+      ];
     "homekit_controller" =
       ps: with ps; [
         aioesphomeapi
@@ -2595,7 +2599,8 @@
       ];
     "hr_energy_qube" =
       ps: with ps; [
-      ]; # missing inputs: python-qube-heatpump
+        python-qube-heatpump
+      ];
     "html5" =
       ps: with ps; [
         py-vapid
@@ -3476,7 +3481,8 @@
       ];
     "lichess" =
       ps: with ps; [
-      ]; # missing inputs: aiolichess
+        aiolichess
+      ];
     "lidarr" =
       ps: with ps; [
         aiopyarr
@@ -3584,7 +3590,8 @@
       ];
     "lojack" =
       ps: with ps; [
-      ]; # missing inputs: lojack-api
+        lojack-api
+      ];
     "london_air" =
       ps: with ps; [
       ];
@@ -4483,9 +4490,10 @@
     "onvif" =
       ps: with ps; [
         ha-ffmpeg
+        onvif-parsers
         onvif-zeep-async
         wsdiscovery
-      ]; # missing inputs: onvif_parsers
+      ];
     "open_meteo" =
       ps: with ps; [
         open-meteo
@@ -4535,11 +4543,12 @@
         home-assistant-intents
         ifaddr
         mutagen
+        py-opendisplay
         pymicro-vad
         pyserial
         pyspeex-noise
         zeroconf
-      ]; # missing inputs: py-opendisplay
+      ];
     "openerz" =
       ps: with ps; [
         openerz-api
@@ -4905,7 +4914,8 @@
       ];
     "prana" =
       ps: with ps; [
-      ]; # missing inputs: prana-api-client
+        prana-api-client
+      ];
     "private_ble_device" =
       ps: with ps; [
         aioesphomeapi
@@ -5924,7 +5934,8 @@
       ];
     "solarman" =
       ps: with ps; [
-      ]; # missing inputs: solarman-opendata
+        solarman-opendata
+      ];
     "solax" =
       ps: with ps; [
         solax
@@ -6623,7 +6634,8 @@
       ];
     "trmnl" =
       ps: with ps; [
-      ]; # missing inputs: trmnl
+        trmnl
+      ];
     "tts" =
       ps: with ps; [
         ha-ffmpeg
@@ -6693,7 +6705,8 @@
       ];
     "unifi_access" =
       ps: with ps; [
-      ]; # missing inputs: py-unifi-access
+        py-unifi-access
+      ];
     "unifi_direct" =
       ps: with ps; [
         unifi-ap
@@ -7038,7 +7051,8 @@
       ];
     "wiim" =
       ps: with ps; [
-      ]; # missing inputs: wiim
+        wiim
+      ];
     "wilight" =
       ps: with ps; [
         pywilight
@@ -7488,6 +7502,7 @@
     "ccm15"
     "cert_expiry"
     "chacon_dio"
+    "chess_com"
     "clicksend_tts"
     "climate"
     "cloud"
@@ -7643,6 +7658,7 @@
     "freebox"
     "freedns"
     "freedompro"
+    "freshr"
     "fressnapf_tracker"
     "fritz"
     "fritzbox"
@@ -7670,6 +7686,7 @@
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
+    "ghost"
     "gios"
     "github"
     "glances"
@@ -7733,6 +7750,7 @@
     "homeassistant_sky_connect"
     "homeassistant_yellow"
     "homee"
+    "homekit"
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
@@ -7740,6 +7758,7 @@
     "homewizard"
     "homeworks"
     "honeywell"
+    "hr_energy_qube"
     "html5"
     "http"
     "huawei_lte"
@@ -7849,6 +7868,7 @@
     "lg_soundbar"
     "lg_thinq"
     "libre_hardware_monitor"
+    "lichess"
     "lidarr"
     "liebherr"
     "life360"
@@ -7867,6 +7887,7 @@
     "logbook"
     "logentries"
     "logger"
+    "lojack"
     "london_air"
     "london_underground"
     "lookin"
@@ -8012,10 +8033,12 @@
     "onedrive_for_business"
     "onewire"
     "onkyo"
+    "onvif"
     "open_meteo"
     "open_router"
     "openai_conversation"
     "openalpr_cloud"
+    "opendisplay"
     "openerz"
     "openevse"
     "openexchangerates"
@@ -8071,6 +8094,7 @@
     "powerfox"
     "powerfox_local"
     "powerwall"
+    "prana"
     "private_ble_device"
     "probe_plus"
     "profiler"
@@ -8213,6 +8237,7 @@
     "snooz"
     "solaredge"
     "solarlog"
+    "solarman"
     "solax"
     "soma"
     "somfy_mylink"
@@ -8326,6 +8351,7 @@
     "transport_nsw"
     "trend"
     "triggercmd"
+    "trmnl"
     "tts"
     "tuya"
     "twentemilieu"
@@ -8336,6 +8362,7 @@
     "uk_transport"
     "ukraine_alarm"
     "unifi"
+    "unifi_access"
     "unifiprotect"
     "universal"
     "upb"
@@ -8400,6 +8427,7 @@
     "whirlpool"
     "whois"
     "wiffi"
+    "wiim"
     "wilight"
     "window"
     "withings"

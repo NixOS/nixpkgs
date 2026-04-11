@@ -2,14 +2,13 @@
   lib,
   attrs,
   buildPythonPackage,
-  bson,
+  hatchling,
   boto3,
   botocore,
   cattrs,
   fetchFromGitHub,
   itsdangerous,
   platformdirs,
-  poetry-core,
   psutil,
   pymongo,
   pytestCheckHook,
@@ -23,27 +22,27 @@
   rich,
   tenacity,
   time-machine,
-  timeout-decorator,
   ujson,
+  orjson,
   urllib3,
   url-normalize,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-cache";
-  version = "1.2.1";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
-    tag = "v${version}";
-    hash = "sha256-juRCcBUr+Ko6kVPpUapwRbUGqWLKaRiCqppOc3S5FMU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t9SJ+enZHHYPRXaSrPop2hVOagE4oMnuXExO2DeNttc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cattrs
     platformdirs
@@ -57,12 +56,15 @@ buildPythonPackage rec {
       boto3
       botocore
     ];
-    mongodbo = [ pymongo ];
+    mongodb = [ pymongo ];
     redis = [ redis ];
-    bson = [ bson ];
-    json = [ ujson ];
     security = [ itsdangerous ];
     yaml = [ pyyaml ];
+    all = [
+      orjson
+      ujson
+    ]
+    ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [
@@ -75,10 +77,7 @@ buildPythonPackage rec {
     rich
     tenacity
     time-machine
-    timeout-decorator
-  ]
-  ++ optional-dependencies.json
-  ++ optional-dependencies.security;
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -90,11 +89,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Tests are flaky in the sandbox
-    "test_remove_expired_responses"
-    # Tests that broke with urllib 2.0.5
+    # Flaky
     "test_request_only_if_cached__stale_if_error__expired"
-    "test_stale_if_error__error_code"
   ];
 
   pythonImportsCheck = [ "requests_cache" ];
@@ -102,8 +98,8 @@ buildPythonPackage rec {
   meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
-    changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/$v{finalAttrs.version}/HISTORY.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

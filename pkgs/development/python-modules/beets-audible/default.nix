@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "beets-audible";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neurrone";
     repo = "beets-audible";
     tag = "v${version}";
-    hash = "sha256-JijKKbceQejpOFIjrpoWRt6qlwBA6Yr8dwVTHyM7Io8=";
+    hash = "sha256-eyyj1zwdf7pINeULhhPvUnnkE2skE69fpWArZls0nLU=";
   };
 
   build-system = [

@@ -25,12 +25,16 @@
   libpthread-stubs,
   libvorbis,
   libzip,
+  makeWrapper,
   nlohmann_json,
   openssl,
   pkg-config,
   speexdsp,
   zlib,
   withDiscordRpc ? false,
+  # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
+  rct1Path ? null,
+  rct2Path ? null,
 }:
 
 let
@@ -75,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     unzip
+    makeWrapper
   ];
 
   buildInputs = [
@@ -139,6 +144,12 @@ stdenv.mkDerivation (finalAttrs: {
       + (versionCheck "OPENSFX" opensfx-version)
       + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
     );
+
+  postInstall = ''
+    wrapProgram $out/bin/openrct2 \
+      ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
+      ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
+  '';
 
   meta = {
     description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";

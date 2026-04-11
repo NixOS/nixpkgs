@@ -55,6 +55,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tesseract
   ];
 
+  patches = [
+    ./0001-fix-image_stack-action-target-type.patch
+  ];
+
   postPatch = ''
     substituteInPlace meson.build \
       --replace "/app/bin/tesseract" "${lib.getExe tesseract}"

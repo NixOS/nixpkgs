@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.BazeliskVersion=${finalAttrs.version}"
+    "-X github.com/bazelbuild/bazelisk/core.BazeliskVersion=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,9 +32,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/bazelbuild/bazelisk";
     changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      elasticdog
-      kaynetik
-    ];
+    maintainers = with lib.maintainers; [ elasticdog ];
   };
 })

@@ -1161,8 +1161,6 @@ with pkgs;
 
   bump2version = with python3Packages; toPythonApplication bump2version;
 
-  cgit = callPackage ../applications/version-management/cgit { };
-
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
@@ -1517,10 +1515,6 @@ with pkgs;
 
   libfx2 = with python3Packages; toPythonApplication fx2;
 
-  flirc = libsForQt5.callPackage ../applications/video/flirc {
-    readline = readline70;
-  };
-
   foxdot = with python3Packages; toPythonApplication foxdot;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
@@ -1534,8 +1528,6 @@ with pkgs;
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
   gistyc = with python3Packages; toPythonApplication gistyc;
-
-  glances = python3Packages.callPackage ../applications/system/glances { };
 
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
@@ -1563,8 +1555,6 @@ with pkgs;
   kerf_1 = callPackage ../development/interpreters/kerf {
     stdenv = clangStdenv;
   };
-
-  reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
@@ -1621,8 +1611,6 @@ with pkgs;
     charles5
     ;
 
-  tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
-
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
@@ -1641,6 +1629,8 @@ with pkgs;
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
+
+  stac-validator = with python3Packages; toPythonApplication stac-validator;
 
   stack2nix =
     with haskell.lib;
@@ -1941,38 +1931,6 @@ with pkgs;
 
   roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
 
-  rsyslog = callPackage ../tools/system/rsyslog {
-    withHadoop = false; # Currently Broken
-    withKsi = false; # Currently Broken
-  };
-
-  rsyslog-light = rsyslog.override {
-    withKrb5 = false;
-    withSystemd = false;
-    withJemalloc = false;
-    withMysql = false;
-    withPostgres = false;
-    withDbi = false;
-    withNetSnmp = false;
-    withUuid = false;
-    withCurl = false;
-    withGnutls = false;
-    withGcrypt = false;
-    withLognorm = false;
-    withMaxminddb = false;
-    withOpenssl = false;
-    withRelp = false;
-    withKsi = false;
-    withLogging = false;
-    withNet = false;
-    withHadoop = false;
-    withRdkafka = false;
-    withMongo = false;
-    withCzmq = false;
-    withRabbitmq = false;
-    withHiredis = false;
-  };
-
   xmlsort = perlPackages.XMLFilterSort;
 
   mcelog = callPackage ../os-specific/linux/mcelog {
@@ -2252,11 +2210,6 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
-  drone = callPackage ../development/tools/continuous-integration/drone { };
-  drone-oss = callPackage ../development/tools/continuous-integration/drone {
-    enableUnfree = false;
-  };
-
   dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
 
   inherit (import ../build-support/dlang/dub-support.nix { inherit callPackage; })
@@ -2392,10 +2345,6 @@ with pkgs;
   firehol = callPackage ../applications/networking/firehol { };
 
   fluentd = callPackage ../tools/misc/fluentd { };
-
-  lp_solve = callPackage ../applications/science/math/lp_solve {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
 
   fpm = callPackage ../tools/package-management/fpm { };
 
@@ -2676,10 +2625,6 @@ with pkgs;
     ]);
 
     packages = config.ihaskell.packages or (_: [ ]);
-  };
-
-  ilspycmd = callPackage ../development/tools/ilspycmd {
-    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   incus-lts = callPackage ../by-name/in/incus/lts.nix { };
@@ -3041,6 +2986,8 @@ with pkgs;
     hdf5 = hdf5-mpi.override { usev110Api = true; };
   };
 
+  ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
+
   # Not in aliases because it wouldn't get picked up by callPackage
   netbox = netbox_4_5;
 
@@ -3399,6 +3346,8 @@ with pkgs;
     inherit (python3Packages) sphinx;
   };
 
+  rpatool = with python3Packages; toPythonApplication rpatool;
+
   rpm = callPackage ../tools/package-management/rpm {
     lua = lua5_4;
   };
@@ -3507,8 +3456,6 @@ with pkgs;
   tartube-yt-dlp = callPackage ../applications/video/tartube {
     youtube-dl = yt-dlp;
   };
-
-  teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
   buildTeleport = callPackage ../build-support/teleport { };
 
@@ -4270,13 +4217,16 @@ with pkgs;
       # Prefer native-bignum to avoid linking issues with gmp;
       # GHC 9.10 doesn't work too well with iserv-proxy.
       if stdenv.hostPlatform.isStatic then
-        haskell.packages.native-bignum.ghc912
+        haskell.compiler.native-bignum.ghc912
       # JS backend can't use GMP
       else if stdenv.targetPlatform.isGhcjs then
         haskell.compiler.native-bignum.ghc910
       else
         haskell.compiler.ghc910
     );
+
+  # TODO(@NixOS/haskell): deprecate this alias?
+  microhs = targetPackages.haskell.packages.microhs.ghc or haskell.compiler.microhs;
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -5014,7 +4964,6 @@ with pkgs;
     erlang
     erlang_28
     erlang_27
-    erlang_26
     ;
 
   inherit (beam.packages.erlang_28.beamPackages)
@@ -5030,11 +4979,6 @@ with pkgs;
     lfe
     ;
 
-  inherit (beam.packages.erlang_26.beamPackages)
-    elixir_1_16
-    elixir_1_15
-    ;
-
   inherit (beam.packages.erlang)
     erlfmt
     elvis-erlang
@@ -5047,12 +4991,10 @@ with pkgs;
   beamPackages = dontRecurseIntoAttrs beam.packages.erlang.beamPackages;
   beamMinimalPackages = dontRecurseIntoAttrs beam_minimal.packages.erlang.beamPackages;
 
-  beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
   beam28Packages = recurseIntoAttrs beam.packages.erlang_28.beamPackages;
   beam29Packages = dontRecurseIntoAttrs beam.packages.erlang_29.beamPackages;
 
-  beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26.beamPackages;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   beamMinimal28Packages = recurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
   beamMinimal29Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_29.beamPackages;
@@ -8075,7 +8017,6 @@ with pkgs;
     # Effective Cassandra 4.0.2 there is full Java 11 support
     #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
     jre = pkgs.jdk11_headless;
-    python = python3;
   };
   cassandra = cassandra_4;
 
@@ -8350,13 +8291,6 @@ with pkgs;
   mongodb-7_0 = callPackage ../servers/nosql/mongodb/7.0.nix {
     sasl = cyrus_sasl;
     boost = boost179.override { enableShared = false; };
-  };
-
-  mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
-    inherit (darwin) developer_cmds DarwinTools;
-    boost = boost177; # Configure checks for specific version.
-    icu = icu69;
-    protobuf = protobuf_21;
   };
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
@@ -8655,8 +8589,6 @@ with pkgs;
 
   linuxPackagesFor = linuxKernel.packagesFor;
 
-  hardenedLinuxPackagesFor = linuxKernel.hardenedPackagesFor;
-
   linuxManualConfig = linuxKernel.manualConfig;
 
   linuxPackages_custom = linuxKernel.customPackage;
@@ -8686,12 +8618,6 @@ with pkgs;
   # Testing (rc) kernel
   linuxPackages_testing = linuxKernel.packages.linux_testing;
   linux_testing = linuxKernel.kernels.linux_testing;
-
-  # Realtime kernel
-  linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
-  linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;
-  linux-rt = linuxPackages-rt.kernel;
-  linux-rt_latest = linuxPackages-rt_latest.kernel;
 
   # zen-kernel
   linuxPackages_zen = linuxKernel.packages.linux_zen;
@@ -9302,7 +9228,7 @@ with pkgs;
     bitwig-studio-unwrapped = bitwig-studio5-unwrapped;
   };
 
-  bitwig-studio = bitwig-studio5;
+  bitwig-studio = bitwig-studio6;
 
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -9910,7 +9836,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_32
     k3s_1_33
     k3s_1_34
     k3s_1_35
@@ -10044,9 +9969,6 @@ with pkgs;
   };
 
   luddite = with python3Packages; toPythonApplication luddite;
-
-  lxi-tools = callPackage ../tools/networking/lxi-tools { };
-  lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
@@ -11017,8 +10939,6 @@ with pkgs;
     xppen_4
     ;
 
-  xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
-
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
   yokadi = python3Packages.callPackage ../applications/misc/yokadi { };
@@ -11981,6 +11901,10 @@ with pkgs;
 
   dcp9020cdw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).cupswrapper;
 
+  dcpj785dw = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcpj785dw { }).driver;
+
+  dcpj785dw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcpj785dw { }).cupswrapper;
+
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
   cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
@@ -12389,7 +12313,33 @@ with pkgs;
 
   hy = with python3Packages; toPythonApplication hy;
 
-  ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { };
+  ghc-standalone-archive =
+    {
+      haskellPackages,
+      src,
+      deps ? p: [ ],
+      name,
+    }:
+    let
+      inherit (haskellPackages) ghc ghcWithPackages;
+      with-env = ghcWithPackages deps;
+      ghcName = "${ghc.targetPrefix}ghc";
+    in
+    runCommand name
+      {
+        buildInputs = [
+          with-env
+          cctools
+        ];
+      }
+      ''
+        mkdir -p $out/lib
+        mkdir -p $out/include
+        ${ghcName} ${src} -staticlib -outputdir . -o $out/lib/${name}.a -stubdir $out/include
+        for file in ${ghc}/lib/${ghcName}-${ghc.version}/include/*; do
+          ln -sv $file $out/include
+        done
+      '';
 
   vdr = callPackage ../applications/video/vdr { };
   vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });

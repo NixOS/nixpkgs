@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
-  version = "20260323";
+  version = "20260330";
 
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
-    hash = "sha256-FkJZm0MgN/HRfomjvFXq2M8FICHk7Uo1cI3C6WcZC8o=";
+    hash = "sha256-O/H5eeais4xKAWshC8nZfLqeIYdjVxLVZ5d1sUFnF1w=";
   };
 
   nativeBuildInputs = [

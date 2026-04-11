@@ -1008,15 +1008,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2556-1";
+      version = "0.0.2565-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2556-1.rockspec";
-          sha256 = "0vr0cx0x1j0pniw5s16fpy5ypzpxb4hz143rgyksiyyrdz366kcc";
+          url = "mirror://luarocks/fzf-lua-0.0.2565-1.rockspec";
+          sha256 = "1ipcw3xx7ahspr57nn400v1zvdxqcf1685dh7dynsishw5y2fny1";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/c9e7b7bfbd01f949164988ee1684035468e1995c.zip";
-        sha256 = "0bnfw6svi916zpy34i803a9rgjhs566imn0mrgdgmar4kf0qvw5b";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/9f0432fdd7825ab163520045831a40b6df82ea28.zip";
+        sha256 = "0m416my25nc9crawfbhp4askng69xcnhvwwbsvkvakv2ak1i2bbh";
       };
 
       disabled = luaOlder "5.1";
@@ -1105,15 +1105,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.63-1";
+      version = "1.6.65-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.63-1.rockspec";
-          sha256 = "14hmd8i604bfiv51fbpm4xw5f6b750bmxac4ghc5w36wdzg1cl7y";
+          url = "mirror://luarocks/grug-far.nvim-1.6.65-1.rockspec";
+          sha256 = "111gpirhbxha8ynih644vdw6qahqxfil19wvzbci9wc1s8d1097k";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/dc4684e163971bb1f5bfb93fbd4bb3e892bf9b15.zip";
-        sha256 = "1225sn36wqy8bdlyhbhajivhjhp936kbq307d4p94lcagvrvf7vp";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/37d0eafc6a2dcf8641aa19fc2a8db5e391b7f16b.zip";
+        sha256 = "0gk1fq4pyhzc1pd7dnzdvvzkszxih7shwk4fn2gfkhh7av9n0pac";
       };
 
       disabled = luaOlder "5.1";
@@ -1136,15 +1136,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "haskell-tools.nvim";
-      version = "7.0.3-1";
+      version = "8.1.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/haskell-tools.nvim-7.0.3-1.rockspec";
-          sha256 = "0zmarh3ypsfnh22zm3mqr4padjkzmlz622jnm2s5n5xkvfqjc4q8";
+          url = "mirror://luarocks/haskell-tools.nvim-8.1.1-1.rockspec";
+          sha256 = "06k911dmlfwf0nnswpi454xph96waymvqjywbqrs3k517p1ch2dw";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v7.0.3.zip";
-        sha256 = "0hdd2qnhy0vki0qcj7xzs29xla0a1ccwmym163py45lhwlgnjxvw";
+        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v8.1.1.zip";
+        sha256 = "178a8qgrigcnf662xzbw7yzh400vyhl7xvacv4k1sy5rk7f236l3";
       };
 
       disabled = luaOlder "5.1";
@@ -1908,6 +1908,66 @@ final: prev: {
                   Most sqlite3 functions are called via an object-oriented interface to either
                   database or SQL statement objects.
         '';
+      };
+    }
+  ) { };
+
+  ltreesitter = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter";
+      version = "0.2.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-0.2.0-1.rockspec";
+          sha256 = "0qhmx73hkskzmf5s3yv843234ri8n3gqj4dad79b018j5ilwiria";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "euclidianAce";
+        repo = "ltreesitter";
+        tag = "v0.2.0";
+        hash = "sha256-PYM6UAwp8w0qZxua5G6RFXI78Q6L3Vlc3eolXlNrN8k=";
+      };
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/ltreesitter";
+        license.fullName = "MIT";
+        description = "Treesitter bindings to Lua";
+        longDescription = "Standalone Lua bindings to the Treesitter api (with full type definitions for Teal).";
+      };
+    }
+  ) { };
+
+  ltreesitter-ts = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter-ts";
+      version = "0.0.1-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-ts-0.0.1-1.rockspec";
+          sha256 = "064nn3h6wi8z5ply35ig78jjkpy527nc5qxisbkvv8s3s345h82r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "ltreesitter-ts";
+        tag = "0.0.1";
+        hash = "sha256-HFBOYFadw+lwQYk39vrFtAn/HGjfXzCxjN1RLBp4yKA=";
+      };
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/ltreesitter-ts";
+        license.fullName = "MIT";
+        description = "Treesitter parsing library bindings for Lua";
+        longDescription = "This combines [ltreesitter](https://github.com/EuclidianAce/ltreesitter) and the [tree-sitter](https://github.com/tree-sitter/tree-sitter) library together to have an easy LuaRocks based install for tree sitter parsing. There are no other enhancements to either library. It can be imported as just `ltreesitter`.";
       };
     }
   ) { };
@@ -3217,17 +3277,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lualine.nvim";
-      version = "scm-1";
+      version = "scm-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lualine.nvim-scm-1.rockspec";
-          sha256 = "01cqa4nvpq0z4230szwbcwqb0kd8cz2dycrd764r0z5c6vivgfzs";
+          url = "mirror://luarocks/lualine.nvim-scm-2.rockspec";
+          sha256 = "0lfwmiq9jcrxyhg6qk7l7znab356lwndrp52b9f3h86a48v5ywj0";
         }).outPath;
       src = fetchFromGitHub {
         owner = "nvim-lualine";
         repo = "lualine.nvim";
-        rev = "47f91c416daef12db467145e16bed5bbfe00add8";
-        hash = "sha256-OpLZH+sL5cj2rcP5/T+jDOnuxd1QWLHCt2RzloffZOA=";
+        rev = "f5d2a8570f8b736ddb9bb4be504355bcd6e15ec8";
+        hash = "sha256-woyw4T0rG5Q3ipbsvI0F094tzJ8bnOOlaCzsibi/AKw=";
       };
 
       disabled = luaOlder "5.1";
@@ -3508,6 +3568,39 @@ final: prev: {
     }
   ) { };
 
+  luarocks-build-tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luarocks-build-tree-sitter-cli";
+      version = "0.0.3-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luarocks-build-tree-sitter-cli-0.0.3-1.rockspec";
+          sha256 = "0yy04svrll85zn334mhhnzzdqymsbiqymnr6iaj23h436v3gcq38";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "luarocks-build-tree-sitter-cli";
+        tag = "0.0.3";
+        hash = "sha256-Chc0eKvKyL9JM6MNX5GcRes1YA2+W842NDrX1nNMQ+E=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/luarocks-build-tree-sitter-cli";
+        license.fullName = "MIT";
+        description = "A LuaRocks build backend to install the tree-sitter CLI";
+        longDescription = "luarocks-build-tree-sitter-cli is a LuaRocks build.type that allows installing tree-sitter CLI binaries via LuaRocks directly. It works similarly to the npm install option for tree-sitter, but uses LuaRocks instead.";
+      };
+    }
+  ) { };
+
   luarocks-build-treesitter-parser = callPackage (
     {
       buildLuarocksPackage,
@@ -3620,15 +3713,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luasnip";
-      version = "2.4.1-1";
+      version = "2.5.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luasnip-2.4.1-1.rockspec";
-          sha256 = "03cl2qybqa06q41vxckamr46s7ij9igqz59ak0wshhzp7yysn2xr";
+          url = "mirror://luarocks/luasnip-2.5.0-1.rockspec";
+          sha256 = "1qgd4536yglz0v21bpia3q2xbjcakxh4jhphhficm7nqb82xfsap";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/L3MON4D3/LuaSnip/archive/v2.4.1.zip";
-        sha256 = "1vjn0fwxv89p4dxycwn5lf7c0fgspzymbjp76n27rqnkab6v1qzy";
+        url = "https://github.com/L3MON4D3/LuaSnip/archive/v2.5.0.zip";
+        sha256 = "16cirbi0zjg874858yqd36p3kbrmlpfii3bvx6lm9bpli7b4w9kn";
       };
 
       disabled = luaOlder "5.1";
@@ -4595,15 +4688,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neorg-interim-ls";
-      version = "2.1.1-1";
+      version = "2.1.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neorg-interim-ls-2.1.1-1.rockspec";
-          sha256 = "0kx8ql89yadlhnw2jl7ck950vrzs0ihjm079mg0vlnklriw4zw5v";
+          url = "mirror://luarocks/neorg-interim-ls-2.1.4-1.rockspec";
+          sha256 = "16c6b4in826fnv2wgxl1b7qsxvj62qq2xjnbik7z0hiij2vwc52x";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/benlubas/neorg-interim-ls/archive/v2.1.1.zip";
-        sha256 = "1vszvmsy27n68ivi6bmk1hifi00dg33mc9iz66nv2gfmwcfwbsfz";
+        url = "https://github.com/benlubas/neorg-interim-ls/archive/v2.1.4.zip";
+        sha256 = "0fpzfjpamb4amlnqf89zy9hdg95qh0mzdfrzh7qw13yvh4273z27";
       };
 
       disabled = luaOlder "5.1";
@@ -4628,15 +4721,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neotest";
-      version = "5.14.3-1";
+      version = "5.15.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neotest-5.14.3-1.rockspec";
-          sha256 = "12hx48pvnxk0i5mwl6w2wzla109n75rbz5rn2cq2dhzxszx3h4rz";
+          url = "mirror://luarocks/neotest-5.15.0-1.rockspec";
+          sha256 = "0kp8ybvnrlaisrra9lrwmqk9ll6qs2vddck2449b9k2prjhmfm3q";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neotest/neotest/archive/72bc8f1ec62a590fb47368c81f89610e0f353e28.zip";
-        sha256 = "1hlwlp7kyz1navkz4k3fbxgkmqgabr160l8ic6mgnp7f4q0xfhj9";
+        url = "https://github.com/nvim-neotest/neotest/archive/fd0b7986dd0ae04e38ec7dc0c78a432e3820839c.zip";
+        sha256 = "0lkck8pb5d65v2xhbg0hbxinzii9yzg4g10dbanq0j7wbpbwximm";
       };
 
       disabled = luaOlder "5.1";
@@ -5400,21 +5493,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "8.0.4-2";
+      version = "9.0.1-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-8.0.4-2.rockspec";
-          sha256 = "12c711xrr0chsmx86w0zf4z3fg10nn53cv1dqdhq64a6vi5gjd4g";
+          url = "mirror://luarocks/rustaceanvim-9.0.1-2.rockspec";
+          sha256 = "0r33jq01qyrspl2vsk0bv5bx32ycyyhkhylfs5xxrilgpzv0rh5h";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.4.zip";
-        sha256 = "0nhbl28bxgbkd2jlhb5v9na29972djgmhd9kczma66mf0bwfwi7d";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.1.zip";
+        sha256 = "1vzp5vf5wpkpsp40zwwkl9l29ifiap4h2hr8wxjhgznsjk3y8y5y";
       };
 
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.4.zip";
+        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.1.zip";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-2.0-only";
         description = "🦀 Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
@@ -5682,38 +5775,46 @@ final: prev: {
     {
       argparse,
       buildLuarocksPackage,
-      dkjson,
       fetchFromGitHub,
       fetchurl,
       inspect,
+      ltreesitter-ts,
+      lua-cjson,
       luafilesystem,
+      luarocks-build-treesitter-parser,
       lusc_luv,
       luv,
       tl,
+      tree-sitter-cli,
+      tree-sitter-teal,
     }:
     buildLuarocksPackage {
       pname = "teal-language-server";
-      version = "0.0.5-1";
+      version = "0.1.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/teal-language-server-0.0.5-1.rockspec";
-          sha256 = "11ps1hgkgli4sf9gcj7pin4kbc5w0yck0daig1ghqssn2q9m2x5l";
+          url = "mirror://luarocks/teal-language-server-0.1.1-1.rockspec";
+          sha256 = "1dhhqm2dwl1i27dni8yd6l7qjd1xhz16b772jp96aj66rizhkvcr";
         }).outPath;
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "teal-language-server";
-        rev = "main";
-        hash = "sha256-TbNvYG2aRt27+sfXvZOlq/F7Gy6sQtoDz6satC+Qqss=";
+        tag = "0.1.1";
+        hash = "sha256-UgN3BOdsxUIsn1HAXEmAzHns1ZKylxUo7owI2uYsNlA=";
       };
 
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
       propagatedBuildInputs = [
         argparse
-        dkjson
         inspect
+        ltreesitter-ts
+        lua-cjson
         luafilesystem
         lusc_luv
         luv
         tl
+        tree-sitter-cli
+        tree-sitter-teal
       ];
 
       meta = {
@@ -5779,8 +5880,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "e6cdb4dc528c5dc4ca8da86e83ef4e3c84b0729c";
-        hash = "sha256-eTDW8KdrFAt68ih5Dxn9WgIBW8PjZ+9yBX2HpIPyVJs=";
+        rev = "48d2656e54d3e3953ae647153ccdaffa50d4d76b";
+        hash = "sha256-PtNTNzNk6V5SoxytHk6KYiY1LreMug7Qw3B7WtyHeHs=";
       };
 
       disabled = lua.luaversion != "5.1";
@@ -5911,6 +6012,39 @@ final: prev: {
     }
   ) { };
 
+  tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luarocks-build-tree-sitter-cli,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-cli";
+      version = "0.26.5-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-cli-0.26.5-1.rockspec";
+          sha256 = "1bd9lz72gvi7djzcy0z6yja045ycm4byiyjpwa3m6zgh1h4mp30r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "tree-sitter-cli";
+        rev = "d8e1eb4ae406b75db0f50fae8be5dff636dbb4da";
+        hash = "sha256-J73buMI+DzrQ4Qx7G6rW2xFxiOYJBy4rGVDsnfNEgzQ=";
+      };
+
+      nativeBuildInputs = [ luarocks-build-tree-sitter-cli ];
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/tree-sitter-cli";
+        license.fullName = "MIT";
+        description = "Install tree-sitter CLI binaries";
+        longDescription = "An option to install the tree-sitter CLI via LuaRocks";
+      };
+    }
+  ) { };
+
   tree-sitter-http = callPackage (
     {
       buildLuarocksPackage,
@@ -6000,6 +6134,38 @@ final: prev: {
         homepage = "https://github.com/nvim-orgmode/tree-sitter-org";
         license.fullName = "MIT";
         description = "A fork of tree-sitter-org, for use with the orgmode Neovim plugin";
+      };
+    }
+  ) { };
+
+  tree-sitter-teal = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-teal";
+      version = "0.0.35-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-teal-0.0.35-1.rockspec";
+          sha256 = "06g2i3y3gmyz17v9gxwswa9db544nyhd5mx4zq3lihrshbbf6r10";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/euclidianAce/tree-sitter-teal/archive/05d276e737055e6f77a21335b7573c9d3c091e2f.zip";
+        sha256 = "1g1zk47a8jcwac0j60mlfv56mhlhbf6f77vjkx4vsfbrryprcfi4";
+      };
+
+      disabled = luaOlder "5.1";
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/tree-sitter-teal";
+        license.fullName = "UNKNOWN";
+        description = "tree-sitter parser for teal";
       };
     }
   ) { };

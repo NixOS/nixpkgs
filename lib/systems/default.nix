@@ -3,11 +3,11 @@
 let
   inherit (lib)
     any
-    filterAttrs
+    attrNames
+    filter
     foldl
     hasInfix
     isAttrs
-    isFunction
     isList
     mapAttrs
     optional
@@ -43,7 +43,8 @@ let
   */
   equals =
     let
-      removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
+      # System attrs are never __functor-style attrsets, so builtins.isFunction suffices.
+      removeFunctions = a: removeAttrs a (filter (n: builtins.isFunction a.${n}) (attrNames a));
     in
     a: b: removeFunctions a == removeFunctions b;
 

@@ -10,17 +10,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.3";
+  version = "2.16.6";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
-    rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-ONpSW6VMoiW1Q0Aa5Dp1pZx3LAQ2Kzv5YHKxHOxbXdo=";
+    tag = "@astrojs/language-server@${finalAttrs.version}";
+    hash = "sha256-xuAkfTVF+do7Tmk6LUOFkS7yunhVRkl+ZGpsOC7Ob4M=";
   };
 
   # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspaces = [ "@astrojs/language-server..." ];
+  pnpmWorkspaces = [
+    "@astrojs/language-server..."
+    "@astrojs/ts-plugin"
+  ];
   prePnpmInstall = ''
     pnpm config set dedupe-peer-dependents false
     pnpm approve-builds @emmetio/css-parser
@@ -36,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-Kqw4W3ZWRHWNnJYLGks9IHjCYAYEIigskwb//yKvb6c=";
+    hash = "sha256-+5S/VuZjP6LoWUPKF1NMhw317AFAJUgaY7/Tq0ZKouw=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter "@astrojs/language-server..." build
+    pnpm --filter "@astrojs/language-server..." --filter "@astrojs/ts-plugin" build
 
     runHook postBuild
   '';
@@ -63,11 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --offline --prod --filter="@astrojs/language-server..."
     mkdir -p $out/{bin,lib/node_modules/astro-language-server/packages/language-tools}
     cp -r ./node_modules $out/lib/node_modules/astro-language-server
-    cp -r packages/language-tools/{language-server,yaml2ts} $out/lib/node_modules/astro-language-server/packages/language-tools/
+    cp -r packages/language-tools/{language-server,yaml2ts,ts-plugin} $out/lib/node_modules/astro-language-server/packages/language-tools/
     pushd $out/lib/node_modules/astro-language-server/node_modules
-    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark}
+    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark} .pnpm/node_modules/@astrojs/ts-plugin
     popd
-
     ln -s $out/lib/node_modules/astro-language-server/packages/language-tools/language-server/bin/nodeServer.js $out/bin/astro-ls
 
     runHook postInstall
@@ -86,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
     changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      miniharinn
+      god464
+    ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };

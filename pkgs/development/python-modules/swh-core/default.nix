@@ -44,7 +44,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-core";
-  version = "4.6.0";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dI+xfj0DnUbBdYIVycyJQg3B/jnH/eg/Ju8YX2k8Qkc=";
+    hash = "sha256-5lL4/Hz8KbWurcDCOHqKh8eNqA1CkliSMCrdeYwqEHs=";
   };
 
   build-system = [

@@ -61,6 +61,7 @@
   ./hardware/cpu/amd-ryzen-smu.nix
   ./hardware/cpu/amd-sev.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/cpu/intel-npu.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/cpu/x86-msr.nix
   ./hardware/decklink.nix
@@ -1204,6 +1205,7 @@
   ./services/networking/frr.nix
   ./services/networking/g3proxy.nix
   ./services/networking/gdomap.nix
+  ./services/networking/geph.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix
@@ -1586,6 +1588,7 @@
   ./services/video/go2rtc/default.nix
   ./services/video/mediamtx.nix
   ./services/video/mirakurun.nix
+  ./services/video/motioneye.nix
   ./services/video/photonvision.nix
   ./services/video/ustreamer.nix
   ./services/video/v4l2-relayd.nix
@@ -1729,6 +1732,7 @@
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/pairdrop.nix
+  ./services/web-apps/papra.nix
   ./services/web-apps/part-db.nix
   ./services/web-apps/pdfding.nix
   ./services/web-apps/peering-manager.nix
@@ -1938,6 +1942,7 @@
   ./system/boot/unl0kr.nix
   ./system/boot/uvesafb.nix
   ./system/boot/zram-as-tmp.nix
+  ./system/boot/zswap.nix
   ./system/etc/etc-activation.nix
   ./system/service/systemd/system.nix
   ./system/service/systemd/user.nix

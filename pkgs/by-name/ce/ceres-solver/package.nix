@@ -14,9 +14,6 @@
   withBlas ? true,
 }:
 
-# gflags is required to run tests
-assert runTests -> gflags != null;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "ceres-solver";
   version = "2.1.0";

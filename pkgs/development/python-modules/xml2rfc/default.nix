@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.32.0";
+  version = "3.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     tag = "v${version}";
-    hash = "sha256-3SE54ihJY5zs4YIROalHhKoeCiXCk6wYgaOBHEP3ze0=";
+    hash = "sha256-eoTuA4OJjqJGRP+uRi2TMWfS3yrCCUPIKI2uNPnjqcA=";
   };
 
   postPatch = ''

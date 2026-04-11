@@ -30,7 +30,7 @@ buildOctavePackage rec {
       gpl3Plus
       bsd2
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Input/Output in external formats";
   };
 }
