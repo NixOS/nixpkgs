@@ -61,7 +61,7 @@ jobs:
 
       - name: Find commit that touched ci/pinned.json
         id: find-pinned-commit
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           TARGET_SHA: ${{ inputs.targetSha }}
           HEAD_SHA: ${{ inputs.headSha }}
@@ -132,7 +132,7 @@ jobs:
             core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
-        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - name: Load supported versions
         id: versions
@@ -180,7 +180,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
         continue-on-error: true
@@ -270,7 +270,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - name: Combine all output paths and eval stats
         run: |
@@ -307,7 +307,7 @@ jobs:
 
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const { readFile } = require('node:fs/promises')
@@ -337,7 +337,7 @@ jobs:
             })
       - name: Request changes if PR is against an inappropriate branch
         if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             require('./nixpkgs/trusted/ci/github-script/check-target-branch.js')({
@@ -359,7 +359,7 @@ jobs:
           path: versions
 
       - name: Add version comparison table to job summary
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           ARTIFACT_PREFIX: ${{ inputs.artifact-prefix }}
           SYSTEMS: ${{ inputs.systems }}
@@ -451,7 +451,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - name: Ensure flake outputs on all systems still evaluate
         run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'
