@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rendercv";
-  version = "2.7";
+  version = "2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rendercv";
     repo = "rendercv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ClS/RwfAhjo+bh1fTiir1YCVelDJPOjp+Z3GHVzF4E=";
+    hash = "sha256-iYfUoSN5HiDsAwkx44KbmHPN+vcYAra1zyfxTwziYkI=";
   };
 
   build-system = with python3Packages; [ uv-build ];
@@ -37,11 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "phonenumbers"
-    "markdown"
-  ];
-
-  patches = [
-    ./fix_theme_directory_permissions.patch
   ];
 
   postPatch = ''
@@ -61,6 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/renderer/test_pdf_png.py"
     "tests/cli/render_command/test_render_command.py"
     "tests/test_pyodide.py"
+    "tests/test_generated_files.py"
   ];
 
   doCheck = true;
@@ -68,7 +64,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Typst-based CV/resume generator";
     homepage = "https://rendercv.com";
-    changelog = "https://docs.rendercv.com/changelog/#27-march-6-2026";
+    changelog = "https://docs.rendercv.com/changelog/#28-march-21-2026";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "rendercv";
