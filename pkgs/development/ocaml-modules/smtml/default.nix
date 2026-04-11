@@ -5,6 +5,7 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  darwin,
   bitwuzla-cxx,
   bos,
   cmdliner,
@@ -30,19 +31,22 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9499a8ngL8rTeyhWumn08ZjymD8zOMyyG0ZgjVITSPQ=";
+    hash = "sha256-dWZrN0hTxxqGC2queit91GDuw/x5fyRPwHbmKxkvc/w=";
   };
 
   minimalOCamlVersion = "4.14";
 
   nativeBuildInputs = [
     menhir
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
   buildInputs = [
