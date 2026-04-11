@@ -558,95 +558,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gshadow" false)
     (lib.mesonBool "idn" false)
   ];
-  preConfigure =
-    let
-      # A list of all the runtime binaries referenced by the source code (plus
-      # scripts and unit files) of systemd executables, tests and libraries.
-      # As soon as a dependency is lo longer required we should remove it from
-      # the list.
-      # The `where` attribute for each of the replacement patterns must be
-      # exhaustive. If another (unhandled) case is found in the source code the
-      # build fails with an error message.
-      binaryReplacements = [
-        {
-          search = "/sbin/mkswap";
-          replacement = "${lib.getBin util-linux}/sbin/mkswap";
-          where = [
-            "man/systemd-makefs@.service.xml"
-          ];
-        }
-        {
-          search = "/bin/echo";
-          replacement = "${coreutils}/bin/echo";
-          where = [
-            "man/systemd-analyze.xml"
-            "man/systemd.service.xml"
-            "man/systemd-run.xml"
-            "src/analyze/test-verify.c"
-            "src/test/test-env-file.c"
-            "src/test/test-load-fragment.c"
-          ];
-        }
-        {
-          search = "/bin/cat";
-          replacement = "${coreutils}/bin/cat";
-          where = [
-            "test/test-execute/exec-noexecpaths-simple.service"
-          ];
-        }
-        {
-          search = "/usr/lib/systemd/systemd-fsck";
-          replacement = "$out/lib/systemd/systemd-fsck";
-          where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ];
+  preConfigure = ''
+    mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
 
-      # { replacement, search, where, ignore } -> List[str]
-      mkSubstitute =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        let
-          ignore' = lib.concatStringsSep "|" (
-            ignore
-            ++ [
-              "^test"
-              "NEWS"
-            ]
-          );
-        in
-        ''
-          set +e
-          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-          set -e
-          if [[ -n "$search" ]]; then
-            echo "Not all references to '${search}' have been replaced. Found the following matches:"
-            echo "$search"
-            exit 1
-          fi
-        '';
-    in
-    ''
-      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-      export LC_ALL="en_US.UTF-8";
-
-      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
-      ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
-
-      substituteInPlace src/libsystemd/sd-journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-    '';
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
+      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+  '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
