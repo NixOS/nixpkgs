@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitLab,
+  callPackage,
   meson,
   ninja,
   pkg-config,
@@ -39,15 +40,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.51.0";
+  version = "0.53.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = "phoc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6glG5QvphanjBvf9xKiXjkVceWBQ8EjFkRywdfYc7E4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qBeOsHxdcJjAx/KGJEQKuqkexp1lGWeEaJPBjAy1Yxw=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [
@@ -101,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
+    tests.dependency-versions = callPackage ./test-dependency-versions.nix { inherit gvdb; };
     updateScript = nix-update-script { };
   };
 
