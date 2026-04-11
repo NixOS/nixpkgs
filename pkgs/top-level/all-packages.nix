@@ -9343,10 +9343,6 @@ with pkgs;
 
   firewalld-gui = firewalld.override { withGui = true; };
 
-  fldigi = callPackage ../applications/radio/fldigi {
-    hamlib = hamlib_4;
-  };
-
   fossil = callPackage ../applications/version-management/fossil {
     sqlite = sqlite.override { enableDeserialize = true; };
   };

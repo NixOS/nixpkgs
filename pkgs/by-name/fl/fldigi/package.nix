@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  hamlib,
+  hamlib_4,
   fltk_1_3,
   libjpeg,
   libpng,
@@ -17,12 +17,12 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fldigi";
   version = "4.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-dis3D/6crnc6KgO1EtC3JC5+kEB8EdWrvS0xrmUBZk8=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxinerama
     gettext
-    hamlib
+    hamlib_4
     fltk_1_3
     libjpeg
     libpng
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
