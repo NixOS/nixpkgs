@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nurl prefetch-yarn-deps prefetch-npm-deps gclient2nix
+#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nurl prefetch-npm-deps yarn-berry_4.yarn-berry-fetcher nix-prefetch-git gclient2nix
 """
 electron updater
 
@@ -115,12 +115,12 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
 
 @memory.cache
 def get_electron_yarn_hash(electron_tag: str) -> str:
-    print(f"prefetch-yarn-deps", file=sys.stderr)
+    print(f"yarn-berry-fetcher prefetch", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
         with open(tmp_dir + "/yarn.lock", "w") as f:
             f.write(get_electron_file(electron_tag, "yarn.lock"))
         return (
-            subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
+            subprocess.check_output(["yarn-berry-fetcher", "prefetch", tmp_dir + "/yarn.lock"])
             .decode("utf-8")
             .strip()
         )

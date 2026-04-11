@@ -11,7 +11,7 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.74.477";
+  version = "1.2.84.476";
 
   src =
     # WARNING: This Wayback Machine URL redirects to the closest timestamp.
@@ -20,13 +20,13 @@ stdenv.mkDerivation {
     # https://web.archive.org/web/*/https://download.scdn.co/Spotify.dmg
     if stdenv.hostPlatform.isAarch64 then
       (fetchurl {
-        url = "https://web.archive.org/web/20251010104459/https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-0gwoptqLBJBM0qJQ+dGAZdCD6WXzDJEs0BfOxz7f2nQ=";
+        url = "https://web.archive.org/web/20260228212834/https://download.scdn.co/SpotifyARM64.dmg";
+        hash = "sha256-Zj5qATaW1QPTInC/Y/jZx2xq5eHG/OQixpj8DWUpEXY=";
       })
     else
       (fetchurl {
-        url = "https://web.archive.org/web/20251010104433/https://download.scdn.co/Spotify.dmg";
-        hash = "sha256-8CrhLbnswbuAjRMaan2cTnnOMsr3vpW92IQ00KwPUHo=";
+        url = "https://web.archive.org/web/20260228213541/https://download.scdn.co/Spotify.dmg";
+        hash = "sha256-4Lm4g0gAQ3EA7Sj2wDTbjEXRxcNoGWHLvdEx/57nry4=";
       });
 
   nativeBuildInputs = [ undmg ];
@@ -48,7 +48,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       matteopacini
       Enzime
-      iedame
     ];
   };
 }

@@ -29,27 +29,24 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.10.3";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-o55S9Fr1gnyuXFAVgugrnFyJIv7nKMZ3Lc4+m/aVrII=";
+    hash = "sha256-E0GfYznHj4CKsRWQm6zHTAJ8hJw9ieFoKIOT9tcumYQ=";
   };
 
-  npmDepsHash = "sha256-0vqH3nAB4HqfwS7Oy/qewzLyx48vS+rKiAwwbTkSOOc=";
+  npmDepsHash = "sha256-DyPfylne9Ku7sEUNN0LLlN0EOnCjcklsh+F6YP+rXv4=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  prePatch = ''
-    cat > server/db/index.ts << EOF
-    export * from "./${db false}";
-    EOF
-  '';
+  # dependency resolution is borked
+  npmFlags = [ "--legacy-peer-deps" ];
 
   # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
   # Based on pkgs.nextjs-ollama-llm-ui.
@@ -59,35 +56,48 @@ buildNpmPackage (finalAttrs: {
       "localFont from \"next/font/local\""
 
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "Inter({ subsets: [\"latin\"] })" \
-      "localFont({ src: './Inter.ttf' })"
+      "const inter = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
+      "const inter = localFont({ src: './Inter.ttf' });"
+
+    substituteInPlace server/lib/consts.ts --replace-fail \
+      'export const APP_VERSION = "1.17.0";' \
+      'export const APP_VERSION = "${finalAttrs.version}";'
 
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
   '';
 
-  preBuild = "npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema.ts --name migration --out init";
+  preBuild = ''
+    npm run set:${db false}
+    npm run set:oss
+    npm run db:generate
+  '';
 
-  npmBuildScript = "build:${db false}";
+  buildPhase = ''
+    runHook preBuild
 
-  postBuild = "npm run build:cli";
+    npm run build
+    npm run build:cli
+
+    runHook postBuild
+  '';
 
   preInstall = "mkdir -p $out/{bin,share/pangolin}";
 
   installPhase = ''
     runHook preInstall
 
-    cp -r node_modules $out/share/pangolin
-
-    cp -r .next/standalone/.next $out/share/pangolin
-    cp .next/standalone/package.json $out/share/pangolin
-
+    cp -r node_modules $out/share/pangolin/node_modules
+    cp -r .next/standalone/. $out/share/pangolin
     cp -r .next/static $out/share/pangolin/.next/static
-    cp -r public $out/share/pangolin/public
-
     cp -r dist $out/share/pangolin/dist
-    cp -r init $out/share/pangolin/dist/init
+    cp -r server/migrations $out/share/pangolin/dist/init
+    cp package.json $out/share/pangolin/package.json
 
     cp server/db/names.json $out/share/pangolin/dist/names.json
+    cp server/db/ios_models.json $out/share/pangolin/dist/ios_models.json
+    cp server/db/mac_models.json $out/share/pangolin/dist/mac_models.json
+
+    cp -r public $out/share/pangolin/public
 
     runHook postInstall
   '';
@@ -164,7 +174,7 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       jackr
-      sigmasquadron
+      water-sucks
     ];
     platforms = lib.platforms.linux;
     mainProgram = "pangolin";

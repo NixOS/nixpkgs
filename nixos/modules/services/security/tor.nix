@@ -456,6 +456,8 @@ in
 
       package = lib.mkPackageOption pkgs "tor" { };
 
+      obfs4Package = lib.mkPackageOption pkgs "obfs4" { };
+
       enableGeoIP =
         lib.mkEnableOption ''
           use of GeoIP databases.
@@ -634,7 +636,31 @@ in
         };
 
         onionServices = lib.mkOption {
-          description = (descriptionGeneric "HiddenServiceDir");
+          description = descriptionGeneric "HiddenServiceDir" + ''
+            :::{.warning}
+            Because `tor.service` runs in its own `RootDirectory=`,
+            when using a onion service to reverse-proxy to a Unix socket,
+            you need to make that Unix socket available
+            within the mount namespace of `tor.service`.
+
+            When you can configure your service to create its socket in `/tmp`,
+            this can be done with:
+            ```nix
+            systemd.services.''${your-service} = {
+              unitConfig.JoinsNamespaceOf = [ "tor.service" ];`
+              serviceConfig.PrivateTmp = true;
+            };
+            ```
+            Otherwise, you can use:
+            ```nix
+            systemd.services.tor.serviceConfig.BindPaths = [ "/path/to/your-service/socket/directory" ];
+            ```
+            but you have to be sure that `/path/to/socket/directory`
+            exists before `tor.service` is started
+            and is not deleted and recreated between restarts of `your-service`,
+            or you'll need to restart `tor.service` to refresh the `BindPaths=`.
+            :::
+          '';
           default = { };
           example = {
             "example.org/www" = {
@@ -745,6 +771,15 @@ in
                         }
                       ))
                     ]);
+                  example = [
+                    {
+                      port = 9000;
+                      target = {
+                        addr = "127.0.0.1";
+                        port = 9123;
+                      };
+                    }
+                  ];
                   apply = map (
                     v:
                     if lib.isInt v then
@@ -1055,7 +1090,11 @@ in
           options.MaxClientCircuitsPending = optionInt "MaxClientCircuitsPending";
           options.NATDPort = optionIsolablePorts "NATDPort";
           options.NewCircuitPeriod = optionInt "NewCircuitPeriod";
-          options.Nickname = optionString "Nickname";
+          options.Nickname = lib.mkOption {
+            type = with lib.types; nullOr (strMatching "^[a-zA-Z0-9]{1,19}$");
+            default = null;
+            description = (descriptionGeneric "Nickname");
+          };
           options.ORPort = optionORPort "ORPort";
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
           options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
@@ -1249,7 +1288,7 @@ in
               BridgeRelay = true;
               ExtORPort.port = lib.mkDefault "auto";
               ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
-              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe pkgs.obfs4} managed";
+              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe cfg.obfs4Package} managed";
             }
         // lib.optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
@@ -1322,7 +1361,7 @@ in
     systemd.services.tor = {
       description = "Tor Daemon";
       documentation = [ "man:tor(8)" ];
-      path = [ pkgs.tor ];
+      path = [ cfg.package ];
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -1410,22 +1449,10 @@ in
         RootDirectoryStartOnly = true;
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
-        BindPaths = [
-          stateDir
-        ]
-        ++ lib.filter (x: x != null) (
-          lib.catAttrs "unix" (
-            lib.filter (x: x != null) (
-              lib.catAttrs "target" (
-                lib.concatMap (onionService: onionService.map) (lib.attrValues cfg.relay.onionServices)
-              )
-            )
-          )
-        );
         BindReadOnlyPaths = [
-          builtins.storeDir
           "/etc"
         ]
+        ++ lib.optional (!config.systemd.services.tor.confinement.enable) builtins.storeDir
         ++ lib.optionals config.services.resolved.enable [
           "/run/systemd/resolve/stub-resolv.conf"
           "/run/systemd/resolve/resolv.conf"
@@ -1479,7 +1506,6 @@ in
           "~@timer"
         ];
         SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
       };
     };
 

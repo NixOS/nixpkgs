@@ -72,14 +72,14 @@ stdenv.mkDerivation {
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    wrapPythonProgramsIn "$out/lib/neard" "$pythonPath"
+    wrapPythonProgramsIn "$out/lib/neard" "''${pythonPath[*]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

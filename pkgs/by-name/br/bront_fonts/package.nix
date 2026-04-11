@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,19 +16,19 @@ stdenvNoCC.mkDerivation {
     sha256 = "1sx2gv19pgdyccb38sx3qnwszksmva7pqa1c8m35s6cipgjhhgb4";
   };
 
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/truetype *Bront.ttf
-  '';
+  preInstall = "rm {DejaVuSansMono,UbuntuMono}.ttf";
 
-  meta = with lib; {
+  nativeBuildInputs = [ installFonts ];
+
+  meta = {
     description = "Bront Fonts";
     longDescription = "Ubuntu Mono Bront and DejaVu Sans Mono Bront fonts.";
     homepage = "https://github.com/chrismwendt/bront";
-    license = with licenses; [
+    license = with lib.licenses; [
       bitstreamVera
       ufl
     ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.grburst ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 }

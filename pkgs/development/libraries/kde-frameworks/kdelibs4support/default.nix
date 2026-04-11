@@ -34,7 +34,7 @@
   qtsvg,
   qttools,
   qtx11extras,
-  xorg,
+  libsm,
 }:
 
 mkDerivation {
@@ -61,7 +61,7 @@ mkDerivation {
     networkmanager
     qtsvg
     qtx11extras
-    xorg.libSM
+    libsm
   ];
   propagatedBuildInputs = [
     kauth

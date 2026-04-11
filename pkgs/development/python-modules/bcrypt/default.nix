@@ -5,15 +5,12 @@
   rustPlatform,
   rustc,
   setuptools,
-  setuptoolsRustBuildHook,
-  fetchPypi,
-  pythonOlder,
+  setuptools-rust,
+  fetchFromGitHub,
   pytestCheckHook,
-  libiconv,
-  stdenv,
   # for passthru.tests
   asyncssh,
-  django_4,
+  django,
   fastapi,
   paramiko,
   twisted,
@@ -21,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.3.0";
-  format = "pyproject";
+  version = "5.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Oj/SIEF4ttKtzwnLT2Qm/+9UdiV3p8m1TBWQCMsojBg=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "bcrypt";
+    tag = version;
+    hash = "sha256-7Dp07xoq6h+fiP7d7/TRRoYszWsyQF1c4vuFUpZ7u6U=";
   };
 
   cargoRoot = "src/_bcrypt";
@@ -39,19 +36,19 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-HgHvfMBspPsSYhllnKBg5XZB6zxFIqJj+4//xKG8HwA=";
+    hash = "sha256-hYMJlwxnXA0ZOJiyZ8rDp9govVcc1SGkDfqUVngnUPQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    setuptoolsRustBuildHook
+    setuptools-rust
+  ];
+
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
-
-  # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -60,17 +57,18 @@ buildPythonPackage rec {
   passthru.tests = {
     inherit
       asyncssh
-      django_4
+      django
       fastapi
       paramiko
       twisted
       ;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pyca/bcrypt/blob/${src.tag}/CHANGELOG.rst";
     description = "Modern password hashing for your software and your servers";
     homepage = "https://github.com/pyca/bcrypt/";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

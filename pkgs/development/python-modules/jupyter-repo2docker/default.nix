@@ -10,32 +10,33 @@
   jinja2,
   pkgs-docker,
   python-json-logger,
-  pythonOlder,
   requests,
   ruamel-yaml,
   semver,
   setuptools,
+  setuptools-scm,
   toml,
   traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2025.08.0";
+  version = "2025.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
     tag = version;
-    hash = "sha256-vqLZbqshEl3xC5hcE4OkWfZpPSlSfv70oygEYPFqyFE=";
+    hash = "sha256-9ZRew9DspRENxhqpWFTSdP8KcQQHA4vMMECLikt+nsw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     docker
     entrypoints
@@ -61,11 +62,11 @@ buildPythonPackage rec {
     "repo2docker.contentproviders.base"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn code repositories into Jupyter enabled Docker Images";
     homepage = "https://repo2docker.readthedocs.io/";
     changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.tag}/docs/source/changelog.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -21,7 +21,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "endeavour";
   version = "43.0";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Endeavour";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1mCTw+nJ1w7RdCXfPCO31t1aYOq9Bki3EaXsHiiveD0=";
   };
 
@@ -57,16 +57,24 @@ stdenv.mkDerivation rec {
     libical
   ];
 
+  postPatch = ''
+    # Switch to girepository-2.0
+    # libpeas1 will be dropped in https://gitlab.gnome.org/World/Endeavour/-/merge_requests/153
+    substituteInPlace src/gui/gtd-application.c \
+      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
+      --replace-fail "g_irepository_get_option_group" "gi_repository_get_option_group"
+  '';
+
   passthru = {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Personal task manager for GNOME";
     mainProgram = "endeavour";
     homepage = "https://gitlab.gnome.org/World/Endeavour";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

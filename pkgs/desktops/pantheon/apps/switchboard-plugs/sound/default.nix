@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "switchboard-plug-sound";
-    rev = version;
-    sha256 = "sha256-GLeQxdrrjz4MurN8Ia5Q68y6gHuyxiMVNneft1AXKvs=";
+    repo = "settings-sound";
+    tag = version;
+    hash = "sha256-eemNFGTh/QQJst04t+fzyDkowpAVRQpMS8EFUiLIMok=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Sound Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-sound";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    homepage = "https://github.com/elementary/settings-sound";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

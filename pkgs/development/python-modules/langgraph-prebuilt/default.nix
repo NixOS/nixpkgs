@@ -14,6 +14,7 @@
   # tests
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
+  langgraph-sdk,
   postgresql,
   postgresqlTestHook,
   psycopg,
@@ -29,25 +30,26 @@
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-prebuilt";
-  version = "0.6.4";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "prebuilt==${version}";
-    hash = "sha256-9jl16cKp3E7j79PXrr/3splrcJtfQQN7yFJ5sfa6c+I=";
+    tag = "prebuilt==${finalAttrs.version}";
+    hash = "sha256-B9ntvj6qoKd63W/cPkevtfHbv8XUxmkaWupxURA8C68=";
   };
 
-  sourceRoot = "${src.name}/libs/prebuilt";
+  sourceRoot = "${finalAttrs.src.name}/libs/prebuilt";
 
   build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   skipPythonImportsCheck = true; # This will be packaged with langgraph
@@ -72,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
+    export PYTHONPATH=${finalAttrs.src}/libs/langgraph:$PYTHONPATH
   '';
 
   pytestFlags = [
@@ -100,8 +102,8 @@ buildPythonPackage rec {
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

@@ -20,14 +20,14 @@
   enableAlsa ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jack-example-tools";
   version = "4";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack-example-tools";
-    rev = "tags/${final.version}";
+    rev = "tags/${finalAttrs.version}";
     hash = "sha256-5jmynNxwNVLxEZ1MaqQUG6kRwipDkjhrdDCbZHtmAHk=";
   };
 
@@ -61,11 +61,11 @@ stdenv.mkDerivation (final: {
   # no tests defined, but prepare for some in the future.
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Official examples and tools from the JACK project";
     homepage = "https://jackaudio.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

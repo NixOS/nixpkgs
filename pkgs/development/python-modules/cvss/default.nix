@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonschema,
   unittestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cvss";
   version = "3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
@@ -35,12 +32,12 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for CVSS2/3/4";
     homepage = "https://github.com/RedHatProductSecurity/cvss";
     changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/${src.tag}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cvss_calculator";
   };
 }

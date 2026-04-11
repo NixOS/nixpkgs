@@ -5,15 +5,15 @@
   bison,
   lib,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sc";
-  version = "2024-08-15";
+  version = "7.16_1.1.4";
 
   src = fetchFromGitHub {
     repo = "sc";
     owner = "n-t-roff";
-    rev = "e029bc0fb5fa29da1fd23b04fa2a97039a96d2ba";
-    hash = "sha256-JQY+ixHL+TpP4YRpgB9GP4jO5+PBMS/v5Ad3Ux0+yuQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-qC7UQQqprT0Td7TCCe7iB9qJIBp47GW3aBAon27Katg=";
   };
 
   buildInputs = [ ncurses ];
@@ -42,6 +42,7 @@ stdenv.mkDerivation {
 
     homepage = "https://github.com/n-t-roff/sc";
     license = lib.licenses.unlicense;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.claes ];
   };
-}
+})

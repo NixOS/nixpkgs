@@ -4,12 +4,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  hypothesis,
+  hypothesis_6_136,
+  mypy,
   poetry-core,
   pytest-aio,
-  pytest-subtests,
+  pytest-mypy,
+  pytest-mypy-plugins,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   trio,
   typing-extensions,
@@ -20,8 +21,6 @@ buildPythonPackage rec {
   version = "0.26.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
@@ -31,8 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i setup.cfg \
-      -e '/--cov.*/d' \
-      -e '/--mypy.*/d'
+      -e '/--cov.*/d'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -42,27 +40,26 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     httpx
-    hypothesis
+    # https://github.com/dry-python/returns/issues/2224
+    hypothesis_6_136
+    mypy
     pytestCheckHook
     pytest-aio
-    pytest-subtests
+    pytest-mypy
+    pytest-mypy-plugins
     setuptools
     trio
   ];
-
-  preCheck = ''
-    rm -rf returns/contrib/mypy
-  '';
 
   pythonImportsCheck = [ "returns" ];
 
   disabledTestPaths = [ "typesafety" ];
 
-  meta = with lib; {
+  meta = {
     description = "Make your functions return something meaningful, typed, and safe";
     homepage = "https://github.com/dry-python/returns";
     changelog = "https://github.com/dry-python/returns/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jessemoore ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jessemoore ];
   };
 }

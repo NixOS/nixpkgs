@@ -1,21 +1,22 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   gcc-arm-embedded,
   python3Packages,
+  qttools,
+  udevCheckHook,
+  wrapQtAppsHook,
   qtbase,
   qtmultimedia,
-  qttools,
   SDL,
   gtest,
   dfu-util,
   avrdude,
-  udevCheckHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "opentx";
   version = "2.3.15";
 
@@ -36,6 +37,7 @@ mkDerivation rec {
     python3Packages.pillow
     qttools
     udevCheckHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -68,7 +70,7 @@ mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "OpenTX Companion transmitter support software";
     longDescription = ''
       OpenTX Companion is used for many different tasks like loading OpenTX
@@ -77,14 +79,13 @@ mkDerivation rec {
     '';
     mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion version));
     homepage = "https://www.open-tx.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
-      elitak
+    maintainers = with lib.maintainers; [
       lopsided98
     ];
   };

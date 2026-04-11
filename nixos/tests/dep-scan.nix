@@ -7,10 +7,12 @@
 {
   name = "owasp dep-scan test";
 
-  meta.maintainers = with lib; [
-    maintainers.ethancedwards8
-    teams.ngi
-  ];
+  meta.maintainers =
+    with lib;
+    [
+      maintainers.ethancedwards8
+    ]
+    ++ teams.ngi.members;
 
   nodes.machine = {
     environment.systemPackages = with pkgs; [
@@ -20,12 +22,7 @@
 
     # code repo to scan for vulnerabilites, could be anything
     # I just happened to pick the source of the package
-    environment.etc."dep-scan-source".source = pkgs.fetchFromGitHub {
-      owner = "owasp-dep-scan";
-      repo = "dep-scan";
-      tag = "v6.0.0b3";
-      hash = "sha256-GdrFsECcBZ2J47ojM33flqOtrY3avchGpsZk6pt8Aks=";
-    };
+    environment.etc."dep-scan-source".source = pkgs.dep-scan.src;
 
     # we need to download the database before the vm starts, otherwise
     # the program will try to download them at runtime.

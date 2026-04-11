@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "alertmanager-ntfy";
-  version = "1.0.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "alexbakker";
     repo = "alertmanager-ntfy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aVK8HCRXRprNoBhILLN7F/Fb3RePPzBW4vBMnQr9zRU=";
+    hash = "sha256-+gNpmSrvyNSgCgZrC9L1/a5zDmbVJInqSjfsE0d8Imo=";
   };
 
-  vendorHash = "sha256-CpVGLM6ZtfYODhP6gzWGcnpEuDvKRiMWzoPNm2qtML4=";
+  vendorHash = "sha256-++jIi53fckPkU4ZVgR2DkSfHZlA39w5jx4TfAlcsKIM=";
 
   doInstallCheck = true;
   installCheckPhase = ''

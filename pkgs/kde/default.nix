@@ -37,8 +37,6 @@ let
           inherit (v) version;
         }
       ) allUrls;
-
-      debugAlias = set: lib.dontRecurseIntoAttrs (lib.filterAttrs (k: v: !v.meta.broken) set);
     in
     (
       qt6Packages
@@ -46,12 +44,13 @@ let
       // gear
       // plasma
       // {
-        inherit sources;
-
         # Aliases to simplify test-building entire package sets
-        frameworks = debugAlias frameworks;
-        gear = debugAlias gear;
-        plasma = debugAlias plasma;
+        inherit
+          sources
+          frameworks
+          gear
+          plasma
+          ;
 
         mkKdeDerivation = self.callPackage (import ./lib/mk-kde-derivation.nix self) { };
 

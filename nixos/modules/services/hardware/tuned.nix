@@ -9,11 +9,53 @@ let
   cfg = config.services.tuned;
 
   moduleFromName = name: lib.getAttrFromPath (lib.splitString "." name) config;
-
-  settingsFormat = pkgs.formats.iniWithGlobalSection { };
-  profileFormat = pkgs.formats.ini { };
   ppdSettingsFormat = pkgs.formats.ini { };
+  profileFormat = pkgs.formats.ini { };
+  recommendFormat = pkgs.formats.ini { };
+  settingsFormat = pkgs.formats.iniWithGlobalSection { };
 
+  ppdSettingsSubmodule = {
+    freeformType = ppdSettingsFormat.type;
+
+    options = {
+      main = lib.mkOption {
+        type = lib.types.submodule {
+          options = {
+            default = lib.mkOption {
+              type = lib.types.str;
+              default = "balanced";
+              description = "Default PPD profile.";
+              example = "performance";
+            };
+
+            battery_detection = lib.mkEnableOption "battery detection" // {
+              default = true;
+            };
+          };
+        };
+        default = { };
+        description = "Core configuration for power-profiles-daemon support.";
+      };
+
+      profiles = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = {
+          power-saver = "powersave";
+          balanced = "balanced";
+          performance = "throughput-performance";
+        };
+        description = "Map of PPD profiles to native TuneD profiles.";
+      };
+
+      battery = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = {
+          balanced = "balanced-battery";
+        };
+        description = "Map of PPD battery states to TuneD profiles.";
+      };
+    };
+  };
   settingsSubmodule = {
     freeformType = settingsFormat.type;
 
@@ -61,66 +103,23 @@ let
       };
     };
   };
-
-  ppdSettingsSubmodule = {
-    freeformType = ppdSettingsFormat.type;
-
-    options = {
-      main = lib.mkOption {
-        type = lib.types.submodule {
-          options = {
-            default = lib.mkOption {
-              type = lib.types.str;
-              default = "balanced";
-              description = "Default PPD profile.";
-              example = "performance";
-            };
-
-            battery_detection = lib.mkEnableOption "battery detection" // {
-              default = true;
-            };
-          };
-        };
-        default = { };
-        description = "Core configuration for power-profiles-daemon support.";
-      };
-
-      profiles = lib.mkOption {
-        type = lib.types.attrsOf lib.types.str;
-        default = {
-          power-saver = "powersave";
-          balanced = "balanced";
-          performance = "throughput-performance";
-        };
-        description = "Map of PPD profiles to native TuneD profiles.";
-      };
-
-      battery = lib.mkOption {
-        type = lib.types.attrsOf lib.types.str;
-        default = {
-          balanced = "balanced-battery";
-        };
-        description = "Map of PPD battery states to TuneD profiles.";
-      };
-    };
-  };
 in
-
 {
   options.services.tuned = {
     enable = lib.mkEnableOption "TuneD";
 
     package = lib.mkPackageOption pkgs "tuned" { };
 
-    settings = lib.mkOption {
-      type = lib.types.submodule settingsSubmodule;
+    ppdSettings = lib.mkOption {
+      type = lib.types.submodule ppdSettingsSubmodule;
       default = { };
       description = ''
-        Configuration for TuneD.
-        See {manpage}`tuned-main.conf(5)`.
+        Settings for TuneD's power-profiles-daemon compatibility service.
       '';
     };
-
+    ppdSupport = lib.mkEnableOption "translation of power-profiles-daemon API calls to TuneD" // {
+      default = true;
+    };
     profiles = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule {
@@ -130,7 +129,7 @@ in
       default = { };
       description = ''
         Profiles for TuneD.
-        See {manpage}`tuned.conf(5)`.
+        See {manpage}`tuned.conf(5)` for details.
       '';
       example = {
         my-cool-profile = {
@@ -146,16 +145,44 @@ in
         };
       };
     };
-
-    ppdSupport = lib.mkEnableOption "translation of power-profiles-daemon API calls to TuneD" // {
-      default = true;
-    };
-
-    ppdSettings = lib.mkOption {
-      type = lib.types.submodule ppdSettingsSubmodule;
+    recommend = lib.mkOption {
+      type = recommendFormat.type;
       default = { };
       description = ''
-        Settings for TuneD's power-profiles-daemon compatibility service.
+        TuneD rules for `recommend_profile`, written to
+        `/etc/tuned/recommend.conf`.
+
+        At startup, the daemon evaluates the file in alphabetical order.
+        The first matching entry is applied. Empty profile rules always match.
+
+        If `services.tuned.ppdSupport` is `true`, settings in
+        `services.tuned.ppdSettings` take precedence over both the default
+        behaviour and `services.tuned.recommend`. For example:
+        `services.tuned.ppdSettings.main.default = "performance";` ensures
+        the corresponding PPD profile is applied regardless of
+        `services.tuned.recommend` setting.
+
+        If `ppdSupport` is `false`, only `services.tuned.recommend` is used;
+        if `recommend` is empty, TuneD's default behaviour applies.
+
+        See {manpage}`tuned-main.conf(5)` for more details.
+      '';
+      example = lib.literalExpression ''
+        # Enable `virtual-guest` profile for VM guests
+        virtual-guest = {
+          virt = ".+";
+        };
+
+        # Default to the `desktop` profile for all other systems
+        desktop = { };
+      '';
+    };
+    settings = lib.mkOption {
+      type = lib.types.submodule settingsSubmodule;
+      default = { };
+      description = ''
+        Configuration for TuneD.
+        See {manpage}`tuned-main.conf(5)` for details.
       '';
     };
   };
@@ -186,6 +213,7 @@ in
           message = "`services.tuned` conflicts with `${name}`.";
         })
         [
+          "hardware.system76.power-daemon"
           "services.auto-cpufreq"
           "services.power-profiles-daemon"
           "services.tlp"
@@ -198,11 +226,14 @@ in
             sections = { };
             globalSection = cfg.settings;
           };
-
-          "tuned/ppd.conf".source = lib.mkIf cfg.ppdSupport (
-            ppdSettingsFormat.generate "ppd.conf" cfg.ppdSettings
-          );
         }
+        (lib.mkIf cfg.ppdSupport {
+          "tuned/ppd.conf".source = ppdSettingsFormat.generate "ppd.conf" cfg.ppdSettings;
+        })
+
+        (lib.mkIf (cfg.settings.recommend_command && cfg.recommend != { }) {
+          "tuned/recommend.conf".source = recommendFormat.generate "recommend.conf" cfg.recommend;
+        })
 
         (lib.mapAttrs' (
           name: value:

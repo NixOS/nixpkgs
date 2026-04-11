@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "1.18.0";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
     tag = version;
-    hash = "sha256-g2X9fBUS5wbQJbP29V5pWwrQ1+P/Y8euK4Rv7C6r3WM=";
+    hash = "sha256-+bD/kKOI19zptPhO6vB2Q0bQWjkBr+vgqBgAyaoSLJc=";
   };
 
   build-system = [
@@ -52,7 +52,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "yamlfix" ];
 

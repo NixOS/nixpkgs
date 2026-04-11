@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clipman";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "clipman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fAiXivLXpxezvMUKv0HfDvzSN60G4RFfgi6/fO0C1p8=";
   };
 
@@ -38,12 +38,12 @@ buildGoModule rec {
     installManPage docs/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/chmouel/clipman";
     description = "Simple clipboard manager for Wayland";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.linux;
     mainProgram = "clipman";
   };
-}
+})

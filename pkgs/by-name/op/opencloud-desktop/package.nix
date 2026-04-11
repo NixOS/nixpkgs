@@ -12,19 +12,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencloud-desktop";
-  version = "2.0.0";
+  version = "3.0.3";
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NM9SspeMXu1q3tfpcFk4OuLapu/clbotJLu2u4nmAlY=";
+    hash = "sha256-b6KaWrthL2z/Ep+O7wFIXxjd+H8+sBqZz8nmoQijTQU=";
   };
 
   buildInputs = [
-    kdePackages.extra-cmake-modules
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qttools
+    kdePackages.extra-cmake-modules
     kdePackages.qtkeychain
     libre-graph-api-cpp-qt-client
     kdsingleapplication

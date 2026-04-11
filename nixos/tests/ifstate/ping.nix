@@ -7,7 +7,7 @@ let
     networking.ifstate = {
       enable = true;
       settings.interfaces.eth1 = {
-        addresses = [ "2001:0db8::${builtins.toString id}/64" ];
+        addresses = [ "2001:0db8::${toString id}/64" ];
         link = {
           state = "up";
           kind = "physical";

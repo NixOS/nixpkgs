@@ -5,7 +5,6 @@
   mock,
   pykerberos,
   pytestCheckHook,
-  pythonOlder,
   requests-credssp,
   requests-ntlm,
   requests,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pywinrm";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,18 +39,18 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "winrm" ];
 
   enabledTestPaths = [ "winrm/tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Windows Remote Management";
     homepage = "https://github.com/diyan/pywinrm";
     changelog = "https://github.com/diyan/pywinrm/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       elasticdog
       kamadorueda
     ];

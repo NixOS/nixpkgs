@@ -20,7 +20,14 @@
   nss,
   nspr,
   libdrm,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   libxkbcommon,
   libxshmfence,
   pango,
@@ -93,16 +100,16 @@ let
             nss
             nspr
             libdrm
-            xorg.libX11
-            xorg.libxcb
-            xorg.libXcomposite
-            xorg.libXdamage
-            xorg.libXext
-            xorg.libXfixes
-            xorg.libXrandr
-            xorg.libxshmfence
+            libx11
+            libxcb
+            libxcomposite
+            libxdamage
+            libxext
+            libxfixes
+            libxrandr
+            libxshmfence
             libxkbcommon
-            xorg.libxkbfile
+            libxkbfile
             pango
             (lib.getLib stdenv.cc.cc)
             systemd

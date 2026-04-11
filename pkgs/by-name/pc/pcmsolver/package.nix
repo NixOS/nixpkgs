@@ -11,14 +11,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcmsolver";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "PCMSolver";
     repo = "pcmsolver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Required for build with gcc-14
-  env.NIX_CFLAGS_COMPILE = "-std=c++14";
+  env.NIX_CFLAGS_COMPILE = "-std=c++14 -Wno-template-body";
 
   cmakeFlags = [
     "-DENABLE_OPENMP=ON"
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
   # Requires files, that are not installed.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "API for the Polarizable Continuum Model";
     mainProgram = "run_pcm";
     homepage = "https://pcmsolver.readthedocs.io/en/stable/";
-    license = licenses.lgpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

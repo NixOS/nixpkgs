@@ -9,12 +9,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "applgrid";
   version = "1.6.27";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/applgrid/${pname}-${version}.tgz";
+    url = "https://www.hepforge.org/archive/applgrid/applgrid-${finalAttrs.version}.tgz";
     hash = "sha256-h+ZNGj33FIwg4fOCyfGJrUKM2vDDQl76JcLhtboAOtc=";
   };
 
@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
   ''
   + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile.in \
-      --replace-fail "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
+      --replace-fail "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib" \
+      --replace-fail 'libfAPPLgrid_la_LIBADD =' 'libfAPPLgrid_la_LIBADD = $(FRTLLIB)' \
+      --replace-fail '$(CXXLINK) -rpath $(libdir) $(libfAPPLgrid_la_OBJECTS) $(libfAPPLgrid_la_LIBADD) $(LIBS)' \
+                     '$(CXXLINK) -rpath $(libdir) $(libfAPPLgrid_la_OBJECTS) $(libfAPPLgrid_la_LIBADD) $(LIBS) -Wl,-undefined,dynamic_lookup'
   '');
 
   enableParallelBuilding = false; # broken
@@ -50,11 +53,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "http://applgrid.hepforge.org";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

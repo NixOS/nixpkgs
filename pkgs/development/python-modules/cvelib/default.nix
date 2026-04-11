@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonschema,
   pytestCheckHook,
-  pythonOlder,
   requests,
   hatchling,
   testers,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "cvelib";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
@@ -40,12 +37,12 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = cve; };
 
-  meta = with lib; {
+  meta = {
     description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
     changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
     mainProgram = "cve";
   };
 }

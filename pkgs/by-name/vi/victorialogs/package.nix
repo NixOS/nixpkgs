@@ -10,16 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.36.1";
+  version = "1.49.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TZhgZ8x1ESXrNMU6Sa4cQMurTZ+obD/JqqIJFJ18KOA=";
+    hash = "sha256-7qpI9EjHh5XddXXx4QuGt+h5Rwcj6Me+mpZDbnCGbio=";
   };
 
   vendorHash = null;
+  env.CGO_ENABLED = 0;
 
   subPackages =
     lib.optionals withServer [
@@ -33,12 +34,9 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withVlAgent [ "app/vlagent" ];
 
   postPatch = ''
-    # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.2" "go ${finalAttrs.passthru.go.version}"
-
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+    # Relax go version to major.minor
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+    sed -i -E 's/^(## explicit; go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
   '';
 
   ldflags = [
@@ -50,11 +48,7 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests)
-        victorialogs
-        ;
-    };
+    tests = lib.recurseIntoAttrs nixosTests.victorialogs;
     updateScript = nix-update-script { };
   };
 

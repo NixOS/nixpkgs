@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   libGLU,
-  libX11,
+  libx11,
   pkg-config,
   stdenv,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGLU
-    libX11
+    libx11
     SDL2
   ];
 
@@ -56,5 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "aranym";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    # never successfully built on Hydra for darwin or aarch64 linux
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 })

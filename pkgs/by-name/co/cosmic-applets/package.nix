@@ -20,17 +20,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-applets";
-  version = "1.0.0-beta.4";
+  version = "1.0.8";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applets";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-hBqsFiH2zKwGN9tWEf4iDoVcwssj7YN+7+2ooVNKszs=";
+    hash = "sha256-x2FHzgbxxHJEYlCK0bi5j7WdAqAlcocLYW20y2ionBc=";
   };
 
-  cargoHash = "sha256-HLbcTDwS5IvolEMb0bZr4CPjtEjZI8G+AggXifIDiKM=";
+  cargoPatches = [
+    # The lockfile references two different revisions of the same internal repository cosmic-settings,
+    # which likely is unintentional and currently causing issues with fetchCargoVendor.
+    # Upstream already resolved this because of a general dependency update, so this can be removed on the
+    # next update.
+    ./dedup-cosmic-settings.patch
+  ];
+
+  cargoHash = "sha256-R9d7slLid3x7NYXkMfcRRa4zY8/RxW+QLMZGsvHdfCw=";
 
   nativeBuildInputs = [
     just
@@ -77,10 +85,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

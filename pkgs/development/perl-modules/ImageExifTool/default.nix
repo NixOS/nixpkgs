@@ -3,31 +3,34 @@
   fetchFromGitHub,
   gitUpdater,
   lib,
-  shortenPerlShebang,
-  stdenv,
   versionCheckHook,
+  ArchiveZip,
+  CompressRawLzma,
+  IOCompress,
+  IOCompressBrotli,
 }:
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "13.39";
+  version = "13.52";
 
   src = fetchFromGitHub {
     owner = "exiftool";
     repo = "exiftool";
     tag = version;
-    hash = "sha256-GPm3HOt7fNMbXRrV5V+ykJAfhww1O6NrD0l/7hA2i28=";
+    hash = "sha256-vsIktUk93fA8lqmphl2xk0Hqgh7VJ08LCP98NnD2o/Q=";
   };
-
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   postPatch = ''
     patchShebangs exiftool
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/exiftool
-  '';
+  propagatedBuildInputs = [
+    ArchiveZip
+    CompressRawLzma
+    IOCompress
+    IOCompressBrotli
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -57,7 +60,6 @@ buildPerlPackage rec {
       artistic2
     ];
     maintainers = with lib.maintainers; [
-      kiloreux
       anthonyroussel
     ];
     mainProgram = "exiftool";

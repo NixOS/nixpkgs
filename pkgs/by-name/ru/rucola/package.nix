@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rucola";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Linus-Mussmaecher";
     repo = "rucola";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vBY6tkzLgZuSU5AqH3uzDwjPl/ayWY0S8uRvlgE/Wmw=";
   };
 
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal-based markdown note manager";
     homepage = "https://github.com/Linus-Mussmaecher/rucola";
-    changelog = "https://github.com/Linus-Mussmaecher/rucola/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Linus-Mussmaecher/rucola/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "rucola";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

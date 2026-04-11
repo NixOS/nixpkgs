@@ -15,14 +15,14 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaru";
   version = "25.10.3";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3cSVPObfmr62S6yTD2c8AO3s7lxb9KFVuYSydTIJ1jE=";
   };
 
@@ -48,16 +48,16 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with lib; {
+  meta = {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = "https://github.com/ubuntu/yaru";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3Plus
       lgpl21Only
       lgpl3Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ moni ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

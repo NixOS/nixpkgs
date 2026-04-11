@@ -5,22 +5,19 @@
   httpx,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
     tag = "v${version}";
-    hash = "sha256-ITgha0gZxGPCE+7HVQyDNiPI5uAYZo9Rz8fZVgCYgeM=";
+    hash = "sha256-ta6kS+MiSa2DZx18EQr7hvWYrK55j48hSBACtcklCpI=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycfmodel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Model for Cloud Formation scripts";
     homepage = "https://github.com/Skyscanner/pycfmodel";
     changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

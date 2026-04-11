@@ -9,14 +9,14 @@
   rare-regex,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rare";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "zix99";
     repo = "rare";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-tzAbt9THSTYDvooU7yNQJhJaFM1bcKCabDNtiMpux3Q=";
   };
 
@@ -28,9 +28,13 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.version=${version}"
-    "-X=main.buildSha=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.buildSha=${finalAttrs.src.tag}"
+  ];
+
+  # Skip tests try /dev.
+  checkFlags = [
+    "-skip=TestNoMountTraverseWithSymlink"
   ];
 
   tags = lib.optionals withPcre2 [
@@ -43,11 +47,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast text scanner/regex extractor and realtime summarizer";
     homepage = "https://rare.zdyn.net";
-    changelog = "https://github.com/zix99/rare/releases/tag/${src.rev}";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
+    changelog = "https://github.com/zix99/rare/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "rare";
   };
-}
+})

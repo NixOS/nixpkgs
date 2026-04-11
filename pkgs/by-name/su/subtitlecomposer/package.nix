@@ -9,7 +9,7 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subtitlecomposer";
   version = "0.8.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zGbI960NerlOEUvhOLm+lEJdbhj8VFUfm8pkOYGRcGw=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sonnet
   ]);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/subtitlecomposer";
     description = "Open source text-based subtitle editor";
     longDescription = ''
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       Subtitle Workshop for every platform supported by Plasma Frameworks.
     '';
     changelog = "https://invent.kde.org/multimedia/subtitlecomposer/-/blob/master/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kugland ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kugland ];
     mainProgram = "subtitlecomposer";
-    platforms = with platforms; linux ++ freebsd ++ windows;
+    platforms = with lib.platforms; linux ++ freebsd ++ windows;
   };
-}
+})

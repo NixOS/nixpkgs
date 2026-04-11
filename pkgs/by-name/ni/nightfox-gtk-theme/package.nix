@@ -35,14 +35,19 @@ let
     "yellow"
     "all"
   ];
-  tweakVariantList = [
-    "nord"
-    "carbon"
-    "black"
-    "float"
-    "outline"
-    "macos"
-  ];
+  tweakVariantList =
+    map (scheme: scheme + "fox") [
+      "carbon"
+      "dusk"
+      "nord"
+      "tera"
+    ]
+    ++ [
+      "black"
+      "float"
+      "outline"
+      "macos"
+    ];
   iconVariantList = [
     "Duskfox"
     "Duskfox-Alt"
@@ -115,6 +120,6 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ d3vil0p3r ];
+      maintainers = [ ];
     };
   }

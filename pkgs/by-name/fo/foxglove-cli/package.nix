@@ -11,16 +11,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "foxglove-cli";
-  version = "1.0.27";
+  version = "1.0.31";
 
   src = fetchFromGitHub {
     owner = "foxglove";
     repo = "foxglove-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c1Kpy5lT1DCyCq4qcmv+crGgNJ3WSP8TO94NgixY2fQ=";
+    hash = "sha256-BBvkvh1OZ+HJHJzSxCf8aCQklpZ536bkLNVlbKX9obY=";
   };
 
-  vendorHash = "sha256-GjgDRFzW4zqVooHx9WEgWkcnZ+zQsr09OuZxtc9rZD4=";
+  vendorHash = "sha256-nRd9d3LJIrWoO+CQdbWLs249rOYmzfIf4u6x5dBDA2Y=";
 
   env.CGO_ENABLED = 0;
   tags = [ "netgo" ];

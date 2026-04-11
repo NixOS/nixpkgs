@@ -32,6 +32,10 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "textual"
+  ];
+
   dependencies = [
     pyperclip
     textual

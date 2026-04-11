@@ -8,17 +8,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sigstore-models";
-  version = "0.0.5";
+  version = "0.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "sigstore-models";
-    tag = "v${version}";
-    hash = "sha256-zlIZzfgHZPEuiZu3JNX74Cg1jPNaO1HUhMtpxoyOoqk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XuCTS5rADDaCVRZprgEtJVUdGWX3ORij7kXPn87y+m4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+      "uv_build>=0.9.0,<0.10" "uv_build"
+  '';
 
   build-system = [ uv-build ];
 
@@ -34,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pydantic-based, protobuf-free data models for Sigstore";
     homepage = "https://github.com/astral-sh/sigstore-models";
-    changelog = "https://github.com/astral-sh/sigstore-models/releases/tag/${src.tag}";
+    changelog = "https://github.com/astral-sh/sigstore-models/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

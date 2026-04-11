@@ -3,20 +3,20 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typos-lsp";
   # Please update the corresponding VSCode extension too.
   # See pkgs/applications/editors/vscode/extensions/tekumara.typos-vscode/default.nix
-  version = "0.1.45";
+  version = "0.1.51";
 
   src = fetchFromGitHub {
     owner = "tekumara";
     repo = "typos-lsp";
-    tag = "v${version}";
-    hash = "sha256-Yyb2i3ymkxZGmyl3N7hcM2pWuJZRMxcWRNk283wdyy4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-24HeIisU7jOTWB8i06WgMxyWaSnB6twcncMbUVx5P24=";
   };
 
-  cargoHash = "sha256-FMKS49Uz7gwsXoa9VjVlMwUzZWUJ5D2kOYjQro9iNwE=";
+  cargoHash = "sha256-kwSEC7WEEF3MbjGO0/hSRty2LXbUayBgxAyFDQ450dw=";
 
   # fix for compilation on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726
@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Source code spell checker";
     homepage = "https://github.com/tekumara/typos-lsp";
-    changelog = "https://github.com/tekumara/typos-lsp/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tarantoj ];
+    changelog = "https://github.com/tekumara/typos-lsp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tarantoj ];
     mainProgram = "typos-lsp";
   };
-}
+})

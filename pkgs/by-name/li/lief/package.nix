@@ -6,6 +6,8 @@
   cmake,
   ninja,
   nix-update-script,
+  testers,
+  validatePkgConfig,
 }:
 
 let
@@ -35,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
   ];
 
   # Not in propagatedBuildInputs because only the $py output needs it; $out is
@@ -52,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LIEF_PYTHON_API" true)
     (lib.cmakeBool "LIEF_EXAMPLES" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "Python_EXECUTABLE" pyEnv.interpreter)
   ];
 
   postBuild = ''
@@ -68,16 +72,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "lief" ];
 
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+  };
+
+  meta = {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
-    license = [ licenses.asl20 ];
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    license = [ lib.licenses.asl20 ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       lassulus
-      genericnerdyusername
     ];
+    pkgConfigModules = [ "LIEF" ];
   };
 })

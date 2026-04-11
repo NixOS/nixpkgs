@@ -14,14 +14,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqld";
   version = "0.24.32";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "libsql";
-    tag = "libsql-server-v${version}";
+    tag = "libsql-server-v${finalAttrs.version}";
     hash = "sha256-CiTJ9jLANBrncz/O/0k2/UI/qGCTGWLZuLQdncunlX8";
   };
 
@@ -55,17 +55,18 @@ rustPlatform.buildRustPackage rec {
     zstd
   ];
 
-  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
 
-  # error[E0425]: cannot find function `consume_budget` in module `tokio::task`
-  env.RUSTFLAGS = "--cfg tokio_unstable";
+    # error[E0425]: cannot find function `consume_budget` in module `tokio::task`
+    RUSTFLAGS = "--cfg tokio_unstable";
+  };
 
   # requires a complex setup with podman for the end-to-end tests
   doCheck = false;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -78,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "sqld";
   };
-}
+})

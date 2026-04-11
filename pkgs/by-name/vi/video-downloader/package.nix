@@ -16,16 +16,16 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "video-downloader";
-  version = "0.12.28";
+  version = "0.12.31";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Unrud";
     repo = "video-downloader";
-    tag = "v${version}";
-    hash = "sha256-8BEKlg0k4vqgnbG737waKcEqWAnxeL+Vr6bD/1zFVdg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b/CZRw2/hMTKoLXVuqpRuNRmMoouZwr9wXvAysj2xeQ=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fliegendewurst ];
     mainProgram = "video-downloader";
   };
-}
+})

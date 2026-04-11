@@ -18,32 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.17.0";
+  version = "6.19.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-l4HllBCrfeqOn3m7EP8UiOY9EPy7cFA7lEJronqOLew=";
+    hash = "sha256-kzIhPTVIC2RwhqcMMC3oVo3oNFWph3TTXeIWxM4ZEAY=";
   };
 
   patches = [
+    # musl build fix: https://lore.kernel.org/netdev/20260223223435.289652-1-slyich@gmail.com/T/#u
     (fetchurl {
-      name = "musl-endian.patch";
-      url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
-      hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
-    })
-    (fetchurl {
-      name = "musl-basename.patch";
-      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
-      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
-    })
-  ]
-  # Temporarily gated to keep rebuild counts under control.
-  # The proper fix (targeted to staging) is done in https://github.com/NixOS/nixpkgs/pull/451397
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchurl {
-      name = "musl-redefinition.patch";
-      url = "https://lore.kernel.org/netdev/20251012124002.296018-1-yureka@cyberchaos.dev/raw";
-      hash = "sha256-8gSpZb/B5sMd2OilUQqg0FqM9y3GZd5Ch5AXV5wrCZQ=";
+      name = "musl.patch";
+      url = "https://lore.kernel.org/netdev/20260223223435.289652-1-slyich@gmail.com/raw";
+      hash = "sha256-H45PUilF1D+1DxgtxSRBCgH4RQ7+APBfIW4QE9v6gUE=";
     })
   ];
 
@@ -118,14 +105,13 @@ stdenv.mkDerivation rec {
   # needed for nixos-anywhere
   passthru.tests.static = pkgsStatic.iproute2;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
 }

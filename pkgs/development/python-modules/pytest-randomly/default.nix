@@ -4,35 +4,34 @@
   factory-boy,
   faker,
   fetchFromGitHub,
-  importlib-metadata,
+  model-bakery,
   numpy,
+  pytest,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.13.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "4.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pytest-randomly";
     owner = "pytest-dev";
-    rev = version;
-    hash = "sha256-bxbW22Nf/0hfJYSiz3xdrNCzrb7vZwuVvSIrWl0Bkv4=";
+    tag = version;
+    hash = "sha256-UQ1G9o4dsVEEo4y2u1TYYurJPfih7QlbilkwPqi39H0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     factory-boy
     faker
+    model-bakery
     numpy
     pytest-xdist
     pytestCheckHook
@@ -45,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_randomly" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${version}/CHANGELOG.rst";
+  meta = {
+    changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest plugin to randomly order tests and control random.seed";
     homepage = "https://github.com/pytest-dev/pytest-randomly";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

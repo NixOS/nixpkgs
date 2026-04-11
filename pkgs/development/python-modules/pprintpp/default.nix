@@ -4,7 +4,6 @@
   fetchpatch,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pprintpp";
   version = "0.4.0-unstable-2022-05-31";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joaonc";
@@ -37,12 +34,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for pprint that's actually pretty";
     homepage = "https://github.com/wolever/pprintpp";
     changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
     mainProgram = "pypprint";
   };
 }

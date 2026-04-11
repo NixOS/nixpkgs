@@ -11,7 +11,7 @@
   jre,
   gtk3,
   glib,
-  libXtst,
+  libxtst,
 }:
 
 let
@@ -46,8 +46,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "willuhn";
     repo = "jameica";
-    # Releases currently happen on branches named like the version number. Rev of the "2.12.0" branch.
-    rev = "b74b160643b18171d2d185b80b60e82a02a75898";
+    tag = version;
     hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=i";
   };
 
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     glib
-    libXtst
+    libxtst
   ];
 
   dontWrapGApps = true;
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
 
     install -Dm644 releases/${version}/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
-    install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
+    install -Dm644 build/jameica-icon.png $out/share/icons/hicolor/64x64/apps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -124,7 +123,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      flokli
       r3dl3g
     ];
     mainProgram = "jameica";

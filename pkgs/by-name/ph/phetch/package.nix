@@ -9,7 +9,7 @@
   which,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phetch";
   version = "1.2.0";
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "xvxx";
     repo = "phetch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-J+ka7/B37WzVPPE2Krkd/TIiVwuKfI2QYWmT0JHgBGQ=";
   };
 
@@ -56,9 +56,9 @@ rustPlatform.buildRustPackage rec {
       - Secure Gopher support (TLS)
       - Tor support
     '';
-    changelog = "https://github.com/xvxx/phetch/releases/tag/v${version}";
+    changelog = "https://github.com/xvxx/phetch/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/xvxx/phetch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixalbrigtsen ];
   };
-}
+})

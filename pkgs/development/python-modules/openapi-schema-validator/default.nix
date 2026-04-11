@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -20,9 +19,7 @@
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
   version = "0.6.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

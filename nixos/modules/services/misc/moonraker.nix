@@ -176,6 +176,7 @@ in
     ]
     ++ lib.optional (cfg.configDir != null) "d '${cfg.configDir}' - ${cfg.user} ${cfg.group} - -"
     ++ lib.optionals cfg.analysis.enable [
+      "d '${cfg.stateDir}/tools' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tools/klipper_estimator' - ${cfg.user} ${cfg.group} - -"
       "L+ '${cfg.stateDir}/tools/klipper_estimator/klipper_estimator_linux' - - - - ${lib.getExe pkgs.klipper-estimator}"
     ];

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ihm";
-  version = "2.7";
+  version = "2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
     tag = version;
-    hash = "sha256-ZMHVYuNcUjhMKJUr5bCIELO6F0CNi0ESfbsBm5vOiA4=";
+    hash = "sha256-sT2wZRKyW+N0gd6xwOAEXImMnWKWq8h9UX1b3qkDLGQ=";
   };
 
   nativeBuildInputs = [ swig ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ihm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for handling IHM mmCIF and BinaryCIF files";
     homepage = "https://github.com/ihmwg/python-ihm";
     changelog = "https://github.com/ihmwg/python-ihm/blob/${src.tag}/ChangeLog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -5,7 +5,7 @@
   darwin,
   dotnetCorePackages,
   fetchFromGitLab,
-  libX11,
+  libx11,
   libgdiplus,
   moltenvk,
   ffmpeg,
@@ -17,12 +17,12 @@
   vulkan-loader,
   glew,
   libGL,
-  libICE,
-  libSM,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libice,
+  libsm,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   udev,
   SDL2,
   SDL2_mixer,
@@ -59,7 +59,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   runtimeDeps = [
-    libX11
+    libx11
     libgdiplus
     SDL2_mixer
     openal
@@ -70,12 +70,12 @@ buildDotnetModule rec {
 
     # Avalonia UI
     glew
-    libICE
-    libSM
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libice
+    libsm
+    libxcursor
+    libxext
+    libxi
+    libxrandr
     gtk3
 
     # Headless executable
@@ -133,7 +133,7 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ryujinx.app";
     changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
@@ -145,8 +145,8 @@ buildDotnetModule rec {
       2017. The project has since been abandoned on October 1st 2024 and QoL
       updates are now managed under a fork.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       artemist
       willow

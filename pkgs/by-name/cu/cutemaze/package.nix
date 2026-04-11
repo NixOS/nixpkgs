@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutemaze";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchurl {
     url = "https://gottcode.org/cutemaze/cutemaze-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-a+QIOD0TB0AGnqIUgtkMBZuPUCQbXp4NtZ6b0vk/J0c=";
+    hash = "sha256-Fl/fsKB04Kn4HwkNlpcuR3wTJFfn1gGgRGTwRUNDawY=";
   };
 
   nativeBuildInputs = [
@@ -49,10 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cutemaze";
     homepage = "https://gottcode.org/cutemaze/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      dotlambda
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;
   };
 })

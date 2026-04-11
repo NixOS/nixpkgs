@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.17.81";
+  version = "0.17.89";
 in
 buildGoModule {
   pname = "gqlgen";
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "99designs";
     repo = "gqlgen";
     tag = "v${version}";
-    hash = "sha256-JYxI3f+IFWeNkltInV7Slf4AjYCw8gsC1PxsdZ9cukw=";
+    hash = "sha256-CFRAwgA5C2mwBtNq7wTHZupV5131U4YKjr6MfCbpiPA=";
   };
 
-  vendorHash = "sha256-MFQwLWpjgsCkS1GFRbO/egDIWbh3HDAYuqekjGOC+ug=";
+  vendorHash = "sha256-M0g3IrPMJSBkP0w6goUJiOQ8a44HUGX+kGFPymyyrlY=";
 
   subPackages = [ "." ];
 
@@ -39,7 +39,7 @@ buildGoModule {
   meta = {
     homepage = "https://github.com/99designs/gqlgen";
     changelog = "https://github.com/99designs/gqlgen/releases/tag/v${version}";
-    description = "go generate based graphql server library";
+    description = "Go generate based GraphQL server library";
     license = lib.licenses.mit;
     mainProgram = "gqlgen";
     maintainers = with lib.maintainers; [ skowalak ];

@@ -15,19 +15,20 @@
   # tests
   pytest-cov-stub,
   pytest-order,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-run-parallel";
-  version = "0.6.0";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "pytest-run-parallel";
     tag = "v${version}";
-    hash = "sha256-6cfpPJItOmb79KERqpKz/nQlyTrAj4yv+bGM8SXrsXg=";
+    hash = "sha256-/EoIemQvQFgo9Ic+ZcQJk7fC8S+OHOHaHODrsivarhY=";
   };
 
   build-system = [ setuptools ];
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-order
+    pytest-xdist
     pytestCheckHook
   ];
 

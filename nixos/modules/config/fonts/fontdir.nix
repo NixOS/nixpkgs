@@ -12,15 +12,15 @@ let
     {
       runCommand,
       gzip,
-      xorg,
+      font-alias,
+      mkfontscale,
     }:
     runCommand "X11-fonts"
       {
         preferLocalBuild = true;
         nativeBuildInputs = [
           gzip
-          xorg.mkfontscale
-          xorg.mkfontdir
+          mkfontscale
         ];
       }
       ''
@@ -34,7 +34,7 @@ let
         ''}
         mkfontscale
         mkfontdir
-        cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
+        cat $(find ${pkgs.font-alias}/ -name fonts.alias) >fonts.alias
       ''
   ) { };
 

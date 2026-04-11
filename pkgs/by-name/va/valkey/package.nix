@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.1.4";
+  version = "9.0.3";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-obtmiDobMs/POqYH5XjqpzmjVrEC6gUsTc1rREDJ8tw=";
+    hash = "sha256-cic4XBRFcSyttaMK6grzmi/RmrZiLRnYjMwGiU9teMw=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -63,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
@@ -114,12 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     serverBin = "valkey-server";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://valkey.io/";
     description = "High-performance data structure server that primarily serves key/value workloads";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

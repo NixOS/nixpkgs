@@ -23,7 +23,7 @@
   useWrappedDaemon ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-keyring";
   version = "48.0";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/gnome-keyring-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major finalAttrs.version}/gnome-keyring-${finalAttrs.version}.tar.xz";
     hash = "sha256-8gUYySDp6j+cm4tEvoxQ2Nf+7NDdViSWD3e9LKT7650=";
   };
 
@@ -90,15 +90,25 @@ stdenv.mkDerivation rec {
     runHook preCheck
   '';
 
-  # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-  postFixup = lib.optionalString useWrappedDaemon ''
-    files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+  postFixup =
+    # disable OnlyShowIn to allow xdg-autostart in any DE
+    # https://wiki.archlinux.org/title/GNOME/Keyring#Using_gnome-keyring-daemon_outside_desktop_environments_(KDE,_GNOME,_XFCE,_...)
+    ''
+      for f in "$out"/etc/xdg/autostart/*.desktop; do
+        [ -e "$f" ] || continue
+        substituteInPlace "$f" \
+          --replace-fail "OnlyShowIn=" "#OnlyShowIn="
+      done
+    ''
+    # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
+    + lib.optionalString useWrappedDaemon ''
+      files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
 
-    for file in ''${files[*]}; do
-      substituteInPlace $file \
-        --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
-    done
-  '';
+      for file in ''${files[*]}; do
+        substituteInPlace $file \
+          --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+      done
+    '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -109,7 +119,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
-    changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = [
       # Most of the code (some is 2Plus)
       lib.licenses.lgpl21Plus
@@ -119,4 +129,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

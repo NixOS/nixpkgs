@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "astropy-iers-data";
-  version = "0.2025.8.4.0.42.59";
+  version = "0.2026.1.19.0.42.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy-iers-data";
     tag = "v${version}";
-    hash = "sha256-Izqm626PZzjnMNUzPW2x15ER7fn5f9+m2X434vXV/yo=";
+    hash = "sha256-psxVL7375xQuo6mqh+5rvv0xEuZNUOtFco1BrPPWLtg=";
   };
 
   build-system = [
@@ -28,10 +28,11 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/astropy/astropy-iers-data/releases/tag/${src.tag}";
     description = "IERS data maintained by @astrofrog and astropy.utils.iers maintainers";
     homepage = "https://github.com/astropy/astropy-iers-data";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

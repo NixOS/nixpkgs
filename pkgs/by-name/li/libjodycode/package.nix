@@ -1,15 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  fetchpatch,
+  fetchFromCodeberg,
   jdupes,
   fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjodycode";
-  version = "4.1";
+  version = "4.1.2";
 
   outputs = [
     "out"
@@ -17,26 +16,18 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jbruchon";
     repo = "libjodycode";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IBOCl5iFxKwanA28JG4wEzy9tNb6TznKK8RJET8CtSY=";
+    hash = "sha256-HqDNbZwWDebVnu1uj07N/ttwmvvz1qGk8s/Vrc3hJK4=";
   };
-
-  patches = [
-    # Fix linux build failure, drop after 4.1 release.
-    (fetchpatch {
-      name = "linux-build-fix.patch";
-      url = "https://codeberg.org/jbruchon/libjodycode/commit/07294bbfd6c3c4be42c40c9ed81eebb5cd3d83a0.patch";
-      hash = "sha256-qgP8MgGenGebM7n5zpPJ1WTsYUTCZwcWUloUKToc1eo=";
-    })
-  ];
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   env.PREFIX = placeholder "out";
+
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit jdupes;

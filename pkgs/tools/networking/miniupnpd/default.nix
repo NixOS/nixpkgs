@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     "--firewall=${firewall}"
     # allow using various config options
     "--ipv6"
+    "--igd2"
     "--leasefile"
     "--regex"
     "--vendorcfg"
@@ -117,11 +118,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) upnp;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "miniupnpd";
   };
 }

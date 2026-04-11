@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "find-libpython";
-  version = "0.4.1";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ktbarrett";
     repo = "find_libpython";
     tag = "v${version}";
-    hash = "sha256-6VRUkRACtZt8n2VT5MwxZ51/ep+Lt/jmEGyfI1zseJw=";
+    hash = "sha256-g2Gl+usa1mJMvvumynnoy/ckFTSrFA57o339t2j9lWQ=";
   };
 
   build-system = [
@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "find_libpython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Finds the libpython associated with your environment, wherever it may be hiding";
     changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/${src.tag}";
     homepage = "https://github.com/ktbarrett/find_libpython";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jleightcap ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jleightcap ];
     mainProgram = "find_libpython";
   };
 }

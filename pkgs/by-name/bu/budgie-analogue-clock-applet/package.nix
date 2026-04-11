@@ -8,19 +8,20 @@
   vala,
   budgie-desktop,
   gtk3,
-  libpeas,
+  gtk-layer-shell,
+  libpeas2,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-analogue-clock-applet";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "samlane-ma";
     repo = "analogue-clock-applet";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8kqDEzcUqg/TvwpazYQt1oQDVC00fOxFLVsKYMDuV9I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8ZFExgE1aJ8XN4+ugSzI34UjdPHbtbhJ+3xetcLZ6sg=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     budgie-desktop
     gtk3
-    libpeas
+    gtk-layer-shell
+    libpeas2
   ];
 
   passthru = {

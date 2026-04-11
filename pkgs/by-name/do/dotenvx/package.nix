@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "dotenvx";
-  version = "1.51.0";
+  version = "1.59.1";
 
   src = fetchFromGitHub {
     owner = "dotenvx";
     repo = "dotenvx";
     tag = "v${version}";
-    hash = "sha256-vRvcsh4b/QlU+f7646t8O5F8VT/K6zBxbUpos+hh0fw=";
+    hash = "sha256-P1k1cd6DfxGom2VKPKkNqhfs0h89QHQW19ZtePlutJk=";
   };
 
-  npmDepsHash = "sha256-AT9ZE7ip63t6vK/GBVM9JCmir68jrxMN54RoREmjSIk=";
+  npmDepsHash = "sha256-OUggLKCzvgH158HSavEJBKtVs2EsddHDs/1q7H/5pPY=";
 
   dontNpmBuild = true;
 
@@ -30,11 +30,14 @@ buildNpmPackage rec {
   };
 
   meta = {
-    description = "Better dotenv–from the creator of `dotenv";
+    description = "Better dotenv–from the creator of `dotenv`";
     homepage = "https://github.com/dotenvx/dotenvx";
     changelog = "https://github.com/dotenvx/dotenvx/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      kaynetik
+    ];
     mainProgram = "dotenvx";
   };
 }

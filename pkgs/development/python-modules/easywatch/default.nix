@@ -21,10 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "easywatch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dead-simple way to watch a directory";
     homepage = "https://github.com/Ceasar/easywatch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

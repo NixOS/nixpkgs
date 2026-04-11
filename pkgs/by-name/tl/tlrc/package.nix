@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tlrc";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
-    rev = "v${version}";
-    hash = "sha256-Q0vRrCNpbG6LihCi9+uI25PnpFuPfoY2MZmyB/IN/SQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wYoxawZ9kfmWt02ONiN8Evq0TqI1XGDnY7vhQixySHo=";
   };
 
-  cargoHash = "sha256-IrRhj3Tv8rLTJki+Wd4Xfmf74OnYInUytMnYuvre7mw=";
+  cargoHash = "sha256-vrbNSow+DFOfJW1P/SSRm7V7Btzml7amWJ08JUXOZfg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Official tldr client written in Rust";
     homepage = "https://github.com/tldr-pages/tlrc";
-    changelog = "https://github.com/tldr-pages/tlrc/releases/tag/v${version}";
+    changelog = "https://github.com/tldr-pages/tlrc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "tldr";
     maintainers = with lib.maintainers; [ acuteenvy ];
   };
-}
+})

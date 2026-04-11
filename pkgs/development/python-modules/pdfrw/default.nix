@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # tests require the extra download of github.com/pmaupin/static_pdfs
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python library that reads and writes PDFs";
     homepage = "https://github.com/pmaupin/pdfrw";
-    maintainers = with maintainers; [ teto ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
+    license = lib.licenses.mit;
   };
 }

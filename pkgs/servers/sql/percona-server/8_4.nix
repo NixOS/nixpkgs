@@ -50,11 +50,11 @@ assert !(withJemalloc && withTcmalloc);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.4.6-6";
+  version = "8.4.8-8";
 
   src = fetchurl {
     url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-q01k+/TzvT7h52bqn9icc6VMlrUUjMDNKz0UdTyAWjU=";
+    hash = "sha256-jsGaovy3FNBrprC27R7cNofAZmTjqSK21U6wn6TEiBA=";
   };
 
   nativeBuildInputs = [
@@ -211,15 +211,18 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.percona.com/software/mysql-database/percona-server";
     description = ''
       A free, fully compatible, enhanced, open source drop-in replacement for
       MySQL® that provides superior performance, scalability and instrumentation.
       Long-term support release.
     '';
-    license = licenses.gpl2Only;
-    teams = [ teams.flyingcircus ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -29,14 +29,14 @@ let
   inherit (lib) mesonEnable;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suil";
   version = "0.10.20";
 
   src = fetchFromGitLab {
     owner = "lv2";
     repo = "suil";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rP8tq+zmHrAZeuNttakPPfraFXNvnwqbhtt+LtTNV/k=";
   };
 
@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://drobilla.net/software/suil";
     description = "Lightweight C library for loading and wrapping LV2 plugin UIs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

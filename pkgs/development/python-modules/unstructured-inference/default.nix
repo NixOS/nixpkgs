@@ -2,15 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   # runtime dependencies
-  layoutparser,
-  python-multipart,
+  accelerate,
   huggingface-hub,
-  opencv-python,
+  layoutparser,
+  onnx,
   onnxruntime,
+  opencv-python,
+  python-multipart,
+  rapidfuzz,
   transformers,
-  detectron2,
-  paddleocr,
   # check inputs
   pytestCheckHook,
   coverage,
@@ -21,24 +23,34 @@
   pdf2image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unstructured-inference";
-  version = "1.0.5";
-  format = "setuptools";
+  version = "1.1.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
-    tag = version;
-    hash = "sha256-3eyavjGUc3qbKuTorAiefisz4TjiG5v/88lsXYmcFmo=";
+    tag = finalAttrs.version;
+    hash = "sha256-RY+acfyAGP2r8axfifQkTSkbwkrZ0u6KvFwds24IkMc=";
   };
 
-  propagatedBuildInputs = [
-    layoutparser
-    python-multipart
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    # Wants >= 4.13.0.90 but the latest release is 4.13.0
+    "opencv-python"
+  ];
+
+  dependencies = [
+    accelerate
     huggingface-hub
-    opencv-python
+    layoutparser
+    onnx
     onnxruntime
+    opencv-python
+    python-multipart
+    rapidfuzz
     transformers
     # detectron2 # fails to build
     # paddleocr # 3.12 not yet supported
@@ -86,16 +98,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unstructured_inference" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
-    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
-}
+})

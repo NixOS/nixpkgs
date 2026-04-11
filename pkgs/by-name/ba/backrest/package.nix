@@ -7,6 +7,8 @@
   libredirect,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   restic,
   stdenv,
   util-linux,
@@ -30,13 +32,15 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 1;
-      hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
+      pnpm = pnpm_9;
+      fetcherVersion = 3;
+      hash = "sha256-9wzPNZxLE0l/AJ8SyE0SkhkBImiibhqJgsG3UrGj3aA=";
     };
 
     buildPhase = ''
@@ -93,6 +97,7 @@ buildGoModule {
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBackup" # relies on ionice
         "TestCancelBackup"
+        "TestFirstRun" # e2e test requires networking
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

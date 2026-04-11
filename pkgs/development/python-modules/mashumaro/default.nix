@@ -8,10 +8,8 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
-  tomli,
   tomli-w,
   typing-extensions,
 }:
@@ -36,7 +34,7 @@ buildPythonPackage rec {
     orjson = [ orjson ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
-    toml = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    toml = [ tomli-w ];
   };
 
   nativeCheckInputs = [
@@ -45,7 +43,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "mashumaro" ];
 
@@ -54,6 +52,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/Fatal1ty/mashumaro";
     changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tjni ];
   };
 }

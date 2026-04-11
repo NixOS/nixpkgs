@@ -42,6 +42,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  makeFlags = lib.optional stdenv.hostPlatform.isPE "LDFLAGS=-no-undefined";
+
   meta = {
     homepage = "https://libisl.sourceforge.io/";
     license = lib.licenses.lgpl21;

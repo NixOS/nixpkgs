@@ -8,13 +8,13 @@
 }:
 let
   pname = "scrutiny";
-  version = "0.8.1";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
     tag = "v${version}";
-    hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
+    hash = "sha256-0NgAdgtlsAetXfFqJdYpvzEXL4Ibh4yzAjOaOFoMvrs=";
   };
 
   frontend = buildNpmPackage {
@@ -22,7 +22,7 @@ let
     pname = "${pname}-webapp";
     src = "${src}/webapp/frontend";
 
-    npmDepsHash = "sha256-M8P41LPg7oJ/C9abDuNM5Mn+OO0zK56CKi2BwLxv8oQ=";
+    npmDepsHash = "sha256-EgIM3iu/dGQhzanWjjBFmLHU3EOy2riScXCDSwAvAZc=";
 
     buildPhase = ''
       runHook preBuild
@@ -38,7 +38,7 @@ let
       runHook postInstall
     '';
 
-    passthru.updatescript = nix-update-script { };
+    passthru.updateScript = nix-update-script { };
   };
 in
 buildGoModule rec {
@@ -46,7 +46,7 @@ buildGoModule rec {
 
   subPackages = "webapp/backend/cmd/scrutiny";
 
-  vendorHash = "sha256-SiQw6pq0Fyy8Ia39S/Vgp9Mlfog2drtVn43g+GXiQuI=";
+  vendorHash = "sha256-4qjKGjCvB0ggf6Cda7LfMeqbbBbhGcxB2ZfymUhajq8=";
 
   env.CGO_ENABLED = 0;
 
@@ -60,14 +60,17 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
-  passthru.updatescript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
     homepage = "https://github.com/AnalogJ/scrutiny";
     changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      samasaur
+      svistoi
+    ];
     mainProgram = "scrutiny";
     platforms = lib.platforms.linux;
   };

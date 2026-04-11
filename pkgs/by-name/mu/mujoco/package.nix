@@ -3,8 +3,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  gitMinimal,
   fetchFromGitLab,
   glfw,
+  libGL,
   glm,
   spdlog,
   cereal,
@@ -18,14 +20,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "d38452e1ee03523a208362186fd42248ff2609f6";
-      hash = "sha256-SCQDORhmJmTb0CYm15zjEa7dkwc+lpW2s1d4DsMRovI=";
+      rev = "255c84dadd029fd8ad25c5efb5933e47beaa00c7";
+      hash = "sha256-TJT2Kzc64zI42FAbbGWP3Sshh1dU/D/AtEpgZrrhebg=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "5f7d66929fb66869d96dfcbacf0d8a586b33766d";
-      hash = "sha256-G9jMWq8BxKvRGP4D2/tcogdLwmek4XGYESqepnZIlCw=";
+      rev = "5c55f5d4f45a1b09c5d98aa63a671993ebd42c69";
+      hash = "sha256-CChXn58cqam3d6Q61ZJMr5NFq1Ezc5uywA7FSPhk4GI=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -36,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "4033cfcc1dd45b3cdf7285afd93556f2cfbe9425";
-      hash = "sha256-E1jfbHldIQOwonHvMn0feQiLI9zq3zB8Q9a0ufw1HuY=";
+      rev = "75bcd155c40cb48e647c87c3f29052360255bc9e";
+      hash = "sha256-ZBm3ac6Kt7gOqNip6PeNNMiOF0fwG+7PJYA47KT0ogI=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -75,18 +77,12 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
-    trianglemeshdistance = fetchFromGitHub {
-      owner = "InteractiveComputerGraphics";
-      repo = "TriangleMeshDistance";
-      rev = "2cb643de1436e1ba8e2be49b07ec5491ac604457";
-      hash = "sha256-qG/8QKpOnUpUQJ1nLj+DFoLnUr+9oYkJPqUhwEQD2pc=";
-    };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.3.7";
+  version = "3.6.0";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -94,12 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-qetgQDgXtaDAuAo/PakZJEsevnvZFJB5EYXPMWeaEqo=";
+    hash = "sha256-Gxr8AH9grTjrMTHHOVseLuTC3rNuQEZRWhSvR4HgIc4=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    # git is needed to apply patches to ccd-src and qhull-src (see below)
+    gitMinimal
+  ];
 
   buildInputs = [
     glm
@@ -108,6 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
     cereal
     glfw
+  ];
+
+  propagatedBuildInputs = [
+    # consuming MuJoCo through cmake find_package requires libGL
+    libGL
   ];
 
   cmakeFlags = [
@@ -120,17 +125,27 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p build/_deps
     ln -s ${pin.abseil-cpp} build/_deps/abseil-cpp-src
     ln -s ${pin.benchmark} build/_deps/benchmark-src
-    ln -s ${pin.ccd} build/_deps/ccd-src
+  ''
+  # cccd is patched by mujoco's cmake and thus needs to be writable
+  # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L232-L235
+  + ''
+    cp -r ${pin.ccd} build/_deps/ccd-src
+    chmod -R +w build/_deps/ccd-src
+  ''
+  + ''
     ln -s ${pin.eigen3} build/_deps/eigen3-src
     ln -s ${pin.googletest} build/_deps/googletest-src
     ln -s ${pin.lodepng} build/_deps/lodepng-src
-    ln -s ${pin.qhull} build/_deps/qhull-src
+  ''
+  # qhull is patched by mujoco's cmake and thus needs to be writable
+  # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L132-L135
+  + ''
+    cp -r ${pin.qhull} build/_deps/qhull-src
+    chmod -R +w build/_deps/qhull-src
+  ''
+  + ''
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
-  ''
-  # Mujoco's cmake apply a patch on the trianglemeshdistance source code. Requires write permission.
-  + ''
-    cp -r ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 

@@ -2,7 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   hatchling,
+
+  # dependencies
   jsonschema,
   jupyter-events,
   jupyter-server,
@@ -13,15 +17,15 @@
   jupyter-collaboration,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-server-ydoc";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_server_ydoc";
-    inherit version;
-    hash = "sha256-tSa+aEqmIev9lywYpUynxhPGfy0FHPUteiaqCS9zWkY=";
+    inherit (finalAttrs) version;
+    hash = "sha256-NvMRSR6fKJ9GH83yavubcs3w6sPO7QwMvI7EOvyO/rw=";
   };
 
   build-system = [ hatchling ];
@@ -49,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

@@ -42,12 +42,12 @@ stdenv.mkDerivation {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Neofetch but for ip addresses";
     mainProgram = "ipfetch";
     homepage = "https://github.com/trakBan/ipfetch";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
 }

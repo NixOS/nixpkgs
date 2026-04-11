@@ -7,29 +7,29 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-credential-gcr";
-  version = "2.1.30";
+  version = "2.1.32";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
-    tag = "v${version}";
-    hash = "sha256-ZHQLZLw5Qe+60POSxfUZ5nh9punLXHzlXbjrUVR9MKU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xOiLrN8NLKzm7VDDzeq8gbAD6+WXYqcDaSoTpvOOvbw=";
   };
 
   postPatch = ''
     rm -rf ./test
   '';
 
-  vendorHash = "sha256-eQ9ZsJqW+FF3XHrqaDm254/vdLxR1Mw5wt+TkWqtXBg=";
+  vendorHash = "sha256-P8Mhk6jj7TlbP+rcqpYsWy8CIGJMetYAuKylXRBNKIc=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/GoogleCloudPlatform/docker-credential-gcr/v2/config.Version=${version}"
+    "-X github.com/GoogleCloudPlatform/docker-credential-gcr/v2/config.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -50,7 +50,7 @@ buildGoModule rec {
       authenticated requests to GCR's repositories (gcr.io, eu.gcr.io, etc.).
     '';
     homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
-    changelog = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/tag/v${version}";
+    changelog = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       suvash
@@ -58,4 +58,4 @@ buildGoModule rec {
     ];
     mainProgram = "docker-credential-gcr";
   };
-}
+})

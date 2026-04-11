@@ -4,18 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "soco-cli";
-  version = "0.4.80";
+  version = "0.4.83";
   pyproject = true;
-
-  disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "avantrec";
     repo = "soco-cli";
-    rev = "v${version}";
-    hash = "sha256-w4F1N1ULGH7mbxtI8FpZ54ixa9o7N2A9OEiE2FOf73g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sVu6mizqUy9AdwGRciez1wnBPTnUcIRBjkAM+IY3n0E=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -31,15 +29,14 @@ python3.pkgs.buildPythonApplication rec {
   # Tests wants to communicate with hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "soco_cli"
-  ];
+  pythonImportsCheck = [ "soco_cli" ];
 
   meta = {
     description = "Command-line interface to control Sonos sound systems";
     homepage = "https://github.com/avantrec/soco-cli";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/avantrec/soco-cli/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
+    license = lib.licenses.asl20;
     mainProgram = "sonos";
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

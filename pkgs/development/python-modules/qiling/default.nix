@@ -8,7 +8,6 @@
   multiprocess,
   pefile,
   pyelftools,
-  pythonOlder,
   python-fx,
   python-registry,
   pyyaml,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "qiling";
   version = "1.4.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiling" ];
 
-  meta = with lib; {
+  meta = {
     description = "Qiling Advanced Binary Emulation Framework";
     homepage = "https://qiling.io/";
     changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     broken = true;
     maintainers = [ ];
   };

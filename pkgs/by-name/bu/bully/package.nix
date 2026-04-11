@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} ../*.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
     homepage = "https://github.com/kimocoder/bully";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.linux;
     mainProgram = "bully";
   };
 }

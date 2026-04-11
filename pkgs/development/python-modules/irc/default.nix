@@ -17,9 +17,7 @@
 buildPythonPackage rec {
   pname = "irc";
   version = "20.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -44,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "irc" ];
 
-  meta = with lib; {
+  meta = {
     description = "IRC (Internet Relay Chat) protocol library for Python";
     homepage = "https://github.com/jaraco/irc";
     changelog = "https://github.com/jaraco/irc/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -79,12 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webull desktop trading application";
     homepage = "https://www.webull.com/trading-platforms/desktop-app";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fauxmight ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fauxmight ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "webull-desktop";
   };

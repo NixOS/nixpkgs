@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter341,
   fetchFromGitHub,
   webkitgtk_4_1,
   copyDesktopItems,
@@ -8,26 +8,24 @@
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
+  dart,
 }:
 
-let
-  version = "1.5.3";
+flutter341.buildFlutterApplication (finalAttrs: {
+  pname = "venera";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
-    tag = "v${version}";
-    hash = "sha256-yjO7nQ3F+DLudjqXUp0N13lhBZSAKwAeKXRAKxPxDVQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UgQej91SsqyZzJaN3kQDHqJI3686W451wBTeTACXrV8=";
   };
-in
-flutter335.buildFlutterApplication {
-  pname = "venera";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -63,18 +61,29 @@ flutter335.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "venera.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "venera.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };
@@ -87,4 +96,4 @@ flutter335.buildFlutterApplication {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_polyfill" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/pycqa/flake8-polyfill";
     description = "Polyfill package for Flake8 plugins";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

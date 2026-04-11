@@ -7,23 +7,20 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.4.0";
+  version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "pytest-doctestplus";
     tag = "v${version}";
-    hash = "sha256-hKxTniN7BHDdIHqxNGOuvD7Rk5ChSh1Zn6fo6G+Uty4=";
+    hash = "sha256-64I0K0+yYU1omGkVgfxeD9r9s9yHp0ik1HAsEc1NNtA=";
   };
 
   postPatch = ''
@@ -61,10 +58,10 @@ buildPythonPackage rec {
     "test_remote_data_all"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

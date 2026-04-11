@@ -5,6 +5,7 @@
 
   # dependencies
   hass-web-proxy-lib,
+  titlecase,
 
   # tests
   homeassistant,
@@ -18,16 +19,24 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.10.0";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-rhYShAb251LfcrBjarcle041AWVSEi0wqc9/W1SlgUo=";
+    hash = "sha256-fgsYznTqJrEh4niyGfksnflRp1PpljrlzJBvs8gKn54=";
   };
 
-  dependencies = [ hass-web-proxy-lib ];
+  patches = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1070
+    ./service-to-action.patch
+  ];
+
+  dependencies = [
+    hass-web-proxy-lib
+    titlecase
+  ];
 
   nativeCheckInputs = [
     homeassistant
@@ -53,11 +62,11 @@ buildHomeAssistantComponent rec {
     "tests/test_media_source.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";
     homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
     changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
-    maintainers = with maintainers; [ presto8 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ presto8 ];
+    license = lib.licenses.mit;
   };
 }

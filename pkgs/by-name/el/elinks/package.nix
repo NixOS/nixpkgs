@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   ncurses,
-  libX11,
+  libx11,
   bzip2,
   zlib,
   brotli,
@@ -25,26 +25,26 @@
   python ? null,
   enablePerl ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform),
   perl ? null,
-# re-add javascript support when upstream supports modern spidermonkey
+  # re-add javascript support when upstream supports modern spidermonkey
 }:
 
 assert enableGuile -> guile != null;
 assert enablePython -> python != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elinks";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "elinks";
-    rev = "v${version}";
-    hash = "sha256-TTb/v24gIWKiCQCESHo0Pz6rvRtw5anoXK0b35dzfLM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eFH42PCMF3HPvNqcaXOyIM6AAr3RusgxiRlUa2X8B9U=";
   };
 
   buildInputs = [
     ncurses
-    libX11
+    libx11
     bzip2
     zlib
     brotli
@@ -86,14 +86,14 @@ stdenv.mkDerivation rec {
   ++ lib.optional enablePython "--with-python"
   ++ lib.optional enablePerl "--with-perl";
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured text-mode web browser";
     mainProgram = "elinks";
     homepage = "https://github.com/rkd77/elinks";
-    license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       iblech
     ];
   };
-}
+})

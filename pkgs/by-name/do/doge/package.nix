@@ -3,16 +3,16 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doge";
-  version = "3.9.0";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Olivia5k";
     repo = "doge";
-    tag = version;
-    hash = "sha256-aJ1SFehjKiSc7osf5BOB1xjDnrkVXp37PQ5bNpbv1Mk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I/wvwl+I6qclFSGlIIXexyw6ADs9+/MdI4PAb07QwGA=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
       quantenzitrone
     ];
   };
-}
+})

@@ -5,18 +5,18 @@
   lib,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "srgn";
-  version = "0.14.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
-    rev = "srgn-v${version}";
-    hash = "sha256-ZWjpkClhac4VD4b/Veffb5FHGvh+oeTu3ukaOux6MG0=";
+    rev = "srgn-v${finalAttrs.version}";
+    hash = "sha256-K9pHtsPD3Ab0I68y+QjHhzQwYBIQoJ0rc/fRomBDzVg=";
   };
 
-  cargoHash = "sha256-d/wFD0kxWNOsYaY4G5P9iM85dSo0UZGSte5AqOosM2g=";
+  cargoHash = "sha256-jgxA8T7Q7QXw7J53SDHpLEv2mFtgv89uGrbKlxzmhJQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,13 +26,13 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Code surgeon for precise text and code transplantation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ magistau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ magistau ];
     mainProgram = "srgn";
-    homepage = "https://github.com/${src.owner}/${src.repo}/";
-    downloadPage = "https://github.com/${src.owner}/${src.repo}/releases/tag/${src.rev}";
-    changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/";
+    downloadPage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/CHANGELOG.md";
   };
-}
+})

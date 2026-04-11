@@ -4,7 +4,7 @@
   eudev,
   fetchFromGitHub,
   installShellFiles,
-  libdisplay-info_0_2,
+  libdisplay-info,
   libglvnd,
   libinput,
   libxkbcommon,
@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.08";
+  version = "25.11";
 
   src = fetchFromGitHub {
-    owner = "YaLTeR";
+    owner = "niri-wm";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RLD89dfjN0RVO86C/Mot0T7aduCygPGaYbog566F0Qo=";
+    hash = "sha256-FC9eYtSmplgxllCX4/3hJq5J3sXWKLSc7at8ZUxycVw=";
   };
 
   outputs = [
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-lR0emU2sOnlncN00z6DwDIE2ljI+D2xoKqG3rS45xG0=";
+  cargoHash = "sha256-X28M0jyhUtVtMQAYdxIPQF9mJ5a77v8jw1LKaXSjy7E=";
 
   strictDeps = true;
 
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    libdisplay-info_0_2
+    libdisplay-info
     libglvnd # For libEGL
     libinput
     libxkbcommon
@@ -118,13 +118,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Upstream recommends setting the commit hash manually when in a
     # build environment where the Git repository is unavailable.
-    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    # See https://github.com/niri-wm/niri/wiki/Packaging-niri#version-string
     NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
   checkFlags = [ "--skip=::egl" ];
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -134,11 +133,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Scrollable-tiling Wayland compositor";
-    homepage = "https://github.com/YaLTeR/niri";
-    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/niri-wm/niri";
+    changelog = "https://github.com/niri-wm/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      foo-dogsquared
       sodiboo
       getchoo
     ];

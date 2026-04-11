@@ -217,7 +217,7 @@ in
       }
     ]
     ++ lib.mapAttrsToList (mcu: firmware: {
-      assertion = firmware.enable -> firmware.serial != null;
+      assertion = firmware.enableKlipperFlash -> firmware.serial != null;
       message = ''
         Unable to determine the serial connection for services.klipper.firmwares."${mcu}". Please set one of the following:
 

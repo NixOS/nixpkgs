@@ -9,17 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau-lsp";
-  version = "1.55.0";
+  version = "1.64.1";
 
   src = fetchFromGitHub {
     owner = "JohnnyMorganz";
     repo = "luau-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-ZrvPZi3ss83onsinyAl1AlQmV6jFctW8agYO9ieJtno=";
+    hash = "sha256-8vUFPs+8SjeXxtNkLCepv27tLekBunqsrPj/IWONUVA=";
     fetchSubmodules = true;
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -55,10 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/JohnnyMorganz/luau-lsp/releases/tag/${finalAttrs.version}";
     changelog = "https://github.com/JohnnyMorganz/luau-lsp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      anninzy
-      HeitorAugustoLN
-    ];
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "luau-lsp";
     platforms = lib.platforms.all;
     badPlatforms = [

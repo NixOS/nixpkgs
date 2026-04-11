@@ -10,23 +10,23 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2025.1029.1";
+  version = "2026.406.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
-        hash = "sha256-Asqz0jiiHTtLcBzvibNzlaRe0jAop5YU4gmooZf/8gw=";
+        hash = "sha256-cFSTxS6L/JHyuoOTlvov0J6vD8mNE0EhLXQok66+4zk=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Intel.zip";
-        hash = "sha256-2ZAZ3CnYz/6VJxqpDNvx6jGcNV/9oo8Eb5/GkSidiv0=";
+        hash = "sha256-DTQ+2BRK3tu0H4xOwJel2bgs8U5fk2EZSuAYyloXSPU=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
-        hash = "sha256-lx+RN20sPiG++pLS0gW6ixIYw3+g1KGCMrAhgW+yZIw=";
+        hash = "sha256-RKKhf193BYF7dYL1x4gF2+Kl2xHuWZ/WMYBk4M/x8S0=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
@@ -89,6 +89,11 @@ else
       ;
 
     extraPkgs = pkgs: with pkgs; [ icu ];
+
+    # fix OpenGL renderer on nvidia + wayland
+    extraBwrapArgs = [
+      "--ro-bind-try /etc/egl/egl_external_platform.d /etc/egl/egl_external_platform.d"
+    ];
 
     extraInstallCommands =
       let

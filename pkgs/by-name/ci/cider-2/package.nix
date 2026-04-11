@@ -18,11 +18,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cider-2";
-  version = "3.1.1";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "https://repo.cider.sh/apt/pool/main/cider-v${version}-linux-x64.deb";
-    hash = "sha256-2gd/ThI59GFU/lMKFLtwHeRWSqp14jFd8YMrV8Cu/oQ=";
+    hash = "sha256-cYtUVoDSESzElmmvhTPhLBXjiZF6fo3cJaw1QYCtVCg=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +86,8 @@ stdenv.mkDerivation rec {
 
     install -Dm444 $out/share/pixmaps/cider.png \
       $out/share/icons/hicolor/256x256/apps/cider.png
+
+    rm -r $out/share/pixmaps
   '';
 
   passthru.updateScript = ./updater.sh;
@@ -97,7 +99,6 @@ stdenv.mkDerivation rec {
     mainProgram = "cider-2";
     maintainers = with lib.maintainers; [
       amadejkastelic
-      itsvic-dev
       l0r3v
     ];
     platforms = [ "x86_64-linux" ];

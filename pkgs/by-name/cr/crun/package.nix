@@ -6,12 +6,17 @@
   go-md2man,
   pkg-config,
   libcap,
+  libkrun,
+  libkrun-sev,
   libseccomp,
   python3,
-  systemd,
+  systemdMinimal,
   yajl,
   nixosTests,
   criu,
+  versionCheckHook,
+  withLibkrun ? lib.meta.availableOn stdenv.hostPlatform libkrun,
+  withLibkrunSEV ? false,
 }:
 
 let
@@ -38,16 +43,22 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.24";
+  version = "1.27";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
-    rev = version;
-    hash = "sha256-Sdp6ZxUzK8T7zfrgevrLxhMh7SQfO+6mABBiFMLbgh0=";
+    tag = finalAttrs.version;
+    hash = "sha256-AhNKSwKZdm/8rZsDIGwNdNcVUXFvEGQecGw3pZYjmZw=";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
   nativeBuildInputs = [
@@ -61,32 +72,56 @@ stdenv.mkDerivation rec {
     criu
     libcap
     libseccomp
-    systemd
+    systemdMinimal
     yajl
+  ]
+  ++ lib.optionals withLibkrun [
+    libkrun
+  ]
+  ++ lib.optionals withLibkrunSEV [
+    libkrun-sev
+  ];
+
+  configureFlags = lib.optionals withLibkrun [
+    "--with-libkrun"
   ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
-  NIX_LDFLAGS = "-lcriu";
+  env = {
+    NIX_LDFLAGS = "-lcriu";
+  };
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
   postPatch = ''
-    echo ${version} > .tarball-version
-    echo '#define GIT_VERSION "${src.rev}"' > git-version.h
+    echo ${finalAttrs.version} > .tarball-version
+    echo "#define GIT_VERSION \"$(cat COMMIT)\"" > git-version.h
 
     ${lib.concatMapStringsSep "\n" (
-      e: "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+      e: "substituteInPlace Makefile.am --replace-fail 'tests/${e}' ''"
     ) disabledTests}
+  ''
+  + lib.optionalString withLibkrun ''
+    substituteInPlace src/libcrun/handlers/krun.c \
+      --replace-fail '"libkrun.so.1"' '"${libkrun}/lib/libkrun.so.1"'
+  ''
+  + lib.optionalString withLibkrunSEV ''
+    substituteInPlace src/libcrun/handlers/krun.c \
+      --replace-fail '"libkrun-sev.so.1"' '"${libkrun-sev}/lib/libkrun-sev.so.1"'
   '';
 
   doCheck = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   meta = {
-    changelog = "https://github.com/containers/crun/releases/tag/${version}";
+    changelog = "https://github.com/containers/crun/releases/tag/${finalAttrs.version}";
     description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
     license = lib.licenses.gpl2Plus;
@@ -94,4 +129,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.podman ];
     mainProgram = "crun";
   };
-}
+})

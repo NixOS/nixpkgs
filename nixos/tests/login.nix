@@ -48,13 +48,12 @@
         machine.wait_for_file("/home/alice/done")
 
     with subtest("Systemd gives and removes device ownership as needed"):
-        # Change back to /dev/snd/timer after systemd-258.1
-        machine.succeed("getfacl /dev/dri/card0 | grep -q alice")
+        machine.succeed("getfacl /dev/snd/timer | grep -q alice")
         machine.send_key("alt-f1")
         machine.wait_until_succeeds("[ $(fgconsole) = 1 ]")
-        machine.fail("getfacl /dev/dri/card0 | grep -q alice")
+        machine.fail("getfacl /dev/snd/timer | grep -q alice")
         machine.succeed("chvt 2")
-        machine.wait_until_succeeds("getfacl /dev/dri/card0 | grep -q alice")
+        machine.wait_until_succeeds("getfacl /dev/snd/timer | grep -q alice")
 
     with subtest("Virtual console logout"):
         machine.send_chars("exit\n")

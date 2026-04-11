@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   patches ? [ ],
   writeText,
   conf ? null,
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     hash = "sha256-QtYQB2mvw1k2LA8D+/cVnA8+GRDWjhIM6rxfi/IGjEw=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   inherit patches;
 
@@ -28,16 +28,21 @@ stdenv.mkDerivation {
       configFile =
         if lib.isDerivation conf || builtins.isPath conf then conf else writeText "blocks.def.h" conf;
     in
-    lib.optionalString (conf != null) "cp ${configFile} blocks.def.h";
+    lib.optionalString (conf != null) "cp ${configFile} blocks.def.h"
+    + ''
+      # gcc15
+      substituteInPlace dwmblocks.c \
+        --replace-fail 'void termhandler()' 'void termhandler(int signum)'
+    '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular status bar for dwm written in c";
     homepage = "https://github.com/torrinfail/dwmblocks";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sophrosyne ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sophrosyne ];
+    platforms = lib.platforms.linux;
     mainProgram = "dwmblocks";
   };
 }

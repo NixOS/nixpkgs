@@ -1,15 +1,15 @@
 {
-  lib,
   stdenv,
   zig,
   callPackage,
   wrapCCWith,
   wrapBintoolsWith,
   overrideCC,
-  targetPackages,
 }:
 {
-  hook = callPackage ./hook.nix { inherit zig; };
+  # Provided for backward compatibility, as the `zig` derivation now sets
+  # setupHook.
+  hook = zig;
 
   bintools-unwrapped = callPackage ./bintools.nix { inherit zig; };
   bintools = wrapBintoolsWith { bintools = zig.bintools-unwrapped; };
@@ -22,10 +22,7 @@
     nixSupport.cc-cflags = [
       "-target"
       "${stdenv.targetPlatform.system}-${stdenv.targetPlatform.parsed.abi.name}"
-    ]
-    ++ lib.optional (
-      stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-    ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
+    ];
   };
 
   stdenv = overrideCC stdenv zig.cc;

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
-  nodejs,
+  nodejs_22,
   ffmpeg-full,
   nunicode,
   util-linux,
@@ -15,10 +15,10 @@
 
 let
   source = {
-    version = "2.30.0";
-    hash = "sha256-4nmKTB/EUiyoOzti0BjbKrfnu3CA9XJnekgxFporVyI=";
-    npmDepsHash = "sha256-apr7s6GeYAAYg5n9gJjG9MVRPXJnpJoIvVyyAFw3Als=";
-    clientNpmDepsHash = "sha256-+yDIgQENUmUcxytym8Ke4M6CJ915BvdhgtQFc+ykiD8=";
+    version = "2.33.1";
+    hash = "sha256-O1AurSUq3MNcSchQlC/UfPO2KoB4dBBsONAQ2Bmxk9o=";
+    npmDepsHash = "sha256-NVHKPiT4GFiFVVyO7z/fZtU8Zf4o/LM1PmUs6zwzZF0=";
+    clientNpmDepsHash = "sha256-KWGnFeXxOVGqAruB9k/FqQfQNG6JrZFUQpo0Ls8jEYA=";
   };
 
   src = fetchFromGitHub {
@@ -31,6 +31,8 @@ let
   client = buildNpmPackage {
     pname = "audiobookshelf-client";
     inherit (source) version;
+
+    nodejs = nodejs_22;
 
     src = runCommand "cp-source" { } ''
       cp -r ${src}/client $out
@@ -59,6 +61,7 @@ buildNpmPackage {
 
   inherit src;
   inherit (source) npmDepsHash version;
+  nodejs = nodejs_22;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
@@ -73,7 +76,7 @@ buildNpmPackage {
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
   '';

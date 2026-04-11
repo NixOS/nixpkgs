@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.74.0";
+  version = "1.91.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4nQg7wb3+nc9Pxdf9ys8aMzSgF6boNzri+MmtDLS5jE=";
+    hash = "sha256-AXScsFVN8vEdhjM4m4VK41tje9QABp0OGq+8sPM+4oo=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-htb/LAX3SOZEDHTYcu9WRcAkuY+fUMolODYfGE3qihY=";
+  vendorHash = "sha256-idxt6qrs2CPO4SvZEuZNy12mw7dy1dslfuVn1ufrZ5Y=";
 
   ldflags = [
     "-s"
@@ -83,7 +83,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://gitlab.com/gitlab-org/cli";
     changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      freezeboy
       luftmensch-luftmensch
       anthonyroussel
     ];

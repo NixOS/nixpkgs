@@ -7,12 +7,21 @@
   stdenv,
 }:
 let
-  inherit (cudaPackages.tensorrt) src pname version;
+  inherit (cudaPackages.tensorrt)
+    meta
+    pname
+    src
+    version
+    ;
   inherit (lib.versions) major minor;
   inherit (stdenv.hostPlatform) parsed;
 in
 buildPythonPackage {
-  inherit pname version;
+  # Make sure to add the cudaNamePrefix tag since we're not using cudaPackages.buildRedist but this is a
+  # redistributable.
+  pname = "${cudaPackages.cudaNamePrefix}-${pname}";
+
+  inherit version;
 
   src =
     let
@@ -31,17 +40,27 @@ buildPythonPackage {
   ];
 
   buildInputs = [
-    cudaPackages.cudnn
     cudaPackages.tensorrt
   ];
 
   pythonImportsCheck = [ "tensorrt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for TensorRT, a high-performance deep learning interface";
-    homepage = "https://developer.nvidia.com/tensorrt";
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
+
+    # Explicitly inherit from TensorRT's meta to avoid pulling in attributes added by stdenv.mkDerivation.
+    inherit (meta)
+      badPlatforms
+      broken
+      changelog
+      downloadPage
+      homepage
+      license
+      longDescription
+      maintainers
+      platforms
+      sourceProvenance
+      teams
+      ;
   };
 }

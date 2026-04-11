@@ -17,7 +17,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hankel";
   version = "1.2.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "steven-murray";
     repo = "hankel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/5PvbH8zz2siLS1YJYRSrl/Cpi0WToBu1TJhlek8VEE=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of Ogata's (2005) method for Hankel transforms";
     homepage = "https://github.com/steven-murray/hankel";
-    changelog = "https://github.com/steven-murray/hankel/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/steven-murray/hankel/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

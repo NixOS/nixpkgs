@@ -41,13 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Slicer for the FlashForge 3D printers";
     homepage = "https://www.flashforge.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "flashprint";
-    maintainers = [ maintainers.ianliu ];
+    maintainers = [ lib.maintainers.ianliu ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

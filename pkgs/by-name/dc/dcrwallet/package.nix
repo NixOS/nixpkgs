@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dcrwallet";
-  version = "2.0.6";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
-    rev = "release-v${version}";
-    hash = "sha256-MrQrDip8vE0l5XHkx/zIegSZd/AkWq1aFZLUVPdMy50=";
+    rev = "release-v${finalAttrs.version}";
+    hash = "sha256-9CblBsZa2jAzp58Qj/Zoq68JcuKxzDO51P19XZJIJ6I=";
   };
 
-  vendorHash = "sha256-Ulh6RxK+PvS70mJ7TYiGMzKFsR79+asWuQ5W1FAI23I=";
+  vendorHash = "sha256-J1Iy3XWvLNLEf+0kDYbX1UbgBvxz7C3NSPeF/PpuD5E=";
 
   subPackages = [ "." ];
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ juaningan ];
     mainProgram = "dcrwallet";
   };
-}
+})

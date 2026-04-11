@@ -8,30 +8,31 @@
   freetype,
   libglvnd,
   curl,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  fontconfig,
+  libxcursor,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libjack2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tonelib-gfx";
-  version = "4.8.7";
+  version = "4.9.0";
 
   # It's hard to find out when a release happens and what version that release is,
   #  without visiting the site directly.
   #
   # The following command can retrieve the latest released version.
   # curl --silent https://tonelib.net/downloads.html | \
-  #     grep -P 'ToneLib GFX</h3' -A3 | \
+  #     grep -P '>ToneLib GFX<' -A3 | \
   #     sed -nE 's/^.*Version: ([0-9.]+).*/\1/p'
   #
   # The following command gives us the URL for the latest release without intermediate redirects.
   # curl --head 'https://www.tonelib.net/download.php?id=gfx&os=lnx'
   src = fetchurl {
-    url = "https://tonelib.vip/download/24-10-24/ToneLib-GFX-amd64.deb";
-    hash = "sha256-2ao6tTRbPMpE2Y/7/gwQN3G5Z6Uu+SQel9o1ejwD9v4=";
+    url = "https://tonelib.vip/download/25-11-10/ToneLib-GFX-amd64.deb";
+    hash = "sha256-WL9kV50R5AGG57I5IkNz7EKd4NPlf0iO+QiE8k+E26Q=";
   };
 
   nativeBuildInputs = [
@@ -49,10 +50,11 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = map lib.getLib [
     curl
-    libXcursor
-    libXinerama
-    libXrandr
-    libXrender
+    fontconfig
+    libxcursor
+    libxinerama
+    libxrandr
+    libxrender
     libjack2
   ];
 
@@ -63,14 +65,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass";
     homepage = "https://tonelib.net/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       husjon
-      orivej
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-GFX";

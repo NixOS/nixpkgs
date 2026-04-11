@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -16,60 +17,63 @@
   jax,
   jaxlib,
   pytestCheckHook,
-  tensorflow,
   torch,
+  # python <= 3.12 only
+  tensorflow,
+
+  # passthru
+  jaxtyping,
 }:
 
-let
-  self = buildPythonPackage rec {
-    pname = "jaxtyping";
-    version = "0.3.3";
-    pyproject = true;
+buildPythonPackage (finalAttrs: {
+  pname = "jaxtyping";
+  version = "0.3.9";
+  pyproject = true;
 
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "jaxtyping";
-      tag = "v${version}";
-      hash = "sha256-92wvnlaGVppu8qNo8f7zw7be788hj8Mdi8KDfNQllwU=";
-    };
+  src = fetchFromGitHub {
+    owner = "patrick-kidger";
+    repo = "jaxtyping";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ex84xtns3wtIodXdpC6/88Kn0I+33B7ScHPIc9C5tuY=";
+  };
 
-    build-system = [ hatchling ];
+  build-system = [ hatchling ];
 
-    dependencies = [
-      wadler-lindig
-    ];
+  dependencies = [
+    wadler-lindig
+  ];
 
-    pythonImportsCheck = [ "jaxtyping" ];
+  pythonImportsCheck = [ "jaxtyping" ];
 
-    nativeCheckInputs = [
-      cloudpickle
-      equinox
-      ipython
-      jax
-      jaxlib
-      pytestCheckHook
-      tensorflow
-      torch
-    ];
+  nativeCheckInputs = [
+    cloudpickle
+    equinox
+    ipython
+    jax
+    jaxlib
+    pytestCheckHook
+    torch
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    tensorflow
+  ];
 
-    doCheck = false;
+  doCheck = false;
 
-    # Enable tests via passthru to avoid cyclic dependency with equinox.
-    passthru.tests = {
-      check = self.overridePythonAttrs {
-        # We disable tests because they complain about the version of typeguard being too new.
-        doCheck = false;
-        catchConflicts = false;
-      };
-    };
-
-    meta = {
-      description = "Type annotations and runtime checking for JAX arrays and PyTrees";
-      homepage = "https://github.com/google/jaxtyping";
-      changelog = "https://github.com/patrick-kidger/jaxtyping/releases/tag/v${version}";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ GaetanLepage ];
+  # Enable tests via passthru to avoid cyclic dependency with equinox.
+  passthru.tests = {
+    check = jaxtyping.overridePythonAttrs {
+      # We disable tests because they complain about the version of typeguard being too new.
+      doCheck = false;
+      catchConflicts = false;
     };
   };
-in
-self
+
+  meta = {
+    description = "Type annotations and runtime checking for JAX arrays and PyTrees";
+    homepage = "https://github.com/patrick-kidger/jaxtyping";
+    changelog = "https://github.com/patrick-kidger/jaxtyping/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+  };
+})

@@ -1,51 +1,67 @@
 {
   lib,
   stdenv,
-  fetchzip,
-  nodejs,
+  autoPatchelfHook,
+  fetchurl,
   makeBinaryWrapper,
   versionCheckHook,
-  nix-update-script,
 }:
 
+let
+  sources = lib.importJSON ./sources.json;
+  srcConfig =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "0.0.353";
+  inherit (sources) version;
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@github/copilot/-/copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-OWlEz75vVEvbtDNobLJ/a1iUuepYewCTWoqTbDG+4wg=";
+  src = fetchurl {
+    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/${srcConfig.name}.tar.gz";
+    inherit (srcConfig) hash;
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  sourceRoot = ".";
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/lib/node_modules/@github/copilot
-    cp -r . $out/lib/node_modules/@github/copilot
-
-    mkdir -p $out/bin
-    makeBinaryWrapper ${nodejs}/bin/node $out/bin/copilot \
-      --add-flags "$out/lib/node_modules/@github/copilot/index.js"
-
+    # Use libexec to preserve filename when calling makeBinaryWrapper
+    install -Dm755 copilot $out/libexec/copilot
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
+  postInstall = ''
+    # Filename must explictly be "copilot" for internal self-referencing
+    makeWrapper $out/libexec/copilot $out/bin/copilot \
+      --add-flags "--no-auto-update"
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = !stdenv.hostPlatform.isDarwin; # skip on Darwin - OpenSSL errors in sandbox
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
     homepage = "https://github.com/github/copilot-cli";
     changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://www.npmjs.com/package/@github/copilot";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       dbreyfogle
     ];
     mainProgram = "copilot";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

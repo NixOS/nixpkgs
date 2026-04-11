@@ -6,7 +6,6 @@
   curl,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   openssl,
   pkg-config,
   stdenv,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rakshasa";
-  version = "0.16.0";
+  version = "0.16.8";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CtLRZK384IlfXoXLIpdXWa8s9M0n0EopKrJGrK6xq3c=";
+    hash = "sha256-catUO7dlJUu8td/+EtBsEs128y/c+teT5xk5H+vkipE=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-aligned=yes" ];
 
-  passthru.updateScript = nix-update-script { };
-
   enableParallelBuilding = true;
 
   meta = {
@@ -47,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rakshasa/libtorrent";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ebzzry
-      codyopel
       thiagokokada
     ];
     platforms = lib.platforms.unix;

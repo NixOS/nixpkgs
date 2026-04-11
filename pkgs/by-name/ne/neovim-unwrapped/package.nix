@@ -5,7 +5,8 @@
   cmake,
   gettext,
   libuv,
-  lua,
+  lua5_1,
+  luajit,
   pkg-config,
   unibilium,
   utf8proc,
@@ -25,6 +26,11 @@
   fish ? null,
   python3 ? null,
 }:
+
+let
+  lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
+in
+
 stdenv.mkDerivation (
   finalAttrs:
   let
@@ -34,7 +40,7 @@ stdenv.mkDerivation (
         let
           luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
         in
-        (luapkgs.lpeg.overrideAttrs (oa: {
+        (luapkgs.lpeg.overrideAttrs (old: {
           preConfigure = ''
             # neovim wants clang .dylib
             substituteInPlace Makefile \
@@ -53,7 +59,7 @@ stdenv.mkDerivation (
             rm -f ${luaLibDir}/lpeg.so
           '';
           nativeBuildInputs =
-            oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
+            old.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
         }))
       else
         luapkgs.lpeg;
@@ -95,7 +101,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.11.4";
+    version = "0.12.1";
 
     __structuredAttrs = true;
 
@@ -103,8 +109,10 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-IpMHxIDpldg4FXiXPEY2E51DfO/Z5XieKdtesLna9Xw=";
+      hash = "sha256-cbFM5TKGmhEDsdhMvGzMyn0Js0MJwdMwXDkzQcdw/TM=";
     };
+
+    strictDeps = true;
 
     patches = [
       # introduce a system-wide rplugin.vim in addition to the user one
@@ -115,18 +123,31 @@ stdenv.mkDerivation (
 
     inherit lua;
     treesitter-parsers =
-      treesitter-parsers
-      // {
-        markdown = treesitter-parsers.markdown // {
-          location = "tree-sitter-markdown";
-        };
-      }
-      // {
-        markdown_inline = treesitter-parsers.markdown // {
-          language = "markdown_inline";
-          location = "tree-sitter-markdown-inline";
-        };
-      };
+      lib.mapAttrs
+        (
+          language: grammar:
+          tree-sitter.buildGrammar {
+            inherit (grammar) src;
+            version = "neovim-${finalAttrs.version}";
+            language = grammar.language or language;
+            location = grammar.location or null;
+          }
+        )
+        (
+          treesitter-parsers
+
+          // {
+            markdown = treesitter-parsers.markdown // {
+              location = "tree-sitter-markdown";
+            };
+          }
+          // {
+            markdown_inline = treesitter-parsers.markdown // {
+              language = "markdown_inline";
+              location = "tree-sitter-markdown-inline";
+            };
+          }
+        );
 
     buildInputs = [
       libuv
@@ -143,6 +164,10 @@ stdenv.mkDerivation (
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       glibcLocales
       procps
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
+      # Provide libintl for non-glibc platforms
+      gettext
     ];
 
     doCheck = false;
@@ -214,14 +239,7 @@ stdenv.mkDerivation (
     + lib.concatStrings (
       lib.mapAttrsToList (language: grammar: ''
         ln -s \
-          ${
-            tree-sitter.buildGrammar {
-              inherit (grammar) src;
-              version = "neovim-${finalAttrs.version}";
-              language = grammar.language or language;
-              location = grammar.location or null;
-            }
-          }/parser \
+          ${grammar}/parser \
           $out/lib/nvim/parser/${language}.so
       '') finalAttrs.treesitter-parsers
     );
@@ -236,7 +254,6 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {

@@ -11,15 +11,15 @@
   cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frei0r-plugins";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
-    rev = "v${version}";
-    hash = "sha256-95d1aXfCq4mPccY8VKmO7jkX57li6OVSwtfIf9459n4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3gUWvO5izOrJt+XwcNBNiLfu+iMqo4nuPbx++TYzao0=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

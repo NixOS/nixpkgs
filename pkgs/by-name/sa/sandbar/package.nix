@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kolunmi/sandbar";
     description = "DWM-like bar for the river wayland compositor";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fccapria ];
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fccapria ];
+    platforms = lib.platforms.all;
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "sandbar";
   };
 })

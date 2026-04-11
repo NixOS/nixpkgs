@@ -3,6 +3,7 @@
   lib,
   options,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -83,6 +84,28 @@ in
             slurm to work properly (see `services.munge.password`).
           '';
         };
+
+        flags = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.oneOf [
+              lib.types.str
+              lib.types.bool
+              lib.types.float
+              lib.types.int
+            ]
+          );
+          default = { };
+          example = {
+            "i" = true;
+            "systemd" = true;
+            "L" = "/var/log/file with space.log";
+            "n" = 10;
+          };
+          description = ''
+            Flags passed to `slurmctld` daemon, see {manpage}`slurmctld(8)`.
+            Special characters are properly escaped.
+          '';
+        };
       };
 
       dbdserver = {
@@ -120,7 +143,7 @@ in
           type = lib.types.lines;
           default = "";
           description = ''
-            Extra configuration for `slurmdbd.conf` See also:
+            Extra configuration for {file}`slurmdbd.conf` See also:
             {manpage}`slurmdbd.conf(8)`.
           '';
         };
@@ -130,11 +153,50 @@ in
         enable = lib.mkEnableOption "slurm client daemon";
       };
 
+      rest = {
+        enable = lib.mkEnableOption "slurm REST daemon";
+
+        options = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          description = "Extra command-line options to pass to slurmrestd.";
+        };
+
+        environment = lib.mkOption {
+          default = { };
+          description = "Environment variables to set for the slurmrestd daemon, see slurmrestd(8).";
+          type = lib.types.submodule {
+            freeformType = with lib.types; attrsOf str;
+            options = {
+              SLURM_JWT = lib.mkOption {
+                type = lib.types.str;
+                default = "daemon";
+                description = "This variable must be set to use JWT token authentication.";
+              };
+              SLURMRESTD_LISTEN = lib.mkOption {
+                type = lib.types.str;
+                default = ":6820";
+                description = "Comma-delimited list of host:port pairs or unix sockets to listen on.";
+              };
+              SLURMRESTD_DEBUG = lib.mkOption {
+                type = lib.types.str;
+                default = "info";
+                description = ''
+                  Set debug level explicitly. Valid values are 0-9, or the same
+                  string values as the debug options such as SlurmctldDebug in
+                  slurm.conf(5).
+                '';
+              };
+            };
+          };
+        };
+      };
+
       enableStools = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to provide a slurm.conf file.
+          Whether to provide a {file}`slurm.conf` file.
           Enable this option if you do not run a slurm daemon on this host
           (i.e. `server.enable` and `client.enable` are `false`)
           but you still want to run slurm commands from this host.
@@ -270,7 +332,7 @@ in
           default = "";
           type = lib.types.lines;
           description = ''
-            Extra configuration for that will be added to `mpi.conf`.
+            Extra configuration for that will be added to {file}`mpi.conf`.
           '';
         };
       };
@@ -279,7 +341,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Extra configuration that will be added to the end of `plugstack.conf`.
+          Extra configuration that will be added to the end of {file}`plugstack.conf`.
         '';
       };
 
@@ -287,7 +349,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Extra configuration for `cgroup.conf`. This file is
+          Extra configuration for {file}`cgroup.conf`. This file is
           used when `procTrackType=proctrack/cgroup`.
         '';
       };
@@ -297,9 +359,9 @@ in
         default = [ ];
         description = ''
           Slurm expects config files for plugins in the same path
-          as `slurm.conf`. Add extra nix store
+          as {file}`slurm.conf`. Add extra nix store
           paths that should be merged into same directory as
-          `slurm.conf`.
+          {file}`slurm.conf`.
         '';
       };
 
@@ -336,158 +398,207 @@ in
 
   config =
     let
-      wrappedSlurm = pkgs.stdenv.mkDerivation {
-        name = "wrappedSlurm";
+      wrappedSlurm = pkgs.runCommand "wrappedSlurm" { } ''
+        mkdir -p $out/bin
+        find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
+        do
+          exename="$(basename $EXE)"
+          wrappername="$out/bin/$exename"
+          cat > "$wrappername" <<EOT
+        #!/bin/sh
+        if [ -z "\$SLURM_CONF" ]
+        then
+          SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
+        else
+          "$EXE" "\$@"
+        fi
+        EOT
+          chmod +x "$wrappername"
+        done
 
-        builder = pkgs.writeText "builder.sh" ''
-          mkdir -p $out/bin
-          find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
-          do
-            exename="$(basename $EXE)"
-            wrappername="$out/bin/$exename"
-            cat > "$wrappername" <<EOT
-          #!/bin/sh
-          if [ -z "$SLURM_CONF" ]
-          then
-            SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
-          else
-            "$EXE" "\$0"
-          fi
-          EOT
-            chmod +x "$wrappername"
-          done
-
-          mkdir -p $out/share
-          ln -s ${lib.getBin cfg.package}/share/man $out/share/man
-        '';
-      };
+        mkdir -p $out/share
+        ln -s ${lib.getBin cfg.package}/share/man $out/share/man
+      '';
 
     in
-    lib.mkIf (cfg.enableStools || cfg.client.enable || cfg.server.enable || cfg.dbdserver.enable) {
+    lib.mkIf
+      (
+        cfg.enableStools
+        || cfg.client.enable
+        || cfg.server.enable
+        || cfg.dbdserver.enable
+        || cfg.rest.enable
+      )
+      {
 
-      environment.systemPackages = [ wrappedSlurm ];
+        environment.systemPackages = [ wrappedSlurm ];
 
-      services.munge.enable = lib.mkDefault true;
+        services.munge.enable = lib.mkDefault true;
 
-      # use a static uid as default to ensure it is the same on all nodes
-      users.users.slurm = lib.mkIf (cfg.user == defaultUser) {
-        name = defaultUser;
-        group = "slurm";
-        uid = config.ids.uids.slurm;
-      };
-
-      users.groups.slurm.gid = config.ids.uids.slurm;
-
-      systemd.services.slurmd = lib.mkIf (cfg.client.enable) {
-        path =
-          with pkgs;
-          [
-            wrappedSlurm
-            coreutils
-          ]
-          ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
-
-        wantedBy = [ "multi-user.target" ];
-        after = [
-          "systemd-tmpfiles-clean.service"
-          "munge.service"
-          "network-online.target"
-          "remote-fs.target"
-        ];
-        wants = [ "network-online.target" ];
-
-        serviceConfig = {
-          Type = "forking";
-          KillMode = "process";
-          ExecStart = "${wrappedSlurm}/bin/slurmd";
-          PIDFile = "/run/slurmd.pid";
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          LimitMEMLOCK = "infinity";
-          Delegate = "Yes";
-        };
-      };
-
-      systemd.tmpfiles.rules = lib.optionals cfg.client.enable [
-        "d /var/spool/slurmd 755 root root -"
-        "d ${cfg.mpi.PmixCliTmpDirBase} 755 root root -"
-      ];
-
-      services.openssh.settings.X11Forwarding = lib.mkIf cfg.client.enable (lib.mkDefault true);
-
-      systemd.services.slurmctld = lib.mkIf (cfg.server.enable) {
-        path =
-          with pkgs;
-          [
-            wrappedSlurm
-            munge
-            coreutils
-          ]
-          ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
-
-        wantedBy = [ "multi-user.target" ];
-        after = [
-          "network.target"
-          "munged.service"
-        ];
-        requires = [ "munged.service" ];
-
-        serviceConfig = {
-          Type = "forking";
-          ExecStart = "${wrappedSlurm}/bin/slurmctld";
-          PIDFile = "/run/slurmctld.pid";
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        # use a static uid as default to ensure it is the same on all nodes
+        users.users.slurm = lib.mkIf (cfg.user == defaultUser) {
+          name = defaultUser;
+          group = "slurm";
+          uid = config.ids.uids.slurm;
         };
 
-        preStart = ''
-          mkdir -p ${cfg.stateSaveLocation}
-          chown -R ${cfg.user}:slurm ${cfg.stateSaveLocation}
-        '';
-      };
+        users.groups.slurm.gid = config.ids.uids.slurm;
 
-      systemd.services.slurmdbd =
-        let
-          # slurm strips the last component off the path
-          configPath = "$RUNTIME_DIRECTORY/slurmdbd.conf";
-        in
-        lib.mkIf (cfg.dbdserver.enable) {
-          path = with pkgs; [
-            wrappedSlurm
-            munge
-            coreutils
+        users.users.slurmrestd = lib.mkIf (cfg.rest.enable) {
+          name = "slurmrestd";
+          group = "slurmrestd";
+          isSystemUser = true;
+        };
+
+        users.groups.slurmrestd = lib.mkIf (cfg.rest.enable) { };
+
+        systemd.services.slurmd = lib.mkIf (cfg.client.enable) {
+          path =
+            with pkgs;
+            [
+              wrappedSlurm
+              coreutils
+            ]
+            ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
+
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "systemd-tmpfiles-clean.service"
+            "munge.service"
+            "network-online.target"
+            "remote-fs.target"
           ];
+          wants = [ "network-online.target" ];
+
+          serviceConfig = {
+            Type = "forking";
+            KillMode = "process";
+            ExecStart = "${wrappedSlurm}/bin/slurmd";
+            PIDFile = "/run/slurmd.pid";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            LimitMEMLOCK = "infinity";
+            Delegate = "Yes";
+          };
+        };
+
+        systemd.tmpfiles.rules = lib.optionals cfg.client.enable [
+          "d /var/spool/slurmd 755 root root -"
+          "d ${cfg.mpi.PmixCliTmpDirBase} 755 root root -"
+        ];
+
+        services.openssh.settings.X11Forwarding = lib.mkIf cfg.client.enable (lib.mkDefault true);
+
+        systemd.services.slurmctld = lib.mkIf (cfg.server.enable) {
+          path =
+            with pkgs;
+            [
+              wrappedSlurm
+              munge
+              coreutils
+            ]
+            ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
           wantedBy = [ "multi-user.target" ];
           after = [
             "network.target"
             "munged.service"
-            "mysql.service"
           ];
-          requires = [
-            "munged.service"
-            "mysql.service"
-          ];
-
-          preStart = ''
-            install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
-            ${lib.optionalString (cfg.dbdserver.storagePassFile != null) ''
-              echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
-                >> ${configPath}
-            ''}
-          '';
-
-          script = ''
-            export SLURM_CONF=${configPath}
-            exec ${cfg.package}/bin/slurmdbd -D
-          '';
+          requires = [ "munged.service" ];
 
           serviceConfig = {
-            RuntimeDirectory = "slurmdbd";
-            Type = "simple";
-            PIDFile = "/run/slurmdbd.pid";
+            Type = "forking";
+            ExecStart =
+              let
+                isLong = optionName: builtins.stringLength optionName > 1;
+                flagFormat = optionName: {
+                  option = if isLong optionName then "--${optionName}" else "-${optionName}";
+                  sep = null;
+                  explicitBool = false;
+                };
+                cli = [ "${wrappedSlurm}/bin/slurmctld" ] ++ lib.cli.toCommandLine flagFormat cfg.server.flags;
+              in
+              utils.escapeSystemdExecArgs cli;
+            PIDFile = "/run/slurmctld.pid";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
+
+          preStart = ''
+            mkdir -p ${cfg.stateSaveLocation}
+            chown -R ${cfg.user}:slurm ${cfg.stateSaveLocation}
+          '';
         };
 
-    };
+        systemd.services.slurmdbd =
+          let
+            # slurm strips the last component off the path
+            configPath = "$RUNTIME_DIRECTORY/slurmdbd.conf";
+          in
+          lib.mkIf (cfg.dbdserver.enable) {
+            path = with pkgs; [
+              wrappedSlurm
+              munge
+              coreutils
+            ];
+
+            wantedBy = [ "multi-user.target" ];
+            after = [
+              "network.target"
+              "munged.service"
+              "mysql.service"
+            ];
+            requires = [
+              "munged.service"
+              "mysql.service"
+            ];
+
+            preStart = ''
+              install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
+              ${lib.optionalString (cfg.dbdserver.storagePassFile != null) ''
+                echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
+                  >> ${configPath}
+              ''}
+            '';
+
+            script = ''
+              export SLURM_CONF=${configPath}
+              exec ${cfg.package}/bin/slurmdbd -D
+            '';
+
+            serviceConfig = {
+              RuntimeDirectory = "slurmdbd";
+              Type = "simple";
+              PIDFile = "/run/slurmdbd.pid";
+              ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            };
+          };
+
+        systemd.services.slurmrestd = lib.mkIf (cfg.rest.enable) {
+          path = with pkgs; [
+            wrappedSlurm
+            coreutils
+          ];
+
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "systemd-tmpfiles-clean.service"
+            "network-online.target"
+            "remote-fs.target"
+            "slurmctld.service"
+          ];
+          wants = [ "network-online.target" ];
+
+          serviceConfig = {
+            Type = "simple";
+            ExecStart = "${wrappedSlurm}/bin/slurmrestd ${cfg.rest.options}";
+            PIDFile = "/run/slurmrestd.pid";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            LimitMEMLOCK = "infinity";
+            User = "slurmrestd";
+            Group = "slurmrestd";
+          };
+
+          environment = cfg.rest.environment;
+        };
+      };
 
 }

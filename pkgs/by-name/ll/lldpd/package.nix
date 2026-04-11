@@ -10,13 +10,13 @@
   removeReferencesTo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lldpd";
-  version = "1.0.20";
+  version = "1.0.21";
 
   src = fetchurl {
-    url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
-    hash = "sha256-YbjLItSHnmj3glovuOHpKrtKukdzl3zwJYvDLtn1VFA=";
+    url = "https://media.luffy.cx/files/lldpd/lldpd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-WxsBBgeaB4W1XhvkXOxAtmtBd58+5vGo0tvXXTid8JE=";
   };
 
   configureFlags = [
@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
     find $out -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
   '';
 
-  meta = with lib; {
+  meta = {
     description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipments";
     homepage = "https://lldpd.github.io/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
   };
-}
+})

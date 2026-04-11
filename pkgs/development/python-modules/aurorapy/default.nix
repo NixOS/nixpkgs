@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aurorapy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the communication protocol for Power-One Aurora inverters";
     homepage = "https://gitlab.com/energievalsabbia/aurorapy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

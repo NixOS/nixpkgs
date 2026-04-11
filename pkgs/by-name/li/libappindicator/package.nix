@@ -105,10 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library to allow applications to export a menu into the Unity Menu bar";
     homepage = "https://launchpad.net/libappindicator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       lgpl3
     ];
@@ -118,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
         "3" = [ "appindicator3-0.1" ];
       }
       .${gtkVersion} or throwBadGtkVersion;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
     # TODO: Resolve the issues with the Mono bindings.
     broken = monoSupport;
   };

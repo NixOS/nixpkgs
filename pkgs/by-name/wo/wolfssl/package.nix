@@ -10,6 +10,7 @@
   # requiring to build a special variant for that software. Example: 'haproxy'
   variant ? "all",
   extraConfigureFlags ? [ ],
+  enableJni ? false,
   enableARMCryptoExtensions ?
     stdenv.hostPlatform.isAarch64
     && ((builtins.match "^.*\\+crypto.*$" stdenv.hostPlatform.gcc.arch) != null),
@@ -17,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.8.2";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     tag = "v${finalAttrs.version}-stable";
-    hash = "sha256-rWBfpI6tdpKvQA/XdazBvU5hzyai5PtKRBpM4iplZDU=";
+    hash = "sha256-Ov59Zt0UskADQThdzr9wni2junSpy3jiABWpiGr8xtg=";
   };
 
   postPatch = ''
@@ -31,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     # ensure test detects musl-based systems too
     substituteInPlace scripts/ocsp-stapling2.test \
       --replace '"linux-gnu"' '"linux-"'
+  ''
+  + lib.optionalString enableJni ''
+    # Some tests fail when JNI is enabled
+    sed -i '/TEST_DECL(test_wolfSSL_Tls13_ECH)/d;
+            /TEST_DECL(test_wolfSSL_Tls13_ECH_HRR)/d;
+            /TEST_DECL(test_TLSX_CA_NAMES_bad_extension)/d' tests/api.c
+    sed -i '/quic/d' tests/include.am
+    sed -i '/WOLFSSL_QUIC/,/#endif/d' tests/unit.c
   '';
 
   configureFlags = [
@@ -64,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
     # No runtime detection under ARM and no platform function checks like for X86.
     (if enableARMCryptoExtensions then "--enable-armasm=inline" else "--disable-armasm")
+  ]
+  ++ lib.optionals enableJni [
+    "--enable-jni"
   ]
   ++ extraConfigureFlags;
 
@@ -108,14 +120,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast, portable implementation of TLS/SSL for embedded devices";
     mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fab
       vifino
     ];

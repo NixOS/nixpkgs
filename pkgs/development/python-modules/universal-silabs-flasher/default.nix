@@ -3,39 +3,37 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
-  async-timeout,
   bellows,
   click,
   coloredlogs,
   crc,
-  libgpiod,
+  gpiod,
   pyserial-asyncio-fast,
+  tqdm,
   typing-extensions,
   zigpy,
 
   # tests
+  aioresponses,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-mock,
-  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.37";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-XvDzv39at+6h1Q2tmiYiNsLpcMTx+sOd958K+PB0WSc=";
+    hash = "sha256-6rdWi+un85YWSann2zHFFnWvAZF6V8wXBP1VunaiZMo=";
   };
 
   postPatch = ''
@@ -52,27 +50,31 @@ buildPythonPackage rec {
     coloredlogs
     crc
     pyserial-asyncio-fast
+    tqdm
     typing-extensions
     zigpy
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ gpiod ];
 
   nativeCheckInputs = [
+    aioresponses
     pytestCheckHook
     pytest-asyncio
-    pytest-mock
-    pytest-timeout
+  ];
+
+  disabledTests = [
+    # timing sensitive
+    "test_xmodem_happy_path"
   ];
 
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/${src.tag}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

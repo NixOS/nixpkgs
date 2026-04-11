@@ -10,16 +10,16 @@
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.4.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    tag = "v${version}";
-    hash = "sha256-W/Za/k/XusZmPLiX4ER9XaQWG4jdkrIh7JualHeeqZM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ea8fR+tsur/tIQwfUS88HvjCADv8VgEjHD7JnR44Twk=";
   };
 
   pythonRelaxDeps = [
@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     "questionary"
     "rich-click"
     "textual"
+    "tomlkit"
     "tree-sitter"
     "tree-sitter-sql"
   ];
@@ -99,10 +100,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
   };
-}
+})

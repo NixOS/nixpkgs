@@ -11,15 +11,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "fpm";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to build packages for multiple platforms with ease";
     homepage = "https://github.com/jordansissel/fpm";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      manveru
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "fpm";
   };
 }

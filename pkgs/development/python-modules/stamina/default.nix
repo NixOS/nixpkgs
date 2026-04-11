@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "stamina";
-  version = "25.1.0";
+  version = "25.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
     tag = version;
-    hash = "sha256-TehGqR3vbjLNByHZE2+Ytq52dpEpiL6+7TRUKwXcC1M=";
+    hash = "sha256-PsoEo53JeD9zrqRmvPotTiX4lM16aJXB3Gr1+mFTEYA=";
   };
 
   build-system = [
@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stamina" ];
 
-  meta = with lib; {
+  meta = {
     description = "Production-grade retries for Python";
     homepage = "https://github.com/hynek/stamina";
     changelog = "https://github.com/hynek/stamina/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

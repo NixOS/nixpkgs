@@ -7,6 +7,7 @@
   # build-system
   cython,
   setuptools,
+  pkg-config,
 
   # native dependencies
   libxml2,
@@ -40,8 +41,7 @@ buildPythonPackage rec {
 
   # required for build time dependency check
   nativeBuildInputs = [
-    libxml2.dev
-    libxslt.dev
+    pkg-config
   ];
 
   buildInputs = [
@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "lxml.etree"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lxml/lxml/blob/lxml-${version}/CHANGES.txt";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

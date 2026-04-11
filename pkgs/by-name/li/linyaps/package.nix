@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   lib,
   stdenv,
   cmake,
@@ -10,10 +9,11 @@
   linyaps-box,
   cli11,
   curl,
+  elfutils,
   gpgme,
   gtest,
   libarchive,
-  libelf,
+  libcap,
   libsodium,
   libsysprof-capture,
   nlohmann_json,
@@ -24,7 +24,7 @@
   uncrustify,
   xz,
   yaml-cpp,
-  replaceVars,
+  versionCheckHook,
   bash,
   binutils,
   coreutils,
@@ -39,25 +39,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.9.13";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-sAxHDvhRz7okElk8vdISJt/yrNnCdu95hW3ImHOjiyw=";
+    hash = "sha256-hNXpJCz7px8uw2mbBhou3+Gb5InlMXJT2PjWmUycX5A=";
   };
 
   patches = [
     ./fix-host-path.patch
-    # Fix for Qt 6.10
-    (fetchpatch {
-      url = "https://github.com/OpenAtom-Linyaps/linyaps/commit/c49e6cfab304ffa2b5b1657da247a6eda6f46c3a.patch";
-      hash = "sha256-lFyPb8YiaXJl2yzPElUR1jYwdOxA0h+db4sv/N70N4E=";
-    })
   ];
 
   postPatch = ''
+    substituteInPlace apps/ll-cli/src/main.cpp \
+      --replace-fail "ociRuntimeCLI, { BINDIR }" "ociRuntimeCLI, { \"${lib.getBin linyaps-box}/bin\" }"
+
     substituteInPlace apps/ll-init/CMakeLists.txt \
       --replace-fail "target_link_options(\''${LL_INIT_TARGET} PRIVATE -static -static-libgcc" \
                      "target_link_options(\''${LL_INIT_TARGET} PRIVATE -static -static-libgcc -L${stdenv.cc.libc.static}/lib"
@@ -73,10 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cli11
     curl
+    elfutils
     gpgme
     gtest
     libarchive
-    libelf
+    libcap
     libsodium
     libsysprof-capture
     nlohmann_json
@@ -94,8 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     copyDesktopItems
     pkg-config
-    qt6Packages.wrapQtAppsNoGuiHook
+    qt6Packages.wrapQtAppsHook
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "CPM_LOCAL_PACKAGES_ONLY" true)
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postInstall = ''
     # move to the right location for systemd.packages option

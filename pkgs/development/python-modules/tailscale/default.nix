@@ -10,16 +10,13 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "tailscale";
   version = "0.6.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tailscale" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Tailscale API";
     homepage = "https://github.com/frenck/python-tailscale";
     changelog = "https://github.com/frenck/python-tailscale/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -8,12 +8,12 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intltool";
   version = "0.51.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/intltool/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/intltool/trunk/${finalAttrs.version}/+download/intltool-${finalAttrs.version}.tar.gz";
     sha256 = "1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
 
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done
   '';
-  meta = with lib; {
+  meta = {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,33 +1,36 @@
 {
   lib,
+  stdenv,
+  nodejs_22,
+  electron_39,
+  makeWrapper,
   fetchFromGitHub,
+  buildNpmPackage,
+  makeDesktopItem,
+  copyDesktopItems,
   buildDotnetModule,
   dotnetCorePackages,
-  buildNpmPackage,
-  electron_37,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  stdenv,
 }:
 let
-  electron = electron_37;
+  node = nodejs_22;
+  electron = electron_39;
   dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.10.11";
+  version = "2026.02.11";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
-    rev = "cb6bc979d9371b89b289b6cb0bb8b6f60b350bc7";
-    hash = "sha256-0LnFXSLyby5b2gSIse7Qld4cQlwNAFHSuGGqk6B9TZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/CMxFjIcLqk2oTnXUV519NkrImsnq3/kUGiew5E3Zyw=";
   };
 
+  nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-giWeXrsiFaZOh5zs7L4L0w3wcnD/F3TyrMM/POfOTvE=";
+  npmDepsHash = "sha256-bli8TKzxcASuCegEGwiHM5siMXGK4WuzhweNr5HaCvg=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -61,7 +64,7 @@ buildNpmPackage (finalAttrs: {
     cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
-      --add-flags "--ozone-platform-hint=auto"              \
+      --add-flags "--ozone-platform-hint=auto --no-updater" \
       --add-flags "$out/share/vrcx/resources/app.asar"      \
       --set NODE_ENV production                             \
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
@@ -75,11 +78,11 @@ buildNpmPackage (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "vrcx";
+      icon = "vrcx";
+      exec = "vrcx %u";
+      terminal = false;
       desktopName = "VRCX";
       comment = "Friendship management tool for VRChat";
-      icon = "vrcx";
-      exec = "vrcx";
-      terminal = false;
       categories = [
         "Utility"
         "Application"
@@ -90,8 +93,8 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     backend = buildDotnetModule {
-      pname = "${finalAttrs.pname}-backend";
       inherit (finalAttrs) version src;
+      pname = "${finalAttrs.pname}-backend";
 
       dotnet-sdk = dotnet.sdk;
       dotnet-runtime = dotnet.runtime;

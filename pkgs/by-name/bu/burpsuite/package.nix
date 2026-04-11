@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2025.10.1";
+  version = "2026.3.1";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-aLP8jVHuKmp4yzcd1KsgidAhWUxoJo0beGwq/6I4n4A=";
+        hash = "sha256-jRVRvqFRsRO+vbEoV35bX4vi9XEYl737L0umt61ACtk=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-HiYdJrnTg0HkCt+lXKkhfGawp/NZQmhH4sGytlpiLU8=";
+        hash = "sha256-wjXzFXE+cIHw8tXuitsN4emH5varOTWQxiohwFGKZvc=";
       };
 
   src = fetchurl {
@@ -73,27 +73,28 @@ buildFHSEnv {
       udev
       libxkbcommon
       libgbm
+      libglvnd
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
     ];
 
   extraInstallCommands = ''
-    mkdir -p "$out/share/pixmaps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
+    mkdir -p "$out/share/icons/hicolor/64x64/apps"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     inherit description;
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
@@ -104,12 +105,12 @@ buildFHSEnv {
     homepage = "https://portswigger.net/burp/";
     changelog =
       "https://portswigger.net/burp/releases/professional-community-"
-      + replaceStrings [ "." ] [ "-" ] version;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+      + lib.replaceStrings [ "." ] [ "-" ] version;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bennofs
       blackzeshi
       fab

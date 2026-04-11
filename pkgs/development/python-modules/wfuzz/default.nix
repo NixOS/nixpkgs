@@ -10,26 +10,22 @@
   pycurl,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   fetchpatch2,
-  pythonAtLeast,
   legacy-cgi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wfuzz";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xmendez";
     repo = "wfuzz";
-    tag = "v${version}";
-    hash = "sha256-RM6QM/iR00ymg0FBUtaWAtxPHIX4u9U/t5N/UT/T6sc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OYMZHo0ujRzwOcE+EKRNPxffxVbbiMHe+AqBz7q/u2A=";
   };
 
   patches = [
@@ -41,23 +37,18 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pyparsing>=2.4*" "pyparsing>=2.4"
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
     chardet
     distutils # src/wfuzz/plugin_api/base.py
+    legacy-cgi
     pycurl
     six
     setuptools
     pyparsing
   ]
-  ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
 
   nativeCheckInputs = [
     netaddr
@@ -83,8 +74,8 @@ buildPythonPackage rec {
     cp -R -T "wordlist" "$out/share/wordlists/wfuzz"
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/xmendez/wfuzz/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/xmendez/wfuzz/releases/tag/${finalAttrs.src.tag}";
     description = "Web content fuzzer to facilitate web applications assessments";
     longDescription = ''
       Wfuzz provides a framework to automate web applications security assessments
@@ -92,7 +83,7 @@ buildPythonPackage rec {
       web application vulnerabilities.
     '';
     homepage = "https://wfuzz.readthedocs.io";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ pamplemousse ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
-}
+})

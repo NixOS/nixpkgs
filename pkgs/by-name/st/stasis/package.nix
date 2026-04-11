@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stasis";
-  version = "0.5.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "saltnpepper97";
     repo = "stasis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8molNHV0FnJO9F2muME2JAfw6EtxDQZiQX3JFW8DTs=";
+    hash = "sha256-WgfBaBBQSbEgwl14BFiANiK77Mj7ptXqX9Q3CWA2MJ8=";
   };
 
-  cargoHash = "sha256-nACVS4BAjtI+aRO8Tg0FdOQSXiZMX/iVh22w0s6NLpw=";
+  cargoHash = "sha256-rXyRvLQ1r7AxBgegOCtexGlBomd6tMDK2X2xUE50Mkg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

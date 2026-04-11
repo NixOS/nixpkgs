@@ -1,20 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   translate-toolkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weblate-language-data";
-  version = "2025.9";
+  version = "2026.7";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "weblate_language_data";
-    inherit version;
-    hash = "sha256-sk53eGLPSfYoe4+BExIxINkFt/vcvkIIO5611hwx9uU=";
+  src = fetchFromGitHub {
+    owner = "WeblateOrg";
+    repo = "language-data";
+    tag = finalAttrs.version;
+    hash = "sha256-IKOvVYmB7SA82aMQWqYbwmh7xBg5szR/DvnPS6T0sts=";
   };
 
   build-system = [ setuptools ];
@@ -26,12 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weblate_language_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language definitions used by Weblate";
     homepage = "https://github.com/WeblateOrg/language-data";
-    changelog = "https://github.com/WeblateOrg/language-data/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://github.com/WeblateOrg/language-data/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
-
-}
+})

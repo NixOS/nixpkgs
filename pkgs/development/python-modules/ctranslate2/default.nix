@@ -27,6 +27,11 @@ buildPythonPackage rec {
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
   sourceRoot = "${src.name}/python";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11==" "pybind11>="
+  '';
+
   build-system = [
     pybind11
     setuptools
@@ -62,10 +67,15 @@ buildPythonPackage rec {
     rm -rf ctranslate2
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    "test_invalid_model_path"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+      # RuntimeError: Failed to initialize cpuinfo!"
+      "test_torch_variables"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted
+      "test_invalid_model_path"
+    ];
 
   disabledTestPaths = [
     # TODO: ModuleNotFoundError: No module named 'opennmt'

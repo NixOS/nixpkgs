@@ -29,7 +29,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "aiobotocore"
+    "tenacity"
+  ];
 
   dependencies = [
     aiobotocore

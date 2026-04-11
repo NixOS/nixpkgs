@@ -57,6 +57,12 @@ in
       '';
     };
 
+    virtualisation.googleComputeImage.buildMemSize = mkOption {
+      type = types.int;
+      default = 1024;
+      description = "Memory size (in MiB) for the temporary VM used to build the image.";
+    };
+
     virtualisation.googleComputeImage.contents = mkOption {
       type = with types; listOf attrs;
       default = [ ];
@@ -129,6 +135,7 @@ in
       inherit (cfg) contents;
       partitionTableType = if cfg.efi then "efi" else "legacy";
       inherit (config.virtualisation) diskSize;
+      memSize = cfg.buildMemSize;
       inherit config lib pkgs;
     };
 

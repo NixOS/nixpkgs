@@ -5,7 +5,7 @@
   babel,
   buildPythonPackage,
   dnspython,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lxml,
   multidict,
   pyasn1-modules,
@@ -13,7 +13,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcollections,
@@ -25,10 +24,7 @@ buildPythonPackage rec {
   version = "0.13.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jssfr";
     repo = "aioxmpp";
     tag = "v${version}";

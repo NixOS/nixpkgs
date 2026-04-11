@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to banking tasks, file formats and country information";
     homepage = "https://www.aquamaniac.de/rdm/";
     hydraPlatforms = [ ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

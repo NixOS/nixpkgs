@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "athens";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qF5sSpWtw1qTxfaZkQse882JjE5idP2Wk0RVsPmzIlY=";
+    hash = "sha256-Mv0fJ5EiU/Nxakr1sLx2rcJnQ9SEjFMn+2Gf4qsnN3w=";
   };
 
   vendorHash = "sha256-bn3He7ImXxrl+Or2pqzVpM8VxbfqDDupwtZbdSMd4HI=";

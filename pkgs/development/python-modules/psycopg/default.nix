@@ -15,7 +15,6 @@
 
   # psycopg-c
   cython,
-  tomli,
 
   # docs
   furo,
@@ -26,7 +25,6 @@
   # tests
   anyio,
   pproxy,
-  pytest-randomly,
   pytestCheckHook,
   postgresql,
   postgresqlTestHook,
@@ -34,13 +32,14 @@
 
 let
   pname = "psycopg";
-  version = "3.2.12";
+  version = "3.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-g1mms12EqRiln5dK/BmBa9dd9duSPRgRIiZkVmSRaYI=";
+    hash = "sha256-hWiclfvimp6WldcDQPx7RFLx+XYRR9wPagAe0oZg7Pw=";
   };
 
   patches = [
@@ -59,8 +58,7 @@ let
 
   psycopg-c = buildPythonPackage {
     pname = "${pname}-c";
-    inherit version src;
-    format = "pyproject";
+    inherit version pyproject src;
 
     # apply patches to base repo
     inherit patches;
@@ -68,13 +66,18 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools ==" "setuptools >="
     '';
 
-    nativeBuildInputs = [
+    build-system = [
       cython
-      libpq.pg_config
       setuptools
-      tomli
+    ];
+
+    nativeBuildInputs = [
+      libpq.pg_config
     ];
 
     buildInputs = [
@@ -91,8 +94,7 @@ let
 
   psycopg-pool = buildPythonPackage {
     pname = "${pname}-pool";
-    inherit version src;
-    format = "setuptools";
+    inherit version pyproject src;
 
     # apply patches to base repo
     inherit patches;
@@ -102,7 +104,9 @@ let
       cd psycopg_pool
     '';
 
-    propagatedBuildInputs = [ typing-extensions ];
+    build-system = [ setuptools ];
+
+    dependencies = [ typing-extensions ];
 
     # tested in psycopg
     doCheck = false;
@@ -114,8 +118,12 @@ let
 in
 
 buildPythonPackage rec {
-  inherit pname version src;
-  pyproject = true;
+  inherit
+    pname
+    version
+    pyproject
+    src
+    ;
 
   outputs = [
     "out"
@@ -126,12 +134,6 @@ buildPythonPackage rec {
 
   sphinxRoot = "../docs";
 
-  # Introduce this file necessary for the docs build via environment var
-  LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
-    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
-  };
-
   inherit patches;
 
   # only move to sourceRoot after patching, makes patching easier
@@ -139,12 +141,11 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ]
+  build-system = [ setuptools ];
+
   # building the docs fails with the following error when cross compiling
   #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     furo
     sphinx-autodoc-typehints
     sphinxHook
@@ -170,7 +171,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     pproxy
-    pytest-randomly
     pytestCheckHook
     postgresql
   ]
@@ -179,6 +179,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.pool;
 
   env = {
+    # Introduce this file necessary for the docs build via environment var
+    LIBPQ_DOCS_FILE = fetchurl {
+      url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+      hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
+    };
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
     PGDATABASE = "psycopg";
@@ -220,6 +225,7 @@ buildPythonPackage rec {
     "refcount"
     "timing"
     "flakey"
+    "slow"
   ];
 
   postCheck = ''

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-push-qml";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-push-qml";
     tag = finalAttrs.version;
-    hash = "sha256-1HJkcAe5ixqmEACy4mSk5dSCPf4FsY3tzH6v09SSH+M=";
+    hash = "sha256-QpkW/fbl0Px5HsKfz/gv+D1S+iSpMZM8TiZCuAq1myk=";
   };
 
   postPatch = ''
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    # In case anything still depends on deprecated hints
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!lib.strings.versionAtLeast qtbase.version "6"))
   ];
 
   preBuild = ''
@@ -57,12 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Lomiri Push Notifications QML plugin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-push-qml";
-    # License file indicates gpl3Only, but de87869c2cdb9819c2ca7c9eca9c5fb8b500a01f says it should be lgpl3Only
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-push-qml/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

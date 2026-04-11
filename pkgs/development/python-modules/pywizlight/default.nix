@@ -5,15 +5,12 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pywizlight";
   version = "0.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sbidy";
@@ -42,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywizlight" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python connector for WiZ light bulbs";
     mainProgram = "wizlight";
     homepage = "https://github.com/sbidy/pywizlight";
     changelog = "https://github.com/sbidy/pywizlight/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -19,12 +19,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vNCqfXsPjb3mph28YuYKpWTs9VHbIcXs6GVn4XgQKtQ=";
 
-  cargoBuildFlags = [ "--package xdvdfs-cli" ];
-  cargoTestFlags = [ "--package xdvdfs-cli" ];
+  cargoBuildFlags = [
+    "--package"
+    "xdvdfs-cli"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "xdvdfs-cli"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/xdvdfs";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

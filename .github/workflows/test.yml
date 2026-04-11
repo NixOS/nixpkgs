@@ -11,7 +11,7 @@ permissions: {}
 
 jobs:
   prepare:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       merge-group: ${{ steps.files.outputs.merge-group }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
@@ -19,14 +19,14 @@ jobs:
       push: ${{ steps.files.outputs.push }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: true # default, for clarity
           sparse-checkout: |
             ci/github-script
       - id: prepare
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           retries: 10
           # The default for this includes code 422, which happens regularly for us when comparing commits:
@@ -40,12 +40,12 @@ jobs:
               context,
               core,
               // Review comments will be posted by the main PR workflow on the pull_request_target event.
-              dry: false,
+              dry: true,
             })
 
       - name: Determine changed files
         id: files
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const files = (await github.paginate(github.rest.pulls.listFiles, {
@@ -55,10 +55,15 @@ jobs:
             })).map(file => file.filename)
 
             if (files.some(file => [
+              '.github/workflows/build.yml',
+              '.github/workflows/check.yml',
               '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
+              'ci/github-script/supportedSystems.js',
+              'ci/pinned.json',
+              'ci/supportedBranches.js',
             ].includes(file))) core.setOutput('merge-group', true)
 
             if (files.some(file => [
@@ -69,11 +74,20 @@ jobs:
               '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/pull-request-target.yml',
-              '.github/workflows/reviewers.yml',
               '.github/workflows/test.yml',
               'ci/github-script/bot.js',
+              'ci/github-script/check-target-branch.js',
+              'ci/github-script/commits.js',
+              'ci/github-script/get-pr-commit-details.js',
+              'ci/github-script/lint-commits.js',
               'ci/github-script/merge.js',
+              'ci/github-script/prepare.js',
+              'ci/github-script/reviewers.js',
+              'ci/github-script/reviews.js',
+              'ci/github-script/supportedSystems.js',
               'ci/github-script/withRateLimit.js',
+              'ci/pinned.json',
+              'ci/supportedBranches.js',
             ].includes(file))) core.setOutput('pr', true)
 
   merge-group:
@@ -83,9 +97,8 @@ jobs:
     uses: ./.github/workflows/merge-group.yml
     # Those are actually only used on the merge_group event, but will throw an error if not set.
     permissions:
-      statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      pull-requests: write # unused on pull_request, required by merge-group workflow
+      statuses: write # unused on pull_request, required by merge-group workflow
     with:
       artifact-prefix: mg-
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -98,11 +111,10 @@ jobs:
     uses: ./.github/workflows/pull-request-target.yml
     # Those are actually only used on the pull_request_target event, but will throw an error if not set.
     permissions:
-      issues: write
-      pull-requests: write
-      statuses: write
+      issues: write # unused on pull_request, required by bot workflow
+      pull-requests: write # unused on pull_request, required by PR workflow
+      statuses: write # unused on pull_request, required by PR workflow
     secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: pr-

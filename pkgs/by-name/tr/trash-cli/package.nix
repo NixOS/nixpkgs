@@ -7,7 +7,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "trash-cli";
   version = "0.24.5.26";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ltuMnxtG4jTTSZd6ZHWl8wI0oQMMFqW0HAPetZMfGtc=";
   };
 
@@ -76,12 +76,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line interface to the freedesktop.org trashcan";
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "trash";
   };
-}
+})

@@ -25,6 +25,7 @@ let
       force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
+      resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
@@ -95,6 +96,27 @@ in
       '';
       description = ''
         A string which is appended to the end of limine.conf. The config format can be found [here](https://github.com/limine-bootloader/limine/blob/trunk/CONFIG.md).
+      '';
+    };
+
+    resolution = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      example = "1920x1080x32";
+      description = ''
+        The framebuffer resolution to set when booting Linux entries.
+        This controls the GOP mode that Limine sets before handing off to the kernel,
+        which affects early boot graphics (e.g., simpledrm, efifb).
+
+        Format: `<width>x<height>` or `<width>x<height>x<bpp>`.
+        If bpp is omitted, defaults to 32.
+
+        Note: Refresh rate is not supported because the UEFI GOP protocol only
+        defines framebuffer dimensions and pixel format, not display timing.
+        Refresh rate is determined later by the GPU driver based on EDID.
+
+        This is distinct from {option}`boot.loader.limine.style.interface.resolution`
+        which only affects the Limine bootloader's own menu interface.
       '';
     };
 
@@ -202,16 +224,22 @@ in
         '';
       };
 
-      createAndEnrollKeys = lib.mkEnableOption null // {
-        internal = true;
-        description = ''
-          Creates secure boot signing keys and enrolls them during bootloader installation.
+      autoGenerateKeys = lib.mkEnableOption null // {
+        description = "Generate keys automatically when none exists during bootloader installation";
+      };
 
-          ::: {.note}
-          This is used for automated nixos tests.
-          NOT INTENDED to be used on a real system.
-          :::
-        '';
+      autoEnrollKeys = {
+        enable = lib.mkEnableOption null // {
+          description = "Enroll automatically generated keys";
+        };
+        extraArgs = lib.mkOption {
+          default = [
+            "--microsoft"
+            "--firmware-builtin"
+          ];
+          type = lib.types.listOf lib.types.str;
+          description = "Extra arguments passed to sbctl";
+        };
       };
 
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
@@ -229,10 +257,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -375,7 +403,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [
@@ -404,6 +432,7 @@ in
           replacements = {
             python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
             configPath = limineInstallConfig;
+            inherit (config.system.nixos) distroName;
           };
         };
       };
@@ -453,15 +482,24 @@ in
         };
 
         script = ''
-          cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
-          chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
+          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
         '';
       };
 
       services.fwupd.uefiCapsuleSettings = {
         DisableShimForSecureBoot = true;
       };
+    })
+    (lib.mkIf (cfg.enable && cfg.secureBoot.enable && cfg.secureBoot.autoEnrollKeys.enable) {
+      assertions = [
+        {
+          assertion = cfg.secureBoot.autoGenerateKeys;
+          message = "autoEnrollKeys doesn't do anything without autoGenerateKeys.";
+        }
+      ];
+
+      boot.loader.limine.secureBoot.autoGenerateKeys = true;
     })
   ];
 }

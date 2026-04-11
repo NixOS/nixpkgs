@@ -1,0 +1,186 @@
+From bcaa94b1c6ccdbedcf7dfa15db98542af12aa46d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 14 Nov 2025 21:54:21 +0100
+Subject: [PATCH] Build against system-installed libvgm
+
+---
+ Makefile        | 16 ++++++----------
+ fmtoy_ym2151.c  |  4 ++--
+ fmtoy_ym2203.c  |  4 ++--
+ fmtoy_ym2608.c  |  4 ++--
+ fmtoy_ym2610.c  |  4 ++--
+ fmtoy_ym2610b.c |  4 ++--
+ fmtoy_ym2612.c  |  4 ++--
+ fmtoy_ym3812.c  |  4 ++--
+ fmtoy_ymf262.c  |  4 ++--
+ 9 files changed, 22 insertions(+), 26 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 32f6421..3aa2af9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@ CC?=gcc
+ AR?=ar
+ CFLAGS?=-ggdb -Wall
+ ifndef EMSCRIPTEN
+-	CFLAGS+=$(shell pkg-config alsa jack --cflags)
++	CFLAGS+=$(shell pkg-config alsa jack vgm-emu --cflags)
+ endif
+ 
+ EMLDFLAGS?= \
+@@ -38,19 +38,19 @@ endif
+ libfmtoy.a: fmtoy.o fmtoy_ym2151.o fmtoy_ym2203.o fmtoy_ym2608.o fmtoy_ym2610.o fmtoy_ym2610b.o fmtoy_ym2612.o fmtoy_ym3812.o fmtoy_ymf262.o
+ 	$(AR) cr $@ $^
+ 
+-fmtoy_jack: fmtoy_jack.o cmdline.o tools.o libfmtoy.a libfmvoice/libfmvoice.a midilib/libmidi.a libvgm/build/bin/libvgm-emu.a
+-	$(CC) $^ -o $@ $(LIBS) $(shell pkg-config alsa jack --libs)
++fmtoy_jack: fmtoy_jack.o cmdline.o tools.o libfmtoy.a libfmvoice/libfmvoice.a midilib/libmidi.a
++	$(CC) $^ -o $@ $(LIBS) $(shell pkg-config alsa jack vgm-emu --libs)
+ 
+-fmtowWasm.wasm fmtoyWasm.js: glue.o libfmtoy.a libfmvoice/libfmvoice.a libvgm/$(LIBVGM_BUILD_DIR)/bin/libvgm-emu.a
++fmtowWasm.wasm fmtoyWasm.js: glue.o libfmtoy.a libfmvoice/libfmvoice.a
+ 	$(CC) $^ -s WASM=1 -s EXPORT_ES6=1 -s MODULARIZE=1 $(EMLDFLAGS) -o $@
+ 	sed -i '1s/^/\/* eslint-disable *\/ /' $@
+ 
+-fmtoyWorkletWasm.js: glue.o libfmtoy.a libfmvoice/libfmvoice.a libvgm/$(LIBVGM_BUILD_DIR)/bin/libvgm-emu.a
++fmtoyWorkletWasm.js: glue.o libfmtoy.a libfmvoice/libfmvoice.a
+ 	$(CC) $^ -s WASM=1 EXPORT_ES6=1 -s MODULARIZE=1  -s SINGLE_FILE=1 $(EMLDFLAGS) -o $@
+ 	sed -i '1s/^/\/* eslint-disable *\/ /' $@
+ 	sed -i "s/typeof window == 'object' || typeof importScripts == 'function'/1/g" $@
+ 
+-fmtoyAsm.js: glue.o libfmtoy.a libfmvoice/libfmvoice.a libvgm/$(LIBVGM_BUILD_DIR)/bin/libvgm-emu.a
++fmtoyAsm.js: glue.o libfmtoy.a libfmvoice/libfmvoice.a
+ 	$(CC) $^ -s WASM=0 -s EXPORT_ES6=1 -s MODULARIZE=1 $(EMLDFLAGS) -o $@
+ 	sed -i '1s/^/\/* eslint-disable *\/ /' $@
+ 
+@@ -65,9 +65,6 @@ midilib/libmidi.a:
+ 	cd midilib && make libmidi.a
+ libfmvoice/libfmvoice.a:
+ 	cd libfmvoice && make libfmvoice.a
+-libvgm/$(LIBVGM_BUILD_DIR)/bin/libvgm-emu.a:
+-	cd libvgm && cmake -B$(LIBVGM_BUILD_DIR) -DBUILD_LIBAUDIO=OFF -DBUILD_LIBPLAYER=OFF -DBUILD_PLAYER=OFF -DBUILD_VGM2WAV=OFF -DUTIL_LOADERS=OFF
+-	cd libvgm/$(LIBVGM_BUILD_DIR) && make vgm-emu
+ 
+ %.o: %.c
+ 	$(CC) -MMD -c $< -o $@ $(CFLAGS)
+@@ -78,4 +75,3 @@ clean:
+ 	rm -f *.o *.d *.a chips/*.o chips/*.d *.js *.wasm fmtoy_jack
+ 	cd libfmvoice && make clean
+ 	cd midilib && make clean
+-	cd libvgm && rm -rf build
+diff --git a/fmtoy_ym2151.c b/fmtoy_ym2151.c
+index 1e3678e..9332076 100644
+--- a/fmtoy_ym2151.c
++++ b/fmtoy_ym2151.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ym2151.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ #include "tools.h"
+ 
+ static int fmtoy_ym2151_init(struct fmtoy *fmtoy, int clock, int sample_rate, struct fmtoy_channel *channel) {
+diff --git a/fmtoy_ym2203.c b/fmtoy_ym2203.c
+index 19275ae..a7285fb 100644
+--- a/fmtoy_ym2203.c
++++ b/fmtoy_ym2203.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ym2203.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static int fmtoy_ym2203_init(struct fmtoy *fmtoy, int clock, int sample_rate, struct fmtoy_channel *channel) {
+ 	channel->chip->clock = clock;
+diff --git a/fmtoy_ym2608.c b/fmtoy_ym2608.c
+index d149ce1..2449c5d 100644
+--- a/fmtoy_ym2608.c
++++ b/fmtoy_ym2608.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ym2608.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static int fmtoy_ym2608_init(struct fmtoy *fmtoy, int clock, int sample_rate, struct fmtoy_channel *channel) {
+ 	channel->chip->clock = clock;
+diff --git a/fmtoy_ym2610.c b/fmtoy_ym2610.c
+index fcca9f4..c69c987 100644
+--- a/fmtoy_ym2610.c
++++ b/fmtoy_ym2610.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ym2610.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static int fmtoy_ym2610_init(struct fmtoy *fmtoy, int clock, int sample_rate, struct fmtoy_channel *channel) {
+ 	channel->chip->clock = clock;
+diff --git a/fmtoy_ym2610b.c b/fmtoy_ym2610b.c
+index cd434c4..a4adfa4 100644
+--- a/fmtoy_ym2610b.c
++++ b/fmtoy_ym2610b.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ym2610b.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static int fmtoy_ym2610b_init(struct fmtoy *fmtoy, int clock, int sample_rate, struct fmtoy_channel *channel) {
+ 	channel->chip->clock = clock;
+diff --git a/fmtoy_ym2612.c b/fmtoy_ym2612.c
+index 9a012db..e3de3d7 100644
+--- a/fmtoy_ym2612.c
++++ b/fmtoy_ym2612.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ym2612.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static int fmtoy_ym2612_init(struct fmtoy *fmtoy, int clock, int sample_rate, struct fmtoy_channel *channel) {
+ 	channel->chip->clock = clock;
+diff --git a/fmtoy_ym3812.c b/fmtoy_ym3812.c
+index 391f81a..5d6bae1 100644
+--- a/fmtoy_ym3812.c
++++ b/fmtoy_ym3812.c
+@@ -2,8 +2,8 @@
+ 
+ #include "fmtoy.h"
+ #include "fmtoy_ym3812.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static void fmwrite(DEVFUNC_WRITE_A8D8 writefn, void *dataPtr, uint8_t reg, uint8_t data) {
+ 	writefn(dataPtr, 0, reg);
+diff --git a/fmtoy_ymf262.c b/fmtoy_ymf262.c
+index 2bd1a1a..e281c2b 100644
+--- a/fmtoy_ymf262.c
++++ b/fmtoy_ymf262.c
+@@ -1,7 +1,7 @@
+ #include "fmtoy.h"
+ #include "fmtoy_ymf262.h"
+-#include "libvgm/emu/SoundEmu.h"
+-#include "libvgm/emu/SoundDevs.h"
++#include <vgm/emu/SoundEmu.h>
++#include <vgm/emu/SoundDevs.h>
+ 
+ static void fmwrite(DEVFUNC_WRITE_A8D8 writefn, void *dataPtr, uint8_t reg, uint8_t data) {
+ 	writefn(dataPtr, 0, reg);
+-- 
+2.51.0
+

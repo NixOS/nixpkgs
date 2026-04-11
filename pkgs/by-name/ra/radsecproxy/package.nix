@@ -7,14 +7,14 @@
   nettle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radsecproxy";
   version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "radsecproxy";
     repo = "radsecproxy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E7nU6NgCmwRzX5j1Zyx/LTztjLqYJKv+3VU6UE0HhZA=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://radsecproxy.github.io/";
     description = "Generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sargon ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

@@ -10,14 +10,14 @@
 let
   jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jing-trang";
   version = "20181222";
 
   src = fetchFromGitHub {
     owner = "relaxng";
     repo = "jing-trang";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-Krupa3MGk5UaaQsaNpPMZuIUzHJytDiksz9ysCPkFS4=";
     fetchSubmodules = true;
   };
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     saxon
   ];
 
-  CLASSPATH = "lib/saxon.jar";
+  env.CLASSPATH = "lib/saxon.jar";
 
   patches = [
     ./no-git-during-build.patch
@@ -54,16 +54,16 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "ant test";
 
-  meta = with lib; {
+  meta = {
     description = "RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

@@ -8,8 +8,8 @@
   jsonnet,
   jsonschema,
   omegaconf,
-  pytest-subtests,
   pytestCheckHook,
+  pythonAtLeast,
   pyyaml,
   reconplogger,
   requests,
@@ -21,34 +21,34 @@
   typeshed-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonargparse";
-  version = "4.42.0";
+  version = "4.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
-    tag = "v${version}";
-    hash = "sha256-M6CEUDf6JcjZWRBoHfVyFmX9ZV8xsB7illoBk0YzZs0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iZiXIeoxohbiKgE7oMy6q9kc3m0AxPFgoQunXmZDjYA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pyyaml ];
 
-  optional-dependencies = {
-    all = [
-      argcomplete
-      fsspec
-      jsonnet
-      jsonschema
-      omegaconf
-      ruyaml
-      docstring-parser
-      typeshed-client
-      requests
-    ];
+  optional-dependencies = lib.fix (self: {
+    all =
+      self.argcomplete
+      ++ self.fsspec
+      ++ self.jsonnet
+      ++ self.jsonschema
+      ++ self.omegaconf
+      ++ self.reconplogger
+      ++ self.ruyaml
+      ++ self.signatures
+      ++ self.toml
+      ++ self.urls;
     argcomplete = [ argcomplete ];
     fsspec = [ fsspec ];
     jsonnet = [
@@ -65,22 +65,27 @@ buildPythonPackage rec {
     ];
     toml = [ toml ];
     urls = [ requests ];
-  };
+  });
 
   nativeCheckInputs = [
-    pytest-subtests
     pytestCheckHook
     types-pyyaml
     types-requests
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.PicklingError: Can't pickle local object ...
+    "test_get_argument_group_class_underscores_to_dashes"
+    "test_pickle_parser"
+  ];
+
   pythonImportsCheck = [ "jsonargparse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to implement minimal boilerplate CLIs derived from various sources";
     homepage = "https://github.com/omni-us/jsonargparse";
-    changelog = "https://github.com/omni-us/jsonargparse/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/omni-us/jsonargparse/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

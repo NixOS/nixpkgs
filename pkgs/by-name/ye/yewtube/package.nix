@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yewtube";
-  version = "2.12.1";
+  version = "2.13.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "yewtube";
-    tag = "v${version}";
-    hash = "sha256-+V9t71Z8PKioM7HWlzTB6X7EokAWgqC3fQJr5tkPdq8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aRJQMm1Ykn6bs6OTSEGMTc5N8pinuRQQ+m54XpT45As=";
   };
 
   postPatch = ''
     # Don't try to detect the version at runtime with pip
     substituteInPlace mps_youtube/__init__.py \
       --replace "from pip._vendor import pkg_resources" "" \
-      --replace "__version__ =" "__version__ = '${version}' #"
+      --replace "__version__ =" "__version__ = '${finalAttrs.version}' #"
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -43,14 +43,14 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mps_youtube" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based YouTube player and downloader, forked from mps-youtube";
     mainProgram = "yt";
     homepage = "https://github.com/mps-youtube/yewtube";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fgaz
       koral
     ];
   };
-}
+})

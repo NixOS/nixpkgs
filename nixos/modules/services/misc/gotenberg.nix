@@ -8,6 +8,7 @@ let
   cfg = config.services.gotenberg;
 
   args = [
+    "--api-bind-ip=${cfg.bindIP}"
     "--api-port=${toString cfg.port}"
     "--api-timeout=${cfg.timeout}"
     "--api-root-path=${cfg.rootPath}"
@@ -351,6 +352,4 @@ in
       // optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
     };
   };
-
-  meta.maintainers = with lib.maintainers; [ pyrox0 ];
 }

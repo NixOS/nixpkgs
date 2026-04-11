@@ -8,18 +8,18 @@
   karmor,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "karmor";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
-    rev = "v${version}";
-    hash = "sha256-BlMWbd+c/dW3nrG9mQn4lfyXvauJ4GCcJypp+SMfAuY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xOI6meI88GB5w19T9eSn+8dTnhrUxUCKHUBk/1EaDVI=";
   };
 
-  vendorHash = "sha256-SZAJsstFUtZi+/sSkgmvFSjd4115YKsPuPEksWxE9D0=";
+  vendorHash = "sha256-FL5WL44dsM0uPYXMNfYKRd37umId21rMGvj84rYTU3A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=github.com/kubearmor/kubearmor-client/selfupdate.BuildDate=1970-01-01"
-    "-X=github.com/kubearmor/kubearmor-client/selfupdate.GitSummary=${version}"
+    "-X=github.com/kubearmor/kubearmor-client/selfupdate.GitSummary=${finalAttrs.version}"
   ];
 
   # integration tests require network access
@@ -54,11 +54,10 @@ buildGoModule rec {
     description = "Client tool to help manage KubeArmor";
     mainProgram = "karmor";
     homepage = "https://kubearmor.io";
-    changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
+    changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      urandom
       kashw2
     ];
   };
-}
+})

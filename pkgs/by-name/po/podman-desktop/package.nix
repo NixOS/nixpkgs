@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
-  electron_38,
+  electron_41,
   nodejs,
-  pnpm_10,
+  pnpm_10_29_2,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeDesktopItem,
   darwin,
   nix-update-script,
@@ -19,12 +21,12 @@
 }:
 
 let
-  electron = electron_38;
+  electron = electron_41;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.22.1";
+  version = "1.26.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -57,30 +59,35 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+YM1fiY2bH5nY1L/xWjMbWe5lH1LfyKW47OzCROB3nE=";
+    hash = "sha256-VVyKC1z7YECZlbTaFaq2OwGg0k22qBbn/HEOYiJ8fcw=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-2Cja6CQxjOlxjhsjGQ5C9a/C/2RfzKdvtRCKO7VztwQ=";
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 2;
+    hash = "sha256-tCp5qLZVo93H8VIToU3mkmwNsVXOAd1IEsL6RlazPXo=";
   };
 
   patches = [
     # podman should be installed with nix; disable auto-installation
     ./extension-no-download-podman.patch
+    ./system-defaults-dir.patch
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ELECTRON_OVERRIDE_DIST_PATH = electron.dist;
+  };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10_29_2
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-    makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -122,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram "$out/Applications/${appName}.app/Contents/MacOS/${appName}" \
           ${commonWrapperArgs}
       ''
+      # Enforce X11 to avoid the Wayland dashboard issue.
+      # Revisit this once issue https://github.com/podman-desktop/podman-desktop/issues/14388 is resolved.
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         mkdir -p "$out/share/lib/podman-desktop"
         cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
@@ -130,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
           --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+          --set XDG_SESSION_TYPE 'x11' \
           ${commonWrapperArgs} \
           --inherit-argv0
       ''

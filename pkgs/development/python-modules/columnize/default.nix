@@ -8,13 +8,16 @@
 
 buildPythonPackage rec {
   pname = "columnize";
-  version = "0.3.11";
+  version = "3.11";
   pyproject = true;
 
+  # 3.11 is the git tag for the 0.3.11 version
+  # r-ryantm keeps trying to change the version to 3.11
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "pycolumnize";
-    tag = "3.11";
+    tag = version;
     hash = "sha256-YJEIujoRpLvUM4H4CB1nEJaYStFOSVKIGzchnptlt7M=";
   };
 

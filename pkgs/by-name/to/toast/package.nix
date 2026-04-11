@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toast";
-  version = "0.47.7";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "toast";
-    rev = "v${version}";
-    sha256 = "sha256-vp70jv4F0VKd/OZHVRDcIJlKLwK9w+cV28lh0C7ESqg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-bhKIJ1x4WQAPAMEyw12NmmDbnDYbucIz0U3/MdTfmP0=";
   };
 
-  cargoHash = "sha256-3sBb6etSicYvEOIuLARUxo21ulVQ5qVsz65lAtuG+B4=";
+  cargoHash = "sha256-zo+KTtCJkCjG9j/VgUcnTZfRyJLj0C3BvKRREAjyeb8=";
 
   checkFlags = [ "--skip=format::tests::code_str_display" ]; # fails
 
-  meta = with lib; {
+  meta = {
     description = "Containerize your development and continuous integration environments";
     mainProgram = "toast";
     homepage = "https://github.com/stepchowfun/toast";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

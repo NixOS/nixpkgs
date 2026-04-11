@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "lightway";
-  version = "0-unstable-2025-09-19";
+  version = "0-unstable-2026-04-10";
 
   src = fetchFromGitHub {
     owner = "expressvpn";
     repo = "lightway";
-    rev = "dac72eb8af0994de020d71d24114717ecfb9804d";
-    hash = "sha256-oHxHJ4D/Xg/zAFiI0bMX3Dc05HXIjk+ZHuGY03cwY+c=";
+    rev = "72a924935df9db641e7f4fe28cbeafaead59014f";
+    hash = "sha256-tygK2CQmbbynJiwGkMvYzt2dHoE17DCJeqD+jlai/m8=";
   };
 
-  cargoHash = "sha256-RFlac10XFJXT3Giayy31kZ3Nn1Q+YsPt/zCdkSV0Atk=";
+  cargoHash = "sha256-NdVOphyBW5sflv5jZPV/ShfAJXb3ZOyDRctmn/2JY38=";
 
   cargoBuildFlags = lib.cli.toCommandLineGNU { } {
     package = [

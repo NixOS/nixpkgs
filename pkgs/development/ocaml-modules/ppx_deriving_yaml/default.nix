@@ -1,6 +1,7 @@
 {
   lib,
   buildDunePackage,
+  ocaml,
   fetchurl,
   ppxlib,
   alcotest,
@@ -27,7 +28,13 @@ buildDunePackage rec {
   pname = "ppx_deriving_yaml";
   inherit (param) version;
 
-  minimalOCamlVersion = "4.08";
+  env =
+    # Fix build with gcc15
+    lib.optionalAttrs
+      (lib.versions.majorMinor ocaml.version == "4.13" || lib.versions.majorMinor ocaml.version == "5.0")
+      {
+        NIX_CFLAGS_COMPILE = "-std=gnu11";
+      };
 
   src = fetchurl {
     url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${version}/ppx_deriving_yaml-${version}.tbz";

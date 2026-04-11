@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "2.1.4";
+  version = "2.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "pook";
     tag = "v${version}";
-    hash = "sha256-z0QaMdsX2xLXICgQwnlUD2KsgCn0jB4wO83+6O4B3D8=";
+    hash = "sha256-pStAlxhyZ1eDER17yLYc1r+kGpEZFW+mi0y3nrPA1CQ=";
   };
 
   build-system = [ hatchling ];
@@ -58,11 +58,11 @@ buildPythonPackage rec {
   # Tests use sockets
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
     changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

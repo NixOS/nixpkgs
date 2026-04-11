@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchurl,
   fftw,
   gtk2,
   lv2,
@@ -15,10 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ir.lv2";
   version = "1.4.0";
 
-  src = fetchgit {
-    url = "https://git.hq.sig7.se/ir.lv2.git";
-    rev = "1d4a4f9b1aad6223d541ebb0c16d85d527478222";
-    hash = "sha256-6/KpwM/aHMNvtpf3/BJQjGe1kRZx3NFmV8F6r/bPkII=";
+  # https://github.com/NixOS/nixpkgs/issues/463147#issuecomment-3658352031
+  src = fetchurl {
+    url = "https://web.archive.org/web/20251216014553/https://git.hq.sig7.se/ir.lv2.git/snapshot/1d4a4f9b1aad6223d541ebb0c16d85d527478222.tar.gz";
+    hash = "sha256-lTzj4tf7jNOKnvcZzEbzPqg4aPgXcbCVwIHoV+5G+hU=";
   };
 
   buildInputs = [
@@ -49,6 +49,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
-    mainProgram = "convert4chan";
   };
 })

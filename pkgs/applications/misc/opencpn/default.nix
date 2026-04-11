@@ -42,8 +42,9 @@
   sqlite,
   tinyxml,
   util-linux,
-  wxGTK32,
-  xorg,
+  wxwidgets_3_2,
+  libxtst,
+  libxdmcp,
   xz,
 }:
 
@@ -57,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "Release_${finalAttrs.version}";
     hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
   };
+
+  patches = [
+    # https://github.com/OpenCPN/OpenCPN/pull/4900
+    ./fix-clang20.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
@@ -106,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     xz
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -114,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     libsepol
     util-linux
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
@@ -146,14 +152,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Concise ChartPlotter/Navigator";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kragniz
       lovesegfault
     ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
 })

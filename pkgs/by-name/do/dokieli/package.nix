@@ -16,20 +16,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-10-31";
+  version = "0-unstable-2026-03-25";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "491ba0313e7890443ea9efefe83529821ca5689f";
-    hash = "sha256-7ZY2s/dC6+ITxnoaOWP8VnB1hYwaVfxMTWh6OlqOuc4=";
+    rev = "d684e852325b2247b831b179efed5d96c211f864";
+    hash = "sha256-Af8KsH1tqPDuOUEaHRN3ULJwGWgZc5JgFT99sGKkkec=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-8LBMHdjWaxno4I+ZAwTw9WCVotX7O0eufhGJGg1a0w4=";
+    hash = "sha256-bUXAYeTJqz11Rl7vaNPNRBTqjLdSr0FrEQBAFLd9oEs=";
   };
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -42,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
 

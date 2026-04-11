@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pyroscope";
-  version = "1.13.4";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pyroscope";
-    rev = "v1.13.4";
-    hash = "sha256-nyb91BO4zzJl3AG/ojBO+q7WiicZYmOtztW6FTlQHMM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UPxGimkzXLFACqmAM1hNQIoNjN6OquVibwVmNvP00+s=";
   };
 
-  vendorHash = "sha256-GZMoXsoE3pL0T3tkWY7i1f9sGy5uVDqeurCvBteqV9A=";
+  vendorHash = "sha256-O8ZKIl5d2gvmtCqJOJJ5SU+qhNRyWj2kH0xHZzfLN5Y=";
   proxyVendor = true;
 
   subPackages = [
@@ -39,7 +39,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -56,7 +55,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/grafana/pyroscope";
     changelog = "https://github.com/grafana/pyroscope/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+      lf-
+    ];
     mainProgram = "pyroscope";
   };
 })

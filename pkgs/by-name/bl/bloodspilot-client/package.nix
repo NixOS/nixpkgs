@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   SDL,
   libGLU,
   libGL,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./bloodspilot-sdl-window-fix.patch ];
 
   buildInputs = [
-    libX11
+    libx11
     SDL
     SDL_ttf
     SDL_image
@@ -34,17 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  NIX_LDFLAGS = "-lX11";
+  env.NIX_LDFLAGS = "-lX11";
 
   meta = {
     description = "Multiplayer space combat game (client part)";
     mainProgram = "bloodspilot-client-sdl";
     homepage = "http://bloodspilot.sf.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
 })

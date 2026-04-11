@@ -3,7 +3,6 @@
   mkKdeDerivation,
   replaceVars,
   qtdeclarative,
-  kauth,
   samba,
   shadow,
 }:
@@ -22,7 +21,6 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtdeclarative
-    kauth
   ];
 
   # We can't actually install samba via PackageKit, so let's not confuse users any more than we have to

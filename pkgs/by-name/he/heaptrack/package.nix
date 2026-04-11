@@ -11,6 +11,7 @@
   sparsehash,
   zstd,
   kdePackages,
+  rustc-demangle,
 }:
 
 stdenv.mkDerivation {
@@ -25,6 +26,11 @@ stdenv.mkDerivation {
     hash = "sha256-8NLpp/+PK3wIB5Sx0Z1185DCDQ18zsGj9Wp5YNKgX8E=";
   };
 
+  patches = [
+    ./boost-189.patch
+    ./cmake-minimum-required.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     kdePackages.extra-cmake-modules
@@ -38,6 +44,7 @@ stdenv.mkDerivation {
     libunwind
     sparsehash
     zstd
+    rustc-demangle
   ]
   ++ (with kdePackages; [
     qtbase
@@ -53,18 +60,23 @@ stdenv.mkDerivation {
     elfutils
   ];
 
+  postPatch = ''
+    substituteInPlace src/interpret/demangler.cpp \
+      --replace-fail "librustc_demangle.so" "${rustc-demangle}/lib/librustc_demangle.so"
+  '';
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper \
       $out/Applications/KDE/heaptrack_gui.app/Contents/MacOS/heaptrack_gui \
       $out/bin/heaptrack_gui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Heap memory profiler for Linux";
     homepage = "https://github.com/KDE/heaptrack";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "heaptrack_gui";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

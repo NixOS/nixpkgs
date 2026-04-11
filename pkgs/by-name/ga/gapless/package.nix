@@ -16,14 +16,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gapless";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P8hmywS/k+24KfFxpQdnBv0ArD+pKgUNcYk/Mnsx5jY=";
+    hash = "sha256-UzOmf0it0vazKo4PhAhaobJFZc5YKBLq7bcexatROOA=";
   };
 
   nativeBuildInputs = [
@@ -51,12 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful, fast, fluent, light weight music player written in GTK4";
     mainProgram = "g4music";
     homepage = "https://gitlab.gnome.org/neithern/g4music";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
 }:
@@ -10,9 +9,7 @@
 buildPythonPackage rec {
   pname = "mmcif-pdbx";
   version = "2.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Electrostatics";
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdbx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another version of PDBx/mmCIF Python implementation";
     homepage = "https://github.com/Electrostatics/mmcif_pdbx";
     changelog = "https://github.com/Electrostatics/mmcif_pdbx/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

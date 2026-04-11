@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    cmake
     onetbb
   ];
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Parallel Presolve for Integer and Linear Optimization";
     license = with lib.licenses; [ lgpl3Plus ];
     mainProgram = "papilo";
-    maintainers = with lib.maintainers; [ david-r-cox ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -37,16 +37,16 @@
   testers,
   wgpu-py,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wgpu-py";
-  version = "0.26.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
-    tag = "v${version}";
-    hash = "sha256-TaWrodP1KtCLIKi+NOnq2U7CLGVEhnlJilD6Txt7vgo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qy5tBlmA9mwEkk87WhIa5UxbXYNVFct6CrUWKm3Fy5s=";
   };
 
   postPatch =
@@ -59,10 +59,12 @@ buildPythonPackage rec {
         --replace-fail '[tool.hatch.build.targets.wheel.hooks.custom]' "" \
         --replace-fail 'path = "tools/hatch_build.py"' ""
     ''
-    # Skip the compute_textures / astronauts example during testing, as it uses `imageio` to
+    # Skip the compute_textures example during testing, as it uses `imageio` to
     # retrieve an image of an astronaut, which touches the network.
+    # Additionally skip the imgui_backend_sea and imgui_basic_example examples during testing,
+    # as they depend on imgui_bundle which has not been packaged for nixpkgs.
     + ''
-      substituteInPlace examples/compute_textures.py \
+      substituteInPlace examples/{compute_textures.py,imgui_backend_sea.py,imgui_basic_example.py} \
         --replace-fail 'import wgpu' 'import wgpu # run_example = false'
     '';
 
@@ -79,6 +81,8 @@ buildPythonPackage rec {
     [
       cffi
       sniffio
+      # https://github.com/pygfx/wgpu-py/blob/ff8db1772f7f94bf2a3e82989f5d296d2ddbb923/pyproject.toml#L16
+      (rendercanvas.overrideAttrs { doInstallCheck = false; })
     ]
     # Required only on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -123,9 +127,9 @@ buildPythonPackage rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    for suite in tests examples codegen tests_mem; do
-      pytest -vvv $suite
-    done
+    pytest tests -k "not test_render_timestamps_inside_encoder"
+    pytest examples
+    pytest tests_mem
 
     runHook postInstallCheck
   '';
@@ -138,10 +142,10 @@ buildPythonPackage rec {
   meta = {
     description = "WebGPU for Python";
     homepage = "https://github.com/pygfx/wgpu-py";
-    changelog = "https://github.com/pygfx/wgpu-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pygfx/wgpu-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
 
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

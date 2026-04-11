@@ -2,29 +2,24 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jost";
   version = "3.5";
 
   src = fetchzip {
-    url = "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
+    url = "https://github.com/indestructible-type/Jost/releases/download/${finalAttrs.version}/Jost.zip";
     hash = "sha256-ne81bMhmTzNZ/GGIzb7nCYh19vNLK+hJ3cP/zDxtiGM=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 fonts/otf/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/indestructible-type/Jost";
     description = "Sans serif font by Indestructible Type";
-    license = licenses.ofl;
-    maintainers = [ maintainers.ar1a ];
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.ar1a ];
   };
-}
+})

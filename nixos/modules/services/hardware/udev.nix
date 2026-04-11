@@ -410,7 +410,7 @@ in
           config.hardware.firmwareCompression == "zstd" -> config.boot.kernelPackages.kernelAtLeast "5.19";
         message = ''
           The firmware compression method is set to zstd, but the kernel version is too old.
-          The kernel version must be at least 5.3 to use zstd compression.
+          The kernel version must be at least 5.19 to use zstd compression.
         '';
       }
       {

@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "slack-bolt";
-  version = "1.26.0";
+  version = "1.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
     tag = "v${version}";
-    hash = "sha256-5VbljuIYuPNPVZ6OwK9GV0ZyCNtMH7aPogOoBaaVb5A=";
+    hash = "sha256-3aYsISTNc2uexzpIiBNnw40XegczL5BdKqi6j9K/A80=";
   };
 
   build-system = [ setuptools ];
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 

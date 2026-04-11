@@ -21,12 +21,12 @@
   gtk-sharp-2_0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgpod";
   version = "0.8.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkpod/libgpod-${version}.tar.bz2";
+    url = "mirror://sourceforge/gtkpod/libgpod-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Y4p5WdBOlfHmKrrQK9M3AuTo3++YSFrH2dUDlcN+lV0=";
   };
 
@@ -98,12 +98,12 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     description = "Library used by gtkpod to access the contents of an ipod";
     mainProgram = "ipod-read-sysinfo-extended";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

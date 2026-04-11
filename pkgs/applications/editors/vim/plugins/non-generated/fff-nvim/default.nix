@@ -2,39 +2,64 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  perl,
-  openssl,
-  vimUtils,
   nix-update-script,
+  openssl,
+  perl,
+  zig,
+  pkg-config,
+  stdenv,
+  vimUtils,
 }:
 let
-  version = "e8850c3-unstable-2025-10-20";
+  version = "0.5.2";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "e8850c3c62a13e92f71233350962e842fcabf01b";
-    hash = "sha256-qyzM45FaXqLipnBW2zTao2SvY21qiFsdsX+Mn2Tu3xI=";
+    tag = "v${version}";
+    hash = "sha256-rv33dRf53m9iJwRl56z9oU0EuY1wUChsZyHOi/3gv4A=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-ZZt4BlMgRik4LH92F5cgS84WI1Jeuw68jP+y1+QXfDE=";
+    cargoHash = "sha256-ylQtZa3ZRs38mhge5tLLCRpnUdHYSjuZOwU+/6TO8Cw=";
+
+    cargoBuildFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
+
+    cargoCheckFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
 
     nativeBuildInputs = [
       pkg-config
       perl
+      rustPlatform.bindgenHook
     ];
 
     buildInputs = [
       openssl
     ];
 
-    env = {
-      RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+    # This test requires curl and GitHub access
+    checkFlags = [
+      "--skip=update_check::tests::test_update_check_end_to_end"
+    ];
 
+    env = {
       OPENSSL_NO_VENDOR = true;
+
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+
+      ZIG = lib.getExe zig; # zlob requires zig
     };
   };
 in
@@ -45,13 +70,17 @@ vimUtils.buildVimPlugin {
   postPatch = ''
     substituteInPlace lua/fff/download.lua \
       --replace-fail \
-        "return plugin_dir .. '/../target'" \
+        "return plugin_dir .. '/../target/release'" \
         "return '${fff-nvim-lib}/lib'"
   '';
 
+  nvimSkipModule = [
+    # Skip single file dev config for testing fff.nvim locally
+    "empty_config"
+  ];
+
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.fff-nvim.fff-nvim-lib";
     };
 
@@ -65,6 +94,7 @@ vimUtils.buildVimPlugin {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      saadndm
     ];
   };
 }

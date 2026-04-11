@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
+  rename,
   nixosTests,
   variants ? [ ],
   suffix ? "",
@@ -17,24 +18,28 @@
     weights, and freely available to all.
   '',
 }:
-
-stdenvNoCC.mkDerivation rec {
+let
+  _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts${suffix}";
-  version = "2025.10.01";
+  version = "2026.04.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
-    rev = "noto-monthly-release-${version}";
-    hash = "sha256-SIF6G84sUvFSVatmZdF1zQve3pOYtlawJIXYFSW2srI=";
+    tag = "noto-monthly-release-${finalAttrs.version}";
+    hash = "sha256-f5A9vFTO+TgZTarN0cDmRZfBQxeqedzJp3KdCnua4Yw=";
   };
+
+  nativeBuildInputs = [
+    rename
+  ];
 
   outputs = [
     "out"
     "megamerge" # Experimental fonts created by merging regular notofonts
   ];
-
-  _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
   installPhase = ''
     # We check availability in order of variable -> otf -> ttf
@@ -61,7 +66,7 @@ stdenvNoCC.mkDerivation rec {
       ''
     else
       ''
-        for variant in $_variants; do
+        for variant in ${lib.concatStringsSep " " _variants}; do
           if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
             install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
           elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
@@ -71,7 +76,10 @@ stdenvNoCC.mkDerivation rec {
           fi
         done
       ''
-  );
+  )
+  + ''
+    rename 's/\[.*\]//' $out/share/fonts/noto/*
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "noto-monthly-release-";
@@ -91,4 +99,4 @@ stdenvNoCC.mkDerivation rec {
       jopejoe1
     ];
   };
-}
+})

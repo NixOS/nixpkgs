@@ -8,7 +8,6 @@
   packaging,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   webargs,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiohttp-apispec";
   version = "3.0.0b2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "maximdanilchenko";
@@ -54,10 +51,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_apispec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Build and document REST APIs with aiohttp and apispec";
     homepage = "https://github.com/maximdanilchenko/aiohttp-apispec/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

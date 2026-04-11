@@ -7,21 +7,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "procfd";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "deshaw";
     repo = "procfd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KhnSHtPT9H9CWotwQIA9gFvwgm0PKsmDjQS817PxMw0=";
+    hash = "sha256-Z18DUXT26ZRFbD25pCKqPlEnxboQKhyhKysXeOsebcE=";
   };
 
-  cargoHash = "sha256-srFXs+h+ZMXeWRwGQUAqMACJG4ZUgztWr2ff6sRfkU8=";
+  cargoHash = "sha256-QsdHNZnh86qQTE6ZtycrzqU+L72EBmRlRNqJ2CRU4MI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -30,6 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "procfd";
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
 })

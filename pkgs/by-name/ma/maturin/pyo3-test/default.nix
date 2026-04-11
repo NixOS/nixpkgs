@@ -7,19 +7,19 @@
   # These are always passed as an override or as a callPackage option.
   nativeBuildInputs,
   buildAndTestSubdir,
-  format,
+  pyproject,
   preConfigure,
 }:
 
 buildPythonPackage rec {
   pname = "word-count";
-  version = "0.13.2";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "pyo3";
     rev = "v${version}";
-    hash = "sha256-NOMrrfo8WjlPhtGxWUOPJS/UDDdbLQRCXR++Zd6JmIA=";
+    hash = "sha256-xuC/7rynufWCHBnMiJny4m1Y1aaogdv/5UsafpmZLAw=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   inherit
     buildAndTestSubdir
-    format
+    pyproject
     nativeBuildInputs
     preConfigure
     ;

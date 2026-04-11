@@ -1,7 +1,6 @@
 {
   lib,
   aiodns,
-  async-timeout,
   buildPythonPackage,
   cached-ipaddress,
   fetchFromGitHub,
@@ -12,7 +11,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +33,6 @@ buildPythonPackage rec {
     ifaddr
     netifaces
     pyroute2
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -53,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodiscover" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
     changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

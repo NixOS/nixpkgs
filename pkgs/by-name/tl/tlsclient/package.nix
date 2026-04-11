@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "tlsclient command line utility";
     longDescription = "unix port of 9front's tlsclient(1) and rcpu(1)";
     homepage = "https://git.sr.ht/~moody/tlsclient";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moody ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moody ];
     mainProgram = "tlsclient";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

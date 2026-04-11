@@ -121,27 +121,23 @@ rec {
 
   # Return a modified stdenv that builds static libraries instead of
   # shared libraries.
-  makeStaticLibraries =
-    stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (
-        args:
-        {
-          dontDisableStatic = true;
-        }
-        // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
-          configureFlags = (args.configureFlags or [ ]) ++ [
-            "--enable-static"
-            "--disable-shared"
-          ];
-          cmakeFlags = (args.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-          mesonFlags = (args.mesonFlags or [ ]) ++ [
-            "-Ddefault_library=static"
-            "-Ddefault_both_libraries=static"
-          ];
-        }
-      );
-    });
+  makeStaticLibraries = overrideMkDerivationArgs (
+    args:
+    {
+      dontDisableStatic = true;
+    }
+    // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+      configureFlags = (args.configureFlags or [ ]) ++ [
+        "--enable-static"
+        "--disable-shared"
+      ];
+      cmakeFlags = (args.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
+      mesonFlags = (args.mesonFlags or [ ]) ++ [
+        "-Ddefault_library=static"
+        "-Ddefault_both_libraries=static"
+      ];
+    }
+  );
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
@@ -190,14 +186,10 @@ rec {
     Modify a stdenv so that all buildInputs are implicitly propagated to
     consuming derivations
   */
-  propagateBuildInputs =
-    stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ (args.buildInputs or [ ]);
-        buildInputs = [ ];
-      });
-    });
+  propagateBuildInputs = overrideMkDerivationArgs (args: {
+    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ (args.buildInputs or [ ]);
+    buildInputs = [ ];
+  });
 
   /*
     Modify a stdenv so that the specified attributes are added to
@@ -209,10 +201,23 @@ rec {
           { env.NIX_CFLAGS_COMPILE = "-O0"; }
           stdenv;
   */
-  addAttrsToDerivation =
-    extraAttrs: stdenv:
+  addAttrsToDerivation = extraAttrs: overrideMkDerivationArgs (_: extraAttrs);
+
+  /*
+    Modify a stdenv so as to extend `mkDerivation`'s arguments.
+    A stronger version of `addAttrsToDerivation`.
+
+    Example:
+      requireCcache =
+        overrideMkDerivationArgs
+           (oldAttrs: {
+             requiredSystemFeatures = oldAttrs.requiredSystemFeatures or [ ] ++ [ "ccache" ];
+           });
+  */
+  overrideMkDerivationArgs =
+    extension: stdenv:
     stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (_: extraAttrs);
+      mkDerivationFromStdenv = extendMkDerivationArgs old extension;
     });
 
   /*
@@ -246,26 +251,20 @@ rec {
     binaries have debug info, and compiler optimisations are
     disabled.
   */
-  keepDebugInfo =
-    stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        dontStrip = true;
-        env = (args.env or { }) // {
-          NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
-          NIX_RUSTFLAGS = toString (args.env.NIX_RUSTFLAGS or "") + " -g -C opt-level=0 -C strip=none";
-        };
-      });
-    });
+  keepDebugInfo = overrideMkDerivationArgs (args: {
+    dontStrip = true;
+    env = (args.env or { }) // {
+      NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+      NIX_RUSTFLAGS = toString (args.env.NIX_RUSTFLAGS or "") + " -g -C opt-level=0 -C strip=none";
+    };
+  });
 
   # Modify a stdenv so that it uses the Gold linker.
-  useGoldLinker =
-    stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
-      });
-    });
+  useGoldLinker = overrideMkDerivationArgs (args: {
+    env = (args.env or { }) // {
+      NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+    };
+  });
 
   /*
     Copy the libstdc++ from the model stdenv to the target stdenv.
@@ -310,9 +309,14 @@ rec {
       let
         bintools = stdenv.cc.bintools.override {
           extraBuildCommands = ''
-            wrap ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
-            wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
-            wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
+            pushd $out/bin
+            ln -s ${pkgs.buildPackages.mold}/bin/${stdenv.cc.bintools.targetPrefix}ld.mold ${stdenv.cc.bintools.targetPrefix}ld.mold
+          '' # Pre-generated configure scripts call the linker binary without the target prefix when cross compiling.
+          + lib.optionalString (stdenv.cc.bintools.targetPrefix != "") ''
+            ln -s ${stdenv.cc.bintools.targetPrefix}ld.mold ld.mold
+          ''
+          + ''
+            popd
           '';
         };
       in
@@ -330,10 +334,28 @@ rec {
             (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12"))
             {
               mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-                NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+                env = (args.env or { }) // {
+                  NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+                };
               });
             }
       );
+
+  useWildLinker =
+    stdenv:
+    if !stdenv.targetPlatform.isLinux then
+      throw "Wild only supports building Linux ELF files from Linux hosts."
+    else
+      stdenv.override (prev: {
+        allowedRequisites = null;
+        cc = prev.cc.override {
+          bintools = prev.cc.bintools.override {
+            extraBuildCommands = ''
+              ln -fs ${pkgs.buildPackages.wild}/bin/* "$out/bin"
+            '';
+          };
+        };
+      });
 
   /*
     Modify a stdenv so that it builds binaries optimized specifically
@@ -341,20 +363,16 @@ rec {
 
     WARNING: this breaks purity!
   */
-  impureUseNativeOptimizations =
-    stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env = (args.env or { }) // {
-          NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native";
-        };
+  impureUseNativeOptimizations = overrideMkDerivationArgs (args: {
+    env = (args.env or { }) // {
+      NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native";
+    };
 
-        NIX_ENFORCE_NO_NATIVE = false;
+    NIX_ENFORCE_NO_NATIVE = false;
 
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-      });
-    });
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  });
 
   /*
     Modify a stdenv so that it builds binaries with the specified list of
@@ -371,13 +389,11 @@ rec {
       ];
   */
   withCFlags =
-    compilerFlags: stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env = (args.env or { }) // {
-          NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
-        };
-      });
+    compilerFlags:
+    overrideMkDerivationArgs (args: {
+      env = (args.env or { }) // {
+        NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+      };
     });
 
   withDefaultHardeningFlags =

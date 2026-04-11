@@ -6,17 +6,19 @@
   expat,
   fontconfig,
   freetype,
-  xorg,
+  libxrender,
+  libxext,
+  libx11,
+  libsm,
+  libice,
 }:
 
-# !!! assert freetype == xorg.freetype
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zoom";
   version = "1.1.5";
 
   src = fetchurl {
-    url = "https://www.logicalshift.co.uk/unix/zoom/zoom-${version}.tar.gz";
+    url = "https://www.logicalshift.co.uk/unix/zoom/zoom-${finalAttrs.version}.tar.gz";
     hash = "sha256-8pZ/HAVV341K6QRDUC0UzzO2rGW2AvSZ++Pp445V27w=";
   };
 
@@ -25,16 +27,16 @@ stdenv.mkDerivation rec {
     expat
     fontconfig
     freetype
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrender
+    libice
+    libsm
+    libx11
+    libxext
+    libxrender
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.logicalshift.co.uk/unix/zoom/";
     description = "Player for Z-Code, TADS and HUGO stories or games";
     longDescription = ''
@@ -44,8 +46,8 @@ stdenv.mkDerivation rec {
       released many interactive fiction stories before their ambitions to enter
       the database market finally brought them low.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "zoom";
   };
-}
+})

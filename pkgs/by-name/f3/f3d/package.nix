@@ -6,7 +6,7 @@
   cmake,
   help2man,
   gzip,
-  libXt,
+  libxt,
   openusd,
   onetbb,
   vtk,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.2.0";
+  version = "3.5.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-p1Cqam3sYDXJCU1A2sC/fV1ohxS3FGiVrxeGooNXVBQ=";
+    hash = "sha256-j8OSG3MNWAlCIZcjhWCMeskbcv+4pTn4ktRZXKYmBkc=";
+    fetchLFS = true;
   };
 
   nativeBuildInputs = [
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     python3Packages.pybind11
   ]
   ++ lib.optionals withUsd [
-    libXt
+    libxt
     openusd
     onetbb
   ];

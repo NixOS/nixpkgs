@@ -63,7 +63,7 @@ in
           "${pkgs.chisel}/bin/chisel server "
           + lib.concatStringsSep " " (
             lib.optional (cfg.host != null) "--host ${cfg.host}"
-            ++ lib.optional (cfg.port != null) "--port ${builtins.toString cfg.port}"
+            ++ lib.optional (cfg.port != null) "--port ${toString cfg.port}"
             ++ lib.optional (cfg.authfile != null) "--authfile ${cfg.authfile}"
             ++ lib.optional (cfg.keepalive != null) "--keepalive ${cfg.keepalive}"
             ++ lib.optional (cfg.backend != null) "--backend ${cfg.backend}"

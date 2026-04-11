@@ -10,13 +10,13 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-generators";
   version = "1.8.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wHmtB5H8AJTUaeGHw+0hsQ6nU4VyvVrP2P4NeCocRzY=";
   };
   strictDeps = true;
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of image builders";
     homepage = "https://github.com/nix-community/nixos-generators";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lassulus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lassulus ];
     mainProgram = "nixos-generate";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

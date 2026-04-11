@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.270.0";
+  version = "0.290.1";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DCgj2IXGidWET8jCmmmuz9viOjdO89UqloZ5yvnXluk=";
+    hash = "sha256-KSwgEju6RRFV0B0dbnutZ/xgnBeSnPW6pyIQwBYg8Ew=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
@@ -25,12 +25,14 @@ buildGoModule (finalAttrs: {
       --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
   '';
 
-  vendorHash = "sha256-U5H20Csk8EhIqmUBN8DVYA5jta2LoGLs/EYiZbGo6Tc=";
+  vendorHash = "sha256-8PJ2M5L8DkL4ydtUQbw0wKvt+5rVYbOAAGvURkSMm/o=";
 
   excludedPackages = [
     "bundle/internal"
     "acceptance"
     "integration"
+    "tools/testrunner"
+    "tools/testmask"
   ];
 
   ldflags = [
@@ -59,6 +61,8 @@ buildGoModule (finalAttrs: {
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"
       "TestPatchWheel"
+      # Requires HOME to be set
+      "TestCacheDirEnvVar"
     ]);
 
   nativeCheckInputs = [
@@ -83,7 +87,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/databricks";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

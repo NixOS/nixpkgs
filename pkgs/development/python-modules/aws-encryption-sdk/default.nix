@@ -8,23 +8,20 @@
   mock,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-encryption-sdk";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-encryption-sdk-python";
-    tag = "v${version}";
-    hash = "sha256-SlYXob61YLl96NKnmsGZTIU10bfwKYbhLsHjC/tXGI4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-u0Fu6ikUJ70RQgptsAGbzmx3+FpXGTpN4Y2rKOSgO2o=";
   };
 
   build-system = [ setuptools ];
@@ -59,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_encryption_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the AWS Encryption SDK";
     homepage = "https://aws-encryption-sdk-python.readthedocs.io/";
-    changelog = "https://github.com/aws/aws-encryption-sdk-python/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    changelog = "https://github.com/aws/aws-encryption-sdk-python/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

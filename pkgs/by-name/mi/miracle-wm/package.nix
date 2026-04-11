@@ -31,19 +31,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.7.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AgzLv6HkmHmWLQuWv2QXWhzB8jxvEKLyznVj67J6Wl8=";
+    hash = "sha256-N8FDoQDEfv0xGjtnKx+jNfRwxvJdb4ETvQnZuBvlccQ=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
-      --replace-fail '-march=native' '# -march=native' \
+      --replace-fail '-march=native' '# -march=native'
+  ''
+  # Fix compat with newer Mir
+  # https://github.com/miracle-wm-org/miracle-wm/commit/aaae6e64261d8a00c2a1df47e2eab99400382d69
+  # Remove when version > 0.8.3
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \

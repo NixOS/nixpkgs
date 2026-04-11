@@ -5,7 +5,7 @@
   mp3Support ? true,
   lame,
   opusSupport ? true,
-  opusTools,
+  opus-tools,
   faacSupport ? false,
   faac,
   flacSupport ? true,
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication {
       zeroconf
     ]
     ++ lib.optional mp3Support lame
-    ++ lib.optional opusSupport opusTools
+    ++ lib.optional opusSupport opus-tools
     ++ lib.optional faacSupport faac
     ++ lib.optional flacSupport flac
     ++ lib.optional soxSupport sox
@@ -69,12 +69,12 @@ python3Packages.buildPythonApplication {
     $out/bin/pulseaudio-dlna --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight streaming server which brings DLNA / UPNP and Chromecast support to PulseAudio and Linux";
     mainProgram = "pulseaudio-dlna";
     homepage = "https://github.com/Cygn/pulseaudio-dlna";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.linux;
   };
 }

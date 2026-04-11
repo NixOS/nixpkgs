@@ -3,7 +3,8 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  SDL2,
+  sdl3,
+  libdecor,
   libsecret,
   glib,
   gnutls,
@@ -17,7 +18,7 @@
 }:
 
 let
-  rev = "1.2.1";
+  rev = "1.4.0";
 in
 buildDotnetModule rec {
   pname = "XIVLauncher";
@@ -27,7 +28,7 @@ buildDotnetModule rec {
     owner = "goatcorp";
     repo = "XIVLauncher.Core";
     inherit rev;
-    hash = "sha256-bGHUDPUrohcc/lLE647cicaEIYo9t1/anc2VeMJlsGc=";
+    hash = "sha256-kEMqqwlp+ZHjrEz6K7nYXyi0L8VAy1rHW2bOHEk1F6M=";
     fetchSubmodules = true;
   };
 
@@ -49,8 +50,8 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
   # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetFlags = [
     "-p:BuildHash=${rev}"
@@ -58,7 +59,7 @@ buildDotnetModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace lib/FFXIVQuickLauncher/src/XIVLauncher.Common/Game/Patch/Acquisition/Aria/AriaHttpPatchAcquisition.cs \
+    substituteInPlace lib/FFXIVQuickLauncher/src/XIVLauncher.Common/Game/Patch/Acquisition/Aria/AriaPatchAcquisition.cs \
       --replace-fail 'ariaPath = "aria2c"' 'ariaPath = "${aria2}/bin/aria2c"'
   '';
 
@@ -93,7 +94,8 @@ buildDotnetModule rec {
   executables = [ "XIVLauncher.Core" ];
 
   runtimeDeps = [
-    SDL2
+    sdl3
+    libdecor
     libsecret
     glib
     gnutls
@@ -111,11 +113,12 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom launcher for FFXIV";
     homepage = "https://github.com/goatcorp/XIVLauncher.Core";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      blooym
       keysmashes
       witchof0x20
     ];

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "nvdlib";
   version = "0.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Vehemont";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nvdlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the National Vulnerability CVE/CPE API";
     homepage = "https://github.com/Vehemont/nvdlib/";
     changelog = "https://github.com/vehemont/nvdlib/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

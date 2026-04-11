@@ -27,11 +27,11 @@ buildPythonApplication rec {
   # Project has no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Export pass(1), \"Standard unix password manager\", to CSV";
     mainProgram = "pass2csv";
     homepage = "https://codeberg.org/svartstare/pass2csv";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

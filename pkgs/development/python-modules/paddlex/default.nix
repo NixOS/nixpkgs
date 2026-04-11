@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   numpy,
   pillow,
   pyyaml,
@@ -17,60 +18,31 @@
   ruamel-yaml,
   typing-extensions,
   ujson,
-  distutils,
+  gputil,
   huggingface-hub,
+  modelscope,
+  aistudio-sdk,
   nix-update-script,
 }:
 
-let
-  gputil = buildPythonPackage rec {
-    pname = "gputil";
-    version = "1.4.0";
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "anderskm";
-      repo = "gputil";
-      tag = "v${version}";
-      hash = "sha256-iOyB653BMmDBtK1fM1ZyddjlnaypsuLMOV0sKaBt+yE=";
-    };
-
-    build-system = [ setuptools ];
-
-    dependencies = [ distutils ];
-
-    pythonImportsCheck = [ "GPUtil" ];
-
-    meta = {
-      homepage = "https://github.com/anderskm/gputil";
-      license = lib.licenses.mit;
-      description = "Getting GPU status from NVIDA GPUs using nvidia-smi";
-      changelog = "https://github.com/anderskm/gputil/releases/tag/${src.tag}";
-    };
-  };
-in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.3.5";
+  version = "3.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-rxVfkvi/uOetMbR3pHN+apjqtvgTq5rwLc0gkhI6OvU=";
+    hash = "sha256-XQrRo4B/xn7uBbQv7YjfKaK4DLiTciGnXjb+dL1hkw4=";
   };
 
-  build-system = [ setuptools ];
-
-  pythonRemoveDeps = [
-    # unpackaged
-    "aistudio-sdk"
-    "modelscope"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
+
   pythonRelaxDeps = [
-    "numpy"
-    "pandas"
     "pyyaml"
   ];
 
@@ -91,6 +63,8 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+    modelscope
+    aistudio-sdk
   ];
 
   passthru.updateScript = nix-update-script { };

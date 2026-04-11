@@ -2,22 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  perl,
   jq,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsv";
-  version = "1.0.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "liquidaty";
     repo = "zsv";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-o5n6pUMdirtNsLAi17+sp0xteFCfFUcr2k8q57pTW2A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ht6sg93bHrNTw1tEEkd9vRl5aIsc1q7nASakvECdyzI=";
   };
-
-  nativeBuildInputs = [ perl ];
 
   buildInputs = [ jq ];
 
@@ -25,13 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--jq-prefix=${lib.getLib jq}"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "World's fastest (simd) CSV parser, with an extensible CLI";
     mainProgram = "zsv";
     homepage = "https://github.com/liquidaty/zsv";
     changelog = "https://github.com/liquidaty/zsv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chillcicada ];
     platforms = lib.platforms.all;
   };
 })

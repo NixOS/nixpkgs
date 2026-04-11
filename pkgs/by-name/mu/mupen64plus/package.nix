@@ -15,17 +15,17 @@
   vulkan-loader,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mupen64plus";
   version = "2.6.0";
 
   src = fetchurl {
-    url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
+    url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${finalAttrs.version}/mupen64plus-bundle-src-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
   };
 
   patches = [
-    # Remove unused SDL2 header that erroneously adds libX11 dependency
+    # Remove unused SDL2 header that erroneously adds libx11 dependency
     ./remove-unused-header.patch
   ];
 
@@ -52,12 +52,11 @@ stdenv.mkDerivation rec {
     dash m64p_install.sh DESTDIR="$out" PREFIX=""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nintendo 64 Emulator";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.mupen64plus.org/";
-    maintainers = [ maintainers.sander ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mupen64plus";
   };
-}
+})

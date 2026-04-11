@@ -74,15 +74,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eigenpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
     changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

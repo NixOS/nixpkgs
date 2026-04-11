@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "daqp";
   version = "0.7.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darnstrom";
@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "daqp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dual active-set algorithm for convex quadratic programming";
     homepage = "https://github.com/darnstrom/daqp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }

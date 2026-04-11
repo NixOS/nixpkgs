@@ -14,8 +14,9 @@
 #
 # No attempt is made to support custom LLVM optimization flags, or the
 # undocumented flag to disable TBAA, or avoid
-# <https://gitlab.haskell.org/ghc/ghc/-/issues/23870>, as these are not
-# required to bootstrap GHC and at worst will produce an error message.
+# <https://gitlab.haskell.org/ghc/ghc/-/issues/23870> (krank:ignore-line),
+# as these are not required to bootstrap GHC and at worst will produce an
+# error message.
 #
 # It is called `subopt` to reflect the fact that it uses `opt(1)` as a
 # subprocess, and the fact that the GHC build system situation

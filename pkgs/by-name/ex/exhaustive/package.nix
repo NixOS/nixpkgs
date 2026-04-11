@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "exhaustive";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "nishanths";
     repo = "exhaustive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OLIdtKzCqnBkzdUSIl+UlENeMl3zrBE47pLWPg+6qXw=";
   };
 
@@ -27,11 +27,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Check exhaustiveness of switch statements of enum-like constants in Go code";
     mainProgram = "exhaustive";
     homepage = "https://github.com/nishanths/exhaustive";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ meain ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ meain ];
   };
-}
+})

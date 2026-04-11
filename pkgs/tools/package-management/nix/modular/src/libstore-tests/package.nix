@@ -10,6 +10,8 @@
   nix-store-test-support,
   sqlite,
 
+  openssl,
+
   rapidcheck,
   gtest,
   runCommand,
@@ -26,14 +28,11 @@ mkMesonExecutable (finalAttrs: {
 
   workDir = ./.;
 
-  # Hack for sake of the dev shell
-  passthru.externalBuildInputs = [
+  buildInputs = [
     sqlite
     rapidcheck
     gtest
-  ];
 
-  buildInputs = finalAttrs.passthru.externalBuildInputs ++ [
     nix-store
     nix-store-c
     nix-store-test-support
@@ -63,7 +62,10 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
-            buildInputs = [ writableTmpDirAsHomeHook ];
+            buildInputs = [
+              writableTmpDirAsHomeHook
+            ]
+            ++ lib.optional (lib.versionAtLeast version "2.34pre") openssl;
           }
           ''
             export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}

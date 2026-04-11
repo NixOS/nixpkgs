@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   torch,
-  apple-sdk_13,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
 
   # nativeBuildInputs
@@ -28,20 +25,17 @@
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
-  pname = "torchvision";
-  version = "0.24.0";
 in
-buildPythonPackage {
-  format = "setuptools";
-  inherit pname version;
-
-  stdenv = torch.stdenv;
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
+  pname = "torchvision";
+  version = "0.26.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    tag = "v${version}";
-    hash = "sha256-EyA/d2fAdK2arMBqNtDwKtpaKb171zqEnYFrqAFQr+g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FOdDGY3v8yWBhtNo9tZP79/xwrc7AoIY5Y1ZABzWe6g=";
   };
 
   nativeBuildInputs = [
@@ -55,14 +49,6 @@ buildPythonPackage {
     libjpeg_turbo
     libpng
     torch.cxxdev
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # This should match the SDK used by `torch` above
-    apple-sdk_13
-
-    # error: unknown type name 'MPSGraphCompilationDescriptor'; did you mean 'MPSGraphExecutionDescriptor'?
-    # https://developer.apple.com/documentation/metalperformanceshadersgraph/mpsgraphcompilationdescriptor/
-    (darwinMinVersionHook "12.0")
   ];
 
   dependencies = [
@@ -98,9 +84,9 @@ buildPythonPackage {
   meta = {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

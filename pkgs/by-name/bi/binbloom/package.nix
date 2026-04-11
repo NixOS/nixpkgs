@@ -5,25 +5,25 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "binbloom";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = "binbloom";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ox4o9RPtqMsme//8dVatNUo+mA/6dM9eI/T5lsuSAus=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Raw binary firmware analysis software";
     mainProgram = "binbloom";
     homepage = "https://github.com/quarkslab/binbloom";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erdnaxe ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erdnaxe ];
+    platforms = lib.platforms.linux;
   };
-}
+})

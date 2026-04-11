@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "audiness";
-  version = "0.5.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audiness";
-    tag = version;
-    hash = "sha256-+5NDea4p/JWEk305EhAtab3to36a74KR50eosw6c5qI=";
+    tag = finalAttrs.version;
+    hash = "sha256-row372NA8/DJbI6WJyGmKrlfuCsxUa5inhMljRzShT8=";
   };
 
   pythonRelaxDeps = [
@@ -29,14 +29,19 @@ python3.pkgs.buildPythonApplication rec {
     validators
   ];
 
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-mock
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "audiness" ];
 
   meta = {
     description = "CLI tool to interact with Nessus";
-    homepage = "https://github.com/audiusGmbH/audiness";
-    changelog = "https://github.com/audiusGmbH/audiness/releases/tag/${version}";
+    homepage = "https://github.com/audius/audiness";
+    changelog = "https://github.com/audius/audiness/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "audiness";
   };
-}
+})

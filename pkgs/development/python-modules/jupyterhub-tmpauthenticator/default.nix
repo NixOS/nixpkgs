@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   jupyterhub,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "jupyterhub-tmpauthenticator";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tmpauthenticator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Jupyterhub authenticator that allows anyone to log in";
     homepage = "https://github.com/jupyterhub/tmpauthenticator";
     changelog = "https://github.com/jupyterhub/tmpauthenticator/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ chiroptical ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

@@ -9,10 +9,10 @@
 
 let
   pname = "jigasi";
-  version = "1.1-311-g3de47d0";
+  version = "1.1-395-g3bb4143";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    hash = "sha256-pwUgkId7AHFjbqYo02fBgm0gsiMqEz+wvwkdy6sgTD0=";
+    url = "https://download.jitsi.org/stable/jigasi_${version}-1_all.deb";
+    hash = "sha256-kBUo9TZZs3/OUrV1t813jk8Pf2vNrKEP7hZL2L2oMNE=";
   };
 in
 stdenv.mkDerivation {
@@ -24,13 +24,13 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    substituteInPlace usr/share/${pname}/${pname}.sh \
-      --replace "exec java" "exec ${jdk11}/bin/java"
+    substituteInPlace usr/share/jigasi/jigasi.sh \
+      --replace-fail "exec java" "exec ${jdk11}/bin/java"
 
     mkdir -p $out/{share,bin}
-    mv usr/share/${pname} $out/share/
+    mv usr/share/jigasi $out/share/
     mv etc $out/
-    ln -s $out/share/${pname}/${pname}.sh $out/bin/${pname}
+    ln -s $out/share/jigasi/jigasi.sh $out/bin/jigasi
     runHook postInstall
   '';
 
@@ -38,15 +38,15 @@ stdenv.mkDerivation {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Server-side application that allows regular SIP clients to join Jitsi Meet conferences";
     mainProgram = "jigasi";
     longDescription = ''
       Jitsi Gateway to SIP: a server-side application that allows regular SIP clients to join Jitsi Meet conferences hosted by Jitsi Videobridge.
     '';
     homepage = "https://github.com/jitsi/jigasi";
-    license = licenses.asl20;
-    teams = [ teams.jitsi ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.jitsi ];
+    platforms = lib.platforms.linux;
   };
 }

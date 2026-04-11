@@ -17,7 +17,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.43.0";
+  version = "1.49.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-148bubjJYbmqugOd8crWXLqxigWfd3VVnsL0/WB2FYM=";
+    hash = "sha256-4vUcKHoQto4TQce4y4/MwdES0+PPlSjNvzLW77FodWs=";
   };
 
-  cargoHash = "sha256-3DIpEPStOh/PcjoJ5dWpfSgRNMTCmN+wO2VzeNtikFU=";
+  cargoHash = "sha256-5hhwzkNgF+i5aCUoVh1VNfkNJFttyy5cLhBwu8uHmAQ=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage {
     export USER=just-user
     export USERNAME=just-user
     export JUST_CHOOSER="${coreutils}/bin/cat"
+    export XDG_RUNTIME_DIR=$(mktemp -d)
 
     # Prevent string.rs from being changed
     cp tests/string.rs $TMPDIR/string.rs
@@ -65,10 +66,6 @@ rustPlatform.buildRustPackage {
     export PATH=${bashInteractive}/bin:$PATH
     patchShebangs tests
   '';
-
-  patches = [
-    ./fix-just-path-in-tests.patch
-  ];
 
   cargoBuildFlags = [
     "--package=just"
@@ -91,8 +88,8 @@ rustPlatform.buildRustPackage {
       # No linkcheck in sandbox
       echo 'optional = true' >> book/en/book.toml
       mdbook build book/en
-      mkdir -p $doc/share/doc/$name
-      mv ./book/en/build/html $doc/share/doc/$name
+      mkdir -p $doc/share/doc/$name/html
+      mv ./book/en/build/* $doc/share/doc/$name/html
     ''
     + lib.optionalString installManPages ''
       $out/bin/just --man > ./just.1

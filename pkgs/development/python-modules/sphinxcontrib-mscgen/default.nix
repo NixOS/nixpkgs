@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   sphinx,
   mscgen,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-mscgen";
   version = "0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension using mscgen to render diagrams";
     homepage = "https://github.com/sphinx-contrib/mscgen";
-    license = licenses.bola11;
+    license = lib.licenses.bola11;
     maintainers = [ ];
   };
 }

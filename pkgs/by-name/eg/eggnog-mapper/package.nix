@@ -7,7 +7,7 @@
   zlib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eggnog-mapper";
   version = "2.1.13";
   format = "setuptools";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = "eggnog-mapper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gu4D8DBvgCPlO+2MjeNZy6+lNqsIlksegWmmYvEZmUU=";
   };
 
@@ -47,11 +47,11 @@ python3Packages.buildPythonApplication rec {
   # the user can download only those that interest them.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast genome-wide functional annotation through orthology assignment";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";
-    maintainers = with maintainers; [ luispedro ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ luispedro ];
+    platforms = lib.platforms.all;
   };
-}
+})

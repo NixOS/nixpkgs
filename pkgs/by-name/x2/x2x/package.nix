@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  libX11,
-  libXtst,
-  libXext,
+  libx11,
+  libxtst,
+  libxext,
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libXi,
+  libxi,
 }:
 
 stdenv.mkDerivation {
@@ -26,17 +26,17 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXtst
-    libXext
-    libXi
+    libx11
+    libxtst
+    libxext
+    libxi
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows the keyboard, mouse on one X display to be used to control another X display";
     homepage = "https://github.com/dottedmag/x2x";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     mainProgram = "x2x";
   };
 }

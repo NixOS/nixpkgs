@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyheck,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dotwiz";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rnag";
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "benchmarks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dict subclass that supports dot access notation";
     homepage = "https://github.com/rnag/dotwiz";
     changelog = "https://github.com/rnag/dotwiz/blob/v${src.tag}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

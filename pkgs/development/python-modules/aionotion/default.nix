@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   yarl,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "aionotion";
   version = "2025.02.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -69,11 +66,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aionotion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
     changelog = "https://github.com/bachya/aionotion/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

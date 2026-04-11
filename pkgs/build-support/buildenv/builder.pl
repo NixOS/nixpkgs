@@ -15,7 +15,7 @@ $SIG{__DIE__}  = sub { die "pkgs.buildEnv error: ", @_ };
 my $out = $ENV{"out"};
 my $extraPrefix = $ENV{"extraPrefix"};
 
-my @pathsToLink = split ' ', $ENV{"pathsToLink"};
+my @pathsToLink = @{decode_json $ENV{"pathsToLinkJSON"}};
 
 sub isInPathsToLink($path) {
     $path = "/" if $path eq "";
@@ -74,7 +74,7 @@ sub findFiles;
 
 sub findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     opendir DIR, "$target" or die "cannot open `$target': $!";
-    my @names = readdir DIR or die;
+    my @names = readdir DIR;
     closedir DIR;
 
     foreach my $name (@names) {

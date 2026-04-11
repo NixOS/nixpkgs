@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-magic,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pycketcasts";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nwithan8";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycketcasts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with PocketCast's unofficial API";
     homepage = "https://github.com/nwithan8/pycketcasts";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

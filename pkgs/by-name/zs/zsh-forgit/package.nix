@@ -11,17 +11,18 @@
   gnugrep,
   gnused,
   makeWrapper,
+  perl,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-forgit";
-  version = "25.10.0";
+  version = "26.04.1";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     tag = finalAttrs.version;
-    hash = "sha256-MG60GzRG0NFQsGXBXBedSweucxo88S/NACXTme7ixRM=";
+    hash = "sha256-/tG//6s0km8IUJXI4f++/UUCTAOYTDE/C5bbkHFhdNY=";
   };
 
   strictDeps = true;
@@ -52,18 +53,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           git
           gnugrep
           gnused
+          perl
         ]
       }
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wfxr/forgit";
     description = "Utility tool powered by fzf for using git interactively";
     mainProgram = "git-forgit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ deejayem ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ deejayem ];
+    platforms = lib.platforms.all;
   };
 })

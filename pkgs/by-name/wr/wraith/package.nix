@@ -1,36 +1,45 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  openssl_1_1,
+  fetchFromGitHub,
+  openssl,
+  replaceVars,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wraith";
-  version = "1.4.10";
-  src = fetchurl {
-    url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
-    sha256 = "1h8159g6wh1hi69cnhqkgwwwa95fa6z1zrzjl219mynbf6vjjzkw";
+  version = "1.4.10-unstable-2024-03-19";
+
+  src = fetchFromGitHub {
+    owner = "wraith";
+    repo = "wraith";
+    rev = "5e463847f86b5e72554bd895224a79a44091c59d";
+    hash = "sha256-zKF8CVwj7LvkIgXIwQLC2vgBG7nL8RhoMov8YNdm9dc=";
+    fetchSubmodules = true;
   };
   hardeningDisable = [ "format" ];
-  buildInputs = [ openssl_1_1 ];
+  buildInputs = [ openssl ];
   patches = [
-    ./configure.patch
-    ./dlopen.patch
+    (replaceVars ./configure.patch {
+      openssl-lib = "${lib.getLib openssl}/lib";
+      openssl-include = "${lib.getDev openssl}/include";
+    })
+    (replaceVars ./remove-git-dep.patch {
+      rev = finalAttrs.src.rev;
+      rev-short = lib.sources.shortRev finalAttrs.src.rev;
+      version = finalAttrs.version;
+    })
   ];
-  postPatch = ''
-    substituteInPlace configure        --subst-var-by openssl.dev ${openssl_1_1.dev} \
-                                       --subst-var-by openssl-lib ${lib.getLib openssl_1_1}
-    substituteInPlace src/libssl.cc    --subst-var-by openssl ${lib.getLib openssl_1_1}
-    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${lib.getLib openssl_1_1}
-  '';
+  configureFlags = [
+    "SSL_LIBDIR=${lib.getLib openssl}/lib"
+  ];
   installPhase = ''
     mkdir -p $out/bin
     cp -a wraith $out/bin/wraith
     ln -s wraith $out/bin/hub
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "IRC channel management bot written purely in C/C++";
     longDescription = ''
@@ -47,8 +56,8 @@ stdenv.mkDerivation rec {
       to fix its runtime dependenices.
     '';
     homepage = "https://wraith.botpack.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elitak ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

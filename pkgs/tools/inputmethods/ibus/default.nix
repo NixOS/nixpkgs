@@ -38,7 +38,7 @@
   nixosTests,
   versionCheckHook,
   nix-update-script,
-  libX11,
+  libx11,
   libOnly ? false,
 }:
 
@@ -67,13 +67,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibus";
-  version = "1.5.32";
+  version = "1.5.33";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     tag = finalAttrs.version;
-    hash = "sha256-Rp2Aw2C2LXMBp8++pnZtPHiPoFDERpkDsKd0E//twuY=";
+    hash = "sha256-cpNZI6KbL9zUJHw1szpWl4lOEAvlBdd+FA6xGh1sYYY=";
   };
 
   patches = [
@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       PYTHON = null;
     })
     ./build-without-dbus-launch.patch
+    # https://github.com/NixOS/nixpkgs/issues/230290
+    ./vala-parallelism.patch
   ];
 
   outputs = [
@@ -182,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for pygobject overrides
     isocodes
     json-glib
-    libX11
+    libx11
     vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals (!libOnly) [

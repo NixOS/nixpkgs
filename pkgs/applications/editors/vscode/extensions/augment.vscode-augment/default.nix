@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-augment";
     publisher = "augment";
-    version = "0.613.0";
-    hash = "sha256-2HvDCfNX+snwnqd9XI6rHBkGBydxnf5OYYfBnAAxjZk=";
+    version = "0.825.5";
+    hash = "sha256-UKkrdxHlbcdpd3RQxNpZVBINZlncPv7e5RETnj/19Ts=";
   };
 
   meta = {

@@ -5,7 +5,7 @@
   libsForQt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rmview";
   version = "3.1.4";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bordaigorl";
     repo = "rmview";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-yae86PR/TZKApqrMP7MdS8941J9wqlKzkOnFyIhUk4o=";
   };
 
@@ -40,11 +40,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast live viewer for reMarkable 1 and 2";
     mainProgram = "rmview";
     homepage = "https://github.com/bordaigorl/rmview";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.nickhu ];
   };
-}
+})

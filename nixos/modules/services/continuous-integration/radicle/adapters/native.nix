@@ -15,7 +15,7 @@ let
 in
 
 {
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.teams = [ lib.teams.radicle ];
 
   options.services.radicle.ci.adapters.native = {
     instances = lib.mkOption {
@@ -129,7 +129,7 @@ in
     systemd.tmpfiles.settings.radicle-native-ci = lib.listToAttrs (
       map (
         instance:
-        lib.nameValuePair (builtins.dirOf instance.settings.log) {
+        lib.nameValuePair (dirOf instance.settings.log) {
           d = {
             user = config.users.users.radicle.name;
             group = config.users.groups.radicle.name;

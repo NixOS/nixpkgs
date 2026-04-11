@@ -11,12 +11,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "molsketch";
   version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/molsketch/Molsketch-${version}-src.tar.gz";
+    url = "mirror://sourceforge/molsketch/Molsketch-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-6wFvl3Aktv8RgEdI2ENsKallKlYy/f8Tsm5C0FB/igI=";
   };
 
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  meta = with lib; {
+  meta = {
     description = "2D molecule editor";
     homepage = "https://sourceforge.net/projects/molsketch/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.moni ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.moni ];
     mainProgram = "molsketch";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

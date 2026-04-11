@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-grpc,
@@ -13,8 +12,6 @@ buildPythonPackage {
   inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp";
 

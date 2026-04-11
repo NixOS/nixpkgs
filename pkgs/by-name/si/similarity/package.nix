@@ -20,8 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-7qLC1RvjBXd9JFrJdDTIngZhMvyQV1ko3MXRr/2y7hA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.pname}-ts";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/similarity-ts";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

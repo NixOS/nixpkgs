@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-xwin";
-  version = "0.20.1";
+  version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "rust-cross";
     repo = "cargo-xwin";
-    rev = "v${version}";
-    hash = "sha256-RfXX6LZrxQmWtjnMVIpCj9KVn5fnvQRGgEeH+gTR0Vk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mgFMjNxjB4S9/nou6S8NN8ZpXX7K49lLArt/cXcSPIE=";
   };
 
-  cargoHash = "sha256-0N2JLENHG6QUcEtw237Oe/fwdgo87DVJ+Gx6wtpP9BU=";
+  cargoHash = "sha256-Md2pk8kYqUDPzRQedbne4Crg5UbGHHE5OTRz4LXLs3E=";
 
-  meta = with lib; {
+  meta = {
     description = "Cross compile Cargo project to Windows MSVC target with ease";
     mainProgram = "cargo-xwin";
     homepage = "https://github.com/rust-cross/cargo-xwin";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
-}
+})

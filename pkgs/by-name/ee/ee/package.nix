@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  nix-update-script,
-  fetchgit,
+  fetchFromGitHub,
   ncurses,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "ee";
-  version = "1.5.2";
+  version = "1.5.2-unstable-2024-06-20";
 
-  src = fetchgit {
-    url = "https://git.freebsd.org/src.git";
-    tag = "release/14.3.0";
-    outputHash = "sha256-nMhHXeoam9VtUuhhi0eoGZfcW9zZhpYQKVYbkAbfgc0=";
+  src = fetchFromGitHub {
+    owner = "freebsd";
+    repo = "freebsd-src";
+    rev = "0667538b888c1171932c6cf28b62fc19d393e119";
+    hash = "sha256-nMhHXeoam9VtUuhhi0eoGZfcW9zZhpYQKVYbkAbfgc0=";
     rootDir = "contrib/ee";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   buildInputs = [ ncurses ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace create.make --replace-fail "-lcurses" "-lncurses"
   '';
 
-  NIX_CFLAGS_COMPILE = "-DHAS_UNISTD=1 -DHAS_STDLIB=1 -DHAS_SYS_WAIT=1";
+  env.NIX_CFLAGS_COMPILE = "-DHAS_UNISTD=1 -DHAS_STDLIB=1 -DHAS_SYS_WAIT=1";
 
   installPhase = ''
     runHook preInstall
@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     mainProgram = "ee";
+    maintainers = with lib.maintainers; [ qweered ];
   };
-})
+}

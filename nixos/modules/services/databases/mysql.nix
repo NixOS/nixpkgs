@@ -9,7 +9,7 @@ let
   cfg = config.services.mysql;
 
   isMariaDB = lib.getName cfg.package == lib.getName pkgs.mariadb;
-  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql80;
+  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql84;
   # Oracle MySQL has supported "notify" service type since 8.0
   hasNotify = isMariaDB || (isOracle && lib.versionAtLeast cfg.package.version "8.0");
 
@@ -111,6 +111,9 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.path;
+        default = (
+          if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
+        );
         example = "/var/lib/mysql";
         description = ''
           The data directory for MySQL.
@@ -429,10 +432,6 @@ in
         message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
       }
     ];
-
-    services.mysql.dataDir = lib.mkDefault (
-      if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
-    );
 
     services.mysql.settings.mysqld = lib.mkMerge [
       {

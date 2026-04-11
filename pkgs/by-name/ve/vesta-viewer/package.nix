@@ -14,7 +14,8 @@
   libgcc,
   gtk3,
   gtk2,
-  xorg,
+  libxxf86vm,
+  libxtst,
   temurin-jre-bin,
 }:
 
@@ -48,11 +49,9 @@ let
       gtk3
       gtk2
       temurin-jre-bin
-    ]
-    ++ (with xorg; [
-      libXxf86vm
-      libXtst
-    ]);
+      libxxf86vm
+      libxtst
+    ];
 
     src = fetchzip {
       url = "https://jp-minerals.org/vesta/archives/${version}/VESTA-gtk3.tar.bz2";

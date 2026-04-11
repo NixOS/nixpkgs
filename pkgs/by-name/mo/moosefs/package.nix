@@ -10,19 +10,20 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moosefs";
-  version = "4.58.1";
+  version = "4.58.4";
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
-    rev = "v${version}";
-    sha256 = "sha256-l3tF3y41nRy5AB/+9p/XJK5NKmPlod9td2n0RSRnYAQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-AvY1TOoxxpiqrMqngZe3BTgMuxwltQk1unr/IEfOLt4=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -50,10 +51,6 @@ stdenv.mkDerivation rec {
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"
   '';
 
-  postInstall = ''
-    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
-  '';
-
   doCheck = true;
 
   passthru.tests = {
@@ -70,4 +67,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

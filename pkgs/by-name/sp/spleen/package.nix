@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  xorg,
+  mkfontscale,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-i0fFbxpuuFj7z540UwVXQEsC+7NFXjjmT7hEc/0MNy8=";
   };
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   dontBuild = true;
 
@@ -32,10 +32,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospaced bitmap fonts";
     homepage = "https://www.cambus.net/spleen-monospaced-bitmap-fonts";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

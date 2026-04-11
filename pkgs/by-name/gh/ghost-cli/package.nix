@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghost-cli";
-  version = "1.28.3";
+  version = "1.28.6";
 
   src = fetchFromGitHub {
     owner = "TryGhost";
     repo = "Ghost-CLI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hmLEkYivIH3uNOz6umEYU+A843a7d1M31OE5RCQ9WRQ=";
+    hash = "sha256-GUdo2qn+5YOefCSHlH+jv+gSZWlT8POzQlaN0+Yxuhk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-ncZ5ULF1nE0vl+WISfEGZKtABT+pkJtWjHMkT1BjPCE=";
+    hash = "sha256-B39MyCn4P8iqT/y2wPeHKJgYWzgB4I81usmzC0PH3qU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = ''${placeholder "out"}/bin/ghost'';
+  versionCheckProgram = "${placeholder "out"}/bin/ghost";
 
   passthru = {
     updateScript = nix-update-script { };

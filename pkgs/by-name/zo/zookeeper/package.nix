@@ -10,16 +10,16 @@
 }:
 let
   # Latest supported LTS JDK for Zookeeper 3.9:
-  # https://zookeeper.apache.org/doc/r3.9.2/zookeeperAdmin.html#sc_requiredSoftware
+  # https://zookeeper.apache.org/doc/r3.9.5/zookeeperAdmin.html#sc_requiredSoftware
   jre = jdk11_headless;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zookeeper";
-  version = "3.9.3";
+  version = "3.9.5";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/zookeeper-${finalAttrs.version}/apache-zookeeper-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha512-1E2HDBaRZi778ai68YWckBuCDcX/Fjs26BvrJ7b7880xtfHwdWl+2q9tPnpMsMyS+STc/2SylO8T1TVYm9rxQw==";
+    hash = "sha512-uqHCHdpNVyOPynUeT6K78dr/mihhKxJeSX3M1cGI7mRJ4veZR+R0wt1NGZknidTTayexui/rgMKwxF598OIqqA==";
   };
 
   nativeBuildInputs = [ makeWrapper ];

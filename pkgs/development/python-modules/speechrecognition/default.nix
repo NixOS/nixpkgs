@@ -13,7 +13,6 @@
   pocketsphinx,
   pyaudio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   respx,
   setuptools,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "speechrecognition";
   version = "3.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
@@ -78,7 +75,7 @@ buildPythonPackage rec {
     pocketsphinx
     respx
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -87,14 +84,14 @@ buildPythonPackage rec {
     "test_sphinx_keywords"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
     changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "1.0.17";
 
   src = fetchurl {
-    url = "http://download.librdf.org/source/redland-${version}.tar.gz";
+    url = "https://download.librdf.org/source/redland-${version}.tar.gz";
     sha256 = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681";
   };
 
@@ -60,14 +60,14 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix broken DT_NEEDED in lib/redland/librdf_storage_sqlite.so.
-  NIX_CFLAGS_LINK = "-lraptor2";
+  env.NIX_CFLAGS_LINK = "-lraptor2";
 
   doCheck = false; # fails 1 out of 17 tests with a segmentation fault
 
-  meta = with lib; {
+  meta = {
     description = "C libraries that provide support for the Resource Description Framework (RDF)";
     homepage = "https://librdf.org/";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

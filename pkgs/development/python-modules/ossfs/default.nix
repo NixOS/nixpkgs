@@ -5,16 +5,13 @@
   fetchFromGitHub,
   fsspec,
   oss2,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ossfs";
   version = "2025.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ossfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem for Alibaba Cloud (Aliyun) Object Storage System (OSS)";
     homepage = "https://github.com/fsspec/ossfs";
     changelog = "https://github.com/fsspec/ossfs/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

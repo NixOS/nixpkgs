@@ -1,6 +1,7 @@
 {
   lib,
   buildNpmPackage,
+  nodejs_22,
   fetchurl,
   testers,
 }:
@@ -15,6 +16,8 @@ let
 in
 buildNpmPackage (finalAttrs: {
   inherit pname version src;
+
+  nodejs = nodejs_22;
 
   npmDepsHash = "sha256-vqsm8/1I1HFo9IZdOqGQ/qFEyLTYY5uwtsnp1PJfPIk=";
 

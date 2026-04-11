@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gama-tui";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "termkit";
     repo = "gama";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ISgORjzH7ZigQYm7PSA4ZClhpw2GU7yor580fEf5UNc=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.Version=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   # requires network access
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gama";
   };
-}
+})

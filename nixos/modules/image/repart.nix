@@ -81,7 +81,7 @@ let
             SizeMaxBytes = "2G";
           };
           description = ''
-            Specify the repart options for a partiton as a structural setting.
+            Specify the repart options for a partition as a structural setting.
             See {manpage}`repart.d(5)`
             for all available options.
           '';
@@ -201,6 +201,14 @@ in
       '';
     };
 
+    imageSize = lib.mkOption {
+      type = lib.types.strMatching "^([0-9]+[KMGTP]?|auto)$";
+      default = "auto";
+      example = "512G";
+      description = "Size of the produced image in bytes with optional K, M, G, T suffix,
+        or 'auto' to determine the minimal size automatically";
+    };
+
     package = lib.mkPackageOption pkgs "systemd-repart" {
       # We use buildPackages so that repart images are built with the build
       # platform's systemd, allowing for cross-compiled systems to work.
@@ -220,7 +228,7 @@ in
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
                 "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
-            }
+            };
             repartConfig = {
               Type = "esp";
               Format = "vfat";
@@ -377,15 +385,15 @@ in
               defined for '${fileName}' is ${toString labelLength} characters long.
               The suggested maximum label length is ${toString suggestedMaxLabelLength}.
 
-              If you use sytemd-sysupdate style A/B updates, this might
+              If you use systemd-sysupdate style A/B updates, this might
               not leave enough space to increment the version number included in
               the label in a future release. For example, if your label is
               ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
               you're at version 9, you cannot increment this to 10.
             ''
             ++ lib.optional (partitionConfig.stripNixStorePrefix != "_mkMergedOptionModule") ''
-              The option definition `image.repart.paritions.${fileName}.stripNixStorePrefix`
-              has changed to `image.repart.paritions.${fileName}.nixStorePrefix` and now
+              The option definition `image.repart.partitions.${fileName}.stripNixStorePrefix`
+              has changed to `image.repart.partitions.${fileName}.nixStorePrefix` and now
               accepts the path to use as prefix directly. Use `nixStorePrefix = "/"` to
               achieve the same effect as setting `stripNixStorePrefix = true`.
             ''
@@ -415,6 +423,7 @@ in
             compression
             split
             seed
+            imageSize
             sectorSize
             finalPartitions
             ;

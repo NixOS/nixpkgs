@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tornado ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mrjoes/sockjs-tornado/";
     description = "SockJS python server implementation on top of Tornado framework";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -5,29 +5,26 @@
   buildPythonPackage,
   dataclasses-json,
   fetchFromGitHub,
+  hatchling,
   marshmallow,
-  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weatherflow4py";
-  version = "1.4.1";
+  version = "1.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "weatherflow4py";
-    tag = "v${version}";
-    hash = "sha256-nHpLdzO49HhX5+gtYrgche4whs7Onzp4HeRNFwLHcVI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cfQWdQhjW6KjBLQWO9BSAVZ2btRCMjx1CpUifoOwPsU=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -35,6 +32,8 @@ buildPythonPackage rec {
     marshmallow
     websockets
   ];
+
+  pythonRelaxDeps = [ "marshmallow" ];
 
   nativeCheckInputs = [
     aioresponses
@@ -49,11 +48,11 @@ buildPythonPackage rec {
     "test_convert_json_to_weather_data4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the WeatherFlow REST API";
     homepage = "https://github.com/jeeftor/weatherflow4py";
-    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

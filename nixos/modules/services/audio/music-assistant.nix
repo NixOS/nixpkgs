@@ -16,6 +16,7 @@ let
     ;
 
   inherit (types)
+    bool
     listOf
     enum
     str
@@ -26,6 +27,9 @@ let
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
+
+  # YouTube Music needs deno with JIT to solve yt-dlp challenges
+  useYTMusic = lib.elem "ytmusic" cfg.providers;
 in
 
 {
@@ -51,6 +55,15 @@ in
       '';
     };
 
+    openFirewall = lib.mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Whether to open required ports for the configured providers.
+        Currently airplay and sendspin need port to be opened to function.
+      '';
+    };
+
     providers = mkOption {
       type = listOf (enum cfg.package.providerNames);
       default = [ ];
@@ -65,6 +78,31 @@ in
   };
 
   config = mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts =
+        lib.optional cfg.enable 8097 # Music Assistant stream port
+        ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
+        ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927;
+      # The information published by Apple 1 seem to not apply to libraop.
+      # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
+      # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
+      # 2: https://en.wikipedia.org/wiki/Ephemeral_port#Range
+      allowedUDPPortRanges = lib.mkIf (lib.elem "airplay" cfg.providers) [
+        {
+          from = 32768;
+          to = 65535;
+        }
+      ];
+    };
+
+    services.avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
+      enable = true;
+      publish = {
+        enable = true;
+        userServices = true;
+      };
+    };
+
     systemd.services.music-assistant = {
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
@@ -84,11 +122,22 @@ in
         [
           lsof
         ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [
+          cliairplay
+          libraop
+        ]
+        ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          shairport-sync
+        ]
         ++ lib.optionals (lib.elem "spotify" cfg.providers) [
           librespot-ma
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           snapcast
+        ]
+        ++ lib.optionals useYTMusic [
+          deno
+          ffmpeg-headless
         ];
 
       serviceConfig = {
@@ -104,7 +153,7 @@ in
         CapabilityBoundingSet = [ "" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = !useYTMusic;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -118,6 +167,9 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -125,6 +177,10 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged @resources"
+          "mbind"
+        ]
+        ++ lib.optionals useYTMusic [
+          "@pkey"
         ];
         RestrictSUIDSGID = true;
         UMask = "0077";

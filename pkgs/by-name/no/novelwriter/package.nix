@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "2.7.5";
+  version = "2.8.2";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     tag = "v${version}";
-    hash = "sha256-qCbtQwV+dU/ypnb5UruTsXas9XUqlJweaxnfqTHsT+I=";
+    hash = "sha256-VCl0dHnMlmkyGFeLPACi2ZC66ebrDraw+JABNomWP4k=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
@@ -36,7 +36,6 @@ python3.pkgs.buildPythonApplication {
     mkdir -p $out/share/icons
     cp -r setup/data/hicolor $out/share/icons
 
-    install -Dm644 setup/data/novelwriter.png -t $out/share/pixmaps
     install -Dm644 setup/data/novelwriter.desktop -t $out/share/applications
     install -Dm644 setup/data/x-novelwriter-project.xml -t $out/share/mime/packages
   '';

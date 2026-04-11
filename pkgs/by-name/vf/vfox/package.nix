@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vfox";
-  version = "0.9.2";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "version-fox";
     repo = "vfox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dtu0A+BC/9sypnWvA8XOlmQFPsV5LUGCXpdarYeCdlU=";
+    hash = "sha256-wpMxqt9m2Bh4oYSVmxG8AYZx3kzwmjBZC54UlBKWZz4=";
   };
 
-  vendorHash = "sha256-+5hJMip3wAR1k6n21I3QFYe++nw4J4Ip+43EujQl2ec=";
+  vendorHash = "sha256-494nqL6KiUk4VeKlG9YHFpgACgaYC3SR1I1EViD71Jw=";
 
   __darwinAllowLocalNetworking = true;
 

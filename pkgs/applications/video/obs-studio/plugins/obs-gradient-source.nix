@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-gradient-source";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-gradient-source";
     rev = version;
-    sha256 = "sha256-5pll84UZYOTESrid2UuC1aWlaLrWf1LpXqlV09XKLug=";
+    sha256 = "sha256-Y9PTvaZr7ANwHhqgWsNIikRQLdKO8sA4OXI+mKyUnaM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for adding a gradient Source to OBS Studio";
     homepage = "https://github.com/exeldro/obs-gradient-source";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
   };
 }

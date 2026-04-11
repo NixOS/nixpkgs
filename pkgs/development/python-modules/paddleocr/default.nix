@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "paddleocr";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     tag = "v${version}";
-    hash = "sha256-cXxt/SxOVDcI+00WLSySSxMDU6qSHik+MWAZ6y4wRJw=";
+    hash = "sha256-pKRaE5+9a2W0RiOyDpT8UDjY1XUSJ95CV2VgdCkJpSI=";
   };
 
   patches = [
@@ -56,20 +56,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==72.1.0" ""
+      --replace-fail "setuptools==72.1.0" "setuptools"
   '';
 
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  # trying to relax only pymupdf makes the whole build fail
-  pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    "imgaug"
-    "visualdl"
-    "opencv-contrib-python"
   ];
 
   dependencies = [

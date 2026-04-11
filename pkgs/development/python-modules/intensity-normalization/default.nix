@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   hatchling,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "intensity-normalization";
   version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "intensity_normalization";

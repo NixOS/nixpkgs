@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sleek";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nrempel";
     repo = "sleek";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4op0EqJWRGEQwXu5DjFBM1ia9nKiE5QTg+pbaeg4+ag=";
   };
 
   cargoHash = "sha256-0AB2Z++WnOQ06CkKIHBydgV4VlLGqhlKGAQ0blPOFPo=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for formatting SQL";
     homepage = "https://github.com/nrempel/sleek";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xrelkd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "sleek";
   };
-}
+})

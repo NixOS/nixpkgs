@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
   nixosTests,
@@ -11,10 +12,19 @@ let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
 
-stdenv.mkDerivation {
-  name = "jool-${sourceAttrs.version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "jool";
+  inherit (sourceAttrs) version;
 
   src = sourceAttrs.src;
+
+  patches = lib.optionals (lib.versionAtLeast kernel.version "6.18.0") [
+    (fetchpatch {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/3.23-stable/community/jool-modules-lts/kernel-6.18.patch";
+      hash = "sha256-EtV95YaOzPU3e/8NQvUtAH/RWiV16djeKrnvSgYybCQ=";
+    })
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   hardeningDisable = [ "pic" ];
@@ -41,4 +51,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-7FVcLvbZQK5M90ofoBpK2V/1+vWlBI/Z2x3ydbCwVbM=";
 
-  meta = with lib; {
+  meta = {
     description = "Decode x86 binaries and print out which instruction set extensions they use";
     longDescription = ''
       Disassemble a binary containing x86 instructions and print out which extensions it uses.
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       perhaps PE-format ones as well. (It used to be more limited.)
     '';
     homepage = "https://github.com/pkgw/elfx86exts";
-    maintainers = with maintainers; [ rmcgibbo ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ rmcgibbo ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "elfx86exts";
   };
 })

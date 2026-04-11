@@ -64,7 +64,7 @@ buildPythonPackage rec {
     pytest-console-scripts
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

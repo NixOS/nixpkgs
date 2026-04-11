@@ -1,8 +1,9 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
+  wrapQtAppsHook,
   qtbase,
   qtmultimedia,
   qtimageformats,
@@ -10,7 +11,7 @@
   qttools,
   libidn,
   qca-qt5,
-  libXScrnSaver,
+  libxscrnsaver,
   hunspell,
   libsecret,
   libgcrypt,
@@ -43,7 +44,7 @@ assert builtins.elem (lib.toLower chatType) [
 
 assert enablePsiMedia -> enablePlugins;
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "psi-plus";
 
   version = "1.5.2115";
@@ -63,6 +64,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ]
   ++ lib.optionals enablePsiMedia [
     pkg-config
@@ -75,7 +77,7 @@ mkDerivation rec {
     qtx11extras
     libidn
     qca-qt5
-    libXScrnSaver
+    libxscrnsaver
     hunspell
     libsecret
     libgcrypt
@@ -111,7 +113,6 @@ mkDerivation rec {
     description = "XMPP (Jabber) client based on Qt5";
     mainProgram = "psi-plus";
     maintainers = with lib.maintainers; [
-      orivej
       unclechu
     ];
     license = lib.licenses.gpl2Only;

@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcalc";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xcalc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hXjfoUV+lCifbW7WFGcUMH2Kc6G1TS9CrxMhtiX8HNQ=";
+    hash = "sha256-huFXthdGeGdaSpEpldzND/TizjKwG91vkb/pMzMySYA=";
   };
 
   strictDeps = true;

@@ -12,17 +12,17 @@
   freetype,
   fontconfig,
   dbus,
-  libXi,
-  libXcursor,
-  libXdamage,
-  libXrandr,
-  libXcomposite,
-  libXext,
-  libXfixes,
-  libXrender,
-  libX11,
-  libXtst,
-  libXScrnSaver,
+  libxi,
+  libxcursor,
+  libxdamage,
+  libxrandr,
+  libxcomposite,
+  libxext,
+  libxfixes,
+  libxrender,
+  libx11,
+  libxtst,
+  libxscrnsaver,
   libxcb,
   nss,
   nspr,
@@ -52,18 +52,18 @@ let
     freetype
     fontconfig
     dbus
-    libXi
-    libXcursor
-    libXdamage
-    libXrandr
-    libXcomposite
-    libXext
-    libXfixes
+    libxi
+    libxcursor
+    libxdamage
+    libxrandr
+    libxcomposite
+    libxext
+    libxfixes
     libxcb
-    libXrender
-    libX11
-    libXtst
-    libXScrnSaver
+    libxrender
+    libx11
+    libxtst
+    libxscrnsaver
     nss
     nspr
     alsa-lib
@@ -107,15 +107,14 @@ stdenv.mkDerivation rec {
   passthru.tests.test = nixosTests.terminal-emulators.hyper;
 
   dontPatchELF = true;
-  meta = with lib; {
+  meta = {
     description = "Terminal built on web technologies";
     homepage = "https://hyper.is/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       puffnfresh
-      fabiangd
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "hyper";
     broken = true; # Error: 'node-pty' failed to load

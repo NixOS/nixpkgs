@@ -5,18 +5,18 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nmon";
-  version = "16q";
+  version = "16s";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nmon/lmon${version}.c";
-    sha256 = "sha256-G3ioFnLBkpGz0RpuMZ3ZsjoCKiYtuh786gCNbfUaylE=";
+    url = "mirror://sourceforge/nmon/lmon${finalAttrs.version}.c";
+    hash = "sha256-BzbOD3KeSMEkp7pWbAacWiNFEcycasknfakvi7RPKxE=";
   };
 
   buildInputs = [ ncurses ];
   dontUnpack = true;
-  buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
+  buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${finalAttrs.src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
     with stdenv.hostPlatform;
     if isx86 then
       "X86"
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     cp nmon $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AIX & Linux Performance Monitoring tool";
     mainProgram = "nmon";
     homepage = "https://nmon.sourceforge.net";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sveitser ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sveitser ];
   };
-}
+})

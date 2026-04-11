@@ -10,14 +10,14 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picoloop";
   version = "0.77e";
 
   src = fetchFromGitHub {
     repo = "picoloop";
     owner = "yoyz";
-    rev = "picoloop-${version}";
+    rev = "picoloop-${finalAttrs.version}";
     sha256 = "0i8j8rgyha3ara6d4iis3wcimszf2csxdwrm5yq0wyhg74g7cvjd";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  sourceRoot = "${src.name}/picoloop";
+  sourceRoot = "${finalAttrs.src.name}/picoloop";
 
   makeFlags = [ "-f Makefile.PatternPlayer_debian_RtAudio_sdl20" ];
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     cp {font.*,LICENSE} $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Synth and a stepsequencer (a clone of the famous nanoloop)";
     homepage = "https://github.com/yoyz/picoloop";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "picoloop";
   };
-}
+})

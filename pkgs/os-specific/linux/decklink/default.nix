@@ -12,8 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   # See pkgs/by-name/bl/blackmagic-desktop-video/package.nix for more.
   inherit (blackmagic-desktop-video) src version;
 
-  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  INSTALL_MOD_PATH = placeholder "out";
+  env = {
+    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    INSTALL_MOD_PATH = placeholder "out";
+  };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -43,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
-    maintainers = [ maintainers.naxdy ];
-    license = licenses.unfree;
+    maintainers = [ lib.maintainers.naxdy ];
+    license = lib.licenses.unfree;
     description = "Kernel module for the Blackmagic Design Decklink cards";
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

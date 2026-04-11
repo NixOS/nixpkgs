@@ -8,11 +8,11 @@
   pixman,
   alsa-lib,
   openssl,
-  libXrandr,
-  libXfixes,
-  libXext,
-  libXrender,
-  libXinerama,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxrender,
+  libxinerama,
   libjpeg,
   zlib,
   spice-protocol,
@@ -27,12 +27,12 @@
   gdk-pixbuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spice";
   version = "0.16.0";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
+    url = "https://www.spice-space.org/download/releases/spice-server/spice-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-Cm7JUo8FNxJhu7LUb/Nee1xF/4m7l1qZr5Wl8g/0cX0=";
   };
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     cyrus_sasl
     glib
     gst_all_1.gst-plugins-base
-    libXext
-    libXfixes
-    libXinerama
-    libXrandr
-    libXrender
+    libxext
+    libxfixes
+    libxinerama
+    libxrandr
+    libxrender
     libcacard
     libjpeg
     libopus
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     ln -s spice-server $out/include/spice
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction
@@ -100,11 +100,11 @@ stdenv.mkDerivation rec {
       utilized by a third-party component.
     '';
     homepage = "https://www.spice-space.org/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atemu
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

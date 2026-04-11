@@ -2,22 +2,23 @@
   buildPythonPackage,
   faust-cchardet,
   fetchFromGitHub,
-  httplib2,
+  httpx,
   lib,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytouchline-extended";
-  version = "0.4.6";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brondum";
     repo = "pytouchline";
     tag = version;
-    hash = "sha256-VENKzcIsh8KFvqG+JzwinkCNqQkPpSq3zusiGctGU+Y=";
+    hash = "sha256-7F8VeLrMgo54LQWG4BzxL6EgvthssAjUO65HSkXd2sk=";
   };
 
   postPatch = ''
@@ -29,12 +30,13 @@ buildPythonPackage rec {
 
   dependencies = [
     faust-cchardet
-    httplib2
+    httpx
   ];
 
   pythonImportsCheck = [ "pytouchline_extended" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

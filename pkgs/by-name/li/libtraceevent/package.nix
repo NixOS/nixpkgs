@@ -13,14 +13,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtraceevent";
-  version = "1.8.4";
+  version = "1.9";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
-    rev = "libtraceevent-${version}";
-    hash = "sha256-T4NxYVJKl+2YZ6JZ7PvtM4RdTg9DIE+su4KxJwvw7iI=";
+    rev = "libtraceevent-${finalAttrs.version}";
+    hash = "sha256-4KuF+UNMWxfxXYVlS0cBY5/p242UQ/NoRRVK+wmn04E=";
   };
 
   postPatch = ''
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "libtraceevent-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel trace event library";
     homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
-    license = licenses.lgpl21Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wentasah ];
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wentasah ];
   };
-}
+})

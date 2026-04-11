@@ -3,7 +3,7 @@
   generateSplicesForMkScope,
   callPackage,
   attributePathToSplice ? [ "freebsd" ],
-  branch ? "release/14.2.0",
+  branch ? "release/15.0.0",
 }:
 
 let

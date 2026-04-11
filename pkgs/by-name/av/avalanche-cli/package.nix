@@ -14,22 +14,24 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "avalanche-cli";
-  version = "1.9.2";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanche-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/HwZUsggBeuSZLYQDWUU4rfktnvwVolE5mKiZW4IXXs=";
+    hash = "sha256-bAZJRFlry7vYTTf95kTOJwcjYelN40n264oeykx7nxc=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-JQEWEqseg5q0b8rPlO/19V1BLbWBdXldoWgUiqI9Qh4=";
+  vendorHash = "sha256-0+YwlCHjiU46y333RSuaha4pLKFTYlj+M9+TFAALamY=";
 
-  # Fix error: 'Caught SIGILL in blst_cgo_init'
-  # https://github.com/bnb-chain/bsc/issues/1521
-  CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
-  CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
+  env = {
+    # Fix error: 'Caught SIGILL in blst_cgo_init'
+    # https://github.com/bnb-chain/bsc/issues/1521
+    CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
+    CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
+  };
 
   ldflags = [
     "-s"
@@ -73,7 +75,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/avalanche";
-  versionCheckProgramArg = "--version";
 
   doCheck = false;
 

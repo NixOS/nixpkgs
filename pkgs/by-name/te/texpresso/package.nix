@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texpresso";
-  version = "0-unstable-2025-01-29";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "c42a5912f501f180984840fa8adf9ffc09c5ac13";
-    hash = "sha256-T/vou7OcGtNoodCrznmjBLxg6ZAFDCjhpYgNyZaf44g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d+wNQIysn3hdTQnHN9MJbFOIhJQ0ml6PoeuwsryntTI=";
   };
 
   postPatch = ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       #!nix-shell -i bash -p curl jq nix-update
 
       tectonic_version="$(curl -s "https://api.github.com/repos/let-def/texpresso/contents/tectonic" | jq -r '.sha')"
-      nix-update --version=branch texpresso
+      nix-update texpresso
       nix-update --version=branch=$tectonic_version texpresso.tectonic
     '';
   };

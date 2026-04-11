@@ -13,14 +13,14 @@
   teensy-loader-cli,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "qmk";
-  version = "1.1.8";
-  format = "pyproject";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-C0Jra/IK61tngGsuEnMD4mySRc/iZVgdYEbMXtwpBZ0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-FkvRbExAGyt2XuTwF7z6gUGULd82KWHEy6GXXYyyikg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qmk/qmk_cli";
     description = "Program to help users work with QMK Firmware";
     longDescription = ''
@@ -76,11 +76,8 @@ python3.pkgs.buildPythonApplication rec {
         - qmk lint
       - ... and many more!
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      bhipple
-      ekleog
-    ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "qmk";
   };
-}
+})

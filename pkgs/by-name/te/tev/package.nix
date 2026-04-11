@@ -15,19 +15,23 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "2.5.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-S4VE33wMima6GeGPmZOU6ub5V/ZWoVYqAIizh9BJHGo=";
+    hash = "sha256-o8ejMsaiplnTLiWtjaJnV9z2ZNkiOWy3DLU+x49MJrg=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux (
@@ -61,11 +65,11 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wayland-scanner
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   cmakeFlags = [
@@ -86,6 +90,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tom94 ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
   };
 }

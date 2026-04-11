@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "python-autopxd2";
-  version = "2.5.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "autopxd2";
     inherit version;
-    hash = "sha256-uxVWz2LSXWpDYvQFrxlrmxA1XQagyHTfFf4hhaHKOqc=";
+    hash = "sha256-fzq5xy7vPjxwgaEyBXk3Ke9JnySJ3PM5WAucFCZ/IP8=";
   };
 
   build-system = [

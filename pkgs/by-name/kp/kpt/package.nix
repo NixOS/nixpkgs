@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kpt";
   version = "1.0.0-beta.55";
 
   src = fetchFromGitHub {
     owner = "kptdev";
     repo = "kpt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MVrJUsMpt1L56ezy2b2G6Aac9kpe4QgfSosR+PeTuBQ=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/kptdev/kpt/run.version=${version}"
+    "-X github.com/kptdev/kpt/run.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mikefaille ];
   };
-}
+})

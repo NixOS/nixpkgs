@@ -7,6 +7,7 @@
         "license": "TensorRT",
         "version": "10.7.0.23",
         "cuda_variant": [
+            "11",
             "12"
         ],
         "linux-aarch64": {
@@ -26,6 +27,12 @@
             }
         },
         "linux-x86_64": {
+            "cuda11": {
+                "md5": "6adf7d02aae9105abb6bf3b4c1ce89f4",
+                "relative_path": "tensorrt/10.7.0/tars/TensorRT-10.7.0.23.Linux.x86_64-gnu.cuda-11.8.tar.gz",
+                "sha256": "958e1c32b48e41d1c48bdc94363450e14f996ca9de0e205ccee65af319eea2c0",
+                "size": "4341092411"
+            },
             "cuda12": {
                 "md5": "925c98fbe9abe82058814159727732a2",
                 "relative_path": "tensorrt/10.7.0/tars/TensorRT-10.7.0.23.Linux.x86_64-gnu.cuda-12.6.tar.gz",

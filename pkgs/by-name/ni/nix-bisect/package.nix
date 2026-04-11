@@ -4,12 +4,9 @@
   python3,
 }:
 
-let
+python3.pkgs.buildPythonApplication {
   pname = "nix-bisect";
   version = "0.4.1-unstable-2024-04-19";
-in
-python3.pkgs.buildPythonApplication {
-  inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -31,10 +28,9 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "nix_bisect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bisect nix builds";
     homepage = "https://github.com/timokau/nix-bisect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
   };
 }

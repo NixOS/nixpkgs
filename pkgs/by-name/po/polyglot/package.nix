@@ -7,7 +7,7 @@
   maven,
   libGL,
   xdg-utils,
-  libXxf86vm,
+  libxxf86vm,
   zip,
   zlib,
 }:
@@ -60,7 +60,7 @@ maven.buildMavenPackage rec {
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libGL
-          libXxf86vm
+          libxxf86vm
         ]
       }"
 

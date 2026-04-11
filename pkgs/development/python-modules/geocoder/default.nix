@@ -4,7 +4,6 @@
   click,
   fetchPypi,
   future,
-  pythonOlder,
   ratelim,
   requests,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "geocoder";
   version = "1.38.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geocoder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for geocoding";
     homepage = "https://pypi.org/project/geocoder/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

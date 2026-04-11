@@ -7,7 +7,6 @@
   pendulum,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   responses,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.12.6";
+  version = "1.12.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
     tag = "v${version}";
-    hash = "sha256-nrfIyXftS2X2HuuLFRZpWLz/IbRasqUzv+r/HvhxfAw=";
+    hash = "sha256-eMO/K6W9ROljYxR3gK9QjCHdlbAuN4DYjOyTO1WcalQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simple_salesforce" ];
 
-  meta = with lib; {
+  meta = {
     description = "Very simple Salesforce.com REST API client for Python";
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
-    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
-    license = licenses.asl20;
+    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/${src.tag}/CHANGES";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -19,13 +19,18 @@
   undmg,
   util-linux,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcomposite,
+  libx11,
 }:
 
 let
   libPath = lib.concatStringsSep ":" [
     "${glib.out}/lib"
-    "${xorg.libXrandr}/lib"
+    "${libxrandr}/lib"
     "${wayland.out}/lib"
   ];
   scriptPath = lib.concatStringsSep ":" [
@@ -40,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "26.1.1-57288";
+  version = "26.3.0-57392";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-11IyKI2oOffzSPTB65XksZI3PD9W2+0SPZIfpb0RLuU=";
+    hash = "sha256-pVTlGXZVb/Q/6/i7B07KWb3Kg+5Lm06+v4ERxUjoW7o=";
   };
 
   hardeningDisable = [
@@ -66,18 +71,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fuse
     glib
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXinerama
+    libx11
+    libxcomposite
+    libxext
+    libxrandr
+    libxi
+    libxinerama
   ];
 
   runtimeDependencies = [
     dbus
     glib
-    xorg.libXrandr
+    libxrandr
   ];
 
   unpackPhase = ''
@@ -159,14 +164,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       wegank
       codgician
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

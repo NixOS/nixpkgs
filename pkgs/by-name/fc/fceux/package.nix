@@ -5,8 +5,8 @@
   cmake,
   fetchFromGitHub,
   ffmpeg,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxcb,
   lua5_1,
   minizip,
@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2QDiAk2HO9oQ1gNvc7QFZSCbWkCDYW5OJWT8f4bmXyg=";
   };
 
+  patches = [
+    ./0001-fix-build-with-minizip-1.3.2.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -49,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     ffmpeg
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxcb
     lua5_1
     minizip

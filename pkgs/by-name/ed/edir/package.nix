@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "edir";
   version = "2.32";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-E9zb7Y4KNQ/gw+TkpRVMUHMPlY1ImQAb0P8G/OFgMwM=";
   };
 
@@ -22,12 +22,12 @@ python3Packages.buildPythonApplication rec {
     platformdirs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Program to rename and remove files and directories using your editor";
     homepage = "https://github.com/bulletmark/edir";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ guyonvarch ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ guyonvarch ];
+    platforms = lib.platforms.all;
     mainProgram = "edir";
   };
-}
+})

@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.25";
+  version = "0.0.29";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-roN8sU0WjGXd1jfQiTXSJ0OQRW8MbNYUfCdz744lnRM=";
+    hash = "sha256-rOkh6HgZ5F/1wJr0iZwaqqYmcEONioz7jeebp19xxXs=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-A2lPCweusmDPwh6IXAj4D6+GRK6CaZSP5gFDhrsBI5Q=";
+  cargoHash = "sha256-ajuhF+jpx+9U9swrd8HF3ZH7ovSwz0nDNRiQzcrttwg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -56,8 +56,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=ty_test" # test framework tests
   ];
 
+  checkFlags = [
+    # Flaky:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 26, kind: ExecutableFileBusy, message: "Text file busy" }
+    "--skip=python_environment::ty_environment_and_active_environment"
+    "--skip=python_environment::ty_environment_and_discovered_venv"
+    "--skip=python_environment::ty_environment_is_only_environment"
+    "--skip=python_environment::ty_environment_is_system_not_virtual"
+
+    # flaky: unmatched assertion: revealed: Literal[1]
+    "--skip=mdtest::generics/pep695/functions.md"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -73,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -84,6 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ty";
     maintainers = with lib.maintainers; [
       bengsparks
+      figsoda
       GaetanLepage
     ];
   };

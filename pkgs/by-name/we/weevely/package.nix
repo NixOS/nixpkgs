@@ -7,7 +7,7 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weevely";
   version = "4.0.2-unstable-2024-04-29";
   pyproject = false;
@@ -41,16 +41,16 @@ python3Packages.buildPythonApplication rec {
     cp -a * $out/share/weevely/
     makeWrapper ${python3}/bin/python $out/bin/weevely \
       --add-flags "$out/share/weevely/weevely.py" \
-      --prefix PYTHONPATH : ${python3Packages.makePythonPath propagatedBuildInputs}
+      --prefix PYTHONPATH : ${python3Packages.makePythonPath finalAttrs.propagatedBuildInputs}
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Weaponized web shell";
     homepage = "https://github.com/epinna/weevely3";
     mainProgram = "weevely";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ d3vil0p3r ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

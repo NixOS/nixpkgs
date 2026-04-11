@@ -16,8 +16,6 @@ buildDunePackage {
   pname = "cohttp-lwt-unix";
   inherit (cohttp-lwt) version src;
 
-  duneVersion = "3";
-
   buildInputs = [
     cmdliner
     ppx_sexp_conv

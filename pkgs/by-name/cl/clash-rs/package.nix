@@ -10,27 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.1";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-asD7veAYdIF5biCbSXYvAyW/qBra3tvON9TQYCw6nB8=";
+    hash = "sha256-5o98Yj8a30Tn/Cf3QMZ5EaCjCgD3XttqaHHuIjBWg4s=";
   };
 
-  cargoHash = "sha256-9zCQKxkjiskkBGxfnq2ANpqWobs+UJ5qCsbME2Z7GY4=";
-
-  cargoPatches = [ ./Cargo.patch ];
-
-  patches = [
-    ./unbounded-shifts.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace clash-lib/Cargo.toml \
-      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
-  '';
+  cargoHash = "sha256-tRAkA64D2UOEqLbkKiSBDbNlvX7tejSJwYF7+VwicAk=";
 
   nativeBuildInputs = [
     cmake
@@ -46,8 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg tokio_unstable";
-    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
   buildFeatures = [ "plus" ];
@@ -60,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     jack2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Realtime scripted modular audio engine for video games and musical applications";
     mainProgram = "a2play";
     homepage = "http://audiality.org";
-    license = licenses.zlib;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 })

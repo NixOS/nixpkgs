@@ -9,7 +9,6 @@
   pytest-order,
   pytestCheckHook,
   python,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -94,11 +93,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tabcmd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tabcmd";
   };

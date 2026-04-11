@@ -12,6 +12,7 @@
   cgal_5,
   curl,
   dbus,
+  draco,
   eigen,
   expat,
   ffmpeg,
@@ -25,7 +26,6 @@
   gtest,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libsecret,
   libpng,
   mpfr,
@@ -37,34 +37,38 @@
   systemd,
   onetbb,
   webkitgtk_4_1,
-  wxGTK31,
-  xorg,
+  wxwidgets_3_1,
+  libx11,
   libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
+  withNvidiaGLWorkaround ? false,
 }:
 let
   wxGTK' =
-    (wxGTK31.override {
+    (wxwidgets_3_1.override {
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
+      withEGL = false;
     }).overrideAttrs
       (old: {
+        buildInputs = old.buildInputs ++ [ libsecret ];
         configureFlags = old.configureFlags ++ [
           # Disable noisy debug dialogs
           "--enable-debug=no"
+          "--enable-secretstore"
         ];
       });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RdMBx/onLq58oI1sL0cHmF2SGDfeI9KkPPCbjyMqECI=";
+    hash = "sha256-c1WTODLrXGtyJWkEueOz5jHhPbA/JFcMeAwhpvoKnKo=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     cgal_5
     curl
     dbus
+    draco
     eigen
     expat
     ffmpeg
@@ -105,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gtk3
     hicolor-icon-theme
-    ilmbase
     libsecret
     libpng
     mpfr
@@ -116,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     webkitgtk_4_1
     wxGTK'
-    xorg.libX11
+    libx11
     opencv.cxxdev
     libnoise
   ]
@@ -135,6 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
       hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
     })
+
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./patches/no-ilmbase.patch
   ];
 
   doCheck = true;
@@ -142,41 +149,43 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  NLOPT = nlopt;
+  env = {
+    NLOPT = nlopt;
 
-  NIX_CFLAGS_COMPILE = toString (
-    [
-      "-Wno-ignored-attributes"
-      "-I${opencv.out}/include/opencv4"
-      "-Wno-error=incompatible-pointer-types"
-      "-Wno-template-id-cdtor"
-      "-Wno-uninitialized"
-      "-Wno-unused-result"
-      "-Wno-deprecated-declarations"
-      "-Wno-use-after-free"
-      "-Wno-format-overflow"
-      "-Wno-stringop-overflow"
-      "-DBOOST_ALLOW_DEPRECATED_HEADERS"
-      "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
-      "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
-      "-DBOOST_MATH_DISABLE_FLOAT128"
-      "-DBOOST_MATH_NO_QUAD_SUPPORT"
-      "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
-      "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
-      "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
-    ]
-    # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
-    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
-      "-Wno-error=template-id-cdtor"
-    ]
-  );
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-Wno-ignored-attributes"
+        "-I${opencv.out}/include/opencv4"
+        "-Wno-error=incompatible-pointer-types"
+        "-Wno-template-id-cdtor"
+        "-Wno-uninitialized"
+        "-Wno-unused-result"
+        "-Wno-deprecated-declarations"
+        "-Wno-use-after-free"
+        "-Wno-format-overflow"
+        "-Wno-stringop-overflow"
+        "-DBOOST_ALLOW_DEPRECATED_HEADERS"
+        "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
+        "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
+        "-DBOOST_MATH_DISABLE_FLOAT128"
+        "-DBOOST_MATH_NO_QUAD_SUPPORT"
+        "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
+        "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
+        "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
+      ]
+      # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
+      ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
+        "-Wno-error=template-id-cdtor"
+      ]
+    );
 
-  NIX_LDFLAGS = toString [
-    (lib.optionalString withSystemd "-ludev")
-    "-L${boost186}/lib"
-    "-lboost_log"
-    "-lboost_log_setup"
-  ];
+    NIX_LDFLAGS = toString [
+      (lib.optionalString withSystemd "-ludev")
+      "-L${boost186}/lib"
+      "-lboost_log"
+      "-lboost_log_setup"
+    ];
+  };
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
@@ -194,13 +203,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGL_SILENCE_DEPRECATION")
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-Wl,--no-as-needed")
     (lib.cmakeBool "ORCA_VERSION_CHECK_DEFAULT" false)
-    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
-    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY_RELEASE" "${libnoise}/lib/libnoise-static.a")
     "-Wno-dev"
-
-    # cmake 4 compatibility, remove in next update
-    # see: https://github.com/SoftFever/OrcaSlicer/commit/883607e1d4a0b2bb719f2f4bcd9fd72f8c2174fa
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.13")
   ];
 
   # Generate translation files
@@ -214,6 +219,13 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      ${lib.optionalString withNvidiaGLWorkaround ''
+        --set __GLX_VENDOR_LIBRARY_NAME mesa
+        --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
+        --set MESA_LOADER_DRIVER_OVERRIDE zink
+        --set GALLIUM_DRIVER zink
+        --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+      ''}
     )
   '';
 

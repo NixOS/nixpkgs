@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "3.16";
+  version = "3.18";
   srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
     tag = version;
-    hash = "sha256-NBHmRA+6Os6/IpW8behbgpVjtN8QF9gkffXU2ZVC8ts=";
+    hash = "sha256-7zDknn2UUR2Dt3BUJ9YI0LAjRedVyUPJAiIBiRyyphQ=";
   };
   mkSubProject =
     {
@@ -25,6 +25,10 @@ let
       inherit version src;
       sourceRoot = "${src.name}/${subprj}";
       inherit buildInputs;
+
+      # Fix build with gcc 15
+      env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
       # Remove (meant for other OSs) lines from Makefiles
       preInstall = ''
         sed -i "/chown root/d" Makefile
@@ -70,8 +74,8 @@ let
 in
 
 symlinkJoin {
-  name = "wiringpi-${version}";
-  inherit passthru;
+  pname = "wiringpi";
+  inherit passthru version;
   paths = [
     passthru.wiringPi
     passthru.devLib

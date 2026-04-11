@@ -29,9 +29,11 @@ stdenv.mkDerivation {
     "out"
   ];
 
-  PREFIX = (placeholder "out");
-  BINPREFIX = "${placeholder "bin"}/bin";
-  MANPREFIX = "${placeholder "man"}/share/man/man1";
+  env = {
+    PREFIX = (placeholder "out");
+    BINPREFIX = "${placeholder "bin"}/bin";
+    MANPREFIX = "${placeholder "man"}/share/man/man1";
+  };
 
   buildInputs = [
     # stubbing out a `git config` check that `make install` tries to do

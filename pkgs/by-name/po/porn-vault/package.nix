@@ -3,6 +3,8 @@
   rustPlatform,
   lib,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenvNoCC,
   nodejs_22,
   ffmpeg,
@@ -35,8 +37,8 @@ let
       mainProgram = "izzy";
     };
   };
-  pnpm = pnpm_9;
   nodejs = nodejs_22;
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "porn-vault";
@@ -49,15 +51,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-wQ3dqLc0l2BmLGDYrbWxX2mPwO/Tqz0fY/fOQTEUv24=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-Xr9tRiP1hW+aFs9FnPvPkeJ0/LtJI57cjWY5bZQaRTQ=";
+    pnpm = pnpm';
+    fetcherVersion = 3;
+    hash = "sha256-CAsUP+bLrTkbUd3h/FP4gBVwZECyqQg0nnmap4zsRTs=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm'
     makeWrapper
   ];
 

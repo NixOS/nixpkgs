@@ -1,44 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  paho-mqtt,
   cryptography,
+  fetchFromGitHub,
+  paho-mqtt,
+  requests,
+  setuptools,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.4";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "0.2.9";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4RwsuFg2ukvM0rplCZKJx85DbJTpJnhkCVDnfT4r4A8=";
+  src = fetchFromGitHub {
+    owner = "tuya";
+    repo = "tuya-device-sharing-sdk";
+    tag = finalAttrs.version;
+    hash = "sha256-kNWg+AXISThwK14ByObUr+/4GMntrZgtEEMNpw/HjLw=";
   };
-
-  # workaround needed, upstream issue: https://github.com/tuya/tuya-device-sharing-sdk/issues/10
-  postPatch = ''
-    touch requirements.txt
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    requests
-    paho-mqtt
     cryptography
+    paho-mqtt
+    requests
   ];
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  pythonImportsCheck = [ "tuya_sharing" ];
+
+  meta = {
     description = "Tuya Device Sharing SDK";
     homepage = "https://github.com/tuya/tuya-device-sharing-sdk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aciceri ];
+    changelog = "https://github.com/tuya/tuya-device-sharing-sdk/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})

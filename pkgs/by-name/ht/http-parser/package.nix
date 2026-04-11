@@ -7,14 +7,14 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "http-parser";
   version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "http-parser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vda4dp75pjf5fcph73sy0ifm3xrssrmf927qd1x8g3q46z0cv6c";
   };
 
@@ -61,14 +61,14 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isWindows ''
     install -D *.dll.a $out/lib
-    ln -sf libhttp_parser.${version}.dll.a $out/lib/libhttp_parser.dll.a
+    ln -sf libhttp_parser.${finalAttrs.version}.dll.a $out/lib/libhttp_parser.dll.a
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HTTP message parser written in C";
     homepage = "https://github.com/nodejs/http-parser";
-    maintainers = with maintainers; [ matthewbauer ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = [ ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
-}
+})

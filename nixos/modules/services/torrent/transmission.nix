@@ -86,7 +86,7 @@ in
           `.config/transmission-daemon/settings.json`
           (each time the service starts).
 
-          See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
+          See [Transmission's documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
           for documentation of settings not explicitly covered by this module.
         '';
         default = { };
@@ -357,19 +357,29 @@ in
     # when /home/foo is not owned by cfg.user.
     # Note also that using an ExecStartPre= wouldn't work either
     # because BindPaths= needs these directories before.
-    system.activationScripts.transmission-daemon = ''
-      install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
-    ''
-    + optionalString (cfg.downloadDirPermissions != null) ''
-      install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+    systemd.services.transmission-setup = {
+      before = [ "transmission.service" ];
+      partOf = [ "transmission.service" ];
 
-      ${optionalString cfg.settings.incomplete-dir-enabled ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
-      ''}
-      ${optionalString cfg.settings.watch-dir-enabled ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
-      ''}
-    '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      script = ''
+        install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
+      ''
+      + optionalString (cfg.downloadDirPermissions != null) ''
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+
+        ${optionalString cfg.settings.incomplete-dir-enabled ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+        ''}
+        ${optionalString cfg.settings.watch-dir-enabled ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+        ''}
+      '';
+    };
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
@@ -392,7 +402,7 @@ in
               set -eu${lib.optionalString (cfg.settings.message-level >= 3) "x"}
               ${pkgs.jq}/bin/jq --slurp add ${settingsFile} '${cfg.credentialsFile}' |
               install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
-               '${cfg.home}/${settingsDir}/settings.json'
+              '${cfg.home}/${settingsDir}/settings.json'
             ''
           )
         ];
@@ -585,23 +595,23 @@ in
       include "${cfg.package.apparmor}/bin.transmission-daemon"
     '';
     security.apparmor.includes."local/bin.transmission-daemon" = ''
-      r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},
+      ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE} r,
 
-      owner rw ${cfg.home}/${settingsDir}/**,
-      rw ${cfg.settings.download-dir}/**,
+      owner ${cfg.home}/${settingsDir}/** rw,
+      ${cfg.settings.download-dir}/** rw,
       ${optionalString cfg.settings.incomplete-dir-enabled ''
-        rw ${cfg.settings.incomplete-dir}/**,
+        ${cfg.settings.incomplete-dir}/** rw,
       ''}
       ${optionalString cfg.settings.watch-dir-enabled ''
-        r${optionalString cfg.settings.trash-original-torrent-files "w"} ${cfg.settings.watch-dir}/**,
+        ${cfg.settings.watch-dir}/** r${optionalString cfg.settings.trash-original-torrent-files "w"},
       ''}
       profile dirs {
-        rw ${cfg.settings.download-dir}/**,
+        ${cfg.settings.download-dir}/** rw,
         ${optionalString cfg.settings.incomplete-dir-enabled ''
-          rw ${cfg.settings.incomplete-dir}/**,
+          ${cfg.settings.incomplete-dir}/** rw,
         ''}
         ${optionalString cfg.settings.watch-dir-enabled ''
-          r${optionalString cfg.settings.trash-original-torrent-files "w"} ${cfg.settings.watch-dir}/**,
+          ${cfg.settings.watch-dir}/** r${optionalString cfg.settings.trash-original-torrent-files "w"},
         ''}
       }
 
@@ -612,12 +622,12 @@ in
           # any existing profile for script-torrent-done-filename
           # FIXME: to be tested as I'm not sure it works well with NoNewPrivileges=
           # https://gitlab.com/apparmor/apparmor/-/wikis/AppArmorStacking#seccomp-and-no_new_privs
-          px ${cfg.settings.script-torrent-done-filename} -> &@{dirs},
+          ${cfg.settings.script-torrent-done-filename} px -> &@{dirs},
         ''
       }
 
       ${optionalString (cfg.webHome != null) ''
-        r ${cfg.webHome}/**,
+        ${cfg.webHome}/** r,
       ''}
     '';
   };

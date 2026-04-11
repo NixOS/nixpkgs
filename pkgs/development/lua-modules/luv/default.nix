@@ -13,7 +13,7 @@
 
 buildLuarocksPackage rec {
   pname = "luv";
-  version = "1.51.0-1";
+  version = "1.51.0-2";
 
   src = fetchFromGitHub {
     owner = "luvit";
@@ -21,7 +21,7 @@ buildLuarocksPackage rec {
     rev = version;
     # Need deps/lua-compat-5.3 only
     fetchSubmodules = true;
-    hash = "sha256-vQfr0TwhkvRDJwZnxDD/53yCzyDouzQimTnwj4drs/c=";
+    hash = "sha256-UJHNXftAvtDuporyKCuJ7+KbtG0lBZ+DtESixS8rabQ=";
   };
 
   # to make sure we dont use bundled deps

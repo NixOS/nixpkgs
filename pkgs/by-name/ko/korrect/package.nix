@@ -9,13 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "korrect";
-  version = "0.2.1";
+  version = "0.3.7";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-/tFrHTZ6YHnN9OvoHBJWEnwX780DYrs0f5wV1dPyAcc=";
+    hash = "sha256-qpjpdP0KeuwF5XhnlkrKcXJ4puHNpt/7SrIFOnFjGNA=";
   };
-  cargoHash = "sha256-bG31pqI/eB+J0FUq/lWak6Ekf+00JiCfuKZdyUkIAAw=";
+  cargoHash = "sha256-1k2I8R5H4UGYf7rc9r2SwMwrA2F7PlECbsCco731beQ=";
+
+  # Tests create a local http server to check the download functionality
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -25,7 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
       --bash <($out/bin/${finalAttrs.meta.mainProgram} completions bash) \
       --fish <($out/bin/${finalAttrs.meta.mainProgram} completions fish) \
-      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completions zsh)
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completions zsh) \
+      --nushell <($out/bin/${finalAttrs.meta.mainProgram} completions nushell)
   '';
 
   meta = {

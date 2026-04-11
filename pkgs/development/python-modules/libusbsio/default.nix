@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libusbsio" ];
 
-  meta = with lib; {
+  meta = {
     description = "LIBUSBSIO Host Library for USB Enabled MCUs";
     homepage = "https://www.nxp.com/design/design-center/software/development-software/libusbsio-host-library-for-usb-enabled-mcus:LIBUSBSIO";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

@@ -29,6 +29,7 @@
   crateVersion,
   extraLinkFlags,
   extraRustcOptsForBuildRs,
+  capLints,
   libName,
   libPath,
   release,
@@ -48,7 +49,7 @@ let
   completeDepsDir = lib.concatStringsSep " " completeDeps;
   completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
   envFeatures = lib.concatStringsSep " " (
-    map (f: lib.replaceStrings [ "-" ] [ "_" ] (lib.toUpper f)) crateFeatures
+    map (f: "CARGO_FEATURE_${lib.replaceStrings [ "-" ] [ "_" ] (lib.toUpper f)}=1") crateFeatures
   );
 in
 ''
@@ -195,7 +196,7 @@ in
      fi
      noisily rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
        ${mkRustcFeatureArgs crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
-       -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
+       -L dependency=target/buildDeps ${buildDeps} --cap-lints ${capLints} $EXTRA_BUILD_FLAGS --color ${colors}
 
      mkdir -p target/build/${crateName}.out
      export RUST_BACKTRACE=1
@@ -205,11 +206,10 @@ in
      (
        # Features should be set as environment variable for build scripts:
        # https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
-       for feature in ${envFeatures}; do
-         export CARGO_FEATURE_$feature=1
-       done
-
-       target/build/${crateName}/build_script_build | tee target/build/${crateName}.opt
+       #
+       # We use `env` instead of `export` because it's possible for a Cargo feature name to contain a character that Bash does
+       # not support for variables.
+       env ${envFeatures} target/build/${crateName}/build_script_build | tee target/build/${crateName}.opt
      )
 
      set +e

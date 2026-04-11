@@ -1,7 +1,7 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron,
+  electron_39,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -10,17 +10,23 @@
   prefetch-npm-deps,
   rsync,
   stdenv,
+  nodejs_24,
 }:
-
+let
+  electron = electron_39;
+  nodejs = nodejs_24;
+in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "15.2.2";
+  version = "18.1.3";
+
+  inherit nodejs;
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-jnHPlKA2I/HIUoxDn+h4F9BDTr5G0mLcq6pAlFgxTv8=";
+    hash = "sha256-2NEhLYC13OYZqaLLLLyQHn5uDIDh40DVtUSuUAjCxgQ=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -63,7 +69,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-0HQ0+/1gxlODdHeLxgj0y5RtWUOizB+9SULtOmi0DFk=";
+      hash = "sha256-AnAiPjxl5MbQchCPPHmtRFEojClseHFul+w5FEEUdwY=";
     }
   );
 
@@ -101,7 +107,8 @@ buildNpmPackage rec {
     npm run build
     npm exec electron-builder -- --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
 
     runHook postBuild
   '';
@@ -165,8 +172,8 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      offline
       pineapplehunter
+      tebriel
     ];
     mainProgram = "super-productivity";
   };

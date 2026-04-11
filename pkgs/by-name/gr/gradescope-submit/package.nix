@@ -26,10 +26,10 @@ ocamlPackages.buildDunePackage rec {
     lwt_ssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small script to submit to Gradescope via GitHub";
     homepage = "https://github.com/nmittu/gradescope-submit";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "submit";
   };

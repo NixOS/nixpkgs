@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "mercadopago";
   version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mercadopago";

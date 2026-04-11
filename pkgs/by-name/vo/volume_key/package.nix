@@ -16,13 +16,13 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "volume_key";
   version = "0.3.11";
 
   src = fetchgit {
     url = "https://pagure.io/volume_key.git";
-    rev = "volume_key-${version}";
+    rev = "volume_key-${finalAttrs.version}";
     sha256 = "1sqdbcih1c39bjiv4mm1m7acc3lfh2i2hf2r9i7rk8adfzq8awma";
   };
 
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 1 out of 1 tests, needs `certutil`
 
-  meta = with lib; {
+  meta = {
     description = "Library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
     mainProgram = "volume_key";
     homepage = "https://pagure.io/volume_key/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

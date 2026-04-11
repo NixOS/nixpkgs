@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-scm,
   packaging,
   setuptools-scm,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "nipreps-versions";
   version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nipreps";
@@ -35,11 +32,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "nipreps_versions" ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools_scm plugin for nipreps version schemes";
     homepage = "https://github.com/nipreps/version-schemes";
     changelog = "https://github.com/nipreps/version-schemes/blob/${src.rev}/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

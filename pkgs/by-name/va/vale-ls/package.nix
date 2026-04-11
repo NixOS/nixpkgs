@@ -55,7 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "vale-ls";
     maintainers = with lib.maintainers; [
-      foo-dogsquared
       jansol
     ];
   };

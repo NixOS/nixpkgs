@@ -5,17 +5,16 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  ytt,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ytt";
-  version = "0.52.1";
+  version = "0.53.2";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
-    rev = "v${version}";
-    sha256 = "sha256-fSrvsRZpXXvR6SpEigEMiP0lU5y+ddidHwtz+rmgSb4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QGb3lTeMiYN4+uml1x0tIGRf7EF96gXIsXgkxyWxL1Q=";
   };
 
   vendorHash = null;
@@ -25,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X carvel.dev/ytt/pkg/version.Version=${version}"
+    "-X carvel.dev/ytt/pkg/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -42,20 +41,20 @@ buildGoModule rec {
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
-    package = ytt;
-    command = "ytt --version";
-    inherit version;
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.meta.mainProgram} --version";
+    inherit (finalAttrs) version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
     mainProgram = "ytt";
     homepage = "https://get-ytt.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       brodes
       techknowlogick
       gabyx
     ];
   };
-}
+})

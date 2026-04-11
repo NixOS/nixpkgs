@@ -5,29 +5,44 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  nodejs,
   usage,
   testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.2.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hnq3ViMrNIo9m/1mePjEzMv87U24wY50UiYxnpJqHR8=";
+    hash = "sha256-0yonwl/2BIkGUs0uOBP+Pjo93NvLVK4QQQj/K4C4NNY=";
   };
 
-  cargoHash = "sha256-Zj8Z88gYx+i0VN14HbO1LSlWjZX1EvrtyKvAwpnFMgs=";
+  cargoHash = "sha256-jxTN+La7Ye2okRZGAY6niIvvRf2E4vFFHd1nny7JJDo=";
+
+  patches = [
+    ./use-bin-exe-env.patch
+  ];
 
   postPatch = ''
-    substituteInPlace ./examples/mounted.sh \
+    substituteInPlace ./examples/*.sh \
       --replace-fail '/usr/bin/env -S usage' "$(pwd)/target/${stdenv.targetPlatform.rust.rustcTargetSpec}/release/usage"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [
+    # for some tests
+    nodejs
+  ];
+
+  checkFlags = [
+    # has --include-bash-completion-lib so requires external lib downloaded on runtime
+    "--skip=test_bash_completion_integration"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \

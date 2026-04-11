@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libeufin";
-  version = "1.0.2";
+  version = "1.3.0";
 
   src = fetchgit {
     url = "https://git.taler.net/libeufin.git/";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZjZo0oCsrnc413OY7ElU95Vto9Smp6fuPI3RzJzC3Zk=";
+    hash = "sha256-bt1NBoiN52CX2Itg8lQ/b0V/MZulBTaD8luNlH4Mwss=";
     fetchSubmodules = true;
     leaveDotGit = true; # required for correct submodule fetching
     # Save the HEAD short commit hash in a file so it can be retrieved later for versioning.
     # Delete .git folder for reproducibility (otherwise, the hash changes unexpectedly after fetching submodules)
     postFetch = ''
       pushd $out
-      git rev-parse HEAD > ./common/src/main/resources/HEAD.txt
+      git rev-parse HEAD > ./libeufin-common/src/main/resources/HEAD.txt
       rm -rf .git
       popd
     '';
@@ -37,9 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   patchPhase = ''
     runHook prePatch
 
+    substituteInPlace Makefile \
+      --replace-fail "install: build install-nobuild-files" "install: install-nobuild-files"
+
     # The .git folder had to be deleted. Read hash from file instead of using the git command.
     substituteInPlace build.gradle \
-      --replace-fail "commandLine 'git', 'rev-parse', '--short', 'HEAD'" 'commandLine "cat", "$projectDir/common/src/main/resources/HEAD.txt"'
+      --replace-fail "git rev-parse --short HEAD" "cat $projectDir/libeufin-common/src/main/resources/HEAD.txt"
 
     # Use gradle repo to download dependencies
     substituteInPlace build.gradle \
@@ -62,8 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   gradleFlags = [ "-Dorg.gradle.java.home=${jdk17_headless}" ];
   gradleBuildTask = [
-    "bank:installShadowDist"
-    "nexus:installShadowDist"
+    "libeufin-bank:installShadowDist"
+    "libeufin-nexus:installShadowDist"
+    "libeufin-ebisync:installShadowDist"
   ];
 
   nativeBuildInputs = [
@@ -76,9 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    make install-nobuild
+    make install
 
-    for exe in libeufin-nexus libeufin-bank ; do
+    for exe in libeufin-bank libeufin-nexus libeufin-ebisync ; do
       wrapProgram $out/bin/$exe \
         --set JAVA_HOME ${jdk17_headless.home} \
         --prefix PATH : $out/bin \

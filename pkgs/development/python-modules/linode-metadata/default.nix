@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "linode-metadata";
-  version = "0.3.1";
+  version = "0.3.4";
 
   src = fetchPypi {
     pname = "linode_metadata";
     inherit version;
-    hash = "sha256-EnOW3o3Y/6wzX8z4JIWqy0zSkP2iyQQfDxHBXmKt3mQ=";
+    hash = "sha256-6b0u1/Z2Q8iKLgFAu4ZbA6vK228sPMXgudsfa5PbAj0=";
   };
 
   pyproject = true;

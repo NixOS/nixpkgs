@@ -25,8 +25,8 @@ in
       "apparmor"
       "profiles"
     ] "Please use the new option: `security.apparmor.policies'.")
-    apparmor/includes.nix
-    apparmor/profiles.nix
+    ./apparmor/includes.nix
+    ./apparmor/profiles.nix
   ];
 
   options = {
@@ -154,7 +154,7 @@ in
     ''
     + lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
-    environment.etc."apparmor/apparmor.conf".text = '''';
+    environment.etc."apparmor/apparmor.conf".text = "";
     # For aa-logprof
     environment.etc."apparmor/severity.db".source = pkgs.apparmor-utils + "/etc/apparmor/severity.db";
     environment.etc."apparmor/logprof.conf".source =
@@ -272,5 +272,5 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.apparmor.members;
+  meta.teams = [ lib.teams.apparmor ];
 }

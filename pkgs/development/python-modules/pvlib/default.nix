@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "pvlib";
-  version = "0.13.1";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qT/RGNBIt4fbZsI0SGwFwMZc8J2zRNggg5YbyCat9G8=";
+    hash = "sha256-nmpmhlJAzk4xy+nTYKKNbreVO6u2KsQDry+QrtFqRQk=";
   };
 
   build-system = [
@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pvlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulate the performance of photovoltaic energy systems";
     homepage = "https://pvlib-python.readthedocs.io";
     changelog = "https://pvlib-python.readthedocs.io/en/v${version}/whatsnew.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

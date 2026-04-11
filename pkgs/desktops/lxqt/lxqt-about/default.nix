@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-about";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-about";
     rev = version;
-    hash = "sha256-StPepm6XWaK1kDAspnBJ4X1/QGqHmSj48RBobJ46Sao=";
+    hash = "sha256-EP0Sd/VvLufqtn/7ZQwdI/h+BJhkGks7jTlEoEqYWgk=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-about";
     description = "Dialogue window providing information about LXQt and the system it's running on";
     mainProgram = "lxqt-about";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

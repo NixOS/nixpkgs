@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wg-netmanager";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
-    rev = "wg_netmanager-v${version}";
+    rev = "wg_netmanager-v${finalAttrs.version}";
     sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     "device"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wireguard network manager";
     longDescription = ''
       Wireguard network manager, written in rust, simplifies the setup of wireguard nodes,
@@ -33,14 +33,14 @@ rustPlatform.buildRustPackage rec {
       To achieve this, wireguard network manager needs to be running on each node.
     '';
     homepage = "https://github.com/gin66/wg_netmanager";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
       bsd3
       mpl20
     ];
-    maintainers = with maintainers; [ gin66 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ gin66 ];
+    platforms = lib.platforms.linux;
     mainProgram = "wg_netmanager";
   };
-}
+})

@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msilbc";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "mirror://savannah/linphone/plugins/sources/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/linphone/plugins/sources/msilbc-${finalAttrs.version}.tar.gz";
     sha256 = "07j02y994ybh274fp7ydjvi76h34y2c34ndwjpjfcwwr03b48cfp";
   };
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     "MEDIASTREAMER_CFLAGS=-I${linphonePackages.mediastreamer2}/include"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Mediastreamer plugin for the iLBC audio codec";
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
-}
+})

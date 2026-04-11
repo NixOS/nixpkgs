@@ -39,6 +39,23 @@ in
               ":date.txt"
             ];
           };
+          gitHttpBackend.checkExportOkFiles = false;
+        };
+        services.cgit."check.localhost" = {
+          enable = true;
+          scanPath = "/tmp/git";
+          settings = {
+            strict-export = "git-daemon-export-ok";
+          };
+          gitHttpBackend.checkExportOkFiles = true;
+        };
+        services.cgit."no-git-http-backend.localhost" = {
+          enable = true;
+          scanPath = "/tmp/git";
+          settings = {
+            strict-export = "git-daemon-export-ok";
+          };
+          gitHttpBackend.enable = false;
         };
 
         environment.systemPackages = [ pkgs.git ];
@@ -106,6 +123,26 @@ in
       )
       server.fail(
           "curl -fsS 'http://localhost/%28c%29git/some-repo/about/' | grep -F 'cgit NixOS Test at'"
+      )
+
+      # EXPORT_ALL is not set with checkExportOkFiles = true
+      server.succeed("touch /tmp/git/some-repo/git-daemon-export-ok")
+      server.succeed(
+         "git clone http://check.localhost/some-repo $(mktemp -d)"
+      )
+      server.succeed("rm /tmp/git/some-repo/git-daemon-export-ok")
+      server.fail(
+         "git clone http://check.localhost/some-repo $(mktemp -d)"
+      )
+
+      # Disabling the git-http-backend-works
+      server.succeed("touch /tmp/git/some-repo/git-daemon-export-ok")
+      server.succeed(
+         "git clone http://no-git-http-backend.localhost/some-repo $(mktemp -d)"
+      )
+      server.succeed("rm /tmp/git/some-repo/git-daemon-export-ok")
+      server.fail(
+         "git clone http://no-git-http-backend.localhost/some-repo $(mktemp -d)"
       )
     '';
 }

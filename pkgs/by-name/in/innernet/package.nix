@@ -10,18 +10,18 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "innernet";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = "innernet";
-    tag = "v${version}";
-    hash = "sha256-9rw+hS4qwAL6adDzi2Hfl4TQBDWvPKjwpkbRCBKzwEY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wGxTdoWMHVUldW+bjli+5zqo3PRU/8tn7fxAeVrynjs=";
   };
 
-  cargoHash = "sha256-MM6sYNmd/i8ba6WRLMsQWR3+KEc2o8Io+gAN9RjYj5E=";
+  cargoHash = "sha256-vDPs+EEl/ZbKxOrNHc86N7+5ij+4YmsZRo5/Sxja6ms=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -60,11 +60,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Private network system that uses WireGuard under the hood";
     homepage = "https://github.com/tonarino/innernet";
-    changelog = "https://github.com/tonarino/innernet/releases/tag/v${version}";
+    changelog = "https://github.com/tonarino/innernet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       tomberek
       _0x4A6F
     ];
   };
-}
+})

@@ -18,11 +18,11 @@
   libglvnd,
   libjpeg,
   libxkbcommon,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   makeWrapper,
   ninja,
   pkg-config,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   src = fetchFromGitHub {
     owner = "jturcotte";
     repo = "chiptrack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yQP5hFM5qBWdaF192PBvM4il6qpmlgUCeuwDCiw/LaQ=";
   };
 
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
           owner = "rust-skia";
           repo = "skia";
           # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-          rev = "refs/tags/m129-0.77.1";
+          tag = "m129-0.77.1";
           hash = "sha256-WRVuQpfRnYrE7KGFRFx66fXtMFmtJbC3xUcRPK1JoOM=";
         };
         # The externals for skia are taken from skia/DEPS
@@ -114,11 +114,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
           ++ lib.optionals clangStdenv.hostPlatform.isLinux [
             libglvnd
             libxkbcommon
-            libX11
-            libXcursor
-            libXext
-            libXrandr
-            libXi
+            libx11
+            libxcursor
+            libxext
+            libxrandr
+            libxi
             wayland
           ]
         )

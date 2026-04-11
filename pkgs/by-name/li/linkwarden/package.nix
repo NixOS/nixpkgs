@@ -3,11 +3,10 @@
   stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchYarnDeps,
+  yarn-berry,
   makeBinaryWrapper,
   nixosTests,
-  yarnConfigHook,
-  fetchpatch,
+  stdenv,
   # dependencies
   bash,
   monolith,
@@ -15,8 +14,8 @@
   openssl,
   google-fonts,
   playwright-driver,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
 }:
 
 let
@@ -48,16 +47,35 @@ let
       "Bentham"
     ];
   };
+
+  # Playwright's upstream chromium-headless-shell zips use different directory
+  # names per architecture (chrome-headless-shell-linux64 vs chrome-linux).
+  chrome =
+    let
+      browsers = playwright-driver.selectBrowsers {
+        withChromiumHeadlessShell = true;
+        withChromium = false;
+        withFirefox = false;
+        withWebkit = false;
+        withFfmpeg = false;
+      };
+      chromeDir =
+        {
+          x86_64-linux = "chrome-headless-shell-linux64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    in
+    "${browsers}/chromium_headless_shell-*/${chromeDir}/chrome-headless-shell";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ARy7UNG1Rnq3E8UaM1zgmbtr9uLvsfIHLdvVeTKjM+I=";
+    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
   };
 
   patches = [
@@ -73,23 +91,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ./01-localfont.patch
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-FpJJwei7T8emcFtkIOOWyf92w3zp5n1b1MnSRA5dnyI=";
+  missingHashes = ./missing-hashes.json;
+  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-4Qo87kZ0eKHDL4K4yd7rfJwQ5rO1ho2JOvup4nIDMoQ=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    prisma
-    yarnConfigHook
+    prisma_6
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
 
   buildInputs = [
     openssl
   ];
 
-  env.NODE_ENV = "production";
+  env = {
+    NODE_ENV = "production";
+    YARN_ENABLE_SCRIPTS = 0;
+  };
 
   postPatch = ''
     for f in packages/filesystem/*Folder.ts packages/filesystem/*File.ts; do
@@ -101,9 +124,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preBuild = ''
     export PRISMA_CLIENT_ENGINE_TYPE='binary'
-    export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines}/lib/libquery_engine.node"
-    export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines}/bin/query-engine"
-    export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines}/bin/schema-engine"
+    export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines_6}/lib/libquery_engine.node"
+    export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines_6}/bin/query-engine"
+    export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines_6}/bin/schema-engine"
   '';
 
   buildPhase = ''
@@ -120,7 +143,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postBuild = ''
     substituteInPlace node_modules/next/dist/server/image-optimizer.js \
-      --replace-fail 'this.cacheDir = (0, _path.join)(distDir, "cache", "images");' 'this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, "cache", "images");'
+      --replace-fail "this.cacheDir = (0, _path.join)(distDir, 'cache', 'images');" "this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, 'cache', 'images');"
   '';
 
   installPhase = ''
@@ -129,7 +152,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Shrink closure a bit
     shopt -s extglob
     rm -rf node_modules/bcrypt node_modules/@next/swc-* node_modules/lightningcss* node_modules/react-native* node_modules/@react-native* \
-      node_modules/expo* node_modules/@expo node_modules/.bin node_modules/zeego/node_modules/.bin node_modules/@react-navigation/native* \
+      node_modules/expo* node_modules/@expo node_modules/.bin/!(next|tsx) node_modules/zeego/node_modules/.bin node_modules/@react-navigation/native* \
       node_modules/@react-navigation/*/node_modules/.bin node_modules/@native-html node_modules/jest-expo node_modules/@jsamr/react-native-li \
       node_modules/lucide-react-native node_modules/@esbuild/!(linux-x64)
     shopt -u extglob
@@ -140,6 +163,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r apps/worker $out/share/linkwarden/apps/worker
     cp -r packages $out/share/linkwarden/
     cp -r node_modules $out/share/linkwarden/
+    cp -r node_modules/.bin $out/share/linkwarden/node_modules/
     rm -r $out/share/linkwarden/node_modules/@linkwarden/{mobile,react-native-render-html}
 
     echo "#!${lib.getExe bash} -e
@@ -151,7 +175,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/worker
     else
       echo "Starting server"
-      ${lib.getExe prisma} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
+      ${lib.getExe prisma_6} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
         && ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/web -- -H \$LINKWARDEN_HOST -p \$LINKWARDEN_PORT
     fi
     " > $out/bin/start.sh
@@ -166,10 +190,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       }" \
       --set-default PRISMA_CLIENT_ENGINE_TYPE 'binary' \
-      --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines}/lib/libquery_engine.node" \
-      --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines}/bin/query-engine" \
-      --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines}/bin/schema-engine" \
-      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/chrome-linux/chrome \
+      --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines_6}/lib/libquery_engine.node" \
+      --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines_6}/bin/query-engine" \
+      --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines_6}/bin/schema-engine" \
+      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${chrome} \
       --set-default LINKWARDEN_CACHE_DIR /var/cache/linkwarden \
       --set-default LINKWARDEN_HOST localhost \
       --set-default LINKWARDEN_PORT 3000 \

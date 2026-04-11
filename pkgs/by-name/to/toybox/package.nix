@@ -15,15 +15,15 @@ let
   inherit (lib) optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toybox";
   version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = "toybox";
-    rev = version;
-    sha256 = "sha256-b5sigIxyg4T4wVc5z8Das+RdEXmNBPFsXpWwXxU/ERE=";
+    tag = finalAttrs.version;
+    hash = "sha256-b5sigIxyg4T4wVc5z8Das+RdEXmNBPFsXpWwXxU/ERE=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs .";
 
   inherit extraConfig;
-  passAsFile = [ "extraConfig" ];
 
   configurePhase = ''
     make ${
@@ -57,7 +56,8 @@ stdenv.mkDerivation rec {
         "defconfig"
     }
 
-    cat $extraConfigPath .config > .config-
+    printf "%s" "$extraConfig" > .config-
+    cat .config >> .config-
     mv .config- .config
 
     make oldconfig
@@ -87,12 +87,14 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Lightweight implementation of some Unix command line utilities";
     homepage = "https://landley.net/toybox/";
-    license = licenses.bsd0;
-    platforms = with platforms; linux ++ darwin ++ freebsd;
-    maintainers = with maintainers; [ hhm ];
+    license = lib.licenses.bsd0;
+    platforms = with lib.platforms; linux ++ darwin ++ freebsd;
+    maintainers = with lib.maintainers; [ hhm ];
     priority = 10;
   };
-}
+})

@@ -1,29 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   dacite,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "soundcloud-v2";
-  version = "1.6.0";
+  version = "1.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RiUTFGwP/J7HKcHGFvT3Kw3NM/gUeMZCB/Jl8HLngkM=";
+  src = fetchFromGitHub {
+    owner = "7x11x13";
+    repo = "soundcloud.py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-V+eEBMlzHbNM3dd+vBNkIvjwc+DdV8RZTasSggCv/jY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dacite
     python-dateutil
     requests
@@ -34,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "soundcloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the v2 SoundCloud API";
     homepage = "https://github.com/7x11x13/soundcloud.py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

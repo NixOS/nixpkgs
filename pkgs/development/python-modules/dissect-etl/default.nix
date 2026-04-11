@@ -8,21 +8,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-etl";
-  version = "3.11";
+  version = "3.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.etl";
     tag = version;
-    hash = "sha256-soJH7kx/029yXyOjv6OsWjWAMMHXKx711GLPBClDAK0=";
+    hash = "sha256-QmtFkzO57jLTQg16MawAgU7Vq8vgo7DkEDq+FEjnObs=";
   };
 
   build-system = [
@@ -46,11 +43,11 @@ buildPythonPackage rec {
     "test_empty"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for Event Trace Log (ETL) files";
     homepage = "https://github.com/fox-it/dissect.etl";
     changelog = "https://github.com/fox-it/dissect.etl/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

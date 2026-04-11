@@ -9,12 +9,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freexl";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/freexl-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/freexl-${finalAttrs.version}.tar.gz";
     hash = "sha256-F2cF8d5Yq3we679cbeRqt2/Ni4VlCNvSj1ZI98bhp/A=";
   };
 
@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library to extract valid data from within an Excel (.xls) spreadsheet";
     homepage = "https://www.gaia-gis.it/fossil/freexl";
     # They allow any of these
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       mpl11
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

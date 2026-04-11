@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-11LrScN1kvtq0Fo7RWGjbQO0U5b5brCbipl5pdZnrFs=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software package for performing Bayesian analysis and simulation using Markov Chain Monte Carlo";
     homepage = "https://github.com/jsta/openbugs/";
     changelog = "https://github.com/jsta/openbugs/blob/master/ChangeLog";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       "i686-linux"
       "x86_64-linux"
     ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ andresnav ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ andresnav ];
   };
 }

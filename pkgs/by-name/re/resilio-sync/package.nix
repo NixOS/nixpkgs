@@ -3,23 +3,24 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  installShellFiles,
   libxcrypt-legacy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "resilio-sync";
-  version = "3.0.2.1058";
+  version = "3.1.1.1075";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${version}/linux/x64/0/resilio-sync_x64.tar.gz";
-        hash = "sha256-jdkxSN/JscL2hxIWuShNKyUk28d453LPDM/+FtzquGQ=";
+        url = "https://download-cdn.resilio.com/${finalAttrs.version}/linux/x64/0/resilio-sync_x64.tar.gz";
+        hash = "sha256-FgRMK5dOxkbaXyi0BPYQZK0tR/ZZuuUGAciwThqICBk=";
       };
 
       aarch64-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
-        hash = "sha256-iczg1jEy+49QczKxc0/UZJ8LPaCHsXKmSrudVb3RWZ8=";
+        url = "https://download-cdn.resilio.com/${finalAttrs.version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
+        hash = "sha256-P3gUwj3Vr9qn9S6iqlgGfZpK7x5u4U96b886JCE3CYY=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    installShellFiles
   ];
 
   buildInputs = [
@@ -37,19 +39,23 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D rslsync "$out/bin/rslsync"
+    runHook preInstall
+
+    installBin rslsync
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically sync files via secure, distributed technology";
     homepage = "https://www.resilio.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       cwoac
     ];
     mainProgram = "rslsync";
   };
-}
+})

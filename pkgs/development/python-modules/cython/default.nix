@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   gdb,
-  isPyPy,
   ncurses,
   numpy,
   pkg-config,
@@ -16,19 +15,22 @@
 
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.1.4";
+  version = "3.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
     tag = version;
-    hash = "sha256-qFj7w0fQY6X1oADLsAgwFefzx92/Pmgv9j5S6v0sdPg=";
+    hash = "sha256-8J5EcaQXexWEA+se5rCR06CwlEYao2XK5TnVNgFGHYQ=";
   };
 
   build-system = [
-    pkg-config
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   nativeCheckInputs = [
@@ -36,10 +38,6 @@ buildPythonPackage rec {
     numpy
     ncurses
   ];
-
-  env = lib.optionalAttrs (!isPyPy) {
-    LC_ALL = "en_US.UTF-8";
-  };
 
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
@@ -119,7 +117,7 @@ buildPythonPackage rec {
       attributes. This allows the compiler to generate very efficient C code
       from Cython code.
     '';
-    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/cython/cython/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
     maintainers = [ ];

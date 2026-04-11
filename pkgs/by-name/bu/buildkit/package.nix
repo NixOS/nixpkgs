@@ -5,15 +5,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkit";
-  version = "0.25.1";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
-    rev = "v${version}";
-    hash = "sha256-h9XkvgYa7m7LxeUuQ8aFFxNcTULfjQ5gR7vRN9Y89rI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gLWxkvr6Ead75MjMAQJIEMWN97NQfWA2v71rZnAYbo8=";
   };
 
   vendorHash = null;
@@ -23,8 +23,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/moby/buildkit/version.Version=${version}"
-    "-X github.com/moby/buildkit/version.Revision=${src.rev}"
+    "-X github.com/moby/buildkit/version.Version=${finalAttrs.version}"
+    "-X github.com/moby/buildkit/version.Revision=${finalAttrs.src.rev}"
   ];
 
   doCheck = false;
@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = {
     description = "Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit";
     homepage = "https://github.com/moby/buildkit";
-    changelog = "https://github.com/moby/buildkit/releases/tag/v${version}";
+    changelog = "https://github.com/moby/buildkit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       developer-guy
@@ -40,4 +40,4 @@ buildGoModule rec {
     ];
     mainProgram = "buildctl";
   };
-}
+})

@@ -1,17 +1,18 @@
 {
-  mkDerivation,
-  extra-cmake-modules,
+  lib,
+  stdenv,
   fetchFromGitHub,
+  extra-cmake-modules,
+  wrapQtAppsHook,
   kiconthemes,
   kio,
   kjobwidgets,
   kxmlgui,
-  lib,
   testers,
   k4dirstat,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "k4dirstat";
   version = "3.4.3";
 
@@ -22,7 +23,11 @@ mkDerivation rec {
     hash = "sha256-TXMUtiPS7qRLm6cCy2ZntYrcNJ0fn6X+3o3P5u7oo08=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
     kiconthemes
     kio
@@ -35,12 +40,12 @@ mkDerivation rec {
     command = "k4dirstat -platform offscreen --version &>/dev/stdout";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jeromerobert/k4dirstat";
     description = "Small utility program that sums up disk usage for directory trees";
     mainProgram = "k4dirstat";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.raboof ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raboof ];
+    platforms = lib.platforms.linux;
   };
 }

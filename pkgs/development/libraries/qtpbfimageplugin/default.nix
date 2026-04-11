@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     tag = version;
-    hash = "sha256-3Tfh92ozitvL9EiGJy8Q20C8zDx5eNNJFa7KDXDuS6Y=";
+    hash = "sha256-IU9sA8yipGsqD9HadGlQce4ud0RyfMMh83cdVuSTGjs=";
   };
 
   nativeBuildInputs = [

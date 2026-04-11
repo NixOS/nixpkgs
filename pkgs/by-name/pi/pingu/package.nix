@@ -4,27 +4,39 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pingu";
-  version = "0.0.5";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
-    owner = "sheepla";
+    owner = "CactiChameleon9";
     repo = "pingu";
-    rev = "v${version}";
-    sha256 = "sha256-iAHj6/qaZgpTfrUZZ9qdsjiNMJ2zH0CzhR4TVSC9oLE=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-KiJRr06N5zOq2vov+iKf5omrzxORxIUaEjM+rXfaoR0=";
+    # Get values that require us to use git, then delete .git
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse --short HEAD > ldflags_revision
+      find . -type d -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  vendorHash = "sha256-xn6la6E0C5QASXxNee1Py/rBs4ls9X/ePeg4Q1e2UyU=";
+  vendorHash = "sha256-+2YyJo4RFJXTt7foDrEoLeCcbkRqQ+boFaKioUtcZsM=";
+  ldflags = [
+    "-w"
+    "-s"
+    "-X main.appVersion=${finalAttrs.version}"
+  ];
+  preBuild = ''
+    ldflags+=" -X main.appRevision=$(cat ldflags_revision)"
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Ping command implementation in Go but with colorful output and pingu ascii art";
-    homepage = "https://github.com/sheepla/pingu/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ CactiChameleon9 ];
+    homepage = "https://github.com/CactiChameleon9/pingu/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ CactiChameleon9 ];
     mainProgram = "pingu";
-    # Doesn't build with Go toolchain >1.22, build error:
-    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'.
-    broken = true;
   };
-}
+})

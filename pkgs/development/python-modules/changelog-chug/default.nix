@@ -5,7 +5,6 @@
   docutils,
   semver,
   setuptools,
-  coverage,
   testscenarios,
   testtools,
   unittestCheckHook,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
     testscenarios
     testtools
     unittestCheckHook

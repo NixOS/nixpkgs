@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
   nodejs,
@@ -12,15 +12,15 @@
   discord-development,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openasar";
-  version = "0-unstable-2025-09-17";
+  version = "0-unstable-2026-03-28";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "bf8a71e2fcf1c77761092b7b899839164e3a596c";
-    hash = "sha256-gKaqLIlEJUUTbXBQ0E97bHS6Z1HFdmEt8jsvkQH4hI8=";
+    rev = "2fa6bb6145320cb72c033bfffbf8162c5386a32f";
+    hash = "sha256-uzIbtoWCBbVpIxfc75H4isOOTJItH01S7hWzb17oDcg=";
   };
 
   postPatch = ''
@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source alternative of Discord desktop's \"app.asar\"";
     homepage = "https://openasar.dev";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Scrumplex
       jopejoe1
     ];

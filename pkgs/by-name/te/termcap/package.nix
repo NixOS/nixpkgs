@@ -8,12 +8,12 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "termcap";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://gnu/termcap/termcap-${version}.tar.gz";
+    url = "mirror://gnu/termcap/termcap-${finalAttrs.version}.tar.gz";
     hash = "sha256-kaDiLlOHykRntbyxjt8cUbkwJi/UZtX9o5bdnSZxkQA=";
   };
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString (
     [
       "-DSTDC_HEADERS"
+      "-std=gnu89"
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-implicit-function-declaration"
@@ -76,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
   };
-}
+})

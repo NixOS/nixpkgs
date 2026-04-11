@@ -23,11 +23,10 @@ stdenv.mkDerivation {
     cp -fa colormake.pl colormake colormake-short clmake clmake-short $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper around make to colorize the output";
     homepage = "https://bre.klaki.net/programs/colormake/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -3,8 +3,9 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  nodejs_20,
-  pnpm_8,
+  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   wrapGAppsHook3,
   glib-networking,
@@ -12,19 +13,15 @@
   copyDesktopItems,
 }:
 
-let
-  # NodeJS 22.18.0 broke our build, not sure why
-  wails' = wails.override { nodejs = nodejs_20; };
-in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.0.3";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-ndvrgSRblm7pVwnGvxpwtGVMEGp+mqpC4kE87lmt36M=";
+    hash = "sha256-n1eGgvIxbWMugCaB/YX1chPgt97autDDJzomIgntz6M=";
   };
 
   patches = [
@@ -42,8 +39,9 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    pnpm_8.configHook
-    wails'
+    pnpmConfigHook
+    pnpm
+    wails
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -55,11 +53,15 @@ buildGoModule rec {
   # we use env because buildGoModule doesn't forward all normal attrs
   # this is pretty hacky
   env = {
-    pnpmDeps = pnpm_8.fetchDeps {
-      inherit pname version src;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        src
+        ;
       sourceRoot = "${src.name}/frontend";
-      fetcherVersion = 1;
-      hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
+      fetcherVersion = 3;
+      hash = "sha256-p0PFIqnIDZPffKaACWWDUvdBN+a0aMbZTUvz9wRTY+k=";
     };
 
     pnpmRoot = "frontend";
@@ -74,7 +76,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-3nsJPuwL2Zw/yuHvd8rMSpj9DBBpYUaR19z9TSV/7jg=";
+  vendorHash = "sha256-LvDftUsmvrIY2WkC2pFxRasUGwytEE6ObhzDlrdgpB4=";
 
   buildPhase = ''
     runHook preBuild

@@ -30,10 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://freemacsoft.net/appcleaner";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [
-      emilytrau
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.darwin;
   };
 })

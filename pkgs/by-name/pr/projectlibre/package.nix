@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R license $out/share/doc/projectlibre
     cp -R resources/samples/* $out/share/projectlibre/samples
     install -Dm644 resources/projectlibre.desktop -t $out/share/applications
-    install -Dm644 resources/projectlibre.png -t $out/share/pixmaps
+    install -Dm644 resources/projectlibre.png -t $out/share/icons/hicolor/128x128/apps
     install -Dm755 resources/projectlibre -t $out/bin
     popd
 

@@ -15,14 +15,10 @@ buildDunePackage {
 
   propagatedBuildInputs = [ dune-private-libs ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Library for embedding location information inside executable and libraries";
     inherit (dune_3.meta) homepage;
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

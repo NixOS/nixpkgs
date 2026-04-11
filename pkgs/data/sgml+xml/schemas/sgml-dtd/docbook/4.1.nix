@@ -20,7 +20,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "docbook-sgml-4.1";
+  pname = "docbook-sgml";
+  version = "4.1";
 
   dontUnpack = true;
 

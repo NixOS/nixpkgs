@@ -12,7 +12,7 @@
   python3,
   libxml2,
   libxklavier,
-  libXtst,
+  libxtst,
   gtk2,
   intltool,
   libxslt,
@@ -24,15 +24,14 @@
 }:
 
 let
-  pname = "caribou";
-  version = "0.4.21";
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
-stdenv.mkDerivation rec {
-  name = "caribou-${version}";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "caribou";
+  version = "0.4.21";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/caribou/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/caribou/${lib.versions.majorMinor finalAttrs.version}/caribou-${finalAttrs.version}.tar.xz";
     hash = "sha256-nEPZ9L0w9P6n94DU6LFPdYkQfFLpy2vSAr0NHCBk3lU=";
   };
 
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
     dbus
     pythonEnv
     python3.pkgs.pygobject3
-    libXtst
+    libxtst
     gtk2
   ];
 
@@ -107,15 +106,15 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "caribou"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Input assistive technology intended for switch and pointer users";
     mainProgram = "caribou-preferences";
     homepage = "https://gitlab.gnome.org/Archive/caribou";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     # checking for a Python interpreter with version >= 2.4... none
     # configure: error: no suitable Python interpreter found
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

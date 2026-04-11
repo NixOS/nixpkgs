@@ -15,12 +15,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo";
   version = "0.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/osmo-pim/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/osmo-pim/osmo-${finalAttrs.version}.tar.gz";
     sha256 = "19h3dnjgqbawnvgnycyp4n5b6mjsp5zghn3b69b6f3xa3fyi32qy";
   };
 
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     libgringotts
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Handy personal organizer";
     mainProgram = "osmo";
     homepage = "https://clayo.org/osmo/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

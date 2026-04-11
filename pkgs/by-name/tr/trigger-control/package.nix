@@ -6,7 +6,7 @@
   makeWrapper,
   pkg-config,
   SDL2,
-  libX11,
+  libx11,
   dbus,
   libdecor,
   libnotify,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     dbus
     libnotify
   ]
@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Control the dualsense's triggers on Linux (and Windows) with a gui and C++ api";
     homepage = "https://github.com/Etaash-mathamsetty/trigger-control";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "trigger-control";
-    maintainers = with maintainers; [ azuwis ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ azuwis ];
+    platforms = lib.platforms.all;
   };
 })

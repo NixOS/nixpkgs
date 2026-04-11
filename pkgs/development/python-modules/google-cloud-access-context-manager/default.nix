@@ -3,25 +3,26 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
-  pythonOlder,
   protobuf,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-access-context-manager";
-  version = "0.2.3";
+  version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_access_context_manager";
-    inherit version;
-    hash = "sha256-wt6A+6EZDkZ50zYmOE0Z4EpWujtNRh7VIeiSCa9jogk=";
+    inherit (finalAttrs) version;
+    hash = "sha256-IbnGOozCLKe61oTaFZW19FkA0UO4D+fByc9e/4zzqrA=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -34,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.identity.accesscontextmanager" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobufs for Google Access Context Manager";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-access-context-manager";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-access-context-manager-v${version}/packages/google-cloud-access-context-manager/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-access-context-manager-v${finalAttrs.version}/packages/google-cloud-access-context-manager/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
-}
+})

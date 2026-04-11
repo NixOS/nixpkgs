@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableGUI [ libsForQt5.qt5.qtbase ];
 
   configureFlags = [
-    ''--with-qt=${if enableGUI then "${libsForQt5.qt5.qtbase}/lib" else "no"}''
+    "--with-qt=${if enableGUI then "${libsForQt5.qt5.qtbase}/lib" else "no"}"
   ]
   ++ lib.optionals (!enableGUI) [ "--without-doc" ];
 

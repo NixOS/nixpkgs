@@ -10,14 +10,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspng";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "randy408";
     repo = "libspng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, modern libpng alternative";
     homepage = "https://libspng.org/";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ humancalico ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ humancalico ];
+    platforms = lib.platforms.all;
   };
-}
+})

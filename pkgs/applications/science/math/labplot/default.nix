@@ -106,10 +106,10 @@ stdenv.mkDerivation rec {
     discount
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free, open source and cross-platform data visualization and analysis software accessible to everyone";
     homepage = "https://labplot.kde.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       cc-by-30
@@ -121,8 +121,8 @@ stdenv.mkDerivation rec {
       lgpl3Plus
       mit
     ];
-    maintainers = with maintainers; [ hqurve ];
+    maintainers = with lib.maintainers; [ hqurve ];
     mainProgram = "labplot2";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

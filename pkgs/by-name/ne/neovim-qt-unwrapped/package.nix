@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  libsForQt5,
+  qt6,
   fetchFromGitHub,
   cmake,
   doxygen,
@@ -24,12 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DUSE_SYSTEM_MSGPACK=1"
     "-DENABLE_TESTS=0" # tests fail because xcb platform plugin is not found
+    "-DWITH_QT=Qt6"
   ];
 
   nativeBuildInputs = [
     cmake
     doxygen
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     (python3.withPackages (ps: [
       ps.jinja2
       ps.msgpack
@@ -38,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     neovim.unwrapped # only used to generate help tags at build time
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
     msgpack-c
   ];
 

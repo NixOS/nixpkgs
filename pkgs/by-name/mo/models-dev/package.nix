@@ -2,23 +2,24 @@
   lib,
   stdenvNoCC,
   bun,
+  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "models-dev";
-  version = "0-unstable-2025-10-31";
+  version = "0-unstable-2026-04-04";
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "models.dev";
-    rev = "91a03818a6eb45508d042c91cb4cf21a331296f1";
-    hash = "sha256-cjyGeTLfv8CpW8OuyPDG3KKYJ6N7u2EUhMFTGTGOIPM=";
+    rev = "1eb0b8c8e17ffddd89f53b2a3e426777dc560542";
+    hash = "sha256-KICnZDxBt6eo4sVJCpp2gBJgzht7+qB6i9pykXze7AY=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "models-dev-node_modules";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-node_modules";
+    inherit version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -35,22 +36,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-       # NOTE: Starting with Bun 1.3.0, isolated builds became the default
-       # behavior. In isolated builds, each package receives its own
-       # `.node_modules` subdirectory containing only the dependencies
-       # explicitly declared in that package's `package.json`. Since our build
-       # process copies only the root-level `.node_modules` directory, we must
-       # use `--linker=hoisted` to consolidate all dependencies there. Without
-       # this flag, we would need to copy every individual `.node_modules`
-       # subdirectory from each package.
-       bun install \
-         --force \
-         --frozen-lockfile \
-         --linker=hoisted \
-         --no-progress \
-         --production
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
 
       runHook postBuild
     '';
@@ -58,46 +49,43 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
 
-    # Required else we get errors that our fixed-output derivation references store paths
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
-        aarch64-linux = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
-        x86_64-darwin = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
-        aarch64-darwin = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-      }
-      .${stdenvNoCC.hostPlatform.system};
+    outputHash = "sha256-E78Hb4ByMfYL/IZG911dX6XRRKNJ0UbQUWMSv0dclFo=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
   nativeBuildInputs = [ bun ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
+    cp -R ${node_modules}/. .
 
     runHook postConfigure
-  '';
-
-  preBuild = ''
-    patchShebangs packages/web/script/build.ts
   '';
 
   buildPhase = ''
     runHook preBuild
 
     cd packages/web
-    bun run build
+    bun run ./script/build.ts
 
     runHook postBuild
   '';
@@ -112,12 +100,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--subpackage"
+      "node_modules"
+    ];
   };
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/sst/models-dev";
+    homepage = "https://github.com/anomalyco/models.dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

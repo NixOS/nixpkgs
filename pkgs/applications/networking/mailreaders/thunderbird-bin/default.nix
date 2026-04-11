@@ -38,7 +38,6 @@ let
   pname = "thunderbird-bin";
 
   mozillaPlatforms = {
-    i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
@@ -94,7 +93,7 @@ let
       ;
     baseName = "thunderbird";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
-    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    baseUrl = "https://archive.mozilla.org/pub/thunderbird/releases/";
   };
 
   nativeBuildInputs = [

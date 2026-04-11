@@ -35,8 +35,8 @@ body:
         If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
       options:
         - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
+        - "- Unstable (26.05)"
+        - "- Stable (25.11)"
       default: 0
     validations:
       required: true
@@ -75,7 +75,7 @@ body:
       options:
         - label: "I assert that this module does not yet exist in an [open pull request](https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+is%3Apr+label%3A%228.has%3A+module+%28new%29%22) or in [NixOS Unstable](https://search.nixos.org/options?channel=unstable)."
           required: true
-        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%229.needs%3A+module+%28new%29%22). "
+        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%229.needs%3A+module+%28new%29%22). "
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
           required: true

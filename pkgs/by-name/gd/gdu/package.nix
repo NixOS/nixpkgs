@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gdu";
-  version = "5.31.0";
+  version = "5.35.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MAkD4Mh7aXWc8Y4TkXH7NSDgPQugB7Gjhr4nfOr/X1U=";
+    hash = "sha256-zWwnM6CJBVGt4DM3Y5/ETbRdoq2yJeq53Co2ZvlwPRQ=";
   };
 
-  vendorHash = "sha256-aKhHC3sPRyi/l9BxeUgx+3TdYulb0cI9WxuPvbLoswg=";
+  vendorHash = "sha256-+fv+agIgIq3guIfBhY8VQz85T0cm3xxTRGFHLSIMpwc=";
 
   nativeBuildInputs = [
     installShellFiles

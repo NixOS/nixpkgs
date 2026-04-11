@@ -6,10 +6,10 @@
   libogg,
   libtheora,
   SDL,
-  libXft,
+  libxft,
   SDL_image,
   zlib,
-  libX11,
+  libx11,
   libpng,
   openal,
   runtimeShell,
@@ -80,20 +80,20 @@ stdenv.mkDerivation rec {
     libogg
     libtheora
     SDL
-    libXft
+    libxft
     SDL_image
     zlib
-    libX11
+    libx11
     libpng
     openal
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Physics/Gravity Platform game";
     longDescription = ''
       And Yet It Moves is an award-winning physics-based platform game in which players rotate the game world at will to solve challenging puzzles. Tilting the world turns walls into floors, slides into platforms, and stacks of rocks into dangerous hazards.
     '';
     homepage = "http://www.andyetitmoves.net/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

@@ -4,7 +4,6 @@
   fetchYarnDeps,
   nodejs,
   yarn,
-  yarnBuildHook,
   yarnConfigHook,
   nixosTests,
   php,
@@ -12,25 +11,25 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "engelsystem";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "engelsystem";
     repo = "engelsystem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pi+nowImUvENx2c4gsku1KkFb3pLM84oT8WevI6ImQg=";
+    hash = "sha256-hnTkeSqxkvO2Prop0VaBAV/4opr46wjEaJ5ptd5zQ34=";
   };
 
   inherit php;
 
-  vendorHash = "sha256-ODJgsvECw+q3sAA6pWNw4X2Png7f4G2Jty9AQSj/SgE=";
-  composoerNoDev = true;
+  composerNoDev = true;
   composerStrictValidation = false;
+  vendorHash = "sha256-oGpgtkX0UVSdVceQ8pD3PuGBITifQzaMIb4QRdc7WeY=";
 
   yarnOfflineCache = fetchYarnDeps {
     pname = "${finalAttrs.pname}-yarn-deps";
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-nyCLM9OF2qwlW+VK38kiRMo6jMlupNFG+91N3Fb/WLY=";
+    hash = "sha256-IMg1AoqCiQEvMHeqXgonIY2J0nmBHLW2Drz/Vb0rD48=";
   };
 
   strictDeps = true;
@@ -67,7 +66,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://engelsystem.de";
     license = lib.licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
     platforms = lib.platforms.all;
   };
 })

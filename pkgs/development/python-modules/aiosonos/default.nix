@@ -7,27 +7,24 @@
   brotli,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosonos";
-  version = "0.1.9";
+  version = "0.1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aiosonos";
-    tag = version;
-    hash = "sha256-15zGeYspuWR5w1yGHXfXhmUeV4p+/jhXrnkZ98XW/LI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Vd0m96BdFGYslAW/yHYdA4BUo6X8v1eYt6Z9ABinCJU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -48,10 +45,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Async python library to communicate with Sonos devices ";
+    description = "Async python library to communicate with Sonos devices";
     homepage = "https://github.com/music-assistant/aiosonos";
-    changelog = "https://github.com/music-assistant/aiosonos/releases/tag/${version}";
+    changelog = "https://github.com/music-assistant/aiosonos/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.autrimpo ];
   };
-}
+})

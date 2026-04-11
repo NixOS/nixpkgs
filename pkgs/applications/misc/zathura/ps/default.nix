@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
@@ -10,16 +10,20 @@
   libspectre,
   gettext,
   desktop-file-utils,
+  appstream,
   appstream-glib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
-  version = "0.2.8";
+  version = "2026.02.03";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura-ps/download/zathura-ps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-B8pZT3J3+YdtADgEhBg0PqKWQCjpPJD5Vp7/NqiTLko=";
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura-ps";
+    tag = finalAttrs.version;
+    hash = "sha256-5i3LvdjcAdofc0oZCBSm2qn/29UR1Yiia3OmVjFC4ZI=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     desktop-file-utils
+    appstream
     appstream-glib
   ];
 
@@ -38,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-ps/";

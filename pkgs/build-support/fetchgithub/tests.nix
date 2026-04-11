@@ -8,6 +8,25 @@
     hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
   };
 
+  simple-tag = testers.invalidateFetcherByDrvHash fetchFromGitHub {
+    name = "simple-tag-nix-source";
+    owner = "NixOS";
+    repo = "nix";
+    rev = "2.3.15";
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+
+  describe-tag = testers.invalidateFetcherByDrvHash fetchFromGitHub {
+    name = "describe-tag-nix-source";
+    owner = "NixOS";
+    repo = "nix";
+    rev = "2.3.15";
+    hash = "sha256-y7l+46lVP2pzJwGON5qEV0EoxWofRoWAym5q9VXvpc8=";
+    postCheckout = ''
+      { git -C "$out" describe || echo "git describe failed"; } | tee "$out"/describe-output.txt
+    '';
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchFromGitHub {
     name = "sparse-checkout-nix-source";
     owner = "NixOS";

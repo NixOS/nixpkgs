@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   huggingface-hub,
@@ -31,27 +31,21 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-huggingface";
-  version = "0.3.1";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-huggingface==${version}";
-    hash = "sha256-nae7KwCKjkvenOO8vErxFQStHolc+N8EUuK6U8r48Kc=";
+    tag = "langchain-huggingface==${finalAttrs.version}";
+    hash = "sha256-I6n7UNEbGqlyzT663k7+YpcaB/+rE9RlkqIToupoEyY=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/huggingface";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/huggingface";
 
-  build-system = [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     huggingface-hub
@@ -78,6 +72,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
+  disabledTests = [
+    # Requires a circular dependency on langchain
+    "test_init_chat_model_huggingface"
+  ];
+
   pythonImportsCheck = [ "langchain_huggingface" ];
 
   passthru = {
@@ -89,7 +88,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting Huggingface related classes and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/huggingface";
     license = lib.licenses.mit;
@@ -98,4 +97,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -5,7 +5,7 @@
   gitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "moodle-dl";
   version = "2.3.13";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "C0D3D3V";
     repo = "Moodle-DL";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6arwc72gu7XyT6HokSEs2TkvE2FG7mIvy4F+/i/0eJg=";
   };
 
@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";
-    maintainers = [ maintainers.kmein ];
+    maintainers = [ lib.maintainers.kmein ];
     description = "Moodle downloader that downloads course content fast from Moodle";
     mainProgram = "moodle-dl";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

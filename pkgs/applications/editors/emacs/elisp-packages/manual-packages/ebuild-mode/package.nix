@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-melpaBuild rec {
+melpaBuild (finalAttrs: {
   pname = "ebuild-mode";
-  version = "1.78";
+  version = "1.82";
 
   src = fetchzip {
-    url = "https://gitweb.gentoo.org/proj/ebuild-mode.git/snapshot/ebuild-mode-${version}.tar.bz2";
-    hash = "sha256-vpNjhW3U/b+A4O78vYKoMN0Gutd6fRcB4wb3dz1z2Cc=";
+    url = "https://gitweb.gentoo.org/proj/ebuild-mode.git/snapshot/ebuild-mode-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Rb1L++Ln7jGmdIpXTIBg7x64hHAm0b/yJqILKllCNQs=";
   };
 
   meta = {
@@ -19,4 +19,4 @@ melpaBuild rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

@@ -9,8 +9,9 @@
   keystoneauth1,
   requests,
   warlock,
-  oslo-utils,
+  openstacksdk,
   oslo-i18n,
+  oslo-utils,
   wrapt,
   pyopenssl,
   stestr,
@@ -21,7 +22,7 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.10.0";
+  version = "4.11.0";
 
   disabledTests = [
     # Skip tests which require networking.
@@ -51,7 +52,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "python_glanceclient";
     inherit version;
-    hash = "sha256-/2wtQqF2fFz6PNHSKjcy04qxE9RxrSLE7mShvTlBsQM=";
+    hash = "sha256-XOIRi/50YpNIBZFmF+U3vFsA/UyrP7e7iKT5JTlwVi0=";
   };
 
   postPatch = ''
@@ -74,10 +75,11 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
+    ddt
+    openstacksdk
+    requests-mock
     stestr
     testscenarios
-    ddt
-    requests-mock
   ];
 
   checkPhase = ''
@@ -88,10 +90,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "glanceclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the OpenStack Images API";
     homepage = "https://github.com/openstack/python-glanceclient/";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -2,22 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
-  nodejs_22,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.15.4";
+  version = "2.16.6";
 
   src = fetchFromGitHub {
     owner = "withastro";
-    repo = "language-tools";
-    rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-NBLUeg1WqxTXtu8eg1fihQSfm8koYAEWhfXAj/fIdC8=";
+    repo = "astro";
+    tag = "@astrojs/language-server@${finalAttrs.version}";
+    hash = "sha256-xuAkfTVF+do7Tmk6LUOFkS7yunhVRkl+ZGpsOC7Ob4M=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  # https://pnpm.io/filtering#--filter-package_name-1
+  pnpmWorkspaces = [
+    "@astrojs/language-server..."
+    "@astrojs/ts-plugin"
+  ];
+  prePnpmInstall = ''
+    pnpm config set dedupe-peer-dependents false
+    pnpm approve-builds @emmetio/css-parser
+  '';
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -25,52 +37,61 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       prePnpmInstall
       ;
-    fetcherVersion = 1;
-    hash = "sha256-tlpk+wbLjJqt37lu67p2A2RZAR1ZfnZFiYoqIQwvWPQ=";
+    pnpm = pnpm_10;
+    fetcherVersion = 2;
+    hash = "sha256-+5S/VuZjP6LoWUPKF1NMhw317AFAJUgaY7/Tq0ZKouw=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_9.configHook
+    nodejs
+    pnpmConfigHook
+    pnpm_10
   ];
 
-  buildInputs = [ nodejs_22 ];
-
-  # Must specify to download "@astrojs/yaml2ts" depencendies
-  # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspaces = [ "@astrojs/language-server..." ];
-  prePnpmInstall = ''
-    # Warning section for "pnpm@v8"
-    # https://pnpm.io/cli/install#--filter-package_selector
-    pnpm config set dedupe-peer-dependents false
-  '';
+  buildInputs = [ nodejs ];
 
   buildPhase = ''
     runHook preBuild
 
-    # Must build the "@astrojs/yaml2ts" package. Dependency is linked via workspace by "pnpm"
-    # (https://github.com/withastro/language-tools/blob/%40astrojs/language-server%402.14.2/pnpm-lock.yaml#L78-L80)
-    pnpm --filter "@astrojs/language-server..." build
+    pnpm --filter "@astrojs/language-server..." --filter "@astrojs/ts-plugin" build
 
     runHook postBuild
   '';
 
+  env.CI = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/astro-language-server}
-    cp -r {packages,node_modules} $out/lib/astro-language-server
-    ln -s $out/lib/astro-language-server/packages/language-server/bin/nodeServer.js $out/bin/astro-ls
+    pnpm install --offline --prod --filter="@astrojs/language-server..."
+    mkdir -p $out/{bin,lib/node_modules/astro-language-server/packages/language-tools}
+    cp -r ./node_modules $out/lib/node_modules/astro-language-server
+    cp -r packages/language-tools/{language-server,yaml2ts,ts-plugin} $out/lib/node_modules/astro-language-server/packages/language-tools/
+    pushd $out/lib/node_modules/astro-language-server/node_modules
+    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark} .pnpm/node_modules/@astrojs/ts-plugin
+    popd
+    ln -s $out/lib/node_modules/astro-language-server/packages/language-tools/language-server/bin/nodeServer.js $out/bin/astro-ls
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex"
+      "@astrojs/language-server@(.*)"
+    ];
+  };
+
   meta = {
     description = "Astro language server";
-    homepage = "https://github.com/withastro/language-tools";
-    changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
+    homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
+    changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      miniharinn
+      god464
+    ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };

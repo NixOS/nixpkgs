@@ -16,6 +16,7 @@
 { lib }:
 let
   inherit (lib)
+    concatMapStringsSep
     isList
     isAttrs
     substring
@@ -23,14 +24,19 @@ let
     concatLists
     const
     elem
+    foldl'
     generators
     id
     mapAttrs
-    trace
     ;
 in
 
 rec {
+  inherit (builtins)
+    trace
+    addErrorContext
+    unsafeGetAttrPos
+    ;
 
   # -- TRACING --
 
@@ -54,7 +60,7 @@ rec {
     # Type
 
     ```
-    traceIf :: bool -> string -> a -> a
+    traceIf :: Bool -> String -> a -> a
     ```
 
     # Examples
@@ -161,7 +167,7 @@ rec {
 
     ```nix
     trace { a.b.c = 3; } null
-    trace: { a = <CODE>; }
+    trace: { a = <thunk>; }
     => null
     traceSeq { a.b.c = 3; } null
     trace: { a = { b = { c = 3; }; }; }
@@ -251,6 +257,23 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeqFn :: (a -> b) -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeqFn` usage example
+
+    ```nix
+    traceValSeqFn (v: v // { d = "foo";}) { a.b.c = 3; }
+    trace: { a = { b = { c = 3; }; }; d = "foo"; }
+    => { a = { ... }; }
+
+    :::
   */
   traceValSeqFn = f: v: traceValFn f (builtins.deepSeq v v);
 
@@ -262,6 +285,24 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeq :: a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeq` usage example
+
+    ```nix
+    traceValSeq { a.b.c = 3; }
+    trace: { a = { b = { c = 3; }; }; }
+    => { a = { ... }; }
+    ```
+
+    :::
   */
   traceValSeq = traceValSeqFn id;
 
@@ -282,6 +323,24 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeqNFn :: (a -> b) -> Int -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeqNFn` usage example
+
+    ```nix
+    traceValSeqNFn (v: v // { d = "foo";}) 2 { a.b.c = 3; }
+    trace: { a = { b = {…}; }; d = "foo"; }
+    => { a = { ... }; }
+    ```
+
+    :::
   */
   traceValSeqNFn =
     f: depth: v:
@@ -299,6 +358,24 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeqN :: Int -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeqN` usage example
+
+    ```nix
+    traceValSeqN 2 { a.b.c = 3; }
+    trace: { a = { b = {…}; }; }
+    => { a = { ... }; }
+    ```
+
+    :::
   */
   traceValSeqN = traceValSeqNFn id;
 
@@ -327,6 +404,12 @@ rec {
 
     : 4\. Function argument
 
+    # Type
+
+    ```
+    traceFnSeqN :: Int -> String -> (a -> b) -> a -> b
+    ```
+
     # Examples
     :::{.example}
     ## `lib.debug.traceFnSeqN` usage example
@@ -334,7 +417,7 @@ rec {
     ```nix
     traceFnSeqN 2 "id" (x: x) { a.b.c = 3; }
     trace: { fn = "id"; from = { a.b = {…}; }; to = { a.b = {…}; }; }
-    => { a.b.c = 3; }
+    => { a = { ... }; }
     ```
 
     :::
@@ -383,7 +466,7 @@ rec {
 
     ```
     runTests :: {
-      tests = [ String ];
+      tests :: [String];
       ${testName} :: {
         expr :: a;
         expected :: a;
@@ -453,6 +536,129 @@ rec {
         ) tests
       )
     );
+
+  /**
+    Pretty-print a list of test failures.
+
+    This takes an attribute set containing `failures` (a list of test failures
+    produced by `runTests`) and pretty-prints each failing test, before
+    throwing an error containing the raw test data as JSON.
+
+    If the input list is empty, `null` is returned.
+
+    # Inputs
+
+    `failures`
+
+    : A list of test failures (produced `runTests`), each containing `name`,
+      `expected`, and `result` attributes.
+
+    # Type
+
+    ```
+    throwTestFailures :: {
+      failures = [
+        {
+          name :: String;
+          expected :: a;
+          result :: a;
+        }
+      ];
+    }
+    ->
+    Null
+    ```
+
+    # Examples
+    :::{.example}
+
+    ## `lib.debug.throwTestFailures` usage example
+
+    ```nix
+    throwTestFailures {
+      failures = [
+        {
+          name = "testDerivation";
+          expected = derivation {
+            name = "a";
+            builder = "bash";
+            system = "x86_64-linux";
+          };
+          result = derivation {
+            name = "b";
+            builder = "bash";
+            system = "x86_64-linux";
+          };
+        }
+      ];
+    }
+    ->
+    trace: FAIL testDerivation:
+      Expected: <derivation a>
+        Result: <derivation b>
+
+    error:
+           … while evaluating the file '...':
+
+           … caused by explicit throw
+             at /nix/store/.../lib/debug.nix:528:7:
+              527|       in
+              528|       throw (
+                 |       ^
+              529|         builtins.seq traceFailures (
+
+           error: 1 tests failed:
+           - testDerivation
+
+           [{"expected":"/nix/store/xh7kyqp69mxkwspmi81a94m9xx74r8dr-a","name":"testDerivation","result":"/nix/store/503l84nir4zw57d1shfhai25bxxn16c6-b"}]
+    null
+    ```
+
+    :::
+  */
+  throwTestFailures =
+    {
+      failures,
+      description ? "tests",
+      ...
+    }:
+    if failures == [ ] then
+      null
+    else
+      let
+        toPretty =
+          value:
+          # Thanks to @Ma27 for this:
+          #
+          # > The `unsafeDiscardStringContext` is useful when the `toPretty`
+          # > stumbles upon a derivation that would be realized without it (I
+          # > ran into the problem when writing a test for a flake helper where
+          # > I creating a bunch of "mock" derivations for different systems
+          # > and Nix then tried to build those when the error-string got
+          # > forced).
+          #
+          # See: https://github.com/NixOS/nixpkgs/pull/416207#discussion_r2145942389
+          builtins.unsafeDiscardStringContext (generators.toPretty { allowPrettyValues = true; } value);
+
+        failureToPretty = failure: ''
+          FAIL ${toPretty failure.name}:
+          Expected:
+          ${toPretty failure.expected}
+
+          Result:
+          ${toPretty failure.result}
+        '';
+
+        traceFailures = foldl' (_accumulator: failure: traceVal (failureToPretty failure)) null failures;
+      in
+      throw (
+        builtins.seq traceFailures (
+          "${builtins.toString (builtins.length failures)} ${description} failed:\n- "
+          + (concatMapStringsSep "\n- " (failure: failure.name) failures)
+          + "\n\n"
+          + builtins.toJSON failures
+        )
+      );
 
   /**
     Create a test assuming that list elements are `true`.

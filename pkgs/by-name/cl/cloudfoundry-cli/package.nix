@@ -6,17 +6,17 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudfoundry-cli";
-  version = "8.16.0";
+  version = "8.18.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-7ROrXGGzHTI83/SgBqcNJdlZlWzt8rAYdsNM2vgyDKA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-M7fqd7xidW6+9Er/JhIQWliKWWm0YncCFcxry0b6JNk=";
   };
-  vendorHash = "sha256-vWy93zOHh4kCQ/D4rKlbL0mcDbOStYOvC8G4bc6KRgg=";
+  vendorHash = "sha256-9BDcCZkOft0H8EEn582/eXg6fd/NzPOBGLnqECP1Dyg=";
 
   subPackages = [ "." ];
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
-    "-X code.cloudfoundry.org/cli/version.binaryVersion=${version}"
+    "-X code.cloudfoundry.org/cli/version.binaryVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -41,11 +41,11 @@ buildGoModule rec {
     installShellCompletion --bash $bashCompletionScript
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
-    maintainers = with maintainers; [ ris ];
+    maintainers = with lib.maintainers; [ ris ];
     mainProgram = "cf";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

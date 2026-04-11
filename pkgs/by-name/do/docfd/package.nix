@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  dune_3,
+  dune,
   makeWrapper,
   pandoc,
   poppler-utils,
@@ -14,7 +14,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "12.0.0";
+  version = "12.3.2";
 
   minimalOCamlVersion = "5.1";
 
@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-Tb5J9FgI2JBpl5oejWRT3ixzt7kufnM+Xy6DdiB9s98=";
+    hash = "sha256-d7c72jXadwBtUqarfdGnEDo9yFwCAeEX0GGVqCe70Ak=";
   };
 
   # Compatibility with nottui ≥ 0.4
@@ -30,7 +30,7 @@ ocamlPackages.buildDunePackage rec {
 
   nativeBuildInputs = [
     python3
-    dune_3
+    dune
     makeWrapper
   ];
 
@@ -69,7 +69,7 @@ ocamlPackages.buildDunePackage rec {
 
   passthru.tests.version = testers.testVersion { package = docfd; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
       Think interactive grep for text and other document files.
@@ -78,9 +78,9 @@ ocamlPackages.buildDunePackage rec {
       integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chewblacka ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chewblacka ];
+    platforms = lib.platforms.all;
     mainProgram = "docfd";
   };
 }

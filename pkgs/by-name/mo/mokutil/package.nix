@@ -10,14 +10,14 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mokutil";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "lcp";
     repo = "mokutil";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-DO3S1O0AKoI8gssnUyBTRj5lDNs6hhisc/5dTIqmbzM=";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lcp/mokutil";
     description = "Utility to manipulate machines owner keys";
     mainProgram = "mokutil";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.linux;
   };
-}
+})

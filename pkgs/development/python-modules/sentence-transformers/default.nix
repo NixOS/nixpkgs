@@ -3,16 +3,14 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
 
   # dependencies
-  accelerate,
-  datasets,
   huggingface-hub,
-  optimum,
-  pillow,
+  numpy,
   scikit-learn,
   scipy,
   torch,
@@ -20,28 +18,37 @@
   transformers,
   typing-extensions,
 
+  # optional-dependencies
+  # image
+  pillow,
+  # train
+  accelerate,
+  datasets,
+  # onnx
+  optimum-onnx,
+
   # tests
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.1.2";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
-    tag = "v${version}";
-    hash = "sha256-FNJ4mWBcgy3J8ZJtHt+uBgNmvMnqphj+sLMmBvgdB1k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xf5ujZH7OH81ofavytI/Zd0PCkRf6rIoXzWI9kUjoDE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
-    pillow
+    numpy
     scikit-learn
     scipy
     torch
@@ -51,12 +58,15 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    image = [
+      pillow
+    ];
     train = [
       accelerate
       datasets
     ];
-    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
-    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+    onnx = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime-gpu;
     # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
   };
 
@@ -64,7 +74,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -90,7 +100,9 @@ buildPythonPackage rec {
     "test_mse_loss_matryoshka"
     "test_nanobeir_evaluator"
     "test_negative_dimension_raises_error"
+    "test_pairwise_angle_sim_even_and_odd_sparse_embeddings"
     "test_paraphrase_mining"
+    "test_pooling_prompt_attention_mask_respects_include_prompt"
     "test_pretrained_model"
     "test_router_as_middle_module"
     "test_router_backwards_compatibility"
@@ -121,6 +133,17 @@ buildPythonPackage rec {
     # NameError: name 'ParallelismConfig' is not defined
     "test_hf_argument_parser"
     "test_hf_argument_parser_incorrect_string_arguments"
+
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Pickler._batch_setitems() takes 2 positional arguments but 3 were given
+    # https://github.com/huggingface/sentence-transformers/issues/3606
+    "test_group_by_label_batch_sampler_label_a"
+    "test_group_by_label_batch_sampler_label_b"
+    "test_group_by_label_batch_sampler_uneven_dataset"
+    "test_proportional_no_duplicates"
+    "test_round_robin_batch_sampler"
+    "test_round_robin_batch_sampler_vallue_error"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     # These sparse tests also time out, on x86_64-darwin.
@@ -130,14 +153,17 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/cross_encoder/test_cross_encoder.py"
+    "tests/cross_encoder/test_model_card.py"
     "tests/cross_encoder/test_train_stsb.py"
     "tests/evaluation/test_information_retrieval_evaluator.py"
     "tests/sparse_encoder/models/test_csr.py"
     "tests/sparse_encoder/models/test_sparse_static_embedding.py"
+    "tests/sparse_encoder/test_model_card.py"
     "tests/sparse_encoder/test_opensearch_models.py"
     "tests/sparse_encoder/test_pretrained.py"
     "tests/sparse_encoder/test_sparse_encoder.py"
     "tests/test_compute_embeddings.py"
+    "tests/test_model_card.py"
     "tests/test_model_card_data.py"
     "tests/test_multi_process.py"
     "tests/test_pretrained_stsb.py"
@@ -154,8 +180,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/huggingface/sentence-transformers";
-    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

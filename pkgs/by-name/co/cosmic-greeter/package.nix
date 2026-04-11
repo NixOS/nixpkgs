@@ -15,26 +15,33 @@
   nix-update-script,
   nixosTests,
   orca,
+  fetchpatch2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.0-beta.4";
+  version = "1.0.8";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-kp5DSr/RxWhv35VKAc8xSAprM1Hbo84/oB8h0XBSmTE=";
+    hash = "sha256-U0JrxvMWzISSA0tP8moasN7iN7TfZreEwbvWZGHRn8E=";
   };
 
-  cargoHash = "sha256-4yRBgFrH4RBpuvChTED+ynx+PyFumoT2Z+R1gXxF4Xc=";
+  cargoHash = "sha256-J5ycaeKZsEBPcI9JH8bHsOAcXXwcx/D21GlVhJZbGwM=";
 
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-10-14";
-    VERGEN_GIT_SHA = finalAttrs.src.tag;
-  };
+  cargoPatches = [
+    (fetchpatch2 {
+      # https://github.com/pop-os/cosmic-greeter/pull/426
+      name = "security-hardening.patch";
+      url = "https://github.com/pop-os/cosmic-greeter/commit/6049b50f8984f98c2c61117d86b9f6f9befc9300.patch?full_index=1";
+      hash = "sha256-T9tc4Krmp5jieKhbaTgI1CByWqSWy97HWcKMIXzr7MU=";
+    })
+  ];
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   cargoBuildFlags = [ "--all" ];
 
@@ -87,10 +94,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

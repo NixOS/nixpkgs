@@ -7,14 +7,14 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcue";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lipnitsk";
     repo = "libcue";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZMUUa8CmpFNparPsM/P2yvRto9E85EdTxpID5sKQbNI=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "CUE Sheet Parser Library";
     longDescription = ''
       libcue is intended to parse a so called cue sheet from a char string or
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       available.
     '';
     homepage = "https://github.com/lipnitsk/libcue";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -14,13 +14,13 @@
   pplite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-apron";
   version = "0.9.15";
   src = fetchFromGitHub {
     owner = "antoinemine";
     repo = "apron";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gHLCurydxX1pS66DTAWUJGl9Yqu9RWRjkZh6lXzM7YY=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     description = "Numerical abstract domain library";
     inherit (ocaml.meta) platforms;
   };
-}
+})

@@ -16,10 +16,10 @@ buildDunePackage {
     nottui
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Run Nottui UIs in Lwt";
-    license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";
   };
 }

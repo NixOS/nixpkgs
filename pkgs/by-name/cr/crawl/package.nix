@@ -4,7 +4,7 @@
   fetchFromGitHub,
   which,
   sqlite,
-  lua5_1,
+  lua5_4,
   perl,
   python3,
   zlib,
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
-  version = "0.33.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    hash = "sha256-GXrYLGoQ1UwDHs+kLLcaBNpJ2BVMv4NhmpyfNFxPmg8=";
+    hash = "sha256-exntfZbGEDBwFA8AHhOoBPIXw/MDrHx5oxrxPDixpCc=";
   };
 
   # Patch hard-coded paths and remove force library builds
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   # Still unstable with luajit
   buildInputs = [
-    lua5_1
+    lua5_4
     zlib
     sqlite
     ncurses
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source, single-player, role-playing roguelike game";
     homepage = "http://crawl.develz.org/";
     longDescription = ''
@@ -123,13 +123,13 @@ stdenv.mkDerivation rec {
       with dangerous and unfriendly monsters in a quest to rescue the
       mystifyingly fabulous Orb of Zot.
     '';
-    platforms = platforms.linux ++ platforms.darwin;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = with lib.licenses; [
       gpl2Plus
       bsd2
       bsd3
       mit
-      licenses.zlib
+      lib.licenses.zlib
       cc0
     ];
     maintainers = [ ];

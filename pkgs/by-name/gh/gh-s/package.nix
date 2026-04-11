@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-s";
   version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "gennaro-tedesco";
     repo = "gh-s";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+jAJicvk6N2PfOTBR5H9nP3xTiBq4oYfNLvxN4sKvh4=";
   };
 
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Search github repositories interactively";
     homepage = "https://github.com/gennaro-tedesco/gh-s";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ daru-san ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "gh-s";
   };
-}
+})

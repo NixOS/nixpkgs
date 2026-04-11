@@ -86,7 +86,7 @@ If both the dependency and depending packages aren't compilers or other machine-
 
 Finally, if the depending package is a compiler or other machine-code-producing tool, it might need dependencies that run at "emit time". This is for compilers that (regrettably) insist on being built together with their source languages' standard libraries. Assuming build != host != target, a run-time dependency of the standard library cannot be run at the compiler's build time or run time, but only at the run time of code emitted by the compiler.
 
-Putting this all together, that means that we have dependency types of the form "X→ E", which means that the dependency executes on X and emits code for E; each of X and E can be `build`, `host`, or `target`, and E can be `*` to indicate that the dependency is not a compiler-like package.
+Putting this all together, that means that we have dependency types of the form `X → E`, which means that the dependency executes on `X` and emits code for `E`; each of `X` and `E` can be `build`, `host`, or `target`, and `E` can be `*` to indicate that the dependency is not a compiler-like package.
 
 Dependency types describe the relationships that a package has with each of its transitive dependencies.  You could think of attaching one or more dependency types to each of the formal parameters at the top of a package's `.nix` file, as well as to all of *their* formal parameters, and so on.   Triples like `(foo, bar, baz)`, on the other hand, are a property of an instantiated derivation -- you could would attach a triple `(mips-linux, mips-linux, sparc-solaris)` to a `.drv` file in `/nix/store`.
 
@@ -94,17 +94,17 @@ Only nine dependency types matter in practice:
 
 #### Possible dependency types {#possible-dependency-types}
 
-| Dependency type | Dependency’s host platform | Dependency’s target platform |
-|-----------------|----------------------------|------------------------------|
-| build → *       | build                      | (none)                       |
-| build → build   | build                      | build                        |
-| build → host    | build                      | host                         |
-| build → target  | build                      | target                       |
-| host → *        | host                       | (none)                       |
-| host → host     | host                       | host                         |
-| host → target   | host                       | target                       |
-| target → *      | target                     | (none)                       |
-| target → target | target                     | target                       |
+| Dependency type   | Dependency’s host platform | Dependency’s target platform |
+|-------------------|----------------------------|------------------------------|
+| `build → *`       | `build`                    | (none)                       |
+| `build → build`   | `build`                    | `build`                      |
+| `build → host`    | `build`                    | `host`                       |
+| `build → target`  | `build`                    | `target`                     |
+| `host → *`        | `host`                     | (none)                       |
+| `host → host`     | `host`                     | `host`                       |
+| `host → target`   | `host`                     | `target`                     |
+| `target → *`      | `target`                   | (none)                       |
+| `target → target` | `target`                   | `target`                     |
 
 Let's use `g++` as an example to make this table clearer.  `g++` is a C++ compiler written in C.  Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`.  This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
 
@@ -235,13 +235,24 @@ One would think that `localSystem` and `crossSystem` overlap horribly with the t
 
 ### Implementation of dependencies {#ssec-cross-dependency-implementation}
 
-The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for "host → target" is called `deps<host><target>` (where `host`, and `target` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<host><target>` is automatically taken from `pkgs<host><target>`. (These `pkgs<host><target>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
+The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for `host → target` is called `deps<theirHost><theirTarget>` (where `theirHost`, and `theirTarget` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<theirHost><theirTarget>` is automatically taken from `pkgs<theirHost><theirTarget>`. (These `pkgs<theirHost><theirTarget>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.openssl` should be used at run-time.
 
-Now, for most of Nixpkgs's history, there were no `pkgs<host><target>` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them for libraries to show that the host platform is irrelevant.
+Adjacent package sets are defined as `pkgs<theirHost><theirTarget>` attributes, where "their" represents the new attribute set, and "our" represents the "current" package set. Below is a table of adjacent stages and their aliases. See [](#variables-specifying-dependencies) for usage examples.
 
-But before that, there was just `pkgs`, even though both `buildInputs` and `nativeBuildInputs` existed. \[Cross barely worked, and those were implemented with some hacks on `mkDerivation` to override dependencies.\] What this means is the vast majority of packages do not use any explicit package set to populate their dependencies, just using whatever `callPackage` gives them even if they do correctly sort their dependencies into the multiple lists described above. And indeed, asking that users both sort their dependencies, _and_ take them from the right attribute set, is both too onerous and redundant, so the recommended approach (for now) is to continue just categorizing by list and not using an explicit package set.
+| Adjacent package set                   | Their host platform | Their target platform |
+|----------------------------------------|---------------------|-----------------------|
+| `pkgsBuildBuild`                       | Our build platform  | Our build platform    |
+| `pkgsBuildHost` or `buildPackages`     | Our build platform  | Our host platform     |
+| `pkgsBuildTarget`                      | Our build platform  | Our target platform   |
+| `pkgsHostHost`                         | Our host platform   | Our host platform     |
+| `pkgsHostTarget` or `pkgs`             | Our host platform   | Our target platform   |
+| `pkgsTargetTarget` or `targetPackages` | Our target platform | Our target platform   |
 
-To make this work, we "splice" together the six `pkgsFooBar` package sets and have `callPackage` actually take its arguments from that. This is currently implemented in `pkgs/top-level/splice.nix`. `mkDerivation` then, for each dependency attribute, pulls the right derivation out from the splice. This splicing can be skipped when not cross-compiling as the package sets are the same, but still is a bit slow for cross-compiling. We'd like to do something better, but haven't come up with anything yet.
+Now, for most of Nixpkgs's history, there were no `pkgs<theirHost><theirTarget>` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them to show that only their host platform matters. That is, use `buildPackages` where any of `pkgsBuild*` would do, and `targetPackages` when any of `pkgsTarget*` would do (if we had more than just `pkgsTargetTarget`).
+
+But before that, there was just `pkgs`, even though both `buildInputs` and `nativeBuildInputs` existed. (Cross barely worked, and those were implemented with some hacks on `mkDerivation` to override dependencies.) What this means is the vast majority of packages do not use any explicit package set to populate their dependencies, just using whatever `callPackage` gives them even if they do correctly sort their dependencies into the multiple lists described above. And indeed, asking that users both sort their dependencies, _and_ take them from the right attribute set, is both too onerous and redundant, so the recommended approach (for now) is to continue just categorizing by list and not using an explicit package set.
+
+To make this work, we "splice" together the six `pkgs<theirHost><theirTarget>` package sets and have `callPackage` actually take its arguments from that. This is currently implemented in `pkgs/top-level/splice.nix`. `mkDerivation` then, for each dependency attribute, pulls the right derivation out from the splice. This splicing can be skipped when not cross-compiling as the package sets are the same, but still is a bit slow for cross-compiling. We'd like to do something better, but haven't come up with anything yet.
 
 ### Bootstrapping {#ssec-bootstrapping}
 

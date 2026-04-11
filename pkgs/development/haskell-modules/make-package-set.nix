@@ -48,46 +48,64 @@ let
   inherit (lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
-  mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
-    inherit stdenv;
-    nodejs = buildPackages.nodejs-slim;
-    inherit (self)
-      buildHaskellPackages
-      ghc
-      ghcWithHoogle
-      ghcWithPackages
-      ;
-    inherit (self.buildHaskellPackages) jailbreak-cabal;
-    hscolour = overrideCabal (drv: {
-      isLibrary = false;
-      doHaddock = false;
-      hyperlinkSource = false; # Avoid depending on hscolour for this build.
-      postFixup = "rm -rf $out/lib $out/share $out/nix-support";
-    }) self.buildHaskellPackages.hscolour;
-    cpphs =
-      overrideCabal
-        (drv: {
-          isLibrary = false;
-          postFixup = "rm -rf $out/lib $out/share $out/nix-support";
-        })
-        (
-          self.cpphs.overrideScope (
-            self: super: {
-              mkDerivation =
-                drv:
-                super.mkDerivation (
-                  drv
-                  // {
-                    enableSharedExecutables = false;
-                    enableSharedLibraries = false;
-                    doHaddock = false;
-                    useCpphs = false;
-                  }
-                );
-            }
-          )
-        );
-  };
+  builder = if !(ghc.isMhs or false) then ./generic-builder.nix else ./microhs-builder.nix;
+
+  mkDerivationImpl = pkgs.callPackage builder (
+    {
+      inherit stdenv;
+      inherit (self)
+        buildHaskellPackages
+        ghc
+        ;
+      inherit (self.buildHaskellPackages) jailbreak-cabal;
+    }
+    // lib.optionalAttrs (!(ghc.isMhs or false)) {
+      inherit haskellLib;
+      inherit (self)
+        ghcWithHoogle
+        ghcWithPackages
+        ;
+      nodejs = buildPackages.nodejs-slim;
+      iserv-proxy = {
+        build = buildHaskellPackages.iserv-proxy;
+        host = self.iserv-proxy;
+      };
+      hscolour = overrideCabal (drv: {
+        isLibrary = false;
+        doHaddock = false;
+        hyperlinkSource = false; # Avoid depending on hscolour for this build.
+        postFixup = "rm -rf $out/lib $out/share $out/nix-support";
+      }) self.buildHaskellPackages.hscolour;
+      cpphs =
+        overrideCabal
+          (drv: {
+            isLibrary = false;
+            postFixup = "rm -rf $out/lib $out/share $out/nix-support";
+          })
+          (
+            self.cpphs.overrideScope (
+              self: super: {
+                mkDerivation =
+                  drv:
+                  super.mkDerivation (
+                    drv
+                    // {
+                      enableSharedExecutables = false;
+                      enableSharedLibraries = false;
+                      doHaddock = false;
+                      useCpphs = false;
+                    }
+                  );
+              }
+            )
+          );
+    }
+    // lib.optionalAttrs (ghc.isMhs or false) {
+      inherit (self) wrapMhs ghc-compat;
+      MicroCabal = self.ghc.microcabal-stage1;
+      cpphs = self.ghc.cpphs;
+    }
+  );
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
@@ -157,7 +175,7 @@ let
           inherit (scope) ghc buildHaskellPackages;
         };
     in
-    ps // ps.xorg // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
+    ps // ps.gnome2 // { inherit stdenv; } // scopeSpliced;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -177,10 +195,12 @@ let
         nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = pkgs.lib.optionalString (
-          buildPlatform.libc == "glibc"
-        ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        env = {
+          LANG = "en_US.UTF-8";
+        }
+        // lib.optionalAttrs (buildPlatform.libc == "glibc") {
+          LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        };
       }
       ''
         export HOME="$TMP"
@@ -657,6 +677,8 @@ package-set { inherit pkgs lib callPackage; } self
     withHoogle = self.ghcWithHoogle;
   };
 
+  wrapMhs = pkgs.callPackage ../compilers/microhs/wrapper.nix { };
+
   /*
     Run `cabal sdist` on a source.
 
@@ -674,10 +696,6 @@ package-set { inherit pkgs lib callPackage; } self
         inherit src;
         nativeBuildInputs = [
           buildHaskellPackages.cabal-install
-
-          # TODO after https://github.com/haskell/cabal/issues/8352
-          #      remove ghc
-          self.ghc
         ];
         dontUnpack = false;
       }
@@ -699,10 +717,18 @@ package-set { inherit pkgs lib callPackage; } self
   */
   buildFromCabalSdist =
     pkg:
-    haskellLib.overrideSrc {
-      src = self.cabalSdist { inherit (pkg) src; };
-      version = pkg.version;
-    } pkg;
+    haskellLib.overrideCabal
+      (_: {
+        # Patches are already applied by srcOnly above, so clear them
+        # to avoid double-application.
+        patches = [ ];
+      })
+      (
+        haskellLib.overrideSrc {
+          src = self.cabalSdist { src = pkgs.srcOnly pkg; };
+          version = pkg.version;
+        } pkg
+      );
 
   /*
     Modify a Haskell package to add shell completion scripts for the

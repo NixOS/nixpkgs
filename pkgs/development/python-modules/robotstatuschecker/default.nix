@@ -32,10 +32,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking that Robot Framework test cases have expected statuses and log messages";
     homepage = "https://github.com/robotframework/statuschecker";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -7,12 +7,12 @@
   sigi,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sigi";
   version = "3.7.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Tsrfan7aejP2oy9x9VoTIq0ba0s0tnx1RTlAB0v6eis=";
   };
 
@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = sigi; };
 
-  meta = with lib; {
+  meta = {
     description = "Organizing CLI for people who don't love organizing";
     homepage = "https://github.com/sigi-cli/sigi";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ booniepepper ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ booniepepper ];
     mainProgram = "sigi";
   };
-}
+})

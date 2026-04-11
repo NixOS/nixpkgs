@@ -3,6 +3,7 @@
   fetchFromGitHub,
   gnused,
   lib,
+  stdenv,
   maven,
   makeWrapper,
   openjdk,
@@ -15,13 +16,13 @@
 }:
 
 let
-  version = "2.0.06";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-/V8Ce1r68Svf4TQ/zgIqSWjqIFr1uJOmv+aRNLm1qE4=";
+    hash = "sha256-72BeLmX6TDz/Z3LwnKsEEK4BntE4dp9DsbsrAkh1K2U=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -32,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-DeYmCmsDdNOVMlD+SwvSB2VdqvCDwKghXlyaDuamHiY=";
+  mvnHash = "sha256-OnxgoJhpJndYpkSmFdM+aniwrArPjPtn2E/4McU6J2k=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -108,10 +109,12 @@ maven.buildMavenPackage {
       PREFIX_CMD=""
       if [ "$commandToInstall" = "forge-adventure" ]; then
         PREFIX_CMD="--prefix LD_LIBRARY_PATH : ${
-          lib.makeLibraryPath [
-            libGL
-            alsa-lib
-          ]
+          lib.makeLibraryPath (
+            [
+              libGL
+            ]
+            ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ]
+          )
         }"
       fi
 
@@ -131,13 +134,12 @@ maven.buildMavenPackage {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://card-forge.github.io/forge";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dyegoaurelio
-      eigengrau
     ];
   };
 }

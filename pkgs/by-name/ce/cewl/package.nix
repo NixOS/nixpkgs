@@ -12,13 +12,13 @@ let
     gemdir = ./.;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cewl";
   version = "5.5.2";
   src = fetchFromGitHub {
     owner = "digininja";
     repo = "CeWL";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5LTZUr3OMeu1NODhIgBiVqtQnUWYfZTm73q61vT3rXc=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     homepage = "https://digi.ninja/projects/cewl.php/";
     license = lib.licenses.gpl3Plus;
   };
-}
+})

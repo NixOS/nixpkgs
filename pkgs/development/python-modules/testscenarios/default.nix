@@ -40,6 +40,8 @@ buildPythonPackage rec {
     testtools
   ];
 
+  doCheck = false; # tests not compatible with teststools 2.8
+
   checkPhase = ''
     runHook preCheck
 
@@ -48,9 +50,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pyunit extension for dependency injection";
     homepage = "https://github.com/testing-cabal/testscenarios";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

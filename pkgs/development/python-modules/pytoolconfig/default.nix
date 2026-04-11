@@ -8,21 +8,17 @@
   platformdirs,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   sphinx,
   sphinx-autodoc-typehints,
   sphinx-rtd-theme,
   sphinxHook,
   tabulate,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pytoolconfig";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bagel897";
@@ -36,7 +32,7 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  PDM_PEP517_SCM_VERSION = version;
+  env.PDM_PEP517_SCM_VERSION = version;
 
   nativeBuildInputs = [
     pdm-backend
@@ -49,7 +45,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.doc;
 
-  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ packaging ];
 
   optional-dependencies = {
     validation = [ pydantic ];
@@ -65,14 +61,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     description = "Python tool configuration";
     homepage = "https://github.com/bagel897/pytoolconfig";
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       fab
       hexa
     ];

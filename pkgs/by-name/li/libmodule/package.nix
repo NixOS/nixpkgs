@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodule";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "libmodule";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-93ItLKThtT9JRc+X/bRm06pugsN31HAF3qTUqqCu6nE=";
   };
 
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C simple and elegant implementation of an actor library";
     homepage = "https://github.com/FedeDP/libmodule";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       eadwu
     ];
   };
-}
+})

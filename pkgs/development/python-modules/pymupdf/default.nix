@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   python,
   toPythonModule,
@@ -43,31 +42,45 @@ let
   mupdf-cxx-lib = toPythonModule (lib.getLib mupdf-cxx);
   mupdf-cxx-dev = lib.getDev mupdf-cxx;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
-  version = "1.26.4";
+  version = "1.27.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    tag = version;
-    hash = "sha256-bzyScV7vznuBQNP8nTjHL2exIs/rVmJBH+soyuAwIGI=";
+    tag = finalAttrs.version;
+    hash = "sha256-7Bnu5AG1b5v4hd85xzyFvjsqXl5Lqltbb2NcmkTQwaE=";
   };
+
+  patches = [
+    # `conftest.py` tries to run `pip install` to install test dependencies.
+    ./conftest-dont-pip-install.patch
+  ];
 
   # swig is not wrapped as Python package
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "ret.append( 'swig')" "pass" \
+      --replace-fail "ret.append('swig')" "pass" \
+      --replace-fail "ret.append('swig==4.3.1')" "pass"
   '';
 
-  nativeBuildInputs = [
+  # `build_extension` passes arguments to `$LD` that are meant for `c++`.
+  # When `LD` is not set, `build_extension` falls back to using `c++` in `PATH`.
+  # See https://github.com/pymupdf/PyMuPDF/blob/1.26.6/pipcl.py#L1998 for details.
+  preConfigure = ''
+    unset LD
+  '';
+
+  build-system = [
     libclang
     swig
-    psutil
     setuptools
+  ];
+
+  dependencies = [
+    mupdf-cxx-lib
   ];
 
   buildInputs = [
@@ -78,8 +91,6 @@ buildPythonPackage rec {
     libjpeg_turbo
     gumbo
   ];
-
-  propagatedBuildInputs = [ mupdf-cxx-lib ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
@@ -100,11 +111,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  checkInputs = [
     fonttools
     pillow
+    psutil
     pymupdf-fonts
   ];
 
@@ -113,6 +122,7 @@ buildPythonPackage rec {
     "test_codespell"
     "test_pylint"
     "test_flake8"
+    "test_4751"
     # Upstream recommends disabling these when not using bundled MuPDF build
     "test_color_count"
     "test_3050"
@@ -123,13 +133,24 @@ buildPythonPackage rec {
     "test_4457"
     "test_4445"
     "test_4533"
+    "test_4702"
     # Not a git repository, so git ls-files fails
     "test_open2"
+    # Segfaults in test_general.py::test_4907 with system MuPDF
+    "test_4907"
   ];
 
   disabledTestPaths = [
     # mad about markdown table formatting
     "tests/test_tables.py::test_markdown"
+
+    # Do not lint code
+    "tests/test_typing.py"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5 when getting widget options
+    "tests/test_4505.py"
+    "tests/test_widgets.py"
   ];
 
   pythonImportsCheck = [
@@ -149,9 +170,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
-    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
     platforms = lib.platforms.unix;
   };
-}
+})

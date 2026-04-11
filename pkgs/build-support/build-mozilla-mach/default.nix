@@ -45,12 +45,13 @@ in
   pkgs,
   stdenv,
   patchelf,
+  fetchpatch,
 
   # build time
   autoconf,
   cargo,
   dump_syms,
-  makeWrapper,
+  makeBinaryWrapper,
   mimalloc,
   nodejs,
   perl,
@@ -58,7 +59,9 @@ in
   pkgsCross, # wasm32 rlbox
   python3,
   runCommand,
+  rustc,
   rust-cbindgen,
+  rustPlatform,
   unzip,
   which,
   wrapGAppsHook3,
@@ -73,8 +76,6 @@ in
   glib,
   gnum4,
   gtk3,
-  icu73,
-  icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
   libGL,
   libGLU,
   libevent,
@@ -90,7 +91,17 @@ in
   nss_latest,
   onnxruntime,
   pango,
-  xorg,
+  libxt,
+  libxtst,
+  libxrender,
+  libxi,
+  libxft,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libx11,
+  xorgproto,
+  pixman,
   zip,
   zlib,
   pkgsBuildBuild,
@@ -98,6 +109,7 @@ in
   # Darwin
   apple-sdk_14,
   apple-sdk_15,
+  apple-sdk_26,
   cups,
   rsync, # used when preparing .app directory
 
@@ -126,7 +138,9 @@ in
   jemallocSupport ? !stdenv.hostPlatform.isMusl,
   jemalloc,
   ltoSupport ? (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV
+    (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+    && stdenv.hostPlatform.is64bit
+    && !stdenv.hostPlatform.isRiscV
   ),
   overrideCC,
   buildPackages,
@@ -159,7 +173,7 @@ in
   geolocationSupport ? !privacySupport,
   webrtcSupport ? !privacySupport,
 
-  # digital rights managemewnt
+  # digital rights management
 
   # This flag controls whether Firefox will show the nagbar, that allows
   # users at runtime the choice to enable Widevine CDM support when a site
@@ -199,25 +213,9 @@ assert elfhackSupport -> isElfhackPlatform stdenv;
 let
   inherit (lib) enableFeature;
 
-  rustPackages =
-    pkgs:
-    (pkgs.rust.override (
-      # aarch64-darwin firefox crashes on loading favicons due to a llvm 21 bug:
-      # https://github.com/NixOS/nixpkgs/issues/453372
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
-      lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
-        llvmPackages = pkgs.llvmPackages_20;
-      }
-    )).packages.stable;
-
-  toRustC = pkgs: (rustPackages pkgs).rustc;
-
-  rustc = toRustC pkgs;
-  inherit (rustPackages pkgs) rustPlatform;
-
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
-  llvmPackagesBuildBuild0 = (toRustC pkgsBuildBuild).llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -232,7 +230,7 @@ let
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (
     llvmPackages.stdenv.cc.override {
-      bintools = if ltoSupport then (toRustC buildPackages).llvmPackages.bintools else stdenv.cc.bintools;
+      bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
     }
   );
 
@@ -303,7 +301,14 @@ buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   version = packageVersion;
 
-  inherit src unpackPhase meta;
+  inherit src unpackPhase;
+
+  meta =
+    meta
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # MacOS builds may take a long time and sometimes hit the default timeout
+      timeout = lib.max (24 * 60 * 60) (meta.timeout or 0);
+    };
 
   outputs = [
     "out"
@@ -327,24 +332,30 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
+    # Revert apple sdk bump to 26.1 and 26.2
     ++
-      lib.optionals
-        (
-          lib.versionAtLeast version "141.0.2"
-          || (lib.versionAtLeast version "140.2.0" && lib.versionOlder version "141.0")
-        )
+      lib.optionals (lib.versionAtLeast version "148" && lib.versionOlder apple-sdk_26.version "26.2")
         [
-          ./142-relax-apple-sdk.patch
+          (fetchpatch {
+            url = "https://github.com/mozilla-firefox/firefox/commit/73cbb9ff0fdbf8b13f38d078ce01ef6ec0794f9c.patch";
+            hash = "sha256-ghdddJxsaxXzLZpOOfwss+2S/UUcbLqKGzWWqKy9h/k=";
+            revert = true;
+          })
+        ]
+    ++
+      lib.optionals (lib.versionAtLeast version "146" && lib.versionOlder apple-sdk_26.version "26.1")
+        [
+          (fetchpatch {
+            url = "https://github.com/mozilla-firefox/firefox/commit/c1cd0d56e047a40afb2a59a56e1fd8043e448e05.patch";
+            hash = "sha256-bFHLy3b0jOcROqltIwHwSAqWYve8OZHbiPMOdhLUCLc=";
+            revert = true;
+          })
         ]
     ++ extraPatches;
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
     patchShebangs mach build
-  ''
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
-  + lib.optionalString (lib.versionAtLeast version "134") ''
-    sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
   ''
   + extraPostPatch;
 
@@ -356,16 +367,12 @@ buildStdenv.mkDerivation {
     "-l"
   ];
 
-  # if not explicitly set, wrong cc from buildStdenv would be used
-  HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
-  HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
-
   nativeBuildInputs = [
     autoconf
     cargo
     gnum4
     llvmPackagesBuildBuild.bintools
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     perl
     python3
@@ -459,20 +466,7 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  ''
-  +
-    # fileport.h was exposed in SDK 15.4 but we have only 15.2 in nixpkgs so far.
-    lib.optionalString
-      (
-        stdenv.hostPlatform.isDarwin
-        && lib.versionAtLeast version "143"
-        && lib.versionOlder apple-sdk_15.version "15.4"
-      )
-      ''
-        mkdir -p xnu/sys
-        cp ${apple-sdk_15.sourceRelease "xnu"}/bsd/sys/fileport.h xnu/sys
-        export CXXFLAGS="-isystem $(pwd)/xnu"
-      '';
+  '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
@@ -490,7 +484,7 @@ buildStdenv.mkDerivation {
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
   ]
-  # LTO is done using clang and lld on Linux.
+  # LTO is done using clang and lld.
   ++ lib.optionals ltoSupport [
     "--enable-lto=cross,full" # Cross-Language LTO
     "--enable-linker=lld"
@@ -502,7 +496,8 @@ buildStdenv.mkDerivation {
     # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
     "--enable-system-pixman"
     "--with-system-ffi"
-    "--with-system-icu"
+    # Mozilla vendors 10+ patches and ICU upstream is very slow to adopt them
+    # "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-libvpx"
@@ -556,7 +551,14 @@ buildStdenv.mkDerivation {
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
+    (
+      if lib.versionAtLeast version "145" then
+        apple-sdk_26
+      else if lib.versionAtLeast version "138" then
+        apple-sdk_15
+      else
+        apple-sdk_14
+    )
     cups
   ]
   ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (
@@ -575,17 +577,17 @@ buildStdenv.mkDerivation {
       libwebp
       nspr
       pango
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXft
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXt
-      xorg.libXtst
-      xorg.pixman
-      xorg.xorgproto
+      libx11
+      libxcursor
+      libxdamage
+      libxext
+      libxft
+      libxi
+      libxrender
+      libxt
+      libxtst
+      pixman
+      xorgproto
       zlib
       (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)
     ]
@@ -598,7 +600,6 @@ buildStdenv.mkDerivation {
       libdrm
     ]
   ))
-  ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
   ++ lib.optional gssSupport libkrb5
   ++ lib.optional jemallocSupport jemalloc
   ++ extraBuildInputs;
@@ -638,7 +639,12 @@ buildStdenv.mkDerivation {
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
-  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  env = {
+    # if not explicitly set, wrong cc from buildStdenv would be used
+    HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
+    HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
     # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
     # On musl we have to explicitly set the rpath to include these libraries.
@@ -674,9 +680,6 @@ buildStdenv.mkDerivation {
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
-
-      # Needed to find Mozilla runtime
-      gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
 
       resourceDir=$out/lib/${binaryName}
     ''

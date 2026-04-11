@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "trickster";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ _1000101 ];
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [ _1000101 ];
   };
 
   nodes = {

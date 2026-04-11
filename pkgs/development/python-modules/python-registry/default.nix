@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   unicodecsv,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Registry" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse the Windows Registry hives";
     homepage = "https://github.com/williballenthin/python-registry";
     changelog = "https://github.com/williballenthin/python-registry/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

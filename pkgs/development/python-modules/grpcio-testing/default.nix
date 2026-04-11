@@ -4,7 +4,6 @@
   fetchPypi,
   grpcio,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,15 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.75.1";
+  version = "1.78.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "grpcio_testing";
     inherit version;
-    hash = "sha256-RUF4XosbetXbFVEyGsFE3WOM/z0fsC+St9ZRHFhLmKg=";
+    hash = "sha256-BuQoB75GlJvciDOaA6cQ7AVbBta8ghy1ljZuUWWRU8w=";
   };
 
   postPatch = ''
@@ -45,10 +42,10 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Testing utilities for gRPC Python";
     homepage = "https://grpc.io/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

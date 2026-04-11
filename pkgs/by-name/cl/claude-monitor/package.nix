@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "claude-monitor";
   version = "3.1.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Maciek-roboblog";
     repo = "Claude-Code-Usage-Monitor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v5ooniaN1iVerBW77/00SpghIVE1j8cl2WENcPnS66M=";
   };
 
@@ -39,9 +39,9 @@ python3Packages.buildPythonApplication rec {
       and get intelligent predictions about session limits.
     '';
     homepage = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor";
-    changelog = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "claude-monitor";
   };
-}
+})

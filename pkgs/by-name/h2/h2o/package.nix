@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2025-10-17";
+  version = "2.3.0-rolling-2026-02-28";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "562d7bd089173da03e71bc4c0824468751c5b411";
-    hash = "sha256-/P4S8ng1kQPPHNSNuqgLasu2c2Y9BD2Y9v0hlMiPCIM=";
+    rev = "725e54bc932fbe0c6e208db4e71eb1df79ec43ff";
+    hash = "sha256-SAH7AZYy6ZRRa8zhhe8voKJCqM5CxSuZA/XwT1Nb9NI=";
   };
 
   outputs = [
@@ -78,15 +78,15 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) h2o; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
     homepage = "https://h2o.examp1e.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       toastal
       thoughtpolice
     ];
     mainProgram = "h2o";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

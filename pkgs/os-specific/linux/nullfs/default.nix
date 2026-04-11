@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nullfs";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "nullfsvfs";
     rev = "v${version}";
-    sha256 = "sha256-csEfgXOXrFgWcyKmxEPKi33M7nVVI2hE+YGXMe4vdFE=";
+    sha256 = "sha256-UJubWx5QfzLAiYTN1BPaziT3gKsTI0OVCmcuwKX3Gp0=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual black hole file system that behaves like /dev/null";
     homepage = "https://github.com/abbbi/nullfsvfs";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ callumio ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ callumio ];
   };
 }

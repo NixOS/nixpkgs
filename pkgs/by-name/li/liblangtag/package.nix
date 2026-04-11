@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # Artifact tarball contains lt-localealias.h needed for darwin
   src = fetchurl {
-    url = "https://bitbucket.org/tagoh/liblangtag/downloads/${pname}-${version}.tar.bz2";
+    url = "https://bitbucket.org/tagoh/liblangtag/downloads/liblangtag-${version}.tar.bz2";
     hash = "sha256-Xta81K4/PAXJEuYvIWzRpEEjhGFH9ymkn7VmjaUeAw4=";
   };
 
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface library to access tags for identifying languages";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
     # There are links to a homepage that are broken by a BitBucket change
     homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
   };

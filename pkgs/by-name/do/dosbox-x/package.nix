@@ -13,7 +13,7 @@
   libpng,
   libslirp,
   libxkbfile,
-  libXrandr,
+  libxrandr,
   makeWrapper,
   ncurses,
   pkg-config,
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2025.10.07";
+  version = "2026.03.29";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-6y41xAs2FyOL8v+c5ma3zVIw186PU48CcbM3T050jeI=";
+    hash = "sha256-hOP+hmvVCdFSqXnD6+6OVIQ7allEidKt9W9AT704htA=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libxkbfile
-    libXrandr
+    libxrandr
   ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory

@@ -329,18 +329,17 @@ You can invoke the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot mer
 The bot will verify the following conditions, refusing to merge otherwise:
 
 - the PR author should be @r-ryantm or a Nixpkgs committer;
-- the invoker should be among the package maintainers;
+- the invoker should be among the package maintainers on the targeted branch;
 - the package should reside in `pkgs/by-name`.
 
-Further, nixpkgs-merge-bot will ensure all CI checks and the ofborg builds for Linux have successfully completed before merging the pull request.
-Should the checks still be underway, the bot will wait for them to finish before attempting the merge again.
+Required status checks prevent PRs that fail them ("PR / ..." jobs) from being merged. Ofborg is not required by the checks.
 
 For other pull requests, please see [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
 
 In case the PR is stuck waiting for the author to apply a trivial change and the author allowed members to modify the PR, consider applying it yourself.
 You should pay extra attention to make sure the addition doesn't go against the idea of the original PR and would not be opposed by the author.
 
-Please see the discussion in [GitHub nixpkgs issue #321665](https://github.com/NixOS/nixpkgs/issues/321665) for information on how to proceed to be granted this level of access.
+Please see the [`nixpkgs-committers` repository](https://github.com/NixOS/nixpkgs-committers) for information on how to proceed to be granted this level of access.
 
 As a maintainer, when you leave the Nix community, please create an issue or post on [Discourse](https://discourse.nixos.org) with references to the packages and modules you maintained, so they can be taken over by other contributors.
 
@@ -430,7 +429,7 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging-next` | `staging` | [`staging-nixos`](#test-driver-rebuild) |
+| branch | `master` | `staging-next` | `staging` | [`staging-nixos`][test-driver-rebuild] |
 | --- | --- | --- | --- | --- |
 | Used for development | ✔️ | ❌ | ✔️ | ✔️ |
 | Built by Hydra | ✔️ | ✔️ | ❌ | ❌ |
@@ -501,7 +500,7 @@ Please note that changes to the Linux kernel are an exception to this rule.
 These PRs go to `staging-nixos`, see [the next section for more context](#changes-rebuilding-all-tests).
 
 ### Changes rebuilding all NixOS tests
-[test-driver-rebuild]: #changes-rebuilding-all-tests
+[test-driver-rebuild]: #changes-rebuilding-all-nixos-tests
 
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.
@@ -659,13 +658,13 @@ If you have any problems with formatting, please ping the [formatting team](http
   Do
 
   ```nix
-  { rev = version; }
+  { tag = version; }
   ```
 
   instead of
 
   ```nix
-  { rev = "${version}"; }
+  { tag = "${version}"; }
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
@@ -680,7 +679,7 @@ If you have any problems with formatting, please ping the [formatting team](http
   { buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null; }
   ```
 
-  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  As an exception, an explicit conditional expression with null can be used when fixing an important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
 - Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
@@ -865,7 +864,7 @@ If someone approved and didn't merge a few days later, they most likely just for
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
 The easiest way to do so is to notify them via GitHub.
-Github notifies people involved, whenever you add a comment or push to your PR or re-request their review.
+GitHub notifies people involved, whenever you add a comment or push to your PR or re-request their review.
 Doing any of that will get their attention again.
 Everyone deserves proper attention, and yes, that includes you!
 However, please be mindful that committers can sadly not always give everyone the attention they deserve.

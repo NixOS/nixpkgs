@@ -7,17 +7,17 @@
   pypblib,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.8.dev24";
+  version = "1.8.dev30";
   pyproject = true;
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-f9NnaPcHdNNInWTvpkg91ieaYejJ29kAAOLcbnbDmM0=";
+    hash = "sha256-KaR6NPD6wzA0WcYzq/ptRFBeI0Pfumz/S2rVlsDKnU4=";
   };
 
   preBuild = ''
@@ -46,15 +46,15 @@ buildPythonPackage rec {
     rm -r pysat
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for SAT-based prototyping in Python (without optional dependencies)";
     homepage = "https://github.com/pysathq/pysat";
     changelog = "https://pysathq.github.io/updates/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.marius851000
-      maintainers.chrjabs
+      lib.maintainers.marius851000
+      lib.maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
   };
-}
+})

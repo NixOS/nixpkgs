@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -25,17 +24,15 @@
 
 let
   pname = "ansible";
-  version = "12.1.0";
+  version = "13.5.0";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-It6hk41DP6UVswAc+tZcswjvl8mA8VIBdNBU3TjzLIM=";
+    hash = "sha256-abF15pTZUR/sg4sKgvFQurNm3Zy3qCkJbD06cvYEZxk=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,
@@ -93,13 +90,13 @@ buildPythonPackage {
   # difficult to test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Radically simple IT automation";
     mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       HarisDotParis
       robsliwi
     ];

@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-krrVgdoCcW3voSiQAoWsG+rPf1HYKbuGhplhn21as2c=";
 
-  RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
+  env.RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
 
   preFixup = ''
     cp  wprs "$out/bin/wprs"
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage {
     ${wprs}/bin/wprs -h > /dev/null && touch $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rootless remote desktop access for remote Wayland";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mksafavi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mksafavi ];
     platforms = [ "x86_64-linux" ]; # The aarch64-linux support is not implemented in upstream yet. Also, the darwin platform is not supported as it requires wayland.
     homepage = "https://github.com/wayland-transpositor/wprs";
     mainProgram = "wprs";

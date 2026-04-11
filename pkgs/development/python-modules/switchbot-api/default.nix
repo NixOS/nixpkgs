@@ -1,40 +1,53 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
+  pycryptodome,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezer,
+  pytestCheckHook,
+  syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "switchbot-api";
-  version = "2.8.0";
+  version = "2.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";
-    tag = "v${version}";
-    hash = "sha256-xalIVkmzflUVkw/DFOLas6T/jUXSs3gZhEa3IJWtEaw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n2KAKILbywObqxG/lDNHkXWVCcrEJAaqv6xBDH8ed/Q=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    pycryptodome
+  ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-freezer
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [ "switchbot_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous library to use Switchbot API";
     homepage = "https://github.com/SeraphicCorp/py-switchbot-api";
-    changelog = "https://github.com/SeraphicCorp/py-switchbot-api/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SeraphicCorp/py-switchbot-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

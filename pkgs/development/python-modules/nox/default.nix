@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2025.10.16";
+  version = "2026.02.09";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = "nox";
     tag = version;
-    hash = "sha256-oRVDGHw/0HkHLtzcSZL2Aj1uxuRS/ms66cBPDQjJ17I=";
+    hash = "sha256-RaB0q9gCoYqKAI8IzNh5qUd0SrzsPeOa3C6IGxpcbwE=";
   };
 
   build-system = [ hatchling ];
@@ -51,13 +51,10 @@ buildPythonPackage rec {
     humanize
     packaging
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   optional-dependencies = {
-    tox_to_nox = [
+    tox-to-nox = [
       jinja2
       tox
     ];
@@ -68,7 +65,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nox" ];
 

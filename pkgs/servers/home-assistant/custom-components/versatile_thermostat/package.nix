@@ -2,20 +2,27 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   lib,
+  numpy,
+  scipy,
   gitUpdater,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "jmcollin78";
   domain = "versatile_thermostat";
-  version = "7.4.1";
+  version = "9.3.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
-    rev = "refs/tags/${version}";
-    hash = "sha256-QE3XTummNZCziZPKfFjTI0ell+bftGqbcG0hh+QHx9s=";
+    tag = version;
+    hash = "sha256-fHmCakDFD6na3IQcQCX2g9XYIIJp0DTaZ9qEcSgw+78=";
   };
+
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(Alpha|Beta|alpha|beta).*"; };
 

@@ -8,21 +8,18 @@
   marshmallow,
   marshmallow-sqlalchemy,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
     tag = version;
-    hash = "sha256-dK2bE5mZiFh0nAN2yRpABT+SGG/UGWJ1oDtnD6bgyXk=";
+    hash = "sha256-YyXsCyIJmXb1p1J5wvGg57bGbsAbz83vW6hxpnbpOSw=";
   };
 
   build-system = [ flit-core ];

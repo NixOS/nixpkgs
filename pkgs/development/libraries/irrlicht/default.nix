@@ -4,9 +4,9 @@
   fetchzip,
   libGLU,
   libGL,
-  libXrandr,
-  libX11,
-  libXxf86vm,
+  libxrandr,
+  libx11,
+  libxxf86vm,
   zlib,
 }:
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation {
   buildInputs = [
     libGLU
     libGL
-    libXrandr
-    libX11
-    libXxf86vm
+    libxrandr
+    libx11
+    libxxf86vm
   ]
   ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 
@@ -57,5 +57,7 @@ stdenv.mkDerivation {
     license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

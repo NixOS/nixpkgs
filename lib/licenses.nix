@@ -64,6 +64,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    adobeDisplayPostScript = {
+      spdxId = "Adobe-Display-PostScript";
+      fullName = "Adobe Display PostScript License";
+    };
+
     adobeUtopia = {
       fullName = "Adobe Utopia Font License";
       spdxId = "Adobe-Utopia";
@@ -299,6 +304,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    bzip2 = {
+      spdxId = "bzip2-1.0.6";
+      fullName = "bzip2 and libbzip2 License v1.0.6";
+    };
+
     cal10 = {
       spdxId = "CAL-1.0";
       fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
@@ -499,6 +509,11 @@ lib.mapAttrs mkLicense (
     curl = {
       spdxId = "curl";
       fullName = "curl License";
+    };
+
+    dec3Clause = {
+      spdxId = "DEC-3-Clause";
+      fullName = "DEC 3-Clause License";
     };
 
     doc = {
@@ -727,6 +742,23 @@ lib.mapAttrs mkLicense (
       spdxId = "HPND-sell-variant";
     };
 
+    hpndSellVariantMitDisclaimerXserver = {
+      spdxId = "HPND-sell-MIT-disclaimer-xserver";
+      fullName = "Historical Permission Notice and Disclaimer - sell xserver variant with MIT disclaimer";
+    };
+
+    hpndSellVariantSafetyClause = {
+      fullName = "HPND - sell variant with safety critical systems clause";
+      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-voodoo/-/blob/68a5b6d98ae34749cca889f4373b4043d00bfe6a/src/voodoo_dga.c#L12-33";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace reference with whatever this license is supposed to be then
+      # https://github.com/spdx/license-list-XML/issues/2922
+      # spdxId = "HPND-sell-variant-safety-clause";
+    };
+
     hpndDec = {
       fullName = "Historical Permission Notice and Disclaimer - DEC variant";
       spdxId = "HPND-DEC";
@@ -745,6 +777,11 @@ lib.mapAttrs mkLicense (
     hpndUc = {
       spdxId = "HPND-UC";
       fullName = "Historical Permission Notice and Disclaimer - University of California variant";
+    };
+
+    hyphenBulgarian = {
+      fullName = "hyphen-bulgarian License";
+      spdxId = "hyphen-bulgarian";
     };
 
     # Intel's license, seems free
@@ -938,6 +975,11 @@ lib.mapAttrs mkLicense (
       fullName = "libtiff License";
     };
 
+    liliq-p-11 = {
+      spdxId = "LiLiQ-P-1.1";
+      fullName = "Licence Libre du Québec – Permissive version 1.1";
+    };
+
     llgpl21 = {
       fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
       url = "https://opensource.franz.com/preamble.html";
@@ -991,6 +1033,11 @@ lib.mapAttrs mkLicense (
     mit-cmu = {
       spdxId = "MIT-CMU";
       fullName = "CMU License";
+    };
+
+    mit-enna = {
+      spdxId = "MIT-enna";
+      fullName = "enna License";
     };
 
     mit-feh = {
@@ -1101,6 +1148,13 @@ lib.mapAttrs mkLicense (
     nposl3 = {
       spdxId = "NPOSL-3.0";
       fullName = "Non-Profit Open Software License 3.0";
+    };
+
+    # NTP is basically HPND, but spdx and the OSI recognize it
+    # hpnd says "and without fee", ntp "with or without fee"
+    ntp = {
+      spdxId = "NTP";
+      fullName = "NTP License";
     };
 
     nvidiaCuda = {
@@ -1372,7 +1426,7 @@ lib.mapAttrs mkLicense (
 
     tsl = {
       shortName = "TSL";
-      fullName = "Timescale License Agreegment";
+      fullName = "Timescale License Agreement";
       url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
       free = false;
     };
@@ -1508,6 +1562,16 @@ lib.mapAttrs mkLicense (
     x11 = {
       spdxId = "X11";
       fullName = "X11 License";
+    };
+
+    x11BsdClause = {
+      fullName = "X11 License with third BSD clause";
+      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-geode/-/blob/d147c3f1b6907ae9db6f12853cedd450537d99d2/COPYING";
+    };
+
+    x11NoPermitPersons = {
+      spdxId = "X11-no-permit-persons";
+      fullName = "X11 no permit persons clause";
     };
 
     xerox = {

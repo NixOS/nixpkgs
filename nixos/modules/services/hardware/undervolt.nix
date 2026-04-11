@@ -16,29 +16,37 @@ let
         limit != null && window != null
       ) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
-  cliArgs = lib.cli.toCommandLineGNU { } {
-    inherit (cfg)
-      verbose
-      temp
-      turbo
-      ;
-    # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
-    #
-    #     Core or Cache offsets have no effect. It is not possible to set different offsets for
-    #     CPU Core and Cache. The CPU will take the smaller of the two offsets, and apply that to
-    #     both CPU and Cache. A warning message will be displayed if you attempt to set different offsets.
-    core = cfg.coreOffset;
-    cache = cfg.coreOffset;
-    gpu = cfg.gpuOffset;
-    uncore = cfg.uncoreOffset;
-    analogio = cfg.analogioOffset;
+  cliArgs =
+    let
+      optionFormat = optionName: {
+        option = "--${optionName}";
+        sep = null;
+        explicitBool = false;
+      };
+    in
+    lib.cli.toCommandLine optionFormat {
+      inherit (cfg)
+        verbose
+        temp
+        turbo
+        ;
+      # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
+      #
+      #     Core or Cache offsets have no effect. It is not possible to set different offsets for
+      #     CPU Core and Cache. The CPU will take the smaller of the two offsets, and apply that to
+      #     both CPU and Cache. A warning message will be displayed if you attempt to set different offsets.
+      core = cfg.coreOffset;
+      cache = cfg.coreOffset;
+      gpu = cfg.gpuOffset;
+      uncore = cfg.uncoreOffset;
+      analogio = cfg.analogioOffset;
 
-    temp-bat = cfg.tempBat;
-    temp-ac = cfg.tempAc;
+      temp-bat = cfg.tempBat;
+      temp-ac = cfg.tempAc;
 
-    power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
-    power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
-  };
+      power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
+      power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
+    };
 in
 {
   options.services.undervolt = {
@@ -186,17 +194,27 @@ in
     systemd.services.undervolt = {
       description = "Intel Undervolting Service";
 
-      # Apply undervolt on boot, nixos generation switch and resume
-      wantedBy = [
-        "multi-user.target"
-        "post-resume.target"
-      ];
-      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
         ExecStart = "${cfg.package}/bin/undervolt ${toString cliArgs}";
+      };
+    };
+
+    systemd.services.undervolt-sleep = {
+      description = "Preserve Intel Undervolting After Sleep";
+
+      wantedBy = [ "sleep.target" ];
+      before = [ "sleep.target" ];
+
+      unitConfig.StopWhenUnneeded = true;
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "no";
+        RemainAfterExit = true;
+        ExecStop = "${cfg.package}/bin/undervolt ${toString cliArgs}";
       };
     };
 

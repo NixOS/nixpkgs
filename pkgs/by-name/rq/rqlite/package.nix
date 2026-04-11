@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "rqlite";
-  version = "9.1.3";
+  version = "9.4.5";
 
   src = fetchFromGitHub {
     owner = "rqlite";
     repo = "rqlite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BybfZio4SSlpTbNHWfiA/2lVcNXhKWaBNTEoCSDxMSE=";
+    hash = "sha256-jvqmRmURAvo0bNrwgft95oHupRf8FJaB3XRgnU43wRo=";
   };
 
-  vendorHash = "sha256-bkAlZT0bntSdVwioEaqBK7XObGwJuIG7tfF7XOr3lKQ=";
+  vendorHash = "sha256-PPmX/KbNO/LEwGlw8bziek4uDd5sgDo3+wNlBJm/qA4=";
 
   subPackages = [
     "cmd/rqlite"

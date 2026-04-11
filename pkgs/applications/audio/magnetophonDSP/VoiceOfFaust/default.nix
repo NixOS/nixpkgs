@@ -5,36 +5,30 @@
   faust2jack,
   faust2lv2,
   helmholtz,
-  mrpeach,
   puredata-with-plugins,
   jack-example-tools,
 }:
-stdenv.mkDerivation rec {
+let
+  plugins = [
+    helmholtz
+  ];
+  pitchTracker = puredata-with-plugins plugins;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "VoiceOfFaust";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "VoiceOfFaust";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     sha256 = "sha256-wsc4yzytK2hPVBQwMhdhjnH1pDtpkNCFJnItyzszEs0=";
   };
-
-  plugins = [
-    helmholtz
-    mrpeach
-  ];
-
-  pitchTracker = puredata-with-plugins plugins;
 
   nativeBuildInputs = [
     faust2jack
     faust2lv2
   ];
-
-  # ld: crtbegin.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a PIE object
-  # ld: failed to set dynamic section sizes: bad value
-  hardeningDisable = [ "pie" ];
 
   enableParallelBuilding = true;
 
@@ -58,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

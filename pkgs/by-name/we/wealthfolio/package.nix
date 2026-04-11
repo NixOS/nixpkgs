@@ -10,30 +10,32 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "1.2.3";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bp8BxJp/Ga9Frqyvl76Fh9AfSEKv3W+P1ND9zqeMXhg=";
+    hash = "sha256-flXuskAzrDFBMcAtOe++QpFRIXvbbx5eqXxrymC4MMM=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-imExQiPl6sjYD//p788dGYEn+DRs9H8l9sGmCdl5Cic=";
+    hash = "sha256-feM1jQsUDKVX4+x4Otdwx6AEM+FO7fiaJjmMbU6GDf8=";
   };
 
-  cargoRoot = "src-tauri";
+  cargoRoot = ".";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -43,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-CiEtxZn+kqYqS0sx9SLPvIkOTq2La48gQp+xx9z5BJs=";
+    hash = "sha256-Zo3EVWxuJ//EtqUZ1l2/B1MGlmpoBcWQksY/IpCb5N4";
   };
 
   nativeBuildInputs = [
@@ -52,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];
@@ -67,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     jq \
       '.plugins.updater.endpoints = [ ]
       | .bundle.createUpdaterArtifacts = false' \
-      src-tauri/tauri.conf.json \
-      | sponge src-tauri/tauri.conf.json
+      apps/tauri/tauri.conf.json \
+      | sponge apps/tauri/tauri.conf.json
   '';
 
   passthru.updateScript = nix-update-script { };

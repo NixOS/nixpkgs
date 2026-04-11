@@ -9,7 +9,6 @@
   moto,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pycognito";
   version = "2024.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
@@ -57,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycognito" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python class to integrate Boto3's Cognito client so it is easy to login users. With SRP support";
     homepage = "https://github.com/pvizeli/pycognito";
     changelog = "https://github.com/NabuCasa/pycognito/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

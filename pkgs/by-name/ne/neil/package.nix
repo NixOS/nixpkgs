@@ -6,15 +6,15 @@
   babashka,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neil";
-  version = "0.3.68";
+  version = "0.3.69";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "neil";
-    rev = "v${version}";
-    sha256 = "sha256-ulqVrFsuYvRKxASHI6AqnHkKKdmDVgtivsRIscivcXw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NRuWRZRh93lQjfi3C+gliixZYAZ/JZRMZJbcPv29YFI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ babashka ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/babashka/neil";
     description = "CLI to add common aliases and features to deps.edn-based projects";
     mainProgram = "neil";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = babashka.meta.platforms;
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [ jlesquembre ];
   };
-}
+})

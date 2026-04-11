@@ -2,16 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ulid";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "oklog";
     repo = "ulid";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kPNLaZMGwGc7ngPCivf/n4Bis219yOkGAaa6mt7+yTY=";
   };
 
@@ -27,12 +28,14 @@ buildGoModule rec {
     "-skip=TestMonotonicSafe"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Universally Unique Lexicographically Sortable Identifier (ULID) in Go";
     homepage = "https://github.com/oklog/ulid";
-    changelog = "https://github.com/oklog/ulid/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/oklog/ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "ulid";
   };
-}
+})

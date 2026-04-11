@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -11,7 +10,6 @@
   scikit-build-core,
   setuptools,
   setuptools-scm,
-  typing-extensions,
 
   # native dependencies
   libsoxr,
@@ -53,9 +51,6 @@ buildPythonPackage rec {
     nanobind
     setuptools
     setuptools-scm
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   buildInputs = [ libsoxr ];
@@ -66,11 +61,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
     description = "High quality, one-dimensional sample-rate conversion library";
     homepage = "https://github.com/dofuuz/python-soxr/tree/main";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

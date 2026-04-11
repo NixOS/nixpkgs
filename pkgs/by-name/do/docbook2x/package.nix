@@ -16,12 +16,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "docbook2X";
   version = "0.8.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/docbook2x/docbook2X-${version}.tar.gz";
+    url = "mirror://sourceforge/docbook2x/docbook2X-${finalAttrs.version}.tar.gz";
     sha256 = "0ifwzk99rzjws0ixzimbvs83x6cxqk1xzmg84wa1p7bs6rypaxs0";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   # configure tries to find osx in PATH and hardcodes the resulting path
   # (if any) on the Perl code. this fails under strictDeps, so override
   # the autoconf test:
-  OSX = "${opensp}/bin/osx";
+  env.OSX = "${opensp}/bin/osx";
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal
@@ -89,14 +89,14 @@ stdenv.mkDerivation rec {
       "${gnused}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     longDescription = ''
       docbook2X is a software package that converts DocBook documents
       into the traditional Unix man page format and the GNU Texinfo
       format.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://docbook2x.sourceforge.net/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

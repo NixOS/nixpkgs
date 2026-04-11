@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "2.2.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-e25pjXopmWqoLV16DC+w57YZzH6bbwITsRhKI9IBr+0=";
+    hash = "sha256-bhM8CIKmZ3p96DViHVieMmUXOtkhs0+nhQs4naIgQVY=";
   };
 
-  npmDepsHash = "sha256-/Gi0hNuG6fkgOCcjD1jDNyUT1ke3oipqmzAHDpdbiJg=";
+  npmDepsHash = "sha256-iWyFuyZJOW2/F1gE2nA601IlgXpYXeK31gwI+SfxRuY=";
 
   npmBuildScript = "prepare";
 

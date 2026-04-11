@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xxHash";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-h6kohM+NxvQ89R9NEXZcYBG2wPOuB4mcyPfofKrx9wQ=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Using unofficial CMake build script to install CMake module files.
   cmakeDir = "../cmake_unofficial";
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast hash algorithm";
     longDescription = ''
       xxHash is an Extremely fast Hash algorithm, running at RAM speed limits.
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
       endian).
     '';
     homepage = "https://github.com/Cyan4973/xxHash";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       gpl2
     ];
     mainProgram = "xxhsum";
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "libxxhash"
     ];
   };
-}
+})

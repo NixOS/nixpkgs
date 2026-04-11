@@ -4,14 +4,12 @@
   fetchPypi,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bracex";
   version = "2.6";
-  format = "pyproject";
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bracex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bash style brace expansion for Python";
     homepage = "https://github.com/facelessuser/bracex";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

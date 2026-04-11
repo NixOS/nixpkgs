@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "kneed";
-  version = "0.8.5";
+  version = "0.8.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arvkevi";
     repo = "kneed";
     tag = "v${version}";
-    sha256 = "sha256-oakP6NkdvTzMZcoXS6cKNsRo//K+CoPLlhvbQLGij00=";
+    sha256 = "sha256-A9d5igX9Eqr3rgx93VMee9yFEs6WfO0bb/eCEFCxUJg=";
   };
 
   build-system = [ hatchling ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "tests/test_no_matplotlib.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Knee point detection in Python";
     homepage = "https://github.com/arvkevi/kneed";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tm-drtina ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tm-drtina ];
   };
 }

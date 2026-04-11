@@ -4,21 +4,21 @@
   coreutils,
   fetchurl,
   zlib,
-  libX11,
-  libXext,
-  libSM,
-  libICE,
+  libx11,
+  libxext,
+  libsm,
+  libice,
   libxkbcommon,
   libxshmfence,
-  libXfixes,
-  libXt,
-  libXi,
-  libXcursor,
-  libXScrnSaver,
-  libXcomposite,
-  libXdamage,
-  libXtst,
-  libXrandr,
+  libxfixes,
+  libxt,
+  libxi,
+  libxcursor,
+  libxscrnsaver,
+  libxcomposite,
+  libxdamage,
+  libxtst,
+  libxrandr,
   alsa-lib,
   dbus,
   cups,
@@ -29,8 +29,8 @@
   libGL,
   freetype,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
   libxcb,
   expat,
   libuuid,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.6.3797.63";
+  version = "7.9.3970.47";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-byMooo6J8ycd6Nhmd8UUXJgDZA+Da+rCZauXQRWXIq8=";
-        x86_64-linux = "sha256-6ernnmXIg+h8lOYo4MTDTuCDuTJ87VIR8UNDr2EHIJA=";
+        aarch64-linux = "sha256-08KlF8JJlZqAZeSFAqaNzMPfHp95GddRScnLnkQ2PF8=";
+        x86_64-linux = "sha256-Dc1VyxB60WsrynOT5r85+Xljx8mU7IKodnIIeGZ/u+M=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -104,23 +104,23 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     stdenv.cc.libc
     zlib
-    libX11
-    libXt
-    libXext
-    libSM
-    libICE
+    libx11
+    libxt
+    libxext
+    libsm
+    libice
     libxcb
     libxkbcommon
     libxshmfence
-    libXi
-    libXft
-    libXcursor
-    libXfixes
-    libXScrnSaver
-    libXcomposite
-    libXdamage
-    libXtst
-    libXrandr
+    libxi
+    libxft
+    libxcursor
+    libxfixes
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxtst
+    libxrandr
     atk
     at-spi2-atk
     at-spi2-core
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     qt6.qtwayland
     freetype
     fontconfig
-    libXrender
+    libxrender
     libuuid
     expat
     glib
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace-fail vivaldi-stable vivaldi
     local d
-    for d in 16 22 24 32 48 64 128 256; do
+    for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
       ln -s \
         "$out"/opt/vivaldi/product_logo_''${d}.png \

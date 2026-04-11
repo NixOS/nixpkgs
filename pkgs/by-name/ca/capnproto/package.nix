@@ -33,21 +33,19 @@ in
 # See: https://gerrit.lix.systems/c/lix/+/1874
 clangStdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "1.2.0";
+  version = "1.4.0";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    hash = "sha256-aDcn4bLZGq8915/NPPQsN5Jv8FRWd8cAspkG3078psc=";
+    hash = "sha256-CuhKOJwU+QG25lRR8F7ina+DV45ZlLzg/UJ2swf2tZ0=";
   };
 
   patches = [
     # https://github.com/capnproto/capnproto/pull/2377
     ./fix-libucontext.patch
-    # https://github.com/capnproto/capnproto/pull/2410
-    ./fix-libatomic.patch
   ];
 
   nativeBuildInputs = [
@@ -87,7 +85,7 @@ clangStdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://capnproto.org/";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''
@@ -95,8 +93,8 @@ clangStdenv.mkDerivation rec {
       capability-based RPC system. Think JSON, except binary. Or think Protocol
       Buffers, except faster.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     teams = [ lib.teams.lix ];
   };
 }

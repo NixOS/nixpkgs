@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "cpp-ipfs-http-client";
-  version = "unstable-2022-01-30";
+  version = "0-unstable-2023-06-04";
 
   src = fetchFromGitHub {
     owner = "vasild";
     repo = "cpp-ipfs-http-client";
-    rev = "3cdfa7fc6326e49fc81b3c7ca43ce83bdccef6d9";
-    sha256 = "sha256-/oyafnk4SbrvoCh90wkZXNBjknMKA6EEUoEGo/amLUo=";
+    rev = "29a103af79ad62ef42180f54f6cd2128b4128836";
+    hash = "sha256-B57W4OqNU0M4yYxbHIZb2TyHfMaihCOD1KdvPrm6xLE=";
   };
 
   patches = [ ./unvendor-nlohmann-json.patch ];
@@ -35,13 +35,15 @@ stdenv.mkDerivation {
     "-Wno-error=deprecated-declarations"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IPFS C++ API client library";
     homepage = "https://github.com/vasild/cpp-ipfs-http-client";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

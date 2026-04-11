@@ -2,69 +2,65 @@
   lib,
   stdenv,
   buildPackages,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  trivy,
+  versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "trivy";
-  version = "0.66.0";
+  # As of March 2026, trivy has made compromised releases twice.
+  # At a minimum, before updating, check the diff of this package, and of all
+  # dependencies/GitHub Actions changes, carefully.
+  # Also read about how the previous compromises occurred, and ensure
+  # that the signs present then are not present now.
+  # Finally, weigh the risk of a compromised release against the expected
+  # benefit of the update, and consider the possibility of not updating.
+  version = "0.69.3"; # Did you read the comment?
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
-    tag = "v${version}";
-    hash = "sha256-Kn28mUdCi/8FPrAa0UbfOaBlzkaGc9daYOR93t+n2uY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lzFcLyrORA+1LxS4nzJVvilg29GTNiGRmnjJ47ev/yU=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-FabIeFGUX55zyMtGadHKGbJ7awlHgNzfO2IiiFKmIc4=";
+  vendorHash = "sha256-aqSB2pakYH713GSbIAHwAL9Gio17MzZtwqfh9sbzDBs=";
 
   subPackages = [ "cmd/trivy" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${version}"
+    "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${finalAttrs.version}"
   ];
 
+  env.GOEXPERIMENT = "jsonv2";
+
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Tests require network access
   doCheck = false;
 
-  postInstall =
-    let
-      trivy =
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          placeholder "out"
-        else
-          buildPackages.trivy;
-    in
-    ''
-      installShellCompletion --cmd trivy \
-        --bash <(${trivy}/bin/trivy completion bash) \
-        --fish <(${trivy}/bin/trivy completion fish) \
-        --zsh <(${trivy}/bin/trivy completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd trivy \
+      --bash <($out/bin/trivy completion bash) \
+      --fish <($out/bin/trivy completion fish) \
+      --zsh <($out/bin/trivy completion zsh)
+  '';
 
   doInstallCheck = true;
-
-  passthru.tests.version = testers.testVersion {
-    package = trivy;
-    command = "trivy --version";
-    version = "Version: ${version}";
-  };
 
   meta = {
     description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     homepage = "https://github.com/aquasecurity/trivy";
-    changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
+    changelog = "https://github.com/aquasecurity/trivy/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       Trivy is a simple and comprehensive vulnerability scanner for containers
       and other artifacts. A software vulnerability is a glitch, flaw, or
@@ -79,4 +75,4 @@ buildGo124Module rec {
       jk
     ];
   };
-}
+})

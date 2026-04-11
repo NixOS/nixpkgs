@@ -47,21 +47,10 @@ robustly than text search through `maintainer-list.nix`.
 
 The maintainer is designated by a `selector` which must be one of:
 - `handle` (default): the maintainer's attribute name in `lib.maintainers`;
-- `email`, `name`, `github`, `githubId`, `matrix`, `name`:
+- `email`, `name`, `github`, `githubId`, `matrix`:
   attributes of the maintainer's object, matched exactly; see [`maintainer-list.nix`] for the fields' definition.
 
 [`maintainer-list.nix`]: ../maintainer-list.nix
-
-### `get-maintainer-pings-between.sh`
-
-Gets which maintainers would be pinged between two Nixpkgs revisions.
-Outputs a JSON object on stdout mapping GitHub usernames to the attributes that they would be getting pinged for.
-
-Example:
-
-```sh
-maintainers/scripts/get-maintainer-pings-between.sh HEAD^ HEAD
-```
 
 ## Conventions
 

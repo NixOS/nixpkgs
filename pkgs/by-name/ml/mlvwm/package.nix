@@ -3,21 +3,21 @@
   stdenv,
   fetchFromGitHub,
   gccmakedep,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
   imake,
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlvwm";
   version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "morgant";
     repo = "mlvwm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gccmakedep
-    libX11
-    libXext
-    libXpm
+    libx11
+    libxext
+    libxpm
     imake
   ];
 
@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     installManPage man/mlvwm.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/morgant/mlvwm";
     description = "Macintosh-like Virtual Window Manager";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     longDescription = ''
       MLVWM or Macintosh-Like Virtual Window Manager,
       is an FVWM descendant created by Takashi Hasegawa
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       As its name implies, it attempts to emulate the
       pre-Mac OS X Macintosh look and feel in its layout and window design.
     '';
-    platforms = platforms.linux;
-    maintainers = [ maintainers.j0hax ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.j0hax ];
     mainProgram = "mlvwm";
   };
-}
+})

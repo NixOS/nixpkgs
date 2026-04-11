@@ -7,7 +7,7 @@
   gettext,
   perl,
   libgdiplus,
-  libX11,
+  libx11,
   ncurses,
   zlib,
   bash,
@@ -48,15 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gettext
     libgdiplus
-    libX11
+    libx11
     ncurses
     zlib
     bash
   ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
-    "--x-libraries=${libX11.out}/lib"
+    "--x-includes=${libx11.dev}/include"
+    "--x-libraries=${libx11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
   ];
 
@@ -75,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace-fail /usr/share "$out/share"
   '';
 
-  # Fix mono DLLMap so it can find libX11 to run winforms apps
+  # Fix mono DLLMap so it can find libx11 to run winforms apps
   # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
   # https://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
-    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
+    sed -i -e "s@libX11.so.6@${libx11.out}/lib/libX11.so.6@g"
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit enableParallelBuilding;
 
-  meta = with lib; {
+  meta = {
     # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129.
     # Cross build is broken due to attempt to execute cert-sync built for the host.
     broken =
@@ -115,18 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
       else
         "https://gitlab.winehq.org/mono/mono";
     description = "Cross platform, open source .NET development framework";
-    platforms = with platforms; darwin ++ linux;
+    platforms = with lib.platforms; darwin ++ linux;
     knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "6.14.0") [
       ''
         mono was archived upstream, see https://www.mono-project.com/
         While WineHQ has taken over development, consider using 6.14.0 or newer.
       ''
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thoughtpolice
       obadz
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       # runtime, compilers, tools and most class libraries licensed
       mit
       # runtime includes some code licensed

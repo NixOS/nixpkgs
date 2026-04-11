@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   aiodns,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   version = "0.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
@@ -37,6 +34,8 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
+
+  pythonRelaxDeps = [ "pycountry" ];
 
   build-system = [
     poetry-core
@@ -65,11 +64,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/frenck/python-radios/releases/tag/v${version}";
     description = "Asynchronous Python client for the Radio Browser API";
     homepage = "https://github.com/frenck/python-radios";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

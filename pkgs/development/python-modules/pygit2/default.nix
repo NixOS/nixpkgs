@@ -10,20 +10,17 @@
   libgit2,
   pycparser,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.18.2";
+  version = "1.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7Kh+BmLJZXFbfxNJHV6FjfLAkINB3um94rwDJo5GD1U=";
+    hash = "sha256-MWX3hKrlajCaJ9jurnkj1T2i6PYJQwjH9bQo3uySXPk=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -53,15 +50,15 @@ buildPythonPackage rec {
 
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   pythonImportsCheck = [ "pygit2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of Python bindings to the libgit2 shared library";
     homepage = "https://github.com/libgit2/pygit2";
     changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
 }

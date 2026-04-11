@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -13,7 +12,7 @@
   vulkan-headers,
   vulkan-loader,
   libpng,
-  libSM,
+  libsm,
   ffmpeg,
   libevdev,
   libusb1,
@@ -22,21 +21,19 @@
   wolfssl,
   python3,
   pugixml,
-  flatbuffers,
-  llvm_18,
+  protobuf_33,
+  llvm,
   cubeb,
   opencv,
   enableDiscordRpc ? false,
   faudioSupport ? true,
   faudio,
-  SDL2,
   sdl3,
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
   miniupnpc,
   rtmidi,
-  asmjit,
   glslang,
   zstd,
   hidapi,
@@ -53,21 +50,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.38";
+  version = "0.0.39-unstable-2026-02-20";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HaguOzCN0/FvAb0b4RZWnw9yvVum14wEj26WnqOnSag=";
-    fetchSubmodules = true;
+    rev = "6bfb33279f6989f3ff9ea2dc40ef45d6aeb57ef8";
+    postCheckout = ''
+      cd $out/3rdparty
+      git submodule update --init \
+        fusion/fusion asmjit/asmjit yaml-cpp/yaml-cpp SoundTouch/soundtouch stblib/stb \
+        feralinteractive/feralinteractive
+    '';
+    hash = "sha256-Cu4Zaze0FZ00sRvPtUzUkOiX5ZAHWTtmWa536gNOTNY=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "nixpkgs"
+    #define RPCS3_GIT_VERSION "nixpkgs-${lib.sources.shortRev finalAttrs.src.rev}"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -84,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
     (lib.cmakeBool "USE_SYSTEM_OPENAL" true)
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
-    (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
+    (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
@@ -128,16 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
     wolfssl
     python3
     pugixml
-    SDL2 # Still needed by FAudio's CMake
     sdl3
-    flatbuffers
-    llvm_18
-    libSM
+    protobuf_33
+    llvm
+    libsm
     opencv.cxxdev
     cubeb
     miniupnpc
     rtmidi
-    asmjit
     glslang
     zstd
     hidapi
@@ -147,14 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals waylandSupport [
     wayland
     qtwayland
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-build-qt-6.10.patch";
-      url = "https://github.com/RPCS3/rpcs3/commit/038ee090b731bf63917371a3586c2f7d7cf4e585.patch";
-      hash = "sha256-jTIxsheG9b9zp0JEeWQ73BunAXmEIg5tj4SrWBfdHy8=";
-    })
   ];
 
   doInstallCheck = true;
@@ -170,13 +162,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -D ${./99-dualsense-controllers.rules} $out/etc/udev/rules.d/99-dualsense-controllers.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ilian
     ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

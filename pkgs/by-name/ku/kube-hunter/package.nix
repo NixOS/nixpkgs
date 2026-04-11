@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kube-hunter";
   version = "0.6.8";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "kube-hunter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
@@ -51,12 +51,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_K8sCveHunter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to search issues in Kubernetes clusters";
     homepage = "https://github.com/aquasecurity/kube-hunter";
-    changelog = "https://github.com/aquasecurity/kube-hunter/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/aquasecurity/kube-hunter/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kube-hunter";
   };
-}
+})

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spigot";
-  version = "20220606.eb585f8";
+  version = "20240909.f158e08";
 
   src = fetchurl {
     url = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/spigot-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JyNNZo/HUPWv5rYtlNYp8Hl0C7i3yxEyKm+77ysN7Ao=";
+    hash = "sha256-8re4ubDgsTjc/WrE60b6eXBrGEJSKJTEXd/XMdJ79nM=";
   };
 
   nativeBuildInputs = [

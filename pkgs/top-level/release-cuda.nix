@@ -2,10 +2,7 @@
     Test CUDA packages.
 
     This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
-
-    Cf. https://github.com/nix-community/infra/pull/1335
+    because it requires unfree software.
 
     Test for example like this:
 
@@ -94,7 +91,6 @@ let
       firefox-devedition-unwrapped = linux;
       freecad = linux;
       gimp = linux;
-      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
       jellyfin-ffmpeg = linux;

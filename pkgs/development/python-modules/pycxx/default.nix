@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Set of classes to help create extensions of Python in the C++ language";
     homepage = "https://sourceforge.net/projects/cxx/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
   };
 }

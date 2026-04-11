@@ -14,21 +14,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.32.0";
+  version = "2.34.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_pubsub";
     inherit version;
-    hash = "sha256-PG24WT6ncsoGX7Iu5Pre5DhlLrW0z0x4s/28Ah9FKDY=";
+    hash = "sha256-JfmMO6FqaYcfnruteuzj/mPIr+e6OSqtIJS+cw1UWXY=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +42,8 @@ buildPythonPackage rec {
     protobuf
   ]
   ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   optional-dependencies = {
     libcst = [ libcst ];
@@ -68,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.pubsub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://github.com/googleapis/python-pubsub";
     changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "fixup_pubsub_v1_keywords.py";
   };

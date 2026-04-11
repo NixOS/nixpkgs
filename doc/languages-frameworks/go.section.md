@@ -84,7 +84,7 @@ nix-prefetch -E "{ sha256 }: ((import ./. { }).my-package.overrideAttrs { vendor
       version = "0.4.0";
       src = fetchFromGitHub {
         inherit (previousAttrs.src) owner repo;
-        rev = "v${finalAttrs.version}";
+        tag = "v${finalAttrs.version}";
         hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
       };
       vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";
@@ -101,6 +101,7 @@ If `true`, the intermediate fetcher downloads dependencies from the
 
 This is useful if your code depends on C code and `go mod tidy` does not include the needed sources to build or
 if any dependency has case-insensitive conflicts which will produce platform-dependent `vendorHash` checksums.
+It may also be needed if the module targets language version 1.16 or earlier, since vendoring compiles all dependencies against language version 1.16 in this case.
 
 Defaults to `false`.
 

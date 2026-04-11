@@ -31,7 +31,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "8.4.2",
+  version ? "8.6.0",
 }:
 
 let
@@ -45,7 +45,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-5oNYKHPaDkpunl6oC104Rh1wAEMWfLfvCFdGHlXZn4o=";
+    hash = "sha256-W22eB0IzHNZe3xaF8AZOkUTDCic3NXkypdqSDY61Su0=";
     stripRoot = false;
   };
 
@@ -77,6 +77,7 @@ let
     #        ],
     #     )
     [
+      bash # see https://github.com/NixOS/nixpkgs/pull/489519
       coreutils
       diffutils
       file
@@ -87,6 +88,7 @@ let
       gnused
       gnutar
       gzip
+      python3 # see https://github.com/NixOS/nixpkgs/pull/489519
       unzip
       which
       zip
@@ -206,6 +208,11 @@ stdenv.mkDerivation rec {
       usrBinEnv = "${coreutils}/bin/env";
     })
 
+    # Bazel tries to run "/bin/true" to test if linux-sandbox works.
+    (replaceVars ./patches/linux_sandbox.patch {
+      binTrue = "${coreutils}/bin/true";
+    })
+
     # Provide default JRE for Bazel process by setting --server_javabase=
     # in a new default system bazelrc file
     (replaceVars ./patches/bazel_rc.patch {
@@ -215,14 +222,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

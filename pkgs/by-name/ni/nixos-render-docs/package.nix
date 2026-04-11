@@ -21,7 +21,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "nixos-render-docs";
   version = "0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = lib.cleanSourceWith {
     filter =
@@ -80,10 +80,10 @@ python.pkgs.buildPythonApplication rec {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Renderer for NixOS manual and option docs";
     mainProgram = "nixos-render-docs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

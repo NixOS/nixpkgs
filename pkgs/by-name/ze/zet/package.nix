@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/yarrow/zet/pull/7
   checkType = "debug";
 
+  env.RUSTFLAGS = "-Amismatched_lifetime_syntaxes";
+
   meta = {
     description = "CLI utility to find the union, intersection, set difference, etc of files considered as sets of lines";
     mainProgram = "zet";

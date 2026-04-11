@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   flit-core,
   numpy,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pylibjpeg";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibjpeg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python framework for decoding JPEG images, with a focus on supporting Pydicom";
     homepage = "https://github.com/pydicom/pylibjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -1,40 +1,68 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  numpy,
+  fetchFromGitHub,
+  nix-update-script,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  numpy,
+  pyside6,
   pyyaml,
-  sentencepiece,
+  requests,
   tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "0.17.1";
-  format = "pyproject";
+  version = "8545";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Nq1xqtkAo+dfyU6+lupgKfA6TkS+difvetPQPox7y1M=";
+  src = fetchFromGitHub {
+    owner = "ggml-org";
+    repo = "llama.cpp";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-sb0fSpzwyl2Ws270if/4Ts75J3E6mGEJ/N5GDjzgg6A=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/gguf-py";
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     numpy
-    poetry-core
     pyyaml
-    sentencepiece
+    requests
     tqdm
   ];
 
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "gguf" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
+
+  meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mitchmindtree ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mitchmindtree
+      sarahec
+    ];
   };
-}
+})

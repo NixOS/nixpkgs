@@ -6,11 +6,11 @@
 
 let
   pname = "fluent-reader";
-  version = "1.1.4";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/yang991178/fluent-reader/releases/download/v${version}/Fluent.Reader.${version}.AppImage";
-    hash = "sha256-2oLV9SWBNt0j1WAS6j4dobsUEpptjTubpr8pdOcIOY4=";
+    hash = "sha256-v9sj0xy6YalPZ49z8E6bczgzu9XmBuA1JK7/leKnvV4=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -28,12 +28,12 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern desktop RSS reader built with Electron, React, and Fluent UI";
     mainProgram = "fluent-reader";
     homepage = "https://hyliu.me/fluent-reader";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fzf-git-sh";
-  version = "0-unstable-2025-10-21";
+  version = "0-unstable-2026-03-19";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf-git.sh";
-    rev = "c823ffd521cb4a3a65a5cf87f1b1104ef651c3de";
-    hash = "sha256-G5b6s3p4Lrh2YQyBKE3Lzh78USR1tKlR/YqTMr3mXsI=";
+    rev = "0f0488331a060cf45aaecb6705a2cf394fb20293";
+    hash = "sha256-fV4RtYL+ksbl5SMVZMoRyo6YUWP/KFvFPgfIbecIOO4=";
   };
 
   dontBuild = true;
@@ -73,11 +73,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/junegunn/fzf-git.sh";
     description = "Bash, zsh and fish key bindings for Git objects, powered by fzf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ deejayem ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ deejayem ];
+    platforms = lib.platforms.all;
   };
 }

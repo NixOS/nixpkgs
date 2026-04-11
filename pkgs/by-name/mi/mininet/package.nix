@@ -39,7 +39,7 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mininet";
   version = "2.3.1b4";
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mininet";
     repo = "mininet";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Z7Vbfu0EJ4+rCpckXrt3hgxeB9N2nnyPIXgPBnpV4uw=";
   };
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$py $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$py ''${pythonPath[*]}"
     wrapProgram "$out/bin/mnexec" \
       --prefix PATH : "${generatedPath}"
     wrapProgram "$out/bin/mn" \
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Emulator for rapid prototyping of Software Defined Networks";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/mininet/mininet";
-    maintainers = with maintainers; [ teto ];
+    maintainers = with lib.maintainers; [ teto ];
     mainProgram = "mnexec";
   };
-}
+})

@@ -11,4 +11,4 @@ index 2755dc99..4026b96e 100644
  # addopts = -n auto --junitxml=docs/reports/tests/pytest.xml --html=docs/reports/tests/tests.html
 -asyncio_default_fixture_loop_scope = fixture
 \ No newline at end of file
-+asyncio_default_fixture_loop_scope = fixture
++asyncio_default_fixture_loop_scope = function

@@ -7,22 +7,19 @@
   pandas,
   pyarrow,
   pytest8_3CheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.4.3";
+  version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     tag = "v${version}";
-    hash = "sha256-AyO/GwtExMWi4mB3OMtYPFvAVS/ylcBXGiGXgaScyCA=";
+    hash = "sha256-cF40Y2J944AojOXKoTzQ/ybTFY4GP5G8KWY6+NWyRT8=";
   };
 
   build-system = [ setuptools ];
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "db_dtypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
     homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
     changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

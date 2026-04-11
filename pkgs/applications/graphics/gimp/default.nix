@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   babl,
+  bash-completion,
   cfitsio,
   gegl,
   gtk3,
@@ -41,21 +42,24 @@
   python3,
   libexif,
   gettext,
+  glibcLocales,
   wrapGAppsHook3,
   libxslt,
   gobject-introspection,
   vala,
   gi-docgen,
   perl,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
-  xorg,
+  libxpm,
+  libxmu,
   glib-networking,
   json-glib,
   libmypaint,
   llvmPackages,
   gexiv2,
   harfbuzz,
+  makeFontsConf,
   mypaint-brushes1,
   libwebp,
   libheif,
@@ -68,6 +72,7 @@
   alsa-lib,
   desktopToDarwinBundle,
   fetchpatch,
+  qoi,
 }:
 
 let
@@ -79,17 +84,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.4";
+  version = "3.0.8";
 
   outputs = [
     "out"
     "dev"
     "devdoc"
+    "man"
   ];
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
+    hash = "sha256-/rSYrMAbJoJ8/x/5Wqj7gs3Wpg16v3c8/NGavq/KM4Y=";
   };
 
   patches = [
@@ -113,11 +119,29 @@ stdenv.mkDerivation (finalAttrs: {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
 
-    # Fix a crash that occurs when trying to pick a color for text outline
-    # TODO: remove after GIMP 3.2 is released, per https://gitlab.gnome.org/GNOME/gimp/-/issues/14047#note_2491655
+    # Allow calling tests from other directories.
+    # Required for the next patch.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/1685c86af5d6253151d0056a9677ba469ea10164.diff";
-      hash = "sha256-Rb3ANXWki21thByEIWkBgWEml4x9Qq2HAIB9ho1bygw=";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/fd58ab3bee7a79cb0a7870c6858f3b64c84a7917.patch";
+      hash = "sha256-fpysKWwt5rilqp7ukdWx7kutkDquL/6YhYjR1zQfu/Q=";
+    })
+
+    # Do not go through ui for save-and-export test.
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/608ad0a528b5b31101c021d96aeb95558d207497.patch";
+      hash = "sha256-0oA5u+uAT0l3WT90fy0RGOR8xy/fGIHevBb69oUzfGs=";
+      excludes = [
+        # Other changes would prevent deletion, removing it from build is sufficient.
+        "app/tests/test-save-and-export.c"
+      ];
+    })
+
+    # Disable broken UI tests.
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/c34fe3e94f1019eafcb38edf1c07bff12a57431e.patch";
+      hash = "sha256-yVauEpoGEOIfCXnGnWMGWjXbIDizDhJ3hipeCy3XSBM=";
     })
   ];
 
@@ -126,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
+    glibcLocales
     wrapGAppsHook3
     libxslt # for xsltproc
     gobject-introspection
@@ -147,8 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    appstream-glib # for library
+    appstream # for library
     babl
+    bash-completion
     cfitsio
     gegl
     gtk3
@@ -186,11 +212,12 @@ stdenv.mkDerivation (finalAttrs: {
     libheif
     python
     libexif
-    xorg.libXpm
-    xorg.libXmu
+    libxpm
+    libxmu
     glib-networking
     libmypaint
     mypaint-brushes1
+    qoi
 
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
     adwaita-icon-theme
@@ -246,6 +273,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+
+    # Silence fontconfig warnings about missing config during tests
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ ];
+    };
   };
 
   postPatch = ''
@@ -256,6 +288,16 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
       plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+
+    # Use Python from environment not from Meson.
+    # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2607
+    substituteInPlace meson.build \
+      --replace-fail "import('python').find_installation()" "import('python').find_installation('python3')"
+
+    # Broken test
+    # https://github.com/NixOS/nixpkgs/pull/484971#issuecomment-3846759517
+    substituteInPlace app/tests/meson.build \
+      --replace-fail "{${"\n"}    'name': 'save-and-export',${"\n"}  }${"\n"}" ""
   '';
 
   preBuild =
@@ -322,12 +364,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with maintainers; [ jtojnar ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gimp";
   };
 })

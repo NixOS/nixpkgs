@@ -12,6 +12,7 @@
 
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
+  "system-monitor@axet.github.com" = "system-monitor-3";
 
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
@@ -26,14 +27,26 @@
   "mousefollowsfocus@matthes.biz" = "mouse-follows-focus";
   "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
 
-  "power-profile-indicator@laux.wtf" = "power-profile-indicator";
-  "power-profile@fthx" = "power-profile-indicator-2";
-
-  "fullscreen-to-empty-workspace@aiono.dev" = "fullscreen-to-empty-workspace";
-  "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
-
   "eur-usd-gshell@vezza.github.com" = "eur-usd";
   "usd-mxn-gshell@kinduff.github.com" = "usd-mxn";
+
+  "lockkeys@febueldo.test" = "lock-keys";
+  "lockkeys@vaina.lt" = "lock-keys-2";
+
+  "memento-mori@paveloom" = "memento-mori";
+  "memento-mori@vedeshpadal" = "memento-mori-2";
+
+  "netspeed@alynx.one" = "net-speed";
+  "netspeed@shivamksharma.github.io" = "net-speed-2";
+
+  "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
+  "nightlighttoggle@sam" = "night-light-toggle-2";
+
+  "activitywatch-status@cweiske.de" = "activitywatch-status";
+  "aw-status@brayo.dev" = "aw-status";
+
+  "autoselectheadset@josephlbarnett.github.com" = "auto-select-headset";
+  "autoselectheadset@Anduril97.github.com" = "auto-select-headset-2";
 
   # ############################################################################
   # These extensions no longer collide. We preserve the old attribute name for backwards compatibility.
@@ -41,6 +54,8 @@
   "true-color-window-invert@lynet101" = "true-color-window-invert";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
   "openweather-extension@penguin-teal.github.io" = "openweather-refined";
+  "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
+  "power-profile@fthx" = "power-profile-indicator-2";
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

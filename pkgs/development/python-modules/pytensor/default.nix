@@ -15,13 +15,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -31,19 +31,19 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.35.1";
+  version = "2.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-5+yMZysK69g+3uYrP12WK3ngpAYn8XrHoVjLqjvbobg=";
+    hash = "sha256-BKyaApIijxuJ0gNNXqahDOMW3rpF6+qgoCEpWj6Uz5g=";
   };
 
   build-system = [
@@ -58,8 +58,10 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
+    setuptools
   ];
 
   nativeCheckInputs = [
@@ -82,11 +84,25 @@ buildPythonPackage rec {
     rm -rf pytensor
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # TypeError: jax_funcified_fgraph() takes 2 positional arguments but 3 were given
+    "test_jax_Reshape_shape_graph_input"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
+
+    # Crashes with jax>=0.9.0
+    # in .../jax/_src/compiler.py", line 362 in backend_compile_and_load
+    "test_higher_order_derivatives"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error
     # tests.unittest_tools.WrongValue: WrongValue
     "test_op_sd"
     "test_op_ss"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
@@ -159,7 +175,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -173,11 +188,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
-}
+})

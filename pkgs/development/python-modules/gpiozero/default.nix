@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "gpiozero";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gpiozero";
@@ -61,12 +58,12 @@ buildPythonPackage rec {
     "test_spi_hardware_write"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
     changelog = "https://github.com/gpiozero/gpiozero/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

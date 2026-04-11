@@ -3,29 +3,30 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  orjson,
   setuptools,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiotractive";
-  version = "0.6.0";
+  version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zhulik";
     repo = "aiotractive";
-    tag = "v${version}";
-    hash = "sha256-QwwW/UxRgd4rco80SqQUGt0ArDNT9MXa/U/W2/dHZT0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tr8USF7GF9CMOcjy62e+oTu4k/1jIAOsZmWTFWEzJvk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "orjson" ];
+
+  dependencies = [
     aiohttp
+    orjson
     yarl
   ];
 
@@ -34,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiotractive" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/zhulik/aiotractive/releases/tag/v${version}";
+  meta = {
     description = "Python client for the Tractive REST API";
     homepage = "https://github.com/zhulik/aiotractive";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/zhulik/aiotractive/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ps_mem";
   version = "3.14";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = "ps_mem";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };
 
@@ -28,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "ps_mem";
   };
-}
+})

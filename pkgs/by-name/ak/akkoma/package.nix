@@ -1,6 +1,6 @@
 {
   lib,
-  beamPackages,
+  beam_minimal,
   fetchFromGitea,
   cmake,
   file,
@@ -8,16 +8,29 @@
   nix-update-script,
 }:
 
+let
+  beamPackages = beam_minimal.packages.erlang_27.extend (
+    self: super: {
+      elixir = self.elixir_1_17;
+      rebar3 = self.rebar3WithPlugins {
+        plugins = with self; [ pc ];
+      };
+    }
+  );
+in
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.15.2";
+  version = "3.18.1";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     tag = "v${version}";
-    hash = "sha256-GW86OyO/XPIrCS+cPKQ8LG8PdhhfA2rNH1FXFiuL6vM=";
+    hash = "sha256-4HIIgTNcNAMCpHyT6zBcmxXeFbMrt38Z7PtT9Onvz+U=";
+
+    # upstream repository archive fetching is broken
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [ cmake ];
@@ -34,9 +47,9 @@ beamPackages.mixRelease rec {
   ];
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
+    pname = "mix-deps-akkoma";
     inherit src version;
-    hash = "sha256-ygRj0s9J2/nBXR5s9CE7eMRBxsRhKlV/IZrkwPpco14=";
+    hash = "sha256-igXEX6I+7G7tNCLjEf0VBOaii0r7jXCdF6x78LMcUv0=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \

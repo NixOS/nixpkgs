@@ -13,7 +13,6 @@
   boto3,
   dateparser,
   dnspython,
-  elastic-transport,
   elasticsearch-dsl,
   elasticsearch,
   expiringdict,
@@ -32,8 +31,10 @@
   opensearch-py,
   publicsuffixlist,
   pygelf,
+  pyyaml,
   requests,
   tqdm,
+  urllib3,
   xmltodict,
 
   # test
@@ -48,15 +49,20 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "6.18.7";
+  version = "9.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = version;
-    hash = "sha256-AjRYd3uN76Zl7IEXqFK+qssAvuS+TbT+mZL+pPlxDwc=";
+    hash = "sha256-iJkXtSkHImVOWvuZuWOsUTXPtXNXYbp5umjpPFmuQvo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires_python = ">=3.10,<3.15"' ""
+  '';
 
   build-system = [
     hatchling
@@ -73,7 +79,6 @@ buildPythonPackage rec {
     boto3
     dateparser
     dnspython
-    elastic-transport
     elasticsearch
     elasticsearch-dsl
     expiringdict
@@ -91,8 +96,10 @@ buildPythonPackage rec {
     opensearch-py
     publicsuffixlist
     pygelf
+    pyyaml
     requests
     tqdm
+    urllib3
     xmltodict
   ];
 

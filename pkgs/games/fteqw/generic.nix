@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   libopus,
-  xorg,
+  libxrandr,
   pname,
   releaseFile ? pname,
   buildFlags,
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     substituteInPlace ./engine/Makefile \
       --replace "I/usr/include/opus" "I${libopus.dev}/include/opus"
     substituteInPlace ./engine/gl/gl_vidlinuxglx.c \
-      --replace 'Sys_LoadLibrary("libXrandr"' 'Sys_LoadLibrary("${xorg.libXrandr}/lib/libXrandr.so"'
+      --replace 'Sys_LoadLibrary("libXrandr"' 'Sys_LoadLibrary("${libxrandr}/lib/libXrandr.so"'
   '';
 
   installPhase = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit description;
     homepage = "https://fteqw.org";
     longDescription = ''
@@ -63,8 +63,8 @@ stdenv.mkDerivation {
       limits, vulkan and OpenGL renderers, a dedicated
       server, and fteqcc, for easier QuakeC development
     '';
-    maintainers = with maintainers; [ necrophcodr ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ necrophcodr ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

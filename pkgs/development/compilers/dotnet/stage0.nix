@@ -18,7 +18,6 @@
   releaseManifestFile,
   tarballHash,
   depsFile,
-  fallbackTargetPackages,
   bootstrapSdk,
 }:
 
@@ -44,6 +43,7 @@ let
         tarballHash
         bootstrapSdk
         ;
+      hasRuntime = true;
     }).overrideAttrs
       (old: rec {
         prebuiltPackages = mkNugetDeps {

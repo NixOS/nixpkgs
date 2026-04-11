@@ -7,14 +7,12 @@
 # Tested in lib/tests/filesystem.sh
 let
   inherit (builtins)
-    readDir
     pathExists
     toString
     ;
 
   inherit (lib.filesystem)
     pathIsDirectory
-    pathIsRegularFile
     pathType
     packagesFromDirectoryRecursive
     ;
@@ -25,10 +23,22 @@ let
 in
 
 {
+  inherit (builtins)
+    baseNameOf
+    dirOf
+    isPath
+    ;
+
+  inherit (builtins)
+    readDir
+    readFileType
+    hashFile
+    ;
 
   /**
     The type of a path. The path needs to exist and be accessible.
-    The result is either "directory" for a directory, "regular" for a regular file, "symlink" for a symlink, or "unknown" for anything else.
+    The result is either `"directory"` for a directory, `"regular"` for a
+    regular file, `"symlink"` for a symlink, or `"unknown"` for anything else.
 
     # Inputs
 
@@ -140,7 +150,7 @@ in
     # Type
 
     ```
-    Path -> Map String Path
+    haskellPathsInDir :: Path -> { [String] :: Path }
     ```
   */
   haskellPathsInDir =
@@ -160,9 +170,9 @@ in
     in
     builtins.listToAttrs cabal-subdirs;
   /**
-    Find the first directory containing a file matching 'pattern'
-    upward from a given 'file'.
-    Returns 'null' if no directories contain a file matching 'pattern'.
+    Find the first directory containing a file matching `pattern`
+    upward from a given `file`.
+    Returns `null` if no directories contain a file matching `pattern`.
 
     # Inputs
 
@@ -177,7 +187,7 @@ in
     # Type
 
     ```
-    RegExp -> Path -> Nullable { path : Path; matches : [ MatchResults ]; }
+    locateDominatingFile :: RegExp -> Path -> ({ path :: Path; matches :: [MatchResults]; } | Null)
     ```
   */
   locateDominatingFile =
@@ -217,7 +227,7 @@ in
     # Type
 
     ```
-    Path -> [ Path ]
+    listFilesRecursive :: Path -> [Path]
     ```
   */
   listFilesRecursive =
@@ -290,16 +300,6 @@ in
       - Other files are ignored, including symbolic links to directories and to regular `.nix`
         files; this is because nixlang code cannot distinguish the type of a link's target.
 
-    # Type
-
-    ```
-    packagesFromDirectoryRecursive :: {
-      callPackage :: Path -> {} -> a,
-      newScope? :: AttrSet -> scope,
-      directory :: Path,
-    } -> AttrSet
-    ```
-
     # Inputs
 
     `callPackage`
@@ -313,6 +313,16 @@ in
 
     `directory`
     : The directory to read package files from.
+
+    # Type
+
+    ```
+    packagesFromDirectoryRecursive :: {
+      callPackage :: Path -> AttrSet -> Any;
+      newScope? :: AttrSet -> Scope;
+      directory :: Path;
+    } -> AttrSet
+    ```
 
     # Examples
     :::{.example}
@@ -438,12 +448,6 @@ in
   /**
     Append `/default.nix` if the passed path is a directory.
 
-    # Type
-
-    ```
-    resolveDefaultNix :: (Path | String) -> (Path | String)
-    ```
-
     # Inputs
 
     A single argument which can be a [path](https://nix.dev/manual/nix/stable/language/types#type-path) value or a string containing an absolute path.
@@ -453,6 +457,12 @@ in
     If the input refers to a directory that exists, the output is that same path with `/default.nix` appended.
     Furthermore, if the input is a string that ends with `/`, `default.nix` is appended to it.
     Otherwise, the input is returned unchanged.
+
+    # Type
+
+    ```
+    resolveDefaultNix :: (Path | String) -> (Path | String)
+    ```
 
     # Examples
     :::{.example}

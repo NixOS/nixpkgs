@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shhmsg";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "https://shh.thathost.com/pub-unix/files/shhmsg-${version}.tar.gz";
+    url = "https://shh.thathost.com/pub-unix/files/shhmsg-${finalAttrs.version}.tar.gz";
     sha256 = "0ax02fzqpaxr7d30l5xbndy1s5vgg1ag643c7zwiw2wj1czrxil8";
   };
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for displaying messages";
     homepage = "https://shh.thathost.com/pub-unix/";
-    license = licenses.artistic1;
-    platforms = platforms.all;
+    license = lib.licenses.artistic1;
+    platforms = lib.platforms.all;
   };
-}
+})

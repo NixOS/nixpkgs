@@ -14,6 +14,8 @@ in
   options.services.changedetection-io = {
     enable = mkEnableOption "changedetection-io";
 
+    package = lib.mkPackageOption pkgs "changedetection-io" { };
+
     user = mkOption {
       default = "changedetection-io";
       type = types.str;
@@ -151,7 +153,7 @@ in
             ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
             EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
             ExecStart = ''
-              ${pkgs.changedetection-io}/bin/changedetection.py \
+              ${cfg.package}/bin/changedetection.py \
                 -h ${cfg.listenAddress} -p ${toString cfg.port} -d ${cfg.datastorePath}
             '';
             ProtectHome = true;

@@ -7,20 +7,20 @@
 
 let
   pname = "sudachidict";
-  version = "20250515";
+  version = "20260116";
 
   srcs = {
     core = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-core.zip";
-      hash = "sha256-+N6B1eW8ScDJSjMWjSNJlQAEOCNh5Q0lcsAWrY9eRVE=";
+      hash = "sha256-ngu93F5AQjQibIuNzLtVdokvzddhLbz850njAWDGBMk=";
     };
     small = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-small.zip";
-      hash = "sha256-+0pg2wXS1Y/5LGnVvEbtEpws2LqFPv88jCHsV+Oxb5E=";
+      hash = "sha256-+JL1U0YQqdovQxIWEUq7ks1oaSMlI3SgG9sEqGG8YxE=";
     };
     full = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-full.zip";
-      hash = "sha256-jYFZax9LDLX6knGuQDhbhdDU3WGjevVkDFF/XZx2kg0=";
+      hash = "sha256-uZYAxZUfkwQxHV5QbldU4VoHdUyBU4agcl8Yhnqf+sg=";
     };
   };
 in

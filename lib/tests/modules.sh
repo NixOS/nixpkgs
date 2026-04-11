@@ -58,8 +58,19 @@ logFailure() {
 evalConfig() {
     local attr=$1
     shift
+
+    local nix_args=()
+
+    if [ "${ABORT_ON_WARN-0}" = "1" ]; then
+        nix_args+=(--option abort-on-warn true)
+    fi
+
+    if [ "${STRICT_EVAL-0}" = "1" ]; then
+        nix_args+=(--strict)
+    fi
+
     local script="import ./default.nix { modules = [ $* ];}"
-    local-nix-instantiate -E "$script" -A "$attr"
+    local-nix-instantiate "${nix_args[@]}" -E "$script" -A "$attr"
 }
 
 reportFailure() {
@@ -160,6 +171,8 @@ checkConfigError() {
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
+checkConfigError "In module .*test-push-down-non-attrs.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config ./test-push-down-non-attrs.nix
+
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 
 # Check that a module argument is passed, also when a default is available
@@ -200,12 +213,12 @@ checkConfigError '.*A definition for option .bad. is not of type .non-empty .lis
 
 # types.attrTag
 checkConfigOutput '^true$' config.okChecks ./types-attrTag.nix
-checkConfigError 'A definition for option .intStrings\.syntaxError. is not of type .attribute-tagged union' config.intStrings.syntaxError ./types-attrTag.nix
-checkConfigError 'A definition for option .intStrings\.syntaxError2. is not of type .attribute-tagged union' config.intStrings.syntaxError2 ./types-attrTag.nix
-checkConfigError 'A definition for option .intStrings\.syntaxError3. is not of type .attribute-tagged union' config.intStrings.syntaxError3 ./types-attrTag.nix
-checkConfigError 'A definition for option .intStrings\.syntaxError4. is not of type .attribute-tagged union' config.intStrings.syntaxError4 ./types-attrTag.nix
-checkConfigError 'A definition for option .intStrings\.mergeError. is not of type .attribute-tagged union' config.intStrings.mergeError ./types-attrTag.nix
-checkConfigError 'A definition for option .intStrings\.badTagError. is not of type .attribute-tagged union' config.intStrings.badTagError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError. is not of type .attribute-tagged union with choices: left, right' config.intStrings.syntaxError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError2. is not of type .attribute-tagged union with choices: left, right' config.intStrings.syntaxError2 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError3. is not of type .attribute-tagged union with choices: left, right' config.intStrings.syntaxError3 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError4. is not of type .attribute-tagged union with choices: left, right' config.intStrings.syntaxError4 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.mergeError. is not of type .attribute-tagged union with choices: left, right' config.intStrings.mergeError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagError. is not of type .attribute-tagged union with choices: left, right' config.intStrings.badTagError ./types-attrTag.nix
 checkConfigError 'A definition for option .intStrings\.badTagTypeError\.left. is not of type .signed integer.' config.intStrings.badTagTypeError.left ./types-attrTag.nix
 checkConfigError 'A definition for option .nested\.right\.left. is not of type .signed integer.' config.nested.right.left ./types-attrTag.nix
 checkConfigError 'In attrTag, each tag value must be an option, but tag int was a bare type, not wrapped in mkOption.' config.opt.int ./types-attrTag-wrong-decl.nix
@@ -222,6 +235,39 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
+
+# types.externalPath
+checkConfigOutput '".*/foo/bar"' config.externalPath.ok1 ./types.nix
+checkConfigOutput '".*/"' config.externalPath.ok2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad5 ./types.nix
+
+# types.fileset
+checkConfigOutput '^0$' config.filesetCardinal.ok1 ./fileset.nix
+checkConfigOutput '^1$' config.filesetCardinal.ok2 ./fileset.nix
+checkConfigOutput '^1$' config.filesetCardinal.ok3 ./fileset.nix
+checkConfigOutput '^1$' config.filesetCardinal.ok4 ./fileset.nix
+checkConfigOutput '^0$' config.filesetCardinal.ok5 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err1 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err2 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err3 ./fileset.nix
+checkConfigError 'A definition for option .* is not of type .fileset.. Definition values:\n.*' config.filesetCardinal.err4 ./fileset.nix
+
+# types.serializableValueWith
+checkConfigOutput '^null$' config.nullableValue.null ./types.nix
+checkConfigOutput '^true$' config.nullableValue.bool ./types.nix
+checkConfigOutput '^1$' config.nullableValue.int ./types.nix
+checkConfigOutput '^1.1$' config.nullableValue.float ./types.nix
+checkConfigOutput '^"foo"$' config.nullableValue.str ./types.nix
+checkConfigOutput '^".*/store.*"$' config.nullableValue.path ./types.nix
+STRICT_EVAL=1 checkConfigOutput '^\{"foo":1\}$' config.nullableValue.attrs ./types.nix
+STRICT_EVAL=1 checkConfigOutput '^\[\{"bar":\[1\]\}\]$' config.nullableValue.list ./types.nix
+
+checkConfigError 'A definition for option .* is not of type .VAL value.. .*' config.nullableValue.lambda ./types.nix
+checkConfigError 'A definition for option .* is not of type .VAL value.. .*' config.structuredValue.null ./types.nix
 
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
@@ -475,49 +521,49 @@ checkConfigError 'The option .mergedName. in .*\.nix. is already declared in .*\
 # - non-merged types
 # - nestedTypes elemType
 # attrsWith
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.attrsWith.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedAttrsWith.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.attrsWith.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedAttrsWith.type.functor.wrapped ./deprecated-wrapped.nix
 
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.attrsWith.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedAttrsWith.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.attrsWith.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedAttrsWith.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 # listOf
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.listOf.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedListOf.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.listOf.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedListOf.type.functor.wrapped ./deprecated-wrapped.nix
 
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.listOf.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedListOf.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.listOf.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedListOf.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 # unique / uniq
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.unique.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedUnique.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.unique.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedUnique.type.functor.wrapped ./deprecated-wrapped.nix
 
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.unique.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedUnique.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.unique.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedUnique.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 # nullOr
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.functor.wrapped ./deprecated-wrapped.nix
 
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 # functionTo
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.functor.wrapped ./deprecated-wrapped.nix
 
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
 
 # coercedTo
 # Note: test 'nestedTypes.finalType' and 'nestedTypes.coercedType'
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.nestedTypes.finalType.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.nestedTypes.coercedType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.nestedTypes.finalType.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.nestedTypes.coercedType.functor.wrapped ./deprecated-wrapped.nix
 # either
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.functor.wrapped ./deprecated-wrapped.nix
 
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.nestedTypes.left.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.nestedTypes.right.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.nestedTypes.left.functor.wrapped ./deprecated-wrapped.nix
-NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.nestedTypes.right.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.nestedTypes.left.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.nestedTypes.right.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.nestedTypes.left.functor.wrapped ./deprecated-wrapped.nix
+ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.nestedTypes.right.functor.wrapped ./deprecated-wrapped.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
@@ -555,24 +601,24 @@ checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
 
 # Regression of either, due to freeform not beeing checked previously
 checkConfigOutput '^"foo"$' config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
 checkConfigOutput '^"foo"$' config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
 checkConfigOutput '^"foo"$' config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
 checkConfigOutput '^"foo"$' config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong.nix
 
 checkConfigOutput '^42$' config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.either.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
 checkConfigOutput '^42$' config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.eitherBehindNullor.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
 checkConfigOutput '^42$' config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.oneOf.int ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
 checkConfigOutput '^42$' config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
-NIX_ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
+ABORT_ON_WARN=1 checkConfigError "One or more definitions did not pass the type-check of the \'either\' type" config.number.str ./freeform-deprecated-malicous.nix ./freeform-deprecated-malicous-wrong2.nix
 # Value OK: Fail if a warning is emitted
-NIX_ABORT_ON_WARN=1 checkConfigOutput "^42$" config.number.int ./freeform-attrsof-either.nix
+ABORT_ON_WARN=1 checkConfigOutput "^42$" config.number.int ./freeform-attrsof-either.nix
 
 
 ## types.anything
@@ -630,6 +676,17 @@ checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
 
+## defaults
+checkConfigOutput "\[\]" config.list ./defaults.nix
+checkConfigOutput "{}" config.attrs ./defaults.nix
+checkConfigOutput "{}" config.attrsOf ./defaults.nix
+checkConfigOutput "null" config.null ./defaults.nix
+checkConfigOutput "{}" config.submodule ./defaults.nix
+checkConfigOutput "\[\]" config.unique ./defaults.nix
+checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
+# These types don't have empty values
+checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
+
 # types.unique
 #   requires a single definition
 checkConfigError 'The option .examples\.merged. is defined multiple times while it.s expected to be unique' config.examples.merged.a ./types-unique.nix
@@ -659,6 +716,10 @@ checkConfigError 'In module .*/options-type-error-configuration.nix: expected an
 
 # Check that that merging of option collisions doesn't depend on type being set
 checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
+
+# types.optionDeclaration
+checkConfigOutput '^10$' config.anOption ./option.nix
+checkConfigError 'A definition for option .aBadOptionDef. is not of type .option declaration.' config.aBadOptionDef ./option.nix
 
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
@@ -825,6 +886,14 @@ checkConfigError 'Please use.*lib.types.addCheck.*instead' config.adhocFail.foo 
 checkConfigError 'A definition for option .* is not of type .*' config.addCheckFail.bar.baz ./v2-check-coherence.nix
 checkConfigOutput '^true$' config.result ./v2-check-coherence.nix
 
+
+# Option name suggestions
+checkConfigError 'Did you mean .set\.enable.\?' config.set ./error-typo-nested.nix
+checkConfigError 'Did you mean .set.\?' config ./error-typo-outside-with-nested.nix
+checkConfigError 'Did you mean .bar., .baz. or .foo.\?' config ./error-typo-multiple-suggestions.nix
+checkConfigError 'Did you mean .enable., .ebe. or .enabled.\?' config ./error-typo-large-attrset.nix
+checkConfigError 'Did you mean .services\.myservice\.port. or .services\.myservice\.enable.\?' config.services.myservice ./error-typo-submodule.nix
+checkConfigError 'Did you mean .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificate. or .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificateKey.\?' config.services.nginx.virtualHosts.\"example.com\" ./error-typo-deeply-nested.nix
 
 cat <<EOF
 ====== module tests ======

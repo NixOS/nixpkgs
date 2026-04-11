@@ -8,7 +8,7 @@
   icoutils,
   replaceVars,
   xsel,
-  xorg,
+  xprop,
   xdotool,
   coreutils,
   unixtools,
@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
-  version = "2.59";
+  version = "2.60";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-esJxGCGDb8AZi28Z7NeHMYyL8GWFpKOusua9UxlgSns=";
+    hash = "sha256-AraAdneAkLTS1wZ7pWC0Mm51m50s2hCy6wN74nlUtxo=";
   };
 
   sourceRoot = ".";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (replaceVars ./fix-paths.patch {
       xsel = "${xsel}/bin/xsel";
-      xprop = "${xorg.xprop}/bin/xprop";
+      xprop = "${xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";
       uname = "${coreutils}/bin/uname";
       whereis = "${unixtools.whereis}/bin/whereis";

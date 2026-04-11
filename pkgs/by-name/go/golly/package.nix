@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   python3,
   zlib,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   SDL2,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -21,17 +21,20 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     python3
     zlib
     libGLU
     libGL
-    libX11
+    libx11
     SDL2
   ];
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: [ ps.setuptools ]))
+    (python3.withPackages (ps: [
+      ps.setuptools
+      ps.distutils
+    ]))
     wrapGAppsHook3
   ];
 
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CXX=${stdenv.cc.targetPrefix}c++"
     "CXXC=${stdenv.cc.targetPrefix}c++"
     "LD=${stdenv.cc.targetPrefix}c++"
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   installPhase = ''

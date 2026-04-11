@@ -7,14 +7,14 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snappy";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-bMZD8EI9dvDGupfos4hi/0ShBkrJlI5Np9FxE6FfrNE=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     cat <<EOF > $dev/lib/pkgconfig/snappy.pc
       Name: snappy
       Description: Fast compressor/decompressor library.
-      Version: ${version}
+      Version: ${finalAttrs.version}
       Libs: -L$out/lib -lsnappy
       Cflags: -I$dev/include
     EOF
@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
   # requires gbenchmark and gtest but it also installs them out $dev
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://google.github.io/snappy/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

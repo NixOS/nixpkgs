@@ -4,30 +4,30 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awsbck";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
-    rev = "v${version}";
-    hash = "sha256-IFdhfBri1k5u7NfC1HTSegKCtRDK2fz+WkjwHOtp1qk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DZ2k0fwEyfeP24maTuxG2vmQaZuQ4LJo0KaKFTUDSYM=";
   };
 
-  cargoHash = "sha256-9RKsnGjbP0iQsC2iCq6LTleILHvX0powQu15oopE2XY=";
+  cargoHash = "sha256-wydSzfb8GAJYJPNtSyYBUHtN3+9jsGINSex2F3ILQKI=";
 
   # tests run in CI on the source repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Backup a folder to AWS S3, once or periodically";
     homepage = "https://github.com/beeb/awsbck";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ beeb ];
+    maintainers = with lib.maintainers; [ beeb ];
     mainProgram = "awsbck";
   };
-}
+})

@@ -2,6 +2,7 @@
 #!nix-shell -i bash -p curl jq bundix ruby_3_4 prefetch-yarn-deps nix-update nixfmt
 
 set -eu -o pipefail
+set -x
 dir="$(dirname "$(readlink -f "$0")")"
 
 current=$(nix --extra-experimental-features nix-command eval --raw -f . docuseal.src.tag)
@@ -28,18 +29,13 @@ sed -i "/^ruby '[0-9]\+\.[0-9]\+\.[0-9]\+'$/d" "$repo/Gemfile"
 # fix: https://github.com/nix-community/bundix/issues/88
 BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --remove-platform x86_64-linux --lockfile="$repo/Gemfile.lock"
 BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --remove-platform aarch64-linux --lockfile="$repo/Gemfile.lock"
+# keep generic gems available for bundlerEnv consumers
+BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --add-platform ruby --lockfile="$repo/Gemfile.lock"
 # generate gemset.nix
 bundix --lock --lockfile="$repo/Gemfile.lock" --gemfile="$repo/Gemfile" --gemset="$dir/gemset.nix"
 
-# patch yarn.lock
-sed -i 's$, "@hotwired/turbo@https://github.com/docusealco/turbo#main"$$g' "$repo/yarn.lock"
-
-# calc yarn hash
-YARN_HASH="$(prefetch-yarn-deps "$repo/yarn.lock")"
-YARN_HASH="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$YARN_HASH")"
-
 # update
-cp "$repo/Gemfile" "$repo/Gemfile.lock" "$repo/yarn.lock" "$dir/"
+cp "$repo/Gemfile" "$repo/Gemfile.lock" "$dir/"
 nix-update docuseal --version "$latest"
 nix-update docuseal --subpackage "docusealWeb"
 

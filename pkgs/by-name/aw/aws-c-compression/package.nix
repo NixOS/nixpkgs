@@ -7,7 +7,7 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-compression";
   # nixpkgs-update: no auto update
   version = "0.3.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-compression";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gpru+hnppgLHhcPfVBOaMdcT6e8wUjZmY7Caaa/KAW4=";
   };
 
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 implementation of huffman encoding/decoding";
     homepage = "https://github.com/awslabs/aws-c-compression";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

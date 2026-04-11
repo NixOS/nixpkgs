@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "star";
   version = "2.7.11b";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-4EoS9NOKUwfr6TDdjAqr4wGS9cqVX5GYptiOCQpmg9c=";
   };
 
-  sourceRoot = "${src.name}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail "-std=c++11" "-std=c++14"
@@ -51,12 +51,11 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/STAR";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Spliced Transcripts Alignment to a Reference";
     longDescription = ''
       STAR (Spliced Transcripts Alignment to a Reference) is a fast RNA-seq
@@ -64,8 +63,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "STAR";
     homepage = "https://github.com/alexdobin/STAR";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.arcadio ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.arcadio ];
   };
-}
+})

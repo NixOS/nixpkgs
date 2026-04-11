@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.3.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "danifus";
     repo = "pyzipper";
@@ -49,11 +47,11 @@ buildPythonPackage rec {
     "test_CleanImport"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python zipfile extensions";
     homepage = "https://github.com/danifus/pyzipper";
     changelog = "https://github.com/danifus/pyzipper/blob/v${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

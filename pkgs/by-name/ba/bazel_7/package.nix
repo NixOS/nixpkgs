@@ -6,13 +6,15 @@
   makeWrapper,
   writeTextFile,
   replaceVars,
+  fetchpatch,
   writeShellApplication,
   makeBinaryWrapper,
   autoPatchelfHook,
   buildFHSEnv,
   # this package (through the fixpoint glass)
   # TODO probably still need for tests at some point
-  bazel_self,
+  bazel_7,
+  bazel_self ? bazel_7,
   # native build inputs
   runtimeShell,
   zip,
@@ -35,10 +37,11 @@
   # Apple dependencies
   cctools,
   libtool,
-  sigtool,
+  darwin,
   # Allow to independently override the jdks used to build and run respectively
-  buildJdk,
-  runJdk,
+  jdk21_headless,
+  buildJdk ? jdk21_headless,
+  runJdk ? jdk21_headless,
   # Toggle for hacks for running bazel under buildBazelPackage:
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
@@ -386,6 +389,12 @@ stdenv.mkDerivation rec {
     (replaceVars ./bazel_rc.patch {
       bazelSystemBazelRCPath = bazelRC;
     })
+
+    # Fix build with gcc 15 by adding missing headers
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel/commit/1d206cac050b6c7d9ce65403e6a9909a49bfe4bc.patch";
+      hash = "sha256-Tg5o1Va7dd5hvXbWhZiog+VtuiqngqbbYOkCafVudDs=";
+    })
   ]
   # See enableNixHacks argument above.
   ++ lib.optional enableNixHacks ./nix-build-bazel-package-hacks.patch;
@@ -417,7 +426,7 @@ stdenv.mkDerivation rec {
         # don't use system installed Xcode to run clang, use Nix clang instead
         sed -i -E \
           -e "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
-          -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${sigtool}/bin/codesign;" \
+          -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${darwin.sigtool}/bin/codesign;" \
           scripts/bootstrap/compile.sh \
           tools/osx/BUILD
 
@@ -431,6 +440,11 @@ stdenv.mkDerivation rec {
           sedVerbose $wrapper \
             -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g"
         done
+
+        # set --macos_sdk_version to make utimensat visible:
+        sedVerbose compile.sh \
+          -e "/bazel_build /a\  --macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion} \\\\" \
+
       '';
 
       genericPatches = ''
@@ -519,14 +533,14 @@ stdenv.mkDerivation rec {
     + lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
     + genericPatches;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     inherit platforms;

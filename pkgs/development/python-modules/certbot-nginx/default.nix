@@ -4,7 +4,6 @@
   certbot,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.9";
 
   sourceRoot = "${src.name}/certbot-nginx";
 
@@ -29,6 +27,7 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

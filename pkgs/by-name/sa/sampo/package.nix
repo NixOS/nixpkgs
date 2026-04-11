@@ -9,20 +9,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sampo";
-  version = "0.12.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "bruits";
     repo = "sampo";
     tag = "sampo-v${finalAttrs.version}";
-    hash = "sha256-0E9dvyu6mGbuMH8Lf/rVTn3skVq9kaVjQG2eLH8a2IY=";
+    hash = "sha256-lCF38mDdoBqm9F9enEhYx3fdrTgLG+ItL37Kxzqhqcw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-gooShQWJY9UKYq99o7qhyz6ROK+VXYG2PpygdVWG0iM=";
+  cargoHash = "sha256-roYUqxY+zkRoHZbC52Psk7/T1lRYjgnQ0cAFlUCZPn4=";
 
   cargoBuildFlags = [
     "-p"
@@ -34,9 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=sampo-v([0-9\\.]*)" ]; };
 
   meta = {
     description = "Automate changelogs, versioning, and publishing—even for monorepos across multiple package registries";

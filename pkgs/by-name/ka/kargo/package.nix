@@ -9,18 +9,18 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kargo";
-  version = "1.7.5";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "akuity";
     repo = "kargo";
-    tag = "v${version}";
-    hash = "sha256-HYTtZ2+eZ5DXXif26t7Q9RnsIRhIxJ88YZHQFNN22Vo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jdRba3n9jGpZIp8E7Fz4DC3eDV4GK+MpuxBpYhpR60o=";
   };
 
-  vendorHash = "sha256-zo3aEs0xrWbjj5nCtZ1GEfAYXy2cnaUCUbN5bjYFZ+Y=";
+  vendorHash = "sha256-ir73yLXLOs6/6YX72EeyMcGLsImRkGmH4vppwKeOD+A=";
 
   subPackages = [ "cmd/cli" ];
 
@@ -31,9 +31,9 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${package_url}.version=${version}"
+      "-X ${package_url}.version=${finalAttrs.version}"
       "-X ${package_url}.buildDate=1970-01-01T00:00:00Z"
-      "-X ${package_url}.gitCommit=${src.rev}"
+      "-X ${package_url}.gitCommit=${finalAttrs.src.rev}"
       "-X ${package_url}.gitTreeState=clean"
     ];
 
@@ -51,7 +51,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = kargo;
-    command = "HOME=$TMPDIR ${meta.mainProgram} version --client";
+    command = "HOME=$TMPDIR ${finalAttrs.meta.mainProgram} version --client";
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -71,4 +71,4 @@ buildGoModule rec {
       bbigras
     ];
   };
-}
+})

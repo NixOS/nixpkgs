@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zip2hashcat";
   version = "1.0";
 
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
     description = "Processes input ZIP files into a format suitable for use with hashcat";
     homepage = "https://github.com/hashstation/zip2hashcat";
     license = lib.licenses.mit;
-    changelog = "https://github.com/hashstation/zip2hashcat/releases/tag/${version}";
+    changelog = "https://github.com/hashstation/zip2hashcat/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "zip2hashcat";
     platforms = lib.platforms.all;
   };
-}
+})

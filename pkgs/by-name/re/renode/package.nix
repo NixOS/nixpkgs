@@ -2,8 +2,7 @@
   buildDotnetModule,
   cmake,
   dconf,
-  dotnet-runtime_8,
-  dotnet-sdk_6,
+  dotnetCorePackages,
   fetchFromGitHub,
   fetchpatch,
   gcc,
@@ -12,7 +11,6 @@
   gtk3,
   lib,
   mono,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -23,13 +21,6 @@ let
     rev = "d3d69f8f17ed164ee23e46f0c06844a69bf4c004";
     hash = "sha256-wR3heL58NOQLENwCzL4lPM4KuvT/ON7dlc/KUqrlRjg=";
   };
-  assemblyVersion =
-    s:
-    let
-      part = lib.strings.splitString "-" s;
-      result = builtins.head part;
-    in
-    result;
 
   pythonLibs =
     with python3Packages;
@@ -67,29 +58,30 @@ let
 in
 buildDotnetModule rec {
   pname = "renode";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "renode";
     repo = "renode";
-    rev = "20ad06d9379997829df309c5724be94ba4effedd";
-    hash = "sha256-I/W3OAzHCN8rEIlDyBwI1ZDvKfHYYBDiqE9XkWHxo7o=";
+    rev = "d66b0c2aa3d420408eccecfd1d3bab0fd702a6db";
+    hash = "sha256-HQaMo3qsZvD4uBIsGzyKpTO7gaxjVvurI91pm1UXvjc=";
     fetchSubmodules = true;
   };
 
   projectFile = "Renode_NET.sln";
 
-  dotnet-runtime = dotnet-runtime_8;
-  dotnet-sdk = dotnet-sdk_6;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
   nugetDeps = ./deps.json;
 
   patches = [ ./renode-test.patch ];
 
+  dotnetFlags = [ "-p:TargetFrameworks=net9.0" ];
+
   prePatch = ''
-    substituteInPlace tools/building/createAssemblyInfo.sh \
-      --replace CURRENT_INFORMATIONAL_VERSION="`git rev-parse --short=8 HEAD`" \
-      CURRENT_INFORMATIONAL_VERSION="${builtins.substring 0 8 src.rev}"
+    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${version}.0")/g' src/Renode/Properties/AssemblyInfo.template
+    sed -i 's/AssemblyInformationalVersion("%INFORMATIONAL_VERSION%")/AssemblyInformationalVersion("${src.rev}")/g' src/Renode/Properties/AssemblyInfo.template
+    mv src/Renode/Properties/AssemblyInfo.template src/Renode/Properties/AssemblyInfo.cs
   '';
 
   postPatch = ''
@@ -105,7 +97,6 @@ buildDotnetModule rec {
     patchShebangs build.sh tools/
 
     # Fixes determinism build error
-    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${assemblyVersion version}")/g' src/Renode/Properties/AssemblyInfo.template
     sed -i 's/AssemblyVersion("1.0.*")/AssemblyVersion("1.0.0.0")/g' lib/AntShell/AntShell/Properties/AssemblyInfo.cs lib/CxxDemangler/CxxDemangler/Properties/AssemblyInfo.cs
   '';
 
@@ -117,7 +108,6 @@ buildDotnetModule rec {
     cmake
     gcc
   ];
-
   runtimeDeps = [
     gtk3
     mono
@@ -169,7 +159,7 @@ buildDotnetModule rec {
     ln -s $out/lib/*.so src/Infrastructure/src/Emulator/Cores/bin/Release/lib
   '';
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];
+  dotnetInstallFlags = [ "-p:TargetFramework=net9.0" ];
 
   postInstall = ''
     mkdir -p $out/lib/renode
@@ -183,9 +173,13 @@ buildDotnetModule rec {
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
   '';
 
+  postFixup = ''
+    mv $out/bin/Renode $out/bin/renode
+  '';
+
   executables = [ "Renode" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/renode/renode/blob/${version}/CHANGELOG.rst";

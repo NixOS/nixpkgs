@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -20,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-experimental";
-  version = "0.3.4";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-experimental";
     tag = "libs/experimental/v${version}";
-    hash = "sha256-KgGfJfxHOfpwVVo/OcbOjiO5pbxoDE1MiyKqUwsqfIg=";
+    hash = "sha256-3hz63DCoym2V4b6Wzi0eH+B8mvGu7pqRNj3Ltk04UTk=";
   };
 
   sourceRoot = "${src.name}/libs/experimental";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
+    pdm-backend
   ];
 
   pythonRelaxDeps = [
@@ -62,15 +63,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_experimental" ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_color_question_1"
+    "test_color_question_2"
+  ];
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "libs/experimental/v";
   };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain-experimental/releases/tag/${src.tag}";
-    description = "Package add experimental features on LangChain";
+    description = "Experimental features for LangChain";
     homepage = "https://github.com/langchain-ai/langchain-experimental/tree/main/libs/experimental";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mrdev023 ];
+    maintainers = with lib.maintainers; [
+      mrdev023
+      sarahec
+    ];
   };
 }

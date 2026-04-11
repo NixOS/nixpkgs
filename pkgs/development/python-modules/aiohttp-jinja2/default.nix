@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiohttp-jinja2";
   version = "1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_jinja2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jinja2 support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp_jinja2";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

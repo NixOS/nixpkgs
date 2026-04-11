@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "http://smarden.org/runit/${pname}-${version}.tar.gz";
+    url = "https://smarden.org/runit/${pname}-${version}.tar.gz";
     sha256 = "sha256-le9NKGi5eMcXn+R5AeXFeOEc8nPSkr1iCL06fMsCkpA=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     cp -r ../man $man/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UNIX init scheme with service supervision";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://smarden.org/runit";
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

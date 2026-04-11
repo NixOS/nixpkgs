@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "cose";
   version = "1.1.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TimothyClaeys";
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycose" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the COSE specification";
     homepage = "https://github.com/TimothyClaeys/pycose";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ t4ccer ];
   };
 }

@@ -8,22 +8,24 @@
   numpy-typing-compat,
   beartype,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optype";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
-    tag = "v${version}";
-    hash = "sha256-0CE6dU4Vt3UP8ZfNcmP2Th7ixceCa0ItYUmNcEU7mgw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tzbS+CeWGxMXK1LFN/LslI6kfbVQPjqYlDB7fX0ogfU=";
   };
 
-  disabled = pythonOlder "3.11";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.16,<0.10.0" uv_build
+  '';
 
   build-system = [
     uv-build
@@ -57,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jolars ];
   };
-}
+})

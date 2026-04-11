@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "smtprelay";
-  version = "1.12.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "decke";
     repo = "smtprelay";
-    tag = "v${version}";
-    hash = "sha256-mlaTZXzbZLdtzDqj8y2e8WjyaNxOPQ1a6YXbPhCxc1c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CKE0KYzLBp3nS4gIUqQ1jyu9c4uBi3x9WcLA1zxTemY=";
   };
 
-  vendorHash = "sha256-wr53cIkygsM0+R02PjQAtIPrQDu7vploRTsMOrPBt4o=";
+  vendorHash = "sha256-kiFPTm46Ws3orwmm/pIz8amcYOq7038exLQ5fU9QqI8=";
 
   subPackages = [
     "."
@@ -27,15 +27,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.appVersion=v${version}"
+    "-X=main.appVersion=v${finalAttrs.version}"
   ];
 
   meta = {
     homepage = "https://github.com/decke/smtprelay";
     description = "Simple Golang SMTP relay/proxy server";
     mainProgram = "smtprelay";
-    changelog = "https://github.com/decke/smtprelay/releases/tag/v${version}";
+    changelog = "https://github.com/decke/smtprelay/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ juliusrickert ];
   };
-}
+})

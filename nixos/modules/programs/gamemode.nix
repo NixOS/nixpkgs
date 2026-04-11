@@ -72,10 +72,6 @@ in
     systemd = {
       packages = [ pkgs.gamemode ];
       user.services.gamemoded = {
-        # The upstream service already defines this, but doesn't get applied.
-        # See https://github.com/NixOS/nixpkgs/issues/81138
-        wantedBy = [ "default.target" ];
-
         # Use pkexec from the security wrappers to allow users to
         # run libexec/cpugovctl & libexec/gpuclockctl as root with
         # the the actions defined in share/polkit-1/actions.

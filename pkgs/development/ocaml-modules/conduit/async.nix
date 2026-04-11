@@ -1,6 +1,7 @@
 {
   buildDunePackage,
   async,
+  async_ssl ? null,
   ppx_sexp_conv,
   ppx_here,
   uri,
@@ -25,6 +26,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     async
+    async_ssl
     conduit
     uri
     ipaddr

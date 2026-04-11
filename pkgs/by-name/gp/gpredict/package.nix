@@ -9,7 +9,7 @@
   gtk3,
   glib,
   curl,
-  goocanvas2,
+  goocanvas_2,
   gpsd,
   hamlib_4,
   wrapGAppsHook3,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     glib
     gtk3
-    goocanvas2
+    goocanvas_2
     gpsd
     hamlib_4
   ];

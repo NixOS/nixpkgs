@@ -15,20 +15,21 @@
   procps,
   libiberty_static,
   runtimeShell,
+  gitUpdater,
   sysconfDir ? "", # set this parameter to override the default value $out/etc
   static ? false,
 }:
 
 let
   pname = "distcc";
-  version = "2021-03-11";
+  version = "3.4";
   distcc = stdenv.mkDerivation {
     inherit pname version;
     src = fetchFromGitHub {
       owner = "distcc";
       repo = "distcc";
-      rev = "de21b1a43737fbcf47967a706dab4c60521dbbb1";
-      sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
+      tag = "v${version}";
+      hash = "sha256-S3EHJ8s+bYWBmOfKP5ErNSa+UIalIK82MgKhWvPnwFo=";
     };
 
     nativeBuildInputs = [
@@ -95,6 +96,10 @@ let
             chmod +x $out/bin/g++
           fi
         '');
+
+      updateScript = gitUpdater {
+        rev-prefix = "v";
+      };
     };
 
     meta = {
@@ -102,8 +107,8 @@ let
       homepage = "http://distcc.org";
       license = lib.licenses.gpl2Only;
 
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ anderspapitto ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      maintainers = with lib.maintainers; [ pascalj ];
     };
   };
 in

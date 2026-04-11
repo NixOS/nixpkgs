@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bbedit";
-  version = "15.5.3";
+  version = "15.5.5";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/BBSW-download/BBEdit_${finalAttrs.version}.dmg";
-    hash = "sha256-8TSn0+mbvv+55Jh1VCvTfl+rNSzG9TjlQq5vA71wVmw=";
+    hash = "sha256-DsrGj2id9XUf3n55s0OHoJnX4AQY5AqiP9skaXysghk=";
   };
 
   sourceRoot = ".";
@@ -26,6 +26,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  # app bundle may be messed up by standard fixup
+  dontFixup = true;
 
   meta = {
     description = "Powerful and full-featured professional HTML and text editor for macOS";

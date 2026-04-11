@@ -17,7 +17,8 @@
   gssSupport ?
     with stdenv.hostPlatform;
     (
-      !isWindows
+      # krb5 is broken on cygwin
+      !(isWindows || isCygwin)
       &&
         # disable gss because of: undefined reference to `k5_bcmp'
         # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
@@ -86,7 +87,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.16.0";
+  version = "8.18.0";
 
   src = fetchurl {
     urls = [
@@ -95,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-QMjN28tsxiUcA96kI6Ryps6kA3vmVLpc9d7G6y0i/x0=";
+    hash = "sha256-QN95Fm50qiAUk2XhHuTHmKRq1Xw05PaP0TEA4smpGUY=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -118,7 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
+  env = {
+    CXX = "${stdenv.cc.targetPrefix}c++";
+    CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
     # Not having this causes curl’s `configure` script to fail with static builds on Darwin because
     # some of curl’s propagated inputs need libiconv.
     NIX_LDFLAGS = "-liconv";
@@ -208,9 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ca-path=/etc/ssl/certs"
   ];
 
-  CXX = "${stdenv.cc.targetPrefix}c++";
-  CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
-
   # takes 14 minutes on a 24 core and because many other packages depend on curl
   # they cannot be run concurrently and are a bottleneck
   # tests are available in passthru.tests.withCheck
@@ -281,13 +283,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://curl.se/";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
-      lovek323
       Scrumplex
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
-    # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    # Fails to link against static gss
+    broken = stdenv.hostPlatform.isStatic && gssSupport;
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "haxx" finalAttrs.version;
   };
 })

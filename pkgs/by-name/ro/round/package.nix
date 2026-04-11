@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "round";
   version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = "round";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vP2q0inU5zNJ/eiAqEzwHSqril8hTtpbpNBiAkeWeSU=";
   };
 
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for rounding images";
     homepage = "https://github.com/mingrammer/round";
-    license = licenses.mit;
-    maintainers = with maintainers; [ addict3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ addict3d ];
     mainProgram = "round";
   };
-}
+})

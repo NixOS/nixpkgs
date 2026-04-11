@@ -1,29 +1,30 @@
 {
   buildDunePackage,
-  dune_3,
+  dune,
   dyn,
   ordering,
+  pp,
   csexp,
+  fs-io,
+  top-closure,
 }:
 
 buildDunePackage {
   pname = "stdune";
-  inherit (dune_3) version src;
-  duneVersion = "3";
+  inherit (dune) version src;
 
   dontAddPrefix = true;
 
   propagatedBuildInputs = [
     dyn
     ordering
+    pp
     csexp
+    fs-io
+    top-closure
   ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
-  meta = dune_3.meta // {
+  meta = dune.meta // {
     description = "Dune's unstable standard library";
   };
 }

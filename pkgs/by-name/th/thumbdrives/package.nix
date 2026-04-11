@@ -14,16 +14,16 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "thumbdrives";
   version = "0.3.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "thumbdrives";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };
 
@@ -53,14 +53,14 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "USB mass storage emulator for Linux handhelds";
     homepage = "https://sr.ht/~martijnbraam/thumbdrives/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       chuangzhu
       Luflosi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

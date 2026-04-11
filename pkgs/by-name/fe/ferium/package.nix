@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferium";
   version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "gorilla-devs";
     repo = "ferium";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eeQjezB6pRdnPADLgDLo8b+bUSP12gfBhFNt/uYCwHU=";
   };
 
@@ -33,14 +33,14 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and multi-source CLI program for managing Minecraft mods and modpacks from Modrinth, CurseForge, and GitHub Releases";
     mainProgram = "ferium";
     homepage = "https://github.com/gorilla-devs/ferium";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       leo60228
       soupglasses
     ];
   };
-}
+})

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyloadapi";
-  version = "1.4.2";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "pyloadapi";
     tag = "v${version}";
-    hash = "sha256-DkYbQB91KYskfm2yDVmR0/MJiixC2C5miHpTq7RpVBU=";
+    hash = "sha256-+fGrXKS7jomYMJOPneKyAV/nrvqBFrqh3ds4R46lQ48=";
   };
 
   build-system = [
@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "tests/test_cli.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper for pyLoad's API";
     homepage = "https://github.com/tr4nt0r/pyloadapi";
     changelog = "https://github.com/tr4nt0r/pyloadapi/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

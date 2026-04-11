@@ -3,8 +3,10 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  gettext,
   guileSupport ? false,
   guile,
+  texinfo,
   # avoid guile depend on bootstrap to prevent dependency cycles
   inBootstrap ? false,
   pkg-config,
@@ -15,12 +17,12 @@ let
   guileEnabled = guileSupport && !inBootstrap;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.gz";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
@@ -40,16 +42,37 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ];
-  buildInputs = lib.optionals guileEnabled [ guile ];
+  ]
+  ++ lib.optionals (!inBootstrap) [ texinfo ];
 
-  configureFlags = lib.optional guileEnabled "--with-guile";
+  buildInputs =
+    lib.optionals guileEnabled [ guile ]
+    # gettext gets pulled in via autoreconfHook because strictDeps is not set,
+    # and is linked against. Without this, it doesn't end up in HOST_PATH.
+    # TODO: enable strictDeps, and either make this dependency explicit, or remove it
+    ++ lib.optional stdenv.isCygwin gettext;
+
+  configureFlags =
+    lib.optional guileEnabled "--with-guile"
+    # fnmatch.c:124:14: error: conflicting types for 'getenv'; have 'char *(void)'
+    ++ lib.optional stdenv.hostPlatform.isCygwin "CFLAGS=-std=gnu17";
 
   outputs = [
     "out"
     "man"
     "info"
-  ];
+  ]
+  ++ lib.optionals (!inBootstrap) [ "doc" ];
+
+  postBuild = lib.optionalString (!inBootstrap) ''
+    makeinfo --html --no-split doc/make.texi
+  '';
+
+  postInstall = lib.optionalString (!inBootstrap) ''
+    mkdir -p $doc/share/doc/$pname-$version
+    cp ./make.html $doc/share/doc/$pname-$version/index.html
+  '';
+
   separateDebugInfo = true;
 
   passthru.tests = {
@@ -57,7 +80,7 @@ stdenv.mkDerivation rec {
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -70,10 +93,9 @@ stdenv.mkDerivation rec {
       to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
-
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

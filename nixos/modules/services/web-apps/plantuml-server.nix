@@ -108,7 +108,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        PLANTUML_LIMIT_SIZE = builtins.toString cfg.plantumlLimitSize;
+        PLANTUML_LIMIT_SIZE = toString cfg.plantumlLimitSize;
         GRAPHVIZ_DOT = "${cfg.graphvizPackage}/bin/dot";
         PLANTUML_STATS = if cfg.plantumlStats then "on" else "off";
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
@@ -120,7 +120,7 @@ in
             jetty.home=${cfg.packages.jetty} \
             jetty.base=${cfg.package} \
             jetty.http.host=${cfg.listenHost} \
-            jetty.http.port=${builtins.toString cfg.listenPort}
+            jetty.http.port=${toString cfg.listenPort}
       '';
 
       serviceConfig = {

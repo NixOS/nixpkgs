@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "easyenergy";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -66,11 +63,11 @@ buildPythonPackage rec {
     "test_electricity_midnight"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for getting energy/gas prices from easyEnergy";
     homepage = "https://github.com/klaasnicolaas/python-easyenergy";
     changelog = "https://github.com/klaasnicolaas/python-easyenergy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

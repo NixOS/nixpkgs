@@ -6,7 +6,7 @@
   glib,
   intltool,
   libfm,
-  libX11,
+  libx11,
   pango,
   pkg-config,
   wrapGAppsHook3,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "pcmanfm";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-4kJDCnld//Vbe2KbrLoYZJ/dutagY/GImoOnbpQIdDY=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk
     libfm'
-    libX11
+    libx11
     pango
     adwaita-icon-theme
   ];

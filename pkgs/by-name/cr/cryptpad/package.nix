@@ -11,25 +11,81 @@
   nodejs,
   rdfind,
   unzip,
+  # Cryptpad supports multiple versions of onlyoffice:
+  # - the latest version is always used for new documents
+  # - old versions are used whenever opening a file that was created with an
+  # older version, at that point cryptpad coverts it to the latest version.
+  #
+  # The first version supported in nixpkgs came with v7 installed so no
+  # document have been created with an older version and we don't need
+  # anything earlier for nixos installs, but if someone wishes to migrate
+  # from an older instance to nixos they might need to use an older version
+  # so we still allow installing all the way back to v1.
+  # Older versions are not tested and might be removed in the future.
+  oldest_needed_version ? "v7",
 }:
 
 let
-  version = "2025.3.0";
+  version = "2025.9.0";
   # nix version of install-onlyoffice.sh
   # a later version could rebuild from sdkjs/web-apps as per
   # https://github.com/cryptpad/onlyoffice-builds/blob/main/build.sh
-  onlyoffice_build =
-    rev: hash:
-    fetchFromGitHub {
-      inherit rev hash;
-      owner = "cryptpad";
-      repo = "onlyoffice-builds";
-    };
+  onlyoffice_fetch =
+    {
+      rev ? null,
+      version ? null,
+      hash,
+      ...
+    }:
+    assert (
+      lib.assertMsg (lib.xor (rev == null) (
+        version == null
+      )) "onlyoffice_fetch requires one of either `rev` or `version` to be provided (not both)."
+    );
+    if rev != null then
+      fetchFromGitHub {
+        inherit rev hash;
+        owner = "cryptpad";
+        repo = "onlyoffice-builds";
+      }
+    # New method for v7+ versions that use ZIP releases
+    else
+      fetchurl {
+        url = "https://github.com/cryptpad/onlyoffice-editor/releases/download/${version}/onlyoffice-editor.zip";
+        inherit hash;
+      };
+
   onlyoffice_install = oo: ''
     oo_dir="$out_cryptpad/www/common/onlyoffice/dist/${oo.subdir}"
-    cp -a "${onlyoffice_build oo.rev oo.hash}/." "$oo_dir"
-    chmod -R +w "$oo_dir"
-    echo "${oo.rev}" > "$oo_dir/.commit"
+    ${
+      if lib.versionOlder oo.subdir oldest_needed_version then
+        ''
+          echo "Skipping onlyoffice ${oo.subdir} (< ${oldest_needed_version})"
+        ''
+      else if oo ? "version" then
+        ''
+          mkdir -p "$oo_dir"
+          echo "Installing onlyoffice ${oo.subdir}"
+          unzip -q ${onlyoffice_fetch oo} -d "$oo_dir"
+          echo "${oo.version}" > "$oo_dir/.version"
+
+          # Clean up help files and dictionaries as per upstream
+          ${lib.optionalString (oo.subdir == "v7") ''
+            rm -rf "$oo_dir"/web-apps/apps/*/main/resources/help
+            rm -rf "$oo_dir"/dictionaries/
+          ''}
+        ''
+      else
+        ''
+          echo "Installing onlyoffice ${oo.subdir}"
+          cp -a "${onlyoffice_fetch oo}/." "$oo_dir"
+          chmod -R +w "$oo_dir"
+          echo "${oo.rev}" > "$oo_dir/.commit"
+
+          # Clean up help files as per upstream
+          rm -rf "$oo_dir"/web-apps/apps/*/main/resources/help
+        ''
+    }
   '';
   onlyoffice_versions = [
     {
@@ -59,8 +115,13 @@ let
     }
     {
       subdir = "v7";
-      rev = "e1267803";
-      hash = "sha256-iIds0GnCHAyeIEdSD4aCCgDtnnwARh3NE470CywseS0=";
+      version = "v7.3.3.60+11";
+      hash = "sha256-He8RwsaJPBhaxFklA7vSxxNUpmcM41lW859gQUUJWbQ=";
+    }
+    {
+      subdir = "v8";
+      version = "v8.3.3.23+5";
+      hash = "sha256-+53jzvmGltD1yjXAimLl8zL1V4YDc1qF1PUFSeyiUm8=";
     }
   ];
 
@@ -70,8 +131,9 @@ let
     hash = "sha256-hrbxrI8RC1pBatGZ76TAiVfUbZid7+eRuXk6lmz7OgQ=";
   };
   x2t_install = ''
+    echo "Installing x2t"
     local X2T_DIR=$out_cryptpad/www/common/onlyoffice/dist/x2t
-    unzip ${x2t} -d "$X2T_DIR"
+    unzip -q ${x2t} -d "$X2T_DIR"
     echo "${x2t_version}" > "$X2T_DIR"/.version
   '';
 
@@ -83,11 +145,15 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "cryptpad";
     repo = "cryptpad";
-    rev = version;
-    hash = "sha256-NxkVMsfLzdzifdn+f0C6mBJGd1oLwcMTAIXv+gBG7rI=";
+    tag = version;
+    hash = "sha256-C5vj8vgSzR81NJhCSlY9sEoSAQs3ckeoCrChrSTTIso=";
+    # case-insensitive file results in different hash on darwin, delete to avoid collision
+    postFetch = ''
+      find $out -iname "funding.json" -delete
+    '';
   };
 
-  npmDepsHash = "sha256-GWkyRlizPSA72WwoY+mRLwaMeD/SXdo6oUVwsd2gp7c=";
+  npmDepsHash = "sha256-d/2JKGdC/tgDOo4Qr/0g83lh5gW6Varr0vkZUZe+WTA=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -100,6 +166,9 @@ buildNpmPackage {
     # fix httpSafePort setting
     # https://github.com/cryptpad/cryptpad/pull/1571
     ./0001-env.js-fix-httpSafePort-handling.patch
+    # fix install-onlyyofice.sh check
+    # https://github.com/cryptpad/cryptpad/pull/2097
+    ./0001-install-onlyoffice.sh-fix-check-for-new-install_vers.patch
   ];
 
   # cryptpad build tries to write in cache dir
@@ -120,8 +189,13 @@ buildNpmPackage {
     # Move to install directory manually.
     npm run install:components
     mv www/components "$out_cryptpad/www/"
-    # and fix absolute symlink to /build...
-    ln -Tfs ../../src/tweetnacl "$out_cryptpad/www/components/tweetnacl"
+    # optimization: replace copies with symlinks...
+    for d in "$out_cryptpad/www/components/"*; do
+      d="''${d##*/}"
+      [ -e "$out_cryptpad/node_modules/$d" ] || continue
+      rm -rf "$out_cryptpad/www/components/$d"
+      ln -Tfs "../../node_modules/$d" "$out_cryptpad/www/components/$d"
+    done
 
     # install OnlyOffice (install-onlyoffice.sh without network)
     mkdir -p "$out_cryptpad/www/common/onlyoffice/dist"
@@ -130,7 +204,11 @@ buildNpmPackage {
     # Run upstream's `install-onlyoffice.sh` script in `--check` mode to
     # verify that we've installed the correct versions of the various
     # OnlyOffice components.
+
     patchShebangs --build $out_cryptpad/install-onlyoffice.sh
+    mkdir -p $out_cryptpad/onlyoffice-conf
+    # Need to set this before running the check script
+    echo oldest_needed_version=${oldest_needed_version} > $out_cryptpad/onlyoffice-conf/onlyoffice.properties
     $out_cryptpad/install-onlyoffice.sh --accept-license --check --rdfind
 
     # cryptpad assumes it runs in the source directory and also outputs
@@ -144,7 +222,7 @@ buildNpmPackage {
     # directory.
     makeWrapper "${lib.getExe nodejs}" "$out/bin/cryptpad" \
       --add-flags "$out_cryptpad/server.js" \
-      --run "for d in customize.dist lib www scripts; do ${coreutils}/bin/ln -sf \"$out_cryptpad/\$d\" .; done" \
+      --run "for d in src customize.dist lib www scripts; do ${coreutils}/bin/ln -sf \"$out_cryptpad/\$d\" .; done" \
       --run "if ! [ -d customize ]; then \"${lib.getExe nodejs}\" \"$out_cryptpad/scripts/build.js\"; fi"
   '';
 

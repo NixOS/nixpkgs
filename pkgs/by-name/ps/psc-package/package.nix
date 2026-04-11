@@ -13,7 +13,7 @@ let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psc-package-simple";
 
   version = "0.6.2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ installShellFiles ];
 
-  libPath = lib.makeLibraryPath buildInputs;
+  libPath = lib.makeLibraryPath finalAttrs.buildInputs;
 
   dontStrip = true;
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       $PSC_PACKAGE
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PSC_PACKAGE
+    patchelf --interpreter ${dynamic-linker} --set-rpath ${finalAttrs.libPath} $PSC_PACKAGE
   ''
   + ''
     chmod u-w $PSC_PACKAGE
@@ -65,14 +65,14 @@ stdenv.mkDerivation rec {
       --zsh <($PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for PureScript based on package sets";
     mainProgram = "psc-package";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
     ];
   };
-}
+})

@@ -6,30 +6,28 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron_37,
+  electron_39,
   httptoolkit-server,
 }:
 
 let
-  electron = electron_37;
+  electron = electron_39;
 in
 buildNpmPackage rec {
   pname = "httptoolkit";
-  version = "1.22.1";
+
+  # update together with httptoolkit-server
+  # nixpkgs-update: no auto update
+  version = "1.24.4";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
     tag = "v${version}";
-    hash = "sha256-6iiXOBVtPLdW9MWUcu2Hggm7uPHudASebRPQ34JJTMQ=";
+    hash = "sha256-b1u+DFhxU/ED4GgMHFaF51zNfC+0vIg6ujyA8jIy8AQ=";
   };
 
-  patches = [
-    # generated via running: `npm update node-abi`
-    ./bump-node-abi.patch
-  ];
-
-  npmDepsHash = "sha256-WtnL9Gf1zGWnIjMifh0l3fwaeur+iI1l/Vwta+X6EAM=";
+  npmDepsHash = "sha256-FX8sClJL66zvWEaaw0lmoat7cM396RA8Rq9NgRVh0Vw=";
 
   makeCacheWritable = true;
 

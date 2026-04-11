@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-table-other";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-hoAaismWfiVIYs780oiwwA3syjBnYNQ5nYbhlBbAAKw=";
+    hash = "sha256-hqFui1Ycxih7I7VjUjfJe6V5I9RyamyNi6aZKcWGrWU=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Some other tables for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-table-other";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

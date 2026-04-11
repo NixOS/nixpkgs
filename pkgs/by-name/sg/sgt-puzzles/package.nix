@@ -4,7 +4,7 @@
   fetchurl,
   desktop-file-utils,
   gtk3,
-  libX11,
+  libx11,
   cmake,
   imagemagick,
   pkg-config,
@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgt-puzzles";
-  version = "20251021.790f585";
+  version = "20260309.06e37f1";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4EZgFswP0oqjS0OZbkyTHCs7dKm2PgUKpsJWssQAvQ4=";
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3Z/Qp8D/0DeJL9oZlKL6vx9BXvMVFa6MMnkStds/VHI=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libX11
+    libx11
   ];
 
   postInstall = ''
@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       raskin
       tomfitzhenry
-      iedame
     ];
     platforms = lib.platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";

@@ -7,15 +7,15 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpdump";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "dhcpdump";
-    tag = "v${version}";
-    hash = "sha256-ck6DLsLQ00unNqPLBKkxaJLDCaPFjTFJcQjTbKSq0U8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EtCwtRvAvZdfW/6MjHEXJTHoD/OknJeZJ7q0qb+CzeE=";
   };
 
   strictDeps = true;
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
     homepage = "https://github.com/bbonev/dhcpdump";
-    changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${version}";
+    changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
     license = lib.licenses.bsd2;
     mainProgram = "dhcpdump";
   };
-}
+})

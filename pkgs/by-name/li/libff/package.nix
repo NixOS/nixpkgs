@@ -9,14 +9,14 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libff";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "scipr-lab";
     repo = "libff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0dczi829497vqlmn6n4fgi89bc2h9f13gx30av5z2h6ikik7crgn";
     fetchSubmodules = true;
   };
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for Finite Fields and Elliptic Curves";
     changelog = "https://github.com/scipr-lab/libff/blob/develop/CHANGELOG.md";
     homepage = "https://github.com/scipr-lab/libff";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
-}
+})

@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "yatline-catppuccin.yazi";
-  version = "0-unstable-2025-03-05";
+  version = "0-unstable-2026-02-01";
 
   src = fetchFromGitHub {
     owner = "imsi32";
     repo = "yatline-catppuccin.yazi";
-    rev = "8cc4773ecab8ee8995485d53897e1c46991a7fea";
-    hash = "sha256-Wz53zjwFyflnxCIMjAv+nzcgDriJwVYBX81pFXJUzc4=";
+    rev = "6c3f166231d054bd500585b83280258f3941e3af";
+    hash = "sha256-NRmXzgRMnjCKbg8V+TuppBRLbP1NAz7taRtYv8C7kqY=";
   };
 
   meta = {

@@ -3,40 +3,40 @@
   rustPlatform,
   fetchFromGitHub,
   libdrm,
-  libX11,
+  libx11,
   libGL,
   wayland,
   wayland-protocols,
   libxkbcommon,
-  libXrandr,
-  libXi,
-  libXcursor,
+  libxrandr,
+  libxi,
+  libxcursor,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amdgpu_top";
-  version = "0.11.0";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
     repo = "amdgpu_top";
-    tag = "v${version}";
-    hash = "sha256-ZXvTLzEjH+R59GqRzDcdtNI7MD7SpG89Wm32KdgEAgg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k+/y8YaEP8DJuW8n/Xq/Ea9DWG79Cux+PgZbSP4m3pQ=";
   };
 
-  cargoHash = "sha256-L9vQHht7sZCosKTiMS77IG2WOOTmnMbLQqN8SInU6zM=";
+  cargoHash = "sha256-+eMItSemE69UGfGF9CeKyEvUxvhiZjkJJPeZoVfa+dk=";
 
   buildInputs = [
     libdrm
-    libX11
+    libx11
     libGL
     wayland
     wayland-protocols
     libxkbcommon
-    libXrandr
-    libXi
-    libXcursor
+    libxrandr
+    libxi
+    libxcursor
   ];
 
   postInstall = ''
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/${pname}
+    patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" $out/bin/${finalAttrs.meta.mainProgram}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -62,4 +62,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "amdgpu_top";
   };
-}
+})

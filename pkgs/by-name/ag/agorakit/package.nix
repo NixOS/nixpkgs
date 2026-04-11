@@ -27,7 +27,7 @@ php82.buildComposerProject2 (finalAttrs: {
     runHook postInstall
   '';
 
-  vendorHash = "sha256-cg9OIBvWX69yU6U6Ag/T3jScG2OUdpTqc+KwP6VyUHo=";
+  vendorHash = "sha256-3Kxuvmb3eZN3ChW59b5rITgCe4NqPHIBHau1PBmxPis=";
   composerStrictValidation = false;
 
   passthru.updateScript = nix-update-script { };

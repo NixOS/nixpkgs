@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "PREFIX=$(out)"
+  ];
 
   doInstallCheck = true;
 
@@ -114,10 +118,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      stesie
-    ];
+    maintainers = [ ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;
+    # Pending upstream fix: https://github.com/bellard/quickjs/pull/483
+    knownVulnerabilities = [
+      "CVE-2026-1144"
+      "CVE-2026-1145"
+      "CVE-2026-3979"
+    ];
   };
 })

@@ -9,14 +9,14 @@
   zlib,
   which,
   texinfo,
-  libX11,
+  libx11,
   xorgproto,
-  libXi,
+  libxi,
   gmp,
-  libXext,
-  libXt,
-  libXaw,
-  libXmu,
+  libxext,
+  libxt,
+  libxaw,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
     binutils
     emacs
     gmp
-    libX11
+    libx11
     xorgproto
-    libXi
-    libXext
-    libXt
-    libXaw
-    libXmu
+    libxi
+    libxext
+    libxt
+    libxaw
+    libxmu
     zlib
     which
     texinfo
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     "--enable-ansi"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GNU Common Lisp compiler working via GCC";
     mainProgram = "gcl";
     teams = [ lib.teams.lisp ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     broken = true; # 2025-01-21; to check after 2.7.0 is tagged
   };
 }

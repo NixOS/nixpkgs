@@ -10,7 +10,7 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  image =
+  imageCfg =
     (import ../lib/eval-config.nix {
       system = null;
       modules = [
@@ -26,8 +26,8 @@ let
           nixpkgs.pkgs = pkgs;
         }
       ];
-    }).config.system.build.openstackImage
-    + "/nixos.qcow2";
+    }).config;
+  image = "${imageCfg.system.build.openstackImage}/${imageCfg.image.fileName}";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
@@ -80,6 +80,7 @@ in
 
   userdata = makeEc2Test {
     name = "openstack-ec2-metadata";
+    meta.broken = true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''

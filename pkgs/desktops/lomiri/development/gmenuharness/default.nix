@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to test GMenuModel structures";
     homepage = "https://gitlab.com/ubports/development/core/gmenuharness";
-    license = licenses.gpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "libgmenuharness"
     ];

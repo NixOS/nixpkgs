@@ -12,13 +12,12 @@
   cryptography,
   doxygen,
   gettext,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   version = "4.12.0";
   pname = "uranium";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
@@ -26,8 +25,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-SE9xqrloPXIRTJiiqUdRKFmb4c0OjmJK5CMn6VXMFmk=";
   };
-
-  disabled = pythonOlder "3.5.0";
 
   buildInputs = [
     python
@@ -54,11 +51,11 @@ buildPythonPackage rec {
      UM/Application.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python framework for building Desktop applications";
     homepage = "https://github.com/Ultimaker/Uranium";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

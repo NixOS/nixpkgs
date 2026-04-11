@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flare-game";
   version = "1.14";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = "flare-game";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tINIwxyQn8eeJCHwRmAMo2TYRgrgJlGaUrnrgbmM3Jo=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = [ lib.licenses.cc-by-sa-30 ];
     platforms = lib.platforms.unix;
   };
-}
+})

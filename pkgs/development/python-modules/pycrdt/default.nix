@@ -6,27 +6,28 @@
   # nativeBuildInputs
   rustPlatform,
 
-  # tests
+  # dependencies
   anyio,
+
+  # tests
   objsize,
   pydantic,
   pytestCheckHook,
   trio,
-  y-py,
 
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycrdt";
-  version = "0.12.42";
+  version = "0.12.50";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt";
-    tag = version;
-    hash = "sha256-TEuP6mkd4phic2vJv0BYD50GvlrNj4Z4/jMknLfnYI8=";
+    tag = finalAttrs.version;
+    hash = "sha256-YtOgUzoqLnRslHrSWSkP+AexdaBR/1e+NH4gKSIKn9I=";
   };
 
   postPatch = ''
@@ -50,7 +51,6 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     trio
-    y-py
   ];
 
   pytestFlags = [
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
-    changelog = "https://github.com/jupyter-server/pycrdt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

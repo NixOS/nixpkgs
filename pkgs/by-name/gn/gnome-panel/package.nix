@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-panel";
-  version = "3.56.0";
+  version = "3.58.1";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-panel/${lib.versions.majorMinor finalAttrs.version}/gnome-panel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UoptZ92E7a5sgKXuZW+E+9lC87Nx1g+XottgZc9P0XA=";
+    hash = "sha256-fovKQ6gaE0xmazp4uvKv+wxdMO+xvKZTiH/EGzHdXmQ=";
   };
 
   patches = [
@@ -91,13 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Component of Gnome Flashback that provides panels and default applets for the desktop";
     mainProgram = "gnome-panel";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-panel";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-panel/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -6,16 +6,13 @@
   fetchFromGitHub,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fasteners";
   version = "0.20";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "harlowja";
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module that provides useful locks";
     homepage = "https://github.com/harlowja/fasteners";
     changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -20,7 +20,7 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "accountsservice";
   version = "23.13.9";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${finalAttrs.version}.tar.xz";
     sha256 = "rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8=";
   };
 
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     teams = with lib.teams; [ freedesktop ];
     platforms = lib.platforms.linux;
   };
-}
+})

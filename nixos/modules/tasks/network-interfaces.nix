@@ -65,9 +65,6 @@ let
     }
   );
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface: "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
-
   addrOpts =
     v:
     assert v == 4 || v == 6;
@@ -205,7 +202,7 @@ let
         tempAddress = mkOption {
           type = types.enum (lib.attrNames tempaddrValues);
           default = cfg.tempAddresses;
-          defaultText = literalExpression ''config.networking.tempAddresses'';
+          defaultText = literalExpression "config.networking.tempAddresses";
           description = ''
             When IPv6 is enabled with SLAAC, this option controls the use of
             temporary address (aka privacy extensions) on this
@@ -348,9 +345,10 @@ let
 
         virtualOwner = mkOption {
           default = "root";
-          type = types.str;
+          type = types.nullOr types.str;
           description = ''
             In case of a virtual device, the user who owns it.
+            `null` will not set owner, allowing access to any user.
           '';
         };
 
@@ -749,10 +747,9 @@ in
       default = "";
       example = "text=anything; echo You can put $text here.";
       description = ''
-        Shell commands to be executed at the end of the
-        `network-setup` systemd service.  Note that if
-        you are using DHCP to obtain the network configuration,
-        interfaces may not be fully configured yet.
+        Shell commands to be executed after all the network
+        interfaces have been created, but not necessarily
+        fully configured.
       '';
     };
 
@@ -1061,6 +1058,54 @@ in
               type = types.nullOr types.str;
               example = "vepa";
               description = "The mode of the macvlan device.";
+            };
+
+          };
+
+        });
+    };
+
+    networking.ipvlans = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          wan = {
+            interface = "enp2s0";
+            mode = "l2";
+            flags = "vepa";
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define ipvlan interfaces which should
+        be automatically created.
+      '';
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+
+            interface = mkOption {
+              example = "enp4s0";
+              type = types.str;
+              description = "The interface the ipvlan will transmit packets through.";
+            };
+
+            mode = mkOption {
+              default = "l2";
+              type = types.enum [
+                "l2"
+                "l3"
+                "l3s"
+              ];
+              description = "The mode of the interface.";
+            };
+
+            flags = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              example = "vepa";
+              description = "The flags of the ipvlan device.";
             };
 
           };
@@ -1769,13 +1814,9 @@ in
 
     environment.corePackages = [
       pkgs.host
-      pkgs.hostname-debian
+      pkgs.hostname
       pkgs.iproute2
-      pkgs.iputils
-    ]
-    ++ optionals config.networking.wireless.enable [
-      pkgs.wirelesstools # FIXME: obsolete?
-      pkgs.iw
+      pkgs.iputils # ping
     ]
     ++ bridgeStp;
 
@@ -1809,6 +1850,20 @@ in
         '';
       };
     };
+
+    networking.localCommands = lib.mkIf config.networking.resolvconf.enable ''
+      # Set the static DNS configuration, if given.
+      ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
+      ${optionalString (cfg.nameservers != [ ] && cfg.domain != null) ''
+        domain ${cfg.domain}
+      ''}
+      ${optionalString (cfg.search != [ ]) ("search " + concatStringsSep " " cfg.search)}
+      ${flip concatMapStrings cfg.nameservers (ns: ''
+        nameserver ${ns}
+      '')}
+      EOF
+    '';
+
     services.mstpd = mkIf needsMstpd { enable = true; };
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
@@ -1926,7 +1981,7 @@ in
               # Udev attributes for systemd to name the device and to create a .device target.
               systemdAttrs =
                 n:
-                ''NAME:="${n}", ENV{INTERFACE}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+                ''NAME:="${n}", ENV{ID_NET_NAME}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
             in
             flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (
               device:

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   callPackage,
-  pythonOlder,
   fetchPypi,
   writeText,
 
@@ -12,11 +11,9 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   iniconfig,
   packaging,
   pluggy,
-  tomli,
 
   # optional-dependencies
   argcomplete,
@@ -29,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.4.2";
+  version = "9.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hsDQuTMGuWHVjWKk20h58n/iVRPUuWnfNRq93bPDDgE=";
+    hash = "sha256-dRhmUakr2JYR0dn8IPC0NF/YJ8QczVwpmoaKBdcO3xE=";
   };
 
   outputs = [
@@ -52,10 +49,6 @@ buildPythonPackage rec {
     packaging
     pluggy
     pygments
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   optional-dependencies = {
@@ -76,9 +69,6 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  # FIXME(jade): perhaps this should be the default?
-  # https://github.com/NixOS/nixpkgs/issues/435069
-  dontWrapPythonPrograms = true;
   passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
@@ -104,11 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    teams = [ teams.python ];
-    license = licenses.mit;
+    teams = [ lib.teams.python ];
+    license = lib.licenses.mit;
   };
 }

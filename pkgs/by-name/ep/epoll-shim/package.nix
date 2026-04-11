@@ -29,15 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DALLOWS_ONESHOT_TIMERS_WITH_TIMEOUT_ZERO=YES"
   ];
 
+  # fortify causes redefinition errors in the interposer
+  hardeningDisable = lib.optional stdenv.hostPlatform.isFreeBSD "fortify";
+
   # https://github.com/jiixyj/epoll-shim/issues/41
   # https://github.com/jiixyj/epoll-shim/pull/34
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Small epoll implementation using kqueue";
     homepage = "https://github.com/jiixyj/epoll-shim";
-    license = licenses.mit;
-    platforms = platforms.darwin ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.mit;
+    platforms =
+      lib.platforms.darwin ++ lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 })

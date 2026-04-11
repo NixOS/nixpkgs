@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "namecheap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Namecheap API client in Python";
     homepage = "https://github.com/Bemmu/PyNamecheap";
     changelog = "https://github.com/Bemmu/PyNamecheap/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   dnspython,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynslookup";
   version = "1.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wesinator";
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nslookup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to do DNS lookups";
     homepage = "https://github.com/wesinator/pynslookup";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

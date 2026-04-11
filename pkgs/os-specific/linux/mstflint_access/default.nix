@@ -10,12 +10,9 @@
 
 stdenv.mkDerivation rec {
   pname = "mstflint_access";
-  inherit (mstflint) version;
+  inherit (mstflint) version src;
 
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/kernel-mstflint-${version}.tar.gz";
-    hash = "sha256-kQBv/67miw6lSHIcCVYy66B7OHVofFs2N+evtsQ3Ovk=";
-  };
+  sourceRoot = "source/kernel";
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
@@ -35,11 +32,11 @@ stdenv.mkDerivation rec {
   ]
   ++ makeFlags;
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module for Nvidia NIC firmware update";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = [ licenses.gpl2Only ];
-    maintainers = with maintainers; [ thillux ];
-    platforms = platforms.linux;
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = with lib.maintainers; [ thillux ];
+    platforms = lib.platforms.linux;
   };
 }

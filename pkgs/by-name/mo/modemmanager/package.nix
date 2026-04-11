@@ -32,14 +32,14 @@
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.24.0";
+  version = "1.24.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "ModemManager";
     rev = version;
-    hash = "sha256-3jI75aR2esmv5dkE4TrdCHIcCvtdOBKnBC5XLEKoVFs=";
+    hash = "sha256-rBLOqpx7Y2BB6/xvhIw+rDEXsLtePhHLBvfpSuJzQik=";
   };
 
   patches = [
@@ -121,11 +121,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
-    license = licenses.gpl2Plus;
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
   };
 }

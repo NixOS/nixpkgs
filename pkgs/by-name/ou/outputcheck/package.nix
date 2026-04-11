@@ -5,7 +5,7 @@
   lit,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "outputcheck";
   version = "0.4.2";
   pyproject = true;
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace tests/invalid-regex-syntax.smt2 \
       --replace-fail "unbalanced parenthesis" "missing ), unterminated subpattern"
 
-    echo ${version} > RELEASE-VERSION
+    echo ${finalAttrs.version} > RELEASE-VERSION
   '';
 
   nativeCheckInputs = [ lit ];
@@ -48,9 +48,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for checking tool output inspired by LLVM's FileCheck";
     homepage = "https://github.com/stp/OutputCheck";
-    changelog = "https://github.com/stp/OutputCheck/releases/tag/${version}";
+    changelog = "https://github.com/stp/OutputCheck/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fsagbuya ];
     mainProgram = "OutputCheck";
   };
-}
+})

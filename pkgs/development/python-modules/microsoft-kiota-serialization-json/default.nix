@@ -8,22 +8,19 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-json";
-  version = "1.9.7";
+  version = "1.9.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-json-v${version}";
-    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
+    hash = "sha256-J9OLxZ3vQpChhfwjXzrGF691zco/bKv51FG20VFieN0=";
   };
 
   sourceRoot = "${src.name}/packages/serialization/json/";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-serialization-json-v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "JSON serialization implementation for Kiota clients in Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/json";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-json-${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

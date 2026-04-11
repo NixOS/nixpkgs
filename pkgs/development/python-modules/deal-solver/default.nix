@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   z3-solver,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "deal-solver";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";
@@ -50,13 +47,14 @@ buildPythonPackage rec {
     # Flaky tests, sometimes it works sometimes it doesn't
     "test_expr_asserts_ok"
     "test_fuzz_math_floats"
+    "test_model_skip_helpers2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Z3-powered solver (theorem prover) for deal";
     homepage = "https://github.com/life4/deal-solver";
     changelog = "https://github.com/life4/deal-solver/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

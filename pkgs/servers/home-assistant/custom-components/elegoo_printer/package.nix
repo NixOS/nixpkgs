@@ -4,6 +4,7 @@
   buildHomeAssistantComponent,
 
   # dependencies
+  aiomqtt,
   colorlog,
   loguru,
   websocket-client,
@@ -18,16 +19,17 @@
 buildHomeAssistantComponent rec {
   owner = "danielcherubini";
   domain = "elegoo_printer";
-  version = "2.3.5";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "danielcherubini";
     repo = "elegoo-homeassistant";
     tag = "v${version}";
-    hash = "sha256-Ekt19lfn0DdedMFhJDDUkqsv7vjS96+lAhWveag6EeE=";
+    hash = "sha256-JyAgBPaj7BQNn+qhBRZPDw0HypRxpBKGvAuKfQk/bn4=";
   };
 
   dependencies = [
+    aiomqtt
     colorlog
     loguru
     websocket-client
@@ -40,12 +42,12 @@ buildHomeAssistantComponent rec {
     home-assistant
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/danielcherubini/elegoo-homeassistant/releases/tag/v${version}";
     description = "Home Assistant integration for Elegoo 3D printers using the SDCP protocol";
     homepage = "https://github.com/danielcherubini/elegoo-homeassistant";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       typedrat
     ];
   };

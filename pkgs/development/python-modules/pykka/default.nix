@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   pydantic,
@@ -11,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.4.0";
+  version = "4.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jodal";
     repo = "pykka";
     tag = "v${version}";
-    hash = "sha256-OwY8EKCRuc9Tli7Q+rHieqEAYxb7KNBHiPUuycNO8J4=";
+    hash = "sha256-ij5djc+6CjIC9HLxOJorMFdNRnxOoS37+oAmI8Lo5pc=";
   };
 
   build-system = [ hatchling ];
@@ -31,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykka" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pykka.org/";
     description = "Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/releases/tag/${src.tag}";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -15,7 +15,7 @@
   python,
   rpm,
   sphinx,
-  systemd,
+  systemd-python,
 }:
 
 let
@@ -25,7 +25,7 @@ in
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
   version = "4.10.1";
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     libcomps
     libdnf
     rpm
-    systemd
+    systemd-python
   ];
 
   cmakeFlags = [
@@ -119,11 +119,11 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [ ''--add-flags "--setopt=pluginpath=$out/${python.sitePackages}/dnf-plugins"'' ];
 
-  meta = with lib; {
+  meta = {
     description = "Core plugins to use with DNF package manager";
     homepage = "https://github.com/rpm-software-management/dnf-plugins-core";
     changelog = "https://github.com/rpm-software-management/dnf-plugins-core/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ katexochen ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ katexochen ];
   };
 }

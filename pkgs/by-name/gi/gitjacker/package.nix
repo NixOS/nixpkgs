@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitjacker";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "gitjacker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     export PATH=$TMPDIR/usr/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Leak git repositories from misconfigured websites";
     mainProgram = "gitjacker";
     longDescription = ''
@@ -39,7 +39,7 @@ buildGoModule rec {
       even where directory listings are disabled.
     '';
     homepage = "https://github.com/liamg/gitjacker";
-    license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ unlicense ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

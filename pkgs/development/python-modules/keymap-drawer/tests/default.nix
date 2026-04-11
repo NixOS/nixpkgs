@@ -1,89 +1,179 @@
 {
-  lib,
-  fetchFromGitHub,
-  runCommand,
-  stdenv,
+  keymap-drawer,
+  runCommandWith,
   testers,
 
-  keymap-drawer,
+  libxml2,
+  xmlstarlet,
   yamllint,
+  yq-go,
 }:
 let
   runKeymapDrawer =
-    name:
-    runCommand "keymap-drawer-${name}" {
-      nativeBuildInputs = [ keymap-drawer ];
+    { name, ... }@args:
+    runCommandWith {
+      name = "${keymap-drawer.name}-${name}";
+      derivationArgs = removeAttrs args [ "name" ] // {
+        nativeBuildInputs = [ keymap-drawer ] ++ args.nativeBuildInputs or [ ];
+      };
     };
-
-  MattSturgeon-example = fetchFromGitHub {
-    owner = "MattSturgeon";
-    repo = "glove80-config";
-    rev = "d55267dd26593037256b35a5d6ebba0f75541da5";
-    hash = "sha256-MV6cNpgHBuaGvpu2aR1aBNMpwPnDqOSbGf+2ykxocP4=";
-    nonConeMode = true;
-    sparseCheckout = [
-      "config"
-      "img"
-    ];
-  };
-
-  # MattSturgeon's example requires MDI icons
-  mdi = fetchFromGitHub {
-    owner = "Templarian";
-    repo = "MaterialDesign-SVG";
-    tag = "v7.4.47";
-    hash = "sha256-NoSSRT1ID38MT70IZ+7h/gMVCNsjNs3A2RX6ePGwuQ0=";
-  };
 in
 {
-  dump-config = runKeymapDrawer "dump-config" ''
-    keymap dump-config --output "$out"
+  dump-config =
+    runKeymapDrawer
+      {
+        name = "dump-config";
+        nativeBuildInputs = [
+          yamllint
+        ];
+      }
+      /* bash */ ''
+        keymap dump-config --output "$out"
 
-    if [ ! -s "$out" ]; then
-      >&2 echo 'Expected `dump-config` to have content.'
-      exit 1
-    fi
+        if [ ! -s "$out" ]; then
+          >&2 echo 'Expected `dump-config` to have content.'
+          exit 1
+        fi
 
-    ${lib.getExe yamllint} --strict --config-data relaxed "$out"
-  '';
+        yamllint --strict --config-data relaxed "$out"
+      '';
 
-  parse-zmk = testers.testEqualContents {
-    assertion = "keymap parse --zmk-keymap produces expected YAML";
-    expected = "${MattSturgeon-example}/img/glove80.yaml";
-    actual = runKeymapDrawer "parse" ''
-      keymap \
-        --config ${MattSturgeon-example}/config/keymap_drawer.yaml \
-        parse --zmk-keymap ${MattSturgeon-example}/config/glove80.keymap \
-        --output "$out"
-    '';
-    checkMetadata = stdenv.buildPlatform.isLinux;
-  };
+  invalid-keymap = testers.testBuildFailure (
+    runKeymapDrawer
+      {
+        name = "invalid-keymap";
+      }
+      /* bash */ ''
+        keymap \
+          --config ${./config.yaml} \
+          parse --zmk-keymap ${./invalid.keymap} \
+          --output "$out"
+      ''
+  );
 
-  draw = testers.testEqualContents {
-    assertion = "keymap draw produces expected SVG";
-    expected = "${MattSturgeon-example}/img/glove80.svg";
-    actual = runKeymapDrawer "draw" ''
-      ${lib.optionalString stdenv.buildPlatform.isLinux ''
-        export XDG_CACHE_HOME="$PWD/cache"
-        glyphs="$XDG_CACHE_HOME/keymap-drawer/glyphs"
-      ''}
-      ${lib.optionalString stdenv.buildPlatform.isDarwin ''
-        export HOME="$PWD/home"
-        glyphs="$HOME/Library/Caches/keymap-drawer/glyphs"
-      ''}
-      mkdir -p "$glyphs"
+  parse-zmk =
+    runKeymapDrawer
+      {
+        name = "parse";
+        nativeBuildInputs = [
+          yamllint
+          yq-go
+        ];
+      }
+      /* bash */ ''
+        keymap \
+          --config ${./config.yaml} \
+          parse --zmk-keymap ${./minimal.keymap} \
+          --output "$out"
 
-      # Unpack MDI icons into the cache
-      for file in ${mdi}/svg/*
-      do
-        ln -s "$file" "$glyphs/mdi:$(basename "$file")"
-      done
+        yamllint --strict --config-data relaxed "$out" || {
+          >&2 echo "Malformed YAML"
+          exit 1
+        }
 
-      keymap \
-        --config ${MattSturgeon-example}/config/keymap_drawer.yaml \
-        draw ${MattSturgeon-example}/img/glove80.yaml \
-        --output "$out"
-    '';
-    checkMetadata = stdenv.buildPlatform.isLinux;
-  };
+        layer_count=$(yq '.layers | length' "$out")
+        (( layer_count == 2 )) || {
+          >&2 echo "Expected 2 layers, found $layer_count"
+          exit 1
+        }
+
+        default_layer=$(yq --exit-status '.layers.default | flatten' "$out") || {
+          >&2 echo "Expected default layer"
+          exit 1
+        }
+
+        fn_layer=$(yq --exit-status '.layers.fn | flatten' "$out") || {
+          >&2 echo "Expected fn layer"
+          exit 1
+        }
+
+        [ "$default_layer" = '[ESC, A, B, SPACE, C, D]' ] || {
+          >&2 echo "Incorrect default layer: $default_layer"
+          exit 1
+        }
+
+        [ "$fn_layer" = '[F1, F2, F3, F4, F5, F6]' ] || {
+          >&2 echo "Incorrect fn layer: $fn_layer"
+          exit 1
+        }
+
+        yq --exit-status '.. | select(. == "ESC")' "$out" >/dev/null || {
+          >&2 echo "Expected 'ESC' key"
+          exit 1
+        }
+
+        yq --exit-status '.. | select(. == "SPACE")' "$out" >/dev/null || {
+          >&2 echo "Expected 'SPACE' key"
+          exit 1
+        }
+
+        yq --exit-status '.. | select(. == "F1")' "$out" >/dev/null || {
+          >&2 echo "Expected 'F1' key"
+          exit 1
+        }
+      '';
+
+  draw =
+    runKeymapDrawer
+      {
+        name = "draw";
+        nativeBuildInputs = [
+          xmlstarlet
+          libxml2
+        ];
+      }
+      /* bash */ ''
+        keymap \
+          --config ${./config.yaml} \
+          draw ${./minimal.yaml} \
+          --output "$out"
+
+        ns="http://www.w3.org/2000/svg"
+
+        # Basic XML validity
+        xmllint --noout "$out" || {
+          >&2 echo "Malformed XML"
+          exit 1
+        }
+
+        # Root element is <svg>
+        xmlstarlet sel -N s="$ns" -t -v "name(/s:svg)" "$out" | grep -qx svg || {
+          >&2 echo "Expected <svg> root element"
+          exit 1
+        }
+
+        # Assert two layers exist
+        layer_count=$(xmlstarlet sel -N s="$ns" -t -v 'count(//s:g[contains(@class, "layer-")])' "$out")
+        (( layer_count == 2 )) || {
+          >&2 echo "Expected exactly 2 layers, found $layer_count"
+          exit 1
+        }
+
+        for layer in default fn; do
+          # layer-id class
+          xmlstarlet sel -N s="$ns" -t -v 'count(//s:g[@class="layer-'"$layer"'"])' "$out" | grep -qx 1 || {
+            >&2 echo "Missing layer-$layer class"
+            exit 1
+          }
+
+          # text label
+          xmlstarlet sel -N s="$ns" -t -v '//s:text[@class="label" and text()="'"$layer"':"]' "$out" | grep -q "$layer": || {
+            >&2 echo "Missing $layer layer text label"
+            exit 1
+          }
+        done
+
+        key_count=$(xmlstarlet sel -N s="$ns" -t -v 'count(//s:g[contains(@class, "keypos-")])' "$out")
+        (( key_count == 12 )) || {
+          >&2 echo "Expected 12 keys total (6 per layer), found $key_count"
+          exit 1
+        }
+
+        for key in ESC A B SPACE C D F1 F2 F3 F4 F5 F6; do
+          xmlstarlet sel -N s="$ns" -t -v "//s:text[@class='key tap' and text()='$key']" "$out" | grep -q "$key" || {
+            >&2 echo "Expected key '$key'"
+            exit 1
+          }
+        done
+      '';
 }

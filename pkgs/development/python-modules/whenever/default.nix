@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pythonOlder,
   rustPlatform,
   cargo,
   rustc,
@@ -20,21 +19,19 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.8.8";
+  version = "0.10.0b3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "whenever";
     tag = version;
-    hash = "sha256-i9zUf0oRcG4993Q0kkfndfcEe+mLYFcqrIlg7idKDGY=";
+    hash = "sha256-cfqgUkuslNm0jgrnSIEDjWHBL7Pmk5OpR/hmJOrdfbU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-j4sxIcJa406HCDkTJCSU8H+yo2Jth1p8+CaNWlUaIUs=";
+    hash = "sha256-L4k0s28AYqOV/M9BQsczZT08bwtDYIzEdgpdR4z8CeU=";
   };
 
   build-system = [
@@ -74,11 +71,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Strict, predictable, and typed datetimes";
     homepage = "https://github.com/ariebovenberg/whenever";
     changelog = "https://github.com/ariebovenberg/whenever/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

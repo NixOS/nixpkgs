@@ -41,13 +41,13 @@ home-assistant.python.pkgs.buildPythonPackage (
       runHook postInstall
     '';
 
-    nativeCheckInputs =
+    nativeBuildInputs =
       with home-assistant.python.pkgs;
       [
         manifestRequirementsCheckHook
         packaging
       ]
-      ++ (args.nativeCheckInputs or [ ]);
+      ++ (args.nativeBuildInputs or [ ]);
 
     passthru = {
       isHomeAssistantComponent = true;
@@ -62,7 +62,7 @@ home-assistant.python.pkgs.buildPythonPackage (
   }
   // removeAttrs args [
     "meta"
-    "nativeCheckInputs"
+    "nativeBuildInputs"
     "passthru"
   ]
 )

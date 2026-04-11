@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-google";
-  version = "0.36.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1E+3z/ZVonhJgldIDToKhGxFdhq0t+yNep38G3ePOrw=";
+    hash = "sha256-Lzre5IMgf1K0S+932R8GqZHdrLp0eElvpxPpy93zNyo=";
   };
 
-  vendorHash = "sha256-XKKQBpS2PCGBuoiz4G3BI6czVNndPjr+rTKrM5jlsaY=";
+  vendorHash = "sha256-mR9EBeADVFMpykd+CV0tjX95Mn8hJbszLFqNL204IuQ=";
 
   # upstream Makefile also does a go test $(go list ./... | grep -v integration)
   preCheck = ''
@@ -35,11 +35,11 @@ buildGoModule rec {
     ln -s $out/github.com/terraform-linters/${pname}/${version}/${pname} $out/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/terraform-linters/tflint-ruleset-google";
     description = "TFLint ruleset plugin for Terraform Google Provider";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ john-rodewald ];
-    license = with licenses; [ mpl20 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ john-rodewald ];
+    license = with lib.licenses; [ mpl20 ];
   };
 }

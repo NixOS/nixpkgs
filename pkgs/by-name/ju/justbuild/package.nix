@@ -2,6 +2,7 @@
   gccStdenv,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
 
   fmt,
   nlohmann_json,
@@ -33,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZTwe6S0AH1yQt5mABtIeWuMbiVSKeOZWMFI26fthLsM=";
+    tag = "v${version}";
+    hash = "sha256-WJg6zDgDKJjxbR7fdFUY6f2uNHntYPZT8lIt2kAJqAo=";
   };
 
   bazelapi = fetchurl {

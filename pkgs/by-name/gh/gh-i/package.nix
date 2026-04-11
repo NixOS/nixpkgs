@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-i";
   version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "gennaro-tedesco";
     repo = "gh-i";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-k1xfQxRh8T0SINtbFlIVNFEODYU0RhBAkjudOv1bLvw=";
   };
 
@@ -21,10 +21,10 @@ buildGoModule rec {
 
   meta = {
     description = "Search github issues interactively";
-    changelog = "https://github.com/gennaro-tedesco/gh-i/releases/tag/v${version}";
+    changelog = "https://github.com/gennaro-tedesco/gh-i/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/gennaro-tedesco/gh-i";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gh-i";
   };
-}
+})

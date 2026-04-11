@@ -4,21 +4,18 @@
   fetchFromGitHub,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "gate";
-  version = "0.58.0";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "minekube";
     repo = "gate";
-    tag = "v${version}";
-    hash = "sha256-1E6Ge3c+LQpDlyy5Jtyw21VFuKqyF4XVpxF41qOjk+w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C+XKDFzsCgZpTS2fEpAKOExPyO9WOjdmHKvVpmNyDRo=";
   };
 
-  vendorHash = "sha256-2ZRfvjIGUznHjn7KA20uzEpVbI7EByNUYu6xALJEUfo=";
+  vendorHash = "sha256-7tDEtZyV4upFG/DGg1rbJbO8XV7MSAzFSs/3NmH4qI4=";
 
   ldflags = [
     "-s"
@@ -44,4 +41,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ XBagon ];
     mainProgram = "gate";
   };
-}
+})

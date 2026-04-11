@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   git,
-  asio,
+  asio_1_32_0,
   catch2,
   spdlog,
   udev,
@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     git
   ];
   buildInputs = [
-    asio
+    # Depends on io_service
+    asio_1_32_0
     catch2
     spdlog
   ];
@@ -59,10 +60,10 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop library for Bluetooth low energy development";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver";
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.unix;
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.unix;
   };
 }

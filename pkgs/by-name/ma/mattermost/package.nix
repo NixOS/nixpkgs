@@ -5,6 +5,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
@@ -19,14 +20,15 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.5";
-    srcHash = "sha256-X0YjyRrFSYI7A+VINLV3NwAmsxgTkdUdHChyl1L+iWY=";
-    vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
+    version = "10.11.13";
+    srcHash = "sha256-jh1Ez+5pJiB9eBbOkVMVWryok0NsHrg0p/1d2723fwU=";
+    vendorHash = "sha256-hKAKM2qFn5Zvr/Sc33XmFl7l59agMaEvlvVD5aOyaxI=";
     npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
   },
+  ...
 }:
 
 let
@@ -193,6 +195,7 @@ buildMattermost rec {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         versionInfo.regex
       ]
@@ -219,6 +222,9 @@ buildMattermost rec {
         substituteInPlace channels/webpack.config.js \
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
+
+      # https://github.com/NixOS/nixpkgs/issues/474535
+      nodejs = nodejs_22;
 
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
@@ -258,7 +264,6 @@ buildMattermost rec {
     maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
     ];
     platforms = lib.platforms.linux;

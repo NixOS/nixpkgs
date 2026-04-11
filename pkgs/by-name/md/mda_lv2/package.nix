@@ -9,12 +9,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mda-lv2";
   version = "1.2.6";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
+    url = "https://download.drobilla.net/mda-lv2-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-zWYRcCSuBJzzrKg/npBKcCdyJOI6lp9yqcXQEKSYV9s=";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://drobilla.net/software/mda-lv2.html";
     description = "LV2 port of the MDA plugins by Paul Kellett";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

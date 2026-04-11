@@ -4,22 +4,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zabbix-utils";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zabbix";
     repo = "python-zabbix-utils";
     tag = "v${version}";
-    hash = "sha256-VEL7vAIodxFdw3XEjL0nSQL49RiaxfZdS+HcYUzxgho=";
+    hash = "sha256-/9OTehMGELU70Y3ZU1ZB4/ODkI3UbfIXNQ7H/vTz6JE=";
   };
 
   build-system = [ setuptools ];

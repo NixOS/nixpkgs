@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typstyle";
-  version = "0.14.0";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "typstyle-rs";
     repo = "typstyle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L6MmXipkpTfSvSzuUmE6/hUqDoLbe3+2/bHgFbTfLpo=";
+    hash = "sha256-zDvO++UEA94Kdfu4/qCqfF6IgdCtpIjaVZjZdlkQgNw=";
   };
 
-  cargoHash = "sha256-xGGuZw87CjS/tA74SiIyMqM6PS0OJt00axiI3jyAAr0=";
+  cargoHash = "sha256-9Z2l982ELoMOAzsFMhQzaXcb1vX8Y6aek0j/HbTzp38=";
 
   # Disabling tests requiring network access
   checkFlags = [
@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

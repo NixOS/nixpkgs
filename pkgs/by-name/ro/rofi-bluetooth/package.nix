@@ -5,6 +5,7 @@
   makeWrapper,
   bc,
   bluez,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -36,6 +37,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Rofi-based interface to connect to bluetooth devices and display status info";

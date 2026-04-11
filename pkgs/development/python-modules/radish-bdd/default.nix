@@ -8,26 +8,22 @@
   humanize,
   lxml,
   parse-type,
-  pysingleton,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   tag-expressions,
 }:
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.18.2";
+  version = "0.18.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
     tag = "v${version}";
-    hash = "sha256-SSrEKGs4q4rcnQM03/gc0/vEb7gmTmpfgeNp3e+Hyvg=";
+    hash = "sha256-pnZ/vqjMd1Q/wF1W6joYrIulZSXAzS2G3E5Ke5VSAQg=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +32,6 @@ buildPythonPackage rec {
     humanize
     lxml
     parse-type
-    pysingleton
     pyyaml
     tag-expressions
   ];
@@ -49,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radish" ];
 
-  meta = with lib; {
+  meta = {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
     changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       l33tname
     ];

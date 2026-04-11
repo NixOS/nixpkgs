@@ -8,14 +8,14 @@
   mplayer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gopro";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "KonradIT";
     repo = "gopro-linux";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0sb9vpiadrq8g4ag828h8mvq01fg0306j0wjwkxdmwfqync1128l";
   };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for processing media filmed on GoPro HERO 3, 4, 5, 6, and 7 cameras";
     homepage = "https://github.com/KonradIT/gopro-linux";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "gopro";
   };
-}
+})

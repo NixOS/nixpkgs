@@ -20,7 +20,6 @@ let
     take
     length
     filterAttrs
-    optionalString
     flip
     head
     pipe
@@ -156,8 +155,25 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
+      # Recover overrider and additional attributes for f
+      # When f is a callable attribute set,
+      # it may contain its own `f.override` and additional attributes.
+      # This helper function recovers those attributes and decorate the overrider.
+      recoverMetadata =
+        if isAttrs f then
+          fDecorated:
+          # Preserve additional attributes for f
+          f
+          // fDecorated
+          # Decorate f.override if presented
+          // lib.optionalAttrs (f ? override) {
+            override = fdrv: makeOverridable (f.override fdrv);
+          }
+        else
+          id;
+      decorate = f': recoverMetadata (mirrorArgs f');
     in
-    mirrorArgs (
+    decorate (
       origArgs:
       let
         result = f origArgs;
@@ -323,7 +339,7 @@ rec {
       abort "lib.customisation.callPackageWith: ${error}";
 
   /**
-    Like callPackage, but for a function that returns an attribute
+    Like `callPackage`, but for a function that returns an attribute
     set of derivations. The override function is added to the
     individual attributes.
 
@@ -609,15 +625,18 @@ rec {
     # Type
 
     ```
-    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> scope
+    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> Scope
     ```
   */
   makeScope =
     newScope: f:
     let
-      self = f self // {
-        newScope = scope: newScope (self // scope);
+      self = {
         callPackage = self.newScope { };
+      }
+      // f self
+      // {
+        newScope = scope: newScope (self // scope);
         overrideScope = g: makeScope newScope (extends g f);
         packages = f;
       };
@@ -665,27 +684,27 @@ rec {
     };
 
   /**
-    Like makeScope, but aims to support cross compilation. It's still ugly, but
+    Like `makeScope`, but aims to support cross compilation. It's still ugly, but
     hopefully it helps a little bit.
 
     # Type
 
     ```
     makeScopeWithSplicing' ::
-      { splicePackages :: Splice -> AttrSet
-      , newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+      { splicePackages :: Splice -> AttrSet;
+        newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a;
       }
-      -> { otherSplices :: Splice, keep :: AttrSet -> AttrSet, extra :: AttrSet -> AttrSet }
+      -> { otherSplices :: Splice; keep :: AttrSet -> AttrSet; extra :: AttrSet -> AttrSet; }
       -> AttrSet
 
-    Splice ::
-      { pkgsBuildBuild :: AttrSet
-      , pkgsBuildHost :: AttrSet
-      , pkgsBuildTarget :: AttrSet
-      , pkgsHostHost :: AttrSet
-      , pkgsHostTarget :: AttrSet
-      , pkgsTargetTarget :: AttrSet
-      }
+    Splice :: {
+      pkgsBuildBuild :: AttrSet;
+      pkgsBuildHost :: AttrSet;
+      pkgsBuildTarget :: AttrSet;
+      pkgsHostHost :: AttrSet;
+      pkgsHostTarget :: AttrSet;
+      pkgsTargetTarget :: AttrSet;
+    }
     ```
   */
   makeScopeWithSplicing' =
@@ -763,27 +782,42 @@ rec {
     # Inputs
 
     `extendMkDerivation`-specific configurations
-    : `constructDrv`: Base build helper, the `mkDerivation`-like build helper to extend.
-    : `excludeDrvArgNames`: Argument names not to pass from the input fixed-point arguments to `constructDrv`. Note: It doesn't apply to the updating arguments returned by `extendDrvArgs`.
-    : `extendDrvArgs` : An extension (overlay) of the argument set, like the one taken by [overrideAttrs](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
-    : `inheritFunctionArgs`: Whether to inherit `__functionArgs` from the base build helper (default to `true`).
-    : `transformDrv`: Function to apply to the result derivation (default to `lib.id`).
+    : `constructDrv` (required)
+      : Base build helper, the `mkDerivation`-like build helper to extend.
+
+      `excludeDrvArgNames` (default to `[ ]`)
+      : Argument names not to pass from the input fixed-point arguments to `constructDrv`.
+        It doesn't apply to the updating arguments returned by `extendDrvArgs`.
+
+      `excludeFunctionArgNames` (default to `[ ]`)
+      : `__functionArgs` attribute names to remove from the result build helper.
+        `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
+
+      `extendDrvArgs` (required)
+      : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+
+      `inheritFunctionArgs` (default to `true`)
+      : Whether to inherit `__functionArgs` from the base build helper.
+        Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
+
+      `transformDrv` (default to `lib.id`)
+      : Function to apply to the result derivation.
 
     # Type
 
     ```
     extendMkDerivation ::
       {
-        constructDrv :: ((FixedPointArgs | AttrSet) -> a)
-        excludeDrvArgNames :: [ String ],
-        extendDrvArgs :: (AttrSet -> AttrSet -> AttrSet)
-        inheritFunctionArgs :: Bool,
-        transformDrv :: a -> a,
+        constructDrv :: (FixedPointArgs | AttrSet) -> Derivation;
+        excludeDrvArgNames :: [String];
+        excludeFunctionArgNames :: [String];
+        extendDrvArgs :: AttrSet -> AttrSet -> AttrSet;
+        inheritFunctionArgs :: Bool;
+        transformDrv :: Derivation -> Derivation;
       }
-      -> (FixedPointArgs | AttrSet) -> a
+      -> ((FixedPointArgs | AttrSet) -> Derivation)
 
-    FixedPointArgs = AttrSet -> AttrSet
-    a = Derivation when defining a build helper
+    FixedPointArgs :: AttrSet -> AttrSet
     ```
 
     # Examples
@@ -836,6 +870,7 @@ rec {
     {
       constructDrv,
       excludeDrvArgNames ? [ ],
+      excludeFunctionArgNames ? [ ],
       extendDrvArgs,
       inheritFunctionArgs ? true,
       transformDrv ? id,
@@ -850,10 +885,12 @@ rec {
       )
       # Add __functionArgs
       (
-        # Inherit the __functionArgs from the base build helper
-        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
-        # Recover the __functionArgs from the derived build helper
-        // functionArgs (extendDrvArgs { })
+        removeAttrs (
+          # Inherit the __functionArgs from the base build helper
+          optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+          # Recover the __functionArgs from the derived build helper
+          // functionArgs (extendDrvArgs { })
+        ) excludeFunctionArgNames
       )
     // {
       inherit
@@ -962,7 +999,21 @@ rec {
     # Type
 
     ```
-    mapCrossIndex :: (a -> b) -> AttrSet -> AttrSet
+    mapCrossIndex :: (a -> b) -> {
+      buildBuild :: a;
+      buildHost :: a;
+      buildTarget :: a;
+      hostHost :: a;
+      hostTarget :: a;
+      targetTarget :: a;
+    } -> {
+      buildBuild :: b;
+      buildHost :: b;
+      buildTarget :: b;
+      hostHost :: b;
+      hostTarget :: b;
+      targetTarget :: b;
+    }
     ```
 
     # Examples

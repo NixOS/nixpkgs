@@ -12,15 +12,15 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ca-certs-nss";
-  version = "3.117";
+  version = "3.121";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
-    hash = "sha256-SdcTJ3Og5h5XvqnDqp1flw/hwLWINjlqeT/vIwAg380=";
+    url = "https://github.com/mirage/ca-certs-nss/releases/download/v${finalAttrs.version}/ca-certs-nss-${finalAttrs.version}.tbz";
+    hash = "sha256-KLFr7n9DORIkRHXud/xe61DkxKAKPZ1TopGCeK5h45w=";
   };
 
   propagatedBuildInputs = [
@@ -39,11 +39,11 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = with lib; {
+  meta = {
     description = "X.509 trust anchors extracted from Mozilla's NSS";
     homepage = "https://github.com/mirage/ca-certs-nss";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "extract-from-certdata";
   };
-}
+})

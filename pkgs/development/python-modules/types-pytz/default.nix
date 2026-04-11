@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-pytz";
-  version = "2025.2.0.20250809";
+  version = "2026.1.1.20260304";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_pytz";
-    inherit version;
-    hash = "sha256-Ii4y5qKbsohx+INOh4XjgB8txEQccVzSCCsnHuy+IeU=";
+    inherit (finalAttrs) version;
+    hash = "sha256-DDVC2OmwFgtCQjNEDFK4PW9YyuS4UzPVTk+WHPAT4Rc=";
   };
 
   build-system = [ setuptools ];
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytz-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for pytz";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

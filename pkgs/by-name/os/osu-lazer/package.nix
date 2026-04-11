@@ -13,7 +13,7 @@
   lttng-ust,
   numactl,
   libglvnd,
-  xorg,
+  libxi,
   udev,
   vulkan-loader,
   nix-update-script,
@@ -22,13 +22,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2025.1029.1";
+  version = "2026.406.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     tag = "${version}-lazer";
-    hash = "sha256-zIeeZVyI//uTZDH3i7FyuKRDDRcVRaT/43/4F5/Lamw=";
+    hash = "sha256-3Wg6BzMoP2BR5XAmdZgl3+Kt9YOFb+k3Qceh2hh9or8=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -54,7 +54,7 @@ buildDotnetModule rec {
     libglvnd
 
     # needed for the window to actually appear
-    xorg.libXi
+    libxi
 
     # needed to avoid in runtime.log:
     # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action

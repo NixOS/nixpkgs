@@ -3,10 +3,9 @@
   nix-update-script,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_13,
+  apple-sdk,
   cmake,
   coreutils,
-  darwinMinVersionHook,
   libxml2,
   lto ? true,
   makeWrapper,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ponyc";
-  version = "0.60.3";
+  version = "0.60.6";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     tag = version;
-    hash = "sha256-VlmIy2i7BZ8jK96KVnTzdjyXWTyOuWE5M3yNp7gcVCA=";
+    hash = "sha256-mBtSoFOX0dHtb0ojdT+uB1Lmu7Cak/3A8808dv3o1ik=";
     fetchSubmodules = true;
   };
 
@@ -59,9 +58,6 @@ stdenv.mkDerivation rec {
     git
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Keep in sync with `PONY_OSX_PLATFORM`.
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
     cctools.libtool
   ];
 
@@ -77,7 +73,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-darwin-build.patch {
-      apple-sdk = apple-sdk_13;
+      inherit apple-sdk;
     })
   ];
 
@@ -102,6 +98,20 @@ stdenv.mkDerivation rec {
         --replace-fail "https://github.com/google/benchmark/archive/v$benchmarkRev.tar.gz" "$NIX_BUILD_TOP/deps/benchmark-$benchmarkRev.tar" \
         --replace-fail "https://github.com/google/googletest/releases/download/v$googletestRev/googletest-$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
+
+  # We do not concern ourselves with darwin as the ponyc compiler
+  # has logic which overrides this environmental variable in this
+  # case.
+  env.arch =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86-64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "armv8-a"
+    else
+      lib.warn ''
+        architecture '${stdenv.hostPlatform.system}' compiles with native optimizations,
+        this may result in crashes on incompatible CPUs!
+      '' "native";
 
   preBuild = ''
     extraFlags=(build_flags=-j$NIX_BUILD_CORES)
@@ -166,11 +176,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
-    homepage = "https://www.ponylang.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    homepage = "https://www.ponylang.io";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       kamilchm
       redvers
       numinit

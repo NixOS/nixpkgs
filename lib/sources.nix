@@ -20,7 +20,7 @@ let
 
   /**
     A basic filter for `cleanSourceWith` that removes
-    directories of version control system, backup files (*~)
+    directories of version control system, backup files (`*~`)
     and some generated files.
 
     # Inputs
@@ -72,7 +72,7 @@ let
     );
 
   /**
-    Filters a source tree removing version control files and directories using cleanSourceFilter.
+    Filters a source tree removing version control files and directories using `cleanSourceFilter`.
 
     # Inputs
 
@@ -131,7 +131,7 @@ let
       # that src.filter is called lazily.
       # For implementing a filter, see
       # https://nixos.org/nix/manual/#builtin-filterSource
-      # Type: A function (path -> type -> bool)
+      # Type: A function (Path -> Type -> Bool)
       filter ? _path: _type: true,
       # Optional name to use as part of the store path.
       # This defaults to `src.name` or otherwise `"source"`.
@@ -158,7 +158,7 @@ let
     # Type
 
     ```
-    sources.trace :: sourceLike -> Source
+    sources.trace :: SourceLike -> Source
     ```
   */
   trace =
@@ -200,7 +200,7 @@ let
     ## `sourceByRegex` usage example
 
     ```nix
-    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    src = sourceByRegex ./my-subproject [".*\\.py$" "^database\\.sql$"]
     ```
 
     :::
@@ -241,7 +241,7 @@ let
     # Type
 
     ```
-    sourceLike -> [String] -> Source
+    sourceFilesBySuffices :: SourceLike -> [String] -> Source
     ```
 
     # Examples
@@ -529,4 +529,6 @@ in
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

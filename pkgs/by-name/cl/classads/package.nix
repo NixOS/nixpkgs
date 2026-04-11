@@ -6,12 +6,12 @@
   pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "classads";
   version = "1.0.10";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";
+    url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${finalAttrs.version}.tar.gz";
     sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.10.2";
+  version = "1.11.1";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_snowflake";
     inherit version;
-    hash = "sha256-7bq+IU7VAJLecv5JERXnxNtPY0I/6WSCyGedXCYoDLk=";
+    hash = "sha256-C2uS13vwN9AuZ0XgrdRHMsunuzSwoM06HGFmJ45Bs0A=";
   };
 
   pythonRelaxDeps = [
@@ -48,6 +48,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-snowflake";
     changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-snowflake/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tjni ];
   };
 }

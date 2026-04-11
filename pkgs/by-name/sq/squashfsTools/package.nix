@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   help2man,
   lz4,
   lzo,
@@ -12,16 +13,24 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squashfs";
-  version = "4.7.2";
+  version = "4.7.5";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
-    rev = version;
-    hash = "sha256-iQ+pBt+jvqI6zgZRV2MZM3CeFqiXe8Z+SS+rLOB4DLw=";
+    rev = finalAttrs.version;
+    hash = "sha256-rQ69sXvi6wY8yRyuQzcJZ6MvVGBbIw7vG+kYVHvfQQ8=";
   };
+
+  patches = [
+    # Fix for Darwin: struct stat uses st_atimespec instead of st_atim.
+    (fetchpatch {
+      url = "https://github.com/plougher/squashfs-tools/commit/f88f4a659d6ab432a57e90fe2f6191149c6b343f.patch";
+      hash = "sha256-XRDV6qtd5jVwt2jbIlLDYKiI1tbVcuij5/vaPj9SN5w=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -58,12 +67,12 @@ stdenv.mkDerivation rec {
     nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/plougher/squashfs-tools";
     description = "Tool for creating and unpacking squashfs filesystems";
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ruuda ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ruuda ];
     mainProgram = "mksquashfs";
   };
-}
+})

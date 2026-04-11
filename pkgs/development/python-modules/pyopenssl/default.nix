@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "25.1.0";
+  version = "25.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "pyopenssl";
     tag = version;
-    hash = "sha256-QF511MVyjfddmkTd2H7RNJeoWs+e0me4i55YGP4t910=";
+    hash = "sha256-lNXS3lIGFPeM7DKMFTLBiOWn+AwZtenXF5KGN5DRwO4=";
   };
 
   outputs = [
@@ -95,11 +95,11 @@ buildPythonPackage rec {
     "test_verify_with_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the OpenSSL library";
     homepage = "https://github.com/pyca/pyopenssl";
     changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -26,18 +26,18 @@
   level-zero,
   libffi,
 }:
-intel-oneapi.mkIntelOneApi (fa: {
+intel-oneapi.mkIntelOneApi (finalAttrs: {
   pname = "intel-oneapi-hpc-toolkit";
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/2d2a6686-ff06-44ce-baf0-ab84f8dafa89/intel-oneapi-hpc-toolkit-2025.2.1.44_offline.sh";
-    hash = "sha256-SC0eDu4TGf9bZB8aAX4AnIvguTpP0afOj9JqA63QSPs=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/f59a79aa-4a6e-46e8-a6c2-be04bb13f274/intel-oneapi-hpc-toolkit-2025.3.1.55_offline.sh";
+    hash = "sha256-NwLR7OWzmKYM05BZ2U7IZI+3IBnb0wiUgF+vHrX0Tro=";
   };
 
   versionYear = "2025";
-  versionMajor = "2";
+  versionMajor = "3";
   versionMinor = "1";
-  versionRel = "44";
+  versionRel = "55";
 
   inherit components;
 
@@ -62,7 +62,7 @@ intel-oneapi.mkIntelOneApi (fa: {
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
-    inherit (fa) pname;
+    inherit (finalAttrs) pname;
     file = "hpc.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit-download.html?packages=hpc-toolkit&hpc-toolkit-os=linux&hpc-toolkit-lin=offline";
   };

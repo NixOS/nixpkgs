@@ -21,19 +21,25 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   writeScript,
 }:
 let
-  id = "289869947";
+  id = "373278730";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
-  version = "2.1.0";
+  version = "2.7.1";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.dev/download/${id}/multiviewer_${version}_amd64.deb";
-    sha256 = "sha256-H+tt2FiT1UxkWBxpuyOIUjRMOMl7kN/SFH/WqoRdVUU=";
+    url = "https://releases.multiviewer.app/download/${id}/multiviewer_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-BKXw8a4fUT+B7KBc6p/Heo+sAtWAG5b/D2iohuNOotY=";
   };
 
   nativeBuildInputs = [
@@ -58,13 +64,13 @@ stdenvNoCC.mkDerivation rec {
     nspr
     nss
     pango
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libxcb
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
+    libx11
+    libxcomposite
+    libxcb
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
   ];
 
   dontBuild = true;
@@ -94,7 +100,7 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = writeScript "update-multiviewer-for-f1" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl common-updater-scripts
+    #!nix-shell -i bash -p curl jq common-updater-scripts
     set -eu -o pipefail
 
     # Get latest API for packages, store so we only make one request
@@ -105,24 +111,24 @@ stdenvNoCC.mkDerivation rec {
     id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
     version=$(echo $latest | jq -r '.version')
 
-    if [ "$version" != "${version}" ]
+    if [ "$version" != "${finalAttrs.version}" ]
     then
       # Pre-calculate package hash
-      hash=$(nix-prefetch-url --type sha256 $link)
+      hash=$(nix-hash --type sha256 --to-sri $(nix-prefetch-url --type sha256 $link))
 
       # Update ID and version in source
-      update-source-version ${pname} "$id" --version-key=id
-      update-source-version ${pname} "$version" "$hash" --system=x86_64-linux
+      sed -i "s/id = \"[0-9]*\"/id = \"$id\"/" ${__curPos.file}
+      update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial desktop client for F1 TV";
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ babeuh ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ babeuh ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "multiviewer";
   };
-}
+})

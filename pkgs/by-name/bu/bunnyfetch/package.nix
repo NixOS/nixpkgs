@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bunnyfetch";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "bunnyfetch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
   };
 
@@ -20,12 +20,12 @@ buildGoModule rec {
   # No upstream tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tiny system info fetch utility";
     homepage = "https://github.com/Rosettea/bunnyfetch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ devins2518 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devins2518 ];
+    platforms = lib.platforms.linux;
     mainProgram = "bunnyfetch";
   };
-}
+})

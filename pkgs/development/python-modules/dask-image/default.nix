@@ -22,22 +22,22 @@
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2024.5.3";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-image";
     tag = "v${version}";
-    hash = "sha256-kXCAqJ2Zgo/2Khvo2YcK+n4oGM219GyQ2Hsq9re1Lac=";
+    hash = "sha256-+nzYthnobcemunMcAWwRpHOQy6yFtjdib/7VZqWEiqc=";
   };
 
   postPatch = ''
-    substituteInPlace dask_image/ndinterp/__init__.py \
-      --replace-fail "out_bounds.ptp(axis=1)" "np.ptp(out_bounds, axis=1)"
+    sed -i "/--flake8/d" pyproject.toml
 
-    substituteInPlace tests/test_dask_image/test_imread/test_core.py \
-      --replace-fail "fh.save(" "fh.write("
+    # https://numpy.org/doc/stable//release/2.4.0-notes.html#removed-numpy-in1d
+    substituteInPlace tests/test_dask_image/test_ndmeasure/test_core.py \
+      --replace-fail "np.in1d" "np.isin"
   '';
 
   build-system = [
@@ -70,6 +70,11 @@ buildPythonPackage rec {
 
     # AssertionError (comparing slices)
     "test_find_objects_with_empty_chunks"
+
+    # scipy compat issue
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_generic_filter_identity"
+    "test_generic_filter_comprehensions"
   ];
 
   meta = {

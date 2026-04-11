@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   spdlog,
@@ -12,7 +13,6 @@
   kahip,
   adios2,
   python3Packages,
-  darwinMinVersionHook,
   catch2_3,
   withParmetis ? false,
 }:
@@ -26,19 +26,31 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.10.0.post1";
+  version = "0.10.0.post5";
   pname = "dolfinx";
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "dolfinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZsaEcJdvsf3dxJ739/CU20+drjbAvuc/HkIGCfh9U5A=";
+    hash = "sha256-CK7YEtJtrx/Mto72RHT4Qjg5StO28Et+FeCYxk5T+8s=";
   };
 
-  preConfigure = ''
-    cd cpp
-  '';
+  patches = [
+    # Fix wrong span extent in _lift_bc_interior_facets
+    # https://github.com/FEniCS/dolfinx/pull/4102
+    (fetchpatch {
+      url = "https://github.com/FEniCS/dolfinx/commit/6daca34a075a6dcdfdf77feb13d55d5dbd20e4dd.patch";
+      hash = "sha256-b/C1MqslS2OBCt+kK/+vJjW8pmsJx2FQ36qDtFA1ewI=";
+      includes = [ "cpp/dolfinx/fem/assemble_vector_impl.h" ];
+    })
+    # Fix hdf5 interface for rank 1
+    # https://github.com/FEniCS/dolfinx/pull/4043
+    (fetchpatch {
+      url = "https://github.com/FEniCS/dolfinx/commit/fce7c44f220d4cb94c5149ad28cd1ab00909c319.patch";
+      hash = "sha256-EVm4Rx5UO/3pKIVvjgYAkN+i5QR+u0Nxwxotlf41t+Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -49,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     dolfinxPackages.kahip
     dolfinxPackages.scotch
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3")
   ++ lib.optional withParmetis dolfinxPackages.parmetis;
 
   propagatedBuildInputs = [
@@ -63,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.fenics-basix
     python3Packages.fenics-ffcx
   ];
+
+  cmakeDir = "../cpp";
 
   cmakeFlags = [
     (lib.cmakeBool "DOLFINX_ENABLE_ADIOS2" true)
@@ -81,9 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-unittests";
       inherit (finalAttrs) version src;
 
-      preConfigure = ''
-        cd cpp/test
-      '';
+      cmakeDir = "../cpp/test";
 
       nativeBuildInputs = [
         cmake

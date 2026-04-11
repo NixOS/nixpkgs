@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchpatch,
   fetchurl,
   cmake,
@@ -14,12 +13,13 @@
   curl,
   gcc,
   libsForQt5,
-  libXt,
+  libxt,
   qtbase,
   qttools,
   qtwebengine,
   readline,
   qtwebsockets,
+  qtwayland,
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -30,7 +30,7 @@
   withWebengine ? false, # vulnerable, so disabled by default
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "supercollider";
   version = "3.13.1";
 
@@ -47,6 +47,12 @@ mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
       hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
+    })
+
+    # Fixes the build with GCC 15
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/edfac5e24959b12286938a9402326e521c2d2b63.patch";
+      hash = "sha256-8DNCO5VEX6V0Q29A/v5tFC7u835bwNHvcNlZzmS0ADg=";
     })
   ];
 
@@ -70,9 +76,10 @@ mkDerivation rec {
     libsndfile
     fftw
     curl
-    libXt
+    libxt
     qtbase
     qtwebsockets
+    qtwayland
     readline
   ]
   ++ lib.optional withWebengine qtwebengine
@@ -116,12 +123,12 @@ mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
     maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

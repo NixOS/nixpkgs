@@ -11,11 +11,6 @@
     inherit hash;
   },
   patches ? [ ],
-  maintainers ? [
-    lib.maintainers.artturin
-    lib.maintainers.philiptaron
-    lib.maintainers.lovesegfault
-  ],
   teams ? [ lib.teams.nix ],
   self_attribute_name,
 }@args:
@@ -50,7 +45,6 @@ assert (hash == null) -> (src != null);
   meson,
   ninja,
   mdbook,
-  mdbook-linkcheck,
   nlohmann_json,
   nixosTests,
   openssl,
@@ -64,10 +58,7 @@ assert (hash == null) -> (src != null);
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ?
-    lib.meta.availableOn stdenv.hostPlatform aws-c-common
-    && !enableStatic
-    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ? lib.meta.availableOn stdenv.hostPlatform aws-c-common,
   aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -101,8 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   hardeningDisable = [
     "shadowstack"
   ]
@@ -126,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableDocumentation [
     (lib.getBin lowdown-unsandboxed)
     mdbook
-    mdbook-linkcheck
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal
@@ -263,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
-  meta = with lib; {
+  meta = {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
       Nix is a powerful package manager for Linux and other Unix systems that
@@ -273,14 +261,14 @@ stdenv.mkDerivation (finalAttrs: {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl21Plus;
-    inherit maintainers teams;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    inherit teams;
+    platforms = lib.platforms.unix;
     # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
     # https://hydra.nixos.org/build/298175022
     # probably https://github.com/NixOS/nix/issues/13042
     broken = stdenv.hostPlatform.system == "i686-linux" && stdenv.buildPlatform != stdenv.hostPlatform;
-    outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
   };
 })

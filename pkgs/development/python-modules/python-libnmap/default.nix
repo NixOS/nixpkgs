@@ -3,15 +3,12 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-libnmap";
   version = "0.7.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "savon-noir";
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libnmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to run nmap scans, parse and diff scan results";
     homepage = "https://github.com/savon-noir/python-libnmap";
     changelog = "https://github.com/savon-noir/python-libnmap/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

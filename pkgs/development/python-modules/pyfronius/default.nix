@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pyfronius";
     tag = version;
-    hash = "sha256-Q1GMt9K9+wohFogXwGyAhyfSxSsmo+80Kca7F7VhksA=";
+    hash = "sha256-KUO5e3UYIm49kgBxidizt77AplojOv4UsnIoDa0Gtv4=";
   };
 
   build-system = [ setuptools ];
@@ -25,17 +25,16 @@ buildPythonPackage rec {
   dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
-    aiounittest
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pyfronius" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Fronius Symo";
     homepage = "https://github.com/nielstron/pyfronius";
     changelog = "https://github.com/nielstron/pyfronius/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

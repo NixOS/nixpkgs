@@ -3,24 +3,22 @@
   stdenv,
   yq,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   iproute2,
   libbpf,
   nixosTests,
   withBpf ? false,
   withConfigValidation ? true,
   withShellColor ? false,
-  withWireguard ? true,
 }:
 
 let
-  version = "2.0.2";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "liske";
+  version = "2.2.5";
+  src = fetchFromCodeberg {
+    owner = "routerkit";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-ghl2EVSum8KOh9wpFkrLGeIii2cj0a2+yOa48/JwFRk=";
+    hash = "sha256-KdOlKjs/Zv8TsCiMpA87gb7KKpl4Ohg512yiuNHcV9o=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
@@ -34,7 +32,9 @@ let
       (
         [
           mkdocs-material
+          mike
           mkdocs-glightbox
+          mkdocs-macros-plugin
           mkdocs-minify-plugin
         ]
         ++ mkdocs-material.optional-dependencies.imaging
@@ -80,8 +80,7 @@ let
         setproctitle
       ]
       ++ lib.optional withConfigValidation jsonschema
-      ++ lib.optional withShellColor pygments
-      ++ lib.optional withWireguard wgnlpy;
+      ++ lib.optional withShellColor pygments;
 
     pythonRemoveDeps = lib.optional (!withConfigValidation) "jsonschema";
 
@@ -100,7 +99,6 @@ let
           withBpf
           withConfigValidation
           withShellColor
-          withWireguard
           ;
       };
       # needed for access in schema validaten in module

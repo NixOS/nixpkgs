@@ -23,38 +23,44 @@
   properties-cpp,
   qtbase,
   qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
+  qtfeedback ? null,
+  qtgraphicaleffects ? null,
   qttools,
   validatePkgConfig,
   wrapGAppsHook3,
   xvfb-run,
+  withDocumentation ? true,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
-    rev = finalAttrs.version;
-    hash = "sha256-S/idjDdcRvqZqKmflkYJyQckz4/9k/8JY6eRDACk9Ag=";
+    tag = finalAttrs.version;
+    hash = "sha256-ukaEur2RgdIVPYm90OUCs0L+F9OQ3zaypreyx33iD5M=";
   };
 
   outputs = [
     "out"
     "dev"
-    "doc"
     "examples"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
   ];
 
   patches = [
-    # Remove when version > 2.1.0
+    # Remove when version > 2.2.2
     (fetchpatch {
-      name = "0001-lomiri-content-hub-treewide-Add-missing-LDM-include-dirs.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/cdd3371714c183d4caf166157082288c022bb98d.patch";
-      hash = "sha256-Uubd425T+0KxPR9lJW6+ejO2fFzcDwEIpJATSZ9jYD4=";
+      name = "0001-lomiri-content-hub-Properly-include-lomiri-api-includedirs.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/dab1854e5ec0a91fd28c9d84f06dcdd0af39518b.patch";
+      hash = "sha256-aQB8kLL2ZkKUOvFoDQ9rottFsCSNJ66wUjUZxP+kr5k=";
     })
   ];
 
@@ -69,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
       --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+  ''
+  # Need QtQuick.Window on QML2_IMPORT_PATH
+  + ''
+    substituteInPlace tests/qml6-tests/CMakeLists.txt \
+      --replace-fail 'QML2_IMPORT_PATH=' 'QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}:'
   '';
 
   strictDeps = true;
@@ -78,9 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
     qtdeclarative # qmlplugindump
-    qttools # qdoc
     validatePkgConfig
     wrapGAppsHook3
+  ]
+  ++ lib.optionals withDocumentation [
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -96,8 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     properties-cpp
     qtbase
     qtdeclarative
-    qtfeedback
+  ]
+  ++ lib.optionals (!withQt6) [
+    # Deprecated in Qt6
     qtgraphicaleffects
+
+    # Will prolly want this in the future, but needs porting to Qt6
+    qtfeedback
   ];
 
   nativeCheckInputs = [
@@ -112,10 +130,13 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_DOC" true)
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
+    (lib.cmakeBool "ENABLE_DOC" withDocumentation)
+    # in case something still depends on it
+    # no longer available in the Qt6 build
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
+    (lib.cmakeBool "ENABLE_WERROR" (!withQt6)) # Known issues on Qt6
   ];
 
   preBuild =
@@ -127,12 +148,19 @@ stdenv.mkDerivation (finalAttrs: {
       # Executes qmlplugindump
       export QT_PLUGIN_PATH=${listToQtVar [ qtbase ] qtbase.qtPluginPrefix}
       export QML2_IMPORT_PATH=${
-        listToQtVar [
-          qtdeclarative
-          lomiri-ui-toolkit
-          qtfeedback
-          qtgraphicaleffects
-        ] qtbase.qtQmlPrefix
+        listToQtVar (
+          [
+            qtdeclarative
+            lomiri-ui-toolkit
+          ]
+          ++ lib.optionals (!withQt6) [
+            # Deprecated in Qt6
+            qtgraphicaleffects
+
+            # Will prolly want this in the future, but needs porting to Qt6
+            qtfeedback
+          ]
+        ) qtbase.qtQmlPrefix
       }
     '';
 
@@ -159,6 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    }
+    // lib.optionalAttrs (!withQt6) {
       # Tests content-hub functionality, up to the point where one app receives a content exchange request
       # from another and changes into a mode to pick the content to send
       vm = nixosTests.lomiri.desktop-appinteractions;
@@ -182,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "liblomiri-content-hub"
+      "liblomiri-content-hub${lib.optionalString withQt6 "-qt6"}"
       "liblomiri-content-hub-glib"
     ];
   };

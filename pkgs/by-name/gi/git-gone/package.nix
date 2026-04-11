@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-gone";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "git-gone";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/8ujbZ7FQTZzTG4HnHg6v3rWhxt2PuSGwIJpBVTxhfM=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cleanup stale Git branches of merge requests";
     homepage = "https://github.com/swsnr/git-gone";
-    changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/swsnr/git-gone/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cafkafk
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-gone";
   };
-}
+})

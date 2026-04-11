@@ -18,7 +18,7 @@
   libjxl,
   librsvg,
   libwebp,
-  libX11,
+  libx11,
   lcms2,
   bison,
   brasero,
@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.8.1";
+  version = "3.12.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-JzYvwRylxYHzFoIjDJUCDlofzd9M/+vnVVeCjGF021s=";
+    sha256 = "sha256-MiI0RlPNb7XXmBtzlRrj2QxBT3QiCoschmWyVXQoTHU=";
   };
 
   strictDeps = true;
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libtiff
     libwebp
-    libX11
+    libx11
   ];
 
   postPatch = ''
@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs data/gschemas/make-enums.py \
       gthumb/make-gthumb-h.py \
       po/make-potfiles-in.py \
-      postinstall.py \
       gthumb/make-authors-tab.py
   '';
 
@@ -100,13 +99,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
     mainProgram = "gthumb";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       bobby285271
       mimame
     ];

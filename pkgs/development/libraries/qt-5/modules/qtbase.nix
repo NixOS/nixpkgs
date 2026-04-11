@@ -17,7 +17,6 @@
   python3,
   which,
   # darwin support
-  apple-sdk_14,
   xcbuild,
 
   dbus,
@@ -27,12 +26,12 @@
   harfbuzz,
   icu,
   libdrm,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrender,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -43,11 +42,11 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   zlib,
   at-spi2-core,
 
@@ -57,7 +56,6 @@
   withGtk3 ? false,
   dconf,
   gtk3,
-  withQttranslation ? true,
   qttranslations ? null,
   withLibinput ? false,
   libinput,
@@ -86,11 +84,6 @@ let
       "linux-generic-g++"
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
-
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
-  darwinVersionInputs = [
-    apple-sdk_14
-  ];
 in
 
 stdenv.mkDerivation (
@@ -130,18 +123,18 @@ stdenv.mkDerivation (
           libdrm
 
           # X11 libs
-          libX11
-          libXcomposite
-          libXext
-          libXi
-          libXrender
+          libx11
+          libxcomposite
+          libxext
+          libxi
+          libxrender
           libxcb
           libxkbcommon
-          xcbutil
-          xcbutilimage
-          xcbutilkeysyms
-          xcbutilrenderutil
-          xcbutilwm
+          libxcb-util
+          libxcb-image
+          libxcb-keysyms
+          libxcb-render-util
+          libxcb-wm
         ]
         ++ lib.optional libGLSupported libGL
       );
@@ -153,7 +146,6 @@ stdenv.mkDerivation (
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
         lib.optional withLibinput libinput ++ lib.optional withGtk3 gtk3
       )
-      ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
       ++ lib.optional developerBuild gdb
       ++ lib.optional (cups != null) cups
       ++ lib.optional mysqlSupport libmysqlclient
@@ -325,9 +317,9 @@ stdenv.mkDerivation (
             "-w"
           ]
           ++ [
-            ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+            ''-DNIXPKGS_QTCOMPOSE="${libx11.out}/share/X11/locale"''
             ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
-            ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+            ''-DNIXPKGS_LIBXCURSOR="${libxcursor.out}/lib/libXcursor"''
           ]
           ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
           ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"
@@ -442,14 +434,14 @@ stdenv.mkDerivation (
         "-I"
         "${openssl.dev}/include"
         "-system-sqlite"
-        ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
-        ''-${if libpq != null then "plugin" else "no"}-sql-psql''
+        "-${if mysqlSupport then "plugin" else "no"}-sql-mysql"
+        "-${if libpq != null then "plugin" else "no"}-sql-psql"
         "-system-libpng"
 
         "-make libs"
         "-make tools"
-        ''-${lib.optionalString (!buildExamples) "no"}make examples''
-        ''-${lib.optionalString (!buildTests) "no"}make tests''
+        "-${lib.optionalString (!buildExamples) "no"}make examples"
+        "-${lib.optionalString (!buildTests) "no"}make tests"
       ]
       ++ (
         if stdenv.hostPlatform.isDarwin then
@@ -466,19 +458,19 @@ stdenv.mkDerivation (
             "-xcb"
             "-qpa xcb"
             "-L"
-            "${libX11.out}/lib"
+            "${libx11.out}/lib"
             "-I"
-            "${libX11.out}/include"
+            "${libx11.out}/include"
             "-L"
-            "${libXext.out}/lib"
+            "${libxext.out}/lib"
             "-I"
-            "${libXext.out}/include"
+            "${libxext.out}/include"
             "-L"
-            "${libXrender.out}/lib"
+            "${libxrender.out}/lib"
             "-I"
-            "${libXrender.out}/include"
+            "${libxrender.out}/include"
 
-            ''-${lib.optionalString (cups == null) "no-"}cups''
+            "-${lib.optionalString (cups == null) "no-"}cups"
             "-dbus-linked"
             "-glib"
           ]
@@ -499,8 +491,7 @@ stdenv.mkDerivation (
             "-I"
             "${libmysqlclient}/include"
           ]
-          ++ lib.optional (withQttranslation && (qttranslations != null)) [
-            # depends on x11
+          ++ lib.optional (qttranslations != null) [
             "-translationdir"
             "${qttranslations}/translations"
           ]
@@ -544,19 +535,18 @@ stdenv.mkDerivation (
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.qt.io/";
         description = "Cross-platform application framework for C++";
-        license = with licenses; [
+        license = with lib.licenses; [
           fdl13Plus
           gpl2Plus
           lgpl21Plus
           lgpl3Plus
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           qknight
           ttuegel
-          periklis
           bkchr
         ];
         pkgConfigModules = [
@@ -578,7 +568,7 @@ stdenv.mkDerivation (
           "Qt5Widgets"
           "Qt5Xml"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
       };
 
     }

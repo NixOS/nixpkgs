@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
   trimesh,
@@ -28,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.9.0";
+  version = "4.11.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-HOSmV55RRZkIk1YppWfYvSm0hURSKUsDeeWtVBrH7Rs=";
+    hash = "sha256-LF7tjthYtsEZJLqBiQZBe4urLjSD3Vbi3g1ZJ++0Tyk=";
   };
 
   build-system = [ setuptools ];

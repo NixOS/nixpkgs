@@ -2,16 +2,15 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dacite";
   version = "1.9.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "konradhalas";
@@ -23,7 +22,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--benchmark-autosave --benchmark-json=benchmark.json" ""
+  ''
+  + lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace tests/core/test_union.py \
+      --replace-fail "typing.Union[int, str]" "int | str"
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,11 +36,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/performance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python helper to create data classes from dictionaries";
     homepage = "https://github.com/konradhalas/dacite";
     changelog = "https://github.com/konradhalas/dacite/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

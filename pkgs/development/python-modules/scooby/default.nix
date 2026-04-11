@@ -8,7 +8,6 @@
   psutil,
   pytest-console-scripts,
   pytestCheckHook,
-  pythonOlder,
   pyvips,
   scipy,
   setuptools-scm,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "scooby";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "banesullivan";
@@ -65,12 +62,12 @@ buildPythonPackage rec {
     "test_auto_report"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
     description = "Lightweight tool for reporting Python package versions and hardware resources";
     mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

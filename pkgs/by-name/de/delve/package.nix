@@ -3,17 +3,19 @@
   buildGoModule,
   fetchFromGitHub,
   stdenv,
+  nix-update-script,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "delve";
-  version = "1.25.2";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
-    rev = "v${version}";
-    hash = "sha256-CtOaaYxqa4GwfDQ1yuUwRQPy948Xyha046TLTaq526w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j/uGkAd/4Hpspgcb2J3UOs8iThx2YydUee31Hddl9zw=";
   };
 
   patches = [
@@ -22,7 +24,14 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   subPackages = [ "cmd/dlv" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -42,13 +51,24 @@ buildGoModule rec {
     # add symlink for vscode golang extension
     # https://github.com/golang/vscode-go/blob/master/docs/debugging.md#manually-installing-dlv-dap
     ln $out/bin/dlv $out/bin/dlv-dap
+
+    installShellCompletion --cmd dlv \
+      --bash <($out/bin/dlv completion bash) \
+      --fish <($out/bin/dlv completion fish) \
+      --zsh <($out/bin/dlv completion zsh)
   '';
 
-  meta = with lib; {
+  # delve doesn't support --version
+  doInstallCheck = false;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
-    maintainers = with maintainers; [ vdemeester ];
-    license = licenses.mit;
+    changelog = "https://github.com/go-delve/delve/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.mit;
     mainProgram = "dlv";
   };
-}
+})

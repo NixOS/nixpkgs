@@ -13,7 +13,7 @@ let
   buildVscodeLanguagePack =
     {
       language,
-      version ? "1.105.2025100809",
+      version ? "1.110.2026040813",
       hash,
     }:
     buildVscodeMarketplaceExtension {
@@ -41,71 +41,71 @@ in
   # French
   vscode-language-pack-fr = buildVscodeLanguagePack {
     language = "fr";
-    hash = "sha256-HFpkXUYz7//5KlKe1NjiT/KBFBar9H5ivpltqGOTHJo=";
+    hash = "sha256-/34hQYL82oNV4AK+X9Qhc49y11U7QjBtQZkxX2DJCv0=";
   };
   # Italian
   vscode-language-pack-it = buildVscodeLanguagePack {
     language = "it";
-    hash = "sha256-YD1jTB9VzWF51QaFPRsEBC1pMkgrs2cl0HFA/PFz3ro=";
+    hash = "sha256-igknYIMrlTf6dzPRCWeE2IQ8s7SsD4AFN/oPPISv5Vk=";
   };
   # German
   vscode-language-pack-de = buildVscodeLanguagePack {
     language = "de";
-    hash = "sha256-hIw0nFdYgcyOuJW8k7HRS0sKc0Gsuh7YWyLwQ3Z1FkU=";
+    hash = "sha256-ovzQBQfdPQoVVgKl47qnucUQfhBBDCbbGwKlI86gR10=";
   };
   # Spanish
   vscode-language-pack-es = buildVscodeLanguagePack {
     language = "es";
-    hash = "sha256-iO+1Lq/vXkMCGNnj9CovBhLPtbuJtGHSfQnjXypRBcw=";
+    hash = "sha256-tn1irueWoqGidrxOv49IP0pdUPjk1mPvFppe2RHEs3E=";
   };
   # Russian
   vscode-language-pack-ru = buildVscodeLanguagePack {
     language = "ru";
-    hash = "sha256-HxTStM+g/XKJH1twNYMu/V7IM7vBlYF4mfcemV+oOQI=";
+    hash = "sha256-3RMlWPzjHAYJsiulQOMqIZ0/u2hqxF+gZ9vVZVvPJWE=";
   };
   # Chinese (Simplified)
   vscode-language-pack-zh-hans = buildVscodeLanguagePack {
     language = "zh-hans";
-    hash = "sha256-nCPu7pEXpM22M+2IMtuPgxzyEF3R6MPm2CVZAccPdAU=";
+    hash = "sha256-5ig0jME4lljWRKL3j64RobHW98IdjzrF/cZEEkpjMZo=";
   };
   # Chinese (Traditional)
   vscode-language-pack-zh-hant = buildVscodeLanguagePack {
     language = "zh-hant";
-    hash = "sha256-JKKqrwGn/EMDMot1cIgLpekUVQf4IY+snENeKoE5jYU=";
+    hash = "sha256-gV/Z1br8I+fp+/4ALQQt75sNYJGK+opvUHpkYHwV2Xc=";
   };
   # Japanese
   vscode-language-pack-ja = buildVscodeLanguagePack {
     language = "ja";
-    hash = "sha256-6OWcr/XnJsOvRFho+P5Z+ppuAC8d08I3s0YWnLhH874=";
+    hash = "sha256-UilZzzy8DjhXQP6jrkndNBZFqUeX2zLVy05nOIDViKk=";
   };
   # Korean
   vscode-language-pack-ko = buildVscodeLanguagePack {
     language = "ko";
-    hash = "sha256-VqlAaS679KF0ZKlzDT55FIu5GKyzU41y1ptX7t88UHc=";
+    hash = "sha256-Z4a01eQD1bgQnlf0174DozkKqo5TeVR6J8sgnMPGmMg=";
   };
   # Czech
   vscode-language-pack-cs = buildVscodeLanguagePack {
     language = "cs";
-    hash = "sha256-yFtp+XK7Y2Fi/uYqsh88d3hCRcQJhJOLWvs2pQ05ddo=";
+    hash = "sha256-CCqtlFQrlgRN8ds/pqMFP6S5Ks+ZpGu3iUfchSFX1mA=";
   };
   # Portuguese (Brazil)
   vscode-language-pack-pt-br = buildVscodeLanguagePack {
     language = "pt-BR";
-    hash = "sha256-2zM8E832ioa6fqnWzPq+PA/eiEAo8FDNNH/4HJPZIcI=";
+    hash = "sha256-Yi2W8bdieyNxJfGy3XNafB5DX27VujSz8Dp8BMyBi1w=";
   };
   # Turkish
   vscode-language-pack-tr = buildVscodeLanguagePack {
     language = "tr";
-    hash = "sha256-7ghSb/sQM64wfsRRtS+quAqJEvUdIXAcPCQKJbsDXKc=";
+    hash = "sha256-lKHTQryxzSgW7S3QVXHCr7DvFihD+vr2lOwiWk1klVQ=";
   };
   # Polish
   vscode-language-pack-pl = buildVscodeLanguagePack {
     language = "pl";
-    hash = "sha256-/joZpsIAY9Ut67wAbzNTraBgBgtjDAeRoq8PUbP3rSc=";
+    hash = "sha256-l2PBwwGS+HFswTF4gbS++AREmTMzzbiZtHzzvX900yc=";
   };
   # Pseudo Language
   vscode-language-pack-qps-ploc = buildVscodeLanguagePack {
     language = "qps-ploc";
-    hash = "sha256-xERSh5N5Mbyc977ji0n91ra0RV9ZldJKBzc3IWYWYyo=";
+    hash = "sha256-9/SDMQ9v0zZq1fveWDx6TI/28o9NDzN0YI/tOcC7dks=";
   };
 }

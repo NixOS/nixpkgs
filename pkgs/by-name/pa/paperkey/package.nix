@@ -4,12 +4,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "paperkey";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://www.jabberwocky.com/software/paperkey/${pname}-${version}.tar.gz";
+    url = "https://www.jabberwocky.com/software/paperkey/paperkey-${finalAttrs.version}.tar.gz";
     sha256 = "1xq5gni6gksjkd5avg0zpd73vsr97appksfx0gx2m38s4w9zsid2";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Store OpenPGP or GnuPG on paper";
     mainProgram = "paperkey";
     longDescription = ''
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
       are generally used to back up computer data.
     '';
     homepage = "https://www.jabberwocky.com/software/paperkey/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       peterhoeg
     ];
   };
-}
+})

@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxinerama";
-  version = "1.1.5";
+  version = "1.1.6";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXinerama-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UJTR8PzBgoyxaW0NOdnoZq4yUgxU0B9hjxo8HjDCCFw=";
+    hash = "sha256-0A/BWZwwPcXLwSK4BovcdAXW/LGQYPRZf8Ub06i+Udc=";
   };
 
   strictDeps = true;
@@ -57,10 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       mit
       mitOpenGroup
-      # TODO: change this to a new license depending on if this
-      # https://github.com/spdx/license-list-XML/issues/2831
-      # actually creates a new license or just new markup for X11
-      x11
+      x11NoPermitPersons
     ];
     maintainers = [ ];
     pkgConfigModules = [ "xinerama" ];

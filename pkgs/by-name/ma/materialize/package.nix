@@ -92,7 +92,6 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
   version = "0.87.2";
-  MZ_DEV_BUILD_SHA = "000000000000000000000000000000000000000000000000000";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
@@ -112,12 +111,15 @@ rustPlatform.buildRustPackage rec {
   '';
 
   env = {
+    MZ_DEV_BUILD_SHA = "000000000000000000000000000000000000000000000000000";
     # needed for internal protobuf c wrapper library
     PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
 
     # needed to dynamically link rdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
   };
 
   cargoHash = "sha256-+OREisZ/vw3Oi5MNCYn7u06pZKtf+2trlGyn//uAGws=";
@@ -130,9 +132,6 @@ rustPlatform.buildRustPackage rec {
   ]
   # Provides the mig command used by the krb5-src build script
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
-
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [
     openssl
@@ -168,7 +167,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/environmentd";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

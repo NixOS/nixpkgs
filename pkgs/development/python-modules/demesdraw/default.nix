@@ -8,7 +8,6 @@
   matplotlib,
   numpy,
   scipy,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -18,8 +17,7 @@
 buildPythonPackage rec {
   pname = "demesdraw";
   version = "0.4.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -48,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demesdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drawing functions for Demes demographic models";
     mainProgram = "demesdraw";
     homepage = "https://github.com/grahamgower/demesdraw";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sqldef";
-  version = "3.3.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "sqldef";
     repo = "sqldef";
-    rev = "v${version}";
-    hash = "sha256-nzWOVB66gASKh3AWoyifjGJ2H17G4RRv51Lqo01p1pw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-//wAzWGgNIYp/uajrhX2GexIsdYRjRAOPcHXZuSdj+E=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-u471eJFxVcXiwuAFRD65yJnDoR3D40PLHXeoMcENdLY=";
+  vendorHash = "sha256-xX4ZrhIdHvNFRTXHkZfEbevauuv4x9IYfDVfq7IFDg8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # The test requires a running database
@@ -35,7 +35,7 @@ buildGoModule rec {
       asl20 # for parser
     ];
     homepage = "https://github.com/sqldef/sqldef";
-    changelog = "https://github.com/sqldef/sqldef/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sqldef/sqldef/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ kgtkr ];
   };
-}
+})

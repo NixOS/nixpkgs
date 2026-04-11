@@ -3,15 +3,12 @@
   requests,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aladdin-connect";
   version = "0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "shoejosh";
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aladdin_connect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with Genie Aladdin Connect devices";
     homepage = "https://github.com/shoejosh/aladdin-connect";
     changelog = "https://github.com/shoejosh/aladdin-connect/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

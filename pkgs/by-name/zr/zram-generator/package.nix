@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zram-generator";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "zram-generator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aGBvvjGKZ5biruwmJ0ITakqPhTWs9hspRIE9QirqstA=";
   };
 
@@ -71,10 +71,10 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/systemd/zram-generator";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Systemd unit generator for zram devices";
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

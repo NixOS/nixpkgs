@@ -6,8 +6,6 @@
   pkg-config,
   docutils,
   pandoc,
-  ethtool,
-  iproute2,
   libnl,
   udev,
   udevCheckHook,
@@ -17,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "59.0";
+  version = "62.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GSARu2HNej4tI62RjLWkjS+5FKVbeNmX7jh0atlEpX0=";
+    hash = "sha256-1n33KH8HTyZ0jHtDanopxwABiLjAvt+V7lgaeabJs8s=";
   };
 
   strictDeps = true;
@@ -44,8 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ethtool
-    iproute2
     libnl
     perl
     udev

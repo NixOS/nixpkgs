@@ -8,18 +8,18 @@
   sq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sq";
-  version = "0.48.5";
+  version = "0.48.12";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = "sq";
-    rev = "v${version}";
-    hash = "sha256-y7+UfwTbL0KTQgz4JX/q6QQqL0n8SO1qgKTrK9AFhO4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TAQiTZx13rYlJlT41/RE03Ro4CRjECBdQz42YSI1j74=";
   };
 
-  vendorHash = "sha256-MejUKPIhvjgV2+h81DJUSdBEMD0rvgDbTAvv3E2uTOk=";
+  vendorHash = "sha256-jfUUVbvrdFX/++xRAgz7Tzqgu5AK2ZDmubWnWBIQeKE=";
 
   proxyVendor = true;
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${version}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -44,16 +44,16 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = sq;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for data";
     mainProgram = "sq";
     homepage = "https://sq.io/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

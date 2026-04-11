@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docopt-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for docopt";
     homepage = "https://pypi.org/project/types-docopt/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

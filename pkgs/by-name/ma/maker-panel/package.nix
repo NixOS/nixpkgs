@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maker-panel";
   version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "twitchyliquid64";
     repo = "maker-panel";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0dlsy0c46781sb652kp80pvga7pzx6xla64axir92fcgg8k803bi";
   };
 
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage rec {
     installManPage maker-panel.5
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Make mechanical PCBs by combining shapes together";
     homepage = "https://github.com/twitchyliquid64/maker-panel";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
-}
+})

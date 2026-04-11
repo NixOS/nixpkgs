@@ -34,12 +34,12 @@ buildFHSEnv {
   # disabled temporarily because fastdiff no longer support 32bit
   # multiPkgs = pio-pkgs;
 
-  meta = with lib; {
+  meta = {
     description = "Open source ecosystem for IoT development";
     homepage = "https://platformio.org";
-    maintainers = with maintainers; [ mog ];
-    license = licenses.asl20;
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ mog ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux;
   };
 
   extraInstallCommands = ''

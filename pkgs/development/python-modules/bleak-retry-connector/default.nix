@@ -9,34 +9,30 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
-  pythonOlder,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "4.4.3";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bleak-retry-connector";
     tag = "v${version}";
-    hash = "sha256-/IJBAeb/PdJt0IbLm3RnaHn4o8o1DXN8jGiQtzp7wLg=";
+    hash = "sha256-wUfIP0UHL60AAq38j4Kc2enTccdhT7aaSrXWJ1y5+7I=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    lib.optionals (pythonOlder "3.14") [
-      bleak
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && pythonOlder "3.14") [
-      bluetooth-adapters
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus-fast
-    ];
+  dependencies = [
+    bleak
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus-fast
+    bluetooth-adapters
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -44,13 +40,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # ModuleNotFoundError: No module named 'dbus_fast'
+  doCheck = stdenv.hostPlatform.isLinux;
+
   pythonImportsCheck = [ "bleak_retry_connector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
-    changelog = "https://github.com/bluetooth-devices/bleak-retry-connector/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/bleak-retry-connector/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

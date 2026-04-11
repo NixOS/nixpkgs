@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   makeWrapper,
   nixosTests,
   symlinkJoin,
@@ -14,14 +16,12 @@
 }:
 let
   qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {
-    withGrass = withGrass;
-    withServer = withServer;
-    withWebKit = withWebKit;
+    inherit withGrass withServer withWebKit;
   };
 in
 
 symlinkJoin {
-  inherit (qgis-unwrapped) version src;
+  inherit (qgis-unwrapped) version outputs src;
   pname = "qgis";
 
   paths = [ qgis-unwrapped ];
@@ -42,6 +42,9 @@ symlinkJoin {
         --prefix PATH : $program_PATH \
         --set PYTHONPATH $program_PYTHONPATH
     done
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    ln -s ${qgis-unwrapped.man} $man
   '';
 
   passthru = {

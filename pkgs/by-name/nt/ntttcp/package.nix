@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntttcp";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "ntttcp-for-linux";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-6O7qSrR6EFr7k9lHQHGs/scZxJJ5DBNDxlSL5hzlRf4=";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux network throughput multiple-thread benchmark tool";
     homepage = "https://github.com/microsoft/ntttcp-for-linux";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ntttcp";
   };
-}
+})

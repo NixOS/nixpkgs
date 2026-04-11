@@ -21,17 +21,16 @@
   nixosTests,
   openssh,
   sqliteSupport ? true,
-  xorg,
+  lndir,
   runCommand,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildNpmPackage,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "forgejo";
     repo = "forgejo";
     inherit rev hash;
@@ -114,6 +113,9 @@ buildGoModule rec {
     getGoDirs() {
       make show-backend-tests
     }
+
+    # TestRunHookPrePostReceive (cmd/hook_test.go) needs .git to pass
+    git init
   '';
 
   checkFlags =
@@ -164,7 +166,7 @@ buildGoModule rec {
         {
           nativeBuildInputs = [
             brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''
@@ -192,15 +194,7 @@ buildGoModule rec {
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      emilylange
-      urandom
-      bendlas
-      adamcstephens
-      marie
-      pyrox0
-      tebriel
-    ];
+    teams = [ lib.teams.forgejo ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "forgejo";
   };

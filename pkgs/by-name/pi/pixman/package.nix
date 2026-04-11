@@ -13,8 +13,7 @@
   qemu,
   scribus,
   tigervnc,
-  wlroots_0_17,
-  wlroots_0_18,
+  wlroots_0_19,
   xwayland,
 
   gitUpdater,
@@ -78,8 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
         qemu
         scribus
         tigervnc
-        wlroots_0_17
-        wlroots_0_18
+        wlroots_0_19
         xwayland
         ;
       pkg-config = testers.hasPkgConfigModules {
@@ -92,11 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pixman.org";
     description = "Low-level library for pixel manipulation";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "pixman-1" ];
   };
 })

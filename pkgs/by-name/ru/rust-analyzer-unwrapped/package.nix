@@ -8,19 +8,20 @@
   useMimalloc ? false,
   doCheck ? true,
   nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-analyzer-unwrapped";
-  version = "2025-10-28";
+  version = "2026-04-06";
 
-  cargoHash = "sha256-iw+Pgtv5VkCRSa07ap5fjhVZQgo+sfNjp5A4yaHdX1M=";
+  cargoHash = "sha256-IQ+hVSJw3iQ7cAY7PMRHR8md3Shn3xu/OSZB3de5UFY=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
-    rev = version;
-    hash = "sha256-rNsxpCKWzVNJ5FR71mpZFSEPxuvZfAQzcVpgfwgajQU=";
+    rev = finalAttrs.version;
+    hash = "sha256-bFC/p7Ywyd9QIr9DbU3Q75c7AcaCm9wVmEvcI3702cY=";
   };
 
   cargoBuildFlags = [
@@ -48,21 +49,17 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
-  env.CFG_RELEASE = version;
+  env.CFG_RELEASE = finalAttrs.version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
     export RUST_SRC_PATH=${rustPlatform.rustLibSrc}
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    versionOutput="$($out/bin/rust-analyzer --version)"
-    echo "'rust-analyzer --version' returns: $versionOutput"
-    [[ "$versionOutput" == "rust-analyzer ${version}" ]]
-    runHook postInstallCheck
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -72,14 +69,14 @@ rustPlatform.buildRustPackage rec {
     # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
   };
 
-  meta = with lib; {
-    description = "Modular compiler frontend for the Rust language";
+  meta = {
+    description = "Language server for the Rust language";
     homepage = "https://rust-analyzer.github.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with lib.maintainers; [ oxalica ];
     mainProgram = "rust-analyzer";
   };
-}
+})

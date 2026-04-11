@@ -353,7 +353,7 @@ let
                 pkgs.pkg-config
               ];
 
-              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant_2 ];
 
               postBuild = ''
                 NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
@@ -549,7 +549,10 @@ let
           # Telega has a server portion for it's network protocol
           # elisp error
           telega = (ignoreCompilationError super.telega).overrideAttrs (old: {
-            buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+            buildInputs = old.buildInputs ++ [
+              pkgs.tdlib
+              pkgs.zlib
+            ];
             nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
             postPatch = ''
@@ -855,18 +858,6 @@ let
 
           auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
 
-          auto-virtualenv = super.auto-virtualenv.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
-                  url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
-                  hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
-                })
-              ];
-            }
-          );
-
           aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
           badger-theme = ignoreCompilationError super.badger-theme; # elisp error
@@ -1017,6 +1008,9 @@ let
           # missing optional dependencies
           conda = addPackageRequires super.conda [ self.projectile ];
 
+          # https://github.com/NixOS/nixpkgs/issues/483425
+          consult = addPackageRequires super.consult [ self.flymake ];
+
           # needs network during compilation, also native-ice
           consult-gh = ignoreCompilationError (
             super.consult-gh.overrideAttrs (old: {
@@ -1145,10 +1139,6 @@ let
           # depends on later-do which is not on any ELPA
           emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
 
-          # missing optional dependencies
-          # https://github.com/isamert/empv.el/pull/96
-          empv = addPackageRequires super.empv [ self.hydra ];
-
           enotify = ignoreCompilationError super.enotify; # elisp error
 
           # https://github.com/leathekd/ercn/issues/6
@@ -1249,7 +1239,7 @@ let
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
 
-          gnosis = mkHome super.gnosis;
+          gnosis = ignoreCompilationError (mkHome super.gnosis); # doing db stuff when compiling
 
           go = ignoreCompilationError super.go; # elisp error
 
@@ -1411,6 +1401,33 @@ let
 
           leaf-defaults = ignoreCompilationError super.leaf-defaults; # elisp error
 
+          liberime = super.liberime.overrideAttrs (
+            let
+              libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+            in
+            prevAttrs: {
+              buildInputs = prevAttrs.buildInputs ++ [
+                pkgs.librime
+              ];
+              nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [
+                pkgs.which
+              ];
+              postBuild =
+                prevAttrs.postBuild or ""
+                + "\n"
+                + ''
+                  make CC=$CC SUFFIX=${libExt}
+                '';
+              postInstall =
+                prevAttrs.postInstall or ""
+                + "\n"
+                + ''
+                  rm -rv $out/share/emacs/site-lisp/elpa/liberime-*/{src,emacs-module,Makefile}
+                  install src/liberime-core${libExt} $out/share/emacs/site-lisp/elpa/liberime-*
+                '';
+            }
+          );
+
           # https://github.com/abo-abo/lispy/pull/683
           # missing optional dependencies
           lispy = addPackageRequires (mkHome super.lispy) [ self.indium ];
@@ -1455,6 +1472,8 @@ let
           mu4e-query-fragments = addPackageRequires super.mu4e-query-fragments [ self.mu4e ];
 
           mu4e-views = addPackageRequires super.mu4e-views [ self.mu4e ];
+
+          mu4e-walk = addPackageRequires super.mu4e-walk [ self.mu4e ];
 
           # https://github.com/magnars/multifiles.el/issues/9
           multifiles = addPackageRequires super.multifiles [ self.dash ];
@@ -1666,18 +1685,6 @@ let
           sakura-theme = addPackageRequiresIfOlder super.sakura-theme [ self.autothemer ] "20240921.1028";
 
           scad-preview = ignoreCompilationError super.scad-preview; # elisp error
-
-          sdml-mode = super.sdml-mode.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "make-pretty-hydra-optional.patch";
-                  url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
-                  hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
-                })
-              ];
-            }
-          );
 
           # https://github.com/wanderlust/semi/pull/29
           # missing optional dependencies

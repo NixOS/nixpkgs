@@ -28,10 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xpilots";
     homepage = "http://bloodspilot.sf.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
 })

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "15.1.0";
+  version = "16.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-VeF6Sti1Ide2LchiCuPut/bdbJUv+5eTH2q0YMcniyA=";
+    hash = "sha256-mz0VI72lqtur5HdCkPNxInk0pUWxji0boIZnfvdrxIs=";
   };
 
   build-system = [
@@ -63,10 +63,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # `__darwinAllowLocalNetworking` doesn’t work for these; not sure why.
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_timeout.py"
-  ];
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "av"
@@ -97,7 +94,7 @@ buildPythonPackage rec {
     description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
     homepage = "https://github.com/PyAV-Org/PyAV";
-    changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/PyAV-Org/PyAV/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

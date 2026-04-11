@@ -7,14 +7,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-pack";
   version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CN1LcLX7ag+in9sosT2NYVKfhDLGv2m3zHOk2T4MFYc=";
   };
 
@@ -31,14 +31,14 @@ rustPlatform.buildRustPackage rec {
   # Disabling check here to work with build sandboxing.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utility that builds rust-generated WebAssembly package";
     mainProgram = "wasm-pack";
     homepage = "https://github.com/rustwasm/wasm-pack";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ maintainers.dhkl ];
+    maintainers = [ lib.maintainers.dhkl ];
   };
-}
+})

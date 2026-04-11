@@ -34,10 +34,8 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta =
-    metaCommon
-    // (with lib; {
-      platforms = if isAarch64 then [ "aarch64-darwin" ] else platforms.darwin;
-      mainProgram = "losslesscut";
-    });
+  meta = metaCommon // {
+    platforms = if isAarch64 then [ "aarch64-darwin" ] else lib.platforms.darwin;
+    mainProgram = "losslesscut";
+  };
 }

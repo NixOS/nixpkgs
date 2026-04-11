@@ -138,6 +138,7 @@ in
         exit 1
       '';
     in
+    # python
     ''
       # List of AS instances
       machines = [scion01, scion02, scion03, scion04, scion05]
@@ -168,6 +169,10 @@ in
 
       # Wait for scion-control.service on all instances
       wait_for_unit("scion-control.service")
+
+      wait_for_unit("scion-dispatcher.service")
+      succeed("test -L /run/shm")
+      succeed('test "$(readlink --no-newline /run/shm)" = /dev/shm')
 
       # Ensure cert is valid against TRC
       succeed("scion-pki certificate verify --trc /etc/scion/certs/*.trc /etc/scion/crypto/as/*.pem >&2")

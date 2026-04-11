@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ppdeep";
-  version = "20250625";
+  version = "20260221";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-t9pQ5U7ZvXkyY4K28vUfNxgW8ElaUjPe4jqUafh6Kng=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-i+H0Fkt60vfEClGmZNMXZwHkCy+cG5bRju/68G3+/5Q=";
   };
 
   build-system = [ setuptools ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppdeep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for computing fuzzy hashes (ssdeep)";
     homepage = "https://github.com/elceef/ppdeep";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

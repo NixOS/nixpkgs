@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angle-grinder";
   version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "rcoh";
     repo = "angle-grinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-1SZho04qJcNi84ZkDmxoVkLx9VJX04QINZQ6ZEoCq+c=";
   };
 
@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Slice and dice logs on the command line";
     homepage = "https://github.com/rcoh/angle-grinder";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bbigras ];
     mainProgram = "agrind";
   };
-}
+})

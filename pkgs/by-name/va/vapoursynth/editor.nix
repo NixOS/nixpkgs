@@ -1,19 +1,19 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   makeWrapper,
   runCommand,
   python3,
   vapoursynth,
   qmake,
+  wrapQtAppsHook,
   qtbase,
   qtwebsockets,
 }:
 
 let
-  unwrapped = mkDerivation rec {
+  unwrapped = stdenv.mkDerivation rec {
     pname = "vapoursynth-editor";
     version = "R19-mod-4";
 
@@ -29,7 +29,11 @@ let
         --replace-fail "TARGET = vsedit-32bit" "TARGET = vsedit"
     '';
 
-    nativeBuildInputs = [ qmake ];
+    nativeBuildInputs = [
+      qmake
+      wrapQtAppsHook
+    ];
+
     buildInputs = [
       qtbase
       vapoursynth
@@ -63,12 +67,12 @@ let
       inherit withPlugins;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Cross-platform editor for VapourSynth scripts";
       homepage = "https://github.com/YomikoR/VapourSynth-Editor";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 

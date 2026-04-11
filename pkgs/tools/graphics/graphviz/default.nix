@@ -17,7 +17,7 @@
   pango,
   bash,
   bison,
-  xorg,
+  libxrender,
   python3,
   withXorg ? true,
 
@@ -28,7 +28,12 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    optional
+    optionals
+    optionalString
+    optionalAttrs
+    ;
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
     pango
     bash
   ]
-  ++ optionals withXorg (with xorg; [ libXrender ]);
+  ++ optionals withXorg [ libxrender ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -68,11 +73,14 @@ stdenv.mkDerivation rec {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
   ]
-  ++ optional (xorg == null) "--without-x";
+  # TODO: this should probably be !withXorg instead of false, however it causes 17k rebuilds
+  ++ optional false "--without-x";
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin) "-I${cairo.dev}/include/cairo";
+  env = optionalAttrs (withXorg && stdenv.hostPlatform.isDarwin) {
+    CPPFLAGS = "-I${cairo.dev}/include/cairo";
+  };
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
@@ -103,12 +111,12 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       raskin
     ];

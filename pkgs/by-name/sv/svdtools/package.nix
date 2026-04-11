@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "svdtools";
   version = "0.5.0";
 
   src = fetchCrate {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-2GemBVTRvYC5bvlYgJKmDJM78ZoE63B1QwV8cfSHYPg=";
   };
 
@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
     description = "Tools to handle vendor-supplied, often buggy SVD files";
     mainProgram = "svdtools";
     homepage = "https://github.com/stm32-rs/svdtools";
-    changelog = "https://github.com/stm32-rs/svdtools/blob/v${version}/CHANGELOG-rust.md";
+    changelog = "https://github.com/stm32-rs/svdtools/blob/v${finalAttrs.version}/CHANGELOG-rust.md";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

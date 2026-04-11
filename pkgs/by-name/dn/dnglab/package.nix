@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnglab";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "dnglab";
     repo = "dnglab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     # darwin/linux hash mismatch
     postFetch = ''
       rm -rf "$out"/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     rm $out/bin/benchmark $out/bin/identify
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Camera RAW to DNG file format converter";
     homepage = "https://github.com/dnglab/dnglab";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "dnglab";
   };
-}
+})

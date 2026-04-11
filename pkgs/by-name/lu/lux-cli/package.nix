@@ -18,24 +18,23 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.18.8";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "lumen-oss";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AHmIdVkU4a+zmJPWfGkmRI7Mc/NdX+KokKHn9CZ9tOM=";
+    hash = "sha256-EuAVD+gBd1k8huufgbjdFJC/aGXqlc/66kIIaC7td2Q=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-noOyrKNxfndkq7VlyxLs8R8FG+1xkwM7MbKu0vO4Nh8=";
+  cargoHash = "sha256-Xvvw4NbSYdMmihsu1bWNfHzI9oItGlhY/KLNiRUHj+k=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   nativeBuildInputs = [
@@ -60,7 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  cargoTestFlags = "--lib"; # Disable impure integration tests
+  cargoTestFlags = [
+    "--lib" # Disable impure integration tests
+  ];
 
   nativeCheckInputs = [
     lua5_4
@@ -89,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
+      ALameLlama
     ];
     platforms = lib.platforms.all;
     mainProgram = "lx";

@@ -18,6 +18,7 @@
   hypothesis,
   iso8601,
   lzip,
+  moto,
   msgpack,
   postgresql,
   postgresqlTestHook,
@@ -29,7 +30,9 @@
   pytest-postgresql,
   pytz,
   requests-mock,
-  systemd,
+  swh-model,
+  systemd-python,
+  tqdm,
   types-deprecated,
   types-psycopg2,
   types-pytz,
@@ -39,9 +42,9 @@
   pkgs, # Only for pkgs.zstd
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-core";
-  version = "4.5.2";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -49,13 +52,18 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-core";
-    tag = "v${version}";
-    hash = "sha256-yNWij9GclQCysQe9Bukr4cHlZgSQqLAuX1KwGWzAK+0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5lL4/Hz8KbWurcDCOHqKh8eNqA1CkliSMCrdeYwqEHs=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
   ];
 
   dependencies = [
@@ -73,12 +81,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     aiohttp-utils
     flask
     hypothesis
     iso8601
     lzip
+    moto
     msgpack
     postgresql
     postgresqlTestHook
@@ -90,7 +102,9 @@ buildPythonPackage rec {
     pytest-postgresql
     pytz
     requests-mock
-    systemd
+    swh-model
+    systemd-python
+    tqdm
     types-deprecated
     types-psycopg2
     types-pytz
@@ -111,10 +125,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-core/-/tags/${finalAttrs.src.tag}";
     description = "Low-level utilities and helpers used by almost all other modules in the stack";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-core";
     license = lib.licenses.gpl3Only;
     mainProgram = "swh";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

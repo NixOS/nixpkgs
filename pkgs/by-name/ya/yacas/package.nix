@@ -17,14 +17,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yacas";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "grzegorzmazur";
     repo = "yacas";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0dqgqvsb6ggr8jb3ngf0jwfkn6xwj2knhmvqyzx3amc74yd3ckqx";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

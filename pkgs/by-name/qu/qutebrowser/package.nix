@@ -15,6 +15,7 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   qt6Packages,
+  wayland,
   enableWideVine ? false,
   widevine-cdm,
   # can cause issues on some graphics chips
@@ -23,28 +24,27 @@
 }:
 
 let
-  isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "5.4.296";
+      version = "5.6.205";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-UQ7sYOh7s95mfzH2ZbfDyEvUZiXr7MI3u0WY8WNHWv4=";
+      hash = "sha256-JMmxoT68PNJ/MmlMwVNYcHerorklLv5YY6C55xjn73w=";
       stripRoot = false;
     };
 
-  version = "3.6.0";
+  version = "3.7.0";
 in
 
 python3.pkgs.buildPythonApplication {
-  pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
+  pname = "qutebrowser";
   inherit version;
   pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-XBtRjAiBvSMRFwdW1RZK2ZQnxwhzdjfK5O6SZrHUZ7w=";
+    hash = "sha256-x/lYhOpeZnXlhAJb6lXP+VDEfXSa/39BX2jaA/zOD5I=";
   };
 
   # Needs tox
@@ -75,7 +75,7 @@ python3.pkgs.buildPythonApplication {
   dependencies = with python3.pkgs; [
     colorama
     pyyaml
-    (if isQt6 then pyqt6-webengine else pyqtwebengine)
+    pyqt6-webengine
     jinja2
     pygments
     # scripts and userscripts libs
@@ -104,6 +104,11 @@ python3.pkgs.buildPythonApplication {
   ''
   + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  ''
+  + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform wayland) ''
+    substituteInPlace qutebrowser/misc/wmname.py \
+      --replace-fail '_load_library("wayland-client")' \
+                     'ctypes.CDLL("${lib.getLib wayland}/lib/libwayland-client${stdenv.hostPlatform.extensions.sharedLibrary}")'
   '';
 
   installPhase = ''
@@ -132,7 +137,7 @@ python3.pkgs.buildPythonApplication {
     let
       libPath = lib.makeLibraryPath [ pipewire ];
       resourcesPath =
-        if (isQt6 && stdenv.hostPlatform.isDarwin) then
+        if stdenv.hostPlatform.isDarwin then
           "${qt6Packages.qtwebengine}/lib/QtWebEngineCore.framework/Resources"
         else
           "${qt6Packages.qtwebengine}/resources";
@@ -144,7 +149,7 @@ python3.pkgs.buildPythonApplication {
         "''${qtWrapperArgs[@]}"
         # avoid persistant warning on starup
         --set QT_STYLE_OVERRIDE Fusion
-        ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+        ${lib.optionalString pipewireSupport "--prefix LD_LIBRARY_PATH : ${libPath}"}
         ${lib.optionalString enableVulkan ''
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
           --set-default QSG_RHI_BACKEND vulkan
@@ -162,9 +167,7 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
     maintainers = with lib.maintainers; [
-      jagajaga
       rnhmjoj
-      ebzzry
       dotlambda
     ];
   };

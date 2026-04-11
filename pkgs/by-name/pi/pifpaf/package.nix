@@ -5,13 +5,13 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pifpaf";
   version = "3.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-f9nPb483tuvNk82wDtuB6553z18qY/x0tgz1NbVGUWE=";
   };
 
@@ -42,11 +42,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pifpaf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of tools and fixtures to manage daemons for testing";
     mainProgram = "pifpaf";
     homepage = "https://github.com/jd/pifpaf";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

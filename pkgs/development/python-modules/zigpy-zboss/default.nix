@@ -33,6 +33,12 @@ buildPythonPackage rec {
       excludes = [ "setup.cfg" ];
       hash = "sha256-aC0+FbbtuHDW3ApJDnTG3TUeNWhzecEYVuiSOik03uU=";
     })
+    (fetchpatch {
+      # https://github.com/kardia-as/zigpy-zboss/pull/67
+      name = "replace-pyserial-asyncio-with-pyserial-asyncio-fast.patch";
+      url = "https://github.com/kardia-as/zigpy-zboss/commit/d44ceb537dc16ce020f8c60a0ff35e88672f3455.patch";
+      hash = "sha256-aXWRtBLDr9NLIMNK/xtsYuy/hEB2zHU3YYcRKbguTTo=";
+    })
   ];
 
   pythonRemoveDeps = [ "async_timeout" ];

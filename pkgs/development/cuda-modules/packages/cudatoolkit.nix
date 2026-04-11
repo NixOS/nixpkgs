@@ -2,8 +2,10 @@
   lib,
   symlinkJoin,
   backendStdenv,
+  cudaAtLeast,
   cudaMajorMinorVersion,
   cuda_cccl ? null,
+  cuda_crt ? null,
   cuda_cudart ? null,
   cuda_cuobjdump ? null,
   cuda_cupti ? null,
@@ -53,13 +55,16 @@ let
     libcusolver
     libcusparse
     libnpp
+  ]
+  ++ lib.optionals (cudaAtLeast "13") [
+    cuda_crt
   ];
 
   # This assumes we put `cudatoolkit` in `buildInputs` instead of `nativeBuildInputs`:
   allPackages = (map (p: p.__spliced.buildHost or p) hostPackages) ++ targetPackages;
 in
 symlinkJoin rec {
-  name = "cuda-merged-${cudaMajorMinorVersion}";
+  pname = "cuda-merged";
   version = cudaMajorMinorVersion;
 
   paths = builtins.concatMap getAllOutputs allPackages;
@@ -67,7 +72,7 @@ symlinkJoin rec {
   passthru = {
     cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
     lib = symlinkJoin {
-      inherit name;
+      inherit pname version;
       paths = map (p: lib.getLib p) allPackages;
     };
   };

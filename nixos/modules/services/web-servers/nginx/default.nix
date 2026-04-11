@@ -202,12 +202,16 @@ let
 
             ssl_protocols ${cfg.sslProtocols};
             ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
-            ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+            ${optionalString (cfg.sslDhparam != false)
+              "ssl_dhparam ${
+                if cfg.sslDhparam == true then config.security.dhparams.params.nginx.path else cfg.sslDhparam
+              };"
+            }
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
 
-              ssl_ecdh_curve X25519:prime256v1:secp384r1;
+              ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -573,10 +577,7 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 
-  oldHTTP2 = (
-    versionOlder cfg.package.version "1.25.1"
-    && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic")
-  );
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie"));
 in
 
 {
@@ -778,7 +779,6 @@ in
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
           Supported Nginx forks include `angie`, `openresty` and `tengine`.
-          For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
       };
 
@@ -982,10 +982,10 @@ in
       };
 
       sslDhparam = mkOption {
-        type = types.nullOr types.path;
-        default = null;
+        type = types.either types.path types.bool;
+        default = false;
         example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file.";
+        description = "Path to DH parameters file, or `true` to generate with `security.dhparms.params.nginx`.";
       };
 
       proxyResolveWhileRunning = mkOption {
@@ -1089,7 +1089,7 @@ in
                   example = "1:2:2";
                   description = ''
                     The levels parameter defines structure of subdirectories in cache: from
-                    1 to 3, each level accepts values 1 or 2. Сan be used any combination of
+                    1 to 3, each level accepts values 1 or 2. Can be used any combination of
                     1 and 2 in these formats: x, x:x and x:x:x.
                   '';
                 };
@@ -1375,27 +1375,6 @@ in
         }
 
         {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
-          message = ''
-            services.nginx.enableQuicBPF requires using nginxQuic package,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic"
-            -> all (host: !host.quic) (attrValues virtualHosts);
-          message = ''
-            services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
-          '';
-        }
-
-        {
           # The idea is to understand whether there is a virtual host with a listen configuration
           # that requires ACME configuration but has no HTTP listener which will make deterministically fail
           # this operation.
@@ -1677,6 +1656,8 @@ in
           ) (filter (vhostConfig: vhostConfig.useACMEHost != null) acmeEnabledVhosts);
       in
       listToAttrs acmePairs;
+
+    security.dhparams.params.nginx = lib.mkIf (cfg.sslDhparam == true) { };
 
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {

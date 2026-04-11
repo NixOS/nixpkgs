@@ -1,8 +1,8 @@
 diff --git a/src/addressbook/libebook/e-book-client.c b/src/addressbook/libebook/e-book-client.c
-index 5e65ec8..2cae29d 100644
+index c31f3ef..9ebb5f2 100644
 --- a/src/addressbook/libebook/e-book-client.c
 +++ b/src/addressbook/libebook/e-book-client.c
-@@ -1924,7 +1924,18 @@ e_book_client_get_self (ESourceRegistry *registry,
+@@ -1926,7 +1926,18 @@ e_book_client_get_self (ESourceRegistry *registry,
  
  	*out_client = book_client;
  
@@ -22,7 +22,7 @@ index 5e65ec8..2cae29d 100644
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_object_unref (settings);
  
-@@ -1992,7 +2003,18 @@ e_book_client_set_self (EBookClient *client,
+@@ -1994,7 +2005,18 @@ e_book_client_set_self (EBookClient *client,
  	g_return_val_if_fail (
  		e_contact_get_const (contact, E_CONTACT_UID) != NULL, FALSE);
  
@@ -42,7 +42,7 @@ index 5e65ec8..2cae29d 100644
  	g_settings_set_string (
  		settings, SELF_UID_KEY,
  		e_contact_get_const (contact, E_CONTACT_UID));
-@@ -2028,8 +2050,20 @@ e_book_client_is_self (EContact *contact)
+@@ -2030,8 +2052,20 @@ e_book_client_is_self (EContact *contact)
  	 * unfortunately the API doesn't allow that.
  	 */
  	g_mutex_lock (&mutex);
@@ -66,10 +66,10 @@ index 5e65ec8..2cae29d 100644
  	g_mutex_unlock (&mutex);
  
 diff --git a/src/addressbook/libebook/e-book.c b/src/addressbook/libebook/e-book.c
-index a9b68e3..6a13b1b 100644
+index 9d986d2..d63902a 100644
 --- a/src/addressbook/libebook/e-book.c
 +++ b/src/addressbook/libebook/e-book.c
-@@ -2586,7 +2586,18 @@ e_book_get_self (ESourceRegistry *registry,
+@@ -2593,7 +2593,18 @@ e_book_get_self (ESourceRegistry *registry,
  		return FALSE;
  	}
  
@@ -89,7 +89,7 @@ index a9b68e3..6a13b1b 100644
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_object_unref (settings);
  
-@@ -2641,7 +2652,18 @@ e_book_set_self (EBook *book,
+@@ -2648,7 +2659,18 @@ e_book_set_self (EBook *book,
  	g_return_val_if_fail (E_IS_BOOK (book), FALSE);
  	g_return_val_if_fail (E_IS_CONTACT (contact), FALSE);
  
@@ -109,7 +109,7 @@ index a9b68e3..6a13b1b 100644
  	g_settings_set_string (
  		settings, SELF_UID_KEY,
  		e_contact_get_const (contact, E_CONTACT_UID));
-@@ -2669,7 +2691,18 @@ e_book_is_self (EContact *contact)
+@@ -2676,7 +2698,18 @@ e_book_is_self (EContact *contact)
  
  	g_return_val_if_fail (E_IS_CONTACT (contact), FALSE);
  
@@ -130,10 +130,10 @@ index a9b68e3..6a13b1b 100644
  	g_object_unref (settings);
  
 diff --git a/src/addressbook/libedata-book/e-book-meta-backend.c b/src/addressbook/libedata-book/e-book-meta-backend.c
-index 752f83f..eaa3dad 100644
+index 2a95a75..950f430 100644
 --- a/src/addressbook/libedata-book/e-book-meta-backend.c
 +++ b/src/addressbook/libedata-book/e-book-meta-backend.c
-@@ -145,7 +145,18 @@ ebmb_is_power_saver_enabled (void)
+@@ -148,7 +148,18 @@ ebmb_is_power_saver_enabled (void)
  	GSettings *settings;
  	gboolean enabled = FALSE;
  
@@ -178,10 +178,10 @@ index 9f8646a..079aba9 100644
  	cbc->priv->update_alarms_id = 0;
  	cbc->priv->alarm_enabled = FALSE;
 diff --git a/src/calendar/backends/file/e-cal-backend-file.c b/src/calendar/backends/file/e-cal-backend-file.c
-index 2525856..7ecc1a8 100644
+index 6318854..6b7a88c 100644
 --- a/src/calendar/backends/file/e-cal-backend-file.c
 +++ b/src/calendar/backends/file/e-cal-backend-file.c
-@@ -3682,7 +3682,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
+@@ -3701,7 +3701,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -204,10 +204,10 @@ index 2525856..7ecc1a8 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index 026ae80..e3003c2 100644
+index 92d68e2..d1e1fa4 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
-@@ -2844,8 +2844,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+@@ -2882,8 +2882,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
  
  	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
  	watcher->priv->cancellable = g_cancellable_new ();
@@ -244,10 +244,10 @@ index 026ae80..e3003c2 100644
  		g_signal_connect_object (
  			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index 84ccbb0..9010429 100644
+index 371f9bb..b0a661e 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
-@@ -157,7 +157,18 @@ ecmb_is_power_saver_enabled (void)
+@@ -160,7 +160,18 @@ ecmb_is_power_saver_enabled (void)
  	GSettings *settings;
  	gboolean enabled = FALSE;
  
@@ -267,7 +267,7 @@ index 84ccbb0..9010429 100644
  
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
-@@ -2628,7 +2639,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+@@ -2652,7 +2663,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -290,10 +290,10 @@ index 84ccbb0..9010429 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/camel/camel-cipher-context.c b/src/camel/camel-cipher-context.c
-index d00fbd5..0f67653 100644
+index 03b5129..3f4256a 100644
 --- a/src/camel/camel-cipher-context.c
 +++ b/src/camel/camel-cipher-context.c
-@@ -1630,7 +1630,18 @@ camel_cipher_can_load_photos (void)
+@@ -1637,7 +1637,18 @@ camel_cipher_can_load_photos (void)
  	GSettings *settings;
  	gboolean load_photos;
  
@@ -314,10 +314,10 @@ index d00fbd5..0f67653 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index 4594ab1..e71ce05 100644
+index c5ac40f..fb8ae19 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
-@@ -745,7 +745,18 @@ gpg_ctx_get_executable_name (void)
+@@ -748,7 +748,18 @@ gpg_ctx_get_executable_name (void)
  		GSettings *settings;
  		gchar *path;
  
@@ -338,10 +338,10 @@ index 4594ab1..e71ce05 100644
  		g_clear_object (&settings);
  
 diff --git a/src/camel/camel-utils.c b/src/camel/camel-utils.c
-index 0c1c7dd..4188934 100644
+index 2c0b6ef..b354332 100644
 --- a/src/camel/camel-utils.c
 +++ b/src/camel/camel-utils.c
-@@ -361,7 +361,19 @@ void
+@@ -363,7 +363,19 @@ void
  _camel_utils_initialize (void)
  {
  	G_LOCK (mi_user_headers);
@@ -363,10 +363,10 @@ index 0c1c7dd..4188934 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 8cf56f0..f4355d5 100644
+index c3c2d7d..e1370db 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5681,7 +5681,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+@@ -5671,7 +5671,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
  	if (do_old_flags_update) {
  		GSettings *eds_settings;
  
@@ -411,10 +411,10 @@ index f7c5d3c..67732c3 100644
  	g_clear_object (&settings);
  
 diff --git a/src/libedataserver/e-network-monitor.c b/src/libedataserver/e-network-monitor.c
-index 188f276..939f89b 100644
+index e9cb145..8fc30d5 100644
 --- a/src/libedataserver/e-network-monitor.c
 +++ b/src/libedataserver/e-network-monitor.c
-@@ -256,7 +256,18 @@ e_network_monitor_constructed (GObject *object)
+@@ -260,7 +260,18 @@ e_network_monitor_constructed (GObject *object)
  	/* Chain up to parent's method. */
  	G_OBJECT_CLASS (e_network_monitor_parent_class)->constructed (object);
  
@@ -531,10 +531,10 @@ index db775f9..fb524db 100644
  	g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-source-registry.c b/src/libedataserver/e-source-registry.c
-index 1539f8b..77cf123 100644
+index bd9822d..3e021dd 100644
 --- a/src/libedataserver/e-source-registry.c
 +++ b/src/libedataserver/e-source-registry.c
-@@ -1754,7 +1754,19 @@ e_source_registry_init (ESourceRegistry *registry)
+@@ -1781,7 +1781,19 @@ e_source_registry_init (ESourceRegistry *registry)
  
  	g_mutex_init (&registry->priv->sources_lock);
  
@@ -556,10 +556,10 @@ index 1539f8b..77cf123 100644
  	g_signal_connect (
  		registry->priv->settings, "changed",
 diff --git a/src/libedataserverui/e-reminders-widget.c b/src/libedataserverui/e-reminders-widget.c
-index b47a374..e812fbe 100644
+index 980ceb1..02d9551 100644
 --- a/src/libedataserverui/e-reminders-widget.c
 +++ b/src/libedataserverui/e-reminders-widget.c
-@@ -1985,7 +1985,19 @@ static void
+@@ -2132,7 +2132,19 @@ static void
  e_reminders_widget_init (ERemindersWidget *reminders)
  {
  	reminders->priv = e_reminders_widget_get_instance_private (reminders);

@@ -63,7 +63,10 @@ runTest (
             };
             phpExtraExtensions = all: [ all.bz2 ];
             nginx.enableFastcgiRequestBuffering = true;
+            secrets.mysecret = "/etc/nextcloud/mysecretfile";
           };
+
+          environment.etc."nextcloud/mysecretfile".text = "foobar";
 
           specialisation.withoutMagick.configuration = {
             services.nextcloud.enableImagemagick = false;
@@ -116,6 +119,9 @@ runTest (
             client_hash = client.succeed("nix-hash testfile.bin").strip()
             nextcloud_hash = nextcloud.succeed("nix-hash /var/lib/nextcloud-data/data/root/files/testfile.bin").strip()
             t.assertEqual(client_hash, nextcloud_hash)
+
+        with subtest("secrets"):
+            assert "foobar" == nextcloud.succeed("nextcloud-occ config:system:get mysecret").strip()
       '';
   }
 )

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cue";
-  version = "0.14.2";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RK06DHCR2ugz6WhythvVfb1WUn7QyHPK8vaUNWVAd+Q=";
+    hash = "sha256-mTj3XMWByNrKjm+/MOQGLyUKIv4JJ8i6Oaphbzls84U=";
   };
 
-  vendorHash = "sha256-wVeNMw6AZS1wT+KnaZBGOfBxrKzmfQSXeZWcYiLKMQ4=";
+  vendorHash = "sha256-HXRrVPjPc10Q1MVr1d9vZBWgSVqNZ5J0UgvP/hTPfcg=";
 
   subPackages = [ "cmd/*" ];
 

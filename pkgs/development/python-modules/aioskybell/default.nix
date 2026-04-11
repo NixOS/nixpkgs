@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aioskybell";
   version = "23.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tkdrob";
@@ -56,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioskybell" ];
 
-  meta = with lib; {
+  meta = {
     description = "API client for Skybell doorbells";
     homepage = "https://github.com/tkdrob/aioskybell";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

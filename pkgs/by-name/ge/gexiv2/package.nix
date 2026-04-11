@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gexiv2/${lib.versions.majorMinor version}/gexiv2-${version}.tar.xz";
     sha256 = "YGwoqq57Hz71yOq+Xn3/18WhyGbSW3Zx+4R/4oenK4s=";
   };
 
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gexiv2";
     description = "GObject wrapper around the Exiv2 photo metadata library";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 }

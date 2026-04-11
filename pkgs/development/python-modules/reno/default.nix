@@ -80,11 +80,11 @@ buildPythonApplication rec {
     $out/bin/reno -h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Release Notes Manager";
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

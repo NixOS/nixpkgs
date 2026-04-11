@@ -16,21 +16,22 @@
   mono,
   wrapWithMono ? true,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "owmods-gui";
-  version = "0.15.3";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
-    tag = "gui_v${version}";
-    hash = "sha256-mR4CKcdwlkJPyYK0KPSGbWMaSmHlGo5kOGHoZybduco=";
+    tag = "gui_v${finalAttrs.version}";
+    hash = "sha256-1m648o9hm7j/etNNhGy2Yq9paz6ZHWDxVBLGdzGMbZQ=";
   };
 
-  cargoHash = "sha256-KcJAbhIeScFHLjEboQmt0NiqoIen2TihtDJaJwsVuEQ=";
+  cargoHash = "sha256-/id7DC3W22musOI4r4b0RPqSnIQVn1yHYLZcTilShVk=";
 
+  buildNoDefaultFeatures = true;
   buildFeatures = [
-    "tauri/custom-protocol"
+    "custom-protocol"
   ];
 
   nativeBuildInputs = [
@@ -55,15 +56,15 @@ rustPlatform.buildRustPackage rec {
   postPatch =
     let
       frontend = buildNpmPackage {
-        inherit version;
+        inherit (finalAttrs) version;
 
         env.VITE_VERSION_SUFFIX = "-nix";
 
         pname = "owmods-gui-ui";
-        src = "${src}/owmods_gui/frontend";
+        src = "${finalAttrs.src}/owmods_gui/frontend";
 
-        packageJSON = "${src}/owmods_gui/frontend/package.json";
-        npmDepsHash = "sha256-puDgzzzYy9HsuMo5V/E8Z8k6blCkl01JdfbpdhtnvS0=";
+        packageJSON = "${finalAttrs.src}/owmods_gui/frontend/package.json";
+        npmDepsHash = "sha256-PDpL8Cdl6U17wPBGmyg5kYP5zh1NXRPVnaW4WrFD3oM=";
 
         postBuild = ''
           cp -r ../dist/ $out
@@ -108,8 +109,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "GUI version of the mod manager for Outer Wilds Mod Loader";
     homepage = "https://github.com/ow-mods/ow-mod-man/tree/main/owmods_gui";
-    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/gui_v${version}";
-    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/gui_v${version}";
+    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/gui_v${finalAttrs.version}";
+    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/gui_v${finalAttrs.version}";
     mainProgram = "outer-wilds-mod-manager";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
@@ -119,4 +120,4 @@ rustPlatform.buildRustPackage rec {
       spoonbaker
     ];
   };
-}
+})

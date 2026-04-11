@@ -8,7 +8,6 @@
   lxml,
   nodejs,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   testers,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "readabilipy";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
@@ -41,7 +38,7 @@ buildPythonPackage rec {
 
     src = src;
     sourceRoot = "${src.name}/readabilipy/javascript";
-    npmDepsHash = "sha256-LiPSCZamkJjivzpawG7H9IEXYjn3uzFeY2vfucyHfUo=";
+    npmDepsHash = "sha256-1yp80TwRbE/NcMa0qrml0TlSZJ6zwSTmj+zDjBejko8=";
 
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
@@ -101,12 +98,12 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "HTML content extractor";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
     changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "readabilipy";
   };
 }

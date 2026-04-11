@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -22,12 +23,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # timing-sensitive and often breaks on x86_64-darwin
+    "test_relative_time"
+  ];
+
   pythonImportsCheck = [ "pysnooper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Poor man's debugger for Python";
     homepage = "https://github.com/cool-RR/PySnooper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
   };
 }

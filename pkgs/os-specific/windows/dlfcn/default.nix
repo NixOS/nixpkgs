@@ -3,26 +3,29 @@
   lib,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dlfcn";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "dlfcn-win32";
     repo = "dlfcn-win32";
-    rev = "v${version}";
-    sha256 = "sha256-ljVTMBiGp8TPufrQcK4zQtcVH1To4zcfBAbUOb+v910=";
+    tag = "v${version}";
+    hash = "sha256-kLY8vvHTT02gENPlVvyDyR0ULC8NA+E/P6mWtU6MbBY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/dlfcn-win32/dlfcn-win32";
     description = "Set of functions that allows runtime dynamic library loading";
-    license = licenses.mit;
-    platforms = platforms.windows;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.windows;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

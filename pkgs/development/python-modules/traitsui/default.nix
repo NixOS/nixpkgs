@@ -5,15 +5,12 @@
   setuptools,
   traits,
   pyface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "traitsui";
   version = "8.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "traitsui" ];
 
-  meta = with lib; {
+  meta = {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/traitsui";
     changelog = "https://github.com/enthought/traitsui/releases/tag/${version}";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

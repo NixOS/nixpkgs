@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.16.0";
+  version = "4.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-gBqMwqmpu0+gMeffiFdwy/kBdCUQRpJr+3vzUkBCRSk=";
+    hash = "sha256-oUh9XVj2FGRow3l5wBUGW+BN01ykLvsQH0uC/No22Do=";
   };
 
   build-system = with python3Packages; [
@@ -53,8 +53,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
     versionCheckHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     "qtpy/"

@@ -6,7 +6,7 @@
   pkg-config,
 
   # Optional dependencies
-  enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic,
+  enableApp ? with stdenv.hostPlatform; !(isWindows || isCygwin) && !isStatic,
   c-aresMinimal,
   libev,
   openssl,
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

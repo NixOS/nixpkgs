@@ -9,11 +9,11 @@
 }:
 mkKdeDerivation rec {
   pname = "klevernotes";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/klevernotes/${version}/klevernotes-${version}.tar.xz";
-    hash = "sha256-btnCn9YhA0aIhg6PXYuxsZQa6JeHyIrYwSKvTuqrsj8=";
+    hash = "sha256-UK0LwCmAh93TR3/n4IEyTfMKMFhoy7IuVCoI2mk13e0=";
   };
 
   extraBuildInputs = [

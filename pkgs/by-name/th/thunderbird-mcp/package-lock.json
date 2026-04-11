@@ -1,0 +1,19 @@
+{
+  "name": "thunderbird-mcp",
+  "version": "0.1.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "thunderbird-mcp",
+      "version": "0.1.0",
+      "license": "MIT",
+      "bin": {
+        "thunderbird-mcp": "mcp-bridge.cjs"
+      },
+      "engines": {
+        "node": ">=18.0.0"
+      }
+    }
+  }
+}

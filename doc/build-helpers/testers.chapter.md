@@ -63,7 +63,7 @@ Note the moduleNames used in cmake find_package are case sensitive.
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
 
 You may use Nix to reproducibly build static websites, such as for software documentation.
-Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
+Some packages will install documentation in their `out` or `doc` outputs, or maybe you have a dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
 
 If you have a static site that can be built with Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
 
@@ -578,7 +578,7 @@ Use the derivation hash to invalidate the output via name, for testing.
 
 Type: `(a@{ name, ... } -> Derivation) -> a -> Derivation`
 
-Normally, fixed output derivations can and should be cached by their output hash only, but for testing we want to re-fetch everytime the fetcher changes.
+Normally, fixed output derivations can and should be cached by their output hash only, but for testing we want to re-fetch every time the fetcher changes.
 
 Changes to the fetcher become apparent in the drvPath, which is a hash of how to fetch, rather than a fixed store path.
 By inserting this hash into the name, we can make sure to re-run the fetcher every time the fetcher changes.

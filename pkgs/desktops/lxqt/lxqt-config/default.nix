@@ -5,12 +5,12 @@
   cmake,
   glib,
   kwindowsystem,
-  libXScrnSaver,
-  libXcursor,
-  libXdmcp,
+  libxscrnsaver,
+  libxcursor,
+  libxdmcp,
   libkscreen,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libqtxdg,
   libxcb,
   lxqt-build-tools,
@@ -21,20 +21,20 @@
   qttools,
   qtwayland,
   wrapQtAppsHook,
-  xf86inputlibinput,
+  xf86-input-libinput,
   xkeyboard_config,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-config";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-config";
-    rev = version;
-    hash = "sha256-iyAqdAWcg94a65lPjq412slvSKdP3W62LTyyvYdWipA=";
+    tag = finalAttrs.version;
+    hash = "sha256-2fviPhSBwUU9jg3217PLbREh8MkArd2Uc4bhFXo2J7U=";
   };
 
   nativeBuildInputs = [
@@ -48,20 +48,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib.bin
     kwindowsystem
-    libXScrnSaver
-    libXcursor
-    libXdmcp
+    libxscrnsaver
+    libxcursor
+    libxdmcp
     libkscreen
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libqtxdg
     libxcb
     lxqt-menu-data
     qtbase
     qtsvg
     qtwayland
-    xf86inputlibinput
-    xf86inputlibinput.dev
+    xf86-input-libinput
+    xf86-input-libinput.dev
   ];
 
   cmakeFlags = [ "-DCMAKE_CXX_STANDARD=20" ];
@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-config";
     description = "Tools to configure LXQt and the underlying operating system";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 
-}
+})

@@ -4,6 +4,8 @@
   lib,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   nix-update-script,
   discord,
@@ -18,25 +20,27 @@ stdenv.mkDerivation (finalAttrs: {
   # the Equicord repository. Dates as tags (and automatic releases) were the compromise
   # we came to with upstream. Please do not change the version schema (e.g., to semver)
   # unless upstream changes the tag schema from dates.
-  version = "2025-11-02";
+  version = "2026-04-06";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equicord";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-SThWYUi4h3OpsP28ouHW1f8+m1dr+wMAYhA/90LBYPg=";
+    tag = finalAttrs.version;
+    hash = "sha256-3wFmi+SzInP+1PH3pwBquTrU757I8z6PmvPxuyygIwU=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-gl/4+AN3+YOl3uCYholPU8jo0IayazlY987fwhtHCuk=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-9DNn38JdFQMQh48UEJo5d6CUMbjlzs5LEma6095o508=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   env = {

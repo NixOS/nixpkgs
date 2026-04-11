@@ -6,23 +6,19 @@
   fetchFromGitHub,
   dbus,
   dotnetCorePackages,
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "assetripper";
-  version = "1.3.0";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "AssetRipper";
     repo = "AssetRipper";
     tag = finalAttrs.version;
-    hash = "sha256-ixXWbygFhvOjld+YRLIhkO3cgDNkQsbivri2pjU4rgM=";
+    hash = "sha256-pBza6yuMdExKqzhds8Ib5SzRzXRdD5TdEN/Yz7V+zGA=";
   };
-
-  postPatch = ''
-    sed 's@Path.Join(ExecutingDirectory, "temp",@Path.Join(Path.GetTempPath(), "AssetRipper",@' \
-      -i Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs
-  '';
 
   buildInputs = [
     dbus
@@ -49,11 +45,11 @@ buildDotnetModule (finalAttrs: {
   '';
 
   # Patch some prebuilt libraries fetched via NuGet.
-  fixupPhase = ''
+  fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     runHook preFixup
 
-    autoPatchelf $out/lib/${finalAttrs.pname}/libnfd.so
-    autoPatchelf $out/lib/${finalAttrs.pname}/libTexture2DDecoderNative.so
+    autoPatchelf $out/lib/assetripper/libnfd.so
+    autoPatchelf $out/lib/assetripper/libTexture2DDecoderNative.so
 
     runHook postFixup
   '';
@@ -69,15 +65,20 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "AssetRipper.GUI.Free" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = finalAttrs.dotnet-sdk.aspnetcore;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for extracting assets from Unity serialized files and asset bundles";
     homepage = "https://github.com/AssetRipper/AssetRipper";
     license = lib.licenses.gpl3Only;
     mainProgram = "AssetRipper";
-    maintainers = with lib.maintainers; [ YoshiRulz ];
+    maintainers = with lib.maintainers; [
+      YoshiRulz
+      toasteruwu
+    ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       fromSource

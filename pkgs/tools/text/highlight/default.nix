@@ -15,13 +15,13 @@
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.17";
+    version = "4.18";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      hash = "sha256-XSfiQGMd7GtewyZ72VK/0D9Z9sYzVBWeO1CQXVk63Zc=";
+      hash = "sha256-QYW6kj5cp+TVLXwj7kxbgj0kpN0n5qXYU3xZ5UW66vc=";
     };
 
     enableParallelBuilding = true;
@@ -71,11 +71,11 @@ let
       make -C extras/swig clean # Clean up intermediate files.
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Source code highlighting tool";
       mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       maintainers = [ ];
     };
   };

@@ -38,5 +38,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    # The last successful Darwin Hydra build was in 2023
+    # On linux fails to build on gcc-15, needs porting to c23, but
+    # the upstream code did not update since 2006.
+    broken = true;
   };
 }

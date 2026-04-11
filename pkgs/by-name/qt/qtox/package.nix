@@ -7,9 +7,9 @@
   perl,
   kdePackages,
   libtoxcore,
-  libpthreadstubs,
-  libXdmcp,
-  libXScrnSaver,
+  libpthread-stubs,
+  libxdmcp,
+  libxscrnsaver,
   ffmpeg,
   filter-audio,
   libexif,
@@ -23,23 +23,23 @@
   sqlcipher,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtox";
   version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "qTox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5pH39NsJdt4+ldlbpkvA0n/X/LkEUEv4UL1K/W3BqmM=";
   };
 
   buildInputs = [
     kdePackages.sonnet
     libtoxcore
-    libpthreadstubs
-    libXdmcp
-    libXScrnSaver
+    libpthread-stubs
+    libxdmcp
+    libxscrnsaver
     ffmpeg
     filter-audio
     libexif
@@ -63,20 +63,20 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
 
   cmakeFlags = [
-    "-DGIT_DESCRIBE=v${version}"
+    "-DGIT_DESCRIBE=v${finalAttrs.version}"
     "-DTIMESTAMP=1"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Qt Tox client";
     mainProgram = "qtox";
     homepage = "https://tox.chat";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       akaWolf
       peterhoeg
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,45 +1,46 @@
 {
   lib,
-  buildGo125Module,
-  buildNpmPackage,
+  buildGoModule,
   fetchFromGitHub,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
   versionCheckHook,
   nixosTests,
   nix-update-script,
-  go_1_25,
 }:
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "sshwifty";
-  version = "0.4.0-beta-release";
+  version = "0.4.5-beta-release";
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
-    hash = "sha256-7ZfS46+aflKIQ8S9T18JjCb7bY8mB6cJl/lgJi5Hukg=";
+    hash = "sha256-b6DgDhnaeIT8HnE2+TNzI2XPmERwPdnv6U8cu0ZZmAc=";
   };
 
-  sshwifty-ui = buildNpmPackage {
-    pname = "sshwifty-ui";
-    inherit (finalAttrs) version src;
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
 
-    npmDepsHash = "sha256-I96VixL21cF2kp9AK6q0ipjphjdWuSETKakbsprGek0=";
-
-    npmBuildScript = "generate";
-
-    postInstall = ''
-      cp -r application/controller/{static_pages,static_pages.go} \
-        $out/lib/node_modules/sshwifty-ui/application/controller
-    '';
-
-    nativeBuildInputs = [ go_1_25 ];
+  overrideModAttrs = oldAttrs: {
+    nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
+    preBuild = null;
   };
 
-  postPatch = ''
-    cp -r ${finalAttrs.sshwifty-ui}/lib/node_modules/sshwifty-ui/* .
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-xfnG5ONEVA58ZHmFoG6x9bYxwHuAjq7VsqxifEH2nQk=";
+  };
+
+  vendorHash = "sha256-s9wjaxeuIBClyBwDSZvnSVxXh/RI6oOITU2cL3oNb5o=";
+
+  preBuild = ''
+    # Generate static pages
+    npm run generate
   '';
-
-  vendorHash = "sha256-kLKydjvZtFEY7vjqxK1cCwZSTbdqYWPRmxYSN0LYqsg=";
 
   ldflags = [
     "-s"
@@ -55,7 +56,12 @@ buildGo125Module (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) sshwifty; };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=unstable"
+        "--version-regex=^([0-9.]+(?!.+-prebuild).+$)"
+      ];
+    };
   };
 
   meta = {
@@ -63,7 +69,6 @@ buildGo125Module (finalAttrs: {
     homepage = "https://github.com/nirui/sshwifty";
     changelog = "https://github.com/nirui/sshwifty/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "sshwifty";
   };

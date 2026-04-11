@@ -51,12 +51,12 @@ rustPlatform.buildRustPackage {
   # many tests seem to require a running kafka instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Highly efficient daemon for streaming data from Kafka into Delta Lake";
     mainProgram = "kafka-delta-ingest";
     homepage = "https://github.com/delta-io/kafka-delta-ingest";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -6,7 +6,9 @@
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_10_29_2,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
 }:
 stdenv.mkDerivation rec {
@@ -23,15 +25,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10_29_2
     makeWrapper
     imagemagick
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-6I10NSmTDd/wmL/HfAgLH+G2MDfuPmrTePNDDy08nRA=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-EP7bpbJUcKmHm7KMlKc0Fz2u0niQ3jC7YN/9pp7vucE=";
   };
 
   env = {

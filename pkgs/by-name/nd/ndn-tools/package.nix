@@ -11,14 +11,14 @@
   wafHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndn-tools";
   version = "24.07";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-tools";
-    rev = "ndn-tools-${version}";
+    rev = "ndn-tools-${finalAttrs.version}";
     sha256 = "sha256-rzGd+8SkztrkXRXcEcQm6rOtAGnF7h/Jg8jaBb7FP9w=";
   };
 
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) Essential Tools";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bertof ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bertof ];
   };
-}
+})

@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.3.1";
+  version = "6.3.2";
   pname = "icalendar";
   pyproject = true;
   outputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-lLcMuwKFdZbjscrp4dW5ybPHwcx9RHf44RH3BWwO6ng=";
+    hash = "sha256-EnG6zPaKKTgLw2DxWOyBkxlFuqtURpBlxy1aoZjX/TQ=";
   };
 
   patches = [
@@ -67,12 +67,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "src/icalendar" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ olcai ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ olcai ];
   };
 }

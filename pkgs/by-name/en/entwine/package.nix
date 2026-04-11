@@ -11,14 +11,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entwine";
   version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-K/mR3Js5F6JeS9xvEOhzX4sXGK/Zo+1mHCXDSaBdV2M=";
   };
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Point cloud organization for massive datasets";
     homepage = "https://entwine.io/";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ matthewcroughan ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.linux;
     mainProgram = "entwine";
   };
-}
+})

@@ -9,14 +9,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libaudec";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "zrythm";
     repo = "libaudec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8morbrq8zG+2N3ruMeJa85ci9P0wPQOfZ5H56diFEAo=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and resampling audio files";
     homepage = "https://www.zrythm.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "audec";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

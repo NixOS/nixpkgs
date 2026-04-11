@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   yarl,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "eiswarnung";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eiswarnung" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
     changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

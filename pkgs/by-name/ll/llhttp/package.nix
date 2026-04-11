@@ -6,17 +6,18 @@
   nix-update-script,
   testers,
   python3,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.3.0";
+  version = "9.3.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     tag = "release/v${finalAttrs.version}";
-    hash = "sha256-VL58h8sdJIpzMiWNqTvfp8oITjb0b3X/F8ygaE9cH94=";
+    hash = "sha256-eHy8sjmfLA+q1WWuo4bkZ0wRI4q9fkNaW8c2OgKv/MM=";
   };
 
   outputs = [
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
 
   cmakeFlags = [
@@ -41,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "libllhttp" ];
     };
   };
 
@@ -52,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libllhttp" ];
   };
 })

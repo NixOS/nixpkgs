@@ -2,13 +2,14 @@
   stdenv,
   lib,
   fetchurl,
-  perl,
-  gfortran,
-  automake,
   autoconf,
-  openssh,
+  automake,
+  gfortran,
   hwloc,
+  openssh,
+  perl,
   python3,
+  removeReferencesTo,
   # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
   # these libraries currently build so this argument is ignored on Darwin.
   ch4backend,
@@ -26,17 +27,30 @@
 
 let
   withPmStr = if withPm != [ ] then builtins.concatStringsSep ":" withPm else "no";
+
+  # Binaries that should go in the "dev" output.
+  # These are all MPI compilers (wrappers around gcc, really).
+  develBins = [
+    "bin/mpicc"
+    "bin/mpic++"
+    "bin/mpicxx"
+    "bin/mpif77"
+    "bin/mpif90"
+    "bin/mpifort"
+  ];
+
+  libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation rec {
   pname = "mpich";
-  version = "4.3.2";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    hash = "sha256-R9d0WHpxVqU3UiGMgRyFLnCsRNucUC3D85m0y4F+OBg=";
+    hash = "sha256-6TUOMiJCg+lTEfIhNPNsmOPNHGZdF/riCmzJLtPP/hE=";
   };
 
   patches = [
@@ -49,6 +63,8 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "bin"
+    "dev"
     "doc"
     "man"
   ];
@@ -56,10 +72,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--with-pm=${withPmStr}"
-  ]
-  ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
-    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
-    "FCFLAGS=-fallow-argument-mismatch"
+
+    # NOTE: /etc is meant to contain MPICH configuration for both *compilers* (dev) and for *runtime* (out, bin).
+    #   /etc/mpixxx_opts.conf is a *compiler* configuration file.
+    #   /etc/mpiexec.hydra.conf is a *runtime* configuration file.
+    #
+    # Ideally we'd be able to specify those separately. However, the build currently doesn't install mpiexec.hydra.conf
+    # at all, but it does install mpixxx_opts.conf. So we configure the sysconfdir to be a "dev" output, since the only
+    # file that's installed is needed by compilers, not runtime.
+    # If we ever need both, we should probably have a separate "etc" output.
+    "--sysconfdir=${placeholder "dev"}/etc"
   ]
   ++ lib.optionals pmixSupport [
     "--with-pmix"
@@ -68,10 +90,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    gfortran
-    python3
     autoconf
     automake
+    gfortran
+    python3
+    removeReferencesTo
   ];
   buildInputs = [
     perl
@@ -84,11 +107,45 @@ stdenv.mkDerivation rec {
   # test_double_serializer.test fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  preFixup = ''
+  postInstall =
+    # Move compiler binaries into $dev.
+    ''
+      for f in ${lib.concatStringsSep " " develBins}; do
+        moveToOutput "$f" "''${!outputDev}"
+      done
+    ''
     # Ensure the default compilers are the ones mpich was built with
-    sed -i 's:CC="gcc":CC=${stdenv.cc}/bin/gcc:' $out/bin/mpicc
-    sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
-    sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
+    + ''
+      sed -i 's:CC="gcc":CC=${stdenv.cc}/bin/gcc:' "$dev"/bin/mpicc
+      sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' "$dev"/bin/mpicxx
+      sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' "$dev"/bin/mpifort
+    '';
+
+  # The entire configure line is embedded into some binaries, so we can end up with cycles between
+  # outputs, or one output depending on all other outputs. Since the configure line embedding does
+  # not affect functionality, we can simply break its references.
+  #
+  # To find the cycles, temporarily add this to postFixup to print them out:
+  #   for i in out bin dev doc man; do
+  #     for j in out bin dev doc man; do
+  #       if [ "$i" != "$j" ]; then
+  #         echo "$i in $j: --------------------------------"
+  #         grep -r "''${!i}" "''${!j}" || true
+  #       fi
+  #     done
+  #   done
+  postFixup = ''
+    remove-references-to \
+      -t "''${!outputBin}" \
+      -t "''${!outputDev}" \
+      -t "''${!outputDoc}" \
+      -t "''${!outputMan}" \
+      $(find "$out"/lib -type f -name 'libmpi${libExt}*')
+    remove-references-to \
+      -t "''${!outputDev}" \
+      -t "''${!outputDoc}" \
+      -t "''${!outputMan}" \
+      $(find "$bin"/bin -type f)
   '';
 
   meta = {

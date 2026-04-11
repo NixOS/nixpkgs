@@ -5,15 +5,12 @@
   hatchling,
   requests,
   ciso8601,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dwdwfsapi";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dwdwfsapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to retrieve data provided by DWD via their geoserver WFS API";
     homepage = "https://github.com/stephan192/dwdwfsapi";
     changelog = "https://github.com/stephan192/dwdwfsapi/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
   };
 }

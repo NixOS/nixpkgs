@@ -60,7 +60,7 @@ in
       ];
     };
   };
-  config = lib.mkIf config.hardware.facter.detected.dhcp.enable {
+  config = lib.mkIf (config.hardware.facter.enable && config.hardware.facter.detected.dhcp.enable) {
     networking.useDHCP = lib.mkDefault true;
 
     # Per-interface DHCP configuration

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   click,
-  fetchFromGitea,
+  fetchFromCodeberg,
   flake8,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,8 +16,7 @@ buildPythonPackage rec {
   version = "20.10.2";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "hjacobs";
     repo = "python-clickclick";
     rev = version;
@@ -46,10 +45,10 @@ buildPythonPackage rec {
     "test_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Click command line utilities";
     homepage = "https://codeberg.org/hjacobs/python-clickclick/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

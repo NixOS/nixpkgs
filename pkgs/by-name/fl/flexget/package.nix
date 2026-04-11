@@ -5,16 +5,16 @@
   stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
-  version = "3.17.11";
+  version = "3.19.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
-    tag = "v${version}";
-    hash = "sha256-Qfq6TXSNAnIq8m3I7noFe6pIq6PmUTQKUjN+ZC4NxyU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G0Scv6XHjpxp5V0Ep+4itu+SmO/8jhR6LHvG/9scIPY=";
   };
 
   pythonRelaxDeps = true;
@@ -68,10 +68,10 @@ python3Packages.buildPythonApplication rec {
     transmission-rpc
     qbittorrent-api
     deluge-client
-    cloudscraper
     python-telegram-bot
     boto3
-    libtorrent-rasterbar
+    matrix-nio
+    subliminal
   ];
 
   pythonImportsCheck = [
@@ -158,11 +158,17 @@ python3Packages.buildPythonApplication rec {
     "TestYamlLists"
   ];
 
+  disabledTestPaths = [
+    # FIXME package pytest-ftpserver
+    "tests/ftp/test_ftp_download.py"
+    "tests/ftp/test_ftp_list.py"
+  ];
+
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${finalAttrs.src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

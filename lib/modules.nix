@@ -20,12 +20,14 @@ let
     head
     id
     imap1
+    init
     isAttrs
     isBool
     isFunction
     oldestSupportedReleaseIsAtLeast
     isList
     isString
+    last
     length
     mapAttrs
     mapAttrsToList
@@ -34,12 +36,16 @@ let
     optional
     optionalAttrs
     optionalString
+    pipe
     recursiveUpdate
+    remove
     reverseList
     sort
+    sortOn
     seq
     setAttrByPath
     substring
+    take
     throwIfNot
     trace
     typeOf
@@ -60,6 +66,8 @@ let
     ;
   inherit (lib.strings)
     isConvertibleWithToString
+    levenshtein
+    levenshteinAtMost
     ;
 
   showDeclPrefix =
@@ -304,8 +312,41 @@ let
                   addErrorContext
                     "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
                     (addErrorContext "while evaluating a definition from `${firstDef.file}'" (showDefs [ firstDef ]));
+
+                # absInvalidOptionParent is absolute; other variables are relative to the submodule prefix
+                absInvalidOptionParent = init (prefix ++ firstDef.prefix);
+                invalidOptionParent = init firstDef.prefix;
+                siblingOptionNames = attrNames (attrByPath invalidOptionParent { } options);
+                candidateNames =
+                  if invalidOptionParent == [ ] then remove "_module" siblingOptionNames else siblingOptionNames;
+                invalidOptionName = last firstDef.prefix;
+                # For small option sets, check all; for large sets, only check distance ≤ 2
+                suggestions =
+                  if length candidateNames < 100 then
+                    pipe candidateNames [
+                      (sortOn (levenshtein invalidOptionName))
+                      (take 3)
+                    ]
+                  else
+                    pipe candidateNames [
+                      # levenshteinAtMost is only fast for distance ≤ 2
+                      (filter (levenshteinAtMost 2 invalidOptionName))
+                      (sortOn (levenshtein invalidOptionName))
+                      (take 3)
+                    ];
+                suggestion =
+                  if suggestions == [ ] then
+                    ""
+                  else if length suggestions == 1 then
+                    "\n\nDid you mean `${showOption (absInvalidOptionParent ++ [ (head suggestions) ])}'?"
+                  else
+                    "\n\nDid you mean ${
+                      concatStringsSep ", " (
+                        map (s: "`${showOption (absInvalidOptionParent ++ [ s ])}'") (init suggestions)
+                      )
+                    } or `${showOption (absInvalidOptionParent ++ [ (last suggestions) ])}'?";
               in
-              "The option `${optText}' does not exist. Definition values:${defText}";
+              "The option `${optText}' does not exist. Definition values:${defText}${suggestion}";
           in
           if
             attrNames options == [ "_module" ]
@@ -1147,6 +1188,9 @@ let
         instead of:
 
           baseType // { check = value: /* your check */; }
+
+        Alternatively, this message may also occur as false positive when mixing Nixpkgs
+        versions, if one Nixpkgs is between 83fed2e6..58696117 (Aug 28 - Oct 28 2025)
       '';
 
   # Merge definitions of a value of a given type.
@@ -1202,6 +1246,8 @@ let
             allInvalid = filter (def: !type.check def.value) defsFinal;
           in
           throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+      else if type.emptyValue ? value then
+        type.emptyValue.value
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
@@ -1276,13 +1322,24 @@ let
     : 1\. Function argument
   */
   pushDownProperties =
+    let
+      mapAttrsIfAttrs =
+        f: val:
+        if isAttrs val then
+          mapAttrs f val
+        else
+          # This does not actually work, since arriving here means we have e.g.
+          # (lib.mkIf cond nonAttrs), while an attrset is expected. However,
+          # avoiding the mapAttrs call here gives better errors later.
+          val;
+    in
     cfg:
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     # FIXME: handle mkOrder?
     else
       [ cfg ];
@@ -1416,7 +1473,7 @@ let
     # Type
 
     ```
-    option -> attrsOf { highestPrio, value }
+    mergeAttrDefinitionsWithPrio :: Option -> { [String] :: { highestPrio :: Int; value :: Any; } }
     ```
   */
   mergeAttrDefinitionsWithPrio =
@@ -1525,7 +1582,7 @@ let
   # mkDefault properties of the previous option.
   #
   mkAliasDefinitions = mkAliasAndWrapDefinitions id;
-  mkAliasAndWrapDefinitions = wrap: option: mkAliasIfDef option (wrap (mkMerge option.definitions));
+  mkAliasAndWrapDefinitions = wrap: option: mkIf option.isDefined (wrap (mkMerge option.definitions));
 
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
@@ -1537,9 +1594,11 @@ let
       prio = option.highestPrio or defaultOverridePriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in
-    mkAliasIfDef option (wrap (mkMerge defsWithPrio));
+    mkIf option.isDefined (wrap (mkMerge defsWithPrio));
 
-  mkAliasIfDef = option: mkIf (isOption option && option.isDefined);
+  mkAliasIfDef =
+    lib.warn "Usage of 'mkAliasIfDef' has been deprecated. Use 'mkIf option.isDefined' instead."
+      (option: mkIf option.isDefined);
 
   /**
     Compatibility.

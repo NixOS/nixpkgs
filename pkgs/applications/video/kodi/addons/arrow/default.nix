@@ -29,10 +29,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/razzeee/script.module.arrow";
     description = "Better dates & times for Python";
-    license = licenses.asl20;
-    teams = [ teams.kodi ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.kodi ];
   };
 }

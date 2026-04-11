@@ -11,19 +11,21 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.26.1";
+  version = "1.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "proto-plus-python";
     tag = "v${version}";
-    hash = "sha256-7FonHHXpgJC0vg9Y26bqz0g1NmLWwaZWyFZ0kv7PjY8=";
+    hash = "sha256-B+CkOLzbpu3XXnH7MND5GCljG/bUyPPU57zXIIXoRiU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ protobuf ];
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -40,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful, idiomatic protocol buffers in Python";
     homepage = "https://github.com/googleapis/proto-plus-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ruuda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ruuda ];
   };
 }

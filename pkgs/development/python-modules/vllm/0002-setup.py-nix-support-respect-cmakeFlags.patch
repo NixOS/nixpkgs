@@ -1,19 +1,10 @@
-From 10b7e8330bdba319a4162cceb8e5dd4280215b04 Mon Sep 17 00:00:00 2001
-From: SomeoneSerge <else@someonex.net>
-Date: Wed, 31 Jul 2024 12:06:15 +0000
-Subject: [PATCH 2/2] setup.py: nix-support (respect cmakeFlags)
-
----
- setup.py | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
 diff --git a/setup.py b/setup.py
-index 01e006f9..14762146 100644
+index e9b36e2a2..bc9e2f1e3 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -15,6 +15,15 @@ from setuptools import Extension, find_packages, setup
- from setuptools.command.build_ext import build_ext
- from torch.utils.cpp_extension import CUDA_HOME
+@@ -20,6 +20,15 @@ from setuptools.command.build_ext import build_ext
+ from setuptools_scm import get_version
+ from torch.utils.cpp_extension import CUDA_HOME, ROCM_HOME
  
 +import os
 +import json
@@ -27,14 +18,11 @@ index 01e006f9..14762146 100644
  
  def load_module_from_path(module_name, path):
      spec = importlib.util.spec_from_file_location(module_name, path)
-@@ -159,6 +168,7 @@ class cmake_build_ext(build_ext):
-             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}'.format(outdir),
-             '-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY={}'.format(self.build_temp),
-             '-DVLLM_TARGET_DEVICE={}'.format(VLLM_TARGET_DEVICE),
+@@ -151,6 +160,7 @@ class cmake_build_ext(build_ext):
+         cmake_args = [
+             "-DCMAKE_BUILD_TYPE={}".format(cfg),
+             "-DVLLM_TARGET_DEVICE={}".format(VLLM_TARGET_DEVICE),
 +            *NIX_ATTRS["cmakeFlags"],
          ]
  
          verbose = envs.VERBOSE
--- 
-2.45.1
-

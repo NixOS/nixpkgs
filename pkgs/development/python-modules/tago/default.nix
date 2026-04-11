@@ -5,7 +5,6 @@
   fetchFromGitHub,
   promise,
   python-socketio,
-  pythonOlder,
   requests,
   websockets,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "tago";
   version = "3.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tago-io";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tago" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with Tago.io";
     homepage = "https://github.com/tago-io/tago-sdk-python";
     changelog = "https://github.com/tago-io/tago-sdk-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

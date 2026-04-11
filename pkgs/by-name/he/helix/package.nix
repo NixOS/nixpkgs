@@ -1,67 +1,117 @@
 {
-  fetchzip,
   lib,
-  rustPlatform,
-  git,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+  symlinkJoin,
+  runCommand,
+  makeBinaryWrapper,
+  helix-unwrapped,
+  removeReferencesTo,
+  pkgs,
+  tree-sitter,
+  lockedGrammars ? lib.importJSON ./grammars.json,
+  grammarsOverlay ? (
+    final: prev: {
+      tree-sitter-beancount = prev.tree-sitter-beancount.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-dart = prev.tree-sitter-dart.overrideAttrs {
+        patches = [ ];
+      };
+      tree-sitter-glimmer = prev.tree-sitter-glimmer.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-janet-simple = prev.tree-sitter-janet-simple.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-latex = prev.tree-sitter-latex.override {
+        generate = false;
+      };
+      tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
+        dontCheckForBrokenSymlinks = true;
+      };
+      tree-sitter-sql = prev.tree-sitter-sql.override {
+        generate = false;
+      };
+      tree-sitter-tlaplus = prev.tree-sitter-tlaplus.overrideAttrs {
+        patches = [ ];
+      };
+    }
+  ),
 }:
+let
+  lockedVersionsOverlay =
+    final: prev:
+    lib.mapAttrs (
+      drvName: grammar:
+      let
+        lockedGrammar = lockedGrammars.${lib.removePrefix "tree-sitter-" drvName};
+      in
+      (prev.${drvName}.override {
+        location = lockedGrammar.subpath;
+      }).overrideAttrs
+        {
+          version = lib.sources.shortRev lockedGrammar.nurl.args.rev;
+          src = (pkgs.${lockedGrammar.nurl.fetcher} lockedGrammar.nurl.args);
+        }
+    ) prev;
 
-rustPlatform.buildRustPackage (final: {
+  tree-sitter-grammars =
+    lib.filterAttrs (drvName: _: lib.hasAttr (lib.removePrefix "tree-sitter-" drvName) lockedGrammars)
+      (
+        tree-sitter.grammarsScope.overrideScope (
+          lib.composeExtensions lockedVersionsOverlay grammarsOverlay
+        )
+      );
+
+  # Dynamic libraries for the grammars always use the `.so` extension, also on Darwin (should use `.dylib`)
+  # See here: https://github.com/helix-editor/helix/pull/14982
+  # Switch to `stdenv.hostPlatform.extensions.sharedLibrary` once the fix above reaches the next release
+
+  grammarsFarm = runCommand "helix-grammars" { } (
+    lib.concatMapAttrsStringSep "\n" (_: grammar: ''
+      install -D ${grammar}/parser $out/${grammar.language}.so
+      ${lib.getExe removeReferencesTo} -t ${grammar} $out/${grammar.language}.so
+    '') (lib.filterAttrs (_: lib.isDerivation) tree-sitter-grammars)
+  );
+
+  lockedGrammarsCount = lib.length (lib.attrNames lockedGrammars);
+
+  runtimeDir = runCommand "helix-runtime" { } ''
+    mkdir -p $out
+    ln -s ${grammarsFarm} $out/grammars
+    cp -r --no-preserve=mode ${helix-unwrapped.src}/runtime/queries $out
+    count=$(ls -1 "$out/grammars/" | wc -l)
+    if [ "$count" -ne ${toString lockedGrammarsCount} ]; then
+      echo "Expected ${toString lockedGrammarsCount} grammars, found $count"
+      exit 1
+    fi
+  '';
+in
+
+symlinkJoin {
   pname = "helix";
-  version = "25.07.1";
+  inherit (helix-unwrapped) version;
 
-  # This release tarball includes source code for the tree-sitter grammars,
-  # which is not ordinarily part of the repository.
-  src = fetchzip {
-    url = "https://github.com/helix-editor/helix/releases/download/${final.version}/helix-${final.version}-source.tar.xz";
-    hash = "sha256-Pj/lfcQXRWqBOTTWt6+Gk61F9F1UmeCYr+26hGdG974=";
-    stripRoot = false;
-  };
+  paths = [ helix-unwrapped ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  cargoHash = "sha256-Mf0nrgMk1MlZkSyUN6mlM5lmTcrOHn3xBNzmVGtApEU=";
-
-  nativeBuildInputs = [
-    git
-    installShellFiles
-  ];
-
-  env.HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
-
-  postInstall = ''
-    # not needed at runtime
-    rm -r runtime/grammars/sources
-
-    mkdir -p $out/lib
-    cp -r runtime $out/lib
-    installShellCompletion contrib/completion/hx.{bash,fish,zsh}
-    mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
-    cp contrib/Helix.desktop $out/share/applications
-    cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
+  postBuild = ''
+    wrapProgram $out/bin/hx --set HELIX_RUNTIME "${runtimeDir}"
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgram = "${placeholder "out"}/bin/hx";
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
+    runtime = runtimeDir;
+    inherit tree-sitter-grammars;
   };
 
   meta = {
-    description = "Post-modern modal text editor";
-    homepage = "https://helix-editor.com";
-    changelog = "https://github.com/helix-editor/helix/blob/${final.version}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
-    mainProgram = "hx";
-    maintainers = with lib.maintainers; [
-      danth
-      yusdacra
-      zowoq
-    ];
+    inherit (helix-unwrapped.meta)
+      description
+      homepage
+      changelog
+      license
+      mainProgram
+      maintainers
+      ;
   };
-})
+}

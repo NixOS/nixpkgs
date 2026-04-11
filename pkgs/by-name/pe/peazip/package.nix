@@ -5,7 +5,7 @@
   qt6Packages,
   fpc,
   lazarus,
-  xorg,
+  libx11,
   runCommand,
   _7zz,
   brotli,
@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
-  version = "10.7.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
     rev = finalAttrs.version;
-    hash = "sha256-JVSr4ztDHjJF+vzhaMSSAWt6PEtxNzfCRBQBlfLA4xs=";
+    hash = "sha256-jeAvnSNLS173/diuGfv/PEvj7M4ARRHLoXQ2bkKSMP8=";
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ]
   ++ (with qt6Packages; [
     qtbase

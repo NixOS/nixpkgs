@@ -6,7 +6,7 @@
   makeWrapper,
   perlPackages,
   replaceVars,
-  xorg,
+  xmessage,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -24,7 +24,7 @@ perlPackages.buildPerlPackage rec {
 
   patches = [
     (replaceVars ./0001-Fix-paths.patch {
-      xmessage = xorg.xmessage;
+      xmessage = xmessage;
       inherit fluxbox gnused;
       # replaced in postPatch
       fbmenugen = null;
@@ -46,7 +46,7 @@ perlPackages.buildPerlPackage rec {
     perlPackages.Gtk3
     perlPackages.LinuxDesktopFiles
     perlPackages.perl
-    xorg.xmessage
+    xmessage
   ];
 
   dontConfigure = true;
@@ -70,12 +70,12 @@ perlPackages.buildPerlPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trizen/fbmenugen";
     description = "Simple menu generator for the Fluxbox Window Manager";
     mainProgram = "fbmenugen";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

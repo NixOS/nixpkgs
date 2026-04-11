@@ -7,12 +7,12 @@
   privsepUser ? "ntp",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openntpd";
   version = "6.8p1";
 
   src = fetchurl {
-    url = "mirror://openbsd/OpenNTPD/${pname}-${version}.tar.gz";
+    url = "mirror://openbsd/OpenNTPD/openntpd-${finalAttrs.version}.tar.gz";
     sha256 = "0ijsylc7a4jlpxsqa0jq1w1c7333id8pcakzl7a5749ria1xp0l5";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openntpd.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

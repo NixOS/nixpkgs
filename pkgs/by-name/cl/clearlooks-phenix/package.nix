@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "7.1";
   pname = "clearlooks-phenix";
 
   src = fetchzip {
-    url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
+    url = "https://github.com/jpfleury/clearlooks-phenix/archive/${finalAttrs.version}.tar.gz";
     sha256 = "sha256-UJgKPoNcpBkIxITAIn3INsANJn/hD8l9NCr/entbZx8=";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "GTK3 port of the Clearlooks theme";
     longDescription = ''
       The Clearlooks-Phénix project aims at creating a GTK3 port of Clearlooks,
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jpfleury/clearlooks-phenix";
     downloadPage = "https://github.com/jpfleury/clearlooks-phenix/releases";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.prikhi ];
+    platforms = lib.platforms.linux;
   };
-}
+})

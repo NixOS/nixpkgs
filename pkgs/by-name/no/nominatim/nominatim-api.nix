@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   hatchling,
+  async-timeout,
   psycopg,
   pyicu,
   python-dotenv,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "nominatim";
-  version = "5.1.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
     tag = "v${version}";
-    hash = "sha256-eMCXXPrUZvM4ju0mi1+f+LXhThCCCEH+HDz6lurw+Jo=";
+    hash = "sha256-cICDzsEJ2yRi8PaQpjfVC9ZI3KeQPiqGu4U1nTxxBvk=";
   };
 
   postPatch = ''
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    async-timeout
     psycopg
     pyicu
     python-dotenv

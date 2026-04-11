@@ -3,15 +3,15 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-proxy";
-  version = "0.8.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "sparfenyuk";
     repo = "mcp-proxy";
-    tag = "v${version}";
-    hash = "sha256-3hNpUOWbyOUjLcvfcMzj4+xHyUl7k1ZSy8muWHvSEvM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hig+ZDFdToiYGOjb/rpqxnu8MaLmQLgSh5WYcgJGA1I=";
   };
 
   pyproject = true;
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ keyruu ];
   };
-}
+})

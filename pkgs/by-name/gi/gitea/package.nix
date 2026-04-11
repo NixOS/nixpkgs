@@ -11,6 +11,8 @@
   gzip,
   nodejs,
   openssh,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   stdenv,
   sqliteSupport ? true,
@@ -22,15 +24,16 @@ let
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-0p7P68BvO3hv0utUbnPpHSpGLlV7F9HHmOITvJAb/ww=";
+      fetcherVersion = 3;
+      hash = "sha256-Atb6m5ZD9NKjYezFnYLnQqnlr72g5dz7ROfOF9fsqto=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm
     ];
 
     buildPhase = ''
@@ -45,18 +48,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.25.0";
+  version = "1.25.5";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-uBBL62Q/aigsCo0S0hwNooKljTn+OfcqoJxan6Ac0rM=";
+    hash = "sha256-EDj/n4dOZsdJx4zdP8GwUavZNK145Q8ENXmIL+81MY4=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-HHW7xgXJKnzj6HLKAUXKYIZgOKKbXVSK+YGSKCwBeLU=";
+  vendorHash = "sha256-o7OIVo0/gunGMIDd0r6c9KDtku6pWwzmgm1X9qVbx4w=";
 
   outputs = [
     "out"
@@ -117,11 +120,11 @@ buildGoModule rec {
     tests = nixosTests.gitea;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       techknowlogick
       SuperSandro2000
     ];

@@ -53,9 +53,13 @@ let
       done
     '';
   };
+  libnet' = libnet.overrideAttrs { dontDisableStatic = true; };
   net = symlinkJoin {
-    inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
+    inherit (libnet') name;
+    paths = [
+      (lib.getLib libnet')
+      (lib.getDev libnet')
+    ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
@@ -72,7 +76,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    tag = "debian/${version}+debian-35";
+    tag = "debian/${finalAttrs.version}+debian-35";
     hash = "sha256-RVv9USAHTVYnGgKygIPgfXpfjCYigJvScuzc2+1Uzfw=";
     name = "dsniff.tar.gz";
   };
@@ -99,8 +103,20 @@ stdenv.mkDerivation rec {
     libnsl
     libnl
   ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+
+  env = {
+    NIX_CFLAGS_LINK = toString [
+      "-lglib-2.0"
+      "-lpthread"
+      "-ltirpc"
+      "-lnl-3"
+      "-lnl-genl-3"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${libtirpc.dev}/include/tirpc"
+      "-std=gnu17"
+    ];
+  };
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch
@@ -114,15 +130,15 @@ stdenv.mkDerivation rec {
     "--with-openssl=${ssl}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools for network auditing and penetration testing";
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.
     '';
     homepage = "https://www.monkey.org/~dugsong/dsniff/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.symphorien ];
     # bsd and solaris should work as well
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,10 +4,10 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
-  libXft,
-  libXcursor,
-  libXcomposite,
+  libx11,
+  libxft,
+  libxcursor,
+  libxcomposite,
   conf ? null,
   nixosTests,
 }:
@@ -19,14 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cococry";
     repo = "Ragnar";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-OZhIwrKEhTfkw9K8nZIwGZzxXBObseWS92Y+85HmdNs=";
   };
 
   prePatch = ''
     substituteInPlace Makefile \
-      --replace '/usr/bin' "$out/bin" \
-      --replace '/usr/share' "$out/share"
+      --replace-fail '/usr/bin' "$out/bin" \
+      --replace-fail '/usr/share' "$out/share"
   '';
 
   postPatch =
@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libX11
-    libXft
-    libXcursor
-    libXcomposite
+    libx11
+    libxft
+    libxcursor
+    libxcomposite
   ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki";
-  version = "2.2.0";
+  version = "2.2.0-unstable-2026-01-04";
 
   src = fetchgit {
     url = "https://git.sr.ht/~thestr4ng3r/chiaki";
-    tag = "v${finalAttrs.version}";
+    rev = "ab55cf4c95f7723faae08a546fbe14e0f6bddf45";
     fetchSubmodules = true;
-    hash = "sha256-mLx2ygMlIuDJt9iT4nIj/dcLGjMvvmneKd49L7C3BQk=";
+    hash = "sha256-GYhbq3QCyykMu5K1ITJ+XqNU593Gn3eBTM9coKmh/Vk=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     libsForQt5.wrapQtAppsHook
   ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-    'cmake_minimum_required(VERSION 3.2)' \
-    'cmake_minimum_required(VERSION 3.5)'
-  '';
 
   buildInputs = [
     ffmpeg

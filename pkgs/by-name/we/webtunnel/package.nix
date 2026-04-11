@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webtunnel";
   version = "0.0.3";
 
@@ -13,7 +13,7 @@ buildGoModule rec {
     group = "tpo";
     owner = "anti-censorship/pluggable-transports";
     repo = "webtunnel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HB95GCIJeO5fKUW23VHrtNZdc9x9fk2vnmI9JogDWSQ=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.gbtb ];
     license = lib.licenses.mit;
   };
-}
+})

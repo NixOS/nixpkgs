@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shopify-themekit";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "themekit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-m0TAgnYklj/WqZJIm9mHLE7SZgXP8YDQZndDgpiNqL0=";
   };
 
@@ -27,11 +27,11 @@ buildGoModule rec {
     rm -f $out/bin/{cmd,tkrelease}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for shopify themes";
     mainProgram = "theme";
     homepage = "https://shopify.github.io/themekit/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _1000101 ];
   };
-}
+})

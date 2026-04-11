@@ -15,14 +15,14 @@
   judy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zmap";
   version = "4.3.4";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zmap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fHCVo8OwQUzpdDq7dMBxvK15Ojth5UmNoPTVuTGUP58=";
   };
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zmap.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Fast single packet network scanner designed for Internet-wide network surveys";
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

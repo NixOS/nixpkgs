@@ -15,12 +15,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dico";
   version = "2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/dico/dico-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
   # ERROR: All 188 tests were run, 90 failed unexpectedly.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage = "https://www.gnu.org/software/dico/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       GNU Dico is a flexible modular implementation of DICT server
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
       remote dictionary servers.
     '';
   };
-}
+})

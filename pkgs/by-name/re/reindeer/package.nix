@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reindeer";
-  version = "2025.10.27.00";
+  version = "2026.02.23.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
-    tag = "v${version}";
-    hash = "sha256-ykey6fdL9bjf+IfIAKzlIs5Pw/r2rAe6VB8BR1fUtz4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m2IqtOzkrKhFfpwNX1KGW2HZz9DLskGXHum8mc4SVuc=";
   };
 
-  cargoHash = "sha256-aFDMVxWLeE8TtQCW5U2ULh9yJBc67vkXkPjgo+QPxYM=";
+  cargoHash = "sha256-fWpxIQJOcqzUwHNID+Wc+3QOY9P9hIAYSb9wP8x4pVU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Generate Buck build rules from Rust Cargo dependencies";
     mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nickgerace ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ amaanq ];
   };
-}
+})

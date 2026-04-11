@@ -1,26 +1,32 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   cython,
-  fetchPypi,
   numpy,
-  packaging,
-  pandas,
-  patsy,
   scipy,
   setuptools,
   setuptools-scm,
-  stdenv,
+
+  # dependencies
+  packaging,
+  pandas,
+  patsy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "statsmodels";
-  version = "0.14.5";
+  version = "0.14.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3iYOWMzP0s7d+DW1WjVyM9bKhToapPkPdVOlLMccbd8=";
+  src = fetchFromGitHub {
+    owner = "statsmodels";
+    repo = "statsmodels";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Rr+7vQ+nx8XihoQQECqHlDKvk7xRTdCpQTzs5pBbqmk=";
   };
 
   postPatch = ''
@@ -56,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "statsmodels" ];
 
-  meta = with lib; {
+  meta = {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
-    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
   };
-}
+})

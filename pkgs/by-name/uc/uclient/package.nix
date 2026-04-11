@@ -35,12 +35,12 @@ stdenv.mkDerivation {
         -i CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny OpenWrt fork of libnl";
     homepage = "https://git.openwrt.org/?p=project/uclient.git;a=summary";
-    license = licenses.isc;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "uclient-fetch";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

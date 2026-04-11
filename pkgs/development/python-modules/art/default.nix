@@ -32,12 +32,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ASCII art library for Python";
     mainProgram = "art";
     homepage = "https://github.com/sepandhaghighi/art";
     changelog = "https://github.com/sepandhaghighi/art/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

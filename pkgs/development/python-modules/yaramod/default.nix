@@ -19,16 +19,16 @@ let
     hash = "sha256-El4WA92t2O/L4wUqH6Xj8w+ANtb6liRwafDhqn8jxjQ=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yaramod";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avast";
     repo = "yaramod";
-    tag = "v${version}";
-    hash = "sha256-iIPMwN/kHrbN3ca+IJdyIfvrsnwiiflQY/gHAT3p+S4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2XI7lGfoMHimtuQ29I1cFtV4OgfvR3Qcvh/FhA0yeBw=";
   };
 
   postPatch = ''
@@ -37,6 +37,9 @@ buildPythonPackage rec {
     cp -r --no-preserve=all ${nlohmann_json.src}/single_include/nlohmann/json.hpp deps/json/
     cp -r --no-preserve=all ${pybind11.src} deps/pybind11/
     cp -r --no-preserve=all ${gtest.src} deps/googletest/
+
+    substituteInPlace deps/pog/deps/fmt/fmt/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   dontUseCmakeConfigure = true;
@@ -61,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaramod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing of YARA rules into AST and building new rulesets in C++";
     homepage = "https://github.com/avast/yaramod";
-    changelog = "https://github.com/avast/yaramod/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ msm ];
+    changelog = "https://github.com/avast/yaramod/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ msm ];
   };
-}
+})

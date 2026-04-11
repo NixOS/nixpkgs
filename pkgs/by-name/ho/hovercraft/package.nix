@@ -5,20 +5,22 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hovercraft";
   version = "2.7";
-  format = "setuptools";
+  pyproject = true;
   disabled = !python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "hovercraft";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-X6EaiVahAYAaFB65oqmj695wlJFXNseqz0SQLzGVD0w=";
   };
 
-  nativeCheckInputs = with python3Packages; [ manuel ];
+  build-system = [ python3Packages.setuptools ];
+
+  nativeCheckInputs = [ python3Packages.manuel ];
 
   dependencies = with python3Packages; [
     setuptools
@@ -41,6 +43,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "hovercraft";
     homepage = "https://github.com/regebro/hovercraft";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ makefu ];
+    maintainers = [ lib.maintainers.makefu ];
   };
-}
+})

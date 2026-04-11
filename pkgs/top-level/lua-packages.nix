@@ -48,6 +48,7 @@ rec {
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
     luarocksMoveDataFolder
     luarocksCheckHook
+    bustedCheckHook
     ;
 
   inherit lua;
@@ -65,9 +66,7 @@ rec {
     ;
 
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
-  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
-    inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
-  };
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix { };
 
   luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
@@ -112,6 +111,8 @@ rec {
     }
   ) { };
 
+  image-nvim = callPackage ../development/lua-modules/image-nvim { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
@@ -131,7 +132,7 @@ rec {
       };
 
       # The makefile tries to link to `-llua<luaversion>`
-      LUA_LIBS = "-llua";
+      env.LUA_LIBS = "-llua";
 
       buildInputs =
         lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
@@ -145,13 +146,13 @@ rec {
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         # The package does not build with lua 5.4 or luaJIT
         broken = luaAtLeast "5.4" || isLuaJIT;
         description = "Lua module for PAM authentication";
         homepage = "https://github.com/devurandom/lua-pam";
-        license = licenses.mit;
-        maintainers = with maintainers; [ traxys ];
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ traxys ];
       };
     }
   ) { };
@@ -160,21 +161,21 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
-      version = "0.1.31";
+      version = "0.1.32";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-WUiBFJ8L8NzSGoEwTAw/iHAzPqJqaOUSFyqGeEf+f94==";
+        sha256 = "sha256-ba/ahIl8BDfyXIbaN6zVCh3UwY6JbAqqZEpXktOfeYo=";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
 
-      meta = with lib; {
+      meta = {
         description = "New FFI-based API for lua-nginx-module";
         homepage = "https://github.com/openresty/lua-resty-core";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         maintainers = [ ];
       };
     }
@@ -193,10 +194,10 @@ rec {
         sha256 = "sha256-G2l4Zo9Xm/m4zRfxrgzEvRE5LMO+UuX3kd7FwlCnxDA=";
       };
 
-      meta = with lib; {
+      meta = {
         description = "Lua-land LRU Cache based on LuaJIT FFI";
         homepage = "https://github.com/openresty/lua-resty-lrucache";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         maintainers = [ ];
       };
     }
@@ -238,13 +239,13 @@ rec {
         );
       '';
 
-      meta = with lib; {
+      meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "Lightweight UNIX I/O and POSIX binding for Lua";
         homepage = "https://www.gitano.org.uk/luxio/";
-        license = licenses.mit;
-        maintainers = with maintainers; [ richardipsum ];
-        platforms = platforms.unix;
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ richardipsum ];
+        platforms = lib.platforms.unix;
       };
     }
   ) { };
@@ -252,6 +253,8 @@ rec {
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
   };
+
+  readline = callPackage ../development/lua-modules/readline { inherit (pkgs) readline; };
 
   vicious = callPackage (
     { fetchFromGitHub }:
@@ -274,17 +277,17 @@ rec {
         printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Modular widget library for the awesome window manager";
         homepage = "https://vicious.rtfd.io";
         changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
           makefu
           mic92
           McSinyx
         ];
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
       };
     }
   ) { };

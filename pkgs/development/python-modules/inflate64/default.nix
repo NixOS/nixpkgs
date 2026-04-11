@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
   setuptools,
   setuptools-scm,
@@ -13,8 +13,7 @@ buildPythonPackage rec {
   version = "1.0.2";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "inflate64";
     tag = "v${version}";

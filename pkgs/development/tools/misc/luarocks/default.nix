@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks_bootstrap";
-  version = "3.12.2";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hQysstYGUcZnnEXL+9ECS0sBViYggeDIMgo6LpUexBA=";
+    hash = "sha256-ETVoDpeFSsW7ld2z31Vog3RKsMquoxd7c8m9y7Fb1wk=";
   };
 
   patches = [
@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/luarocks";
-  versionCheckProgramArg = "--version";
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
@@ -131,15 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for Lua";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raskin
       teto
     ];
     mainProgram = "luarocks";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
   };
 })

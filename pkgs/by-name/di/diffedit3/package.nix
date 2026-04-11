@@ -7,16 +7,16 @@
   diffedit3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diffedit3";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-o3Y3SQLkMxYMepGyvK6m/8aA5ZDwCAYdYUhGplkckjU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-tlrP97XMAAnk5H5wTHPsP1DMSmDqV9wJp1n+22jUtnM=";
   };
 
-  cargoHash = "sha256-XAtp5pCKFQRqyF9Y0udrcudgF5i3vWxk//kZ/hRsFaA=";
+  cargoHash = "sha256-Hv3T0pxNUwp7No5tmFopMGjNdxfje4gRODj3B7sDVcg=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ilyagr/diffedit3";
     description = "3-pane diff editor";
-    license = with licenses; [ asl20 ];
+    license = with lib.licenses; [ asl20 ];
     mainProgram = "diffedit3";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

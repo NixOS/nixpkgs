@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgenpeimg=disabled"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fwupd.org/";
     maintainers = [ ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 })

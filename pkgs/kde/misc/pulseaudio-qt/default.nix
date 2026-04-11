@@ -7,11 +7,11 @@
 }:
 mkKdeDerivation rec {
   pname = "pulseaudio-qt";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/pulseaudio-qt/pulseaudio-qt-${version}.tar.xz";
-    hash = "sha256-ahjbdt0rzD332ak3nAJSlYFyZLqh8u2Mqqx9pE4E6TE=";
+    hash = "sha256-eWGcVblICKp9MH+yNK05oQltCI8h+Aa+DniL55p2s8k=";
   };
 
   extraNativeBuildInputs = [ pkg-config ];

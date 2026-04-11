@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unittest-cpp";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "unittest-cpp";
     repo = "unittest-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0sxb3835nly1jxn071f59fwbdzmqi74j040r81fanxyw3s1azw0i";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   # Fix 'Version:' setting in .pc file. TODO: remove once upstreamed:
   #     https://github.com/unittest-cpp/unittest-cpp/pull/188
-  cmakeFlags = [ "-DPACKAGE_VERSION=${version}" ];
+  cmakeFlags = [ "-DPACKAGE_VERSION=${finalAttrs.version}" ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

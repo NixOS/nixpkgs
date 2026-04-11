@@ -18,14 +18,14 @@
   eigen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luminance-hdr";
   version = "2.6.1.1";
 
   src = fetchFromGitHub {
     owner = "LuminanceHDR";
     repo = "LuminanceHDR";
-    rev = "v.${version}";
+    rev = "v.${finalAttrs.version}";
     sha256 = "sha256-PWqtYGx8drfMVp7D7MzN1sIUTQ+Xz5yyeHN87p2r6PY=";
   };
 
@@ -81,11 +81,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://qtpfsgui.sourceforge.net/";
     description = "Complete open source solution for HDR photography";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.hrdinka ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})

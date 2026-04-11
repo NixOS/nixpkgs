@@ -32,10 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Completely normal office calculator";
     mainProgram = "procalc";
     homepage = "https://proofficecalculator.com/";
-    maintainers = with lib.maintainers; [
-      pmiddend
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ pmiddend ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
   };

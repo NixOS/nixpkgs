@@ -15,16 +15,18 @@ let
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.56";
-      hash = "sha256-+uMzNrX97n16vuMJU2J4l9gNwge46LQDVrPxSftpvyA=";
+      version = "6.18.21";
+      hash = "sha256-56cRf+iTX+SbxEelp84q4m9JnJzGWuAaRBgWM+3MLQc=";
       isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
-      version = "6.17.6";
-      hash = "sha256-SGaM42dN+pl0GAQRDmCR6QB0ET1loqfFwC7kUxTXEjw=";
+      version = "6.19.11";
+      hash = "sha256-JbiS33MeAxtcB8e7JQUu+K8bh2Ad/B6wKGKqA98R9Wc=";
     };
   };
+
+  # nixpkgs-update: no auto update
 
   xanmodKernelFor =
     {

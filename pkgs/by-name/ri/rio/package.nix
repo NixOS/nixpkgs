@@ -7,8 +7,10 @@
   nixosTests,
   nix-update-script,
   autoPatchelfHook,
+  installShellFiles,
   cmake,
   ncurses,
+  scdoc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -16,10 +18,10 @@
   vulkan-loader,
   libxkbcommon,
   withX11 ? !stdenv.hostPlatform.isDarwin,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
   libxcb,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
@@ -36,10 +38,10 @@ let
       vulkan-loader
     ]
     ++ lib.optionals withX11 [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
+      libx11
+      libxcursor
+      libxi
+      libxrandr
       libxcb
     ]
     ++ lib.optionals withWayland [
@@ -48,20 +50,22 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.30";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkZq9mPQTeYtDuvGrEzV7PlDQZHUED/JuSLvsFWxYI0=";
+    hash = "sha256-RJRWcwqrmlK398lAh8LIkUj595ESKEyNwkC+V2hoKAE=";
   };
 
-  cargoHash = "sha256-Rr6FiievKElzWhLEXOQZdcJ4KKlfvW9p8k7r7wIm0MQ=";
+  cargoHash = "sha256-gqUWK97xPrPpKkRsPA6oaZVJWKiq+l1I8WsHufVSjbo=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     ncurses
+    scdoc
+    installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
@@ -99,6 +103,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    scdoc < extra/man/rio.1.scd > rio.1
+    scdoc < extra/man/rio.5.scd > rio.5
+    scdoc < extra/man/rio-bindings.5.scd > rio-bindings.5
+    installManPage rio.1 rio.5 rio-bindings.5
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications/
@@ -137,7 +146,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${finalAttrs.version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/releases/tag/v${finalAttrs.version}";
     mainProgram = "rio";
   };
 })

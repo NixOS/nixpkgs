@@ -39,17 +39,17 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.8.0";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-Ilcp4WW65SyqrqDGBRdnB25m7OCbrsfdtxWvl0uTjNw=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-/vLCTAF46M1H0Q64RLM7+IFMofmjZmZ4IFzvm/y7zkg=";
   };
 
   patches = [
@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
-  JAX_RELEASE = "1";
+  env.JAX_RELEASE = "1";
 
   dependencies = [
     jaxlib
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     opt-einsum
     scipy
   ]
-  ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
   optional-dependencies = rec {
     cuda = [ jax-cuda12-plugin ];
@@ -187,10 +187,11 @@ buildPythonPackage rec {
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
+    changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       samuela
     ];
   };
-}
+})

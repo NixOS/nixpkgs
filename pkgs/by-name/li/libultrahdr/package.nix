@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   cmake,
   ninja,
@@ -30,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Fix build with gcc 15 by adding missing cstdint header
+    (fetchpatch {
+      url = "https://github.com/google/libultrahdr/commit/5fa99b5271a3c80a13c78062d7adc6310222dd8e.patch";
+      hash = "sha256-o6lbDOdx+ZrCy/Iq02WjM9Tas8C5P/FMwUtXMUCoZGY=";
+    })
+
     (replaceVars ./gtest.patch {
       GTEST_INCLUDE_DIRS = "${lib.getDev gtest}/include";
     })
@@ -48,14 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "UHDR_BUILD_TESTS" true)
+    # Build disables install target in cross-compilation mode so
+    # cross-compilation would fail on NixOS. Force flag to false.
+    # See https://github.com/google/libultrahdr/blob/8cbc983d2f6c2171af5cbcdb8801102f83fe92ab/CMakeLists.txt#L153
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" false)
   ];
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    libjpeg
+  ];
+
+  buildInputs = [
     gtest
+    libjpeg
   ];
 
   nativeCheckInputs = [

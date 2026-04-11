@@ -4,7 +4,6 @@
   jdk,
   jre-generate-cacerts,
   maven,
-  perl,
   writers,
 }:
 
@@ -13,7 +12,9 @@
   sourceRoot ? null,
   buildOffline ? false,
   doCheck ? true,
+  prePatch ? null,
   patches ? [ ],
+  postPatch ? null,
   pname,
   version,
   mvnJdk ? jdk,
@@ -36,28 +37,37 @@ let
 
   fetchedMavenDeps = stdenv.mkDerivation (
     {
-      name = "${pname}-${version}-maven-deps";
-      inherit src sourceRoot patches;
+      pname = "maven-deps-${pname}";
+      inherit
+        src
+        sourceRoot
+        prePatch
+        patches
+        postPatch
+        version
+        ;
 
       nativeBuildInputs = [
         maven
       ]
       ++ args.nativeBuildInputs or [ ];
 
-      JAVA_HOME = mvnJdk;
+      env = mvnFetchExtraArgs.env or { } // {
+        JAVA_HOME = mvnJdk;
+      };
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
       buildPhase = ''
         runHook preBuild
 
-        MAVEN_EXTRA_ARGS=""
+        MAVEN_EXTRA_ARGS="-B"
 
         # handle proxy
         if [[ -n "''${HTTP_PROXY-}" ]] || [[ -n "''${HTTPS_PROXY-}" ]] || [[ -n "''${NO_PROXY-}" ]];then
           mvnSettingsFile="$(mktemp -d)/settings.xml"
           ${writeProxySettings} $mvnSettingsFile
-          MAVEN_EXTRA_ARGS="-s=$mvnSettingsFile"
+          MAVEN_EXTRA_ARGS="$MAVEN_EXTRA_ARGS -s=$mvnSettingsFile"
         fi
 
         # handle cacert by populating a trust store on the fly
@@ -111,7 +121,7 @@ let
       outputHashMode = "recursive";
       outputHash = mvnHash;
     }
-    // mvnFetchExtraArgs
+    // (removeAttrs mvnFetchExtraArgs [ "env" ])
   );
 in
 stdenv.mkDerivation (
@@ -123,7 +133,9 @@ stdenv.mkDerivation (
       maven
     ];
 
-    JAVA_HOME = mvnJdk;
+    env = args.env or { } // {
+      JAVA_HOME = mvnJdk;
+    };
 
     buildPhase = ''
       runHook preBuild

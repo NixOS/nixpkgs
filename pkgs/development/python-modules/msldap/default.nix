@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   unicrypto,
   asyauth,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "msldap";
   version = "0.5.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msldap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python LDAP library for auditing MS AD";
     homepage = "https://github.com/skelsec/msldap";
     changelog = "https://github.com/skelsec/msldap/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

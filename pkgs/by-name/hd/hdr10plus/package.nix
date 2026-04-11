@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rust,
+  buildPackages,
   rustPlatform,
   hdr10plus_tool,
   cargo-c,
@@ -10,7 +10,7 @@
 
 let
   inherit (lib) optionals concatStringsSep;
-  inherit (rust.envVars) setEnv;
+  inherit (buildPackages.rust.envVars) setEnv;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;

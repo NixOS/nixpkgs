@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   typing-extensions,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "python-can";
   version = "4.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hardbyte";
@@ -87,12 +84,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "can" ];
 
-  meta = with lib; {
+  meta = {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
     changelog = "https://github.com/hardbyte/python-can/releases/tag/${src.tag}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       fab
       sorki
     ];

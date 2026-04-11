@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlcheck";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "jarulraj";
     repo = "sqlcheck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rGqCtEO2K+OT44nYU93mF1bJ07id+ixPkRSC8DcO6rY=";
     fetchSubmodules = true;
   };
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Automatically identify anti-patterns in SQL queries";
     mainProgram = "sqlcheck";
-    license = licenses.asl20;
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; unix ++ windows;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ h7x4 ];
+    maintainers = with lib.maintainers; [ h7x4 ];
   };
-}
+})

@@ -5,7 +5,6 @@
   packaging,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pip-requirements-parser";
   version = "32.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nexB";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
     "test_legacy_version_is_deprecated"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse pip requirements";
     homepage = "https://github.com/nexB/pip-requirements-parser";
     changelog = "https://github.com/nexB/pip-requirements-parser/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

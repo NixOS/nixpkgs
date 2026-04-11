@@ -61,6 +61,7 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
+    wrapPythonProgramsIn "$out/libexec/" "''${pythonPath[*]}"
 
     runHook postInstall
   '';
@@ -78,7 +79,6 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

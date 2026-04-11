@@ -23,15 +23,15 @@ let
       LDFLAGS=-s
     ''; # use linux flags by default
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tree";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
-    rev = version;
-    hash = "sha256-sC3XdZWJSXyCIYr/Y41ogz5bNBTfwKjOFtYwhayXPhY=";
+    rev = finalAttrs.version;
+    hash = "sha256-ks3bj916tDdizywQnZKNSAfA2AzWh3np2F6QN5eOzIc=";
   };
 
   preConfigure = ''
@@ -43,17 +43,22 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://oldmanprogrammer.net/source.php?dir=projects/tree";
     description = "Command to produce a depth indented directory listing";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Tree is a recursive directory listing command that produces a
       depth indented listing of files, which is colorized ala dircolors if
       the LS_COLORS environment variable is set and output is to tty.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nickcao ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tree";
   };
-}
+})

@@ -10,12 +10,12 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlink";
   version = "0.1.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YxozhEJh/KBirlA6ymIEbJY3r7wYSeTL40W2xQLyue0=";
   };
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "WCH-Link flash tool for WCH's RISC-V MCUs(CH32V, CH56X, CH57X, CH58X, CH59X, CH32L103, CH32X035, CH641, CH643)";
     homepage = "https://github.com/ch32-rs/wlink";
-    changelog = "https://github.com/ch32-rs/wlink/releases/tag/v${version}";
+    changelog = "https://github.com/ch32-rs/wlink/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "wlink";
   };
-}
+})

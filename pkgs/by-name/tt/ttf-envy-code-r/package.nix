@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "PR7";
 
   src = fetchzip {
-    url = "http://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
+    url = "https://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
     hash = "sha256-pJqC/sbNjxEwbVf2CVoXMBI5zvT3DqzRlKSqFT8I2sM=";
   };
 
@@ -22,10 +22,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://damieng.com/blog/tag/envy-code-r";
     description = "Free scalable coding font by DamienG";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
   };
 }

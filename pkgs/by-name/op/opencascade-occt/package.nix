@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   cmake,
   ninja,
@@ -10,38 +10,38 @@
   tk,
   libGL,
   libGLU,
-  libXext,
-  libXmu,
-  libXi,
+  libxext,
+  libxmu,
+  libxi,
   vtk,
   withVtk ? false,
-
-  # used in passthru.tests
   opencascade-occt,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencascade-occt";
-  version = "7.8.1";
-  commit = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
+  version = "7.9.3";
 
-  src = fetchurl {
-    name = "occt-${commit}.tar.gz";
-    url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
-    hash = "sha256-AGMZqTLLjXbzJFW/RSTsohAGV8sMxlUmdU/Y2oOzkk8=";
+  src = fetchFromGitHub {
+    owner = "Open-Cascade-SAS";
+    repo = "OCCT";
+    tag = "V${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-Zp4m+f1wrzynoCrzIwvYELUXsY/NQIBY+HFk5UteufI=";
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "7.9") [
     # fix compilation on darwin against latest version of freetype
     # https://gitlab.freedesktop.org/freetype/freetype/-/merge_requests/330
     (fetchpatch {
       url = "https://github.com/Open-Cascade-SAS/OCCT/commit/7236e83dcc1e7284e66dc61e612154617ef715d6.diff";
       hash = "sha256-NoC2mE3DG78Y0c9UWonx1vmXoU4g5XxFUT3eVXqLU60=";
     })
-
-    # patch does not apply against 7.9+, it was submitted upstream for future
-    # inclusion: https://github.com/Open-Cascade-SAS/OCCT/pull/683
-    ./vtk-draw-conditional-glx.patch
   ];
+
+  # Exclude TKIVtkDraw toolkits cause VTK has no glx support on darwin
+  postPatch = lib.optionalString (withVtk && stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace adm/MODULES \
+      --replace-fail "TKIVtkDraw" ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
     tk
     libGL
     libGLU
-    libXext
-    libXmu
-    libXi
+    libxext
+    libxmu
+    libxi
     rapidjson
   ]
   ++ lib.optional withVtk vtk;
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
   cmakeFlags = [
     (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
@@ -80,13 +80,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = "https://www.opencascade.org/";
-    license = licenses.lgpl21; # essentially...
+    license = lib.licenses.lgpl21; # essentially...
     # The special exception defined in the file OCCT_LGPL_EXCEPTION.txt
     # are basically about making the license a little less share-alike.
-    maintainers = with maintainers; [ amiloradovsky ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

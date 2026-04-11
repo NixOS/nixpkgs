@@ -40,7 +40,7 @@
     server_wsdd.wait_for_unit("samba-wsdd")
 
     client_wsdd.wait_until_succeeds(
-        "echo list | ${pkgs.libressl.nc}/bin/nc -N -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
+        "echo list | ${pkgs.netcat}/bin/nc -N -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
     )
   '';
 }

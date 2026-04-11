@@ -15,13 +15,15 @@
   cgal,
   gmp,
   mpfr,
+  suitesparse,
+  onnxruntime,
   poselib,
   lz4,
   autoAddDriverRunpath,
   config,
   stdenv,
   qt5,
-  xorg,
+  libsm,
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
@@ -52,6 +54,8 @@ let
     mpfr
     lz4
     qt5.qtbase
+    suitesparse
+    onnxruntime
   ]
   ++ lib.optionals cudaSupport [
     cudatoolkit
@@ -63,26 +67,30 @@ let
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv'.mkDerivation {
-  version = "unstable-3.12.5-openimageio";
+  version = "4.0.2";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = "f8edccaa36909713b9d3930e1ca65cb364a38b26";
-    hash = "sha256-0lD7ywM48ODe11u9D3XSk9btqQ4gs/APBFf9IyiXe6g=";
+    rev = "d927f7e518fc20afa33390712c4cc20d85b730b8";
+    hash = "sha256-+cPkksfCLyEo7A70nuRWnOBEkhx8BFevQ9XWTipEkpM=";
   };
 
-  # TODO: remove this when https://github.com/colmap/colmap/pull/3459 is in a release
-  # This was produced with:
-  # git diff f8edccaa36909713b9d3930e1ca65cb364a38b26 e40c0730020938587c9d4eb7634cbff93cbc2f81
-  patches = [ ./openimageio.patch ];
+  patches = [
+    ./suitesparse-no-include-subdir.patch
+    # Remove when https://github.com/colmap/colmap/pull/4265 is merged
+    ./disambiguate-gradientchecker.patch
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" false)
     (lib.cmakeBool "UNINSTALL_ENABLED" false)
     (lib.cmakeBool "FETCH_POSELIB" false)
     (lib.cmakeBool "FETCH_FAISS" false)
+    (lib.cmakeBool "FETCH_ONNX" false)
     (lib.cmakeBool "TESTS_ENABLED" true)
+    (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${suitesparse.dev}/include")
+    (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${suitesparse}/lib")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
@@ -105,7 +113,7 @@ stdenv'.mkDerivation {
     cgal
     gmp
     mpfr
-    xorg.libSM
+    libsm
   ]
   ++ depsAlsoForPycolmap;
 
@@ -120,7 +128,7 @@ stdenv'.mkDerivation {
 
   passthru.depsAlsoForPycolmap = depsAlsoForPycolmap;
 
-  meta = with lib; {
+  meta = {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
     longDescription = ''
       COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
@@ -128,9 +136,9 @@ stdenv'.mkDerivation {
     '';
     mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
-    license = licenses.bsd3;
-    platforms = if cudaSupport then platforms.linux else platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = if cudaSupport then lib.platforms.linux else lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lebastr
       usertam
       chpatrick

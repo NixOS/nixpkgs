@@ -8,15 +8,16 @@ buildPythonPackage rec {
   # the frontend version corresponding to a specific home-assistant version can be found here
   # https://github.com/home-assistant/home-assistant/blob/master/homeassistant/components/frontend/manifest.json
   pname = "home-assistant-frontend";
-  version = "20251001.4";
+  version = "20260325.6";
   format = "wheel";
 
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     pname = "home_assistant_frontend";
     dist = "py3";
     python = "py3";
-    hash = "sha256-yrGIgx8VgCi4G+xWFjy37lI4i1ohPV1bttJfejnkkXA=";
+    hash = "sha256-YGIJW+MCiTzFlQkUEjtxMvYpYgvJJZXyslin7Zw1jRU=";
   };
 
   # there is nothing to strip in this package
@@ -25,11 +26,11 @@ buildPythonPackage rec {
   # no Python tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant/frontend/releases/tag/${version}";
     description = "Frontend for Home Assistant";
     homepage = "https://github.com/home-assistant/frontend";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.7.6";
+  version = "1.8.4";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     tag = finalAttrs.version;
-    hash = "sha256-HpjP6VSkEAFeXIFXLbndQzEWJwVvHe6B3aSwCz6KiIM=";
+    hash = "sha256-Dj1QJatjnK7Rb+SZLiRO0eHERzqmoq01n8fUE7SVWMI=";
   };
 
   depsBuildBuild = [
@@ -127,15 +127,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     mainProgram = "adwaita-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "libadwaita-1" ];
   };
 })

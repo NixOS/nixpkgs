@@ -24,9 +24,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PqYPYnKPlnU3PByxksBscl4GqDRllQdmD6RWpy/Ura0=";
   };
 
-  postPatch = ''
-    sed -i -e '/add_subdirectory(mt32emu)/d' CMakeLists.txt
-  '';
+  postPatch =
+    # Make sure system-installed libmt32emu is used
+    # Don't depend on in-tree mt32emu to be used
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(mt32emu)' "" \
+        --replace-fail 'add_dependencies(mt32emu-qt mt32emu)' ""
+    ''
+    # Bump CMake minimum to something our CMake supports
+    # Fixed treewide in https://github.com/munt/munt/commit/e6af0c7e5d63680716ab350467207c938054a0df
+    # Remove when version > 1.11.1
+    + ''
+      substituteInPlace CMakeLists.txt mt32emu_qt/CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 2.8.12...3.27)'
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -47,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withJack libjack2;
 
   cmakeFlags = [
-    "-Dmt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING=OFF"
-    "-Dmunt_WITH_MT32EMU_QT=ON"
-    "-Dmunt_WITH_MT32EMU_SMF2WAV=OFF"
+    (lib.cmakeBool "mt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING" false)
+    (lib.cmakeBool "munt_WITH_MT32EMU_QT" true)
+    (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" false)
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

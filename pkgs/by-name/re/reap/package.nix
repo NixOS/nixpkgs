@@ -21,12 +21,12 @@ stdenv.mkDerivation {
     install -dm755 "$out/share/licenses/reap/"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/leahneukirchen/reap";
     description = "Run process until all its spawned processes are dead";
     mainProgram = "reap";
-    license = with licenses; [ publicDomain ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.leahneukirchen ];
+    license = with lib.licenses; [ publicDomain ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.leahneukirchen ];
   };
 }

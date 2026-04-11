@@ -1,5 +1,6 @@
 {
   lib,
+  claude-code,
   vscode-utils,
 }:
 
@@ -7,9 +8,15 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "claude-code";
     publisher = "anthropic";
-    version = "2.0.31";
-    hash = "sha256-ylcb5Ty9x9uj38OY0RXsS+YNKVKUzc1c5x6RJsZ3E2g=";
+    version = "2.1.96";
+    hash = "sha256-9WVCySGmohmyzTzcskzGCHk6ZFX+/HwkpmX2yudVar8=";
   };
+
+  postInstall = ''
+    mkdir -p "$out/$installPrefix/resources/native-binary"
+    rm -f "$out/$installPrefix/resources/native-binary/claude"*
+    ln -s "${claude-code}/bin/claude" "$out/$installPrefix/resources/native-binary/claude"
+  '';
 
   meta = {
     description = "Harness the power of Claude Code without leaving your IDE";

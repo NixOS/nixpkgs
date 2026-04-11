@@ -4,14 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frida-tools";
-  version = "14.4.5";
-  format = "pyproject";
+  version = "14.6.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sId91KB2qLasJHsfrS6Nfqctn0kCPS6ieNwtfheai8M=";
+    inherit (finalAttrs) version;
+    pname = "frida_tools";
+    hash = "sha256-EwpoRBHT6NyR1sHV4oEXqu5R/Wcud4n3DWxEkeZXdzM=";
   };
 
   build-system = with python3Packages; [
@@ -40,4 +41,4 @@ python3Packages.buildPythonApplication rec {
       wxWindowsException31
     ];
   };
-}
+})

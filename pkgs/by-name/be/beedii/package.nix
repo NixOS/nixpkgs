@@ -2,26 +2,23 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "beedii";
   version = "1.0.0";
 
   src = fetchzip {
-    url = "https://github.com/webkul/beedii/releases/download/v${version}/beedii.zip";
+    url = "https://github.com/webkul/beedii/releases/download/v${finalAttrs.version}/beedii.zip";
     hash = "sha256-MefkmWl7LdhQiePpixKcatoIeOTlrRaO3QA9xWAxJ4Q=";
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
+  sourceRoot = "${finalAttrs.src.name}/Fonts";
 
-    install -Dm444 Fonts/*.ttf -t $out/share/fonts/truetype/${pname}
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = gitUpdater {
     url = "https://github.com/webkul/beedii";
@@ -29,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
 
     # This version does not include font files in the released assets.
     # https://github.com/webkul/beedii/issues/1
-    ignoredVersions = "^1\.2\.0$";
+    ignoredVersions = "^1\\.2\\.0$";
   };
 
   meta = {
@@ -41,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
       kachick
     ];
   };
-}
+})

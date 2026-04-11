@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "ufolib2";
   version = "0.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
@@ -50,15 +50,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "ufoLib2" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fonttools/ufoLib2/releases/tag/${src.tag}";
     description = "Library to deal with UFO font sources";
     homepage = "https://github.com/fonttools/ufoLib2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -2,29 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libXft,
+  libxft,
   imlib2,
   giflib,
   libexif,
   conf ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sxiv";
   version = "26";
 
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "sxiv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xaawlfdy7b277m38mgg4423kd7p1ffn0dq4hciqs6ivbb3q9c4f";
   };
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "config.def.h" conf);
-  preBuild = lib.optionalString (conf != null) "cp ${configFile} config.def.h";
+  preBuild = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h";
 
   buildInputs = [
-    libXft
+    libxft
     imlib2
     giflib
     libexif
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     install -Dt $out/share/applications sxiv.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple X Image Viewer";
     homepage = "https://github.com/muennich/sxiv";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ h7x4 ];
+    maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "sxiv";
   };
-}
+})

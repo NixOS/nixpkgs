@@ -8,18 +8,18 @@
   cmake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gql";
-  version = "0.41.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
-    rev = version;
-    hash = "sha256-iczBVix56aKbvOksxYmZ8WPgngnTDn9MIlVnZ2nA5Ts=";
+    rev = finalAttrs.version;
+    hash = "sha256-fTmCL8b9Yp0DwgatGd7ODpq3z9b3Rqg/skqvjQkZvOU=";
   };
 
-  cargoHash = "sha256-vblQuUSpTK93UEYdiEPq1C3N+E3WCTZHoLJDWG4rZNs=";
+  cargoHash = "sha256-48nNiUCtFdTksgkLGDkhWp2Tfy4NGt6ka1ntC8UHXO0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SQL like query language to perform queries on .git files";
     homepage = "https://github.com/AmrDeveloper/GQL";
-    changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${src.rev}";
-    license = licenses.mit;
+    changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gitql";
   };
-}
+})

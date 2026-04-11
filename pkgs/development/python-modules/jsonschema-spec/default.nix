@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build
   poetry-core,
@@ -22,9 +21,7 @@
 buildPythonPackage rec {
   pname = "jsonschema-spec";
   version = "0.3.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
@@ -59,11 +56,11 @@ buildPythonPackage rec {
 
   passthru.skipBulkUpdate = true; # newer versions under the jsonschema-path name
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/p1c2u/jsonschema-spec/releases/tag/${version}";
     description = "JSONSchema Spec with object-oriented paths";
     homepage = "https://github.com/p1c2u/jsonschema-spec";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

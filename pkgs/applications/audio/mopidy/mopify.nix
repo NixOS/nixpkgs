@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-mopify";
   version = "1.7.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-Mopify";
     hash = "sha256-RlCC+39zC+LeA/QDWPHYx5TrEwOgVrnvcH1Xg12qSLE=";
   };
@@ -30,10 +30,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_mopify" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dirkgroenen/mopidy-mopify";
     description = "Mopidy webclient based on the Spotify webbased interface";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.Gonzih ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.Gonzih ];
   };
-}
+})

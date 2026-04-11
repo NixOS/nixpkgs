@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evisum";
-  version = "0.6.4";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "hlyotWUTfDKkEjAvDrlE7xYEMG7XksCg3X9Xksdca/g=";
+    sha256 = "XuND4zidLkkah3kYYBc7ZLG4r3QvnKpc34NFxA7NR9c=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "System and process monitor written with EFL";
     mainProgram = "evisum";
     homepage = "https://www.enlightenment.org";
-    license = with licenses; [ isc ];
-    platforms = platforms.linux;
-    teams = [ teams.enlightenment ];
+    license = with lib.licenses; [ isc ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.enlightenment ];
   };
 }

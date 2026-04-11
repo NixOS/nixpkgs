@@ -26,13 +26,13 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "faustlive";
   version = "2.5.17";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
     fetchSubmodules = true;
   };
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "cd Build";
 
-  meta = with lib; {
+  meta = {
     description = "Standalone just-in-time Faust compiler";
     mainProgram = "FaustLive";
     longDescription = ''
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
     homepage = "https://faust.grame.fr/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
-}
+})

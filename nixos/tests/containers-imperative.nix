@@ -3,9 +3,7 @@
   name = "containers-imperative";
   meta = {
     maintainers = with lib.maintainers; [
-      aristid
       aszlig
-      kampfschlaefer
     ];
   };
 
@@ -55,7 +53,7 @@
           docbook5
           libxml2
           docbook_xsl_ns
-          xorg.lndir
+          lndir
           documentation-highlighter
           perlPackages.ConfigIniFiles
         ];

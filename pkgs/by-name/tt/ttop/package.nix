@@ -28,13 +28,13 @@ buildNimPackage (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Top-like system monitoring tool";
     homepage = "https://github.com/inv2004/ttop";
     changelog = "https://github.com/inv2004/ttop/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       sikmir
     ];
     mainProgram = "ttop";

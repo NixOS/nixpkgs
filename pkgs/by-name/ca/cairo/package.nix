@@ -15,8 +15,8 @@
   pixman,
   zlib,
   x11Support ? !stdenv.hostPlatform.isDarwin || true,
-  libXext,
-  libXrender,
+  libxext,
+  libxrender,
   gobjectSupport ? true,
   glib,
   xcbSupport ? x11Support,
@@ -72,8 +72,8 @@ stdenv.mkDerivation (
       zlib
     ]
     ++ optionals x11Support [
-      libXext
-      libXrender
+      libxext
+      libxrender
     ]
     ++ optionals xcbSupport [ libxcb ]
     ++ optional gobjectSupport glib; # TODO: maybe liblzo but what would it be for here?
@@ -125,7 +125,7 @@ stdenv.mkDerivation (
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       description = "2D graphics library with support for multiple output devices";
       mainProgram = "cairo-trace";
       longDescription = ''
@@ -139,7 +139,7 @@ stdenv.mkDerivation (
         when available (e.g., through the X Render Extension).
       '';
       homepage = "http://cairographics.org/";
-      license = with licenses; [
+      license = with lib.licenses; [
         lgpl2Plus
         mpl10
       ];
@@ -149,7 +149,7 @@ stdenv.mkDerivation (
         "cairo-svg"
       ]
       ++ lib.optional gobjectSupport "cairo-gobject";
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   }
 )

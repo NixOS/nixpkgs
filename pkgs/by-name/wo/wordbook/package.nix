@@ -13,7 +13,7 @@
   desktop-file-utils,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wordbook";
   version = "0.4.0";
   pyproject = false; # Built with meson
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fushinari";
     repo = "Wordbook";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oiAXSDJJtlV6EIHzi+jFv+Ym1XHCMLx9DN1YRiXZNzc=";
   };
 
@@ -62,4 +62,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

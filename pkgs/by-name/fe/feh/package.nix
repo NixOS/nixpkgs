@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  libxt,
+  libxinerama,
+  libx11,
   imlib2Full,
   libjpeg,
   libpng,
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feh";
-  version = "3.11.2";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = "feh";
     rev = finalAttrs.version;
-    hash = "sha256-bwp/hzkuwQTgPakE0zkNtBWrNUkVWt9btTD8MVx+Xq4=";
+    hash = "sha256-cjfP/jnVWIGXTihtjVANE1T31R9ZFj8g5H8W3F+JrQk=";
   };
 
   outputs = [
@@ -34,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    xorg.libXt
-    xorg.libX11
-    xorg.libXinerama
+    libxt
+    libx11
+    libxinerama
     imlib2Full
     libjpeg
     libpng
@@ -46,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "VERSION=${finalAttrs.version}"
     "exif=1"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "verscmp=0"
@@ -65,17 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     # released under a variant of the MIT license
     # https://spdx.org/licenses/MIT-feh.html
-    license = licenses.mit-feh;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit-feh;
+    maintainers = with lib.maintainers; [
       gepbird
-      globin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "feh";
   };
 })

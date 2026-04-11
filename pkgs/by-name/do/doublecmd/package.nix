@@ -7,20 +7,20 @@
   getopt,
   glib,
   lazarus,
-  libX11,
+  libx11,
   libsForQt5,
   writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.1.29";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WEBCP5l9XZhule26thiti/NQpT0FPSu7b6ZffouHipQ=";
+    hash = "sha256-VmiL3B4BmbKhk0eWmlKuPuPv6OsUk7DbFNoYGdcpeBM=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dbus
     glib
-    libX11
+    libx11
     libsForQt5.libqtpas
   ];
 

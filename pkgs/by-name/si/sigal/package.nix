@@ -6,13 +6,13 @@
   ffmpeg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sigal";
   version = "2.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-IOAQ6lMudYH+Ukx27VKbPNKmQKBaX3j0p750nC5Y1Hg=";
   };
 
@@ -51,13 +51,13 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another simple static gallery generator";
     mainProgram = "sigal";
     homepage = "http://sigal.saimon.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

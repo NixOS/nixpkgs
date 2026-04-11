@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytest-dev/pytest-django/blob/v${version}/docs/changelog.rst";
     description = "Pytest plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

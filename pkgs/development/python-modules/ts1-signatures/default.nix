@@ -5,15 +5,12 @@
   setuptools,
   dpkt,
   pyyaml,
-  pythonOlder,
   pytestCheckHook,
 }:
 buildPythonPackage {
   pname = "ts1-signatures";
   version = "0-unstable-2024-08-10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "yifeikong";
@@ -39,6 +36,6 @@ buildPythonPackage {
     description = "TLS and HTTP signature and fingerprint library";
     homepage = "https://github.com/yifeikong/th1";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
   };
 }

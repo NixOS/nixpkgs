@@ -30,16 +30,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.26.1";
+  version = "2.26.6";
   pyproject = true;
-
-  disabled = python.pkgs.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-ObBZoX5RwO7cf0zzOQ0aTWklq/Zzgh0DFLM9qxZHk8I=";
+    hash = "sha256-khgaI9ivwF6i2zlW57vQtBwQpk5mzYVCV4lMOio7ibw=";
   };
 
   pythonRelaxDeps = [ "hishel" ];

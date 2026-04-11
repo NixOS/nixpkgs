@@ -10,12 +10,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "OpenIPMI";
   version = "2.0.37";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openipmi/OpenIPMI-${version}.tar.gz";
+    url = "mirror://sourceforge/openipmi/OpenIPMI-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-xi049dp99Cmaw6ZSUI6VlTd1JEAYHjTHayrs69fzAbk=";
   };
 
@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openipmi.sourceforge.io/";
     description = "User-level library that provides a higher-level abstraction of IPMI and generic services";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl2Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ arezvov ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ arezvov ];
   };
-}
+})

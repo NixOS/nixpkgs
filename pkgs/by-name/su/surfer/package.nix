@@ -8,22 +8,22 @@
   autoPatchelfHook,
   libxkbcommon,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
+  libx11,
+  libxcursor,
+  libxi,
   stdenv,
   makeWrapper,
   zenity,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfer";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "surfer-project";
     repo = "surfer";
-    rev = "v${version}";
-    hash = "sha256-mvHyljAEVi1FMkEbKsPmCNx2Cg0/Ydw3ZQCZsowEKGc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-83UKSD9Z4pT0OXLqIgquuJ8W6+U29ZzWG1SOrAOK9ic=";
     fetchSubmodules = true;
   };
 
@@ -43,12 +43,12 @@ rustPlatform.buildRustPackage rec {
     wayland
     libxkbcommon
     libGL
-    libX11
-    libXcursor
-    libXi
+    libx11
+    libxcursor
+    libxi
   ];
 
-  cargoHash = "sha256-89pkHS0YQ77PmQfT8epdu2tPRNAenYGgtoiJVuuVYiI=";
+  cargoHash = "sha256-UuZpgW8di79mTNpDJ7K12IC5Xa3YX9ex2BYd62pUh1o=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;
@@ -61,10 +61,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Extensible and Snappy Waveform Viewer";
     homepage = "https://surfer-project.org/";
-    changelog = "https://gitlab.com/surfer-project/surfer/-/releases/v${version}";
+    changelog = "https://gitlab.com/surfer-project/surfer/-/releases/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ hakan-demirli ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "surfer";
   };
-}
+})

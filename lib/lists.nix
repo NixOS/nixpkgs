@@ -9,9 +9,8 @@ let
     min
     id
     warn
-    pipe
     ;
-  inherit (lib.attrsets) mapAttrs attrNames;
+  inherit (lib.attrsets) mapAttrs attrNames attrValues;
   inherit (lib) max;
 in
 rec {
@@ -144,10 +143,13 @@ rec {
     fold' 0;
 
   /**
-    `fold` is an alias of `foldr` for historic reasons
+    `fold` is an alias of `foldr` for historic reasons.
+
+    ::: {.warning}
+    This function will be removed in 26.05.
+    :::
   */
-  # FIXME(Profpatsch): deprecate?
-  fold = foldr;
+  fold = warn "fold has been deprecated, use foldr instead" foldr;
 
   /**
     “left fold”, like `foldr`, but from the left:
@@ -259,7 +261,7 @@ rec {
     # Type
 
     ```
-    foldl' :: (acc -> x -> acc) -> acc -> [x] -> acc
+    foldl' :: (a -> b -> a) -> a -> [b] -> a
     ```
 
     # Examples
@@ -296,7 +298,7 @@ rec {
     # Type
 
     ```
-    imap0 :: (int -> a -> b) -> [a] -> [b]
+    imap0 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -328,7 +330,7 @@ rec {
     # Type
 
     ```
-    imap1 :: (int -> a -> b) -> [a] -> [b]
+    imap1 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -370,7 +372,7 @@ rec {
 
     # Type
     ```
-    ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+    ifilter0 :: (Int -> a -> Bool) -> [a] -> [a]
     ```
 
     # Examples
@@ -421,6 +423,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    flatten :: [a | [a | [a | ...]]] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.flatten` usage example
@@ -437,7 +445,7 @@ rec {
   flatten = x: if isList x then concatMap (y: flatten y) x else [ x ];
 
   /**
-    Remove elements equal to 'e' from a list.  Useful for buildInputs.
+    Remove elements equal to `e` from a list.  Useful for `buildInputs`.
 
     # Inputs
 
@@ -496,7 +504,7 @@ rec {
     # Type
 
     ```
-    findSingle :: (a -> bool) -> a -> a -> [a] -> a
+    findSingle :: (a -> Bool) -> a -> a -> [a] -> a
     ```
 
     # Examples
@@ -618,7 +626,7 @@ rec {
     # Type
 
     ```
-    findFirst :: (a -> bool) -> a -> [a] -> a
+    findFirst :: (a -> Bool) -> a -> [a] -> a
     ```
 
     # Examples
@@ -658,7 +666,7 @@ rec {
     # Type
 
     ```
-    any :: (a -> bool) -> [a] -> bool
+    any :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -693,7 +701,7 @@ rec {
     # Type
 
     ```
-    all :: (a -> bool) -> [a] -> bool
+    all :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -724,7 +732,7 @@ rec {
     # Type
 
     ```
-    count :: (a -> bool) -> [a] -> int
+    count :: (a -> Bool) -> [a] -> Int
     ```
 
     # Examples
@@ -758,7 +766,7 @@ rec {
     # Type
 
     ```
-    optional :: bool -> a -> [a]
+    optional :: Bool -> a -> [a]
     ```
 
     # Examples
@@ -792,7 +800,7 @@ rec {
     # Type
 
     ```
-    optionals :: bool -> [a] -> [a]
+    optionals :: Bool -> [a] -> [a]
     ```
 
     # Examples
@@ -820,6 +828,12 @@ rec {
     `x`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    toList :: (a | [a]) -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -852,7 +866,7 @@ rec {
     # Type
 
     ```
-    range :: int -> int -> [int]
+    range :: Int -> Int -> [Int]
     ```
 
     # Examples
@@ -886,7 +900,7 @@ rec {
     # Type
 
     ```
-    replicate :: int -> a -> [a]
+    replicate :: Int -> a -> [a]
     ```
 
     # Examples
@@ -921,7 +935,7 @@ rec {
     # Type
 
     ```
-    (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
+    partition :: (a -> Bool) -> [a] -> { right :: [a]; wrong :: [a]; }
     ```
 
     # Examples
@@ -959,6 +973,12 @@ rec {
     `lst`
 
     : 4\. Function argument
+
+    # Type
+
+    ```
+    groupBy' :: (a -> b -> a) -> a -> (b -> String) -> [b] -> { [String] :: a }
+    ```
 
     # Examples
     :::{.example}
@@ -1126,6 +1146,12 @@ rec {
 
     : 3\. Function argument
 
+    # Type
+
+    ```
+    listDfs :: Bool -> (a -> a -> Bool) -> [a] -> ({ minimal :: a; visited :: [a]; rest :: [a]; } | { cycle :: a; loops :: [a]; visited :: [a]; rest :: [a]; })
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.listDfs` usage example
@@ -1190,6 +1216,12 @@ rec {
     `list`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    toposort :: (a -> a -> Bool) -> [a] -> ({ result :: [a]; } | { cycle :: [a]; loops :: [a]; })
+    ```
 
     # Examples
     :::{.example}
@@ -1362,6 +1394,12 @@ rec {
 
     : The second list
 
+    # Type
+
+    ```
+    compareLists :: (a -> a -> Int) -> [a] -> [a] -> Int
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.compareLists` usage examples
@@ -1400,6 +1438,12 @@ rec {
     `lst`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    naturalSort :: [String] -> [String]
+    ```
 
     # Examples
     :::{.example}
@@ -1444,7 +1488,7 @@ rec {
     # Type
 
     ```
-    take :: int -> [a] -> [a]
+    take :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1478,7 +1522,7 @@ rec {
     # Type
 
     ```
-    takeEnd :: int -> [a] -> [a]
+    takeEnd :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1512,7 +1556,7 @@ rec {
     # Type
 
     ```
-    drop :: int -> [a] -> [a]
+    drop :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1580,7 +1624,7 @@ rec {
     # Type
 
     ```
-    hasPrefix :: [a] -> [a] -> bool
+    hasPrefix :: [a] -> [a] -> Bool
     ```
 
     # Examples
@@ -1659,7 +1703,7 @@ rec {
     # Type
 
     ```
-    sublist :: int -> int -> [a] -> [a]
+    sublist :: Int -> Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1877,7 +1921,7 @@ rec {
     # Type
 
     ```
-    uniqueStrings :: [ String ] -> [ String ]
+    uniqueStrings :: [String] -> [String]
     ```
 
     # Examples
@@ -1905,7 +1949,7 @@ rec {
     # Type
 
     ```
-    allUnique :: [a] -> bool
+    allUnique :: [a] -> Bool
     ```
 
     # Examples
@@ -1924,7 +1968,7 @@ rec {
   allUnique = list: (length (unique list) == length list);
 
   /**
-    Intersects list 'list1' and another list (`list2`).
+    Intersects list `list1` and another list (`list2`).
 
     O(nm) complexity.
 
@@ -1937,6 +1981,12 @@ rec {
     `list2`
 
     : Second list
+
+    # Type
+
+    ```
+    intersectLists :: [a] -> [a] -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -1952,7 +2002,7 @@ rec {
   intersectLists = e: filter (x: elem x e);
 
   /**
-    Subtracts list 'e' from another list (`list2`).
+    Subtracts list `e` from another list (`list2`).
 
     O(nm) complexity.
 
@@ -1965,6 +2015,12 @@ rec {
     `list2`
 
     : Second list
+
+    # Type
+
+    ```
+    subtractLists :: [a] -> [a] -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -1981,7 +2037,7 @@ rec {
 
   /**
     Test if two lists have no common element.
-    It should be slightly more efficient than (intersectLists a b == [])
+    It should be slightly more efficient than `intersectLists a b == []`.
 
     # Inputs
 
@@ -1992,7 +2048,78 @@ rec {
     `b`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mutuallyExclusive :: [a] -> [a] -> Bool
+    ```
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
+  /**
+    Concatenate all attributes of an attribute set.
+    This assumes that every attribute of the set is a list.
+
+    # Inputs
+
+    `set`
+
+    : Attribute set with attributes that are lists
+
+    # Type
+
+    ```
+    concatAttrValues :: { [String] :: [a] } -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.concatAttrValues` usage example
+
+    ```nix
+    concatAttrValues { a = [ 1 2 ]; b = [ 3 ]; }
+    => [ 1 2 3 ]
+    ```
+
+    :::
+  */
+  concatAttrValues = set: concatLists (attrValues set);
+
+  /**
+    Replaces a list's nth element with a new element
+
+    # Inputs
+
+    `list`
+    : Input list
+
+    `idx`
+    : index to replace
+
+    `newElem`
+    : new element to replace with
+
+    # Type
+
+    ```
+    replaceElemAt :: [a] -> Int -> a -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `replaceElemAt` usage example
+
+    ```nix
+    lib.replaceElemAt` [1 2 3] 0 "a"
+    => ["a" 2 3]
+    ```
+
+    :::
+  */
+  replaceElemAt =
+    list: idx: newElem:
+    assert lib.assertMsg (idx >= 0 && idx < length list)
+      "'lists.replaceElemAt' called with index ${toString idx} on a list of size ${toString (length list)}";
+    genList (i: if i == idx then newElem else elemAt list i) (length list);
 }

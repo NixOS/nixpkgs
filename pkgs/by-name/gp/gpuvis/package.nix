@@ -11,14 +11,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpuvis";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "gpuvis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a9eAYDsiwyzZc4FAPo0wANysisIT4qCHLh2PrYswJtw=";
   };
 
@@ -41,17 +41,17 @@ stdenv.mkDerivation rec {
     freetype
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uint32_t' has not been declared
     "-include cstdint"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GPU Trace Visualizer";
     mainProgram = "gpuvis";
     homepage = "https://github.com/mikesart/gpuvis";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emantor ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = lib.platforms.linux;
   };
-}
+})

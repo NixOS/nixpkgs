@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # tests
   ipykernel,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "wasabi";
   version = "1.1.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight console printing and formatting toolkit";
     homepage = "https://github.com/ines/wasabi";
     changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

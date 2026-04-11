@@ -5,7 +5,6 @@
   azure-mgmt-core,
   azure-common,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
   azure-cli,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-resource-templatespecs";
   version = "1.0.0b1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_mgmt_resource_templatespecs";
@@ -37,18 +34,19 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonNamespaces = [
-    "azure.mgmt.resource.templatespecs"
+    "azure.mgmt"
+    "azure.mgmt.resource"
   ];
 
   pythonImportsCheck = [
     "azure.mgmt.resource.templatespecs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource-templatespecs";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource-templatespecs_${version}/sdk/resources/azure-mgmt-resource-templatespecs/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = azure-cli.meta.maintainers;
   };
 }

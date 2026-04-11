@@ -14,19 +14,19 @@
 }:
 buildDotnetModule rec {
   pname = "wheelwizard";
-  version = "2.3.3";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
-    tag = "${version}";
-    hash = "sha256-DuEI6bmvNP6wRuZX9Do0FGDsu80ldy0SCefBk6gqT9s=";
+    tag = version;
+    hash = "sha256-WJVEofU41ZoOYLgD2TMPy50KQ44SPuLKS2piRmI9wV8=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
   '';
 
-  projectFile = "WheelWizard.sln";
+  projectFile = "WheelWizard";
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
@@ -50,7 +50,7 @@ buildDotnetModule rec {
     runHook preInstall
 
     mkdir -p $out/lib/wheelwizard $out/bin
-    cp -r WheelWizard/bin/Release/net8.0/* $out/lib/wheelwizard/
+    cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
       --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
@@ -74,12 +74,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "WheelWizard, Retro Rewind Launcher";
     homepage = "https://github.com/TeamWheelWizard/WheelWizard";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "WheelWizard";
-    maintainers = with maintainers; [ DerHalbGrieche ];
+    maintainers = with lib.maintainers; [ DerHalbGrieche ];
   };
 }

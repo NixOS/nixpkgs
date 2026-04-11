@@ -26,11 +26,11 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/marl";
     description = "Hybrid thread / fiber task scheduler written in C++ 11";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ breakds ];
   };
 }

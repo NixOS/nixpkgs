@@ -12,14 +12,14 @@
   libmnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openonload";
   version = "9.0.2";
 
   src = fetchFromGitHub {
     owner = "Xilinx-CNS";
     repo = "onload";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wyvTtOjD6fwuT2OGGhr10F0Q7hXE97mGREhq7Ns14hw=";
   };
 
@@ -147,12 +147,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "OpenOnLoad high performance network stack from Solarflare";
     homepage = "https://www.openonload.org";
     license = lib.licenses.gpl2;
-    maintainers = with maintainers; [ YorikSar ];
+    maintainers = with lib.maintainers; [ YorikSar ];
     # ARM64 build fails, see https://github.com/Xilinx-CNS/onload/issues/253
     platforms = [ "x86_64-linux" ];
   };
-}
+})

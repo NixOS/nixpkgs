@@ -6,27 +6,33 @@
   electron,
   makeDesktopItem,
   imagemagick,
+  autoPatchelfHook,
   writeScript,
   _7zz,
   commandLineArgs ? "",
 }:
 let
   pname = "obsidian";
-  version = "1.9.14";
+  version = "1.12.7";
   appname = "Obsidian";
-  meta = with lib; {
+  meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     mainProgram = "obsidian";
-    license = licenses.obsidian;
-    maintainers = with maintainers; [
-      atila
+    license = lib.licenses.obsidian;
+    maintainers = with lib.maintainers; [
       conradmearns
       zaninime
-      qbit
       kashw2
       w-lfchen
+    ];
+
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 
@@ -36,9 +42,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-C9sk1Nv5Yw+MMwapqnzTHbW/IQbd1fc8PSp4PBrnhzo="
+        "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs="
       else
-        "sha256-vS8PCz8dpMFvJCF1Heu2m+Qj9hl2ZmxNM0AwB6CbU88=";
+        "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
   };
 
   icon = fetchurl {
@@ -63,14 +69,10 @@ let
       src
       desktopItem
       icon
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-    };
     nativeBuildInputs = [
+      autoPatchelfHook
       makeWrapper
       imagemagick
     ];
@@ -81,6 +83,7 @@ let
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
+      install -m 755 -D obsidian-cli $out/bin/obsidian-cli
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
       install -m 444 -D "${desktopItem}/share/applications/"* \
@@ -107,13 +110,8 @@ let
       version
       src
       appname
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    };
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
@@ -123,7 +121,8 @@ let
       runHook preInstall
       mkdir -p $out/{Applications/${appname}.app,bin}
       cp -R . $out/Applications/${appname}.app
-      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/obsidian
+      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/obsidian-cli $out/bin/obsidian-cli
       runHook postInstall
     '';
   };

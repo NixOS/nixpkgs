@@ -2,26 +2,31 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-bless";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-SNaA+CEuCBwo4c54qWGs5AdkBYb9IWY1cQ0dRd/noe8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-JBd1YPTJ2ZqcGZ+FTGR2hqXWYd+kJ/0snWrn4uEpXWg=";
   };
 
-  cargoHash = "sha256-nfSJ9RkzFAWlxlfoUKk8ZmIXDJXoSyHCGgRgMy9FDkw=";
-  cargoDepsName = pname;
+  cargoHash = "sha256-DN5PRUO0M0/ExIkuR+Iwk3SW1jzIaFnzvLOBuFoJ360=";
+  cargoDepsName = finalAttrs.pname;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Tool to select active boot partition on ARM Macs";
     homepage = "https://crates.io/crates/asahi-bless";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukaslihotzki ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukaslihotzki ];
     mainProgram = "asahi-bless";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

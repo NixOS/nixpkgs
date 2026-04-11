@@ -9,12 +9,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldns";
   version = "1.8.4";
 
   src = fetchurl {
-    url = "https://www.nlnetlabs.nl/downloads/ldns/${pname}-${version}.tar.gz";
+    url = "https://www.nlnetlabs.nl/downloads/ldns/ldns-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-g4uQdZS6r/HNdn6VRmp3RZmK5kvHS+A43Mxi4t4uQkc=";
   };
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ldns-config" "$dev"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library with the aim of simplifying DNS programming in C";
     homepage = "https://www.nlnetlabs.nl/projects/ldns/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     mainProgram = "drill";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

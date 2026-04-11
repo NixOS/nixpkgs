@@ -9,24 +9,25 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.59.0";
+  version = "2.62.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_container";
     inherit version;
-    hash = "sha256-ZsTKUV0zzGbzf9jltrqJBjsG66sz4UlbjEJMcgs/tgM=";
+    hash = "sha256-O647Jw3v9kD1Pn0naPvAP/vzUxqIZWD7nk97VRRs1T8=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -53,11 +54,11 @@ buildPythonPackage rec {
     "google.cloud.container_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Container Engine API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-container";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-container-v${version}/packages/google-cloud-container/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -23,16 +23,16 @@
   sparqlwrapper,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awswrangler";
-  version = "3.13.0";
+  version = "3.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    tag = version;
-    hash = "sha256-MkoJpztVjwZbGcJTdnLRF7ZtIFd0qGoz/cksEoqLe4w=";
+    tag = finalAttrs.version;
+    hash = "sha256-utxSM8S3uelwrLHrXx5NglOmqjS7YKnAPujNS7UhWf8=";
   };
 
   pythonRelaxDeps = [
@@ -80,11 +80,11 @@ buildPythonPackage rec {
     "tests/unit/test_moto.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
-    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchPypi,
+  fetchpatch,
   sassc,
   hyperkitty,
   postorius,
@@ -13,13 +14,21 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman_web";
   version = "0.0.9";
-  disabled = pythonOlder "3.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-3wnduej6xMQzrjGhGXQznfJud/Uoy3BDduukRJeahL8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "django-5.2.patch";
+      url = "https://gitlab.com/mailman/mailman-web/-/commit/bf3eae03ba6ed416ff58e63ea30dd4b95f310e46.patch";
+      includes = [ "pyproject.toml" ];
+      hash = "sha256-NcXFXYJe3ve4qAGzOVZv9hBx4MTwxRtIYp1GRD1g0qw=";
+    })
+  ];
 
   postPatch = ''
     # Upstream seems to mostly target installing on top of existing
@@ -46,12 +55,12 @@ buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) mailman; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mailman/mailman-web";
     description = "Django project for Mailman 3 web interface";
     mainProgram = "mailman-web";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       qyliss
       m1cr0man
     ];

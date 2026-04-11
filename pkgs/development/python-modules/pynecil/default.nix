@@ -2,6 +2,7 @@
   aiohttp,
   bleak,
   bleak-retry-connector,
+  bluetooth-adapters,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-regex-commit,
@@ -14,17 +15,15 @@
 
 buildPythonPackage rec {
   pname = "pynecil";
-  version = "4.2.0";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
     tag = "v${version}";
-    hash = "sha256-ZEg5fmSE594YEgcJROOeVqc1reyGlyQiYNoCcfUanrY=";
+    hash = "sha256-nZaWiaEAIsubvSSsJZLQVfpaElWx7WKeRlYK80tUohg=";
   };
-
-  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [
     hatch-regex-commit
@@ -35,6 +34,7 @@ buildPythonPackage rec {
     aiohttp
     bleak
     bleak-retry-connector
+    bluetooth-adapters
   ];
 
   pythonImportsCheck = [ "pynecil" ];

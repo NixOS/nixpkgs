@@ -43,11 +43,11 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tabnine.com";
     description = "Smart Compose for code that uses deep learning to help you write code faster";
-    license = licenses.unfree;
-    platforms = attrNames sources.platforms;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.unfree;
+    platforms = lib.attrNames sources.platforms;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

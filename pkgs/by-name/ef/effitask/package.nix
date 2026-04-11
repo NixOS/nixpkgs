@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "effitask";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "sanpii";
     repo = "effitask";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical task manager, based on the todo.txt format";
     longDescription = ''
       To use it as todo.sh add-on, create a symlink like this:
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage rec {
       like described in the projects readme.
     '';
     homepage = "https://github.com/sanpii/effitask";
-    maintainers = with maintainers; [ davidak ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ davidak ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "effitask";
   };
-}
+})

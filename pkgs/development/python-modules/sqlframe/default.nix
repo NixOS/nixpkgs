@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "sqlframe";
-  version = "3.43.7";
+  version = "3.46.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eakmanrq";
     repo = "sqlframe";
     tag = "v${version}";
-    hash = "sha256-qrKNn13wFEqvMQYzHH8T1pga1EUaVIt701p0k4eXw9c=";
+    hash = "sha256-WTeJXiIkyj9FgO1w3P6JsCTtpGzezWnsiz/boB9PdIU=";
   };
 
   build-system = [ setuptools-scm ];
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Requires google-cloud credentials
@@ -97,6 +97,8 @@ buildPythonPackage rec {
     # duckdb.duckdb.CatalogException: Catalog Error: Table Function with name "dsdgen" is not in the catalog, but it exists in the tpcds extension.
     # "tests/integration/test_int_dataframe.py"
     "tests/integration/"
+    # AttributeError: module 'pyspark.sql.functions' has no attribute 'JVMView'
+    "tests/unit/*/test_activate.py"
   ];
 
   meta = {

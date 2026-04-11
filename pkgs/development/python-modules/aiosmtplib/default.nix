@@ -7,22 +7,19 @@
   hatchling,
   pytest-asyncio_0,
   pytestCheckHook,
-  pythonOlder,
   trustme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosmtplib";
-  version = "4.0.2";
+  version = "5.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
-    tag = "v${version}";
-    hash = "sha256-LpD2bSgpClUpNguZaRy11WEwQviiCjqMJlRl6CRp50o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+aMtU8ea8yy1jxPPQGSu4kW3PX9N9qYQ90CSduPPgYc=";
   };
 
   build-system = [ hatchling ];
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosmtplib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
-    changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

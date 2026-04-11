@@ -10,24 +10,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "func";
-  version = "1.16.2";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "func";
     tag = "knative-v${finalAttrs.version}";
-    hash = "sha256-nbS7X5WPu+WBtPUKShE5aWve5m2gw2naQQzNeG7pbGM=";
+    hash = "sha256-SYqkWE7dVFy6stibcWayU2J+oIFIfwNDoK6TzchgBzo=";
   };
 
-  vendorHash = "sha256-Gn+nyck/VOwf8iKPeyLvsPWOpfdN/maUcQOLFAU0oic=";
+  vendorHash = "sha256-F/TQ1QwfQfum1DOY2xrzpTlm7jvuJQUjtBLY6pZfTh8=";
 
   subPackages = [ "cmd/func" ];
 
   ldflags = [
-    "-X knative.dev/func/pkg/app.vers=v${finalAttrs.version}"
+    "-X knative.dev/func/pkg/version.Vers=v${finalAttrs.version}"
     "-X main.date=19700101T000000Z"
-    "-X knative.dev/func/pkg/app.hash=${finalAttrs.version}"
-    "-X knative.dev/func/pkg/app.kver=${finalAttrs.src.tag}"
+    "-X knative.dev/func/pkg/version.Hash=${finalAttrs.version}"
+    "-X knative.dev/func/pkg/version.Kver=${finalAttrs.src.tag}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

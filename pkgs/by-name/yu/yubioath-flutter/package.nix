@@ -1,31 +1,28 @@
 {
   lib,
-  flutter335,
-  python3,
+  flutter341,
+  python3Packages,
   fetchFromGitHub,
   pcre2,
   libnotify,
   libappindicator,
-  pkg-config,
   gnome-screenshot,
-  makeWrapper,
   removeReferencesTo,
   runCommand,
-  yq,
-  yubioath-flutter,
+  yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter341.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.3.0";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-1Hr8ZDHXiLiYfQg4PEpmIuIJR/USbsGCgI4YZSex2Eg=";
+    hash = "sha256-UN3wWM3wa4c+qv5czn1z0bWlJPc4nUIPgF0HHi+9Muc=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -39,11 +36,7 @@ flutter335.buildFlutterApplication rec {
       --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-    removeReferencesTo
-    pkg-config
-  ];
+  nativeBuildInputs = [ removeReferencesTo ];
 
   buildInputs = [
     pcre2
@@ -61,8 +54,7 @@ flutter335.buildFlutterApplication rec {
     ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
 
     # Move the icon.
-    mkdir $out/share/pixmaps
-    mv $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/pixmaps
+    install -Dm444 $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/icons/hicolor/128x128/apps/com.yubico.yubioath.png
 
     # Cleanup.
     rm -rf \
@@ -86,19 +78,24 @@ flutter335.buildFlutterApplication rec {
   '';
 
   passthru = {
-    helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
+    helper = python3Packages.callPackage ./helper.nix { inherit src version meta; };
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          nativeBuildInputs = [ yq ];
-          inherit (yubioath-flutter) src;
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "yubioath-flutter.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { extraArgs = [ "--use-github-releases" ]; })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "yubioath-flutter.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
     ];
   };
 
@@ -107,7 +104,10 @@ flutter335.buildFlutterApplication rec {
     mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      lukegb
+      ryand56
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

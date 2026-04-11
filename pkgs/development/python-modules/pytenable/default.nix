@@ -1,43 +1,67 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   cryptography,
   defusedxml,
-  fetchFromGitHub,
   gql,
   graphql-core,
-  marshmallow,
-  pydantic-extra-types,
   pydantic,
+  pydantic-extra-types,
+  python-box,
+  python-dateutil,
+  requests,
+  requests-toolbelt,
+  restfly,
+  semver,
+  typing-extensions,
+
+  # marshmallow build system
+  flit-core,
+
+  # tests
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
-  python-box,
-  python-dateutil,
-  pythonOlder,
   requests-pkcs12,
-  requests-toolbelt,
-  requests,
   responses,
-  restfly,
-  semver,
-  setuptools,
-  typing-extensions,
 }:
+let
+  marshmallow' = buildPythonPackage {
+    pname = "marshmallow";
+    version = "3.26.2";
+    pyproject = true;
 
-buildPythonPackage rec {
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+
+    build-system = [ flit-core ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "marshmallow" ];
+  };
+in
+buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.8.4";
+  version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = version;
-    hash = "sha256-Dt6jN+0Ktv3CO88RmbgKCU8v3Oa10MnKjyJaePxXsaI=";
+    tag = finalAttrs.version;
+    hash = "sha256-WAKZe1m6EaNE+y2B/1/k8qZsEftLfAVPVEvIkh2N/4g=";
   };
 
   pythonRelaxDeps = [
@@ -52,7 +76,7 @@ buildPythonPackage rec {
     defusedxml
     gql
     graphql-core
-    marshmallow
+    marshmallow'
     pydantic
     pydantic-extra-types
     python-box
@@ -71,6 +95,10 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-pkcs12
     responses
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   disabledTestPaths = [
@@ -98,11 +126,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tenable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

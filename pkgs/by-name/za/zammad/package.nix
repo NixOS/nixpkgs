@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   applyPatches,
   bundlerEnv,
   callPackage,
@@ -12,7 +13,9 @@
   jq,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cacert,
   valkey,
   dataDir ? "/var/lib/zammad",
@@ -20,7 +23,7 @@
 
 let
   pname = "zammad";
-  version = "6.5.2";
+  version = "7.0.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -29,9 +32,9 @@ let
     ];
 
     postPatch = ''
-      sed -i -e "s|ruby '3.2.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
-      sed -i -e "s|ruby 3.2.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
-      sed -i -e "s|3.2.[0-9]\+|${ruby.version}|" .ruby-version
+      sed -i -e "s|ruby '3.4.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
+      sed -i -e "s|ruby 3.4.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
+      sed -i -e "s|3.4.[0-9]\+|${ruby.version}|" .ruby-version
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
@@ -70,7 +73,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     valkey
     postgresql
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     procps
     cacert
@@ -78,11 +82,12 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname src;
+    pnpm = pnpm_10;
 
-    fetcherVersion = 1;
-    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
+    fetcherVersion = 3;
+    hash = "sha256-BhkKCo9fVkG7G2er/NVyEP17T8P1rLqCQdJlcjHsSxQ=";
   };
 
   buildPhase = ''
@@ -108,11 +113,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
-    # dataDir will be set in the module, and the package gets overriden there
+    # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
-    ln -s ${dataDir}/tmp $out/tmp
     ln -s ${dataDir}/log $out/log
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/tmp $out/tmp
   '';
 
   passthru = {
@@ -138,6 +144,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       taeer
       netali
+      meenzen
     ];
   };
 }

@@ -5,6 +5,7 @@
   replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
+  gawk,
   gtk3,
   getent,
   nixosTests,
@@ -12,14 +13,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "2.6.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
     tag = "v${version}";
-    hash = "sha256-DEs6jbWYJFJgpaPtF5NT3DQs3erjzdm2brLNHpjrEPA=";
+    hash = "sha256-X+2RxD4+F8LBqvJNRh6FduRLU4a2SnZQ8a9BCN6Ty1E=";
   };
 
   patches = [
@@ -72,7 +73,10 @@ python3Packages.buildPythonPackage rec {
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ getent ];
+  propagatedBuildInputs = [
+    getent
+    gawk
+  ];
 
   postInstall =
     # copy script manually

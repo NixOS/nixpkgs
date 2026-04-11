@@ -1,0 +1,40 @@
+From 51765e343e9829f1d3e95d1d7303fa3594ae91cc Mon Sep 17 00:00:00 2001
+From: Ben Gamari <ben@smart-cactus.org>
+Date: Tue, 22 Aug 2023 12:24:53 -0400
+Subject: [PATCH] llvmGen: Allow LlvmLits in MetaExprs
+
+This omission appears to be an oversight.
+
+(cherry picked from commit 5880fff6d353a14785c457999fded5a7100c9514)
+---
+ compiler/GHC/Llvm/MetaData.hs | 1 +
+ compiler/GHC/Llvm/Ppr.hs      | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/compiler/GHC/Llvm/MetaData.hs b/compiler/GHC/Llvm/MetaData.hs
+index f46ae0a101..121cdd5788 100644
+--- a/compiler/GHC/Llvm/MetaData.hs
++++ b/compiler/GHC/Llvm/MetaData.hs
+@@ -68,6 +68,7 @@ instance Outputable MetaId where
+ 
+ -- | LLVM metadata expressions
+ data MetaExpr = MetaStr !LMString
++              | MetaLit !LlvmLit
+               | MetaNode !MetaId
+               | MetaVar !LlvmVar
+               | MetaStruct [MetaExpr]
+diff --git a/compiler/GHC/Llvm/Ppr.hs b/compiler/GHC/Llvm/Ppr.hs
+index f48e7aa034..bc88a13439 100644
+--- a/compiler/GHC/Llvm/Ppr.hs
++++ b/compiler/GHC/Llvm/Ppr.hs
+@@ -256,6 +256,7 @@ ppMetaExpr :: LlvmCgConfig -> MetaExpr -> SDoc
+ ppMetaExpr opts = \case
+   MetaVar (LMLitVar (LMNullLit _)) -> text "null"
+   MetaStr    s                     -> char '!' <> doubleQuotes (ftext s)
++  MetaLit    l                     -> ppTypeLit opts l
+   MetaNode   n                     -> ppr n
+   MetaVar    v                     -> ppVar opts v
+   MetaStruct es                    -> char '!' <> braces (ppCommaJoin (map (ppMetaExpr opts) es))
+-- 
+2.50.1
+

@@ -1,5 +1,4 @@
 {
-  apple-sdk_13,
   stdenv,
   cmake,
   lsb-release,
@@ -35,7 +34,7 @@
   libogg,
   libvorbis,
   bzip2,
-  libX11,
+  libx11,
   sdl_gamecontrollerdb,
 }:
 
@@ -118,12 +117,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.1.0";
+  version = "9.2.1";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-sRUg6wa0KOG+hoR+6QEVyPe/9O9yEefNB69BMO+H+iU=";
+    hash = "sha256-t3QwJqXMmeC2B26YW1kMnnmRVXOVZA+1SMmDPvTa0FQ=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -173,15 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libvorbis
     bzip2
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     zenity
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Metal.hpp requires macOS 13.x min.
-    apple-sdk_13
   ];
 
   cmakeFlags = [
@@ -244,7 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/bin
       ln -s $out/lib/soh.elf $out/bin/soh
-      install -Dm644 ../soh/macosx/sohIcon.png $out/share/pixmaps/soh.png
+      install -Dm644 ../soh/macosx/sohIcon.png $out/share/icons/hicolor/1024x1024/apps/soh.png
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Recreate the macOS bundle (without using cpack)
@@ -293,10 +288,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [
-      j0lol
-      matteopacini
-    ];
+    maintainers = with lib.maintainers; [ matteopacini ];
     license = with lib.licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit

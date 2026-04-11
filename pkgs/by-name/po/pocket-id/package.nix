@@ -1,28 +1,30 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo125Module,
+  buildGo126Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
-
-buildGo125Module (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.14.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0x80oykzMTEsuGUBtXXdKgWJld8mrDPUssYpAznqKnc=";
+    hash = "sha256-5y4XIwBnag+vWoNH3RBYn5QbmpM2S08mkY7GiLFchag=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-CmhPURPNwcpmD9shLrQPVKFGBirEMjq0Z4lmgMCpxS8=";
+  vendorHash = "sha256-ZrwnM3X8PbR89xQrM2VeYUTRR2/HupoAb5k9sH26vb8=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -34,9 +36,21 @@ buildGo125Module (finalAttrs: {
     cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
   '';
 
+  checkFlags = [
+    # requires networking
+    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+  ];
+
+  # required for TestIsURLPrivate
+  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
@@ -44,12 +58,14 @@ buildGo125Module (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 1;
-      hash = "sha256-/e1zBHdy3exqbMvlv0Jth7vpJd7DDnWXGfMV+Cdr56I=";
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-4rMVdZnPMAIX/F3CGNJQJtH9OcJ663UlF+arvuwgS80=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
@@ -93,6 +109,7 @@ buildGo125Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
+      tmarkus
       ymstnt
     ];
     platforms = lib.platforms.unix;

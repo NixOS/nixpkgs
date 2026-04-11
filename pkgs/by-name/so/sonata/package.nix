@@ -21,16 +21,16 @@ let
     setuptools
     ;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "sonata";
-  version = "1.7.1";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
-    tag = "v${version}";
-    hash = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eyB+DHcAg1nYjE415VjpPnqZC9embYRhnwXhN2ZVN0o=";
   };
 
   nativeBuildInputs = [
@@ -90,9 +90,9 @@ buildPythonApplication rec {
        - Available in 24 languages
     '';
     homepage = "https://www.nongnu.org/sonata/";
-    changelog = "https://github.com/multani/sonata/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/multani/sonata/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

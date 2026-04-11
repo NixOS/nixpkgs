@@ -19,11 +19,11 @@ buildGoModule {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ThomasLeister/prosody-filer";
     maintainers = [ ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     description = "Simple file server for handling XMPP http_upload requests";
     mainProgram = "prosody-filer";
   };

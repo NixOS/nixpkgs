@@ -4,13 +4,13 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   filetype,
   google-api-core,
   google-auth,
-  google-generativeai,
+  google-genai,
   langchain-core,
   pydantic,
 
@@ -27,33 +27,27 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "2.1.10";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
-    tag = "libs/genai/v${version}";
-    hash = "sha256-kqII8RG1ep+n5CqKLY1v7Mc+zJh6kl1rAjMmkomfeqM=";
+    tag = "libs/genai/v${finalAttrs.version}";
+    hash = "sha256-aNmYj5eOWDgHYlSLElwQXQByQg8gHqiybM19JQlkluk=";
   };
 
-  sourceRoot = "${src.name}/libs/genai";
+  sourceRoot = "${finalAttrs.src.name}/libs/genai";
 
-  build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     filetype
     google-api-core
     google-auth
-    google-generativeai
+    google-genai
     langchain-core
     pydantic
   ];
@@ -68,7 +62,18 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    "test_serialize"
+  ];
+
+  disabledTestPaths = [
+    # AssertionError: assert {'google_maps...s': None, ...} == {'google_maps...a'...
+    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata[raw_response0-expected_grounding_metadata0]"
+  ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 
@@ -81,13 +86,13 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${finalAttrs.src.tag}";
     description = "LangChain integrations for Google Gemini";
     homepage = "https://github.com/langchain-ai/langchain-google/tree/main/libs/genai";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.eu90h
-      lib.maintainers.sarahec
+    maintainers = with lib.maintainers; [
+      eu90h
+      sarahec
     ];
   };
-}
+})

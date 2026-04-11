@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   innoextract,
   runtimeShell,
@@ -8,15 +8,15 @@
 }:
 
 let
-  version = "6.2.2";
+  version = "6.4.1";
   majorVersion = builtins.substring 0 1 version;
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "iscc";
   inherit version;
   src = fetchurl {
     url = "https://files.jrsoftware.org/is/${majorVersion}/innosetup-${version}.exe";
-    hash = "sha256-gRfRDQCirTOhOQl46jhyhhwzDgh5FEEKY3eyLExbhWM=";
+    hash = "sha256-9Bdg4fGuFdIIm7arFi4hcguSrnUG7XBmezkgAGPWjjQ=";
   };
   nativeBuildInputs = [
     innoextract
@@ -57,12 +57,13 @@ stdenv.mkDerivation rec {
   # They worked in wine but not on real windows.
   dontStrip = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for Inno Setup, a tool for creating Windows installers";
     homepage = "https://jrsoftware.org/isinfo.php";
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
+    mainProgram = "iscc";
     platforms = wineWow64Packages.stable.meta.platforms;
   };
 }

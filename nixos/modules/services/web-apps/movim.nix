@@ -111,7 +111,7 @@ let
             inherit (cfg.precompressStaticFiles) brotli gzip;
 
             findTextFileNames = lib.concatStringsSep " -o " (
-              builtins.map (n: ''-iname "*.${n}"'') [
+              map (n: ''-iname "*.${n}"'') [
                 "css"
                 "ini"
                 "js"
@@ -129,7 +129,7 @@ let
                 echo -n "Precompressing static files with Brotli …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
                   | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}
+                      ${lib.getExe brotli.package} --keep --quality=${toString brotli.compressionLevel} --output={}.br {}
                 echo " done."
               ''
             )
@@ -138,7 +138,7 @@ let
                 echo -n "Precompressing static files with Gzip …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
                   | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz
+                      ${lib.getExe gzip.package} -c -${toString gzip.compressionLevel} {} > {}.gz
                 echo " done."
               ''
             )
@@ -653,7 +653,7 @@ in
                 "/ws/" = {
                   "proxy.preserve-host" = "ON";
                   "proxy.tunnel" = "ON";
-                  "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                  "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${toString cfg.port}/";
                 };
                 "/" = {
                   "file.dir" = "${package}/share/php/movim/public";
@@ -764,7 +764,7 @@ in
                 };
                 "/ws/" = {
                   priority = 900;
-                  proxyPass = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                  proxyPass = "http://${cfg.settings.DAEMON_INTERFACE}:${toString cfg.port}/";
                   proxyWebsockets = true;
                   recommendedProxySettings = true;
                   extraConfig = # nginx
@@ -922,7 +922,7 @@ in
         ++ lib.optional (webServerService != null) webServerService;
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
-          WS_PORT = builtins.toString cfg.port;
+          WS_PORT = toString cfg.port;
         };
 
         serviceConfig = {

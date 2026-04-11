@@ -3,36 +3,51 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  unittestCheckHook,
-  poetry-core,
+  setuptools,
+  netaddr,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pyrad";
-  version = "2.4-unstable-2024-07-24";
+  version = "2.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyradius";
     repo = "pyrad";
-    rev = "f42a57cb0e80de42949810057d36df7c4a6b5146";
-    hash = "sha256-5SPVeBL1oMZ/XXgKch2Hbk6BRU24HlVl4oXZ2agF1h8=";
+    tag = finalAttrs.version;
+    hash = "sha256-94BjJRzCSJu/bVuYYKFlJkBcOVcQjmbDJ8QG+JwVpxY=";
   };
 
+  build-system = [ setuptools ];
+
+  dependencies = [ netaddr ];
+
+  # Upstream doesn't exclude docs, example, and pyrad.tests from package
+  # discovery, causing them to be installed into site-packages.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'repository =' 'Repository ='
+      --replace-fail 'exclude = ["tests*"]' 'exclude = ["docs*", "example*", "pyrad.tests*"]'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyrad" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python RADIUS Implementation";
@@ -40,4 +55,4 @@ buildPythonPackage {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})

@@ -7,6 +7,8 @@
   gencat,
   csu,
   i18n,
+  libsys,
+  llvmPackages,
   extraSrc ? [ ],
 }:
 
@@ -18,6 +20,7 @@ mkDerivation {
     "lib/msun"
     "lib/libmd"
     "lib/libutil"
+    "lib/libsys"
     "libexec/rtld-elf"
     "include/rpcsvc"
     "contrib/libc-pwcache"
@@ -34,6 +37,7 @@ mkDerivation {
     "etc/master.passwd"
     "etc/shells"
     "include/paths.h"
+    "include/gssapi"
   ]
   ++ extraSrc;
 
@@ -47,6 +51,7 @@ mkDerivation {
 
   buildInputs = [
     include
+    libsys
   ];
 
   extraNativeBuildInputs = [
@@ -66,8 +71,10 @@ mkDerivation {
     substituteInPlace $BSDSRCDIR/include/paths.h --replace '/usr/share/i18n' '${i18n}/share/i18n'
   '';
 
+  # -fno-blocks is a mystery to me--clang recognizes it and is like yeah we have blocks
+  # but compiler-rt is seemingly not providing Block.h. not sure why.
   preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I../libsys -B${csu}/lib -fno-blocks"
   '';
 
   postBuild = ''

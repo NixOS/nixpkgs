@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nemorosa";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyokoMiki";
     repo = "nemorosa";
-    tag = version;
-    hash = "sha256-UBvtff5fU3kH/+Kw426+yyoyJ3aASBIYDPX+X5jqkA8=";
+    tag = finalAttrs.version;
+    hash = "sha256-1Heh6iE33IM5SSrXjQMUTOS5xDh+c9nlpzQRNIkUqck=";
   };
 
   # Upstream uses overly strict, fresh version specifiers
@@ -29,24 +29,29 @@ python3Packages.buildPythonApplication rec {
   dependencies =
     with python3Packages;
     [
+      aiohttp
       aiolimiter
+      anyio
+      apprise
       apscheduler
+      asyncer
       beautifulsoup4
       defusedxml
       deluge-client
       fastapi
-      httpx
       humanfriendly
       msgspec
       platformdirs
       qbittorrent-api
       reflink-copy
       sqlalchemy
+      tenacity
       torf
       transmission-rpc
       uvicorn
       uvloop
     ]
+    ++ aiohttp.optional-dependencies.speedups
     ++ beautifulsoup4.optional-dependencies.lxml
     ++ msgspec.optional-dependencies.yaml
     ++ sqlalchemy.optional-dependencies.aiosqlite
@@ -62,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "nemorosa";
   };
-}
+})

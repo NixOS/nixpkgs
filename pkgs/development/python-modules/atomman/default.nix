@@ -1,42 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  cython,
-  datamodeldict,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  numpy,
+  setuptools,
+
+  # dependencies
+  datamodeldict,
   matplotlib,
   numericalunits,
-  numpy,
   pandas,
-  phonopy,
   potentials,
-  pytestCheckHook,
-  pythonOlder,
   requests,
   scipy,
-  setuptools,
   toolz,
   xmltodict,
+
+  # tests
+  phonopy,
+  pytestCheckHook,
+
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atomman";
   version = "1.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UmvMYVM1YmLvSaVLzWHdxYpRU+Z3z65cy7mfmDZfDG0=";
   };
 
   build-system = [
-    setuptools
-    numpy
     cython
+    numpy
+    setuptools
   ];
 
   dependencies = [
@@ -68,16 +72,17 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_unique_shifts_prototype" # needs network access to download database files
+    # needs network access to download database files
+    "test_unique_shifts_prototype"
   ];
 
   pythonImportsCheck = [ "atomman" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/usnistgov/atomman/blob/${src.rev}/UPDATES.rst";
+  meta = {
+    changelog = "https://github.com/usnistgov/atomman/blob/${finalAttrs.src.tag}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

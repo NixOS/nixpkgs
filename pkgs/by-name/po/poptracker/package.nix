@@ -6,7 +6,7 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
-  libX11,
+  libx11,
   openssl,
   zlib,
   which,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.32.1";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DFJfuDOzcVdiXLv5EzO5TL3UJLCZPM1bTZharp2ww5U=";
+    hash = "sha256-YPYGK1yDw0K5/gbJ9jwFSbpIJGKpkGy2iIcMiA9/xmA=";
     fetchSubmodules = true;
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     SDL2_image
-    libX11
+    libx11
     openssl
     zlib
   ];

@@ -1,19 +1,25 @@
 {
+  defaultGemConfig,
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   bundlerEnv,
-  ruby_3_3,
+  ruby_3_4,
   makeWrapper,
   nixosTests,
+  openssl,
+  rustc,
+  cargo,
+  rustPlatform,
+  buildRubyGem,
 }:
 
 let
-  version = "6.0.7";
+  version = "6.1.2";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby_3_3;
+    ruby = ruby_3_4;
     gemdir = ./.;
     groups = [
       "development"
@@ -23,15 +29,47 @@ let
       "minimagick"
       "test"
     ];
+    gemConfig = defaultGemConfig // {
+      trilogy = attrs: {
+        buildInputs = [ openssl ];
+      };
+      commonmarker = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-rUNsf7DUVueD9revOR6Mab36XnVEmjL4bVv6TIMMqjM=";
+        };
+        dontBuild = false;
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iCRWCgdnPce1nxygv5182FTGxMl9D+VVpdvrozK43+g=";
+    hash = "sha256-k46XXoCMz7Sw3LrYtC8Cqs8Mqe8VSRw4xa9HVnQMzwg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,10 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     rubyEnv.wrappedRuby
     rubyEnv.bundler
   ];
-
-  # taken from https://www.redmine.org/issues/33784
-  # can be dropped when the upstream bug is closed and the fix is present in the upstream release
-  patches = [ ./0001-python3.patch ];
 
   buildPhase = ''
     mv config config.dist
@@ -64,15 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.redmine = nixosTests.redmine;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.redmine.org/";
     changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       aanderse
       felixsinger
       megheaiulian
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 })

@@ -6,7 +6,6 @@
   numpy,
   pydot,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyformlang";
   version = "1.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyformlang" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for formal grammars";
     homepage = "https://github.com/Aunsiels/pyformlang";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

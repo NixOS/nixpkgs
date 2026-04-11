@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   fetchpatch2,
   hatch-fancy-pypi-readme,
@@ -11,7 +10,6 @@
   packaging,
   setuptools,
   wheel,
-  tomli,
   # Test Inputs
   cmake,
   cython,
@@ -26,8 +24,6 @@ buildPythonPackage rec {
   pname = "scikit-build";
   version = "0.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "scikit_build";
@@ -63,8 +59,7 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     cmake
@@ -98,14 +93,14 @@ buildPythonPackage rec {
     "test_sdist_with_symlinks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ]; # BSD due to reuses of PyNE code
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

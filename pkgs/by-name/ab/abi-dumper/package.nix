@@ -8,14 +8,14 @@
   vtable-dumper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abi-dumper";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-dumper";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
   };
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     description = "Dump ABI of an ELF object containing DWARF debug info";
     mainProgram = "abi-dumper";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ bhipple ];
     platforms = lib.platforms.all;
   };
-}
+})

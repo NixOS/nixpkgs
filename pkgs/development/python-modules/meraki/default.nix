@@ -6,24 +6,26 @@
   jinja2,
   poetry-core,
   pytest,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "2.0.3";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-dAy295DB213TotVkVGvLYIzzHk1M9PycMNgyX+wD7ms=";
+    hash = "sha256-B9eda7ccpCRGuBB2XfRI/Fz+MVBUIjFZzHYWfckQT2g=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<79.0.0" "setuptools"
+  '';
 
   pythonRelaxDeps = [
     "pytest"

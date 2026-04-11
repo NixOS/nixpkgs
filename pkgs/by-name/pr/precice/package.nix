@@ -18,13 +18,13 @@ assert petsc.mpiSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "precice";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "precice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1FbTNo2F+jH1EVV6gXc9o0T31UHY/wBK3vQeCV7wW5E=";
+    hash = "sha256-3Cg9e1n/O1kG806X3PT7IBd6QuBM38qj9BTlzYZqfSs=";
   };
 
   cmakeFlags = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PreCICE stands for Precise Code Interaction Coupling Environment";
     homepage = "https://precice.org/";
     license = with lib.licenses; [ lgpl3Only ];
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
     mainProgram = "precice-tools";
     platforms = lib.platforms.unix;
   };

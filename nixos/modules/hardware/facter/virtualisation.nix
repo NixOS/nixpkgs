@@ -51,13 +51,20 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf config.hardware.facter.enable {
 
     # KVM support
     boot.kernelModules =
       let
         hasCPUFeature =
-          feature: lib.any ({ features, ... }: lib.elem feature features) (report.hardware.cpu or [ ]);
+          feature:
+          lib.any (
+            {
+              features ? [ ],
+              ...
+            }:
+            lib.elem feature features
+          ) (report.hardware.cpu or [ ]);
       in
       lib.mkMerge [
         (lib.mkIf (hasCPUFeature "vmx") [ "kvm-intel" ])
@@ -98,7 +105,7 @@ in
     # parallels
     hardware.parallels.enable = lib.mkIf cfg.parallels.enable (lib.mkDefault true);
     nixpkgs.config = lib.mkIf (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
-      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "prl-tools" ];
+      allowUnfreePackages = [ "prl-tools" ];
     };
   };
 }

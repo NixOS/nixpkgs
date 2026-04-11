@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
@@ -11,7 +10,7 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  python-multipart,
   requests,
   setuptools,
   starlette,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.6.3";
+  version = "1.6.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     tag = "v${version}";
-    hash = "sha256-AzIjfUH89tYZwVnOpdSwEzaGNpedfQ50k9diKUfH+Fg=";
+    hash = "sha256-9H9DF3LmxzUv0M0fxYh6FLtdAA9FgRklceMlGdjlp+g=";
   };
 
   build-system = [ setuptools ];
@@ -46,6 +43,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    python-multipart
     requests
     starlette
     werkzeug
@@ -61,11 +59,11 @@ buildPythonPackage rec {
     "tests/jose/test_chacha20.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
     changelog = "https://github.com/lepture/authlib/blob/${src.tag}/docs/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

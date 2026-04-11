@@ -7,19 +7,16 @@
   jedi,
   jupyter-core,
   pexpect,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.30.3";
+  version = "0.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nryNTYciAq16xkpW4HIm2NPFzkW1tCDQQB9UfHUKR10=";
+    hash = "sha256-AxmEtMBinBKchhYtJ72N8mTWmTv5Ya7HMP23H6zv3bw=";
   };
 
   build-system = [ hatchling ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "metakernel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter/IPython Kernel Tools";
     homepage = "https://github.com/Calysto/metakernel";
     changelog = "https://github.com/Calysto/metakernel/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ thomasjm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thomasjm ];
   };
 }

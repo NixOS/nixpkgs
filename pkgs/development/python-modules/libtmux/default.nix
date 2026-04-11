@@ -11,16 +11,16 @@
   tmux,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libtmux";
-  version = "0.46.2";
+  version = "0.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
-    tag = "v${version}";
-    hash = "sha256-M3su+bDFuvmNEDVK+poWfxwbpsw/0L1/R6Z4CL0mvZ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-34YwI0QjewDeigHYLiTdEi8PgleW1VCiaQSQvrSpf/s=";
   };
 
   postPatch = ''
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Typed scripting library / ORM / API wrapper for tmux";
     homepage = "https://libtmux.git-pull.com/";
-    changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
+    changelog = "https://github.com/tmux-python/libtmux/raw/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

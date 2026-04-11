@@ -78,14 +78,14 @@ stdenv.mkDerivation rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt6 bindings for Emilua";
     homepage = "https://emilua.org/";
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       manipuladordedados
       lucasew
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

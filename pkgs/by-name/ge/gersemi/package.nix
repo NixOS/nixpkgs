@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gersemi";
-  version = "0.22.3";
-  format = "pyproject";
+  version = "0.23.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
-    tag = version;
-    hash = "sha256-B45+j53p61+LTAw7C1h+9icc27zhoYittdxn7iDmZCo=";
+    tag = finalAttrs.version;
+    hash = "sha256-sXgu3KscRi/3Myg/4jarMZ4W7/CaQTmyxxbcu8/0o6Y=";
   };
 
   build-system = with python3Packages; [
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ xeals ];
     mainProgram = "gersemi";
   };
-}
+})

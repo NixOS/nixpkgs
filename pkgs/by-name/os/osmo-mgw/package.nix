@@ -9,19 +9,19 @@
   libosmoabis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-mgw";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-mgw";
-    rev = version;
-    hash = "sha256-Y/98K81US6McNu+JEJtMluJTvsv0DHJiyjMPJz8/35o=";
+    rev = finalAttrs.version;
+    hash = "sha256-rRjr3Mw3ELp1o7QYDuU7mqZEeL2seo0xEONXpkP14SQ=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

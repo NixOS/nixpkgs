@@ -6,12 +6,10 @@
   writeScript,
 }:
 
-let
-  commitHash = "f10711437bfbb25b15506eb69dde24bb7decd222"; # matches tag release
-in
 buildGoModule (finalAttrs: {
   pname = "enry";
   version = "1.3.0";
+  commitSha = "f10711437bfbb25b15506eb69dde24bb7decd222"; # matches version
 
   src = fetchFromGitHub {
     owner = "go-enry";
@@ -24,7 +22,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
-    "-X main.commit=${commitHash}"
+    "-X main.commit=${finalAttrs.commitSha}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -32,18 +30,20 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = writeScript "update-enry" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq nix-update
+    #!nix-shell -i bash -p curl jq nix-prefetch-github gnused
 
     set -eu -o pipefail
 
-    gh_metadata="$(curl -sS https://api.github.com/repos/go-enry/enry/tags)"
-    version="$(echo "$gh_metadata" | jq -r '.[] | .name' | sort --version-sort | tail -1)"
-    commit_hash="$(echo "$gh_metadata" | jq -r --arg ver "$version" '.[] | select(.name == $ver).commit.sha')"
+    latest_tag="$(curl -sS https://api.github.com/repos/go-enry/enry/releases/latest | jq -r '.tag_name')"
+    prefetch_output="$(nix-prefetch-github --rev "$latest_tag" go-enry enry)"
+    commit_sha="$(jq -r '.rev' <<< "$prefetch_output")"
+    source_hash="$(jq -r '.hash' <<< "$prefetch_output")"
 
-    filename="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" enry).file" | tr -d '"')"
-    sed -i "s/commitHash = \"[^\"]*\"/commitHash = \"$commit_hash\"/" $filename
-
-    nix-update enry
+    nixfile="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" enry).file" | tr -d '"')"
+    sed -i "$nixfile" \
+      -e "s|version = \".*\";|version = \"''${latest_tag#v}\";|" \
+      -e "s|commitSha = \".*\"; # matches version|commitSha = \"$commit_sha\"; # matches version|" \
+      -e "s|hash = \"sha256-.*\";|hash = \"$source_hash\";|"
   '';
 
   meta = {

@@ -8,29 +8,22 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "adminneo-org";
     repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ckz0LvKLY6xm3thPmY/ry8G5kkt29rmDsG/D6NNeRoY=";
+    hash = "sha256-NCQqjIJsAiz1At/oYsuuUejr5A7PVLyzROI5Ev3zxlM=";
   };
 
   nativeBuildInputs = [
     php
   ];
 
-  # Package provides a Makefile, which is currently broken
-  # https://github.com/adminneo-org/adminneo/issues/161
-  # As soon, as this is fixed, the buildPhase can be removed
-  buildPhase = ''
-    runHook preBuild
-
-    ${php}/bin/php bin/compile.php
-
-    runHook postBuild
-  '';
+  makeFlags = [
+    "PHP=${php}/bin/php"
+  ];
 
   installPhase = ''
     runHook preInstall

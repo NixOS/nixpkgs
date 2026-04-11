@@ -10,22 +10,13 @@
   generateSplicesForMkScope,
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchgit,
   fetchpatch,
   fetchFromGitHub,
   makeSetupHook,
-  makeWrapper,
-  bison,
-  cups ? null,
-  harfbuzz,
-  libGL,
-  perl,
   python3,
-  gstreamer,
-  gst-plugins-base,
-  gtk3,
-  dconf,
   llvmPackages_19,
   darwin,
 
@@ -65,13 +56,6 @@ let
       ./qtdeclarative-default-disable-qmlcache.patch
       # add version specific QML import path
       ./qtdeclarative-qml-paths.patch
-      # Fix an undefined behavior, and fix random-seeming build error with Clang. See:
-      # - https://codereview.qt-project.org/c/qt/qtdeclarative/+/354847
-      # - https://github.com/llvm/llvm-project/issues/74070
-      (fetchpatch {
-        url = "https://github.com/qt/qtdeclarative/commit/636481a31110f1819efaf6500b25fbc395854311.patch";
-        hash = "sha256-ACOG3IjR0SIlLYioODGdhkNTGNvnKu6iOihsVdzyvgo=";
-      })
     ];
     qtlocation = lib.optionals stdenv.cc.isClang [
       # Fix build with Clang 16
@@ -253,12 +237,15 @@ let
   addPackages =
     self:
     let
-      qtModule = callPackage ../qtModule.nix {
-        inherit patches;
-        # Use a variant of mkDerivation that does not include wrapQtApplications
-        # to avoid cyclic dependencies between Qt modules.
-        mkDerivation = (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
-      };
+      qtModuleWithStdenv =
+        stdenv:
+        callPackage ../qtModule.nix {
+          inherit patches;
+          # Use a variant of mkDerivation that does not include wrapQtApplications
+          # to avoid cyclic dependencies between Qt modules.
+          mkDerivation = (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
+        };
+      qtModule = qtModuleWithStdenv stdenv;
 
       callPackage = self.newScope {
         inherit
@@ -285,14 +272,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit
-          bison
-          cups
-          harfbuzz
-          libGL
-          ;
         withGtk3 = !stdenv.hostPlatform.isDarwin;
-        inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -308,9 +288,7 @@ let
       qtlocation = callPackage ../modules/qtlocation.nix { };
       qtlottie = callPackage ../modules/qtlottie.nix { };
       qtmacextras = callPackage ../modules/qtmacextras.nix { };
-      qtmultimedia = callPackage ../modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base;
-      };
+      qtmultimedia = callPackage ../modules/qtmultimedia.nix { };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix { };
       qtpim = callPackage ../modules/qtpim.nix { };
       qtpositioning = callPackage ../modules/qtpositioning.nix { };
@@ -333,14 +311,22 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ../modules/qtwayland.nix { };
       qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
-      qtwebengine = callPackage ../modules/qtwebengine.nix {
-        # Won’t build with Clang 20, as `-Wenum-constexpr-conversion`
-        # was made a hard error.
-        stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
-        inherit (srcs.qtwebengine) version;
-        inherit (darwin) bootstrap_cmds;
-        python = python3;
-      };
+      qtwebengine =
+        # Actually propagating stdenv change
+        let
+          # Won’t build with Clang 20, as `-Wenum-constexpr-conversion`
+          # was made a hard error.
+          # qt5webengine no longer maintained, FTBFS with GCC 15
+          stdenv' = if stdenv.cc.isClang then llvmPackages_19.stdenv else gcc14Stdenv;
+          qtModule' = qtModuleWithStdenv stdenv';
+        in
+        callPackage ../modules/qtwebengine.nix {
+          inherit (srcs.qtwebengine) version;
+          inherit (darwin) bootstrap_cmds;
+          stdenv = stdenv';
+          qtModule = qtModule';
+          python = python3;
+        };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
       qtwebkit = callPackage ../modules/qtwebkit.nix { };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix { };

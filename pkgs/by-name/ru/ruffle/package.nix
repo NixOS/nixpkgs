@@ -8,10 +8,10 @@
   autoPatchelfHook,
   alsa-lib,
   wayland,
-  libXcursor,
-  libXrandr,
-  libXi,
-  libX11,
+  libxcursor,
+  libxrandr,
+  libxi,
+  libx11,
   libxcb,
   vulkan-loader,
   udev,
@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0.2.0-nightly-2025-10-24";
+  version = "0.2.0-nightly-2026-03-29";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = lib.strings.removePrefix "0.2.0-" finalAttrs.version;
-    hash = "sha256-zp+2kILsWkRVDX5q7rCI294VCOz8C3PleDPgED3n+LM=";
+    hash = "sha256-QJorW1H0pmaa546L0Qk0EayjegA9ObhLwbBgPOccUOM=";
   };
 
   postPatch =
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                        "OpenH264Version(${major}, ${minor}, ${patch})"
     '';
 
-  cargoHash = "sha256-Eo9wLL/Xj/mWto3cRSxAv5dMf+jLOUUk5wCd8voQEeQ=";
+  cargoHash = "sha256-WsygyqL8o+cRiHhrVj51F2hOws9wLDr/g0werSXv/i4=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
@@ -87,10 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       openh264
     ]
     ++ lib.optionals withX11 [
-      libXcursor
-      libXrandr
-      libXi
-      libX11
+      libxcursor
+      libxrandr
+      libxi
+      libx11
       libxcb
     ]
   );
@@ -150,7 +150,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0.2.0-" finalAttrs.version}";
     maintainers = [
       lib.maintainers.jchw
-      lib.maintainers.normalcea
     ];
     mainProgram = "ruffle";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

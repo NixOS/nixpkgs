@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libedit";
-  version = "20250104-3.1";
+  version = "20251016-3.1";
 
   src = fetchurl {
     url = "https://thrysoee.dk/editline/libedit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-I3knAWlFUKU3IGMM0c1hZxAbV3Ot3ctBBPc0W3OlaKw=";
+    hash = "sha256-ITYrAGU7v8HHH3GnV42ma1tSA1WdQxNNLddxnjE84EE=";
   };
 
   outputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       similar to those found in GNU Readline.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ corngood ];
     platforms = lib.platforms.all;
   };
 })

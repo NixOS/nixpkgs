@@ -14,14 +14,14 @@
   libcanberra,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scantailor-universal";
   version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "trufanov-nok";
     repo = "scantailor-universal";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-n8NbokK+U0FAuYXtjRJcxlI1XAmI4hk5zV3sF86hB/s=";
   };
@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     libsForQt5.qttools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive post-processing tool for scanned pages";
     homepage = "https://github.com/trufanov-nok/scantailor";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ unclamped ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ unclamped ];
+    platforms = lib.platforms.unix;
     mainProgram = "scantailor-universal-cli";
   };
-}
+})

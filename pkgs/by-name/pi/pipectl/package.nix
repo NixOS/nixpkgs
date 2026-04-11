@@ -6,14 +6,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pipectl";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "pipectl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pNBw1ukNaqu40qPXnORUGApYpJ/0EAO9Tq5zAbDe33I=";
   };
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     "-DINSTALL_DOCUMENTATION=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Ferdi265/pipectl";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     description = "Simple named pipe management utility";
-    maintainers = with maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "pipectl";
   };
-}
+})

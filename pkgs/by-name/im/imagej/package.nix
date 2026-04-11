@@ -17,12 +17,12 @@ let
     sha256 = "sha256-nU2nWI1wxZB/xlOKsZzdUjj+qiCTjO6GwEKYgZ5Risg=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagej";
   version = "153";
 
   src = fetchurl {
-    url = "https://wsr.imagej.net/distros/cross-platform/ij${version}.zip";
+    url = "https://wsr.imagej.net/distros/cross-platform/ij${finalAttrs.version}.zip";
     sha256 = "sha256-MGuUdUDuW3s/yGC68rHr6xxzmYScUjdXRawDpc1UQqw=";
   };
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     install -Dm644 ${icon} $out/share/icons/hicolor/128x128/apps/imagej.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://imagej.nih.gov/ij/";
     description = "Image processing and analysis in Java";
     longDescription = ''
@@ -83,10 +83,10 @@ stdenv.mkDerivation rec {
       inspired by NIH Image for the Macintosh.
       It runs on any computer with a Java 1.4 or later virtual machine.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yuriaisaka ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
     mainProgram = "imagej";
   };
-}
+})

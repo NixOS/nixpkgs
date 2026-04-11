@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   aiohttp,
   requests,
@@ -12,8 +11,6 @@
 buildPythonPackage rec {
   pname = "brunt";
   version = "1.2.0";
-
-  disabled = pythonOlder "3.8";
 
   format = "setuptools";
 

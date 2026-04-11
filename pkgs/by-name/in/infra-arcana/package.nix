@@ -10,14 +10,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "infra-arcana";
   version = "23.0.0";
 
   src = fetchFromGitLab {
     owner = "martin-tornqvist";
     repo = "ia";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b7YRhoQa298fcP4cXlWhLXajjL0M3Mk4Kbb81iH6s5w=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sites.google.com/site/infraarcana";
     description = "Lovecraftian single-player roguelike game";
     mainProgram = "infra-arcana";
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
       Shining Trapezohedron - a window to all secrets of the universe. Your
       ultimate goal is to unearth this artifact.
     '';
-    platforms = platforms.linux;
-    maintainers = [ maintainers.kenran ];
-    license = licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.kenran ];
+    license = lib.licenses.agpl3Plus;
   };
-}
+})

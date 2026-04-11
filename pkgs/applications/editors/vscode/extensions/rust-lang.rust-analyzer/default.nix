@@ -21,20 +21,21 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2025-08-25";
+  releaseTag = "2026-02-16";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     tag = releaseTag;
-    hash = "sha256-apbJj2tsJkL2l+7Or9tJm1Mt5QPB6w/zIyDkCx8pfvk=";
+    hash = "sha256-1TZROjtryMzOJHgHhAUQUoAMnnWal231G7gM1pfNlK4=";
   };
 
   vsix = buildNpmPackage {
     inherit pname releaseTag;
+    name = "${pname}-${version}.vsix";
     version = lib.trim (lib.readFile ./version.txt);
     src = "${src}/editors/code";
-    npmDepsHash = "sha256-fV4Z3jj+v56A7wbIEYhVAPVuAMqMds5xSe3OetWAsbw=";
+    npmDepsHash = "sha256-rg4ARGB9NzI8rxEOONWq+mwSG9hd3yyFRhOUomMLN6w=";
     buildInputs = [
       pkgsBuildBuild.libsecret
     ];
@@ -57,15 +58,14 @@ let
         walk(del(.["$generated-start"]?) | del(.["$generated-end"]?))
       ' package.json | sponge package.json
 
-      mkdir -p $out
-      npx vsce package -o $out/${pname}.zip
+      npm exec --package=@vscode/vsce -- vsce package --out $out
     '';
   };
 
 in
 vscode-utils.buildVscodeExtension {
   inherit version vsix pname;
-  src = "${vsix}/${pname}.zip";
+  src = vsix;
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
   vscodeExtName = pname;

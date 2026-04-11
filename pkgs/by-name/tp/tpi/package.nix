@@ -3,14 +3,14 @@
   fetchFromGitHub,
   lib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpi";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "turing-machines";
     repo = "tpi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-se5+8Zf+RKtvfkmDDxKiUVp5J+bQ9j9RFedDK/pxCgA=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ WoutSwinkels ];
     mainProgram = "tpi";
   };
-}
+})

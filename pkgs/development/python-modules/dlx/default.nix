@@ -26,10 +26,10 @@ buildPythonPackage {
     ${python.interpreter} ./examples/sudoku.py 3 "070285010008903500000000000500010008010000090900040003000000000002408600090632080"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Donald Knuth's Dancing Links algorithm";
     homepage = "https://github.com/sraaphorst/dlx_python";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

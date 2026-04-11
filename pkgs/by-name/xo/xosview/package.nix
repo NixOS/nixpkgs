@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xosview";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "hills";
     repo = "xosview";
     rev = finalAttrs.version;
-    hash = "sha256-9Pr7voJiCH7oBziMFRHCWxoyuGdndcdRD2POjiNT7yw=";
+    hash = "sha256-lAVMpdVeYENtJrnRiCVgMbti7fKdQusTBsNCVdJZJkA=";
   };
 
   outputs = [
@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   buildInputs = [
-    libX11
-    libXpm
+    libx11
+    libxpm
   ];
 
   makeFlags = [

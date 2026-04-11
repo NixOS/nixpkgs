@@ -20,6 +20,12 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "coq-withPackages": [
+    "index.html#coq-withPackages"
+  ],
+  "coq-withPackages-usage": [
+    "index.html#coq-withPackages-usage"
+  ],
   "cuda": [
     "index.html#cuda"
   ],
@@ -113,11 +119,32 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-writeShellApplication": [
+    "index.html#ex-writeShellApplication"
+  ],
+  "friction-graphics": [
+    "index.html#friction-graphics"
+  ],
+  "friction-graphics-wayland": [
+    "index.html#friction-graphics-wayland"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "javascript-buildNpmPackage-npmFlags": [
+    "index.html#javascript-buildNpmPackage-npmFlags"
+  ],
+  "javascript-buildNpmPackage-npmWorkspace": [
+    "index.html#javascript-buildNpmPackage-npmWorkspace"
+  ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
   ],
   "julec-hook": [
     "index.html#julec-hook"
@@ -185,8 +212,107 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nodejs-install-executables": [
+    "index.html#nodejs-install-executables"
+  ],
+  "nodejs-install-executables-example": [
+    "index.html#nodejs-install-executables-example"
+  ],
+  "nodejs-install-executables-exclusive-variables": [
+    "index.html#nodejs-install-executables-exclusive-variables"
+  ],
+  "nodejs-install-executables-variables": [
+    "index.html#nodejs-install-executables-variables"
+  ],
+  "nodejs-install-executables-wrapper-args": [
+    "index.html#nodejs-install-executables-wrapper-args"
+  ],
+  "nodejs-install-manuals": [
+    "index.html#nodejs-install-manuals"
+  ],
+  "nodejs-install-manuals-example": [
+    "index.html#nodejs-install-manuals-example"
+  ],
   "nostrictaliasing": [
     "index.html#nostrictaliasing"
+  ],
+  "npm-build-hook": [
+    "index.html#npm-build-hook"
+  ],
+  "npm-build-hook-dont": [
+    "index.html#npm-build-hook-dont"
+  ],
+  "npm-build-hook-example-snippet": [
+    "index.html#npm-build-hook-example-snippet"
+  ],
+  "npm-build-hook-exclusive-variables": [
+    "index.html#npm-build-hook-exclusive-variables"
+  ],
+  "npm-build-hook-flags": [
+    "index.html#npm-build-hook-flags"
+  ],
+  "npm-build-hook-honored-variables": [
+    "index.html#npm-build-hook-honored-variables"
+  ],
+  "npm-build-hook-script": [
+    "index.html#npm-build-hook-script"
+  ],
+  "npm-build-hook-snippet": [
+    "index.html#npm-build-hook-snippet"
+  ],
+  "npm-build-hook-variables": [
+    "index.html#npm-build-hook-variables"
+  ],
+  "npm-config-hook": [
+    "index.html#npm-config-hook"
+  ],
+  "npm-config-hook-deps": [
+    "index.html#npm-config-hook-deps"
+  ],
+  "npm-config-hook-exclusive-variables": [
+    "index.html#npm-config-hook-exclusive-variables"
+  ],
+  "npm-config-hook-honored-variables": [
+    "index.html#npm-config-hook-honored-variables"
+  ],
+  "npm-config-hook-install-flags": [
+    "index.html#npm-config-hook-install-flags"
+  ],
+  "npm-config-hook-rebuild-flags": [
+    "index.html#npm-config-hook-rebuild-flags"
+  ],
+  "npm-config-hook-snippet": [
+    "index.html#npm-config-hook-snippet"
+  ],
+  "npm-config-hook-variables": [
+    "index.html#npm-config-hook-variables"
+  ],
+  "npm-config-hook-writable-cache": [
+    "index.html#npm-config-hook-writable-cache"
+  ],
+  "npm-install-hook": [
+    "index.html#npm-install-hook"
+  ],
+  "npm-install-hook-dont": [
+    "index.html#npm-install-hook-dont"
+  ],
+  "npm-install-hook-dont-prune": [
+    "index.html#npm-install-hook-dont-prune"
+  ],
+  "npm-install-hook-exclusive-variables": [
+    "index.html#npm-install-hook-exclusive-variables"
+  ],
+  "npm-install-hook-honored-variables": [
+    "index.html#npm-install-hook-honored-variables"
+  ],
+  "npm-install-hook-prune-flags": [
+    "index.html#npm-install-hook-prune-flags"
+  ],
+  "npm-install-hook-snippet": [
+    "index.html#npm-install-hook-snippet"
+  ],
+  "npm-install-hook-variables": [
+    "index.html#npm-install-hook-variables"
   ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
@@ -247,6 +373,9 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-darwin-availability-checks": [
+    "index.html#sec-darwin-availability-checks"
+  ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
   ],
@@ -288,6 +417,39 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-26.05": [
+    "release-notes.html#sec-nixpkgs-release-26.05"
+  ],
+  "sec-nixpkgs-release-26.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.05-highlights"
+  ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities",
+    "index.html#sec-xorg",
+    "index.html#katamari-tarballs",
+    "index.html#individual-tarballs",
+    "index.html#generating-nix-expressions",
+    "index.html#overriding-the-generator",
+    "index.html#javascript-node2nix",
+    "index.html#javascript-node2nix-preparation",
+    "index.html#javascript-node2nix-pitfalls"
+  ],
+  "sec-nixpkgs-release-26.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib"
+  ],
+  "sec-nixpkgs-release-26.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations",
+    "index.html#fetchfromsavannah"
+  ],
+  "sec-nixpkgs-release-26.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.05-notable-changes"
   ],
   "sec-nixpkgs-release-25.11": [
     "release-notes.html#sec-nixpkgs-release-25.11"
@@ -388,6 +550,24 @@
   ],
   "sec-pkg-overrideDerivation": [
     "index.html#sec-pkg-overrideDerivation"
+  ],
+  "sec-platform-breakdown": [
+    "index.html#sec-platform-breakdown"
+  ],
+  "sec-platform-tier1": [
+    "index.html#sec-platform-tier1"
+  ],
+  "sec-platform-tier2": [
+    "index.html#sec-platform-tier2"
+  ],
+  "sec-platform-tier3": [
+    "index.html#sec-platform-tier3"
+  ],
+  "sec-platform-tier4-7": [
+    "index.html#sec-platform-tier4-7"
+  ],
+  "sec-platform-tiers": [
+    "index.html#sec-platform-tiers"
   ],
   "sec-lib-makeOverridable": [
     "index.html#sec-lib-makeOverridable"
@@ -560,6 +740,9 @@
   "chap-stdenv": [
     "index.html#chap-stdenv"
   ],
+  "sec-problems": [
+    "index.html#sec-problems"
+  ],
   "sec-using-llvm": [
     "index.html#sec-using-llvm"
   ],
@@ -622,6 +805,9 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "sssec-testing-octave-packages": [
+    "index.html#sssec-testing-octave-packages"
   ],
   "strictflexarrays1": [
     "index.html#strictflexarrays1"
@@ -737,6 +923,9 @@
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
   ],
+  "var-stdenv-strictDeps": [
+    "index.html#var-stdenv-strictDeps"
+  ],
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
   ],
@@ -793,6 +982,9 @@
   ],
   "tar-files": [
     "index.html#tar-files"
+  ],
+  "x86_64-darwin-26.05": [
+    "release-notes.html#x86_64-darwin-26.05"
   ],
   "zip-files": [
     "index.html#zip-files"
@@ -1224,7 +1416,8 @@
     "index.html#sec-purity-in-nixpkgs"
   ],
   "sec-hardening-in-nixpkgs": [
-    "index.html#sec-hardening-in-nixpkgs"
+    "index.html#sec-hardening-in-nixpkgs",
+    "index.html#pie"
   ],
   "sec-hardening-flags-enabled-by-default": [
     "index.html#sec-hardening-flags-enabled-by-default"
@@ -1258,9 +1451,6 @@
   ],
   "sec-hardening-flags-disabled-by-default": [
     "index.html#sec-hardening-flags-disabled-by-default"
-  ],
-  "pie": [
-    "index.html#pie"
   ],
   "shadowstack": [
     "index.html#shadowstack"
@@ -1378,6 +1568,9 @@
   ],
   "lib.sourceTypes.binaryBytecode": [
     "index.html#lib.sourceTypes.binaryBytecode"
+  ],
+  "lib.sourceTypes.obfuscatedCode": [
+    "index.html#lib.sourceTypes.obfuscatedCode"
   ],
   "chap-passthru": [
     "index.html#chap-passthru"
@@ -1727,9 +1920,6 @@
   "fetchfrombitbucket": [
     "index.html#fetchfrombitbucket"
   ],
-  "fetchfromsavannah": [
-    "index.html#fetchfromsavannah"
-  ],
   "fetchfromrepoorcz": [
     "index.html#fetchfromrepoorcz"
   ],
@@ -1750,6 +1940,9 @@
   ],
   "fetchtorrent-parameters": [
     "index.html#fetchtorrent-parameters"
+  ],
+  "fetchitchio": [
+    "index.html#fetchitchio"
   ],
   "chap-trivial-builders": [
     "index.html#chap-trivial-builders"
@@ -2412,6 +2605,27 @@
   "setup-hook-gdk-pixbuf": [
     "index.html#setup-hook-gdk-pixbuf"
   ],
+  "libglycin-hooks": [
+    "index.html#libglycin-hooks"
+  ],
+  "libglycin-setup-hook": [
+    "index.html#libglycin-setup-hook"
+  ],
+  "libglycin-patch-vendor-hook": [
+    "index.html#libglycin-patch-vendor-hook"
+  ],
+  "libglycin-hooks-example-code-snippet": [
+    "index.html#libglycin-hooks-example-code-snippet"
+  ],
+  "libglycin-hook-variables-controlling": [
+    "index.html#libglycin-hook-variables-controlling"
+  ],
+  "glycin-cargo-deps-path": [
+    "index.html#glycin-cargo-deps-path"
+  ],
+  "glycin-dont-wrap": [
+    "index.html#glycin-dont-wrap"
+  ],
   "ghc": [
     "index.html#ghc"
   ],
@@ -2610,6 +2824,9 @@
   "dont-tauri-build": [
     "index.html#dont-tauri-build"
   ],
+  "dont-tauri-fixup": [
+    "index.html#dont-tauri-fixup"
+  ],
   "dont-tauri-install": [
     "index.html#dont-tauri-install"
   ],
@@ -2661,17 +2878,24 @@
   "waf-hook-honored-variables": [
     "index.html#waf-hook-honored-variables"
   ],
-  "zig-hook": [
+  "zig": [
+    "index.html#zig",
     "index.html#zig-hook"
   ],
-  "zig-hook-example-code-snippet": [
+  "zig-example-code-snippet": [
+    "index.html#zig-example-code-snippet",
     "index.html#zig-hook-example-code-snippet"
   ],
-  "zig-hook-variables-controlling": [
+  "zig-variables-controlling": [
+    "index.html#zig-variables-controlling",
     "index.html#zig-hook-variables-controlling"
   ],
-  "zig-hook-exclusive-variables": [
+  "zig-exclusive-variables": [
+    "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
+  ],
+  "dont-use-zig-configure": [
+    "index.html#dont-use-zig-configure"
   ],
   "dont-use-zig-build": [
     "index.html#dont-use-zig-build"
@@ -2682,10 +2906,15 @@
   "dont-use-zig-install": [
     "index.html#dont-use-zig-install"
   ],
-  "zig-hook-similar-variables": [
+  "dont-set-zig-default-flags": [
+    "index.html#dont-set-zig-default-flags"
+  ],
+  "zig-similar-variables": [
+    "index.html#zig-similar-variables",
     "index.html#zig-hook-similar-variables"
   ],
-  "zig-hook-variables-honored": [
+  "zig-variables-honored": [
+    "index.html#zig-variables-honored",
     "index.html#zig-hook-variables-honored"
   ],
   "xcbuildhook": [
@@ -2868,25 +3097,32 @@
   "sec-chicken-override-scope": [
     "index.html#sec-chicken-override-scope"
   ],
-  "sec-language-coq": [
+  "sec-language-rocq": [
+    "index.html#sec-language-rocq",
     "index.html#sec-language-coq"
   ],
-  "coq-derivation-coq": [
+  "rocq-derivation-rocq": [
+    "index.html#rocq-derivation-rocq",
     "index.html#coq-derivation-coq"
   ],
-  "coq-packages-attribute-sets-coqpackages": [
+  "rocq-packages-attribute-sets-rocqpackages": [
+    "index.html#rocq-packages-attribute-sets-rocqpackages",
     "index.html#coq-packages-attribute-sets-coqpackages"
   ],
-  "coq-overriding-packages": [
+  "rocq-overriding-packages": [
+    "index.html#rocq-overriding-packages",
     "index.html#coq-overriding-packages"
   ],
-  "coq-override": [
+  "rocq-override": [
+    "index.html#rocq-override",
     "index.html#coq-override"
   ],
-  "coq-overrideCoqDerivation": [
+  "rocq-overrideRocqDerivation": [
+    "index.html#rocq-overrideRocqDerivation",
     "index.html#coq-overrideCoqDerivation"
   ],
-  "coq-overrideAttrs": [
+  "rocq-overrideAttrs": [
+    "index.html#rocq-overrideAttrs",
     "index.html#coq-overrideAttrs"
   ],
   "crystal": [
@@ -3092,6 +3328,9 @@
   ],
   "ssec-gnome-hooks-gst-grl-plugins": [
     "index.html#ssec-gnome-hooks-gst-grl-plugins"
+  ],
+  "ssec-gnome-hooks-libglycin": [
+    "index.html#ssec-gnome-hooks-libglycin"
   ],
   "ssec-gnome-updating": [
     "index.html#ssec-gnome-updating"
@@ -3343,6 +3582,9 @@
   "sec-language-java": [
     "index.html#sec-language-java"
   ],
+  "sec-language-lean4": [
+    "index.html#sec-language-lean4"
+  ],
   "language-javascript": [
     "index.html#language-javascript"
   ],
@@ -3376,15 +3618,6 @@
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
   ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
-  ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"
   ],
@@ -3417,15 +3650,6 @@
   ],
   "javascript-corepack": [
     "index.html#javascript-corepack"
-  ],
-  "javascript-node2nix": [
-    "index.html#javascript-node2nix"
-  ],
-  "javascript-node2nix-preparation": [
-    "index.html#javascript-node2nix-preparation"
-  ],
-  "javascript-node2nix-pitfalls": [
-    "index.html#javascript-node2nix-pitfalls"
   ],
   "javascript-pnpm": [
     "index.html#javascript-pnpm"
@@ -3519,6 +3743,18 @@
   ],
   "julia-withpackage-arguments": [
     "index.html#julia-withpackage-arguments"
+  ],
+  "lean4-buildLakePackage": [
+    "index.html#lean4-buildLakePackage"
+  ],
+  "lean4-dev-shells": [
+    "index.html#lean4-dev-shells"
+  ],
+  "lean4-history": [
+    "index.html#lean4-history"
+  ],
+  "lean4-leanPackages": [
+    "index.html#lean4-leanPackages"
   ],
   "lisp": [
     "index.html#lisp"
@@ -4198,6 +4434,18 @@
     "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
+  "neovim-plugin-nvim-treesitter": [
+    "index.html#neovim-plugin-nvim-treesitter",
+    "index.html#vim-plugin-nvim-treesitter"
+  ],
+  "neovim-plugin-treesitter-standalone": [
+    "index.html#neovim-plugin-treesitter-standalone",
+    "index.html#vim-plugin-treesitter-standalone"
+  ],
+  "neovim-plugin-treesitter-grammar-dependencies": [
+    "index.html#neovim-plugin-treesitter-grammar-dependencies",
+    "index.html#vim-plugin-treesitter-grammar-dependencies"
+  ],
   "managing-plugins-with-vim-plug": [
     "index.html#managing-plugins-with-vim-plug"
   ],
@@ -4355,6 +4603,9 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+  "sec-linux-new-kernels": [
+    "index.html#sec-linux-new-kernels"
+  ],
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
   ],
@@ -4435,21 +4686,6 @@
   ],
   "sec-weechat": [
     "index.html#sec-weechat"
-  ],
-  "sec-xorg": [
-    "index.html#sec-xorg"
-  ],
-  "katamari-tarballs": [
-    "index.html#katamari-tarballs"
-  ],
-  "individual-tarballs": [
-    "index.html#individual-tarballs"
-  ],
-  "generating-nix-expressions": [
-    "index.html#generating-nix-expressions"
-  ],
-  "overriding-the-generator": [
-    "index.html#overriding-the-generator"
   ],
   "sec-build-support": [
     "index.html#sec-build-support"
@@ -4623,12 +4859,8 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
-    "index.html#chap-contributing"
-  ],
-  "sec-contributing-devmode": [
-    "index.html#sec-contributing-devmode"
-  ],
-  "sec-contributing-markup": [
+    "index.html#chap-contributing",
+    "index.html#sec-contributing-devmode",
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

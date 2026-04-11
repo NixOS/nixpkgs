@@ -8,14 +8,14 @@
   pari,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.1.1";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "lcalc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0CYrRGn5YQ07BaGu0Q5otnjwyh3sNq21EXp3M/KlRdw=";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     "--with-pari"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/sagemath/lcalc";
     description = "Program for calculating with L-functions";
     mainProgram = "lcalc";
-    license = with licenses; [ gpl2 ];
-    teams = [ teams.sage ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2 ];
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
   };
-}
+})

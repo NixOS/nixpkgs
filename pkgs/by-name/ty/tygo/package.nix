@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tygo";
-  version = "0.2.19";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "gzuidhof";
     repo = "tygo";
-    rev = "v${version}";
-    hash = "sha256-Eyvvqk8D9q8rOODR72kJSg+g7cVjx3FJCPmSog6eP1E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nhGc5K6Mb6l88lNbcX2vOT2jUZoIVoHuk4NCzL3hjys=";
   };
 
-  vendorHash = "sha256-E73yqGhPzZA/1xTYGvTBy0/b4SE9hzx+gdhjX3ClE/Y=";
+  vendorHash = "sha256-XQS+P+vPt2rH0SD0srFSnqjupIeu5XgFi3iVzq/ovmg=";
 
   env.CGO_ENABLED = 0;
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ alexymantha ];
     mainProgram = "tygo";
   };
-}
+})

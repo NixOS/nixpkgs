@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10_29_2,
   nodejs,
   electron,
   makeWrapper,
@@ -15,17 +17,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.1.5";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6egqI1JhnRc8YwzAvyy4Xg9Z9dEfG7wIbMfUgQ+4IBA=";
+    hash = "sha256-i4Pw1jvkRYCQg1+9eZVi30Qblpttz9V+k//zehBZGDM=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_10_29_2
     nodejs
     # we use a script wrapper here for environment variable expansion at runtime
     # https://github.com/NixOS/nixpkgs/issues/172583
@@ -42,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-nobOORfhwlGEvNt+MfDKd3rXor6tJHDulz5oD1BGY4I=";
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-MgUOOr188t+t/4sTXVpbr+xYT/1qf7/B0ZG0w+QkVxc=";
   };
 
   buildPhase = ''
@@ -57,6 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     # since the install script does not do this for whatever reason
     cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/node-napi-v7.node ./dist/venmic-x64.node
     cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/node-napi-v7.node ./dist/venmic-arm64.node
+
+    # Remove unnecessary koffi prebuilds, otherwise unsupported platforms
+    # (OpenBSD, FreeBSD, Linux musl builds) will cause autoPatchelf to not
+    # be able to find the required libraries and fail.
+    find ./node_modules/koffi/build/koffi -mindepth 1 -maxdepth 1 \
+      ! -name linux_x64 \
+      ! -name linux_arm64 \
+      -type d -exec rm -rf {} +
 
     # Patch venmic before putting it into the ASAR archive
     autoPatchelf ./dist

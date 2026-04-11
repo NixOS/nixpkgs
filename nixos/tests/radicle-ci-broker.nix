@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  seed-nid = "z6Mkg52RcwDrPKRzzHaYgBkHH3Gi5p4694fvPstVE9HTyMB6";
+  seed-nid = "z6MkhwX7wBkHQvcLazu2KDFK6UifGkLcoxNm2iA38fPH9LwU";
   seed-ssh-keys = import ./ssh-keys.nix pkgs;
 
   radicleConfig =
@@ -16,12 +16,15 @@ in
 
 {
   name = "radicle-ci-broker";
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.maintainers = lib.teams.radicle.members;
 
   nodes.seed = {
+    virtualisation.credentials = {
+      "xyz.radicle.node.secret".source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+    };
+
     services.radicle = {
       enable = true;
-      privateKeyFile = seed-ssh-keys.snakeOilEd25519PrivateKey;
       publicKey = seed-ssh-keys.snakeOilEd25519PublicKey;
       node.openFirewall = true;
       settings = {
@@ -68,6 +71,9 @@ in
         radicle-job
       ];
     };
+
+  interactive.sshBackdoor.enable = true;
+  interactive.defaults.virtualisation.graphics = false;
 
   testScript = ''
     import json

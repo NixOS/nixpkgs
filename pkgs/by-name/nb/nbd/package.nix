@@ -13,12 +13,12 @@
   gnutls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nbd";
   version = "3.25";
 
   src = fetchurl {
-    url = "https://github.com/NetworkBlockDevice/nbd/releases/download/nbd-${version}/nbd-${version}.tar.xz";
+    url = "https://github.com/NetworkBlockDevice/nbd/releases/download/nbd-${finalAttrs.version}/nbd-${finalAttrs.version}.tar.xz";
     hash = "sha256-9cj9D8tXsckmWU0OV/NWQy7ghni+8dQNCI8IMPDL3Qo=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

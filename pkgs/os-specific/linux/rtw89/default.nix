@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek 8852AE, 8852BE, and 8853CE, 802.11ax devices";
     homepage = "https://github.com/lwfinger/rtw89";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ tvorog ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ tvorog ];
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "5.7";
     priority = -1;
   };

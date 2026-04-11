@@ -10,7 +10,7 @@
 buildPythonPackage {
   pname = "hnswlib";
   inherit (hnswlib) version src meta;
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     numpy

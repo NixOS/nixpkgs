@@ -6,25 +6,25 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fly";
-  version = "7.14.2";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
-    rev = "v${version}";
-    hash = "sha256-lm4l+9hYOFKt12KaOs/5R4zymya82Tb4q1k3leyG2UA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JWl3dUx3eQWD8I+be6APuQklUw1ZzW6xK6iypxbgxF0=";
   };
 
-  vendorHash = "sha256-2busKAFaQYE82XKCAx8BGOMjjs8WzqIxdpz+J45maoc=";
+  vendorHash = "sha256-ZZfiRfOkAcF3ItB4tjp8BgurMThxUOoBMyt9PeJpus4=";
 
   subPackages = [ "fly" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/concourse/concourse.Version=${version}"
+    "-X github.com/concourse/concourse.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -38,14 +38,14 @@ buildGoModule rec {
       --zsh <($out/bin/fly completion --shell zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to Concourse CI";
     mainProgram = "fly";
     homepage = "https://concourse-ci.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ivanbrennan
       SuperSandro2000
     ];
   };
-}
+})

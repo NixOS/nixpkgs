@@ -24,7 +24,6 @@
   pycparser,
   pyformlang,
   pydemumble,
-  pythonOlder,
   pyvex,
   rich,
   rpyc,
@@ -38,16 +37,14 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.154";
+  version = "9.2.193";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-aOgZXHk6GTWZAEraZQahEXUYs8LWAWv1n9GfX+2XTPU=";
+    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
@@ -106,10 +103,10 @@ buildPythonPackage rec {
     "archinfo"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

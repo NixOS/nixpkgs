@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-UmJVmtuPQYW/w+mdnJw9Ql4R1xf/07l+/Ky1wX9WKqw=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/truetype $src/*.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Bad-ass, unholy-mother-shut-your-mouth stencil sans-serif";

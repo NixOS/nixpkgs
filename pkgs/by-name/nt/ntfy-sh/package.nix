@@ -17,7 +17,7 @@ buildGoModule (
     ui = buildNpmPackage {
       inherit (finalAttrs) src version;
       pname = "ntfy-sh-ui";
-      npmDepsHash = "sha256-LmEJ7JuaAdjB816VspVXAQC+I46lpNAjwfLTxeNeLPc=";
+      npmDepsHash = "sha256-p6zuQ8UE121OPLRBK8rUlZ64aBVWp/9Hgx9dx2Mzya8=";
 
       prePatch = ''
         cd web/
@@ -37,16 +37,16 @@ buildGoModule (
   in
   {
     pname = "ntfy-sh";
-    version = "2.14.0";
+    version = "2.21.0";
 
     src = fetchFromGitHub {
       owner = "binwiederhier";
       repo = "ntfy";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-8BqJ2/u+g5P68ekYu/ztzjdQ91c8dIazeNdLRFpqVy0=";
+      hash = "sha256-x05z9CU4mzZ8FGe4++EoUWeUWv+wBNN8hyYz6u3SoU8=";
     };
 
-    vendorHash = "sha256-3adQNZ2G0wKW3aV+gsGo/il6NsrIhGPbI7P4elWrKZQ=";
+    vendorHash = "sha256-jLMZnah0vI/VlRuMSVzSTGdPVJgM6VM0y8kmQKvbRAs=";
 
     doCheck = false;
 
@@ -54,6 +54,11 @@ buildGoModule (
       "-s"
       "-w"
       "-X main.version=${finalAttrs.version}"
+    ];
+
+    excludedPackages = [
+      # main module (heckel.io/ntfy/v2) does not contain package heckel.io/ntfy/v2/tools/loadtest
+      "tools/loadtest"
     ];
 
     nativeBuildInputs = [
@@ -81,6 +86,7 @@ buildGoModule (
     meta = {
       description = "Send push notifications to your phone or desktop via PUT/POST";
       homepage = "https://ntfy.sh";
+      changelog = "https://github.com/binwiederhier/ntfy/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         arjan-s

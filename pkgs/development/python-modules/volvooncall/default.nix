@@ -11,15 +11,12 @@
   mock,
   pytest-asyncio_0,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "volvooncall";
   version = "0.10.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "molobrakos";
@@ -60,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "volvooncall" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
     changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     mainProgram = "voc";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

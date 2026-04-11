@@ -24,9 +24,8 @@
   pulseaudio,
   sndioSupport ? true,
   sndio,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  coreaudioSupport ? stdenv.hostPlatform.isDarwin,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 let
@@ -39,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "clangen";
     repo = "musikcube";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha512-qmoFMDmI4rvb5PrGgGoPlMwllG9H0B5uL4Xve/yQ8reQvQKIOWnt9e9oMm7gKO8eFAvFXiJLWUTpD3lTxZk1mQ==";
   };
 
@@ -68,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     portaudio
     taglib
   ]
-  ++ lib.optionals systemdSupport [ systemd ]
+  ++ lib.optionals systemdSupport [ systemdLibs ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     pulseaudio

@@ -13,29 +13,19 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-10-31";
+    version = "0-unstable-2026-04-05";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "b8e4ebdc0cd3b6dc5f58d8ff54deced2b14b13b1";
-      hash = "sha256-qx4y79utIVyLWQlF/RN1TzHKCM/EMDv7tR9WGEbaYoQ=";
+      rev = "474b0a55b0cb09a3bb6e18d5579836058b075584";
+      hash = "sha256-xRI9JpF/Kx0DNZeGS1CW25j7DVq0fs6tlrGSjcl6k1Y=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
-    pythonRelaxDeps = [
-      "certifi"
-      "flask"
-      "flask-babel"
-      "httpx-socks"
-      "lxml"
-      "setproctitle"
-      "typer-slim"
-      "typing-extensions"
-      "whitenoise"
-    ];
+    pythonRelaxDeps = true;
 
     preBuild =
       let
@@ -62,10 +52,8 @@ python.pkgs.toPythonModule (
       with python.pkgs;
       [
         babel
-        brotli
         certifi
-        cryptography
-        fasttext-predict
+        cloudscraper
         flask
         flask-babel
         httpx
@@ -78,13 +66,14 @@ python.pkgs.toPythonModule (
         pygments
         python-dateutil
         pyyaml
-        setproctitle
-        typer-slim
-        uvloop
+        sniffio
+        typer
+        typing-extensions
         valkey
         whitenoise
       ]
       ++ httpx.optional-dependencies.http2
+      ++ httpx.optional-dependencies.socks
       ++ httpx-socks.optional-dependencies.asyncio;
 
     # tests try to connect to network
@@ -106,12 +95,12 @@ python.pkgs.toPythonModule (
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/searxng/searxng";
       description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       mainProgram = "searxng-run";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         SuperSandro2000
         _999eagle
       ];

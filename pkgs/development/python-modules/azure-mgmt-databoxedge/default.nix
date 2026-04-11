@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_mgmt_databoxedge";
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.databoxedge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Databoxedge Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/databox/azure-mgmt-databox";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-databoxedge_${version}/sdk/databox/azure-mgmt-databox/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

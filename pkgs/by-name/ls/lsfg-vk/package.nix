@@ -6,14 +6,14 @@
   llvmPackages,
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "lsfg-vk";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "PancakeTAS";
     repo = "lsfg-vk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hWpuPH7mKbeMaLaRUwtlkNLy4lOnJEe+yd54L7y2kV0=";
     fetchSubmodules = true;
   };
@@ -36,9 +36,9 @@ llvmPackages.stdenv.mkDerivation rec {
   meta = {
     description = "Vulkan layer for frame generation (Requires owning Lossless Scaling)";
     homepage = "https://github.com/PancakeTAS/lsfg-vk/";
-    changelog = "https://github.com/PancakeTAS/lsfg-vk/releases/tag/${src.tag}";
+    changelog = "https://github.com/PancakeTAS/lsfg-vk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pabloaul ];
   };
-}
+})

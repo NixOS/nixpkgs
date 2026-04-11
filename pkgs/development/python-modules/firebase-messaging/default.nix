@@ -14,7 +14,6 @@
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   sphinx,
   sphinx-autodoc-typehints,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "firebase-messaging";
   version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sdb9696";
@@ -83,11 +80,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to subscribe to GCM/FCM and receive notifications within a python application";
     homepage = "https://github.com/sdb9696/firebase-messaging";
     changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

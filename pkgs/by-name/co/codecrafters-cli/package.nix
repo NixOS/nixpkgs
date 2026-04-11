@@ -5,15 +5,15 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "codecrafters-cli";
-  version = "43";
+  version = "53";
 
   src = fetchFromGitHub {
     owner = "codecrafters-io";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-B7vxBl4y2gS4iEmER4Cq1D7yDGFW3Q4DRL+aJESMOMs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LuMLYupL6OgWujJzH/gu3VRI24LjmqOwPOP2ROGcjlk=";
     # A shortened git commit hash is part of the version output, and is
     # needed at build time. Use the `.git` directory to retrieve the
     # commit SHA, and remove the directory afterwards since it is not needed
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/codecrafters-io/cli/internal/utils.Version=${version}"
+    "-X github.com/codecrafters-io/cli/internal/utils.Version=${finalAttrs.version}"
   ];
 
   # ldflags based on metadata from git
@@ -44,11 +44,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ git ];
 
-  meta = with lib; {
+  meta = {
     description = "CodeCrafters CLI to run tests";
     mainProgram = "codecrafters";
     homepage = "https://github.com/codecrafters-io/cli";
-    maintainers = with maintainers; [ builditluc ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ builditluc ];
+    license = lib.licenses.mit;
   };
-}
+})

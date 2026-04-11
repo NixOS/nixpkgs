@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   # build
   meson,
@@ -32,9 +31,7 @@ let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
     version = "1.3.3";
-    format = "pyproject";
-
-    disabled = pythonOlder "3.8";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "contourpy";
@@ -91,11 +88,11 @@ let
       nuke-refs $out/${python.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
     '';
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/contourpy/contourpy/releases/tag/${src.tag}";
       description = "Python library for calculating contours in 2D quadrilateral grids";
       homepage = "https://github.com/contourpy/contourpy";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [ ];
     };
   };

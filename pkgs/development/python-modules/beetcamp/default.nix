@@ -15,19 +15,16 @@
   nix-update-script,
 }:
 
-let
-  version = "0.22.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "beetcamp";
-  inherit version;
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "beetcamp";
-    tag = version;
-    hash = "sha256-5tcQtvYmXT213mZnzKz2kwE5K22rro++lRF65PjC5X0=";
+    tag = finalAttrs.version;
+    hash = "sha256-Oe5pZ4gYgqBHuzt9LBe4G14+RYXrNL+L5GIGMMflyMI=";
   };
 
   patches = [
@@ -39,10 +36,13 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    beets
     httpx
     packaging
     pycountry
+  ];
+
+  nativeBuildInputs = [
+    beets
   ];
 
   nativeCheckInputs = [
@@ -58,7 +58,19 @@ buildPythonPackage {
     "test_get_html"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      beets-with-beetcamp = beets.override {
+        pluginOverrides = {
+          beetcamp = {
+            enable = true;
+            propagatedBuildInputs = [ finalAttrs.finalPackage ];
+          };
+        };
+      };
+    };
+  };
 
   meta = {
     description = "Bandcamp autotagger source for beets (http://beets.io)";
@@ -69,4 +81,4 @@ buildPythonPackage {
     ];
     mainProgram = "beetcamp";
   };
-}
+})

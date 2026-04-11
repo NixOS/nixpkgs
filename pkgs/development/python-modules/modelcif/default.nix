@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "modelcif";
-  version = "1.5";
+  version = "1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-modelcif";
     tag = version;
-    hash = "sha256-NVsADYEemnhuFwvM4lMebkU5WrqF+gL/3i6LoZ/Alt8=";
+    hash = "sha256-01tCE7uClUEpCFkdAvvjG18SwKypJ+oeQ9SbJZF3RVU=";
   };
 
   build-system = [
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modelcif" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for handling ModelCIF mmCIF and BinaryCIF files";
     homepage = "https://github.com/ihmwg/python-modelcif";
     changelog = "https://github.com/ihmwg/python-modelcif/blob/${src.tag}/ChangeLog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

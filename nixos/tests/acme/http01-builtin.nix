@@ -1,11 +1,11 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 let
   domain = "example.test";
+  ip = "192.168.1.2";
 in
 {
   name = "http01-builtin";
@@ -34,6 +34,7 @@ in
         environment.systemPackages = [ pkgs.openssl ];
 
         security.acme.certs."${config.networking.fqdn}" = {
+          extraDomainNames = [ ip ];
           listenHTTP = ":80";
         };
 
@@ -51,7 +52,14 @@ in
           };
 
           accountchange.configuration = {
-            security.acme.certs."${config.networking.fqdn}".email = "admin@example.test";
+            # Providing an email address is optional
+            security.acme.certs."${config.networking.fqdn}".email = null;
+          };
+
+          emailplaceholder.configuration = {
+            # but Lego will default to this email address, which should not
+            # result in any change when configured
+            security.acme.certs."${config.networking.fqdn}".email = "noemail@example.com";
           };
 
           keytype.configuration = {
@@ -124,6 +132,7 @@ in
 
                 [ alt_names ]
                 DNS.1 = ${config.networking.fqdn}
+                IP.1 = ${ip}
               '';
               csrData =
                 pkgs.runCommand "csr-and-key"
@@ -142,6 +151,7 @@ in
               security.acme.certs."${config.networking.fqdn}" = {
                 csr = "${csrData}/request.csr";
                 csrKey = "${csrData}/key.pem";
+                extraDomainNames = lib.mkForce [ ];
               };
             };
         };
@@ -154,10 +164,12 @@ in
       certName = nodes.builtin.networking.fqdn;
       caDomain = nodes.acme.test-support.acme.caDomain;
     in
+    # python
     ''
       ${(import ./utils.nix).pythonUtils}
 
       domain = "${domain}"
+      ip = "${ip}"
       cert = "${certName}"
       cert2 = "builtin-2." + domain
       cert3 = "builtin-3." + domain
@@ -173,6 +185,7 @@ in
 
           check_issuer(builtin, cert, "pebble")
           check_domain(builtin, cert, cert)
+          check_ip(builtin, cert, ip)
 
       with subtest("Validate permissions"):
           check_permissions(builtin, cert, "acme")
@@ -212,11 +225,23 @@ in
           hash_after = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem")
           # Has to do a full run to register account, which creates new certs.
           assert hash != hash_after, "Certificate was not renewed"
+          hash = hash_after
+
+          builtin.succeed("systemctl stop renew-triggered.target")
+          switch_to(builtin, "emailplaceholder")
+          builtin.wait_for_unit("renew-triggered.target")
+
+          # Check that there are still two account directories
+          builtin.succeed("test $(ls -1 /var/lib/acme/.lego/accounts | tee /dev/stderr | wc -l) -eq 2")
+          hash_after = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem")
+          assert hash == hash_after, "Implicit to explicit email placeholder renewed the certificate"
+
           # Remove the new account directory
           builtin.succeed(
               "cd /var/lib/acme/.lego/accounts"
               " && ls -1 --sort=time | tee /dev/stderr | head -1 | xargs rm -rf"
           )
+
           # old_hash will be used in the preservation tests later
           old_hash = hash_after
 
@@ -300,6 +325,7 @@ in
           builtin.wait_for_unit("renew-triggered.target")
 
           check_issuer(builtin, cert, "pebble")
+          check_ip(builtin, cert, ip)
 
       with subtest("Generate self-signed certs"):
           acme.shutdown()

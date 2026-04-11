@@ -114,6 +114,7 @@ let
 
   cygwinCommon = {
     hello = nativePlatforms;
+    nixVersions.git = nativePlatforms;
   };
 
   wasiCommon = {
@@ -204,11 +205,12 @@ in
     }
   );
 
-  # Test some cross builds on 32 bit mingw-w64
-  crossMingw32 = mapTestOnCross systems.examples.mingw32 windowsCommon;
-
-  # Test some cross builds on 64 bit mingw-w64
-  crossMingwW64 = mapTestOnCross systems.examples.mingwW64 windowsCommon;
+  # Test some cross builds on various mingw-w64 platforms
+  crossMingw32 = mapTestOnCross systems.examples.mingw-msvcrt-i686 windowsCommon;
+  cross-mingw-msvcrt-x86_64 = mapTestOnCross systems.examples.mingw-msvcrt-x86_64 windowsCommon;
+  cross-mingw-ucrt-x86_64 = mapTestOnCross systems.examples.mingw-ucrt-x86_64 windowsCommon;
+  cross-mingw-ucrt-x86_64-llvm = mapTestOnCross systems.examples.mingw-ucrt-x86_64-llvm windowsCommon;
+  cross-mingw-ucrt-aarch64 = mapTestOnCross systems.examples.mingw-ucrt-aarch64 windowsCommon;
 
   x86_64-cygwin = mapTestOnCross systems.examples.x86_64-cygwin cygwinCommon;
 
@@ -255,6 +257,10 @@ in
   i686-musl = mapTestOnCross systems.examples.musl32 linuxCommon;
   i686-gnu = mapTestOnCross systems.examples.gnu32 linuxCommon;
 
+  # Linux on POWER
+  ppc64-elfv1 = mapTestOnCross systems.examples.ppc64-elfv1 linuxCommon;
+  ppc64-elfv2 = mapTestOnCross systems.examples.ppc64-elfv2 linuxCommon;
+  ppc64-musl = mapTestOnCross systems.examples.ppc64-musl linuxCommon;
   ppc64le = mapTestOnCross systems.examples.powernv linuxCommon;
   ppc64le-musl = mapTestOnCross systems.examples.musl-power linuxCommon;
 
@@ -285,20 +291,20 @@ in
   x86_64-netbsd = mapTestOnCross systems.examples.x86_64-netbsd common;
   x86_64-openbsd = mapTestOnCross systems.examples.x86_64-openbsd common;
 
-  # we test `embedded` instead of `linuxCommon` because very few packages
-  # successfully cross-compile to Redox so far
-  x86_64-redox = mapTestOnCross systems.examples.x86_64-unknown-redox embedded;
-
   # Cross-built bootstrap tools for every supported platform
   bootstrapTools =
     let
       linuxTools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       freebsdTools = import ../stdenv/freebsd/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+      cygwinTools = import ../stdenv/cygwin/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       linuxMeta = {
-        maintainers = [ maintainers.dezgeg ];
+        maintainers = [ ];
       };
       freebsdMeta = {
         maintainers = [ maintainers.rhelmot ];
+      };
+      cygwinMeta = {
+        maintainers = [ maintainers.corngood ];
       };
       mkBootstrapToolsJob =
         meta: drv:
@@ -325,8 +331,11 @@ in
       freebsd = mapAttrsRecursiveCond (as: !isDerivation as) (
         name: mkBootstrapToolsJob freebsdMeta
       ) freebsdTools;
+      cygwin = mapAttrsRecursiveCond (as: !isDerivation as) (
+        name: mkBootstrapToolsJob cygwinMeta
+      ) cygwinTools;
     in
-    linux // freebsd;
+    linux // freebsd // cygwin;
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;

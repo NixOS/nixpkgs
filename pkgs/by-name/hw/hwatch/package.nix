@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hwatch";
   version = "0.3.19";
 
   src = fetchFromGitHub {
     owner = "blacknon";
     repo = "hwatch";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-lMsBzMDMgpHxcQFtfZ4K7r2WRUaVR8Ry/kPvwfzPObI=";
   };
 
@@ -33,15 +33,15 @@ rustPlatform.buildRustPackage rec {
     package = hwatch;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/blacknon/hwatch";
     description = "Modern alternative to the watch command";
     longDescription = ''
       A modern alternative to the watch command, records the differences in
       execution results and can check this differences at after.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ hamburger1984 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hamburger1984 ];
     mainProgram = "hwatch";
   };
-}
+})

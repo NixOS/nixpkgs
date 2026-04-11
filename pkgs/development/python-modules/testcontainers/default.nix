@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   docker,
@@ -14,23 +14,23 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "testcontainers";
-  version = "4.13.2";
+  version = "4.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
-    tag = "testcontainers-v${version}";
-    hash = "sha256-S2k+zRNxQJcgVdZcU4TM2JHFJ+UflpXt6r6ooYxyOXo=";
+    tag = "testcontainers-v${finalAttrs.version}";
+    hash = "sha256-AsRTCEICdxrDnsQyfEY19a7Fox9erSJVTykLN3RUlOE=";
   };
 
   postPatch = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     docker
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Allows using docker containers for functional and integration testing";
     homepage = "https://github.com/testcontainers/testcontainers-python";
-    changelog = "https://github.com/testcontainers/testcontainers-python/releases/tag/testcontainers-v${version}";
+    changelog = "https://github.com/testcontainers/testcontainers-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

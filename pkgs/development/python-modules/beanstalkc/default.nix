@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple beanstalkd client library for Python";
-    maintainers = with maintainers; [ aanderse ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ aanderse ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/earl/beanstalkc";
   };
 }

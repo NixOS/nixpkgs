@@ -30,12 +30,12 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.noah.org/wiki/Pexpect";
     description = "Automate interactive console applications such as ssh, ftp, etc";
     downloadPage = "https://github.com/pexpect/pexpect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zimbatm ];
 
     longDescription = ''
       Pexpect is similar to the Don Libes "Expect" system, but Pexpect

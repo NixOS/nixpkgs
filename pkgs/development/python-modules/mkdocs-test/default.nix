@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-test";
-  version = "0.5.6";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "mkdocs-test";
     tag = "v${version}";
-    hash = "sha256-dUJzjL96OrFukEVMdKxuzjo3FqC72n5zG/SpYmF/Wpg=";
+    hash = "sha256-IP6qL+qR8uYSV5eG7/spiiNtdNghApdiuHBF+8OjPPg=";
   };
 
   build-system = [

@@ -1,74 +1,88 @@
 {
   lib,
   fetchFromGitHub,
+  fetchNpmDeps,
   buildGoModule,
-  buildNpmPackage,
-  stdenv,
-  olm,
-  unstableGitUpdater,
-  withGoolm ? false,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  libheif,
 }:
 
-let
-  cppStdLib = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
-
-in
 buildGoModule (finalAttrs: {
   pname = "gomuks-web";
-  version = "0.4.0-unstable-2025-04-22";
+  version = "26.03";
 
   src = fetchFromGitHub {
-    owner = "tulir";
+    owner = "gomuks";
     repo = "gomuks";
-    rev = "fd257ed74c9df42e5b6d14d3c6a283f557f61666";
-    hash = "sha256-jMDLfiwkUme2bxE+ZEtUoNMwZ7GuGGzCV2dH1V87YtQ=";
+    tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
+    hash = "sha256-lWuZ1UkazG31qfZsRUb4eTc34qazCQlI7k+i9H1cdb4=";
   };
 
-  frontend = buildNpmPackage {
-    name = "${finalAttrs.pname}_${finalAttrs.version}-frontend";
-    src = "${finalAttrs.src}/web";
-    inherit (finalAttrs) version;
+  proxyVendor = true;
+  vendorHash = "sha256-0h0/pNCd6g3aknDdKmVgojXKHzbtvWK/NVNToVJP0fU=";
 
-    npmDepsHash = "sha256-Mt2gJ1lLT3oQ3RKr3XTVFXkS/Xmjy0gahbdaxxrO+6g=";
-
-    installPhase = ''
-      cp -r dist $out
-    '';
-  };
-
-  vendorHash = "sha256-qeSxxd9ml2ENAYSPkdd1OWqy2DULnwLUVkKje47uT/I=";
-
-  buildInputs = [
-    (if withGoolm then stdenv.cc.cc.lib else olm)
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
   ];
 
-  CGO_LDFLAGS = lib.optional withGoolm cppStdLib;
+  buildInputs = [
+    libheif
+  ];
 
-  tags = lib.optional withGoolm "goolm";
+  env = {
+    npmRoot = "web";
+    npmDeps = fetchNpmDeps {
+      src = "${finalAttrs.src}/web";
+      hash = "sha256-9kGKUF+t4miz+uXZVifNhLkwYTK8ZAhFfrAfWF8Rxck=";
+    };
+  };
 
-  subPackages = [ "cmd/gomuks" ];
+  postPatch = ''
+    substituteInPlace ./web/build-wasm.sh \
+      --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=${finalAttrs.src.tag}" \
+      --replace-fail 'go.mau.fi/gomuks/version.Commit=$(git rev-parse HEAD)' "go.mau.fi/gomuks/version.Commit=unknown"
+  '';
+
+  doCheck = false;
+
+  tags = [
+    "goolm"
+    "libheif"
+  ];
+
+  ldflags = [
+    "-X 'go.mau.fi/gomuks/version.Tag=${finalAttrs.src.tag}'"
+    "-X 'go.mau.fi/gomuks/version.Commit=unknown'"
+    "-X \"go.mau.fi/gomuks/version.BuildTime=$(date -Iseconds)\""
+    "-X \"maunium.net/go/mautrix.GoModVersion=$(cat go.mod | grep 'maunium.net/go/mautrix ' | head -n1 | awk '{ print $2 })\""
+  ];
+
+  subPackages = [
+    "cmd/gomuks"
+    "cmd/gomuks-terminal"
+    "cmd/archivemuks"
+  ];
 
   preBuild = ''
-    cp -r ${finalAttrs.frontend} ./web/dist
+    CGO_ENABLED=0 go generate ./web
   '';
 
   postInstall = ''
     mv $out/bin/gomuks $out/bin/gomuks-web
   '';
 
-  passthru.updateScript = {
-    inherit (finalAttrs) frontend;
-    updateScript = unstableGitUpdater {
-      branch = "main";
-    };
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "gomuks-web";
     description = "Matrix client written in Go";
     homepage = "https://github.com/tulir/gomuks";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ ctucx ];
+    maintainers = [ lib.maintainers.zaphyra ];
     platforms = lib.platforms.unix;
   };
 })

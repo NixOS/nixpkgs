@@ -45,14 +45,16 @@ stdenv.mkDerivation rec {
   ];
 
   # Ensure C/Fortran code is position-independent.
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-fPIC"
-    "-Ofast"
-  ];
-  FCFLAGS = [
-    "-fPIC"
-    "-Ofast"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-fPIC"
+      "-Ofast"
+    ];
+    FCFLAGS = toString [
+      "-fPIC"
+      "-Ofast"
+    ];
+  };
 
   enableParallelBuilding = true;
 
@@ -95,7 +97,7 @@ stdenv.mkDerivation rec {
       want to make use of librsb.
     '';
     license = with lib.licenses; [ lgpl3Plus ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     platforms = lib.platforms.all;
     # linking errors such as 'undefined reference to `gzungetc'
     broken = true;

@@ -7,21 +7,20 @@
 
 php82.buildComposerProject2 (finalAttrs: {
   pname = "robo";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "consolidation";
     repo = "robo";
     tag = finalAttrs.version;
-    hash = "sha256-bAT4jHvqWeYcACeyGtBwVBA2Rz+AvkZcUGLDwSf+fLg=";
+    hash = "sha256-OYuP56KlS9onuYcy9xL0XrH9hqf/njwVUju1pDyRgKM=";
   };
 
-  vendorHash = "sha256-Rg8WTZUnWA4bemNmE7hxFwfnlMtYyPkeltAQEWJ2VDU=";
+  vendorHash = "sha256-rOFY9TymSw8MatAR/yCpKaj0LupuhaIkk7QAnaKQUZ4=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

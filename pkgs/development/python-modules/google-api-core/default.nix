@@ -7,26 +7,25 @@
   grpcio,
   grpcio-gcp,
   grpcio-status,
-  mock,
   proto-plus,
   protobuf,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.25.1";
+  version = "2.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
     tag = "v${version}";
-    hash = "sha256-lh4t03upQQxY2KGwucXfEeNvqVVXlZ6hjR/e47imetk=";
+    hash = "sha256-wqDGtCYAH2f+P3zUfXgiQTePLr7a0qzUTeEc6pdCGio=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +38,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   optional-dependencies = {
     async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
     grpc = [
@@ -50,8 +51,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
   ];
 

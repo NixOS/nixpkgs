@@ -1,8 +1,7 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build time
   stdenv,
@@ -40,26 +39,29 @@
   bottleneck,
   fsspec,
   s3fs,
+  uncompresspy,
 
   # testing
+  hypothesis,
   pytestCheckHook,
   pytest-xdist,
   pytest-astropy-header,
-  pytest-astropy,
+  pytest-doctestplus,
+  pytest-remotedata,
   threadpoolctl,
 
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yPJUMiKVsbjPJDA9bxVb9+/bbBKCiCuWbOMEDv+MU8U=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "astropy";
+    tag = "v${version}";
+    hash = "sha256-U9kCzyOZcttlUP0DUGkhJVkk96sBM/Gm/s5ZPJZcEoA=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -112,6 +114,7 @@ buildPythonPackage rec {
       bottleneck
       fsspec
       s3fs
+      uncompresspy
     ]
     ++ self.recommended
     ++ self.ipython
@@ -121,11 +124,16 @@ buildPythonPackage rec {
   });
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     pytest-xdist
     pytest-astropy-header
-    pytest-astropy
+    pytest-doctestplus
+    pytest-remotedata
     threadpoolctl
+    # FIXME remove in 7.2.0
+    # see https://github.com/astropy/astropy/pull/18882
+    uncompresspy
   ]
   ++ optional-dependencies.recommended;
 
@@ -136,6 +144,10 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    if [ $OMP_NUM_THREADS -eq 0 ]; then
+      export OMP_NUM_THREADS=1
+    fi
+
     # See https://github.com/astropy/astropy/issues/17649 and see
     # --hypothesis-profile=ci pytest flag below.
     cp conftest.py $out/
@@ -150,6 +162,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    changelog = "https://docs.astropy.org/en/${src.tag}/changelog.html";
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;

@@ -21,24 +21,24 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.3.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-qvHNV3oy89CVR4LtrxFQJpev3yhHXy2Fh5PTik7Eo8g=";
+    hash = "sha256-nH0WtsVP1uwPvimpGnmWx5v0VButIFJu9K5wXsiC4cA=";
   };
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "uutils-coreutils-${finalAttrs.version}";
-    hash = "sha256-yJHp8FCk7W6EDhO/MLrhui50RHW4GOwPQnQmfkdkWd8=";
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-FMTzMgXcAg9dk7dfYG7lTOHYJxN3YHjf0R96LS7W3FI=";
   };
-
-  patches = [
-    ./selinux_no_auto_detect.diff
-  ];
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform acl) [
@@ -49,13 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   nativeBuildInputs = [
+    cargo
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     python3Packages.sphinx
   ];
 
   makeFlags = [
-    "CARGO=${lib.getExe cargo}"
     "PREFIX=${placeholder "out"}"
     "PROFILE=release"
     "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
@@ -75,12 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
         ])
       )
     }"
+    "SKIP_UTILS=${lib.optionalString stdenv.hostPlatform.isStatic "stdbuf"}"
   ]
-  ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  ++ lib.optionals (prefix != null) [
+    "PROG_PREFIX=${prefix}"
+  ]
+  ++ lib.optionals buildMulticallBinary [
+    "MULTICALL=y"
+  ];
 
-  env = lib.optionalAttrs selinuxSupport {
-    SELINUX_INCLUDE_DIR = ''${libselinux.dev}/include'';
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+  }
+  // lib.optionalAttrs selinuxSupport {
+    SELINUX_INCLUDE_DIR = "${lib.getInclude libselinux}/include";
     SELINUX_LIB_DIR = lib.makeLibraryPath [
       libselinux
     ];
@@ -98,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
       prefix' = lib.optionalString (prefix != null) prefix;
     in
     "${placeholder "out"}/bin/${prefix'}ls";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -114,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/uutils/coreutils";
     changelog = "https://github.com/uutils/coreutils/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
+      GaetanLepage
       siraben
       matthiasbeyer
     ];

@@ -9,20 +9,20 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crate2nix";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";
-    rev = version;
-    hash = "sha256-esWhRnt7FhiYq0CcIxw9pvH+ybOQmWBfHYMtleaMhBE=";
+    rev = finalAttrs.version;
+    hash = "sha256-SUuruvw1/moNzCZosHaa60QMTL+L9huWdsCBN6XZIic=";
   };
 
-  sourceRoot = "${src.name}/crate2nix";
+  sourceRoot = "${finalAttrs.src.name}/crate2nix";
 
-  cargoHash = "sha256-Du6RAe4Ax3KK90h6pQEtF75Wdniz+IqF2/TXHA9Ytbw=";
+  cargoHash = "sha256-q/nPKNXZ1eJijeTBXA6Uuz235p+Q1uilXY5a/s8btMM=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,14 +42,13 @@ rustPlatform.buildRustPackage rec {
         ]
       }
 
-      for shell in bash zsh fish
-      do
-        $out/bin/crate2nix completions -s $shell
-        installShellCompletion crate2nix.$shell || installShellCompletion --$shell _crate2nix
-      done
+    $out/bin/crate2nix completions -s bash
+    $out/bin/crate2nix completions -s zsh
+    $out/bin/crate2nix completions -s fish
+    installShellCompletion --bash crate2nix.bash --zsh _crate2nix --fish crate2nix.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix build file generator for Rust crates";
     mainProgram = "crate2nix";
     longDescription = ''
@@ -58,11 +57,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/nix-community/crate2nix";
     changelog = "https://nix-community.github.io/crate2nix/90_reference/90_changelog";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kolloch
       cole-h
-      kranzes
     ];
   };
-}
+})

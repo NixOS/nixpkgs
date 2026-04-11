@@ -46,16 +46,16 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ARP scanning and fingerprinting tool";
     longDescription = ''
       Arp-scan is a command-line tool that uses the ARP protocol to discover
       and fingerprint IP hosts on the local network.
     '';
     homepage = "https://github.com/royhills/arp-scan/wiki/arp-scan-User-Guide";
-    license = licenses.gpl3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       mikoim
       r-burns

@@ -7,14 +7,14 @@
   freebsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libipt";
   version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libipt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rO2Mf2/BfKlPh1wHe0qTuyQAyqpSB/j3Q+JWpNDyNm0=";
   };
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-lstdthreads";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Intel Processor Trace decoder library";
     homepage = "https://github.com/intel/libipt";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

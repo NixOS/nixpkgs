@@ -1,7 +1,7 @@
 {
   lib,
-  SDL2,
-  SDL2_image,
+  sdl3,
+  sdl3-image,
   fetchFromGitHub,
   gettext,
   git,
@@ -29,19 +29,20 @@
   wrapGAppsHook3,
   cacert,
   darwin,
-  apple-sdk_12,
   desktopToDarwinBundle,
+  xxHash,
+  tomlplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.110";
+  version = "0.8.134";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kb8sAaqPHbVXeddMD/BoUnxph4lLTmRctY+yjhgu4gw=";
+    hash = "sha256-BWOLKa7B1GURG4Zfo65ZQrr54nRaRHYibKv71j6gtiY=";
 
     nativeBuildInputs = [
       git
@@ -54,13 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
-        implot json keycodemapdb nv2a_vsh_cpu tomlplusplus volk xxhash || true
+        implot json keycodemapdb nv2a_vsh_cpu volk || true
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
-  __structuredAttrs = true;
+  __structuredAttrs = false;
   nativeBuildInputs = [
-    SDL2
     meson
     cmake
     ninja
@@ -80,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
-    SDL2
-    SDL2_image
+    sdl3
+    sdl3-image
     gettext
     glib
     gtk3
@@ -93,14 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     vulkan-headers
     vulkan-loader
+    xxHash
+    tomlplusplus
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libdrm
     libgbm
     vte
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_12
   ];
 
   configureFlags = [
@@ -132,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ./scripts/xemu-version.sh \
       --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
+
+    substituteInPlace subprojects/volk/volk.c \
+      --replace-fail 'libvulkan.so' '${lib.getLib vulkan-loader}/lib/libvulkan.so'
   '';
 
   preConfigure = ''

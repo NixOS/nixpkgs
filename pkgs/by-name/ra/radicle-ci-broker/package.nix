@@ -7,20 +7,21 @@
   gitMinimal,
   sqlite,
   radicle-node,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-ci-broker";
-  version = "0.21.0";
+  version = "0.27.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "zwTxygwuz5LDGBq255RA2CbNGrz8";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c0Qo6dnR9rP4mLXODkNZp+AnhKS0tqJeh1KgzfHBRV4=";
+    hash = "sha256-1MXoAj2pa+fRKbu2WtxZb6ki6l86n2k+uqYYMcas6fA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -28,15 +29,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-9MkZh1hlHgLC9rGmLx5ehtLtZfhXsCqrJrCJNr1edBU=";
+  cargoHash = "sha256-EO3KK9u17YWIwJukIDTQdQ25b0lGMuiC/gImGSYBkgs=";
 
   postPatch = ''
     substituteInPlace build.rs \
       --replace-fail "let hash = " "let hash = \"$(<$src/.git_head)\"; "
+
+    substituteInPlace ci-broker.md \
+      --replace-fail 'PATH: /bin' "" \
+      --replace-fail '"PATH": "/bin"' ""
   '';
 
   preCheck = ''
     ln -s "$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType" target/debug
+
+    rad auth --alias alice --stdin </dev/null
   '';
 
   nativeCheckInputs = [
@@ -44,17 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gitMinimal
     sqlite
     radicle-node
+    writableTmpDirAsHomeHook
   ];
 
-  checkFlags = [
-    "--skip=acceptance_criteria_for_upgrades"
-    "--skip=logs_adapter_stderr_output"
-    "--skip=process_queued_events"
-    "--skip=runs_adapter_with_configuration"
-  ];
+  checkFlags = [ "--skip=acceptance_criteria_for_upgrades" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -70,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ defelo ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "cib";
   };
 })

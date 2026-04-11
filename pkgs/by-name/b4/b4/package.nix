@@ -5,14 +5,14 @@
   patatt,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
-  version = "0.14.3";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MaSSe437tcl+38lWnNo7Zze7/YQwiB6MxIoLCIztYUc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-5IxEu1efraux/D8Vvxh0r9chvBpj+6EMlvVovB9HzLM=";
   };
 
   # tests make dns requests and fails
@@ -30,15 +30,15 @@ python3Packages.buildPythonApplication rec {
     git-filter-repo
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       qyliss
       mfrw
     ];
   };
-}
+})

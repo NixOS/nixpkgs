@@ -1,5 +1,6 @@
 {
   aiohttp,
+  anyio,
   beautifulsoup4,
   buildPythonPackage,
   colorlog,
@@ -10,30 +11,31 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  yarl,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "aioamazondevices";
-  version = "6.4.6";
+  version = "13.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${version}";
-    hash = "sha256-EjgZ/zmUSCaLDUmijYMCXvwpl4dWfjmTdlO5VLuzIHg=";
+    hash = "sha256-DaQbcWnE/Ij8NpBJ7d0YjWQwKn+mxNw4P4RPT0Lmfs8=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    anyio
     beautifulsoup4
     colorlog
     langcodes
     orjson
-    yarl
+    python-dateutil
   ];
 
   pythonImportsCheck = [ "aioamazondevices" ];

@@ -250,7 +250,7 @@ stdenv.mkDerivation {
   # of the bindist installer can find the libraries they expect.
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location.
-  ${libEnvVar} = libPath;
+  env.${libEnvVar} = libPath;
 
   postUnpack =
     # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,
@@ -474,13 +474,6 @@ stdenv.mkDerivation {
       "$out/bin/ghc-pkg" --package-db="$package_db" recache
     '';
 
-  # GHC cannot currently produce outputs that are ready for `-pie` linking.
-  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-  # See:
-  # * https://github.com/NixOS/nixpkgs/issues/129247
-  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = [ "pie" ];
-
   doInstallCheck = true;
   installCheckPhase = ''
     # Sanity check, can ghc create executables?
@@ -531,5 +524,6 @@ stdenv.mkDerivation {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     teams = [ lib.teams.haskell ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

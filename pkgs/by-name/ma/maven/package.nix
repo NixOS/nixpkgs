@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "3.9.11";
+  version = "3.9.12";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-S3GVtqT1yBr0wCEmd6Mu6BQ2Q0AbxuHoQS5rBuqCvqw=";
+    hash = "sha256-+iyZSHKSlsI6/Rj9AakPYs3aCaRhkbVKi8N2TC7ugS4=";
   };
 
   sourceRoot = ".";
@@ -78,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    changelog = "https://maven.apache.org/docs/${finalAttrs.version}/release-notes.html";
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode

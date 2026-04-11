@@ -26,12 +26,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sekizai" ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  meta = with lib; {
+  meta = {
     description = "Define placeholders where your blocks get rendered and append to those blocks";
     homepage = "https://github.com/django-cms/django-sekizai";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Full stack, web application framework for the JVM";
     mainProgram = "grails";
     longDescription = ''
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
       experience.
     '';
     homepage = "https://grails.org/";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

@@ -4,14 +4,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clolcat";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "IchMageBaume";
     repo = "clolcat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-fLa239dwEXe4Jyy5ntgfU9V0h5wrBsvq6/s2HCis7Sc=";
   };
 
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Much faster lolcat";
     homepage = "https://github.com/IchMageBaume/clolcat";
-    platforms = platforms.all;
-    maintainers = [ maintainers.felipeqq2 ];
-    license = licenses.wtfpl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.felipeqq2 ];
+    license = lib.licenses.wtfpl;
     mainProgram = "clolcat";
   };
-}
+})

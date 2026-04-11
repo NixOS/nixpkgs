@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "logmap";
   version = "0-unstable-2021-12-15";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "zhzyker";
@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools for fuzzing Log4j2 jndi injection";
     homepage = "https://github.com/zhzyker/logmap";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "logmap";
   };
 }

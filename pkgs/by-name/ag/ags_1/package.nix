@@ -76,7 +76,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/Aylur/ags/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      foo-dogsquared
       johnrtitor
     ];
     mainProgram = "ags";

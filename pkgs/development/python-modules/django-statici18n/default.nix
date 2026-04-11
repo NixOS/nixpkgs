@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-statici18n";
-  version = "2.6.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zyegfryed";
     repo = "django-statici18n";
     tag = "v${version}";
-    hash = "sha256-G1JF/AQEDgvDamvjCYiQM7b6HfbdMBhfEUvT3yL1io0=";
+    hash = "sha256-e6sCH/9h+Ki96hfG4ftuLo34HfZbwImThi9YxmZOmRc=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +43,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper for generating Javascript catalog to static files";
     homepage = "https://github.com/zyegfryed/django-statici18n";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [
     ];
   };

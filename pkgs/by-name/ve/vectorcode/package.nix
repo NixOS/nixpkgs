@@ -86,21 +86,26 @@ let
           "chromadb/test/test_chroma.py"
           "chromadb/test/test_client.py"
           "chromadb/test/ef/test_multimodal_ef.py"
+
+          # sqlite3.OperationalError: no such table: migrations
+          "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.18";
+  version = "0.7.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-xtFSERuXivdqY5XT/JJ4lZ1HgGTAE+DGV7pxH1163ZQ=";
+    hash = "sha256-RU9WnKuPaxDnPW5MQyrxPEw7ufMcVNxSRyJ5QvrzoVs=";
   };
 
   build-system = with python.pkgs; [
@@ -201,6 +206,9 @@ python.pkgs.buildPythonApplication rec {
     "test_get_reranker"
     "test_query_tool_success"
     "test_supported_rerankers_initialization"
+    # tree-sitter-language-pack 1.x.x raises LanguageNotFoundError for unknown
+    # languages here, while this test still expects LookupError.
+    "test_treesitter_chunker_parser_from_config_no_parser_found_error"
   ];
 
   passthru = {

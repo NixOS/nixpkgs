@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jpm";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "jpm";
     rev = "v${version}";
-    sha256 = "sha256-lPB4jew6RkJlDp8xOQ4YA9MkgLBImaBHcvv4WF/sLRc=";
+    sha256 = "sha256-3WmIXJhmrZyr7SYFkEcYC3YYBJtq8Uavo6PjLVXA3Bs=";
   };
 
   # `auto-shebangs true` gives us a shebang line that points to janet inside the
@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
 
     janet bootstrap.janet configs/${platformFile}
 
+    # patch default config to use janet's path instead of jpm itself
+    substituteInPlace $out/lib/janet/jpm/default-config.janet \
+      --replace-fail $out ${janet}
+
     runHook postInstall
   '';
 
@@ -55,6 +59,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     $out/bin/jpm help
+    $out/bin/jpm show-paths
   '';
 
   meta = janet.meta // {

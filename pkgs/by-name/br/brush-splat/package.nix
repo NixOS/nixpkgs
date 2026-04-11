@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "--no-as-needed"
     "-lvulkan"
     "-lwayland-client"
@@ -59,7 +59,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

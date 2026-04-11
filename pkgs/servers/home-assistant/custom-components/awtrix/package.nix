@@ -22,10 +22,10 @@ buildHomeAssistantComponent rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Home-assistant integration for awtrix";
     homepage = "https://github.com/10der/homeassistant-custom_components-awtrix";
-    maintainers = with maintainers; [ pinpox ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ pinpox ];
+    license = lib.licenses.mit;
   };
 }

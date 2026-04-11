@@ -9,19 +9,19 @@
   nodejs,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sql-formatter";
-  version = "15.6.10";
+  version = "15.7.3";
 
   src = fetchFromGitHub {
     owner = "sql-formatter-org";
     repo = "sql-formatter";
-    rev = "v${version}";
-    hash = "sha256-3C1NdPUuBfrDN6HRSyfu76IEV2pFIirK94kwoEhr1ZU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wRzGm8t0z3e/CdvawvAqi/bbc8owpVP07kvVmTrTnsI=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-zcCYGTuaPkizZHc4K6RAPWwMnP5LtnyaLbF9xcPpNBs=";
   };
 
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sql-formatter-org.github.io/sql-formatter";
     license = lib.licenses.mit;
     mainProgram = "sql-formatter";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
-}
+})

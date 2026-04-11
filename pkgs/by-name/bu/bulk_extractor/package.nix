@@ -10,7 +10,7 @@
   openssl,
   zlib,
   pkg-config,
-  python310,
+  python3,
   re2,
 }:
 
@@ -26,10 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # Fix gcc15 build failures due to missing <cstdint>
+  # Tracking: https://github.com/NixOS/nixpkgs/issues/475479
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/exif_entry.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
+  '';
+
   enableParallelBuilding = true;
   nativeBuildInputs = [
     pkg-config
-    python310
+    python3
     autoreconfHook
   ];
   buildInputs = [
@@ -48,11 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     aclocal -I m4
   '';
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Digital forensics tool for extracting information from file systems";
     longDescription = ''
       bulk_extractor is a C++ program that scans a disk image, a file, or a
@@ -65,15 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/simsong/bulk_extractor";
     downloadPage = "http://downloads.digitalcorpora.org/downloads/bulk_extractor/";
     changelog = "https://github.com/simsong/bulk_extractor/blob/${finalAttrs.src.rev}/ChangeLog";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = with platforms; unix ++ windows;
-    license = with licenses; [
+    maintainers = [ ];
+    platforms = with lib.platforms; unix ++ windows;
+    license = with lib.licenses; [
       mit
       cpl10
       gpl3Only
       lgpl21Only
       lgpl3Only
-      licenses.openssl
+      lib.licenses.openssl
     ];
   };
 })

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "exifprobe";
-  version = "unstable-2018-06-19";
+  version = "2.0.1-unstable-2018-06-19";
 
   src = fetchFromGitHub {
     owner = "hfiguiere";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1c1fhc0v1m452lgnfcijnvrc0by06qfbhn3zkliqi60kv8l2isbp";
   };
 
-  CFLAGS = [ "-O2" ];
+  env.CFLAGS = toString [ "-O2" ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     rm -r $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for reading EXIF data from image files produced by digital cameras";
     homepage = "https://github.com/hfiguiere/exifprobe";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

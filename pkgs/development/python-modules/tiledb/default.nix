@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.35.1";
-  format = "pyproject";
+  version = "0.36.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     tag = version;
-    hash = "sha256-X2hXm7aRICFoa2cjT0bvke+i9m5nSL+jX+aAUfiaP04=";
+    hash = "sha256-LzXj6bs+DuOMDhPeXAmBuarA+eEe67LWWnhpNhR660k=";
   };
 
   build-system = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  TILEDB_PATH = tiledb;
+  env.TILEDB_PATH = tiledb;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 

@@ -7,8 +7,8 @@
   freetype,
   fontconfig,
   libGL,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   libxcb,
   libxkbcommon,
   utf8proc,
@@ -54,12 +54,12 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fontconfig
-    libX11
+    libx11
     freetype
     libGL
     libxcb
     libxkbcommon
-    libXrandr
+    libxrandr
     utf8proc
     wayland
   ];
@@ -84,12 +84,12 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.wayst;
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal emulator";
     mainProgram = "wayst";
     homepage = "https://github.com/91861/wayst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ berbiche ];
   };
 }

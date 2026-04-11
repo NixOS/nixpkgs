@@ -7,15 +7,15 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pgweb";
-  version = "0.16.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = "pgweb";
-    rev = "v${version}";
-    hash = "sha256-gZK8+H3dBMzSVyE96E7byihKMR4+1YlVFZJtCTGUZwI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3UWld72AN504+Bo8aIY31qMO1xIRL3MXG5ImzMeSoU8=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildGoModule rec {
     rm -f pkg/client/{client,dump}_test.go
   '';
 
-  vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
+  vendorHash = "sha256-7gfziA+rKwS6u63I6DaA2Fi/wvtr1rAJupSNJZB72dU=";
 
   ldflags = [
     "-s"
@@ -44,7 +44,7 @@ buildGoModule rec {
 
   passthru.tests = {
     version = testers.testVersion {
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
       package = pgweb;
       command = "pgweb --version";
     };
@@ -52,7 +52,7 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
+    changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${finalAttrs.version}";
     description = "Web-based database browser for PostgreSQL";
     longDescription = ''
       A simple postgres browser that runs as a web server. You can view data,
@@ -66,4 +66,4 @@ buildGoModule rec {
       luisnquin
     ];
   };
-}
+})

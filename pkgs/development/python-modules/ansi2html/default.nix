@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "ansi2html";
   version = "1.9.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansi2html" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert text with ANSI color codes to HTML";
     mainProgram = "ansi2html";
     homepage = "https://github.com/ralphbean/ansi2html";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

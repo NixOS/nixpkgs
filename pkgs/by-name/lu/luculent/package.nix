@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "luculent";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "http://www.eastfarthing.com/${pname}/${pname}.tar.xz";
+    url = "http://www.eastfarthing.com/luculent/luculent.tar.xz";
     hash = "sha256-6NxLnTBnvHmTUTFa2wW0AuKPEbCqzaWQyiFVnF0sBqU=";
   };
 
@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Luculent font";
     homepage = "http://www.eastfarthing.com/luculent/";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

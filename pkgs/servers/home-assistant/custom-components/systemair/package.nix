@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "AN3Orik";
   domain = "systemair";
-  version = "1.0.14";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "systemair";
     tag = "v${version}";
-    hash = "sha256-csciuUBetlUSh9KousKN1O08J/c/gviWSzB2c+morU8=";
+    hash = "sha256-8cYoqTf8EKlvnSA8C3LHVQGwWrCacHzKGYaUlxyCXgk=";
   };
 
   postPatch = ''
@@ -30,11 +30,11 @@ buildHomeAssistantComponent rec {
     aiohttp
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/AN3Orik/systemair/releases/tag/v${version}";
     description = "Home Assistant component for Systemair SAVE ventilation units";
     homepage = "https://github.com/AN3Orik/systemair";
-    maintainers = with maintainers; [ uvnikita ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
   };
 }

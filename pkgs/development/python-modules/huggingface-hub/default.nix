@@ -10,47 +10,41 @@
   filelock,
   fsspec,
   hf-xet,
+  httpx,
   packaging,
   pyyaml,
-  requests,
   tqdm,
+  typer,
   typing-extensions,
 
   # optional-dependencies
-  # cli
-  inquirerpy,
-  # inference
-  aiohttp,
   # torch
   torch,
   safetensors,
-  # hf_transfer
-  hf-transfer,
   # fastai
   toml,
   fastai,
   fastcore,
-  # tensorflow
-  tensorflow,
-  pydot,
-  graphviz,
-  # tensorflow-testing
-  keras,
+  # gradio
+  gradio,
+  requests,
+  # mcp
+  mcp,
 
   # tests
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "0.35.3";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    tag = "v${version}";
-    hash = "sha256-KOq3qxt3AyWQIOG0+HUbNr15u85tyTEstoUkYBFkpC4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7spvenDWuSDVTlcbOQd8oJ3bwzsyuQDIyMiVSyFIhuQ=";
   };
 
   build-system = [ setuptools ];
@@ -59,10 +53,11 @@ buildPythonPackage rec {
     filelock
     fsspec
     hf-xet
+    httpx
     packaging
     pyyaml
-    requests
     tqdm
+    typer
     typing-extensions
   ];
 
@@ -70,36 +65,25 @@ buildPythonPackage rec {
     all = [
 
     ];
-    cli = [
-      inquirerpy
-    ];
-    inference = [
-      aiohttp
-    ];
     torch = [
       torch
       safetensors
     ]
     ++ safetensors.optional-dependencies.torch;
-    hf_transfer = [
-      hf-transfer
-    ];
     fastai = [
       toml
       fastai
       fastcore
     ];
-    tensorflow = [
-      tensorflow
-      pydot
-      graphviz
-    ];
-    tensorflow-testing = [
-      tensorflow
-      keras
+    gradio = [
+      gradio
+      requests
     ];
     hf_xet = [
       hf-xet
+    ];
+    mcp = [
+      mcp
     ];
   };
 
@@ -114,11 +98,11 @@ buildPythonPackage rec {
     description = "Download and publish models and other files on the huggingface.co hub";
     mainProgram = "hf";
     homepage = "https://github.com/huggingface/huggingface_hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       osbm
     ];
   };
-}
+})

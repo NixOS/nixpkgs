@@ -6,17 +6,22 @@
   addBinToPathHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gallia";
-  version = "2.0.0b2";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
-    tag = "v${version}";
-    hash = "sha256-CZsVd9ob4FHC9KeepK7OHWatVTJUiJEjqtaylhD+yS0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2jiD2ZZGinfTT+35TYl3+okWkkTrY1IdfSYbjC+/cvs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.11,<0.10.0" "uv_build"
+  '';
 
   pythonRelaxDeps = [ "pydantic" ];
 
@@ -27,14 +32,13 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     boltons
     construct
-    more-itertools
     platformdirs
     pydantic
     tabulate
     zstandard
   ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   nativeCheckInputs =
     with python3.pkgs;
@@ -51,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
-    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/${src.tag}";
+    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
@@ -59,4 +63,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,13 +1,15 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -16,13 +18,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.13.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-oReDI6w+N82f+DSv1mPvr0hPG7CJ7CbIFljhSNQ86cI=";
+    hash = "sha256-IGsH8QHoj2CvrSEc9eIisxySXQkjPSDBXsCPOXqANVM=";
   };
 
   metaCommon = {
@@ -39,18 +41,20 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_10;
       fetcherVersion = 2;
-      hash = "sha256-gSgryNui5uXuJEKoojz+knZ8rlJpjaR2+XF3xTwV5YI=";
+      hash = "sha256-dWqwEnXPT+5N+36szm4AF1ChM9M6UJltct+EtQAofGQ=";
     };
 
     buildPhase = ''
@@ -76,7 +80,7 @@ let
   });
 in
 
-buildGoModule {
+buildGo126Module {
   inherit pname version src;
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
@@ -87,7 +91,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-3kQWCjxCom/Sb4RzRF55NsDfSA9F9mOLy9sYVFUaevY=";
+  vendorHash = "sha256-EeIxt0BzSaZh1F38btUXN9kAvj12nlqEerVgWVGkiuk=";
 
   nativeBuildInputs = [
     autoPatchelfHook

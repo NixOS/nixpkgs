@@ -16,22 +16,37 @@
   gpart,
   hdparm,
   procps,
-  util-linuxMinimal,
   polkit,
   wrapGAppsHook3,
   replaceVars,
   mtools,
-  dosfstools,
   xhost,
+  dosfstools,
+  e2fsprogs,
+  util-linuxMinimal,
+  withAllTools ? false,
+  bcachefs-tools,
+  btrfs-progs,
+  exfatprogs,
+  f2fs-tools,
+  hfsprogs,
+  jfsutils,
+  cryptsetup,
+  lvm2,
+  nilfs-utils,
+  ntfs3g,
+  udftools,
+  xfsprogs,
+  xfsdump,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
+    hash = "sha256-ZziKxAX5/pKkBjbLA7Dh4LtkA62JzMF0sv8ZDvbzI0k=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -65,6 +80,27 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
+  runtimeDeps = [
+    dosfstools
+    e2fsprogs
+    util-linuxMinimal
+  ]
+  ++ lib.optionals withAllTools [
+    bcachefs-tools
+    btrfs-progs
+    exfatprogs
+    f2fs-tools
+    hfsprogs
+    jfsutils
+    cryptsetup
+    lvm2
+    nilfs-utils
+    ntfs3g
+    udftools
+    xfsprogs
+    xfsdump
+  ];
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
@@ -73,18 +109,19 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
        --prefix PATH : "${
-         lib.makeBinPath [
-           gpart
-           hdparm
-           util-linuxMinimal
-           procps
-           coreutils
-           gnused
-           gnugrep
-           mtools
-           dosfstools
-           xhost
-         ]
+         lib.makeBinPath (
+           [
+             gpart
+             hdparm
+             procps
+             coreutils
+             gnused
+             gnugrep
+             mtools
+             xhost
+           ]
+           ++ finalAttrs.runtimeDeps
+         )
        }"
     )
   '';

@@ -11,6 +11,7 @@
   fetchFromGitHub,
 
   # build-system
+  apache-tvm-ffi,
   setuptools,
 
   # nativeBuildInputs
@@ -22,26 +23,29 @@
   click,
   einops,
   numpy,
-  pynvml,
+  nvidia-ml-py,
   tabulate,
   torch,
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flashinfer";
-  version = "0.3.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-e9PfLfU0DdoLKlXiHylCbGd125c7Iw9y4NDIOAP0xHs=";
+    hash = "sha256-Hq3oTeEJHRvXwThI8vc06E3Ot/FnPP0sZUfze3ISa2o=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    apache-tvm-ffi
+    setuptools
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -77,16 +81,17 @@ buildPythonPackage rec {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
   pythonRemoveDeps = [
     "nvidia-cudnn-frontend"
+    "nvidia-cutlass-dsl"
   ];
   dependencies = [
     click
     einops
     numpy
-    pynvml
+    nvidia-ml-py
     tabulate
     torch
     tqdm
@@ -104,6 +109,9 @@ buildPythonPackage rec {
       scenarios.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ breakds ];
+    maintainers = with lib.maintainers; [
+      breakds
+      daniel-fahey
+    ];
   };
-}
+})

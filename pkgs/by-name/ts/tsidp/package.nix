@@ -2,19 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "tsidp";
-  version = "0.0.4";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tsidp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u6dQORtB4eNEFLlouuFV5oxedSN1fZ31YkZavfU1F0U=";
+    hash = "sha256-J85JXK7votjNzXh9qiu9YtafVh6s6SRjxO5y7jrh/tE=";
   };
 
-  vendorHash = "sha256-obtcJTg7V4ij3fGVmZMD7QQwKJX6K5PPslpM1XKCk9Q=";
+  vendorHash = "sha256-CFiGRKlSCoPUpH63NiYBGvTUZI/Dxqkh7OsiExsNcEk=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/tailscale/tsidp";

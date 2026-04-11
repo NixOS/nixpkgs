@@ -6,10 +6,10 @@
   makeWrapper,
   unzip,
   libGL,
-  libICE,
-  libSM,
-  libX11,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxrandr,
   zlib,
   alsa-lib,
 }:
@@ -33,10 +33,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libGL
-    libICE
-    libSM
-    libX11
-    libXrandr
+    libice
+    libsm
+    libx11
+    libxrandr
     stdenv.cc.cc
     zlib
   ];
@@ -60,11 +60,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free/libre soft-body physics simulator mainly targeted at simulating vehicle physics";
     homepage = "https://www.rigsofrods.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       raskin
       wegank
     ];

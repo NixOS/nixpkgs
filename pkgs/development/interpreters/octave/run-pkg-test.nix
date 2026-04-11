@@ -1,6 +1,8 @@
 {
   octave,
   runCommand,
+  nativeOctavePkgTestInputs,
+  octavePkgTestEnv,
 }:
 package:
 
@@ -8,7 +10,10 @@ runCommand "${package.name}-pkg-test"
   {
     nativeBuildInputs = [
       (octave.withPackages (os: [ package ]))
-    ];
+    ]
+    ++ nativeOctavePkgTestInputs;
+
+    env = octavePkgTestEnv;
   }
   ''
     { octave-cli --eval 'pkg test ${package.pname}' || touch FAILED_ERRCODE; } \

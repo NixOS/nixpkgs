@@ -20,19 +20,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "man"
+    "doc"
   ];
 
   strictDeps = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
     # Source files
     mkdir -p $out/share/zinit
-    install -m0644 zinit{,-side,-install,-autoload}.zsh _zinit $out/share/zinit
+    install -m0644 zinit{,-side,-install,-autoload,-additional}.zsh _zinit $out/share/zinit
     install -m0755 share/git-process-output.zsh $out/share/zinit
+    install -m0644 share/rpm2cpio.zsh $out/share/zinit
 
     # Autocompletion
     installShellCompletion --zsh _zinit
@@ -40,6 +44,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Manpage
     mkdir -p ${placeholder "man"}/share/man/man{1..9}
     installManPage doc/zinit.1
+
+    mkdir -p $doc/share/doc/zinit
+    install -m0644 doc/zsdoc/*.adoc $doc/share/doc/zinit
+    install -m0644 doc/HACKING.md $doc/share/doc/zinit
 
     runHook postInstall
   '';
@@ -51,8 +59,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail "ZINIT[MAN_DIR]:=\''${ZPFX}/man" "ZINIT[MAN_DIR]:=${placeholder "man"}/share/man"
   '';
 
-  #TODO: output doc through zshelldoc
-
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -60,11 +66,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
+    changelog = "https://github.com/zdharma-continuum/zinit/blob/${finalAttrs.src.rev}/doc/CHANGELOG.md";
     license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       pasqui23
       sei40kr
       moraxyc
+      kaynetik
     ];
   };
 })

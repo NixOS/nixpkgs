@@ -1,8 +1,6 @@
 {
   lib,
   clangStdenv,
-  buildPackages,
-  runCommand,
   fetchurl,
   perl,
   python3,
@@ -23,14 +21,15 @@
   wayland-protocols,
   wayland-scanner,
   libwebp,
-  enchant2,
-  xorg,
+  enchant,
+  libx11,
   libxkbcommon,
   libavif,
   libepoxy,
   libjxl,
   at-spi2-core,
   cairo,
+  expat,
   libxml2,
   libsoup_3,
   libsecret,
@@ -39,7 +38,7 @@
   hyphen,
   icu,
   libsysprof-capture,
-  libpthreadstubs,
+  libpthread-stubs,
   nettle,
   libtasn1,
   p11-kit,
@@ -52,6 +51,7 @@
   libintl,
   lcms2,
   libmanette,
+  librice,
   geoclue2,
   flite,
   fontconfig,
@@ -61,11 +61,10 @@
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
-  woff2,
   bubblewrap,
   libseccomp,
   libbacktrace,
-  systemd,
+  systemdLibs,
   xdg-dbus-proxy,
   replaceVars,
   glib,
@@ -74,7 +73,7 @@
   enableGeoLocation ? true,
   enableExperimental ? false,
   withLibsecret ? true,
-  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
   fetchpatch,
 }:
@@ -86,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.1";
+  version = "2.52.1";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M+kS7m4820uYA3FfUGhq+Fpgr0fxz3KmrMai2xuz2f4=";
+    hash = "sha256-I459UyBbFABK3X7rQpPJTW+/cJez7+987lUZ5cEhqQQ=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -117,6 +116,14 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
+    })
+
+    # Fix webkitgtk_4_1 build
+    # WebKitDOMDOMWindow.cpp:1085:10: error: variable has incomplete type 'void'
+    # https://bugs.webkit.org/show_bug.cgi?id=310915
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/40c315ca7b3ad6ae5c98d72a6927b3a75b43cb46.patch";
+      hash = "sha256-xGPi5p2XhDxpd4NtZMrd1JbHvV2fey6V3eH0fgy6ifY=";
     })
   ];
 
@@ -143,8 +150,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     cairo # required even when using skia
-    enchant2
+    enchant
+    expat
     flite
+    freetype
     libavif
     libepoxy
     libjxl
@@ -162,7 +171,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
     libsysprof-capture
     libtasn1
     libwebp
@@ -173,12 +182,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     nettle
     p11-kit
     sqlite
-    woff2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
-    freetype
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
@@ -188,10 +195,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals enableGeoLocation [
     geoclue2
@@ -199,6 +206,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    librice
     # For ENABLE_WEBXR
     openxr-loader
   ]
@@ -221,7 +229,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]
@@ -260,18 +267,26 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
-    pkgConfigModules = [
-      "javascriptcoregtk-${abiVersion}"
-      "webkit2gtk-${abiVersion}"
-      "webkit2gtk-web-extension-${abiVersion}"
-    ];
-    platforms = platforms.linux ++ platforms.darwin;
-    teams = [ teams.gnome ];
+    license = lib.licenses.bsd2;
+    pkgConfigModules =
+      if lib.versionAtLeast abiVersion "6.0" then
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkitgtk-${abiVersion}"
+          "webkitgtk-web-process-extension-${abiVersion}"
+        ]
+      else
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkit2gtk-${abiVersion}"
+          "webkit2gtk-web-extension-${abiVersion}"
+        ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

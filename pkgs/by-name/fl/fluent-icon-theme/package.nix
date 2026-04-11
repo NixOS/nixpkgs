@@ -70,11 +70,11 @@ lib.checkListOfEnum "${pname}: available color variants"
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Fluent icon theme for linux desktops";
       homepage = "https://github.com/vinceliuice/Fluent-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ icy-thought ];
     };
   }

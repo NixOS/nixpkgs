@@ -9,19 +9,19 @@
 let
   codeParserBindings = callPackage ./code-parser.nix { };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.9.4";
+  version = "5.14.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
-    rev = "v${version}";
-    hash = "sha256-Vj3QqskgrQIMF9mNY8WzvHL0KCU9Ebr3eDm4mUwQJL0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yYl2cSPY5hn1GSda5ioMD3rEectNMtYGstVpz73pi3Y=";
   };
 
-  vendorHash = "sha256-nmgRQwjf6F7IkED0S7Q03T6Wad5sEmYLbBHLyA33WjU=";
+  vendorHash = "sha256-yeVEQEXHGAkdkfcnjok8iOvVRxucObVAxhuACmyFDJw=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
@@ -31,15 +31,33 @@ buildGoModule rec {
     CGO_CFLAGS = "-I${codeParserBindings}/include";
   };
 
+  checkFlags =
+    let
+      # Skip tests that require an elasticsearch instance
+      skippedTests = [
+        "TestBulkSizeTracking"
+        "TestProactiveFlushOnSizeLimit"
+        "TestRemoveBulkSizeTracking"
+        "TestDeleteBulkSizeTracking"
+        "TestMixedOperationsBulkSizeTracking"
+        "TestConcurrentOperationsThreadSafety"
+        "TestConcurrentFlushOperations"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   passthru = {
     inherit codeParserBindings;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Indexes Git repositories into Elasticsearch for GitLab";
     mainProgram = "gitlab-elasticsearch-indexer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yayayayaka ];
-    teams = [ teams.cyberus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+      yayayayaka
+    ];
   };
-}
+})

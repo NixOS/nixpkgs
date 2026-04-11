@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "msldapdump";
   version = "0-unstable-2023-06-12";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "dievus";
@@ -38,10 +38,10 @@ python3.pkgs.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "LDAP enumeration tool";
     homepage = "https://github.com/dievus/msLDAPDump";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

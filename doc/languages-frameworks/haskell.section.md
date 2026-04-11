@@ -260,6 +260,14 @@ the same package with the `previousIntermediates` argument to support
 incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
 more information. Defaults to `false`.
 
+`dontConvertCabalFileToUnix`
+: By default, `haskellPackages.mkDerivation` converts the `.cabal` file of a
+given package to Unix line endings.
+This is intended to work around
+[Hackage converting revised `.cabal` files to DOS line endings](https://github.com/haskell/hackage-server/issues/316)
+which frequently causes patches to stop applying.
+You can pass `true` to disable this behavior.
+
 `enableLibraryProfiling`
 : Whether to enable [profiling][profiling] for libraries contained in the
 package. Enabled by default if supported.
@@ -1249,8 +1257,8 @@ it does for the unstable branches.
 ### Why is topic X not covered in this section? Why is section Y missing? {#haskell-why-not-covered}
 
 We have been working on [moving the nixpkgs Haskell documentation back into the
-nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). Since this
-process has not been completed yet, you may find some topics missing here
+nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). <!-- krank:ignore-line -->
+Since this process has not been completed yet, you may find some topics missing here
 covered in the old [haskell4nix docs](https://haskell4nix.readthedocs.io/).
 
 If you feel any important topic is not documented at all, feel free to comment

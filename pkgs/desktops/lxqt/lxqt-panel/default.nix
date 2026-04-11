@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -10,12 +9,12 @@
   kguiaddons,
   kwindowsystem,
   layer-shell-qt,
-  libXdamage,
-  libXdmcp,
-  libXtst,
+  libxdamage,
+  libxdmcp,
+  libxtst,
   libdbusmenu,
   liblxqt,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libqtxdg,
   libstatgrab,
@@ -36,24 +35,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel";
-  version = "2.2.2";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-panel";
     tag = finalAttrs.version;
-    hash = "sha256-ui+HD2igPiyIOgIKPbgfO4dnfm2rFP/R6oG2pH5g5VY=";
+    hash = "sha256-n/U2EgEZfh8mJWtEX+HByqHqtm9NqIXnURqUzSOcvns=";
   };
-
-  patches = [
-    # fix build against Qt >= 6.10 (https://github.com/lxqt/lxqt-panel/pull/2306)
-    # TODO: drop when upgrading beyond version 2.2.2
-    (fetchpatch {
-      name = "cmake-fix-build-with-Qt-6.10.patch";
-      url = "https://github.com/lxqt/lxqt-panel/commit/fce8cd99a1de0e637e8539c4d8ac68832a40fa6d.patch";
-      hash = "sha256-KXxV6SZqdpvZSn+zbBZ32Qs6XKfFXEej1F4qBt+MzxA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -69,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     kguiaddons
     kwindowsystem
     layer-shell-qt
-    libXdamage
-    libXdmcp
-    libXtst
+    libxdamage
+    libxdmcp
+    libxtst
     libdbusmenu
     liblxqt
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libqtxdg
     libstatgrab

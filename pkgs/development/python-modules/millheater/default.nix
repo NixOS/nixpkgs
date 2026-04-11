@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
     tag = version;
-    hash = "sha256-s2uufn4G3yTDLd0v72KAL8AuZNSBYwQRkAX8UKXcex4=";
+    hash = "sha256-7Jqk5WarCA/YBpmFuF4/dbWpQHtKKRH8hYRT2FXn2n8=";
   };
 
   build-system = [ setuptools ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mill" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Mill heater devices";
     homepage = "https://github.com/Danielhiversen/pymill";
     changelog = "https://github.com/Danielhiversen/pymill/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

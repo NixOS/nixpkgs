@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "8";
+          patch = "12";
           suffix = "";
         };
-        hash = "sha256-uZEHMFJrKYKZtGs1WVztkFVyLfYMBq1jAfak4scoolI=";
+        hash = "sha256-KoTNMd2Njqiq/3XeZvwbSwEn3VeZqlCmSumjE4hbRZM=";
       };
     };
 
@@ -42,27 +42,15 @@
       inherit passthruFun;
     };
 
-    python310 = callPackage ./cpython {
-      self = __splicedPackages.python310;
-      sourceVersion = {
-        major = "3";
-        minor = "10";
-        patch = "19";
-        suffix = "";
-      };
-      hash = "sha256-yPSlllciAdgd19+R9w4XfhmnDx1ImWi1S1+78pqXwHY=";
-      inherit passthruFun;
-    };
-
     python311 = callPackage ./cpython {
       self = __splicedPackages.python311;
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "14";
+        patch = "15";
         suffix = "";
       };
-      hash = "sha256-jT7Y7FyIwclfXlWGEqclRQ0kUoE92tXlj9saU7Egm3g=";
+      hash = "sha256-JyF53dmi5BoPyOQuM9+9ygs3EapavzctPy1RVD0JtiU=";
       inherit passthruFun;
     };
 
@@ -71,10 +59,10 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "11";
+        patch = "13";
         suffix = "";
       };
-      hash = "sha256-wwuyS38emhmxG1WlRkNPdOc5u0wnGj46gP9DgNSfets=";
+      hash = "sha256-wIvGWoGXHB3VeDGCgmUDNpRmx+ZzdNFkZRmt8FIHtoQ=";
       inherit passthruFun;
     };
 
@@ -91,10 +79,10 @@
       sourceVersion = {
         major = "3";
         minor = "14";
-        patch = "0";
+        patch = "3";
         suffix = "";
       };
-      hash = "sha256-Ipna5ULTlc44g6ygDTyRAwfNaOCy9zNgmMjnt+7p8+k=";
+      hash = "sha256-qX1VSemtgf4XFZ7QLGh3StXSZscvjZoLWpw3H+hdkCs=";
       inherit passthruFun;
     };
 
@@ -104,9 +92,9 @@
         major = "3";
         minor = "15";
         patch = "0";
-        suffix = "a1";
+        suffix = "a7";
       };
-      hash = "sha256-MZSTnUiO6u79z5kNNVQtmtHOeIeJxOIwWiBg63BY5aQ=";
+      hash = "sha256-j1kMQot/DUBt+Si4Vzfno6+ijt3U0UGUEOqAloftHqc=";
       inherit passthruFun;
     };
 

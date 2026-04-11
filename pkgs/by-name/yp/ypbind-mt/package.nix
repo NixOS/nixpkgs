@@ -11,12 +11,12 @@
   systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ypbind-mt";
   version = "2.7.2";
 
   src = fetchurl {
-    url = "https://github.com/thkukuk/ypbind-mt/releases/download/v${version}/ypbind-mt-${version}.tar.xz";
+    url = "https://github.com/thkukuk/ypbind-mt/releases/download/v${finalAttrs.version}/ypbind-mt-${finalAttrs.version}.tar.xz";
     hash = "sha256-Bk8vGFZzxUk9+D9kALeZ86NZ3lYRi2ujfEMnER8vzYs=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ BarrOff ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     cp roapi-http $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create full-fledged APIs for static datasets without writing a single line of code";
     homepage = "https://roapi.github.io/docs/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.darwin;
   };
 }

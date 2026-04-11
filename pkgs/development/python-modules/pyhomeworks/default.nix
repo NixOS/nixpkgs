@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pyhomeworks";
   version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomeworks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Lutron Homeworks Series 4/8";
     homepage = "https://github.com/dubnom/pyhomeworks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

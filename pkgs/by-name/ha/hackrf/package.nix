@@ -9,14 +9,14 @@
   fftwSinglePrec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hackrf";
   version = "2024.02.1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "hackrf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b3nGrk2P6ZLYBSCSD7c0aIApCh3ZoVDcFftybqm4vx0=";
   };
 
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
       --replace "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source SDR platform";
     homepage = "https://greatscottgadgets.com/hackrf/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ sjmackenzie ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ sjmackenzie ];
   };
-}
+})

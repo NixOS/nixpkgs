@@ -15,12 +15,11 @@
   intltool,
   libayatana-common,
   libgudev,
-  libqtdbusmock,
-  libqtdbustest,
   librda,
   libsForQt5,
   lomiri,
-  mate,
+  marco,
+  mate-settings-daemon,
   pkg-config,
   properties-cpp,
   python3,
@@ -78,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-schemas # lomiri schema
   ])
   ++ [
-    mate.marco # marco schema
-    mate.mate-settings-daemon # mate mouse schema
+    marco # marco schema
+    mate-settings-daemon # mate mouse schema
   ];
 
   nativeCheckInputs = [
@@ -90,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     gtest
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     properties-cpp
   ];
 

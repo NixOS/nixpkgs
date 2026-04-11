@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-multipart";
-  version = "0.0.20";
+  version = "0.0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
     tag = version;
-    hash = "sha256-y8wLGRvc7xSmkSyK77Tl5V6mMneS+dtmqBLZOhvmRSY=";
+    hash = "sha256-fvqXqQwU0JC4Pkvho5WGe/itlxttk1lKL7R5Vt0oKpA=";
   };
 
   build-system = [ hatchling ];
@@ -47,11 +47,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Kludex/python-multipart/blob/${src.tag}/CHANGELOG.md";
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/Kludex/python-multipart";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

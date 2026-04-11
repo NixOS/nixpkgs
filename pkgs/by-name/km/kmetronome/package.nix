@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kmetronome.sourceforge.io/";
     description = "ALSA MIDI metronome with Qt interface";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "kmetronome";
   };

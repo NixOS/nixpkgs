@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Python Library to access a Midea CCM15 data converter";
     homepage = "https://github.com/ocalvo/py-ccm15";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

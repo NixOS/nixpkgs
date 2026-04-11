@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgweather/${lib.versions.majorMinor version}/libgweather-${version}.tar.xz";
     hash = "sha256-cBdnd1PN99H9w1Xkv82x66g2l5Oo3yTSQUJ6k5y/QoM=";
   };
 
@@ -119,11 +119,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to access weather information from online services for numerous locations";
     homepage = "https://gitlab.gnome.org/GNOME/libgweather";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

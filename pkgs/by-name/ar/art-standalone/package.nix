@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";
-  version = "0-unstable-2025-09-03";
+  version = "0-unstable-2025-10-09";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "art_standalone";
-    rev = "10d60509c9073791f9eca1d2b8443d40a40edc05";
-    hash = "sha256-Xg6s58jymma1sNb6P7pwWFpYq1O6GoynrgPeLZRD+rI=";
+    rev = "e78bf68917bcaaf58fef3960cd88793b3b7f39cc";
+    hash = "sha256-0r6Ap41AMSHhZpMJ5QoWiGGcHPj35et4kiA20xs9uLs=";
   };
 
   patches = [
@@ -65,19 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     lz4
     openssl
-    (wolfssl.overrideAttrs (oldAttrs: {
-      configureFlags = oldAttrs.configureFlags ++ [
-        "--enable-jni"
-      ];
-      # Disable failing tests when jni enabled
-      postPatch = oldAttrs.postPatch or "" + ''
-        sed -i '/TEST_DECL(test_wolfSSL_Tls13_ECH)/d;
-                /TEST_DECL(test_wolfSSL_Tls13_ECH_HRR)/d;
-                /TEST_DECL(test_TLSX_CA_NAMES_bad_extension)/d' tests/api.c
-        sed -i '/quic/d' tests/include.am
-        sed -i '300,305d' tests/unit.c
-      '';
-    }))
+    (wolfssl.override { enableJni = true; })
     xz
     zlib
   ];

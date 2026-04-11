@@ -3,16 +3,28 @@
   appimageTools,
   fetchurl,
   gitUpdater,
+  stdenv,
 }:
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.4.6";
+  version = "6.4.11";
 
-  src = fetchurl {
-    url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-Z36jWYiWP5PdiDHazXnZw9PbFC7sB2DV9c29YEjNDEc=";
+  sources = {
+    "aarch64-linux" = fetchurl {
+      url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-aarch64.AppImage";
+      hash = "sha256-CvHwYKbieRYbBKUCoKAa11rTy5Opdfb7FKS4poantKs=";
+    };
+    "x86_64-linux" = fetchurl {
+      url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
+      hash = "sha256-0b88H6eMYO+EgRnWzd9x/MUCr7CE/AHDZnKILQJS1DQ=";
+    };
   };
+
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "simplex-chat-desktop: Unsupported system: ${system}";
+
+  src = sources.${system} or throwSystem;
 
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -46,6 +58,9 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ terryg ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

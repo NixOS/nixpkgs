@@ -24,7 +24,7 @@
   withDrm ? stdenv.hostPlatform.isLinux,
   libdrm,
   withVidmode ? stdenv.hostPlatform.isLinux,
-  libXxf86vm,
+  libxxf86vm,
 
   withGeolocation ? true,
   withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin,
@@ -88,7 +88,7 @@ let
       ++ lib.optional withRandr libxcb
       ++ lib.optional withGeoclue geoclue
       ++ lib.optional withDrm libdrm
-      ++ lib.optional withVidmode libXxf86vm
+      ++ lib.optional withVidmode libxxf86vm
       ++ lib.optional withAppIndicator (
         if (pname != "gammastep") then libappindicator else libayatana-appindicator
       );
@@ -144,7 +144,7 @@ rec {
       sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Screen color temperature manager";
       longDescription = ''
         Redshift adjusts the color temperature according to the position
@@ -154,9 +154,9 @@ rec {
         your eyes to slowly adapt. At night the color temperature should
         be set to match the lamps in your room.
       '';
-      license = licenses.gpl3Plus;
+      license = lib.licenses.gpl3Plus;
       homepage = "http://jonls.dk/redshift";
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "redshift";
       maintainers = [ ];
     };
@@ -174,7 +174,6 @@ rec {
     };
 
     meta = redshift.meta // {
-      name = "${pname}-${version}";
       longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";

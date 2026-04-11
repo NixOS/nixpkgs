@@ -8,7 +8,6 @@
   async-timeout,
   kasa-crypt,
   orjson,
-  pythonOlder,
   requests,
   websocket-client,
   websockets,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.13.8";
+  version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
     tag = version;
-    hash = "sha256-hIE7wjKP+JcXQZ1lGbKCaKKK2ZlCF5BbJu3H7gqrsKU=";
+    hash = "sha256-he/Ti15H2JBngvNCBSwJQWa0LBIBFa+x38TW9g2CQ44=";
   };
 
   postPatch = ''
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sense_energy" ];
 
-  meta = with lib; {
+  meta = {
     description = "API for the Sense Energy Monitor";
     homepage = "https://github.com/scottbonline/sense";
     changelog = "https://github.com/scottbonline/sense/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

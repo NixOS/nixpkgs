@@ -106,11 +106,11 @@ let
       with pkgs;
       [
         libdrm
-        xorg.libXext
-        xorg.libX11
-        xorg.libXv
-        xorg.libXrandr
-        xorg.libxcb
+        libxext
+        libx11
+        libxv
+        libxrandr
+        libxcb
         zlib
         stdenv.cc.cc
         wayland
@@ -143,7 +143,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "nvidia-${if useFabricmanager then "dc" else "x11"}-${version}${nameSuffix}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}${nameSuffix}";
+  pname = "nvidia-${if useFabricmanager then "dc" else "x11"}";
 
   builder = ./builder.sh;
 
@@ -327,18 +328,18 @@ stdenv.mkDerivation (finalAttrs: {
       inherit lib32;
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "${
       if useFabricmanager then "Data Center" else "X.org"
     } driver and kernel module for NVIDIA cards";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     platforms = [
       "x86_64-linux"
     ]
     ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kiskae
       edwtjo
     ];

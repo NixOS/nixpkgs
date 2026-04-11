@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "librespot-ma";
-  version = "0.6.0-unstable-2025-08-10";
+  version = "0.8.0-unstable-2025-12-05";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "librespot";
-    rev = "accecb60a16334013c0c99a5ded553794ee871b7";
-    hash = "sha256-vPiI8llXB6+ahX+iad/Ut81D3iZcTSVmYGDXXwApk/w=";
+    rev = "1d68d603027d89d1a60bf5a15f180e28382e2cfc";
+    hash = "sha256-quKAiXqTwf6cgKi9qqksQRaGqV9UZjerHQZfqDVHCIs=";
   };
 
-  cargoHash = "sha256-Lujz2revTAok9B0hzdl8NVQ5XMRY9ACJzoQHIkIgKMg=";
+  cargoHash = "sha256-Kf3w6tD/MQaXXegtiCkFbUcYwr4OMw6ipLxNLxJ2NTQ=";
 
   nativeBuildInputs = [
     pkg-config

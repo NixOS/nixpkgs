@@ -14,17 +14,14 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "aiosonic";
-  version = "0.26.0";
+  version = "0.30.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -32,7 +29,7 @@ buildPythonPackage rec {
     owner = "sonic182";
     repo = "aiosonic";
     tag = version;
-    hash = "sha256-sYd7qjOiRENO6hPhJ01RLsr+2RtTITrXjcT6/ZaGfAU=";
+    hash = "sha256-VqtPl/dZmxjB7z9AjwBfmYmcxFae2NhWEnsw4l9+IYg=";
   };
 
   postPatch = ''
@@ -118,6 +115,11 @@ buildPythonPackage rec {
       # "FAILED tests/test_proxy.py::test_proxy_request - Exception: port 8865 never got active"
       "test_proxy_request"
     ];
+
+  disabledTestPaths = [
+    # tests hang
+    "tests/test_sse.py"
+  ];
 
   meta = {
     changelog = "https://github.com/sonic182/aiosonic/blob/${src.tag}/CHANGELOG.md";

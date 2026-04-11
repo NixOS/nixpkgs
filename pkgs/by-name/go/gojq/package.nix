@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gojq";
-  version = "0.12.17";
+  version = "0.12.19";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = "gojq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zJkeghN3btF/fZZeuClHV1ndB/2tTTMljEukMYe7UWU=";
+    hash = "sha256-egaBNHKKzwDwaUN4GT+Xvt11Nz6ojNMSIrXbcEisyI4=";
   };
 
-  vendorHash = "sha256-ZC0byawZLBwId5GcAgHXRdEOMUSAv4wDNHFHLrbhB+I=";
+  vendorHash = "sha256-6UnX9YHh4RGcIFfqaJLxDPxuGQ6KO4UIOryXsoJUjFs=";
 
   ldflags = [
     "-s"
@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   postInstallCheck = ''
     $out/bin/gojq --help > /dev/null
     $out/bin/gojq --raw-output '.values[1]' <<< '{"values":["hello","world"]}' | grep '^world$' > /dev/null

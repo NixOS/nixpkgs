@@ -6,12 +6,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "popt";
   version = "1.19";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${version}.tar.gz";
+    url = "https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
   };
 
@@ -41,13 +41,24 @@ stdenv.mkDerivation rec {
       })
     ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
+  configureFlags = [
+    # Otherwise, it configures sysconfdir as $out/etc.
+    "--sysconfdir=/etc"
+  ];
+
   doCheck = false; # fails
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rpm-software-management/popt";
     description = "Command line option parsing library";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})
