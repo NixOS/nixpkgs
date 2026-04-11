@@ -127,6 +127,49 @@ let
         b = stdenv.mkDerivation args;
       };
 
+    # Fixed-output derivation: exercise the `outputHash` /
+    # `outputHashAlgo` / `outputHashMode` path through both entry
+    # points and assert drvPath parity. This is the shape that
+    # fetchurl and friends produce, and it's the most commonly used
+    # "non-standard" mkDerivation flavour.
+    fixedOutput =
+      let
+        args = {
+          name = "compat-fo";
+          inherit src;
+          outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          outputHashAlgo = "sha256";
+          outputHashMode = "recursive";
+          buildCommand = "cp -r $src $out";
+        };
+      in
+      {
+        a = mkDerivationAsPackage stdenv args;
+        b = stdenv.mkDerivation args;
+      };
+
+    # Multi-output derivation: exercise `outputs = [ ... ]` through
+    # both entry points. The shim's per-output wrapping (via
+    # `layers.stdenvMkDerivation`'s `lib.genAttrs` over
+    # `this.drvAttrs.outputs`) must produce attrsets indistinguishable
+    # from what `stdenv.mkDerivation` yields for each output, including
+    # matching `outputName` / `outPath` / `drvPath`.
+    multiOutput =
+      let
+        args = {
+          pname = "compat-mo";
+          version = "1.0";
+          inherit src;
+          outputs = [ "out" "dev" "man" ];
+          dontUnpack = true;
+          installPhase = "mkdir -p $out $dev $man";
+        };
+      in
+      {
+        a = mkDerivationAsPackage stdenv args;
+        b = stdenv.mkDerivation args;
+      };
+
     # `.overrideAttrs` must accept all three legacy shapes:
     #   - plain attrset
     #   - `prev: { ... }` (one arg)
@@ -282,6 +325,32 @@ let
     test-structuredAttrs-drvPath = {
       expr = pairs.structuredAttrs.a.drvPath;
       expected = pairs.structuredAttrs.b.drvPath;
+    };
+
+    test-fixedOutput-drvPath = {
+      expr = pairs.fixedOutput.a.drvPath;
+      expected = pairs.fixedOutput.b.drvPath;
+    };
+
+    test-multiOutput-drvPath = {
+      expr = pairs.multiOutput.a.drvPath;
+      expected = pairs.multiOutput.b.drvPath;
+    };
+    test-multiOutput-outputs = {
+      expr = pairs.multiOutput.a.outputs;
+      expected = pairs.multiOutput.b.outputs;
+    };
+    test-multiOutput-dev-outputName = {
+      expr = pairs.multiOutput.a.dev.outputName;
+      expected = "dev";
+    };
+    test-multiOutput-dev-outPath-matches-legacy = {
+      expr = pairs.multiOutput.a.dev.outPath;
+      expected = pairs.multiOutput.b.dev.outPath;
+    };
+    test-multiOutput-man-drvPath-matches-legacy = {
+      expr = pairs.multiOutput.a.man.drvPath;
+      expected = pairs.multiOutput.b.man.drvPath;
     };
 
     test-overrideAttrs-plain-drvPath = {
