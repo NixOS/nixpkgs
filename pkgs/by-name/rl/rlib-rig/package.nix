@@ -21,11 +21,14 @@ rustPlatform.buildRustPackage rec {
   # Testing requires additional dependencies not installable with Nix alone
   doCheck = false;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "The R Installation Manager";
     homepage = "https://github.com/r-lib/rig";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ giang ];
     mainProgram = "rig";
+    platforms = lib.platforms.unix;
   };
 }
