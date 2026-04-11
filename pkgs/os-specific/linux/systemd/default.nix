@@ -38,7 +38,6 @@
   libgpg-error,
   libidn2,
   curl,
-  gnupg,
   zlib,
   xz,
   zstd,
@@ -599,13 +598,6 @@ stdenv.mkDerivation (finalAttrs: {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ]
-      ++ lib.optionals withImportd [
-        {
-          search = "\"gpg\"";
-          replacement = "\\\"${gnupg}/bin/gpg\\\"";
-          where = [ "src/import/pull-common.c" ];
         }
       ]
       ++ lib.optionals withKmod [
