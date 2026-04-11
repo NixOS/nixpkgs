@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "socid-extractor";
   version = "0.0.28";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = "socid-extractor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eLdJw2teMG/DlG8F8p3nm+L2+iY1zD2QbNHjWAyjtPY=";
   };
 
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to extract details from personal pages";
     homepage = "https://github.com/soxoj/socid-extractor";
-    changelog = "https://github.com/soxoj/socid-extractor/blob/v${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/soxoj/socid-extractor/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "socid_extractor";
   };
-}
+})
