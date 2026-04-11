@@ -6,14 +6,14 @@
   stdenv,
   writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lazycommit";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "m7medvision";
     repo = "lazycommit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tS5jWucT4/1YRAXySUnElEkjaF2+Bl7O3taSzZf2NF0=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^TestSetEndpoint_Validation$";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.buildSource=nix"
   ];
 
@@ -41,11 +41,11 @@ buildGoModule rec {
   meta = {
     description = "Simple cli for generating git commits";
     homepage = "https://github.com/m7medvision/lazycommit";
-    changelog = "https://github.com/m7medvision/lazycommit/releases/tag/v${version}";
+    changelog = "https://github.com/m7medvision/lazycommit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       m7medvision
     ];
     mainProgram = "lazycommit";
   };
-}
+})
