@@ -28,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontUnpack = true;
   dontBuild = true;
 
+  # The sysroot contains symlinks that point to paths only valid on the
+  # target device (e.g. /var/lock -> /run/lock), which is expected for a
+  # cross-compilation toolchain.
+  dontCheckForBrokenSymlinks = true;
+
   installPhase = ''
     mkdir -p $out
     ENVCLEANED=1 $src -y -d $out
