@@ -15147,6 +15147,8 @@ self: super: with self; {
 
   pystatgrab = callPackage ../development/python-modules/pystatgrab { };
 
+  pysteamauth2 = callPackage ../development/python-modules/pysteamauth2 { };
+
   pystemd = callPackage ../development/python-modules/pystemd { inherit (pkgs) systemd; };
 
   pystemmer = callPackage ../development/python-modules/pystemmer { };
