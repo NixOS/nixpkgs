@@ -1,8 +1,7 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3 prefetch-yarn-deps nix-prefetch-git nix-prefetch
+#! nix-shell -i python3 -p python3 nix-prefetch-git nix-prefetch
 
 from pathlib import Path
-from shutil import copyfile
 from urllib.request import Request, urlopen
 import json
 import os
@@ -34,12 +33,29 @@ def prefetch_github(rev: str):
 
     return json.loads(proc)
 
-def prefetch_yarn(lock_file: str):
-    print(f"Prefetching yarn deps")
+def prefetch_pnpm():
+    print("Prefetching pnpm deps")
 
-    hash = run_external(["prefetch-yarn-deps", lock_file])
+    nixpkgs_path = Path(__file__).parent / "../../../../"
+    output = subprocess.run(["nix-build", "-A", "stash"], text=True, cwd=nixpkgs_path, capture_output=True)
 
-    return run_external(["nix", "hash", "convert", "--hash-algo", "sha256", hash])
+    # The line is of the form "    got:    sha256-xxx"
+    lines = [i.strip() for i in output.stderr.splitlines()]
+    new_hash_lines = [i.strip("got:").strip() for i in lines if i.startswith("got:")]
+
+    if len(new_hash_lines) == 0:
+        if output.returncode != 0:
+            print("Error while fetching new hash with nix build")
+            print(output.stderr)
+        print("No hash change is needed")
+        return None
+
+    if len(new_hash_lines) > 1:
+        print(new_hash_lines)
+        raise Exception("Got an unexpected number of new hash lines:")
+
+    return new_hash_lines[0]
+
 
 def prefetch_go_modules(src: str, version: str):
     print(f"Prefetching go modules")
@@ -59,6 +75,9 @@ def prefetch_go_modules(src: str, version: str):
         expr
     ])
 
+def get_version_json():
+    with open(Path(__file__).parent / "version.json", 'r') as f:
+        return json.load(f)
 
 def save_version_json(version: dict[str, str]):
     print("Writing version.json")
@@ -67,16 +86,16 @@ def save_version_json(version: dict[str, str]):
         f.write("\n")
 
 if __name__ == "__main__":
+    version = get_version_json()
+
     release = get_latest_release_tag()
 
-    src = prefetch_github(release['name'])
+    src = prefetch_github(release["name"])
 
-    yarn_hash = prefetch_yarn(f"{src['path']}/ui/v2.5/yarn.lock")
+    version["version"] = release["name"][1:]
+    version["gitHash"] = release["commit"]["sha"][:8]
+    version["srcHash"] = src["hash"]
+    version["vendorHash"] = prefetch_go_modules(src["path"], release["name"][1:])
+    version["pnpmHash"] = prefetch_pnpm() or version["pnpmHash"] # If hash is unchanged, fall back to existing hash
 
-    save_version_json({
-        "version": release["name"][1:],
-        "gitHash": release["commit"]["sha"][:8],
-        "srcHash": src["hash"],
-        "yarnHash": yarn_hash,
-        "vendorHash": prefetch_go_modules(src["path"], release["name"][1:])
-    })
+    save_version_json(version)

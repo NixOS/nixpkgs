@@ -1,15 +1,15 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
+  pnpm_10,
+  pnpmConfigHook,
   lib,
   nixosTests,
   nodejs,
   stash,
   stdenv,
   testers,
-  yarnBuildHook,
-  yarnConfigHook,
 }:
 let
   inherit (lib.importJSON ./version.json)
@@ -17,10 +17,11 @@ let
     srcHash
     vendorHash
     version
-    yarnHash
+    pnpmHash
     ;
 
   pname = "stash";
+  pnpm = pnpm_10;
 in
 buildGoModule (
   finalAttrs:
@@ -30,14 +31,21 @@ buildGoModule (
       inherit (finalAttrs) version gitHash;
       src = "${finalAttrs.src}/ui/v2.5";
 
-      yarnOfflineCache = fetchYarnDeps {
-        yarnLock = "${final.src}/yarn.lock";
-        hash = finalAttrs.yarnHash;
+      pnpmDeps = fetchPnpmDeps {
+        inherit (finalAttrs)
+          pname
+          version
+          src
+          pnpmHash
+          ;
+        sourceRoot = "${finalAttrs.src.name}/ui/v2.5";
+        hash = "${finalAttrs.pnpmHash}";
+        fetcherVersion = 1;
       };
 
       nativeBuildInputs = [
-        yarnConfigHook
-        yarnBuildHook
+        pnpmConfigHook
+        pnpm
         # Needed for executing package.json scripts
         nodejs
       ];
@@ -56,8 +64,8 @@ buildGoModule (
         export VITE_APP_STASH_VERSION=v${finalAttrs.version}
         export VITE_APP_NOLEGACY=true
 
-        yarn --offline run gqlgen
-        yarn --offline build
+        npm run gqlgen
+        npm run build
 
         mv build $out
 
@@ -73,7 +81,7 @@ buildGoModule (
       pname
       version
       gitHash
-      yarnHash
+      pnpmHash
       vendorHash
       ;
 
