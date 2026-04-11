@@ -20,6 +20,7 @@ let
     concatMapStrings
     concatStringsSep
     elem
+    elemAt
     extendDerivation
     filter
     filterAttrs
@@ -46,8 +47,12 @@ let
     zipAttrsWith
     ;
 
-  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
-  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
+  inherit (import ../../build-support/lib/mk-derivation-extras.nix { inherit lib stdenv; })
+    makeCMakeFlags
+    makeMesonFlags
+    envWithMainProgram
+    validateEnv
+    ;
 
   /**
     This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
@@ -94,46 +99,51 @@ let
       # NOTE: the above documentation had to be duplicated in `lib/customisation.nix`: `makeOverridable`.
       overrideAttrs =
         f0:
-        makeDerivationExtensible (
-          final:
-          let
-            prev = rattrs final;
-            thisOverlay = lib.toExtension f0 final prev;
-            pos = builtins.unsafeGetAttrPos "version" thisOverlay;
-          in
-          lib.warnIf
+        let
+          extends' =
+            overlay: f:
             (
-              prev ? src
-              && thisOverlay ? version
-              && prev ? version
-              # We could check that the version is actually distinct, but that
-              # would probably just delay the inevitable, or preserve tech debt.
-              # && prev.version != thisOverlay.version
-              && !(thisOverlay ? src)
-              && !(thisOverlay.__intentionallyOverridingVersion or false)
-            )
-            ''
-              ${
-                args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-              } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                toString pos.line or "<unknown line>"
-              }:${toString pos.column or "<unknown column>"}.
+              final:
+              let
+                prev = f final;
+                thisOverlay = overlay final prev;
+                warnForBadVersionOverride = (
+                  prev ? src
+                  && thisOverlay ? version
+                  && prev ? version
+                  # We could check that the version is actually distinct, but that
+                  # would probably just delay the inevitable, or preserve tech debt.
+                  # && prev.version != thisOverlay.version
+                  && !(thisOverlay ? src)
+                  && !(thisOverlay.__intentionallyOverridingVersion or false)
+                );
+                pname = args.pname or "<unknown name>";
+                version = args.version or "<unknown version>";
+                pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+              in
+              lib.warnIf warnForBadVersionOverride ''
+                ${
+                  args.name or "${pname}-${version}"
+                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
-              This is most likely not what you want. In order to properly change the version of a package, override
-              both the `version` and `src` attributes:
+                This is most likely not what you want. In order to properly change the version of a package, override
+                both the `version` and `src` attributes:
 
-              hello.overrideAttrs (oldAttrs: rec {
-                version = "1.0.0";
-                src = pkgs.fetchurl {
-                  url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                  hash = "...";
-                };
-              })
+                hello.overrideAttrs (oldAttrs: rec {
+                  version = "1.0.0";
+                  src = pkgs.fetchurl {
+                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                    hash = "...";
+                  };
+                })
 
-              (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-            ''
-            (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
-        );
+                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+              '' (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+            );
+        in
+        makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
 
       finalPackage = mkDerivationSimple overrideAttrs args;
 
@@ -369,6 +379,17 @@ let
 
       ...
     }@attrs:
+
+    # Policy on acceptable hash types in nixpkgs
+    assert
+      attrs ? outputHash
+      -> (
+        let
+          algo = attrs.outputHashAlgo or (head (splitString "-" attrs.outputHash));
+        in
+        if algo == "md5" then throw "Rejected insecure ${algo} hash '${attrs.outputHash}'" else true
+      );
+
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
@@ -378,17 +399,13 @@ let
       separateDebugInfo' =
         let
           actualValue = separateDebugInfo && isLinux;
-        in
-        if
-          actualValue
-          && (
+          conflictingOption =
             attrs ? "disallowedReferences"
             || attrs ? "disallowedRequisites"
             || attrs ? "allowedRequisites"
-            || attrs ? "allowedReferences"
-          )
-          && !__structuredAttrs
-        then
+            || attrs ? "allowedReferences";
+        in
+        if actualValue && conflictingOption && !__structuredAttrs then
           throw "separateDebugInfo = true in ${
             attrs.pname or "mkDerivation argument"
           } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
@@ -397,7 +414,7 @@ let
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
-        (
+        builtins.length (
           depsBuildTarget
           ++ depsBuildTargetPropagated
           ++ depsHostHost
@@ -406,12 +423,12 @@ let
           ++ propagatedBuildInputs
           ++ depsTargetTarget
           ++ depsTargetTargetPropagated
-        ) == [ ];
+        ) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
       concretizeFlagImplications =
         flag: impliesFlags: list:
-        if elem flag list then (list ++ impliesFlags) else list;
+        if builtins.elem flag list then (list ++ impliesFlags) else list;
 
       hardeningDisable' = unique (
         pipe hardeningDisable [
@@ -424,12 +441,12 @@ let
         ]
       );
       enabledHardeningOptions =
-        if elem "all" hardeningDisable' then
+        if builtins.elem "all" hardeningDisable' then
           [ ]
         else
           subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
+      erroneousHardeningFlags = subtractLists (knownHardeningFlags ++ [ "pie" ]) (
         hardeningEnable ++ remove "all" hardeningDisable
       );
 
@@ -438,7 +455,7 @@ let
         positions: name: deps:
         imap1 (
           index: dep:
-          if dep == null || isDerivation dep || isString dep || builtins.isPath dep then
+          if dep == null || isDerivation dep || builtins.isString dep || builtins.isPath dep then
             dep
           else if isList dep then
             checkDependencyList' ([ index ] ++ positions) name dep
@@ -448,7 +465,7 @@ let
             }${name} for ${attrs.name or attrs.pname}"
         ) deps;
     in
-    if erroneousHardeningFlags != [ ] then
+    if builtins.length erroneousHardeningFlags != 0 then
       abort (
         "mkDerivation was called with unsupported hardening flags: "
         + lib.generators.toPretty { } {
@@ -475,58 +492,53 @@ let
 
         outputs = outputs';
 
-        buildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
-          checkDependencyList "depsBuildBuild" depsBuildBuild
-        );
-        buildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
-          checkDependencyList "nativeBuildInputs" nativeBuildInputs'
-        );
-        buildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
-          checkDependencyList "depsBuildTarget" depsBuildTarget
-        );
-        hostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
-          checkDependencyList "depsHostHost" depsHostHost
-        );
-        hostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
-          checkDependencyList "buildInputs" buildInputs'
-        );
-        targetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
-          checkDependencyList "depsTargetTarget" depsTargetTarget
-        );
-        allDependencies = concatLists [
-          buildBuildOutputs
-          buildHostOutputs
-          buildTargetOutputs
-          hostHostOutputs
-          hostTargetOutputs
-          targetTargetOutputs
+        dependencies = [
+          [
+            (map (drv: getDev drv.__spliced.buildBuild or drv) (
+              checkDependencyList "depsBuildBuild" depsBuildBuild
+            ))
+            (map (drv: getDev drv.__spliced.buildHost or drv) (
+              checkDependencyList "nativeBuildInputs" nativeBuildInputs'
+            ))
+            (map (drv: getDev drv.__spliced.buildTarget or drv) (
+              checkDependencyList "depsBuildTarget" depsBuildTarget
+            ))
+          ]
+          [
+            (map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+            (map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+          ]
+          [
+            (map (drv: getDev drv.__spliced.targetTarget or drv) (
+              checkDependencyList "depsTargetTarget" depsTargetTarget
+            ))
+          ]
         ];
-
-        propagatedBuildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
-          checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
-        );
-        propagatedBuildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
-          checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
-        );
-        propagatedBuildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
-          checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
-        );
-        propagatedHostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
-          checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
-        );
-        propagatedHostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
-          checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
-        );
-        propagatedTargetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
-          checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
-        );
-        allPropagatedDependencies = concatLists [
-          propagatedBuildBuildOutputs
-          propagatedBuildHostOutputs
-          propagatedBuildTargetOutputs
-          propagatedHostHostOutputs
-          propagatedHostTargetOutputs
-          propagatedTargetTargetOutputs
+        propagatedDependencies = [
+          [
+            (map (drv: getDev drv.__spliced.buildBuild or drv) (
+              checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
+            ))
+            (map (drv: getDev drv.__spliced.buildHost or drv) (
+              checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
+            ))
+            (map (drv: getDev drv.__spliced.buildTarget or drv) (
+              checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
+            ))
+          ]
+          [
+            (map (drv: getDev drv.__spliced.hostHost or drv) (
+              checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
+            ))
+            (map (drv: getDev drv.__spliced.hostTarget or drv) (
+              checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
+            ))
+          ]
+          [
+            (map (drv: getDev drv.__spliced.targetTarget or drv) (
+              checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
+            ))
+          ]
         ];
 
         derivationArg = removeAttrs attrs removedOrReplacedAttrNames // {
@@ -578,19 +590,19 @@ let
           __ignoreNulls = true;
           inherit __structuredAttrs strictDeps;
 
-          depsBuildBuild = buildBuildOutputs;
-          nativeBuildInputs = buildHostOutputs;
-          depsBuildTarget = buildTargetOutputs;
-          depsHostHost = hostHostOutputs;
-          buildInputs = hostTargetOutputs;
-          depsTargetTarget = targetTargetOutputs;
+          depsBuildBuild = elemAt (elemAt dependencies 0) 0;
+          nativeBuildInputs = elemAt (elemAt dependencies 0) 1;
+          depsBuildTarget = elemAt (elemAt dependencies 0) 2;
+          depsHostHost = elemAt (elemAt dependencies 1) 0;
+          buildInputs = elemAt (elemAt dependencies 1) 1;
+          depsTargetTarget = elemAt (elemAt dependencies 2) 0;
 
-          depsBuildBuildPropagated = propagatedBuildBuildOutputs;
-          propagatedNativeBuildInputs = propagatedBuildHostOutputs;
-          depsBuildTargetPropagated = propagatedBuildTargetOutputs;
-          depsHostHostPropagated = propagatedHostHostOutputs;
-          propagatedBuildInputs = propagatedHostTargetOutputs;
-          depsTargetTargetPropagated = propagatedTargetTargetOutputs;
+          depsBuildBuildPropagated = elemAt (elemAt propagatedDependencies 0) 0;
+          propagatedNativeBuildInputs = elemAt (elemAt propagatedDependencies 0) 1;
+          depsBuildTargetPropagated = elemAt (elemAt propagatedDependencies 0) 2;
+          depsHostHostPropagated = elemAt (elemAt propagatedDependencies 1) 0;
+          propagatedBuildInputs = elemAt (elemAt propagatedDependencies 1) 1;
+          depsTargetTargetPropagated = elemAt (elemAt propagatedDependencies 2) 0;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
@@ -629,7 +641,9 @@ let
             else
               null
           } =
-            concatStringsSep " " enabledHardeningOptions;
+            lib.warnIf ((builtins.elem "pie" hardeningEnable) || (builtins.elem "pie" hardeningDisable))
+              "The 'pie' hardening flag has been removed in favor of enabling PIE by default in compilers and should no longer be used. PIE can be disabled with the -no-pie compiler flag, but this is usually not necessary as most build systems pass this if needed. Usage of the 'pie' hardening flag will become an error in future."
+              (builtins.concatStringsSep " " enabledHardeningOptions);
 
           # TODO: remove platform condition
           # Enabling this check could be a breaking change as it requires to edit nix.conf
@@ -641,6 +655,8 @@ let
           ${if buildIsDarwin then "__darwinAllowLocalNetworking" else null} = __darwinAllowLocalNetworking;
           ${if buildIsDarwin then "__sandboxProfile" else null} =
             let
+              allDependencies = concatLists (concatLists dependencies);
+              allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
               computedSandboxProfile = concatMap (input: input.__propagatedSandboxProfile or [ ]) (
                 extraNativeBuildInputs ++ extraBuildInputs ++ allDependencies
               );
@@ -661,6 +677,7 @@ let
             concatStringsSep "\n" (filter (x: x != "") (unique profiles));
           ${if buildIsDarwin then "__propagatedSandboxProfile" else null} =
             let
+              allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
               computedPropagatedSandboxProfile = concatMap (
                 input: input.__propagatedSandboxProfile or [ ]
               ) allPropagatedDependencies;
@@ -668,6 +685,8 @@ let
             unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
           ${if buildIsDarwin then "__impureHostDeps" else null} =
             let
+              allDependencies = concatLists (concatLists dependencies);
+              allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
               computedImpureHostDeps = unique (
                 concatMap (input: input.__propagatedImpureHostDeps or [ ]) (
                   extraNativeBuildInputs ++ extraBuildInputs ++ allDependencies
@@ -690,6 +709,7 @@ let
             ];
           ${if buildIsDarwin then "__propagatedImpureHostDeps" else null} =
             let
+              allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
               computedPropagatedImpureHostDeps = unique (
                 concatMap (input: input.__propagatedImpureHostDeps or [ ]) allPropagatedDependencies
               );
@@ -699,7 +719,7 @@ let
           # -- Windows/Cygwin-specific attrs --
           ${if isWindows || isCygwin then "allowedImpureDLLs" else null} =
             allowedImpureDLLs
-            ++ optionals isCygwin [
+            ++ lib.optionals isCygwin [
               "KERNEL32.dll"
             ];
 
@@ -722,7 +742,7 @@ let
                 inherit name;
                 value =
                   let
-                    raw = zipAttrsWith (_: concatLists) [
+                    raw = zipAttrsWith (_: builtins.concatLists) [
                       attrsOutputChecksFiltered
                       (makeOutputChecks attrs.outputChecks.${name} or { })
                     ];
@@ -804,9 +824,7 @@ let
       );
 
     let
-      env' = env // {
-        ${if meta ? mainProgram then "NIX_MAIN_PROGRAM" else null} = meta.mainProgram;
-      };
+      env' = envWithMainProgram { inherit env meta; };
 
       derivationArg = makeDerivationArgument (
         removeAttrs attrs [
@@ -832,39 +850,26 @@ let
       };
       validity = checkMeta.assertValidity { inherit meta attrs; };
 
-      checkedEnv =
-        let
-          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
-          errors = lib.concatMapStringsSep "\n" (
-            name:
-            "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
-                lib.generators.toPretty { } derivationArg.${name}
-              }"
-          ) overlappingNames;
-        in
-        assert assertMsg (isAttrs env && !isDerivation env)
-          "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
-        assert assertMsg (overlappingNames == [ ])
-          "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
-        mapAttrs (
-          n: v:
-          assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-            "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
-          v
-        ) env';
+      checkedEnv = validateEnv {
+        inherit env;
+        overlaidEnv = env';
+        derivationArgs = derivationArg;
+      };
 
-      attrsToRemove = [
-        # Fixed-output derivations may not reference other paths, which means that
-        # for a fixed-output derivation, the corresponding inputDerivation should
-        # *not* be fixed-output. To achieve this we simply delete the attributes that
-        # would make it fixed-output.
+      # Fixed-output derivations may not reference other paths, which means that
+      # for a fixed-output derivation, the corresponding inputDerivation should
+      # *not* be fixed-output. To achieve this we simply delete the attributes that
+      # would make it fixed-output.
+      fixedOutputRelatedAttrs = [
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"
+      ];
 
-        # inputDerivation produces the inputs; not the outputs, so any
-        # restrictions on what used to be the outputs don't serve a purpose
-        # anymore.
+      # inputDerivation produces the inputs; not the outputs, so any
+      # restrictions on what used to be the outputs don't serve a purpose
+      # anymore.
+      outputCheckAttrs = [
         "allowedReferences"
         "allowedRequisites"
         "disallowedReferences"
@@ -882,10 +887,10 @@ let
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
         inputDerivation = derivation (
-          removeAttrs derivationArg attrsToRemove
+          removeAttrs derivationArg (fixedOutputRelatedAttrs ++ outputCheckAttrs)
           // {
             # Add a name in case the original drv didn't have one
-            name = "inputDerivation" + optionalString (derivationArg ? name) "-${derivationArg.name}";
+            name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
             # This always only has one output
             outputs = [ "out" ];
             # This doesn’t require any system features even if the original
