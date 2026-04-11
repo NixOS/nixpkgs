@@ -113,7 +113,7 @@ let
         mpl20
       ];
       maintainers = with lib.maintainers; [ siraben ];
-      platforms = with lib.platforms; unix ++ windows;
+      platforms = [ "x86_64-linux" ];
       mainProgram = "pike";
     };
   });
@@ -208,7 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
       mpl20
     ];
     maintainers = with lib.maintainers; [ siraben ];
-    platforms = with lib.platforms; unix ++ windows;
+    # Bootstrap binary is only available for x86_64-linux
+    platforms = [ "x86_64-linux" ];
     mainProgram = "pike";
   };
 })
