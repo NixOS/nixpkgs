@@ -82,10 +82,19 @@ security.tpm2 = {
     tctiEnvironment.interface = "tabrmd";
 }
 ```
+
+Or to use the Linux kernel resource manager:
+```
+security.tpm2 = {
+    enable = true;
+    pkcs11.enable = true;
+
+    tctiEnvironment.enable = true;
+}
+```
 `enable = true;` is required for any tpm functionality other than the raw character device and kernel resource manager to be available.
 
 `abrmd.enable = true;` causes the tpm2-abrmd program (the user-space resource manager) to run as a systemd service.
-Generally you want this because the user-space resource manager gets more frequent updates than the kernel-space RM, and there aren't any kernel RM features that are unavailable in the user-space RM.
 
 `pkcs11.enable = true;` makes the PKCS11 tool and libraries available in the system path.
 Generally you want this because it's unlikely to cause problems and it's required by one of the more common TPM use cases, which is protecting an ssh key using the TPM.
