@@ -21,13 +21,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AKwS088lP3dByKh3dQRW76+L6ouD8EmVms2qWIC5IiE=";
   };
 
-  buildInputs = [ libxkbcommon ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  buildInputs = [
+    libxkbcommon
+    check
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    check
   ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };

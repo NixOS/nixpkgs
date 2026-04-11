@@ -14,8 +14,6 @@ in
 {
   name = "initrd-luks-empty-passphrase";
 
-  _module.args.systemdStage1 = lib.mkDefault false;
-
   nodes.machine =
     { pkgs, ... }:
     {
@@ -31,9 +29,9 @@ in
       };
 
       boot.loader.systemd-boot.enable = true;
-      boot.initrd.systemd = lib.mkIf systemdStage1 {
-        enable = true;
-        emergencyAccess = true;
+      boot.initrd.systemd = {
+        enable = systemdStage1;
+        emergencyAccess = lib.mkIf systemdStage1 true;
       };
       environment.systemPackages = with pkgs; [ cryptsetup ];
 
