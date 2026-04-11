@@ -2865,18 +2865,6 @@ with pkgs;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
-  inherit
-    ({
-      limesuite = callPackage ../applications/radio/limesuite {
-      };
-      limesuiteWithGui = limesuite.override {
-        withGui = true;
-      };
-    })
-    limesuite
-    limesuiteWithGui
-    ;
-
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
