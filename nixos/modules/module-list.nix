@@ -1904,6 +1904,7 @@
   ./system/boot/loader/refind/refind.nix
   ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix
+  ./system/boot/lustrate.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
   ./system/boot/nix-store-veritysetup.nix
