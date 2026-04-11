@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatch-vcs,
@@ -9,6 +10,7 @@
 
   # dependencies
   anndata,
+  certifi,
   fast-array-utils,
   h5py,
   joblib,
@@ -28,8 +30,9 @@
   session-info2,
   statsmodels,
   tqdm,
-  typing-extensions,
   umap-learn,
+  # python<3.13 only:
+  typing-extensions,
 
   # optional-attrs
   # dask
@@ -60,14 +63,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-jpi3SyTaG5mxCqUNSM564MMIrNdz4LBYo9+dn5nYmeY=";
+    hash = "sha256-r8kicjCFyEKLxQtFYuZg0NKK7gRBoaLSSFGWqcQtBqM=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -86,6 +89,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     anndata
+    certifi
     fast-array-utils
     h5py
     joblib
@@ -105,11 +109,13 @@ buildPythonPackage (finalAttrs: {
     session-info2
     statsmodels
     tqdm
-    typing-extensions
     umap-learn
   ]
   ++ fast-array-utils.optional-dependencies.accel
-  ++ fast-array-utils.optional-dependencies.sparse;
+  ++ fast-array-utils.optional-dependencies.sparse
+  ++ lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
 
   optional-dependencies = {
     # commented attributes are due to some dependencies not being in Nixpkgs

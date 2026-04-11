@@ -19,7 +19,6 @@
   libjack2,
   libpulseaudio,
   libusb1,
-  mesa-demos,
   openal,
   pciutils,
   pipewire,
@@ -107,7 +106,6 @@ symlinkJoin {
       ++ additionalLibs;
 
       runtimePrograms = [
-        mesa-demos
         pciutils # need lspci
         xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ]

@@ -113,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ethancedwards8
       fpletz
-      kaynetik
     ];
   };
 })
