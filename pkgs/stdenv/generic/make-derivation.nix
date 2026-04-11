@@ -47,13 +47,16 @@ let
     zipAttrsWith
     ;
 
-  mkDerivationExtras = import ../../build-support/lib/mk-derivation-extras.nix { inherit lib stdenv; };
+  mkDerivationExtras = import ../../build-support/lib/mk-derivation-extras.nix {
+    inherit lib stdenv;
+  };
   inherit (mkDerivationExtras)
     makeCMakeFlags
     makeMesonFlags
     envWithMainProgram
     validateEnv
     processDerivationArgs
+    mkInputDerivation
     ;
 
   /**
@@ -826,14 +829,18 @@ let
       );
 
     let
-      inherit (processDerivationArgs {
-        stdenvArgs = removeAttrs attrs [
-          "meta"
-          "passthru"
-          "pos"
-        ];
-        inherit meta makeDerivationArgument;
-      }) derivationArg checkedEnv;
+      inherit
+        (processDerivationArgs {
+          stdenvArgs = removeAttrs attrs [
+            "meta"
+            "passthru"
+            "pos"
+          ];
+          inherit meta makeDerivationArgument;
+        })
+        derivationArg
+        checkedEnv
+        ;
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
@@ -845,27 +852,6 @@ let
       };
       validity = checkMeta.assertValidity { inherit meta attrs; };
 
-      # Fixed-output derivations may not reference other paths, which means that
-      # for a fixed-output derivation, the corresponding inputDerivation should
-      # *not* be fixed-output. To achieve this we simply delete the attributes that
-      # would make it fixed-output.
-      fixedOutputRelatedAttrs = [
-        "outputHashAlgo"
-        "outputHash"
-        "outputHashMode"
-      ];
-
-      # inputDerivation produces the inputs; not the outputs, so any
-      # restrictions on what used to be the outputs don't serve a purpose
-      # anymore.
-      outputCheckAttrs = [
-        "allowedReferences"
-        "allowedRequisites"
-        "disallowedReferences"
-        "disallowedRequisites"
-        "outputChecks"
-      ];
-
     in
 
     extendDerivation validity.handled (
@@ -875,46 +861,7 @@ let
         # This allows easy building and distributing of all derivations
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
-        inputDerivation = derivation (
-          removeAttrs derivationArg (fixedOutputRelatedAttrs ++ outputCheckAttrs)
-          // {
-            # Add a name in case the original drv didn't have one
-            name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
-            # This always only has one output
-            outputs = [ "out" ];
-            # This doesn’t require any system features even if the original
-            # derivation did.
-            requiredSystemFeatures = [ ];
-
-            # Propagate the original builder and arguments, since we override
-            # them and they might contain references to build inputs
-            _derivation_original_builder = derivationArg.builder;
-            _derivation_original_args = derivationArg.args;
-
-            builder = stdenvShell;
-            # The builtin `declare -p` dumps all bash and environment variables,
-            # which is where all build input references end up (e.g. $PATH for
-            # binaries). By writing this to $out, Nix can find and register
-            # them as runtime dependencies (since Nix greps for store paths
-            # through $out to find them). Using placeholder for $out works with
-            # and without structuredAttrs.
-            # This build script does not use setup.sh or stdenv, to keep
-            # the env most pristine. This gives us a very bare bones env,
-            # hence the extra/duplicated compatibility logic and "pure bash" style.
-            args = [
-              "-c"
-              ''
-                out="${placeholder "out"}"
-                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
-                declare -p > $out
-                for var in $passAsFile; do
-                    pathVar="''${var}Path"
-                    printf "%s" "$(< "''${!pathVar}")" >> $out
-                done
-              ''
-            ];
-          }
-        );
+        inputDerivation = mkInputDerivation { inherit derivationArg stdenvShell; };
 
         inherit passthru overrideAttrs;
         inherit meta;

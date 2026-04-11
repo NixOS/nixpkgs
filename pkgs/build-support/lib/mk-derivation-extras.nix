@@ -1,14 +1,31 @@
 /**
-  Helpers for the three `stdenv.mkDerivation` semantics that live
-  *outside* `makeDerivationArgument` -- re-exported from the cross-aware
-  cmake / meson helpers, plus a tiny `envWithMainProgram` that bakes
-  `meta.mainProgram` into `NIX_MAIN_PROGRAM`.
+  Shared helpers for the `stdenv.mkDerivation` semantics that live
+  *outside* `makeDerivationArgument`:
 
-  Shared between `pkgs/stdenv/generic/make-derivation.nix` (the legacy
-  `stdenv.mkDerivation` code path) and
+    - `envWithMainProgram` -- overlay `NIX_MAIN_PROGRAM` from
+      `meta.mainProgram` onto the user-supplied `env` attrset
+    - `validateEnv` -- assert the overlaid env is an attrset of
+      scalars/derivations, doesn't collide with derivation-arg keys,
+      etc.
+    - `processDerivationArgs` -- the full pipeline wiring
+      `envWithMainProgram`, `validateEnv`, `makeCMakeFlags`,
+      `makeMesonFlags`, and the `__structuredAttrs` `env`-nesting
+      dance into a single call that both `make-derivation.nix` and
+      `layers.stdenvMkDerivation` delegate to.
+    - `mkInputDerivation` -- the build-time-deps-only passthru used
+      by `nix-build shell.nix -A inputDerivation`, stripped of
+      fixed-output and output-check attrs so it always builds.
+    - `fixedOutputRelatedAttrs` / `outputCheckAttrs` -- the constant
+      lists of keys `mkInputDerivation` strips.
+    - `makeCMakeFlags` / `makeMesonFlags` -- re-exported from the
+      cross-aware helpers in `cmake.nix` / `meson.nix` so callers
+      only import this one file.
+
+  Shared between `pkgs/stdenv/generic/make-derivation.nix` (the
+  legacy `stdenv.mkDerivation` code path) and
   `pkgs/build-support/package/make-package.nix`'s
-  `layers.stdenvMkDerivation`, so both entry points compute the same
-  thing from the same source instead of duplicating the logic.
+  `layers.stdenvMkDerivation`, so both entry points compute the
+  same thing from the same source instead of duplicating the logic.
 */
 { lib, stdenv }:
 
@@ -24,9 +41,10 @@ rec {
     return the effective env attrset with `NIX_MAIN_PROGRAM` overlaid
     from `meta.mainProgram` (if set).
 
-    Both `stdenv.mkDerivation`'s internal `env'` and
-    `layers.stdenvMkDerivation`'s `envAttrs` are exactly this
-    computation.
+    Called from `processDerivationArgs` below (and via that indirection
+    from both `stdenv.mkDerivation` and `layers.stdenvMkDerivation`),
+    and also exposed directly so callers that don't want the rest of
+    the processing pipeline can compute just the overlay.
   */
   envWithMainProgram =
     {
@@ -72,7 +90,9 @@ rec {
       prettyPrint = lib.generators.toPretty { };
       makeError =
         name:
-        "  - ${name}: in `env`: ${prettyPrint overlaidEnv.${name}}; in derivation arguments: ${prettyPrint derivationArgs.${name}}";
+        "  - ${name}: in `env`: ${prettyPrint overlaidEnv.${name}}; in derivation arguments: ${
+            prettyPrint derivationArgs.${name}
+          }";
       errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
     in
     assert lib.assertMsg (lib.isAttrs env && !lib.isDerivation env)
@@ -85,6 +105,95 @@ rec {
         "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
       v
     ) overlaidEnv;
+
+  /**
+    Derivation-arg keys that make a derivation fixed-output. Stripped
+    from `derivationArg` when computing `inputDerivation`, since the
+    inputDerivation intentionally is *not* fixed-output.
+  */
+  fixedOutputRelatedAttrs = [
+    "outputHashAlgo"
+    "outputHash"
+    "outputHashMode"
+  ];
+
+  /**
+    Derivation-arg keys that describe runtime output checks. Stripped
+    from `derivationArg` when computing `inputDerivation`, since the
+    inputDerivation produces the *inputs*, so restrictions that were
+    meant for the outputs no longer serve a purpose.
+  */
+  outputCheckAttrs = [
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+    "outputChecks"
+  ];
+
+  /**
+    Build an `inputDerivation` passthru: a derivation that always
+    builds successfully and whose runtime dependencies are the
+    original derivation's *build-time* dependencies. Used by
+    e.g. `nix-build shell.nix -A inputDerivation` to pre-fetch
+    everything needed to enter a `nix-shell` without actually
+    building the package.
+
+    Takes:
+
+      - `derivationArg`: the pre-merge (without `checkedEnv`)
+        derivation-arg attrset as returned by
+        `processDerivationArgs`
+      - `stdenvShell`: the shell the inputDerivation builder runs
+        under, typically `stdenv.shell`
+
+    Returns a plain derivation (not a package attrset).
+  */
+  mkInputDerivation =
+    {
+      derivationArg,
+      stdenvShell,
+    }:
+    derivation (
+      (builtins.removeAttrs derivationArg (fixedOutputRelatedAttrs ++ outputCheckAttrs))
+      // {
+        # Add a name in case the original drv didn't have one
+        name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
+        # This always only has one output
+        outputs = [ "out" ];
+        # This doesn't require any system features even if the
+        # original derivation did.
+        requiredSystemFeatures = [ ];
+
+        # Propagate the original builder and arguments, since we
+        # override them and they might contain references to build
+        # inputs
+        _derivation_original_builder = derivationArg.builder;
+        _derivation_original_args = derivationArg.args;
+
+        builder = stdenvShell;
+        # The builtin `declare -p` dumps all bash and environment
+        # variables, which is where all build input references end up
+        # (e.g. $PATH for binaries). By writing this to $out, Nix can
+        # find and register them as runtime dependencies (since Nix
+        # greps for store paths through $out to find them). Using
+        # placeholder for $out works with and without
+        # structuredAttrs. This build script does not use setup.sh or
+        # stdenv, to keep the env most pristine.
+        args = [
+          "-c"
+          ''
+            out="${builtins.placeholder "out"}"
+            if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
+            declare -p > $out
+            for var in $passAsFile; do
+                pathVar="''${var}Path"
+                printf "%s" "$(< "''${!pathVar}")" >> $out
+            done
+          ''
+        ];
+      }
+    );
 
   /**
     The full "process a stdenv.mkDerivation attrset into a ready-to-

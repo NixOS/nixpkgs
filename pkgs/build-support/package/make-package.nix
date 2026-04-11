@@ -149,10 +149,21 @@ let
 
         inherit (this) help name;
 
+        # Match `lib.customisation.makeOverridable`'s `.override`,
+        # which accepts both the function form `pkg.override (old: {
+        # ... })` and the legacy attrset form
+        # `pkg.override { ... }`. Many existing nixpkgs callers
+        # (e.g. `pkgs/test/cc-wrapper/hardening.nix`) rely on the
+        # attrset shape, and refusing it would force every such call
+        # site to be ported when a package becomes mkPackage-based.
         override =
-          f:
+          fOrAttrs:
           this.extend (
-            this: old: {
+            this: old:
+            let
+              f = if lib.isFunction fOrAttrs then fOrAttrs else (_: fOrAttrs);
+            in
+            {
               deps = old.deps // f old.deps;
             }
           );
@@ -190,7 +201,9 @@ let
       # checkMeta's view of the package: raw derivation args plus
       # whatever `meta` the package set. Shared by both `validity`
       # and the enriched `public.meta` below.
-      checkedAttrs = this.drvAttrs // { inherit (this) meta; };
+      checkedAttrs = this.drvAttrs // {
+        inherit (this) meta;
+      };
     in
     {
       # Moved out of `baseLayer`: both `validity` and the commonMeta
@@ -276,11 +289,12 @@ let
     let
       inherit (import ../lib/mk-derivation-extras.nix { inherit lib stdenv; })
         processDerivationArgs
+        mkInputDerivation
         ;
     in
     this: old:
     let
-      outputs = lib.genAttrs (this.drvAttrs.outputs) (
+      perOutput = lib.genAttrs (this.drvAttrs.outputs) (
         outputName:
         this.public
         // {
@@ -307,13 +321,19 @@ let
             inherit (this) name;
           };
 
-      inherit (processDerivationArgs {
-        stdenvArgs = nameArgs // this.stdenvArgs;
-        inherit (this) meta;
-        inherit (stdenv) makeDerivationArgument;
-      }) derivationArg checkedEnv;
+      inherit
+        (processDerivationArgs {
+          stdenvArgs = nameArgs // this.stdenvArgs;
+          inherit (this) meta;
+          inherit (stdenv) makeDerivationArgument;
+        })
+        derivationArg
+        checkedEnv
+        ;
 
-      checkedAttrs = this.drvAttrs // { inherit (this) meta; };
+      checkedAttrs = this.drvAttrs // {
+        inherit (this) meta;
+      };
     in
     {
       validity = checkMeta.assertValidity {
@@ -364,6 +384,14 @@ let
               ++ this.drvAttrs.propagatedNativeBuildInputs or [ ]
               ++ this.drvAttrs.propagatedBuildInputs or [ ];
           };
+          # Build-time-dependency-only derivation, matching the same
+          # passthru on `stdenv.mkDerivation`. Useful for e.g.
+          # `nix-build shell.nix -A inputDerivation` to fetch everything
+          # needed to enter a nix-shell without building the package.
+          inputDerivation = mkInputDerivation {
+            inherit derivationArg;
+            stdenvShell = stdenv.shell;
+          };
         }
         // rec {
           outPath =
@@ -377,8 +405,13 @@ let
           # that iterate `pkg.outputs` see the same list in both
           # forms.
           inherit (this.drvAttrs) outputs;
+          # The `all` list of per-output attrsets, as
+          # `lib.customisation.extendDerivation` would produce it.
+          # Iterate `this.drvAttrs.outputs` (not `lib.attrValues perOutput`)
+          # to preserve declaration order, matching upstream.
+          all = map (name: perOutput.${name}) this.drvAttrs.outputs;
         }
-        // outputs;
+        // perOutput;
     };
 
   /**
@@ -568,10 +601,7 @@ let
         args:
         let
           resolvedDefaults =
-            if defaults == null then
-              { }
-            else
-              defaults (builtins.intersectAttrs defFargs args);
+            if defaults == null then { } else defaults (builtins.intersectAttrs defFargs args);
           userResult = function (builtins.intersectAttrs fnFargs args);
           userLayers = if lib.isList userResult then userResult else [ userResult ];
         in
