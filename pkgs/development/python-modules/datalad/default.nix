@@ -4,7 +4,6 @@
   setuptools,
   stdenv,
   fetchFromGitHub,
-  pythonAtLeast,
   installShellFiles,
   git,
   versioneer,
@@ -48,14 +47,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.3.4";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = finalAttrs.version;
-    hash = "sha256-5PAHHN+dgMAxqUZn3vXWsoesw3lQMy6Q8nUJYa4SofM=";
+    hash = "sha256-zNN4AYUn6LZHLrloGADgB5v29OpPSkNOS3BEkfdr7Kg=";
   };
 
   postPatch = ''
@@ -121,7 +120,12 @@ buildPythonPackage (finalAttrs: {
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
+  # Datalad moved to a pytest plugin in 1.4.0, and pytest fails with ImportPathMismatchError.
+  # Removing `datald` and setting `PY_IGNORE_IMPORTMISMATCH=1` works around the issue.
+  # (Their expectation is you'll install datalad in a virtual environment before testing it.)
   preCheck = ''
+    rm -r datalad
+    export PY_IGNORE_IMPORTMISMATCH=1
     export HOME=$TMPDIR
     export DATALAD_TESTS_NONETWORK=1
     export PATH="$PATH:$out/bin"
