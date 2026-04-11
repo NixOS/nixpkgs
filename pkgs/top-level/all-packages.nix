@@ -7348,8 +7348,6 @@ with pkgs;
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
 
-  sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
-
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix { };
