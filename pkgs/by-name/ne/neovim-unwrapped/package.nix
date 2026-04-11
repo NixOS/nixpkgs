@@ -238,7 +238,7 @@ stdenv.mkDerivation (
     ''
     + lib.concatStrings (
       lib.mapAttrsToList (language: grammar: ''
-        ln -s \
+        ln -sf \
           ${grammar}/parser \
           $out/lib/nvim/parser/${language}.so
       '') finalAttrs.treesitter-parsers
