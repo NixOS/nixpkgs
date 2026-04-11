@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odiff";
-  version = "4.3.2";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "odiff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gCF+CInczBJfDyZgxEQor5C/OSxKciCu9gbZanaE/nA=";
+    hash = "sha256-5x03mpqBllfEVBGMspcC/ljC6PrSXQgU2j+eKfHu6PM=";
   };
 
   postConfigure = ''

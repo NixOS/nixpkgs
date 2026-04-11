@@ -224,8 +224,7 @@ in
       native-bignum =
         let
           isNativeBignumGhc =
-            name:
-            !(builtins.elem name nativeBignumExcludes) && !(compiler.${name} ? isMhs && compiler.${name}.isMhs);
+            name: pkgs.lib.hasPrefix "ghc" name && !(builtins.elem name nativeBignumExcludes);
           nativeBignumGhcNames = pkgs.lib.filter isNativeBignumGhc (pkgs.lib.attrNames compiler);
         in
         pkgs.lib.recurseIntoAttrs (

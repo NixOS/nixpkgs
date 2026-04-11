@@ -142,6 +142,8 @@ in
           };
         };
 
+        # No SCSI support in systemd stage 1 at present.
+        boot.initrd.systemd.enable = false;
         boot.iscsi-initiator = {
           discoverPortal = "target";
           name = initiatorName;

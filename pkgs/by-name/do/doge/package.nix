@@ -32,7 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "doge";
     maintainers = with lib.maintainers; [
-      Gonzih
       quantenzitrone
     ];
   };

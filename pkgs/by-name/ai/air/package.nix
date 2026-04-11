@@ -30,6 +30,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "air";
     homepage = "https://github.com/air-verse/air";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Gonzih ];
+    maintainers = [ ];
   };
 })

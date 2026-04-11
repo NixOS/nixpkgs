@@ -69,7 +69,6 @@ let
   # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
   commonServiceConfig = {
     after = [
-      "systemd-udev-settle.service"
       "network-pre.target"
       "systemd-sysusers.service"
       "systemd-sysctl.service"
@@ -87,6 +86,12 @@ let
     wants = [
       "network.target"
     ];
+
+    # We wait for the udev events queue to empty in the *hope* that the
+    # devices needed here become available. This is terribly broken and
+    # essentially no better than a random sleep().
+    # FIXME: use .device units dependecies instead.
+    serviceConfig.ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
 
     unitConfig = {
       # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
@@ -173,7 +178,7 @@ in
         etc."ifstate/ifstate.yaml".source = settingsFormat.generate "ifstate.yaml" cfg.settings cfg.package;
       };
 
-      systemd.services.ifstate = commonServiceConfig // {
+      systemd.services.ifstate = lib.recursiveUpdate commonServiceConfig {
         description = "IfState";
 
         wantedBy = [
@@ -263,7 +268,7 @@ in
             "remote-fs.target"
           ];
 
-          services.ifstate-initrd = commonServiceConfig // {
+          services.ifstate-initrd = lib.recursiveUpdate commonServiceConfig {
             description = "IfState initrd";
 
             wantedBy = [

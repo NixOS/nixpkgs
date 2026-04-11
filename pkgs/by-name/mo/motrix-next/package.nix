@@ -25,16 +25,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motrix-next";
-  version = "3.6.3";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "AnInsomniacy";
     repo = "motrix-next";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u4t/QIRFDuvGPA4+p4OuS6tDnU6+ZmEJSfOYIh//NaQ=";
+    hash = "sha256-nn1YivQ7UCRpWnWa2w0F06n6bQrMJ1d8Gb84hY6K5WE=";
   };
 
-  cargoHash = "sha256-WcYXb5UF4mhahYQ5Jomsph+UHWqa+3cjRQdJyydw7oY=";
+  cargoHash = "sha256-mrzyIvHlfs3epOm3ZKPetmJOCKpZdHlfosOP7iLlu1k=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [

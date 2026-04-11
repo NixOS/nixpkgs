@@ -29,6 +29,10 @@ let
 
   upstreamUnits = [
     "basic.target"
+    "breakpoint-pre-udev.service"
+    "breakpoint-pre-basic.service"
+    "breakpoint-pre-mount.service"
+    "breakpoint-pre-switch-root.service"
     "ctrl-alt-del.target"
     "debug-shell.service"
     "emergency.service"
@@ -153,6 +157,7 @@ in
 
   options.boot.initrd.systemd = {
     enable = mkEnableOption "systemd in initrd" // {
+      default = true;
       description = ''
         Whether to enable systemd in initrd. The unit options such as
         {option}`boot.initrd.systemd.services` are the same as their
@@ -423,42 +428,57 @@ in
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
-    assertions = [
-      {
-        assertion =
-          cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
-        message = "The ‘fileSystems’ option does not specify your root file system.";
-      }
-    ]
-    ++
-      map
-        (name: {
-          assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
-          message = ''
-            systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
-              convert it to analogous systemd units in 'boot.initrd.systemd'.
-
-                Definitions:
-            ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
-              (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
-            }
-          '';
-        })
-        [
-          [ "preFailCommands" ]
-          [ "preDeviceCommands" ]
-          [ "preLVMCommands" ]
-          [ "postDeviceCommands" ]
-          [ "postResumeCommands" ]
-          [ "postMountCommands" ]
-          [ "extraUdevRulesCommands" ]
-          [ "extraUtilsCommands" ]
-          [ "extraUtilsCommandsTest" ]
+    assertions =
+      let
+        obsoleteOpt =
+          opts: msgFn:
+          lib.flip map opts (opt: {
+            assertion = lib.attrByPath opt (throw "impossible") config.boot.initrd == "";
+            message = ''
+              ${msgFn (lib.concatStringsSep "." opt)}
+                  Definitions:
+              ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
+                (lib.attrByPath opt (throw "impossible") options.boot.initrd).definitionsWithLocations
+              }
+            '';
+          });
+      in
+      [
+        {
+          assertion =
+            cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+          message = "The ‘fileSystems’ option does not specify your root file system.";
+        }
+      ]
+      ++
+        obsoleteOpt
           [
-            "network"
-            "postCommands"
+            [ "preFailCommands" ]
+            [ "preDeviceCommands" ]
+            [ "preLVMCommands" ]
+            [ "postDeviceCommands" ]
+            [ "postResumeCommands" ]
+            [ "postMountCommands" ]
+            [
+              "network"
+              "postCommands"
+            ]
           ]
-        ];
+          (name: ''
+            systemd stage 1 does not support `boot.initrd.${name}`. Instead, create systemd services using the `boot.initrd.systemd.services` options, which has an API matching the stage 2 `systemd.services` options. Refer to `bootup(7)`, specifically the sections on "Bootup in the Initrd" and "System Manager Bootup", for information about when various units happen, and order services accordingly.
+          '')
+      ++
+        obsoleteOpt
+          [
+            [ "extraUtilsCommands" ]
+            [ "extraUtilsCommandsTest" ]
+          ]
+          (name: ''
+            systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.systemd.initrdBin`, `boot.initrd.systemd.extraBin`, `boot.initrd.systemd.contents`, or `boot.initrd.systemd.storePaths` to add files to the initrd.
+          '')
+      ++ obsoleteOpt [ [ "extraUdevRulesCommands" ] ] (name: ''
+        systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.services.udev` to configure udev.
+      '');
 
     system.build = { inherit initialRamdisk; };
 

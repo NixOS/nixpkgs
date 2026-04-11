@@ -65,7 +65,6 @@ let
     "systemd-udevd-control.socket"
     "systemd-udevd-kernel.socket"
     "systemd-udevd.service"
-    "systemd-udev-settle.service"
   ]
   ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
   ++ [
@@ -792,10 +791,13 @@ in
       path = [ pkgs.util-linux ];
       overrideStrategy = "asDropin";
     };
+    systemd.services."modprobe@" = {
+      restartIfChanged = false;
+      serviceConfig.ExecSearchPath = lib.makeBinPath [ pkgs.kmod ];
+    };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
-    systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-importd.environment = proxy_env;
