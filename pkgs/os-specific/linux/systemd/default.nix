@@ -599,13 +599,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [ "man/systemd-fsck@.service.xml" ];
         }
-      ]
-      ++ lib.optionals withKmod [
-        {
-          search = "ExecStart=-modprobe";
-          replacement = "ExecStart=-${lib.getBin kmod}/bin/modprobe";
-          where = [ "units/modprobe@.service" ];
-        }
       ];
 
       # { replacement, search, where, ignore } -> List[str]
