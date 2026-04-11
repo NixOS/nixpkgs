@@ -73,15 +73,15 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
-    "version": "5.6.0-2.26151.2",
-    "hash": "sha256-J1h9PsPivgmHxcG2sFccStRazssjmO9q8a92bZbnDew=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.analyzers/5.6.0-2.26151.2/microsoft.codeanalysis.analyzers.5.6.0-2.26151.2.nupkg"
+    "version": "5.6.0-2.26172.2",
+    "hash": "sha256-CJcnDRGIt7//SJLOSXLHoOnGs3QtLGqgpDyNPbjELm8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.analyzers/5.6.0-2.26172.2/microsoft.codeanalysis.analyzers.5.6.0-2.26172.2.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.BannedApiAnalyzers",
-    "version": "5.6.0-2.26160.112",
-    "hash": "sha256-ZYIA/XYvgS+wttCu5Gb46cLpTcjHvJC1R4VDxyCuXA0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.bannedapianalyzers/5.6.0-2.26160.112/microsoft.codeanalysis.bannedapianalyzers.5.6.0-2.26160.112.nupkg"
+    "version": "5.7.0-1.26202.104",
+    "hash": "sha256-p7ybIuiw34dJb1IehSN4v+II42tznBbYYAtVMiKUTbo=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.bannedapianalyzers/5.7.0-1.26202.104/microsoft.codeanalysis.bannedapianalyzers.5.7.0-1.26202.104.nupkg"
   },
   {
     "pname": "Microsoft.CodeAnalysis.Common",
@@ -103,9 +103,9 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.PublicApiAnalyzers",
-    "version": "5.6.0-2.26160.112",
-    "hash": "sha256-dcUvJ9J88Z4jGNmO4RZbqtzAYPCix1ooyv7a/q8MK6c=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.publicapianalyzers/5.6.0-2.26160.112/microsoft.codeanalysis.publicapianalyzers.5.6.0-2.26160.112.nupkg"
+    "version": "5.7.0-1.26202.104",
+    "hash": "sha256-JUov6s7HgwbliMPxy86J7ok+LfEcFZooVQBiedCSUeo=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.publicapianalyzers/5.7.0-1.26202.104/microsoft.codeanalysis.publicapianalyzers.5.7.0-1.26202.104.nupkg"
   },
   {
     "pname": "Microsoft.CSharp",
@@ -121,15 +121,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "10.0.0-beta.26160.1",
-    "hash": "sha256-HxAuMFWDuwU7Gl8zXDc6TzyKosD25jAX14obzPWlFnA=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/10.0.0-beta.26160.1/microsoft.dotnet.arcade.sdk.10.0.0-beta.26160.1.nupkg"
+    "version": "10.0.0-beta.26201.4",
+    "hash": "sha256-A1H87Y8Tvf8+cnKj3a59TFi2utka8e9R1j6p9JbOpzs=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/10.0.0-beta.26201.4/microsoft.dotnet.arcade.sdk.10.0.0-beta.26201.4.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "10.0.0-beta.26160.1",
-    "hash": "sha256-jnGEiC6HTUSRQ9ckKLY1hGni8/awfq3gdzY74U8mjXM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/10.0.0-beta.26160.1/microsoft.dotnet.xlifftasks.10.0.0-beta.26160.1.nupkg"
+    "version": "10.0.0-beta.26201.4",
+    "hash": "sha256-4UIzFVmuDPIxECOBsAolrCCTb5Mzk5baYHDvGYFh/sc=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/10.0.0-beta.26201.4/microsoft.dotnet.xlifftasks.10.0.0-beta.26201.4.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -433,9 +433,9 @@
   },
   {
     "pname": "Roslyn.Diagnostics.Analyzers",
-    "version": "5.6.0-2.26160.112",
-    "hash": "sha256-GLfrXlVVIHDH3+qRdvGI///L9M932GL19KVWXUw6xFE=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/roslyn.diagnostics.analyzers/5.6.0-2.26160.112/roslyn.diagnostics.analyzers.5.6.0-2.26160.112.nupkg"
+    "version": "5.7.0-1.26202.104",
+    "hash": "sha256-GO3HaDDOCK+PT4/yoQuj1vXvgGzGmgV2ksBbdP51zW0=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/roslyn.diagnostics.analyzers/5.7.0-1.26202.104/roslyn.diagnostics.analyzers.5.7.0-1.26202.104.nupkg"
   },
   {
     "pname": "SQLitePCLRaw.bundle_green",
@@ -499,9 +499,9 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "3.0.0-preview.3.26160.112",
-    "hash": "sha256-LDm/H50j+VkuGPGo0epbZuOzQuVX3G7YcgIcpX8ipB0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/3.0.0-preview.3.26160.112/system.commandline.3.0.0-preview.3.26160.112.nupkg"
+    "version": "3.0.0-preview.4.26202.104",
+    "hash": "sha256-Kuh7UZ+fg4mJWismeSS6PNKGFgSYruYOVY7agur6xe8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/3.0.0-preview.4.26202.104/system.commandline.3.0.0-preview.4.26202.104.nupkg"
   },
   {
     "pname": "System.ComponentModel.Composition",
