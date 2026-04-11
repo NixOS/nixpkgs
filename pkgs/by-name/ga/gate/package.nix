@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gate";
-  version = "0.63.0";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "minekube";
     repo = "gate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xHzXJgMNoubjaGD/cr9syIxlJKzxjWm13g6fQtFI3Sc=";
+    hash = "sha256-C+XKDFzsCgZpTS2fEpAKOExPyO9WOjdmHKvVpmNyDRo=";
   };
 
   vendorHash = "sha256-7tDEtZyV4upFG/DGg1rbJbO8XV7MSAzFSs/3NmH4qI4=";

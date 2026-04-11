@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "magika-cli";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "magika";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-g/fnSdh2jpOHOLTuR4DUPB1kbC0eKADHLKcfB1q08XI=";
+    hash = "sha256-1WJRkqFQqlSFzr4wkEbRwj1WoxDKTG/1OCtC+914ryY=";
   };
 
-  cargoHash = "sha256-uqnTyedry9nWyO2518r0D3hk6oWb4wQE/Ku0cOkSjBA=";
+  cargoHash = "sha256-rA+GYCWuinwRVWf3VuFbPgmAwl3vDsaxLjCtsKMtpiU=";
 
   cargoRoot = "rust/cli";
   buildAndTestSubdir = finalAttrs.cargoRoot;
@@ -41,13 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = "true";
+    ORT_STRATEGY = "system";
+    ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";
+
+    # Required to prevent "ort-sys could not link to the ONNX Runtime build":
+    # https://github.com/pykeio/ort/issues/517#issuecomment-3761926178
+    ORT_PREFER_DYNAMIC_LINK = "true";
   };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {

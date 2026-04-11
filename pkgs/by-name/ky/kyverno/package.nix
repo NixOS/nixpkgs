@@ -56,6 +56,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://kyverno.io/";
     changelog = "https://github.com/kyverno/kyverno/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      LorenzBischof
+      Scrumplex
+    ];
   };
 })
