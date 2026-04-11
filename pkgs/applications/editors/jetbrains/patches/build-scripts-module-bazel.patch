@@ -23,3 +23,18 @@
  )
  
  bazel_dep(name = "rules_jvm_external", version = "6.10")
+@@ -97,6 +105,14 @@
+ )
+ 
+ bazel_dep(name = "rules_python", version = "1.7.0")
++single_version_override(
++    module_name = "rules_python",
++    version = "1.7.0",
++    patch_strip = 1,
++    patches = [
++        "//build:rules_python_patch_host_python.patch",
++    ],
++)
+ 
+ # Use custom remote_java_tools_windows with vc_redist .dll files due to https://github.com/bazelbuild/rules_java/issues/316
+ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")

@@ -34,3 +34,18 @@
  )
  
  llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)  # `dev_dependency = True` to avoid leaking the extension in modules using that module, see https://github.com/bazel-contrib/toolchains_llvm/issues/569
+@@ -83,6 +94,14 @@
+ )  # `dev_dependency = True` to avoid registering toolchains in modules using that module, see https://github.com/bazel-contrib/toolchains_llvm/issues/569
+ 
+ bazel_dep(name = "rules_python", version = "1.7.0")
++single_version_override(
++    module_name = "rules_python",
++    version = "1.7.0",
++    patch_strip = 1,
++    patches = [
++        "//build:rules_python_patch_host_python.patch",
++    ],
++)
+ 
+ kotlin_test_deps = use_repo_rule("//plugins/kotlin:kotlin_test_dependencies.bzl", "kotlin_test_deps")
+ kotlin_test_deps(name = "kotlin_test_deps")

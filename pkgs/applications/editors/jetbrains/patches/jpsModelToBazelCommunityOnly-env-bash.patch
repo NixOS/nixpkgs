@@ -5,7 +5,8 @@
  script_dir="$(cd "$(dirname "$0")"; pwd)"
  cd "$script_dir/../platform/build-scripts/bazel"
 -exec /bin/bash "../../../bazel.cmd" run "$@" //:jps-to-bazel
-+exec bazel run @bazelRunArgs@ --registry=file://@registry@ --repository_cache=repo_cache  "$@" //:jps-to-bazel
++echo "TODO REMOVE ME FROM PATCH: patch jpsModelToBazelCommunityOnly.cmd"; exec bazel run @bazelRunArgs@ --registry=file://@registry@ --repository_cache=repo_cache  "$@" //:jps-to-bazel
  
  :CMDSCRIPT
  
+
