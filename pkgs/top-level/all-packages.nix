@@ -1814,8 +1814,6 @@ with pkgs;
 
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
-  klog = qt5.callPackage ../applications/radio/klog { };
-
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
   lgogdownloader-gui = callPackage ../by-name/lg/lgogdownloader/package.nix { enableGui = true; };
