@@ -19,33 +19,20 @@
   wayland-protocols,
   libxkbcommon,
   libdecor,
-  withMinecraftPatch ? false,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
+  pname = "glfw";
   version = "3.4";
-  minecraftPatches = fetchFromGitHub {
-    owner = "BoyOrigin";
-    repo = "glfw-wayland";
-    rev = "f62b4ae8f93149fd754cadecd51d8b1a07d20522";
-    hash = "sha256-kvWP34rOD4HSTvnKb33nvVquTGZoqP8/l+8XQ0h3b7Y=";
-  };
-in
-stdenv.mkDerivation {
-  pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
-  inherit version;
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = [ ./x11.patch ] ++ (lib.optional withMinecraftPatch ./window-position.patch);
-  prePatch = lib.optionalString withMinecraftPatch ''
-    patches+=(${minecraftPatches}/patches/*.patch)
-  '';
+  patches = [ ./x11.patch ];
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
@@ -108,4 +95,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

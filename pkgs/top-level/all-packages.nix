@@ -6343,10 +6343,6 @@ with pkgs;
   ghcid = haskellPackages.ghcid.bin;
   glfw = glfw3;
 
-  glfw3-minecraft = callPackage ../by-name/gl/glfw3/package.nix {
-    withMinecraftPatch = true;
-  };
-
   glibc = callPackage ../development/libraries/glibc (
     if stdenv.hostPlatform != stdenv.buildPlatform then
       {
