@@ -38,7 +38,6 @@
   libgpg-error,
   libidn2,
   curl,
-  gnutar,
   gnupg,
   zlib,
   xz,
@@ -608,29 +607,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "\\\"${gnupg}/bin/gpg\\\"";
           where = [ "src/import/pull-common.c" ];
         }
-        {
-          search = "\"tar\"";
-          replacement = "\\\"${gnutar}/bin/tar\\\"";
-          where = [
-            "src/import/export-tar.c"
-            "src/import/import-tar.c"
-          ];
-          ignore = [
-            # occurrences here refer to the tar sub command
-            "src/sysupdate/sysupdate-resource.c"
-            "src/sysupdate/sysupdate-transfer.c"
-            "src/import/pull.c"
-            "src/import/export.c"
-            "src/import/import.c"
-            "src/import/importd.c"
-            # runs `tar` but also creates a temporary directory with the string
-            "src/import/pull-tar.c"
-            # pull-oci.c has tar references handled in postPatch
-            "src/import/pull-oci.c"
-            # tar referenced as file suffix
-            "src/shared/import-util.c"
-          ];
-        }
       ]
       ++ lib.optionals withKmod [
         {
@@ -685,9 +661,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-
-      substituteInPlace src/import/pull-tar.c src/import/pull-oci.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
