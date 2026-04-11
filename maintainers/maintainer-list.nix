@@ -13132,6 +13132,13 @@
     github = "jorsn";
     githubId = 4646725;
   };
+  jory = {
+    name = "Jory Severijnse";
+    email = "jory@severijnse.eu";
+    github = "JorySeverijnse";
+    githubId = 117462355;
+    keys = [ { fingerprint = "E356 3238 FE99 CE04 627F  980B 0F88 35ED 078F DBF2"; } ];
+  };
   joscha = {
     name = "Joscha Loos";
     email = "j.loos@posteo.net";
