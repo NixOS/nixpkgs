@@ -10588,6 +10588,12 @@ with pkgs;
   });
   trae-cn-fhsWithPackages = trae-cn.fhsWithPackages;
 
+  trae-cn-fhs = trae-cn.fhs.overrideAttrs (_: {
+    strictDeps = true;
+    __structuredAttrs = true;
+  });
+  trae-cn-fhsWithPackages = trae-cn.fhsWithPackages;
+
   whispers = with python3Packages; toPythonApplication whispers;
 
   # Should always be the version with the most features
