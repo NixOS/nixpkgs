@@ -90,7 +90,8 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     respx
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "anthropic" ];
 
