@@ -187,8 +187,9 @@ buildPythonPackage rec {
           "ProcessTestsBuilder_SelectReactorTests.test_processEnded"
         ];
         "src/twisted/internet/test/test_tcp.py" = [
-          # marked as flaky on macOS by upstream
-          # https://github.com/twisted/twisted/blob/twisted-25.5.0/src/twisted/internet/test/test_tcp.py
+          # flaky on macOS, suspected kernel bug in socket notifications
+          # https://github.com/twisted/twisted/issues/12151
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
           # Times out in Hydra on x86_64-darwin
