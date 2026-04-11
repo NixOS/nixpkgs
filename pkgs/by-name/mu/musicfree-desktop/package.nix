@@ -34,6 +34,7 @@ buildNpmPackage (finalAttrs: {
     # update sharp to recognize SHARP_FORCE_GLOBAL_LIBVIPS
     # update node-abi to support newer Electron
     # update nan to fix build with newer Electron (https://github.com/nodejs/nan/issues/921)
+    # update better-sqlite3 to fix build with newer Electron
     # see update.sh for how this patch was generated
     ./bump-deps.patch
 
@@ -57,7 +58,7 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ]; # Used by better-sqlite3
 
-  npmDepsHash = "sha256-lxDEbf++QH1/DaIEgXMnmqMD9d5Ak7IJMc5pQjysKBA=";
+  npmDepsHash = "sha256-pEpU3JuxeMl0Oo/ZnmzH9/WdJ/3O2RUGofm7KXrKcAo=";
 
   postConfigure = ''
     # use Electron's headers to make node-gyp compile against the Electron ABI
