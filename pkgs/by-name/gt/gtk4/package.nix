@@ -65,19 +65,15 @@
   testers,
   darwinMinVersionHook,
 }:
-
 let
-
   gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-4.0";
     gtk_binary_version = "4.0.0";
   };
-
 in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.20.3";
+  version = "4.22.1";
 
   outputs = [
     "out"
@@ -93,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KHPykDCIpmxxFz6i7YX/riZqZrlyw6SEK7svbxh+wVM=";
+    hash = "sha256-zXtanEESfab7MhxahCrXPGLmmW+c4/GWDKUJ9lWdVfw=";
   };
 
   # TODO: make it unconditional on rebuild, drop on version >= 4.20.4
@@ -115,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    shared-mime-info
     sassc
     gi-docgen
     libxml2 # for xmllint
