@@ -7,6 +7,7 @@
   coreutils,
   fetchFromGitHub,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/so-fancy/diff-so-fancy";
