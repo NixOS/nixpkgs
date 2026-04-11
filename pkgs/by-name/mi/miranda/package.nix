@@ -1,10 +1,13 @@
 {
-  stdenv,
   lib,
   fetchzip,
   fetchpatch,
+  gcc14Stdenv,
 }:
 
+let
+  stdenv = gcc14Stdenv;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "miranda";
   version = "2.066";
