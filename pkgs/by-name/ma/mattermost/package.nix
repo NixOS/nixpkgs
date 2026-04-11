@@ -28,6 +28,7 @@
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
   },
+  ...
 }:
 
 let
@@ -194,6 +195,7 @@ buildMattermost rec {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         versionInfo.regex
       ]

@@ -42,13 +42,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C6U3xU/rL+Og6DgJTnPESf+LPlm+svTNS5bSGhrn7dQ=";
+    hash = "sha256-GCmaPNgPn6xTdvRTkXlrSasULlxWFTwuBlbqmMD4O8s=";
     fetchSubmodules = true;
 
     # darwin/linux hash mismatch in rawler submodule
@@ -58,11 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-cgqNGft6LK5XNGv1CDLw5v+m8a9xmu7albfoGJnkE34=";
+  cargoHash = "sha256-IIl4BSEMpyLiiZQGRlQaIPpXNQKGg6GrGQmnHDzDAdc=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-YpM/EQ4eFqziwEpSXpBNEO8A5fCmjVtCrgr11YxLKxY=";
+    hash = "sha256-PLwefGi6p6rJLvLonHXszA74wqySyoE3xxRPDlrfgUQ=";
   };
 
   nativeBuildInputs = [
@@ -148,8 +148,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Add rpath for onnxruntime so the binary can find libonnxruntime.dylib at runtime
+      # The binary links against @rpath/libonnxruntime.*.dylib but has no LC_RPATH entries
       install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
+      # The app also dlopen()s libonnxruntime.dylib at a hardcoded path inside the bundle
+      mkdir -p "$out/Applications/RapidRAW.app/Contents/Resources/resources"
+      ln -sf ${onnxruntime}/lib/libonnxruntime.dylib "$out/Applications/RapidRAW.app/Contents/Resources/resources/libonnxruntime.dylib"
     '';
 
   postFixup =
