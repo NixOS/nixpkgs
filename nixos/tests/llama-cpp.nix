@@ -3,6 +3,22 @@
   name = "llama-cpp";
   meta.maintainers = with lib.maintainers; [ newam ];
 
+  nodes.legacy =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.llama-cpp ];
+
+      # Legacy single-instance API (backward-compatible with master branch)
+      services.llama-cpp = {
+        enable = true;
+        model = "/nonexistent.gguf";
+        extraFlags = [
+          "-c"
+          "2048"
+        ];
+      };
+    };
+
   nodes.machine =
     { pkgs, ... }:
     {
@@ -27,6 +43,44 @@
     };
 
   testScript = ''
+    # --- Legacy single-instance API ---
+    legacy.wait_for_unit("multi-user.target")
+
+    legacy.succeed("llama-server --help")
+
+    legacy_unit = legacy.succeed("systemctl cat llama-cpp.service")
+    print(f"Legacy service unit:\n{legacy_unit}")
+
+    # Service must be named llama-cpp (no suffix, not llama-cpp-)
+    legacy.succeed("systemctl cat llama-cpp.service")
+
+    for directive in [
+        "DynamicUser=true",
+        "NoNewPrivileges=true",
+        "ProtectSystem=strict",
+        "CapabilityBoundingSet=",
+        "StateDirectory=llama-cpp",
+        "CacheDirectory=llama-cpp",
+    ]:
+        assert directive in legacy_unit, f"Missing {directive} in legacy service unit"
+
+    # StateDirectory must not have a trailing dash
+    assert "StateDirectory=llama-cpp-" not in legacy_unit, \
+        "Legacy service should not have trailing dash in StateDirectory"
+
+    assert "PrivateDevices=true" in legacy_unit, \
+        "CPU-only build should have PrivateDevices=true"
+
+    # extraFlags should be reflected in ExecStart
+    assert "-c" in legacy_unit, "extraFlags -c not in ExecStart"
+
+    # Verify llama-cpp-verify is installed
+    legacy.succeed("command -v llama-cpp-verify")
+    legacy_verify = legacy.succeed("cat $(command -v llama-cpp-verify)")
+    assert "default:" in legacy_verify or "llama-cpp:" in legacy_verify, \
+        "verify script should contain legacy instance data"
+
+    # --- Multi-instance API ---
     machine.wait_for_unit("multi-user.target")
 
     machine.succeed("llama-server --help")
