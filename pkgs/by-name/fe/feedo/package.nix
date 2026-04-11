@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.1.31";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname;
-    inherit (finalAttrs) version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GMXCvKJcz4uowsphCaSTPdp1ijBlP2Oxpqlph7VX6hw=";
   };
 
