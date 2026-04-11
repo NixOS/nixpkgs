@@ -172,7 +172,9 @@ with pkgs;
   inherit (import ../build-support/package/make-package.nix { inherit callPackage config lib stdenv; })
     layers
     mkPackage
+    mkPackageWithDefaults
     ;
+
 
   ### Nixpkgs maintainer tools
 

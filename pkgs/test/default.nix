@@ -191,6 +191,10 @@ in
 
   overriding = callPackage ./overriding.nix { };
 
+  mk-package-override-layers = callPackage ./mk-package-override-layers.nix { };
+
+  mk-package-with-defaults = callPackage ./mk-package-with-defaults.nix { };
+
   texlive = recurseIntoAttrs (callPackage ./texlive { });
 
   # TODO: Temporarily disabled recursion so we can see the performance comparison in the PR,
