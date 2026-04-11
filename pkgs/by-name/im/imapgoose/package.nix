@@ -47,6 +47,7 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "imapgoose";
     maintainers = with lib.maintainers; [
+      philocalyst
       bobberb
     ];
   };
