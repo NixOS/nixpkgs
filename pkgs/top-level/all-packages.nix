@@ -3270,10 +3270,6 @@ with pkgs;
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
-  riseup-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
-    provider = "riseup";
-  };
-
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
   rtaudio = rtaudio_5;
