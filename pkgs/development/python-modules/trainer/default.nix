@@ -18,7 +18,7 @@
 
 let
   pname = "coqui-tts-trainer";
-  version = "0.3.2";
+  version = "0.4.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +28,7 @@ buildPythonPackage {
     owner = "idiap";
     repo = "coqui-ai-Trainer";
     tag = "v${version}";
-    hash = "sha256-lZmRniy8M3vsh0gCip9Eg0CwgDwcZnY1quy1VwU0O5I=";
+    hash = "sha256-cXdKkGkyco/9UcY4DZzTbccS4SPb918pr5/yCQxWqzk=";
   };
 
   nativeBuildInputs = [
