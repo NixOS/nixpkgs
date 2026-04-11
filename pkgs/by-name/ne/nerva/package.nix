@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "nerva";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "nerva";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4j+jJBTC5kGHyRlu2JNqTbJMc7RIde4JGJpg3ecDqk=";
+    hash = "sha256-ojm4we7mI02Y1MT9uWDpu1tp0QRo4VvGrvezUb+Lxcc=";
   };
 
   vendorHash = "sha256-j+8KZxHnYrtxwdBxpAXZ+Q5Sm1REluUEmD69tKYTCag=";
