@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.18.4";
+  version = "3.18.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
-    hash = "sha256-AcF0HpC7vPusEGp7i4ofY2FTJrFxLwXv33MnR6sdvJg=";
+    hash = "sha256-1fljGr5b3OYtcaGg/Qq2W78FWORB1lXRtqaBlxTGTDI=";
   };
 
   build-system = [ hatchling ];
