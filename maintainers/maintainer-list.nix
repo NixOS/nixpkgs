@@ -2093,6 +2093,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  arch-fan = {
+    email = "juanserracines@gmail.com";
+    github = "arch-fan";
+    githubId = 55891793;
+    name = "arch-fan";
+  };
   archer-65 = {
     email = "mario.liguori.056@gmail.com";
     github = "archer-65";
