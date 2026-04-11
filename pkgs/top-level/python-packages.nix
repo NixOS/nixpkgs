@@ -3748,6 +3748,8 @@ self: super: with self; {
 
   deep-ep = callPackage ../development/python-modules/deep-ep { };
 
+  deep-gemm = callPackage ../development/python-modules/deep-gemm { };
+
   deep-translator = callPackage ../development/python-modules/deep-translator { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };

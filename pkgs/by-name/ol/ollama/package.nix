@@ -94,7 +94,7 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.20.4/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.20.5/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
@@ -140,13 +140,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.20.4";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8TbZvxxaUdROpe3gnBx0XzX62tbQ9QeJP3Yp7XXJoTQ=";
+    hash = "sha256-/H4DZ/aRB04lKSke9XsK+vb76pcy940scoTunXO4pf4=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
@@ -232,7 +232,7 @@ goBuild (finalAttrs: {
     '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.20.4/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.20.5/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
@@ -263,6 +263,8 @@ goBuild (finalAttrs: {
       skippedTests = [
         "TestPushHandler/unauthorized_push" # Writes to $HOME, see https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
         "TestPiRun_InstallAndWebSearchLifecycle" # Requires network access to install npm packages
+        "TestOpenclawRun_ChannelSetupHappensBeforeGatewayRestart" # /bin/mkdir and /bin/cat are unavailable on NixOS
+        "TestOpenclawChannelSetupPreflight" # /bin/mkdir and /bin/cat are unavailable on NixOS
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
