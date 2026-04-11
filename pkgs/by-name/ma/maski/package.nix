@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maski";
   version = "0.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ManUtopiK";
     repo = "maski";
