@@ -19,12 +19,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     mainProgram = "telemt";
-    description = "MTProxy for Telegram on Rust + Tokio";
+    description = "MTProxy for Telegram";
     homepage = "https://github.com/telemt/telemt";
     license = {
       shortName = "telemt-license";
       fullName = "TELEMT Public License 3";
       url = "https://github.com/telemt/telemt/blob/main/LICENSE";
+      free = false;
     };
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
