@@ -65,7 +65,14 @@ let
           serverJavabase
           ;
         command = "fetch";
-        targets = if fetchAll then [ "--all" ] else targets;
+        targets =
+          if fetchAll then
+            [
+              "--all"
+              "--force"
+            ]
+          else
+            targets;
         outputHashMode = "recursive";
         commandArgs = [ "--repository_cache=repo_cache" ] ++ commandArgs;
         bazelPreBuild = bazelPreBuild + ''

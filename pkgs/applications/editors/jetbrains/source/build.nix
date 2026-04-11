@@ -13,10 +13,13 @@
   replaceVars,
   gcc,
   which,
+  patchelf,
   # TODO REMOVE
   breakpointHook,
   # TODO REMOVE
   strace,
+  # TODO REMOVE
+  vim,
 
   ant,
   cmake,
@@ -90,6 +93,13 @@ let
     }
   );
 
+  pythonPatchelfPatch = (
+    replaceVars ../patches/rules_python_patch_host_python.patch {
+      patchelf = lib.getExe patchelf;
+      dynamicLinker = stdenv.cc.bintools.dynamicLinker;
+    }
+  );
+
   src = runCommand "intellij-community-source" { } ''
     cp -r ${ideaSrc} $out
     chmod +w -R $out
@@ -116,6 +126,9 @@ let
     # Fix /usr/bin/env usage in the Java stub
     cp ${javaStubPatch} $out/build/rules_java_stub.patch
     cp ${javaStubPatch} $out/platform/build-scripts/bazel/build/rules_java_stub.patch
+    # Patch precompiled Python toolchain
+    cp ${pythonPatchelfPatch} $out/build/rules_python_patch_host_python.patch
+    cp ${pythonPatchelfPatch} $out/platform/build-scripts/bazel/build/rules_python_patch_host_python.patch
     # Patch for OS detection in llvm_toolchains
     cp ${../patches/toolchains_llvm_os_release.patch} $out/build/toolchains_llvm_os_release.patch
     cp ${../patches/toolchains_llvm_os_release.patch} $out/platform/build-scripts/bazel/build/toolchains_llvm_os_release.patch
@@ -307,6 +320,8 @@ bazel.package {
     breakpointHook
     # TODO: Remove
     strace
+    # TODO: Remove
+    vim
   ];
 
   bazel = bazel;
@@ -378,7 +393,7 @@ bazel.package {
     outputHash =
       {
         aarch64-linux = ""; # TODO
-        x86_64-linux = "";
+        x86_64-linux = "sha256-MNe6Xj5lzbuL0nYzq+6XJCkQWAUfNNgIthRgRTkEe1g=";
       }
       .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";

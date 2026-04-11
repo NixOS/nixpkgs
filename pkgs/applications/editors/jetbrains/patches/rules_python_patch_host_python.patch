@@ -1,0 +1,20 @@
+# Run patchelf on the used Python libraries
+--- a/python/private/toolchains_repo.bzl
++++ b/python/private/toolchains_repo.bzl
+@@ -363,6 +363,16 @@
+     )
+     python_tester = rctx.path("python_tester.py")
+     rctx.file(python_tester, python_tester_contents)
++    repo_utils.execute_checked(
++        rctx,
++        op = "NixPatchelf",
++        arguments = [
++            "@patchelf@",
++            "--set-interpreter",
++            "@dynamicLinker@",
++            rctx.path(python_binary)
++        ],
++    )
+     repo_utils.execute_checked(
+         rctx,
+         op = "CheckHostInterpreter",
