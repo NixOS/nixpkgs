@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # Let Tauri know what version we're building and deactivate the built-in updater
-  # Note: .bundle.externalBin doesn't include `"but"` at the moment
-  #       as that'd require more build adjustments
+  # Note: .bundle.externalBin doesn't include `"but"` - the `but` CLI
+  #       is packaged separately as `gitbutler-cli`
   postPatch = ''
     tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
     jq '.
