@@ -11,7 +11,6 @@
   pkgs,
   buildImage,
   buildLayeredImage,
-  fakeNss,
   pullImage,
   shadowSetup,
   buildImageWithNixDb,
@@ -27,11 +26,37 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  nonRootShadowSetup =
+    {
+      user,
+      uid,
+      gid ? uid,
+    }:
+    with pkgs;
+    [
+      (writeTextDir "etc/shadow" ''
+        root:!x:::::::
+        ${user}:!:::::::
+      '')
+      (writeTextDir "etc/passwd" ''
+        root:x:0:0::/root:${runtimeShell}
+        ${user}:x:${toString uid}:${toString gid}::/home/${user}:
+      '')
+      (writeTextDir "etc/group" ''
+        root:x:0:
+        ${user}:x:${toString gid}:
+      '')
+      (writeTextDir "etc/gshadow" ''
+        root:x::
+        ${user}:x::
+      '')
+    ];
+
   nginxArguments =
     let
       nginxPort = "80";
       nginxConf = pkgs.writeText "nginx.conf" ''
-        user nobody nobody;
+        user nginx nginx;
         daemon off;
         error_log /dev/stdout info;
         pid /dev/null;
@@ -55,9 +80,12 @@ let
       name = "nginx-container";
       tag = "latest";
       contents = [
-        fakeNss
         pkgs.nginx
-      ];
+      ]
+      ++ nonRootShadowSetup {
+        uid = 999;
+        user = "nginx";
+      };
 
       extraCommands = ''
         mkdir -p tmp/nginx_client_body
@@ -596,46 +624,18 @@ rec {
   };
 
   # buildLayeredImage with non-root user
-  bashLayeredWithUser =
-    let
-      nonRootShadowSetup =
-        {
-          user,
-          uid,
-          gid ? uid,
-        }:
-        with pkgs;
-        [
-          (writeTextDir "etc/shadow" ''
-            root:!x:::::::
-            ${user}:!:::::::
-          '')
-          (writeTextDir "etc/passwd" ''
-            root:x:0:0::/root:${runtimeShell}
-            ${user}:x:${toString uid}:${toString gid}::/home/${user}:
-          '')
-          (writeTextDir "etc/group" ''
-            root:x:0:
-            ${user}:x:${toString gid}:
-          '')
-          (writeTextDir "etc/gshadow" ''
-            root:x::
-            ${user}:x::
-          '')
-        ];
-    in
-    pkgs.dockerTools.buildLayeredImage {
-      name = "bash-layered-with-user";
-      tag = "latest";
-      contents = [
-        pkgs.bash
-        pkgs.coreutils
-      ]
-      ++ nonRootShadowSetup {
-        uid = 999;
-        user = "somebody";
-      };
+  bashLayeredWithUser = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-with-user";
+    tag = "latest";
+    contents = [
+      pkgs.bash
+      pkgs.coreutils
+    ]
+    ++ nonRootShadowSetup {
+      uid = 999;
+      user = "somebody";
     };
+  };
 
   # basic example, with cross compilation
   cross =
