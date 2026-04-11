@@ -7440,8 +7440,6 @@ with pkgs;
 
   inherit (python3Packages) sphinxHook;
 
-  suwidgets = libsForQt5.callPackage ../applications/radio/suwidgets { };
-
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
