@@ -4972,8 +4972,6 @@ self: super: with self; {
 
   email-validator = callPackage ../development/python-modules/email-validator { };
 
-  emailthreads = callPackage ../development/python-modules/emailthreads { };
-
   embedding-reader = callPackage ../development/python-modules/embedding-reader { };
 
   emborg = callPackage ../development/python-modules/emborg { };
