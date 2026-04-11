@@ -170,6 +170,39 @@ Use the raw package name from `xzar.sh` (e.g. `openclaw`, `ollama`, `nexa`). For
 
 Do **not** batch multiple package updates into a single commit — one commit per package.
 
+### 4.9 Push update to a per-package branch
+
+After committing a package update, push the commit to a dedicated branch on the `mkg20001/nixpkgs` fork so it can be used for upstream PRs or independent testing.
+
+1. Record the commit hash of the update you just made:
+   ```bash
+   UPDATE_COMMIT=$(git rev-parse HEAD)
+   ```
+2. Create a git worktree based on `upstream/master` (or `origin/master` if upstream doesn't exist):
+   ```bash
+   git worktree add /tmp/wt-<pkg-name> upstream/master
+   ```
+3. In the worktree, create a branch named `<pkg-name>-<new-version>` and cherry-pick the commit:
+   ```bash
+   cd /tmp/wt-<pkg-name>
+   git checkout -b <pkg-name>-<new-version>
+   git cherry-pick $UPDATE_COMMIT
+   ```
+   If the cherry-pick has conflicts, resolve them — the intent is to land the same change cleanly on top of upstream master.
+4. Push the branch:
+   ```bash
+   git push git@github.com:mkg20001/nixpkgs.git <pkg-name>-<new-version>
+   ```
+   If the branch already exists on the remote (from a previous run), force-push with `--force-with-lease`.
+5. Return to the main tree but **keep the worktree** — do **not** remove it:
+   ```bash
+   cd /root/nixpkgs
+   ```
+
+Use the raw package name and new version for the branch name (e.g. `ollama-0.21.0`, `openclaw-2026.5.0`).
+
+Skip this step for packages that were **not** updated (i.e. already at latest version).
+
 ## 5. Build every package in xzar.sh
 
 Read `xzar.sh` and extract the list of attribute names passed to `nix-build -A`. As of writing that includes:
@@ -217,6 +250,7 @@ When all packages build, summarise to the user:
 - which packages were updated to newer versions (old → new),
 - which packages were skipped for version updates and why (e.g. fork pin, already latest, update broke build),
 - which patches you had to rebase,
-- any package whose fix was non-trivial.
+- any package whose fix was non-trivial,
+- for each updated package: the worktree path (`/tmp/wt-<pkg-name>`), the branch name (`<pkg-name>-<version>`), and the remote it was pushed to (`git@github.com:mkg20001/nixpkgs`).
 
 Then stop. Pushing and running `xzar.sh` for real is the user's call.
