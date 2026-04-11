@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "yabause";
-  version = "0-unstable-2025-12-20";
+  version = "0-unstable-2026-04-10";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "yabause";
-    rev = "65af22e96beb6d9b0b9a50a81a39c86a6d604c1c";
-    hash = "sha256-LafC48f1m6pRWhXmfN+D+5r9qCNm1v9uLJVq5Wa5naE=";
+    rev = "76faf7c601359bafc41785325d686644000a7ba9";
+    hash = "sha256-UHmUsqAK+As6qfvhto2aOsW9A/lZMypfn2NxFui2x8c=";
   };
 
   makefile = "Makefile";
