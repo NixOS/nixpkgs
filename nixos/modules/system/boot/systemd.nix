@@ -866,6 +866,14 @@ in
         pamMount = false;
       };
     };
+
+    # the systemd vmspawn credential dropin executes sshd and expects ExecSearchPath to be set, see:
+    # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
+    # this service is used, for example, when NixOS is started via systemd-vmspawn
+    systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
+      serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
+      overrideStrategy = "asDropin";
+    };
   };
 
   # FIXME: Remove these eventually.

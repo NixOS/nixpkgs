@@ -51,6 +51,8 @@ buildPythonPackage rec {
   # Core dump
   doCheck = false;
 
+  pythonImportsCheck = [ "skl2onnx" ];
+
   meta = {
     description = "Convert scikit-learn models to ONNX";
     license = with lib.licenses; [ asl20 ];

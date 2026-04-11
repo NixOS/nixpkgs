@@ -245,11 +245,15 @@ lib.makeExtensible (
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
         nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
+        nixComponents_2_32 = throw "nixComponents_2_32 has been removed. use nixComponents_2_34.";
+        nixComponents_2_33 = throw "nixComponents_2_33 has been removed. use nixComponents_2_34.";
         nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
         nix_2_26 = throw "nix_2_26 has been removed. use nix_2_31.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
         nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
+        nix_2_32 = throw "nix_2_32 has been removed. use nix_2_34.";
+        nix_2_33 = throw "nix_2_33 has been removed. use nix_2_34.";
 
         minimum = throw "nixVersions.minimum has been removed. Use a specific version instead.";
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
