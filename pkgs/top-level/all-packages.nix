@@ -10223,8 +10223,6 @@ with pkgs;
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
-  qsstv = qt5.callPackage ../applications/radio/qsstv { };
-
   qsudo = libsForQt5.callPackage ../applications/misc/qsudo { };
 
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
