@@ -9,20 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vultisig-cli";
-  version = "0.6.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "vultisig";
     repo = "vultisig-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eQvWD0Jubtp0wfmuTBN4Mr4rKqoEvMiAGI5D8GAHYDY=";
+    hash = "sha256-4I+N9uKZBzw0AePjS8CiALye/fuykBtpAoYxp+5iTW8=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-SQ2C01dVSzJwzCvJUclcSiGTPz7RJfO3fYPCZbvnAHk=";
+    hash = "sha256-Ob0O69CDQwxQ+CnAtCSyweUahqDz0/g/JnJnAoruzIk=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    # Build shared workspace packages (core/chain, core/mpc, core/config, lib/utils)
+    YARN_IGNORE_PATH=1 yarn build:shared
 
     # Build workspace dependencies needed by the CLI at runtime (SDK must come first)
     YARN_IGNORE_PATH=1 yarn workspace @vultisig/sdk build:platform:node
@@ -63,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/vultisig-cli/node_modules/@vultisig
     cp -rL packages/sdk $out/lib/vultisig-cli/node_modules/@vultisig/sdk
     cp -rL packages/rujira $out/lib/vultisig-cli/node_modules/@vultisig/rujira
+    cp -rL packages/core/chain $out/lib/vultisig-cli/node_modules/@vultisig/core-chain
+    cp -rL packages/core/config $out/lib/vultisig-cli/node_modules/@vultisig/core-config
+    cp -rL packages/core/mpc $out/lib/vultisig-cli/node_modules/@vultisig/core-mpc
+    cp -rL packages/lib/dkls $out/lib/vultisig-cli/node_modules/@vultisig/lib-dkls
+    cp -rL packages/lib/mldsa $out/lib/vultisig-cli/node_modules/@vultisig/lib-mldsa
+    cp -rL packages/lib/schnorr $out/lib/vultisig-cli/node_modules/@vultisig/lib-schnorr
+    cp -rL packages/lib/utils $out/lib/vultisig-cli/node_modules/@vultisig/lib-utils
 
     mkdir -p $out/bin
     makeWrapper ${lib.getExe nodejs} $out/bin/vultisig \
