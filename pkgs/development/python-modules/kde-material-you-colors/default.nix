@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kde-material-you-colors";
-  version = "2.0.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fvDWBcXCIviCXMlLFPowJttNmpX1JO1OZsnSPyNhLv8=";
+    hash = "sha256-sN7u3jePevJnTHhQL6eAYKU2AD2QNW7VYuEHLN5RsK8=";
   };
 
   build-system = [ setuptools ];
