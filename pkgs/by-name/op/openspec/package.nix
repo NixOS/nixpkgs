@@ -70,6 +70,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --zsh <($out/bin/openspec completion generate zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "AI-native system for spec-driven development";
     homepage = "https://github.com/Fission-AI/OpenSpec";
