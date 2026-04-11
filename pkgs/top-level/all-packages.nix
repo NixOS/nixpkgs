@@ -7380,24 +7380,6 @@ with pkgs;
     scheme = guile;
   };
 
-  soapysdr = callPackage ../applications/radio/soapysdr { };
-
-  soapysdr-with-plugins = callPackage ../applications/radio/soapysdr {
-    extraPackages = [
-      limesuite
-      soapyairspy
-      soapyaudio
-      soapybladerf
-      soapyhackrf
-      soapyplutosdr
-      soapyremote
-      soapyrtlsdr
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isLinux [
-      soapyuhd
-    ]);
-  };
-
   spandsp = callPackage ../development/libraries/spandsp { };
   spandsp3 = callPackage ../development/libraries/spandsp/3.nix { };
 
