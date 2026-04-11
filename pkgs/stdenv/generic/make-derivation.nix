@@ -47,11 +47,13 @@ let
     zipAttrsWith
     ;
 
-  inherit (import ../../build-support/lib/mk-derivation-extras.nix { inherit lib stdenv; })
+  mkDerivationExtras = import ../../build-support/lib/mk-derivation-extras.nix { inherit lib stdenv; };
+  inherit (mkDerivationExtras)
     makeCMakeFlags
     makeMesonFlags
     envWithMainProgram
     validateEnv
+    processDerivationArgs
     ;
 
   /**
@@ -824,21 +826,14 @@ let
       );
 
     let
-      env' = envWithMainProgram { inherit env meta; };
-
-      derivationArg = makeDerivationArgument (
-        removeAttrs attrs [
+      inherit (processDerivationArgs {
+        stdenvArgs = removeAttrs attrs [
           "meta"
           "passthru"
           "pos"
-          "env"
-        ]
-        // {
-          ${if __structuredAttrs then "env" else null} = checkedEnv;
-          cmakeFlags = makeCMakeFlags attrs;
-          mesonFlags = makeMesonFlags attrs;
-        }
-      );
+        ];
+        inherit meta makeDerivationArgument;
+      }) derivationArg checkedEnv;
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
@@ -849,12 +844,6 @@ let
           ++ attrs.propagatedBuildInputs or [ ];
       };
       validity = checkMeta.assertValidity { inherit meta attrs; };
-
-      checkedEnv = validateEnv {
-        inherit env;
-        overlaidEnv = env';
-        derivationArgs = derivationArg;
-      };
 
       # Fixed-output derivations may not reference other paths, which means that
       # for a fixed-output derivation, the corresponding inputDerivation should

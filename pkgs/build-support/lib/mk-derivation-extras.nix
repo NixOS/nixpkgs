@@ -16,7 +16,7 @@ let
   inherit (import ./cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ./meson.nix { inherit lib stdenv; }) makeMesonFlags;
 in
-{
+rec {
   inherit makeCMakeFlags makeMesonFlags;
 
   /**
@@ -85,4 +85,56 @@ in
         "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
       v
     ) overlaidEnv;
+
+  /**
+    The full "process a stdenv.mkDerivation attrset into a ready-to-
+    call `derivation` argument set" pipeline: env extraction with
+    NIX_MAIN_PROGRAM overlay, cmake/meson flag computation,
+    optionally-nested `structuredAttrs.env`, and env validation.
+
+    Both `pkgs/stdenv/generic/make-derivation.nix`'s `derivationArg`
+    let-binding and `layers.stdenvMkDerivation`'s `drvAttrs`
+    computation are now thin wrappers around this one.
+
+    Takes:
+
+      - `stdenvArgs`: the attrs to feed into `derivation`, minus
+        `meta` / `passthru` / `pos`. May contain `env = { ... }`.
+      - `meta`: package meta attrset (only read for `mainProgram`).
+      - `makeDerivationArgument`: stdenv's `makeDerivationArgument`
+        function, passed in because the helper itself has no stdenv
+        of its own.
+
+    Returns `{ derivationArg, checkedEnv }` where the final
+    derivation is computed as `derivation (derivationArg // checkedEnv)`
+    (non-structured-attrs mode) or any equivalent rearrangement
+    (structured mode, where `env` is additionally carried as a nested
+    key inside `derivationArg`).
+  */
+  processDerivationArgs =
+    {
+      stdenvArgs,
+      meta ? { },
+      makeDerivationArgument,
+    }:
+    let
+      env = stdenvArgs.env or { };
+      __structuredAttrs = stdenvArgs.__structuredAttrs or false;
+      overlaidEnv = envWithMainProgram { inherit env meta; };
+      derivationArg = makeDerivationArgument (
+        (builtins.removeAttrs stdenvArgs [ "env" ])
+        // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
+        // {
+          cmakeFlags = makeCMakeFlags stdenvArgs;
+          mesonFlags = makeMesonFlags stdenvArgs;
+        }
+      );
+      checkedEnv = validateEnv {
+        inherit env overlaidEnv;
+        derivationArgs = derivationArg;
+      };
+    in
+    {
+      inherit derivationArg checkedEnv;
+    };
 }

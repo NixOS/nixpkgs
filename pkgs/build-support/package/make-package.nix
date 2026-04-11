@@ -275,10 +275,7 @@ let
     { stdenv, ... }:
     let
       inherit (import ../lib/mk-derivation-extras.nix { inherit lib stdenv; })
-        makeCMakeFlags
-        makeMesonFlags
-        envWithMainProgram
-        validateEnv
+        processDerivationArgs
         ;
     in
     this: old:
@@ -295,18 +292,10 @@ let
         }
       );
 
-      rawStdenvArgs = this.stdenvArgs;
-      rawEnv = rawStdenvArgs.env or { };
-      structured = rawStdenvArgs.__structuredAttrs or false;
-
-      envAttrs = envWithMainProgram {
-        env = rawEnv;
-        inherit (this) meta;
-      };
-
-      # The name / pname / version injection that
-      # `stdenv.makeDerivationArgument` will see. Factored out so the
-      # env-overlap check below sees the same key space.
+      # The name / pname / version injection that `stdenv.mkDerivation`
+      # would normally get from the user's top-level attrs. Prepending
+      # it to `this.stdenvArgs` means the shared helper can treat our
+      # input the same way it treats a legacy mkDerivation call.
       nameArgs =
         if this ? version then
           {
@@ -318,26 +307,11 @@ let
             inherit (this) name;
           };
 
-      # Everything that will end up in the derivation-arg attrset
-      # *other* than `env` itself. Computed before `checkedEnv` so we
-      # have something to check for key-overlap against, mirroring
-      # `derivationArg` in `make-derivation.nix`.
-      nonEnvProcessedArgs =
-        nameArgs
-        // (builtins.removeAttrs rawStdenvArgs [ "env" ])
-        // lib.optionalAttrs structured { env = checkedEnv; }
-        // {
-          cmakeFlags = makeCMakeFlags rawStdenvArgs;
-          mesonFlags = makeMesonFlags rawStdenvArgs;
-        };
-
-      checkedEnv = validateEnv {
-        env = rawEnv;
-        overlaidEnv = envAttrs;
-        derivationArgs = nonEnvProcessedArgs;
-      };
-
-      processedStdenvArgs = nonEnvProcessedArgs // checkedEnv;
+      inherit (processDerivationArgs {
+        stdenvArgs = nameArgs // this.stdenvArgs;
+        inherit (this) meta;
+        inherit (stdenv) makeDerivationArgument;
+      }) derivationArg checkedEnv;
 
       checkedAttrs = this.drvAttrs // { inherit (this) meta; };
     in
@@ -346,7 +320,7 @@ let
         inherit (this.public) meta;
         attrs = checkedAttrs;
       };
-      drvAttrs = stdenv.makeDerivationArgument processedStdenvArgs;
+      drvAttrs = derivationArg // checkedEnv;
       drvOutAttrs = builtins.derivationStrict this.drvAttrs;
       public =
         old.public
