@@ -10871,6 +10871,13 @@
     githubId = 108175486;
     keys = [ { fingerprint = "E4DD 51F7 FA3F DCF1 BAF6  A72C 576E 43EF 8482 E415"; } ];
   };
+  horizonwiki = {
+    email = "horizondebug@email.com";
+    name = "Sergey";
+    github = "horizonwiki";
+    githubId = 190667396;
+    keys = [ { fingerprint = "9CC2 8EF1 5FEC 489B 99AC  9C26 5A23 3EE0 8727 EBDD"; } ];
+  };
   hoppla20 = {
     email = "privat@vincentcui.de";
     github = "hoppla20";
