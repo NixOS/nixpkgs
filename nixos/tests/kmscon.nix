@@ -31,7 +31,7 @@
   enableOCR = true;
 
   testScript = ''
-    machine.start()
+    machine.wait_for_unit("default.target")
 
     with subtest("ensure we can open a tty"):
       machine.wait_for_text("alice@machine")
