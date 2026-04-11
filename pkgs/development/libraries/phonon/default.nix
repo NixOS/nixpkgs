@@ -55,14 +55,13 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-fPIC"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "-Wno-error=enum-constexpr-conversion"
-    ]
-  );
+  cmakeFlags = [
+    # The experimental library uses out-of-range enum casts that newer clang
+    # rejects as a hard error (not just a warning), so -Wno-error doesn't help.
+    (lib.cmakeBool "PHONON_BUILD_EXPERIMENTAL" false)
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
