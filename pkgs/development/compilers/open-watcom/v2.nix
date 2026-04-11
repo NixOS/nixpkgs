@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '-static' ""
   '';
 
+  # https://github.com/open-watcom/open-watcom-v2/issues/1608
+  hardeningDisable = [ "strictflexarrays1" ];
+
   nativeBuildInputs = lib.optionals withDocs [
     dosbox # running prebuilt WGML tool to create docs
     ghostscript
