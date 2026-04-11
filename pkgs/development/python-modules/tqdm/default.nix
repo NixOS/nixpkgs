@@ -16,18 +16,17 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.67.1";
+  version = "4.67.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+K75xSwIwTpl8w6jT05arD/Ro0lZh51+WeYwJyhmJ/I=";
+    hash = "sha256-fYJfA/iSRO9z8dTOGTyxd0qBef2W8x1+Hc3mIJK5YLs=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeCheckInputs = [
