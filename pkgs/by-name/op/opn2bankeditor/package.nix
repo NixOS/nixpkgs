@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   dos2unix,
   cmake,
   pkg-config,
@@ -57,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s "$out/Applications/OPN2 Bank Editor.app/Contents/MacOS/OPN2 Bank Editor" $out/bin/opn2_bank_editor
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     mainProgram = "opn2_bank_editor";
