@@ -191,6 +191,8 @@ in
 
   overriding = callPackage ./overriding.nix { };
 
+  mk-derivation-as-package = callPackage ./mk-derivation-as-package.nix { };
+
   mk-package-override-layers = callPackage ./mk-package-override-layers.nix { };
 
   mk-package-with-defaults = callPackage ./mk-package-with-defaults.nix { };

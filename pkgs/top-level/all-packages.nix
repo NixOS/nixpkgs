@@ -169,12 +169,20 @@ with pkgs;
     # We don't want nix-env -q to enter this, because all of these are aliases.
     dontRecurseIntoAttrs (import ./pkg-config/defaultPkgConfigPackages.nix pkgs);
 
-  inherit (import ../build-support/package/make-package.nix { inherit callPackage config lib stdenv; })
+  inherit
+    (import ../build-support/package/make-package.nix {
+      inherit
+        callPackage
+        config
+        lib
+        stdenv
+        ;
+    })
     layers
     mkPackage
     mkPackageWithDefaults
+    mkDerivationAsPackage
     ;
-
 
   ### Nixpkgs maintainer tools
 

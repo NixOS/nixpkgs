@@ -593,11 +593,14 @@ let
         ++ userLayers;
     in
     mkPackage (lib.setFunctionArgs wrapper allFargs);
+
+  mkDerivationAsPackage = import ./mk-derivation.nix { inherit lib mkPackage; };
 in
 {
   inherit
     layers
     mkPackage
     mkPackageWithDefaults
+    mkDerivationAsPackage
     ;
 }
