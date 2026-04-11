@@ -136,6 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/z80asm/t/z80asm_lib.t
   '';
 
+  # z88dk-z80asm triggers buffer overflow detection with FORTIFY_SOURCE=3.
+  # Upstream bug: https://github.com/z88dk/z88dk/issues
+  hardeningDisable = [ "fortify" ];
+
   # Parallel building is not working yet with the upstream Makefiles.
   # Explicitly switch this off for now.
   enableParallelBuilding = false;
