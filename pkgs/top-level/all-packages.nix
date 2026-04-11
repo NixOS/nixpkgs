@@ -1672,10 +1672,6 @@ with pkgs;
 
   datasette = with python3Packages; toPythonApplication datasette;
 
-  diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
-    inherit (haskellPackages) ghcWithPackages diagrams-builder;
-  };
-
   dialogbox = libsForQt5.callPackage ../tools/misc/dialogbox { };
 
   ding = callPackage ../applications/misc/ding {
