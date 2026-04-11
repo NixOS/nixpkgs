@@ -8,6 +8,7 @@
   libx11,
 
   # GTK2/3
+  harfbuzz,
   pango,
   cairo,
   glib,
@@ -42,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
-  version = "1.202.1";
+  version = "1.234.0.4";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     tag = finalAttrs.version;
-    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
+    hash = "sha256-4zzBc7tIP9y3OB3H/PfrlFAqmkkwPsGwE0BF+CgGl24=";
   };
 
   patches = [ ./proc_globdata.patch ];
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ]
   ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
+    harfbuzz
     pango
     cairo
     glib
@@ -94,10 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
       '') deps
     )
     + ''
-      # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
-      substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
-        --replace GTK2_IME_CODE _GTK2_IME_CODE
-
       lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
         bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
         EncConv/encconv/encconv_package.lpk \
@@ -145,5 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux;
     mainProgram = "cudatext";
+    broken = widgetset == "gtk2"; # https://wiki.freepascal.org/CudaText#Linux_error_on_ATSynEdit_compiling
   };
 })
