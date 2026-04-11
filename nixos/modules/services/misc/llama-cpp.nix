@@ -1,3 +1,25 @@
+# llama-cpp NixOS module — llama.cpp inference server
+#
+# Single instance (backward-compatible):
+#
+#   services.llama-cpp = {
+#     enable = true;
+#     model = "/models/my-model.gguf";
+#     extraFlags = [ "-c" "4096" "--gpu-layers" "99" ];
+#     ...
+#   };
+#
+# Multi-instance (each instance gets its own systemd service):
+#
+#   services.llama-cpp.instances = {
+#     code   = { enable = true; port = 8090; model = "/models/code.gguf";  ... };
+#     chat   = { enable = true; port = 8091; model = "/models/chat.gguf";  ... };
+#   };
+#
+# The single-instance API maps to instances."" internally and creates
+# a service named llama-cpp.service.  Named instances create
+# llama-cpp-<name>.service.
+
 {
   config,
   lib,
@@ -371,15 +393,17 @@ let
       "pipefail"
     ];
     text = ''
-      # Instance data baked in at eval time (name:host:port:metrics:slots)
+      # Instance data baked in at eval time (displayName:serviceName:host:port:metrics:slots)
       INSTANCES=(
         ${lib.concatStringsSep "\n        " (
           lib.mapAttrsToList (
             name: inst:
             let
+              displayName = if name == "" then "default" else name;
+              svcName = "llama-cpp" + lib.optionalString (name != "") "-${name}";
               connectHost = if inst.host == "0.0.0.0" then "127.0.0.1" else inst.host;
             in
-            ''"${name}:${connectHost}:${toString inst.port}:${lib.boolToString inst.enableMetrics}:${lib.boolToString inst.slots}"''
+            ''"${displayName}:${svcName}:${connectHost}:${toString inst.port}:${lib.boolToString inst.enableMetrics}:${lib.boolToString inst.slots}"''
           ) enabledInstances
         )}
       )
@@ -407,7 +431,7 @@ let
       warn() { echo -e "  ''${YELLOW}WARN''${NC} $1"; WARN=$((WARN + 1)); }
 
       check_service() {
-        local svc="llama-cpp-$1.service"
+        local svc="$1.service"
         if systemctl is-active --quiet "$svc"; then
           pass "systemd service $svc is active"
         else
@@ -416,7 +440,8 @@ let
       }
 
       check_health() {
-        local url="http://$2:$3/health"
+        local host="$1" port="$2"
+        local url="http://''${host}:''${port}/health"
         local resp
         if resp=$(curl -sf --max-time 5 --connect-timeout 2 "$url" 2>/dev/null); then
           local status
@@ -432,8 +457,9 @@ let
       }
 
       check_metrics() {
-        if [ "$4" != "true" ]; then return; fi
-        local url="http://$2:$3/metrics"
+        local host="$1" port="$2" enabled="$3"
+        if [ "$enabled" != "true" ]; then return; fi
+        local url="http://''${host}:''${port}/metrics"
         if curl -sf --max-time 5 --connect-timeout 2 "$url" >/dev/null 2>&1; then
           pass "/metrics ($url) reachable"
         else
@@ -442,8 +468,9 @@ let
       }
 
       check_slots() {
-        if [ "$4" != "true" ]; then return; fi
-        local url="http://$2:$3/slots"
+        local host="$1" port="$2" enabled="$3"
+        if [ "$enabled" != "true" ]; then return; fi
+        local url="http://''${host}:''${port}/slots"
         if curl -sf --max-time 5 --connect-timeout 2 "$url" >/dev/null 2>&1; then
           pass "/slots ($url) reachable"
         else
@@ -452,7 +479,7 @@ let
       }
 
       check_security() {
-        local svc="llama-cpp-$1.service"
+        local svc="$1.service"
         local output
         if output=$(systemd-analyze security --no-pager "$svc" 2>/dev/null | tail -1); then
           if [ -n "$output" ]; then
@@ -466,8 +493,9 @@ let
       }
 
       check_inference() {
+        local host="$1" port="$2"
         if [ "$DO_INFERENCE" != "true" ]; then return; fi
-        local url="http://$2:$3/v1/chat/completions"
+        local url="http://''${host}:''${port}/v1/chat/completions"
         local resp
         if resp=$(curl -sf --max-time 30 --connect-timeout 2 \
           -H "Content-Type: application/json" \
@@ -489,14 +517,14 @@ let
       echo -e "Instances: ''${#INSTANCES[@]}\n"
 
       for entry in "''${INSTANCES[@]}"; do
-        IFS=: read -r name host port metrics slots <<< "$entry"
+        IFS=: read -r name svcname host port metrics slots <<< "$entry"
         echo -e "''${BOLD}[$name]''${NC} http://$host:$port"
-        check_service "$name"
-        check_health "$name" "$host" "$port"
-        check_metrics "$name" "$host" "$port" "$metrics"
-        check_slots "$name" "$host" "$port" "$slots"
-        check_security "$name"
-        check_inference "$name" "$host" "$port"
+        check_service "$svcname"
+        check_health "$host" "$port"
+        check_metrics "$host" "$port" "$metrics"
+        check_slots "$host" "$port" "$slots"
+        check_security "$svcname"
+        check_inference "$host" "$port"
         echo
       done
 
@@ -509,6 +537,44 @@ let
 
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "enable" ]
+      [ "services" "llama-cpp" "instances" "" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "package" ]
+      [ "services" "llama-cpp" "instances" "" "package" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "model" ]
+      [ "services" "llama-cpp" "instances" "" "model" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "modelsDir" ]
+      [ "services" "llama-cpp" "instances" "" "modelsDir" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "extraFlags" ]
+      [ "services" "llama-cpp" "instances" "" "extraFlags" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "host" ]
+      [ "services" "llama-cpp" "instances" "" "host" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "port" ]
+      [ "services" "llama-cpp" "instances" "" "port" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "openFirewall" ]
+      [ "services" "llama-cpp" "instances" "" "openFirewall" ]
+    )
+    (lib.mkRemovedOptionModule [ "services" "llama-cpp" "modelsPreset" ]
+      "services.llama-cpp.modelsPreset has been removed. Use services.llama-cpp.instances.<name>.extraFlags with --models-preset instead."
+    )
+  ];
+
   options.services.llama-cpp = {
     instances = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule instanceModule);
@@ -529,7 +595,21 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
-    assertions = lib.flatten (
+    warnings =
+      lib.optional (enabledInstances ? "")
+        "services.llama-cpp: Single-instance configuration is supported but consider migrating to services.llama-cpp.instances for multi-instance support. See the llama-cpp NixOS module documentation for details.";
+
+    assertions = [
+      {
+        assertion =
+          let
+            endpoints = lib.mapAttrsToList (_: inst: "${inst.host}:${toString inst.port}") enabledInstances;
+          in
+          lib.length endpoints == lib.length (lib.unique endpoints);
+        message = "services.llama-cpp: multiple instances share the same host:port.";
+      }
+    ]
+    ++ lib.flatten (
       lib.mapAttrsToList (name: inst: [
         {
           assertion = !(inst.apiKey != null && inst.apiKeyFile != null);
@@ -554,7 +634,7 @@ in
         needsGpu = instCfg.needsGpu;
         deviceRules = instCfg.deviceRules;
         gpuGroups = instCfg.gpuGroups;
-        serviceName = "llama-cpp-${name}";
+        serviceName = "llama-cpp" + lib.optionalString (name != "") "-${name}";
 
         # Auto-detect gpuLayers: 99 for GPU packages, 0 for CPU-only
         effectiveGpuLayers =
@@ -581,125 +661,65 @@ in
           Restart = "on-failure";
           RestartSec = 300;
 
-          ExecStart = utils.escapeSystemdExecArgs (
-            [ (lib.getExe' pkg "llama-server") ]
-            ++ (
-              if inst.logVerbosity != null then
-                [
-                  "--log-verbosity"
-                  (toString inst.logVerbosity)
-                ]
-              else
-                [ "--log-disable" ]
-            )
-            ++ [
-              "--host"
-              inst.host
-              "--port"
-              (toString inst.port)
-            ]
-            ++ lib.optionals (inst.model != null) [
-              "--model"
-              (toString inst.model)
-            ]
-            ++ lib.optionals (inst.modelsDir != null) [
-              "--models-dir"
-              (toString inst.modelsDir)
-            ]
-            ++ [
-              "--gpu-layers"
-              (toString effectiveGpuLayers)
-            ]
-            ++ lib.optionals (inst.contextSize != null) [
-              "--ctx-size"
-              (toString inst.contextSize)
-            ]
-            ++ lib.optionals (inst.parallel != null) [
-              "--parallel"
-              (toString inst.parallel)
-            ]
-            ++ lib.optionals (inst.threads != null) [
-              "--threads"
-              (toString inst.threads)
-            ]
-            ++ lib.optionals (inst.threadsHttp != null) [
-              "--threads-http"
-              (toString inst.threadsHttp)
-            ]
-            ++ lib.optionals (inst.batchSize != null) [
-              "--batch-size"
-              (toString inst.batchSize)
-            ]
-            ++ lib.optionals (inst.flashAttention != null) [
-              "--flash-attn"
-              inst.flashAttention
-            ]
-            ++ lib.optionals inst.mlock [ "--mlock" ]
-            ++ lib.optionals (inst.numa != null) [
-              "--numa"
-              inst.numa
-            ]
-            ++ lib.optionals (inst.splitMode != null) [
-              "--split-mode"
-              inst.splitMode
-            ]
-            ++ lib.optionals (inst.mainGpu != null) [
-              "--main-gpu"
-              (toString inst.mainGpu)
-            ]
-            ++ lib.optionals (inst.tensorSplit != null) [
-              "--tensor-split"
-              inst.tensorSplit
-            ]
-            ++ lib.optionals (inst.alias != null) [
-              "--alias"
-              inst.alias
-            ]
-            ++ lib.optionals (inst.chatTemplate != null) [
-              "--chat-template"
-              inst.chatTemplate
-            ]
-            ++ lib.optionals (inst.timeout != null) [
-              "--timeout"
-              (toString inst.timeout)
-            ]
-            ++ lib.optionals (!inst.slots) [ "--no-slots" ]
-            ++ lib.optionals inst.embedding [ "--embedding" ]
-            ++ lib.optionals inst.enableMetrics [ "--metrics" ]
-            ++ lib.optionals (inst.apiKey != null) [
-              "--api-key"
-              inst.apiKey
-            ]
-            ++ lib.optionals (inst.apiKeyFile != null) [
-              "--api-key-file"
-              (toString inst.apiKeyFile)
-            ]
-            ++ lib.optionals (inst.sslKeyFile != null) [
-              "--ssl-key-file"
-              (toString inst.sslKeyFile)
-            ]
-            ++ lib.optionals (inst.sslCertFile != null) [
-              "--ssl-cert-file"
-              (toString inst.sslCertFile)
-            ]
-            ++ lib.concatMap (l: [
-              "--lora"
-              l
-            ]) inst.lora
-            ++ lib.optionals (inst.logFile != null) [
-              "--log-file"
-              (toString inst.logFile)
-            ]
-            ++ lib.optionals (inst.hfRepo != null) [
-              "--hf-repo"
-              inst.hfRepo
-            ]
-            ++ lib.optionals (inst.hfFile != null) [
-              "--hf-file"
-              inst.hfFile
-            ]
-            ++ inst.extraFlags
-          );
+          ExecStart =
+            let
+              # Build CLI flags declaratively; null values are omitted,
+              # false booleans are omitted, true booleans become bare flags,
+              # and lists repeat the flag per element.
+              flagArgs =
+                lib.cli.toCommandLine
+                  (_: {
+                    option = "--${_}";
+                    sep = null;
+                    explicitBool = false;
+                  })
+                  {
+                    host = inst.host;
+                    port = inst.port;
+                    model = inst.model;
+                    models-dir = inst.modelsDir;
+                    gpu-layers = effectiveGpuLayers;
+                    ctx-size = inst.contextSize;
+                    parallel = inst.parallel;
+                    threads = inst.threads;
+                    threads-http = inst.threadsHttp;
+                    batch-size = inst.batchSize;
+                    flash-attn = inst.flashAttention;
+                    mlock = inst.mlock;
+                    numa = inst.numa;
+                    split-mode = inst.splitMode;
+                    main-gpu = inst.mainGpu;
+                    tensor-split = inst.tensorSplit;
+                    alias = inst.alias;
+                    chat-template = inst.chatTemplate;
+                    timeout = inst.timeout;
+                    no-slots = !inst.slots;
+                    embedding = inst.embedding;
+                    metrics = inst.enableMetrics;
+                    api-key = inst.apiKey;
+                    api-key-file = inst.apiKeyFile;
+                    ssl-key-file = inst.sslKeyFile;
+                    ssl-cert-file = inst.sslCertFile;
+                    lora = inst.lora;
+                    log-file = inst.logFile;
+                    hf-repo = inst.hfRepo;
+                    hf-file = inst.hfFile;
+                  };
+            in
+            utils.escapeSystemdExecArgs (
+              [ (lib.getExe' pkg "llama-server") ]
+              ++ (
+                if inst.logVerbosity != null then
+                  [
+                    "--log-verbosity"
+                    (toString inst.logVerbosity)
+                  ]
+                else
+                  [ "--log-disable" ]
+              )
+              ++ flagArgs
+              ++ inst.extraFlags
+            );
 
           StateDirectory = serviceName;
           CacheDirectory = serviceName;
