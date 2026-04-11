@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.91.0";
+  version = "1.92.1";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AXScsFVN8vEdhjM4m4VK41tje9QABp0OGq+8sPM+4oo=";
+    hash = "sha256-4DUEsh2T5rx/0u79+edMLAjTRUmXxlbA0SVH/EwoeVo=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-idxt6qrs2CPO4SvZEuZNy12mw7dy1dslfuVn1ufrZ5Y=";
+  vendorHash = "sha256-fnVY1WEwzuRjHXQSGLl1c7bQXxzOHFEPlb/DhntYm2U=";
 
   ldflags = [
     "-s"
@@ -85,6 +85,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       anthonyroussel
+      turebentzin
     ];
     mainProgram = "glab";
   };
