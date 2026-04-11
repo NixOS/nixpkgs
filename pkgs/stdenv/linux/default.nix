@@ -648,10 +648,6 @@ in
           inherit (prevStage) expand-response-params;
         };
 
-        # To allow users' overrides inhibit dependencies too heavy for
-        # bootstrap, like guile: https://github.com/NixOS/nixpkgs/issues/181188
-        gnumake = super.gnumake.override { inBootstrap = true; };
-
         gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
@@ -869,8 +865,6 @@ in
                 libunistring
                 ;
             };
-
-            gnumake = super.gnumake.override { inBootstrap = false; };
           }
           // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
             # Need to get rid of these when cross-compiling.
