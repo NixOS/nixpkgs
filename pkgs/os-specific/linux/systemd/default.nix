@@ -388,6 +388,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
+    (lib.mesonOption "ntp-servers" "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
@@ -559,8 +560,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "idn" false)
   ];
   preConfigure = ''
-    mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-
     substituteInPlace src/libsystemd/sd-journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
