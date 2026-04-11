@@ -175,13 +175,6 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version =
-        let
-          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-        in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
-          lib.strings.substring versionSuffixPos 1 rcu.version
-        })";
     };
 
     # Python stuff automatically adds an updateScript that just fails
