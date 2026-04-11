@@ -3141,6 +3141,16 @@
     };
     version = "1.18.10";
   };
+  nokolexbor = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1msxwhdnbrfv0ylcw64vzxa8s3dqjr67789lygsyggw0jafndpx6";
+      type = "gem";
+    };
+    version = "0.7.0";
+  };
   observer = {
     groups = [ "default" ];
     platforms = [ ];

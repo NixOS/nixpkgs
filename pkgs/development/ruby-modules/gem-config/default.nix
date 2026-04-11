@@ -810,6 +810,16 @@ in
       }
     );
 
+  nokolexbor = attrs: {
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+      git
+    ];
+    dontBuild = false;
+    dontUseCmakeConfigure = true;
+  };
+
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
     buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
