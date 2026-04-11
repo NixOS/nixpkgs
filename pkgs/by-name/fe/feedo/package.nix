@@ -6,6 +6,7 @@
   ...
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
   pname = "feedo";
   version = "1.1.31";
 
