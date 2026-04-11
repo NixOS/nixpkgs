@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];
 
-  env = {
-    # Doesn't build on Darwin with -std=gnu23. Apply uniformly as C standard target is something unlikely to vary across platforms.
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Doesn't build on Darwin with -std=gnu23.
     NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
 
