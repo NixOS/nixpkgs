@@ -7,14 +7,10 @@
   chromaprint,
   gettext,
   gst_all_1,
-  liblastfm,
-  qtbase,
-  qtx11extras,
-  qttools,
+  libsForQt5,
   taglib_1,
   fftw,
   glew,
-  qjson,
   sqlite,
   libgpod,
   libplist,
@@ -26,12 +22,9 @@
   pcre,
   projectm_3,
   protobuf,
-  qca-qt5,
   pkg-config,
   sparsehash,
   config,
-  wrapQtAppsHook,
-  gst_plugins,
   util-linuxMinimal,
   libunwind,
   libselinux,
@@ -46,6 +39,13 @@ let
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
+
+  gst_plugins = with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-libav
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     util-linuxMinimal
     libunwind
     libselinux
@@ -80,16 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gstreamer
     gvfs
-    liblastfm
+    libsForQt5.liblastfm
     libpulseaudio
     pcre
     projectm_3
     protobuf
-    qca-qt5
-    qjson
-    qtbase
-    qtx11extras
-    qttools
+    libsForQt5.qca-qt5
+    libsForQt5.qjson
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+    libsForQt5.qttools
     sqlite
     taglib_1
     alsa-lib
