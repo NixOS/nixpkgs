@@ -68,5 +68,15 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ ruby0b ];
     mainProgram = "pyload";
+    knownVulnerabilities = [
+      "CVE-2026-29778"
+      "CVE-2026-33314"
+      "CVE-2026-33509"
+      "CVE-2026-35463"
+      "CVE-2026-35464"
+      "CVE-2026-35586"
+      "CVE-2026-35592"
+      "CVE-2026-40071"
+    ];
   };
 }
