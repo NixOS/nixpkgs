@@ -2042,10 +2042,6 @@ with pkgs;
     mozc = mozc.override { withIbus = true; };
     mozc-ut = mozc-ut.override { withIbus = true; };
 
-    openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
-      withIbusSupport = true;
-    };
-
     pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
