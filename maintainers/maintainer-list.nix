@@ -3635,6 +3635,11 @@
     githubId = 114744388;
     name = "bloominstrong";
   };
+  blooym = {
+    name = "Lyna";
+    github = "Blooym";
+    githubId = 19539165;
+  };
   bloveless = {
     email = "brennon.loveless@gmail.com";
     github = "bloveless";
@@ -27993,6 +27998,13 @@
     githubId = 2130305;
     name = "Marek Fajkus";
   };
+  turebentzin = {
+    name = "Ture Bentzin";
+    email = "ture.bentzin@alumni.fh-aachen.de";
+    github = "turebentzin";
+    githubId = 38729194;
+    keys = [ { fingerprint = "4868 4B0F D531 473E C82A  641E F1E6 70A1 ED8E 92CE"; } ];
+  };
   turion = {
     email = "programming@manuelbaerenz.de";
     github = "turion";
@@ -29381,6 +29393,12 @@
     github = "wolfgangwalther";
     githubId = 9132420;
     keys = [ { fingerprint = "F943 A0BC 720C 5BEF 73CD E02D B398 93FA 5F65 CAE1"; } ];
+  };
+  wolfram444 = {
+    name = "Xabibulloh To'xtayev";
+    email = "kamiltox2006@gmail.com";
+    github = "woolfram444";
+    githubId = 109225370;
   };
   womeier = {
     name = "Wolfgang Meier";

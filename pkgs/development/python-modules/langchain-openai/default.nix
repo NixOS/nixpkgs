@@ -87,6 +87,7 @@ buildPythonPackage (finalAttrs: {
     "test_load_openai_llm"
     "test_loads_openai_chat"
     "test_load_openai_chat"
+    "test_format_message_content"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

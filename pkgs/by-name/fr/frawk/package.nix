@@ -27,8 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-VraFR3Mp4mPh+39hw88R0q1p5iNkcQzvhRVNPwSxzU0=";
 
   patches = [
-    # This patch comes from https://github.com/ezrosent/frawk/pull/120, which was squash-merged.
+    # Remove these two patches after frawk is updated to a version including this fix
+    # This patch comes from https://github.com/ezrosent/frawk/pull/120
     ./fix-some-compiler-warnings-errors.patch
+    # From https://github.com/ezrosent/frawk/commit/35a79dc04933f38f98a7c8f6fc89ca09724702ab
+    ./fix-prefetch-read-data.patch
   ];
 
   buildInputs = [

@@ -2,20 +2,24 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vivid";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "vivid";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-963rJz0ZsWnKQx8tO1Y65RHAW/oZnF4A5XKneP0PyBM=";
+    hash = "sha256-5SRZq2L49Kn6zwK1DXjtakz2zKrcAdbMdQ0yxykUvm8=";
   };
 
-  cargoHash = "sha256-oP5/G/PSkwn4JruLQOGtM8M2uPt4Q88bU3kNmXUK4JE=";
+  cargoHash = "sha256-RM6OY5TLofKZPsWoNnF4ZPGhF9eV+ZmOuGXe7Xjc254=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Generator for LS_COLORS with support for multiple color themes";

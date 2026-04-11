@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.6.0";
+  version = "9.7.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xNdA1QoMLjisM68Q6BU2bL0tCEagba/KMAjqr+Lwm+o=";
+    hash = "sha256-FmEflROGdI6DSBlCPgk4k1dV5AIwHvB6pY+E9ItpQgE=";
   };
 
   patches =

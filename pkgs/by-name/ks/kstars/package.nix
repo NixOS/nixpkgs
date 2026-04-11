@@ -5,8 +5,9 @@
   fetchpatch2,
   cfitsio,
   cmake,
+  pkg-config,
   curl,
-  eigen_3_4_0,
+  eigen,
   gsl,
   indi-full,
   kdePackages,
@@ -35,13 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     kdoctools
     wrapQtAppsHook
     cmake
+    pkg-config
   ];
 
   buildInputs = with kdePackages; [
     breeze-icons
     cfitsio
     curl
-    eigen_3_4_0
+    eigen
     gsl
     indi-full
     kconfig

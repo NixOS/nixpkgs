@@ -3,7 +3,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libx11,
 }:
 
 buildGoModule (finalAttrs: {
@@ -17,10 +16,9 @@ buildGoModule (finalAttrs: {
     sha256 = "sha256-2Feb2+7UJ+39waO9rFyT3ZDlEdS5s3uLuxUiDh4iuJE=";
   };
 
-  # clipboard functionality not working on Darwin
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
+  ldflags = [
+    "-X main.Version=${finalAttrs.version}"
+  ];
 
   vendorHash = null;
 
