@@ -95,6 +95,18 @@ clangStdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
         --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
     ''
+    # Make PrusaSlicer handle the url "prusaslicer://"
+    + ''
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'Exec=prusa-slicer %F' \
+        'Exec=prusa-slicer %U'
+
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
+    ''
   );
 
   nativeBuildInputs = [
