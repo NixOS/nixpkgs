@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OXg9Xyv0L4KVQw5Gr6WRHeh4K6ozmj2//FPXVYaMhgU=";
 
+  # Testing requires additional dependencies not installable with Nix alone
   doCheck = false;
 
   meta = {
