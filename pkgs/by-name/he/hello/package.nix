@@ -11,7 +11,7 @@ mkPackage (
     gnulib,
   }:
   [
-    (layers.derivation { inherit stdenv; })
+    (layers.stdenvMkDerivation { inherit stdenv; })
     (this: old: {
       name = "hello";
       version = "2.12.3";
