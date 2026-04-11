@@ -119,6 +119,7 @@ in
             lomiri-history-service
             lomiri-mediaplayer-app
             lomiri-music-app
+            lomiri-notes-app
             lomiri-online-accounts
             lomiri-polkit-agent
             lomiri-schemas # exposes some required dbus interfaces
