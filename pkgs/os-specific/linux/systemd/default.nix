@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchzip,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -14,10 +13,8 @@
   pkg-config,
   coreutils,
   gperf,
-  getent,
   glibcLocales,
   autoPatchelfHook,
-  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
