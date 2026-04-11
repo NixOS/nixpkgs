@@ -403,6 +403,18 @@ let
         // outputs;
     };
 
+  /**
+    Resolve the dependency function arguments of a package function and
+    run it to produce a layer (or list of layers) for the mkPackage
+    fixpoint.
+
+    Because each function-arg name is looked up via `callPackage`, the
+    function may mix traditional spliced single-package arguments
+    (e.g. `pkg-config`, `zlib`) with whole package-set arguments
+    (e.g. `pkgsBuildHost`, `pkgsHostTarget`). The two styles produce
+    bit-identical drvPaths under both native and cross compilation; see
+    `pkgs/test/mk-package-package-set-deps.nix` for the regression test.
+  */
   layers.withDeps =
     f: externalArgs: this: old:
     let
