@@ -8,11 +8,8 @@
 let
   cfg = config.services.telemt;
 
-  # TOML format generator for type-safe serialization of Nix attribute sets.
   configFormat = pkgs.formats.toml { };
 
-  # Resolves the mutually exclusive 'settings' and 'configFile' options
-  # into a single path to be used by the service.
   effectiveConfigFile =
     if cfg.configFile != null then
       cfg.configFile
@@ -23,7 +20,7 @@ in
 {
   options = {
     services.telemt = {
-      enable = lib.mkEnableOption "Telemt - MTProxy for Telegram on Rust + Tokio";
+      enable = lib.mkEnableOption "Telemt - MTProxy for Telegram";
 
       package = lib.mkPackageOption pkgs "telemt" { };
 
@@ -35,29 +32,12 @@ in
         example = {
           general = {
             use_middle_proxy = false;
-            log_level = "normal";
-          };
-          general.modes = {
-            classic = false;
-            secure = false;
-            tls = true;
-          };
-          general.links = {
-            show = "*";
           };
           server = {
             port = 443;
-            listen_addr_ipv4 = "0.0.0.0";
-            listen_addr_ipv6 = "::";
-            proxy_protocol = false;
-          };
-          server.api = {
-            enabled = true;
-            listen = "0.0.0.0:9091";
           };
           censorship = {
             tls_domain = "petrovich.ru";
-            mask = true;
           };
           access = {
             users = {
@@ -78,7 +58,7 @@ in
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = "/etc/secrets/telemt/config.toml";
+        example = "/etc/secrets/telemt.toml";
         description = ''
           Path to an existing Telemt configuration file in TOML format.
 
@@ -116,7 +96,7 @@ in
         '';
       }
       {
-        assertion = !cfg.openFirewall || cfg.configFile == null;
+        assertion = cfg.openFirewall -> cfg.configFile == null;
         message = ''
           `services.telemt.openFirewall` cannot be used with `services.telemt.configFile`.
           When using an external config file, the port is not known to NixOS, so the firewall cannot be configured automatically.
@@ -156,14 +136,14 @@ in
 
         WorkingDirectory = "/run/telemt";
 
-        # Resource limits.
+        # Resource limits
         LimitNOFILE = 1048576;
         LimitNPROC = 512;
         LimitCORE = 0;
 
         ExecStart = "${lib.getExe cfg.package} /run/credentials/telemt.service/config.toml";
 
-        # Security hardening.
+        # Security hardening
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateDevices = true;
@@ -203,9 +183,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.optional (
-      cfg.openFirewall && cfg.configFile == null && cfg.settings ? server && cfg.settings.server ? port
-    ) cfg.settings.server.port;
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.server.port ];
   };
 
   meta.maintainers = with lib.maintainers; [
