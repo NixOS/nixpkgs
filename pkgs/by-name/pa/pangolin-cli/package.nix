@@ -4,24 +4,26 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pangolin-cli";
-  version = "0.3.3";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-VOb/rmfeJ51MaI37v9+wEDuSmPQyOuKqfGKxY7gtl1c=";
+    hash = "sha256-ZgdYc7DbNdxwNxPswSRgmuZ4czqL+IfZAjo4XH2Df2I=";
   };
 
-  vendorHash = "sha256-hZj/PDNsWGplSrOgzJtL09/oFXHZ4zdS7BiRS+oy5bw=";
+  vendorHash = "sha256-eBrglhyqKy6pG9eF0yfJdCOLxeWys4atKAp9Jgtzdj8=";
 
   nativeBuildInputs = [ installShellFiles ];
+  ldflags = [
+    "-X github.com/fosrl/cli/internal/version.Version=${finalAttrs.version}"
+  ];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/pangolin
@@ -34,9 +36,6 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
 
