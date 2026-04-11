@@ -1,0 +1,12 @@
+diff --git a/utils/unittest/googletest/src/gtest-death-test.cc b/utils/unittest/googletest/src/gtest-death-test.cc
+index ede8378..bdef225 100644
+--- a/utils/unittest/googletest/src/gtest-death-test.cc
++++ b/utils/unittest/googletest/src/gtest-death-test.cc
+@@ -33,6 +33,7 @@
+ #include "gtest/gtest-death-test.h"
+ 
+ #include <utility>
++#include <cstdint>
+ 
+ #include "gtest/internal/gtest-port.h"
+ #include "gtest/internal/custom/gtest.h"

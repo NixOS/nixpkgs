@@ -1,0 +1,842 @@
+From 95d046e287ae7b9ea3f10958180fa07d4064cf25 Mon Sep 17 00:00:00 2001
+From: apolius <apolius@tuta.io>
+Date: Sat, 1 Jun 2019 00:39:11 +0100
+Subject: [PATCH 1/4] updated setColor and getInfo
+
+---
+ conf.lua                           |   2 +-
+ configuration.lua                  |   2 +-
+ main.lua                           |   2 +-
+ menu.lua                           |  10 +++++-----
+ messageBoxState.lua                |   6 +++---
+ particles.lua                      |   6 +++---
+ pauseGameState.lua                 |   4 ++--
+ res/{images => }/fonts/joystix.ttf | Bin
+ resmgr.lua                         |  24 ++++++------------------
+ rules.lua                          |   2 +-
+ saveLevelState.lua                 |   6 +++---
+ selectionList.lua                  |  12 ++++++------
+ textInput.lua                      |   4 ++--
+ 13 files changed, 34 insertions(+), 46 deletions(-)
+ rename res/{images => }/fonts/joystix.ttf (100%)
+
+diff --git a/conf.lua b/conf.lua
+index 703a060..00aa34f 100644
+--- a/conf.lua
++++ b/conf.lua
+@@ -1,6 +1,6 @@
+ function love.conf(t)
+     t.identity = "duckmarines"
+-    t.version = "0.10.0"
++   -- t.version = "0.10.0"
+     t.console = false
+ 
+     t.window.title = "Duck Marines"
+diff --git a/configuration.lua b/configuration.lua
+index 2800dbc..f2c12a2 100644
+--- a/configuration.lua
++++ b/configuration.lua
+@@ -24,7 +24,7 @@ function Config:save()
+ end
+ 
+ function Config:load()
+-	if love.filesystem.exists("config") then
++	if love.filesystem.getInfo("config") then
+ 		local strdata = love.filesystem.read("config")
+ 		local data = TSerial.unpack(strdata)
+ 
+diff --git a/main.lua b/main.lua
+index 6443d01..16bcf1b 100644
+--- a/main.lua
++++ b/main.lua
+@@ -25,7 +25,7 @@ rules = nil
+ 
+ function love.load()
+ 	-- Setup user data
+-	if love.filesystem.exists("usermaps") == false then
++	if love.filesystem.getInfo("usermaps") == false then
+ 		love.filesystem.createDirectory("usermaps")
+ 	end
+ 
+diff --git a/menu.lua b/menu.lua
+index 90f2ead..fb1060e 100644
+--- a/menu.lua
++++ b/menu.lua
+@@ -84,16 +84,16 @@ function Menu:draw()
+ 				love.graphics.draw(self.imgButton, self.quadLeftEdge, v.x, v.y+3, 0, 1, v.height-6)
+ 				love.graphics.draw(self.imgButton, self.quadRightEdge, v.x+v.width-3, v.y+3, 0, 1, v.height-6)
+ 
+-				love.graphics.setColor(255, 194, 49, 255)
++				love.graphics.setColor(1, 194/255, 49/255, 1)
+ 				love.graphics.rectangle("fill", v.x+3, v.y+3, v.width-6, v.height-6)
+-				love.graphics.setColor(255, 255, 255, 255)
++				love.graphics.setColor(1, 1, 1, 1)
+ 				if v.enabled then
+-					love.graphics.setColor(80, 49, 0, 255)
++					love.graphics.setColor(80/255, 49/255, 0, 1)
+ 				else
+-					love.graphics.setColor(80, 49, 0, 128)
++					love.graphics.setColor(80/255, 49/255, 0, 128/255)
+ 				end
+ 				love.graphics.printf(v.text, v.x, (v.y+v.height/2-9), v.width, "center")
+-				love.graphics.setColor(255,255,255,255)
++				love.graphics.setColor(1, 1, 1, 1)
+ 			elseif v.type == Menu.IMAGE_BUTTON then
+ 				love.graphics.draw(v.img, v.quad, v.x, v.y)
+ 			end
+diff --git a/messageBoxState.lua b/messageBoxState.lua
+index cf69535..1062a16 100644
+--- a/messageBoxState.lua
++++ b/messageBoxState.lua
+@@ -27,11 +27,11 @@ end
+ 
+ function MessageBoxState:draw()
+ 	love.graphics.setFont(ResMgr.getFont("menu"))
+-	love.graphics.setColor(23, 23, 23, 255)
++	love.graphics.setColor(23/255, 23/255, 23/255, 1/255)
+ 	love.graphics.rectangle("fill", self.x-25, self.y-25, self.width+50, self.height+50)
+-	love.graphics.setColor(241, 148, 0, 255)
++	love.graphics.setColor(241/255, 148/255, 0, 1)
+ 	love.graphics.rectangle("line", self.x-24.5, self.y-24.5, self.width+50, self.height+50)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
+ end
+ 
+diff --git a/particles.lua b/particles.lua
+index 1376e75..14a68fa 100644
+--- a/particles.lua
++++ b/particles.lua
+@@ -57,7 +57,7 @@ function BonusTextParticle.create(x,y,text,color)
+ 	self.text = text
+ 	self.yspeed = 100
+ 	self.alive = true
+-	self.color = color or {255, 255, 255, 255}
++	self.color = color or {1, 1, 1, 100/255}
+ 
+ 	local number = tonumber(self.text)
+ 	if number and number <= 0 then
+@@ -81,11 +81,11 @@ function BonusTextParticle:draw()
+ 	love.graphics.draw(self.bar, self.x-40, self.y+26)
+ 
+ 	love.graphics.setFont(ResMgr.getFont("joystix30"))
+-	love.graphics.setColor(0, 0, 0, 255)
++	love.graphics.setColor(0, 0, 0, 100/255)
+ 	love.graphics.printf(self.text, self.x-75, self.y+3, 150, "center")
+ 	love.graphics.setColor(self.color)
+ 	love.graphics.printf(self.text, self.x-75, self.y, 150, "center")
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 100/255)
+ end
+ 
+ function BonusTextParticle:getLayer()
+diff --git a/pauseGameState.lua b/pauseGameState.lua
+index c11a915..1a90ea4 100644
+--- a/pauseGameState.lua
++++ b/pauseGameState.lua
+@@ -44,9 +44,9 @@ function PauseGameState:update()
+ end
+ 
+ function PauseGameState:draw()
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+-	love.graphics.setColor(255,255,255,255)
++	love.graphics.setColor(1,1,1,1)
+ end
+ 
+ function PauseGameState:buttonPressed(id, source)
+diff --git a/res/images/fonts/joystix.ttf b/res/fonts/joystix.ttf
+similarity index 100%
+rename from res/images/fonts/joystix.ttf
+rename to res/fonts/joystix.ttf
+diff --git a/resmgr.lua b/resmgr.lua
+index 22988cf..ece93d4 100644
+--- a/resmgr.lua
++++ b/resmgr.lua
+@@ -5,26 +5,14 @@ local images = {}
+ local fonts = {}
+ local sounds = {}
+ 
+-local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:+-?!()|x%"
+-
+ local currentSongSource = nil
+ 
+-function ResMgr.getImage(name)
+-	local path = "res/images/" .. name
+-	if images[path] == nil then
+-		images[path] = love.graphics.newImage(path)
+-		images[path]:setWrap("repeat", "repeat")
+-		print("Loaded image: " .. name)
+-	end
+-	return images[path]
+-end
+-
+-function ResMgr.loadFonts()
+-	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString, 2)
+-	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
+-	fonts["joystix30"] = love.graphics.newFont("res/images/fonts/joystix.ttf", 30)
+-	fonts["joystix40"] = love.graphics.newFont("res/images/fonts/joystix.ttf", 40)
+-end
++ function ResMgr.loadFonts()
++-- 	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString, 2)
++-- 	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
++-- 	fonts["joystix30"] = love.graphics.newFont("res/fonts/joystix.ttf", 30)
++-- 	fonts["joystix40"] = love.graphics.newFont("res/fonts/joystix.ttf", 40)
++ end
+ 
+ function ResMgr.getFont(name)
+ 	return fonts[name]
+diff --git a/rules.lua b/rules.lua
+index 84483c6..4f6c38d 100644
+--- a/rules.lua
++++ b/rules.lua
+@@ -60,7 +60,7 @@ function Rules:save()
+ end
+ 
+ function Rules:load()
+-	if love.filesystem.exists("rules") then
++	if love.filesystem.getInfo("rules") then
+ 		local strdata = love.filesystem.read("rules")
+ 		local data = TSerial.unpack(strdata)
+ 
+diff --git a/saveLevelState.lua b/saveLevelState.lua
+index 174ae33..188f6f4 100644
+--- a/saveLevelState.lua
++++ b/saveLevelState.lua
+@@ -32,11 +32,11 @@ function SaveLevelState.create(parent)
+ end
+ 
+ function SaveLevelState:draw()
+-	love.graphics.setColor(23, 23, 23, 255)
++	love.graphics.setColor(23/255, 23/255, 23/255, 1)
+ 	love.graphics.rectangle("fill", 142, 96, 415, 271)
+-	love.graphics.setColor(241, 148, 0, 255)
++	love.graphics.setColor(241/255, 148/255, 0, 1)
+ 	love.graphics.rectangle("line", 142.5, 96.5, 415, 271)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ end
+ 
+ function SaveLevelState:updateFileList()
+diff --git a/selectionList.lua b/selectionList.lua
+index a713dfb..0514c69 100644
+--- a/selectionList.lua
++++ b/selectionList.lua
+@@ -19,8 +19,8 @@ function SelectionList.create(x, y, width, length, spacing, listener)
+ 
+ 	self.items = {}
+ 	self.labels = {}
+-	self.backgroundColor = {0, 0, 0, 255}
+-	self.selectionColor = {20, 20, 20, 255}
++	self.backgroundColor = {0, 0, 0, 1}
++	self.selectionColor = {20/255, 20/255, 20/255, 1}
+ 
+ 	self.imgButton = ResMgr.getImage("selectionlist_buttons.png")
+ 	self.quadButtonLeft = love.graphics.newQuad(0, 0, 2, 14, 49, 14)
+@@ -35,7 +35,7 @@ end
+ function SelectionList:draw()
+ 	love.graphics.setColor(self.backgroundColor)
+ 	love.graphics.rectangle("fill", self.x, self.y+14, self.width, self.height-28)
+-	love.graphics.setColor(255,255,255,255)
++	love.graphics.setColor(1,1,1,1)
+ 
+ 	-- Draw buttons
+ 	love.graphics.draw(self.imgButton, self.quadButtonLeft, self.x, self.y)
+@@ -52,11 +52,11 @@ function SelectionList:draw()
+ 	end
+ 
+ 	-- Draw sides
+-	love.graphics.setColor(255, 194, 49)
++	love.graphics.setColor(1, 194/255, 49/255)
+ 	love.graphics.setLineWidth(1)
+ 	love.graphics.line(self.x+1, self.y+14, self.x+1, self.y+self.height-14)
+ 	love.graphics.line(self.x+self.width, self.y, self.x+self.width, self.y+self.height)
+-	love.graphics.setColor(255, 255, 255)
++	love.graphics.setColor(1, 1, 1)
+ 
+ 	love.graphics.setFont(ResMgr.getFont("bold"))
+ 	for i=1, self.length do
+@@ -66,7 +66,7 @@ function SelectionList:draw()
+ 		if index == self.selection then
+ 			love.graphics.setColor(self.selectionColor)
+ 			love.graphics.rectangle("fill", self.x+1, self.y+(i-1)*self.spacing+14, self.width-2, self.spacing)
+-			love.graphics.setColor(255, 255, 255, 255)
++			love.graphics.setColor(1, 1, 1, 1)
+ 		end
+ 		love.graphics.print(self.labels[index], self.x+5, self.y+(i-1)*self.spacing+(self.spacing-8)/2+14)
+ 	end
+diff --git a/textInput.lua b/textInput.lua
+index 9f4a2b7..24ac3dc 100644
+--- a/textInput.lua
++++ b/textInput.lua
+@@ -20,9 +20,9 @@ end
+ function TextInput:draw()
+ 	love.graphics.setColor(self.backgroundColor)
+ 	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+-	love.graphics.setColor(255, 194, 49)
++	love.graphics.setColor(1, 194/255, 49/255)
+ 	love.graphics.rectangle("line", self.x+0.5, self.y+0.5, self.width-1, self.height-1)
+-	love.graphics.setColor(255, 255, 255)
++	love.graphics.setColor(1, 1, 1)
+ 
+ 	if self.active == true then
+ 		love.graphics.print(self.text.."|", self.x+4, self.y+((self.height-8)/2))
+
+From dc4ae044839d624695400059d241e60bd4586373 Mon Sep 17 00:00:00 2001
+From: Karim Jerbi <apolius@tuta.io>
+Date: Sat, 1 Jun 2019 21:29:55 +0100
+Subject: [PATCH 2/4] Further setColor  updates ( love api 11)
+
+there is still a need to update color parameter in some functions
+---
+ bot.lua                 |  4 ++--
+ confirmBoxState.lua     |  6 +++---
+ countdownState.lua      |  8 ++++----
+ duckBeatState.lua       | 14 +++++++-------
+ escapeState.lua         |  4 ++--
+ eventScoreState.lua     |  4 ++--
+ eventTextState.lua      |  8 ++++----
+ gameOverState.lua       |  8 ++++----
+ ingameState.lua         | 10 +++++-----
+ inputSelectState.lua    |  6 +++---
+ levelSelectionState.lua |  4 ++--
+ loadLevelState.lua      |  6 +++---
+ main.lua                |  4 ++--
+ selectionList.lua       |  4 ++--
+ 14 files changed, 45 insertions(+), 45 deletions(-)
+
+diff --git a/bot.lua b/bot.lua
+index 17a84e5..89274a8 100644
+--- a/bot.lua
++++ b/bot.lua
+@@ -249,7 +249,7 @@ end
+ 
+ function Bot:drawPath()
+ 	local colors = {
+-		{191,49,63}, {56,54,136}, {255,130,46}, {119,56,130}
++		{191/255,49/255,63/255}, {56/255,54/255,136/255}, {1,130/255,46/255}, {119/255,56/255,130/255}
+ 	}
+ 	love.graphics.setColor(unpack(colors[self.player]))
+ 	for i=1, #self.allpath-1 do
+@@ -257,7 +257,7 @@ function Bot:drawPath()
+ 		local p2 = self.allpath[i+1]
+ 		love.graphics.line(p1.x*48+24, p1.y*48+24, p2.x*48+24, p2.y*48+24)
+ 	end
+-	love.graphics.setColor(255,255,255,255)
++	love.graphics.setColor(1,1,1,1)
+ end
+ 
+ -- Duck Dash
+diff --git a/confirmBoxState.lua b/confirmBoxState.lua
+index be87d5d..f6be6a1 100644
+--- a/confirmBoxState.lua
++++ b/confirmBoxState.lua
+@@ -31,11 +31,11 @@ end
+ 
+ function ConfirmBoxState:draw()
+ 	love.graphics.setFont(ResMgr.getFont("menu"))
+-	love.graphics.setColor(23, 23, 23, 255)
++	love.graphics.setColor(23/255, 23/255, 23/255, 1)
+ 	love.graphics.rectangle("fill", self.x-25, self.y-25, self.width+50, self.height+50)
+-	love.graphics.setColor(241, 148, 0, 255)
++	love.graphics.setColor(241/255, 148/255, 0, 1)
+ 	love.graphics.rectangle("line", self.x-24.5, self.y-24.5, self.width+50, self.height+50)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ 	love.graphics.printf(self.message, self.x, self.y, self.width, "center")
+ end
+ 
+diff --git a/countdownState.lua b/countdownState.lua
+index eaf17da..a9f2575 100644
+--- a/countdownState.lua
++++ b/countdownState.lua
+@@ -32,14 +32,14 @@ function CountdownState:draw()
+ 
+ 	if self.time < 3 then
+ 		local quad = math.floor(self.time)
+-		love.graphics.setColor(0, 0, 0, 128)
++		love.graphics.setColor(0, 0, 0, 128/255)
+ 		love.graphics.draw(self.img, self.quads[quad], (WIDTH-100)/2, 176)
+-		love.graphics.setColor(255,255,255,255)
++		love.graphics.setColor(1,1,1,1)
+ 		love.graphics.draw(self.img, self.quads[quad], (WIDTH-100)/2, 168)
+ 	else
+-		love.graphics.setColor(0, 0, 0, 128)
++		love.graphics.setColor(0, 0, 0, 128/255)
+ 		love.graphics.draw(self.img, self.quads[3], (WIDTH-300)/2, 176)
+-		love.graphics.setColor(255,255,255,255)
++		love.graphics.setColor(1,1,1,1)
+ 		love.graphics.draw(self.img, self.quads[3], (WIDTH-300)/2, 168)
+ 	end
+ end
+diff --git a/duckBeatState.lua b/duckBeatState.lua
+index 9087a69..4cff55e 100644
+--- a/duckBeatState.lua
++++ b/duckBeatState.lua
+@@ -148,10 +148,10 @@ function DuckBeatState:draw()
+ 
+ 	-- Pulse background to beat
+ 	local alpha = 255 - 637.5*self.pulse
+-	love.graphics.setColor(255,255,255,alpha)
++	love.graphics.setColor(1,1,1,alpha/255)
+ 	love.graphics.rectangle("fill", 173, 0, 2, 333)
+ 	love.graphics.rectangle("fill", 400, 0, 2, 333)
+-	love.graphics.setColor(255,255,255,255)
++	love.graphics.setColor(1,1,1,1)
+ 
+ 	-- Draw beats
+ 	for i,v in ipairs(self.beats) do
+@@ -163,12 +163,12 @@ function DuckBeatState:draw()
+ 		if self.flash[i].time > 0 then
+ 			local alpha = self.flash[i].time * 128
+ 			if self.flash[i].color == DuckBeatState.FLASH_RED then
+-				love.graphics.setColor(186, 18, 18, alpha)
++				love.graphics.setColor(186/255, 18/255, 18/255, alpha/255)
+ 			else
+-				love.graphics.setColor(84, 177, 33, alpha)
++				love.graphics.setColor(84/255, 177/255, 33/255, alpha/255)
+ 			end
+ 			love.graphics.rectangle("fill", 181+(i-1)*54, 0, 51, 333)
+-			love.graphics.setColor(255,255,255,255)
++			love.graphics.setColor(1,1,1,1)
+ 		end
+ 	end
+ 
+@@ -177,12 +177,12 @@ function DuckBeatState:draw()
+ 
+ 	love.graphics.scale(4, 4)
+ 	love.graphics.setFont(ResMgr.getFont("bold"))
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	love.graphics.print(self.points[1], 12, 19)
+ 	love.graphics.print(self.points[2], 12, 58)
+ 	love.graphics.print(self.points[3], 113, 19)
+ 	love.graphics.print(self.points[4], 113, 58)
+-	love.graphics.setColor(255,255,255,255)
++	love.graphics.setColor(1,1,1,1)
+ 	love.graphics.print(self.points[1], 12, 18)
+ 	love.graphics.print(self.points[2], 12, 57)
+ 	love.graphics.print(self.points[3], 113, 18)
+diff --git a/escapeState.lua b/escapeState.lua
+index e108dcb..4097073 100644
+--- a/escapeState.lua
++++ b/escapeState.lua
+@@ -185,10 +185,10 @@ function EscapeState:draw()
+ 				love.graphics.draw(self.ducks, self.duck_quads[i], 206+(i-1)*53-self.time*250, 340-self.time*250, -6*self.time, 1+self.time, 1+self.time, 26, 42)
+ 			else
+ 				if self.time > 1 then
+-					love.graphics.setColor(255, 255, 255, (2-self.time)*255)
++					love.graphics.setColor(1, 1, 1, (2-self.time))
+ 				end
+ 				love.graphics.draw(self.ghosts, self.ghost_quads[i], 181+(i-1)*53, 305-self.time*140)
+-				love.graphics.setColor(255,255,255,255)
++				love.graphics.setColor(1,1,1,1)
+ 			end
+ 		end
+ 	end
+diff --git a/eventScoreState.lua b/eventScoreState.lua
+index b9c2eb8..555b09d 100644
+--- a/eventScoreState.lua
++++ b/eventScoreState.lua
+@@ -86,9 +86,9 @@ function EventScoreState:draw()
+ 				love.graphics.draw(self.duck_dolls, self.duck_quads[i], 274, 97+83*i, val*2, 1+val*8, 1+val*8, 28, 25)
+ 			end
+ 			if self.time > i*0.2+0.25 then
+-				love.graphics.setColor(0, 0, 0, 128)
++				love.graphics.setColor(0, 0, 0, 128/255)
+ 				love.graphics.print(math.abs(self.deltas[i+1]), 364, 79+83*i)
+-				love.graphics.setColor(255, 255,255,255)
++				love.graphics.setColor(1,1,1,1)
+ 				love.graphics.print(math.abs(self.deltas[i+1]), 364, 75+83*i)
+ 				if self.deltas[i+1] >= 0 then
+ 					love.graphics.draw(self.plusminus, self.quad_plus, 320, 80+83*i)
+diff --git a/eventTextState.lua b/eventTextState.lua
+index b5f9436..3ff2763 100644
+--- a/eventTextState.lua
++++ b/eventTextState.lua
+@@ -72,16 +72,16 @@ function EventTextState:update(dt)
+ end
+ 
+ function EventTextState:draw()
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1,1,1,1)
+ 
+ 	love.graphics.draw(self.imgBox, 0, self.y)
+ 
+ 	love.graphics.setFont(self.font)
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	love.graphics.print(self.text, self.offset, self.y+30+4)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1,1,1,1)
+ 	love.graphics.print(self.text, self.offset, self.y+30)
+ end
+ 
+diff --git a/gameOverState.lua b/gameOverState.lua
+index 54ed766..a6cd75d 100644
+--- a/gameOverState.lua
++++ b/gameOverState.lua
+@@ -84,9 +84,9 @@ function GameOverState:update(dt)
+ end
+ 
+ function GameOverState:draw()
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	love.graphics.rectangle("fill", 116, 0, WIDTH-116, HEIGHT)
+-	love.graphics.setColor(255, 255, 255)
++	love.graphics.setColor(1, 1, 1)
+ 
+ 	if self.state == GameOverState.STATE_BARS then
+ 		-- Draw bars
+@@ -102,7 +102,7 @@ function GameOverState:draw()
+ 	elseif self.state == GameOverState.STATE_GRAPH then
+ 		love.graphics.setLineWidth(2)
+ 		local colors = {
+-			{234,73,89}, {76,74,145}, {255,130,46}, {150,75,164}
++			{234/255,73/255,89/255}, {76/255,74/255,145/255}, {1,130/255,46/255}, {150/255,75/255,164/255}
+ 		}
+ 		for i=1,4 do
+ 			for j=0,9 do
+@@ -126,7 +126,7 @@ function GameOverState:draw()
+ 			love.graphics.rectangle("fill", 600, 390-self.scores[i]/self.maxstat*292, 6,6)
+ 		end
+ 	end
+-	love.graphics.setColor(255,255,255)
++	love.graphics.setColor(1,1,1)
+ end
+ 
+ function GameOverState:buttonPressed(id, source)
+diff --git a/ingameState.lua b/ingameState.lua
+index 8c530e0..c2d96ac 100644
+--- a/ingameState.lua
++++ b/ingameState.lua
+@@ -388,23 +388,23 @@ function IngameState:drawHUD()
+ 	love.graphics.scale(3, 3)
+ 
+ 	local timeString = secsToString(self.timeLeft)
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	love.graphics.printf(timeString, 0, 21, 40, "center")
+-	love.graphics.setColor(0, 0, 0, 255)
++	love.graphics.setColor(0, 0, 0, 1)
+ 	love.graphics.printf(timeString, 0, 20, 40, "center")
+ 
+-	love.graphics.setColor(0, 0, 0, 128)
++	love.graphics.setColor(0, 0, 0, 128/255)
+ 	for i=1,4 do
+ 		love.graphics.print(string.format("%03d", self.score[i]), 8, 18+i*29)
+ 	end
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1,1,1,1)
+ 	for i=1,4 do
+ 		love.graphics.print(string.format("%03d", self.score[i]), 8, 17+i*29)
+ 	end
+ 
+ 	love.graphics.pop()
+ 
+-	love.graphics.setColor(255,255,255)
++	love.graphics.setColor(1,1,1)
+ end
+ 
+ function IngameState:getInputs()
+diff --git a/inputSelectState.lua b/inputSelectState.lua
+index 6764356..6a71aa5 100644
+--- a/inputSelectState.lua
++++ b/inputSelectState.lua
+@@ -44,12 +44,12 @@ function InputSelectState:draw()
+ 	local player = 1
+ 	local ai = 1
+ 	for i=1,4 do
+-		love.graphics.setColor(23, 23, 23, 255)
++		love.graphics.setColor(23/255, 23/255, 23/255, 1)
+ 		love.graphics.rectangle("fill", -88+i*150, 66, 126, 32)
+-		love.graphics.setColor(241, 148, 0, 255)
++		love.graphics.setColor(241/255, 148/255, 0, 1)
+ 		love.graphics.rectangle("line", -87.5+i*150, 66.5, 126, 32)
+ 
+-		love.graphics.setColor(255, 255, 255, 255)
++		love.graphics.setColor(1,1,1,1)
+ 
+ 		if self.inputs[i] then
+ 			love.graphics.printf("PLAYER "..player, -100+i*150, 73, 150, "center")
+diff --git a/levelSelectionState.lua b/levelSelectionState.lua
+index 653a4ad..b7a75a1 100644
+--- a/levelSelectionState.lua
++++ b/levelSelectionState.lua
+@@ -46,9 +46,9 @@ function LevelSelectionState:draw()
+ 
+ 	love.graphics.setColor(0, 0, 0)
+ 	love.graphics.rectangle("fill", WIDTH/2, 62, 297, 228)
+-	love.graphics.setColor(255, 194, 49)
++	love.graphics.setColor(1, 194/255, 49/255)
+ 	love.graphics.rectangle("line", WIDTH/2+0.5, 62.5, 297, 228)
+-	love.graphics.setColor(255,255,255)
++	love.graphics.setColor(1,1,1)
+ 
+ 	love.graphics.draw(self.imgBlueprint, WIDTH/2+8, 70)
+ 	love.graphics.draw(self.batch, WIDTH/2+11, 73)
+diff --git a/loadLevelState.lua b/loadLevelState.lua
+index 3b078e8..38bd8f6 100644
+--- a/loadLevelState.lua
++++ b/loadLevelState.lua
+@@ -32,12 +32,12 @@ function LoadLevelState.create(parent, map)
+ end
+ 
+ function LoadLevelState:draw()
+-	love.graphics.setColor(23, 23, 23, 255)
++	love.graphics.setColor(23/255, 23/255, 23/255, 1)
+ 	love.graphics.rectangle("fill", 142, 96, 415, 271)
+-	love.graphics.setColor(241, 148, 0, 255)
++	love.graphics.setColor(241/255, 148/255, 0, 1)
+ 	love.graphics.rectangle("line", 142.5, 96.5, 415, 271)
+ 
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1,1,1,1)
+ end
+ 
+ function LoadLevelState:updateFileList()
+diff --git a/main.lua b/main.lua
+index 16bcf1b..b14d2fa 100644
+--- a/main.lua
++++ b/main.lua
+@@ -75,9 +75,9 @@ function love.draw()
+ 		stateStack:peek(i):baseDraw()
+ 	end
+ 	if not focus then
+-		love.graphics.setColor(0,0,0,128)
++		love.graphics.setColor(0,0,0,128/255)
+ 		love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+-		love.graphics.setColor(255,255,255,255)
++		love.graphics.setColor(1,1,1,1)
+ 	end
+ end
+ 
+diff --git a/selectionList.lua b/selectionList.lua
+index 0514c69..01c49a7 100644
+--- a/selectionList.lua
++++ b/selectionList.lua
+@@ -111,11 +111,11 @@ function SelectionList:getText()
+ end
+ 
+ function SelectionList:setBackgroundColor(r,g,b,a)
+-	self.backgroundColor = {r,g,b,a}
++	self.backgroundColor = {r/255,g/255,b/255,a/255}
+ end
+ 
+ function SelectionList:setSelectionColor(r, g, b, a)
+-	self.selectionColor = {r,g,b,a}
++	self.selectionColor = {r/255,g/255,b/255,a/255}
+ end
+ 
+ function SelectionList:setSelection(index)
+
+From 8e1f5c499ebcd445bfe7ad5e0af139314dfd10ec Mon Sep 17 00:00:00 2001
+From: Karim Jerbi <apolius@tuta.io>
+Date: Sun, 2 Jun 2019 01:02:55 +0100
+Subject: [PATCH 3/4] Fixed font issue
+
+---
+ conf.lua                |  2 +-
+ levelSelectionState.lua |  2 +-
+ resmgr.lua              | 28 ++++++++++++++++++++--------
+ slam.lua                |  4 ++--
+ 4 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/conf.lua b/conf.lua
+index 00aa34f..748e20e 100644
+--- a/conf.lua
++++ b/conf.lua
+@@ -1,6 +1,6 @@
+ function love.conf(t)
+     t.identity = "duckmarines"
+-   -- t.version = "0.10.0"
++    t.version = "11.2"
+     t.console = false
+ 
+     t.window.title = "Duck Marines"
+diff --git a/levelSelectionState.lua b/levelSelectionState.lua
+index b7a75a1..f4c18af 100644
+--- a/levelSelectionState.lua
++++ b/levelSelectionState.lua
+@@ -53,7 +53,7 @@ function LevelSelectionState:draw()
+ 	love.graphics.draw(self.imgBlueprint, WIDTH/2+8, 70)
+ 	love.graphics.draw(self.batch, WIDTH/2+11, 73)
+ 	love.graphics.draw(self.imgDogear, WIDTH/2+265, 70)
+-	love.graphics.setBlendMode("multiply")
++	love.graphics.setBlendMode("multiply","premultiplied")
+ 	love.graphics.draw(self.imgTexture, WIDTH/2+11, 73)
+ 	love.graphics.setBlendMode("alpha")
+ end
+diff --git a/resmgr.lua b/resmgr.lua
+index ece93d4..c80e4b2 100644
+--- a/resmgr.lua
++++ b/resmgr.lua
+@@ -5,14 +5,26 @@ local images = {}
+ local fonts = {}
+ local sounds = {}
+ 
++local fontString = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:+-?!()|x%"
++
+ local currentSongSource = nil
+ 
+- function ResMgr.loadFonts()
+--- 	fonts["bold"] = love.graphics.newImageFont(ResMgr.getImage("fonts/bold.png"), fontString, 2)
+--- 	fonts["menu"] = love.graphics.newImageFont(ResMgr.getImage("fonts/menu.png"), fontString)
+--- 	fonts["joystix30"] = love.graphics.newFont("res/fonts/joystix.ttf", 30)
+--- 	fonts["joystix40"] = love.graphics.newFont("res/fonts/joystix.ttf", 40)
+- end
++function ResMgr.getImage(name)
++	local path = "res/images/" .. name
++	if images[path] == nil then
++		images[path] = love.graphics.newImage(path)
++		images[path]:setWrap("repeat", "repeat")
++		print("Loaded image: " .. name)
++	end
++	return images[path]
++end
++
++function ResMgr.loadFonts()
++	fonts["bold"] = love.graphics.newImageFont("res/images/fonts/bold.png", fontString, 2)
++	fonts["menu"] = love.graphics.newImageFont("res/images/fonts/menu.png", fontString)
++	fonts["joystix30"] = love.graphics.newFont("res/fonts/joystix.ttf", 30)
++	fonts["joystix40"] = love.graphics.newFont("res/fonts/joystix.ttf", 40)
++end
+ 
+ function ResMgr.getFont(name)
+ 	return fonts[name]
+@@ -37,7 +49,7 @@ function playMusic(name)
+ 	stopMusic()
+ 
+ 	local path = "res/music/" .. name
+-	if love.filesystem.exists(path) == false then return end
++	if love.filesystem.getInfo(path) == nil then return end
+ 
+ 	local source = love.audio.newSource("res/music/" .. name, "stream")
+ 	source:setLooping(true)
+@@ -59,4 +71,4 @@ function updateVolume()
+ 	love.audio.tags.sfx.setVolume(config.sound_volume/5)
+ end
+ 
+-return ResMgr
++return ResMgr
+\ No newline at end of file
+diff --git a/slam.lua b/slam.lua
+index 79c4879..e61d5bc 100644
+--- a/slam.lua
++++ b/slam.lua
+@@ -1,4 +1,4 @@
+--- Simple LÖVE Audio Manager
++-- Simple Lï¿½VE Audio Manager
+ --
+ -- Copyright (c) 2011 Matthias Richter
+ -- Permission is hereby granted, free of charge, to any person obtaining a copy
+@@ -97,7 +97,7 @@ end
+ function Source:resume()
+ 	if not self._paused then return end
+ 	for s in pairs(self.instances) do
+-		s:resume()
++		s:play()
+ 	end
+ 	self._paused = false
+ end
+
+From 0342d9d02cb0dc86df480dec4766fa25b34fe0d5 Mon Sep 17 00:00:00 2001
+From: Karim Jerbi <apolius@tuta.io>
+Date: Sun, 2 Jun 2019 01:17:33 +0100
+Subject: [PATCH 4/4] Further getInfo updates
+
+---
+ configuration.lua  | 2 +-
+ loadLevelState.lua | 4 ++--
+ main.lua           | 2 +-
+ rules.lua          | 2 +-
+ saveLevelState.lua | 4 ++--
+ 5 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/configuration.lua b/configuration.lua
+index f2c12a2..51e576d 100644
+--- a/configuration.lua
++++ b/configuration.lua
+@@ -24,7 +24,7 @@ function Config:save()
+ end
+ 
+ function Config:load()
+-	if love.filesystem.getInfo("config") then
++	if love.filesystem.getInfo("config") ~= nil then
+ 		local strdata = love.filesystem.read("config")
+ 		local data = TSerial.unpack(strdata)
+ 
+diff --git a/loadLevelState.lua b/loadLevelState.lua
+index 38bd8f6..361e71e 100644
+--- a/loadLevelState.lua
++++ b/loadLevelState.lua
+@@ -58,7 +58,7 @@ end
+ function LoadLevelState:buttonPressed(id, source)
+ 	if id == "Load" then
+ 		playSound("quack")
+-		if love.filesystem.exists(self:getFilename()) then
++		if love.filesystem.getInfo(self:getFilename()) ~= nil then
+ 			self.parent.map = Map.create(self:getFilename())
+ 			self.parent.map:updateSpriteBatch(true)
+ 			love.timer.sleep(0.25)
+@@ -69,7 +69,7 @@ function LoadLevelState:buttonPressed(id, source)
+ 		end
+ 	elseif id == "delete" then
+ 		playSound("quack")
+-		if love.filesystem.exists(self:getFilename()) then
++		if love.filesystem.getInfo(self:getFilename()) ~= nil then
+ 			pushState(
+ 				ConfirmBoxState.create(self,
+ 				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",
+diff --git a/main.lua b/main.lua
+index b14d2fa..de6d61e 100644
+--- a/main.lua
++++ b/main.lua
+@@ -25,7 +25,7 @@ rules = nil
+ 
+ function love.load()
+ 	-- Setup user data
+-	if love.filesystem.getInfo("usermaps") == false then
++	if love.filesystem.getInfo("usermaps") == nil then
+ 		love.filesystem.createDirectory("usermaps")
+ 	end
+ 
+diff --git a/rules.lua b/rules.lua
+index 4f6c38d..5f203aa 100644
+--- a/rules.lua
++++ b/rules.lua
+@@ -60,7 +60,7 @@ function Rules:save()
+ end
+ 
+ function Rules:load()
+-	if love.filesystem.getInfo("rules") then
++	if love.filesystem.getInfo("rules") ~= nil then
+ 		local strdata = love.filesystem.read("rules")
+ 		local data = TSerial.unpack(strdata)
+ 
+diff --git a/saveLevelState.lua b/saveLevelState.lua
+index 188f6f4..c9d3733 100644
+--- a/saveLevelState.lua
++++ b/saveLevelState.lua
+@@ -57,7 +57,7 @@ end
+ function SaveLevelState:buttonPressed(id, source)
+ 	if id == "save" then
+ 		playSound("quack")
+-		if love.filesystem.exists(self:getFilename()) then
++		if love.filesystem.getInfo(self:getFilename()) ~= nil then
+ 			pushState(ConfirmBoxState.create(self,
+ 				"OVERWRITE " .. self.input:getText():upper() .. "?",
+ 				function()
+@@ -75,7 +75,7 @@ function SaveLevelState:buttonPressed(id, source)
+ 		end
+ 	elseif id == "delete" then
+ 		playSound("quack")
+-		if love.filesystem.exists(self:getFilename()) then
++		if love.filesystem.getInfo(self:getFilename()) ~= nil then
+ 			pushState(
+ 				ConfirmBoxState.create(self,
+ 				"ARE YOU SURE YOU WANT TO DELETE " .. self.input:getText():upper() .. "?",

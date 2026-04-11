@@ -1,0 +1,20 @@
+diff --git a/tess/__init__.py b/tess/__init__.py
+index b7f8f80..91c518f 100644
+--- a/tess/__init__.py
++++ b/tess/__init__.py
+@@ -374,13 +374,13 @@ def orderQ(l, xyz, weights=1):
+     :math:`w_i` are the `weights`, defaulting to uniform: (:math:`\frac{1}{N_b}`)
+     """
+     import numpy as np
+-    from scipy.special import sph_harm
++    from scipy.special import sph_harm_y
+ 
+     theta, phi = cart_to_spher(xyz).T
+     weights = np.ones(xyz.shape[0]) * weights
+     weights /= np.sum(weights)
+     mmeans = np.zeros(2 * l + 1, dtype=float)
+     for m in range(-l, l + 1):
+-        sph_weighted = sph_harm(m, l, phi, theta).dot(weights)  # Average of Y_{6m}
++        sph_weighted = sph_harm_y(l, m, theta, phi).dot(weights)  # Average of Y_{6m}
+         mmeans[m] = abs(sph_weighted) ** 2
+     return np.sqrt(4 * np.pi / (2 * l + 1) * np.sum(mmeans))

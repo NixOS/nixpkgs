@@ -1,0 +1,17 @@
+diff --git a/cli/tests/shell_completions_integration.rs b/cli/tests/shell_completions_integration.rs
+index 815c44c..51b5dd9 100644
+--- a/cli/tests/shell_completions_integration.rs
++++ b/cli/tests/shell_completions_integration.rs
+@@ -25,6 +25,13 @@ fn run_complete_word(usage_bin: &Path, shell: &str, spec_file: &Path, words: &[&
+ 
+ /// Build the usage binary and return its path
+ fn build_usage_binary() -> PathBuf {
++    if let Some(usage_path) = std::env::var("CARGO_BIN_EXE_usage")
++        .ok()
++        .filter(|s| !s.is_empty())
++    {
++        return PathBuf::from(usage_path);
++    }
++
+     let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+     let workspace_root = manifest_dir.parent().unwrap();

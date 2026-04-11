@@ -1,0 +1,10 @@
+--- a/other/github-release-plugin/pom.xml	1970-01-01 01:00:01.000000000 +0100
++++ b/other/github-release-plugin/pom.xml	2026-01-11 00:23:47.212158113 +0100
+@@ -126,7 +133,6 @@
+                             <groupId>org.projectlombok</groupId>
+                             <artifactId>lombok</artifactId>
+                             <version>1.18.30</version>
+-                            <scope>provided</scope>
+                         </path>
+                     </annotationProcessorPaths>
+                 </configuration>

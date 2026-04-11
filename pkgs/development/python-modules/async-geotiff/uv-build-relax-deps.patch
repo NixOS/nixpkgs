@@ -1,0 +1,49 @@
+diff --git i/pyproject.toml w/pyproject.toml
+index 601e2e5..cd26339 100644
+--- i/pyproject.toml
++++ w/pyproject.toml
+@@ -69,7 +69,7 @@ docs = [
+ 
+ 
+ [build-system]
+-requires = ["uv_build>=0.8.8,<0.9.0"]
++requires = ["uv_build>=0.8.8,<0.12.0"]
+ build-backend = "uv_build"
+ 
+ [tool.ruff]
+diff --git i/uv.lock w/uv.lock
+index e7cd10f..2a74412 100644
+--- i/uv.lock
++++ w/uv.lock
+@@ -55,7 +55,6 @@ dependencies = [
+     { name = "defusedxml" },
+     { name = "numpy" },
+     { name = "pyproj" },
+-    { name = "types-defusedxml" },
+ ]
+ 
+ [package.optional-dependencies]
+@@ -77,6 +76,7 @@ dev = [
+     { name = "pytest-asyncio" },
+     { name = "rasterio", version = "1.4.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+     { name = "rasterio", version = "1.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
++    { name = "types-defusedxml" },
+     { name = "types-jsonschema" },
+ ]
+ docs = [
+@@ -97,7 +97,6 @@ requires-dist = [
+     { name = "morecantile", marker = "extra == 'morecantile'", specifier = ">=7.0,<8.0" },
+     { name = "numpy", specifier = ">=2.0" },
+     { name = "pyproj", specifier = ">=3.3.0" },
+-    { name = "types-defusedxml", specifier = ">=0.7.0.20250822" },
+ ]
+ provides-extras = ["morecantile"]
+ 
+@@ -114,6 +113,7 @@ dev = [
+     { name = "pytest", specifier = ">=9.0.2" },
+     { name = "pytest-asyncio", specifier = ">=1.3.0" },
+     { name = "rasterio", specifier = ">=1.4.4" },
++    { name = "types-defusedxml", specifier = ">=0.7.0.20250822" },
+     { name = "types-jsonschema", specifier = ">=4.26.0.20260109" },
+ ]
+ docs = [

@@ -1,0 +1,14 @@
+diff --git a/src/common/CMakeLists.txt b/src/common/CMakeLists.txt
+index 4c2300e..273d76e 100644
+--- a/src/common/CMakeLists.txt
++++ b/src/common/CMakeLists.txt
+@@ -33,8 +33,6 @@ if (BUILD_TESTS)
+             $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/catch2>
+             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+     target_link_libraries(common_plugin_tests PRIVATE ${LIBRARIES})
+-    target_compile_options(common_plugin_tests PRIVATE -fsanitize=undefined)
+-    target_link_options(common_plugin_tests PRIVATE -fsanitize=undefined)
+ 
+     include(CTest)
+     include(Catch)
+
