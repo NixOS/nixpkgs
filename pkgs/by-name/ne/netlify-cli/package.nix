@@ -13,7 +13,7 @@ mkPackage (
     ...
   }:
   [
-    (layers.derivation { inherit stdenv; })
+    (layers.stdenvMkDerivation { inherit stdenv; })
     (this: old: {
       name = "netlify-cli";
       version = "23.15.0";
