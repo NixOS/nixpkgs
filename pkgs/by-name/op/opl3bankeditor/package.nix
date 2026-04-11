@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   dos2unix,
   cmake,
   pkg-config,
@@ -57,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s "$out/Applications/OPL3 Bank Editor.app/Contents/MacOS/OPL3 Bank Editor" $out/bin/opl3_bank_editor
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     mainProgram = "opl3_bank_editor";
