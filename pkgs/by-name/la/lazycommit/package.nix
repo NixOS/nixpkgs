@@ -3,19 +3,26 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  stdenv,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule rec {
   pname = "lazycommit";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "m7medvision";
     repo = "lazycommit";
     tag = "v${version}";
-    hash = "sha256-DD3DXTev8WHNkAYDrPY2PISuA8WwKuK0GCLebpn01Rg=";
+    hash = "sha256-tS5jWucT4/1YRAXySUnElEkjaF2+Bl7O3taSzZf2NF0=";
   };
 
   vendorHash = "sha256-4OPCUWXxsAnzxsqZPHhjvhxQQf5Knm7nGqrdjH4I4YY=";
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  # Error reading config file: open /nix/build/nix-53143-2282724270/.home/.config/.lazycommit.yaml: no such file or directory
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^TestSetEndpoint_Validation$";
 
   ldflags = [
     "-X main.version=${version}"
