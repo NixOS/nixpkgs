@@ -1,0 +1,65 @@
+diff --git a/setup.cfg b/setup.cfg
+index 41de928..1c18182 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,18 +1,14 @@
+ [metadata]
+ name = colour
+ version = 0.1.5
+-summary = converts and manipulates various color representation (HSL, RVB, web, X11, ...)
+-description-file = 
+-	README.rst
+-	CHANGELOG.rst
+-	TODO.rst
+-license_file = LICENSE
+-requires-dist = 
++description = converts and manipulates various color representation (HSL, RVB, web, X11, ...)
++long_description = file: README.rst, CHANGELOG.rst, TODO.rst
++license_files = LICENSE
+ author = Valentin LAB
+ author_email = valentin.lab@kalysto.org
+-home_page = http://github.com/vaab/colour
++url = http://github.com/vaab/colour
+ license = BSD 3-Clause License
+-classifier = 
++classifiers = 
+ 	Programming Language :: Python
+ 	Topic :: Software Development :: Libraries :: Python Modules
+ 	Development Status :: 3 - Alpha
+@@ -26,16 +22,8 @@ classifier =
+ 	Programming Language :: Python :: 3.5
+ 	Programming Language :: Python :: 3.6
+ 
+-[files]
+-modules = colour
+-extra_files = 
+-	README.rst
+-	CHANGELOG.rst
+-	TODO.rst
+-	setup.py
+-
+-[backwards_compat]
+-zip-safe = False
++[options]
++zip_safe = False
+ 
+ [bdist_wheel]
+ universal = 1
+diff --git a/setup.py b/setup.py
+index 47038f9..11a8d3a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -54,12 +54,4 @@ if "%%short-version%%".startswith("%%"):
+     sys.exit(errlvl)
+ 
+ 
+-##
+-## Normal d2to1 setup
+-##
+-
+-setup(
+-    setup_requires=['d2to1'],
+-    extras_require={'test': ['nose', ]},
+-    d2to1=True
+-)
++setup(extras_require={'test': ['nose', ]})

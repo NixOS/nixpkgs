@@ -1,0 +1,21 @@
+--- src/laf/cmake/FindSkia.cmake.orig	2022-01-08 02:15:13.417619266 +0100
++++ src/laf/cmake/FindSkia.cmake	2022-01-08 02:15:43.603960491 +0100
+@@ -32,14 +32,18 @@
+ # SkShaper module + freetype + harfbuzz
+ find_library(SKSHAPER_LIBRARY skshaper PATH "${SKIA_LIBRARY_DIR}")
+ 
++if(NOT USE_SHARED_FREETYPE)
+ set(FREETYPE_FOUND ON)
+ find_library(FREETYPE_LIBRARY freetype2 PATH "${SKIA_LIBRARY_DIR}" NO_DEFAULT_PATH)
+ set(FREETYPE_LIBRARIES ${FREETYPE_LIBRARY})
+ set(FREETYPE_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/freetype/include")
++endif()
+ 
++if(NOT USE_SHARED_HARFBUZZ)
+ find_library(HARFBUZZ_LIBRARY harfbuzz PATH "${SKIA_LIBRARY_DIR}" NO_DEFAULT_PATH)
+ set(HARFBUZZ_LIBRARIES ${HARFBUZZ_LIBRARY})
+ set(HARFBUZZ_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/harfbuzz/src")
++endif()
+ 
+ set(SKIA_LIBRARIES
+   ${SKIA_LIBRARY}

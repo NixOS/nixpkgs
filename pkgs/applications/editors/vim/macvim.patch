@@ -1,0 +1,158 @@
+diff --git a/src/MacVim/vimrc b/src/MacVim/vimrc
+index 162af04..4322049 100644
+--- a/src/MacVim/vimrc
++++ b/src/MacVim/vimrc
+@@ -9,45 +9,7 @@ set nocompatible
+ " more sensible value.  Add "set backspace&" to your ~/.vimrc to reset it.
+ set backspace+=indent,eol,start
+ 
+-" Python2
+-" MacVim is configured by default in the binary release to use the
+-" pre-installed System python2 version. However, following code tries to
+-" find a Homebrew, MacPorts or an installation from python.org:
+-if exists("&pythondll") && exists("&pythonhome")
+-  " Homebrew python 2.7
+-  if filereadable("/usr/local/Frameworks/Python.framework/Versions/2.7/Python")
+-    set pythondll=/usr/local/Frameworks/Python.framework/Versions/2.7/Python
+-
+-  " MacPorts python 2.7
+-  elseif filereadable("/opt/local/Library/Frameworks/Python.framework/Versions/2.7/Python")
+-    set pythondll=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/Python
+-
+-  " https://www.python.org/downloads/mac-osx/
+-  elseif filereadable("/Library/Frameworks/Python.framework/Versions/2.7/Python")
+-    set pythondll=/Library/Frameworks/Python.framework/Versions/2.7/Python
+-  endif
+-endif
+-
+-" Python3
+-" MacVim is configured by default in the binary release to set
+-" pythonthreedll to Homebrew python3. If it cannot be found, the following
+-" code tries to find Python3 from other popular locations.  Note that we are
+-" using "Current" for the version, because Vim supports the stable ABI and
+-" therefore any new version of Python3 will work.
+-if exists("&pythonthreedll") && exists("&pythonthreehome") &&
+-      \ !filereadable(&pythonthreedll)
+-  " MacPorts python
+-  if filereadable("/opt/local/Library/Frameworks/Python.framework/Versions/Current/Python")
+-    set pythonthreedll=/opt/local/Library/Frameworks/Python.framework/Versions/Current/Python
+-
+-  " macOS default Python, installed by 'xcode-select --install'
+-  elseif filereadable("/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/Current/Python3")
+-    set pythonthreedll=/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/Current/Python3
+-
+-  " https://www.python.org/downloads/mac-osx/
+-  elseif filereadable("/Library/Frameworks/Python.framework/Versions/Current/Python")
+-    set pythonthreedll=/Library/Frameworks/Python.framework/Versions/Current/Python
+-  endif
+-endif
++" Default cscopeprg to the Nix-installed path
++set cscopeprg=@CSCOPE@
+ 
+ " vim: sw=2 ts=2 et
+diff --git a/src/auto/configure b/src/auto/configure
+index 0487236..da22ff5 100755
+--- a/src/auto/configure
++++ b/src/auto/configure
+@@ -6686,10 +6686,7 @@ printf "%s\n" "not found" >&6; }
+ 
+     for path in "${vi_cv_path_mzscheme_pfx}/lib" "${SCHEME_LIB}"; do
+       if test "X$path" != "X"; then
+-	if test "x$MACOS_X" = "xyes"; then
+-	  MZSCHEME_LIBS="-framework Racket"
+-	  MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
+-	elif test -f "${path}/libmzscheme3m.a"; then
++	if test -f "${path}/libmzscheme3m.a"; then
+ 	  MZSCHEME_LIBS="${path}/libmzscheme3m.a"
+ 	  MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
+ 	elif test -f "${path}/libracket3m.a"; then
+@@ -7128,23 +7125,6 @@ printf "%s\n" ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
+   fi
+ 
+   if test "x$MACOS_X" = "xyes"; then
+-        dir=/System/Library/Perl
+-    darwindir=$dir/darwin
+-    if test -d $darwindir; then
+-      PERL=/usr/bin/perl
+-    else
+-            dir=/System/Library/Perl/5.8.1
+-      darwindir=$dir/darwin-thread-multi-2level
+-      if test -d $darwindir; then
+-	PERL=/usr/bin/perl
+-      fi
+-    fi
+-    if test -n "$PERL"; then
+-      PERL_DIR="$dir"
+-      PERL_CFLAGS="-DFEAT_PERL -I$darwindir/CORE"
+-      PERL_OBJ="objects/if_perl.o $darwindir/auto/DynaLoader/DynaLoader.a"
+-      PERL_LIBS="-L$darwindir/CORE -lperl"
+-    fi
+                 PERL_LIBS=`echo "$PERL_LIBS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
+     PERL_CFLAGS=`echo "$PERL_CFLAGS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
+   fi
+@@ -7393,13 +7373,7 @@ __:
+ eof
+ 	    	    eval "`cd ${PYTHON_CONFDIR} && make -f "${tmp_mkf}" __ | sed '/ directory /d'`"
+ 	    rm -f -- "${tmp_mkf}"
+-	    if test "x$MACOS_X" = "xyes" && test -n "${python_PYTHONFRAMEWORK}" && ${vi_cv_path_python} -c \
+-		"import sys; sys.exit(${vi_cv_var_python_version} < 2.3)"; then
+-	      vi_cv_path_python_plibs="-framework Python"
+-	      if test "x${vi_cv_path_python}" != "x/usr/bin/python" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
+-		  vi_cv_path_python_plibs="-F${python_PYTHONFRAMEWORKPREFIX} -framework Python"
+-	      fi
+-	    else
++	    if true; then
+ 	      vi_cv_path_python_plibs="-L${PYTHON_CONFDIR} -lpython${vi_cv_var_python_version}"
+ 	      	      	      	      if test -n "${python_LINKFORSHARED}" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
+ 	        python_link_symbol=`echo ${python_LINKFORSHARED} | sed 's/\([^ \t][^ \t]*[ \t][ \t]*[^ \t][^ \t]*\)[ \t].*/\1/'`
+@@ -7498,13 +7472,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
+ printf "%s\n" "no" >&6; }
+ 	fi
+ 
+-                                if test -n "$MACSDK"; then
+-          PYTHON_CFLAGS=
+-          PYTHON_LIBS=-framework Python
+-          PYTHON_CONFDIR=
+-          PYTHON_GETPATH_CFLAGS=
+-        fi
+-
+ 			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if compile and link flags for Python are sane" >&5
+ printf %s "checking if compile and link flags for Python are sane... " >&6; }
+ 	cflags_save=$CFLAGS
+@@ -8593,11 +8560,7 @@ printf "%s\n" "$tclver - OK" >&6; };
+ 
+       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of Tcl include" >&5
+ printf %s "checking for location of Tcl include... " >&6; }
+-      if test "x$MACOS_X" != "xyes"; then
+ 	tclinc="$tclloc/include $tclloc/include/tcl $tclloc/include/tcl$tclver /usr/local/include /usr/local/include/tcl$tclver /usr/include /usr/include/tcl$tclver"
+-      else
+-				tclinc="$tclloc/include $tclloc/include/tcl $tclloc/include/tcl$tclver /System/Library/Frameworks/Tcl.framework/Headers `xcrun --show-sdk-path`/System/Library/Frameworks/Tcl.framework/Versions/Current/Headers"
+-      fi
+       TCL_INC=
+       for try in $tclinc; do
+ 	if test -f "$try/tcl.h"; then
+@@ -8615,13 +8578,8 @@ printf "%s\n" "<not found>" >&6; }
+       if test -z "$SKIP_TCL"; then
+ 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of tclConfig.sh script" >&5
+ printf %s "checking for location of tclConfig.sh script... " >&6; }
+-	if test "x$MACOS_X" != "xyes"; then
+ 	  tclcnf=`echo $tclinc | sed s/include/lib/g`
+ 	  tclcnf="$tclcnf `echo $tclinc | sed s/include/lib64/g`"
+-	else
+-	  	  	  	  tclcnf=`echo $tclinc | sed s/include/lib/g`
+-	  tclcnf="$tclcnf /System/Library/Frameworks/Tcl.framework `xcrun --show-sdk-path`/System/Library/Frameworks/Tcl.framework"
+-	fi
+ 	for try in $tclcnf; do
+ 	  if test -f "$try/tclConfig.sh"; then
+ 	    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $try/tclConfig.sh" >&5
+@@ -8819,10 +8777,6 @@ printf "%s\n" "$rubyhdrdir" >&6; }
+ 	rubylibdir=`$vi_cv_path_ruby -r rbconfig -e "print $ruby_rbconfig.expand($ruby_rbconfig::CONFIG['libdir'])"`
+ 	if test -f "$rubylibdir/$librubya" || expr "$librubyarg" : "-lruby" >/dev/null; then
+ 	  RUBY_LIBS="$RUBY_LIBS -L$rubylibdir"
+-        elif test "$vi_cv_path_ruby" = "/usr/bin/ruby" -a -d "/System/Library/Frameworks/Ruby.framework"; then
+-                        RUBY_LIBS="-framework Ruby"
+-                        RUBY_CFLAGS="$RUBY_CFLAGS -DRUBY_VERSION=$rubyversion"
+-            librubyarg=
+ 	fi
+ 
+ 	if test "X$librubyarg" != "X"; then

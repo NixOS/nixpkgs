@@ -1,0 +1,31 @@
+diff --git a/Makefile b/Makefile
+index 56bbd49..23164ce 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,12 +4,12 @@ CFLAGS = -c -Wall -O2 -MMD
+ LDFLAGS = -fno-exceptions -s
+ 
+ MAKEFLAGS += -s
+-
+-ifeq ($(OS), Windows_NT)
+-	CC = mingw32-gcc
+-	EXE_SUFFIX = .exe
+-else
++UNAME := $(shell uname -s)
++EXE_SUFFIX = ""
++ifeq ($(UNAME), Linux)
+ 	CC = gcc
++else ifeq ($(UNAME), Darwin)
++	CC = clang
+ endif
+ 
+ LD = $(CC)
+@@ -59,4 +59,6 @@ clean:
+ 	-$(RM) $(RULES)
+ 	-$(RM) $(BIN2SREC_EXE) $(SREC2BIN_EXE) $(BINSPLIT_EXE)
+ 
+--include $(RULES)
+\ No newline at end of file
++-include $(RULES)
++install:
++	install -Dm755 $(BIN2SREC_EXE) $(SREC2BIN_EXE) $(BINSPLIT_EXE) -t $(out)/bin

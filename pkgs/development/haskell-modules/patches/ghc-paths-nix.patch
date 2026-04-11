@@ -1,0 +1,43 @@
+diff -Naur ghc-paths-0.1.0.9/GHC/Paths.hs ghc-paths-0.1.0.9-new/GHC/Paths.hs
+--- ghc-paths-0.1.0.9/GHC/Paths.hs	2012-12-16 13:53:45.720148396 +0100
++++ ghc-paths-0.1.0.9-new/GHC/Paths.hs	2012-12-16 17:22:12.765576568 +0100
+@@ -1,13 +1,35 @@
+ {-# LANGUAGE CPP #-}
++{-# LANGUAGE ScopedTypeVariables #-}
+ 
+ module GHC.Paths (
+         ghc, ghc_pkg, libdir, docdir
+   ) where
+ 
++import Control.Exception as E
++import Data.Maybe
++import System.Environment
++import System.IO.Unsafe
++
++-- Yes, there's lookupEnv now, but we want to be compatible
++-- with older GHCs.
++checkEnv :: String -> IO (Maybe String)
++checkEnv var = E.catch (fmap Just (getEnv var))
++                       (\ (e :: IOException) -> return Nothing)
++
++nixLibdir, nixDocdir, nixGhc, nixGhcPkg :: Maybe FilePath
++nixLibdir = unsafePerformIO (checkEnv "NIX_GHC_LIBDIR")
++nixDocdir = unsafePerformIO (checkEnv "NIX_GHC_DOCDIR")
++nixGhc    = unsafePerformIO (checkEnv "NIX_GHC")
++nixGhcPkg = unsafePerformIO (checkEnv "NIX_GHCPKG")
++{-# NOINLINE nixLibdir #-}
++{-# NOINLINE nixDocdir #-}
++{-# NOINLINE nixGhc    #-}
++{-# NOINLINE nixGhcPkg #-}
++
+ libdir, docdir, ghc, ghc_pkg :: FilePath
+ 
+-libdir  = GHC_PATHS_LIBDIR
+-docdir  = GHC_PATHS_DOCDIR
++libdir  = fromMaybe GHC_PATHS_LIBDIR  nixLibdir
++docdir  = fromMaybe GHC_PATHS_DOCDIR  nixDocdir
+ 
+-ghc     = GHC_PATHS_GHC
+-ghc_pkg = GHC_PATHS_GHC_PKG
++ghc     = fromMaybe GHC_PATHS_GHC     nixGhc
++ghc_pkg = fromMaybe GHC_PATHS_GHC_PKG nixGhcPkg

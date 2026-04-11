@@ -1,0 +1,13 @@
+diff --git a/main.go b/main.go
+index 7e43908..062385c 100644
+--- a/main.go
++++ b/main.go
+@@ -15,7 +15,7 @@ func main() {
+ 	info := component.BuildInfo{
+ 		Command:     "otel-desktop-viewer",
+ 		Description: "Basic OTel with Custom Desktop Exporter",
+-		Version:     "0.1.1",
++		Version:     "0.1.4",
+ 	}
+ 
+ 	if err := run(info); err != nil {

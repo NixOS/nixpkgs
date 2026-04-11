@@ -1,0 +1,21 @@
+{
+  "version": "1.3.17-stable",
+  "sources": {
+    "aarch64-darwin": {
+      "url": "https://acli.atlassian.com/darwin/1.3.17-stable/acli_1.3.17-stable_darwin_arm64.tar.gz",
+      "sha256": "db630d0ce82777d47c5cb647a622cd30f38fedefa6b8e1e6f62c1ca3c0974d1f"
+    },
+    "aarch64-linux": {
+      "url": "https://acli.atlassian.com/linux/1.3.17-stable/acli_1.3.17-stable_linux_arm64.tar.gz",
+      "sha256": "59dc9405f6de0a70f8f82e328fdd6db3fc564d28aef38d14c08431a8b130ba36"
+    },
+    "x86_64-darwin": {
+      "url": "https://acli.atlassian.com/darwin/1.3.17-stable/acli_1.3.17-stable_darwin_amd64.tar.gz",
+      "sha256": "043e3b80f08cf4fc09dd52f0432500f5de28902d8c85d848128c5931f766af45"
+    },
+    "x86_64-linux": {
+      "url": "https://acli.atlassian.com/linux/1.3.17-stable/acli_1.3.17-stable_linux_amd64.tar.gz",
+      "sha256": "6177dd5950b0a27f14e8b2daf41e93cf30a306c2e2ee61b13a22f572cbf2f4ff"
+    }
+  }
+}

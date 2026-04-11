@@ -1,0 +1,24 @@
+From 9218347b8f833ab05d016dfba5617dcdeb59eb7b Mon Sep 17 00:00:00 2001
+From: Cole Helbling <cole.e.helbling@outlook.com>
+Date: Wed, 27 May 2020 08:02:57 -0700
+Subject: [PATCH] add NixOS-specific dirs to safe PATH
+
+---
+ doas.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/doas.c b/doas.c
+index e253905..2fdb20f 100644
+--- a/doas.c
++++ b/doas.c
+@@ -234,6 +234,7 @@ int
+ main(int argc, char **argv)
+ {
+ 	const char *safepath = "/bin:/sbin:/usr/bin:/usr/sbin:"
++	    "/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:"
+ 	    "/usr/local/bin:/usr/local/sbin";
+ 	const char *confpath = NULL;
+ 	char *shargv[] = { NULL, NULL };
+-- 
+2.26.2
+

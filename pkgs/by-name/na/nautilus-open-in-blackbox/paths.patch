@@ -1,0 +1,23 @@
+diff --git a/nautilus-open-in-blackbox.py b/nautilus-open-in-blackbox.py
+index 9a43f90..0a5b632 100755
+--- a/nautilus-open-in-blackbox.py
++++ b/nautilus-open-in-blackbox.py
+@@ -78,17 +78,10 @@ class BlackBoxNautilus(GObject.GObject, Nautilus.MenuProvider):
+ 
+         return item
+ 
+-    def is_native(self):
+-        return shutil.which("blackbox") == "/usr/bin/blackbox"
+-
+     def _nautilus_run(self, menu, path):
+         """'Open with BlackBox 's menu item callback."""
+         print("Openning:", path)
+-        args = None
+-        if self.is_native():
+-            args = args = ["blackbox", "-w", path]
+-        else:
+-            args = ["/usr/bin/flatpak", "run", TERMINAL_NAME, "-w", path]
++        args = ["blackbox", "-w", path]
+ 
+         subprocess.Popen(args, cwd=path)
+ 
