@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-opensearch-datasource";
-  version = "2.24.0";
+  version = "2.33.0";
   zipHash = {
-    x86_64-linux = "sha256-ZxlHl08pSqnVKZvVph5Bqjki7ukrV3UScJFRwW4y97o=";
-    aarch64-linux = "sha256-ZwPq3Xz4Rcm2JiAZnZ0D/Z6SamlCnj0/PgXeT6rrxcQ=";
-    x86_64-darwin = "sha256-HMifdRPl8RNb+m/eFaXATNRgDYLMG1UA6N/rWHMTR04=";
-    aarch64-darwin = "sha256-MLVyOeVZ42zJjLpOnGSa5ogGNa7rlcA4qjASCVeA3eU=";
+    x86_64-linux = "sha256-oxPw/cQ/AYTHB4Z/hdt3Jqn3XXnx+bo3uAq6qS7hd6g=";
+    aarch64-linux = "sha256-0bF2ebVF26iPIKs+oICeaBwm6K8TZGqTP6ONR+yDFvY=";
+    x86_64-darwin = "sha256-yGJLaNCAmdIN1uuzh/v+adda6IRmcCH+mpbxno8qK9k=";
+    aarch64-darwin = "sha256-Kxgq9HYXPW3+uEzJPy0kKDFCXrSFpCgZQ+whqx4XtJ8=";
   };
   meta = {
     description = "Empowers you to seamlessly integrate JSON data into Grafana";
