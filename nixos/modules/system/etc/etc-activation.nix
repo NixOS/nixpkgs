@@ -29,12 +29,12 @@
         {
           assertion =
             (!config.system.etc.overlay.mutable)
-            -> (config.systemd.sysusers.enable || config.services.userborn.enable);
+            -> ((config.systemd.sysusers.enable or false) || (config.services.userborn.enable or false));
           message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
           assertion =
-            (config.system.switch.enable)
+            (config.system.switch.enable or false)
             -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
           message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
         }
