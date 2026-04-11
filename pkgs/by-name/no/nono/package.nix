@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.23.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "always-further";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m88lr8nt6mgu0RrV5n66Rth9ja4Z9laut74lbXf6RJY=";
+    hash = "sha256-OHzSkTqbYpXVH2czLsr04FlrKxF3E4KhqoPChQ2xcZM=";
   };
 
-  cargoHash = "sha256-l87Pn6zVZ8ZRPp6m7Aet5uc+5aVjKVbQsHvtaEuTTD8==";
+  cargoHash = "sha256-aMt0Rabx52Hl27TrZmA+KLSm6n4c2adlnY3ikoql8OU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,8 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preCheck = ''
-    # Integration test env_nono_allow_comma_separated expects these paths to exist
-    mkdir -p /tmp/a /tmp/b
+    # The Nix sandbox sets TMPDIR outside /tmp, tests that nest HOME under a tempdir would no longer be nested under /tmp, failing policy assertions.
+    export TMPDIR=/tmp
+    
   '';
 
   meta = {
