@@ -6,7 +6,6 @@
   pydantic,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "zwave-js-server-python";
   version = "0.69.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
