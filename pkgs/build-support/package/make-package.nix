@@ -399,6 +399,10 @@ let
           drvPath =
             assert this.validity.handled;
             this.drvOutAttrs.drvPath;
+          # Match `stdenv.mkDerivation`'s public surface so consumers
+          # that iterate `pkg.outputs` see the same list in both
+          # forms.
+          inherit (this.drvAttrs) outputs;
         }
         // outputs;
     };
