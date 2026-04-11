@@ -18,11 +18,13 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
-    cp -r ${extracted}/usr/share/icons $out/share/
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    cp -r ${extracted}/usr/share/icons/hicolor/512x512/apps/'FF Logs Uploader.png' $out/share/icons/hicolor/512x512/apps/fflogs.png
     chmod -R +w $out/share/
     test ! -e $out/share/icons/hicolor/0x0 # check for regression of https://github.com/electron-userland/electron-builder/issues/5294
     cp ${extracted}/'FF Logs Uploader.desktop' $out/share/applications/fflogs.desktop
     sed -i 's@^Exec=AppRun --no-sandbox@Exec=fflogs@g' $out/share/applications/fflogs.desktop
+    sed -i 's@^Icon=FF Logs Uploader@Icon=fflogs@g' $out/share/applications/fflogs.desktop
   '';
 
   meta = {
