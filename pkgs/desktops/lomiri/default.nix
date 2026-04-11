@@ -69,6 +69,7 @@ let
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
       lomiri-mediaplayer-app = callPackage ./applications/lomiri-mediaplayer-app { };
       lomiri-music-app = callPackage ./applications/lomiri-music-app { };
+      lomiri-notes-app = callPackage ./applications/lomiri-notes-app { };
       lomiri-system-settings-online-accounts =
         callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-online-accounts.nix
           { };
