@@ -15,8 +15,9 @@ let
     name:
     let
       lowerName = lib.strings.toLower name;
+      sanitised = lib.strings.replaceStrings ["+"] ["plus"] lowerName;
     in
-    if builtins.match "^[[:digit:]].*" lowerName != null then "_" + lowerName else lowerName;
+    if builtins.match "^[[:digit:]].*" sanitised != null then "_" + sanitised else sanitised;
 
   convertVersion =
     version: if builtins.match "^[[:digit:]].*" version != null then "+" + version else "";
