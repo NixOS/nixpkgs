@@ -237,14 +237,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0014-core-don-t-taint-on-unmerged-usr.patch
+    ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0003-add-rootprefix-to-lookup-dir-paths.patch
+    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0005-core-don-t-taint-on-unmerged-usr.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
