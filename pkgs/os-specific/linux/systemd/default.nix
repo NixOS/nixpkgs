@@ -615,10 +615,6 @@ stdenv.mkDerivation (finalAttrs: {
       # For compatibility with dependents that use sbin instead of bin.
       ln -s bin "$out/sbin"
     ''
-    + lib.optionalString (!withKernelInstall) ''
-      # "kernel-install" shouldn't be used on NixOS.
-      find $out -name "*kernel-install*" -exec rm {} \;
-    ''
     + lib.optionalString (!withDocumentation) ''
       rm -rf $out/share/doc
     ''
