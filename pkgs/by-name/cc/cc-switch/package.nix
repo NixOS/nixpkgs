@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch";
   version = "5.3.0";
 
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "saladday";
     repo = "cc-switch-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bOvPM/eAhDlqa+ib26aKbYpGxm96bpfa3hQYTcRz6pg=";
   };
 
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ haoxian ];
     platforms = lib.platforms.unix;
   };
-}
+})
