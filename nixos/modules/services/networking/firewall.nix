@@ -8,6 +8,20 @@ let
 
   cfg = config.networking.firewall;
 
+  portRange = lib.types.record {
+    declarations = [ ./firewall.nix ];
+    fields = {
+      from = {
+        type = lib.types.port;
+        description = "The start of the port range, inclusive.";
+      };
+      to = {
+        type = lib.types.port;
+        description = "The end of the port range, inclusive.";
+      };
+    };
+  };
+
   canonicalizePortList = ports: lib.unique (builtins.sort builtins.lessThan ports);
 
   commonOptions = {
@@ -26,7 +40,7 @@ let
     };
 
     allowedTCPPortRanges = lib.mkOption {
-      type = lib.types.listOf (lib.types.attrsOf lib.types.port);
+      type = lib.types.listOf portRange;
       default = [ ];
       example = [
         {
@@ -51,7 +65,7 @@ let
     };
 
     allowedUDPPortRanges = lib.mkOption {
-      type = lib.types.listOf (lib.types.attrsOf lib.types.port);
+      type = lib.types.listOf portRange;
       default = [ ];
       example = [
         {
