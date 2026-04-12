@@ -1,51 +1,146 @@
 {
-  callPackage,
-  lib,
   useNixpkgsEngine ? false,
+  callPackage,
+  fetchzip,
+  fetchFromGitHub,
+  dart,
+  dart-bin,
+  lib,
+  stdenv,
+  runCommand,
 }:
-
 let
+  mkCustomFlutter = args: callPackage ./flutter.nix args;
+  wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
   getPatches =
     dir:
-    if builtins.pathExists dir then
-      map (fileName: dir + "/${fileName}") (builtins.attrNames (builtins.readDir dir))
-    else
-      [ ];
-
-  makeFlutterScope = callPackage ./scope.nix { };
-
-  allVersions = lib.mapAttrs' (versionName: _: {
-    name = "v${versionName}";
-    value =
-      let
-        versionDir = ./versions + "/${versionName}";
-        versionData = lib.importJSON (versionDir + "/data.json");
-        globalPatches = getPatches ./patches;
-        versionPatches = getPatches (versionDir + "/patches");
-        globalEnginePatches = getPatches ./engine/patches;
-        versionEnginePatches = getPatches (versionDir + "/engine/patches");
-      in
-      makeFlutterScope (
-        versionData
-        // {
-          inherit useNixpkgsEngine;
-          patches = globalPatches ++ versionPatches;
-          enginePatches = globalEnginePatches ++ versionEnginePatches;
-        }
-      );
-  }) (builtins.readDir ./versions);
-
-  getLatestForChannel =
-    channel:
     let
-      channelVersions = lib.filterAttrs (_: scope: scope.channel == channel) allVersions;
-      sortedNames = lib.naturalSort (builtins.attrNames channelVersions);
+      files = builtins.attrNames (builtins.readDir dir);
     in
-    if sortedNames == [ ] then null else channelVersions.${lib.last sortedNames}.flutter;
+    if (builtins.pathExists dir) then map (f: dir + ("/" + f)) files else [ ];
+  mkFlutter =
+    {
+      version,
+      engineVersion,
+      engineSwiftShaderHash,
+      engineSwiftShaderRev,
+      engineHashes,
+      enginePatches,
+      dartVersion,
+      flutterHash,
+      dartHash,
+      patches,
+      pubspecLock,
+      artifactHashes,
+      channel,
+    }:
+    let
+      args = {
+        inherit
+          version
+          engineVersion
+          engineSwiftShaderRev
+          engineSwiftShaderHash
+          engineHashes
+          enginePatches
+          patches
+          pubspecLock
+          artifactHashes
+          useNixpkgsEngine
+          channel
+          ;
 
-  stable = getLatestForChannel "stable";
-  beta = getLatestForChannel "beta";
+        dart =
+          let
+            hash =
+              dartHash.${stdenv.hostPlatform.system}
+                or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          in
+          (
+            if lib.versionAtLeast version "3.41" then
+              (dart-bin.overrideAttrs (oldAttrs: {
+                version = dartVersion;
+                src = oldAttrs.src.overrideAttrs (_: {
+                  inherit hash;
+                });
+              }))
+            else
+              (dart-bin.overrideAttrs (_: {
+                # This overrideAttrs is used to replace the version in src.url
+                version = dartVersion;
+                __intentionallyOverridingVersion = true;
+              })).overrideAttrs
+                (oldAttrs: {
+                  src = fetchzip {
+                    inherit (oldAttrs.src) url;
+                    inherit hash;
+                  };
+                })
+          );
+        src =
+          let
+            source = fetchFromGitHub {
+              owner = "flutter";
+              repo = "flutter";
+              tag = version;
+              hash = flutterHash;
+            };
+          in
+          (
+            if lib.versionAtLeast version "3.32" then
+              # # Could not determine engine revision
+              (runCommand source.name { } ''
+                cp --recursive ${source} $out
+                chmod +w $out/bin
+                mkdir $out/bin/cache
+                cp $out/bin/internal/engine.version $out/bin/cache/engine.stamp
+                touch $out/bin/cache/engine.realm
+              '')
+            else
+              source
+          );
+      };
+    in
+    (mkCustomFlutter args).overrideAttrs (
+      prev: next: {
+        passthru = next.passthru // {
+          inherit wrapFlutter mkCustomFlutter mkFlutter;
+          buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
+            flutter = wrapFlutter (mkCustomFlutter args);
+          };
+        };
+      }
+    );
+
+  flutterVersions = lib.mapAttrs' (
+    version: _:
+    let
+      versionDir = ./versions + "/${version}";
+      data = lib.importJSON (versionDir + "/data.json");
+    in
+    lib.nameValuePair "v${version}" (
+      wrapFlutter (
+        mkFlutter (
+          {
+            patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+            enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
+          }
+          // data
+        )
+      )
+    )
+  ) (builtins.readDir ./versions);
+
+  stableFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "stable") flutterVersions;
+  betaFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "beta") flutterVersions;
 in
-(lib.mapAttrs (_: scope: scope.flutter) allVersions)
-// lib.optionalAttrs (stable != null) { inherit stable; }
-// lib.optionalAttrs (beta != null) { inherit beta; }
+flutterVersions
+// {
+  inherit wrapFlutter mkFlutter;
+}
+// lib.optionalAttrs (betaFlutterVersions != { }) {
+  beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
+}
+// lib.optionalAttrs (stableFlutterVersions != { }) {
+  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
+}
