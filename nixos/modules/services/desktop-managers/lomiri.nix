@@ -119,6 +119,7 @@ in
             lomiri-history-service
             lomiri-mediaplayer-app
             lomiri-music-app
+            lomiri-online-accounts
             lomiri-polkit-agent
             lomiri-schemas # exposes some required dbus interfaces
             lomiri-session # wrappers to properly launch the session
@@ -200,6 +201,8 @@ in
       };
 
       environment.pathsToLink = [
+        # Accounts SSO information, for online account management
+        "/share/accounts"
         # Configs for inter-app data exchange system
         "/share/lomiri-content-hub/peers"
         # Configs for inter-app URL requests
