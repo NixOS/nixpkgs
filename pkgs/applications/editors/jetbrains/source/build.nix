@@ -56,12 +56,6 @@ let
     hash = "sha256-cAEpCekXY4kT/Y4Un79yyRI3VQUj3NhfF5YCXG1T6qM=";
   };
 
-  rulesKotlinRev = "30e89b8f9a246952e14eb6f56c2265a46bf4dc54";
-  rulesKotlin = fetchurl {
-    url = "https://github.com/JetBrains/rules_kotlin/archive/${rulesKotlinRev}.zip";
-    hash = "sha256-Raj3P9Zj3wLf0pJc974CoDsHXdFPi0c91FT+6qKOVNA=";
-  };
-
   localJdkVersion = "local_jdk_21";
   bazelArgs = [
     #"--verbose_failures"
@@ -129,9 +123,6 @@ let
     # Patch precompiled Python toolchain
     cp ${pythonPatchelfPatch} $out/build/rules_python_patch_host_python.patch
     cp ${pythonPatchelfPatch} $out/platform/build-scripts/bazel/build/rules_python_patch_host_python.patch
-    # Patch for OS detection in llvm_toolchains
-    cp ${../patches/toolchains_llvm_os_release.patch} $out/build/toolchains_llvm_os_release.patch
-    cp ${../patches/toolchains_llvm_os_release.patch} $out/platform/build-scripts/bazel/build/toolchains_llvm_os_release.patch
     # patches are added to MODULE.bazel files in the patches section. - BUILD.bazel file needed to be appliable
     touch $out/platform/build-scripts/bazel/build/BUILD.bazel
   '';
@@ -250,6 +241,19 @@ let
     else
       "//build:i_build_target";
 
+  # TODO: pass in
+  bazelRepoCacheFODHashes =
+    if buildType == "pycharm" then
+      {
+        aarch64-linux = ""; # TODO
+        x86_64-linux = ""; # TODO
+      }
+    else
+      {
+        aarch64-linux = ""; # TODO
+        x86_64-linux = "sha256-ZPUd0xFC3Jlkmien9vBdw5tCHgfwvd6q/fulXOrl+2s=";
+      };
+
   xplat-launcher = fetchzip {
     urls = [
       "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
@@ -260,12 +264,8 @@ let
   };
 
   patches = [
-    (replaceVars ../patches/module-bazel.patch {
-      inherit rulesKotlin rulesKotlinRev;
-    })
-    (replaceVars ../patches/build-scripts-module-bazel.patch {
-      inherit rulesKotlin rulesKotlinRev;
-    })
+    ../patches/module-bazel.patch
+    ../patches/build-scripts-module-bazel.patch
     (replaceVars ../patches/jps-dynamic-deps-env-bash.patch {
       bashPath = lib.getExe bash;
     })
@@ -322,13 +322,13 @@ bazel.package {
     strace
     # TODO: Remove
     vim
+    autoPatchelfHook
   ];
 
   bazel = bazel;
   targets = [ bazelTarget ];
   registry = bazelRegistry;
   commandArgs = bazelArgs;
-  fetchAll = true;
 
   #patches = [
   #../patches/no-download.patch
@@ -390,12 +390,7 @@ bazel.package {
   '';
 
   bazelRepoCacheFOD = {
-    outputHash =
-      {
-        aarch64-linux = ""; # TODO
-        x86_64-linux = "sha256-MNe6Xj5lzbuL0nYzq+6XJCkQWAUfNNgIthRgRTkEe1g=";
-      }
-      .${stdenv.hostPlatform.system};
+    outputHash = bazelRepoCacheFODHashes.${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
   };
 
