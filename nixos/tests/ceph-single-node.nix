@@ -43,6 +43,7 @@ let
     { pkgs, ... }:
     {
       virtualisation = {
+        memorySize = 2048;
         emptyDiskImages = [
           20480
           20480
@@ -92,6 +93,10 @@ let
           cfg.osd2.name
         ];
       };
+      rgw = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
     };
   };
 
@@ -100,6 +105,8 @@ let
   # For other ways to deploy a ceph cluster, look at the documentation at
   # https://docs.ceph.com/docs/master/
   testScript = ''
+    import json
+
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -194,6 +201,16 @@ let
         "ceph osd pool delete single-node-other-test single-node-other-test --yes-i-really-really-mean-it",
     )
 
+    # Bootstrap RGW
+    monA.succeed(
+        "sudo -u ceph mkdir -p /var/lib/ceph/radosgw/ceph-${cfg.monA.name}",
+        "ceph auth get-or-create client.${cfg.monA.name} osd 'allow rwx' mon 'allow rw' > /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "chown ceph:ceph /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "systemctl start ceph-rgw-${cfg.monA.name}",
+    )
+    monA.wait_for_unit("ceph-rgw-${cfg.monA.name}")
+    monA.wait_for_open_port(7480)
+
     # Shut down ceph by stopping ceph.target.
     monA.succeed("systemctl stop ceph.target")
 
@@ -204,6 +221,7 @@ let
     monA.wait_for_unit("ceph-osd-${cfg.osd0.name}")
     monA.wait_for_unit("ceph-osd-${cfg.osd1.name}")
     monA.wait_for_unit("ceph-osd-${cfg.osd2.name}")
+    monA.wait_for_unit("ceph-rgw-${cfg.monA.name}")
 
     # Ensure the cluster comes back up again
     monA.succeed("ceph -s | grep 'mon: 1 daemons'")
@@ -222,6 +240,32 @@ let
     monA.wait_for_open_port(8080)
     monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Initialize dashboard creds
+    monA.succeed(
+        "echo 'foo bar baz qux' > /tmp/dashboard_pw",
+        "ceph dashboard ac-user-create admin -i /tmp/dashboard_pw administrator",
+        "ceph dashboard set-rgw-credentials",
+    )
+
+    # Get dashboard auth token
+    auth_payload = json.dumps({"username": "admin", "password": "foo bar baz qux"})
+    auth_response = json.loads(monA.succeed(
+        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' http://localhost:8080/api/auth",
+    ))
+    token = auth_response["token"]
+
+    # Check cluster health via dashboard API
+    health = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' http://localhost:8080/api/health/minimal",
+    ))
+    assert health["health"]["status"] == "HEALTH_OK"
+
+    # List daemons via REST API
+    rgw_daemons = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' http://localhost:8080/api/rgw/daemon",
+    ))
+    assert rgw_daemons[0]["id"] == "a"
   '';
 in
 {

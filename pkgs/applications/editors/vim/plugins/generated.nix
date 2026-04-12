@@ -16426,6 +16426,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tokyodark-nvim = buildVimPlugin {
+    pname = "tokyodark.nvim";
+    version = "0-unstable-2025-11-13";
+    src = fetchFromGitHub {
+      owner = "tiagovla";
+      repo = "tokyodark.nvim";
+      rev = "659aff3c73dc2e0159314050a81671f0b2eaad01";
+      hash = "sha256-THvvevUwK3p/aZW+FI2RNnduqWBcmWF5tueYwEY43FI=";
+    };
+    meta.homepage = "https://github.com/tiagovla/tokyodark.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   tokyonight-nvim = buildVimPlugin {
     pname = "tokyonight.nvim";
     version = "4.14.1-unstable-2026-03-24";
