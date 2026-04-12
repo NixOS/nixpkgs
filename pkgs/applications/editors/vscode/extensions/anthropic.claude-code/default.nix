@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "claude-code";
     publisher = "anthropic";
-    version = "2.1.96";
-    hash = "sha256-9WVCySGmohmyzTzcskzGCHk6ZFX+/HwkpmX2yudVar8=";
+    version = "2.1.101";
+    hash = "sha256-L16rJFwOIK8afKXhZ2ekEEoRIRYfHoHTUHP0+iEL1BI=";
   };
 
   postInstall = ''
