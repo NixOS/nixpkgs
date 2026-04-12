@@ -526,11 +526,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-3rj9YJqgys+IZjx8/pMckAYyv5yKhHdySWlCmgZy5TU=",
+    "hash": "sha256-22ZxBz5ZKJzgG/HMv6kce5NosPtmYPk46R7pu3Ss4OA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.67.0",
+    "rev": "v4.68.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1274,13 +1274,13 @@
     "vendorHash": "sha256-IR6KjFW5GbsOIm3EEFyx3ctwhbifZlcNaZeGhbeK/Wo="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-TKdZaE3FJ3vE+wxCrqaIuON1sKW/EJAZ1YE73v23K9I=",
+    "hash": "sha256-+rP7HnEF+J5NjwgnYEnFbSBdV/fyq7s2A0Xt4maLy7k=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.5.0",
+    "rev": "v3.7.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
+    "vendorHash": "sha256-HjrB7C0KaLJz9NVLfZdq5EZbNbF9lJPxSkQwnWUF978="
   },
   "tailscale_tailscale": {
     "hash": "sha256-yR65w/o/VpwKINcvz4SBybAwsphGC7A/B+baKRcIT3I=",
