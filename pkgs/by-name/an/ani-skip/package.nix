@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-skip";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "synacktraa";
     repo = "ani-skip";
     tag = finalAttrs.version;
-    hash = "sha256-VEEG3d6rwTAS7/+gBKHFKIg9zFfBu5eBOu6Z23621gM=";
+    hash = "sha256-WYS1nURNLV1KCnR4gLFcAAzPNttwZVGSv9k5Q1FdeOo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
