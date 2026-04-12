@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rnMp0u3sl9zqIKNp3OoM9PmE/468YCwqTY4rdDHxamw=";
+    hash = "sha256-3N2qj8aoUFQgQlYKEqUCKpMXwfn9XvdxLcB3wT3WOqY=";
   };
 
   postPatch = ''

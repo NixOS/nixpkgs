@@ -30,14 +30,14 @@ let
       # https://dldir1.qq.com/weixin/mac/mac-release.xml
       any-darwin =
         let
-          version = "4.1.8.29-36603";
+          version = "4.1.8.106-37335";
           version' = lib.replaceString "-" "_" version;
         in
         {
           inherit version;
           src = fetchurl {
             url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_${version'}.dmg";
-            hash = "sha256-QwWXDyJjqN2CB1dOZTb5Uv4qU4y8klUlsUS1Ny6M/ac=";
+            hash = "sha256-lygjqWbNqh9fCnhbyfEhnRdKdfQ9MOwPv5unqwJJsvE=";
           };
         };
     in

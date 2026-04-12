@@ -13436,6 +13436,12 @@
     githubId = 12773748;
     matrix = "@j.r:chaos.jetzt";
   };
+  jujb233 = {
+    name = "jujb233";
+    email = "j3207068746@163.com";
+    github = "jujb233";
+    githubId = 191588056;
+  };
   jukremer = {
     email = "nixpkgs@jankremer.eu";
     github = "jukremer";
