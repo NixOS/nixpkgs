@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "pacemaker";
-    rev = "Pacemaker-${finalAttrs.version}";
-    sha256 = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
+    tag = "Pacemaker-${finalAttrs.version}";
+    hash = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
   };
 
   nativeBuildInputs = [
