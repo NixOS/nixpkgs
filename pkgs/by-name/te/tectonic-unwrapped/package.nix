@@ -8,9 +8,8 @@
 
 {
   lib,
-  clangStdenv,
+  stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   rustPlatform,
 
   # nativeBuildInputs
@@ -26,47 +25,18 @@
   tectonic,
 }:
 
-let
-
-  buildRustPackage = rustPlatform.buildRustPackage.override {
-    # use clang to work around build failure with GCC 14
-    # see: https://github.com/tectonic-typesetting/tectonic/issues/1263
-    stdenv = clangStdenv;
-  };
-
-in
-
-buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tectonic";
-  version = "0.15.0";
+  version = "0.16.8";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${finalAttrs.version}";
-    sha256 = "sha256-dZnUu0g86WJIIvwMgdmwb6oYqItxoYrGQTFNX7I61Bs=";
+    sha256 = "sha256-drQ8hCe5vJHewUTFJTfVOotFvuUX19dHQLu2nVIWKbQ=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/tectonic-typesetting/tectonic/pull/1155
-      name = "1155-fix-endless-reruns-when-generating-bbl";
-      url = "https://github.com/tectonic-typesetting/tectonic/commit/fbb145cd079497b8c88197276f92cb89685b4d54.patch";
-      hash = "sha256-6FW5MFkOWnqzYX8Eg5DfmLaEhVWKYVZwodE4SGXHKV0=";
-    })
-    ./tectonic-0.15-fix-dangerous_implicit_autorefs.patch
-  ];
-
-  cargoPatches = [
-    (fetchpatch2 {
-      # cherry-picked from https://github.com/tectonic-typesetting/tectonic/pull/1202
-      name = "1202-fix-build-with-rust-1_80-and-icu-75";
-      url = "https://github.com/tectonic-typesetting/tectonic/compare/19654bf152d602995da970f6164713953cffc2e6...6b49ca8db40aaca29cb375ce75add3e575558375.patch?full_index=1";
-      hash = "sha256-CgQBCFvfYKKXELnR9fMDqmdq97n514CzGJ7EBGpghJc=";
-    })
-  ];
-
-  cargoHash = "sha256-OMa89riyopKMQf9E9Fr7Qs4hFfEfjnDFzaSWFtkYUXE=";
+  cargoHash = "sha256-Hh2w8c/K+AXdX4p620fqVUttQPY33eVIAf0/VIFhHiY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -81,17 +51,54 @@ buildRustPackage (finalAttrs: {
     openssl
   ];
 
+  # By default, tectonic looks up the latest bundle by opening this URL:
+  #
+  #   https://relay.fullyjustified.net/default_bundle_v${FORMAT_VERSION}.tar
+  #
+  # Where FORMAT_VERSION is defined here:
+  #
+  #   https://github.com/tectonic-typesetting/tectonic/blob/master/crates/engine_xetex/xetex/xetex_bindings.h
+  #
+  # When we updated the package, this URL redirects to the following:
+  #
+  #   https://data1.fullyjustified.net/tlextras-2022.0r0.tar
+  #
+  # The environment variable set below, sets the URL that will be used during
+  # runtime by default. We chose to hard-code a URL to a specific version of
+  # the web bundle, so that upstream won't update the `default_bundle` without
+  # us noticing, and break compatibility with our biber-for-tectonic package.
+  #
+  # This is in principle the right thing to do, ever since the 0.16.0 release.
+  # As opposed to what we had with version 0.15.0, we choose to not hard-code a
+  # --web-bundle (or --bundle) argument in the wrapper of the
+  # `tectonic-wrapped` package, as it is not compatible with nextonic, and
+  # `tectonic -X` commands of versions 0.16.0+ -- These commands require the
+  # `--bundle` argument to appear after the subcommand.
+  #
+  # Lastly, we might in the future need to update the bundle URL below if
+  # upstream will upload a new bundle. However, upstream hasn't updated a new
+  # bundle for a long time, see:
+  #
+  #   https://github.com/tectonic-typesetting/tectonic/issues/1269
+  #
+  env.TECTONIC_BUNDLE_LOCKED = "https://data1.fullyjustified.net/tlextras-2022.0r0.tar";
+
   postInstall = ''
     # Makes it possible to automatically use the V2 CLI API
     ln -s $out/bin/tectonic $out/bin/nextonic
   ''
-  + lib.optionalString clangStdenv.hostPlatform.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace dist/appimage/tectonic.desktop \
       --replace-fail Exec=tectonic Exec=$out/bin/tectonic
     install -Dm644 dist/appimage/tectonic.desktop -t $out/share/applications/
     install -Dm644 dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
+  checkFlags = [
+    # Test fails due to tectonic bundle missing and can't be downloaded in the
+    # sandbox
+    "--skip=tests::no_segfault_after_failed_compilation"
+  ];
   doCheck = true;
 
   passthru = {
