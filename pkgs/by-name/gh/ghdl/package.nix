@@ -6,13 +6,12 @@
   zlib,
   llvm,
   lib,
-  gcc-unwrapped,
+  gcc13,
   texinfo,
   gmp,
   mpfr,
   libmpc,
   gnutar,
-  glibc,
   makeWrapper,
   backend ? "mcode",
 }:
@@ -21,13 +20,13 @@ assert backend == "mcode" || backend == "llvm" || backend == "gcc";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "5.1.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "ghdl";
     repo = "ghdl";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-vPeODNTptxIjN6qLoIHaKOFf3P3iAK2GloVreHPaAz8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q5lAWMa1SFjoIJTdWlHSbS4Cg5RYWiej8F05Xrz9ArY=";
   };
 
   env.LIBRARY_PATH = "${stdenv.cc.libc}/lib";
@@ -39,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
     makeWrapper
   ];
+
   buildInputs = [
     zlib
   ]
@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     libmpc
   ];
+
   propagatedBuildInputs = [
   ]
   ++ lib.optionals (backend == "llvm" || backend == "gcc") [
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/check_version  7.0/check_version  7/g' configure
   ''
   + lib.optionalString (backend == "gcc") ''
-    ${gnutar}/bin/tar -xf ${gcc-unwrapped.src}
+    ${gnutar}/bin/tar -xf ${gcc13.cc.src}
   '';
 
   configureFlags = [
@@ -73,16 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-llvm-config=${llvm.dev}/bin/llvm-config"
   ]
   ++ lib.optionals (backend == "gcc") [
-    "--with-gcc=gcc-${gcc-unwrapped.version}"
+    "--with-gcc=gcc-${gcc13.cc.version}"
   ];
 
   buildPhase = lib.optionalString (backend == "gcc") ''
     make copy-sources
     mkdir gcc-objs
     cd gcc-objs
-    ../gcc-${gcc-unwrapped.version}/configure \
-      --with-native-system-header-dir=/include \
-      --with-build-sysroot=${lib.getDev glibc} \
+    ../gcc-${gcc13.cc.version}/configure \
+      --with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include \
+      --with-build-sysroot=/ \
       --prefix=$out \
       --enable-languages=c,vhdl \
       --disable-bootstrap \
@@ -90,7 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
       --disable-multilib \
       --disable-libssp \
       --disable-libgomp \
-      --disable-libquadmath
+      --disable-libquadmath \
+      --with-gmp-include=${gmp.dev}/include \
+      --with-gmp-lib=${gmp.out}/lib \
+      --with-mpfr-include=${mpfr.dev}/include \
+      --with-mpfr-lib=${mpfr.out}/lib \
+      --with-mpc=${libmpc}
     make -j $NIX_BUILD_CORES
     make install
     cd ../
@@ -101,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/ghdl \
       --set LIBRARY_PATH ${
         lib.makeLibraryPath [
-          glibc
+          stdenv.cc.libc
         ]
       }
   '';

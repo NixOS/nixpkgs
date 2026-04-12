@@ -4101,10 +4101,7 @@ with pkgs;
 
   ghdl-gcc = ghdl.override { backend = "gcc"; };
 
-  ghdl-llvm = ghdl.override {
-    backend = "llvm";
-    inherit (llvmPackages_20) llvm;
-  };
+  ghdl-llvm = ghdl.override { backend = "llvm"; };
 
   gcc-arm-embedded = gcc-arm-embedded-15;
 
