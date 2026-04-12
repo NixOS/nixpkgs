@@ -9,5 +9,5 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/webui";
 
-  npmDepsHash = "sha256-IpqineYa15GBqoPDJ7RpaDsq+MQIIDcdq7yhwmH4Lzo=";
+  npmDepsHash = "sha256-Epz+pCbgejkj7vcdwbPC2RfAkp2HRqGV0urXiiBrjZQ=";
 })
