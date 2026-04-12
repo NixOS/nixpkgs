@@ -19,6 +19,7 @@
   procps ? null,
   versionCheckHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 
   # now defaults to false because some tests can be flaky (clipboard etc), see
   # also: https://github.com/neovim/neovim/issues/16233
@@ -161,22 +162,18 @@ stdenv.mkDerivation (
       unibilium
       utf8proc
     ]
-    ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      glibcLocales
-      procps
-    ]
     ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
       # Provide libintl for non-glibc platforms
       gettext
     ];
 
-    doCheck = false;
+    doCheck = true;
 
     # to be exhaustive, one could run
     # make oldtests too
     checkPhase = ''
       runHook preCheck
-      make functionaltest
+      make functionaltest__treesitter
       runHook postCheck
     '';
 
@@ -219,6 +216,7 @@ stdenv.mkDerivation (
       # third-party/CMakeLists.txt is not read at all.
       (lib.cmakeBool "USE_BUNDLED" false)
       (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
+      (lib.cmakeBool "USE_BUNDLED_BUSTED" false)
     ]
     ++ (
       if lua.pkgs.isLuaJIT then
@@ -252,6 +250,12 @@ stdenv.mkDerivation (
 
     nativeInstallCheckInputs = [
       versionCheckHook
+      lua.pkgs.busted
+      writableTmpDirAsHomeHook
+      glibcLocales
+
+      # needs git for vim.pack tests as well
+      procps
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
     doInstallCheck = true;
