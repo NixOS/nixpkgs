@@ -47,12 +47,11 @@ let
     type = attrsWith' "config-name" (
       attrsWith' "path" (
         attrsWith' "tmpfiles-type" (
-          types.submodule (
-            { name, config, ... }:
-            {
-              options.type = mkOption {
+          types.record {
+            declarations = [ ./tmpfiles.nix ];
+            fields = {
+              type = {
                 type = types.str;
-                default = name;
                 defaultText = "‹tmpfiles-type›";
                 example = "d";
                 description = ''
@@ -66,7 +65,7 @@ let
                   {manpage}`tmpfiles.d(5)`
                 '';
               };
-              options.mode = mkOption {
+              mode = {
                 type = types.str;
                 default = "-";
                 example = "0755";
@@ -74,7 +73,7 @@ let
                   The file access mode to use when creating this file or directory.
                 '';
               };
-              options.user = mkOption {
+              user = {
                 type = types.str;
                 default = "-";
                 example = "root";
@@ -87,7 +86,7 @@ let
                   invokes systemd-tmpfiles is used.
                 '';
               };
-              options.group = mkOption {
+              group = {
                 type = types.str;
                 default = "-";
                 example = "root";
@@ -100,7 +99,7 @@ let
                   invokes systemd-tmpfiles is used.
                 '';
               };
-              options.age = mkOption {
+              age = {
                 type = types.str;
                 default = "-";
                 example = "10d";
@@ -113,7 +112,7 @@ let
                   If set to `"-"` no automatic clean-up is done.
                 '';
               };
-              options.argument = mkOption {
+              argument = {
                 type = types.str;
                 default = "";
                 example = "";
@@ -125,8 +124,13 @@ let
                   {manpage}`tmpfiles.d(5)`
                 '';
               };
-            }
-          )
+            };
+            finalise =
+              { name, ... }:
+              {
+                type = lib.mkOptionDefault name;
+              };
+          }
         )
       )
     );
