@@ -18904,6 +18904,8 @@ self: super: with self; {
 
   synology-srm = callPackage ../development/python-modules/synology-srm { };
 
+  synthetic-home = callPackage ../development/python-modules/synthetic-home { };
+
   syrupy = callPackage ../development/python-modules/syrupy { };
 
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
