@@ -270,8 +270,14 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
+              - doc/packages/linux.section.md
+              - lib/kernel.nix
+              - nixos/doc/manual/configuration/linux-kernel.chapter.md
+              - nixos/modules/system/boot/kernel.nix
+              - nixos/tests/kernel-generic/**/*
               - pkgs/build-support/kernel/**/*
               - pkgs/os-specific/linux/kernel/**/*
+              - pkgs/top-level/linux-kernels.nix
 
 "6.topic: lib":
   - any:

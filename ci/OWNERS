@@ -303,8 +303,14 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/es/esphome @mweinelt
 
 # Linux kernel
-/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/doc/packages/linux.section.md @NixOS/linux-kernel
+/lib/kernel.nix @NixOS/linux-kernel
+/nixos/doc/manual/configuration/linux-kernel.chapter.md @NixOS/linux-kernel
+/nixos/modules/system/boot/kernel.nix @NixOS/linux-kernel
+/nixos/tests/kernel-generic/ @NixOS/linux-kernel
+/pkgs/build-support/kernel/ @NixOS/linux-kernel
 /pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
