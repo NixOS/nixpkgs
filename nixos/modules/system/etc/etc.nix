@@ -119,120 +119,122 @@ in
 
       type =
         with lib.types;
-        attrsOf (
-          submodule (
+        attrsOf (record {
+          declarations = [ ./etc.nix ];
+          fields =
+            let
+              field = lib.id;
+            in
+            {
+
+              enable = field {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether this /etc file should be generated.  This
+                  option allows specific /etc files to be disabled.
+                '';
+              };
+
+              target = field {
+                type = lib.types.str;
+                description = ''
+                  Name of symlink (relative to
+                  {file}`/etc`).  Defaults to the attribute
+                  name.
+                '';
+              };
+
+              text = field {
+                default = null;
+                type = lib.types.nullOr lib.types.lines;
+                description = "Text of the file.";
+              };
+
+              source = field {
+                type = lib.types.path;
+                description = "Path of the source file.";
+              };
+
+              mode = field {
+                type = lib.types.str;
+                default = "symlink";
+                example = "0600";
+                description = ''
+                  If set to something else than `symlink`,
+                  the file is copied instead of symlinked, with the given
+                  file mode.
+                '';
+              };
+
+              uid = field {
+                default = 0;
+                type = lib.types.int;
+                description = ''
+                  UID of created file. Only takes effect when the file is
+                  copied (that is, the mode is not 'symlink').
+                '';
+              };
+
+              gid = field {
+                default = 0;
+                type = lib.types.int;
+                description = ''
+                  GID of created file. Only takes effect when the file is
+                  copied (that is, the mode is not 'symlink').
+                '';
+              };
+
+              user = field {
+                defaultText = lib.literalExpression ''"+''${toString uid}"'';
+                type = lib.types.str;
+                description = ''
+                  User name of file owner.
+
+                  Only takes effect when the file is copied (that is, the
+                  mode is not `symlink`).
+
+                  When `services.userborn.enable`, this option has no effect.
+                  You have to assign a `uid` instead. Otherwise this option
+                  takes precedence over `uid`.
+                '';
+              };
+
+              group = field {
+                defaultText = lib.literalExpression ''"+''${toString gid}"'';
+                type = lib.types.str;
+                description = ''
+                  Group name of file owner.
+
+                  Only takes effect when the file is copied (that is, the
+                  mode is not `symlink`).
+
+                  When `services.userborn.enable`, this option has no effect.
+                  You have to assign a `gid` instead. Otherwise this option
+                  takes precedence over `gid`.
+                '';
+              };
+
+            };
+
+          finalise =
             {
               name,
-              config,
-              options,
-              ...
+              self,
+              fields,
             }:
             {
-              options = {
-
-                enable = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                  description = ''
-                    Whether this /etc file should be generated.  This
-                    option allows specific /etc files to be disabled.
-                  '';
-                };
-
-                target = lib.mkOption {
-                  type = lib.types.str;
-                  description = ''
-                    Name of symlink (relative to
-                    {file}`/etc`).  Defaults to the attribute
-                    name.
-                  '';
-                };
-
-                text = lib.mkOption {
-                  default = null;
-                  type = lib.types.nullOr lib.types.lines;
-                  description = "Text of the file.";
-                };
-
-                source = lib.mkOption {
-                  type = lib.types.path;
-                  description = "Path of the source file.";
-                };
-
-                mode = lib.mkOption {
-                  type = lib.types.str;
-                  default = "symlink";
-                  example = "0600";
-                  description = ''
-                    If set to something else than `symlink`,
-                    the file is copied instead of symlinked, with the given
-                    file mode.
-                  '';
-                };
-
-                uid = lib.mkOption {
-                  default = 0;
-                  type = lib.types.int;
-                  description = ''
-                    UID of created file. Only takes effect when the file is
-                    copied (that is, the mode is not 'symlink').
-                  '';
-                };
-
-                gid = lib.mkOption {
-                  default = 0;
-                  type = lib.types.int;
-                  description = ''
-                    GID of created file. Only takes effect when the file is
-                    copied (that is, the mode is not 'symlink').
-                  '';
-                };
-
-                user = lib.mkOption {
-                  default = "+${toString config.uid}";
-                  type = lib.types.str;
-                  description = ''
-                    User name of file owner.
-
-                    Only takes effect when the file is copied (that is, the
-                    mode is not `symlink`).
-
-                    When `services.userborn.enable`, this option has no effect.
-                    You have to assign a `uid` instead. Otherwise this option
-                    takes precedence over `uid`.
-                  '';
-                };
-
-                group = lib.mkOption {
-                  default = "+${toString config.gid}";
-                  type = lib.types.str;
-                  description = ''
-                    Group name of file owner.
-
-                    Only takes effect when the file is copied (that is, the
-                    mode is not `symlink`).
-
-                    When `services.userborn.enable`, this option has no effect.
-                    You have to assign a `gid` instead. Otherwise this option
-                    takes precedence over `gid`.
-                  '';
-                };
-
-              };
-
-              config = {
-                target = lib.mkDefault name;
-                source = lib.mkIf (config.text != null) (
-                  let
-                    name' = "etc-" + lib.replaceStrings [ "/" ] [ "-" ] name;
-                  in
-                  lib.mkDerivedConfig options.text (pkgs.writeText name')
-                );
-              };
-
-            }
-          )
-        );
+              target = lib.mkDefault name;
+              user = lib.mkOptionDefault "+${toString self.uid}";
+              group = lib.mkOptionDefault "+${toString self.gid}";
+              source = lib.mkIf (self.text != null) (
+                let
+                  name' = "etc-" + lib.replaceStrings [ "/" ] [ "-" ] name;
+                in
+                lib.mkOverride fields.text.defsFinal'.highestPrio (pkgs.writeText name' self.text)
+              );
+            };
+        });
 
     };
 
