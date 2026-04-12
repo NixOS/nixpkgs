@@ -10877,21 +10877,24 @@ with pkgs;
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
-  kodi = callPackage ../applications/video/kodi {
+  kodi = callPackage ../by-name/ko/kodi/package.nix {
     ffmpeg = ffmpeg_6;
     jre_headless = buildPackages.jdk11_headless;
+    kodiPackagesFile = ../top-level/kodi-packages.nix;
   };
 
-  kodi-wayland = callPackage ../applications/video/kodi {
+  kodi-wayland = callPackage ../by-name/ko/kodi/package.nix {
     ffmpeg = ffmpeg_6;
     jre_headless = buildPackages.jdk11_headless;
     waylandSupport = true;
+    kodiPackagesFile = ../top-level/kodi-packages.nix;
   };
 
-  kodi-gbm = callPackage ../applications/video/kodi {
+  kodi-gbm = callPackage ../by-name/ko/kodi/package.nix {
     ffmpeg = ffmpeg_6;
     jre_headless = buildPackages.jdk11_headless;
     gbmSupport = true;
+    kodiPackagesFile = ../top-level/kodi-packages.nix;
   };
 
   xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
