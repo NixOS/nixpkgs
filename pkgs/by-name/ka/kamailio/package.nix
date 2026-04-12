@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kamailio";
-  version = "6.0.5";
+  version = "6.0.6";
 
   src = fetchurl {
     url = "https://www.kamailio.org/pub/kamailio/${finalAttrs.version}/src/kamailio-${finalAttrs.version}_src.tar.gz";
-    hash = "sha256-LEpl8MTkNULs0EJCO2/IKe4Vqwmlauf0QbdCfWvOGzA=";
+    hash = "sha256-MuQpDGgTydAomr6ewt6ROOEuA4EXkhin/tN0rYE+zEg=";
   };
 
   buildInputs = [
