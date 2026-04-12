@@ -237,31 +237,39 @@ def parse_args(
             parser.print_help()
             parser.exit()
 
-    def parser_warn(msg: str) -> None:
-        print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
-
     # verbose affects both nix commands and this script, debug only this script
     if args.v or args.debug:
         logger.setLevel(logging.DEBUG)
 
+    def parser_warn(msg: str) -> None:
+        print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
+
+    # Arguments that are modified by this function
+    action = args.action
+    sudo = args.sudo
+    install_bootloader = args.install_bootloader
+    no_reexec = args.no_reexec
+    diff = args.diff
+    flake = args.flake
+
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
-    if args.action == Action.DRY_RUN:
-        args.action = Action.DRY_BUILD
+    if action == Action.DRY_RUN:
+        action = Action.DRY_BUILD
 
     if args.ask_sudo_password:
-        args.sudo = True
+        sudo = True
 
     if args.install_grub:
         parser_warn("--install-grub is deprecated, use --install-bootloader instead")
-        args.install_bootloader = True
+        install_bootloader = True
 
     if args.use_remote_sudo:
         parser_warn("--use-remote-sudo is deprecated, use --sudo instead")
-        args.sudo = True
+        sudo = True
 
     if args.fast:
         parser_warn("--fast is deprecated, use --no-reexec instead")
-        args.no_reexec = True
+        no_reexec = True
 
     if args.no_ssh_tty:
         parser_warn("--no-ssh-tty is deprecated, SSH's TTY is never used anymore")
@@ -270,22 +278,22 @@ def parse_args(
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
     if (
-        args.action
+        action
         in (
             Action.DRY_BUILD,  # --diff breaks dry-build
             Action.EDIT,
             Action.LIST_GENERATIONS,
             Action.REPL,
         )
-        and args.diff
+        and diff
     ):
-        parser_warn(f"--diff is a no-op with '{args.action}'")
-        args.diff = False
+        parser_warn(f"--diff is a no-op with '{action}'")
+        diff = False
 
-    if args.action == Action.EDIT and (args.file or args.attr):
-        parser.error(f"--file and --attr are not supported with '{args.action}'")
+    if action == Action.EDIT and (args.file or args.attr):
+        parser.error(f"--file and --attr are not supported with '{action}'")
 
-    if (args.target_host or args.build_host) and args.action not in (
+    if (args.target_host or args.build_host) and action not in (
         Action.SWITCH,
         Action.BOOT,
         Action.TEST,
@@ -295,30 +303,40 @@ def parse_args(
         Action.BUILD_VM,
         Action.BUILD_VM_WITH_BOOTLOADER,
     ):
-        parser.error(
-            f"--target-host/--build-host is not supported with '{args.action}'"
-        )
+        parser.error(f"--target-host/--build-host is not supported with '{action}'")
 
-    if args.flake and (args.file or args.attr):
+    if flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
     if args.store_path:
         if args.rollback:
             parser.error("--store-path and --rollback are mutually exclusive")
-        if args.flake or args.file or args.attr:
+        if flake or args.file or args.attr:
             parser.error("--store-path cannot be used with --flake, --file, or --attr")
-        if args.action not in (
+        if action not in (
             Action.SWITCH,
             Action.BOOT,
             Action.TEST,
             Action.DRY_ACTIVATE,
         ):
-            parser.error(f"--store-path cannot be used with '{args.action}'")
-        if args.flake is None:
+            parser.error(f"--store-path cannot be used with '{action}'")
+        if flake is None:
             # Disable flake auto-detection since we're using a pre-built store path
-            args.flake = False
+            flake = False
 
-    return args, grouped_nix_args
+    normalized_args = args_validator(
+        {
+            **vars(args),
+            "action": action,
+            "sudo": sudo,
+            "install_bootloader": install_bootloader,
+            "no_reexec": no_reexec,
+            "diff": diff,
+            "flake": flake,
+        }
+    )
+
+    return normalized_args, grouped_nix_args
 
 
 def execute(argv: list[str]) -> None:

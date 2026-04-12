@@ -196,7 +196,7 @@ class GroupedNixArgs:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class NixOSRebuildArgs:
     # The fields in this class are equivalent to CLI arguments.
     #
