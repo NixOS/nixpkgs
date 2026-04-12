@@ -94,7 +94,7 @@ lib.makeScope newScope (
         inherit outputs;
       };
 
-    host-artifacts = self.callPackage ./host-artifacts.nix { inherit (stdenv) hostPlatform; };
+    host-artifacts = self.callPackage ./host-artifacts.nix { };
 
     all-artifacts = self.callPackage ./all-artifacts.nix { };
 
