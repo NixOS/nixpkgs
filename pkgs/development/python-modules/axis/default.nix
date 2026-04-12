@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "67";
+  version = "68";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "axis";
     tag = "v${version}";
-    hash = "sha256-Zfhz3AtiMSF5yNF+Z7++3O1oof5hyfues3u4bToFBYk=";
+    hash = "sha256-2a7zGgWc0QxxjCCg5yCfcepzLhEfvASv/Y8mDgl4y8M=";
   };
 
   postPatch = ''

@@ -52,12 +52,15 @@ let
             getOutputs (lib.optionalAttrs success value);
           getOutputs =
             value: lib.genAttrs (value.outputs or (lib.optional (value ? out) "out")) (output: value.${output});
+          outputNames = defaultValue.outputs or (lib.optional (defaultValue ? out) "out");
+          outputSplice = spliceReal (
+            mapCrossIndex tryGetOutputs value' // { hostTarget = getOutputs value'.hostTarget; }
+          );
         in
         # The derivation along with its outputs, which we recur
         # on to splice them together.
         if lib.isDerivation defaultValue then
-          augmentedValue
-          // spliceReal (mapCrossIndex tryGetOutputs value' // { hostTarget = getOutputs value'.hostTarget; })
+          augmentedValue // lib.genAttrs outputNames (out: outputSplice.${out})
         else if lib.isAttrs defaultValue then
           spliceReal value'
         else

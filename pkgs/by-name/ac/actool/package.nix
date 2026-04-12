@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "actool";
-  version = "1.4.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "actool";
     tag = finalAttrs.version;
-    hash = "sha256-WtiunUS0E6t7X+5lZqm4vZJ7C4dvFGiUKfjvHwNNtR0=";
+    hash = "sha256-HWi+MM0jMfg+nPiNFa3dG3sRuSEnS84+h3s6YRcxcAs=";
   };
 
   build-system = with python3Packages; [
