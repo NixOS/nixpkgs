@@ -13,6 +13,7 @@
   buildPackages,
 
   # Run time
+  bashNonInteractive,
   readline,
   expat,
   libipt,
@@ -108,9 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
     perl
     setupDebugInfoDirs
-  ];
+  ]
+  ++ optional pythonSupport python3;
 
   buildInputs = [
+    bashNonInteractive # for shebangs of gcore, gdb-add-index, gstack
     ncurses
     readline
     expat
@@ -125,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional withTui ncurses
   ++ optional withMpfr mpfr
   ++ optional withGmp gmp
-  ++ optional pythonSupport python3
   ++ optional withGuile guile
   ++ optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
   ++ optional stdenv.hostPlatform.isDarwin libiconv;
@@ -133,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
