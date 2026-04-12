@@ -3,36 +3,32 @@
   stdenv,
   fetchurl,
   pkg-config,
-  wrapQtAppsHook,
   libxml2,
   libdatovka,
-  qmake,
-  qtbase,
-  qtwebsockets,
-  qtsvg,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "datovka";
   version = "4.28.0";
 
   src = fetchurl {
-    url = "https://gitlab.nic.cz/datovka/datovka/-/archive/v${version}/datovka-v${version}.tar.gz";
-    sha256 = "sha256-vTfmJEwbfaPFnZE8o3YnZhjwfMZ0At7eZ0iMoh4/HQE=";
+    url = "https://gitlab.nic.cz/datovka/datovka/-/archive/v${finalAttrs.version}/datovka-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-vTfmJEwbfaPFnZE8o3YnZhjwfMZ0At7eZ0iMoh4/HQE=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     libdatovka
-    qmake
-    qtbase
-    qtsvg
+    libsForQt5.qmake
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     libxml2
-    qtwebsockets
+    libsForQt5.qtwebsockets
   ];
 
   meta = {
@@ -43,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "datovka";
   };
-}
+})
