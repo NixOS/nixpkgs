@@ -510,6 +510,8 @@ self: super: with self; {
 
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
+  aiosendspin-mpris = callPackage ../development/python-modules/aiosendspin-mpris { };
+
   aioserial = callPackage ../development/python-modules/aioserial { };
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
