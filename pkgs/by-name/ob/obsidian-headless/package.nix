@@ -1,12 +1,20 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
   fetchFromGitHub,
+  nodejs,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  makeWrapper,
 }:
 
-buildNpmPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obsidian-headless";
   version = "0.0.9";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "obsidianmd";
@@ -15,14 +23,42 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-RnLiCbAgetMO8pXYNjNW7fPeR8O7/Zz2i/x5OXOL+8U=";
   };
 
-  npmDepsHash = "sha256-9XV5AHdolm2gsFX0vUJpNI73ogKdTQdyekseutw7N+Q";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      postPatch
+      ;
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-Y/atHIJQzrt6ctpI2ks7Mj0bnTCQx4d5mDtY/YIEcow=";
+  };
 
-  # The prepack script runs the build script, which we'd rather do in the build phase.
-  npmPackFlags = [ "--ignore-scripts" ];
-  dontNpmBuild = true;
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm_9
+    makeWrapper
+  ];
 
   postPatch = ''
-    cp ${./package-lock.json} ./package-lock.json
+    cp ${./pnpm-lock.yaml} ./pnpm-lock.yaml
+  '';
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/obsidian-headless
+    cp -r cli.js btime node_modules package.json $out/lib/obsidian-headless/
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.getExe nodejs} $out/bin/ob \
+      --add-flags $out/lib/obsidian-headless/cli.js
+
+    runHook postInstall
   '';
 
   meta = {
