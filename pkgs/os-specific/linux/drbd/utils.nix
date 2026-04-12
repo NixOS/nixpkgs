@@ -42,13 +42,15 @@ stdenv.mkDerivation rec {
     keyutils
     udevCheckHook
     gettext
+    perl
+    perlPackages.Po4a
   ];
 
   buildInputs = [
-    perl
-    perlPackages.Po4a
     gettext
   ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--libdir=${placeholder "out"}/lib"
