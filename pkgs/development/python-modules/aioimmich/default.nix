@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-N7cn/kcyBmiaAhOIxGtLPGxQbPolhhhbSNUzHnpb7QM=";
+    hash = "sha256-p04FGEQXUGMGouy6bY0QW8rC7Ld5RaSoOV/UbAkmNwQ=";
   };
 
   postPatch = ''

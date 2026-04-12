@@ -24,7 +24,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.33";
+  version = "4.0.34";
 
   pyproject = false;
 
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-ezbG3qUfUyr9JEXyKTrULYCVm4hA4+nvcHPzJpdLaWY=";
+        hash = "sha256-9YhhsLqAcevjJmENWVWfA1ursPz3mgFz8mzLLSNlXVM=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in
@@ -175,13 +175,6 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version =
-        let
-          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-        in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
-          lib.strings.substring versionSuffixPos 1 rcu.version
-        })";
     };
 
     # Python stuff automatically adds an updateScript that just fails

@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   libpcap,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "dnsmonster";
   version = "1.2.5";
 

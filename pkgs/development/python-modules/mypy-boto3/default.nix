@@ -335,8 +335,8 @@ in
       "sha256-UNxmIK9UD6AVmT4nyQzunNAKjp2YmV1wQ5oloHOwcXw=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.85"
-      "sha256-2nAa7GFjBOpkk1o52FUKI9mlyGImeMaX6he1KqWw8hM=";
+    buildMypyBoto3Package "connect" "1.42.88"
+      "sha256-bHySODAkvW9fefRoC193e7xSXhGEwMkELzugPCpG5uI=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -459,8 +459,8 @@ in
       "sha256-syjw4M02YXRXsJpM3e7OikE3sSTl/hIIJ3857PP2BII=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.42.85"
-      "sha256-TOP9ndFLp7G9hEXnPNxvxvPnvrT6tcNu+PH6aepCg3k=";
+    buildMypyBoto3Package "ecs" "1.42.88"
+      "sha256-rAic7ide3nLM1I1o/h8vlwWyRFRlqcEh9GxvRugUt7o=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.42.3"
@@ -610,8 +610,8 @@ in
       "sha256-rb8qotqFW+ZcesRS0TUl+NMsrOS7CTQosZ633jSE38k=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.42.83"
-      "sha256-SKqhvfHPmhOOYLnr7LkTClB2lB/3iQHqcefbsVsvk60=";
+    buildMypyBoto3Package "imagebuilder" "1.42.88"
+      "sha256-DJeab+CYHHX6ATvYo/u9zaR6ftrh8Tc8fq/vQ0Sc9lI=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.42.3"
@@ -858,8 +858,8 @@ in
       "sha256-JxR2l3AZarl6nr9l6UiBxTC7638DvVwNQmm6a0dxpsI=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.42.71"
-      "sha256-+Dgo1XpVUPmmUntpzFlPDeym6xUxRiXZki1j5ieS3CU=";
+    buildMypyBoto3Package "mediaconvert" "1.42.88"
+      "sha256-hdXwfuIPo8z+rjN1gldQ80v96WubywmpOnViJ3jDTjo=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.42.86"
@@ -1170,8 +1170,8 @@ in
       "sha256-juVfwdjPDNPaT5tvyXpzDtomugqxeu++AERLkVtFIxw=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.42.87"
-      "sha256-w1mjZjHC65uJ+pkfhBcn7wwhhmaZ4AQPKATS2mXYfkU=";
+    buildMypyBoto3Package "sagemaker" "1.42.88"
+      "sha256-u2KphNpF7yCNtbShS99SakEbg2FANAmMHi0Zr5EvORs=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.42.3"
