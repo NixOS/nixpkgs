@@ -928,14 +928,7 @@ rec {
         outputHash = hash_;
         preferLocalBuild = true;
         builder = writeScript "restrict-message" ''
-          source ${stdenvNoCC}/setup
-          cat <<_EOF_
-
-          ***
-          ${msg}
-          ***
-
-          _EOF_
+          printf '%s' ${lib.escapeShellArg msg}
           exit 1
         '';
       }
