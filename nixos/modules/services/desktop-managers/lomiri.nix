@@ -97,6 +97,7 @@ in
           (with pkgs; [
             glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
             libayatana-common
+            libsForQt5.signond # provides SSO-relevant services, for online accounts settings
             ubports-click
           ])
           # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
