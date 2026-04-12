@@ -138,6 +138,9 @@ stdenv'.mkDerivation (finalAttrs: {
   # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
   ++ lib.optionals rocmSupport [
     ./hiprt-3-compat.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin.patch
   ];
 
   postPatch =
@@ -312,6 +315,7 @@ stdenv'.mkDerivation (finalAttrs: {
         apple-sdk_15
         brotli
         llvmPackages.openmp
+        openxr-loader
       ]
   )
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ sse2neon ]
@@ -446,7 +450,6 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
