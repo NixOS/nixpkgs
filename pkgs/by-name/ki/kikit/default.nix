@@ -26,14 +26,14 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "kikit";
-  version = "1.7.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yaqwsx";
     repo = "KiKit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HSAQJJqJMVh44wgOQm+0gteShLogklBFuIzWtoVTf9I=";
+    hash = "sha256-QhtdQgMgHaB0xj2hQ4MCptr5DDgCOfRClUSyYzrFQis=";
     # Upstream uses versioneer, which relies on gitattributes substitution.
     # This leads to non-reproducible archives on GitHub.
     # See https://github.com/NixOS/nixpkgs/issues/84312
