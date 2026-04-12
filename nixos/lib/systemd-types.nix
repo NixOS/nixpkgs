@@ -8,6 +8,7 @@ let
   inherit (systemdUtils.lib)
     automountConfig
     makeUnit
+    unitNameType
     mountConfig
     pathConfig
     sliceConfig
@@ -20,7 +21,6 @@ let
     ;
 
   inherit (systemdUtils.unitOptions)
-    concreteUnitOptions
     stage1AutomountOptions
     stage1CommonUnitOptions
     stage1MountOptions
@@ -116,16 +116,116 @@ in
 
 {
   units = attrsOf (
-    submodule (
-      { name, config, ... }:
-      {
-        options = concreteUnitOptions;
-        config = {
-          name = mkDefault name;
-          unit = mkDefault (makeUnit name config);
+    lib.types.record {
+      declarations = [ ./systemd-unit-options.nix ];
+      description = "systemd unit";
+      fields = {
+
+        enable = {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            If set to false, this unit will be a symlink to
+            /dev/null. This is primarily useful to prevent specific
+            template instances
+            (e.g. `serial-getty@ttyS0`) from being
+            started. Note that `enable=true` does not
+            make a unit start by default at boot; if you want that, see
+            `wantedBy`.
+          '';
         };
-      }
-    )
+
+        name = {
+          type = lib.types.str;
+          description = ''
+            The name of this systemd unit, including its extension.
+            This can be used to refer to this unit from other systemd units.
+          '';
+        };
+
+        overrideStrategy = {
+          type = lib.types.enum [
+            "asDropinIfExists"
+            "asDropin"
+          ];
+          default = "asDropinIfExists";
+          description = ''
+            Defines how unit configuration is provided for systemd:
+
+            `asDropinIfExists` creates a unit file when no unit file is provided by the package
+            otherwise it creates a drop-in file named `overrides.conf`.
+
+            `asDropin` creates a drop-in file named `overrides.conf`.
+            Mainly needed to define instances for systemd template units (e.g. `systemd-nspawn@mycontainer.service`).
+
+            See also {manpage}`systemd.unit(5)`.
+          '';
+        };
+
+        requiredBy = {
+          type = lib.types.listOf unitNameType;
+          default = [ ];
+          description = ''
+            Units that require (i.e. depend on and need to go down with) this unit.
+            As discussed in the `wantedBy` option description this also creates
+            `.requires` symlinks automatically.
+          '';
+        };
+
+        upheldBy = {
+          type = lib.types.listOf unitNameType;
+          default = [ ];
+          description = ''
+            Keep this unit running as long as the listed units are running. This is a continuously
+            enforced version of wantedBy.
+          '';
+        };
+
+        wantedBy = {
+          type = lib.types.listOf unitNameType;
+          default = [ ];
+          description = ''
+            Units that want (i.e. depend on) this unit. The default method for
+            starting a unit by default at boot time is to set this option to
+            `["multi-user.target"]` for system services. Likewise for user units
+            (`systemd.user.<name>.*`) set it to `["default.target"]` to make a unit
+            start by default when the user `<name>` logs on.
+
+            This option creates a `.wants` symlink in the given target that exists
+            statelessly without the need for running `systemctl enable`.
+            The `[Install]` section described in {manpage}`systemd.unit(5)` however is
+            not supported because it is a stateful process that does not fit well
+            into the NixOS design.
+          '';
+        };
+
+        aliases = {
+          type = lib.types.listOf unitNameType;
+          default = [ ];
+          description = "Aliases of that unit.";
+        };
+
+        text = {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Text of this systemd unit.";
+        };
+
+        unit = {
+          type = lib.types.unspecified;
+          internal = true;
+          description = "The generated unit.";
+        };
+
+      };
+
+      finalise =
+        { name, self, ... }:
+        {
+          name = mkDefault name;
+          unit = mkDefault (makeUnit name self);
+        };
+    }
   );
 
   services = attrsOf (submodule [
