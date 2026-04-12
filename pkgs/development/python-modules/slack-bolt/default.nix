@@ -39,7 +39,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slack-bolt";
   version = "1.28.0";
   pyproject = true;
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1AJO7+7YG/NFh6Rmqwkm6yua2LWdYQ9Rv1oadfHAlhE=";
   };
 
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 
@@ -108,8 +108,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
-    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})
