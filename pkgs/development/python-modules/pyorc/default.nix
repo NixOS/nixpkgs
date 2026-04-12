@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyorc";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "pyorc";
     tag = "v${version}";
-    hash = "sha256-2w3Qh6g+Yg+D10kTow9YR6B6FhQ+z2DvgDy5GtYxH4g=";
+    hash = "sha256-HI6TLpxAFDDYcAGWEOHCMNlAhXxCOFVMVKmWch8BevE=";
   };
 
   postPatch = ''
