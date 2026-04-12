@@ -62,6 +62,7 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "fastcom"
         "fastly"
         "flow"
         "fritz"
