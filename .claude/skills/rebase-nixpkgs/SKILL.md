@@ -189,12 +189,16 @@ After committing a package update, push the commit to a dedicated branch on the 
    git cherry-pick $UPDATE_COMMIT
    ```
    If the cherry-pick has conflicts, resolve them — the intent is to land the same change cleanly on top of upstream master.
-4. Push the branch:
+4. Amend the cherry-picked commit to set the correct author:
+   ```bash
+   git commit --amend --author="Maciej Krüger <mkg20001@gmail.com>" --no-edit
+   ```
+5. Push the branch:
    ```bash
    git push git@github.com:mkg20001/nixpkgs.git <pkg-name>-<new-version>
    ```
    If the branch already exists on the remote (from a previous run), force-push with `--force-with-lease`.
-5. Return to the main tree but **keep the worktree** — do **not** remove it:
+6. Return to the main tree but **keep the worktree** — do **not** remove it:
    ```bash
    cd /root/nixpkgs
    ```
