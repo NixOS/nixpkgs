@@ -10898,12 +10898,6 @@
     githubId = 44043764;
     name = "Liam Hupfer";
   };
-  hqurve = {
-    email = "hqurve@outlook.com";
-    github = "hqurve";
-    githubId = 53281855;
-    name = "hqurve";
-  };
   hraban = {
     email = "hraban@0brg.net";
     github = "hraban";
