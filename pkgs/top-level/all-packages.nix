@@ -2400,11 +2400,6 @@ with pkgs;
 
   gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
 
-  dapl = callPackage ../development/interpreters/dzaima-apl {
-    buildNativeImage = false;
-    stdenv = stdenvNoCC;
-    jdk = jre;
-  };
   dapl-native = callPackage ../development/interpreters/dzaima-apl {
     buildNativeImage = true;
     jdk = graalvmPackages.graalvm-ce;
