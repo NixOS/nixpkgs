@@ -27,6 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TzHjXW9sSbOJv7PrUaQzZ0jOPocVci1DjcmLzv7aaBY=";
 
+  patches = [
+    ./0001-fix-CVE-2026-32146.patch
+    ./0002-fix-tests-for-CVE-2026-32416.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     erlang
