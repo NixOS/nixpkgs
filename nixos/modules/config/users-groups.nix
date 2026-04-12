@@ -36,6 +36,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mkOptionDefault
     mkRenamedOptionModule
     optional
     optionals
@@ -129,435 +130,441 @@ let
     password (i.e. via {command}`login` command).
   '';
 
-  userOpts =
-    { name, config, ... }:
-    {
+  field = id;
 
-      options = {
+  userOpts = types.record {
+    declarations = [ ./users-groups.nix ];
+    description = "user account configuration";
+    fields = {
 
-        enable = mkOption {
-          type = types.bool;
-          default = true;
-          example = false;
-          description = ''
-            If set to false, the user account will not be created. This is useful for when you wish to conditionally
-            disable user accounts.
-          '';
-        };
-
-        name = mkOption {
-          type = types.passwdEntry types.str;
-          apply =
-            x:
-            assert (
-              stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"
-            );
-            x;
-          description = ''
-            The name of the user account. If undefined, the name of the
-            attribute set will be used.
-          '';
-        };
-
-        description = mkOption {
-          type = types.passwdEntry types.str;
-          default = "";
-          example = "Alice Q. User";
-          description = ''
-            A short description of the user account, typically the
-            user's full name.  This is actually the “GECOS” or “comment”
-            field in {file}`/etc/passwd`.
-          '';
-        };
-
-        uid = mkOption {
-          type = with types; nullOr int;
-          default = null;
-          description = ''
-            The account UID. If the UID is null, a free UID is picked on
-            activation.
-          '';
-        };
-
-        isSystemUser = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Indicates if the user is a system user or not. This option
-            only has an effect if {option}`uid` is
-            {option}`null`, in which case it determines whether
-            the user's UID is allocated in the range for system users
-            (below 1000) or in the range for normal users (starting at
-            1000).
-            Exactly one of `isNormalUser` and
-            `isSystemUser` must be true.
-          '';
-        };
-
-        isNormalUser = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Indicates whether this is an account for a “real” user.
-            This automatically sets {option}`group` to `users`,
-            {option}`createHome` to `true`,
-            {option}`home` to {file}`/home/«username»`,
-            {option}`useDefaultShell` to `true`,
-            and {option}`isSystemUser` to `false`.
-            Exactly one of `isNormalUser` and `isSystemUser` must be true.
-          '';
-        };
-
-        group = mkOption {
-          type = types.str;
-          apply =
-            x:
-            assert (
-              stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"
-            );
-            x;
-          default = "";
-          description = "The user's primary group.";
-        };
-
-        extraGroups = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "The user's auxiliary groups.";
-        };
-
-        home = mkOption {
-          type = types.passwdEntry types.path;
-          default = "/var/empty";
-          description = "The user's home directory.";
-        };
-
-        homeMode = mkOption {
-          type = types.strMatching "[0-7]{1,5}";
-          default = "700";
-          description = "The user's home directory mode in numeric format. See {manpage}`chmod(1)`. The mode is only applied if {option}`users.users.<name>.createHome` is true.";
-        };
-
-        cryptHomeLuks = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          description = ''
-            Path to encrypted luks device that contains
-            the user's home directory.
-          '';
-        };
-
-        pamMount = mkOption {
-          type = with types; attrsOf str;
-          default = { };
-          description = ''
-            Attributes for user's entry in
-            {file}`pam_mount.conf.xml`.
-            Useful attributes might include `path`,
-            `options`, `fstype`, and `server`.
-            See <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>
-            for more information.
-          '';
-        };
-
-        shell = mkOption {
-          type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
-          default = pkgs.shadow;
-          defaultText = literalExpression "pkgs.shadow";
-          example = literalExpression "pkgs.bashInteractive";
-          description = ''
-            The path to the user's shell. Can use shell derivations,
-            like `pkgs.bashInteractive`. Don’t
-            forget to enable your shell in
-            `programs` if necessary,
-            like `programs.zsh.enable = true;`.
-          '';
-        };
-
-        ignoreShellProgramCheck = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            By default, nixos will check that programs.SHELL.enable is set to
-            true if the user has a custom shell specified. If that behavior isn't
-            required and there are custom overrides in place to make sure that the
-            shell is functional, set this to true.
-          '';
-        };
-
-        subUidRanges = mkOption {
-          type = with types; listOf (submodule subordinateUidRange);
-          default = [ ];
-          example = [
-            {
-              startUid = 1000;
-              count = 1;
-            }
-            {
-              startUid = 100001;
-              count = 65534;
-            }
-          ];
-          description = ''
-            Subordinate user ids that user is allowed to use.
-            They are set into {file}`/etc/subuid` and are used
-            by `newuidmap` for user namespaces.
-          '';
-        };
-
-        subGidRanges = mkOption {
-          type = with types; listOf (submodule subordinateGidRange);
-          default = [ ];
-          example = [
-            {
-              startGid = 100;
-              count = 1;
-            }
-            {
-              startGid = 1001;
-              count = 999;
-            }
-          ];
-          description = ''
-            Subordinate group ids that user is allowed to use.
-            They are set into {file}`/etc/subgid` and are used
-            by `newgidmap` for user namespaces.
-          '';
-        };
-
-        autoSubUidGidRange = mkOption {
-          type = types.bool;
-          default = false;
-          example = true;
-          description = ''
-            Automatically allocate subordinate user and group ids for this user.
-            Allocated range is currently always of size 65536.
-          '';
-        };
-
-        createHome = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to create the home directory and ensure ownership as well as
-            permissions to match the user.
-          '';
-        };
-
-        useDefaultShell = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            If true, the user's shell will be set to
-            {option}`users.defaultUserShell`.
-          '';
-        };
-
-        hashedPassword = mkOption {
-          type = with types; nullOr (passwdEntry str);
-          default = null;
-          description = ''
-            Specifies the hashed password for the user.
-
-            ${passwordDescription}
-            ${hashedPasswordDescription}
-          '';
-        };
-
-        password = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          description = ''
-            Specifies the (clear text) password for the user.
-            Warning: do not set confidential information here
-            because it is world-readable in the Nix store. This option
-            should only be used for public accounts.
-
-            ${passwordDescription}
-          '';
-        };
-
-        hashedPasswordFile = mkOption {
-          type = with types; nullOr str;
-          default = config.passwordFile;
-          defaultText = literalExpression "null";
-          description = ''
-            The full path to a file that contains the hash of the user's
-            password. The password file is read on each system activation. The
-            file should contain exactly one line, the salted password hash
-            produced by `mkpasswd`.
-
-            ${passwordDescription}
-          '';
-        };
-
-        passwordFile = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          visible = false;
-          description = "Deprecated alias of hashedPasswordFile";
-        };
-
-        initialHashedPassword = mkOption {
-          type = with types; nullOr (passwdEntry str);
-          default = null;
-          description = ''
-            Specifies the initial hashed password for the user, i.e. the
-            hashed password assigned if the user does not already
-            exist. If {option}`users.mutableUsers` is true, the
-            password can be changed subsequently using the
-            {command}`passwd` command. Otherwise, it's
-            equivalent to setting the {option}`hashedPassword` option.
-
-            ${passwordDescription}
-            ${hashedPasswordDescription}
-          '';
-        };
-
-        initialPassword = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          description = ''
-            Specifies the initial password for the user, i.e. the
-            password assigned if the user does not already exist. If
-            {option}`users.mutableUsers` is true, the password
-            can be changed subsequently using the
-            {command}`passwd` command. Otherwise, it's
-            equivalent to setting the {option}`password`
-            option. The same caveat applies: the password specified here
-            is world-readable in the Nix store, so it should only be
-            used for guest accounts or passwords that will be changed
-            promptly.
-
-            ${passwordDescription}
-          '';
-        };
-
-        packages = mkOption {
-          type = types.listOf types.package;
-          default = [ ];
-          example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
-          description = ''
-            The set of packages that should be made available to the user.
-            This is in contrast to {option}`environment.systemPackages`,
-            which adds packages to all users.
-          '';
-        };
-
-        expires = mkOption {
-          type = types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
-          default = null;
-          description = ''
-            Set the date on which the user's account will no longer be
-            accessible. The date is expressed in the format YYYY-MM-DD, or null
-            to disable the expiry.
-            A user whose account is locked must contact the system
-            administrator before being able to use the system again.
-          '';
-        };
-
-        linger = mkOption {
-          type = types.nullOr types.bool;
-          example = true;
-          default = null;
-          description = ''
-            Whether to enable or disable lingering for this user.  Without
-            lingering, user units will not be started until the user logs in,
-            and may be stopped on logout depending on the settings in
-            {file}`logind.conf`.
-
-            By default, NixOS will not manage lingering, new users will default
-            to not lingering, and lingering can be configured imperatively using
-            `loginctl enable-linger` or `loginctl disable-linger`. Setting
-            this option to `true` or `false` is the declarative equivalent of
-            running `loginctl enable-linger` or `loginctl disable-linger`
-            respectively.
-          '';
-        };
+      enable = field {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          If set to false, the user account will not be created. This is useful for when you wish to conditionally
+          disable user accounts.
+        '';
       };
 
-      config = mkMerge [
-        {
-          name = mkDefault name;
-          shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
-        }
-        (mkIf config.isNormalUser {
-          group = mkDefault "users";
-          createHome = mkDefault true;
-          home = mkDefault "${cfg.defaultUserHome}/${config.name}";
-          homeMode = mkDefault "700";
-          useDefaultShell = mkDefault true;
-          isSystemUser = mkDefault false;
-        })
+      name = field {
+        type = types.passwdEntry types.str;
+        defaultText = literalExpression "\"\u2039name\u203a\"";
+        apply =
+          x:
+          assert (
+            stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"
+          );
+          x;
+        description = ''
+          The name of the user account. If undefined, the name of the
+          attribute set will be used.
+        '';
+      };
+
+      description = field {
+        type = types.passwdEntry types.str;
+        default = "";
+        example = "Alice Q. User";
+        description = ''
+          A short description of the user account, typically the
+          user's full name.  This is actually the “GECOS” or “comment”
+          field in {file}`/etc/passwd`.
+        '';
+      };
+
+      uid = field {
+        type = with types; nullOr int;
+        default = null;
+        description = ''
+          The account UID. If the UID is null, a free UID is picked on
+          activation.
+        '';
+      };
+
+      isSystemUser = field {
+        type = types.bool;
+        default = false;
+        description = ''
+          Indicates if the user is a system user or not. This option
+          only has an effect if {option}`uid` is
+          {option}`null`, in which case it determines whether
+          the user's UID is allocated in the range for system users
+          (below 1000) or in the range for normal users (starting at
+          1000).
+          Exactly one of `isNormalUser` and
+          `isSystemUser` must be true.
+        '';
+      };
+
+      isNormalUser = field {
+        type = types.bool;
+        default = false;
+        description = ''
+          Indicates whether this is an account for a “real” user.
+          This automatically sets {option}`group` to `users`,
+          {option}`createHome` to `true`,
+          {option}`home` to {file}`/home/«username»`,
+          {option}`useDefaultShell` to `true`,
+          and {option}`isSystemUser` to `false`.
+          Exactly one of `isNormalUser` and `isSystemUser` must be true.
+        '';
+      };
+
+      group = field {
+        type = types.str;
+        apply =
+          x:
+          assert (
+            stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"
+          );
+          x;
+        default = "";
+        description = "The user's primary group.";
+      };
+
+      extraGroups = field {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "The user's auxiliary groups.";
+      };
+
+      home = field {
+        type = types.passwdEntry types.path;
+        default = "/var/empty";
+        description = "The user's home directory.";
+      };
+
+      homeMode = field {
+        type = types.strMatching "[0-7]{1,5}";
+        default = "700";
+        description = "The user's home directory mode in numeric format. See {manpage}`chmod(1)`. The mode is only applied if {option}`users.users.<name>.createHome` is true.";
+      };
+
+      cryptHomeLuks = field {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Path to encrypted luks device that contains
+          the user's home directory.
+        '';
+      };
+
+      pamMount = field {
+        type = with types; attrsOf str;
+        default = { };
+        description = ''
+          Attributes for user's entry in
+          {file}`pam_mount.conf.xml`.
+          Useful attributes might include `path`,
+          `options`, `fstype`, and `server`.
+          See <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>
+          for more information.
+        '';
+      };
+
+      shell = field {
+        type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
+        default = pkgs.shadow;
+        defaultText = literalExpression "pkgs.shadow";
+        example = literalExpression "pkgs.bashInteractive";
+        description = ''
+          The path to the user's shell. Can use shell derivations,
+          like `pkgs.bashInteractive`. Don’t
+          forget to enable your shell in
+          `programs` if necessary,
+          like `programs.zsh.enable = true;`.
+        '';
+      };
+
+      ignoreShellProgramCheck = field {
+        type = types.bool;
+        default = false;
+        description = ''
+          By default, nixos will check that programs.SHELL.enable is set to
+          true if the user has a custom shell specified. If that behavior isn't
+          required and there are custom overrides in place to make sure that the
+          shell is functional, set this to true.
+        '';
+      };
+
+      subUidRanges = field {
+        type = types.listOf subordinateUidRange;
+        default = [ ];
+        example = [
+          {
+            startUid = 1000;
+            count = 1;
+          }
+          {
+            startUid = 100001;
+            count = 65534;
+          }
+        ];
+        description = ''
+          Subordinate user ids that user is allowed to use.
+          They are set into {file}`/etc/subuid` and are used
+          by `newuidmap` for user namespaces.
+        '';
+      };
+
+      subGidRanges = field {
+        type = types.listOf subordinateGidRange;
+        default = [ ];
+        example = [
+          {
+            startGid = 100;
+            count = 1;
+          }
+          {
+            startGid = 1001;
+            count = 999;
+          }
+        ];
+        description = ''
+          Subordinate group ids that user is allowed to use.
+          They are set into {file}`/etc/subgid` and are used
+          by `newgidmap` for user namespaces.
+        '';
+      };
+
+      autoSubUidGidRange = field {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Automatically allocate subordinate user and group ids for this user.
+          Allocated range is currently always of size 65536.
+        '';
+      };
+
+      createHome = field {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to create the home directory and ensure ownership as well as
+          permissions to match the user.
+        '';
+      };
+
+      useDefaultShell = field {
+        type = types.bool;
+        default = false;
+        description = ''
+          If true, the user's shell will be set to
+          {option}`users.defaultUserShell`.
+        '';
+      };
+
+      hashedPassword = field {
+        type = with types; nullOr (passwdEntry str);
+        default = null;
+        description = ''
+          Specifies the hashed password for the user.
+
+          ${passwordDescription}
+          ${hashedPasswordDescription}
+        '';
+      };
+
+      password = field {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Specifies the (clear text) password for the user.
+          Warning: do not set confidential information here
+          because it is world-readable in the Nix store. This option
+          should only be used for public accounts.
+
+          ${passwordDescription}
+        '';
+      };
+
+      hashedPasswordFile = field {
+        type = with types; nullOr str;
+        defaultText = literalExpression "null";
+        description = ''
+          The full path to a file that contains the hash of the user's
+          password. The password file is read on each system activation. The
+          file should contain exactly one line, the salted password hash
+          produced by `mkpasswd`.
+
+          ${passwordDescription}
+        '';
+      };
+
+      passwordFile = field {
+        type = with types; nullOr str;
+        default = null;
+        visible = false;
+        description = "Deprecated alias of hashedPasswordFile";
+      };
+
+      initialHashedPassword = field {
+        type = with types; nullOr (passwdEntry str);
+        default = null;
+        description = ''
+          Specifies the initial hashed password for the user, i.e. the
+          hashed password assigned if the user does not already
+          exist. If {option}`users.mutableUsers` is true, the
+          password can be changed subsequently using the
+          {command}`passwd` command. Otherwise, it's
+          equivalent to setting the {option}`hashedPassword` option.
+
+          ${passwordDescription}
+          ${hashedPasswordDescription}
+        '';
+      };
+
+      initialPassword = field {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Specifies the initial password for the user, i.e. the
+          password assigned if the user does not already exist. If
+          {option}`users.mutableUsers` is true, the password
+          can be changed subsequently using the
+          {command}`passwd` command. Otherwise, it's
+          equivalent to setting the {option}`password`
+          option. The same caveat applies: the password specified here
+          is world-readable in the Nix store, so it should only be
+          used for guest accounts or passwords that will be changed
+          promptly.
+
+          ${passwordDescription}
+        '';
+      };
+
+      packages = field {
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
+        description = ''
+          The set of packages that should be made available to the user.
+          This is in contrast to {option}`environment.systemPackages`,
+          which adds packages to all users.
+        '';
+      };
+
+      expires = field {
+        type = types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
+        default = null;
+        description = ''
+          Set the date on which the user's account will no longer be
+          accessible. The date is expressed in the format YYYY-MM-DD, or null
+          to disable the expiry.
+          A user whose account is locked must contact the system
+          administrator before being able to use the system again.
+        '';
+      };
+
+      linger = field {
+        type = types.nullOr types.bool;
+        example = true;
+        default = null;
+        description = ''
+          Whether to enable or disable lingering for this user.  Without
+          lingering, user units will not be started until the user logs in,
+          and may be stopped on logout depending on the settings in
+          {file}`logind.conf`.
+
+          By default, NixOS will not manage lingering, new users will default
+          to not lingering, and lingering can be configured imperatively using
+          `loginctl enable-linger` or `loginctl disable-linger`. Setting
+          this option to `true` or `false` is the declarative equivalent of
+          running `loginctl enable-linger` or `loginctl disable-linger`
+          respectively.
+        '';
+      };
+    };
+
+    finalise =
+      { name, self, ... }:
+      let
+        ifNormal = mkIf self.isNormalUser;
+      in
+      {
+        name = mkDefault name;
+        shell = mkIf self.useDefaultShell (mkDefault cfg.defaultUserShell);
+        hashedPasswordFile = mkOptionDefault self.passwordFile;
+
+        group = ifNormal (mkDefault "users");
+        createHome = ifNormal (mkDefault true);
+        home = ifNormal (mkDefault "${cfg.defaultUserHome}/${self.name}");
+        homeMode = ifNormal (mkDefault "700");
+        useDefaultShell = ifNormal (mkDefault true);
+        isSystemUser = ifNormal (mkDefault false);
+        autoSubUidGidRange = mkIf (
+          self.isNormalUser && self.subUidRanges == [ ] && self.subGidRanges == [ ]
+        ) (mkDefault true);
+
         # If !mutableUsers, setting ‘initialPassword’ is equivalent to
         # setting ‘password’ (and similarly for hashed passwords).
-        (mkIf (!cfg.mutableUsers && config.initialPassword != null) {
-          password = mkDefault config.initialPassword;
-        })
-        (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
-          hashedPassword = mkDefault config.initialHashedPassword;
-        })
-        (mkIf (config.isNormalUser && config.subUidRanges == [ ] && config.subGidRanges == [ ]) {
-          autoSubUidGidRange = mkDefault true;
-        })
-      ];
+        password = mkIf (!cfg.mutableUsers && self.initialPassword != null) (
+          mkDefault self.initialPassword
+        );
+        hashedPassword = mkIf (!cfg.mutableUsers && self.initialHashedPassword != null) (
+          mkDefault self.initialHashedPassword
+        );
+      };
+  };
+
+  groupOpts = types.record {
+    declarations = [ ./users-groups.nix ];
+    description = "group configuration";
+    fields = {
+
+      name = field {
+        defaultText = literalExpression "\"\u2039name\u203a\"";
+        type = types.passwdEntry types.str;
+        description = ''
+          The name of the group. If undefined, the name of the attribute set
+          will be used.
+        '';
+      };
+
+      gid = field {
+        type = with types; nullOr int;
+        default = null;
+        description = ''
+          The group GID. If the GID is null, a free GID is picked on
+          activation.
+        '';
+      };
+
+      members = field {
+        type = with types; listOf (passwdEntry str);
+        default = [ ];
+        description = ''
+          The user names of the group members, added to the
+          `/etc/group` file.
+        '';
+      };
 
     };
 
-  groupOpts =
-    { name, config, ... }:
-    {
-
-      options = {
-
-        name = mkOption {
-          type = types.passwdEntry types.str;
-          description = ''
-            The name of the group. If undefined, the name of the attribute set
-            will be used.
-          '';
-        };
-
-        gid = mkOption {
-          type = with types; nullOr int;
-          default = null;
-          description = ''
-            The group GID. If the GID is null, a free GID is picked on
-            activation.
-          '';
-        };
-
-        members = mkOption {
-          type = with types; listOf (passwdEntry str);
-          default = [ ];
-          description = ''
-            The user names of the group members, added to the
-            `/etc/group` file.
-          '';
-        };
-
-      };
-
-      config = {
+    finalise =
+      { name, self, ... }:
+      {
         name = mkDefault name;
 
         members = mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: u.enable && elem config.name u.extraGroups) cfg.users
+          filterAttrs (n: u: u.enable && elem self.name u.extraGroups) cfg.users
         );
       };
+  };
 
-    };
-
-  subordinateUidRange = {
-    options = {
-      startUid = mkOption {
+  subordinateUidRange = types.record {
+    declarations = [ ./users-groups.nix ];
+    fields = {
+      startUid = field {
         type = types.int;
         description = ''
           Start of the range of subordinate user ids that user is
           allowed to use.
         '';
       };
-      count = mkOption {
+      count = field {
         type = types.int;
         default = 1;
         description = "Count of subordinate user ids";
@@ -565,16 +572,17 @@ let
     };
   };
 
-  subordinateGidRange = {
-    options = {
-      startGid = mkOption {
+  subordinateGidRange = types.record {
+    declarations = [ ./users-groups.nix ];
+    fields = {
+      startGid = field {
         type = types.int;
         description = ''
           Start of the range of subordinate group ids that user is
           allowed to use.
         '';
       };
-      count = mkOption {
+      count = field {
         type = types.int;
         default = 1;
         description = "Count of subordinate group ids";
@@ -724,7 +732,7 @@ in
 
     users.users = mkOption {
       default = { };
-      type = with types; attrsOf (submodule userOpts);
+      type = types.attrsOf userOpts;
       example = {
         alice = {
           uid = 1234;
@@ -748,7 +756,7 @@ in
         students.gid = 1001;
         hackers = { };
       };
-      type = with types; attrsOf (submodule groupOpts);
+      type = types.attrsOf groupOpts;
       description = ''
         Additional groups to be created automatically by the system.
       '';

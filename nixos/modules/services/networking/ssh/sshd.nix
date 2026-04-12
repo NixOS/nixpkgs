@@ -91,53 +91,58 @@ let
 
   nssModulesPath = config.system.nssModules.path;
 
-  userOptions = {
+  userOptions = lib.types.record {
+    declarations = [ ./sshd.nix ];
+    fields.openssh = {
+      type = lib.types.submodule {
+        options.authorizedKeys = {
+          keys = lib.mkOption {
+            type = lib.types.listOf lib.types.singleLineStr;
+            default = [ ];
+            description = ''
+              A list of verbatim OpenSSH public keys that should be added to the
+              user's authorized keys. The keys are added to a file that the SSH
+              daemon reads in addition to the the user's authorized_keys file.
+              You can combine the `keys` and
+              `keyFiles` options.
+              Warning: If you are using `NixOps` then don't use this
+              option since it will replace the key required for deployment via ssh.
+            '';
+            example = [
+              "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
+              "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
+            ];
+          };
 
-    options.openssh.authorizedKeys = {
-      keys = lib.mkOption {
-        type = lib.types.listOf lib.types.singleLineStr;
-        default = [ ];
-        description = ''
-          A list of verbatim OpenSSH public keys that should be added to the
-          user's authorized keys. The keys are added to a file that the SSH
-          daemon reads in addition to the the user's authorized_keys file.
-          You can combine the `keys` and
-          `keyFiles` options.
-          Warning: If you are using `NixOps` then don't use this
-          option since it will replace the key required for deployment via ssh.
-        '';
-        example = [
-          "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
-          "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
-        ];
+          keyFiles = lib.mkOption {
+            type = lib.types.listOf lib.types.path;
+            default = [ ];
+            description = ''
+              A list of files each containing one OpenSSH public key that should be
+              added to the user's authorized keys. The contents of the files are
+              read at build time and added to a file that the SSH daemon reads in
+              addition to the the user's authorized_keys file. You can combine the
+              `keyFiles` and `keys` options.
+            '';
+          };
+        };
+
+        options.authorizedPrincipals = lib.mkOption {
+          type = with lib.types; listOf lib.types.singleLineStr;
+          default = [ ];
+          description = ''
+            A list of verbatim principal names that should be added to the user's
+            authorized principals.
+          '';
+          example = [
+            "example@host"
+            "foo@bar"
+          ];
+        };
       };
-
-      keyFiles = lib.mkOption {
-        type = lib.types.listOf lib.types.path;
-        default = [ ];
-        description = ''
-          A list of files each containing one OpenSSH public key that should be
-          added to the user's authorized keys. The contents of the files are
-          read at build time and added to a file that the SSH daemon reads in
-          addition to the the user's authorized_keys file. You can combine the
-          `keyFiles` and `keys` options.
-        '';
-      };
+      default = { };
+      description = "OpenSSH-related user configuration.";
     };
-
-    options.openssh.authorizedPrincipals = lib.mkOption {
-      type = with lib.types; listOf lib.types.singleLineStr;
-      default = [ ];
-      description = ''
-        A list of verbatim principal names that should be added to the user's
-        authorized principals.
-      '';
-      example = [
-        "example@host"
-        "foo@bar"
-      ];
-    };
-
   };
 
   authKeysFiles =
@@ -694,7 +699,7 @@ in
     };
 
     users.users = lib.mkOption {
-      type = with lib.types; attrsOf (submodule userOptions);
+      type = lib.types.attrsOf userOptions;
     };
 
   };
