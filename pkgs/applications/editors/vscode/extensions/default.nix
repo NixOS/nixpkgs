@@ -1437,6 +1437,21 @@ let
         };
       };
 
+      drblury.protobuf-vsc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "protobuf-vsc";
+          publisher = "DrBlury";
+          version = "1.6.0";
+          hash = "sha256-HvTJSFRKO0K7Ud9381viPrXp3TInB1FT97qZArosAjY=";
+        };
+        meta = {
+          description = "Comprehensive Protocol Buffers support with syntax highlighting, IntelliSense, diagnostics and formatting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DrBlury.protobuf-vsc";
+          homepage = "https://github.com/DrBlury/protobuf-vsc-extension";
+          license = lib.licenses.mit;
+        };
+      };
+
       eamodio.gitlens = callPackage ./eamodio.gitlens { };
 
       earthly.earthfile-syntax-highlighting = buildVscodeMarketplaceExtension {

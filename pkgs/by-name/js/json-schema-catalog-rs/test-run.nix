@@ -1,18 +1,18 @@
 {
   json-schema-catalog-rs,
   runCommand,
+  writeText,
+  formats,
 }:
 let
 
-  sample = builtins.toFile "example-schema.json" (
-    builtins.toJSON {
-      "$schema" = "http://json-schema.org/draft-07/schema#";
-      "$id" = "https://example.com/example-2.9.json";
-      "title" = "Example Schema";
-    }
-  );
+  sample = (formats.json { }).generate "example-schema.json" {
+    "$schema" = "http://json-schema.org/draft-07/schema#";
+    "$id" = "https://example.com/example-2.9.json";
+    "title" = "Example Schema";
+  };
 
-  expectedOutput = builtins.toFile "expected-output" ''
+  expectedOutput = writeText "expected-output" ''
     {
       "groups": [
         {

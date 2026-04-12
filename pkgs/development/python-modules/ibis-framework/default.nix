@@ -144,6 +144,10 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     "--benchmark-disable"
     "-Wignore::FutureWarning"
+    # DeprecationWarning: fetch_arrow_table() is deprecated, use to_arrow_table() instead.
+    "-Wignore:fetch_arrow_table:DeprecationWarning"
+    # DeprecationWarning: fetch_record_batch() is deprecated, use to_arrow_reader() instead.
+    "-Wignore:fetch_record_batch:DeprecationWarning"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
@@ -185,6 +189,12 @@ buildPythonPackage (finalAttrs: {
 
     # assert 0 == 3 (tests edge case behavior of databases)
     "test_self_join_with_generated_keys"
+
+    # _duckdb.BinderException: DECIMAL type width must be between 1 and 38
+    "test_decimal_literal[duckdb-decimal-big]"
+
+    # AssertionError: joining an empty array returns '' instead of NULL in duckdb 1.5
+    "test_empty_array_string_join[duckdb]"
 
     # https://github.com/ibis-project/ibis/issues/11929
     # AssertionError: value does not match the expected value

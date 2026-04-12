@@ -6,6 +6,10 @@
 }:
 {
   options.services.logind = {
+    enable = lib.mkEnableOption "the `systemd-logind` login service" // {
+      default = config.systemd.package.withLogind;
+      defaultText = lib.literalExpression "config.systemd.package.withLogind";
+    };
     settings.Login = lib.mkOption {
       description = ''
         Settings option for systemd-logind.
@@ -40,7 +44,7 @@
     };
   };
 
-  config = {
+  config = lib.mkIf config.services.logind.enable {
     systemd.additionalUpstreamSystemUnits = [
       "systemd-logind.service"
       "systemd-user-sessions.service"

@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       In order to install the Kinect Audio Firmware, you need to download the
       non-redistributable firmware from Microsoft.
       The firmware is available at ${firmwareUrl} and the license at ${licenseUrl} .
-      Save the file as UACFirmware and use "nix-prefetch-url file://\$PWD/UACFirmware" to
+      Save the file as UACFirmware and use "nix-prefetch-url file://$PWD/UACFirmware" to
       add it to the Nix store.
     '';
   };

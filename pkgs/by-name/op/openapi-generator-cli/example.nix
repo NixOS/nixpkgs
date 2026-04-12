@@ -2,6 +2,7 @@
   openapi-generator-cli,
   fetchurl,
   runCommand,
+  formats,
 }:
 
 runCommand "openapi-generator-cli-test"
@@ -11,12 +12,10 @@ runCommand "openapi-generator-cli-test"
       url = "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/14c0908becbccd78252be49bd92be8c53cd2b9e3/examples/v3.0/petstore.yaml";
       hash = "sha256-q2D1naR41KwxLNn6vMbL0G+Pl1q4oaDCApsqQfZf7dU=";
     };
-    config = builtins.toFile "config.json" (
-      builtins.toJSON {
-        elmVersion = "0.19";
-        elmPrefixCustomTypeVariants = false;
-      }
-    );
+    config = (formats.json { }).generate "config.json" {
+      elmVersion = "0.19";
+      elmPrefixCustomTypeVariants = false;
+    };
   }
   ''
     openapi-generator-cli generate \

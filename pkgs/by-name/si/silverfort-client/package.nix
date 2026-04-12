@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     message = ''
       Due to the commercial license of Silverfort, Nix is unable to download
       Silverfort automatically. Please download ${name} manually and add it
-      to the Nix store using \`nix-prefetch-url file:///\$PWD/${name}\`.
+      to the Nix store using `nix-prefetch-url file:///$PWD/${name}`.
       It is recommended to add this file to the garbage collector root
       to prevent grabage collection.
     '';
