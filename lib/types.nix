@@ -1202,7 +1202,9 @@ rec {
             n: field: mergeDefinitions (loc ++ [ n ]) field.type (fieldDefs n field)
           ) fields;
 
-          final = mapAttrs (_: m: m.mergedValue) fieldMerges;
+          final = mapAttrs (
+            n: m: if fields.${n} ? apply then fields.${n}.apply m.mergedValue else m.mergedValue
+          ) fieldMerges;
         in
         if unknown != { } then
           throw ''
