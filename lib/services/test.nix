@@ -94,7 +94,8 @@ let
   filterEval =
     config:
     lib.optionalAttrs (config ? process) {
-      inherit (config) assertions warnings process;
+      inherit (config) assertions warnings;
+      process = { inherit (config.process) argv; };
     }
     // {
       services = lib.mapAttrs (k: filterEval) config.services;
