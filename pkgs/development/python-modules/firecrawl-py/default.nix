@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "firecrawl-py";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mendableai";
     repo = "firecrawl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7dB3jdp5jkRiNx63C5sjs3t85fuz5vzurfvYY5jWQyU=";
+    hash = "sha256-wP9fA5sHYwO/K/7dYL6l7R7Us6aiY49IYVUPkY/7sZQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/apps/python-sdk";
