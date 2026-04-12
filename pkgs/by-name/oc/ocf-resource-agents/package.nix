@@ -8,6 +8,7 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bashNonInteractive,
   pkg-config,
   python3,
   glib,
@@ -47,12 +48,15 @@ let
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
+      python3
     ];
 
     buildInputs = [
+      bashNonInteractive
       glib
-      python3
     ];
+
+    strictDeps = true;
 
     env.NIX_CFLAGS_COMPILE = toString (
       lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
