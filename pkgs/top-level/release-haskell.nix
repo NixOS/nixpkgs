@@ -543,6 +543,7 @@ let
       ] released;
       hpack = released;
       hsdns = released;
+      iserv-proxy = released;
       jailbreak-cabal = released;
       language-nix = released;
       nix-paths = released;

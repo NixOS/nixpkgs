@@ -29,29 +29,6 @@ with haskellLib;
 
 # To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 {
-  # Hackage's accelerate is from 2020 and incompatible with our GHC.
-  # The existing derivation also has missing dependencies
-  # compared to the source from github.
-  # https://github.com/AccelerateHS/accelerate/issues/553
-  accelerate = lib.pipe super.accelerate [
-    (warnAfterVersion "1.3.0.0")
-    (addBuildDepends [
-      self.double-conversion
-      self.formatting
-      self.microlens
-    ])
-
-    (overrideCabal (drv: {
-      version = "1.3.0.0-unstable-2026-01-30";
-      src = pkgs.fetchFromGitHub {
-        owner = "AccelerateHS";
-        repo = "accelerate";
-        rev = "c22387ed2e00b00a6c79dcec5d22b53874da91fc";
-        sha256 = "sha256-AtKdxeCytRbmOIFe7OPbSMlhFhJnrgMuIqLFIeqnBGU";
-      };
-    }))
-  ];
-
   # Make sure that Cabal_* can be built as-is
   Cabal_3_10_3_0 = doDistribute (
     super.Cabal_3_10_3_0.override {
@@ -204,6 +181,20 @@ with haskellLib;
   # First to upgrade to lsp >= 2.8 while HLS hasn't yet had a compatible release
   futhark = super.futhark.override {
     lsp = self.lsp_2_8_0_0;
+    lsp-test =
+      overrideCabal
+        (old: {
+          testTargets = [
+            "tests"
+            "func-test"
+          ];
+        })
+        (
+          self.lsp-test_0_18_0_0.override {
+            lsp = self.lsp_2_8_0_0;
+            lsp-types = self.lsp-types_2_4_0_0;
+          }
+        );
     lsp-types = self.lsp-types_2_4_0_0;
   };
 
@@ -363,6 +354,29 @@ with haskellLib;
     '';
   }) super.streamly-core;
 
+  # Work around tasty >= 1.5.4 parallelism breaking the test suite
+  criterion = appendPatches [
+    (pkgs.fetchpatch {
+      name = "criterion-tasty-1.5.4.patch";
+      url = "https://github.com/haskell/criterion/commit/d555422d1779434432489efbc19d75011226c3e6.patch";
+      hash = "sha256-VRSfdzT/mzdRSMQmmIeycuChvRN/VDhYsHJQb0bRMaA=";
+    })
+  ] super.criterion;
+
+  # Avoid rebinding to the same port with tasty >= 1.5.4 parallelism
+  # https://github.com/lpeterse/haskell-socket/pull/73
+  socket = appendPatches [
+    (pkgs.fetchpatch {
+      name = "socket-tasty-1.5.4.patch";
+      url = "https://github.com/lpeterse/haskell-socket/commit/a2687d9f1a60cfb72f85962c501a68d110ed6de0.patch";
+      hash = "sha256-21qkRFnRF6nuM1BILps8o5A/QvaVQ6SkKxO0u2goXos=";
+    })
+  ] super.socket;
+  # https://github.com/flip111/haskell-socket-unix/issues/1
+  socket-unix = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [ "-j1" ];
+  }) super.socket-unix;
+
   # Expected failures are fixed as of GHC-9.10,
   # but the tests haven't been updated yet.
   # https://github.com/ocharles/weeder/issues/198
@@ -491,14 +505,6 @@ with haskellLib;
     sha256 = "1c7knpvxr7p8c159jkyk6w29653z5yzgjjqj11130bbb8mk9qhq7";
   }) super.c2hsc;
 
-  # 2025-02-10: Too strict bounds on bytestring < 0.12
-  ghc-debug-common = doJailbreak super.ghc-debug-common;
-  ghc-debug-client = lib.pipe super.ghc-debug-client [
-    (warnAfterVersion "0.7.0.0")
-    # 2025-09-18: Too strict bounds on containers < 0.7
-    doJailbreak
-  ];
-
   # https://github.com/agrafix/superbuffer/issues/4
   # Too strict bounds on bytestring < 0.12
   superbuffer = doJailbreak super.superbuffer;
@@ -558,6 +564,7 @@ with haskellLib;
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
+  # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
   basement = appendPatches [
     # Fixes compilation for basement on i686
     # https://github.com/haskell-foundation/foundation/pull/573
@@ -567,12 +574,14 @@ with haskellLib;
       sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
       stripLen = 1;
     })
-
-    # Fixes compilation on windows
-    # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
-    ./patches/basement-add-cast.patch
+    ./patches/basement-add-cast.patch # Fixes compilation on windows
+    ./patches/basement-ghcjs.patch # Fixes compilation on ghcjs
 
   ] super.basement;
+
+  # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
+  # Fixes compilation on ghcjs
+  foundation = appendPatch ./patches/foundation-ghcjs.patch super.foundation;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
@@ -670,7 +679,7 @@ with haskellLib;
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
         tag = super.git-annex.version;
-        sha256 = "sha256-oh9lrQvj1Ooi3PI5heNXBopX35s1K5Kyn/mH7V4sXB8=";
+        sha256 = "sha256-/IfPJx3k2U7+vUnQ2IJlT5BxAr+G3yNEQU3w+afQ2aQ=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
@@ -691,6 +700,13 @@ with haskellLib;
         substituteInPlace Makefile \
           --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
                          'InstallDesktopFile git-annex'
+      '';
+
+      # Work around race condition in test suite exposed by tasty-1.5.4
+      # TODO(@sternenseemann): make testFlags arg usable with git-annex
+      preCheck = ''
+        ${drv.preCheck or ""}
+        appendToVar checkFlags -j1
       '';
     }))
   ];
@@ -725,7 +741,7 @@ with haskellLib;
   # Pass in `pkgs.nix` for the required tools. This means that overriding
   # them sort of works, but only if you override all instances.
   nix-paths =
-    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+    if with pkgs.stdenv; buildPlatform.canExecute hostPlatform then
       super.nix-paths.override {
         nix-build = pkgs.nix;
         nix-env = pkgs.nix;
@@ -918,22 +934,31 @@ with haskellLib;
     ))
   ];
 
-  pandoc = appendPatches [
-    # Adjust test fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
-    (pkgs.fetchpatch {
-      name = "pandoc-djot-0.1.2.3.patch";
-      url = "https://github.com/jgm/pandoc/commit/643712ca70b924c0edcc059699aa1ee42234be34.patch";
-      hash = "sha256-khDkb1PzC0fTaWTq3T04UvgoI+XefOJMaTV1d3Du8BU=";
-      includes = [ "test/djot-reader.native" ];
-    })
-    # Adjust tests for skylighting-format-blaze-html >= 0.1.2
-    (pkgs.fetchpatch {
-      name = "pandoc-skylighting-format-blaze-html-0.1.2.patch";
-      url = "https://github.com/jgm/pandoc/commit/cab682ba58f2eb7e940d1af508e196ff6b1c1112.patch";
-      hash = "sha256-lpddKGa8xs+Lhi62HhBgV04fUq2kkippA1xX2/b2ukM=";
-      includes = [ "test/Tests/Writers/HTML.hs" ];
-    })
-  ] super.pandoc;
+  pandoc = overrideCabal (drv: {
+    patches = drv.patches or [ ] ++ [
+      # Adjust test fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
+      (pkgs.fetchpatch {
+        name = "pandoc-djot-0.1.2.3.patch";
+        url = "https://github.com/jgm/pandoc/commit/643712ca70b924c0edcc059699aa1ee42234be34.patch";
+        hash = "sha256-khDkb1PzC0fTaWTq3T04UvgoI+XefOJMaTV1d3Du8BU=";
+        includes = [ "test/djot-reader.native" ];
+      })
+      # Adjust tests for skylighting-format-blaze-html >= 0.1.2
+      (pkgs.fetchpatch {
+        name = "pandoc-skylighting-format-blaze-html-0.1.2.patch";
+        url = "https://github.com/jgm/pandoc/commit/cab682ba58f2eb7e940d1af508e196ff6b1c1112.patch";
+        hash = "sha256-lpddKGa8xs+Lhi62HhBgV04fUq2kkippA1xX2/b2ukM=";
+        includes = [ "test/Tests/Writers/HTML.hs" ];
+      })
+      # Resolve test suite race condition(s) due to tasty >= 1.5.4 and
+      # inDirectory, https://github.com/jgm/pandoc/issues/11566 krank:ignore-line
+      (pkgs.fetchpatch {
+        name = "pandoc-tests-fix-race-condition.patch";
+        url = "https://github.com/jgm/pandoc/commit/134296c54145ef8ea7de523774837055239e0b3d.patch";
+        hash = "sha256-s3v6ukoVZm8cvh9mAp0U+cQDT3p8QSu1F0oQD4Ks9F8=";
+      })
+    ];
+  }) super.pandoc;
 
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
@@ -1166,6 +1191,10 @@ with haskellLib;
   # https://github.com/bos/snappy/issues/1
   # https://github.com/bos/snappy/pull/10
   snappy = dontCheck super.snappy;
+
+  # 2026-04-07: jailbreak for time 1.15
+  # https://github.com/mchav/snappy-hs/issues/2
+  snappy-hs = doJailbreak super.snappy-hs;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -1545,6 +1574,12 @@ with haskellLib;
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   }) super.hpc-coveralls;
 
+  hpc-codecov = overrideCabal (drv: {
+    # Work around test suite race condition due to tasty >= 1.5.4
+    # https://github.com/8c6794b6/hpc-codecov/issues/52
+    testFlags = drv.testFlags or [ ] ++ [ "-j1" ];
+  }) super.hpc-codecov;
+
   # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr = appendPatch ./patches/sexpr-0.2.1.patch (
     overrideCabal (drv: {
@@ -1648,6 +1683,19 @@ with haskellLib;
     '';
   }) super.hledger-flow;
 
+  # hledger-web abuses the regular bounds to exclude yesod-static 1.6.1.2 since
+  # it builds to fail in some build plans. This doesn't affect us at all.
+  hledger-web = appendPatches [
+    (pkgs.fetchpatch {
+      name = "hledger-allow-yesod-static-1.6.1.2.patch";
+      url = "https://github.com/simonmichael/hledger/commit/b06eb8b68222f48024cf02d0718039a20e070201.patch";
+      hash = "sha256-IzDyAqaiqnH3d8d+ikkEpJJufgMB+ZF/1ntUJVyQyws=";
+      revert = true;
+      relative = "hledger-web";
+      excludes = [ "package.yaml" ];
+    })
+  ] super.hledger-web;
+
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
     # 2025-02-13: Too strict bounds on lens < 5.3 and vector < 0.13
@@ -1717,20 +1765,6 @@ with haskellLib;
   reflex-dom = dontDistribute super.reflex-dom;
   reflex-localize-dom = dontDistribute super.reflex-localize-dom;
   trasa-reflex = dontDistribute super.trasa-reflex;
-
-  # https://github.com/ghcjs/jsaddle/pull/160/
-  jsaddle = appendPatch (fetchpatch {
-    name = "fix-on-firefox.patch";
-    url = "https://github.com/ghcjs/jsaddle/commit/71ef7f0cbc60a380ba0dc299e758c8f90cc4b526.patch";
-    relative = "jsaddle";
-    sha256 = "sha256-IBOX74r+lyywVWp0ZucoseeevFrGiInkq7V6RoWADNU=";
-  }) super.jsaddle;
-  jsaddle-warp = appendPatch (fetchpatch {
-    name = "fix-on-firefox.patch";
-    url = "https://github.com/ghcjs/jsaddle/commit/71ef7f0cbc60a380ba0dc299e758c8f90cc4b526.patch";
-    relative = "jsaddle-warp";
-    sha256 = "sha256-jYEUOkP4Kv3yBjo3SbN7sruV+T5R5XWbRFcCUAa6HvE=";
-  }) super.jsaddle-warp;
 
   # https://github.com/ghcjs/jsaddle/issues/151
   jsaddle-webkit2gtk =
@@ -2041,8 +2075,14 @@ with haskellLib;
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  # Test suite does not compile.
-  feed = dontCheck super.feed;
+  # Test suite `readme` does not compile.
+  # https://github.com/haskell-party/feed/issues/77
+  # `readme-doctests` are also broken (can't find a variety of imports)
+  feed = overrideCabal {
+    buildTarget = "tests";
+    testTargets = [ "tests" ];
+    jailbreak = true;
+  } super.feed;
 
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
@@ -2535,9 +2575,74 @@ with haskellLib;
     doJailbreak
   ];
 
-  # Test suite doesn't support hspec 2.8
-  # https://github.com/zellige/hs-geojson/issues/29
-  geojson = dontCheck super.geojson;
+  # too strict bounds on extra < 1.8
+  # https://github.com/georgefst/svgone/pull/3
+  svgone = doJailbreak super.svgone;
+
+  # 2026-01-06: unbreak and modernize to GHC 9.10.3
+  reanimate-svg = overrideCabal (drv: {
+    # patching doesn't actually move files, need to do manually
+    prePatch = ''
+      # Move tests marked good due to previous librsvg failures
+      for f in \
+      animate-elem-32-t.svg \
+      fonts-desc-02-t.svg \
+      shapes-ellipse-02-t.svg \
+      shapes-intro-01-t.svg \
+      styling-css-06-b.svg \
+      text-intro-05-t.svg \
+      ; do
+      mv test/good/$f test/bad/$f
+      done
+
+      # Move tests previously marked bad but now fixed from new changes
+      for f in \
+      filters-displace-02-f.svg \
+      filters-gauss-01-b.svg \
+      masking-mask-01-b.svg \
+      painting-render-01-b.svg \
+      pservers-grad-04-b.svg \
+      pservers-grad-05-b.svg \
+      pservers-grad-07-b.svg \
+      pservers-grad-08-b.svg \
+      pservers-grad-09-b.svg \
+      pservers-grad-10-b.svg \
+      pservers-grad-11-b.svg \
+      pservers-grad-12-b.svg \
+      pservers-grad-14-b.svg \
+      pservers-grad-15-b.svg \
+      pservers-grad-16-b.svg \
+      pservers-grad-22-b.svg \
+      ; do
+      mv test/bad/$f test/good/$f
+      done
+    '';
+    patches = (drv.patches or [ ]) ++ [
+      (pkgs.fetchpatch2 {
+        name = "modernize-to-ghc-9.10.3-and-regress-tests-wrt-librsvg";
+        url = "https://github.com/reanimate/reanimate-svg/commit/3f2fab8eb08b7f35b03f5fa17819e43e3879ea80.patch";
+        sha256 = "sha256-Em10QyAAiIwHId3CZuByKJ4Fv9W6MII4go5rychg07Y=";
+      })
+    ];
+  }) super.reanimate-svg;
+
+  # 2026-01-06: modernize to GHC 9.10.3
+  reanimate = overrideCabal (drv: {
+    # file in Hackage but not on github, need to remove here
+    # test relies on hegometry but that was removed as a dependency
+    # https://github.com/reanimate/reanimate/commit/f58a00e
+    prePatch = drv.prePatch or "" + ''
+      rm -f examples/decompose.hs
+    '';
+    patches = (drv.patches or [ ]) ++ [
+      # variant of PR https://github.com/reanimate/reanimate/pull/317
+      (pkgs.fetchpatch2 {
+        name = "modernize-to-ghc-9.10.3";
+        url = "https://github.com/reanimate/reanimate/commit/273f48c2b82dcfa027481133a6a606e73a22461b.patch";
+        sha256 = "sha256-aibbIoc54I4Ibg6t2o8vykL8MqzmxLvayUNa8MiibEw=";
+      })
+    ];
+  }) super.reanimate;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
