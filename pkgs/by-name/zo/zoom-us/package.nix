@@ -148,7 +148,6 @@ let
       maintainers = with lib.maintainers; [
         philiptaron
         ryan4yin
-        yarny
       ];
       mainProgram = "zoom";
     };
