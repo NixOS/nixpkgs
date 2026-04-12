@@ -15,19 +15,20 @@
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
+  writeText,
 }:
 let
   gradle = gradle_9;
 in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "3.1.12";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-QqwLM2fiPmtFehB83M3yvLp8M1DKywlCxQcG4mclBkk=";
+    hash = "sha256-ljCN2tW7iH+kTiSXwUt+OsAhjYKlAy0W5x/JDmQeR6M=";
   };
 
   nativeBuildInputs = [
@@ -54,10 +55,8 @@ stdenv.mkDerivation rec {
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' ""
 
-    for f in build.gradle */build.gradle; do
-      substituteInPlace $f \
-        --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
-    done
+    substituteInPlace build.gradle bootstrap/build.gradle application/build.gradle \
+      --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -69,6 +68,8 @@ stdenv.mkDerivation rec {
     "-Dorg.gradle.java.home=${jdk25}"
     "--stacktrace"
   ];
+
+  gradleInitScript = writeText "empty-init-script.gradle" ""; # fixes build by making it possibly not reproducible, though it still seems to be
 
   gradleBuildTask = "application:jpackage";
 
