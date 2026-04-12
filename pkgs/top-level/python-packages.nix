@@ -17505,6 +17505,8 @@ self: super: with self; {
 
   sendgrid = callPackage ../development/python-modules/sendgrid { };
 
+  sendspin = callPackage ../development/python-modules/sendspin { };
+
   senf = callPackage ../development/python-modules/senf { };
 
   sensai-utils = callPackage ../development/python-modules/sensai-utils { };
