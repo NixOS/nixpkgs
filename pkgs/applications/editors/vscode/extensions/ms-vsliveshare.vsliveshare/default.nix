@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.1.119";
-    hash = "sha256-s7GCJvlMCcZ+OOwdSh82moU7BlQLz1hVPMwZ9MYtahM=";
+    version = "1.1.122";
+    hash = "sha256-XD8iLG8HA9u5Y4CKQKLnmeAN4IFf1LGDvhTKuroxkHg=";
   };
 
   postPatch = ''
