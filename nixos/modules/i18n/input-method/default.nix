@@ -23,11 +23,16 @@ let
         allowSubstitutes = false;
         buildInputs = [
           cfg.package
+          pkgs.gtk2.dev
+        ];
+
+        disallowedReferences = [
+          pkgs.gtk2.dev
         ];
       }
       ''
         mkdir -p $out/etc/gtk-2.0/
-        GTK_PATH=${cfg.package}/lib/gtk-2.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk2.dev "gtk-query-immodules-2.0"} > $out/etc/gtk-2.0/immodules.cache
+        GTK_PATH=${cfg.package}/lib/gtk-2.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
       '';
 
   gtk3_cache =
@@ -37,11 +42,16 @@ let
         allowSubstitutes = false;
         buildInputs = [
           cfg.package
+          pkgs.gtk3.dev
+        ];
+
+        disallowedReferences = [
+          pkgs.gtk3.dev
         ];
       }
       ''
         mkdir -p $out/etc/gtk-3.0/
-        GTK_PATH=${cfg.package}/lib/gtk-3.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk3.dev "gtk-query-immodules-3.0"} > $out/etc/gtk-3.0/immodules.cache
+        GTK_PATH=${cfg.package}/lib/gtk-3.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
       '';
 
 in
