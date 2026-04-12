@@ -1249,8 +1249,6 @@ with pkgs;
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
-  firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
-
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
