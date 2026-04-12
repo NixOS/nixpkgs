@@ -10262,6 +10262,8 @@ self: super: with self; {
 
   mprisify = callPackage ../development/python-modules/mprisify { };
 
+  mpris-server = callPackage ../development/python-modules/mpris-server { };
+
   mpv = callPackage ../development/python-modules/mpv { inherit (pkgs) mpv; };
 
   mpyq = callPackage ../development/python-modules/mpyq { };
