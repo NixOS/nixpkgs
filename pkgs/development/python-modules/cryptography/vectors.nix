@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   cryptography,
-  fetchpatch2,
   uv-build,
 }:
 

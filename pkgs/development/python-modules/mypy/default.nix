@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   pythonAtLeast,
   isPyPy,
@@ -34,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.19.1";
+  version = "1.20.0";
   pyproject = true;
 
   # relies on several CPython internals
@@ -44,7 +43,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-REUJgYd00qr36hoHevkJEWK/+2hE/caymjD/asqa6eI=";
+    hash = "sha256-QkUk7Y8mJSJtttfSiA7m4JL2Q4XFXEYs5irI8/FygaQ=";
   };
 
   passthru.updateScript = gitUpdater {
@@ -104,9 +103,15 @@ buildPythonPackage rec {
   ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
-    # fails with typing-extensions>=4.10
-    # https://github.com/python/mypy/issues/17005
-    "test_runtime_typing_objects"
+    # A change to the base64 decoder in CPython 3.13.13 and 3.14.4 causes this
+    # test to fail. At the time of writing, upstream skips the test.
+    # Upstream issue: https://github.com/python/mypy/issues/21120
+    # CPython issue: https://github.com/python/cpython/issues/145264
+    "testAllBase64Features_librt_experimental"
+    # https://github.com/python/mypy/issues/21120
+    "testAllBase64Features_librt"
+    # fails to import librt
+    "test_diff_cache_produces_valid_json"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # requires distutils
@@ -114,6 +119,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # circular dependency on distutils
+    "mypyc/test/test_external.py"
     # fails to find tyoing_extensions
     "mypy/test/testcmdline.py"
     "mypy/test/testdaemon.py"
