@@ -24,101 +24,103 @@ let
     All other values are rendered as key-value pairs.
   '';
 
-  mkRulesTypeOption =
-    type:
-    lib.mkOption {
-      # These options are experimental and subject to breaking changes without notice.
-      description = ''
-        PAM `${type}` rules for this service.
+  pamRuleType = lib.types.record {
+    declarations = [ ./pam.nix ];
+    fields =
+      let
+        field = lib.id;
+      in
+      {
+        name = field {
+          type = lib.types.str;
+          description = ''
+            Name of this rule.
+          '';
+          internal = true;
+        };
+        enable = field {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Whether this rule is added to the PAM service config file.
+          '';
+        };
+        order = field {
+          type = lib.types.int;
+          description = ''
+            Order of this rule in the service file. Rules are arranged in ascending order of this value.
 
-        Attribute keys are the name of each rule.
-      '';
-      type = lib.types.attrsOf (
-        lib.types.submodule (
-          { name, config, ... }:
-          {
-            options = {
-              name = lib.mkOption {
-                type = lib.types.str;
-                description = ''
-                  Name of this rule.
-                '';
-                internal = true;
-                readOnly = true;
-              };
-              enable = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-                description = ''
-                  Whether this rule is added to the PAM service config file.
-                '';
-              };
-              order = lib.mkOption {
-                type = lib.types.int;
-                description = ''
-                  Order of this rule in the service file. Rules are arranged in ascending order of this value.
+            ::: {.warning}
+            The `order` values for the built-in rules are subject to change. If you assign a constant value to this option, a system update could silently reorder your rule. You could be locked out of your system, or your system could be left wide open. When using this option, set it to a relative offset from another rule's `order` value:
 
-                  ::: {.warning}
-                  The `order` values for the built-in rules are subject to change. If you assign a constant value to this option, a system update could silently reorder your rule. You could be locked out of your system, or your system could be left wide open. When using this option, set it to a relative offset from another rule's `order` value:
+            ```nix
+            {
+              security.pam.services.login.rules.auth.foo.order =
+                config.security.pam.services.login.rules.auth.unix.order + 10;
+            }
+            ```
+            :::
+          '';
+        };
+        control = field {
+          type = lib.types.str;
+          description = ''
+            Indicates the behavior of the PAM-API should the module fail to succeed in its authentication task. See `control` in {manpage}`pam.conf(5)` for details.
+          '';
+        };
+        modulePath = field {
+          type = lib.types.str;
+          description = ''
+            Either the full filename of the PAM to be used by the application (it begins with a '/'), or a relative pathname from the default module location. See `module-path` in {manpage}`pam.conf(5)` for details.
+          '';
+        };
+        args = field {
+          type = lib.types.listOf lib.types.str;
+          description = ''
+            Tokens that can be used to modify the specific behavior of the given PAM. Such arguments will be documented for each individual module. See `module-arguments` in {manpage}`pam.conf(5)` for details.
 
-                  ```nix
-                  {
-                    security.pam.services.login.rules.auth.foo.order =
-                      config.security.pam.services.login.rules.auth.unix.order + 10;
-                  }
-                  ```
-                  :::
-                '';
-              };
-              control = lib.mkOption {
-                type = lib.types.str;
-                description = ''
-                  Indicates the behavior of the PAM-API should the module fail to succeed in its authentication task. See `control` in {manpage}`pam.conf(5)` for details.
-                '';
-              };
-              modulePath = lib.mkOption {
-                type = lib.types.str;
-                description = ''
-                  Either the full filename of the PAM to be used by the application (it begins with a '/'), or a relative pathname from the default module location. See `module-path` in {manpage}`pam.conf(5)` for details.
-                '';
-              };
-              args = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                description = ''
-                  Tokens that can be used to modify the specific behavior of the given PAM. Such arguments will be documented for each individual module. See `module-arguments` in {manpage}`pam.conf(5)` for details.
+            Escaping rules for spaces and square brackets are automatically applied.
 
-                  Escaping rules for spaces and square brackets are automatically applied.
+            {option}`settings` are automatically added as {option}`args`. It's recommended to use the {option}`settings` option whenever possible so that arguments can be overridden.
+          '';
+        };
+        settings = field {
+          type = moduleSettingsType;
+          default = { };
+          description = ''
+            Settings to add as `module-arguments`.
 
-                  {option}`settings` are automatically added as {option}`args`. It's recommended to use the {option}`settings` option whenever possible so that arguments can be overridden.
-                '';
-              };
-              settings = lib.mkOption {
-                type = moduleSettingsType;
-                default = { };
-                description = ''
-                  Settings to add as `module-arguments`.
+            ${moduleSettingsDescription}
+          '';
+        };
+      };
+    finalise =
+      { name, self, ... }:
+      {
+        inherit name;
+        # Formats an attrset of settings as args for use as `module-arguments`.
+        args = lib.concatLists (
+          lib.flip lib.mapAttrsToList self.settings (
+            name: value:
+            if lib.isBool value then
+              lib.optional value name
+            else
+              lib.optional (value != null) "${name}=${toString value}"
+          )
+        );
+      };
+  };
 
-                  ${moduleSettingsDescription}
-                '';
-              };
-            };
-            config = {
-              inherit name;
-              # Formats an attrset of settings as args for use as `module-arguments`.
-              args = lib.concatLists (
-                lib.flip lib.mapAttrsToList config.settings (
-                  name: value:
-                  if lib.isBool value then
-                    lib.optional value name
-                  else
-                    lib.optional (value != null) "${name}=${toString value}"
-                )
-              );
-            };
-          }
-        )
-      );
-    };
+  mkRulesTypeField = type: {
+    # These options are experimental and subject to breaking changes without notice.
+    description = ''
+      PAM `${type}` rules for this service.
+
+      Attribute keys are the name of each rule.
+    '';
+    type = lib.types.attrsOf pamRuleType;
+    default = { };
+  };
 
   package = config.security.pam.package;
   parentConfig = config;
@@ -167,8 +169,9 @@ let
             You may freely use this option within `nixpkgs`, and future changes will account for those use sites.
             :::
           '';
-          type = lib.types.submodule {
-            options = lib.genAttrs [ "account" "auth" "password" "session" ] mkRulesTypeOption;
+          type = lib.types.record {
+            declarations = [ ./pam.nix ];
+            fields = lib.genAttrs [ "account" "auth" "password" "session" ] mkRulesTypeField;
           };
         };
 
