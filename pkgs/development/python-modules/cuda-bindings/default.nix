@@ -7,11 +7,15 @@
 
   # build-system
   cython,
-  setuptools,
   pyclibrary,
+  setuptools,
+  setuptools-scm,
 
   # env
   symlinkJoin,
+
+  # dependencies
+  cuda-pathfinder,
 
   # tests
   numpy,
@@ -23,14 +27,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cuda-bindings";
-  version = "12.8.0";
+  version = "12.9.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7e9w70KkC6Pcvyu6Cwt5Asrc3W9TgsjiGvArRTer6Oc=";
+    hash = "sha256-uRv27h2b6wXC8oOf5k2KxZ0bUFNvNu6XO05FBbJcU1k=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
@@ -49,9 +54,6 @@ buildPythonPackage (finalAttrs: {
     ''
       substituteInPlace cuda/bindings/_internal/nvjitlink_linux.pyx \
         --replace-fail \
-          'so_name = "libnvJitLink.so"' \
-          'so_name = "${lib.getLib cudaPackages.libnvjitlink}/lib/libnvJitLink.so"' \
-        --replace-fail \
           "handle = dlopen('libcuda.so.1'" \
           "handle = dlopen('${libCudaPath}/lib/libcuda.so.1'"
 
@@ -59,16 +61,6 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           "path = 'libcuda.so.1'" \
           "path = '${libCudaPath}/lib/libcuda.so.1'"
-
-      substituteInPlace cuda/bindings/_bindings/cynvrtc.pyx.in \
-        --replace-fail \
-          "dlfcn.dlopen('libnvrtc.so.12'" \
-          "dlfcn.dlopen('${lib.getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so.12'"
-
-      substituteInPlace cuda/bindings/_lib/cyruntime/cyruntime.pyx.in \
-        --replace-fail \
-          "dlfcn.dlopen('libcudart.so.12'" \
-          "dlfcn.dlopen('${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so.12'"
     '';
 
   preBuild = ''
@@ -79,6 +71,7 @@ buildPythonPackage (finalAttrs: {
     cython
     pyclibrary
     setuptools
+    setuptools-scm
   ];
 
   env = {
@@ -94,6 +87,11 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     cudaPackages.cuda_nvcc # crt/host_defines.h
+    cudaPackages.libcufile # cufile.h
+  ];
+
+  dependencies = [
+    cuda-pathfinder
   ];
 
   pythonImportsCheck = [
@@ -133,7 +131,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    description = "CUDA Python: Performance meets Productivity";
+    description = "Standard set of low-level interfaces, providing access to the CUDA host APIs from Python";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_bindings";
     changelog = "https://nvidia.github.io/cuda-python/${finalAttrs.version}/release/${finalAttrs.version}-notes.html";
     license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary Software
