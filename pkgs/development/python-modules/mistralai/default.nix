@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.2.0";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L+tmX2d5gfTgcYAFRBHOa17zFbNwGVEKbyAv1g7bKho=";
+    hash = "sha256-aqKM85gBvOyfAsps29u6okuQFJ+GzS2AGFgY1H4Tkmw=";
   };
 
   preBuild = ''
