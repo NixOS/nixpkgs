@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "check-sieve";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "dburkart";
     repo = "check-sieve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dElVfLSVtlELleuxCScR6BGuLsJ+KRqcNA8y0lgrBfI=";
+    hash = "sha256-kNHRid87RW+tm3nmMEe8Y5dcgLZMHICzY2rgWlK3h0M=";
   };
 
   nativeBuildInputs = [
