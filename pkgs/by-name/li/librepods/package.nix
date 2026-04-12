@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "AirPods liberated from Apple's ecosystem";
     license = lib.licenses.gpl3;
     mainProgram = "librepods";
-    maintainers = [ lib.maintainers.thefossguy ];
+    maintainers = with lib.maintainers; [
+      thefossguy
+      Cameo007
+    ];
   };
 })
