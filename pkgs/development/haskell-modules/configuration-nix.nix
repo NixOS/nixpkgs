@@ -572,6 +572,9 @@ builtins.intersectAttrs super {
   unliftio = addTestToolDepends [ self.hspec-discover ] super.unliftio;
 
   # Package does not declare tool dependency hspec-discover
+  text-zipper = addTestToolDepends [ self.hspec-discover ] super.text-zipper;
+
+  # Package does not declare tool dependency hspec-discover
   word8 = addTestToolDepends [ self.hspec-discover ] super.word8;
 
   # Test suite requires running a database server. Testing is done upstream.
