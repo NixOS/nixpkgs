@@ -85,6 +85,7 @@ let
       gmenuharness = callPackage ./development/gmenuharness { };
       libusermetrics = callPackage ./development/libusermetrics { };
       lomiri-online-accounts-unwrapped = callPackage ./development/lomiri-online-accounts { };
+      lomiri-online-accounts = callPackage ./development/lomiri-online-accounts/wrapper.nix { };
       qtmir = callPackage ./development/qtmir { };
       trust-store = callPackage ./development/trust-store { };
       u1db-qt = callPackage ./development/u1db-qt { };
