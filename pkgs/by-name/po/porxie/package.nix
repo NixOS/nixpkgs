@@ -2,6 +2,8 @@
   lib,
   fetchFromCodeberg,
   rustPlatform,
+  nixosTests,
+  stdenvNoCC,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,7 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
   cargoHash = "sha256-a0Ps8SvheQoX+Ai8EYgEpyTFwNvB7E3J6MfGiyEvMzM=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux {
+      porxie = nixosTests.porxie;
+    };
+  };
 
   meta = {
     description = "Porxie, an ATProto blob proxy for secure content delivery";
