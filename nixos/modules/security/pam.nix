@@ -135,6 +135,7 @@ let
 
       imports = [
         (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+        (lib.mkRenamedOptionModule [ "u2fAuth" ] [ "u2f" "enable" ])
       ];
 
       options = {
@@ -202,17 +203,39 @@ let
           '';
         };
 
-        u2fAuth = lib.mkOption {
-          default = config.security.pam.u2f.enable;
-          defaultText = lib.literalExpression "config.security.pam.u2f.enable";
-          type = lib.types.bool;
-          description = ''
-            If set, users listed in
-            {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
-            {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
-            not set) are able to log in with the associated U2F key. Path can be
-            changed using {option}`security.pam.u2f.authFile` option.
-          '';
+        u2f = {
+          enable = lib.mkOption {
+            default = config.security.pam.u2f.enable;
+            defaultText = lib.literalExpression "config.security.pam.u2f.enable";
+            type = lib.types.bool;
+            description = ''
+              If set, users listed in
+              {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+              {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
+              not set) are able to log in with the associated U2F key. Path can be
+              changed using {option}`security.pam.u2f.authFile` option.
+            '';
+          };
+
+          control = lib.mkOption {
+            default = config.security.pam.u2f.control;
+            defaultText = lib.literalExpression "config.security.pam.u2f.control";
+            type = lib.types.enum [
+              "required"
+              "requisite"
+              "sufficient"
+              "optional"
+            ];
+            description = ''
+              This option sets pam "control".
+              If you want to have multi factor authentication, use "required".
+              If you want to use U2F device instead of regular password, use "sufficient".
+
+              Read
+              {manpage}`pam.conf(5)`
+              for better understanding of this option.
+            '';
+          };
         };
 
         usshAuth = lib.mkOption {
@@ -1045,8 +1068,8 @@ let
                   in
                   {
                     name = "u2f";
-                    enable = cfg.u2fAuth;
-                    control = u2f.control;
+                    enable = cfg.u2f.enable;
+                    control = cfg.u2f.control;
                     modulePath = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
                     inherit (u2f) settings;
                   }
