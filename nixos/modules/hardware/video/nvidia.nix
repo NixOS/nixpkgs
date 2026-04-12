@@ -6,9 +6,11 @@
 }:
 let
   nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
-  nvidia_x11 = if nvidiaEnabled || cfg.datacenter.enable then cfg.package else null;
+  nvidia_x11 = if cfg.enabled then cfg.package else null;
 
   cfg = config.hardware.nvidia;
+
+  inherit (config.boot.kernelPackages) nvidiaPackages;
 
   useOpenModules = cfg.open == true;
 
@@ -27,7 +29,7 @@ in
       enabled = lib.mkOption {
         readOnly = true;
         type = lib.types.bool;
-        default = nvidia_x11 != null;
+        default = nvidiaEnabled || cfg.datacenter.enable;
         defaultText = lib.literalMD "`true` if NVIDIA support is enabled";
         description = "True if NVIDIA support is enabled";
       };
@@ -296,15 +298,63 @@ in
         It also drastically increases the time the driver needs to clock down after load
       '';
 
-      package = lib.mkOption {
-        default =
-          config.boot.kernelPackages.nvidiaPackages."${if cfg.datacenter.enable then "dc" else "stable"}";
+      branch = lib.mkOption {
+        type =
+          (lib.types.enum (builtins.attrNames (lib.filterAttrs (_: lib.isDerivation) nvidiaPackages)))
+          // {
+            description = "one of the available driver branches in `pkgs/os-specific/linux/nvidia-x11/default.nix`";
+          };
+        default = if cfg.datacenter.enable then "dc" else "stable";
         defaultText = lib.literalExpression ''
-          config.boot.kernelPackages.nvidiaPackages."\$\{if cfg.datacenter.enable then "dc" else "stable"}"
+          if config.hardware.nvidia.datacenter.enable then "dc" else "stable"
         '';
-        example = "config.boot.kernelPackages.nvidiaPackages.legacy_470";
+        example = "bleeding_edge";
+        description = ''
+          The branch of the NVIDIA driver to use.
+
+          Note: if {option}`hardware.nvidia.package` is set, it overrides this option.
+
+          Commonly interesting branches for end users:
+
+          - production, new_feature, beta:
+            NVIDIA's official production / new feature / beta release branches.
+
+          - stable:
+            The default; the highest stable version.
+
+          - latest:
+            Whichever is newer of `production` and `new_feature`.
+
+          - bleeding_edge:
+            Whichever is newer of `latest` and `beta`.
+
+          - legacy_580:
+            The long-lived 580 series (LTSB), for GPUs that newer driver branches
+            no longer support (often Maxwell through Volta; roughly GeForce GTX 9xx
+            through 10xx, plus rare Volta cards like TITAN V).
+
+          - vulkan_beta:
+            The Vulkan developer beta driver, for users interested in testing new
+            Vulkan features.
+        '';
+      };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = nvidiaPackages.${cfg.branch};
+        defaultText = lib.literalExpression "config.boot.kernelPackages.nvidiaPackages.\${config.hardware.nvidia.branch}";
+        example = lib.literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_470";
         description = ''
           The NVIDIA driver package to use.
+
+          Prefer using {option}`hardware.nvidia.branch` when possible.
+
+          If you set this option, it is recommended to pick a package from
+          `config.boot.kernelPackages.nvidiaPackages` so the driver build matches
+          your configured kernel.
+
+          For custom versions, you can use `nvidiaPackages.mkDriver`; see
+          `pkgs/os-specific/linux/nvidia-x11/default.nix` for examples.
         '';
       };
 
