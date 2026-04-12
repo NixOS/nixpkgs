@@ -168,6 +168,14 @@ checkConfigError() {
     fi
 }
 
+# types.record
+checkConfigOutput '^"alice"$' config.people.alice.name ./record.nix
+checkConfigOutput '^true$' config.people.alice.cool ./record.nix
+checkConfigOutput '^2019$' config.people.bob.since ./record.nix
+checkConfigOutput '^false$' config.people.bob.cool ./record.nix
+checkConfigError 'unknown field.s.: age' config.people.alice.name ./record.nix ./record-bad-field.nix
+checkConfigError 'is not of type .signed integer' config.people.alice.since ./record.nix ./record-bad-field-type.nix
+
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 

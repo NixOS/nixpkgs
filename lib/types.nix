@@ -1127,6 +1127,139 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+  # A lightweight typed record: a fixed set of named, typed fields with
+  # optional defaults. Unlike `submodule`, this performs no `evalModules`
+  # fixpoint, no imports resolution, no `_module.args` plumbing and no
+  # unmatched-definitions tree walk — it merely runs `mergeDefinitions`
+  # once per declared field. Intended for heavily-instantiated
+  # `attrsOf (submodule …)` options whose element modules are pure data.
+  #
+  # `fields.<name>` is an attrset with at least `type`, optionally
+  # `default`, `description`, `example`, `defaultText`, `internal`,
+  # `visible`.
+  #
+  # `finalise` (optional) is `{ name, self, fields }: { <fieldName> = <def>; … }`
+  # and supplies extra per-instance definitions (e.g. derived defaults that
+  # depend on the `attrsOf` key or on sibling fields). `self` is the final
+  # merged record (lazy fixpoint), `fields.<name>` is the per-field
+  # `mergeDefinitions` result (exposing `.isDefined` / `.highestPrio`).
+  record =
+    {
+      fields,
+      finalise ? null,
+      description ? "record",
+      # File(s) declaring this record, used for the manual's
+      # "declared by" links since there are no real `mkOption` calls.
+      declarations ? [ ],
+    }@args:
+    let
+      fieldNames = attrNames fields;
+    in
+    mkOptionType {
+      name = "record";
+      inherit description;
+      descriptionClass = "noun";
+      check = isAttrs;
+      merge =
+        loc: defs:
+        let
+          name = last loc;
+          # Push the definition's file down onto each field value so that
+          # per-field `mergeDefinitions` can attribute errors correctly.
+          pushed = map (
+            def:
+            mapAttrs (_: v: {
+              inherit (def) file;
+              value = v;
+            }) def.value
+          ) defs;
+          byField = zipAttrsWith (_: ds: ds) pushed;
+          unknown = builtins.removeAttrs byField fieldNames;
+
+          extra =
+            if finalise == null then
+              { }
+            else
+              finalise {
+                inherit name;
+                self = final;
+                fields = fieldMerges;
+              };
+
+          fieldDefs =
+            n: field:
+            (byField.${n} or [ ])
+            ++ lib.optional (extra ? ${n}) {
+              file = "finalise of record `${showOption loc}'";
+              value = extra.${n};
+            }
+            ++ lib.optional (field ? default) {
+              file = "default of record field `${showOption (loc ++ [ n ])}'";
+              value = lib.mkOptionDefault field.default;
+            };
+
+          fieldMerges = mapAttrs (
+            n: field: mergeDefinitions (loc ++ [ n ]) field.type (fieldDefs n field)
+          ) fields;
+
+          final = mapAttrs (_: m: m.mergedValue) fieldMerges;
+        in
+        if unknown != { } then
+          throw ''
+            A definition for option `${showOption loc}' has unknown field(s): ${concatStringsSep ", " (attrNames unknown)}
+            Known fields: ${concatStringsSep ", " fieldNames}
+            Definition values:${showDefs (concatLists (builtins.attrValues unknown))}''
+        else
+          final;
+      emptyValue = {
+        value = { };
+      };
+      # Produce option-like stubs so the docs generator (which uses
+      # `collect isOption`) keeps rendering sub-options as before.
+      getSubOptions =
+        prefix:
+        mapAttrs (
+          n: field:
+          {
+            _type = "option";
+            loc = prefix ++ [ n ];
+            isDefined = field ? default;
+            declarations = field.declarations or declarations;
+            declarationPositions = [ ];
+            definitions = [ ];
+            files = [ ];
+            options = [ ];
+            type = field.type;
+            description = field.description or null;
+            internal = field.internal or false;
+            visible = field.visible or true;
+            readOnly = false;
+          }
+          // optionalAttrs (field ? default) { inherit (field) default; }
+          // optionalAttrs (field ? defaultText) { inherit (field) defaultText; }
+          // optionalAttrs (field ? example) { inherit (field) example; }
+          // optionalAttrs (field ? default || field ? defaultText) {
+            value = field.default or (throw "no default");
+          }
+        ) fields;
+      nestedTypes = mapAttrs (_: f: f.type) fields;
+      functor = defaultFunctor "record" // {
+        type = lib.types.record;
+        payload = args;
+        binOp =
+          lhs: rhs:
+          if lhs.finalise or null != null && rhs.finalise or null != null then
+            null
+          else
+            {
+              fields = lhs.fields // rhs.fields;
+              declarations = (lhs.declarations or [ ]) ++ (rhs.declarations or [ ]);
+              finalise = if lhs.finalise or null != null then lhs.finalise or null else rhs.finalise or null;
+              description = lhs.description or rhs.description or "record";
+            };
+      };
+    };
+
   # A submodule (like typed attribute set). See NixOS manual.
   submodule =
     modules:
