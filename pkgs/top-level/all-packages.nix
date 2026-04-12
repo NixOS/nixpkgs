@@ -2391,17 +2391,6 @@ with pkgs;
 
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
-  gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-      ;
-  };
-
   gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
 
   dapl = callPackage ../development/interpreters/dzaima-apl {
