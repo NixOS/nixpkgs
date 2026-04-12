@@ -11486,6 +11486,13 @@
     name = "Noah Fontes";
     keys = [ { fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA"; } ];
   };
+  implr = {
+    email = "bartoszstebel@gmail.com";
+    matrix = "@implr:hackerspace.pl";
+    github = "implr";
+    githubId = 2821175;
+    name = "Bartosz Stebel";
+  };
   imrying = {
     email = "philiprying@gmail.com";
     github = "imrying";
