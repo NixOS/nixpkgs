@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "44.9.0";
+  version = "44.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k6yK0aBHA/BpM6uU93Z47kPvduwSlFTG7Upm0SFXcTg=";
+    hash = "sha256-PCCz12AAZuhDzqgJGhYpncr2ICN6xWefi/s9icbMSck=";
   };
 
   build-system = [
