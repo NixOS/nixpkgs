@@ -7106,6 +7106,8 @@ self: super: with self; {
     callPackage ../development/python-modules/home-assistant-chip-wheels { }
   );
 
+  home-assistant-datasets = callPackage ../development/python-modules/home-assistant-datasets { };
+
   home-connect-async = callPackage ../development/python-modules/home-connect-async { };
 
   homeassistant-stubs = callPackage ../servers/home-assistant/stubs.nix { };
