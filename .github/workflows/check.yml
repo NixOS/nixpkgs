@@ -71,6 +71,41 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
+  manual-file-edits:
+    if: inputs.baseBranch && inputs.headBranch
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-slim
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+          path: trusted
+          sparse-checkout: |
+            ci/github-script
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Discourage manual edits to certain files
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            require('./trusted/ci/github-script/manual-file-edits.js')({
+              github,
+              context,
+              core,
+              repoPath: 'trusted',
+            })
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
   owners:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
