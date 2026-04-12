@@ -1,0 +1,33 @@
+diff --git a/misc/spout2pw.sh b/misc/spout2pw.sh
+index 70e1b99..26b5c71 100755
+--- a/misc/spout2pw.sh
++++ b/misc/spout2pw.sh
+@@ -96,6 +96,7 @@ check_pipewire() {
+ 
+ find_gbm_backends() {
+     gbm_backend_paths="
++        @MESA_PATH@/lib
+         /usr/lib/x86_64-linux-gnu/GL/lib
+         /usr/lib/x86_64-linux-gnu
+         /usr/lib64
+@@ -224,8 +225,7 @@ setup_umu() {
+     done
+ 
+     if [ "$UMU_NO_RUNTIME" != 1 ]; then
+-        steamrt_checkpath
+-        gbm_steamrt_workaround "$runtimepath"
++        export GBM_BACKENDS_PATH="$gbm_backends"
+     fi
+ 
+     if [ -n "$WINEPREFIX" ]; then
+@@ -281,9 +281,7 @@ setup_steam() {
+     fi
+ 
+     if [[ ! "$1" == */proton ]] && [ "$steam_runtime" = 1 ]; then
+-        runtimepath="$(echo "$STEAM_COMPAT_TOOL_PATHS" | cut -d: -f2)"
+-        steamrt_checkpath
+-        gbm_steamrt_workaround "$runtimepath"
++        export GBM_BACKENDS_PATH="$gbm_backends"
+     fi
+ 
+     log "Steam Proton launch command: ${launch_cmd[@]}"

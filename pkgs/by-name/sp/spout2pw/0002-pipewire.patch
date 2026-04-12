@@ -1,0 +1,35 @@
+diff --git a/meson.build b/meson.build
+index aa27927..3511709 100644
+--- a/meson.build
++++ b/meson.build
+@@ -60,7 +60,7 @@ libfunnel_proj = subproject(
+     'test_apps=false',
+     'egl=false',
+     'default_library=static',
+-    'static_pipewire=true',
++    'static_pipewire=false',
+   ]
+ )
+ 
+@@ -87,7 +87,6 @@ unix_compiler_args = [ '-DWINE_UNIX_LIB' ] + unix_include_args
+ unix_link_args = [
+   '-l:ntdll.so',
+   '-Wl,--whole-archive',
+-  '-Wl,' + get_option('libpipewire_static_lib'),
+   '-Wl,--no-whole-archive',
+ ]
+ 
+@@ -100,11 +99,13 @@ windows_deps = [
+ ]
+ 
+ vulkan = dependency('vulkan', native: true)
++pipewire = dependency('libpipewire-0.3', native: true)
+ 
+ unix_deps = [
+   funnel,
+   funnel_vk,
+   vulkan,
++  pipewire,
+ ]
+ 
+ foreach p : unix_lib_paths
