@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "3.19.1";
+  version = "3.20.1";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1Cc7W6qyawcg5ZfjsGWH7gScdRhcYpqppjzD83QWV60=";
+    sha256 = "sha256-fSMfHJCl2/Lc6mcYn/m0kR0viH88rRgRTMOoJjFVERQ=";
   };
-  vendorHash = "sha256-81qCRwp57PpzK/eavycOLFYsuD8uVq46h12YVlJRK7Y=";
+  vendorHash = "sha256-kqx23LekpuZJFisVZUoXBY9vHh9zviKyaW5NSa4ecxM=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -38,6 +38,11 @@ buildGoModule (finalAttrs: {
     ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
     ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
   '';
+
+  overrideModAttrs = _: {
+    # the goModules derivation will otherwise inherit the preBuild phase defined above
+    preBuild = "";
+  };
 
   __darwinAllowLocalNetworking = true;
 
