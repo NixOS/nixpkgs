@@ -5,7 +5,7 @@
  
  cd "$script_dir"
 -exec /bin/bash "$root/bazel.cmd" run //:jps-to-bazel -- "$@"
-+echo "TODO REMOVE ME FROM PATCH: patch jps-to-bazel.cmd"; exec bazel run @bazelRunArgs@ --registry=file://@registry@ --repository_cache=repo_cache //:jps-to-bazel -- "$@"
++exec bazel run @bazelRunArgs@ --registry=file://@registry@ --repository_cache=$root/repo_cache //:jps-to-bazel -- "$@"
  :CMDSCRIPT
  
  pushd "%~dp0"

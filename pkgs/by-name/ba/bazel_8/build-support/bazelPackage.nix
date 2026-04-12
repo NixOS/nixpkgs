@@ -19,8 +19,6 @@
   patches ? [ ],
   serverJavabase ? null,
   registry ? null,
-  # fetch all targets to repo cache when using bazelRepoCacheFOD
-  fetchAll ? false,
   bazelRepoCacheFOD ? {
     outputHash = null;
     outputHashAlgo = "sha256";
@@ -61,18 +59,11 @@ let
         inherit registry;
         inherit
           bazel
+          targets
           startupArgs
           serverJavabase
           ;
         command = "fetch";
-        targets =
-          if fetchAll then
-            [
-              "--all"
-              "--force"
-            ]
-          else
-            targets;
         outputHashMode = "recursive";
         commandArgs = [ "--repository_cache=repo_cache" ] ++ commandArgs;
         bazelPreBuild = bazelPreBuild + ''
@@ -175,10 +166,10 @@ let
       targets
       startupArgs
       serverJavabase
+      commandArgs
       ;
     inherit installPhase;
     command = "build";
-    commandArgs = commandArgs ++ [ "--nofetch" ];
 
     passthru = passthru // {
       inherit bazelRepoCache bazelVendorDeps;

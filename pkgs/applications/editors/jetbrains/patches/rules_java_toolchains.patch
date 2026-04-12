@@ -119,3 +119,12 @@
  )
  
  string_setting(
+@@ -387,7 +295,7 @@
+ 
+ default_java_toolchain(
+     name = "prebuilt_toolchain",
+-    configuration = PREBUILT_TOOLCHAIN_CONFIGURATION,
++    configuration = DEFAULT_TOOLCHAIN_CONFIGURATION,
+     toolchain_definition = False,
+ )
+ 

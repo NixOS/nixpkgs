@@ -1,8 +1,8 @@
 --- a/platform/build-scripts/bazel/MODULE.bazel
 +++ b/platform/build-scripts/bazel/MODULE.bazel
-@@ -5,12 +5,20 @@
+@@ -4,6 +4,14 @@
+ )
  
- bazel_dep(name = "bazel_skylib", version = "1.9.0")
  bazel_dep(name = "rules_java", version = "9.3.0")
 +single_version_override(
 +    module_name = "rules_java",
@@ -12,19 +12,11 @@
 +        "//build:rules_java_stub.patch",
 +    ],
 +)
-+
  bazel_dep(name = "rules_kotlin", version = "2.2.2")
  archive_override(
      module_name = "rules_kotlin",
--    sha256 = "45a8f73fd663df02dfd2925cf7be02a03b075dd14f8b473dd454feeaa28e54d0",
-     strip_prefix = "rules_kotlin-@rulesKotlinRev@",
--    url = "https://github.com/JetBrains/rules_kotlin/archive/@rulesKotlinRev@.zip",
-+    url = "file://@rulesKotlin@",
- )
- 
- bazel_dep(name = "rules_jvm_external", version = "6.10")
-@@ -97,6 +105,14 @@
- )
+@@ -72,6 +80,14 @@
+ use_repo(maven, "j2b_maven")
  
  bazel_dep(name = "rules_python", version = "1.7.0")
 +single_version_override(
