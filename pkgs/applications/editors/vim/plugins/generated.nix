@@ -23324,6 +23324,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  zen-nvim = buildVimPlugin {
+    pname = "zen.nvim";
+    version = "0-unstable-2026-04-12";
+    src = fetchFromGitHub {
+      owner = "sand4rt";
+      repo = "zen.nvim";
+      rev = "31d0d45a56eae2a750818b7afa9f504044d7e382";
+      hash = "sha256-vmQ3dJpMACv4oP4MKuIHe3PVs1ZMy0916lNRmtbzZ88=";
+    };
+    meta.homepage = "https://github.com/sand4rt/zen.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   zenbones-nvim = buildVimPlugin {
     pname = "zenbones.nvim";
     version = "4.10.0-unstable-2025-12-02";
