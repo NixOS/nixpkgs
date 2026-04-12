@@ -13,8 +13,10 @@
   types-psutil,
   types-setuptools,
 
-  # propagates
+  # nativeBuildInputs + propagates
   librt,
+
+  # propagates
   mypy-extensions,
   tomli,
   typing-extensions,
@@ -49,6 +51,10 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
+
+  nativeBuildInputs = [
+    librt
+  ];
 
   build-system = [
     mypy-extensions
