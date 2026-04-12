@@ -16,6 +16,7 @@
   keyutils,
   udevCheckHook,
   gettext,
+  versionCheckHook,
 
   # drbd-utils are compiled twice, once with forOCF = true to extract
   # its OCF definitions for use in the ocf-resource-agents derivation,
@@ -115,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = [ "${placeholder "out"}/bin/drbdadm" ];
+  versionCheckProgramArg = "--version";
 
   passthru.tests.drbd = nixosTests.drbd;
 
