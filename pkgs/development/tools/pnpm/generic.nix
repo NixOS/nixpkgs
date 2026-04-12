@@ -8,10 +8,12 @@
   installShellFiles,
   nodejs,
   testers,
+  buildPackages,
+  bashNonInteractive,
+
   withNode ? true,
   version,
   hash,
-  buildPackages,
 }:
 let
   majorVersion = lib.versions.major version;
@@ -24,18 +26,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://registry.npmjs.org/pnpm/-/pnpm-${finalAttrs.version}.tgz";
     inherit hash;
   };
-  # Remove binary files from src, we don't need them, and this way we make sure
-  # our distribution is free of binaryNativeCode
-  preConfigure = ''
-    rm -r dist/reflink.*node dist/vendor
-  '';
-
-  buildInputs = lib.optionals withNode [ nodejs ];
 
   nativeBuildInputs = [
     installShellFiles
     nodejs
   ];
+
+  buildInputs = [
+    bashNonInteractive # needed for node-gyp wrapper script
+  ]
+  ++ lib.optionals withNode [ nodejs ];
+
+  # Remove binary files from src, we don't need them, and this way we make sure
+  # our distribution is free of binaryNativeCode
+  postUnpack = ''
+    rm -r package/dist/reflink.*node package/dist/vendor
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -128,6 +134,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         update-source-version pnpm_${majorVersion} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
       '';
     };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  dontBuild = true;
+  dontConfigure = true;
 
   meta = {
     description = "Fast, disk space efficient package manager for JavaScript";
