@@ -8,6 +8,8 @@
   corosync,
   dbus,
   fetchFromGitHub,
+  getopt,
+  gettext,
   glib,
   gnutls,
   libqb,
@@ -42,24 +44,29 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoconf
     automake
+    gettext
+    getopt
     libtool
     pkg-config
+    python3
   ];
 
   buildInputs = [
     bash
     bzip2
     corosync
-    dbus.dev
+    dbus
     glib
     gnutls
     libqb
+    libtool
     libuuid
-    libxml2.dev
-    libxslt.dev
+    libxml2
+    libxslt
     pam
-    python3
   ];
+
+  strictDeps = true;
 
   preConfigure = ''
     ./autogen.sh --prefix="$out"
