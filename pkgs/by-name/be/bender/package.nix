@@ -10,21 +10,21 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bender";
-  version = "0.28.2";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "pulp-platform";
     repo = "bender";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OJWYhs5QmfUC1I5OkEJAeLTpklEQyQ6024wmhv1sSnA=";
+    hash = "sha256-91VS3cXscq2Lu2oP3b5WJ1sp7HhMhw+BgOVTFsC6pnc=";
   };
 
-  cargoHash = "sha256-nZ2gchifWSmDlVJIsPcvrnUxzhyXYoA1kE9f2pZDJzs=";
+  cargoHash = "sha256-lgEg9Sf5n3zbm/vbn+vLBGmqBOA1aTcCBCFYrzwPVCk=";
 
   nativeCheckInputs = [ gitMinimal ];
   postCheck = ''
     patchShebangs --build tests
-    BENDER="target/${target}/$cargoBuildType/bender" tests/run_all.sh
+    BENDER="$PWD/target/${target}/$cargoBuildType/bender" tests/run_all.sh
   '';
 
   meta = {
