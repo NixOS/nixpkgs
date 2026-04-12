@@ -13,8 +13,6 @@ dont-distribute-packages:
  - ac-machine-conduit
  - accelerate-arithmetic
  - accelerate-fourier
- - accelerate-llvm
- - accelerate-llvm-native
  - accelerate-typelits
  - access-token-provider
  - acme-circular-containers
@@ -356,6 +354,7 @@ dont-distribute-packages:
  - cabal2arch
  - cabalmdvrpm
  - cabalrpmdeps
+ - cadence
  - caffegraph
  - cake
  - cakyrespa
@@ -569,7 +568,6 @@ dont-distribute-packages:
  - constraint-reflection
  - constructible
  - container
- - containers-accelerate
  - content-store
  - control
  - control-invariants
@@ -629,6 +627,7 @@ dont-distribute-packages:
  - CSPM-Interpreter
  - CSPM-ToProlog
  - cspmchecker
+ - css-class-bindings
  - csv-enumerator
  - ctpl
  - cube
@@ -1044,6 +1043,7 @@ dont-distribute-packages:
  - ftshell
  - funbot
  - funbot-git-hook
+ - funcons-intgen
  - funcons-lambda-cbv-mp
  - funcons-simple
  - function-combine
@@ -1691,6 +1691,7 @@ dont-distribute-packages:
  - http-client-rustls
  - http-enumerator
  - http-response-decoder
+ - http-tower-hs
  - http2-client-grpc
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
@@ -1775,12 +1776,12 @@ dont-distribute-packages:
  - ihp-ide
  - ihp-job-dashboard
  - ihp-mail
- - ihp-migrate
  - ihp-schema-compiler
  - ihp-sitemap
  - ihp-ssc
  - ihp-typed-sql
  - ihp-welcome
+ - ihp-zip
  - ihttp
  - imap
  - imbib
@@ -3108,6 +3109,7 @@ dont-distribute-packages:
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
+ - servant-tower-hs
  - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
