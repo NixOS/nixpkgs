@@ -50,34 +50,34 @@ let
     in
     lib.types.strMatching mode // { description = "file mode string"; };
 
-  wrapperType = lib.types.submodule (
-    { name, config, ... }:
-    {
-      options.enable = lib.mkOption {
+  wrapperType = lib.types.record {
+    declarations = [ ./default.nix ];
+    fields = {
+      enable = {
         type = lib.types.bool;
         default = true;
         description = "Whether to enable the wrapper.";
       };
-      options.source = lib.mkOption {
+      source = {
         type = lib.types.path;
         description = "The absolute path to the program to be wrapped.";
       };
-      options.program = lib.mkOption {
+      program = {
         type = with lib.types; nullOr str;
-        default = name;
+        defaultText = lib.literalExpression "‹name›";
         description = ''
           The name of the wrapper program. Defaults to the attribute name.
         '';
       };
-      options.owner = lib.mkOption {
+      owner = {
         type = lib.types.str;
         description = "The owner of the wrapper program.";
       };
-      options.group = lib.mkOption {
+      group = {
         type = lib.types.str;
         description = "The group of the wrapper program.";
       };
-      options.permissions = lib.mkOption {
+      permissions = {
         type = fileModeType;
         default = "u+rx,g+x,o+x";
         example = "a+rx";
@@ -86,7 +86,7 @@ let
           symbolic or numeric file mode understood by {command}`chmod`.
         '';
       };
-      options.capabilities = lib.mkOption {
+      capabilities = {
         type = lib.types.commas;
         default = "";
         description = ''
@@ -106,18 +106,23 @@ let
           :::
         '';
       };
-      options.setuid = lib.mkOption {
+      setuid = {
         type = lib.types.bool;
         default = false;
         description = "Whether to add the setuid bit the wrapper program.";
       };
-      options.setgid = lib.mkOption {
+      setgid = {
         type = lib.types.bool;
         default = false;
         description = "Whether to add the setgid bit the wrapper program.";
       };
-    }
-  );
+    };
+    finalise =
+      { name, ... }:
+      {
+        program = lib.mkOptionDefault name;
+      };
+  };
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
