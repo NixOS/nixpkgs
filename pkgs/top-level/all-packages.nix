@@ -1622,8 +1622,6 @@ with pkgs;
   bogofilter-sqlite = bogofilter.override { database = sqlite; };
   bogofilter-db = bogofilter.override { database = db; };
 
-  boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
-
   bozohttpd-minimal = bozohttpd.override { minimal = true; };
 
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
