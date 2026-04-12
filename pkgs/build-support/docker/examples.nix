@@ -803,6 +803,10 @@ rec {
           }
         )
       );
+      etcCmd = pkgs.writeScript "etc-cmd" ''
+        #!${pkgs.busybox}/bin/sh
+        ${pkgs.busybox}/bin/cat /etc/some-config-file
+      '';
     in
     pkgs.dockerTools.streamLayeredImage {
       name = "etc";
@@ -812,10 +816,7 @@ rec {
         mkdir -p /etc
         ${nixosCore.config.system.build.etcActivationCommands}
       '';
-      config.Cmd = pkgs.writeScript "etc-cmd" ''
-        #!${pkgs.busybox}/bin/sh
-        ${pkgs.busybox}/bin/cat /etc/some-config-file
-      '';
+      config.Cmd = [ etcCmd ];
     };
 
   # Example export of the bash image
