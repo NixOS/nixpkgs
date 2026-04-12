@@ -487,6 +487,7 @@ dont-distribute-packages:
  - cmptype
  - cmv
  - cnc-spec-compiler
+ - co-feldspar
  - Coadjute
  - cobot-io
  - codec
@@ -884,6 +885,7 @@ dont-distribute-packages:
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
+ - eventsourcing-postgresql
  - eventuo11y-batteries
  - eventuo11y-json
  - eventuo11y-otel
@@ -987,6 +989,7 @@ dont-distribute-packages:
  - fluid-idl-scotty
  - FM-SBLEX
  - fmt-for-rio
+ - fnotation
  - foldl-transduce-attoparsec
  - follower
  - fontwhich
@@ -1766,6 +1769,7 @@ dont-distribute-packages:
  - iException
  - ige-mac-integration
  - igrf
+ - ihaskell-inline-r
  - ihaskell-rlangqq
  - ihaskell-symtegration
  - ihp
@@ -2691,6 +2695,7 @@ dont-distribute-packages:
  - postgresql-common-persistent
  - postgresql-pure
  - postgresql-simple-ltree
+ - postgresql-simple-postgresql-types
  - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
@@ -2840,6 +2845,7 @@ dont-distribute-packages:
  - rasa-ext-views
  - rasa-ext-vim
  - rascal
+ - raw-feldspar
  - razom-text-util
  - rbr
  - rc
@@ -3161,6 +3167,7 @@ dont-distribute-packages:
  - si-clock
  - sibe
  - sigma-ij
+ - signals
  - signify-hs
  - silvi
  - simgi
