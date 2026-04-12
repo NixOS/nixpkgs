@@ -2,10 +2,12 @@
   stdenvNoCC,
   lib,
   lndir,
+  lomiri-notes-app,
   lomiri-online-accounts-unwrapped,
   lomiri-online-accounts-plugins,
   wrapQtAppsHook,
   accountsSsoPackages ? [
+    lomiri-notes-app
     lomiri-online-accounts-plugins
   ],
 }:
