@@ -39,10 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     libtasn1
-    # TODO use lib.optional instead of setting packages to null
-    (if usePam then pam else null)
-    (if useLibidn then libidn else null)
-    (if useGnutls then gnutls else null)
+  ]
+  ++ lib.optionals usePam [
+    pam
+  ]
+  ++ lib.optionals useLibidn [
+    libidn
+  ]
+  ++ lib.optionals useGnutls [
+    gnutls
   ];
 
   configureFlags = [
