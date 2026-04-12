@@ -3,9 +3,8 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
   lib,
-  qttools,
+  qt5,
   fribidi,
   libunibreak,
   zstd,
@@ -18,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "buggins";
     repo = "coolreader";
-    rev = "cr${finalAttrs.version}";
-    sha256 = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
+    tag = "cr${finalAttrs.version}";
+    hash = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
   };
 
   patches = [ ./cmake_policy_version_3_5.patch ];
@@ -27,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qttools
+    qt5.qttools
     fribidi
     libunibreak
     zstd

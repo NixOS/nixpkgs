@@ -1249,8 +1249,6 @@ with pkgs;
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
-  firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
-
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
@@ -1493,8 +1491,6 @@ with pkgs;
 
   coconut = with python312Packages; toPythonApplication coconut;
 
-  coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
-
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   inherit (cue) writeCueValidator;
@@ -1622,8 +1618,6 @@ with pkgs;
   bogofilter-sqlite = bogofilter.override { database = sqlite; };
   bogofilter-db = bogofilter.override { database = db; };
 
-  boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
-
   bozohttpd-minimal = bozohttpd.override { minimal = true; };
 
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
@@ -1684,13 +1678,9 @@ with pkgs;
 
   csv2md = with python3Packages; toPythonApplication csv2md;
 
-  csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
-
   dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
 
   datasette = with python3Packages; toPythonApplication datasette;
-
-  datovka = libsForQt5.callPackage ../applications/networking/datovka { };
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
@@ -2228,8 +2218,6 @@ with pkgs;
   };
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
-
-  engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
   rocmPackages = recurseIntoAttrs (callPackage ../development/rocm-modules { });
 

@@ -514,51 +514,51 @@
       "dependency": "transitive",
       "description": {
         "name": "serverpod_client",
-        "sha256": "bb927f4880cfb982c198426818d09cd3b07830f6232e25169dfc0ab443fc83a7",
+        "sha256": "3b6c6b2d0acc064df75225436f9bdf97f9af17547b58024b231e44195e1f7f2a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.5"
+      "version": "3.4.6"
     },
     "serverpod_lints": {
       "dependency": "direct dev",
       "description": {
         "name": "serverpod_lints",
-        "sha256": "04ce1b4023c12499351b7945884ee5dce69ebe8edd7f5787673a53ef941b976f",
+        "sha256": "f033e4234d74558150cc683db4065fedb5a14d9452353155cf593d98ef59d85e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.5"
+      "version": "3.4.6"
     },
     "serverpod_serialization": {
       "dependency": "direct main",
       "description": {
         "name": "serverpod_serialization",
-        "sha256": "be8f84c9409bafe35d1ab65abeaa5c2f7d92116155059e489366c7fdedcca55f",
+        "sha256": "8e6a5421c0ecea309938b76a20228a421d8b3f96bb3e9c227be1ccac1fe0fb33",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.5"
+      "version": "3.4.6"
     },
     "serverpod_service_client": {
       "dependency": "direct main",
       "description": {
         "name": "serverpod_service_client",
-        "sha256": "beb5f12f095b880bd12676648fd6733c9c3afbaa922aa4f1364d4e97b4b4b664",
+        "sha256": "2934809a7205cf3d4990adccb2966a8bcf42024304adb908bf9e527236ca51c7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.5"
+      "version": "3.4.6"
     },
     "serverpod_shared": {
       "dependency": "direct main",
       "description": {
         "name": "serverpod_shared",
-        "sha256": "de25d8bfe73f43544f120ae7584fefe37d47f713bf98d2af4a784d89cccadc2d",
+        "sha256": "27b807dc27a41c10ddf57fd977fcc22245b6d46b8f24190efaf7260c270b860a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.5"
+      "version": "3.4.6"
     },
     "shelf": {
       "dependency": "transitive",

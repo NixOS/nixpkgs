@@ -63,6 +63,11 @@
   }
  },
  "https://repo.maven.apache.org/maven2": {
+  "at/yawk/lz4#lz4-java/1.10.2": {
+   "jar": "sha256-JS2r1YbSIUmjFmGor8GlB0dxTrGimL1KbngMjJGhOGY=",
+   "module": "sha256-LYLf2sMRuwSqec4UpQGJCvdAbJyj6CQHMidx1/QaXrQ=",
+   "pom": "sha256-7o1bwxjqVI5VT8I/gm1Fooq5AEpGqZ4dkaZIQxuHcAc="
+  },
   "com/github/javaparser#javaparser-core/3.14.14": {
    "jar": "sha256-Z4GYXisXFCvQfhp75Zt5NIXLAms3ZnN30WYQrpgUi24=",
    "pom": "sha256-70ERyN/Uh+Zp5w1Qzz2z8O3YuTLKvjXmYzuzzuuGpIo="
@@ -305,10 +310,6 @@
    "jar": "sha256-N99anNbbwfdUuitG+WuIdKg2YOF5a/OMc48CLc+Gwj8=",
    "module": "sha256-S2knc2Ouooq1DFpnYZ++q/jAgk5JOOYmC6wEjlvrga8=",
    "pom": "sha256-dmAvWZVKo9+mjjHIDKibb7ouoAG0+wbLUfoV6tfIWjA="
-  },
-  "org/lz4#lz4-java/1.8.0": {
-   "jar": "sha256-10ozNPs1GVAJszipUfkYID1rvKPR01kDPcM+3Rytye8=",
-   "pom": "sha256-DbittR4TJFSlxAbeuy8aDfgfk91Z++IMuUcQKZRokDQ="
   },
   "org/opentest4j#opentest4j/1.2.0": {
    "jar": "sha256-WIEt5giY2Xb7ge87YtoFxmBMGP1KJJ9QRCgkefwoavI=",

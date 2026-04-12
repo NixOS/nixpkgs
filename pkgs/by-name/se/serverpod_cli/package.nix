@@ -8,14 +8,14 @@
 }:
 buildDartApplication rec {
   pname = "serverpod_cli";
-  version = "3.4.5";
+  version = "3.4.6";
 
   # Fetch the whole monorepo
   src = fetchFromGitHub {
     owner = "serverpod";
     repo = "serverpod";
     tag = version;
-    hash = "sha256-hxZ5s4VZWFyNdhVpBU/SZyFYuB6Xh4YBYzE9amduOTo=";
+    hash = "sha256-VWwyCNBc3AZ+RvDWVOneazNtbm2DUJCfc5VZNmLQUBg=";
   };
 
   sourceRoot = "${src.name}/tools/serverpod_cli";
