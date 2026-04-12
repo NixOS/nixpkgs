@@ -21,6 +21,7 @@
   pkg-config,
   python3,
   nixosTests,
+  versionCheckHook,
 
   # Pacemaker is compiled twice, once with forOCF = true to extract its
   # OCF definitions for use in the ocf-resource-agents derivation, then
@@ -101,6 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out$out/* $out
     rm -r $out/nix
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = [ "${placeholder "out"}/sbin/pacemakerd" ];
+  versionCheckProgramArg = "--version";
 
   passthru.tests = {
     inherit (nixosTests) pacemaker;
