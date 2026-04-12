@@ -1684,8 +1684,6 @@ with pkgs;
 
   csv2md = with python3Packages; toPythonApplication csv2md;
 
-  csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
-
   dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
 
   datasette = with python3Packages; toPythonApplication datasette;
