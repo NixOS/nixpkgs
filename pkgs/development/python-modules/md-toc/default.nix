@@ -1,5 +1,6 @@
 {
   lib,
+  atheris,
   buildPythonPackage,
   fetchFromGitHub,
   fpyutils,
@@ -22,7 +23,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  dependencies = [ fpyutils ];
+  dependencies = [
+    atheris
+    fpyutils
+  ];
 
   nativeCheckInputs = [
     pyfakefs
