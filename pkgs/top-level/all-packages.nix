@@ -9051,23 +9051,6 @@ with pkgs;
     static = true;
   };
 
-  noto-fonts-lgc-plus = callPackage ../by-name/no/noto-fonts/package.nix {
-    suffix = "-lgc-plus";
-    variants = [
-      "Noto Sans"
-      "Noto Serif"
-      "Noto Sans Mono"
-      "Noto Music"
-      "Noto Sans Symbols"
-      "Noto Sans Symbols 2"
-      "Noto Sans Math"
-    ];
-    longDescription = ''
-      This package provides the Noto Fonts, but only for latin, greek
-      and cyrillic scripts, as well as some extra fonts.
-    '';
-  };
-
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
