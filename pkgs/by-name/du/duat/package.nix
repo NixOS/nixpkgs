@@ -1,14 +1,14 @@
 {
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
   cargo,
   cc ? targetPackages.stdenv.cc,
+  fetchFromGitHub,
+  lib,
+  makeBinaryWrapper,
+  nix-update-script,
+  rustPlatform,
   rustc,
   targetPackages,
-  makeBinaryWrapper,
   versionCheckHook,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
