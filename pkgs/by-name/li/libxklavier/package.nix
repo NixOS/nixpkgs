@@ -20,14 +20,14 @@
   withDoc ? (stdenv.buildPlatform == stdenv.hostPlatform),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxklavier";
   version = "5.4";
 
   src = fetchgit {
     url = "https://gitlab.freedesktop.org/archived-projects/libxklavier.git";
-    rev = "${pname}-${version}";
-    sha256 = "1w1x5mrgly2ldiw3q2r6y620zgd89gk7n90ja46775lhaswxzv7a";
+    tag = "libxklavier-${finalAttrs.version}";
+    hash = "sha256-6uzfuVaQlnMMURIke+ZLqL0PhPEmCzx4bFR4+nItPfA=";
   };
 
   patches = [
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})
