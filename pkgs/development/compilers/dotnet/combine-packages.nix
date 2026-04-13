@@ -38,11 +38,18 @@ mkWrapper "sdk" (
     postBuild = ''
       mkdir -p "$out"/bin "$out"/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
-      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
-      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+      cp "${cli}"/share/dotnet/dotnet "$out"/share/dotnet
+      # dotnet won't run if it's renamed, so we can't wrap it in-place
+      makeWrapper "$out"/share/dotnet/dotnet "$out"/share/dotnet/.dotnet-wrapper \
+        --set-default DOTNET_HOST_PATH "$out"/share/dotnet/dotnet
+      # the wrapper itself can't be in $out/bin, because things follow symlinks
+      # to find DOTNET_ROOT
+      ln -s "$out"/share/dotnet/.dotnet-wrapper "$out"/bin/dotnet
       if [[ -e "${cli}"/share/dotnet/dnx ]]; then
-        cp "${cli}"/share/dotnet/dnx $out/share/dotnet
-        ln -s "$out"/share/dotnet/dnx "$out"/bin/dnx
+        cp "${cli}"/share/dotnet/dnx "$out"/share/dotnet
+        makeWrapper "$out"/share/dotnet/dnx "$out"/share/dotnet/.dnx-wrapper \
+          --set-default DOTNET_HOST_PATH "$out"/share/dotnet/dotnet
+        ln -s "$out"/share/dotnet/.dnx-wrapper "$out"/bin/dnx
       fi
     ''
     + lib.optionalString (cli ? man) ''
