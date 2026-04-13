@@ -247,7 +247,24 @@ Common failure modes and how to handle them:
 
 Do not "fix" a build by deleting our patch or reverting our commit — that defeats the purpose of the fork. If a patch is genuinely obsolete (upstream merged it), confirm by reading upstream, then remove the patch and note it in the commit message.
 
-## 6. Report
+## 6. Run NixOS tests
+
+After all packages build, run the NixOS integration tests for packages that have them. Check `nixos/tests/all-tests.nix` for test attributes that match the package names from `xzar.sh`.
+
+For each matching test, run it:
+
+```bash
+NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_INSECURE=1 nix-build -A nixosTests.<test-name> --out-link /tmp/result-test-<test-name>
+```
+
+Known tests to look for (re-derive from `all-tests.nix` each run):
+- `openclaw` — tests openclaw gateway + ollama with a pre-fetched qwen3 model
+- `ollama` — tests ollama service
+- `ollama-cuda`, `ollama-rocm`, `ollama-vulkan` — GPU-variant tests (Linux only)
+
+If a test fails, investigate and fix the issue (module config, missing dependency, test script bug, etc.) before proceeding. Every test must pass.
+
+## 7. Report
 
 When all packages build, summarise to the user:
 - which conflicts you resolved and how (one line each),
@@ -255,6 +272,7 @@ When all packages build, summarise to the user:
 - which packages were skipped for version updates and why (e.g. fork pin, already latest, update broke build),
 - which patches you had to rebase,
 - any package whose fix was non-trivial,
-- for each updated package: the worktree path (`/tmp/wt-<pkg-name>`), the branch name (`<pkg-name>-<version>`), and the remote it was pushed to (`git@github.com:mkg20001/nixpkgs`).
+- for each updated package: the worktree path (`/tmp/wt-<pkg-name>`), the branch name (`<pkg-name>-<version>`), and the remote it was pushed to (`git@github.com:mkg20001/nixpkgs`),
+- which NixOS tests were run and their pass/fail status.
 
 Then stop. Pushing and running `xzar.sh` for real is the user's call.
