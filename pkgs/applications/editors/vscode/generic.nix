@@ -346,13 +346,10 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
-    preFixup = ''
+    preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
       gappsWrapperArgs+=(
-          ${
-            # we cannot use runtimeDependencies otherwise libdbusmenu do not work on kde
-            lib.optionalString stdenv.hostPlatform.isLinux
-              "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
-          }
+          # we cannot use runtimeDependencies otherwise libdbusmenu do not work on kde
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}
         --prefix PATH : ${
           lib.makeBinPath [
             # for moving files to trash
