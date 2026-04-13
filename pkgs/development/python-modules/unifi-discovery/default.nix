@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unifi-discovery";
   version = "1.4.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "unifi-discovery";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pn8WRsYGbBy4EwQ1DufY2WbbVM65dM4h8ZReG+qkr6k=";
   };
 
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module to discover Unifi devices";
     homepage = "https://github.com/bdraco/unifi-discovery";
-    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-}
+})
