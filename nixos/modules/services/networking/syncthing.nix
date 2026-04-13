@@ -73,6 +73,21 @@ let
 
   jq = "${pkgs.jq}/bin/jq";
   grep = lib.getExe pkgs.gnugrep;
+
+  execStart =
+    let
+      args = lib.escapeShellArgs (
+        (lib.cli.toCommandLineGNU { } {
+          "no-browser" = true;
+          "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+          "config" = cfg.configDir;
+          "data" = cfg.databaseDir;
+        })
+        ++ cfg.extraFlags
+      );
+    in
+    "${lib.getExe cfg.package} ${args}";
+
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
     ''
       set -efu
@@ -996,19 +1011,7 @@ in
                   install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart =
-            let
-              args = lib.escapeShellArgs (
-                (lib.cli.toCommandLineGNU { } {
-                  "no-browser" = true;
-                  "gui-address" = cfg.guiAddress;
-                  "config" = cfg.configDir;
-                  "data" = cfg.databaseDir;
-                })
-                ++ cfg.extraFlags
-              );
-            in
-            "${lib.getExe cfg.package} ${args}";
+          ExecStart = execStart;
           RuntimeDirectory = "syncthing";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
@@ -1048,6 +1051,13 @@ in
           ExecStart = updateConfig;
         };
       };
+    };
+
+    # When systemService = false, systemd.packages installs the upstream package
+    # unit into /etc/systemd/user/. That unit has no --config/--data/--gui-address
+    # flags. Override ExecStart here so the NixOS-evaluated paths are used.
+    systemd.user.services.syncthing = mkIf (!cfg.systemService) {
+      serviceConfig.ExecStart = [ "" execStart ];
     };
   };
 }
