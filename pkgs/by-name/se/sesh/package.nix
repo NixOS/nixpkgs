@@ -8,7 +8,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "sesh";
-  version = "2.24.2";
+  version = "2.25.0";
 
   nativeBuildInputs = [
     go-mockery
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "joshmedeski";
     repo = "sesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iisAIn4km/uFw2DohA2mjoYmKgDQ3lYUH284Le3xQD0=";
+    hash = "sha256-azs1tf9eR4MVSdjMdd3U/xdPAANn1Kyamf0TwFrBSTU=";
   };
 
   # NOTE: prevent crash when getting vendor deps/hash
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     mockery
   '';
 
-  vendorHash = "sha256-WHMQ7O5EZ43biR7HxjO9gUq8skFPCZVOx47NIPp5iSE=";
+  vendorHash = "sha256-9IiDp/HaxXQAyNzuVBLiO+oIijBbdKBjssCmj8WV9V4=";
 
   ldflags = [
     "-s"
