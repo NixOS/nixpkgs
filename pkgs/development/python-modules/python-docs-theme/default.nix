@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
-  version = "2025.12";
+  version = "2026.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "python-docs-theme";
     tag = version;
-    hash = "sha256-isKfYgakIsPdMSATx9tjjb+U8oERN560NkBDkbt9AeM=";
+    hash = "sha256-auwfRSjFvAKvKnkKH8iPwvyQ5AcmOKCOusNm79J2k6Q=";
   };
 
   build-system = [ flit-core ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx theme for CPython project";
     homepage = "https://github.com/python/python-docs-theme";
-    changelog = "https://github.com/python/python-docs-theme/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/python/python-docs-theme/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ kaction ];
   };
