@@ -24,9 +24,11 @@ from typing import Any
 
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
-
-from .ocr import perform_ocr_on_screenshot, perform_ocr_variants_on_screenshot
-from .qmp import QMPSession
+from test_driver.machine.ocr import (
+    perform_ocr_on_screenshot,
+    perform_ocr_variants_on_screenshot,
+)
+from test_driver.machine.qmp import QMPSession
 
 CHAR_TO_KEY = {
     "A": "shift-a",

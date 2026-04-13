@@ -418,7 +418,7 @@ class Driver:
             def __enter__(self) -> None:
                 driver.polling_conditions.append(self.condition)
 
-            def __exit__(self, a, b, c) -> None:  # type: ignore
+            def __exit__(self, a, b, c) -> None:
                 res = driver.polling_conditions.pop()
                 assert res is self.condition
 
