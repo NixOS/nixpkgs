@@ -6,7 +6,14 @@
   perlPackages,
   gettext,
   makeWrapper,
-  ImageMagick,
+  pkgs,
+  ImageMagick ?
+    (perlPackages.override {
+      pkgs = pkgs // {
+        imagemagick = imagemagickBig;
+      };
+    }).ImageMagick,
+  imagemagickBig,
   which,
   highlight,
   gitSupport ? false,

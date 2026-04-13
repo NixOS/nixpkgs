@@ -9674,55 +9674,9 @@ with pkgs;
 
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
-  ikiwiki = callPackage ../applications/misc/ikiwiki {
-    inherit
-      (perlPackages.override {
-        pkgs = pkgs // {
-          imagemagick = imagemagickBig;
-        };
-      })
-      ImageMagick
-      ;
-  };
-
-  ikiwiki-full = ikiwiki.override {
-    bazaarSupport = false; # tests broken
-    cvsSupport = true;
-    docutilsSupport = true;
-    gitSupport = true;
-    mercurialSupport = true;
-    monotoneSupport = true;
-    subversionSupport = true;
-  };
-
   avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
-
-  imagemagick_light = lowPrio (
-    imagemagick.override {
-      bzip2Support = false;
-      zlibSupport = false;
-      libX11Support = false;
-      libXtSupport = false;
-      fontconfigSupport = false;
-      freetypeSupport = false;
-      libraqmSupport = false;
-      libjpegSupport = false;
-      djvulibreSupport = false;
-      lcms2Support = false;
-      openexrSupport = false;
-      libjxlSupport = false;
-      libpngSupport = false;
-      liblqr1Support = false;
-      librsvgSupport = false;
-      libtiffSupport = false;
-      libxml2Support = false;
-      openjpegSupport = false;
-      libwebpSupport = false;
-      libheifSupport = false;
-    }
-  );
 
   imagemagickBig = lowPrio (
     imagemagick.override {
