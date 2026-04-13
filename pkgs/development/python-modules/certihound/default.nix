@@ -8,6 +8,7 @@
   pydantic,
   click,
   rich,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ERJ5fbYikhKLwchSIBe5s4KF/1HsXZ1O00QnYXAe+ps=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     ldap3
