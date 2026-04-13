@@ -238,6 +238,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
+    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
