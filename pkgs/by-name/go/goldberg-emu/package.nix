@@ -3,9 +3,11 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  protobuf,
+  protobuf_21,
 }:
-
+let
+  protobuf = protobuf_21;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldberg-emu";
   version = "0.2.5";
@@ -13,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "mr_goldberg";
     repo = "goldberg_emulator";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
   };
 
