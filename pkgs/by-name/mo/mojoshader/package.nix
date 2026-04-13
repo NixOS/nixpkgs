@@ -40,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     fakeGit # https://github.com/icculus/mojoshader/blob/abdc80360c1d4560ab8f356035dcd53ae6e9b87f/CMakeLists.txt#L41-L68
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-I${dxvk_2}/include/dxvk";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    NIX_CFLAGS_COMPILE = "-I${dxvk_2}/include/dxvk";
+  };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
