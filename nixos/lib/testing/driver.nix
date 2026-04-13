@@ -119,6 +119,7 @@ let
           --set testScript "$out/test-script" \
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
+          --set logLevel "${config.logLevel}" \
           ${lib.escapeShellArgs (
             lib.concatMap (arg: [
               "--add-flags"
@@ -218,6 +219,17 @@ in
 
         This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#test-opt-testScript).
       '';
+    };
+
+    logLevel = mkOption {
+      description = "Log level for the test driver.";
+      type = types.enum [
+        "info"
+        "warning"
+        "error"
+      ];
+      default = "info";
+      example = "warning";
     };
   };
 
