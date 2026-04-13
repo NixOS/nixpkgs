@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     # https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.3.0 below "Requirement changes".
     "-DGEN_FILES=off"
   ]
-  ++ lib.optionals stdenv.cc.isGNU [
+  ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "15.0") [
     # mbedtls widely uses a pattern of starting unions with an
     # unsigned int dummy member, and then initializing those unions to
     # { 0 }.  The problem with this is that it only initializes that
