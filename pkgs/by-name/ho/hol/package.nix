@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  pkgs,
+  polyml,
   fetchurl,
   graphviz,
   fontconfig,
@@ -17,12 +17,6 @@ let
   longVersion = "kananaskis-${vnum}";
   holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
-
-  polymlEnableShared =
-    with pkgs;
-    lib.overrideDerivation polyml (attrs: {
-      configureFlags = [ "--enable-shared" ];
-    });
 in
 
 stdenv.mkDerivation {
@@ -34,7 +28,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    polymlEnableShared
+    polyml
     graphviz
     fontconfig
     liberation_ttf
