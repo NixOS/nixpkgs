@@ -43,19 +43,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
-    description = "An elegant, pill-shaped music player for your desktop. Features a smooth audio visualizer, scrolling text, and seamless integration with Dash-to-Dock and the Top Panel.";
-    longDescription = "An elegant, pill-shaped music player for your desktop. Features a smooth audio visualizer, scrolling text, and seamless integration with Dash-to-Dock and the Top Panel.";
-    homepage = "https://github.com/Andbal23/dynamic-music-pill";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-  };
-
   passthru = {
     extensionPortalSlug = "dynamic-music-pill";
     extensionUuid = "dynamic-music-pill@andbal";
     tests = {
       gnome-extensions = nixosTests.gnome-extensions;
     };
+  };
+
+  meta = {
+    description = "An elegant, pill-shaped music player for your desktop. Features a smooth audio visualizer, scrolling text, and seamless integration with Dash-to-Dock and the Top Panel.";
+    longDescription = "An elegant, pill-shaped music player for your desktop. Features a smooth audio visualizer, scrolling text, and seamless integration with Dash-to-Dock and the Top Panel.";
+    homepage = "https://github.com/Andbal23/dynamic-music-pill";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }
