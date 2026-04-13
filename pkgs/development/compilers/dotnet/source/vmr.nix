@@ -149,6 +149,7 @@ stdenv.mkDerivation {
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
     ]
+    ++ lib.optional (lib.versionAtLeast version "10") ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
     ++ lib.optionals (lib.versionAtLeast version "11") (
       [
         ./fix-skiperroronprebuilts.patch
