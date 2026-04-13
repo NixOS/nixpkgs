@@ -28,8 +28,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  # tests are flaky
-  doCheck = false;
+  __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
