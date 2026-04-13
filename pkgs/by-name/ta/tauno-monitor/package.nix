@@ -10,6 +10,7 @@
   gobject-introspection,
   wrapGAppsHook4,
   libadwaita,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tauno-monitor";
@@ -45,6 +46,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dontWrapGApps = true;
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple serial port monitor";
