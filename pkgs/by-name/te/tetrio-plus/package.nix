@@ -13,19 +13,19 @@
 }:
 
 let
-  version = "0.27.7";
+  version = "0.28.1";
   tag = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
     inherit tag;
-    hash = "sha256-AEn1TrC0hUVRgfL2QZ5TMN8pTOm36zpHr2b/LqQp5RY=";
+    hash = "sha256-+yOqHH/RtzjVKHVpVsw2RhECMskCyAyWnjBJNslbGaw=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/resources/desktop-ci/yarn.lock";
-    hash = "sha256-LfUC2bkUX+sFq3vMMOC1YVYbpDxUSnLO9GiKdoQBdAw=";
+    hash = "sha256-ZU4ObEpJwnC71V5IemG5XWNbX/xvlWdKsXulus7ec5A=";
   };
 
 in
@@ -106,6 +106,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ huantian ];
     platforms = lib.platforms.linux;
-    broken = true; # not yet updated for tetrio-desktop v10
   };
 })
