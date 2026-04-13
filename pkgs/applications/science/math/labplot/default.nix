@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
       lgpl3Plus
       mit
     ];
-    maintainers = with lib.maintainers; [ hqurve ];
+    maintainers = [ ];
     mainProgram = "labplot2";
     platforms = lib.platforms.unix;
   };

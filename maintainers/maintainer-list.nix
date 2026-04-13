@@ -5685,6 +5685,11 @@
     name = "Serg Nesterov";
     keys = [ { fingerprint = "6E7D BA30 DB5D BA60 693C  3BE3 1512 F6EB 84AE CC8C"; } ];
   };
+  cvengler = {
+    name = "Clara Engler";
+    github = "cvengler";
+    githubId = 12272949;
+  };
   cwoac = {
     email = "oliver@codersoffortune.net";
     github = "cwoac";
@@ -10897,12 +10902,6 @@
     github = "hpfr";
     githubId = 44043764;
     name = "Liam Hupfer";
-  };
-  hqurve = {
-    email = "hqurve@outlook.com";
-    github = "hqurve";
-    githubId = 53281855;
-    name = "hqurve";
   };
   hraban = {
     email = "hraban@0brg.net";

@@ -876,6 +876,21 @@ in
       serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
       overrideStrategy = "asDropin";
     };
+
+    # Fix paths in sshd-vsock.socket
+    # https://github.com/systemd/systemd/blob/v259.3/src/ssh-generator/ssh-generator.c#L239
+    # this socket is used, for example, when NixOS is started via systemd-vmspawn
+    systemd.sockets.sshd-vsock = mkIf config.services.openssh.enable {
+      overrideStrategy = "asDropin";
+      socketConfig.ExecStartPost = [
+        ""
+        "${config.systemd.package}/lib/systemd/systemd-ssh-issue --make-vsock"
+      ];
+      socketConfig.ExecStopPre = [
+        ""
+        "${config.systemd.package}/lib/systemd/systemd-ssh-issue --rm-vsock"
+      ];
+    };
   };
 
   # FIXME: Remove these eventually.

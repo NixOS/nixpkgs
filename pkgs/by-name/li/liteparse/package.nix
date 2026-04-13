@@ -10,13 +10,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "liteparse";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "liteparse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UHZaKWjzaoYbD2NHwNgvlpPfviD66zPQ6d0UWW/lrmk=";
+    hash = "sha256-GUtqJsmAOrbxLc/aAIre95QD6aaFsj5ClqZfo7jdwB4=";
   };
 
   npmDepsHash = "sha256-Wz46n7BbubC3Cq1CHOHM2q/dVOvOVNQTloHZfkAwzpg=";

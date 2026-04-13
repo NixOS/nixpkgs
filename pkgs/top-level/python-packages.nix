@@ -3160,6 +3160,8 @@ self: super: with self; {
 
   connect-box = callPackage ../development/python-modules/connect-box { };
 
+  connect-box3 = callPackage ../development/python-modules/connect-box3 { };
+
   connected-components-3d = callPackage ../development/python-modules/connected-components-3d { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
@@ -7105,6 +7107,8 @@ self: super: with self; {
   home-assistant-chip-wheels = toPythonModule (
     callPackage ../development/python-modules/home-assistant-chip-wheels { }
   );
+
+  home-assistant-datasets = callPackage ../development/python-modules/home-assistant-datasets { };
 
   home-connect-async = callPackage ../development/python-modules/home-connect-async { };
 
@@ -18907,6 +18911,8 @@ self: super: with self; {
   synergy = callPackage ../development/python-modules/synergy { };
 
   synology-srm = callPackage ../development/python-modules/synology-srm { };
+
+  synthetic-home = callPackage ../development/python-modules/synthetic-home { };
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 

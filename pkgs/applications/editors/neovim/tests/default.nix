@@ -12,7 +12,6 @@
   writeText,
   neovim,
   vimPlugins,
-  neovimUtils,
   wrapNeovimUnstable,
   neovim-unwrapped,
   fetchFromGitLab,
@@ -21,13 +20,19 @@
   pkgs,
 }:
 let
-  inherit (neovimUtils) makeNeovimConfig;
-
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
       config = ''
         map <Leader>$ <Cmd>Obsession<CR>
+      '';
+    }
+    {
+      plugin = vim-obsession;
+      type = "lua";
+      config = ''
+        -- this is a comment
+        vim.g.nixpkgs_test_value = 42
       '';
     }
   ];
@@ -42,20 +47,6 @@ let
       config = ''" placeholder config'';
     }
   ];
-
-  nvimConfSingleLines = {
-    plugins = packagesWithSingleLineConfigs;
-    neovimRcContent = ''
-      " just a comment
-    '';
-  };
-
-  nvimConfNix = {
-    inherit plugins;
-    neovimRcContent = ''
-      " just a comment
-    '';
-  };
 
   nvim-with-luasnip = wrapNeovim2 "-with-luasnip" {
     plugins = [
@@ -105,6 +96,7 @@ let
       }
       (
         ''
+          export PATH="${neovim-drv}/bin:$PATH"
           source ${nmt}/bash-lib/assertions.sh
           vimrc="${writeText "test-${neovim-drv.name}-init.vim" neovim-drv.initRc}"
           luarc="${writeText "test-${neovim-drv.name}-init.lua" neovim-drv.luaRcContent}"
@@ -139,8 +131,19 @@ pkgs.lib.recurseIntoAttrs rec {
 
   ### neovim tests
   ##################
-  nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
-  nvim_singlelines = wrapNeovim2 "-single-lines" nvimConfSingleLines;
+  nvim_with_plugins = wrapNeovim2 "-with-plugins" {
+    inherit plugins;
+    neovimRcContent = ''
+      " just a comment
+    '';
+  };
+
+  nvim_singlelines = wrapNeovim2 "-single-lines" {
+    plugins = packagesWithSingleLineConfigs;
+    neovimRcContent = ''
+      " just a comment
+    '';
+  };
 
   # test that passthru.initRc hasn't changed
   passthruInitRc = runTest nvim_singlelines ''
@@ -413,12 +416,19 @@ pkgs.lib.recurseIntoAttrs rec {
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps = runTest nvim-with-luasnip ''
-    ${nvim-with-luasnip}/bin/nvim -i NONE -c "lua require'jsregexp'" -e +quitall!
+    nvim --headless -i NONE -c "lua require'jsregexp'" -e +quitall!
   '';
 
   inherit nvim_with_rocks_nvim;
   rocks_install_plenary = runTest nvim_with_rocks_nvim ''
-    ${nvim_with_rocks_nvim}/bin/nvim -V3log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
+    nvim -V3rocks-log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
+  '';
+
+  can_load_lua_config = runTest nvim_with_plugins ''
+    if ! nvim --headless -V3lua-config-log.txt -i NONE -c 'lua if vim.g.nixpkgs_test_value ~= 42 then os.exit(42) end' +quit! -e; then
+      echo "Failed to find plugin config"
+      exit 1
+    fi
   '';
 
   inherit (vimPlugins) corePlugins;

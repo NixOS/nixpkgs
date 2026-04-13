@@ -27,6 +27,8 @@ buildGoModule (finalAttrs: {
     "-X github.com/0xjuanma/golazo/cmd.Version=v${finalAttrs.version}"
   ];
 
+  __structuredAttrs = true;
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };

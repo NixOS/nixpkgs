@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lupa";
-  version = "2.6";
+  version = "2.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mncKbolXa+NEdmjXztMSzW/UHTwTwkYsncLCq1cORdk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-c6ZM5dyM2Vt1ozDBUT5G4JjUD87tP+pRbAn2WV6t6Ik=";
   };
 
   build-system = [
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lua in Python";
     homepage = "https://github.com/scoder/lupa";
-    changelog = "https://github.com/scoder/lupa/blob/lupa-${version}/CHANGES.rst";
+    changelog = "https://github.com/scoder/lupa/blob/lupa-${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

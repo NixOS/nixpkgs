@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.7.13";
+  version = "0.8.5";
 
   src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jKK8wc+M5U8L7D4z8aQT/VJdZE1q2Z2BTRrtw+UWoeo=";
+    hash = "sha256-rI4cikbZ+J6SSs5l2WroM6862yDe8IFDqpmAV4Od5ng=";
   };
 
-  cargoHash = "sha256-w9BJ0S6q13udi2JWHtbCCXDjgUYo59/FRjxQGuM5r8c=";
+  cargoHash = "sha256-IQMB5bYvP/1u6FItZ34GYkMBe1fVao5CK2OPGaikIbk=";
 
   env = {
     _DEF_PR_AI_API_KEY = "";

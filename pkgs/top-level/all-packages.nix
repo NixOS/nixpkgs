@@ -8034,15 +8034,15 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
-  dovecot_2_3 = dovecot;
-  dovecot_2_4 = callPackage ../by-name/do/dovecot/2.4.nix {
-    dovecot_pigeonhole = dovecot_pigeonhole_2_4;
+  dovecot_2_3 = callPackage ../by-name/do/dovecot/2.3.nix {
+    dovecot_pigeonhole = dovecot_pigeonhole_0_5;
   };
+  dovecot_2_4 = dovecot;
 
-  dovecot_pigeonhole_0_5 = dovecot_pigeonhole;
-  dovecot_pigeonhole_2_4 = callPackage ../by-name/do/dovecot_pigeonhole/2.4.nix {
-    dovecot = dovecot_2_4;
+  dovecot_pigeonhole_0_5 = callPackage ../by-name/do/dovecot_pigeonhole/0.5.nix {
+    dovecot = dovecot_2_3;
   };
+  dovecot_pigeonhole_2_4 = dovecot_pigeonhole;
 
   inherit (callPackages ../servers/firebird { })
     firebird_4
