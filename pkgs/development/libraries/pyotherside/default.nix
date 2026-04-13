@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace qtquicktests/run \
       --replace-fail \
+        'exec ./qtquicktests' \
+        'exec ./${
+          if stdenv.hostPlatform.isDarwin then
+            "qtquicktests.app/Contents/MacOS/qtquicktests"
+          else
+            "qtquicktests"
+        }' \
+      --replace-fail \
         '-plugins ../src' \
         '-plugins ../src -import $out/${qtbase.qtQmlPrefix} -import ${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}'
   '';
