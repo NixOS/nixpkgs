@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fs-watcher-lsp";
   version = "0.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     version = finalAttrs.version;
     crateName = "fs_watcher_lsp";
