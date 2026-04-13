@@ -4,19 +4,19 @@
   fetchurl,
   autoreconfHook,
   gettext,
-  guileSupport ? false,
+  gnumake,
   guile,
-  texinfo,
+  guileSupport ? false,
   # avoid guile depend on bootstrap to prevent dependency cycles
   inBootstrap ? false,
   pkg-config,
-  gnumake,
+  texinfo,
+  versionCheckHook,
 }:
 
 let
   guileEnabled = guileSupport && !inBootstrap;
 in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.4.1";
@@ -39,18 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
   # directory until derivation realization to avoid unnecessary Nix evaluations.
   patches = lib.filesystem.listFilesRecursive ./patches;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ]
-  ++ lib.optionals (!inBootstrap) [ texinfo ];
+  ++ lib.optionals (!inBootstrap) [ texinfo ]
+  ++ lib.optional stdenv.isCygwin gettext;
 
-  buildInputs =
-    lib.optionals guileEnabled [ guile ]
-    # gettext gets pulled in via autoreconfHook because strictDeps is not set,
-    # and is linked against. Without this, it doesn't end up in HOST_PATH.
-    # TODO: enable strictDeps, and either make this dependency explicit, or remove it
-    ++ lib.optional stdenv.isCygwin gettext;
+  buildInputs = lib.optionals guileEnabled [ guile ];
 
   configureFlags =
     lib.optional guileEnabled "--with-guile"
@@ -69,11 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString (!inBootstrap) ''
-    mkdir -p $doc/share/doc/$pname-$version
-    cp ./make.html $doc/share/doc/$pname-$version/index.html
+    install -Dm644 make.html \
+      --target-directory="$doc"/share/doc/"$pname"-"$version"
   '';
 
   separateDebugInfo = true;
+
+  doCheck = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.tests = {
     # make sure that the override doesn't break bootstrapping
@@ -84,18 +86,19 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
-      other non-source files of a program from the program's source files.
+      other non-source files of a program from the program's source
+      files.
 
       Make gets its knowledge of how to build your program from a file
-      called the makefile, which lists each of the non-source files and
-      how to compute it from other files. When you write a program, you
-      should write a makefile for it, so that it is possible to use Make
-      to build and install the program.
+      called the makefile, which lists each of the non-source files
+      and how to compute it from other files.  When you write a
+      program, you should write a makefile for it, so that it is
+      possible to use Make to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.all;
   };
 })
