@@ -7,11 +7,11 @@
   imagemagick_light,
   ipython,
   junit-xml,
-  mypy,
   ptpython,
   python,
-  ruff,
   remote-pdb,
+  ruff,
+  ty,
 
   netpbm,
   nixosTests,
@@ -72,13 +72,13 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
-    mypy
     ruff
+    ty
   ];
 
   checkPhase = ''
-    echo -e "\x1b[32m## run mypy\x1b[0m"
-    mypy test_driver extract-docstrings.py
+    echo -e "\x1b[32m## run ty\x1b[0m"
+    ty check --error-on-warning test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff check\x1b[0m"
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"
