@@ -37,27 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gnat
   ]
+  ++ lib.optionals (backend == "llvm" || backend == "gcc") [
+    makeWrapper
+  ]
   ++ lib.optionals (backend == "gcc") [
     texinfo
-    makeWrapper
   ];
 
   buildInputs = [
     zlib
   ]
-  ++ lib.optionals (backend == "llvm") [
-    llvm
-  ]
   ++ lib.optionals (backend == "gcc") [
     gmp
     mpfr
     libmpc
-  ];
-
-  propagatedBuildInputs = [
-  ]
-  ++ lib.optionals (backend == "llvm" || backend == "gcc") [
-    zlib
   ];
 
   preConfigure = ''
@@ -99,20 +92,18 @@ stdenv.mkDerivation (finalAttrs: {
       --with-gmp-lib=${gmp.out}/lib \
       --with-mpfr-include=${mpfr.dev}/include \
       --with-mpfr-lib=${mpfr.out}/lib \
-      --with-mpc=${libmpc}
+      --with-mpc=${libmpc} \
+      --enable-default-pie=${if stdenv.targetPlatform.hasSharedLibraries then "yes" else "no"}
     make -j $NIX_BUILD_CORES
     make install
     cd ../
     make -j $NIX_BUILD_CORES ghdllib
   '';
 
-  postFixup = lib.optionalString (backend == "gcc") ''
+  postFixup = lib.optionalString (backend == "llvm" || backend == "gcc") ''
     wrapProgram $out/bin/ghdl \
-      --set LIBRARY_PATH ${
-        lib.makeLibraryPath [
-          stdenv.cc.libc
-        ]
-      }
+      --set LIBRARY_PATH ${lib.makeLibraryPath [ zlib ]} \
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
   '';
 
   hardeningDisable = [
