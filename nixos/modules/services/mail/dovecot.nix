@@ -163,6 +163,11 @@ let
     );
 
   isPre24 = versionOlder cfg.package.version "2.4";
+
+  # HACK: We can not auto-add the default for sieve_script_bin_path unless we have the pigeonhole plugin loaded. Solve this in a better way in the future
+  hasPigeonhole = builtins.any (
+    pkg: pkg.pname or null == "dovecot-pigeonhole"
+  ) config.environment.systemPackages;
 in
 {
   imports = [
@@ -599,9 +604,9 @@ in
               };
 
               sieve_script_bin_path = mkOption {
-                default = if isPre24 then null else "/tmp/dovecot-%{user|username|lower}";
+                default = if isPre24 || !hasPigeonhole then null else "/tmp/dovecot-%{user|username|lower}";
                 defaultText = literalExpression ''
-                  if isPre24
+                  if isPre24 || !hasPigeonhole
                   then null
                   else "/tmp/dovecot-%{user|username|lower}"
                 '';
