@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,6 +25,10 @@ buildGoModule (finalAttrs: {
 
   # Fix tests creating network sockets on macOS
   __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "version" ];
 
   meta = {
     homepage = "https://github.com/peak/s5cmd";
