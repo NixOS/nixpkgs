@@ -1210,6 +1210,7 @@ in
   ollama-cuda = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-cuda.nix;
   ollama-rocm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-rocm.nix;
   ollama-vulkan = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-vulkan.nix;
+  openclaw = runTest ./openclaw.nix;
   ombi = runTest ./ombi.nix;
   omnom = runTest ./omnom;
   oncall = runTest ./web-apps/oncall.nix;

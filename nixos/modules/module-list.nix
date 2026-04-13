@@ -920,6 +920,7 @@
   ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
   ./services/misc/ollama.nix
+  ./services/misc/openclaw.nix
   ./services/misc/ombi.nix
   ./services/misc/omnom.nix
   ./services/misc/open-webui.nix
