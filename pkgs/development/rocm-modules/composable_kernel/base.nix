@@ -11,6 +11,7 @@
   hipify,
   gitMinimal,
   gtest,
+  jemalloc,
   zstd,
   buildTests ? false,
   buildExamples ? false,
@@ -87,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
   env.ROCM_PATH = clr;
+  # Speed up build by ~7% with jemalloc (template torture test workload means allocation heavy clang invocations)
+  env.LD_PRELOAD = "${jemalloc}/lib/libjemalloc.so";
+  env.MALLOC_CONF = "background_thread:true,metadata_thp:auto,dirty_decay_ms:10000,muzzy_decay_ms:10000";
 
   cmakeFlags = [
     (lib.cmakeBool "MIOPEN_REQ_LIBS_ONLY" miOpenReqLibsOnly)

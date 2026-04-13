@@ -11,7 +11,7 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.4.10",
+  version ? "2026.4.11",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -21,10 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uQpIdemz/x0KhknVxO4ZVd3+Gg7J+PCdU0Ycc/cLczM=";
+    hash = "sha256-KDRcjb6nuJ67X7ZImjBgyWyS4YXQlv8OOAkZdZa39Ds=";
   };
 
-  pnpmDepsHash = "sha256-4tisW4TcCXyrFDkQ220cnVWm38L51UnIuDHnx79Eyjc=";
+  pnpmDepsHash = "sha256-fVy4T/JPOX0Ts6/D8pb/2iVxYy/GXJQsdefg84pl4cc=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;

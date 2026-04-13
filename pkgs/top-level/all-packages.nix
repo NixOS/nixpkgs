@@ -375,8 +375,6 @@ with pkgs;
     practiceMod = true;
   };
 
-  chef-cli = callPackage ../tools/misc/chef-cli { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
@@ -1495,8 +1493,6 @@ with pkgs;
 
   inherit (cue) writeCueValidator;
 
-  dazel = python3Packages.callPackage ../development/tools/dazel { };
-
   detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
   deterministic-host-uname = deterministic-uname.override {
@@ -1949,9 +1945,6 @@ with pkgs;
   };
 
   binlore = callPackage ../development/tools/analysis/binlore { };
-
-  birdfont = callPackage ../tools/misc/birdfont { };
-  xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
@@ -3378,8 +3371,6 @@ with pkgs;
   # to match naming of other package repositories
   spire-agent = spire.agent;
   spire-server = spire.server;
-
-  spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
   stirling-pdf-desktop = callPackage ../by-name/st/stirling-pdf/package.nix {
     isDesktopVariant = true;
@@ -6192,8 +6183,6 @@ with pkgs;
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
     ssl_implementation = mbedtls_2;
   };
-
-  cxxtest = python3Packages.callPackage ../development/libraries/cxxtest { };
 
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
