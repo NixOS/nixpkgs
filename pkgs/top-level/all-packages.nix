@@ -9491,12 +9491,6 @@ with pkgs;
     pname = "floorp-bin";
   };
 
-  formiko =
-    with python3Packages;
-    callPackage ../applications/editors/formiko {
-      inherit buildPythonApplication;
-    };
-
   inherit
     ({
       freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
