@@ -21,20 +21,21 @@
   tokenizers,
   torch,
   typing-extensions,
+  xformers,
 }:
 let
   newerThanTuring = lib.filter (version: lib.versionOlder "7.9" version) torch.cudaCapabilities;
 in
 buildPythonPackage (finalAttrs: {
   pname = "exllamav3";
-  version = "0.0.25";
+  version = "0.0.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CltM0bQ3mvQwUYulsVByS7mcIIy6O/P1+nq4h5UAO6E=";
+    hash = "sha256-dUTVG8hpK7O51C1a9pxUMpzTsO/pGaQfo7HUa6YkVOE=";
   };
 
   pythonRelaxDeps = [
@@ -71,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     tokenizers
     torch
     typing-extensions
+    xformers
   ];
 
   env = lib.optionalAttrs torch.cudaSupport {
