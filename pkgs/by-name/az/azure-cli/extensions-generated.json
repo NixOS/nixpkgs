@@ -22,9 +22,9 @@
   },
   "acrtransfer": {
     "pname": "acrtransfer",
-    "version": "1.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/acrtransfer-1.1.0-py3-none-any.whl",
-    "hash": "sha256-ZouU0DQbZjphAhLzGLiZpTvmCuDrWcR+Fi9dq9NINVE=",
+    "version": "1.1.1b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/acrtransfer-1.1.1b1-py3-none-any.whl",
+    "hash": "sha256-9rbBiFCxK0cInu5puF5y2kAYcQ7xFa/X3/va5n5i/J0=",
     "description": "Microsoft Azure Command-Line Tools Acrtransfer Extension"
   },
   "ad": {
