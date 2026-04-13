@@ -148,6 +148,11 @@ let
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+    ''
+    + lib.optionalString (lib.versionAtLeast sdkVersion "10") ''
+      ln -s "$out"/share/dotnet/dnx "$out"/bin/dnx
+    ''
+    + ''
 
       mkdir -p "$artifacts"
       cp -r "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
