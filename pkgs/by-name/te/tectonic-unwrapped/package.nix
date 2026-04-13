@@ -21,6 +21,9 @@
   harfbuzzFull,
   openssl,
   icu,
+
+  # passthru.tests
+  tectonic,
 }:
 
 let
@@ -90,6 +93,10 @@ buildRustPackage (finalAttrs: {
   '';
 
   doCheck = true;
+
+  passthru = {
+    inherit (tectonic.passthru) tests;
+  };
 
   meta = {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
