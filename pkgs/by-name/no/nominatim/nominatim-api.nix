@@ -12,16 +12,16 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nominatim";
-  version = "5.3.0";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
-    tag = "v${version}";
-    hash = "sha256-cICDzsEJ2yRi8PaQpjfVC9ZI3KeQPiqGu4U1nTxxBvk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3WU8n121JbFFZTntcKG6t0x2mC1AzI97q/fMe/UTGTs=";
   };
 
   postPatch = ''
@@ -34,9 +34,7 @@ buildPythonPackage rec {
     cd packaging/nominatim-api
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     async-timeout
@@ -61,4 +59,4 @@ buildPythonPackage rec {
       ngi
     ];
   };
-}
+})
