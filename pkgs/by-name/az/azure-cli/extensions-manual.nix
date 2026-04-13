@@ -359,6 +359,16 @@
     ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
+  workload-orchestration = mkAzExtension {
+    pname = "workload-orchestration";
+    version = "5.1.1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-5.1.1-py3-none-any.whl";
+    hash = "sha256-mtmFRd6K2uOpzgKezdAoBDD7mGFh7blkUGvMqSajdSQ=";
+    description = "Microsoft Azure Command-Line Tools WorkloadOperations Extension";
+    propagatedBuildInputs = with python3Packages; [
+      kubernetes
+    ];
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions

@@ -1147,13 +1147,6 @@
     "hash": "sha256-kIsN8HzvZSF2oPK/D9z1i10W+0kD7jwG9z8Ls5E6XA8=",
     "description": "Additional commands for Azure AppService"
   },
-  "workload-orchestration": {
-    "pname": "workload-orchestration",
-    "version": "5.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-5.1.0-py3-none-any.whl",
-    "hash": "sha256-/9MGhiqQpEUPJ9AgVM0tZ/SQiRdVvOsXVgdnqAtfSMw=",
-    "description": "Microsoft Azure Command-Line Tools WorkloadOperations Extension"
-  },
   "workloads": {
     "pname": "workloads",
     "version": "1.1.0",
