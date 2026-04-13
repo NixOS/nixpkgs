@@ -135,7 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     homepage = "https://peazip.github.io";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ annaaurora ];
+    maintainers = with lib.maintainers; [
+      annaaurora
+      ProxyVT
+    ];
     mainProgram = "peazip";
   };
 })
