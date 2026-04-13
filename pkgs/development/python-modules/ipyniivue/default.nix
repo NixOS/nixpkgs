@@ -7,8 +7,12 @@
   npmHooks,
   hatchling,
   hatch-vcs,
+  hatch-jupyter-builder,
   anywidget,
+  numpy,
+  requests,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -26,8 +30,14 @@ buildPythonPackage rec {
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
     inherit src;
-    hash = "sha256-3IR2d4/i/e1dRlvKN21XnadUfx2lP5SuToQJ9tMhzp4=";
+    hash = "sha256-6TbwAC175mkyR8EThMalWn7qEyaIFDxtKmC/RIuy1dk=";
+    postPatch = ''
+      cp ${./package-lock.json} ./package-lock.json
+    '';
   };
+  postPatch = ''
+    cp ${./package-lock.json} ./package-lock.json
+  '';
 
   # We do not need the build hooks, because we do not need to
   # build any JS components; these are present already in the PyPI artifact.
@@ -45,12 +55,22 @@ buildPythonPackage rec {
   build-system = [
     hatchling
     hatch-vcs
+    hatch-jupyter-builder
   ];
 
-  dependencies = [ anywidget ];
+  dependencies = [
+    anywidget
+    numpy
+    requests
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ipyniivue" ];
+
+  passthru = {
+    # https://github.com/niivue/ipyniivue/pull/139
+    updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  };
 
   meta = {
     description = "Show a nifti image in a webgl 2.0 canvas within a jupyter notebook cell";
