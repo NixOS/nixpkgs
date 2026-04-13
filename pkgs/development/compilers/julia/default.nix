@@ -1,4 +1,6 @@
 {
+  stdenv,
+  lib,
   callPackage,
   fetchpatch2,
   gcc14Stdenv,
@@ -89,10 +91,19 @@ in
       (import ./generic.nix {
         version = "1.12.6";
         hash = "sha256-cR86qNbsXJAEWT6489U+NWTNdZrLqK1K2ulnr8IDMsw=";
+        patches = lib.optionals stdenv.hostPlatform.isDarwin [
+          ./patches/1.12/0001-zlib-rpath.patch
+          ./patches/1.12/0002-lbt-blas-detection.patch
+        ];
       })
-      {
-        stdenv = gcc14Stdenv;
-        gfortran = gfortran14;
-      }
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
   );
 }
