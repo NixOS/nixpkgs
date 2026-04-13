@@ -11584,6 +11584,8 @@ self: super: with self; {
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
 
+  openfermion = callPackage ../development/python-modules/openfermion { };
+
   openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
