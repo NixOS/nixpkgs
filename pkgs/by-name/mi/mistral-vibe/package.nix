@@ -28,14 +28,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.7.3";
+  version = "2.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XRBrBd7X8HewrUJ7K8wQMcVJz3ITPKzyKpyCi7detsE=";
+    hash = "sha256-SPn6YaGmEt2r9Fm3Eagubqw0Q2U5bSvNUY1qo2XfVlE=";
   };
 
   build-system = with python3Packages; [
@@ -48,11 +48,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "agent-client-protocol"
     "cryptography"
     "gitpython"
+    "mcp"
     "mistralai"
+    "opentelemetry-api"
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-sdk"
     "opentelemetry-semantic-conventions"
+    "pydantic"
     "pydantic-settings"
+    "rich"
+    "textual"
+    "watchfiles"
     "zstandard"
   ];
   dependencies = with python3Packages; [

@@ -22,6 +22,7 @@
   mcp,
   google-auth,
   requests,
+  websockets,
 
   # tests
   opentelemetry-sdk,
@@ -72,6 +73,9 @@ buildPythonPackage (finalAttrs: {
       google-auth
       requests
     ];
+    realtime = [
+      websockets
+    ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
@@ -86,6 +90,14 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # AssertionError: <Response [200 OK]> is not an instance of <class 'mistralai.extra.observability.otel.TracedResponse'>
     "TestOtelTracing"
+  ];
+
+  disabledTestPaths = [
+    # Require GCP credentials
+    "tests/test_gcp_integration.py"
+    "tests/test_gcp_v2_parity.py"
+    # Extra tests require additional dependencies (mcp, etc.)
+    "src/mistralai/extra/tests"
   ];
 
   meta = {

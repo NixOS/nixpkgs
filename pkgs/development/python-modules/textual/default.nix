@@ -8,23 +8,22 @@
 
   # dependencies
   markdown-it-py,
+  mdit-py-plugins,
   platformdirs,
+  pygments,
   rich,
   typing-extensions,
-  mdit-py-plugins,
 
   # optional-dependencies
   tree-sitter,
-  tree-sitter-c-sharp,
   tree-sitter-html,
   tree-sitter-javascript,
-  tree-sitter-make,
+  tree-sitter-json,
   tree-sitter-markdown,
   tree-sitter-python,
   tree-sitter-rust,
   tree-sitter-sql,
   tree-sitter-yaml,
-  tree-sitter-zeek,
 
   # tests
   jinja2,
@@ -56,6 +55,7 @@ buildPythonPackage rec {
     markdown-it-py
     mdit-py-plugins
     platformdirs
+    pygments
     rich
     typing-extensions
   ]
@@ -65,16 +65,14 @@ buildPythonPackage rec {
   optional-dependencies = {
     syntax = [
       tree-sitter
-      tree-sitter-c-sharp
       tree-sitter-html
       tree-sitter-javascript
-      tree-sitter-make
+      tree-sitter-json
       tree-sitter-markdown
       tree-sitter-python
       tree-sitter-rust
       tree-sitter-sql
       tree-sitter-yaml
-      tree-sitter-zeek
     ];
   };
 
