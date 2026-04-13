@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  autogen,
-  autoconf,
-  automake,
+  autoreconfHook,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -40,13 +37,13 @@ assert lib.asserts.assertOneOf "pageSizeKiB" (toString pageSizeKiB) (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
-  version = "5.3.0-unstable-2025-09-12";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "jemalloc";
     repo = "jemalloc";
-    rev = "c0889acb6c286c837530fdbeb96007b0dee8b776";
-    hash = "sha256-lBNgvUhuiRPgzr8JC4zSSCT2KpDBktBVX72zfvAEHvo=";
+    tag = finalAttrs.version;
+    hash = "sha256-krm4ACTTYg8AltmxItWwECZuMGmpXQ7VVM3f4OqMMxc=";
   };
 
   patches = [
@@ -57,17 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autogen
-    autoconf
-    automake
+    autoreconfHook
   ];
 
-  # TODO: switch to autoreconfHook when updating beyond 5.3.0
-  # https://github.com/jemalloc/jemalloc/issues/2346
-  configureScript = "./autogen.sh";
-
   configureFlags = [
-    "--with-version=${lib.versions.majorMinor finalAttrs.version}.0-0-g${finalAttrs.src.rev}"
+    "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
   ]
   # see the comment on stripPrefix
@@ -98,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://jemalloc.net/";
+    downloadPage = "https://github.com/jemalloc/jemalloc";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation
