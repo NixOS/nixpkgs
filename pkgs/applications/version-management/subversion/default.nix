@@ -63,7 +63,8 @@ let
         autoconf
         libtool
         python3
-      ];
+      ]
+      ++ lib.optional perlBindings perl; # Needed for swig / EXTERN.h
 
       buildInputs = [
         zlib
@@ -81,6 +82,8 @@ let
       ]
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl;
+
+      strictDeps = true;
 
       patches = [
         ./apr-1.patch
