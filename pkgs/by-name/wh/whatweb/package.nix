@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bundlerEnv,
   ruby_3_4,
+  versionCheckHook,
   withMongo ? false,
   withRchardet ? false,
 }:
@@ -70,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gems ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   installPhase = ''
     runHook preInstall
 
@@ -90,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     withMongo = withMongo;
     withRchardet = withRchardet;
   };
+
+  doInstallCheck = true;
 
   meta = {
     description = "Next generation web scanner";
