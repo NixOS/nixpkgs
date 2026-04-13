@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = finalAttrs.pname;
+    repo = "prometheus-podman-exporter";
     tag = "v${finalAttrs.version}";
     hash = "sha256-HY9ZOooAlIF3vb7ZENpRGvW5074PQS8yrfFXG39/Ycw=";
   };
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     libassuan
     systemd
   ]
-  ++ (lib.optional withBtrfs btrfs-progs);
+  ++ lib.optional withBtrfs btrfs-progs;
   nativeBuildInputs = [ pkg-config ];
 
   # NOTE: this is mostly just copied from the Makefile + the scripts in hack/
@@ -35,10 +35,10 @@ buildGoModule (finalAttrs: {
     "containers_image_openpgp"
     "systemd"
   ]
-  ++ (lib.optionals (!withBtrfs) [
+  ++ lib.optionals (!withBtrfs) [
     "exclude_graphdriver_btrfs"
     "btrfs_noversion"
-  ]);
+  ];
 
   ldflags = [
     # NOTE: upstream manually defines this in a VERSION file

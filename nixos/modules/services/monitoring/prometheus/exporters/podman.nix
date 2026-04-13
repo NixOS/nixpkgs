@@ -63,13 +63,13 @@ in
 
     collector = {
       cacheDuration = mkOption {
-        type = types.nullOr types.int;
+        type = types.nullOr types.ints.positive;
         default = null;
         description = "Duration (seconds) to retrieve container, size and refresh the cache";
       };
       enableAll = mkOption {
         type = types.nullOr types.bool;
-        default = null;
+        default = false;
         description = "Enable all collectors by default";
       };
       enhanceMetrics = mkOption {
@@ -132,7 +132,7 @@ in
         description = "Exclude metrics about the exporter itself (promhttp_*, process_*, go_*)";
       };
       maxRequests = lib.mkOption {
-        type = types.nullOr types.int;
+        type = types.nullOr types.ints.unsigned;
         default = null;
         description = "Maximum number of parallel scrape requests. Use 0 to disable";
       };
