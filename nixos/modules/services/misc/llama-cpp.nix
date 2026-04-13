@@ -134,6 +134,27 @@ let
           description = "Models directory.";
         };
 
+        modelsPreset = lib.mkOption {
+          type = lib.types.nullOr (lib.types.attrsOf lib.types.attrs);
+          default = null;
+          description = ''
+            Models preset configuration as a Nix attribute set.
+            This is converted to an INI file and passed to llama-server via --models-preset.
+            See llama-server documentation for available options.
+          '';
+          example = lib.literalExpression ''
+            {
+              "Qwen3-Coder-Next" = {
+                hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+                hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+                alias = "unsloth/Qwen3-Coder-Next";
+                fit = "on";
+                jinja = "on";
+              };
+            }
+          '';
+        };
+
         host = lib.mkOption {
           type = lib.types.str;
           default = "127.0.0.1";
@@ -570,8 +591,9 @@ in
       [ "services" "llama-cpp" "openFirewall" ]
       [ "services" "llama-cpp" "instances" "" "openFirewall" ]
     )
-    (lib.mkRemovedOptionModule [ "services" "llama-cpp" "modelsPreset" ]
-      "services.llama-cpp.modelsPreset has been removed. Use services.llama-cpp.instances.<name>.extraFlags with --models-preset instead."
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "modelsPreset" ]
+      [ "services" "llama-cpp" "instances" "" "modelsPreset" ]
     )
   ];
 
@@ -705,6 +727,10 @@ in
                     hf-repo = inst.hfRepo;
                     hf-file = inst.hfFile;
                   };
+              modelsPresetArgs = lib.optionals (inst.modelsPreset != null) [
+                "--models-preset"
+                (pkgs.writeText "llama-models-${name}.ini" (lib.generators.toINI { } inst.modelsPreset))
+              ];
             in
             utils.escapeSystemdExecArgs (
               [ (lib.getExe' pkg "llama-server") ]
@@ -718,6 +744,7 @@ in
                   [ "--log-disable" ]
               )
               ++ flagArgs
+              ++ modelsPresetArgs
               ++ inst.extraFlags
             );
 
