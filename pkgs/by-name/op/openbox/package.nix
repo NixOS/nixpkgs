@@ -15,6 +15,7 @@
   libsm,
   imlib2,
   pango,
+  bashNonInteractive,
   libstartup_notification,
   makeWrapper,
 }:
@@ -27,10 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     makeWrapper
+    python3
     python3.pkgs.wrapPython
   ];
 
   buildInputs = [
+    bashNonInteractive
     libxml2
     libxinerama
     libxcursor
@@ -46,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     imlib2
   ];
+
+  strictDeps = true;
 
   pythonPath = with python3.pkgs; [
     pyxdg
