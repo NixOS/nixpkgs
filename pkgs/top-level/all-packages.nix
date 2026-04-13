@@ -3381,8 +3381,6 @@ with pkgs;
   spire-agent = spire.agent;
   spire-server = spire.server;
 
-  spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
-
   stirling-pdf-desktop = callPackage ../by-name/st/stirling-pdf/package.nix {
     isDesktopVariant = true;
   };
