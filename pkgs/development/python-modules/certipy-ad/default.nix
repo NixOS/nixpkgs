@@ -39,6 +39,7 @@ buildPythonPackage (finalAttrs: {
     "ldap3"
     "pycryptodome"
     "pyopenssl"
+    "beautifulsoup4"
   ];
 
   build-system = [ setuptools ];
