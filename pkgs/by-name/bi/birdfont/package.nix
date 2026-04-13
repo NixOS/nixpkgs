@@ -1,24 +1,24 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  python3,
-  xmlbird,
+  autoPatchelfHook,
   cairo,
+  fetchFromGitHub,
   gdk-pixbuf,
-  libgee,
   glib,
-  gtk3,
-  webkitgtk_4_1,
-  libnotify,
-  sqlite,
-  vala,
   gobject-introspection,
   gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  autoPatchelfHook,
+  gtk3,
+  lib,
+  libgee,
+  libnotify,
   nix-update-script,
+  pkg-config,
+  python3,
+  sqlite,
+  stdenv,
+  vala,
+  webkitgtk_4_1,
+  wrapGAppsHook3,
+  xmlbird,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,36 +29,39 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "johanmattssonm";
     repo = "birdfont";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-7xVjY/yH7pMlUBpQc5Gb4t4My24Mx5KkARVp2KSr+Iw=";
+    hash = "sha256-7xVjY/yH7pMlUBpQc5Gb4t4My24Mx5KkARVp2KSr+Iw=";
   };
 
   nativeBuildInputs = [
-    python3
-    pkg-config
-    vala
-    gobject-introspection
-    wrapGAppsHook3
     autoPatchelfHook
+    gobject-introspection
+    pkg-config
+    python3
+    vala
+    wrapGAppsHook3
   ];
   buildInputs = [
-    xmlbird
-    libgee
     cairo
     gdk-pixbuf
     glib
+    gsettings-desktop-schemas
     gtk3
-    webkitgtk_4_1
+    libgee
     libnotify
     sqlite
-    gsettings-desktop-schemas
+    webkitgtk_4_1
+    xmlbird
   ];
 
   postPatch = ''
     substituteInPlace install.py \
-      --replace 'platform.version()' '"Nix"'
+      --replace-fail 'platform.version()' '"Nix"'
 
     patchShebangs .
   '';
+
+  # workaround gcc >= 14 incompatibilities
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=incompatible-pointer-types";
 
   buildPhase = "./build.py";
 
@@ -69,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
     homepage = "https://birdfont.org";
-    license = lib.licenses.gpl3;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "birdfont";
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 })

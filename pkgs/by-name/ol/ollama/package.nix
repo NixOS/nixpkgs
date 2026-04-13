@@ -94,7 +94,7 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.20.5/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.20.6/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
@@ -140,13 +140,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.20.5";
+  version = "0.20.6";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/H4DZ/aRB04lKSke9XsK+vb76pcy940scoTunXO4pf4=";
+    hash = "sha256-ol+LsKRxOR37Rpwc9/NouwMg0GOpaeh6zmN5quIBgnA=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";

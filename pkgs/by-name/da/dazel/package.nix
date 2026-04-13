@@ -1,18 +1,19 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  setuptools,
 }:
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dazel";
   version = "0.0.43";
   pyproject = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    python3Packages.setuptools
+  ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2enQRKg4CAPGHte02io+EfiW9AmuP3Qi41vNQeChg+8=";
   };
 
@@ -24,4 +25,4 @@ buildPythonApplication rec {
       malt3
     ];
   };
-}
+})
