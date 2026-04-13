@@ -3,6 +3,7 @@
   buildGoLatestModule,
   fetchFromGitHub,
   replaceVars,
+  versionCheckHook,
 }:
 
 buildGoLatestModule (finalAttrs: {
@@ -36,6 +37,12 @@ buildGoLatestModule (finalAttrs: {
     "-s"
     "-w"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
