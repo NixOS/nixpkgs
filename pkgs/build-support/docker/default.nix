@@ -121,7 +121,6 @@ rec {
     inherit
       buildImage
       buildLayeredImage
-      fakeNss
       pullImage
       shadowSetup
       buildImageWithNixDb

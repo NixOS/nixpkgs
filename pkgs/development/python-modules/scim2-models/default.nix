@@ -5,11 +5,15 @@
   uv-build,
   pydantic,
   pytestCheckHook,
+  django,
+  fastapi,
+  flask,
+  httpx,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "scim2-models";
-  version = "0.6.6";
+  version = "0.6.11";
 
   pyproject = true;
 
@@ -17,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "python-scim";
     repo = "scim2-models";
     tag = finalAttrs.version;
-    hash = "sha256-pYINB8avoYt1VUgvyDTXw3ejSBoZDFEQK0F4flTeyaY=";
+    hash = "sha256-sqXygOutxdLBRJYC3nn78JFsngF2Tq6E0g91VKXQhZE=";
   };
 
   postPatch = ''
@@ -29,7 +33,13 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    django
+    fastapi
+    flask
+    httpx
+  ];
 
   pythonImportsCheck = [ "scim2_models" ];
 

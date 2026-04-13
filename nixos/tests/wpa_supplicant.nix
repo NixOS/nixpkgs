@@ -273,6 +273,11 @@ in
       # add a virtual wlan interface
       boot.kernelModules = [ "mac80211_hwsim" ];
 
+      users.users.alice = {
+        isNormalUser = true;
+        group = "users";
+      };
+
       # wireless client
       networking.wireless = {
         enable = lib.mkOverride 0 true;
@@ -283,7 +288,7 @@ in
     };
 
     testScript = ''
-      wpa_cli = "sudo -u nobody -g wpa_supplicant wpa_cli"
+      wpa_cli = "sudo -u alice -g wpa_supplicant wpa_cli"
 
       with subtest("Daemon is running and accepting connections"):
           machine.wait_for_unit("wpa_supplicant-wlan1.service")

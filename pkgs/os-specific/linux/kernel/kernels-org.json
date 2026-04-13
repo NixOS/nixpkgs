@@ -38,5 +38,10 @@
         "version": "6.19.12",
         "hash": "sha256:1md8b270pdyk9d8cq0qyr8qmymcijmj3gc39nn394wpr0l94yp6f",
         "lts": false
+    },
+    "7.0": {
+        "version": "7.0",
+        "hash": "sha256:1w4i705i0nl1xqv7fdhdbhy7j3xrzhl31fabs6vmgiw7nf06szxv",
+        "lts": false
     }
 }

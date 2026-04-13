@@ -77,7 +77,7 @@ export HOME="$tmpPath"
 echo "Fetching Fossil repository $url at revision $rev..." >&2
 
 # Clone the repository
-fossil clone -A nobody "$url" "$tmpPath/fossil-clone.fossil" >&2
+fossil clone -A $(whoami) "$url" "$tmpPath/fossil-clone.fossil" >&2
 
 # Create directory for checkout
 checkoutDir="$tmpPath/checkout"

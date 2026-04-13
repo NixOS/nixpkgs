@@ -12,6 +12,8 @@
   gdb,
   glib,
   kdePackages,
+  # Used on Qt6
+  ktactilefeedback ? null,
   libevdev,
   lttng-ust,
   mesa,
@@ -21,6 +23,7 @@
   qmake,
   qtbase,
   qtdeclarative,
+  # Used on Qt5
   qtfeedback ? null,
   qtgraphicaleffects ? null,
   qtpim ? null,
@@ -53,11 +56,18 @@ let
     [
       qtdeclarative
     ]
+    ++ lib.optionals withQt6 [
+      # Qt5Compat.GraphicalEffects
+      qt5compat
+
+      # Tactile feedback on Qt6
+      ktactilefeedback
+    ]
     ++ lib.optionals (!withQt6) [
       # Deprecated in Qt6
       qtgraphicaleffects
 
-      # Will prolly want this in the future, but needs porting to Qt6
+      # Tactile feedback on Qt5
       qtfeedback
     ]
   );
@@ -189,12 +199,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withQt6 [
     # Qt5Compat.GraphicalEffects
     qt5compat
+
+    # Tactile feedback on Qt6
+    ktactilefeedback
   ]
   ++ lib.optionals (!withQt6) [
     # Deprecated in Qt6
     qtgraphicaleffects
 
-    # Will prolly want this in the future, but needs porting to Qt6
+    # Tactile feedback on Qt5
     qtfeedback
   ];
 

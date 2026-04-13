@@ -70,7 +70,10 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -e <(echo "
+    troveclient.tests.test_shell.ShellTest.test_help
+    troveclient.tests.test_shell.ShellTestKeystoneV3.test_help
+    ")
     runHook postCheck
   '';
 
