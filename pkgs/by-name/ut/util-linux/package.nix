@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NFKyYLuqd11udJrDuyIRF4UAP8H0RJcAJcjaJt+nWOk=";
   };
 
+  # Note: fetchpatch/fetchpatch2 cause infinite recursion with util-linuxMinimal.
+  # Prefer fetchurl for the below instead of vendoring patches; it will work.
   patches = [
     # Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
     # which isn't valid on NixOS (and a compatibility link on most other modern
@@ -58,11 +60,35 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix compile of 2.42+ on Darwin.
     # https://lore.kernel.org/util-linux/CAEUYr6ZjVX1bd-xcBGtFN_ZYwQnXDYsw7d1-7sTpF2BbgfrR+g@mail.gmail.com/T/#u
-    ./include-correct-struct-statfs-header.patch
+    # Different fix than originally proposed; we just don't compile that file on Darwin now and the previous patch was able to be reverted.
+    # See: https://github.com/util-linux/util-linux/commit/6ccf20d2fd8e45eed70bd1b915c0d16f646bf133
+    (fetchurl {
+      name = "pidfd-utils-linux-only.patch";
+      url = "https://github.com/util-linux/util-linux/commit/afdade4a3d8e4e6070343c5576470c575719b81f.patch";
+      hash = "sha256-EnHsIhU6jaS4Qm+kQMP2an7Ay08nKbIO0MbU7Y2pwkU=";
+    })
 
-    # Musl does not define AT_HANDLE_FID, hard-code it.
+    # Musl does not define AT_HANDLE_FID, hard-code it if left undefined.
     # https://github.com/util-linux/util-linux/pull/4203
-    ./fix-musl-nsenter.patch
+    (fetchurl {
+      name = "fix-musl-nsenter.patch";
+      url = "https://github.com/util-linux/util-linux/commit/000aff333e5c3a23967280cb0d6451fbbfc9c91b.patch";
+      hash = "sha256-6K3jRr2RsAfHnweBOlMn2F0h8hD3xjZobJ1pSlCQHw8=";
+    })
+
+    # `script` is broken with options after non-option args and has new memory leaks
+    # https://lore.kernel.org/util-linux/adi3573O-5gr9m2q@per.namespace.at/T/#t
+    # https://github.com/util-linux/util-linux/pull/4201
+    (fetchurl {
+      name = "script-fix-backwards-compat.patch";
+      url = "https://github.com/util-linux/util-linux/commit/70507ab9eaed10b8dd77b77d4ea25c11ee726bed.patch";
+      hash = "sha256-PpFtv8XOK36npCVSvdgKcxGQmkJtgdyMmlN+4yQuWS8=";
+    })
+    (fetchurl {
+      name = "script-fix-memory-leaks.patch";
+      url = "https://github.com/util-linux/util-linux/commit/2f1c12a49500ca7ed9c3d5e80664c1622925456b.patch";
+      hash = "sha256-9ZwA6sZwM1rQDoxV5x1KHLWxsFpI5CGWJqubtdEHj/I=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This
