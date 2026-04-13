@@ -84,6 +84,7 @@ let
     mesa = nativePlatforms;
     rustc = nativePlatforms;
     cargo = nativePlatforms;
+    fd = nativePlatforms;
   };
 
   gnuCommon = recursiveUpdate common {

@@ -5980,6 +5980,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  git-dev-nvim = buildVimPlugin {
+    pname = "git-dev.nvim";
+    version = "0.11.0-unstable-2026-04-11";
+    src = fetchFromGitHub {
+      owner = "moyiz";
+      repo = "git-dev.nvim";
+      rev = "916c7309c34bd8f53da1e30f31cec697e9ac5e52";
+      hash = "sha256-5KSjh/Gh8sXrQ7YU66XaaM1M1a3LZswamoBtnA6qiKg=";
+    };
+    meta.homepage = "https://github.com/moyiz/git-dev.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   git-messenger-vim = buildVimPlugin {
     pname = "git-messenger.vim";
     version = "0-unstable-2025-05-30";
@@ -23774,6 +23787,19 @@ final: prev: {
       hash = "sha256-vRJynz3bnkhfHKya+iEgm4PIEwT2P9kvkskgTt5UUU4=";
     };
     meta.homepage = "https://github.com/folke/zen-mode.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  zen-nvim = buildVimPlugin {
+    pname = "zen.nvim";
+    version = "0-unstable-2026-04-12";
+    src = fetchFromGitHub {
+      owner = "sand4rt";
+      repo = "zen.nvim";
+      rev = "31d0d45a56eae2a750818b7afa9f504044d7e382";
+      hash = "sha256-vmQ3dJpMACv4oP4MKuIHe3PVs1ZMy0916lNRmtbzZ88=";
+    };
+    meta.homepage = "https://github.com/sand4rt/zen.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
