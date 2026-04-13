@@ -120,6 +120,7 @@ let
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
           --set logLevel "${config.logLevel}" \
+          ${lib.optionalString (!config.serialOutput) "--add-flags --no-serial-output"} \
           ${lib.escapeShellArgs (
             lib.concatMap (arg: [
               "--add-flags"
@@ -230,6 +231,13 @@ in
       ];
       default = "info";
       example = "warning";
+    };
+
+    serialOutput = mkOption {
+      description = "Whether to display serial console output from virtual machines.";
+      type = types.bool;
+      default = true;
+      example = false;
     };
   };
 

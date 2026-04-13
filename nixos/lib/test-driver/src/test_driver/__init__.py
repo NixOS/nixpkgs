@@ -159,6 +159,12 @@ def main() -> None:
         envvar="logLevel",
         help="Set the log level (info, warning, error)",
     )
+    arg_parser.add_argument(
+        "--serial-output",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Display serial console output from virtual machines",
+    )
 
     args = arg_parser.parse_args()
 
@@ -184,6 +190,9 @@ def main() -> None:
             "error": LogLevel.ERROR,
         }
         logger.set_log_level(log_level_map[args.log_level])
+
+    if not args.serial_output:
+        logger.print_serial_logs(False)
 
     if not args.keep_machine_state:
         logger.info(
