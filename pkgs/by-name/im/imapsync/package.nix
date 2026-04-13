@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ procps ]}
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
 
   buildInputs = with perlPackages; [
     Appcpanminus
@@ -68,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     UnicodeString
     perl
   ];
+
+  strictDeps = true;
 
   meta = {
     description = "Mail folder synchronizer between IMAP servers";
