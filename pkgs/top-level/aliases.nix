@@ -1754,6 +1754,8 @@ mapAliases {
   podofo_1_0 = throw "'podofo_1_0' has been deprecated in favour of 'podofo'"; # Added 2026-05-08
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
   polonium = throw "'polonium' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
+  polyml56 = throw "'polyml56' has been deprecated in favor of polyml"; # Added 2026-06-01
+  polyml57 = throw "'polyml57' has been deprecated in favor of polyml"; # Added 2026-06-01
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
   poppler_utils = throw "'poppler_utils' has been renamed to/replaced by 'poppler-utils'"; # Converted to throw 2025-10-27
   popura = throw "'popura' is abandoned upstream and in nixpkgs and has been removed"; # Added 2026-01-15
