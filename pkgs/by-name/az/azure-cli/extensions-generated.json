@@ -1058,9 +1058,9 @@
   },
   "stream-analytics": {
     "pname": "stream-analytics",
-    "version": "1.0.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stream_analytics-1.0.1-py3-none-any.whl",
-    "hash": "sha256-LQbplYfwJBMr03IehPFE0qHdwc3v5Nw/Zfs+z8jgKZ0=",
+    "version": "1.0.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/stream_analytics-1.0.2-py3-none-any.whl",
+    "hash": "sha256-HAkhteF4LaAO3YnOrWHvHJ+9K6Kd4ns9GCcnDXDJtLg=",
     "description": "Microsoft Azure Command-Line Tools StreamAnalyticsManagementClient Extension"
   },
   "subscription": {
