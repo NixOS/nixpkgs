@@ -35,13 +35,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "nzbhydra2";
-  version = "8.5.3";
+  version = "8.5.4";
 
   src = fetchFromGitHub {
     owner = "theotherp";
     repo = "nzbhydra2";
     tag = "v${version}";
-    hash = "sha256-yaXHbm2gBvmmST4Rurn7s4a1F7GSKfuYhswIDl8bTMA=";
+    hash = "sha256-chP++0ve734wOO7qNy4f+4KyYgBWlkzjaMJiueW4LkM=";
   };
 
   mvnHash = "sha256-dodZT40zNqfaPd8VxfNYY10VrFNlL4xESDdTrgcFaaY=";
@@ -90,6 +90,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
+    changelog = "https://github.com/theotherp/nzbhydra2/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       matteopacini

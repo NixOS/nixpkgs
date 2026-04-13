@@ -3,9 +3,9 @@
   lib,
   coreutils,
   gawk,
+  getconf,
   gnugrep,
   gnused,
-  glibc,
   jq,
   copyDesktopItems,
   makeDesktopItem,
@@ -354,18 +354,23 @@ stdenv.mkDerivation (
               "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
           }
         --prefix PATH : ${
-          lib.makeBinPath [
-            # for moving files to trash
-            glib
+          lib.makeBinPath (
+            [
+              # for moving files to trash
+              glib
 
-            # for launcher and bundled helper scripts
-            gawk
-            glibc.bin
-            gnugrep
-            gnused
-            coreutils
-            which
-          ]
+              # for launcher and bundled helper scripts
+              gawk
+              gnugrep
+              gnused
+              coreutils
+              which
+            ]
+            # provides `getconf` for ps-fallback script that only runs on Linux
+            # https://github.com/microsoft/vscode/blob/97c807618b413805fde466739ba14f77a1f12307/src/vs/base/node/ps.sh#L2
+            # https://github.com/microsoft/vscode/blob/97c807618b413805fde466739ba14f77a1f12307/src/vs/base/node/ps.ts#L203-L217
+            ++ lib.optional stdenv.hostPlatform.isLinux getconf
+          )
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
