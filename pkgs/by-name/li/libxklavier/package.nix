@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
     isocodes
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -65,6 +69,8 @@ stdenv.mkDerivation rec {
     docbook_xsl
     gobject-introspection
   ];
+
+  strictDeps = true;
 
   preAutoreconf = ''
     export NOCONFIGURE=1
