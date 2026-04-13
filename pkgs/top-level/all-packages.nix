@@ -375,8 +375,6 @@ with pkgs;
     practiceMod = true;
   };
 
-  chef-cli = callPackage ../tools/misc/chef-cli { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
