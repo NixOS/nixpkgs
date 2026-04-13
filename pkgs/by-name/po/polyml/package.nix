@@ -7,14 +7,17 @@
   libffi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polyml";
   version = "5.9.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
   };
 
@@ -44,12 +47,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-    make check
-    runHook postCheck
-  '';
-
   meta = {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
@@ -58,8 +55,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.polyml.org/";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; (linux ++ darwin);
+    # Broken as make target `polyimport.o` requires running code
+    # compiled by the cross-compiler
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
     maintainers = with lib.maintainers; [
       kovirobi
     ];
   };
-}
+})
