@@ -1493,6 +1493,10 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-mgmt-containerregistry
       { };
 
+  azure-mgmt-containerregistrytasks =
+    callPackage ../development/python-modules/azure-mgmt-containerregistrytasks
+      { };
+
   azure-mgmt-containerservice =
     callPackage ../development/python-modules/azure-mgmt-containerservice
       { };
