@@ -24,6 +24,8 @@ buildHomeAssistantComponent rec {
     pymitsubishi
   ];
 
+  ignoreVersionRequirement = [ "pymitsubishi" ];
+
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
