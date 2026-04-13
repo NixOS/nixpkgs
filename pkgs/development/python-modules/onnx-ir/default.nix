@@ -74,6 +74,10 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Circular dependency with onnxscript
     "src/onnx_ir/passes/common/common_subexpression_elimination_test.py"
+
+    # ImportError: cannot import name 'hub' from 'onnx'
+    # onnx.hub was removed in 1.21.0
+    "tools/model_zoo_test/model_zoo_test.py"
   ];
 
   # Importing onnxruntime in the sandbox crashes on aarch64-linux:

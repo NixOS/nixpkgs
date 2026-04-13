@@ -9,21 +9,23 @@
   pycognito,
   pyjwt,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytest-freezegun,
+  pytest-timeout,
   pytestCheckHook,
   uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2025.2.0";
+  version = "2025.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = version;
-    hash = "sha256-o5A4AWil6FeHjUBgbHaA010kszhuncHHzf8+CH4QL0c=";
+    hash = "sha256-EK2QiQMHhA69p7xnyeYE+kru0k7eL9EilkAUAN6LukU=";
   };
 
   build-system = [
@@ -41,7 +43,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
+    pytest-cov-stub
     pytest-freezegun
+    pytest-timeout
     pytestCheckHook
   ];
 

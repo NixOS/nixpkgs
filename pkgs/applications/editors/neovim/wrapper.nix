@@ -14,7 +14,6 @@
   neovimUtils,
   perl,
   lndir,
-  vimUtils,
   runCommand,
 }:
 
@@ -100,7 +99,10 @@ let
 
         # we call vimrcContent without 'packages' to avoid the init.vim generation
         neovimRcContent' = lib.concatStringsSep "\n" (
-          vimPackageInfo.userPluginViml ++ lib.optional (neovimRcContent != null) neovimRcContent
+          lib.optional (vimPackageInfo.userPluginConfigs.viml or "" != "") (
+            vimPackageInfo.userPluginConfigs.viml
+          )
+          ++ (lib.optional (neovimRcContent != null) neovimRcContent)
         );
 
         packpathDirs.myNeovimPackages = vimPackageInfo.vimPackage;
@@ -126,6 +128,9 @@ let
           lib.optional (luaDeps != [ ]) luaPathLuaRc
           ++ [ providerLuaRc ]
           ++ lib.optional (luaRcContent != "") luaRcContent
+          ++ lib.optional (
+            vimPackageInfo.userPluginConfigs.lua or "" != ""
+          ) vimPackageInfo.userPluginConfigs.lua
           ++ lib.optional (neovimRcContent' != "") ''
             vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
           ''

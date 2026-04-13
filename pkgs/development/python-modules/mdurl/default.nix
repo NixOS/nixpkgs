@@ -6,19 +6,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdurl";
   version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "hukkin";
+    owner = "executablebooks";
     repo = "mdurl";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-wxV8DKeTwKpFTUBuGTQXaVHc0eW1//Y+2V8Kgs85TDM=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "URL utilities for markdown-it";
-    homepage = "https://github.com/hukkin/mdurl";
+    homepage = "https://github.com/executablebooks/mdurl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

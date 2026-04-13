@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "2.62.2";
+  version = "2.63.2";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-yjy3RMgC38oktxMpvw78w5VVCUE/1+Lv37G/RJaQte0=";
+    hash = "sha256-pAD7mEiDQyfmKmClO9oMLgPua0jOrcImiQrSGLvhCEA=";
   };
 
   frontend = buildNpmPackage rec {

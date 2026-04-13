@@ -17,11 +17,18 @@ let
       xdg-user-dirs
       ncurses
       udev
+      # Required for esp-idf and other frameworks that manage their own
+      # Python virtual environments during the build process.
+      # See: https://github.com/NixOS/nixpkgs/issues/133185
+      cmake
+      ninja
     ])
     ++ (with python.pkgs; [
       python
       setuptools
       pip
+      wheel
+      virtualenv
       bottle
     ]);
 

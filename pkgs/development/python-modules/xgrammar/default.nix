@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.31";
+  version = "0.1.33";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Baa/DiRoNcIv4UOC+msi4PgfRWnwprnZpLG2v7qB2h4=";
+    hash = "sha256-mliAmFBY3eLnUP+2HCRGX36KPUjaxn0Eb+2aKyDwdaM=";
   };
 
   patches = [
@@ -99,6 +99,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires internet access
     "tests/python/test_structural_tag_converter.py"
+    "tests/python/test_structural_tag_for_model.py"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];

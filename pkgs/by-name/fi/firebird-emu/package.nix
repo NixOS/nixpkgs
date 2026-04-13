@@ -2,11 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtdeclarative,
-  qtquickcontrols,
-  wrapQtAppsHook,
+  qt5,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "firebird-emu";
@@ -15,20 +11,20 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nspire-emus";
     repo = "firebird";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-ZptjlnOiF+hKuKYvBFJL95H5YQuR99d4biOco/MVEmE=";
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
-    qmake
+    qt5.wrapQtAppsHook
+    qt5.qmake
   ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtquickcontrols
+    qt5.qtbase
+    qt5.qtdeclarative
+    qt5.qtquickcontrols
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

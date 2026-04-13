@@ -4,6 +4,7 @@
   autoPatchelfHook,
   fetchurl,
   makeBinaryWrapper,
+  bash,
   versionCheckHook,
 }:
 
@@ -40,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Filename must explictly be "copilot" for internal self-referencing
     makeWrapper $out/libexec/copilot $out/bin/copilot \
-      --add-flags "--no-auto-update"
+      --add-flags "--no-auto-update" \
+      --prefix PATH : "${lib.makeBinPath [ bash ]}"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
