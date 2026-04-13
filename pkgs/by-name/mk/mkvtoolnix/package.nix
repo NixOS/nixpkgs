@@ -52,13 +52,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "97.0";
+  version = "98.0";
 
   src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-M8A3d6BOed1A/Bvw25bNGphXNDXJvHdg26OjOdwsNf4=";
+    hash = "sha256-gLs2+hbWFhhpabdknwoozH8WHgVNSR0VjnrmwQA7xrc=";
   };
 
   passthru = {
