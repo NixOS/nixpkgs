@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.nic.cz";
     owner = "labs";
     repo = "bird";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FkrVrjT4Q9zLeauP2GOX38a7a4q7h2aQbEe/kmfKB3A=";
   };
 
