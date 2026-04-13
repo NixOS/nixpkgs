@@ -120,7 +120,7 @@ in
               else
                 "--auth ${cfg.auth}";
           in
-          "${openclaw} gateway run --port ${toString cfg.port} ${authArgs}";
+          "${openclaw} gateway run --port ${toString cfg.port} --allow-unconfigured ${authArgs}";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = [ "openclaw" ];
         ReadWritePaths = [ cfg.stateDir ];
@@ -146,6 +146,7 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_UNIX"
+          "AF_NETLINK"
         ];
         SystemCallArchitectures = "native";
         UMask = "0077";
