@@ -9318,10 +9318,6 @@ with pkgs;
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
-  evilwm = callPackage ../applications/window-managers/evilwm {
-    patches = config.evilwm.patches or [ ];
-  };
-
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   electrum = libsForQt5.callPackage ../applications/misc/electrum { };
