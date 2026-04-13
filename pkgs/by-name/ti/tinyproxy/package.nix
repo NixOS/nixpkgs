@@ -10,10 +10,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyproxy";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
-    hash = "sha256-bpr/O723FmW2gb+85aJrwW5/U7R2HwbePTx15i3rpsE=";
+    hash = "sha256-In/ZG50i2jKl0x7yfSs3KHlBdm8NdXtspMJPiv4BW6g=";
     rev = finalAttrs.version;
     repo = "tinyproxy";
     owner = "tinyproxy";
