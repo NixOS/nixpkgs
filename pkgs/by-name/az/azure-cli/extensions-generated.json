@@ -769,13 +769,6 @@
     "hash": "sha256-q5tuqnN94FS1opr9oLx2LHFYuFX6PTDaBmuvrByXTsI=",
     "description": "Microsoft Azure Command-Line Tools MulticloudConnector Extension"
   },
-  "neon": {
-    "pname": "neon",
-    "version": "1.0.1b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/neon-1.0.1b1-py3-none-any.whl",
-    "hash": "sha256-JG8Y+6/aF8xtsnBledcvxfJ4K+yhS47CS6pIvK7orm8=",
-    "description": "Microsoft Azure Command-Line Tools Neon Extension"
-  },
   "network-analytics": {
     "pname": "network-analytics",
     "version": "1.0.0b1",
