@@ -7,16 +7,16 @@
 
 buildNpmPackage {
   pname = "coc-rust-analyzer";
-  version = "0-unstable-2026-04-01";
+  version = "0-unstable-2026-04-09";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-rust-analyzer";
-    rev = "569c6c56e815ae29ad7873b472ebb750c19d0d38";
-    hash = "sha256-4IZhCQl+iKChGaT0ghn5MnB+h6U5DJSa7YgPDoObiBg=";
+    rev = "561aea31f1e263c8386ab7e09b7ffa95e64cd351";
+    hash = "sha256-Ee/5nkPdQBXwt5jQOMN+2/nHRwk33HigeY/L0NpTLAY=";
   };
 
-  npmDepsHash = "sha256-B/EBAhwEEqLgGshK3Fw7nG7Mv9kk0v4ClLglLhooYBM=";
+  npmDepsHash = "sha256-+3eXdiM0Nll7V6EnDXq88rBjRkPN6GLFASdJ3fMXbq4=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
