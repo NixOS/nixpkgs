@@ -6,6 +6,7 @@
   perlPackages,
   stdenv,
   procps,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Mail folder synchronizer between IMAP servers";
