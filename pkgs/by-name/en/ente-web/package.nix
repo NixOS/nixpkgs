@@ -8,6 +8,7 @@
   nodejs,
   rustPlatform,
   rustc,
+  sd,
   wasm-bindgen-cli_0_2_108,
   wasm-pack,
   yarnConfigHook,
@@ -81,16 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
         packages/wasm/package.json \
         --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
     ''
-    # Replace hardcoded ente.io urls if desired
+    # Replace hardcoded links pointing to the public ente instance so that
+    # users of a self-hosted instance are not accidentally redirected there
     + lib.optionalString (enteMainUrl != null) ''
-      substituteInPlace \
-        apps/payments/src/services/billing.ts \
-        apps/photos/src/pages/shared-albums.tsx \
-        --replace-fail "https://ente.io" ${lib.escapeShellArg enteMainUrl}
-
-      substituteInPlace \
-        apps/accounts/src/pages/index.tsx \
-        --replace-fail "https://web.ente.io" ${lib.escapeShellArg enteMainUrl}
+      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io"; do
+        mapfile -d "" -t files < <(grep -rlFZ -- "$pattern" apps/)
+        ${lib.getExe sd} -F -- "$pattern" ${lib.escapeShellArg enteMainUrl} "''${files[@]}"
+      done
     '';
 
   yarnBuildScript = "build:${enteApp}";
