@@ -25,8 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.qmake
     qt6.wrapQtAppsHook
-    qt6.qtcharts
-    qt6.qtserialport
   ];
 
   buildInputs = [
