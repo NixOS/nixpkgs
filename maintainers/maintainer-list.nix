@@ -14692,6 +14692,14 @@
     github = "krovuxdev";
     githubId = 62192487;
   };
+  kruemmelspalter = {
+    github = "kruemmelspalter";
+    githubId = 54735589;
+    name = "kruemmelspalter";
+    email = "kruemmelspalter@kruemmelspalter.org";
+    matrix = "@kruemmelsplater:kruemmelspalter.org";
+    keys = [ { fingerprint = "28F5 4BD4 73F1 7495 24BF  F4BD 4F4A 2EFA E386 71C8"; } ];
+  };
   krupkat = {
     github = "krupkat";
     githubId = 6817216;
