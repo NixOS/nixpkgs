@@ -6,16 +6,20 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron,
+  electron_40,
   python3Packages,
   pipewire,
   libpulseaudio,
+  jq,
   autoPatchelfHook,
   bun,
   nodejs,
   withTTS ? true,
   withMiddleClickScroll ? false,
 }:
+let
+  electron = electron_40;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
   version = "3.1.8";
@@ -40,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bun
+    jq
     nodejs
     # XXX: Equibop *does not* ship venmic as a prebuilt node module. The package
     # seems to build with or without this hook, but I (NotAShelf) don't have the
@@ -67,15 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # electron builds must be writable to support electron fuses
-  preBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -r ${electron.dist}/Electron.app .
-      chmod -R u+w Electron.app
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
-    '';
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
+    then
+      echo "ERROR: electron version mismatch between package.json and nixpkgs"
+      exit 1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -r ${electron.dist}/Electron.app .
+    chmod -R u+w Electron.app
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
