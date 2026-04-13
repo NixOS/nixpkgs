@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "0.2.20250521-115337+25ed6ac4";
+  version = "0.2.20260317-201835+0234c21f";
 
   # Sapling sets a Cargo config containing lines like so:
   # [target.aarch64-apple-darwin]
@@ -45,7 +45,7 @@ let
     owner = "facebook";
     repo = "sapling";
     tag = version;
-    hash = "sha256-NvfSx6BMbwOFY+y6Yb/tyUNYeuL8WCoc+HSVys8Ko0Y=";
+    hash = "sha256-l2hsBvy8k5o0J4MhVAMVPJFKDUlIIE3PnzX9Xkoxk5M=";
   };
 
   addonsSrc = "${src}/addons";
@@ -53,7 +53,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-9l4lSzFTF5rSByO388tosJCxOb65Nnua6HaDD7F62No=";
+    sha256 = "sha256-krspqktktCRYu2SNzgALX5L4QLmXn0qgYSVP5i7rXwc=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -110,12 +110,11 @@ python312Packages.buildPythonApplication {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-026OKsszbF2aPWpA8JBc6KwZHxEqwnKIluzDjO/opgc=";
-      "fb303_core-0.0.0" = "sha256-IJKAWgBLrLnWItw6UTNdwjuTDO6dUfqyKsVv2aW6Kyo=";
-      "fbthrift-0.0.1+unstable" = "sha256-FuUo1cZG7Ed+TAXY53MpylBPGzFruIsWaxKPR26TxVk=";
-      "serde_bser-0.4.0" = "sha256-OY+IZh4nz5ICrDKYr8pPfORW4i8KBULhGC5YyXb5Ulg=";
-      "watchman_client-0.9.0" = "sha256-OY+IZh4nz5ICrDKYr8pPfORW4i8KBULhGC5YyXb5Ulg=";
+      "cloned-0.1.0" = "sha256-/SePRSJM8cnI/t+Ea/nyXQze+NGcrgnz5zhd4ZCAWzg=";
+      "fb303_core-0.0.0" = "sha256-naFDm7r7U996AOWSKJWS/A5Pa2bdsJIekajLWjXNLmE=";
+      "fbthrift-0.0.1+unstable" = "sha256-cptq2WGqgJKR66pDwvWICw2jEmpFeoQFMqIotbsNH/c=";
+      "serde_bser-0.4.0" = "sha256-gd1El3ioY+2/iMaFSgA6nhJIoQvGpjRXHVwjL4Ne0kM=";
+      "watchman_client-0.9.0" = "sha256-gd1El3ioY+2/iMaFSgA6nhJIoQvGpjRXHVwjL4Ne0kM=";
     };
   };
 
