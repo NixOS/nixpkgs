@@ -14,7 +14,6 @@
   libkrb5,
   libxslt,
   docbook_xsl,
-  file,
   docbook_xml_dtd_43,
   libtool_2,
   withDevdoc ? false,
@@ -27,10 +26,7 @@
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
-let
-  inherit (lib) optional optionalString optionals;
 
-in
 stdenv.mkDerivation {
   pname = "openafs";
   inherit version srcs;
@@ -46,18 +42,18 @@ stdenv.mkDerivation {
     which
     bison
   ]
-  ++ optionals withDevdoc [
+  ++ lib.optionals withDevdoc [
     doxygen
     dblatex
   ];
 
-  buildInputs = [ libkrb5 ] ++ optional withNcurses ncurses;
+  buildInputs = [ libkrb5 ] ++ lib.optional withNcurses ncurses;
 
   patches = [
     ./bosserver.patch
     ./cross-build.patch
   ]
-  ++ optional withTsm ./tsmbac.patch;
+  ++ lib.optional withTsm ./tsmbac.patch;
 
   outputs = [
     "out"
@@ -65,7 +61,7 @@ stdenv.mkDerivation {
     "man"
     "doc"
   ]
-  ++ optional withDevdoc "devdoc";
+  ++ lib.optional withDevdoc "devdoc";
 
   enableParallelBuilding = false;
 
@@ -98,12 +94,12 @@ stdenv.mkDerivation {
       "--disable-kernel-module"
       "--disable-fuse-client"
       "--with-docbook-stylesheets=${docbook_xsl}/share/xml/docbook-xsl"
-      ${optionalString withTsm "--enable-tivoli-tsm"}
-      ${optionalString (!withNcurses) "--disable-gtx"}
+      ${lib.optionalString withTsm "--enable-tivoli-tsm"}
+      ${lib.optionalString (!withNcurses) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
     )
   ''
-  + optionalString withTsm ''
+  + lib.optionalString withTsm ''
     export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/opt/tivoli/tsm/client/api/bin64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
   '';
 
@@ -114,7 +110,7 @@ stdenv.mkDerivation {
       make -C "''${d}" index.html
     done
   ''
-  + optionalString withDevdoc ''
+  + lib.optionalString withDevdoc ''
     make dox
   '';
 
@@ -129,7 +125,7 @@ stdenv.mkDerivation {
 
     rm -r $out/lib/openafs
   ''
-  + optionalString withDevdoc ''
+  + lib.optionalString withDevdoc ''
     mkdir -p $devdoc/share/devhelp/openafs/doxygen
     cp -r doc/{pdf,protocol} $devdoc/share/devhelp/openafs
     cp -r doc/doxygen/output/html $devdoc/share/devhelp/openafs/doxygen
@@ -144,7 +140,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  passthru.cellservdb = callPackage ../cellservdb.nix { };
+  passthru.cellservdb = callPackage ./cellservdb.nix { };
 
   meta = {
     outputsToInstall = [
