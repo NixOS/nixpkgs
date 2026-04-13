@@ -6,22 +6,20 @@
   cmake,
   pkg-config,
   installShellFiles,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
+  darwin,
   boost,
   libevent,
   libsodium,
   zeromq,
   zlib,
   db48,
+  libsForQt5,
   sqlite,
   qrencode,
   libsystemtap,
-  qtbase ? null,
-  qttools ? null,
   python3,
   versionCheckHook,
-  withGui,
+  withGui ? true,
   withWallet ? true,
   enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   gnupg,
@@ -53,12 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     gnupg
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals withGui [
     imagemagick # for convert
     librsvg # for rsvg-convert
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && withGui) [
     libicns # for png2icns
@@ -77,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
   ++ lib.optionals withGui [
     qrencode
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
   ];
 
   preUnpack =
@@ -177,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

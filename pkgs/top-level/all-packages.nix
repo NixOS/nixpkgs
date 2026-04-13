@@ -3022,10 +3022,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  op-geth = callPackage ../applications/blockchains/optimism/geth.nix { };
-
-  optimism = callPackage ../applications/blockchains/optimism { };
-
   pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
@@ -10968,57 +10964,9 @@ with pkgs;
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
-  alfis-nogui = alfis.override {
-    withGui = false;
-  };
-
-  bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  bitcoind = callPackage ../applications/blockchains/bitcoin {
-    withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  bitcoin-knots = libsForQt5.callPackage ../applications/blockchains/bitcoin-knots {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
-    withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  elements = libsForQt5.callPackage ../applications/blockchains/elements {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-  elementsd = callPackage ../applications/blockchains/elements {
-    withGui = false;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
-    boost = boost179;
-  };
-
-  groestlcoin = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
-    withGui = true;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  groestlcoind = callPackage ../applications/blockchains/groestlcoin {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
   napari = with python312Packages; toPythonApplication napari;
-
-  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
@@ -11026,13 +10974,6 @@ with pkgs;
     teos
     teos-watchtower-plugin
     ;
-
-  vertcoin = libsForQt5.callPackage ../applications/blockchains/vertcoin {
-    withGui = true;
-  };
-  vertcoind = callPackage ../applications/blockchains/vertcoin {
-    withGui = false;
-  };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 

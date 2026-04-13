@@ -6,8 +6,7 @@
   cmake,
   pkg-config,
   installShellFiles,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
+  darwin,
   boost,
   libevent,
   zeromq,
@@ -16,11 +15,10 @@
   sqlite,
   qrencode,
   libsystemtap,
-  qtbase ? null,
-  qttools ? null,
+  libsForQt5,
   python3,
   versionCheckHook,
-  withGui ? false,
+  withGui ? true,
   withWallet ? true,
 }:
 
@@ -48,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals withGui [ wrapQtAppsHook ];
+  ++ lib.optionals withGui [ libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [
     boost
@@ -65,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGui [
     qrencode
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
   ];
 
   postInstall = ''
@@ -90,13 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_BENCH" false)
     (lib.cmakeBool "WITH_ZMQ" true)
-    (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
-    (lib.cmakeBool "ENABLE_WALLET" (!withWallet))
-    (lib.cmakeBool "BUILD_GUI" (!withGui))
-    (lib.cmakeBool "ENABLE_WALLET" false)
-  ]
-  ++ lib.optionals withGui [
-    (lib.cmakeBool "BUILD_GUI" true)
+    (lib.cmakeBool "WITH_USDT" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ENABLE_WALLET" withWallet)
+    (lib.cmakeBool "BUILD_GUI" withGui)
+    (lib.cmakeBool "WITH_QRENCODE" withGui) # Fixes the headless QR encode crash!
   ];
 
   nativeCheckInputs = [ python3 ];
@@ -106,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

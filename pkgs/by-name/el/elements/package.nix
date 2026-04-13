@@ -2,13 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoreconfHook,
   pkg-config,
   util-linux,
   hexdump,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
+  darwin,
   boost,
   libevent,
   miniupnpc,
@@ -17,10 +15,9 @@
   db48,
   sqlite,
   qrencode,
-  qtbase ? null,
-  qttools ? null,
+  libsForQt5,
   python3,
-  withGui,
+  withGui ? true,
   withWallet ? true,
 }:
 
@@ -42,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals withGui [ wrapQtAppsHook ];
+  ++ lib.optionals withGui [ libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [
     boost
@@ -59,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGui [
     qrencode
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
   ];
 
   configureFlags = [
@@ -76,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGui [
     "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-qt-bindir=${libsForQt5.qtbase.dev}/bin:${libsForQt5.qttools.dev}/bin"
   ];
 
   # fix "Killed: 9  test/test_bitcoin"
@@ -95,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
