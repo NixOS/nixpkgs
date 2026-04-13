@@ -33,4 +33,5 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ claraphyll ];
     mainProgram = "age-plugin-fido2prf";
   };
+  __structuredAttrs = true;
 })
