@@ -17,6 +17,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
+  ldflags = [ "-X github.com/peak/s5cmd/v2/version.Version=v${finalAttrs.version}" ];
+
   # Skip e2e tests requiring network access
   excludedPackages = [ "./e2e" ];
 
