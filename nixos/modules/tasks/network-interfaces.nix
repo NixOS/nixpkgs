@@ -1780,7 +1780,9 @@ in
       optionalString hasBonds "options bonding max_bonds=0";
 
     boot.kernel.sysctl = {
-      "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
+      # Only set when proxyARP needs it; never write =0 (the kernel default),
+      # which would race with systemd-networkd's IPv4Forwarding= on switch.
+      "net.ipv4.conf.all.forwarding" = mkIf (any (i: i.proxyARP) interfaces) (mkDefault true);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       # allow all users to do ICMP echo requests (ping)
