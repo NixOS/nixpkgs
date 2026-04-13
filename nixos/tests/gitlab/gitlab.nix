@@ -75,7 +75,12 @@ in
 
         services.dovecot2 = {
           enable = true;
-          enableImap = true;
+          enablePAM = true;
+          settings = {
+            dovecot_config_version = "2.4.3";
+            dovecot_storage_version = "2.4.3";
+            protocols.imap = true;
+          };
         };
 
         systemd.services.gitlab-backup.environment.BACKUP = "dump";

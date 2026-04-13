@@ -175,10 +175,15 @@ in
 
             services.dovecot2 = {
               enable = true;
-              protocols = [ "imap" ];
-              sslCACert = "${certs.ca.cert}";
-              sslServerCert = "${certs.${mailDomain}.cert}";
-              sslServerKey = "${certs.${mailDomain}.key}";
+              enablePAM = true;
+              settings = {
+                dovecot_config_version = "2.4.3";
+                dovecot_storage_version = "2.4.3";
+                protocols = [ "imap" ];
+                ssl_server_ca_file = "${certs.ca.cert}";
+                ssl_server_cert_file = "${certs.${mailDomain}.cert}";
+                ssl_server_key_file = "${certs.${mailDomain}.key}";
+              };
             };
 
             services.postfix = {

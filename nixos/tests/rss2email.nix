@@ -33,9 +33,13 @@ import ./make-test-python.nix {
         };
         services.dovecot2 = {
           enable = true;
-          enableImap = true;
-          mailLocation = "maildir:~/mail";
-          protocols = [ "imap" ];
+          enablePAM = true;
+          settings = {
+            dovecot_config_version = "2.4.3";
+            dovecot_storage_version = "2.4.3";
+            mail_path = "~/mail";
+            protocols = [ "imap" ];
+          };
         };
         environment.systemPackages =
           let
