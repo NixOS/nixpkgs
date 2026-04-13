@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Q5lAWMa1SFjoIJTdWlHSbS4Cg5RYWiej8F05Xrz9ArY=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   env.LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
   nativeBuildInputs = [
