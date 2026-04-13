@@ -149,6 +149,9 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
   passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoPatchelfHook
     file
@@ -282,8 +285,15 @@ stdenv.mkDerivation rec {
       export ICAInstDir="$out/opt/citrix-icaclient"
       export HOME=$(mktemp -d)
 
+      # Needed override to make the installer non-interactive. Especially in 26.01 when the installer verifies ubuntu version, there is no /etc/os-release while building.
+      sed -i \
+        -e '2216s/getyesno.*/ANSWER=$INSTALLER_YES/' \
+        -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' \
+        -e 's,/bin/true,true,g' -e 's, -C / , -C . ,g' \
+        -e '1615s,"$ubuntu_major_version",99,g' \
+        ./linuxx64/hinst
+
       # Run upstream installer in the store-path.
-      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' -e 's, -C / , -C . ,g' ./linuxx64/hinst
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
       faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
 
@@ -330,6 +340,10 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
+
+  # 26.01 Comes with its own copy of webkitgtk4.0 which is patched to look for libraries in the bundle. Since we don't want to patch it, we need to ignore missing dependencies.
+  autoPatchelfIgnoreMissingDeps = true;
+
   # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
     ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
@@ -342,8 +356,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     # Older versions need webkitgtk_4_0 which was removed.
-    # 25.08 bundles the same.
-    broken = lib.versionOlder version "25.08";
+    # 26.01 and 25.08 bundles the same.
+    broken = lib.versionOlder version "26.01.0";
     license = lib.licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
