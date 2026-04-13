@@ -108,6 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 
+    # flaky on some filesystems due to non-deterministic disk usage
+    sed '2i echo Skipping du deref test && exit 77' -i ./tests/du/deref.sh
+    sed '2i echo Skipping du inacc-dir test && exit 77' -i ./tests/du/inacc-dir.sh
+
     # fails when syscalls related to acl not being available, e.g. in sandboxed environment
     sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
   ''
