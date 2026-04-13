@@ -48,6 +48,7 @@ let
         withDocumentation = !useQt6;
       };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
+      lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
     }
     // lib.optionalAttrs useQt6 {
@@ -97,7 +98,6 @@ let
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
-      lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       mediascanner2 = callPackage ./services/mediascanner2 { };
     };
 in
