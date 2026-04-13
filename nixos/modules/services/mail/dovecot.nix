@@ -148,8 +148,8 @@ let
 
   doveConf =
     let
-      configVersion = cfg.settings.dovecot_config_version or null;
-      storageVersion = cfg.settings.dovecot_storage_version or null;
+      configVersion = cfg.settings.dovecot_config_version;
+      storageVersion = cfg.settings.dovecot_storage_version;
       remainingSettings = builtins.removeAttrs cfg.settings [
         "dovecot_config_version"
         "dovecot_storage_version"
@@ -577,6 +577,26 @@ in
               };
 
               # 2.4-only options
+
+              dovecot_config_version = mkOption {
+                default = null;
+                description = ''
+                  Dovecot configuration version. It uses the same versioning as Dovecot in general, e.g. 3.0.5. It specifies the configuration syntax, the used setting names and the expected default values.
+
+                  See <https://doc.dovecot.org/latest/core/summaries/settings.html#dovecot_config_version>.
+                '';
+                type = nullOr str;
+              };
+
+              dovecot_storage_version = mkOption {
+                default = null;
+                description = ''
+                  Dovecot storage file format version. It uses the same versioning as Dovecot in general, e.g. 3.0.5. It specifies the oldest Dovecot version that must be able to read files written by this Dovecot instance.
+
+                  See <https://doc.dovecot.org/latest/core/summaries/settings.html#dovecot_storage_version>.
+                '';
+                type = nullOr str;
+              };
 
               sieve_script_bin_path = mkOption {
                 default = if isPre24 then null else "/tmp/dovecot-%{user|username|lower}";
