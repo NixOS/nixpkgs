@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "servo_allocator/use-system-allocator"
+    "servo-allocator/use-system-allocator"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
