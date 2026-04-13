@@ -6,57 +6,20 @@ end-to-end encrypted platform for photos and videos.
 ## Quickstart {#module-services-ente-quickstart}
 
 To host ente, you need the following things:
-- S3 storage server (either external or self-hosted like [minio](https://github.com/minio/minio))
+- An S3-compatible object storage server (either an external provider or a
+  self-hosted one such as [garage](#module-services-garage)). From your
+  storage provider you will need:
+  - the S3 endpoint URL
+  - a bucket name
+  - an access key ID and secret access key with read/write access to the bucket
 - Several subdomains pointing to your server:
   - accounts.example.com
   - albums.example.com
   - api.example.com
   - cast.example.com
   - photos.example.com
-  - s3.example.com
 
-The following example shows how to setup ente with a self-hosted S3 storage via minio.
-You can host the minio s3 storage on the same server as ente, but as this isn't
-a requirement the example shows the minio and ente setup separately.
-We assume that the minio server will be reachable at `https://s3.example.com`.
-
-```nix
-{
-  services.minio = {
-    enable = true;
-    # ente's config must match this region!
-    region = "us-east-1";
-    # Please use a file, agenix or sops-nix to securely store your root user password!
-    # MINIO_ROOT_USER=your_root_user
-    # MINIO_ROOT_PASSWORD=a_randomly_generated_long_password
-    rootCredentialsFile = "/run/secrets/minio-credentials-full";
-  };
-
-  systemd.services.minio.environment.MINIO_SERVER_URL = "https://s3.example.com";
-
-  # Proxy for minio
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
-  services.nginx = {
-    recommendedProxySettings = true;
-    virtualHosts."s3.example.com" = {
-      forceSSL = true;
-      useACME = true;
-      locations."/".proxyPass = "http://localhost:9000";
-      # determine max file upload size
-      extraConfig = ''
-        client_max_body_size 16G;
-        proxy_buffering off;
-        proxy_request_buffering off;
-      '';
-    };
-  };
-}
-```
-
-And the configuration for ente:
+Once you have an S3 endpoint, bucket and credentials, configure ente as follows:
 
 ```nix
 {
@@ -84,11 +47,13 @@ And the configuration for ente:
         s3 = {
           use_path_style_urls = true;
           b2-eu-cen = {
+            # The S3 endpoint, bucket and credentials from your storage provider
             endpoint = "https://s3.example.com";
+            # Must be us-east-1 as it is required internally by ente
             region = "us-east-1";
             bucket = "ente";
-            key._secret = pkgs.writeText "minio_user" "minio_user";
-            secret._secret = pkgs.writeText "minio_pw" "minio_pw";
+            key._secret = "/run/secrets/s3-access-key-id";
+            secret._secret = "/run/secrets/s3-secret-access-key";
           };
         };
         key = {
@@ -121,13 +86,6 @@ And the configuration for ente:
 If you have a mail server or smtp relay, you can optionally configure
 `services.ente.api.settings.smtp` so ente can send you emails (registration code and possibly
 other events). This is optional.
-
-After starting the minio server, make sure the bucket exists:
-
-```
-mc alias set minio https://s3.example.com root_user root_password --api s3v4
-mc mb -p minio/ente
-```
 
 Now ente should be ready to go under `https://photos.example.com`.
 
