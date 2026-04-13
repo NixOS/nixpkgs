@@ -2,6 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cargo,
+  cc ? targetPackages.stdenv.cc,
+  rustc,
+  targetPackages,
+  makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
@@ -18,6 +23,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-gZPr/I9/Ug+PmS1mUtwQ7JVkJ4gTYctvbtpvuOY8QUc=";
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/duat \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          cargo
+          cc
+          rustc
+        ]
+      }
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
