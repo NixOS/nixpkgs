@@ -62,10 +62,10 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-MRm+Pm5mDXys8erQLKHRSClFzxWIYU7Y/otKxl5sJQg=";
-          aarch64-linux = "sha256-cJuNZapJ8LvfPRdv5V9iuy0xxCxLFI5uWTLtAa6bE/w=";
-          x86_64-darwin = "sha256-fOLRQIiRq7BATULy7W90bQ/DrW3Fn7vLut6fKFSoQDA=";
-          x86_64-linux = "sha256-nSe0ywhsTJz6ycqTZaUKfnOvpJOmwip8hYXck9HtW2Q=";
+          aarch64-darwin = "sha256-aNqtLlpYzz2lBJBHUOUDRkm0Cvd9tTnueNtFNQ8YN5M=";
+          aarch64-linux = "sha256-PCTqHbxymG26fo7I9czoklECcB9EbSDk/gfVMuzQr2Y=";
+          x86_64-darwin = "sha256-ZMIK/8UcBuG1vcHv5qkGwjynsLx4ZLeKcTyXiY2O2j4=";
+          x86_64-linux = "sha256-jGFgm5OpcNIT30HPe7IQPIroT+7387PopCgXn6RonL0=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -139,10 +139,10 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-6rUV8UMjFZXA053BXIruK8+OEturmtz+YeAlkivePdA=";
-          aarch64-linux = "sha256-/mv7HVsx97RLzYl12WwsI2gYf0qBr+78B5NiEpTRyrc=";
-          x86_64-darwin = "sha256-BpQFhalV5AfYSjWQp+9lxOnfbaD/NADtvrNMqznEojM=";
-          x86_64-linux = "sha256-uutDUAHYecqDYmS90jZfZ8IrhSzpWB6WgcsZPlRJVaM=";
+          aarch64-darwin = "sha256-TfOAGMw2UDbZAM2zzxfhgSnCuGjb3fIABOPalzctFtE=";
+          aarch64-linux = "sha256-A1cW9U2nYwbmqYNUNmLxWF+Xh0ZduLKzOUR4Hp6O8NU=";
+          x86_64-darwin = "sha256-h3DjPeZvF2q1Y8khO0RwiayyU2YFneNmp2vHZRrEGS8=";
+          x86_64-linux = "sha256-uKcfQBfw+Dkf3OS3yOlEBpPnn5mCxL89mpzXY5BkUqA=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
