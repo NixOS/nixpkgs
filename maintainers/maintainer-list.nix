@@ -14996,6 +14996,12 @@
     githubId = 120277625;
     name = "LazilyStableProton";
   };
+  lbeierlieb = {
+    email = "lukasbrlb.lb@gmail.com";
+    github = "lbeierlieb";
+    githubId = 16045805;
+    name = "Lukas Beierlieb";
+  };
   lblasc = {
     email = "lblasc@znode.net";
     github = "lblasc";
