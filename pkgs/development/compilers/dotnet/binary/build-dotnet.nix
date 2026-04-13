@@ -159,6 +159,11 @@ mkWrapper type (
 
       mkdir -p $out/bin
       ln -s $out/share/dotnet/dotnet $out/bin/dotnet
+    ''
+    + lib.optionalString (type == "sdk" && lib.versionAtLeast version "10") ''
+      ln -s "$out"/share/dotnet/dnx "$out"/bin/dnx
+    ''
+    + ''
 
       runHook postInstall
     '';

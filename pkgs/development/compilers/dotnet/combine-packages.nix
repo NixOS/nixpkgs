@@ -36,11 +36,14 @@ mkWrapper "sdk" (
     ignoreCollisions = true;
     nativeBuildInputs = [ makeWrapper ];
     postBuild = ''
-      mkdir -p "$out"/share/dotnet
-      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
+      mkdir -p "$out"/bin "$out"/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
-      mkdir "$out"/bin
+      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+      if [[ -e "${cli}"/share/dotnet/dnx ]]; then
+        cp "${cli}"/share/dotnet/dnx $out/share/dotnet
+        ln -s "$out"/share/dotnet/dnx "$out"/bin/dnx
+      fi
     ''
     + lib.optionalString (cli ? man) ''
       ln -s ${cli.man} $man
