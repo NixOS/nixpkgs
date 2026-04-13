@@ -22,6 +22,9 @@ buildGoModule (finalAttrs: {
   # Skip e2e tests requiring network access
   excludedPackages = [ "./e2e" ];
 
+  # Fix tests creating network sockets on macOS
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     homepage = "https://github.com/peak/s5cmd";
     description = "Parallel S3 and local filesystem execution tool";
