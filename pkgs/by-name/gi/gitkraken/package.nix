@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.6.0";
+  version = "11.10.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
-      hash = "sha256-MU/WB4RsNViEulvE6fB7S4QTjjMI/50enlyCIX+xar4=";
+      hash = "sha256-t7baPue255rpC/7NpO9PNVOorEp/w44sJl98Jl8x7VU=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-Ty+eRZJ6bnBsrs1VtGem1+m9WDZZf/PgiOvFIazQF6I=";
+      hash = "sha256-0BZ7tTobB1ut0AQekBNBwVWlMBO8cDXotzOhEoLlONs=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-mpJNhvKIBYt3Yd+RjxSgzRP6AfnfHPRbQ0dzd5kQQIQ=";
+      hash = "sha256-CZitCSL3T8bkwas6/+LJ78/HJd6LlWOimS60WMf5xXU=";
     };
   };
 
@@ -207,9 +207,13 @@ let
 
       # SSL and permissions fix for bundled nodegit
       pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
-      mv nodegit-ubuntu-20.node nodegit-ubuntu-20-ssl-1.1.1.node
-      mv nodegit-ubuntu-20-ssl-static.node nodegit-ubuntu-20.node
-      chmod 755 nodegit-ubuntu-20.node
+      nodegitBinary=nodegit-ubuntu-20
+      if [ -e nodegit-x64-ubuntu-20.node ]; then
+        nodegitBinary=nodegit-x64-ubuntu-20
+      fi
+      mv ''${nodegitBinary}.node ''${nodegitBinary}-ssl-1.1.1.node
+      mv ''${nodegitBinary}-ssl-static.node ''${nodegitBinary}.node
+      chmod 755 ''${nodegitBinary}.node
       popd
 
       # Devendor bundled git
