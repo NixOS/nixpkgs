@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "duat";
-  version = "0.7.7";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "AhoyISki";
     repo = "duat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q8HeUN6JeT0OktOrmX3/ohUxCUvbEnlYKukFmtuuA44=";
+    hash = "sha256-SjSJc1pHUNl4G0ROZPyc7ux+Nx7RxMd6vG7jcd6INto=";
   };
 
-  cargoHash = "sha256-Wv2EdOGGsDqdXLvqyZ1sExqTlF+hHYEJu+RON7Ge398=";
+  cargoHash = "sha256-gZPr/I9/Ug+PmS1mUtwQ7JVkJ4gTYctvbtpvuOY8QUc=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
