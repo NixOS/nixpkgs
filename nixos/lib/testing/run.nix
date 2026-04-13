@@ -111,9 +111,6 @@ in
         buildCommand = ''
           mkdir -p $out
 
-          # effectively mute the XMLLogger
-          export LOGFILE=/dev/null
-
           ${lib.optionalString config.enableDebugHook ''
             ln -sf \
               ${hostPkgs.systemd}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf \

@@ -6,7 +6,6 @@
   coreutils,
   imagemagick_light,
   ipython,
-  junit-xml,
   mypy,
   ptpython,
   python,
@@ -43,7 +42,6 @@ buildPythonApplication {
   dependencies = [
     colorama
     ipython
-    junit-xml
     ptpython
     remote-pdb
   ]

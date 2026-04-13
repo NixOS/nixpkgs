@@ -10,11 +10,8 @@ import ptpython.ipython
 from test_driver.debug import Debug, DebugAbstract, DebugNop
 from test_driver.driver import Driver
 from test_driver.logger import (
-    CompositeLogger,
-    JunitXMLLogger,
     LogLevel,
-    TerminalLogger,
-    XMLLogger,
+    Logger,
 )
 
 
@@ -136,11 +133,6 @@ def main() -> None:
         type=writeable_dir,
     )
     arg_parser.add_argument(
-        "--junit-xml",
-        help="Enable JunitXML report generation to the given path",
-        type=Path,
-    )
-    arg_parser.add_argument(
         "testscript",
         action=EnvDefault,
         envvar="testScript",
@@ -171,13 +163,7 @@ def main() -> None:
         )
 
     output_directory = args.output_directory.resolve()
-    logger = CompositeLogger([TerminalLogger()])
-
-    if "LOGFILE" in os.environ.keys():
-        logger.add_logger(XMLLogger(os.environ["LOGFILE"]))
-
-    if args.junit_xml:
-        logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
+    logger = Logger()
 
     if args.log_level:
         logger.set_log_level(log_level_map[args.log_level])
@@ -241,7 +227,7 @@ def generate_driver_symbols() -> None:
         vlans=[],
         tests="",
         out_dir=Path(),
-        logger=CompositeLogger([]),
+        logger=Logger(),
     )
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
