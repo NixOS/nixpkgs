@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "4.8.5";
+  version = "4.8.6";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-zXV3gXUgN28a2J48EwS6RrYxkIgoj0IJ5lPTxvexYdA=";
+    hash = "sha256-8xMHHyj9qUdrd5dFYVlN2bi7EVjcEqoBBxIifC8xk3k=";
   };
 
   mail-templates = stdenv.mkDerivation {
