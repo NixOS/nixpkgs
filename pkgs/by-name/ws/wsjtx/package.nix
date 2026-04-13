@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
   asciidoc,
   asciidoctor,
   cmake,
+  nix-update-script,
   gitUpdater,
   pkg-config,
   fftw,
@@ -20,12 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wsjtx";
-  version = "2.7.0";
+  version = "3.0.0";
 
-  src = fetchgit {
-    url = "https://git.code.sf.net/p/wsjt/wsjtx";
-    rev = "wsjtx-${finalAttrs.version}";
-    hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
+  src = fetchFromGitHub {
+    owner = "WSJTX";
+    repo = "wsjtx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZM46ouS4NyXP7wPsAxY7Uf2mn0CawRiRmqYkkS8yTAU=";
   };
 
   nativeBuildInputs = [
@@ -48,14 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtbase
     qt5.qtmultimedia
     qt5.qtserialport
+    qt5.qtwebsockets
     boost
   ];
 
   strictDeps = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "wsjtx-";
-    ignoredVersions = "(-rc).*";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9]\\.[0-9]\\.[0-9])$"
+    ];
   };
 
   meta = {
