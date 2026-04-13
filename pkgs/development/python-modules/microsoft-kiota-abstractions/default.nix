@@ -12,19 +12,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-abstractions";
-  version = "1.9.10";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-abstractions-v${version}";
-    hash = "sha256-J9OLxZ3vQpChhfwjXzrGF691zco/bKv51FG20VFieN0=";
+    tag = "microsoft-kiota-abstractions-v${finalAttrs.version}";
+    hash = "sha256-KBCjVNZDPMh0wxWm8UVLsrfl2AYp3rKMjAT5c8F7+64=";
   };
 
-  sourceRoot = "${src.name}/packages/abstractions/";
+  sourceRoot = "${finalAttrs.src.name}/packages/abstractions/";
 
   build-system = [ poetry-core ];
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Abstractions library for Kiota generated Python clients";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/abstractions/";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
