@@ -43,12 +43,12 @@ let
       sha256,
       extraPatches ? [ ],
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       inherit version;
       pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
 
       src = fetchurl {
-        url = "mirror://apache/subversion/subversion-${version}.tar.bz2";
+        url = "mirror://apache/subversion/subversion-${finalAttrs.version}.tar.bz2";
         inherit sha256;
       };
 
@@ -189,7 +189,7 @@ let
         maintainers = [ ];
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
-    };
+    });
 
 in
 {
