@@ -10,13 +10,17 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
+  fetchpatch2,
   rustPlatform,
+
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
   fontconfig,
   harfbuzzFull,
   openssl,
-  pkg-config,
   icu,
-  fetchpatch2,
 }:
 
 let
@@ -61,7 +65,9 @@ buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-OMa89riyopKMQf9E9Fr7Qs4hFfEfjnDFzaSWFtkYUXE=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildFeatures = [ "external-harfbuzz" ];
 
