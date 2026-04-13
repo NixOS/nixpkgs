@@ -9757,10 +9757,6 @@ with pkgs;
     subversionSupport = true;
   };
 
-  avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   imagemagick_light = lowPrio (
     imagemagick.override {
       bzip2Support = false;
