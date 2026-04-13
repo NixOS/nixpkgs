@@ -53,5 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "tauno-monitor";
+    platforms = lib.platforms.linux;
   };
 })
