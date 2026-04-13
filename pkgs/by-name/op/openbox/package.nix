@@ -18,6 +18,7 @@
   bashNonInteractive,
   libstartup_notification,
   makeWrapper,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -93,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "X window manager for non-desktop embedded systems";
