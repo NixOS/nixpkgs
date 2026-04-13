@@ -309,6 +309,7 @@ in
   budgie = runTest ./budgie.nix;
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = runTest ./buildkite-agents.nix;
+  bulwark = runTest ./bulwark.nix;
   c2fmzq = runTest ./c2fmzq.nix;
   caddy = runTest ./caddy.nix;
   cadvisor = runTestOn [ "x86_64-linux" ] ./cadvisor.nix;
