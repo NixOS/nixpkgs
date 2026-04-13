@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lucus16
       thoughtpolice
+      sempiternal-aurora
     ];
     platforms =
       lib.platforms.linux ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
