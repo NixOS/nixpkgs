@@ -22,13 +22,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.10.4";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/4UyRzFALujZ98EdXxiVeLH8W+0Mqm09RZ4zEwOVyyk=";
+    hash = "sha256-48POUgO6torvLJLXpVzDQLF5sZ2Ws+vhiI1x84+exAw=";
     fetchSubmodules = true;
   };
 
@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-7jar0aNXaBfoklGzgvC+1DwsOXgpnOcIcEbIGwWgyfw=";
+    hash = "sha256-4CO0ouas6TAZDaL2J8zr9wR28QB/DVN4y1Cqe8m1FEg=";
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-rxOjXhXN19w8qAEvELIh0oXuB/N80Dtzmf/i3hjRal0=";
+  cargoHash = "sha256-7wmqDGhtBHU9iOvLrsqGifCEuVdymdljlETkW7dThHA=";
 
   buildAndTestSubdir = "src-tauri";
 
