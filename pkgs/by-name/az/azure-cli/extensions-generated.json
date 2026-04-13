@@ -90,6 +90,13 @@
     "hash": "sha256-ATO7B3Dzzk8nswan5Tvym7eloe3OD9ZO+yrfkpTWZns=",
     "description": "Microsoft Azure Command-Line Tools ApicExtension Extension"
   },
+  "appnet-preview": {
+    "pname": "appnet-preview",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/appnet_preview-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-JGt61AOwZxk4oxZh4ohktQQH73cBnuHyHwvreev+xH0=",
+    "description": "Azure CLI commands for working with Azure Kubernetes Application Network resources"
+  },
   "appservice-kube": {
     "pname": "appservice-kube",
     "version": "0.1.11",
