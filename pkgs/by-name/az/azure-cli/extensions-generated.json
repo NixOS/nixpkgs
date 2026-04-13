@@ -435,9 +435,9 @@
   },
   "edge-action": {
     "pname": "edge-action",
-    "version": "1.0.0b3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/edge_action-1.0.0b3-py3-none-any.whl",
-    "hash": "sha256-rAC5OVb2crUfQR1DkQmW09Ifft55aAnYgM7s8frPzW4=",
+    "version": "1.0.0b4",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/edge_action-1.0.0b4-py3-none-any.whl",
+    "hash": "sha256-bFIW0MS8t0ggUMfSU/VQki2VcYYQpALAVoPLGWt5aro=",
     "description": "Microsoft Azure Command-Line Tools Extension for Azure Front Door Edge Actions"
   },
   "edgeorder": {
