@@ -6,25 +6,31 @@
   graphviz,
   fontconfig,
   liberation_ttf,
-  experimentalKernel ? true,
+  mlton,
+  experimentalKernel ? false,
 }:
 
 let
-  pname = "hol4";
-  vnum = "14";
-
-  version = "k.${vnum}";
-  longVersion = "kananaskis-${vnum}";
-  holsubdir = "hol-${longVersion}";
+  versionBase = "trindemossen-2";
   kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
+  # the current version of mlton doesn't support i686-linux
+  # it also fails to build with musl
+  useMlton =
+    stdenv.buildPlatform.system != "i686-linux"
+    && stdenv.hostPlatform.system != "i686-linux"
+    && !stdenv.buildPlatform.isMusl
+    && !stdenv.hostPlatform.isMusl
+    && lib.elem stdenv.buildPlatform.system mlton.meta.platforms
+    && lib.elem stdenv.hostPlatform.system mlton.meta.platforms;
 in
 
 stdenv.mkDerivation {
-  inherit pname version;
+  pname = "hol";
+  version = "4-${versionBase}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
-    sha256 = "6Mc/qsEjzxGqzt6yP6x/1Tmqpwc1UDGlwV1Gl+4pMsY=";
+    url = "https://github.com/HOL-Theorem-Prover/HOL/releases/download/${versionBase}/hol-${versionBase}.tar.gz";
+    hash = "sha256-Ciy6IaB7LqwKlZOnEw1H1IcVoSL/bfbQxoWPcZD3H3w=";
   };
 
   buildInputs = [
@@ -32,10 +38,12 @@ stdenv.mkDerivation {
     graphviz
     fontconfig
     liberation_ttf
-  ];
+  ]
+  ++ lib.optional useMlton mlton;
 
-  buildCommand = ''
+  enableParallelBuilding = true;
 
+  buildPhase = ''
     mkdir chroot-fontconfig
     cat ${fontconfig.out}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
@@ -44,30 +52,28 @@ stdenv.mkDerivation {
 
     export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
 
+    substituteInPlace tools/editor-modes/emacs/hol-mode.src \
+      --replace-fail "/tools/yasnippets" "/tools/editor-modes/emacs/yasnippets"
+
     mkdir -p "$out/src"
-    cd  "$out/src"
 
-    tar -xzf "$src"
-    cd ${holsubdir}
-
-    substituteInPlace tools/Holmake/Holmake_types.sml \
-      --replace "\"/bin/" "\"" \
-
-
-    for f in tools/buildutils.sml help/src-sml/DOT;
-    do
-      substituteInPlace $f --replace "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
-    done
-
-    #sed -i -e "/compute/,999 d" tools/build-sequence # for testing
+    cp -a . "$out/src"
+    cd "$out/src"
 
     poly < tools/smart-configure.sml
 
-    bin/build ${kernelFlag}
+    # Extra theories we want to build
+    echo 'examples/formal-languages/context-free' >> tools/sequences/final-examples
 
+    # We run `bin/build` twice to force HOL to generate `.hol/make-deps/*Theory.{sml,sig}.d` files
+    # See https://github.com/HOL-Theorem-Prover/HOL/issues/1670 for more info
+    bin/build ${kernelFlag} -j $NIX_BUILD_CORES
+    bin/build ${kernelFlag} -j $NIX_BUILD_CORES
+  '';
+
+  installPhase = ''
     mkdir -p "$out/bin"
-    ln -st $out/bin  $out/src/${holsubdir}/bin/*
-    # ln -s $out/src/hol4.${version}/bin $out/bin
+    ln -st "$out/bin" "$out"/src/bin/*
   '';
 
   meta = {
@@ -84,7 +90,7 @@ stdenv.mkDerivation {
       implementing combinations of deduction, execution and property
       checking.
     '';
-    homepage = "http://hol.sourceforge.net/";
+    homepage = "https://hol-theorem-prover.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mudri ];
