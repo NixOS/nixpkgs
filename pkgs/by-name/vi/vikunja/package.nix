@@ -19,7 +19,7 @@ let
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = lib.fakeHash;
+    hash = "sha256-bdHiSFaN0vNQMhy6GPlpoFeYrk2CLvO7E30d8J/9GC0=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ let
         ;
       pnpm = pnpm_10_29_2;
       fetcherVersion = 3;
-      hash = lib.fakeHash;
+      hash = "sha256-cDGeIrCxZtcomu3YxikutjXpVe3EeUZ/L3+3y9yx67s=";
     };
 
     nativeBuildInputs = [
@@ -97,7 +97,7 @@ buildGoModule {
       mage
     ];
 
-  vendorHash = lib.fakeHash;
+  vendorHash = "sha256-4UMnfbwL2JFnw9KZDO5sq6XCSBUD5ejeqp6vaTbYWJc=";
 
   inherit frontend;
 
