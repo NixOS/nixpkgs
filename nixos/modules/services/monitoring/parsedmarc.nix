@@ -37,6 +37,7 @@ let
     typeOf
     hashString
     ;
+  inherit (lib) mkDefault;
 in
 {
   options.services.parsedmarc = {
@@ -422,7 +423,37 @@ in
 
     services.dovecot2 = lib.mkIf cfg.provision.localMail.enable {
       enable = true;
-      protocols = [ "imap" ];
+      enablePAM = mkDefault true;
+      settings =
+        let
+          toplevelConfig = config;
+        in
+        { config, ... }:
+        {
+          options = {
+            ssl_server_cert_file = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+            };
+
+            # If STARTTLS is enabled, parsedmarc really wants to use it. However,
+            # if we don't have any certs set, then Dovecot will advertise STARTTLS
+            # but kick the client out if it does try to use it. Therefore, default
+            # this to whether ssl_server_cert_file is set.
+            ssl = lib.mkOption {
+              type = lib.types.nullOr lib.types.bool;
+              default = config.ssl_server_cert_file != null;
+            };
+          };
+
+          config = {
+            dovecot_config_version = mkDefault "2.4.3";
+            dovecot_storage_version = mkDefault "2.4.3";
+            protocols.imap = true;
+            mail_driver = mkDefault "maildir";
+            mail_path = mkDefault "${toplevelConfig.services.postfix.settings.main.mail_spool_directory}/%{user}";
+          };
+        };
     };
 
     services.postfix = lib.mkIf cfg.provision.localMail.enable {
@@ -535,7 +566,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "postfix.service"
-          "dovecot2.service"
+          "dovecot.service"
           "elasticsearch.service"
         ];
         path = with pkgs; [
