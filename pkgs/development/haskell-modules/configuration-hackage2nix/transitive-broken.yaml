@@ -215,7 +215,6 @@ dont-distribute-packages:
  - bbi
  - bdcs
  - bdcs-api
- - beam-duckdb
  - beam-th
  - beautifHOL
  - bech32-th
