@@ -191,6 +191,9 @@ buildPythonPackage rec {
           # https://github.com/twisted/twisted/blob/twisted-25.5.0/src/twisted/internet/test/test_tcp.py
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
+          # Times out under load
+          # TestTimeoutError: reactor still running after 120.0 seconds
+          "AbortConnectionTests_SelectReactorTests.test_fullWriteBuffer"
         ];
       };
     in
