@@ -312,6 +312,12 @@ jobs:
           script: |
             const { readFile } = require('node:fs/promises')
             const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const removedByKernel = Object.fromEntries(
+              Object.entries(changed.attrdiffByKernel ?? {}).map(([kernel, diff]) => [
+                kernel,
+                diff.removed.length,
+              ]),
+            )
             const description =
               'Package: ' + [
                 `added ${changed.attrdiff.added.length}`,
@@ -321,7 +327,15 @@ jobs:
               ' — Rebuild: ' + [
                 `linux ${changed.rebuildCountByKernel.linux}`,
                 `darwin ${changed.rebuildCountByKernel.darwin}`
-              ].join(', ')
+              ].join(', ') +
+              (
+                Object.values(removedByKernel).some((count) => count > 0)
+                  ? ' — Removed: ' + [
+                      `linux ${removedByKernel.linux ?? 0}`,
+                      `darwin ${removedByKernel.darwin ?? 0}`
+                    ].join(', ')
+                  : ''
+              )
 
             const { serverUrl, repo, runId, payload } = context
             const target_url =
