@@ -655,6 +655,14 @@ let
     f:
     let
       installedExtensions = f postgresql.pkgs;
+      recurse = postgresqlWithPackages {
+        inherit
+          buildEnv
+          lib
+          makeBinaryWrapper
+          postgresql
+          ;
+      };
       finalPackage = buildEnv {
         pname = "${postgresql.pname}-and-plugins";
         inherit (postgresql) version;
@@ -696,33 +704,10 @@ let
             };
           };
 
-          withJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: installedExtensions ++ [ postgresql.jit ]);
-          withoutJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: lib.remove postgresql.jit installedExtensions);
+          withJIT = recurse (_: installedExtensions ++ [ postgresql.jit ]);
+          withoutJIT = recurse (_: lib.remove postgresql.jit installedExtensions);
 
-          withPackages =
-            f':
-            postgresqlWithPackages {
-              inherit
-                buildEnv
-                lib
-                makeBinaryWrapper
-                postgresql
-                ;
-            } (ps: installedExtensions ++ f' ps);
+          withPackages = f': recurse (ps: installedExtensions ++ f' ps);
         };
       };
     in
