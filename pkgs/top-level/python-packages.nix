@@ -2609,6 +2609,8 @@ self: super: with self; {
 
   certifi = callPackage ../development/python-modules/certifi { };
 
+  certihound = callPackage ../development/python-modules/certihound { };
+
   certipy = callPackage ../development/python-modules/certipy { };
 
   certipy-ad = callPackage ../development/python-modules/certipy-ad { };

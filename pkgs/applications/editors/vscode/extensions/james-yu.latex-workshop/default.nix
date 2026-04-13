@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "latex-workshop";
     publisher = "James-Yu";
-    version = "10.13.1";
-    hash = "sha256-UyujvtuS0dok5xC4w1lGCwDxOSr58t1/YQ5Mpe6yNPM=";
+    version = "10.14.1";
+    hash = "sha256-lsbiKzZTlkq/9K7ptLg0kHAd4i5OyNh2pLGGYUOJS9A=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
