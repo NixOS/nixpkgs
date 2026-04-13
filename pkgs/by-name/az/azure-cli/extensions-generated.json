@@ -216,6 +216,13 @@
     "hash": "sha256-GOcr3wcJ+FE/UUcvaoB90bWmdthmYZpDznaAtLr48LU=",
     "description": "Microsoft Azure Command-Line Tools Cloudhsm Extension"
   },
+  "computelimit": {
+    "pname": "computelimit",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/computelimit-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-Om6Hp12RxcajwQDUL/APXQpNjZNsJin/ad93hPfTOCg=",
+    "description": "Microsoft Azure Command-Line Tools Computelimit Extension"
+  },
   "computeschedule": {
     "pname": "computeschedule",
     "version": "1.0.0b1",
