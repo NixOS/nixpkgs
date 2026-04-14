@@ -116,17 +116,15 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5hlcc' "''${!outputDev}"
     moveToOutput 'bin/h5hlc++' "''${!outputDev}"
   ''
-  +
-    lib.optionalString enableShared
-      # The shared build creates binaries with -shared suffixes,
-      # so we remove these suffixes.
-      ''
-        pushd ''${!outputBin}/bin
-        for file in *-shared; do
-          mv "$file" "''${file%%-shared}"
-        done
-        popd
-      ''
+  # The shared build creates binaries with -shared suffixes,
+  # so we remove these suffixes.
+  + lib.optionalString enableShared ''
+    pushd ''${!outputBin}/bin
+    for file in *-shared; do
+      mv "$file" "''${file%%-shared}"
+    done
+    popd
+  ''
   + lib.optionalString fortranSupport ''
     mv $out/mod/shared $dev/include
     rm -r $out/mod
