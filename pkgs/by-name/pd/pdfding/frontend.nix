@@ -7,6 +7,8 @@
 
   tailwindcss_4,
   nodejs,
+
+  pdfding,
 }:
 let
   pdfjsVersion = "5.5.207"; # see update script
@@ -26,19 +28,13 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "pdfding-frontend";
-  version = "1.7.1";
-  src = fetchFromGitHub {
-    owner = "mrmn2";
-    repo = "PdfDing";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-T3Y9eWwBVxGPISZ3EZndAR6mwsq4g67RRCPpoZPuh+0=";
-  };
+  pname = "${pdfding.pname}-frontend";
+  inherit (pdfding) src version;
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "pdfding-frontend-${finalAttrs.version}-npm-deps";
-    hash = "sha256-an4KKKx65ehCm1YAlwLWYAW8pQMgB4HdDERqC/hfQi0=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    hash = "sha256-HOGnzDKg1ca/27u1oQEtOkOl6Cg/7k+aLJEJhbypUhE=";
   };
 
   nativeBuildInputs = [

@@ -1,23 +1,38 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iprange";
-  version = "1.0.4";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/firehol/iprange/releases/download/v${version}/iprange-${version}.tar.xz";
-    sha256 = "0rymw4ydn09dng34q4g5111706fyppzs2gd5br76frgvfj4x2f71";
+  src = fetchFromGitHub {
+    owner = "firehol";
+    repo = "iprange";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/rNM/5SmqpNX/yM/9EZdRYsXxgbPLp7+SL/RDtKo3+0=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  configureFlags = [ "--disable-man" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Manage IP ranges";
-    mainProgram = "iprange";
     homepage = "https://github.com/firehol/iprange";
-    license = lib.licenses.gpl2;
+    changelog = "https://github.com/firehol/iprange/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    mainProgram = "iprange";
   };
-}
+})

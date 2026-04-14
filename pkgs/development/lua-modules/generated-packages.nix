@@ -4645,19 +4645,20 @@ final: prev: {
       nui-nvim,
       nvim-nio,
       pathlib-nvim,
-      plenary-nvim,
+      tree-sitter-norg,
+      tree-sitter-norg-meta,
     }:
     buildLuarocksPackage {
       pname = "neorg";
-      version = "9.4.0-1";
+      version = "9.6.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neorg-9.4.0-1.rockspec";
-          sha256 = "0gm91iv0a5lpch6n92cnrcbpn525gxl735cgqwlldbrdfjwxv4y2";
+          url = "mirror://luarocks/neorg-9.6.4-1.rockspec";
+          sha256 = "11k7qwr7430wk3j5kf7isn3d9i4y0drmq6d0dwdx62s4cy9c3pvm";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neorg/neorg/archive/d4e6b3665504baa88685c9d2e79446d336dc0594.zip";
-        sha256 = "0gjyn9csw3rngnjxq6hyh7zl20ks6ibqvb5kggmkr9qhi3a8kiaj";
+        url = "https://github.com/nvim-neorg/neorg/archive/1f14d72aad7165eac307a2a2f6be0fb97a04b3c2.zip";
+        sha256 = "0l7hc1w4j00csv8i6dgbdhx0jcf0017b7hhs8gcldvsyka50xkx5";
       };
 
       disabled = luaOlder "5.1";
@@ -4666,7 +4667,8 @@ final: prev: {
         nui-nvim
         nvim-nio
         pathlib-nvim
-        plenary-nvim
+        tree-sitter-norg
+        tree-sitter-norg-meta
       ];
 
       meta = {
@@ -6104,6 +6106,36 @@ final: prev: {
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
         description = "The official tree-sitter parser for Norg documents.";
+      };
+    }
+  ) { };
+
+  tree-sitter-norg-meta = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-norg-meta";
+      version = "0.1.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-norg-meta-0.1.0-1.rockspec";
+          sha256 = "0vngnyvdad6n36r37sc96asl7h5mph691a0638523mffbg8zdfvr";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/nvim-neorg/tree-sitter-norg-meta/archive/v0.1.0.zip";
+        sha256 = "1vz74wc5yy5fykl9c3b16k6fsvskxp93acsy81p337jzg709v97j";
+      };
+
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://github.com/nvim-neorg/tree-sitter-norg-meta";
+        license.fullName = "MIT";
+        description = "Treesitter parser for Norg's `@document.meta` blocks.";
       };
     }
   ) { };

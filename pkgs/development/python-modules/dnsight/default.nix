@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dnsight";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dnsight";
     repo = "dnsight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WoYLAqNTbMVe+kd/cG1MPRSlYMMYPWP8wm96qr3IdY8=";
+    hash = "sha256-TirYLziPa1xRm7D54Unl5oVjsnsv6Gl0LRVUXzd9o/E=";
   };
 
   pythonRelaxDeps = [ "typer" ];

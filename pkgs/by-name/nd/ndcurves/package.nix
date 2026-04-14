@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndcurves";
-  version = "2.1.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "ndcurves";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YnpC2yYEe9VNcHHDyv+glLrue/J/HXbK/VP7DTAE/q0=";
+    hash = "sha256-X9p01hMoAx6fMSEU/nf/eqyFgy23mZrpBFonjoT1DLo=";
   };
 
   outputs = [
