@@ -7,13 +7,19 @@
   nix-update-script,
   versionCheckHook,
 }:
-stdenvNoCC.mkDerivation rec {
+let
+  sources = lib.importJSON ./sources.json;
+  platform =
+    sources.platforms.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported platform: ${stdenvNoCC.hostPlatform.system}");
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "swiftlint";
-  version = "0.63.2";
+  inherit (sources) version;
 
   src = fetchurl {
-    url = "https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip";
-    hash = "sha256-xZpAXIX5W5LO1nelAIBOCBWWpMrkpqSFr3YGVVfW7Sk=";
+    url = "https://github.com/realm/SwiftLint/releases/download/${finalAttrs.version}/${platform.filename}";
+    inherit (platform) hash;
   };
 
   dontPatch = true;
@@ -54,7 +60,7 @@ stdenvNoCC.mkDerivation rec {
       matteopacini
       DimitarNestorov
     ];
-    platforms = lib.platforms.darwin;
+    platforms = lib.attrNames sources.platforms;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

@@ -1,0 +1,13 @@
+{
+  "version": "0.63.2",
+  "platforms": {
+    "x86_64-darwin": {
+      "filename": "portable_swiftlint.zip",
+      "hash": "sha256-xZpAXIX5W5LO1nelAIBOCBWWpMrkpqSFr3YGVVfW7Sk="
+    },
+    "aarch64-darwin": {
+      "filename": "portable_swiftlint.zip",
+      "hash": "sha256-xZpAXIX5W5LO1nelAIBOCBWWpMrkpqSFr3YGVVfW7Sk="
+    }
+  }
+}
