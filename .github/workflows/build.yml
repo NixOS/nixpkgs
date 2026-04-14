@@ -85,7 +85,9 @@ jobs:
       - name: Build NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
-          contains(fromJSON(inputs.baseBranch).type, 'primary')
+          (contains(fromJSON(inputs.baseBranch).type, 'primary')
+            || startsWith(fromJSON(inputs.baseBranch).branch, 'staging-nixos')
+          )
         run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixos --out-link nixos-manual
 
       - name: Build Nixpkgs manual
