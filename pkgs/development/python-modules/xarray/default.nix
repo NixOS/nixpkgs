@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2026.02.0";
+  version = "2026.04.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-g1cKI0Et3RToWOxn+bELtT5jAaB8e1N+k9doCU+OgfY=";
+    hash = "sha256-BsgL+Xo9fTMLLdz5AfScnKGuBa76cE85LuUzB4ZNLiY=";
   };
 
   postPatch = ''
@@ -97,12 +97,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     scipy
-  ];
-
-  disabledTestPaths = [
-    # https://github.com/pydata/xarray/issues/11183
-    "xarray/tests/test_dataarray.py::TestDataArray::test_curvefit_helpers" # Failed: DID NOT RAISE <class 'ValueError'>
-    "xarray/tests/test_variable.py::TestIndexVariable::test_concat_periods" # ValueError: Could not convert <xarray.IndexVariable 't' (t: 5)> Size: 40B
   ];
 
   pythonImportsCheck = [ "xarray" ];
