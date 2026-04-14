@@ -1,0 +1,137 @@
+From 646d62e74c16be785ef08735ae5b24f4af6bcf78 Mon Sep 17 00:00:00 2001
+From: Ben Gamari <ben@smart-cactus.org>
+Date: Tue, 22 Aug 2023 13:26:58 -0400
+Subject: [PATCH] llvmGen: Don't pass stack alignment via command line
+
+As of https://reviews.llvm.org/D103048 LLVM no longer supports the
+`-stack-alignment=...` flag. Instead this information is passed via a
+module flag metadata node.
+
+This requires dropping support for LLVM 11 and 12.
+
+Fixes #23870
+
+(cherry picked from commit e9af2cf3f16ab60b5c79ed91df95359b11784df6)
+---
+ compiler/GHC/CmmToLlvm.hs               | 29 ++++++++++++++++++++++++-
+ compiler/GHC/CmmToLlvm/Config.hs        |  1 +
+ compiler/GHC/Driver/Config/CmmToLlvm.hs |  1 +
+ compiler/GHC/Driver/Pipeline/Execute.hs |  7 ------
+ configure.ac                            |  2 +-
+ 5 files changed, 31 insertions(+), 9 deletions(-)
+
+diff --git a/compiler/GHC/CmmToLlvm.hs b/compiler/GHC/CmmToLlvm.hs
+index 7d48693765..b9036daef1 100644
+--- a/compiler/GHC/CmmToLlvm.hs
++++ b/compiler/GHC/CmmToLlvm.hs
+@@ -190,7 +190,7 @@ cmmLlvmGen _ = return ()
+ 
+ cmmMetaLlvmPrelude :: LlvmM ()
+ cmmMetaLlvmPrelude = do
+-  metas <- flip mapM stgTBAA $ \(uniq, name, parent) -> do
++  tbaa_metas <- flip mapM stgTBAA $ \(uniq, name, parent) -> do
+     -- Generate / lookup meta data IDs
+     tbaaId <- getMetaUniqueId
+     setUniqMeta uniq tbaaId
+@@ -203,9 +203,36 @@ cmmMetaLlvmPrelude = do
+               -- just a name on its own. Previously `null` was accepted as the
+               -- name.
+               Nothing -> [ MetaStr name ]
++
++  platform <- getPlatform
++  cfg <- getConfig
++  let stack_alignment_metas =
++          case platformArch platform of
++            ArchX86_64 | llvmCgAvxEnabled cfg -> [mkStackAlignmentMeta 32]
++            _                                 -> []
++  module_flags_metas <- mkModuleFlagsMeta stack_alignment_metas
++  let metas = tbaa_metas ++ module_flags_metas
+   cfg <- getConfig
+   renderLlvm $ ppLlvmMetas cfg metas
+ 
++mkNamedMeta :: LMString -> [MetaExpr] -> LlvmM [MetaDecl]
++mkNamedMeta name exprs = do
++    (ids, decls) <- unzip <$> mapM f exprs
++    return $ decls ++ [MetaNamed name ids]
++  where
++    f expr = do
++      i <- getMetaUniqueId
++      return (i, MetaUnnamed i expr)
++
++mkModuleFlagsMeta :: [ModuleFlag] -> LlvmM [MetaDecl]
++mkModuleFlagsMeta =
++    mkNamedMeta "llvm.module.flags" . map moduleFlagToMetaExpr
++
++mkStackAlignmentMeta :: Integer -> ModuleFlag
++mkStackAlignmentMeta alignment =
++    ModuleFlag MFBError "override-stack-alignment" (MetaLit $ LMIntLit alignment i32)
++
++
+ -- -----------------------------------------------------------------------------
+ -- | Marks variables as used where necessary
+ --
+diff --git a/compiler/GHC/CmmToLlvm/Config.hs b/compiler/GHC/CmmToLlvm/Config.hs
+index 649a33c2f6..ecab7fdcc1 100644
+--- a/compiler/GHC/CmmToLlvm/Config.hs
++++ b/compiler/GHC/CmmToLlvm/Config.hs
+@@ -36,6 +36,7 @@ data LlvmCgConfig = LlvmCgConfig
+   , llvmCgContext           :: !SDocContext  -- ^ Context for LLVM code generation
+   , llvmCgFillUndefWithGarbage :: !Bool      -- ^ Fill undefined literals with garbage values
+   , llvmCgSplitSection      :: !Bool         -- ^ Split sections
++  , llvmCgAvxEnabled        :: !Bool
+   , llvmCgBmiVersion        :: Maybe BmiVersion  -- ^ (x86) BMI instructions
+   , llvmCgLlvmVersion       :: Maybe LlvmVersion -- ^ version of Llvm we're using
+   , llvmCgDoWarn            :: !Bool         -- ^ True ==> warn unsupported Llvm version
+diff --git a/compiler/GHC/Driver/Config/CmmToLlvm.hs b/compiler/GHC/Driver/Config/CmmToLlvm.hs
+index 8097bbec7e..752ba987ca 100644
+--- a/compiler/GHC/Driver/Config/CmmToLlvm.hs
++++ b/compiler/GHC/Driver/Config/CmmToLlvm.hs
+@@ -23,6 +23,7 @@ initLlvmCgConfig logger config_cache dflags = do
+     , llvmCgContext              = initSDocContext dflags PprCode
+     , llvmCgFillUndefWithGarbage = gopt Opt_LlvmFillUndefWithGarbage dflags
+     , llvmCgSplitSection         = gopt Opt_SplitSections dflags
++    , llvmCgAvxEnabled           = isAvxEnabled dflags
+     , llvmCgBmiVersion           = case platformArch (targetPlatform dflags) of
+                                       ArchX86_64 -> bmiVersion dflags
+                                       ArchX86    -> bmiVersion dflags
+diff --git a/compiler/GHC/Driver/Pipeline/Execute.hs b/compiler/GHC/Driver/Pipeline/Execute.hs
+index fac2a595f2..4fa72be475 100644
+--- a/compiler/GHC/Driver/Pipeline/Execute.hs
++++ b/compiler/GHC/Driver/Pipeline/Execute.hs
+@@ -992,8 +992,6 @@ llvmOptions llvm_config dflags =
+        [("-enable-tbaa -tbaa",  "-enable-tbaa") | gopt Opt_LlvmTBAA dflags ]
+     ++ [("-relocation-model=" ++ rmodel
+         ,"-relocation-model=" ++ rmodel) | not (null rmodel)]
+-    ++ [("-stack-alignment=" ++ (show align)
+-        ,"-stack-alignment=" ++ (show align)) | align > 0 ]
+ 
+     -- Additional llc flags
+     ++ [("", "-mcpu=" ++ mcpu)   | not (null mcpu)
+@@ -1012,11 +1010,6 @@ llvmOptions llvm_config dflags =
+ 
+         platform = targetPlatform dflags
+ 
+-        align :: Int
+-        align = case platformArch platform of
+-                  ArchX86_64 | isAvxEnabled dflags -> 32
+-                  _                                -> 0
+-
+         attrs :: String
+         attrs = intercalate "," $ mattr
+               ++ ["+sse42"   | isSse4_2Enabled dflags   ]
+diff --git a/configure.ac b/configure.ac
+index 16f2e8b339..0440d5051b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -555,7 +555,7 @@ AC_SUBST(InstallNameToolCmd)
+ # tools we are looking for. In the past, GHC supported a number of
+ # versions of LLVM simultaneously, but that stopped working around
+ # 3.5/3.6 release of LLVM.
+-LlvmMinVersion=11  # inclusive
++LlvmMinVersion=13  # inclusive
+ LlvmMaxVersion=16 # not inclusive
+ AC_SUBST([LlvmMinVersion])
+ AC_SUBST([LlvmMaxVersion])
+-- 
+2.50.1
+

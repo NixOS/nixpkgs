@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem "facter"
+
+gem "base64", "~> 0.2.0"
+gem "benchmark", "~> 0.5.0"
+gem "logger", "~> 1.7.0"

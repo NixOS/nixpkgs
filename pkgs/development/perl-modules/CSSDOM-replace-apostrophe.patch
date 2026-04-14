@@ -1,0 +1,1412 @@
+commit 7dda09313a63c4c64563f582844d7b04302d94bd
+Author: Yves Orton <demerphq@gmail.com>
+Date:   Wed Feb 22 13:28:01 2023 +0100
+
+    Replace apostrophe with :: as package separator
+    
+    In 5.37.9 this is deprecated, and in 5.40 it will be forbidden
+
+diff --git a/lib/CSS/DOM/Parser.pm b/lib/CSS/DOM/Parser.pm
+index 473992c..d688f19 100644
+--- a/lib/CSS/DOM/Parser.pm
++++ b/lib/CSS/DOM/Parser.pm
+@@ -369,7 +369,7 @@ sub _parse_at_rule { for (shift) { for my $tokens (shift) {
+ 
+ 			$selector =~ s/s\z// and pop @selector;
+ 
+-			require CSS'DOM'Rule;
++                        require CSS::DOM::Rule;
+ 			(my $rule = new CSS::DOM::Rule $_[0]||())
+ 				->_set_tokens(
+ 					$selector,\@selector
+@@ -413,7 +413,7 @@ sub _parse_at_rule { for (shift) { for my $tokens (shift) {
+ 		my ($types,@tokens) = ("\@$1",$at,splice @$tokens,0,$+[0]);
+ 		$types =~ /"/ and return; # ignore rules w/invalid strings
+ 		$types =~ s/s\z// and pop @tokens;
+-		require CSS'DOM'Rule;
++                require CSS::DOM::Rule;
+ 		(my $rule = new CSS::DOM::Rule $_[0]||())
+ 			->_set_tokens(
+ 				$types, \@tokens
+diff --git a/lib/CSS/DOM/PropertyParser.pm b/lib/CSS/DOM/PropertyParser.pm
+index 258158f..76b0d99 100644
+--- a/lib/CSS/DOM/PropertyParser.pm
++++ b/lib/CSS/DOM/PropertyParser.pm
+@@ -6,8 +6,8 @@ use warnings; no warnings qw 'utf8 parenthesis';
+ use strict;
+ 
+ use constant 1.03 (); # multiple
+-use CSS::DOM'Constants ':primitive', ':value';
+-use CSS'DOM'Util<unescape unescape_str unescape_url>;
++use CSS::DOM::Constants ':primitive', ':value';
++use CSS::DOM::Util<unescape unescape_str unescape_url>;
+ 
+ use constant old_perl => $] < 5.01;
+ { no strict 'refs'; delete ${__PACKAGE__.'::'}{old_perl} }
+@@ -19,7 +19,7 @@ use constant old_perl => $] < 5.01;
+ use constant naughty_perl => 0+$] eq 5.01;
+ { no strict 'refs'; delete ${__PACKAGE__.'::'}{naughty_perl} }
+ 
+-*s2c = *CSS'DOM'Constants'SuffixToConst;
++*s2c = *CSS::DOM::Constants::SuffixToConst;
+ our %s2c;
+ 
+ our %compiled; # compiled formats
+@@ -60,7 +60,7 @@ sub clone {
+ # exists &dclone or require Storable, "Storable"->import('dclone');
+ # return dclone($_[0]);
+  require Clone;
+- return Clone'clone($_[0]);
++ return Clone::clone($_[0]);
+ }
+ 
+ #  Declare the variables that the re-evals use. Some nasty hacker went and
+@@ -202,7 +202,7 @@ sub _make_arg_list {
+  my($stypes,$stokens) = _space_out($types, $tokens);
+  my $css = join "", @$stokens;
+  if(@_ == 1) { # list property
+-  my $list = shift @'_;
++  my $list = shift @_;
+   my $sep = @$list <= 1 ? '' : do {
+    my $range_start = $$list[0][4];
+    my $range_end = $$list[1][4] - length($$list[1][4]) - 1;
+@@ -301,7 +301,7 @@ sub _make_arg_list {
+ 
+ sub _space_out {
+  my($types,$tokens) = @_;
+-Carp'cluck() if ref $tokens ne 'ARRAY';
++Carp::cluck() if ref $tokens ne 'ARRAY';
+  $tokens = [@$tokens];
+  my @posses;
+  $types =~ s/(?<=[^(f])(?![),]|\z)/
+@@ -328,7 +328,7 @@ sub _prep_val {
+  }
+  else {
+   require CSS::DOM::Parser;
+-  ($types, $tokens) = CSS::DOM::Parser'tokenise($_[0]);
++  ($types, $tokens) = CSS::DOM::Parser::tokenise($_[0]);
+  }
+ 
+  # strip out all whitespace tokens
+diff --git a/lib/CSS/DOM/Rule.pm b/lib/CSS/DOM/Rule.pm
+index 921efb0..666fb08 100644
+--- a/lib/CSS/DOM/Rule.pm
++++ b/lib/CSS/DOM/Rule.pm
+@@ -46,7 +46,7 @@ sub _parse { # This method parses the code passed to it and checks to see
+              # the rule data from the new rule.
+ 	my $self = shift;
+ 	require CSS::DOM::Parser;
+-	my $new_rule  =  CSS::DOM::Parser'parse_statement(shift)
++        my $new_rule  =  CSS::DOM::Parser::parse_statement(shift)
+ 		|| die CSS::DOM::Exception->new(SYNTAX_ERR, $@);
+ 
+ 	ref $new_rule eq ref $self or die CSS::DOM::Exception->new(
+diff --git a/lib/CSS/DOM/Rule/Import.pm b/lib/CSS/DOM/Rule/Import.pm
+index 1afdcdc..75c8505 100644
+--- a/lib/CSS/DOM/Rule/Import.pm
++++ b/lib/CSS/DOM/Rule/Import.pm
+@@ -45,7 +45,7 @@ sub cssText {
+ sub href {
+ 	my $self =shift;
+ 	$self->[hrfe] ||= do {
+-		require CSS'DOM'Parser;
++                require CSS::DOM::Parser;
+ 		if($self->[urlt][00] eq 'u') {
+ 			# ~~~ I probably ought to put things like this in a
+ 			#     Parser::token_val function.
+@@ -53,10 +53,10 @@ sub href {
+ 			$url =~ s/^url\([ \t\r\n\f]*//;
+ 			$url =~ s/[ \t\r\n\f]*\)\z//;
+ 			$url =~ s/^['"]// and chop $url;
+-			CSS'DOM'Parser'unescape($url);
++                        CSS::DOM::Parser::unescape($url);
+ 		}
+ 		else {
+-			CSS'DOM'Parser'unescape(
++                        CSS::DOM::Parser::unescape(
+ 				substr $$self[urlt][1], 1, -1
+ 			)
+ 		}
+diff --git a/lib/CSS/DOM/Rule/Style.pm b/lib/CSS/DOM/Rule/Style.pm
+index dfa7501..54da057 100644
+--- a/lib/CSS/DOM/Rule/Style.pm
++++ b/lib/CSS/DOM/Rule/Style.pm
+@@ -93,8 +93,8 @@ sub _selector_matches { # ~~~ Does this work with initial space in the selector?
+ 
+  # tokenise if necessary
+  unless(ref $self->[selc]) {
+-  require CSS'DOM'Parser;
+-  $self->[selc] = [ CSS'DOM'tokenise($self->[selc]) ];
++  require CSS::DOM::Parser;
++  $self->[selc] = [ CSS::DOM::tokenise($self->[selc]) ];
+  }
+ 
+  # parse selector tokens if necessary
+@@ -130,7 +130,7 @@ sub _selector_matches { # ~~~ Does this work with initial space in the selector?
+ 
+      # ids:
+      if($types =~ s/^#//) {
+-      push @subsel, '#', CSS'DOM'Util'unescape( substr shift @tokens, 1 ),
++      push @subsel, '#', CSS::DOM::Util::unescape( substr shift @tokens, 1 ),
+        undef;
+      }
+ 
+@@ -138,12 +138,12 @@ sub _selector_matches { # ~~~ Does this work with initial space in the selector?
+      elsif($types =~ /^di/ && $tokens[0] eq '.') {
+       $types =~ s/^..//; shift @tokens;
+       push @subsel, '~', 'class',
+-       CSS'DOM'Util'unescape( shift @tokens );
++       CSS::DOM::Util::unescape( shift @tokens );
+      }
+ 
+      # pseudo-elems and classes
+      elsif($types =~ s/^(::?)i//) {
+-      push @subsel, $1,lc CSS'DOM'Util'unescape($tokens[length $1]), undef;
++      push @subsel, $1,lc CSS::DOM::Util::unescape($tokens[length $1]), undef;
+       splice @tokens, 0, $+[0];
+      }
+ 
+@@ -151,14 +151,14 @@ sub _selector_matches { # ~~~ Does this work with initial space in the selector?
+      elsif($types =~ s/^:fi\)//) {
+       push @subsel,
+        ':',
+-       lc CSS'DOM'Util'unescape(substr $tokens[1], 0, -1),
+-       lc CSS'DOM'Util'unescape($tokens[2]);
++       lc CSS::DOM::Util::unescape(substr $tokens[1], 0, -1),
++       lc CSS::DOM::Util::unescape($tokens[2]);
+       splice @tokens, 0, 4;
+      }
+ 
+      # [attr]
+      elsif($types =~ s/^\[i]//) {
+-      push @subsel, '=', lc CSS'DOM'Util'unescape($tokens[1]), undef;
++      push @subsel, '=', lc CSS::DOM::Util::unescape($tokens[1]), undef;
+       splice @tokens, 0, 3;
+      }
+ 
+@@ -166,16 +166,16 @@ sub _selector_matches { # ~~~ Does this work with initial space in the selector?
+      elsif($types =~ /^\[id']/ && $tokens[2] eq '=') {
+       $types =~ s/^.{5}//;
+       push @subsel, '=',
+-       lc CSS'DOM'Util'unescape($tokens[1]),
+-       CSS'DOM'Util'unescape_str($tokens[3]);
++       lc CSS::DOM::Util::unescape($tokens[1]),
++       CSS::DOM::Util::unescape_str($tokens[3]);
+       splice @tokens, 0, 5;
+      }
+ 
+      # [attr~='value'], [attr|='value']
+      elsif($types =~ s/^\[i[~|]']//) {
+       push @subsel, $tokens[2],
+-       lc CSS'DOM'Util'unescape($tokens[1]),
+-       CSS'DOM'Util'unescape_str($tokens[3]);
++       lc CSS::DOM::Util::unescape($tokens[1]),
++       CSS::DOM::Util::unescape_str($tokens[3]);
+       splice @tokens, 0, 5;
+      }
+ 
+diff --git a/lib/CSS/DOM/Style.pm b/lib/CSS/DOM/Style.pm
+index 47d1291..b42b8db 100644
+--- a/lib/CSS/DOM/Style.pm
++++ b/lib/CSS/DOM/Style.pm
+@@ -171,9 +171,9 @@ sub setProperty {
+ 	# short-circuit for the common case
+ 	length $value or $self->removeProperty($name),return;
+ 
+-	require CSS'DOM'Parser;
+-	my @tokens = eval { CSS'DOM'Parser'tokenise_value($value); }
+-		or die CSS::DOM'Exception->new( SYNTAX_ERR, $@);
++        require CSS::DOM::Parser;
++        my @tokens = eval { CSS::DOM::Parser::tokenise_value($value); }
++                or die CSS::DOM::Exception->new( SYNTAX_ERR, $@);
+ 
+ 	# check for whitespace/comment assignment
+ 	$tokens[0] =~ /^s+\z/ and $self->removeProperty($name),return;
+diff --git a/lib/CSS/DOM/Value.pm b/lib/CSS/DOM/Value.pm
+index 45f89e9..83b04e7 100644
+--- a/lib/CSS/DOM/Value.pm
++++ b/lib/CSS/DOM/Value.pm
+@@ -7,9 +7,9 @@ use strict;
+ 
+ use Carp;
+ use CSS::DOM::Constants;
+-use CSS'DOM'Exception 'NO_MODIFICATION_ALLOWED_ERR';
++use CSS::DOM::Exception 'NO_MODIFICATION_ALLOWED_ERR';
+ use Exporter 5.57 'import';
+-use Scalar'Util < weaken reftype >;
++use Scalar::Util < weaken reftype >;
+ 
+ use constant 1.03 our $_const = {
+     type => 0,
+@@ -46,11 +46,11 @@ sub cssText {
+ 		? $self->[valu] : 'inherit'
+ 	 if defined wantarray;
+ 	if(@_) {
+-		die new CSS'DOM'Exception
++                die new CSS::DOM::Exception
+ 		  NO_MODIFICATION_ALLOWED_ERR,
+ 		 "Unowned value objects cannot be modified"
+ 		   unless my $owner = $self->[ownr];
+-		die new CSS'DOM'Exception
++                die new CSS::DOM::Exception
+ 		  NO_MODIFICATION_ALLOWED_ERR,
+ 		 "CSS::DOM::Value objects that do not know to which "
+ 		 ."property they belong cannot be modified"
+diff --git a/lib/CSS/DOM/Value/List.pm b/lib/CSS/DOM/Value/List.pm
+index 85f5ef5..e681fa2 100644
+--- a/lib/CSS/DOM/Value/List.pm
++++ b/lib/CSS/DOM/Value/List.pm
+@@ -2,8 +2,8 @@ package CSS::DOM::Value::List;
+ 
+ $VERSION = '0.17';
+ 
+-use CSS'DOM'Constants <CSS_VALUE_LIST NO_MODIFICATION_ALLOWED_ERR>;
+-use Scalar'Util 'weaken';
++use CSS::DOM::Constants <CSS_VALUE_LIST NO_MODIFICATION_ALLOWED_ERR>;
++use Scalar::Util 'weaken';
+ 
+ # Object of this class are hashes, with the following keys:
+ # c: CSS code
+@@ -14,7 +14,7 @@ use Scalar'Util 'weaken';
+ 
+ sub DOES {
+  return 1 if $_[1] eq 'CSS::DOM::Value';
+- goto &UNIVERSAL'DOES if defined &UNIVERSAL'DOES;
++ goto &UNIVERSAL::DOES if defined &UNIVERSAL::DOES;
+ }
+ 
+ use overload
+@@ -37,14 +37,14 @@ sub cssText {
+  if(defined wantarray) {{
+    if(!defined $$self{c} || grep ref ne 'ARRAY', @{$$self{v}}) {
+     @{$$self{v}} or $old = 'none', last;
+-    require CSS'DOM'Value'Primitive;
++    require CSS::DOM::Value::Primitive;
+     my @args; my $index = 0;
+     for(@{$$self{v}}) {
+      next unless ref eq 'ARRAY';
+      @args or @args = (
+       (owner => property => @$self{<o p>})[0,2,1,3], index => $index
+      ); 
+-     $_ = new CSS'DOM'Value'Primitive @$_, @args;
++     $_ = new CSS::DOM::Value::Primitive @$_, @args;
+     }
+     no warnings 'uninitialized';
+     $old = join length $$self{s} ? $$self{s} : ' ',
+@@ -53,11 +53,11 @@ sub cssText {
+    else { $old = $$self{c} }
+  }}
+  if(@_) { # assignment
+-  die new CSS'DOM'Exception
++  die new CSS::DOM::Exception
+     NO_MODIFICATION_ALLOWED_ERR,
+    "Unowned value objects cannot be modified"
+      unless my $owner = $self->{o};
+-  die new CSS'DOM'Exception
++  die new CSS::DOM::Exception
+     NO_MODIFICATION_ALLOWED_ERR,
+    "CSS::DOM::Value objects that do not know to which "
+    ."property they belong cannot be modified"
+@@ -67,8 +67,8 @@ sub cssText {
+    my @arsg
+     = $owner->property_parser->match($prop, $_[0])
+   ) {
+-   require CSS'DOM'Value;
+-   CSS'DOM'Value::_apply_args_to_self($self,$owner,$prop,@arsg);
++   require CSS::DOM::Value;
++   CSS::DOM::Value::_apply_args_to_self($self,$owner,$prop,@arsg);
+   }
+ 
+   if(my $mh = $owner->modification_handler) {
+@@ -89,8 +89,8 @@ sub item {
+    defined or return;
+    ref eq 'ARRAY' or return exit die return $_;
+ 
+-   require CSS'DOM'Value'Primitive;
+-   return $_ = new CSS'DOM'Value'Primitive
++   require CSS::DOM::Value::Primitive;
++   return $_ = new CSS::DOM::Value::Primitive
+              @$_,
+              (owner => property => @$self{<o p>})[0,2,1,3],
+              index => $index;
+diff --git a/lib/CSS/DOM/Value/Primitive.pm b/lib/CSS/DOM/Value/Primitive.pm
+index 2ce0e9d..2046ff4 100644
+--- a/lib/CSS/DOM/Value/Primitive.pm
++++ b/lib/CSS/DOM/Value/Primitive.pm
+@@ -17,7 +17,7 @@ use Exporter 5.57 'import';
+ 
+ sub DOES {
+  return 1 if $_[1] eq 'CSS::DOM::Value';
+- goto &UNIVERSAL'DOES if defined &UNIVERSAL'DOES;
++ goto &UNIVERSAL::DOES if defined &UNIVERSAL::DOES;
+ }
+ 
+ use constant 1.03 our $_const = { # Don’t conflict with the superclass!
+@@ -203,8 +203,8 @@ sub cssText {
+ 		}}
+ 	}
+ 	if(@_) {
+-		require CSS'DOM'Exception,
+-		die new CSS'DOM'Exception
++                require CSS::DOM::Exception,
++                die new CSS::DOM::Exception
+ 		  NO_MODIFICATION_ALLOWED_ERR,
+ 		 "Unowned value objects cannot be modified"
+ 		   unless my $owner = $self->[ownr];
+@@ -213,15 +213,15 @@ sub cssText {
+ 		# deal with formats
+ 		if(my $format = $$self[form]) {
+ 			if(!our $parser) {
+-				require CSS'DOM'PropertyParser;
++                                require CSS::DOM::PropertyParser;
+ 				add_property{
+-				 $parser = new CSS'DOM'PropertyParser
++                                 $parser = new CSS::DOM::PropertyParser
+ 				} _=>our $prop_spec = {};
+ 			}
+ 			our $prop_spec->{format} = $format;
+ 			if(my @args = match { our $parser } _=> shift) {
+-				require CSS'DOM'Value;
+-				CSS'DOM'Value'_apply_args_to_self(
++                                require CSS::DOM::Value;
++                                CSS::DOM::Value::_apply_args_to_self(
+ 				 $self, $owner, $prop,
+ 				 @args, format => $format, 
+ 				);				
+@@ -231,8 +231,8 @@ sub cssText {
+ 		# This is never reached, at least not when CSS::DOM’s mod-
+ 		# ules call the constructor:
+ 		elsif(!defined $prop) {
+-			require CSS'DOM'Exception,
+-			die new CSS'DOM'Exception
++                        require CSS::DOM::Exception,
++                        die new CSS::DOM::Exception
+ 			  NO_MODIFICATION_ALLOWED_ERR,
+ 			 ref($self) . " objects that do not know to which "
+ 			 ."property they belong cannot be modified"
+@@ -263,8 +263,8 @@ sub cssText {
+ 			       $index+1..$length-1
+ 			      ),
+ 			    );
+-			require CSS'DOM'Value;
+-			CSS'DOM'Value'_load_if_necessary($arsg[1]);
++                        require CSS::DOM::Value;
++                        CSS::DOM::Value::_load_if_necessary($arsg[1]);
+ 			my $list = $arsg[1]->new(
+ 			 owner => $owner,
+ 			 property => $prop,
+@@ -284,8 +284,8 @@ sub cssText {
+ 		 my @arsg
+ 		  = $owner->property_parser->match($prop, $_[0])
+ 		) {
+-			require CSS'DOM'Value;
+-			CSS'DOM'Value'_apply_args_to_self(
++                        require CSS::DOM::Value;
++                        CSS::DOM::Value::_apply_args_to_self(
+ 				 $self, $owner, $prop, @arsg
+ 			);
+ 		}
+@@ -341,10 +341,10 @@ sub cssValueType { CSS::DOM::Value::CSS_PRIMITIVE_VALUE }
+ sub primitiveType { shift->[type] }
+ 
+ sub setFloatValue {
+-  my ($self,$type,$val) = @'_;
++  my ($self,$type,$val) = @_;
+ 
+-  require CSS'DOM'Exception,
+-  die new CSS'DOM'Exception INVALID_ACCESS_ERR, "Invalid value type"
++  require CSS::DOM::Exception,
++  die new CSS::DOM::Exception INVALID_ACCESS_ERR, "Invalid value type"
+    if $type == CSS_UNKNOWN || $type == CSS_COUNTER
+    || $type == CSS_RECT || $type == CSS_RGBCOLOR || $type == CSS_DIMENSION;
+ 
+@@ -352,8 +352,8 @@ sub setFloatValue {
+   # using this API.
+   no warnings 'numeric';
+   $self->cssText(my $css = _serialise($type, $val));
+-  require CSS'DOM'Exception,
+-  die new CSS'DOM'Exception INVALID_ACCESS_ERR, "Invalid value: $css"
++  require CSS::DOM::Exception,
++  die new CSS::DOM::Exception INVALID_ACCESS_ERR, "Invalid value: $css"
+    if $self->cssText ne $css;
+  _:
+ }
+@@ -364,8 +364,8 @@ sub getFloatValue {
+  # There are more types that are numbers than are not, so we
+  # invert our list.
+  my $type = $self->[type];
+- require CSS'DOM'Exception,
+- die new CSS'DOM'Exception INVALID_ACCESS_ERR, "Not a numeric value"
++ require CSS::DOM::Exception,
++ die new CSS::DOM::Exception INVALID_ACCESS_ERR, "Not a numeric value"
+   if $type == CSS_UNKNOWN || $type == CSS_STRING || $type == CSS_URI 
+   || $type == CSS_IDENT || $type == CSS_ATTR || $type == CSS_COUNTER
+   || $type == CSS_RECT || $type == CSS_RGBCOLOR;
+@@ -380,8 +380,8 @@ sub getStringValue {
+  my $self = shift;
+ 
+  my $type = $self->[type];
+- require CSS'DOM'Exception,
+- die new CSS'DOM'Exception INVALID_ACCESS_ERR, "Not a string value"
++ require CSS::DOM::Exception,
++ die new CSS::DOM::Exception INVALID_ACCESS_ERR, "Not a string value"
+   unless $type == CSS_STRING || $type == CSS_URI
+       || $type == CSS_IDENT  || $type == CSS_ATTR;
+ 
+diff --git a/t/CSS2Properties.t b/t/CSS2Properties.t
+index 315321b..13fc438 100644
+--- a/t/CSS2Properties.t
++++ b/t/CSS2Properties.t
+@@ -3,8 +3,8 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
+-sub tests'import { $tests += pop if @_ > 1 };
++sub tests::VERSION { $tests += pop };
++sub tests::import { $tests += pop if @_ > 1 };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/CSSCharsetRule.t b/t/CSSCharsetRule.t
+index 92a8e74..fc3dba5 100644
+--- a/t/CSSCharsetRule.t
++++ b/t/CSSCharsetRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -13,7 +13,7 @@ use_ok 'CSS::DOM::Rule::Charset',;
+ 
+ require CSS::DOM;
+ my $rule = (
+-	my $ss = CSS::DOM'parse(
++	my $ss = CSS::DOM::parse(
+ 		'@charset "utf-8";'
+ 	)
+ )-> cssRules->[0];
+diff --git a/t/CSSFontFaceRule.t b/t/CSSFontFaceRule.t
+index 9f4879e..abd5b6c 100644
+--- a/t/CSSFontFaceRule.t
++++ b/t/CSSFontFaceRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -13,7 +13,7 @@ use_ok 'CSS::DOM::Rule::FontFace',;
+ 
+ require CSS::DOM;
+ my $rule = (
+-	my $ss = CSS::DOM'parse(
++	my $ss = CSS::DOM::parse(
+ 		'@font-face { font-family: "foo";src:url(bar) }'
+ 	)
+ )-> cssRules->[0];
+diff --git a/t/CSSImportRule.t b/t/CSSImportRule.t
+index 6ec65ef..c8a6a51 100644
+--- a/t/CSSImportRule.t
++++ b/t/CSSImportRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -15,7 +15,7 @@ use_ok 'CSS::DOM::Rule::Import';
+ 
+ require CSS::DOM;
+ my $rule = (
+-	my $ss = CSS::DOM'parse(
++	my $ss = CSS::DOM::parse(
+ 		'@import "foo.css" tv, screen'
+ 	)
+ )-> cssRules->[0];
+@@ -95,7 +95,7 @@ use tests 5; # styleSheet
+ 		'foo.css' => '@import "bar.css"',
+ 		'bar.css' => 'a { color: blue }',
+ 	);
+-	is CSS'DOM'parse('@import "foo.css',url_fetcher=>sub{$urls{$_[0]}})
++	is CSS::DOM::parse('@import "foo.css',url_fetcher=>sub{$urls{$_[0]}})
+ 		->cssRules->[0]->styleSheet
+ 		->cssRules->[0]->styleSheet
+ 		->cssRules->[0]->style->color,
+diff --git a/t/CSSMediaRule.t b/t/CSSMediaRule.t
+index fffa7fb..9d01698 100644
+--- a/t/CSSMediaRule.t
++++ b/t/CSSMediaRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -15,7 +15,7 @@ use_ok 'CSS::DOM::Rule::Media';
+ 
+ require CSS::DOM;
+ my $rule = (
+-	my $ss = CSS::DOM'parse(
++	my $ss = CSS::DOM::parse(
+ 		'@media print { body { background: none } }'
+ 	)
+ )-> cssRules->[0];
+@@ -133,4 +133,4 @@ use tests 4; # deleteRule
+ 	cmp_ok $@, '==', CSS::DOM::Exception::INDEX_SIZE_ERR,
+ 		'error raised by deleteRule';
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/t/CSSPageRule.t b/t/CSSPageRule.t
+index 108923e..764e1a1 100644
+--- a/t/CSSPageRule.t
++++ b/t/CSSPageRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -14,7 +14,7 @@ use_ok 'CSS::DOM::Rule::Page',;
+ 
+ require CSS::DOM;
+ my $rule = (
+-	my $ss = CSS::DOM'parse( '@page:first{ margin-top: 3in }')
++	my $ss = CSS::DOM::parse( '@page:first{ margin-top: 3in }')
+ )-> cssRules->[0];
+ 
+ use tests 1; # isa
+diff --git a/t/CSSPrimitiveValue.t b/t/CSSPrimitiveValue.t
+index 5b30046..ad378f7 100644
+--- a/t/CSSPrimitiveValue.t
++++ b/t/CSSPrimitiveValue.t
+@@ -4,8 +4,8 @@ use strict; use warnings;
+ no warnings<utf8 parenthesis regexp once qw bareword syntax>;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
+-sub tests'import  { $tests += pop if @_ > 1 };
++sub tests::VERSION { $tests += pop };
++sub tests::import  { $tests += pop if @_ > 1 };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -441,9 +441,9 @@ for(CSS::DOM::Value::Primitive->new(
+ # ------------------------------------------
+ # Tests for setFloatValue and setStringValue
+ 
+-use CSS'DOM'Style;
++use CSS::DOM::Style;
+ require CSS::DOM::PropertyParser;
+-my $s = new CSS'DOM'Style
++my $s = new CSS::DOM::Style
+  property_parser => $CSS::DOM::PropertyParser::Default;
+ 
+ for my $meth ('setFloatValue' ,'setStringValue'){
+diff --git a/t/CSSRule.t b/t/CSSRule.t
+index b33007c..582eb04 100644
+--- a/t/CSSRule.t
++++ b/t/CSSRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -24,7 +24,7 @@ use tests 7; # constants
+ 
+ 
+ require CSS::DOM;
+-my $ss = CSS::DOM'parse( 'a{text-decoration: none} p { margin: 0 }');
++my $ss = CSS::DOM::parse( 'a{text-decoration: none} p { margin: 0 }');
+ my $rule = cssRules $ss ->[0];
+ 
+ use tests 1; # isa
+diff --git a/t/CSSRuleList.t b/t/CSSRuleList.t
+index bc2bfaf..5cee6f6 100644
+--- a/t/CSSRuleList.t
++++ b/t/CSSRuleList.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/CSSStyleDeclaration-setProperty.t b/t/CSSStyleDeclaration-setProperty.t
+index cceb993..d0615b7 100644
+--- a/t/CSSStyleDeclaration-setProperty.t
++++ b/t/CSSStyleDeclaration-setProperty.t
+@@ -7,7 +7,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/CSSStyleDeclaration.t b/t/CSSStyleDeclaration.t
+index 57bfe98..7bcc370 100644
+--- a/t/CSSStyleDeclaration.t
++++ b/t/CSSStyleDeclaration.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings; no warnings qw 'utf8 parenthesis regexp once qw';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -26,7 +26,7 @@ use tests 3; # first make sure we can use it without loading CSS::DOM
+ 	
+ 
+ require CSS::DOM;
+-my $ss = CSS::DOM'parse ('a{text-decoration: none} p { margin: 0 }');
++my $ss = CSS::DOM::parse ('a{text-decoration: none} p { margin: 0 }');
+ my $rule = cssRules $ss ->[0];
+ my $decl = $rule->style;
+ 
+@@ -105,7 +105,7 @@ like $decl->cssText, qr/color: blue !very\\ important/,
+ 
+ use tests 4; # length
+ {
+-	my $decl = new CSS'DOM'Style;
++	my $decl = new CSS::DOM::Style;
+ 	is eval { $decl->length }, 0,  # This used to die [RT #54810]
+ 	  'length when no properties have been added';  # (fixed in 0.09).
+ 	$decl = CSS::DOM::Style::parse(
+diff --git a/t/CSSStyleRule.t b/t/CSSStyleRule.t
+index 024012b..fb550da 100644
+--- a/t/CSSStyleRule.t
++++ b/t/CSSStyleRule.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -14,7 +14,7 @@ use_ok 'CSS::DOM::Rule::Style',;
+ 
+ require CSS::DOM;
+ my $rule = (
+-	my $ss = CSS::DOM'parse('a{text-decoration: none} p { margin: 0 }')
++	my $ss = CSS::DOM::parse('a{text-decoration: none} p { margin: 0 }')
+ )-> cssRules->[0];
+ 
+ use tests 1; # isa
+diff --git a/t/CSSStyleSheet-insertRule.t b/t/CSSStyleSheet-insertRule.t
+index 3302966..94b3ee7 100644
+--- a/t/CSSStyleSheet-insertRule.t
++++ b/t/CSSStyleSheet-insertRule.t
+@@ -7,7 +7,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -19,4 +19,3 @@ ok eval{$ss->insertRule('a{ color: red }',0);1},
+ 	'insertRule on empty style sheet doesn\'t die';
+ 	# At one point during development, it did die because it was call-
+ 	# ing methods on CSS::DOM::RuleParser which hadn’t been loaded.
+-
+diff --git a/t/CSSStyleSheet.t b/t/CSSStyleSheet.t
+index ab82e6a..40b3edf 100644
+--- a/t/CSSStyleSheet.t
++++ b/t/CSSStyleSheet.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -30,7 +30,7 @@ use tests 3; # (_set_)ownerRule
+ 
+ use tests 2; # cssRules
+ {
+-	$ss = CSS::DOM'parse( 'a{text-decoration: none} p { margin: 0 }');
++	$ss = CSS::DOM::parse( 'a{text-decoration: none} p { margin: 0 }');
+ 	is +()=$ss->cssRules, 2, 'cssRules in list context';
+ 	isa_ok my $rules = cssRules $ss, 'CSS::DOM::RuleList',
+ 		'cssRules in scalar context';
+@@ -38,7 +38,7 @@ use tests 2; # cssRules
+ 
+ use tests 11; # insertRule
+ {
+-	$ss = CSS::DOM'parse ('a{text-decoration: none} p { margin: 0 }');
++	$ss = CSS::DOM::parse ('a{text-decoration: none} p { margin: 0 }');
+ 	
+ 	is $ss->insertRule('b { font-weight: bold }', 0), 0,
+ 		'retval of insertRule';
+@@ -70,7 +70,7 @@ use tests 11; # insertRule
+ 
+ use tests 4; # deleteRule
+ {
+-	$ss = CSS::DOM'parse ('a{text-decoration: none} p { margin: 0 }
++	$ss = CSS::DOM::parse ('a{text-decoration: none} p { margin: 0 }
+ 		i {}');
+ 	is +()=$ss->deleteRule(1), 0, 'retval of deleteRule';
+ 	is_deeply [map $_->selectorText, $ss->cssRules], [qw/ a i /],
+@@ -82,4 +82,4 @@ use tests 4; # deleteRule
+ 	cmp_ok $@, '==', CSS::DOM::Exception::INDEX_SIZE_ERR,
+ 		'error raised by deleteRule';
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/t/CSSValue-prim-cssText.t b/t/CSSValue-prim-cssText.t
+index 09f657b..b19836a 100644
+--- a/t/CSSValue-prim-cssText.t
++++ b/t/CSSValue-prim-cssText.t
+@@ -6,7 +6,7 @@
+ use strict; use warnings; no warnings qw 'qw regexp once utf8 parenthesis';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/CSSValue.t b/t/CSSValue.t
+index 5fad855..f5a04d0 100644
+--- a/t/CSSValue.t
++++ b/t/CSSValue.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings; no warnings qw 'qw regexp once utf8 parenthesis';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -38,7 +38,7 @@ isa_ok +CSS::DOM::Value->new(type => &CSS_CUSTOM, value => "top left"),
+ 
+ require CSS::DOM::Style;
+ require CSS::DOM::PropertyParser;
+-my $s = new CSS'DOM'Style
++my $s = new CSS::DOM::Style
+  property_parser => my $spec = $CSS::DOM::PropertyParser::Default;
+ 
+ # The default parser has no properties with a simple string, attr or
+diff --git a/t/CSSValueList.t b/t/CSSValueList.t
+index 1805209..25c1bec 100644
+--- a/t/CSSValueList.t
++++ b/t/CSSValueList.t
+@@ -3,17 +3,17 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+-use CSS'DOM'Constants ':primitive';
+-use CSS'DOM'Value'List;
++use CSS::DOM::Constants ':primitive';
++use CSS::DOM::Value::List;
+ 
+ use tests 1; # DOES
+-ok +CSS'DOM'Value'List->DOES('CSS::DOM::Value'), 'DOES';
++ok +CSS::DOM::Value::List->DOES('CSS::DOM::Value'), 'DOES';
+ 
+-my $v = new CSS'DOM'Value'List values => [
++my $v = new CSS::DOM::Value::List values => [
+  [ type => CSS_STRING, value => 'sphed' ],
+  [ type => CSS_STRING, value => 'flit' ],
+ ];
+diff --git a/t/MediaList.t b/t/MediaList.t
+index 3092c62..0888d61 100644
+--- a/t/MediaList.t
++++ b/t/MediaList.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/RGBColor.t b/t/RGBColor.t
+index 3758529..12d2938 100644
+--- a/t/RGBColor.t
++++ b/t/RGBColor.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/Rect.t b/t/Rect.t
+index e7f83a4..ea8f046 100644
+--- a/t/Rect.t
++++ b/t/Rect.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -25,4 +25,4 @@ use tests 4;
+  is $v->left->cssText, '4cm', 'left';
+ }
+ 
+-# ~~~ test for modifications of the cssText property
+\ No newline at end of file
++# ~~~ test for modifications of the cssText property
+diff --git a/t/StyleSheet.t b/t/StyleSheet.t
+index a4469fb..e84e7d4 100644
+--- a/t/StyleSheet.t
++++ b/t/StyleSheet.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -55,7 +55,7 @@ use tests 1; # (set_)href
+ 
+ use tests 1; # title
+ {
+-	sub foo'attr { return shift->{+shift} }
++	sub foo::attr { return shift->{+shift} }
+ 	$ss->set_ownerNode(my $foo = bless {title => 'tilde'}, 'foo');
+ 	is $ss->title, 'tilde', 'title';
+ }
+diff --git a/t/StyleSheetList.t b/t/StyleSheetList.t
+index 8e8c7cf..745f894 100644
+--- a/t/StyleSheetList.t
++++ b/t/StyleSheetList.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/charset.t b/t/charset.t
+index eed053e..1666157 100644
+--- a/t/charset.t
++++ b/t/charset.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings; no warnings qw 'utf8 parenthesis';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/css-dom-interface.t b/t/css-dom-interface.t
+index 41bca29..76e5f2f 100644
+--- a/t/css-dom-interface.t
++++ b/t/css-dom-interface.t
+@@ -6,7 +6,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/css-dom-style.t b/t/css-dom-style.t
+index f852f6f..9a6582f 100644
+--- a/t/css-dom-style.t
++++ b/t/css-dom-style.t
+@@ -6,13 +6,13 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+ use tests 4; # modification_handler
+ require CSS::DOM::Style;
+-my $style = CSS::DOM::Style'parse('margin-top: 2px');
++my $style = CSS::DOM::Style::parse('margin-top: 2px');
+ $style->modification_handler(sub { ++$}; ${{} .= shift});
+ $style->cssText('margin-bottom: 600%');
+ is $}, 1, 'cssText triggers mod hander';
+@@ -25,4 +25,3 @@ is $}, 3, 'AUTOLOAD triggers the handler';
+ # ~~~ We also needs tests for modification_handler triggered by:
+ #  • removeProperty
+ #  • modifications to CSSValue objects and their sub-objects (RGBColor etc
+-
+diff --git a/t/css-dom-util.t b/t/css-dom-util.t
+index 5dbef09..554cd1b 100644
+--- a/t/css-dom-util.t
++++ b/t/css-dom-util.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings; no warnings qw 'utf8 parenthesis';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+diff --git a/t/css-dom.t b/t/css-dom.t
+index e36a046..d43d458 100644
+--- a/t/css-dom.t
++++ b/t/css-dom.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings;
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -28,7 +28,7 @@ use tests 1; # compute_style
+  local $SIG{__WARN__} = sub { $w .= shift };
+  require CSS::DOM::Style;
+  my $elem = bless{
+-  style => CSS'DOM'Style'parse('color:red'), tagName => 'p',
++  style => CSS::DOM::Style::parse('color:red'), tagName => 'p',
+  }, MyElem=>;
+  CSS::DOM::compute_style(element => $elem);
+  is $w, undef, 'no warnings for style belonging to element itself';
+diff --git a/t/parser-rules.t b/t/parser-rules.t
+index 16cb536..7387caf 100644
+--- a/t/parser-rules.t
++++ b/t/parser-rules.t
+@@ -8,7 +8,7 @@
+ use strict; use warnings; no warnings qw 'utf8 parenthesis';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -35,7 +35,7 @@ use tests 2; # miscellaneous CSS::DOM::parse stuff
+ 
+ use tests 7; # <!-- -->
+ {
+-	my $sheet = CSS'DOM'parse '
++	my $sheet = CSS::DOM::parse '
+ 		<!-- /* --> /* /**/
+ 		@at-rule {/*<!--*/ } <!--
+ 		-->
+@@ -46,9 +46,9 @@ use tests 7; # <!-- -->
+ 		'@at-rule {/*<!--*/ }' . "\n" .
+ 		"{ style: rule }\n",
+ 		'<!-- -->';
+-	CSS'DOM'parse 'a { --> }';
++	CSS::DOM::parse 'a { --> }';
+ 	ok $@, 'invalid -->';
+-	CSS'DOM'parse 'a { <!-- }';
++	CSS::DOM::parse 'a { <!-- }';
+ 	ok $@, 'invalid <!--';
+ 	ok !eval{$sheet->insertRule('--> a { }');1},
+ 		'invalid --> before statement';
+@@ -62,7 +62,7 @@ use tests 7; # <!-- -->
+ 
+ use tests 5; # single statement parser
+ {
+-	my $sheet = new CSS'DOM;
++	my $sheet = new CSS::DOM;
+ 	$sheet->insertRule('phoo { bar : baz} ',0);
+ 	isa_ok cssRules$sheet->[0], 'CSS::DOM::Rule::Style',
+ 		'ruleset created by insertRule';
+@@ -79,36 +79,36 @@ use tests 5; # single statement parser
+ 
+ use tests 9; # styledecl parser
+ {
+-	my $style = CSS'DOM'Style'parse  ' foo : bar ';
++	my $style = CSS::DOM::Style::parse  ' foo : bar ';
+ 	is $style->cssText, 'foo: bar', 'style parser';
+-	CSS'DOM'Style'parse 'foo: bar}';
++	CSS::DOM::Style::parse 'foo: bar}';
+ 	ok $@, 'style parser chokes on }';
+-	is CSS'DOM'Style'parse  ' ; ;;;;;foo : bar ;;;; ; ',->cssText,
++	is CSS::DOM::Style::parse  ' ; ;;;;;foo : bar ;;;; ; ',->cssText,
+ 		'foo: bar', 'style wit extra semicolons';
+-	is CSS'DOM'Style'parse  'foo:bar',->cssText,
++	is CSS::DOM::Style::parse  'foo:bar',->cssText,
+ 		'foo: bar', 'style with no space';
+-	is CSS'DOM'Style'parse  'foo:bar;;;baz:bonk;;',->cssText,
++	is CSS::DOM::Style::parse  'foo:bar;;;baz:bonk;;',->cssText,
+ 		'foo: bar; baz: bonk',
+ 		'style with no space & extra semicolons';
+-	is CSS'DOM'Style'parse  'foo:bar;;;!baz:bonk;;',->cssText,
++	is CSS::DOM::Style::parse  'foo:bar;;;!baz:bonk;;',->cssText,
+ 		'foo: bar',
+ 		'style with delimiter+ident for property name';
+-	is CSS'DOM'Style'parse  '\70\41 dding:0;;;;;',->cssText,
++	is CSS::DOM::Style::parse  '\70\41 dding:0;;;;;',->cssText,
+ 		'padding: 0',
+ 		'style with escaped property name';
+ 
+-	is CSS'DOM'Style'parse '\a\z\A\Z\)\a a :bar',
++	is CSS::DOM::Style::parse '\a\z\A\Z\)\a a :bar',
+ 		->getPropertyValue("\nz\nZ)\na"), 'bar',
+ 		'style with both kinds of ident escapes';
+ 
+ 	{ package Phoo; use overload '""'=>sub{'foo:bar'}}
+-	is CSS'DOM'Style'parse(bless [], 'Phoo')->cssText, 'foo: bar',
++	is CSS::DOM::Style::parse(bless [], 'Phoo')->cssText, 'foo: bar',
+ 		'::Style::parse\'s force stringification';
+ }
+ 
+ use tests 121; # @media
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@media print{a{color:blue}}',0);
+ 	isa_ok $rule=pop@{$sheet->cssRules}, 'CSS::DOM::Rule::Media',
+@@ -464,7 +464,7 @@ use tests 121; # @media
+ 	is $rule->cssText, "\@meDIa { }\n",
+ 		'serialised empty unclosed fake @meDIa rule w/ws';
+ 
+-	$sheet = CSS'DOM'parse '
++	$sheet = CSS::DOM::parse '
+ 		@media print { a { color: blue } "stuff"}
+ 		td { padding: 0 }
+ 	';
+@@ -496,7 +496,7 @@ use tests 121; # @media
+ 
+ use tests 1; # bracket closure
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@unknown {(rect([',0);
+ 	is +($rule=pop@{$sheet->cssRules})->cssText,
+@@ -506,7 +506,7 @@ use tests 1; # bracket closure
+ 
+ use tests 14; # @page
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@page{color:blue}',0);
+ 	is +($rule=pop@{$sheet->cssRules})->type, PAGE_RULE,
+@@ -553,7 +553,7 @@ use tests 14; # @page
+ 
+ use tests 6; # unrecognised at-rules
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@unknown \ / \ / :-P {...}',0);
+ 	is +($rule=pop@{$sheet->cssRules})->type, UNKNOWN_RULE,
+@@ -579,7 +579,7 @@ use tests 6; # unrecognised at-rules
+ 
+ use tests 6; # ruselet pasrer
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('a{text-decoration:none;color:blue}',0);
+ 	is +($rule=pop@{$sheet->cssRules})->type, STYLE_RULE,
+@@ -605,7 +605,7 @@ use tests 6; # ruselet pasrer
+ 
+ use tests 1; # invaldi strings
+ {
+-	my $sheet = CSS'DOM'parse q*
++	my $sheet = CSS::DOM::parse q*
+ 	      p { 
+ 	        color: green; 
+ 	        font-family: 'Courier New Times 
+@@ -634,51 +634,51 @@ use tests 1; # invaldi strings
+ 
+ use tests 10; # invalid closing brackets
+ {
+-	is CSS'DOM'parse q" @eotetet ]" =>-> cssRules->length,0,
++	is CSS::DOM::parse q" @eotetet ]" =>-> cssRules->length,0,
+ 		'invalid closing bracket in unknown rule';
+ 	ok $@, '$@ is set by invalid closing bracket in unknown rule';
+-	is CSS'DOM'parse q" @media { ]" =>-> cssRules->length, 0,
++	is CSS::DOM::parse q" @media { ]" =>-> cssRules->length, 0,
+ 		'invalid closing bracket in media rule';
+ 	ok $@, '$@ is set by invalid closing bracket in media rule';
+-	is CSS'DOM'parse q" @page { ]" =>-> cssRules->length, 0,
++	is CSS::DOM::parse q" @page { ]" =>-> cssRules->length, 0,
+ 		'invalid closing bracket in page rule';
+ 	ok $@, '$@ is set by invalid closing bracket in page rule';
+-	is CSS'DOM'parse q" page ( ]" =>-> cssRules->length, 0,
++	is CSS::DOM::parse q" page ( ]" =>-> cssRules->length, 0,
+ 		'invalid closing bracket in selector';
+ 	ok $@, '$@ is set by invalid closing bracket in selector';
+-	is CSS'DOM'parse q" a {  (}" =>-> cssRules->length, 0,
++	is CSS::DOM::parse q" a {  (}" =>-> cssRules->length, 0,
+ 		'invalid closing bracket in style declaration';
+ 	ok $@, '$@ is set by invalid closing bracket in selector';
+ }
+ 
+ use tests 14; # invalid [\@;]
+ {
+-	is CSS'DOM'parse q" @eotetet @aa ]" =>-> cssRules->length,0,
++	is CSS::DOM::parse q" @eotetet @aa ]" =>-> cssRules->length,0,
+ 		'invalid @ in unknown rule';
+ 	ok $@, '$@ is set by invalid @ in unknown rule';
+-	is CSS'DOM'parse q" @eotetet aa (;" =>-> cssRules->length,0,
++	is CSS::DOM::parse q" @eotetet aa (;" =>-> cssRules->length,0,
+ 		'invalid ; in unknown rule';
+ 	ok $@, '$@ is set by invalid ; in unknown rule';
+-	is CSS'DOM'parse q" @media {(; { " =>-> cssRules->length,0,
++	is CSS::DOM::parse q" @media {(; { " =>-> cssRules->length,0,
+ 		'invalid ; in media rule';
+ 	ok $@, '$@ is set by invalid ; in media rule';
+-	is CSS'DOM'parse q" @page { (;fooo" =>-> cssRules->length,0,
++	is CSS::DOM::parse q" @page { (;fooo" =>-> cssRules->length,0,
+ 		'invalid ; in page rule';
+ 	ok $@, '$@ is set by invalid ; in page rule';
+-	is CSS'DOM'parse q" page @oo " =>-> cssRules->length,0,
++	is CSS::DOM::parse q" page @oo " =>-> cssRules->length,0,
+ 		'invalid @ in selector';
+ 	ok $@, '$@ is set by invalid @ in selector';
+-	is CSS'DOM'parse q" page ;( " =>-> cssRules->length,0,
++	is CSS::DOM::parse q" page ;( " =>-> cssRules->length,0,
+ 		'invalid ; in selector';
+ 	ok $@, '$@ is set by invalid ; in selector';
+-	is CSS'DOM'parse q" a { ( ;( " =>-> cssRules->length,0,
++	is CSS::DOM::parse q" a { ( ;( " =>-> cssRules->length,0,
+ 		'invalid ; in style declaration';
+ 	ok $@, '$@ is set by invalid ; in style declaration';
+ }
+ 
+ use tests 14; # @import
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@import"foo.css"print,screen;',0);
+ 	is +($rule=pop@{$sheet->cssRules})->type, IMPORT_RULE,
+@@ -722,7 +722,7 @@ use tests 14; # @import
+ 
+ use tests 8; # @font-face
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@font-face{color:blue}',0);
+ 	is +($rule=pop@{$sheet->cssRules})->type, FONT_FACE_RULE,
+@@ -751,7 +751,7 @@ use tests 8; # @font-face
+ 
+ use tests 13; # @charset
+ {
+-	my $sheet = new CSS'DOM; my $rule;
++	my $sheet = new CSS::DOM; my $rule;
+ 
+ 	$sheet->insertRule('@charset "utf-8";',0);
+ 	is +($rule=pop@{$sheet->cssRules})->type, CHARSET_RULE,
+@@ -799,4 +799,3 @@ use tests 13; # @charset
+ 	is +($rule=pop@{$sheet->cssRules})->type, UNKNOWN_RULE,
+ 		'@charset w/space b4 ; is an unknown rule';
+ }
+-
+diff --git a/t/parser-tokens.t b/t/parser-tokens.t
+index 9c0fae3..d6a42b7 100644
+--- a/t/parser-tokens.t
++++ b/t/parser-tokens.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings; no warnings qw 'utf8 parenthesis';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -37,7 +37,7 @@ for('_', 'a'..'z', 'A'.."Z", map(chr,0x80..0x100) ,"\x{2003}","\x{3000}"){
+ {
+ 	my $style = CSS::DOM::Style::parse("--a: 65");
+ 	is $style->cssText, '', 'identifier can\'t begin with --';
+-	$style = CSS'DOM'Style'parse"-0b:-0b";
++	$style = CSS::DOM::Style::parse"-0b:-0b";
+ 	is $style->cssText, '', 'nor with -0';
+ }
+ 
+@@ -49,7 +49,7 @@ use tests 8; # strings
+ 		. q/\'\"/;
+ 	my $expect =
+ 		qq/ \x{10ffff}f-_abcABC}}}}}}}}\xff\x{2003}\x{100}\t'"/;
+-	my $rule = new CSS::DOM::Rule'Import; 
++	my $rule = new CSS::DOM::Rule::Import;
+ 
+ 	$rule->cssText('@import ' . "'$nasty_escaped_string'");
+ 	is $rule->href, $expect, "'...'";
+@@ -80,7 +80,7 @@ use tests 8; # strings
+ 
+ use tests 23; # urls
+ {
+-	my $rule = new CSS'DOM'Rule::Import;
++	my $rule = new CSS::DOM::Rule::Import;
+ 
+ 	$rule->cssText('@import url(!$#%&][\\\}|{*~foo/bar.gif)');
+ 	is $rule->href, '!$#%&][\}|{*~foo/bar.gif', 'unquoted url';
+@@ -118,7 +118,7 @@ use tests 23; # urls
+ 	is $rule->href, "\x{2000}\x{2000}\n 0  )\tz",
+ 		'double-quoted url with escapes';
+ 
+-	my $style = new CSS'DOM'Style;
++	my $style = new CSS::DOM::Style;
+ 
+ 	$style->name('url(foo');
+ 	is $style->name, 'url(foo)', 'unquoted, unterminated url';
+@@ -179,7 +179,7 @@ use tests 3; # spaces and comments
+ 		"name:valu  /*eeeee "  
+ 	);
+ 	is $style->name, 'valu', 'another ws /**/ test';
+-	$style = CSS'DOM'Style'parse( "name: /*\n*/valu");
++	$style = CSS::DOM::Style::parse( "name: /*\n*/valu");
+ 	is $style->name, 'valu', 'multiline comments';
+ }
+ 
+@@ -187,27 +187,27 @@ use tests 3; # spaces and comments
+ 
+ use tests 6; # <!-- -->
+ {
+-	my $sheet = CSS'DOM'parse ' <!--{ name: value }--> @media print{}';
++	my $sheet = CSS::DOM::parse ' <!--{ name: value }--> @media print{}';
+ 	is join('',map cssText$_,cssRules$sheet),
+ 		"{ name: value }\n\@media print {\n}\n",
+ 		'ignored <!-- -->';
+-	is CSS'DOM'parse"{}{name: <!-- value; n:v}" =>->
++	is CSS::DOM::parse"{}{name: <!-- value; n:v}" =>->
+ 		cssRules->length,
+ 	   1,
+ 		'invalid <!--';
+ 	ok $@, '$@ after invalid <!--';
+-	is CSS'DOM'parse"{}{name: --> value; n:v}" =>->
++	is CSS::DOM::parse"{}{name: --> value; n:v}" =>->
+ 		cssRules->length,
+ 	   1,
+ 		'invalid -->';
+ 	ok $@, '$@ after invalid -->';
+-	is CSS'DOM'Style'parse"name:'<!--value-->",->name,
++	is CSS::DOM::Style::parse"name:'<!--value-->",->name,
+ 		"'<!--value-->'", '<!-- --> in a string';
+ }
+ 
+ use tests 1; # miscellaneous tokens
+ {
+-	my $sheet = CSS'DOM'parse  '@foo ()[~=:,./+-]{[("\"';
++	my $sheet = CSS::DOM::parse  '@foo ()[~=:,./+-]{[("\"';
+ 	is $sheet->cssRules->[0]->cssText,
+ 		'@foo ()[~=:,./+-]{[("\"")]}'. "\n",
+ 		'miscellaneous tokens'
+diff --git a/t/property-parser.t b/t/property-parser.t
+index 6423b39..f785054 100644
+--- a/t/property-parser.t
++++ b/t/property-parser.t
+@@ -3,7 +3,7 @@
+ use strict; use warnings; no warnings qw 'utf8 parenthesis regexp once qw';
+ our $tests;
+ BEGIN { ++$INC{'tests.pm'} }
+-sub tests'VERSION { $tests += pop };
++sub tests::VERSION { $tests += pop };
+ use Test::More;
+ plan tests => $tests;
+ 
+@@ -18,11 +18,11 @@ isa_ok my $parser = CSS::DOM::PropertyParser->new,
+ 
+ use tests 4; # clone
+ my $clone = (my $css21 = $CSS::DOM::PropertyParser::CSS21)->clone;
+-isn't $clone, $css21, 'clone at the first level';
+-isn't $clone->get_property('background-position'),
++isnt $clone, $css21, 'clone at the first level';
++isnt $clone->get_property('background-position'),
+       $css21->get_property('background-position'),
+  'clone clones individual property specs';
+-isn't
++isnt
+  $clone->get_property('border-color')->{properties}
+   {'border-top-color'},
+  $css21->get_property('border-color')->{properties}
+@@ -1314,17 +1314,17 @@ use tests 2; # parsing colours
+ { # Tests for problems with colours in cygwin’s perl (broken in 0.08; fixed
+   # in 0.09) and for bugs temporarily introduced while those problems were
+   # being addressed.
+- my $p = new CSS'DOM'PropertyParser;
++ my $p = new CSS::DOM::PropertyParser;
+  $p->add_property(
+   'colours' => {
+     format => '<colour>+',
+    },
+  );
+- my $s = CSS'DOM'Style'parse(
++ my $s = CSS::DOM::Style::parse(
+   "colours: rgb(0,0,0) rgb(1,1,1)", 
+    property_parser => $p
+  );
+- use CSS'DOM'Constants 'CSS_CUSTOM';
++ use CSS::DOM::Constants 'CSS_CUSTOM';
+  is $s->getPropertyCSSValue('colours')->cssValueType, CSS_CUSTOM,
+    'quantified <colour>s';
+  $p->add_property(
+@@ -1346,18 +1346,18 @@ use tests 1; # backtracking with list properties
+   # local ${$whatever}[0]  localises one element.  But it  actually
+   # replaces the array temporarily with a new one,  which cannot
+   # work with references.
+- my $p = new CSS'DOM'PropertyParser;
++ my $p = new CSS::DOM::PropertyParser;
+  $p->add_property(
+   'foo' => {
+     format => '[(foo)|(foo),]+', # [(foo),?]+ does not trigger the bug
+     list   => 1,
+    },
+  );
+- my $s = CSS'DOM'Style'parse(
++ my $s = CSS::DOM::Style::parse(
+   "foo: foo, foo", 
+    property_parser => $p
+  );
+- use CSS'DOM'Constants 'CSS_VALUE_LIST';
++ use CSS::DOM::Constants 'CSS_VALUE_LIST';
+  is_deeply [map cssText $_, @{$s->getPropertyCSSValue('foo')}],[('foo')x2],
+    'backtracking does not preserve existing captures';
+ }

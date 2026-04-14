@@ -1,0 +1,15 @@
+diff --git a/lua/kulala/config/init.lua b/lua/kulala/config/init.lua
+index 7298f95..d781a12 100644
+--- a/lua/kulala/config/init.lua
++++ b/lua/kulala/config/init.lua
+@@ -122,6 +122,10 @@ local function setup_treesitter_master()
+ end
+ 
+ local function set_kulala_parser()
++  assert(vim.treesitter.language.add("kulala_http"))
++  vim.treesitter.language.register("kulala_http", { "http", "rest" })
++  do return end
++
+   local parsers = vim.F.npcall(require, "nvim-treesitter.parsers")
+ 
+   if not parsers then

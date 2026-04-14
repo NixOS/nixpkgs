@@ -1,0 +1,38 @@
+From 9531e7ff00be577560f2cebf6739343646d3c770 Mon Sep 17 00:00:00 2001
+From: Tom Hunze <dev@thunze.de>
+Date: Mon, 23 Feb 2026 19:21:45 +0100
+Subject: [PATCH] Use `np.isin` instead of `np.in1d` to fix numpy 2.4 test
+ compatibility
+
+https://numpy.org/devdocs/release/2.4.0-notes.html#removed-numpy-in1d
+---
+ tests/test_optional/test_px/test_px.py           | 2 +-
+ tests/test_optional/test_px/test_px_functions.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_optional/test_px/test_px.py b/tests/test_optional/test_px/test_px.py
+index 6c65925a727..a74c4680540 100644
+--- a/tests/test_optional/test_px/test_px.py
++++ b/tests/test_optional/test_px/test_px.py
+@@ -36,7 +36,7 @@ def test_custom_data_scatter(backend):
+     )
+     for data in fig.data:
+         assert np.all(
+-            np.in1d(data.customdata[:, 1], iris.get_column("petal_width").to_numpy())
++            np.isin(data.customdata[:, 1], iris.get_column("petal_width").to_numpy())
+         )
+     # Hover and custom data, no repeated arguments
+     fig = px.scatter(
+diff --git a/tests/test_optional/test_px/test_px_functions.py b/tests/test_optional/test_px/test_px_functions.py
+index 0814898f89d..8220ec7a33a 100644
+--- a/tests/test_optional/test_px/test_px_functions.py
++++ b/tests/test_optional/test_px/test_px_functions.py
+@@ -307,7 +307,7 @@ def test_sunburst_treemap_with_path_color(constructor):
+     fig = px.sunburst(
+         df.to_native(), path=path, color="sectors", color_discrete_map=cmap
+     )
+-    assert np.all(np.in1d(fig.data[0].marker.colors, list(cmap.values())))
++    assert np.all(np.isin(fig.data[0].marker.colors, list(cmap.values())))
+ 
+     # Numerical column in path
+     df = (

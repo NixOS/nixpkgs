@@ -1,0 +1,55 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
+  rich,
+  typing-extensions,
+
+  # tests
+  inline-snapshot,
+  pydantic,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "rich-toolkit";
+  version = "0.17.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "patrick91";
+    repo = "rich-toolkit";
+    tag = version;
+    hash = "sha256-69x760lnMdwrNFUL1g9PBlTRGz34Ur2CHWbJq7PqBmk=";
+  };
+
+  build-system = [ hatchling ];
+
+  dependencies = [
+    click
+    rich
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    inline-snapshot
+    pydantic
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "rich_toolkit" ];
+
+  meta = {
+    changelog = "https://github.com/patrick91/rich-toolkit/releases/tag/${src.tag}";
+    description = "Rich toolkit for building command-line applications";
+    homepage = "https://github.com/patrick91/rich-toolkit/";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+  };
+}

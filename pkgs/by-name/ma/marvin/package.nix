@@ -1,0 +1,96 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  openjdk17,
+  freetype,
+  fontconfig,
+  libxi,
+  libx11,
+  libxext,
+  libxtst,
+  libxrender,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "marvin";
+  version = "25.5.0";
+
+  src = fetchurl {
+    name = "marvin-${finalAttrs.version}.deb";
+    url = "https://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
+    hash = "sha256-+fTO6cEJL4QRFpLQ9CXZFt7Jg3otR3ZMWN5vH+3QXmA=";
+  };
+
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
+
+  buildInputs = [
+    freetype
+    fontconfig
+    libxi
+    libx11
+    libxext
+    libxtst
+    libxrender
+  ];
+
+  unpackPhase = ''
+    dpkg-deb -x $src opt
+  '';
+
+  installPhase = ''
+    wrapBin() {
+      makeWrapper $1 $out/bin/$(basename $1) \
+        --set INSTALL4J_JAVA_HOME "${openjdk17}" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gawk
+            gnugrep
+            gnused
+          ]
+        }
+    }
+    cp -r opt $out
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/{128x128,256x256}/apps
+    for name in LicenseManager MarvinSketch MarvinView; do
+      wrapBin $out/opt/chemaxon/marvinsuite/$name
+    done
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/MarvinSketch.png $out/share/icons/hicolor/128x128/apps
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/MarvinView.png $out/share/icons/hicolor/128x128/apps
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/LicenseManager.png $out/share/icons/hicolor/256x256/apps
+
+    for name in cxcalc cxtrain evaluate molconvert mview msketch; do
+      wrapBin $out/opt/chemaxon/marvinsuite/bin/$name
+    done
+    ${lib.concatStrings (
+      map
+        (name: ''
+          substitute ${./. + "/${name}.desktop"} $out/share/applications/${name}.desktop --subst-var out
+        '')
+        [
+          "LicenseManager"
+          "MarvinSketch"
+          "MarvinView"
+        ]
+    )}
+  '';
+
+  meta = {
+    description = "Chemical modelling, analysis and structure drawing program";
+    homepage = "https://chemaxon.com/products/marvin";
+    maintainers = with lib.maintainers; [ fusion809 ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+  };
+})

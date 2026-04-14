@@ -1,0 +1,23 @@
+Patch origin: http://sophie.zarb.org/rpms/68e90a72e0052022f558148d97c9ea2a/files/3
+
+diff --git a/configure.ac b/configure.ac
+index b7a30e9..3768ae9 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,6 +8,7 @@ AC_CONFIG_HEADERS([config.h])
+ 
+ AC_CONFIG_MACRO_DIR([m4])
+ AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.21])
+ 
+ dnl Extra params
+ CUPSCONFIGPATH=""
+@@ -30,8 +31,6 @@ AC_SUBST(XLIBS)
+ 
+ dnl Checks for header files
+ 
+-dnl internationalization macros
+-AM_GNU_GETTEXT
+ 
+ 
+ # Forte Compiler ############################################################

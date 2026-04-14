@@ -1,0 +1,12 @@
+diff -r -u wiimms-iso-tools.source-3.02a.patched/setup.sh wiimms-iso-tools.source-3.02a/setup.sh
+--- wiimms-iso-tools.source-3.02a.patched/setup.sh	2020-06-02 23:48:18.651495869 +0200
++++ wiimms-iso-tools.source-3.02a/setup.sh	2020-06-02 23:48:29.758162513 +0200
+@@ -57,7 +57,7 @@
+ 
+ #--------------------------------------------------
+ 
+-INSTALL_PATH=/usr/local
++ INSTALL_PATH="$out"
+ 
+ if [[ -d $INSTALL_PATH/bin ]]
+ then

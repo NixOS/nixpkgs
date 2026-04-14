@@ -1,0 +1,13 @@
+diff --git a/data/ui/image_stack.blp b/data/ui/image_stack.blp
+index 478bc8c..021388b 100644
+--- a/data/ui/image_stack.blp
++++ b/data/ui/image_stack.blp
+@@ -94,7 +94,7 @@ template $GradiaImageStack: Adw.Bin {
+                       icon-name: "sidebar-show-symbolic";
+                       tooltip-text: _("Open Sidebar");
+                       action-name: "win.sidebar-shown";
+-                      action-target: true;
++                      action-target: "true";
+                       visible: false;
+ 
+                       styles [

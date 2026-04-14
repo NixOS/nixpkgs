@@ -1,0 +1,11 @@
+--- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
++++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
+@@ -14,7 +14,7 @@
+ #include <qwaitcondition.h>
+ #include <qmutex.h>
+ 
+-#include "D3d11.h"
++#include "d3d11.h"
+ #include "dxgi1_2.h"
+ 
+ #include <system_error>
