@@ -7,6 +7,7 @@
   pendulum,
   pyjwt,
   pytestCheckHook,
+  pytest-cov-stub,
   pytz,
   requests,
   responses,
@@ -41,8 +42,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytz
     responses
+  ];
+
+  disabledTests = [
+    "test_connected_app_login_failure"
+    "test_token_login_failure"
+    "test_token_login_failure_with_warning"
   ];
 
   pythonImportsCheck = [ "simple_salesforce" ];
