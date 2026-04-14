@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "helm-diff";
-  version = "3.15.4";
+  version = "3.15.5";
 
   src = fetchFromGitHub {
     owner = "databus23";
     repo = "helm-diff";
     rev = "v${version}";
-    hash = "sha256-FZd1QW2/SHMrOS1/Ecin9SDuPjLKJ3C2kF7s8zB1zqw=";
+    hash = "sha256-ti247vkYPW6PH0DNkgdH99MyUy2uc2n+zHgpNET/cgU=";
   };
 
-  vendorHash = "sha256-P4fxAl3C2CzbIH7U38vHDxcuhSe3GLs1nck3t6IIw48=";
+  vendorHash = "sha256-b479InQ1ZoOtRgY1cyKeDDoGrOIg0aPqNfDrrY1E4tQ=";
 
   ldflags = [
     "-s"
