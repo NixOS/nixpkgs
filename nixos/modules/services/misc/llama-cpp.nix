@@ -9,11 +9,23 @@
 #     ...
 #   };
 #
-# Multi-instance (each instance gets its own systemd service):
+# Multiple models on the same GPU architecture — use modelsPreset:
+#
+#   services.llama-cpp = {
+#     enable = true;
+#     modelsPreset = {
+#       "code"  = { hf-repo = "..."; device = "cuda0"; ... };
+#       "chat"  = { hf-repo = "..."; device = "cuda1"; ... };
+#     };
+#   };
+#
+# Multiple GPU architectures (e.g. AMD + NVIDIA in the same machine)
+# — use multi-instance (each gets its own package build and systemd
+# service):
 #
 #   services.llama-cpp.instances = {
-#     code   = { enable = true; port = 8090; model = "/models/code.gguf";  ... };
-#     chat   = { enable = true; port = 8091; model = "/models/chat.gguf";  ... };
+#     rocm = { enable = true; port = 8090; package = pkgs.llama-cpp-rocm; rocmGpuTargets = [ "gfx906" ]; ... };
+#     cuda = { enable = true; port = 8091; package = pkgs.llama-cpp.override { cudaSupport = true; };   ... };
 #   };
 #
 # The single-instance API maps to instances."" internally and creates
@@ -140,7 +152,16 @@ let
           description = ''
             Models preset configuration as a Nix attribute set.
             This is converted to an INI file and passed to llama-server via --models-preset.
-            See llama-server documentation for available options.
+            The server runs in router mode, spawning a child process per model.
+
+            Each key maps to a CLI flag for the child process. Use `device` to
+            assign a model to a specific GPU (e.g. `cuda0`, `cuda1`, `rocm0`).
+            This is the recommended way to serve multiple models on GPUs of the
+            same architecture. For GPUs with different architectures (requiring
+            different package builds), use multi-instance via
+            `services.llama-cpp.instances` instead.
+
+            See llama-server documentation for available preset options.
           '';
           example = lib.literalExpression ''
             {
@@ -148,6 +169,7 @@ let
                 hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
                 hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
                 alias = "unsloth/Qwen3-Coder-Next";
+                device = "cuda0";
                 fit = "on";
                 jinja = "on";
               };
@@ -601,15 +623,29 @@ in
     instances = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule instanceModule);
       default = { };
-      description = "Named llama-cpp server instances.";
+      description = ''
+        Named llama-cpp server instances.  Each instance gets its own
+        systemd service and can use a different package build, which is
+        needed when targeting GPUs with different architectures (e.g.
+        gfx906 + gfx1102) via `rocmGpuTargets`.
+
+        For multiple models on GPUs of the same architecture, prefer
+        `modelsPreset` with the `device` property instead.
+      '';
       example = lib.literalExpression ''
         {
-          main = {
+          rocm = {
             enable = true;
             port = 8090;
+            package = pkgs.llama-cpp-rocm;
             rocmGpuTargets = [ "gfx906" ];
             hfRepo = "Qwen/Qwen2.5-3B-Instruct-GGUF";
-            environment.ROCR_VISIBLE_DEVICES = "1";
+          };
+          cuda = {
+            enable = true;
+            port = 8091;
+            package = pkgs.llama-cpp.override { cudaSupport = true; };
+            hfRepo = "Qwen/Qwen2.5-3B-Instruct-GGUF";
           };
         }
       '';
