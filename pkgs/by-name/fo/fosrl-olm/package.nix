@@ -24,6 +24,8 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Tunneling client for Pangolin";
     homepage = "https://github.com/fosrl/olm";
