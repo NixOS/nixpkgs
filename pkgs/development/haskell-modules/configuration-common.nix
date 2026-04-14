@@ -2083,6 +2083,14 @@ with haskellLib;
     jailbreak = true;
   } super.feed;
 
+  # 2026-04-14: Apache Iceberg not included in pkgs.duckdb and not packaged
+  beam-duckdb = overrideCabal (drv: {
+    testFlags = (drv.testFlags or [ ]) ++ [
+      "--pattern"
+      "!/Iceberg/"
+    ];
+  }) super.beam-duckdb;
+
   # 2026-03-25: one test fails
   # https://github.com/Tritlo/duckdb-haskell/issues/8
   # TODO: remove after PR https://github.com/Tritlo/duckdb-haskell/pull/9 is merged
