@@ -7,11 +7,11 @@
   useNixpkgsEngine,
   engines,
   fetchurl,
-  hostPlatform ? stdenv.hostPlatform,
   supportedTargetFlutterPlatforms,
 }:
 
 let
+  hostPlatform = stdenv.hostPlatform;
   hostConstants = constants.makeConstants hostPlatform;
 
   engineBaseUrl = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}/";
