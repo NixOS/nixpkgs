@@ -64,6 +64,10 @@ lib.makeOverridable (
 
     passthru ? { },
     meta ? { },
+
+    __structuredAttrs ? false,
+    # TODO(@Artturin): enable strictDeps always
+    strictDeps ? false,
   }:
   let
     chosenOutputs = map (drv: {
@@ -106,6 +110,8 @@ lib.makeOverridable (
           postBuild
           nativeBuildInputs
           buildInputs
+          __structuredAttrs
+          strictDeps
           ;
         pathsToLinkJSON = builtins.toJSON pathsToLink;
         pkgs = builtins.toJSON chosenOutputs;
