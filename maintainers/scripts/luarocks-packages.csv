@@ -168,6 +168,7 @@ toml-edit,,,,,5.1,mrcjkb
 tree-sitter-cli,,,,,,
 tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb
+tree-sitter-norg-meta,,,,,,
 tree-sitter-orgmode,,,,,5.1,
 utf8,,,,,,
 tree-sitter-teal,,,,,,
