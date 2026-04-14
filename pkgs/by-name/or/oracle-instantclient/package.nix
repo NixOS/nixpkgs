@@ -31,16 +31,16 @@ let
   # determine the version number, there might be different ones per architecture
   version =
     {
-      x86_64-linux = "21.10.0.0.0";
-      aarch64-linux = "19.10.0.0.0";
+      x86_64-linux = "23.26.1.0.0";
+      aarch64-linux = "23.26.1.0.0";
       aarch64-darwin = "23.3.0.23.09";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
   directory =
     {
-      x86_64-linux = "2110000";
-      aarch64-linux = "191000";
+      x86_64-linux = "2326100";
+      aarch64-linux = "2326100";
       aarch64-darwin = "233023";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
@@ -49,18 +49,18 @@ let
   hashes =
     {
       x86_64-linux = {
-        basic = "sha256-uo0QBOmx7TQyroD+As60IhjEkz//+0Cm1tWvLI3edaE=";
-        sdk = "sha256-TIBFi1jHLJh+SUNFvuL7aJpxh61hG6gXhFIhvdPgpts=";
-        sqlplus = "sha256-mF9kLjhZXe/fasYDfmZrYPL2CzAp3xDbi624RJDA4lM=";
-        tools = "sha256-ay8ynzo1fPHbCg9GoIT5ja//iZPIZA2yXI/auVExiRY=";
-        odbc = "sha256-3M6/cEtUrIFzQay8eHNiLGE+L0UF+VTmzp4cSBcrzlk=";
+        basic = "sha256-1nFeQEo1s6U4KAt4329+5Z2oOp02tZYhj9JkBR25d/M=";
+        sdk = "sha256-LX747BTD4CQCIWIMEs6U0EcJLJBlFx2xd3jM57H91ds=";
+        sqlplus = "sha256-Oi9t4B0iTkPcN4YJR7piNPAgBdryn8zUe4vBCGYZjkk=";
+        tools = "sha256-34pyUxx7ubgTrTCqtHOIPMGg7baS1lCUuCgnBRbYR30=";
+        odbc = "sha256-e8RaAWSNvI0QQABV7t7rO58Vn26jnwe6IsaxSpPAZtM=";
       };
       aarch64-linux = {
-        basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
-        sdk = "sha256-8VpkNyLyFMUfQwbZpSDV/CB95RoXfaMr8w58cRt/syw=";
-        sqlplus = "sha256-iHcyijHhAvjsAqN9R+Rxo2R47k940VvPbScc2MWYn0Q=";
-        tools = "sha256-4QY0EwcnctwPm6ZGDZLudOFM4UycLFmRIluKGXVwR0M=";
-        odbc = "sha256-T+RIIKzZ9xEg/E72pfs5xqHz2WuIWKx/oRfDrQbw3ms=";
+        basic = "sha256-Gsvr+LfnCBcf78ZhKmpmhFXn6J7HVloqcjps91QGCvI=";
+        sdk = "sha256-LEziVUysVWPwSwc2iiEMcN1GtLM8r1R0rns4tXvroaA=";
+        sqlplus = "sha256-LxgsfrLy93hY9dzvne6IE3XGM4d03UFkos/EFv9664o=";
+        tools = "sha256-RU4J4zDZ9nAg8Q0zt2u37Mw02/rXaMjG5cg5r4lMqck=";
+        odbc = "sha256-fRo46haK5IVT+Y/kCzvP0hGCI9m//RTKHcF5/Gfz2Eo=";
       };
       aarch64-darwin = {
         basic = "sha256-G83bWDhw9wwjLVee24oy/VhJcCik7/GtKOzgOXuo1/4=";
@@ -103,7 +103,7 @@ let
     {
       aarch64-darwin = ".dmg";
     }
-    .${stdenv.hostPlatform.system} or "dbru.zip";
+    .${stdenv.hostPlatform.system} or ".zip";
 
   # calculate the filename of a single zip file
   srcFilename =
@@ -151,7 +151,11 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
+  unpackCmd =
+    if isDarwinAarch64 then
+      "7zz x $curSrc -aoa -oinstantclient -x!META-INF"
+    else
+      "unzip $curSrc -x 'META-INF/*'";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
