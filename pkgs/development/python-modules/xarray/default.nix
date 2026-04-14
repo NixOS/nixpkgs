@@ -35,7 +35,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xarray";
   version = "2026.04.0";
   pyproject = true;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BsgL+Xo9fTMLLdz5AfScnKGuBa76cE85LuUzB4ZNLiY=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  optional-dependencies = lib.fix (self: {
+  optional-dependencies = {
     accel = [
       bottleneck
       # flox
@@ -90,8 +90,10 @@ buildPythonPackage rec {
       # nc-time-axis
       seaborn
     ];
-    complete = with self; accel ++ io ++ etc ++ parallel ++ viz;
-  });
+    complete =
+      with finalAttrs.finalPackage.passthru.optional-dependencies;
+      accel ++ io ++ etc ++ parallel ++ viz;
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -102,7 +104,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "xarray" ];
 
   meta = {
-    changelog = "https://github.com/pydata/xarray/blob/${src.tag}/doc/whats-new.rst";
+    changelog = "https://github.com/pydata/xarray/blob/${finalAttrs.src.tag}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
     license = lib.licenses.asl20;
@@ -110,4 +112,4 @@ buildPythonPackage rec {
       doronbehar
     ];
   };
-}
+})
