@@ -12,7 +12,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt_9,
+  fmt,
   gettext,
   libGL,
   libGLU,
@@ -68,6 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
       hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
     })
+    # Patch for fmt after v9. Does not apply cleanly.
+    (fetchpatch2 {
+      url = "https://github.com/dolphin-emu/dolphin/commit/4b65cc9a4c51af4308f748b3e7bf25d80db83860.patch?full_index=1";
+      hash = "sha256-tby+gEzjn0sMF1t6d4HhtN7CIUXa0om2zyxrJCqNG4c=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -82,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     enet
     ffmpeg
-    fmt_9
+    fmt
     gettext
     libGL
     libGLU
@@ -178,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = lib.licenses.gpl2Plus;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = true;
     platforms = lib.platforms.unix;
   };
 })
