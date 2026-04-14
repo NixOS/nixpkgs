@@ -81,6 +81,11 @@ stdenv.mkDerivation rec {
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
     ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
+
+    substituteInPlace recognize/lib/Classifiers/Classifier.php \
+      --replace-fail \
+        'taskset' \
+        '${lib.getExe' util-linux "taskset"}'
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
