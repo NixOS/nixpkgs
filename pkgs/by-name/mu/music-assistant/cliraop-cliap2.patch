@@ -1,16 +1,16 @@
 diff --git a/music_assistant/providers/airplay/helpers.py b/music_assistant/providers/airplay/helpers.py
-index c5fef7eb..a628622d 100644
+index 0d03b2cd..9cd59cf0 100644
 --- a/music_assistant/providers/airplay/helpers.py
 +++ b/music_assistant/providers/airplay/helpers.py
-@@ -6,6 +6,7 @@
- import os
- import platform
+@@ -9,6 +9,7 @@
+ import socket
  import time
+ from ipaddress import ip_address
 +from shutil import which
  from typing import TYPE_CHECKING
  
- from zeroconf import IPVersion
-@@ -176,7 +177,6 @@ async def check_binary(cli_path: str) -> str | None:
+ from music_assistant_models.enums import ContentType
+@@ -226,7 +227,6 @@ async def check_binary(cli_path: str) -> str | None:
              pass
          return None
  
@@ -18,7 +18,7 @@ index c5fef7eb..a628622d 100644
      system = platform.system().lower().replace("darwin", "macos")
      architecture = platform.machine().lower()
  
-@@ -188,7 +188,7 @@ async def check_binary(cli_path: str) -> str | None:
+@@ -238,7 +238,7 @@ async def check_binary(cli_path: str) -> str | None:
          raise RuntimeError(f"Unsupported streaming protocol requested: {protocol}")
  
      if bridge_binary := await check_binary(
