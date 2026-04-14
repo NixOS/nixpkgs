@@ -10108,12 +10108,6 @@ with pkgs;
 
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
-  nufraw = callPackage ../applications/graphics/nufraw { };
-
-  nufraw-thumbnailer = callPackage ../applications/graphics/nufraw {
-    addThumbnailer = true;
-  };
-
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio { };
 
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins { });
