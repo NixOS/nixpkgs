@@ -27,7 +27,7 @@ let
     ];
 
     mitmCache = gradle.fetchDeps {
-      pkg = self;
+      pkg = finalAttrs;
       data = ./deps.json;
     };
 
