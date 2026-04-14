@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
   dontPatchShebangs = true;
   autoPatchelfIgnoreMissingDeps = [ "*" ];
 
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ sorki ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
     mainProgram = "saa";
   };
 })
