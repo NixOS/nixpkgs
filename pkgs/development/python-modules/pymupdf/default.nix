@@ -44,14 +44,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.26.6";
+  version = "1.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-CYDgMhsOqqm9AscJxVcjU72P63gpJafj+2cj03RFGaw=";
+    hash = "sha256-7Bnu5AG1b5v4hd85xzyFvjsqXl5Lqltbb2NcmkTQwaE=";
   };
 
   patches = [
@@ -122,6 +122,7 @@ buildPythonPackage rec {
     "test_codespell"
     "test_pylint"
     "test_flake8"
+    "test_4751"
     # Upstream recommends disabling these when not using bundled MuPDF build
     "test_color_count"
     "test_3050"
@@ -135,11 +136,19 @@ buildPythonPackage rec {
     "test_4702"
     # Not a git repository, so git ls-files fails
     "test_open2"
+    # Segfaults in test_general.py::test_4907 with system MuPDF
+    "test_4907"
+    # Can fail if MuPDF version is too old
+    "test_4599"
+    "test_4790"
   ];
 
   disabledTestPaths = [
     # mad about markdown table formatting
     "tests/test_tables.py::test_markdown"
+
+    # Do not lint code
+    "tests/test_typing.py"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin [
     # Trace/BPT trap: 5 when getting widget options

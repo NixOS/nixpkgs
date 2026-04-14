@@ -28,62 +28,68 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # Linux: Use struct kiocb * for aops write_begin/end
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/a765a9ddd412c8d1e5cb0f5cf497a8606251811e.patch";
-      hash = "sha256-RkIAdXMvelnWs4YB3OMj6AIQlUbSqdKJpwc6wiSZzrM=";
-    })
-    # linux: remove implied def HAVE_LINUX_FILEMAP_GET_FOLIO
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/c379ff006d8b7db425f7648321c549ab24919d92.patch";
-      hash = "sha256-fDtX3NhWIWupTArEauCM2rEaO3l8jWBVC5mAMil2+nU=";
-    })
-    # LINUX: Zero code on EEXIST in afs_linux_read_cache
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/eb6753d93b930ad7d65772a9751117f6969a5e92.patch";
-      hash = "sha256-97/MdG9DrHEtOKCRLCTgl6ZEtqLUsaNs9LcAzcyrTF4=";
-    })
     # Linux: Use get_tree_nodev
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16646/revisions/d8202bcd24c90cfef138e54264355d242d8f2f2a/patch";
-      decode = "base64 -d";
-      hash = "sha256-lj7tRCrgWFPFsd5cMg9CQAFOx3VYUf3fS4JGNyAgnWk=";
+      url = "https://github.com/openafs/openafs/commit/c02a8f451b48766aa163e729abe40d145751b2dc.patch";
+      hash = "sha256-9okSQLV4tW1wjoffQXPneZbu6tTRqrqVPbEOwZmaD+E=";
+    })
+    # LINUX: Re-dirty folio on writepages recursion
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/11849e96820eca64d91742a8c521614e1e99d9fa.patch";
+      hash = "sha256-F2MOqEDaj4e0Xj1mvs7v61cutZY3cO22p9iIp2bLiRQ=";
     })
     # Linux: Introduce LINUX_WRITE_CACHE_PAGES_USES_FOLIOS
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16650/revisions/cef9524c481520040dc93a02f5df9cd9eb8907a2/patch";
-      decode = "base64 -d";
-      hash = "sha256-SUJxhIL1vNDS8IO6GVGQ8aZOa6XabR3qFfTzWV6umao=";
+      url = "https://github.com/openafs/openafs/commit/63a3503240c06187fa87514e5ea421cece483422.patch";
+      hash = "sha256-ZWV8IZ8CeFQaEOamqKfkXuUccSxCRFNkZ7/kxKbEuis=";
     })
     # Linux: Avoid write_cache_pages() for ->writepages()
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16648/revisions/dd83364354692eaa323b246df17fec2a3f11057d/patch";
+      url = "https://gerrit.openafs.org/changes/16704/revisions/d465a07a98c2b0b2c23780571a8fe70c2584473a/patch";
       decode = "base64 -d";
-      hash = "sha256-3hPqwfkpRkS/XXmWjl+zy4KmVL8RkBuhmC+O0D/h85U=";
+      hash = "sha256-2FOf+o36gbTHm90RxtOI7iXcgb6rv9nh9rSjZzL5O7A=";
+    })
+    # LINUX: Log warning on recursive folio writeback
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16705/revisions/d66ca6372461840c6ecaaa46ec293640c8f22573/patch";
+      decode = "base64 -d";
+      hash = "sha256-A383wDMkwnGFatBDHUGV8FVqPMjzvhqUnIWrP2C+ym4=";
     })
     # Linux: Move afs_root()/afs_fill_super() in osi_vfsops
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16673/revisions/dfd3e87daf227884fa0da7bbab83db1b9de9b882/patch";
+      url = "https://gerrit.openafs.org/changes/16706/revisions/988c70859f1d402022e9342e28f0c5a954760a72/patch";
       decode = "base64 -d";
-      hash = "sha256-mWv/C5Yus4EZFrsQObCiOGA3nO2DAl1JWm8+YMHaabA=";
+      hash = "sha256-JsZwGGa7dRT43RIUUY3hYCbbqPObd5bkDOHl9QK/MhE=";
     })
     # Linux: Use sockaddr_unsized for socket->ops->bind
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16683/revisions/1a5864a5ff777142de3110a6e7848fd5769f933a/patch";
+      url = "https://gerrit.openafs.org/changes/16707/revisions/e6069d6c35e848b5b388f4c47a2ecf0d72420198/patch";
       decode = "base64 -d";
-      hash = "sha256-lHRxDUIyFZNAvJ8J+4SfP9ETU/wnjGh6s5E+bmrQG08=";
+      hash = "sha256-hTRaTqOc0njW/RIsNTrFZ5uWTrQq04Fuh/Sk7K2Q5e4=";
     })
     # Linux: Pass 3rd parameter to filemap_alloc_folio()
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16684/revisions/870e0aeb9d6f26a814ee38ce1becf12b562b7fa1/patch";
+      url = "https://gerrit.openafs.org/changes/16708/revisions/48d2184ec95418cada68b70919b0afd9888bb945/patch";
       decode = "base64 -d";
-      hash = "sha256-DZfi6OK9TYovwmYNrgI+WxGS13cQjdGODlSn3rQO/Gk=";
+      hash = "sha256-CSGlXYkkLSHQoWK2xLpUYJDOUP/mlsxkTru2qdmbeQo=";
     })
     # Linux: implement aops->migrate_folio
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16689/revisions/6d294581969039eea65c974c3a8c565917df9c6a/patch";
+      url = "https://gerrit.openafs.org/changes/16709/revisions/2c51471aea08cc495a5d59fee6e651ba58c9d772/patch";
       decode = "base64 -d";
-      hash = "sha256-XXzrDfoG4BbEDp6C4TElN0+3ytTu4VP5goDiZlq8DjU=";
+      hash = "sha256-TtcblVczSp8b1bfd0ajWjK2LffAkgYr2+KUL2nEe8hs=";
+    })
+    # Linux: Use set_default_d_op() to set dentry ops
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16729/revisions/6d0a2107fcab28fc4ba64d365133d171b75bd3dc/patch";
+      decode = "base64 -d";
+      hash = "sha256-OKxR5zzVKSXPzudPl5jc7koObisQMMqq/d9kfrMem/M=";
+    })
+    # Linux: Use __getname()/__putname() to alloc name
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16738/revisions/a1754489f382aabd087f14c325d13a36faa5bf5c/patch";
+      decode = "base64 -d";
+      hash = "sha256-JizLrwnujybCkcbDIltGfgVtCc5fL3ZxWvgVbI1kKto=";
     })
   ];
 
