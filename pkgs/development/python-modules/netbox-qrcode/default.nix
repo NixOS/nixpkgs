@@ -9,6 +9,7 @@
   # dependencies
   pillow,
   qrcode,
+  psycopg,
 
   # nativeCheckInputs
   django,
@@ -39,6 +40,7 @@ buildPythonPackage (finalAttrs: {
     django
     netaddr
     netbox
+    psycopg # not specified in pyproject.toml, but required at import time
   ];
 
   preFixup = ''
