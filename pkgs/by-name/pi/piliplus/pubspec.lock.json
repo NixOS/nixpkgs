@@ -150,17 +150,6 @@
       "source": "hosted",
       "version": "0.2.3"
     },
-    "auto_orientation": {
-      "dependency": "direct main",
-      "description": {
-        "path": ".",
-        "ref": "master",
-        "resolved-ref": "ca2bb137bd0e4b221df3bc5ba1492d2902c78624",
-        "url": "https://github.com/bggRGjQaUbCoE/auto_orientation.git"
-      },
-      "source": "git",
-      "version": "2.3.1"
-    },
     "battery_plus": {
       "dependency": "direct main",
       "description": {
@@ -306,11 +295,11 @@
       "dependency": "direct main",
       "description": {
         "name": "catcher_2",
-        "sha256": "3c9bc7435d250c1a958bbc7beb2f1d960ffb6c2658f2a5afd8d8e6db15cf8708",
+        "sha256": "ac9dd03230fa4058d14d46450335ca3c40564f734d793e52f81053f3cbf95009",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.8"
+      "version": "2.1.9"
     },
     "characters": {
       "dependency": "direct main",
@@ -397,11 +386,11 @@
       "dependency": "direct main",
       "description": {
         "name": "connectivity_plus",
-        "sha256": "b8fe52979ff12432ecf8f0abf6ff70410b1bb734be1c9e4f2f86807ad7166c79",
+        "sha256": "62ffa266d9a23b79fb3fcbc206afc00bb979417ba57b1324c546b5aab95ba057",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "7.1.0"
+      "version": "7.1.1"
     },
     "connectivity_plus_platform_interface": {
       "dependency": "transitive",
@@ -659,11 +648,11 @@
       "description": {
         "path": ".",
         "ref": "mod",
-        "resolved-ref": "8ba6a6a73691262bd006deec247311d136596032",
+        "resolved-ref": "d1dde80df07a6ec46d9291cfeba6c01de53b5305",
         "url": "https://github.com/bggRGjQaUbCoE/flutter_file_picker.git"
       },
       "source": "git",
-      "version": "11.0.0"
+      "version": "11.0.2"
     },
     "file_selector_linux": {
       "dependency": "transitive",
@@ -1127,11 +1116,11 @@
       "dependency": "direct main",
       "description": {
         "name": "image_cropper",
-        "sha256": "d2555be1ec4b7b12fc502ede481c846ad44578fbb0748debd4c648b25ca07cad",
+        "sha256": "e2c8da14ecb4c6ead02b8e1265f966ce72b43ff930da66eef3833e622185dec7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "12.1.1"
+      "version": "12.2.0"
     },
     "image_cropper_for_web": {
       "dependency": "transitive",
@@ -1167,11 +1156,11 @@
       "dependency": "transitive",
       "description": {
         "name": "image_picker_android",
-        "sha256": "9eae0cbd672549dacc18df855c2a23782afe4854ada5190b7d63b30ee0b0d3fd",
+        "sha256": "66810af8e99b2657ee98e5c6f02064f69bb63f7a70e343937f70946c5f8c6622",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.8.13+15"
+      "version": "0.8.13+16"
     },
     "image_picker_for_web": {
       "dependency": "transitive",
@@ -1262,6 +1251,26 @@
       },
       "source": "hosted",
       "version": "0.6.1"
+    },
+    "jni": {
+      "dependency": "transitive",
+      "description": {
+        "name": "jni",
+        "sha256": "c2230682d5bc2362c1c9e8d3c7f406d9cbba23ab3f2e203a025dd47e0fb2e68f",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.0"
+    },
+    "jni_flutter": {
+      "dependency": "transitive",
+      "description": {
+        "name": "jni_flutter",
+        "sha256": "8b59e590786050b1cd866677dddaf76b1ade5e7bc751abe04b86e84d379d3ba6",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.1"
     },
     "js": {
       "dependency": "transitive",
@@ -1542,6 +1551,17 @@
       "source": "hosted",
       "version": "2.0.0"
     },
+    "native_device_orientation": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "master",
+        "resolved-ref": "240534adb4b4b5c2c7e6c4578b1fc052ce98d7fd",
+        "url": "https://github.com/bggRGjQaUbCoE/flutter_native_device_orientation.git"
+      },
+      "source": "git",
+      "version": "2.0.5"
+    },
     "native_toolchain_c": {
       "dependency": "transitive",
       "description": {
@@ -1646,11 +1666,11 @@
       "dependency": "transitive",
       "description": {
         "name": "path_provider_android",
-        "sha256": "149441ca6e4f38193b2e004c0ca6376a3d11f51fa5a77552d8bd4d2b0c0912ba",
+        "sha256": "69cbd515a62b94d32a7944f086b2f82b4ac40a1d45bebfc00813a430ab2dabcd",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.23"
+      "version": "2.3.1"
     },
     "path_provider_foundation": {
       "dependency": "transitive",
@@ -1866,11 +1886,11 @@
       "dependency": "direct main",
       "description": {
         "name": "saver_gallery",
-        "sha256": "1d942bd7f4fedc162d9a751e156ebac592e4b81fc2e757af82de9077f3437003",
+        "sha256": "3f983d4be63aff52523c3e097a9b00ce9ab8444f9a982c878cde9d0359f4681d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.1.0"
+      "version": "4.1.1"
     },
     "screen_brightness_android": {
       "dependency": "direct overridden",
@@ -1956,11 +1976,11 @@
       "dependency": "transitive",
       "description": {
         "name": "sentry",
-        "sha256": "288aee3d35f252ac0dc3a4b0accbbe7212fa2867604027f2cc5bc65334afd743",
+        "sha256": "682360642a7b14b36daef3b5574b7269164e7763512ac92cdafd55b695bd2183",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "9.16.0"
+      "version": "9.16.1"
     },
     "share_plus": {
       "dependency": "direct main",
@@ -2433,11 +2453,11 @@
       "dependency": "direct main",
       "description": {
         "name": "wakelock_plus",
-        "sha256": "8b12256f616346910c519a35606fb69b1fe0737c06b6a447c6df43888b097f39",
+        "sha256": "ddf3db70eaa10c37558ff817519b85d527dbd21034fd5d8e1c2e85f31588f1c1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.1"
+      "version": "1.5.2"
     },
     "wakelock_plus_platform_interface": {
       "dependency": "transitive",
