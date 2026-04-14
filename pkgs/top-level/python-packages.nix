@@ -20519,6 +20519,8 @@ self: super: with self; {
 
   unasync = callPackage ../development/python-modules/unasync { };
 
+  uncalled-for = callPackage ../development/python-modules/uncalled-for { };
+
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   uncompresspy = callPackage ../development/python-modules/uncompresspy { };

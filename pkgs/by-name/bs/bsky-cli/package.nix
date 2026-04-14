@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bsky-cli";
-  version = "0.0.78";
+  version = "0.0.79";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "bsky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+LZCVF1slJ7Nypi8MogbqXH5GSfcsKJDGKNm4EfLpFY=";
+    hash = "sha256-id7+g9NMCSicPbDoDSqnc7OwEMIVXbXw3O8TkeQjfmg=";
   };
 
-  vendorHash = "sha256-WFGViuC+8Ba6NCU//Z+MTcwNPJbYzpXeCbf4M9mBFPM=";
+  vendorHash = "sha256-m4kth6r13++53fbceWjKYu4D297meAwnkaSsCiu5zS8=";
 
   buildInputs = [
     libpcap

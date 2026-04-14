@@ -11,7 +11,7 @@
   click,
 
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   mock,
   requests-mock,
   tox,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
-    pytest-cov
+    pytest-cov-stub
     mock
     requests-mock
     tox

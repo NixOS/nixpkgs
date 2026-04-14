@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
     tag = version;
-    hash = "sha256-he/Ti15H2JBngvNCBSwJQWa0LBIBFa+x38TW9g2CQ44=";
+    hash = "sha256-xHI4HuPZFVqBNCC9+bILRVLoZ1LFBW9N0tVT8UzYClw=";
   };
 
   postPatch = ''
