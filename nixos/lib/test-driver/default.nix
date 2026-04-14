@@ -8,6 +8,7 @@
   ipython,
   junit-xml,
   ptpython,
+  pydantic,
   python,
   remote-pdb,
   ruff,
@@ -46,6 +47,7 @@ buildPythonApplication {
     ipython
     junit-xml
     ptpython
+    pydantic
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;

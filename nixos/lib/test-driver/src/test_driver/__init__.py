@@ -8,7 +8,7 @@ from pathlib import Path
 import ptpython.ipython
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver
+from test_driver.driver import Driver, DriverConfiguration, load_driver_configuration
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
@@ -58,6 +58,13 @@ def writeable_dir(arg: str) -> Path:
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
+        "-c",
+        "--config",
+        help="the test driver configuration file",
+        type=Path,
+        required=True,
+    )
+    arg_parser.add_argument(
         "--keep-vm-state",
         help=argparse.SUPPRESS,
         dest="keep_machine_state",
@@ -80,54 +87,6 @@ def main() -> None:
         help="Enable interactive debugging breakpoints for sandboxed runs",
     )
     arg_parser.add_argument(
-        "--vm-names",
-        metavar="VM-NAME",
-        action=EnvDefault,
-        envvar="vmNames",
-        nargs="*",
-        help="names of participating virtual machines",
-    )
-    arg_parser.add_argument(
-        "--vm-start-scripts",
-        metavar="VM-START-SCRIPT",
-        action=EnvDefault,
-        envvar="vmStartScripts",
-        nargs="*",
-        help="start scripts for participating virtual machines",
-    )
-    arg_parser.add_argument(
-        "--container-names",
-        metavar="CONTAINER-NAME",
-        action=EnvDefault,
-        envvar="containerNames",
-        nargs="*",
-        help="names of participating containers",
-    )
-    arg_parser.add_argument(
-        "--container-start-scripts",
-        metavar="CONTAINER-START-SCRIPT",
-        action=EnvDefault,
-        envvar="containerStartScripts",
-        nargs="*",
-        help="start scripts for participating containers",
-    )
-    arg_parser.add_argument(
-        "--vlans",
-        metavar="VLAN",
-        action=EnvDefault,
-        envvar="vlans",
-        nargs="*",
-        help="vlans to span by the driver",
-    )
-    arg_parser.add_argument(
-        "--global-timeout",
-        type=int,
-        metavar="GLOBAL_TIMEOUT",
-        action=EnvDefault,
-        envvar="globalTimeout",
-        help="Timeout in seconds for the whole test",
-    )
-    arg_parser.add_argument(
         "-o",
         "--output_directory",
         help="""The path to the directory where outputs copied from the machine will be placed.
@@ -139,18 +98,6 @@ def main() -> None:
         "--junit-xml",
         help="Enable JunitXML report generation to the given path",
         type=Path,
-    )
-    arg_parser.add_argument(
-        "testscript",
-        action=EnvDefault,
-        envvar="testScript",
-        help="the test script to run",
-        type=Path,
-    )
-    arg_parser.add_argument(
-        "--enable-ssh-backdoor",
-        help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
-        action="store_true",
     )
     log_level_map = {level.name.lower(): level for level in LogLevel}
     arg_parser.add_argument(
@@ -191,28 +138,14 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
-    assert len(args.vm_names) == len(args.vm_start_scripts), (
-        f"the number of vm names and vm start scripts must be the same: {args.vm_names} vs. {args.vm_start_scripts}"
-    )
-    assert len(args.container_names) == len(args.container_start_scripts), (
-        f"the number of container names and container start scripts must be the same: {args.container_names} vs. {args.container_start_scripts}"
-    )
-
     with Driver(
-        vm_names=args.vm_names,
-        vm_start_scripts=args.vm_start_scripts,
-        container_names=args.container_names,
-        container_start_scripts=args.container_start_scripts,
-        vlans=args.vlans,
-        tests=args.testscript.read_text(),
+        config=load_driver_configuration(args.config),
         out_dir=output_directory,
         logger=logger,
         keep_machine_state=args.keep_machine_state,
-        global_timeout=args.global_timeout,
         debug=debugger,
-        enable_ssh_backdoor=args.enable_ssh_backdoor,
     ) as driver:
-        if args.enable_ssh_backdoor:
+        if driver.config.enable_ssh_backdoor:
             driver.dump_machine_ssh()
         if args.interactive:
             history_dir = os.getcwd()
@@ -235,12 +168,14 @@ def generate_driver_symbols() -> None:
     scripts.
     """
     d = Driver(
-        vm_names=[],
-        vm_start_scripts=[],
-        container_names=[],
-        container_start_scripts=[],
-        vlans=[],
-        tests="",
+        config=DriverConfiguration(
+            vms=dict(),
+            containers=dict(),
+            vlans=[],
+            global_timeout=0,
+            enable_ssh_backdoor=False,
+            test_script=Path("testScriptWithTypes"),
+        ),
         out_dir=Path(),
         logger=CompositeLogger([]),
     )

@@ -310,10 +310,6 @@ in
     passthru.nodes = config.nodesCompat;
     passthru.containers = config.containers;
 
-    extraDriverArgs = mkIf config.sshBackdoor.enable [
-      "--enable-ssh-backdoor"
-    ];
-
     defaults = mkMerge [
       (mkIf config.node.pkgsReadOnly {
         nixpkgs.pkgs = config.node.pkgs;

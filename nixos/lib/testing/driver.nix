@@ -17,12 +17,6 @@ let
     enableNspawn = config.containers != { };
   };
 
-  vlans = map (
-    m: (m.virtualisation.vlans ++ (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))
-  ) ((lib.attrValues config.nodes) ++ (lib.attrValues config.containers));
-  vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
-  containers = map (m: m.system.build.nspawn) (lib.attrValues config.containers);
-
   pythonizeName =
     name:
     let
@@ -32,11 +26,12 @@ let
     (if builtins.match "[A-z_]" head == null then "_" else head)
     + lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
 
-  uniqueVlans = lib.unique (builtins.concatLists vlans);
-  vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
+  vlanTypeHints = lib.strings.concatMapStringsSep "\n" (
+    i: "vlan${toString i}: VLan"
+  ) config.driverConfiguration.vlans;
 
-  vmMachineNames = map (c: c.system.name) (lib.attrValues config.nodes);
-  containerMachineNames = map (c: c.system.name) (lib.attrValues config.containers);
+  vmMachineNames = lib.attrNames config.driverConfiguration.vms;
+  containerMachineNames = lib.attrNames config.driverConfiguration.containers;
 
   theOnlyMachine =
     let
@@ -72,17 +67,13 @@ let
       ''
         mkdir -p $out/bin
 
-        vmNames=(${lib.escapeShellArgs vmMachineNames})
-        vmStartScripts=(${lib.escapeShellArgs (map lib.getExe vms)})
-        containerNames=(${lib.escapeShellArgs containerMachineNames})
-        containerStartScripts=(${lib.escapeShellArgs (map lib.getExe containers)})
-
         ${lib.optionalString (!config.skipTypeCheck) ''
           # prepend type hints so the test script can be type checked with mypy
+
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
           echo "${toString vmMachineTypeHints}" >> testScriptWithTypes
           echo "${toString containerMachineTypeHints}" >> testScriptWithTypes
-          echo "${toString vlanNames}" >> testScriptWithTypes
+          echo "${toString vlanTypeHints}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
           echo "Running type check (enable/disable: config.skipTypeCheck)"
@@ -94,7 +85,7 @@ let
                 testScriptWithTypes
         ''}
 
-        echo -n "$testScript" >> $out/test-script
+        cp "${config.driverConfiguration.test_script}" $out/test-script
 
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
@@ -111,17 +102,9 @@ let
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
-        # set defaults through environment
-        # see: ./test-driver/test-driver.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
-          --set vmStartScripts "''${vmStartScripts[*]}" \
-          --set vmNames "''${vmNames[*]}" \
-          --set containerStartScripts "''${containerStartScripts[*]}" \
-          --set containerNames "''${containerNames[*]}" \
-          --set testScript "$out/test-script" \
-          --set globalTimeout "${toString config.globalTimeout}" \
-          --set vlans '${toString vlans}' \
-          --set logLevel "${config.logLevel}" \
+          --add-flags "--config ${config.driverConfigurationFile}" \
+          --add-flags "--log-level ${config.logLevel}" \
           ${lib.escapeShellArgs (
             lib.concatMap (arg: [
               "--add-flags"
