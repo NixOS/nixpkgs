@@ -621,6 +621,13 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    fmribSoftwareLibrary = {
+      fullName = "FMRIB Software Library Licence";
+      url = "https://fsl.fmrib.ox.ac.uk/fsl/docs/license.html";
+      free = false;
+      redistributable = false; # only free to redistribute "for non-commercial purposes"
+    };
+
     fontException = {
       spdxId = "Font-exception-2.0";
       fullName = "Font exception 2.0";
@@ -1608,7 +1615,10 @@ lib.mapAttrs mkLicense (
       spdxId = "ZPL-2.1";
       fullName = "Zope Public License 2.1";
     };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4c0839763 (lib/licenses: add fmribSoftwareLibrary license)
   }
   // {
     # TODO: remove legacy aliases
