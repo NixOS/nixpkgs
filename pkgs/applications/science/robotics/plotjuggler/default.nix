@@ -20,7 +20,12 @@
   stdenv,
   libglvnd,
   wrapQtAppsHook,
-  xorg,
+  libxcb,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
 }:
 
 mkDerivation rec {
@@ -48,6 +53,9 @@ mkDerivation rec {
     sha256 = "sha256-hGfoU6oK7vh39TRCBTYnlqEsvGLWCsLVRBXh3RDrmnY=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
@@ -72,12 +80,12 @@ mkDerivation rec {
     # OpenGL support on Linux
     libglvnd
     # XCB libraries for drag and drop support
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.xcbutilwm
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libxcb
+    libxcb-util
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
   ];
 
   cmakeFlags = [
@@ -105,8 +113,8 @@ mkDerivation rec {
     cp -r ${dataTamer}/* $NIX_BUILD_TOP/data_tamer/
     chmod -R u+w $NIX_BUILD_TOP/data_tamer
 
-    # Add WASMER_DIR to cmake flags
-    cmakeFlags="$cmakeFlags -DWASMER_DIR=$WASMER_DIR"
+    # Add WASMER_DIR to cmake flags (array syntax for structuredAttrs)
+    cmakeFlags+=("-DWASMER_DIR=$WASMER_DIR")
   '';
 
   # Rewrite cmake files to use system libraries
