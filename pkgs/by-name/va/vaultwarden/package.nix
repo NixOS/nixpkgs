@@ -19,13 +19,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.35.6";
+  version = "1.35.7";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     tag = finalAttrs.version;
-    hash = "sha256-Q5D/tDE7rC9/iIaD0WlGr2AaoCdAEJQs++8uOdYgRXo=";
+    hash = "sha256-HJDpGsKLsVbeUPqTAph5luROpz7ioJXs/PV5nwtmAz8=";
   };
 
   cargoHash = "sha256-LSmzR3X04i2dmPwj1ivPm/YeNtxGhfwsEXG93iVvhrI=";
