@@ -11,13 +11,10 @@
   ipmitool,
   libvirt,
   monitoring-plugins,
-  mtr,
   net-snmp,
   nfdump,
-  nmap,
   rrdtool,
   system-sendmail,
-  whois,
   dataDir ? "/var/lib/librenms",
   logDir ? "/var/log/librenms",
 }:
@@ -45,14 +42,11 @@ phpPackage.buildComposerProject2 rec {
     ipmitool
     libvirt
     monitoring-plugins
-    mtr
     net-snmp
     nfdump
-    nmap
     rrdtool
     system-sendmail
     unixtools.whereis
-    whois
     (python3.withPackages (
       ps: with ps; [
         pymysql
@@ -76,9 +70,13 @@ phpPackage.buildComposerProject2 rec {
     # This broken logic leads to bad settings being persisted in the database
     patch -p1 -d $out -i ${./broken-binary-paths.diff}
 
+    # Manually cherry-picked patch for CVE-2026-6204
+    # Cherry-Picked frim https://github.com/librenms/librenms/pull/19131
+    # https://github.com/NixOS/nixpkgs/issues/509914
+    patch -p1 -d $out -i ${./rce-fix.patch}
+
     substituteInPlace \
       $out/resources/definitions/config_definitions.json \
-      --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
       --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
       --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
       --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
@@ -86,16 +84,13 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
       --replace-fail '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
       --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
-      --replace-fail '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
       --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
-      --replace-fail '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
       --replace-fail '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
       --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
       --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
       --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
       --replace-fail '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace-fail '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
-      --replace-fail '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
       --replace-fail '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
       --replace-fail '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
