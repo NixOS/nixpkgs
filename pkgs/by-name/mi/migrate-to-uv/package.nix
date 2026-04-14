@@ -11,19 +11,19 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "migrate-to-uv";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkniewallner";
     repo = "migrate-to-uv";
     tag = finalAttrs.version;
-    hash = "sha256-gKiLGuHlUtSFdZCZZIxK7V6apvHMJ7sBZZo0auK4w2s=";
+    hash = "sha256-+UXPgFYgTlLmUYpE2aWsO2OdelP9dCZsB3cWjG4negA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-CZEZ1zLXAerUPgKRmzkN4Q3v/tNDI438V0yfYYZK+pQ=";
+    hash = "sha256-evsc5uOZnN6+tRXmN1SQD5Iqnm4Y+TjmBzWaGQQj2UQ=";
   };
 
   build-system = [
