@@ -41,6 +41,7 @@
   # Unfree optional dependency for hdf4 and hdf5
   enableSzip ? false,
   szip,
+  libaec,
   enableHDF4 ? true,
   hdf4,
   hdf4-forced ? null,
@@ -84,7 +85,7 @@ let
           mpiSupport = enableMPI;
           inherit mpi;
           szipSupport = enableSzip;
-          inherit szip;
+          inherit libaec;
         }
         // lib.optionalAttrs enableMPI {
           cppSupport = false;

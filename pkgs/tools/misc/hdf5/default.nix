@@ -10,8 +10,8 @@
   fortran,
   zlibSupport ? true,
   zlib,
-  szipSupport ? false,
-  szip,
+  szipSupport ? true,
+  libaec,
   mpiSupport ? false,
   mpi,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       zlibSupport
       zlib
       szipSupport
-      szip
+      libaec
       mpiSupport
       mpi
       ;
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ++ optional fortranSupport fortran;
 
   buildInputs =
-    optional fortranSupport fortran ++ optional szipSupport szip ++ optional javaSupport jdk;
+    optional fortranSupport fortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
 
   propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
