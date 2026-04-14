@@ -5,22 +5,20 @@
   fetchurl,
   makeWrapper,
   jre,
-  fmt_9,
   libusb1,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kryoflux";
   version = "3.50";
   src = fetchurl {
-    url = "https://www.kryoflux.com/download/kryoflux_${finalAttrs.version}_linux_r2.tar.gz";
-    hash = "sha256-qGFXu0FkmCB7cffOqNiOluDUww19MA/UuEVElgmSd3o=";
+    url = "https://www.kryoflux.com/download/kryoflux_${finalAttrs.version}_linux_r4.tar.gz";
+    hash = "sha256-8gPK980viDrWc3nY7YatVaGPqPcmvUP9b284sq6Ko6k=";
   };
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
   ];
   buildInputs = [
-    fmt_9
     libusb1
   ];
   dontBuild = true;
