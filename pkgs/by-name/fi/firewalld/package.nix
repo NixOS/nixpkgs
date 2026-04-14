@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoconf,
   automake,
   docbook_xml_dtd_42,
@@ -46,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-P48qdgvcF3BQZ5h+HaylHb70ECa2bmEvYiAi9CeH0qs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Tn3gYQBd+ZG0EQMj+I+VLulSPaK5kO9QCQMbFC40lI=";
   };
 
   patches = [
@@ -61,20 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./specify-localedir.patch
 
     ./gettext-0.25.patch
-
-    # CVE-2026-4948: https://github.com/NixOS/nixpkgs/issues/505280
-    (fetchpatch2 {
-      url = "https://github.com/Prince213/firewalld/commit/e621b4b54be7cd8d77ce549ec17c6f814f9bd337.patch?full_index=1";
-      hash = "sha256-8auXNPVYnNk1UI0jM82IEQrMBhG189/I+DbaXt0VEhc=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace config/xmlschema/check.sh \
       --replace-fail /usr/bin/ ""
 
-    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
-      config/firewall-{applet,config}.desktop.in; do
+    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in}; do
         substituteInPlace $file \
           --replace-fail /usr "$out"
     done
@@ -162,8 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    firewalld = nixosTests.firewalld;
-    firewall-firewalld = nixosTests.firewall-firewalld;
+    inherit (nixosTests) firewalld firewall-firewalld;
   };
 
   meta = {
