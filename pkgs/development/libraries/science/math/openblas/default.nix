@@ -197,11 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Backport https://github.com/OpenMathLib/OpenBLAS/pull/5710
-    # Work around miscompilation of the ARM64 non-SVE DDOT kernel
+    # This commit led to miscompilation of certain ASIMD extensions code paths.
+    # There was an attempted fix in upstream but this still leaves some scipy tests failing.
     (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/e3ce4623c299068bbd47c35ee87aab334bac73b1.patch";
-      hash = "sha256-j0zIJjNiAdIVPgdxB+pXiOrOtedDu6Yq+dgaJ/wCquk=";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/3f6e928d34aca977bd5d4191e6d2c2338a342.patch";
+      revert = true;
+      hash = "sha256-EccgzxgyfAjVbV+HPemGHmzkRe0kpixu3eS3BZWr0g4=";
     })
   ];
 
