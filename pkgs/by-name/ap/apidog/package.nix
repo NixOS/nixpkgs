@@ -7,11 +7,11 @@
 
 let
   pname = "apidog";
-  version = "2.8.23";
+  version = "2.8.24";
 
   src = fetchurl {
     url = "https://file-assets.apidog.com/download/${version}/Apidog-${version}.AppImage";
-    hash = "sha256-N3ULCrYJilcc3R102ndXjKH3g/km7WcEMdi+NL8nmqA=";
+    hash = "sha256-gGhA++wfgURhibGF2tXAmH0orX2VSUiJsAo3wAu6t1g=";
   };
 
   appimageContents = appimageTools.extract {

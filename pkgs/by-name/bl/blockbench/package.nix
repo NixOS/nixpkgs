@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.1.2";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-fU38Exv83cKaPFA26zmwYZlkscCbAEz/7Gch5j/qHjk=";
+    hash = "sha256-aGGvYIYQ3fw1fk5NUwJsMkq2YSugQD94xfy52LvHOKc=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-0FdPTyoVNrsx0LJYcpfZPKZwUKzyJaU6XNnm2bY9F/s=";
+  npmDepsHash = "sha256-RmUUdHSVrZYc4F1Qtkbvn/2oKspM/3SnCuT3McKlMn0=";
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
