@@ -33,11 +33,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 swiftlint $out/bin/swiftlint
-    runHook postInstall
-  '';
+  installPhase =
+    let
+      binary = if stdenvNoCC.hostPlatform.isLinux then "swiftlint-static" else "swiftlint";
+    in
+    ''
+      runHook preInstall
+      install -Dm755 ${binary} $out/bin/swiftlint
+      runHook postInstall
+    '';
 
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     installShellCompletion --cmd swiftlint \
