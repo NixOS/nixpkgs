@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fsl-avwutils";
   version = "2209.6";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";

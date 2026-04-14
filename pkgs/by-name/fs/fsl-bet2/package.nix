@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fsl-bet2";
   version = "2111.9";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";
@@ -69,7 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/bet \
       --set-default FSLOUTPUTTYPE NIFTI_GZ \
       --set-default FSLDIR ${fsl-base} \
-      --prefix PATH : ${lib.makeBinPath [ fsl-avwutils bc python3Packages.fslpy ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          fsl-avwutils
+          bc
+          python3Packages.fslpy
+        ]
+      } \
       --prefix PATH : $out/bin
   '';
 

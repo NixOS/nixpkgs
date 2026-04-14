@@ -11,6 +11,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fsl-cprob";
   version = "2111.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";

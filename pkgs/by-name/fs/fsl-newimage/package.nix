@@ -17,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fsl-newimage";
   version = "2601.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";

@@ -1615,10 +1615,6 @@ lib.mapAttrs mkLicense (
       spdxId = "ZPL-2.1";
       fullName = "Zope Public License 2.1";
     };
-<<<<<<< HEAD
-
-=======
->>>>>>> 4c0839763 (lib/licenses: add fmribSoftwareLibrary license)
   }
   // {
     # TODO: remove legacy aliases

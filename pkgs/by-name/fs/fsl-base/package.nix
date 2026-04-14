@@ -10,6 +10,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fsl-base";
   version = "2604.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "git.fmrib.ox.ac.uk";
     owner = "fsl";
@@ -18,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fvElyS3udWurzpI3XZkFJUu4GFc6pJLA7h0KZfp9eJI=";
   };
 
-  buildInputs = [ tcl tk ];
+  buildInputs = [
+    tcl
+    tk
+  ];
 
   dontBuild = true;
 
