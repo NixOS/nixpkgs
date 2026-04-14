@@ -37,7 +37,6 @@ let
     filterAttrs
     hasAttr
     mapAttrs
-    optionalAttrs
     zipAttrsWith
     ;
   inherit (lib.options)
@@ -82,19 +81,26 @@ let
 
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
   # Note that individual attributes can be overridden if needed.
+  # Shared binOp for elemType-based functors.
+  elemTypeBinOp =
+    a: b:
+    let
+      merged = a.elemType.typeMerge b.elemType.functor;
+    in
+    if merged == null then null else { elemType = merged; };
+
   elemTypeFunctor =
     name:
     { elemType, ... }@payload:
-    {
-      inherit name payload;
+    let
       wrappedDeprecationMessage = makeWrappedDeprecationMessage payload;
+    in
+    {
+      inherit name payload wrappedDeprecationMessage;
+      # Pre-compute wrapped so mkOptionType skips the conditional // merge.
+      wrapped = wrappedDeprecationMessage { loc = null; };
       type = types.${name};
-      binOp =
-        a: b:
-        let
-          merged = a.elemType.typeMerge b.elemType.functor;
-        in
-        if merged == null then null else { elemType = merged; };
+      binOp = elemTypeBinOp;
     };
   makeWrappedDeprecationMessage =
     payload:
@@ -294,7 +300,7 @@ rec {
         descriptionClass
         ;
       functor =
-        if functor ? wrappedDeprecationMessage then
+        if functor ? wrappedDeprecationMessage && !(functor ? wrapped) then
           functor
           // {
             wrapped = functor.wrappedDeprecationMessage {
@@ -578,8 +584,10 @@ rec {
       descriptionClass = "noun";
       check = x: str.check x && builtins.match pattern x != null;
       inherit (str) merge;
-      functor = defaultFunctor "strMatching" // {
+      functor = {
+        name = "strMatching";
         type = payload: strMatching payload.pattern;
+        wrapped = null;
         payload = { inherit pattern; };
         binOp = lhs: rhs: if lhs == rhs then lhs else null;
       };
@@ -595,8 +603,10 @@ rec {
       descriptionClass = "noun";
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
-      functor = (defaultFunctor name) // {
+      functor = {
+        inherit name;
         payload = { inherit sep; };
+        wrapped = null;
         type = payload: lib.types.separatedString payload.sep;
         binOp = lhs: rhs: if lhs.sep == rhs.sep then { inherit (lhs) sep; } else null;
       };
@@ -705,8 +715,10 @@ rec {
         descriptionClass = "noun";
 
         merge = mergeEqualOption;
-        functor = defaultFunctor "path" // {
+        functor = {
+          name = "path";
           type = pathWith;
+          wrapped = null;
           payload = { inherit inStore absolute; };
           binOp = lhs: rhs: if lhs == rhs then lhs else null;
         };
@@ -997,8 +1009,10 @@ rec {
         else
           throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
       nestedTypes = tags;
-      functor = defaultFunctor "attrTag" // {
+      functor = {
+        name = "attrTag";
         type = { tags, ... }: lib.types.attrTag tags;
+        wrapped = null;
         payload = { inherit tags; };
         binOp =
           let
@@ -1172,8 +1186,10 @@ rec {
             staticModules = m;
           }
         );
-      functor = defaultFunctor "deferredModuleWith" // {
+      functor = {
+        name = "deferredModuleWith";
         type = lib.types.deferredModuleWith;
+        wrapped = null;
         payload = {
           inherit staticModules;
         };
@@ -1335,13 +1351,16 @@ rec {
           # configuration. See `noCheckForDocsModule` comment.
           inherit (docsEval._module) freeformType;
         in
-        docsEval.options
-        // optionalAttrs (freeformType != null) {
-          # Expose the sub options of the freeform type. Note that the option
-          # discovery doesn't care about the attribute name used here, so this
-          # is just to avoid conflicts with potential options from the submodule
-          _freeformOptions = freeformType.getSubOptions prefix;
-        };
+        if freeformType != null then
+          docsEval.options
+          // {
+            # Expose the sub options of the freeform type. Note that the option
+            # discovery doesn't care about the attribute name used here, so this
+            # is just to avoid conflicts with potential options from the submodule
+            _freeformOptions = freeformType.getSubOptions prefix;
+          }
+        else
+          docsEval.options;
       getSubModules = modules;
       substSubModules =
         m:
@@ -1351,11 +1370,11 @@ rec {
             modules = m;
           }
         );
-      nestedTypes = lib.optionalAttrs (freeformType != null) {
-        freeformType = freeformType;
-      };
-      functor = defaultFunctor name // {
+      nestedTypes = if freeformType != null then { inherit freeformType; } else { };
+      functor = {
+        inherit name;
         type = lib.types.submoduleWith;
+        wrapped = null;
         payload = {
           inherit
             modules
@@ -1440,8 +1459,10 @@ rec {
       descriptionClass = if builtins.length values < 2 then "noun" else "conjunction";
       check = flip elem values;
       merge = mergeEqualOption;
-      functor = (defaultFunctor name) // {
+      functor = {
+        inherit name;
         payload = { inherit values; };
+        wrapped = null;
         type = payload: lib.types.enum payload.values;
         binOp = a: b: { values = unique (a.values ++ b.values); };
       };
@@ -1654,9 +1675,17 @@ rec {
       getSubModules = finalType.getSubModules;
       substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
       typeMerge = t: null;
-      functor = (defaultFunctor name) // {
-        wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
-      };
+      functor =
+        let
+          wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
+        in
+        {
+          inherit name wrappedDeprecationMessage;
+          type = lib.types.${name} or null;
+          wrapped = wrappedDeprecationMessage { loc = null; };
+          payload = null;
+          binOp = _a: _b: null;
+        };
       nestedTypes.coercedType = coercedType;
       nestedTypes.finalType = finalType;
     };
