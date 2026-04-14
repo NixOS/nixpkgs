@@ -4,7 +4,6 @@
   fetchurl,
   unzip,
   installShellFiles,
-  nix-update-script,
   versionCheckHook,
   runCommand,
 }:
@@ -55,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
     tests = {
       lint =
         runCommand "swiftlint-test-lint"
