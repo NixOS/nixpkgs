@@ -13,6 +13,8 @@ let
   self = stdenv.mkDerivation (finalAttrs: {
     pname = "ramus";
     version = "2.0.2";
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "Vitaliy-Yakovchuk";
