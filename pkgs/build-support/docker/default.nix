@@ -592,7 +592,7 @@ rec {
     in
     runCommand "${baseNameOf name}.tar${compress.ext}" {
       inherit (stream) imageName;
-      passthru = {
+      passthru = stream.passthru // {
         inherit (stream) imageTag;
         inherit stream;
       };
