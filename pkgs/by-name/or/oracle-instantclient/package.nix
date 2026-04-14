@@ -31,17 +31,17 @@ let
   # determine the version number, there might be different ones per architecture
   version =
     {
-      x86_64-linux = "21.10.0.0.0";
-      aarch64-linux = "19.10.0.0.0";
-      aarch64-darwin = "23.3.0.23.09";
+      x86_64-linux = "23.26.3.0.0";
+      aarch64-linux = "23.26.3.0.0";
+      aarch64-darwin = "23.26.2.0.0";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
   directory =
     {
-      x86_64-linux = "2110000";
-      aarch64-linux = "191000";
-      aarch64-darwin = "233023";
+      x86_64-linux = "2326300";
+      aarch64-linux = "2326300";
+      aarch64-darwin = "2326200";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 
@@ -49,38 +49,28 @@ let
   hashes =
     {
       x86_64-linux = {
-        basic = "sha256-uo0QBOmx7TQyroD+As60IhjEkz//+0Cm1tWvLI3edaE=";
-        sdk = "sha256-TIBFi1jHLJh+SUNFvuL7aJpxh61hG6gXhFIhvdPgpts=";
-        sqlplus = "sha256-mF9kLjhZXe/fasYDfmZrYPL2CzAp3xDbi624RJDA4lM=";
-        tools = "sha256-ay8ynzo1fPHbCg9GoIT5ja//iZPIZA2yXI/auVExiRY=";
-        odbc = "sha256-3M6/cEtUrIFzQay8eHNiLGE+L0UF+VTmzp4cSBcrzlk=";
+        basic = "sha256-/OSFNhMykn+DKOpLaNmJaMaw6hJOYkcN6MnQzviAEw4=";
+        sdk = "sha256-esE1h7qKc0rnzAbPQnU7v9vmmDna+HvVk1pJyD3szP0=";
+        sqlplus = "sha256-ZXDXk5hWdnzbtUm1HhQj1qX1MUPFfDDAFWaXBvZaYyo=";
+        tools = "sha256-aAtubzt64Tly1MOVmz3E870HWgvtUeXVshkV1VNfNQs=";
+        odbc = "sha256-Jjz8d7uruWSEcg7fF+g6+5bJF9lvBTrnYhhvCrzm9Aw=";
       };
       aarch64-linux = {
-        basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
-        sdk = "sha256-8VpkNyLyFMUfQwbZpSDV/CB95RoXfaMr8w58cRt/syw=";
-        sqlplus = "sha256-iHcyijHhAvjsAqN9R+Rxo2R47k940VvPbScc2MWYn0Q=";
-        tools = "sha256-4QY0EwcnctwPm6ZGDZLudOFM4UycLFmRIluKGXVwR0M=";
-        odbc = "sha256-T+RIIKzZ9xEg/E72pfs5xqHz2WuIWKx/oRfDrQbw3ms=";
+        basic = "sha256-dLB0TXvxvij2DD2QoTXl2arKGUa6sK3MDI21+8LMl1g=";
+        sdk = "sha256-X7A7RhXYbKemRTpBozT8J9ysbYOd1+VBF3MiqvOe4xg=";
+        sqlplus = "sha256-w8Dvwac0ZV5ITHHzFkYEGKBrpapa8AxV0e2h2racbak=";
+        tools = "sha256-0lzr6PX96IYT7PKcvI99OpMB8SxHPAseFvzTFlLLrME=";
+        odbc = "sha256-YlsMBi3tSjyGdjb5QRsny58aGJmWvxDKCxbw4UIEbEQ=";
       };
       aarch64-darwin = {
-        basic = "sha256-G83bWDhw9wwjLVee24oy/VhJcCik7/GtKOzgOXuo1/4=";
-        sdk = "sha256-PerfzgietrnAkbH9IT7XpmaFuyJkPHx0vl4FCtjPzLs=";
-        sqlplus = "sha256-khOjmaExAb3rzWEwJ/o4XvRMQruiMw+UgLFtsOGn1nY=";
-        tools = "sha256-gA+SbgXXpY12TidpnjBzt0oWQ5zLJg6wUpzpSd/N5W4=";
-        odbc = "sha256-JzoSdH7mJB709cdXELxWzpgaNTjOZhYH/wLkdzKA2N0=";
+        basic = "sha256-w8T843pVcZIyJxfBqEIv4Jj8gppB84L1eiiLJK1roR4=";
+        sdk = "sha256-XuDf/n/wrFXuoZjvaWgcxyn8f98XzJCJ+L/V2TxRQT4=";
+        sqlplus = "sha256-w7EFNxlKUmej7RjQn92uH4ZBkeDeJa14BClAu4JJYpQ=";
+        tools = "sha256-cEHZFl/jcMxM51mF2xzxT+0heotePiz+nM4GljUns40=";
+        odbc = "sha256-N3IFU346SndwqjhdSLpOZ7BJUMV7I76IdYdfd+qiyYQ=";
       };
     }
     .${stdenv.hostPlatform.system} or throwSystem;
-
-  # rels per component and architecture, optional
-  rels =
-    {
-      aarch64-darwin = {
-        basic = "1";
-        tools = "1";
-      };
-    }
-    .${stdenv.hostPlatform.system} or { };
 
   # convert platform to oracle architecture names
   arch =
@@ -103,26 +93,21 @@ let
     {
       aarch64-darwin = ".dmg";
     }
-    .${stdenv.hostPlatform.system} or "dbru.zip";
+    .${stdenv.hostPlatform.system} or ".zip";
 
   # calculate the filename of a single zip file
-  srcFilename =
-    component: arch: version: rel:
-    "instantclient-${component}-${arch}-${version}" + (optionalString (rel != "") "-${rel}") + suffix;
+  srcFilename = component: "instantclient-${component}-${arch}-${version}${suffix}";
 
   # fetcher for the non clickthrough artifacts
   fetcher =
     srcFilename: hash:
     fetchurl {
       url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/${directory}/${srcFilename}";
-      sha256 = hash;
+      inherit hash;
     };
 
   # assemble srcs
-  srcs = map (
-    component:
-    (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or "")
-  ) components;
+  srcs = map (component: fetcher (srcFilename component) hashes.${component}) components;
 
   isDarwinAarch64 = stdenv.hostPlatform.system == "aarch64-darwin";
 
@@ -151,7 +136,11 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
+  unpackCmd =
+    if isDarwinAarch64 then
+      "7zz x $curSrc -aoa -oinstantclient -x!META-INF"
+    else
+      "unzip $curSrc -x 'META-INF/*'";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
