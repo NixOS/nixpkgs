@@ -1,32 +1,29 @@
 {
   lib,
-  boto3,
+  stdenv,
   buildPythonPackage,
-  celery,
-  django-storages,
-  django,
   fetchFromGitHub,
   flit-core,
   flit-scm,
-  gitMinimal,
-  mock,
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
-  redis,
-  sphinx,
+  psutil,
+  dnspython,
+  pytest-asyncio,
+  libredirect,
 }:
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.20.8";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "KristianOellegaard";
+    owner = "codingjoe";
     repo = "django-health-check";
     tag = version;
-    hash = "sha256-voB3shugfM/nO0vPd9yA4NOUB+E9aVcFnqG1mtfRYFc=";
+    hash = "sha256-XHautU7asnlm5Pxddf9+UD20v75rbc9Uo7hLjDYt/SU=";
   };
 
   build-system = [
@@ -34,35 +31,42 @@ buildPythonPackage rec {
     flit-scm
   ];
 
-  buildInputs = [
-    sphinx
-    django
+  dependencies = [
+    dnspython
   ];
 
-  nativeBuildInputs = [ gitMinimal ];
-
   nativeCheckInputs = [
-    boto3
-    django-storages
     pytest-cov-stub
     pytest-django
     pytestCheckHook
-    mock
-    celery
-    redis
+    psutil
+    pytest-asyncio
+    libredirect.hook
   ];
 
   disabledTests = [
-    # commandline output mismatch
-    "test_command_with_non_existence_subset"
+    # require online DNS resolution
+    "test_run_check__dns_working"
+    "test_check_status__nonexistent_hostname"
+    "test_check_status__no_answer"
   ];
 
   pythonImportsCheck = [ "health_check" ];
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  preInstallCheck = ''
+    export PYTHONPATH=$PWD:$PYTHONPATH
+    export DJANGO_SETTINGS_MODULE=tests.testapp.settings
+  '';
+
   meta = {
     description = "Pluggable app that runs a full check on the deployment";
-    homepage = "https://github.com/KristianOellegaard/django-health-check";
-    changelog = "https://github.com/revsys/django-health-check/releases/tag/${src.tag}";
+    homepage = "https://github.com/codingjoe/django-health-check";
+    changelog = "https://github.com/codingjoe/django-health-check/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
