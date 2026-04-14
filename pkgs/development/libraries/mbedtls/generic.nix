@@ -10,6 +10,7 @@
   ninja,
   perl, # Project uses Perl for scripting and testing
   python3,
+  python3Packages,
 
   enableThreading ? true, # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
 }:
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
     ninja
     perl
     python3
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "4.0") [
+    python3Packages.jinja2
+    python3Packages.jsonschema
   ];
 
   strictDeps = true;
@@ -41,18 +46,27 @@ stdenv.mkDerivation rec {
   # trivialautovarinit on clang causes test failures
   hardeningDisable = lib.optional stdenv.cc.isClang "trivialautovarinit";
 
-  postConfigure = lib.optionalString enableThreading ''
-    perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
-    perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
-  '';
+  postConfigure =
+    lib.optionalString (enableThreading && lib.versionOlder version "4.0") ''
+      perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
+      perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
+    ''
+    + lib.optionalString (enableThreading && lib.versionAtLeast version "4.0") ''
+      python scripts/config.py set MBEDTLS_THREADING_C    # Threading abstraction layer
+      python scripts/config.py set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
+    '';
 
   cmakeFlags = [
     "-DUSE_SHARED_MBEDTLS_LIBRARY=${if stdenv.hostPlatform.isStatic then "off" else "on"}"
-
+  ]
+  ++ lib.optionals (lib.versionOlder version "4.0") [
     # Avoid a dependency on jsonschema and jinja2 by not generating source code
     # using python. In releases, these generated files are already present in
     # the repository and do not need to be regenerated. See:
     # https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.3.0 below "Requirement changes".
+
+    # This does not work out of the box on 4.1.0 and creates a significant amount of complexity to reproduce.
+    # Possible related issue: https://github.com/Mbed-TLS/mbedtls/issues/10678
     "-DGEN_FILES=off"
   ];
 
