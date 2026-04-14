@@ -34,6 +34,8 @@ buildGoModule rec {
 
   # Install docopts.sh in PATH to allow sourcing, and replace any binary reference
   # with nixpkgs binary paths.
+  # When updating the package, check very carefully if new dependencies
+  # were added in docopts.sh and add them below accordingly.
   postInstall = ''
     install -D -m 444 $src/docopts.sh $out/bin/docopts.sh
     substituteInPlace $out/bin/docopts.sh \
