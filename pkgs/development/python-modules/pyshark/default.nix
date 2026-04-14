@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   # patches
@@ -27,6 +28,10 @@ buildPythonPackage (finalAttrs: {
   pname = "pyshark";
   version = "0.6";
   pyproject = true;
+
+  # Almost all tests fail with:
+  # RuntimeError: There is no current event loop in thread 'MainThread'
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "KimiNewt";
