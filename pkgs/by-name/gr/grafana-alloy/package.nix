@@ -15,18 +15,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.14.2";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-77WMsnC2WgVnbw1BsCj9ayS6XPsVTghmtIyl9Dk71uY=";
+    hash = "sha256-dAWBmvrthnsji6WuM2itRdfV4ONKDjsCzUJkUSmb1XI=";
   };
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/internal/web/ui";
-    hash = "sha256-MiHFeyDxLzYF3t9H8OEn/bL10WRbzMcwlENs2FSJ4xo=";
+    hash = "sha256-YUCft67WskKubZu8qEIUoH5NHwSfD5o0tWzyply90Zg=";
   };
 
   frontend = buildNpmPackage {
@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
   modRoot = "collector";
 
   proxyVendor = true;
-  vendorHash = "sha256-i/BV987/ZYnCRYX8m9iFdtPo0vrWsmpn6UDs0q59sMM=";
+  vendorHash = "sha256-PbaqxDJHXB1MT5KtiEIkl+gP0DolzlC5JRItGC5VCpQ=";
 
   subPackages = [ "." ];
 
