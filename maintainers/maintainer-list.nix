@@ -138,6 +138,13 @@
     github = "0xd61";
     githubId = 8351869;
   };
+  _0xErwin1 = {
+    email = "ignacio@feuer.me";
+    name = "Ignacio Perez";
+    github = "0xErwin1";
+    githubId = 67933444;
+    keys = [ { fingerprint = "B39E B98E 8860 DAFB 0567  0073 A614 B7D2 5134 987A"; } ];
+  };
   _0xMillyByte = {
     email = "emilia.daelman@gmail.com";
     name = "Emilia Daelman";
