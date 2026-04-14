@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "realtime";
-  version = "2.28.3";
+  version = "3.0.0a1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-Ra7Ig9IMWouMIadx6mg/pe8GlgLCavR6OsPjqgySTCw=";
+    hash = "sha256-Pvu2zyRKS99/KEIWwQXBR7Moegt0KITiaMWi5mi+CL4=";
   };
 
   sourceRoot = "${src.name}/src/realtime";
