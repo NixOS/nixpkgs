@@ -33,12 +33,15 @@
   # tests
   pytest-asyncio,
   pytestCheckHook,
+  h5py,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "xarray";
   version = "2026.04.0";
   pyproject = true;
+  # Needed mainly for pytestFlags with spaces
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pydata";
@@ -98,7 +101,22 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    scipy
+  ]
+  # Besides scipy, these are not strictly needed for the tests, but adding all
+  # of these optional-dependencies extends the amount of tests from ~17k to
+  # ~21k.
+  ++ finalAttrs.finalPackage.optional-dependencies.io
+  ++ finalAttrs.finalPackage.optional-dependencies.accel
+  ++ finalAttrs.finalPackage.optional-dependencies.etc
+  ++ finalAttrs.finalPackage.optional-dependencies.parallel
+  # Not adding optional-dependencies.viz because adding cartopy causes infinite
+  # recursion, and doesn't cause more tests to be collected.
+  ;
+  pytestFlags = lib.optionals (!h5py.hdf5.szipSupport) [
+    "-k"
+    # Our h5py is built with hdf5 that is built without szip support, so we
+    # skip these tests
+    "not szip"
   ];
 
   pythonImportsCheck = [ "xarray" ];
