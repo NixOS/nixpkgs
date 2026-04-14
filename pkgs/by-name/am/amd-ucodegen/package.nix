@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     # instead of processor ID
     (fetchpatch {
       name = "validate-family-not-id.patch";
-      url = "https://github.com/AndyLavr/amd-ucodegen/compare/0d34b54e396ef300d0364817e763d2c7d1ffff02...dobo90:amd-ucodegen:7a3c51e821df96910ecb05b22f3e4866b4fb85b2.patch";
-      hash = "sha256-jvsvu9QgXikwsxjPiTaRff+cOg/YQmKg1MYKyBoMRQI=";
+      url = "https://github.com/AndyLavr/amd-ucodegen/compare/0d34b54e396ef300d0364817e763d2c7d1ffff02...dobo90:amd-ucodegen:7a3c51e821df96910ecb05b22f3e4866b4fb85b2.diff?full_index=1";
+      hash = "sha256-kbvpiizfVq+DoX9lr9gyX49I7vrZX460Xs9l5vAPUa4=";
     })
   ];
 

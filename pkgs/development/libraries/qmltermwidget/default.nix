@@ -34,8 +34,8 @@ stdenv.mkDerivation {
     # Remove when https://github.com/Swordfish90/qmltermwidget/pull/39 merged
     (fetchpatch {
       name = "0001-qmltermwidget-lomiri-submissions.patch";
-      url = "https://github.com/Swordfish90/qmltermwidget/compare/63228027e1f97c24abb907550b22ee91836929c5..ffc6b2b2a20ca785f93300eca93c25c4b74ece17.patch";
-      hash = "sha256-1GjC2mdfP3NpePDWZaT8zvIq3vwWIZs+iQ9o01iQtD4=";
+      url = "https://github.com/Swordfish90/qmltermwidget/compare/63228027e1f97c24abb907550b22ee91836929c5..ffc6b2b2a20ca785f93300eca93c25c4b74ece17.diff?full_index=1";
+      hash = "sha256-GAx7eyE46H6DzeeoC/tQDmJSQXowZSEhNYtfsq108DU=";
     })
 
     # A fix to the above series of patches, to fix a crash in lomiri-terminal-app

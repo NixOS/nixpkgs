@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Clasp bytecode support
     (fetchpatch {
-      url = "https://github.com/clasp-developers/asdf/compare/fe6e3ab741c71ecebc8503e20637d4c940326421..615771b3d0ee6ebb158134769e88ba421c2ea7d1.diff";
+      url = "https://github.com/clasp-developers/asdf/compare/fe6e3ab741c71ecebc8503e20637d4c940326421..615771b3d0ee6ebb158134769e88ba421c2ea7d1.diff?full_index=1";
       hash = "sha256-jrv/vH4uxLVvaCK4UicNzIePQ12lscA0auwgTMb4QwI=";
     })
   ];

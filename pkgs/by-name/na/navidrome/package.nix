@@ -33,8 +33,8 @@ buildGoModule (finalAttrs: {
     # https://github.com/navidrome/navidrome/pull/5276 (waiting on release)
     (fetchpatch {
       name = "regenerate-package-lock-json";
-      url = "https://github.com/navidrome/navidrome/compare/v0.61.1...33a05ef662760fd9feb0a3ae43c7fe149eda610b.patch";
-      hash = "sha256-IQ0wJ7vsSaLjBZS/fKIApNM8UV8oj6L2taCQIPhHvwg=";
+      url = "https://github.com/navidrome/navidrome/compare/v0.61.1...33a05ef662760fd9feb0a3ae43c7fe149eda610b.diff?full_index=1";
+      hash = "sha256-k/MXjuTXyjfiPM8XWX2S3R/KnhR64WCl7BhrFFYxpTA=";
     })
   ];
 

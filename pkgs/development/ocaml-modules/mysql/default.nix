@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/ygrek/ocaml-mysql/compare/v1.2.1...d6d1b3b262ae2cf493ef56f1dd7afcf663a70a26.patch";
-      sha256 = "0018s2wcrvbsw9yaqmwq500qmikwffrgdp5xg9b8v7ixhd4gi6hn";
+      url = "https://github.com/ygrek/ocaml-mysql/compare/v1.2.1...d6d1b3b262ae2cf493ef56f1dd7afcf663a70a26.diff?full_index=1";
+      hash = "sha256-MuiCsXglb+8kNAreytr4ajaU2Kh08R2QWTKDUZJHSlY=";
     })
   ];
 

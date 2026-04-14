@@ -46,8 +46,8 @@ buildPythonPackage rec {
     # plus follow-up (1e677567) from https://github.com/ytdl-org/youtube-dl/pull/30582
     (fetchpatch {
       name = "fix-youtube-dl-speed.patch";
-      url = "https://github.com/ytdl-org/youtube-dl/compare/57044eacebc6f2f3cd83c345e1b6e659a22e4773...1e677567cd083d43f55daef0cc74e5fa24575ae3.diff";
-      sha256 = "11s0j3w60r75xx20p0x2j3yc4d3yvz99r0572si8b5qd93lqs4pr";
+      url = "https://github.com/ytdl-org/youtube-dl/compare/57044eacebc6f2f3cd83c345e1b6e659a22e4773...1e677567cd083d43f55daef0cc74e5fa24575ae3.diff?full_index=1";
+      hash = "sha256-+RKN6UgNl4WiFqeAnNLffjTC/JCigwtE7+VkYPiQQIc=";
     })
     # The above patch may fail to decode the n-parameter (if, say, YouTube is updated). Failure to decode
     # it blocks the download instead of falling back to the throttled version. The patch below implements
