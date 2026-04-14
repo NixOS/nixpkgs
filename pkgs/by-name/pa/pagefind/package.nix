@@ -14,6 +14,7 @@
   versionCheckHook,
   wasm-bindgen-cli_0_2_117,
   wasm-pack,
+  enableExtended ? true,
 }:
 
 # TODO: package python bindings
@@ -56,7 +57,9 @@ let
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "pagefind";
+  inherit enableExtended;
+
+  pname = "pagefind" + lib.optionalString (finalAttrs.enableExtended) "-extended";
   version = "1.5.2";
 
   src = fetchFromGitHub {
@@ -223,8 +226,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  # always build extended
-  buildFeatures = [ "extended" ];
+  buildFeatures = lib.optionals finalAttrs.enableExtended [ "extended" ];
 
   doInstallCheck = true;
 
@@ -234,8 +236,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit lindera-srcs;
+    tests.extended = finalAttrs.finalPackage.overrideAttrs {
+      enableExtended = true;
+    };
     tests.non-extended = finalAttrs.finalPackage.overrideAttrs {
-      buildFeatures = [ ];
+      enableExtended = false;
     };
   };
 
