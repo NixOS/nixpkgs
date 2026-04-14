@@ -2399,6 +2399,10 @@ self: super: with self; {
 
   buildstream-plugins = callPackage ../development/python-modules/buildstream-plugins { };
 
+  buildstream-plugins-community =
+    callPackage ../development/python-modules/buildstream-plugins-community
+      { };
+
   bumble = callPackage ../development/python-modules/bumble { };
 
   bump-my-version = callPackage ../development/python-modules/bump-my-version { };
