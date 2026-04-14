@@ -14,7 +14,7 @@ let
     ;
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
-  amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
+  amiBootMode = "uefi";
 in
 {
   imports = [
@@ -85,9 +85,6 @@ in
       configFile = pkgs.writeText "configuration.nix" ''
         { modulesPath, ... }: {
           imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
-          ${optionalString config.ec2.efi ''
-            ec2.efi = true;
-          ''}
           ${optionalString config.ec2.zfs.enable ''
             ec2.zfs.enable = true;
             networking.hostId = "${config.networking.hostId}";
@@ -162,7 +159,7 @@ in
         name = config.image.baseName;
 
         fsType = "ext4";
-        partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
+        partitionTableType = "efi";
 
         inherit (config.virtualisation) diskSize;
 

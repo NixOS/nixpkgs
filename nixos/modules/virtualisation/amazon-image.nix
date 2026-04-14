@@ -41,14 +41,10 @@ in
       }
     );
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (
-      lib.mkDefault {
-        # The ZFS image uses a partition labeled ESP whether or not we're
-        # booting with EFI.
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
-      }
-    );
+    fileSystems."/boot" = lib.mkDefault {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
+    };
 
     services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
 
@@ -81,15 +77,8 @@ in
       "xen_fbfront"
     ];
 
-    boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
-    boot.loader.grub.efiSupport = cfg.efi;
-    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
+    boot.loader.systemd-boot.enable = true;
     boot.loader.timeout = 1;
-    boot.loader.grub.extraConfig = ''
-      serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
-      terminal_output console serial
-      terminal_input console serial
-    '';
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];

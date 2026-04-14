@@ -1,13 +1,20 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
-  inherit (lib) literalExpression types;
+  inherit (lib) types;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "ec2" "efi" ] ''
+      EC2 images now always use UEFI with systemd-boot.
+      If you need legacy BIOS boot, set boot.loader.grub.device and
+      boot.loader.grub.efiInstallAsRemovable yourself.
+    '')
+  ];
+
   options = {
     ec2 = {
       zfs = {
@@ -48,14 +55,6 @@ in
             }
           );
         };
-      };
-      efi = lib.mkOption {
-        default = pkgs.stdenv.hostPlatform.isAarch64;
-        defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
-        internal = true;
-        description = ''
-          Whether the EC2 instance is using EFI.
-        '';
       };
       hvm = lib.mkOption {
         description = "Unused legacy option. While support for non-hvm has been dropped, we keep this option around so that NixOps remains compatible with a somewhat recent `nixpkgs` and machines with an old `stateVersion`.";
