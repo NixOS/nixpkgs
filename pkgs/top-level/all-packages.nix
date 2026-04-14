@@ -9772,10 +9772,6 @@ with pkgs;
 
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
-  jwm = callPackage ../applications/window-managers/jwm { };
-
-  jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
-
   inherit (callPackage ../applications/networking/cluster/k3s { })
     k3s_1_33
     k3s_1_34
