@@ -50,7 +50,7 @@ buildNpmPackage (finalAttrs: {
     in
     ''
       wrapProgram $out/bin/srt \
-        --prefix PATH ${lib.makeBinPath runtimeDeps}
+        --prefix PATH : ${lib.makeBinPath runtimeDeps}
     '';
 
   nativeInstallCheckInputs = [

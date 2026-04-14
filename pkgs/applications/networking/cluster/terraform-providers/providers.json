@@ -346,11 +346,11 @@
     "vendorHash": null
   },
   "dopplerhq_doppler": {
-    "hash": "sha256-ZqlakWqu9gOMxVLAFUzmho3hl+wbwPA5AXX8Z7XRsCc=",
+    "hash": "sha256-43NFvuKJ2QlCLoEq9N1RSv4BtF4s/GFzzakeIxw6V4Q=",
     "homepage": "https://registry.terraform.io/providers/DopplerHQ/doppler",
     "owner": "DopplerHQ",
     "repo": "terraform-provider-doppler",
-    "rev": "v1.21.1",
+    "rev": "v1.21.2",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-B8mYLd4VdADWoQLWiCM85VQrBfDdlYQ0wkCp9eUBQ4U="
   },
@@ -1031,13 +1031,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "opentelekomcloud_opentelekomcloud": {
-    "hash": "sha256-JSVznbwVTc9/c1q16hv76qJuOI8eRPzsEo0ozRR6oxw=",
+    "hash": "sha256-F8V/eLkKJCC5zPfNh0NC6Z6c3aZjnEoXXa+po3I1NDw=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.36.62",
+    "rev": "v1.36.63",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QFC9oFQ6NiQZiJCltMrwX8p9shm6vEfVnRpJBAtnPW4="
+    "vendorHash": "sha256-qtH6jjhzGRGaHYKjpJLPWjwRL5PQIyOPvI33BVf4cO4="
   },
   "opsgenie_opsgenie": {
     "hash": "sha256-Y67kcg/ovvZc22l1CBz0Mqu7DAIit5F0jQNfQrl2EGI=",

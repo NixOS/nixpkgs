@@ -1223,10 +1223,33 @@ let
           else
             defsFiltered.values;
       in
-      {
-        values = defsSorted;
-        inherit (defsFiltered) highestPrio;
-      };
+      # Fast path: the overwhelming majority of options have exactly one
+      # definition whose value carries no property wrapper
+      # (mkIf/mkMerge/mkOverride/mkOrder/definition). In that case the
+      # discharge/filter/sort pipeline above is a no-op but still allocates
+      # several intermediate lists and closures. Detect it up front and hand
+      # the original singleton straight to the type merge. The let-bindings
+      # above are lazy and thus never forced on this branch.
+      if
+        length defs == 1
+        && (
+          let
+            d = head defs;
+          in
+          addErrorContext "while evaluating definitions from `${d.file}':" (
+            !(isAttrs d.value && d.value ? _type)
+          )
+        )
+      then
+        {
+          values = defs;
+          highestPrio = defaultOverridePriority;
+        }
+      else
+        {
+          values = defsSorted;
+          inherit (defsFiltered) highestPrio;
+        };
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.

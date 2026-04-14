@@ -14,14 +14,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "django-dbbackup";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Archmonger";
     repo = "django-dbbackup";
     tag = finalAttrs.version;
-    hash = "sha256-fl4ezDLHO6KwLfX5KMK9uMonONJCCDLyZUj9KMRZsGc=";
+    hash = "sha256-vSBZmYMcrpJQEhVVqKgn35vaI5TvMBbdwGXZOFjXQbw=";
   };
 
   build-system = [ hatchling ];

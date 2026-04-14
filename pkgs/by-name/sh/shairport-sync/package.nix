@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ssl=openssl"
   ]
   ++ optional enableAvahi "--with-avahi"
-  ++ optional enablePulse "--with-pa"
-  ++ optional enablePipewire "--with-pw"
+  ++ optional enablePulse "--with-pulseaudio"
+  ++ optional enablePipewire "--with-pipewire"
   ++ optional enableAlsa "--with-alsa"
   ++ optional enableSndio "--with-sndio"
   ++ optional enableAo "--with-ao"
