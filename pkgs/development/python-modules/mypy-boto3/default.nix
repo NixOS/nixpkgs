@@ -830,8 +830,8 @@ in
       "sha256-mERVlNSjfxNqfyGRlNgfP1MrzhGrMYgIuZ0pZLPrfBQ=";
 
   mypy-boto3-macie2 =
-    buildMypyBoto3Package "macie2" "1.42.3"
-      "sha256-fzZHKPUXOh/tLGCx6xAHJd4jefApYtEwbt6BSakOLXA=";
+    buildMypyBoto3Package "macie2" "1.42.89"
+      "sha256-Y19V3g8CM4L2L5dWPjpokPNj6iX39OPxUP+H1blFaH0=";
 
   mypy-boto3-managedblockchain =
     buildMypyBoto3Package "managedblockchain" "1.42.3"
