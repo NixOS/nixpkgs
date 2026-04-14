@@ -2,7 +2,6 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  gitUpdater,
 }:
 buildGoModule (finalAttrs: {
   pname = "go-grip";
@@ -16,8 +15,6 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-QsLiCsFY6nI85jsEZtAgmObEKpBSZWhzZk+TlukM8JU=";
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Preview Markdown files locally before committing them";
