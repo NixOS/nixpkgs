@@ -115,7 +115,7 @@ available. While adding new plans is possible in theory, it requires some
 manual database operations which isn't worthwhile. Instead, use `ente-cli`
 with your admin user to modify the storage limit.
 
-## iOS background sync
+## iOS background sync {#module-services-ente-ios-background-sync}
 
 On iOS, background sync is achived via a silent notification sent by the server
 every 30 minutes that allows the phone to sync for about 30 seconds, enough for
