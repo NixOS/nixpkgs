@@ -28,6 +28,7 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
