@@ -1,20 +1,19 @@
 {
+  lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   poetry-core,
-  aiohttp,
-  websockets,
-  typing-extensions,
   pydantic,
   pytest-asyncio,
   pytest-cov-stub,
-  python-dotenv,
   pytestCheckHook,
-  pythonRelaxDepsHook,
+  python-dotenv,
+  typing-extensions,
+  websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "realtime";
   version = "3.0.0a1";
   pyproject = true;
@@ -22,30 +21,28 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Pvu2zyRKS99/KEIWwQXBR7Moegt0KITiaMWi5mi+CL4=";
   };
 
-  sourceRoot = "${src.name}/src/realtime";
+  sourceRoot = "${finalAttrs.src.name}/src/realtime";
+
+  pythonRelaxDeps = [ "websockets" ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    websockets
-    typing-extensions
     pydantic
+    typing-extensions
+    websockets
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  pythonRelaxDeps = [ "websockets" ];
 
   nativeCheckInputs = [
     aiohttp
-    pytestCheckHook
-    pytest-cov-stub
-    python-dotenv
     pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    python-dotenv
   ];
 
   pythonImportsCheck = [ "realtime" ];
@@ -58,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for Supabase Functions";
     homepage = "https://github.com/supabase/supabase-py";
-    changelog = "https://github.com/supabase/supabase-py/blob/v${src.tag}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ siegema ];
+    changelog = "https://github.com/supabase/supabase-py/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siegema ];
   };
-}
+})
