@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-wizard";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "kobzol";
     repo = "cargo-wizard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oFPSgjXZ+Kq59tV/7s6WPF6FHXENoZv8D245yyT0E9E=";
+    hash = "sha256-WLGE2ZuytjSridZwfUTtNQF5woeBbx5ZoHfB9eyvedI=";
   };
 
-  cargoHash = "sha256-ClulQP+1/RLvOWWB3uKTCn2Sx3+TO25qRs456DWHKu0=";
+  cargoHash = "sha256-vRakgwZRyYkk3xFfZzl197tgRmx+/g2b8eaDunwrCzM=";
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType
