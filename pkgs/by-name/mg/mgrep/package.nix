@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgrep";
-  version = "0.1.10";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "mixedbread-ai";
     repo = "mgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Njs0h2Roqm9xK8TV7BqrR5EwpK+ONNl3ct1fHU0UZEY=";
+    hash = "sha256-Tm5bOrYcV4LF7W3TxSBObnwVdFfBZPXpYbOKDyvuRAQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
