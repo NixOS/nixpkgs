@@ -5,7 +5,7 @@
   fetchurl,
   fetchpatch,
   python3,
-  fmt_9,
+  fmt,
   libidn,
   pkg-config,
   spidermonkey_128,
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     gloox
     nvidia-texture-tools
     libsodium
-    fmt_9
+    fmt
     freetype
     premake5
     cxxtest
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-I${libx11.dev}/include"
       "-I${libxcursor.dev}/include"
       "-I${SDL2}/include/SDL2"
-      "-I${fmt_9.dev}/include"
+      "-I${fmt.dev}/include"
       "-I${nvidia-texture-tools.dev}/include"
     ];
 
