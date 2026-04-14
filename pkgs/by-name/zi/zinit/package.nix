@@ -34,20 +34,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # Source files
     mkdir -p $out/share/zinit
-    install -m0644 zinit{,-side,-install,-autoload,-additional}.zsh _zinit $out/share/zinit
-    install -m0755 share/git-process-output.zsh $out/share/zinit
-    install -m0644 share/rpm2cpio.zsh $out/share/zinit
+    install -m0444 zinit{,-side,-install,-autoload,-additional}.zsh _zinit $out/share/zinit
+    install -m0555 share/git-process-output.zsh $out/share/zinit
+    install -m0444 share/rpm2cpio.zsh $out/share/zinit
 
     # Autocompletion
     installShellCompletion --zsh _zinit
 
     # Manpage
-    mkdir -p ${placeholder "man"}/share/man/man{1..9}
+    # otherwsise zinit tries to create them in the nix store
+    mkdir -p $man/share/man/man{1..9}
     installManPage doc/zinit.1
 
     mkdir -p $doc/share/doc/zinit
-    install -m0644 doc/zsdoc/*.adoc $doc/share/doc/zinit
-    install -m0644 doc/HACKING.md $doc/share/doc/zinit
+    install -m0444 doc/zsdoc/*.adoc $doc/share/doc/zinit
+    install -m0444 doc/HACKING.md $doc/share/doc/zinit
 
     runHook postInstall
   '';
@@ -55,8 +56,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     substituteInPlace $out/share/zinit/zinit.zsh \
       --replace-fail zinit.1 zinit.1.gz \
-      --replace-fail "\''${ZINIT[BIN_DIR]}/doc" ${placeholder "man"}/share/man/man1 \
-      --replace-fail "ZINIT[MAN_DIR]:=\''${ZPFX}/man" "ZINIT[MAN_DIR]:=${placeholder "man"}/share/man"
+      --replace-fail "\''${ZINIT[BIN_DIR]}/doc" $man/share/man/man1 \
+      --replace-fail "ZINIT[MAN_DIR]:=\''${ZPFX}/man" "ZINIT[MAN_DIR]:=$man/share/man"
   '';
 
   passthru = {
