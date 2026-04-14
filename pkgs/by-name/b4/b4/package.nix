@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     dkimpy
     patatt
     git-filter-repo
+    textual
   ];
 
   meta = {

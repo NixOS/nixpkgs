@@ -1,15 +1,5 @@
 [
   {
-    "pname": "AutoMapper",
-    "version": "10.1.1",
-    "hash": "sha256-yJm2/zW6aInMjADHQyjXYBbCBDx10akoyja6485LN9A="
-  },
-  {
-    "pname": "AutoMapper.Extensions.Microsoft.DependencyInjection",
-    "version": "8.1.1",
-    "hash": "sha256-gp+BRjzaOEScjYtS2LAJRtEtUGWC2kz8IPW57hFuR7o="
-  },
-  {
     "pname": "CommandLineParser",
     "version": "2.9.1",
     "hash": "sha256-ApU9y1yX60daSjPk3KYDBeJ7XZByKW8hse9NRZGcjeo="
@@ -48,11 +38,6 @@
     "pname": "Microsoft.ComponentDetection.Orchestrator",
     "version": "6.3.0",
     "hash": "sha256-vlB4uWMIVMgaPYYkHvDRR77DCxLQbNl6M0TQiDV6ZoE="
-  },
-  {
-    "pname": "Microsoft.CSharp",
-    "version": "4.7.0",
-    "hash": "sha256-Enknv2RsFF68lEPdrf5M+BpV1kHoLTVRApKUwuk/pj0="
   },
   {
     "pname": "Microsoft.Extensions.Caching.Abstractions",
@@ -118,11 +103,6 @@
     "pname": "Microsoft.Extensions.DependencyInjection",
     "version": "8.0.1",
     "hash": "sha256-O9g0jWS+jfGoT3yqKwZYJGL+jGSIeSbwmvomKDC3hTU="
-  },
-  {
-    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "3.0.0",
-    "hash": "sha256-dGTb6sHsjZ86fiLnwbauGf9CQdN7G96lCM4ADjaSSBs="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -236,11 +216,6 @@
   },
   {
     "pname": "Microsoft.Extensions.Options",
-    "version": "3.0.0",
-    "hash": "sha256-43Unnj57IA5OzebT6XMAXylzDDBuk8KNFaR4chRE/e8="
-  },
-  {
-    "pname": "Microsoft.Extensions.Options",
     "version": "8.0.0",
     "hash": "sha256-n2m4JSegQKUTlOsKLZUUHHKMq926eJ0w9N9G+I3FoFw="
   },
@@ -253,11 +228,6 @@
     "pname": "Microsoft.Extensions.Options.ConfigurationExtensions",
     "version": "8.0.0",
     "hash": "sha256-A5Bbzw1kiNkgirk5x8kyxwg9lLTcSngojeD+ocpG1RI="
-  },
-  {
-    "pname": "Microsoft.Extensions.Primitives",
-    "version": "3.0.0",
-    "hash": "sha256-cwlj0X19gngcOB7kpODhF/h96/L6psMLBIOd2pf3CbU="
   },
   {
     "pname": "Microsoft.Extensions.Primitives",
@@ -898,11 +868,6 @@
     "pname": "System.Reflection.Emit",
     "version": "4.3.0",
     "hash": "sha256-5LhkDmhy2FkSxulXR+bsTtMzdU3VyyuZzsxp7/DwyIU="
-  },
-  {
-    "pname": "System.Reflection.Emit",
-    "version": "4.7.0",
-    "hash": "sha256-Fw/CSRD+wajH1MqfKS3Q/sIrUH7GN4K+F+Dx68UPNIg="
   },
   {
     "pname": "System.Reflection.Emit.ILGeneration",

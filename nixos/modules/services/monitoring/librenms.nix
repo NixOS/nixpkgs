@@ -735,8 +735,6 @@ in
         '';
     };
 
-    programs.mtr.enable = true;
-
     services.logrotate = {
       enable = true;
       settings."${cfg.logDir}/librenms.log" = {

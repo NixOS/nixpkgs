@@ -1121,11 +1121,16 @@ let
     let
       # Add in the default value for this option, if any.
       defs' =
-        (optional (opt ? default) {
-          file = head opt.declarations;
-          value = mkOptionDefault opt.default;
-        })
-        ++ defs;
+        if opt ? default then
+          [
+            {
+              file = head opt.declarations;
+              value = mkOptionDefault opt.default;
+            }
+          ]
+          ++ defs
+        else
+          defs;
 
       # Handle properties, check types, and merge everything together.
       res =

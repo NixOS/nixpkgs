@@ -1,25 +1,7 @@
 {
-  enableArchLinuxPkgs ? false,
-  enableDnfPackages ? false,
-  enable1password ? false,
-  enableBitwarden ? true,
-  enableBluetooth ? true,
-  enableBookmarks ? true,
-  enableCalc ? true,
-  enableClipboard ? true,
-  enableDesktopApplications ? true,
-  enableFiles ? true,
-  enableMenus ? true,
-  enableNiriActions ? true,
-  enableNiriSessions ? true,
-  enableProviderList ? true,
-  enableRunner ? true,
-  enableSnippets ? true,
-  enableSymbols ? true,
-  enableTodo ? true,
-  enableUnicode ? true,
-  enableWebsearch ? true,
-  enableWindows ? true,
+  # list of providers to enable, all are enabled by default
+  # e.g. enabledProviders = ["files"] will only install the files provider
+  enabledProviders ? null,
 
   bluez,
   buildGoModule,
@@ -35,38 +17,13 @@
   wl-clipboard,
 }:
 let
-  providerMap = {
-    "1password" = enable1password;
-    "archlinuxpkgs" = enableArchLinuxPkgs;
-    "bitwarden" = enableBitwarden;
-    "bluetooth" = enableBluetooth;
-    "bookmarks" = enableBookmarks;
-    "calc" = enableCalc;
-    "clipboard" = enableClipboard;
-    "desktopapplications" = enableDesktopApplications;
-    "dnfpackages" = enableDnfPackages;
-    "files" = enableFiles;
-    "menus" = enableMenus;
-    "niriactions" = enableNiriActions;
-    "nirisessions" = enableNiriSessions;
-    "providerlist" = enableProviderList;
-    "runner" = enableRunner;
-    "snippets" = enableSnippets;
-    "symbols" = enableSymbols;
-    "todo" = enableTodo;
-    "unicode" = enableUnicode;
-    "websearch" = enableWebsearch;
-    "windows" = enableWindows;
-  };
-
-  enabledProviders = lib.filterAttrs (_: enabled: enabled) providerMap;
-  enabledProvidersList = lib.concatStringsSep " " (lib.attrNames enabledProviders);
+  providerEnabled = provider: (enabledProviders == null) || lib.elem provider enabledProviders;
 
   runtimeDeps =
-    lib.optionals enableFiles [ fd ]
-    ++ lib.optionals enableBluetooth [ bluez ]
-    ++ lib.optionals enableCalc [ libqalculate ]
-    ++ lib.optionals enableClipboard [
+    lib.optionals (providerEnabled "files") [ fd ]
+    ++ lib.optionals (providerEnabled "bluetooth") [ bluez ]
+    ++ lib.optionals (providerEnabled "calc") [ libqalculate ]
+    ++ lib.optionals (providerEnabled "clipboard") [
       wl-clipboard
       imagemagick
     ];
@@ -93,18 +50,31 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/elephant" ];
 
-  postBuild = ''
-    echo "Building providers: ${enabledProvidersList}"
-
-    mkdir -p $out/lib/elephant/providers
-    for provider in ${enabledProvidersList}; do
-      [ -z "$provider" ] && continue
-      if [ -d "internal/providers/$provider" ]; then
-        echo "Building provider: $provider"
-        go build -buildmode=plugin -o "$out/lib/elephant/providers/$provider.so" ./internal/providers/"$provider" || exit 1
-      fi
-    done
-  '';
+  postBuild =
+    (
+      if enabledProviders == null then
+        ''
+          PROVIDERS=()
+          for x in internal/providers/*/; do
+            PROVIDERS+=("$(basename "$x")")
+          done
+        ''
+      else
+        ''
+          PROVIDERS=(${lib.escapeShellArgs enabledProviders})
+        ''
+    )
+    + ''
+      echo "Installing providers"
+      mkdir -p $out/lib/elephant/providers
+      for provider in "''${PROVIDERS[@]}"; do
+        [ -z "$provider" ] && continue
+        if [ -d "internal/providers/$provider" ]; then
+          echo "Building provider: $provider"
+          go build -buildmode=plugin -o "$out/lib/elephant/providers/$provider.so" ./internal/providers/"$provider" || exit 1
+        fi
+      done
+    '';
 
   postInstall = ''
     wrapProgram $out/bin/elephant \

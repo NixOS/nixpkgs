@@ -10,7 +10,7 @@
   libjpeg_turbo,
   libuv,
   libvorbis,
-  mbedtls_2,
+  mbedtls,
   openal,
   pcre,
   SDL2,
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
-  # incompatible pointer type error: const char ** -> const void **
+  # backport of https://github.com/HaxeFoundation/hashlink/pull/767
   postPatch = ''
-    substituteInPlace libs/sqlite/sqlite.c \
+    substituteInPlace CMakeLists.txt \
      --replace-warn \
-       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, &tl)" \
-       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, (const void**)&tl)"
+       "cmake_minimum_required(VERSION 3.1)" \
+       "cmake_minimum_required(VERSION 3.13)"
   '';
 
   buildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libpng
     libuv
     libvorbis
-    mbedtls_2
+    mbedtls
     openal
     pcre
     SDL2

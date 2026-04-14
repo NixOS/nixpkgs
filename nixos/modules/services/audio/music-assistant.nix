@@ -82,7 +82,8 @@ in
       allowedTCPPorts =
         lib.optional cfg.enable 8097 # Music Assistant stream port
         ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
-        ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927;
+        ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
+        ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780;
       # The information published by Apple 1 seem to not apply to libraop.
       # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
       # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
@@ -97,6 +98,7 @@ in
 
     services.avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
       enable = true;
+      openFirewall = lib.mkIf cfg.openFirewall true;
       publish = {
         enable = true;
         userServices = true;
@@ -129,7 +131,7 @@ in
         ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
           shairport-sync
         ]
-        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify" cfg.providers || lib.elem "spotify_connect" cfg.providers) [
           librespot-ma
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [

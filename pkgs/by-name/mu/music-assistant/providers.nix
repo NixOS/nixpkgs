@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.11";
+  version = "2.8.4";
   providers = {
     airplay =
       ps: with ps; [
@@ -19,6 +19,8 @@
       ps: with ps; [
         gql
       ];
+    ariacast_receiver = ps: [
+    ];
     audible =
       ps: with ps; [
         audible
@@ -27,6 +29,8 @@
       ps: with ps; [
         aioaudiobookshelf
       ];
+    bandcamp = ps: [
+    ]; # missing bandcamp-async-api
     bbc_sounds =
       ps: with ps; [
         pytz
@@ -41,6 +45,10 @@
       ps: with ps; [
         pychromecast
       ];
+    coverartarchive = ps: [
+    ];
+    dashie_kiosk = ps: [
+    ];
     deezer =
       ps: with ps; [
         deezer-python-async
@@ -51,10 +59,15 @@
     dlna =
       ps: with ps; [
         async-upnp-client
+        defusedxml
       ];
+    emby = ps: [
+    ];
     fanarttv = ps: [
     ];
     filesystem_local = ps: [
+    ];
+    filesystem_nfs = ps: [
     ];
     filesystem_smb = ps: [
     ];
@@ -72,6 +85,10 @@
       ];
     hass_players = ps: [
     ];
+    heos =
+      ps: with ps; [
+        pyheos
+      ];
     ibroadcast = ps: [
     ]; # missing ibroadcastaio
     internet_archive = ps: [
@@ -82,6 +99,8 @@
       ps: with ps; [
         aiojellyfin
       ];
+    kion_music = ps: [
+    ]; # missing yandex-music
     lastfm_scrobble =
       ps: with ps; [
         pylast
@@ -106,6 +125,12 @@
       ps: with ps; [
         py-opensonic
       ];
+    orf_radiothek = ps: [
+    ];
+    pandora = ps: [
+    ];
+    party = ps: [
+    ];
     phishin = ps: [
     ];
     plex =
@@ -146,6 +171,8 @@
         snapcast
         websocket-client
       ];
+    somafm = ps: [
+    ];
     sonos =
       ps: with ps; [
         aiosonos
@@ -163,13 +190,17 @@
       ps: with ps; [
         pkce
       ];
-    spotify_connect = ps: [
-    ];
+    spotify_connect =
+      ps: with ps; [
+        pkce
+      ];
     squeezelite =
       ps: with ps; [
         aioslimproto
       ];
     subsonic_scrobble = ps: [
+    ];
+    sync_group = ps: [
     ];
     test = ps: [
     ];
@@ -183,10 +214,16 @@
     ];
     universal_group = ps: [
     ];
+    universal_player = ps: [
+    ];
     vban_receiver =
       ps: with ps; [
         aiovban
       ];
+    yandex_music = ps: [
+    ]; # missing yandex-music
+    yousee = ps: [
+    ];
     ytmusic =
       ps: with ps; [
         bgutil-ytdlp-pot-provider
@@ -194,5 +231,7 @@
         yt-dlp
         ytmusicapi
       ]; # missing deno
+    zvuk_music = ps: [
+    ]; # missing zvuk-music
   };
 }

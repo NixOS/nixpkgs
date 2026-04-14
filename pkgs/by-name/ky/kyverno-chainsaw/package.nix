@@ -2,7 +2,6 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  kyverno-chainsaw,
   lib,
   nix-update-script,
   stdenv,
@@ -16,9 +15,11 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wHwjcpcum3ByBGYUxJ38Qi0RliQUmAIBYmE7t3gEonI=";
   };
+
+  patches = [ ./go-1.26-testdeps-modulepath.patch ];
 
   vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
 
@@ -42,7 +43,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = kyverno-chainsaw;
+    package = finalAttrs.finalPackage;
     command = "chainsaw version";
     version = "v${finalAttrs.version}";
   };

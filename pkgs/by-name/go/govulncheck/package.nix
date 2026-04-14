@@ -3,27 +3,28 @@
   buildGoLatestModule,
   fetchFromGitHub,
   replaceVars,
+  versionCheckHook,
 }:
 
-buildGoLatestModule rec {
+buildGoLatestModule (finalAttrs: {
   pname = "govulncheck";
-  version = "1.1.4";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    tag = "v${version}";
-    hash = "sha256-d1JWh/K+65p0TP5vAQbSyoatjN4L5nm3VEA+qBSrkAA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-15DTxzlK7mkUt7KCwsV5+E5dPopCwFylI0fmVB0LDEo=";
   };
 
   patches = [
     # patch in version information
     (replaceVars ./version.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
-  vendorHash = "sha256-MSTKDeWVxD2Fa6fNoku4EwFwC90XZ5acnM67crcgXDg=";
+  vendorHash = "sha256-+hJtGG9GGDb3D9Cgm7hreySjOlXXsc7HxHcoS2Cxfbs=";
 
   subPackages = [
     "cmd/govulncheck"
@@ -37,10 +38,16 @@ buildGoLatestModule rec {
     "-w"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
+
   meta = {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
     downloadPage = "https://github.com/golang/vuln";
-    changelog = "https://github.com/golang/vuln/releases/tag/v${version}";
+    changelog = "https://github.com/golang/vuln/releases/tag/${finalAttrs.src.tag}";
     description = "Database client and tools for the Go vulnerability database, also known as vuln";
     mainProgram = "govulncheck";
     longDescription = ''
@@ -64,10 +71,10 @@ buildGoLatestModule rec {
       example, a dependency with a Windows-specific vulnerability will not be
       reported for a Linux build.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       jk
       SuperSandro2000
     ];
   };
-}
+})

@@ -10,29 +10,19 @@
   libxslt,
   testers,
   offlineimap,
-  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "offlineimap";
-  version = "8.0.1";
+  version = "8.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Aigh2B4MTAOeUprtcK9kOx+aG4yCmGZoWTLmYYhrfXA=";
+    hash = "sha256-mysvqltO4x2dD8V+FAGOnDw5lQ8bgDwXFK9n15fbUdI=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/OfflineIMAP/offlineimap3/pull/225
-      name = "duplicate-bin.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/commit/64557d2251f0d911c215eb743f6bfe8de8dfc042.patch";
-      hash = "sha256-Agy38fLt2k9AwPmGBoQxUD7+FD3qJzj89A13SQr0/nU=";
-    })
-  ];
 
   postPatch = ''
     # Skip xmllint to stop failures due to no network access
@@ -62,11 +52,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pysocks
     rfc6555
     urllib3
-  ];
-
-  # https://github.com/OfflineIMAP/offlineimap3/pull/232
-  pythonRelaxDeps = [
-    "urllib3"
   ];
 
   postInstall = ''

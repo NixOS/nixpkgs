@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tagref";
-  version = "1.11.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "tagref";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-DjxRK3Ih58vzxvPM0YmRkFU4fogiFsI/WrdHyAonQ7A=";
+    sha256 = "sha256-tsiotSQsf3wlp5wlzV0MHavCieW9LMb3Ei+eKve0O/4=";
   };
 
-  cargoHash = "sha256-Pj86GQoIAf20F7z18Er7frX0aRacGNDQpeyUdr5kwz4=";
+  cargoHash = "sha256-3nGdM3Qv3y5byQI1Txv0VNi2cQZ7RP5tEXFWuom2SOY=";
 
   meta = {
     description = "Manage cross-references in your code";
