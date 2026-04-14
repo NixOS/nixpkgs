@@ -2,16 +2,21 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  stdenv,
   pkg-config,
   openssl,
   fontconfig,
+  libx11,
+  libxkbcommon,
+  wayland,
+  makeWrapper,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emissary";
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "altonen";
+    owner = "eepnet";
     repo = "emissary";
     tag = "v${finalAttrs.version}";
     hash = "sha256-W4QEN52A6s1qDso73tM50/BcjxoX72LbmTG2kJiTfRs=";
@@ -20,20 +25,39 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals stdenv.targetPlatform.isLinux [
+    makeWrapper
   ];
 
   buildInputs = [
     openssl
     fontconfig
+  ]
+  ++ lib.optionals stdenv.targetPlatform.isLinux [
+    libx11
+    libxkbcommon
+    wayland
   ];
 
   __darwinAllowLocalNetworking = true;
 
+  postInstall = lib.optionalString stdenv.targetPlatform.isLinux ''
+    wrapProgram $out/bin/emissary-cli \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+          libx11
+        ]
+      }
+  '';
+
   meta = {
-    changelog = "https://github.com/altonen/emissary/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/eepnet/emissary/releases/tag/${finalAttrs.version}";
     description = "Rust implementation of the I2P protocol stack";
-    homepage = "https://altonen.github.io/emissary/";
-    license = lib.licenses.mit; # https://github.com/altonen/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/altonen/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
+    homepage = "https://eepnet.github.io/emissary/";
+    license = lib.licenses.mit; # https://github.com/eepnet/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/altonen/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
     mainProgram = "emissary-cli";
     maintainers = [ lib.maintainers.N4CH723HR3R ];
   };
