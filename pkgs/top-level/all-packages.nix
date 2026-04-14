@@ -10123,10 +10123,6 @@ with pkgs;
 
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
-  opencpn = callPackage ../applications/misc/opencpn {
-    inherit (darwin) DarwinTools;
-  };
-
   open-music-kontrollers = recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
     jit = callPackage ../applications/audio/open-music-kontrollers/jit.nix { };
