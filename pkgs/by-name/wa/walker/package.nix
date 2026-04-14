@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "walker";
-  version = "2.15.2";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jYvDe44MLx444BfiO1EtCKgHoKfXeIG1DvAw7P2qCrY=";
+    hash = "sha256-ugacgbPxYM68pAcQRceuSlCWtUEuddltMUzAWrnWlHA=";
   };
 
   cargoHash = "sha256-MPjMB5TsrJd28QuEoIDRJjM+SE0cTNCO5PRW+I+/CHE=";

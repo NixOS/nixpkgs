@@ -158,8 +158,11 @@ rec {
         assert (f'.payload != null) == (f.payload != null);
         f.payload != null;
       hasWrapped =
-        assert (f'.wrapped != null) == (f.wrapped != null);
-        f.wrapped != null;
+        let
+          hasWrappedNonNull = set: set ? "wrapped" && set.wrapped != null;
+        in
+        assert (hasWrappedNonNull f') == (hasWrappedNonNull f);
+        hasWrappedNonNull f;
 
       typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
       typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
