@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  DarwinTools,
+  darwin,
   alsa-utils,
   at-spi2-core,
   cmake,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     lsb-release
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    DarwinTools
+    darwin.DarwinTools
     makeWrapper
   ];
 
