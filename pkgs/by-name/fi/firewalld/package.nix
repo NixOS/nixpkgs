@@ -60,7 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./specify-localedir.patch
 
     ./gettext-0.25.patch
-  ];
+  ]
+  ++ lib.optional withGui ./nm-connection-editor.patch;
 
   postPatch = ''
     substituteInPlace config/xmlschema/check.sh \
@@ -70,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
         substituteInPlace $file \
           --replace-fail /usr "$out"
     done
-  ''
-  + lib.optionalString withGui ''
-    substituteInPlace src/firewall-applet.in \
-      --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
-      --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [
