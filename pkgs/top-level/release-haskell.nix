@@ -293,6 +293,7 @@ let
         hlint
         hpack
         hscolour
+        hugs
         icepeak
         ihaskell
         jacinda
@@ -376,7 +377,10 @@ let
             "aarch64-darwin"
           ]
           {
-            haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler;
+            haskell.compiler = packagePlatforms (
+              # hugs doesn't build on musl yet
+              lib.filterAttrs (name: _: !(lib.hasPrefix "microhs" name)) pkgs.pkgsMusl.haskell.compiler
+            );
 
             # Get some cache going for MUSL-enabled GHC.
             haskellPackages = {
