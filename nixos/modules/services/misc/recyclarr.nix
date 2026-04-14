@@ -151,7 +151,16 @@ in
         OnCalendar = cfg.schedule;
         Persistent = true;
         RandomizedDelaySec = "5m";
+
+        # Trigger recyclarr to apply configuration changes when the
+        # timer is restarted.
+        OnActiveSec = "5s";
       };
+
+      # When the config is changed, the timer should be triggered via
+      # restarting the timer and firing OnActiveSec. This ensures that
+      # a NixOS activation will immediately enforce the new config changes.
+      unitConfig.X-ConfigHash = builtins.hashString "sha256" (builtins.toJSON cfg.configuration);
     };
   };
 
