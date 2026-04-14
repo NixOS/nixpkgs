@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "smbus2";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kplindegaard";
     repo = "smbus2";
     tag = version;
-    hash = "sha256-GoXSDUmMnrJAfQ8EfCP5bdkq5g0nKLRHcvou5c6vZGU=";
+    hash = "sha256-CWcRlbZTLiB45DaV6rbhvlk8cTaEJgPAq/JDmbxD7H4=";
   };
 
   build-system = [ setuptools ];
