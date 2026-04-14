@@ -34,6 +34,8 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  __structuredAttrs = true;
+
   meta = {
     # Networking failures in tests, even with __darwinAllowLocalNetworking on
     # and sandbox disabled.
