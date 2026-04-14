@@ -23,6 +23,9 @@ rustPlatform.buildRustPackage (oldAttrs: {
     description = "Yggdrasil Network rewritten in Rust";
     homepage = "https://github.com/Revertron/Yggdrasil-ng";
     license = with lib.licenses; [ mpl20 ];
-    maintainers = with lib.maintainers; [ r4v3n6101 ];
+    maintainers = with lib.maintainers; [
+      r4v3n6101
+      malik
+    ];
   };
 })
