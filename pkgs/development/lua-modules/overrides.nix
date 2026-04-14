@@ -1252,6 +1252,13 @@ in
     };
   });
 
+  tree-sitter-norg-meta = prev.tree-sitter-norg-meta.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      writableTmpDirAsHomeHook
+      tree-sitter
+    ];
+  });
+
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       writableTmpDirAsHomeHook
