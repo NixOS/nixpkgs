@@ -6,6 +6,8 @@
   pkg-config,
 
   dbus,
+
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     dbus
+  ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
   ];
 
   meta = {
