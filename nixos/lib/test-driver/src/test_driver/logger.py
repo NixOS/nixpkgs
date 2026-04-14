@@ -7,7 +7,6 @@ import unicodedata
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
-from enum import IntEnum
 from pathlib import Path
 from queue import Empty, Queue
 from typing import Any
@@ -16,12 +15,6 @@ from xml.sax.xmlreader import AttributesImpl
 
 from colorama import Fore, Style
 from junit_xml import TestCase, TestSuite
-
-
-class LogLevel(IntEnum):
-    INFO = 1
-    WARNING = 2
-    ERROR = 3
 
 
 class AbstractLogger(ABC):
@@ -63,10 +56,6 @@ class AbstractLogger(ABC):
     def print_serial_logs(self, enable: bool) -> None:
         pass
 
-    @abstractmethod
-    def set_log_level(self, level: LogLevel) -> None:
-        pass
-
 
 class JunitXMLLogger(AbstractLogger):
     class TestCaseState:
@@ -82,7 +71,6 @@ class JunitXMLLogger(AbstractLogger):
         self.currentSubtest = "main"
         self.outfile: Path = outfile
         self._print_serial_logs = True
-        self._log_level = LogLevel.INFO
         atexit.register(self.close)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
@@ -104,12 +92,10 @@ class JunitXMLLogger(AbstractLogger):
         yield
 
     def info(self, *args, **kwargs) -> None:  # type: ignore
-        if self._log_level <= LogLevel.INFO:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def warning(self, *args, **kwargs) -> None:  # type: ignore
-        if self._log_level <= LogLevel.WARNING:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def error(self, *args, **kwargs) -> None:  # type: ignore
         self.tests[self.currentSubtest].stderr += args[0] + os.linesep
@@ -126,9 +112,6 @@ class JunitXMLLogger(AbstractLogger):
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
-
-    def set_log_level(self, level: LogLevel) -> None:
-        self._log_level = level
 
     def close(self) -> None:
         with open(self.outfile, "w") as f:
@@ -197,15 +180,10 @@ class CompositeLogger(AbstractLogger):
         for logger in self.logger_list:
             logger.log_serial(message, machine)
 
-    def set_log_level(self, level: LogLevel) -> None:
-        for logger in self.logger_list:
-            logger.set_log_level(level)
-
 
 class TerminalLogger(AbstractLogger):
     def __init__(self) -> None:
         self._print_serial_logs = True
-        self._log_level = LogLevel.INFO
 
     def maybe_prefix(self, message: str, attributes: dict[str, str]) -> str:
         if "machine" in attributes:
@@ -238,21 +216,16 @@ class TerminalLogger(AbstractLogger):
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
     def info(self, *args, **kwargs) -> None:  # type: ignore
-        if self._log_level <= LogLevel.INFO:
-            self.log(*args, **kwargs)
+        self.log(*args, **kwargs)
 
     def warning(self, *args, **kwargs) -> None:  # type: ignore
-        if self._log_level <= LogLevel.WARNING:
-            self.log(*args, **kwargs)
+        self.log(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:  # type: ignore
         self.log(*args, **kwargs)
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
-
-    def set_log_level(self, level: LogLevel) -> None:
-        self._log_level = level
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:
@@ -273,7 +246,6 @@ class XMLLogger(AbstractLogger):
         self.queue: Queue[dict[str, str]] = Queue()
 
         self._print_serial_logs = True
-        self._log_level = LogLevel.INFO
 
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs=AttributesImpl({}))
@@ -297,12 +269,10 @@ class XMLLogger(AbstractLogger):
         self.xml.endElement("line")
 
     def info(self, *args, **kwargs) -> None:  # type: ignore
-        if self._log_level <= LogLevel.INFO:
-            self.log(*args, **kwargs)
+        self.log(*args, **kwargs)
 
     def warning(self, *args, **kwargs) -> None:  # type: ignore
-        if self._log_level <= LogLevel.WARNING:
-            self.log(*args, **kwargs)
+        self.log(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:  # type: ignore
         self.log(*args, **kwargs)
@@ -316,9 +286,6 @@ class XMLLogger(AbstractLogger):
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
-
-    def set_log_level(self, level: LogLevel) -> None:
-        self._log_level = level
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:

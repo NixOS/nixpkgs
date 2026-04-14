@@ -12,7 +12,6 @@ from test_driver.driver import Driver
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
-    LogLevel,
     TerminalLogger,
     XMLLogger,
 )
@@ -152,15 +151,6 @@ def main() -> None:
         help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
         type=int,
     )
-    log_level_map = {level.name.lower(): level for level in LogLevel}
-    arg_parser.add_argument(
-        "--log-level",
-        metavar="LOG_LEVEL",
-        action=EnvDefault,
-        envvar="logLevel",
-        choices=log_level_map,
-        help="Set the log level",
-    )
 
     args = arg_parser.parse_args()
 
@@ -178,9 +168,6 @@ def main() -> None:
 
     if args.junit_xml:
         logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
-
-    if args.log_level:
-        logger.set_log_level(log_level_map[args.log_level])
 
     if not args.keep_machine_state:
         logger.info(
