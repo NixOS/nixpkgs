@@ -4,7 +4,7 @@
   cmake,
   pkg-config,
   dbus,
-  fmt_9,
+  fmt,
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/simplebluez";
 
-  cmakeFlags = [ "-DLIBFMT_LOCAL_PATH=${fmt_9.src}" ];
+  cmakeFlags = [ "-DLIBFMT_LOCAL_PATH=${fmt.src}" ];
 
   nativeBuildInputs = [
     cmake
