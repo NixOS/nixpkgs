@@ -57,7 +57,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorg-server";
-  version = "21.1.21";
+  version = "21.1.22";
 
   outputs = [
     "out"
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+    hash = "sha256-GiQsiRfEm6KczB9gIWE9iiuYBd0NJxpmrp0J9LC7BrM=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
