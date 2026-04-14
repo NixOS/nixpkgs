@@ -11792,10 +11792,6 @@ with pkgs;
 
   spyder = with python3.pkgs; toPythonApplication spyder;
 
-  tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
-    python3 = python312; # fails to build otherwise
-  };
-
   vite = libsForQt5.callPackage ../applications/science/misc/vite { };
 
   ### SCIENCE / PHYSICS
