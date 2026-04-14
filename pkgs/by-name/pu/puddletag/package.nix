@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   python3,
   libsForQt5,
@@ -33,14 +32,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail share/pixmaps share/icons
   '';
 
-  buildInputs =
-    with qt;
-    [
-      qtbase
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      qtwayland
-    ];
+  buildInputs = with qt; [
+    qtbase
+  ];
 
   nativeBuildInputs = with qt; [
     wrapQtAppsHook
