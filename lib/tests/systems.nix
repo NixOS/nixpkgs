@@ -167,6 +167,7 @@ lib.runTests (
       "armv6l-linux"
       "armv7a-linux"
       "armv7l-linux"
+      "csky-linux"
       "i686-linux"
       "loongarch64-linux"
       "m68k-linux"

@@ -209,6 +209,12 @@ rec {
         arch = "armv8-a";
       };
 
+      csky = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "csky";
+      };
+
       i386 = {
         bits = 32;
         significantByte = littleEndian;
@@ -733,6 +739,9 @@ rec {
     gnuabielfv1 = {
       abi = "elfv1";
     };
+    gnuabiv2 = {
+      abi = "v2";
+    };
 
     musleabi = {
       float = "soft";
@@ -1000,6 +1009,7 @@ rec {
               gnuabi64 = abis.muslabi64;
               gnuabielfv2 = abis.musl;
               gnuabielfv1 = abis.musl;
+              gnuabiv2 = abis.musl;
               # The following entries ensure that this function is idempotent.
               musleabi = abis.musleabi;
               musleabihf = abis.musleabihf;
