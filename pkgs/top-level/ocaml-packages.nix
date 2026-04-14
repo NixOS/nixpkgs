@@ -1478,8 +1478,6 @@ let
 
         ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
 
-        ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
-
         ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
 
         ocaml_pcre = callPackage ../development/ocaml-modules/pcre { };
@@ -2358,6 +2356,7 @@ let
         ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
+        ocaml_mysql = throw "ocamlPackages.ocaml_mysql is not maintained, use ocamlPackages.mariadb instead";
         torch = throw "ocamlPackages.torch has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
       }
     )).overrideScope
