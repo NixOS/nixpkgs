@@ -110,6 +110,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       chardet
       chromadb
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops
