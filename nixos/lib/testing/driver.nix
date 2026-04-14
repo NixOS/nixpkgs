@@ -234,6 +234,7 @@ in
     logLevel = mkOption {
       description = "Log level for the test driver.";
       type = types.enum [
+        "debug"
         "info"
         "warning"
         "error"
