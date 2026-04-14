@@ -16,10 +16,7 @@
   # Optional dependencies
   enableJingle ? true,
   farstream,
-  gstreamer,
-  gst-plugins-base,
-  gst-libav,
-  gst-plugins-good,
+  gst_all_1,
   libnice,
   enableSecrets ? true,
   libsecret,
@@ -35,7 +32,14 @@
   gsound,
   extraPythonPackages ? ps: [ ],
 }:
-
+let
+  inherit (gst_all_1)
+    gstreamer
+    gst-plugins-base
+    gst-libav
+    gst-plugins-good
+    ;
+in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
   version = "2.5.0";
@@ -61,7 +65,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ++ lib.optionals enableJingle [
     farstream
     gst-libav
-    gst-plugins-good
+    (gst-plugins-good.override { gtkSupport = true; })
     libnice
   ]
   ++ lib.optional enableSecrets libsecret
