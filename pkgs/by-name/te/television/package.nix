@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   testers,
   television,
   nix-update-script,
@@ -19,6 +21,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-n417hrDLpBD7LhtHfqHPgr9N+gkdC9nw+iDnNRcTqQQ=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    HOME=$TMPDIR
+    installShellCompletion --cmd tv \
+      --bash <($out/bin/tv init bash) \
+      --fish <($out/bin/tv init fish) \
+      --zsh <($out/bin/tv init zsh)
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
