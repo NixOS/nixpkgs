@@ -6,6 +6,7 @@
   installShellFiles,
   nix-update-script,
   versionCheckHook,
+  runCommand,
 }:
 let
   sources = lib.importJSON ./sources.json;
@@ -53,7 +54,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      lint =
+        runCommand "swiftlint-test-lint"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            printf "class test{}\n\nvar a = 1" > test.swift
+            swiftlint lint ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "--disable-sourcekit"} test.swift > output.txt 2>&1 || true
+            grep -q "identifier_name" output.txt
+            grep -q "opening_brace" output.txt
+            grep -q "trailing_newline" output.txt
+            grep -q "type_name" output.txt
+            touch $out
+          '';
+    };
+  };
 
   meta = {
     description = "Tool to enforce Swift style and conventions";
