@@ -2731,7 +2731,7 @@ with pkgs;
   };
 
   medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { usev110Api = true; };
+    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   mhonarc = perlPackages.MHonArc;
@@ -2945,7 +2945,7 @@ with pkgs;
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
   netcdf-mpi = netcdf.override {
-    hdf5 = hdf5-mpi.override { usev110Api = true; };
+    hdf5 = hdf5-mpi.override { apiVersion = "v110"; };
   };
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
@@ -7511,7 +7511,7 @@ with pkgs;
   };
 
   vigra = callPackage ../development/libraries/vigra {
-    hdf5 = hdf5.override { usev110Api = true; };
+    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   vte-gtk4 = vte.override {

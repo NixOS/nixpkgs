@@ -18,7 +18,7 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
   javaSupport ? false,
   jdk,
-  usev110Api ? false,
+  apiVersion ? null,
   threadsafe ? false,
   python3,
 }:
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
   ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
   ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
-  ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
+  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
   ++ lib.optionals threadsafe [
     "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
     "-DHDF5_BUILD_HL_LIB=OFF"
