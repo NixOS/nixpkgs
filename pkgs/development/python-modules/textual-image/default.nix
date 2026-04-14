@@ -2,31 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # dependencies
   rich,
-
-  # tests
   pillow,
   pytestCheckHook,
   syrupy,
-
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-image";
-  version = "0.8.5";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
     repo = "textual-image";
-    tag = "v${version}";
-    hash = "sha256-gkLsM02oQ2H4UUhezbcmaOa2FQfzvFRsa0gd07eNucw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nWP4pxFcsjDA/SIrKXHjufiQaxHGgPpC1ZIti+TW+f0=";
   };
 
-  buildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pillow
@@ -45,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Render images in the terminal with Textual and rich";
     homepage = "https://github.com/lnqs/textual-image/";
-    changelog = "https://github.com/lnqs/textual-image/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/lnqs/textual-image/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ gaelj ];
   };
-}
+})

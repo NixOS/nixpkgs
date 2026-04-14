@@ -15,14 +15,20 @@ let
       system.stateVersion = config.system.nixos.release;
 
       nixpkgs.pkgs = pkgs;
-
-      # use networkd to obtain systemd network setup
-      networking.useNetworkd = true;
     };
 
-  container = {
-    imports = [ common ];
+  profile-host-nspawn = {
+    # use networkd to obtain systemd network setup
+    networking.useNetworkd = true;
 
+    networking.firewall.extraCommands = ''
+      # open DHCP for nspawn interfaces
+      ${pkgs.iptables}/bin/iptables -A nixos-fw -i ve-+ -p udp -m udp --dport 67 -j nixos-fw-accept
+    '';
+  };
+
+  # improvement: move following profile to ../modules/profiles/nspawn-guest.nix
+  profile-guest-nspawn = {
     # We re-use the NixOS container option ...
     boot.isNspawnContainer = true;
     # ... and revert unwanted defaults
@@ -30,6 +36,65 @@ let
 
     # systemd-nspawn expects /sbin/init
     boot.loader.initScript.enable = true;
+
+    # use networkd to obtain systemd network setup
+    networking.useNetworkd = true;
+  };
+
+  profile-host-vmspawn =
+    { config, pkgs, ... }:
+    {
+      # use networkd to obtain systemd network setup
+      networking.useNetworkd = true;
+
+      networking.firewall.extraCommands = ''
+        # open DHCP for vmspawn interfaces
+        ${pkgs.iptables}/bin/iptables -A nixos-fw -i vt-+ -p udp -m udp --dport 67 -j nixos-fw-accept
+      '';
+
+      environment.systemPackages =
+        let
+          # improvement: following wrapper should be moved to pkgs
+          vmspawn-wrapped =
+            pkgs.runCommand "systemd-vmspawn-wrapped" { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+              ''
+                makeWrapper ${config.systemd.package}/bin/systemd-vmspawn $out/bin/systemd-vmspawn-wrapped \
+                  --prefix PATH : ${
+                    lib.makeBinPath [
+                      pkgs.qemu
+                      pkgs.virtiofsd
+                      pkgs.openssh # ssh-keygen
+                    ]
+                  } \
+                  --prefix XDG_CONFIG_HOME : ${pkgs.qemu}/share
+              '';
+        in
+        [ vmspawn-wrapped ];
+    };
+
+  # improvement: move following profile to ../modules/profiles/vmspawn-guest.nix
+  profile-guest-vmspawn = {
+    imports = [ ../modules/profiles/qemu-guest.nix ];
+    # improvement: move following configuration to qemu-guest.nix
+    boot.initrd.availableKernelModules = [
+      "virtiofs"
+    ];
+
+    boot.initrd.systemd.enable = true;
+    # root is defined by systemd-vmspawn
+    boot.initrd.systemd.root = null;
+
+    boot.loader.grub.enable = false;
+
+    # use networkd to obtain systemd network setup
+    networking.useNetworkd = true;
+  };
+
+  container = {
+    imports = [
+      common
+      profile-guest-nspawn
+    ];
   };
 
   containerSystem = evalConfig container;
@@ -60,18 +125,8 @@ let
   vm = {
     imports = [
       common
-      ../modules/profiles/qemu-guest.nix
+      profile-guest-vmspawn
     ];
-    # improvement: move following configuration to qemu-guest.nix
-    boot.initrd.availableKernelModules = [
-      "virtiofs"
-    ];
-
-    boot.initrd.systemd.enable = true;
-    # root is defined by systemd-vmspawn
-    boot.initrd.systemd.root = null;
-
-    boot.loader.grub.enable = false;
 
     services.openssh.enable = true;
   };
@@ -94,14 +149,14 @@ in
 
   nodes.machine =
     {
-      config,
       lib,
-      pkgs,
       ...
     }:
     {
-      # use networkd to obtain systemd network setup
-      networking.useNetworkd = true;
+      imports = [
+        profile-host-nspawn
+        profile-host-vmspawn
+      ];
 
       # do not try to access cache.nixos.org
       nix.settings.substituters = lib.mkForce [ ];
@@ -146,32 +201,6 @@ in
         ];
         overrideStrategy = "asDropin";
       };
-
-      networking.firewall.extraCommands = ''
-        # open DHCP for nspawn interfaces
-        ${pkgs.iptables}/bin/iptables -A nixos-fw -i ve-+ -p udp -m udp --dport 67 -j nixos-fw-accept
-        # open DHCP for vmspawn interfaces
-        ${pkgs.iptables}/bin/iptables -A nixos-fw -i vt-+ -p udp -m udp --dport 67 -j nixos-fw-accept
-      '';
-
-      environment.systemPackages =
-        let
-          # improvement: following wrapper should be moved to pkgs
-          vmspawn-wrapped =
-            pkgs.runCommand "systemd-vmspawn-wrapped" { nativeBuildInputs = [ pkgs.makeWrapper ]; }
-              ''
-                makeWrapper ${config.systemd.package}/bin/systemd-vmspawn $out/bin/systemd-vmspawn-wrapped \
-                  --prefix PATH : ${
-                    lib.makeBinPath [
-                      pkgs.qemu
-                      pkgs.virtiofsd
-                      pkgs.openssh # ssh-keygen
-                    ]
-                  } \
-                  --prefix XDG_CONFIG_HOME : ${pkgs.qemu}/share
-              '';
-        in
-        [ vmspawn-wrapped ];
     };
 
   testScript = ''

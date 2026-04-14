@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-weasyprint";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdemmer";
     repo = "django-weasyprint";
     tag = "v${version}";
-    hash = "sha256-eSh1p+5MyYb6GIEgSdlFxPzVCenlkwSCTkTzgKjezIg=";
+    hash = "sha256-EwTEBIqAZGmtSXkSLZgNPCKA98IrymsUEaCHc1uQ2XE=";
   };
 
   build-system = [

@@ -7,14 +7,18 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dcnnt";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-73ZLgb5YcXlAOjbKLVv8oqgS6pstBdJxa7LFUgIHpUE=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pycryptodome
   ];
 

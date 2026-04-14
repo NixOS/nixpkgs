@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.23.12";
+  version = "0.23.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     tag = "v${version}";
-    hash = "sha256-31gDJKiNJ6CGIJYItMj8VzQkHQdmWFiDrpiC1ntIrVE=";
+    hash = "sha256-kXDdUKOs5+1LKqVnGAd1G6pD4IZkAsuNfJPDWj/ffkg=";
   };
 
   build-system = [

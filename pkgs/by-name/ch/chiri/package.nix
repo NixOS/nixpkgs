@@ -88,10 +88,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm build
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/bin
-    makeWrapper "$out/Applications/Chiri.app/Contents/MacOS/chiri" "$out/bin/chiri"
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/bin
+        makeWrapper "$out/Applications/Chiri.app/Contents/MacOS/chiri" "$out/bin/chiri"
+      ''
+    else
+      ''
+        mv $out/bin/Chiri $out/bin/chiri
+        substituteInPlace $out/share/applications/Chiri.desktop \
+          --replace-fail "Exec=Chiri" "Exec=chiri"
+      '';
 
   doCheck = false;
 

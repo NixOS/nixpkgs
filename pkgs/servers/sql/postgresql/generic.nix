@@ -6,10 +6,8 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
-      fetchpatch2,
       lib,
       replaceVars,
-      writeShellScriptBin,
 
       # source specification
       hash,
@@ -45,9 +43,7 @@ let
       buildPackages,
       newScope,
       nixosTests,
-      postgresqlTestHook,
       self,
-      stdenvNoCC,
       testers,
 
       # Block size
