@@ -2494,7 +2494,6 @@ mapAliases {
   zabbix72 = throw "'zabbix72' was removed as it has reached its end of life"; # Added 2026-02-11
   zandronum-alpha = throw "'zandronum-alpha' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
   zandronum-alpha-server = throw "'zandronum-alpha-server' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
-  zashboard = throw "'zashboard' has been removed because upstream repository source code has been deleted"; # Added 2025-12-29
   zbackup = throw "'zbackup' has been removed due to being unmaintained upstream"; # Added 2025-08-22
   zdoom = throw "'zdoom' has been removed as it was broken and unmaintained upstream. Consider using UZDoom instead."; # Added 2026-04-04
   zeal-qt5 = warnAlias "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
