@@ -11251,10 +11251,6 @@ with pkgs;
 
   spyder = with python3.pkgs; toPythonApplication spyder;
 
-  tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
-    python3 = python312; # fails to build otherwise
-  };
-
   ### SCIENCE / PHYSICS
 
   hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
