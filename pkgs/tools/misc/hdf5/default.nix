@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
     (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
-    (lib.cmakeBool "HDF5_BUILD_WITH_INSTALL_NAME" stdenv.hostPlatform.isDarwin)
     (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
     (lib.cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
     (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
