@@ -13,6 +13,10 @@ let
   inherit (lib) mkAfter mkForce;
   pkgs = config.node.pkgs;
 
+  qemuCommon = import ../lib/qemu-common.nix {
+    inherit lib;
+    inherit (pkgs) stdenv;
+  };
   imdsServer = import ./common/imds-server.nix { inherit pkgs; };
 
   # Build an EC2 image configuration
@@ -31,10 +35,12 @@ let
           # the configuration in virtualisation/amazon-image.nix.
           systemd.services."serial-getty@ttyS0".enable = mkForce false;
 
-          # Make /dev/console point to serial console for proper capture
-          # test-instrumentation.nix adds console=tty0, so we need to add console=ttyS0 AFTER it
-          # The last console= parameter takes precedence for /dev/console
-          boot.kernelParams = mkAfter [ "console=ttyS0" ];
+          # Make /dev/console point to the correct serial device for capture.
+          # test-instrumentation.nix adds console=tty0, so we append the
+          # architecture-appropriate serial device AFTER it (last console=
+          # parameter takes precedence for /dev/console). On x86_64 this is
+          # ttyS0 (16550A), on aarch64 it is ttyAMA0 (PL011).
+          boot.kernelParams = mkAfter [ "console=${qemuCommon.qemuSerialDevice}" ];
 
           # Configure VLAN networking to match test framework setup
           networking.interfaces.eth0 = {
@@ -180,8 +186,17 @@ in
             + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
         )
 
+        # UEFI firmware: writable copy of vars (OVMF needs to write NVRAM)
+        import shutil
+        efi_vars = os.path.join(image_dir, "efivars.fd")
+        shutil.copy2("${pkgs.OVMF.variables}", efi_vars)
+        os.chmod(efi_vars, 0o644)
+
         start_command = (
             "qemu-kvm -m 1024"
+            + "${if pkgs.stdenv.hostPlatform.isAarch64 then " -machine virt -cpu cortex-a72" else ""}"
+            + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware}"
+            + f" -drive if=pflash,format=raw,unit=1,file={efi_vars}"
             + f" -drive file={disk_image},if=virtio,werror=report"
             + vlan_net
             + metadata_net
