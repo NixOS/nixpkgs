@@ -19,6 +19,8 @@
   nlohmann_json,
   stdenv,
   libglvnd,
+  wrapQtAppsHook,
+  xorg,
 }:
 
 mkDerivation rec {
@@ -49,6 +51,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -68,6 +71,13 @@ mkDerivation rec {
   ++ lib.optionals stdenv.isLinux [
     # OpenGL support on Linux
     libglvnd
+    # XCB libraries for drag and drop support
+    xorg.libxcb
+    xorg.xcbutil
+    xorg.xcbutilwm
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
   ];
 
   cmakeFlags = [
