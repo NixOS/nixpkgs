@@ -4,7 +4,6 @@
   bison,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   ffmpeg-headless,
   flex,
   gperf,
@@ -26,25 +25,17 @@
 stdenv.mkDerivation {
   pname = "cliairplay";
   # see the beginning of configure.ac for the upstream version number
-  version = "0.2-unstable-2025-12-30";
+  version = "1.1-unstable-2026-03-16";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "cliairplay";
     # we try to closely match the commit used in the last music-assistant release from
     # https://github.com/music-assistant/server/tree/stable/music_assistant/providers/airplay/bin
-    rev = "4660d886585d6bf8f32e889feec2a0e8975c51dc";
+    rev = "991c65acc2afa17ffe32e279dbc585b0b7f530f8";
     fetchSubmodules = true;
-    hash = "sha256-oDStn9LdLYWKhZNm7Qfdibs4qsct8gE3RZbTKooQeOM=";
+    hash = "sha256-m1O4l6gFEGNAyskYcRHcA15cubZnNgkaYjdVThRRX7w=";
   };
-
-  patches = [
-    # Support gettext 0.25
-    (fetchpatch {
-      url = "https://github.com/music-assistant/cliairplay/commit/92a2445d64c476d740feba1f31c7e5bc768701b7.patch";
-      hash = "sha256-/YnopvAGHHnQhfr2X1OenLMoF4ZlUq9x8tQZha/XfbQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

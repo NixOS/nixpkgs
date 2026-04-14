@@ -68,6 +68,7 @@ symlinkJoin {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       TethysSvensson
+      mithicspirit
     ];
     mainProgram = "zathura";
   };

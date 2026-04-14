@@ -17,15 +17,15 @@
 let
   nodejs = nodejs_22;
   latestVersionForNc = {
-    "31" = {
-      version = "9.0.9";
-      appHash = "sha256-JyxECdAjg+f62hccPUuQ7dFknzETs/JvTB6y5hkbH1M=";
-      modelHash = "sha256-xqCYMJYCk1fZ9ZnIW+hmB0AWrn9APNdu1hk6id6MQQY=";
-    };
     "32" = {
       version = "10.0.7";
       appHash = "sha256-quuH9ZNQhvlJ6SsFeboVIrMtF9K6ckpQkXb9OXDvFm8=";
       modelHash = "sha256-Q862f4mNWE6V4ZUpfNFZrs4kwRF/29uETCroyie0+zA=";
+    };
+    "33" = {
+      version = "11.0.1";
+      appHash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
+      modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
     };
   };
   currentVersionInfo =
@@ -81,6 +81,11 @@ stdenv.mkDerivation rec {
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
     ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
+
+    substituteInPlace recognize/lib/Classifiers/Classifier.php \
+      --replace-fail \
+        'taskset' \
+        '${lib.getExe' util-linux "taskset"}'
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
