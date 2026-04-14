@@ -46,6 +46,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ bash ]}
   '';
 
+  # Darwin requires local networking for the checks
+  __darwinAllowLocalNetworking = true;
   doInstallCheck = true;
 
   meta = {
