@@ -4,6 +4,7 @@
   lib,
   pkgs,
   php ? pkgs.php85,
+  nixosTests,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -38,6 +39,9 @@ php.buildComposerProject2 (finalAttrs: {
       inherit (finalAttrs) meta;
     };
     phpPackage = php;
+    tests = {
+      inherit (nixosTests) strichliste;
+    };
   };
 
   meta = {
