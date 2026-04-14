@@ -5,6 +5,7 @@
   gitUpdater,
   setuptools,
   cython,
+  buildstream,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "BuildStream plugins";
     homepage = "https://github.com/apache/buildstream-plugins";
-    platforms = lib.platforms.linux;
+    inherit (buildstream.meta) platforms;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shymega ];
   };
