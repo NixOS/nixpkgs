@@ -2293,6 +2293,12 @@
     githubId = 3965744;
     name = "Arthur Lee";
   };
+  arthur-ficial = {
+    email = "arti.ficial@fullstackoptimization.com";
+    github = "Arthur-Ficial";
+    githubId = 258112064;
+    name = "Arthur Ficial";
+  };
   arthurteisseire = {
     email = "arthurteisseire33@gmail.com";
     github = "arthurteisseire";
