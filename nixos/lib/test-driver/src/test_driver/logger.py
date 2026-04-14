@@ -1,5 +1,4 @@
-import atexit
-import os
+import codecs
 import sys
 import time
 import unicodedata
@@ -7,14 +6,12 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from enum import IntEnum
-from pathlib import Path
 from queue import Empty, Queue
 from typing import Any
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 
 from colorama import Fore, Style
-from junit_xml import TestCase, TestSuite
 
 
 class LogLevel(IntEnum):
@@ -70,89 +67,6 @@ class AbstractLogger(ABC):
     @abstractmethod
     def set_log_level(self, level: LogLevel) -> None:
         pass
-
-
-class JunitXMLLogger(AbstractLogger):
-    class TestCaseState:
-        def __init__(self) -> None:
-            self.stdout = ""
-            self.stderr = ""
-            self.failure = False
-
-    def __init__(self, outfile: Path) -> None:
-        self.tests: dict[str, JunitXMLLogger.TestCaseState] = {
-            "main": self.TestCaseState()
-        }
-        self.currentSubtest = "main"
-        self.outfile: Path = outfile
-        self._print_serial_logs = True
-        self._log_level = LogLevel.INFO
-        atexit.register(self.close)
-
-    def log(self, message: str, attributes: dict[str, str] = {}) -> None:
-        self.tests[self.currentSubtest].stdout += message + os.linesep
-
-    @contextmanager
-    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
-        old_test = self.currentSubtest
-        self.tests.setdefault(name, self.TestCaseState())
-        self.currentSubtest = name
-
-        yield
-
-        self.currentSubtest = old_test
-
-    @contextmanager
-    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
-        self.log(message)
-        yield
-
-    def debug(self, *args, **kwargs) -> None:
-        if self._log_level <= LogLevel.DEBUG:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
-
-    def info(self, *args, **kwargs) -> None:
-        if self._log_level <= LogLevel.INFO:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
-
-    def warning(self, *args, **kwargs) -> None:
-        if self._log_level <= LogLevel.WARNING:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
-
-    def error(self, *args, **kwargs) -> None:
-        self.tests[self.currentSubtest].stderr += args[0] + os.linesep
-        self.tests[self.currentSubtest].failure = True
-
-    def log_test_error(self, *args, **kwargs) -> None:
-        self.error(*args, **kwargs)
-
-    def log_serial(self, message: str, machine: str) -> None:
-        if not self._print_serial_logs:
-            return
-
-        self.log(f"{machine} # {message}")
-
-    def print_serial_logs(self, enable: bool) -> None:
-        self._print_serial_logs = enable
-
-    def set_log_level(self, level: LogLevel) -> None:
-        self._log_level = level
-
-    def close(self) -> None:
-        with open(self.outfile, "w") as f:
-            test_cases = []
-            for name, test_case_state in self.tests.items():
-                tc = TestCase(
-                    name,
-                    stdout=test_case_state.stdout,
-                    stderr=test_case_state.stderr,
-                )
-                if test_case_state.failure:
-                    tc.add_failure_info("test case failed")
-
-                test_cases.append(tc)
-            ts = TestSuite("NixOS integration test", test_cases)
-            f.write(TestSuite.to_xml_string([ts]))
 
 
 class CompositeLogger(AbstractLogger):

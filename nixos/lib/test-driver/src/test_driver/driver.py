@@ -25,6 +25,7 @@ from test_driver.machine import (
     retry,
 )
 from test_driver.polling_condition import PollingCondition
+from test_driver.test_reporter import TestReporter
 from test_driver.vlan import VLan
 
 SENTINEL = object()
@@ -119,6 +120,7 @@ class Driver:
     vlan_ids: list[int]
     keep_machine_state: bool
     logger: AbstractLogger
+    reporter: TestReporter | None
     debug: DebugAbstract
     vhost_vsock: VHostDeviceVsock | None = None
     enable_ssh_backdoor: bool
@@ -137,11 +139,13 @@ class Driver:
         global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
         enable_ssh_backdoor: bool = False,
+        reporter: TestReporter | None = None,
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.logger = logger
+        self.reporter = reporter
         self.debug = debug
         self.vlan_ids = list(set(vlans))
         self.polling_conditions = []
@@ -289,12 +293,19 @@ class Driver:
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
+        reporter = self.reporter
+        tc = reporter.start(name) if reporter else None
         with self.logger.subtest(name):
             try:
                 yield
             except Exception as e:
+                if reporter and tc:
+                    reporter.finish(tc, str(e))
                 self.logger.log_test_error(f'Test "{name}" failed with error: "{e}"')
                 raise e
+            else:
+                if reporter and tc:
+                    reporter.finish(tc)
 
     def test_symbols(self) -> dict[str, Any]:
         @contextmanager
