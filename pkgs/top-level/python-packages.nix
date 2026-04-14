@@ -4537,6 +4537,8 @@ self: super: with self; {
 
   dns-lexicon = callPackage ../development/python-modules/dns-lexicon { };
 
+  dnsight = callPackage ../development/python-modules/dnsight { };
+
   dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = callPackage ../development/python-modules/dnspython { };
