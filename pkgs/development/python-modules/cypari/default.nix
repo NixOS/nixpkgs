@@ -46,7 +46,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "fix-build-with-cython-3_1.patch";
-      url = "https://github.com/3-manifolds/CyPari/compare/17bf39dc4508f2e46de75b95c65982c627652b60...d6cb914d2bdc74a51cc2a9136204ebf47b3e7369.diff";
+      url = "https://github.com/3-manifolds/CyPari/compare/17bf39dc4508f2e46de75b95c65982c627652b60...d6cb914d2bdc74a51cc2a9136204ebf47b3e7369.diff?full_index=1";
       hash = "sha256-c8sq80mYSMMvgFh7RXYwKcqwI7iVRQsm/8yaIL0+PHQ=";
     })
   ];

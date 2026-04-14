@@ -1420,8 +1420,8 @@ with haskellLib;
     doJailbreak
     (appendPatch (fetchpatch {
       name = "idris-bumps.patch";
-      url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
-      hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
+      url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.diff?full_index=1";
+      hash = "sha256-HoNMn4yo7G7T37ry0T19wh9yD9mC9Pend8V9zWmAs50=";
     }))
     (self.generateOptparseApplicativeCompletions [ "idris" ])
   ];
@@ -1637,8 +1637,8 @@ with haskellLib;
       })
       # Fix build with vector >= 0.13, mtl >= 2.3 (https://github.com/redelmann/scat/pull/8)
       (fetchpatch {
-        url = "https://github.com/redelmann/scat/compare/e8e064f7e6a152fe25a6ccd743573a16974239d0..c6a3636548d628f32d8edc73a333188ce24141a7.patch";
-        hash = "sha256-BU4MUn/TnZHpZBlX1vDHE7QZva5yhlLTb8zwpx7UScI";
+        url = "https://github.com/redelmann/scat/compare/e8e064f7e6a152fe25a6ccd743573a16974239d0..c6a3636548d628f32d8edc73a333188ce24141a7.diff?full_index=1";
+        hash = "sha256-BU4MUn/TnZHpZBlX1vDHE7QZva5yhlLTb8zwpx7UScI=";
       })
     ];
   }) super.scat;

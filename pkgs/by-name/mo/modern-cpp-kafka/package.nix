@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       # https://github.com/morganstanley/modern-cpp-kafka/pull/221
       name = "fix-avoid-overwriting-library-paths.patch";
-      url = "https://github.com/morganstanley/modern-cpp-kafka/compare/a146d10bcf166f55299c7a55728abaaea52cb0e5...a0b5ec08315759097ce656813be57b2c38d79091.patch";
-      hash = "sha256-UsQcMvJoRTn5kgXhmXOyqfW3n59kGKO596U2WjtdqAY=";
+      url = "https://github.com/morganstanley/modern-cpp-kafka/compare/a146d10bcf166f55299c7a55728abaaea52cb0e5...a0b5ec08315759097ce656813be57b2c38d79091.diff?full_index=1";
+      hash = "sha256-1gYzE9m1Y+lgrgR7eyW5WR6zlqnQYAfEBYYK4BC6Jbo=";
     })
     (fetchpatch {
       # https://github.com/morganstanley/modern-cpp-kafka/pull/222
