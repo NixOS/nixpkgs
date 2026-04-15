@@ -159,6 +159,16 @@ in
       defaultText = "hostPkgs.qemu_test";
     };
 
+    qemu.forceAccel = mkOption {
+      description = ''
+        Whether to force the use of hardware-accelerated virtualisation.
+        When enabled, QEMU will not fall back to the slower software emulation
+        (TCG) and will instead error out if the accelerator is not available.
+      '';
+      type = types.bool;
+      default = false;
+    };
+
     globalTimeout = mkOption {
       description = ''
         A global timeout for the complete test, expressed in seconds.

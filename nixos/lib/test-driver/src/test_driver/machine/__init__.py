@@ -212,6 +212,7 @@ class QemuStartCommand:
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
             env=self.build_environment(state_dir, shared_dir),
@@ -1227,8 +1228,29 @@ class QemuMachine(BaseMachine):
             self.shell_path,
             allow_reboot,
         )
-        self.monitor, _ = monitor_socket.accept()
-        self.shell, _ = shell_socket.accept()
+
+        def accept_or_fail(sock: socket.socket, name: str) -> socket.socket:
+            """Accept a connection on a socket, polling the status to check
+            if the QEMU process is still alive. Without this, socket.accept()
+            would block forever if QEMU exits before connecting.
+            """
+            assert self.process
+            while True:
+                readable, _, _ = select.select([sock], [], [], 1.0)
+                if readable:
+                    conn, _ = sock.accept()
+                    return conn
+                rc = self.process.poll()
+                if rc is not None:
+                    output = ""
+                    if self.process.stdout:
+                        output = self.process.stdout.read().decode(errors="ignore")
+                    raise MachineError(
+                        f"QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
+                    )
+
+        self.monitor = accept_or_fail(monitor_socket, "monitor")
+        self.shell = accept_or_fail(shell_socket, "shell")
         self.qmp_client = QMPSession.from_path(self.qmp_path)
 
         # Store last serial console lines for use
