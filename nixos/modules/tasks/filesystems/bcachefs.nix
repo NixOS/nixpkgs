@@ -289,6 +289,7 @@ in
           commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs)
         );
 
+        boot.initrd.systemd.packages = [ cfg.package ];
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
       })
 
