@@ -22895,6 +22895,12 @@
     githubId = 4196789;
     name = "Nathan Ringo";
   };
+  remix7531 = {
+    email = "remix7531@mailbox.org";
+    github = "remix7531";
+    githubId = 131352678;
+    name = "remix7531";
+  };
   remko = {
     github = "remko";
     githubId = 12300;
