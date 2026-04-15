@@ -3,20 +3,21 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  perl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "neve";
-  version = "1.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "MCB-SMART-BOY";
     repo = "Neve";
     rev = "v${version}";
-    hash = "sha256-ICqAkj7JbQhnJ8U7kYs4EaA7k8hBVP0ZSqc9rWZrzhY=";
+    hash = "sha256-1+9USxixmcH5WCG6PDm2bIcONmNCySBWf0Y/H1eKKK0=";
   };
 
-  cargoHash = "sha256-c5SwgLMHEuXoR11QACUHnMy9paQsNFXLcoVQfXdrLQo=";
+  cargoHash = "sha256-TmJzCaImYJzkbIZAVy/ig4re94mG4X5oDGmBs3Y3xd8=";
 
   cargoBuildFlags = [
     "--package"
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    perl
   ];
 
   meta = with lib; {
