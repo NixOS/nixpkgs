@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   python3,
-  setuptools,
   stdenv,
 }:
 
@@ -23,11 +22,12 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  nativeBuildInputs = [
-    python3
-    setuptools
-  ]
+  nativeBuildInputs = [ python3 ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   # Fixes `semantic-release --version` output
   postPatch = ''
