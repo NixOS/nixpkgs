@@ -265,6 +265,8 @@ rec {
     isArc = {
       cpu = {
         family = "arc";
+      };
+    };
     isHppa = {
       cpu = {
         family = "pa";
