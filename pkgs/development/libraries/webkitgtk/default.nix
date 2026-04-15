@@ -85,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.1";
+  version = "2.52.2";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -100,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I459UyBbFABK3X7rQpPJTW+/cJez7+987lUZ5cEhqQQ=";
+    hash = "sha256-Bd4rRIdLotraV1X4mM+1N4PDFz+RtGNo+i3MxYSXKrs=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -118,12 +118,11 @@ clangStdenv.mkDerivation (finalAttrs: {
       name = "fix_ftbfs_riscv64.patch";
     })
 
-    # Fix webkitgtk_4_1 build
-    # WebKitDOMDOMWindow.cpp:1085:10: error: variable has incomplete type 'void'
-    # https://bugs.webkit.org/show_bug.cgi?id=310915
+    # Fix FTBFS on platforms that don't use Skia
+    # https://bugs.webkit.org/show_bug.cgi?id=312160
     (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/40c315ca7b3ad6ae5c98d72a6927b3a75b43cb46.patch";
-      hash = "sha256-xGPi5p2XhDxpd4NtZMrd1JbHvV2fey6V3eH0fgy6ifY=";
+      url = "https://github.com/WebKit/WebKit/commit/36df921c686c07f2b20e3eed20afad5471b96897.patch";
+      hash = "sha256-iYOs1V/p02XHtytw+r1+TyW08pk6PgUH76U1fXG8w34=";
     })
   ];
 

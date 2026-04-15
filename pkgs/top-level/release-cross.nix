@@ -250,6 +250,7 @@ in
   loongarch64-linux = mapTestOnCross systems.examples.loongarch64-linux linuxCommon;
 
   m68k = mapTestOnCross systems.examples.m68k linuxCommon;
+  arc = mapTestOnCross systems.examples.arc linuxCommon;
   s390x = mapTestOnCross systems.examples.s390x linuxCommon;
 
   # (Cross-compiled) Linux on x86

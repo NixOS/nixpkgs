@@ -229,6 +229,11 @@ rec {
         family = "m68k";
       };
     };
+    isArc = {
+      cpu = {
+        family = "arc";
+      };
+    };
     isS390 = {
       cpu = {
         family = "s390";

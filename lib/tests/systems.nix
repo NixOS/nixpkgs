@@ -163,6 +163,7 @@ lib.runTests (
     testillumos = mseteq illumos [ "x86_64-solaris" ];
     testlinux = mseteq linux [
       "aarch64-linux"
+      "arc-linux"
       "armv5tel-linux"
       "armv6l-linux"
       "armv7a-linux"

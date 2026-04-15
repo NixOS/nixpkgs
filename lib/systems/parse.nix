@@ -382,6 +382,12 @@ rec {
         family = "or1k";
       };
 
+      arc = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "arc";
+      };
+
       loongarch64 = {
         bits = 64;
         significantByte = littleEndian;
