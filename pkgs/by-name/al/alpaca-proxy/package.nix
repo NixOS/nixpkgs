@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "alpaca-proxy";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "samuong";
     repo = "alpaca";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-74JQ9ltJ7+sasySgNN3AaXlBILP7VgFN06adoNJG+Bc=";
+    hash = "sha256-Yz90kJGyf2iA3LCj9d/oG5rLVUZVI//cqI6w67iV9Tc=";
   };
 
-  vendorHash = "sha256-N9qpyCQg6H1v/JGJ2wCxDX+ZTM9x6/BM6wQ26xC+dlE=";
+  vendorHash = "sha256-3A88gc8j0OrxBIAFBNlz3Np5CV9xpwwIDCnnfXyBj4Q=";
 
   ldflags = [
     "-s"
