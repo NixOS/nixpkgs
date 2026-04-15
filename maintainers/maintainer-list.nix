@@ -22762,6 +22762,11 @@
     githubId = 77415970;
     name = "Redhawk";
   };
+  redhood = {
+     name = "Alice Liddell"
+     github = "red-hood-woods"
+     githubId = "258934709"
+  };
   redianthus = {
     github = "redianthus";
     githubId = 16472988;
