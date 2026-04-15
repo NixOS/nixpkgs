@@ -16,7 +16,7 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simple-salesforce";
   version = "1.12.9";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eMO/K6W9ROljYxR3gK9QjCHdlbAuN4DYjOyTO1WcalQ=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Very simple Salesforce.com REST API client for Python";
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
-    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
