@@ -11358,6 +11358,12 @@
     githubId = 3948275;
     name = "Harikrishnan R";
   };
+  ilosariph = {
+    email = "simon@simon-wick.ch";
+    github = "Ilosariph";
+    githubId = 71074737;
+    name = "Simon Wick";
+  };
   ilya-epifanov = {
     email = "mail@ilya.network";
     github = "ilya-epifanov";
