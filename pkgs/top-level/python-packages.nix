@@ -6839,6 +6839,8 @@ self: super: with self; {
 
   gz-math = callPackage ../development/python-modules/gz-math { };
 
+  gz-msgs = callPackage ../development/python-modules/gz-msgs { };
+
   h11 = callPackage ../development/python-modules/h11 { };
 
   h2 = callPackage ../development/python-modules/h2 { };
