@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
   google-api-core,
   google-cloud-access-context-manager,
   google-cloud-org-policy,
@@ -11,6 +10,7 @@
   grpc-google-iam-v1,
   libcst,
   mock,
+  nix-update-script,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -18,21 +18,25 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-asset";
-  version = "3.31.3";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-build-v${version}";
-    sha256 = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
+    tag = "google-cloud-asset-v${finalAttrs.version}";
+    sha256 = "sha256-dVgcnnInqjUjySL7wjxGzI33t1YZJ8e9mSsmjAJ+fBI=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-asset";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-asset";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     grpc-google-iam-v1
@@ -62,23 +66,25 @@ buildPythonPackage rec {
     "google.cloud.asset_v1"
     "google.cloud.asset_v1p1beta1"
     "google.cloud.asset_v1p2beta1"
-    "google.cloud.asset_v1p4beta1"
     "google.cloud.asset_v1p5beta1"
   ];
 
   passthru = {
     # python updater script sets the wrong tag
     skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "google-cloud-asset-v";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regexp"
+        "^google-cloud-asset: v([0-9.]+)"
+      ];
     };
   };
 
   meta = {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-${src.tag}/packages/google-cloud-asset/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-${finalAttrs.src.tag}/packages/google-cloud-asset/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

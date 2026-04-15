@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "udiskie";
-  version = "2.6.1";
+  version = "2.6.2";
 
   pyproject = true;
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "coldfix";
     repo = "udiskie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1/qQS2bAxoHbWWmMkDoV5QNSUVYCQfer6lWM9ptG+Vk=";
+    hash = "sha256-8+Fo3rECMPq7FdmZgrnE0/dz15fuLjd7EDVwLZwfgn0=";
   };
 
   patches = [

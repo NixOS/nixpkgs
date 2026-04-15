@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
       'AC_CHECK_DECLS(fdatasync)' ""
   '';
 
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
+
   meta = {
     homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";

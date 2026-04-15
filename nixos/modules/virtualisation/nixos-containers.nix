@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }@host:
 
@@ -92,6 +93,7 @@ let
     # Declare root explicitly to avoid shellcheck warnings, it comes from the env
     declare root
 
+    mkdir -p "$root/usr/bin"
     mkdir -p "$root/etc" "$root/var/lib"
     chmod 0755 "$root/etc" "$root/var/lib"
     mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
@@ -563,7 +565,6 @@ in
                           extraConfig =
                             { options, ... }:
                             {
-                              _file = "module at ${__curPos.file}:${toString __curPos.line}";
                               config = {
                                 nixpkgs =
                                   if options.nixpkgs ? hostPlatform then
@@ -1052,8 +1053,14 @@ in
                 }
                 // (optionalAttrs containerConfig.autoStart {
                   wantedBy = [ "machines.target" ];
-                  wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
-                  after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+                  wants = [
+                    "network.target"
+                  ]
+                  ++ (map (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device") cfg.interfaces);
+                  after = [
+                    "network.target"
+                  ]
+                  ++ (map (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device") cfg.interfaces);
                   restartTriggers = [
                     containerConfig.path
                     config.environment.etc."${configurationDirectoryName}/${name}.conf".source

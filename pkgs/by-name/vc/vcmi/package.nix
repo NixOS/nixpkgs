@@ -24,17 +24,18 @@
   versionCheckHook,
   xz,
   zlib,
+  enableMMAI ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-3XZQyq6urCTI/A6tCSHgzPgOvzH8ckXvDRamWvVgeVY=";
+    hash = "sha256-4Gp/neisH3zpblc/LTQlaWHzXSi6OHzP0IQHI6wzygE=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     xz
     zlib
-  ];
+  ]
+  ++ lib.optional enableMMAI onnxruntime;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_CLIENT" true)
@@ -71,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_GOLDMASTER" true)
     (lib.cmakeBool "ENABLE_TEST" false) # Requires nonfree data files.
     (lib.cmakeBool "ENABLE_PCH" false)
+    (lib.cmakeBool "ENABLE_DISCORD" false)
+    (lib.cmakeBool "ENABLE_MMAI" enableMMAI)
     (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "$out/lib/vcmi")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")

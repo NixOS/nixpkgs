@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatch-vcs,
@@ -9,6 +10,7 @@
 
   # dependencies
   anndata,
+  certifi,
   fast-array-utils,
   h5py,
   joblib,
@@ -28,8 +30,9 @@
   session-info2,
   statsmodels,
   tqdm,
-  typing-extensions,
   umap-learn,
+  # python<3.13 only:
+  typing-extensions,
 
   # optional-attrs
   # dask
@@ -45,6 +48,7 @@
   scikit-misc,
 
   # tests
+  dependency-groups,
   jinja2,
   pytest-cov-stub,
   pytest-mock,
@@ -59,14 +63,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-jpi3SyTaG5mxCqUNSM564MMIrNdz4LBYo9+dn5nYmeY=";
+    hash = "sha256-r8kicjCFyEKLxQtFYuZg0NKK7gRBoaLSSFGWqcQtBqM=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -85,6 +89,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     anndata
+    certifi
     fast-array-utils
     h5py
     joblib
@@ -104,11 +109,13 @@ buildPythonPackage (finalAttrs: {
     session-info2
     statsmodels
     tqdm
-    typing-extensions
     umap-learn
   ]
   ++ fast-array-utils.optional-dependencies.accel
-  ++ fast-array-utils.optional-dependencies.sparse;
+  ++ fast-array-utils.optional-dependencies.sparse
+  ++ lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
 
   optional-dependencies = {
     # commented attributes are due to some dependencies not being in Nixpkgs
@@ -156,6 +163,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    dependency-groups
     jinja2
     pytest-cov-stub
     pytest-mock
@@ -171,6 +179,12 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     export NUMBA_CACHE_DIR=$(mktemp -d);
   '';
+
+  pytestFlagsArray = [
+    # UserWarning: 'where' used without 'out', expect unitialized memory in output.
+    # If this is intentional, use out=None.
+    "-Wignore::UserWarning"
+  ];
 
   disabledTestPaths = [
     # try to download data:
@@ -221,6 +235,11 @@ buildPythonPackage (finalAttrs: {
     # 'write/test.h5ad', errno = 2, error message = 'No such file or directory', flags = 13, o_flags
     # = 242)
     "test_write"
+
+    # Snapshot tests failing because of warnings in output
+    "scanpy.datasets._datasets.krumsiek11"
+    "scanpy.datasets._datasets.toggleswitch"
+    "scanpy.preprocessing._simple.filter_cells"
   ];
 
   pythonImportsCheck = [ "scanpy" ];

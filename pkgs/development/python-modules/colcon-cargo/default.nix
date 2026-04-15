@@ -11,16 +11,16 @@
   toml,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colcon-cargo";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-cargo";
-    tag = version;
-    hash = "sha256-Do8i/Z1nn8wsj0xzCQdSaaXoDf9N34SiMb/GIe4YOs4=";
+    tag = finalAttrs.version;
+    hash = "sha256-jhc5mN4jnLk2zLj01sBm63acrku/FIexnIWCQ6GKDKA=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +38,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = [
+    # Attempts to download https://index.crates.io/config.json at test time
+    "test_build_and_test_package"
+    "test_skip_pure_library_package"
+  ];
+
   disabledTestPaths = [
     # Skip the linter tests
     "test/test_flake8.py"
@@ -50,7 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extension for colcon-core to support Rust packages built with Cargo";
     homepage = "https://github.com/colcon/colcon-cargo";
+    changelog = "https://github.com/colcon/colcon-cargo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

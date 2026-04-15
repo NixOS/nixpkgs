@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High quality MPEG Audio Layer III (MP3) encoder";
     homepage = "http://lame.sourceforge.net";
     license = lib.licenses.lgpl2;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "lame";
   };

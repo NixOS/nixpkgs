@@ -25,7 +25,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.11.2";
+  version = "0.11.4";
   mainProgram = "nitropy";
 in
 
@@ -35,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x0OWFSp6PrW4wTWNP8mLJpbrrYZ66XKOBi8l1vCsko4=";
+    hash = "sha256-MSqWgYuuU7uuYasxTTLRbrrAWQAwE4qQlEZIHiYB/78=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -90,6 +90,7 @@ buildPythonPackage {
     ];
     maintainers = with lib.maintainers; [
       frogamic
+      panicgh
     ];
     inherit mainProgram;
   };

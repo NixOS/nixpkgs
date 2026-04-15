@@ -9,26 +9,26 @@
 
 buildGoModule (finalAttrs: {
   pname = "gnmic";
-  version = "0.43.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = "gnmic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+5f4SxAmpZrOmIr8MUR3ImmoPbzFQ0bh/4qnqkpfs1g=";
+    hash = "sha256-O8Vf6aiSqljSGOpWfgXCgeE7j6jDz7wXuPaDD9OliMA=";
   };
 
-  vendorHash = "sha256-zsb+Tky2yVyEUSKjvnS8YkRFMUf/01VIX2Vl6mB5mpw=";
+  vendorHash = "sha256-HU+SvdjVOixsUot2rV8NNQCc+X1o4Moyr7B2BOBStYY=";
 
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "github.com/openconfig/gnmic/pkg/app.version=${finalAttrs.version}"
+    "github.com/openconfig/gnmic/pkg/version.Version=${finalAttrs.version}"
     "-X"
-    "github.com/openconfig/gnmic/pkg/app.commit=${finalAttrs.src.rev}"
+    "github.com/openconfig/gnmic/pkg/version.Commit=${finalAttrs.src.rev}"
     "-X"
-    "github.com/openconfig/gnmic/pkg/app.date=1970-01-01T00:00:00Z"
+    "github.com/openconfig/gnmic/pkg/version.Date=1970-01-01T00:00:00Z"
   ];
   subPackages = [ "." ];
 

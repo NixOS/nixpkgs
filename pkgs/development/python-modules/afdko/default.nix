@@ -9,10 +9,9 @@
   fetchFromGitHub,
   fetchpatch,
   fontmath,
-  fontpens,
   fonttools,
   libxml2,
-  mutatormath,
+  lxml,
   ninja,
   pytestCheckHook,
   runAllTests ? false,
@@ -70,10 +69,16 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-error=incompatible-function-pointer-types"
-    "-Wno-error=int-conversion"
-  ]);
+  env = {
+    # Use system libxml2
+    FORCE_SYSTEM_LIBXML2 = true;
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-function-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
@@ -82,21 +87,18 @@ buildPythonPackage (finalAttrs: {
     booleanoperations
     defcon
     fontmath
-    fontpens
     fonttools
-    mutatormath
+    lxml
     tqdm
     ufonormalizer
     ufoprocessor
   ]
   ++ defcon.optional-dependencies.lxml
+  ++ defcon.optional-dependencies.pens
   ++ fonttools.optional-dependencies.lxml
   ++ fonttools.optional-dependencies.ufo
   ++ fonttools.optional-dependencies.unicode
   ++ fonttools.optional-dependencies.woff;
-
-  # Use system libxml2
-  FORCE_SYSTEM_LIBXML2 = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

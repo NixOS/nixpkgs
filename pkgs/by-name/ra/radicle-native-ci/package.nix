@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-native-ci";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3qg5TKmN83afz2fj9z3fQjU8vaYE";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hi5QdYVFSvP8AEKcH7yIA7PpaTSe0hBcF3vgCNilCKg=";
+    hash = "sha256-u0KuQ+ii1lRl2f0SduZZtapuDHeSvl9T00esHeCuIq4=";
   };
 
-  cargoHash = "sha256-N1XyMarKCctor5r7AePMuV/BzWiQwXphJFqye0cqO3k=";
+  cargoHash = "sha256-6Hkyf9siagH/GPVxOePpkV2BMloXEamrJSJCnEfIeSo=";
 
   preCheck = ''
     git config --global user.name nixbld
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ defelo ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "radicle-native-ci";
   };
 })

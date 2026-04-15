@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkiwix";
-  version = "14.0.0";
+  version = "14.2.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "libkiwix";
     rev = finalAttrs.version;
-    hash = "sha256-QP23ZS0FJsMVtnWOofywaAPIU0GJ2L+hLP/x0LXMKiU=";
+    hash = "sha256-OnSlny0gn3yTCtwdu7r/4Z7pfQDLMh5Jc2kIubL3kJ0=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # Required for server tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     patchShebangs scripts
-    substituteInPlace meson.build \
-        --replace-fail "libicu_dep = dependency('icu-i18n', static:static_deps)" \
-                       "libicu_dep = [dependency('icu-i18n', static:static_deps), dependency('icu-uc', static:static_deps)]"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -68,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ colinsane ];
   };
 })

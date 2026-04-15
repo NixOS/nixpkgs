@@ -39,7 +39,7 @@
   readline,
   rsync,
   sqlite,
-  unixODBC,
+  unixodbc,
   uwimap,
   valgrind,
   zlib,
@@ -609,8 +609,8 @@ lib.makeScope pkgs.newScope (
             {
               name = "pdo_odbc";
               internalDeps = [ php.extensions.pdo ];
-              buildInputs = [ unixODBC ];
-              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
+              buildInputs = [ unixodbc ];
+              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixodbc}" ];
               doCheck = false;
             }
             {

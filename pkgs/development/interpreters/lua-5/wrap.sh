@@ -3,7 +3,7 @@
 # variable is passed in from the buildLuarocksPackage function.
 set -e
 
-source @lua@/nix-support/utils.sh
+source @luaBuild@/nix-support/utils.sh
 
 wrapLuaPrograms() {
   wrapLuaProgramsIn "$out/bin" "$out $luaPath"
@@ -28,10 +28,16 @@ wrapLuaProgramsIn() {
 
   # Find all regular files in the output directory that are executable.
   find "$dir" -type f -perm -0100 -print0 | while read -d "" f; do
-    # Rewrite "#! .../env lua" to "#! /nix/store/.../lua".
-    # Lua to use besides one with this hook anyway.
-    if head -n1 "$f" | grep -q '#!.*/env.*\(lua\)'; then
-      sed -i "$f" -e "1 s^.*/env[ ]*\(lua\)[^ ]*^#! @executable@^"
+    if head -n1 "$f" | grep -q '#!.*'; then
+        # Cross-compilation hack: exec '/nix/store/...-lua-.../bin/lua' execute
+        # the host lua
+        substituteInPlace "$f" \
+          --replace-fail "@luaBuild@" "@luaHost@"
+        # Build platform's Luarocks writes scripts that reference luarocks
+        # itself in them, so we fix these references to reference the host
+        # platform's luarocks.
+        substituteInPlace "$f" \
+          --replace-fail "@luarocksBuild@" "@luarocksHost@"
     fi
 
     # wrapProgram creates the executable shell script described
@@ -51,6 +57,10 @@ wrapLuaProgramsIn() {
 
     # see setup-hooks/make-wrapper.sh
     wrapProgram "${wrapProgramArgs[@]}"
+
+    # Same as above, but now for the wrapper script
+    substituteInPlace "$f" \
+      --replace-fail "@luarocksBuild@" "@luarocksHost@"
 
   done
 }

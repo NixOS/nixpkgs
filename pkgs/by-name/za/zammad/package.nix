@@ -13,7 +13,7 @@
   jq,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   cacert,
@@ -23,24 +23,18 @@
 
 let
   pname = "zammad";
-  version = "6.5.2";
+  version = "7.0.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
     patches = [
       ./fix-sendmail-location.diff
-      # Fix mail fetch failing with OpenSSL 3.6
-      # https://github.com/zammad/zammad/pull/5888
-      (fetchpatch {
-        url = "https://github.com/zammad/zammad/commit/01376d45f48df057e4377518e6f7e4a0db7de624.patch";
-        hash = "sha256-uH1/t0dP5nvh12GsJz6Yf/RXpf8+hkYoVJnLJAXqpuc=";
-      })
     ];
 
     postPatch = ''
-      sed -i -e "s|ruby '3.2.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
-      sed -i -e "s|ruby 3.2.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
-      sed -i -e "s|3.2.[0-9]\+|${ruby.version}|" .ruby-version
+      sed -i -e "s|ruby '3.4.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
+      sed -i -e "s|ruby 3.4.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
+      sed -i -e "s|3.4.[0-9]\+|${ruby.version}|" .ruby-version
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
@@ -80,7 +74,7 @@ stdenvNoCC.mkDerivation {
     valkey
     postgresql
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     nodejs
     procps
     cacert
@@ -90,10 +84,10 @@ stdenvNoCC.mkDerivation {
 
   pnpmDeps = fetchPnpmDeps {
     inherit pname src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
 
-    fetcherVersion = 1;
-    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
+    fetcherVersion = 3;
+    hash = "sha256-BhkKCo9fVkG7G2er/NVyEP17T8P1rLqCQdJlcjHsSxQ=";
   };
 
   buildPhase = ''
@@ -150,6 +144,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       taeer
       netali
+      meenzen
     ];
   };
 }

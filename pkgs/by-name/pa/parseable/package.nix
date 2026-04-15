@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Asb6064TqvL9kNkWBMj4Z+1j1yIM+iBWsN+R5EuMOVA=";
   };
 
-  LOCAL_ASSETS_PATH = fetchzip {
+  env.LOCAL_ASSETS_PATH = fetchzip {
     url = "https://parseable-prism-build.s3.us-east-2.amazonaws.com/v${finalAttrs.version}/build.zip";
     hash = "sha256-gWzfucetsJJSSjI9nGm7I8xLo0t1VKb4AertiEGuLWA=";
   };

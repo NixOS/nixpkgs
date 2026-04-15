@@ -5,6 +5,7 @@
   fetchFromGitHub,
   jq,
   pkg-config,
+  makeWrapper,
   clang_20,
   libsecret,
   ripgrep,
@@ -14,24 +15,25 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.27.3";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JUSl5yRJ2YtTCMfPv7oziaZG4yNnsucKlvtjfuzZO+I=";
+    hash = "sha256-jmVYARto5NoqX1DbT+jYQOTzMkeSi0Z7A5oKDN5fCnY=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-euy7QwuoJI+07KMUMcRAmmH/zyYgF9wFiLSF4OwQivo=";
+  npmDepsHash = "sha256-Hxxi2eKDLXucZLhUswcQ3kVEKoRNbs81m6IFr+CYxzs=";
 
   dontPatchElf = stdenv.isDarwin;
 
   nativeBuildInputs = [
     jq
     pkg-config
+    makeWrapper
   ]
   ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
 
@@ -70,41 +72,35 @@ buildNpmPackage (finalAttrs: {
   # Prevent npmDeps and python from getting into the closure
   disallowedReferences = [
     finalAttrs.npmDeps
-    nodejs_22.python
+    finalAttrs.nodejs.python
   ];
+
+  npmBuildScript = "bundle";
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,share/gemini-cli}
 
+    mkdir -p $out/{bin,share}
+    cp -r bundle $out/share/gemini-cli
+
+    # We only want to keep optionalDependencies (like @lydell/node-pty) to keep the closure size small,
+    # as regular dependencies are already bundled via esbuild into gemini.js.
+    jq '.dependencies = {} | del(.devDependencies) | del(.workspaces)' package.json > package.json.tmp && mv package.json.tmp package.json
     npm prune --omit=dev
+    rm -rf node_modules/.bin
 
-    # Remove python files to prevent python from getting into the closure
-    find node_modules -name "*.py" -delete
     # keytar/build has gyp-mac-tool with a Python shebang that gets patched,
     # creating a python3 reference in the closure
-    rm -rf node_modules/keytar/build
+    find node_modules -path "*/build/*" -type f -not -name "*.node" -delete
+    find node_modules -type d -empty -delete
 
     cp -r node_modules $out/share/gemini-cli/
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
-    rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
-    cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
-    cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
+    rm -f $out/share/gemini-cli/docs/CONTRIBUTING.md
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core/dist/docs/CONTRIBUTING.md
-
-    ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
-    chmod +x "$out/bin/gemini"
-
-    # Clean up any remaining references to npmDeps in node_modules metadata
-    find $out/share/gemini-cli/node_modules -name "package-lock.json" -delete
-    find $out/share/gemini-cli/node_modules -name ".package-lock.json" -delete
-    find $out/share/gemini-cli/node_modules -name "config.gypi" -delete
+    makeWrapper "${lib.getExe finalAttrs.nodejs}" "$out/bin/gemini" \
+      --add-flags "--no-warnings=DEP0040" \
+      --add-flags "$out/share/gemini-cli/gemini.js"
 
     runHook postInstall
   '';
@@ -121,6 +117,7 @@ buildNpmPackage (finalAttrs: {
       xiaoxiangmoe
       FlameFlag
       taranarmo
+      caverav
     ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";

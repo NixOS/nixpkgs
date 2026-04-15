@@ -24,13 +24,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.18.0";
+  version = "0.18.8";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = finalAttrs.version;
-    sha256 = "sha256-ggDfHqGu17nSxRNZESBLn8MYrvSU+ItQubNdUCAFK1c=";
+    sha256 = "sha256-JiIKCrNH6aWiCqw1ji5RwNrHwLHuSbw/iwqzrumfQQQ=";
   };
 
   vendorHash = null;

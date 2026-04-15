@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [ "pytest" ];
+
   buildInputs = [ pytest ];
 
   dependencies = lib.optionals (pythonOlder "3.13") [

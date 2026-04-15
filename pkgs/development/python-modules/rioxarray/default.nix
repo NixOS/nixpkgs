@@ -20,16 +20,16 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rioxarray";
-  version = "0.20.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
-    tag = version;
-    hash = "sha256-yLWCDaAcwQT2C0Nt1GaIA3NWXe6k2CDkBAr3rsm8eQs=";
+    tag = finalAttrs.version;
+    hash = "sha256-+0TJeEjAKIqi6cbLZiv14dPKW8Xza+4tn/Erzn88ZS0=";
   };
 
   build-system = [ setuptools ];
@@ -49,6 +49,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError: Arrays are not almost equal to 7 decimals
+    # Error with variable __xarray_dataarray_variable__
+    "test_clip_box__auto_expand"
+    "test_reproject"
+    "test_reproject__grid_mapping"
+    "test_reproject__str_resample"
+    "test_reproject_match__pass_nodata"
+
     # AssertionError: assert 535727386 == 535691205
     "test_clip_geojson__no_drop"
     # Fails with GDAL 3.11 warning
@@ -70,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Geospatial xarray extension powered by rasterio";
     homepage = "https://corteva.github.io/rioxarray/";
-    changelog = "https://github.com/corteva/rioxarray/releases/tag/${version}";
+    changelog = "https://github.com/corteva/rioxarray/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

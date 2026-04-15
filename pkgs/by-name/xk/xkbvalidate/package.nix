@@ -7,7 +7,7 @@
 runCommandCC "xkbvalidate"
   {
     pname = "xkbvalidate";
-    inherit (lib.trivial) version;
+    version = lib.trivial.release;
 
     buildInputs = [ libxkbcommon ];
     meta = {

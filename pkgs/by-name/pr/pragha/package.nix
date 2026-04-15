@@ -20,7 +20,7 @@
   withGstPlugins ? true,
   glyr,
   withGlyr ? true,
-  liblastfmSF,
+  liblastfm-vambrose,
   withLastfm ? true,
   libcdio-paranoia,
   withCD ? true,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withGudev libgudev
     ++ lib.optional withKeybinder keybinder3
     ++ lib.optional withLibnotify libnotify
-    ++ lib.optional withLastfm liblastfmSF
+    ++ lib.optional withLastfm liblastfm-vambrose
     ++ lib.optional withGlyr glyr
     ++ lib.optional withLibsoup libsoup_2_4
     ++ lib.optional withMtp libmtp
@@ -103,9 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
   # ++ lib.optional withRygel rygel
   ;
 
-  CFLAGS = [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  env = {
+    CFLAGS = toString [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
+    NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  };
 
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2025.07.14";
+  version = "2026.01.04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certifi";
     repo = "python-certifi";
     rev = version;
-    hash = "sha256-TSqBca42i7i59ERTrnPN0fLdLWToYMCq5cfFFsgZm5U=";
+    hash = "sha256-JXv12im46xKabIRVZ4FMSZUbpw2k8WCcaZZLX2pFteY=";
   };
 
   patches = [

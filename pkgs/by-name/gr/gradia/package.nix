@@ -18,18 +18,20 @@
   webp-pixbuf-loader,
   libsoup_3,
   bash,
+  glib-networking,
+  tesseract,
   nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradia";
-  version = "1.11.1";
+  version = "1.12.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2PSpFmojAIyDNx5yYrLE3CjO/q5iBArmIRikxCGW1HM=";
+    hash = "sha256-iYqMuqq2AmrdNMa7dkDUGg1+gCG7wL/rDEdWAPfcQnw=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +51,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libportal-gtk4
     libsoup_3
     bash
+    glib-networking
+    tesseract
   ];
+
+  patches = [
+    ./0001-fix-image_stack-action-target-type.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "/app/bin/tesseract" "${lib.getExe tesseract}"
+  '';
 
   dependencies = with python3Packages; [
     pygobject3
@@ -77,11 +90,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Make your screenshots ready for the world";
     homepage = "https://github.com/AlexanderVanhee/Gradia";
-    changelog = "https://github.com/AlexanderVanhee/Gradia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       Cameo007
       quadradical
+      claymorwan
     ];
     mainProgram = "gradia";
     platforms = lib.platforms.linux;

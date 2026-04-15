@@ -5,14 +5,14 @@
   cmake,
   libosmium,
   protozero,
-  boost,
   expat,
   bzip2,
   zlib,
   pybind11,
   pytest-httpserver,
   pytestCheckHook,
-  setuptools,
+  scikit-build-core,
+  ninja,
   shapely,
   werkzeug,
   isPyPy,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "4.0.2";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = isPyPy;
@@ -31,17 +31,19 @@ buildPythonPackage rec {
     owner = "osmcode";
     repo = "pyosmium";
     tag = "v${version}";
-    hash = "sha256-pW2w/M4P4DtGhnTy72w0wjMtpLtSgvYGaemme/rRrwM=";
+    hash = "sha256-lEkT+3R6200XarMW1oZcOzMLPviDcpG8kQilXVWOyu0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    scikit-build-core
+    ninja
+  ];
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     libosmium
     protozero
-    boost
     expat
     bzip2
     zlib
@@ -65,7 +67,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for libosmium";
     homepage = "https://osmcode.org/pyosmium";
-    changelog = "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/osmcode/pyosmium/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sikmir ];
   };

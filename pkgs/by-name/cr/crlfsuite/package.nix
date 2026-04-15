@@ -38,7 +38,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Nefcore/CRLFsuite";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      c0bw3b
       fab
     ];
   };

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swayr";
   version = "0.28.2";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "swayr";
-    rev = "swayr-${version}";
+    rev = "swayr-${finalAttrs.version}";
     hash = "sha256-uT8MYgH9kANQ0t+7jqjOOvQIZf5ImdQruZLLlCejwcc=";
   };
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # don't build swayrbar
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ artturin ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -48,7 +48,7 @@ let
     path: name:
     pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
-    } "babelfish < ${path} > $out;";
+    } "exec -a ${lib.getExe pkgs.babelfish} babelfish < ${path} > $out;";
 in
 {
   options = {
@@ -169,7 +169,8 @@ in
     programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     # Required for man completions
-    documentation.man.generateCaches = lib.mkDefault true;
+    documentation.man.cache.enable = lib.mkDefault true;
+    documentation.man.cache.generateAtRuntime = lib.mkDefault true;
 
     environment = lib.mkMerge [
       (lib.mkIf cfg.useBabelfish {

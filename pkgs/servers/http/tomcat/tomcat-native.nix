@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tomcat-native";
-  version = "2.0.13";
+  version = "2.0.14";
 
   src = fetchurl {
     url = "mirror://apache/tomcat/tomcat-connectors/native/${version}/source/${pname}-${version}-src.tar.gz";
-    hash = "sha256-TwAsSTxQICeayqdhqYmWS6VpVHk6XAcYvHCWnIuxHdU=";
+    hash = "sha256-UcpQKVyABea7SjKgzcfuW8IkQGrkAgdbAx9bMHO/K9s=";
   };
 
   sourceRoot = "${pname}-${version}-src/native";

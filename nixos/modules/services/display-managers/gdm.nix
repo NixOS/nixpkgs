@@ -105,7 +105,7 @@ in
   ];
 
   meta = {
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   ###### interface
@@ -169,6 +169,16 @@ in
         '';
       };
 
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.gnome-themes-extra ]";
+        description = ''
+          Additional packages to add to XDG_DATA_DIRS for GDM.
+          The `/share` directory of each package will be added to the data path.
+        '';
+      };
+
     };
 
   };
@@ -221,13 +231,16 @@ in
         enable = true;
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") xdmcfg.xserverArgs);
-          XDG_DATA_DIRS = lib.makeSearchPath "share" [
-            gdm # for gnome-login.session
-            config.services.displayManager.sessionData.desktops
-            pkgs.gnome-control-center # for accessibility icon
-            pkgs.adwaita-icon-theme
-            pkgs.hicolor-icon-theme # empty icon theme as a base
-          ];
+          XDG_DATA_DIRS = lib.makeSearchPath "share" (
+            [
+              gdm # for gnome-login.session
+              config.services.displayManager.sessionData.desktops
+              pkgs.gnome-control-center # for accessibility icon
+              pkgs.adwaita-icon-theme
+              pkgs.hicolor-icon-theme # empty icon theme as a base
+            ]
+            ++ cfg.extraPackages
+          );
         }
         // lib.optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the

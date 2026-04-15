@@ -64,7 +64,7 @@
   # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
   libGL,
 
-  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
+  # For video acceleration via VA-API (--enable-features=AcceleratedVideoDecodeLinuxGL,AcceleratedVideoEncoder)
   libvaSupport ? stdenv.hostPlatform.isLinux,
   libva,
   enableVideoAcceleration ? libvaSupport,
@@ -146,8 +146,8 @@ let
 
   enableFeatures =
     optionals enableVideoAcceleration [
-      "VaapiVideoDecoder"
-      "VaapiVideoEncoder"
+      "AcceleratedVideoDecodeLinuxGL"
+      "AcceleratedVideoEncoder"
     ]
     ++ optional enableVulkan "Vulkan";
 

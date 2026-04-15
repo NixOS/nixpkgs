@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/rocket/rocket";
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
   };
 }

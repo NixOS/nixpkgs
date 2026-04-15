@@ -197,6 +197,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Selects an image variant to build from the "
         "config.system.build.images attribute of the given configuration",
     )
+    main_parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="prints out the diff between the current system "
+        "and the newly built one using nix store diff-closures",
+    )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -259,8 +265,21 @@ def parse_args(
     if args.no_build_nix:
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
+    if (
+        args.action
+        in (
+            Action.DRY_BUILD.value,  # --diff breaks dry-build
+            Action.EDIT.value,
+            Action.LIST_GENERATIONS.value,
+            Action.REPL.value,
+        )
+        and args.diff
+    ):
+        parser_warn(f"--diff is a no-op with '{args.action}'")
+        args.diff = False
+
     if args.action == Action.EDIT.value and (args.file or args.attr):
-        parser.error("--file and --attr are not supported with 'edit'")
+        parser.error(f"--file and --attr are not supported with '{args.action}'")
 
     if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,

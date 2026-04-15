@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      marcweber
       oxalica
       Necior
     ];

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import configparser
+import json
 import libcalamares
 import os
 import subprocess
@@ -409,12 +410,160 @@ def fix_btrfs_subvolumes(hardware_config, partitions):
     return hardware_config
 
 
+# nix internal-json activity/result types
+_ACT_COPY_PATH = 100
+_ACT_COPY_PATHS = 103
+_ACT_BUILDS = 104
+_RES_PROGRESS = 105
+
+
+class NixProgress:
+    """Parse nix internal-json output and track build/copy progress."""
+
+    def __init__(self):
+        self._builds_done = 0
+        self._builds_expected = 0
+        self._copies_done = 0
+        self._copies_expected = 0
+        self._per_act_progress = {}
+        self._copy_bytes = {}
+        self._activities = {}
+        self.fraction = 0.0
+        self._floor = 0.0
+        self._floor_done = 0
+        self.log_messages = []
+
+    def handle(self, line):
+        """Process one line. Returns True for @nix lines, False for plain text."""
+        line = line.strip()
+        if not line:
+            return True
+        if not line.startswith("@nix "):
+            return False
+        try:
+            msg = json.loads(line[5:])
+        except (json.JSONDecodeError, ValueError):
+            return False
+
+        action = msg.get("action")
+        if action == "start":
+            self._on_start(msg)
+        elif action == "stop":
+            self._on_stop(msg)
+        elif action == "result":
+            self._on_result(msg)
+        elif action == "msg":
+            level = msg.get("level", 0)
+            text = msg.get("msg", "")
+            if level <= 1 and text:
+                self.log_messages.append(text)
+
+        self._update()
+        return True
+
+    def _on_start(self, msg):
+        act_id = msg["id"]
+        act_type = msg.get("type", 0)
+        self._activities[act_id] = act_type
+        text = msg.get("text", "")
+        if text and msg.get("level", 5) <= 3:
+            self.log_messages.append(text)
+
+    def _on_stop(self, msg):
+        act_id = msg["id"]
+        self._activities.pop(act_id, None)
+        self._copy_bytes.pop(act_id, None)
+
+    def _on_result(self, msg):
+        act_id = msg["id"]
+        res_type = msg.get("type", 0)
+        fields = msg.get("fields", [])
+        act_type = self._activities.get(act_id, 0)
+
+        if res_type != _RES_PROGRESS or len(fields) < 2:
+            return
+        if act_type == _ACT_BUILDS:
+            self._per_act_progress[(act_type, act_id)] = (
+                "builds",
+                fields[0],
+                fields[1],
+            )
+            self._recompute_counts()
+        elif act_type == _ACT_COPY_PATHS:
+            self._per_act_progress[(act_type, act_id)] = (
+                "copies",
+                fields[0],
+                fields[1],
+            )
+            self._recompute_counts()
+        elif act_type == _ACT_COPY_PATH:
+            self._copy_bytes[act_id] = (fields[0], max(fields[1], 1))
+
+    def _update(self):
+        count_total = self._builds_expected + self._copies_expected
+        count_done = self._builds_done + self._copies_done
+        if count_total <= 0:
+            return
+
+        # Prevents the channel copy (1 path) from dominating the
+        # entire progress bar before the main build starts.
+        effective_total = max(count_total, 3)
+        count_frac = count_done / effective_total
+
+        # large single-path copies move the bar.
+        total_bytes = sum(t for _, t in self._copy_bytes.values())
+        done_bytes = sum(d for d, _ in self._copy_bytes.values())
+        if total_bytes > 0:
+            byte_sub = done_bytes / total_bytes
+            step = len(self._copy_bytes) / effective_total
+            raw = count_frac + byte_sub * step
+        else:
+            raw = count_frac
+        raw = max(0.0, min(1.0, raw))
+
+        # When the denominator grows (e.g. main build discovers hundreds
+        # of new paths), remap remaining work into remaining bar space.
+        if raw >= self._floor:
+            self._floor = raw
+            self._floor_done = count_done
+        else:
+            new_items = count_done - self._floor_done
+            remaining = effective_total - self._floor_done
+            if remaining > 0 and new_items >= 0:
+                raw = self._floor + (new_items / remaining) * (1.0 - self._floor)
+            else:
+                raw = self._floor
+            raw = max(0.0, min(1.0, raw))
+            if raw > self._floor:
+                self._floor = raw
+                self._floor_done = count_done
+
+        self.fraction = raw
+
+    def _recompute_counts(self):
+        bd = be = cd = ce = 0
+        for kind, done, expected in self._per_act_progress.values():
+            if kind == "builds":
+                bd += done
+                be += expected
+            else:
+                cd += done
+                ce += expected
+        self._builds_done = bd
+        self._builds_expected = be
+        self._copies_done = cd
+        self._copies_expected = ce
+
+
 def run():
     """NixOS Configuration."""
 
+    INSTALL_PROGRESS_START = 0.1
+    INSTALL_PROGRESS_END = 1.0
+
     global status
     status = _("Configuring NixOS")
-    libcalamares.job.setprogress(0.1)
+    libcalamares.job.setprogress(0.01)
 
     ngc_cfg = configparser.ConfigParser()
     ngc_cfg["Defaults"] = { "Kernel": "lts" }
@@ -491,7 +640,7 @@ def run():
     ):
         cfg += cfgbootgrubcrypt
         status = _("Setting up LUKS")
-        libcalamares.job.setprogress(0.15)
+        libcalamares.job.setprogress(0.02)
         try:
             libcalamares.utils.host_env_process_output(
                 ["mkdir", "-p", root_mount_point + "/boot"], None
@@ -576,7 +725,7 @@ def run():
                     )
 
     status = _("Configuring NixOS")
-    libcalamares.job.setprogress(0.18)
+    libcalamares.job.setprogress(0.03)
 
     cfg += cfgnetwork
     if gs.value("packagechooser_packagechooser") == "enlightenment":
@@ -781,7 +930,7 @@ def run():
         cfg = cfg.replace(pattern, str(variables[key]))
 
     status = _("Generating NixOS configuration")
-    libcalamares.job.setprogress(0.25)
+    libcalamares.job.setprogress(0.05)
 
     try:
         # Generate hardware.nix with mounted swap device
@@ -861,7 +1010,7 @@ def run():
     libcalamares.utils.host_env_process_output(["cp", "/dev/stdin", config], None, cfg)
 
     status = _("Installing NixOS")
-    libcalamares.job.setprogress(0.3)
+    libcalamares.job.setprogress(INSTALL_PROGRESS_START)
 
     try:
         subprocess.check_output(
@@ -880,6 +1029,8 @@ def run():
             "--no-root-passwd",
             "--root",
             root_mount_point,
+            "--log-format",
+            "internal-json",
             # Nix requires its build directory to have no
             # world-writable parent directories. The chroot store that
             # nixos-install uses will use the state dir in the chroot
@@ -892,7 +1043,8 @@ def run():
         ]
     )
 
-    # Install customizations
+    progress = NixProgress()
+
     try:
         output = ""
         proc = subprocess.Popen(
@@ -902,14 +1054,34 @@ def run():
         )
         while True:
             line = proc.stdout.readline().decode("utf-8")
-            output += line
-            libcalamares.utils.debug("nixos-install: {}".format(line.strip()))
             if not line:
                 break
+
+            was_json = progress.handle(line)
+
+            # Keep output for error reporting
+            if not was_json:
+                output += line
+            for log_line in progress.log_messages:
+                output += log_line + "\n"
+
+            mapped = INSTALL_PROGRESS_START + progress.fraction * (
+                INSTALL_PROGRESS_END - INSTALL_PROGRESS_START
+            )
+            libcalamares.job.setprogress(mapped)
+
+            for log_line in progress.log_messages:
+                libcalamares.utils.debug("nixos-install: {}".format(log_line))
+            progress.log_messages.clear()
+
+            if not was_json:
+                libcalamares.utils.debug("nixos-install: {}".format(line.strip()))
+
         exit = proc.wait()
         if exit != 0:
             return (_("nixos-install failed"), _(output))
     except:
         return (_("nixos-install failed"), _("Installation failed to complete"))
 
+    libcalamares.job.setprogress(INSTALL_PROGRESS_END)
     return None

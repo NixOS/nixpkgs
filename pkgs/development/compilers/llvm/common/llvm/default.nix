@@ -303,17 +303,10 @@ stdenv.mkDerivation (
           # This was fixed upstream in LLVM 21 with
           # 88f041f3e05e26617856cc096d2e2864dfaa1c7b, but it’s too
           # painful to backport all the way.
-          lib.optionalString
-            (
-              lib.versionOlder release_version "21"
-              ||
-                # Rebuild avoidance; TODO: clean up on `staging`.
-                stdenv.hostPlatform.isx86
-            )
-            ''
-              substituteInPlace unittests/TargetParser/Host.cpp \
-                --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-            ''
+          lib.optionalString (lib.versionOlder release_version "21") ''
+            substituteInPlace unittests/TargetParser/Host.cpp \
+              --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+          ''
         +
           # This test fails with a `dysmutil` crash; have not yet dug into what's
           # going on here (TODO(@rrbutani)).
@@ -426,10 +419,23 @@ stdenv.mkDerivation (
         check_version patch ${patch}
       '';
 
-    # E.g. Mesa uses the build-id as a cache key (see #93946):
-    env = lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
-      LDFLAGS = "-Wl,--build-id=sha1";
-    };
+    env =
+      # E.g. Mesa uses the build-id as a cache key (see #93946):
+      lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
+        LDFLAGS = "-Wl,--build-id=sha1";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        # This test was introduced by https://github.com/llvm/llvm-project/pull/158719 to check
+        # for a Windows-specific quirk.
+        # It is also unconditionally run on other platforms because running binaries
+        # without any environment variables should work, but as the test binaries link against
+        # our libLLVM.dylib that has not been installed at this point, and the `DYLD_LIBRARY_PATH`
+        # we set for tests to work around this issue is cleared away by the test itself,
+        # it will fail.
+        # Unfortunately "fixing" the test to pass just `DYLD_LIBRARY_PATH` would void the purpose
+        # of the test itself, so we skip it instead.
+        GTEST_FILTER = "-ProgramEnvTest.TestExecuteEmptyEnvironment";
+      };
 
     cmakeBuildType = "Release";
 
@@ -594,6 +600,10 @@ stdenv.mkDerivation (
         widely used in academic research. Code in the LLVM project is licensed
         under the "Apache 2.0 License with LLVM exceptions".
       '';
+      identifiers.cpeParts = llvm_meta.identifiers.cpeParts // {
+        inherit version;
+        update = "*";
+      };
     };
   }
   // lib.optionalAttrs enableManpages {

@@ -1,5 +1,4 @@
 {
-
   lib,
   stdenv,
   fetchFromGitHub,
@@ -11,18 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8jkuSNK7xTBUkBWzh766zKOlh+7pTr+e0xT1w3xifsw=";
+    hash = "sha256-/lvKMC0bJdfqhPCuBYChX/6Aybpu+cPg0Vjl2HDbOeE=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile --replace-fail 'pkg-config' '${stdenv.cc.targetPrefix}pkg-config'
-  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

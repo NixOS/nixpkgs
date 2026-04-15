@@ -16,7 +16,7 @@
   gd,
   libxaw,
   icu,
-  ghostscript,
+  ghostscript_headless,
   libxpm,
   libxmu,
   libxext,
@@ -29,7 +29,7 @@
   libpaper,
   graphite2,
   zziplib,
-  harfbuzz,
+  harfbuzzFull,
   potrace,
   gmp,
   mpfr,
@@ -44,11 +44,12 @@
   woff2,
   xxHash,
   makeWrapper,
-  useFixedHashes,
+  useFixedHashes ? true,
   asymptote,
   biber-ms,
   tlpdb,
   luajit,
+  ...
 }@args:
 
 # Useful resource covering build options:
@@ -357,7 +358,6 @@ rec {
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
         veprbl
-        lovek323
         raskin
         jwiegley
       ];
@@ -412,7 +412,7 @@ rec {
     buildInputs = core.buildInputs ++ [
       core
       cairo
-      harfbuzz
+      harfbuzzFull
       icu
       graphite2
       libx11
@@ -539,16 +539,16 @@ rec {
     let
       # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
       # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2025-06-12-14-21-B";
+      context_packaging_release = "2026-01-08-23-30-A";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.07";
+      version = "2.11.08";
 
       src = fetchzip {
         name = "luametatex.src.zip";
         url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
+        hash = "sha256-PY1rrgLFAXR7YRcJMx1ob9dQc1PFoBSpi1xLQGM4Lko=";
         stripRoot = false;
       };
 
@@ -571,31 +571,19 @@ rec {
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
-    version = "3.2.2";
+    version = "3.6";
 
     src =
       assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version)
         "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm";
       fetchurl {
         url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-        hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
+        hash = "sha256-JkRrs7EHOf8JJcnkFrdtLSIgdcnV3Pr+biFGCdBy7Ro=";
       };
 
     configureFlags = [
       "--disable-manpage" # man pages are provided by the doc container
       "--with-ttfautohint"
-    ];
-
-    # GCC15 compataiblity patches
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/mgieseki/dvisvgm/commit/ebf66e3f59edf89e9d2b4fb7973b859e185eb034.patch";
-        hash = "sha256-5dppK9saWOuIH4Pmv7Zk9vrRc81oK8qKZqkwCuOQhaY=";
-      })
-      (fetchpatch {
-        url = "https://github.com/mgieseki/dvisvgm/commit/dcb5940dff7ca3084330119a4ff1472cd52ef6de.patch";
-        hash = "sha256-rGTFeeLaWIon4O16x1wFxb3Wr020HdUR3BgrqB5r864=";
-      })
     ];
 
     # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
@@ -608,7 +596,7 @@ rec {
     buildInputs = [
       core
       brotli
-      ghostscript
+      ghostscript_headless
       zlib
       freetype
       ttfautohint
@@ -638,7 +626,7 @@ rec {
       libpng
       freetype
       gd
-      ghostscript
+      ghostscript_headless
     ];
 
     preConfigure = ''
@@ -652,7 +640,7 @@ rec {
       "--disable-debug"
     ];
 
-    GS = "${ghostscript}/bin/gs";
+    GS = lib.getExe ghostscript_headless;
 
     enableParallelBuilding = true;
   };
@@ -705,7 +693,7 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
+        hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;
@@ -751,7 +739,7 @@ rec {
     buildInputs = [
       core # kpathsea
       freetype
-      ghostscript
+      ghostscript_headless
       libx11
       libxaw
       libxi

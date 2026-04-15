@@ -55,6 +55,7 @@ lib.runTests (
       ++ js
       ++ genode
       ++ redox
+      ++ uefi
     );
 
     testarm = mseteq arm [
@@ -136,6 +137,7 @@ lib.runTests (
       "x86_64-solaris"
       "x86_64-windows"
       "x86_64-none"
+      "x86_64-uefi"
     ];
 
     testcygwin = mseteq cygwin [
@@ -161,6 +163,7 @@ lib.runTests (
     testillumos = mseteq illumos [ "x86_64-solaris" ];
     testlinux = mseteq linux [
       "aarch64-linux"
+      "arc-linux"
       "armv5tel-linux"
       "armv6l-linux"
       "armv7a-linux"

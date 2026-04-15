@@ -68,6 +68,9 @@ let
     ghc910 = sets.ghc9103;
     ghc912 = sets.ghc9122;
     ghc914 = sets.ghc9141;
+
+    microhs_0_15 = sets.microhs_0_15_4_0;
+    microhs = sets.microhs_0_15;
   };
 in
 {
@@ -191,6 +194,14 @@ in
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
+      ghc9124 = callPackage ../development/compilers/ghc/9.12.4.nix {
+        bootPkgs =
+          # No suitable bindist packaged yet
+          bb.packages.ghc9103;
+        inherit (buildPackages.python3Packages) sphinx;
+        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+        inherit buildTargetLlvmPackages llvmPackages;
+      };
       ghc9141 = callPackage ../development/compilers/ghc/9.14.1.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -212,15 +223,23 @@ in
       # with "native" and "gmp" backends.
       native-bignum =
         let
-          nativeBignumGhcNames = pkgs.lib.filter (name: !(builtins.elem name nativeBignumExcludes)) (
-            pkgs.lib.attrNames compiler
-          );
+          isNativeBignumGhc =
+            name: pkgs.lib.hasPrefix "ghc" name && !(builtins.elem name nativeBignumExcludes);
+          nativeBignumGhcNames = pkgs.lib.filter isNativeBignumGhc (pkgs.lib.attrNames compiler);
         in
         pkgs.lib.recurseIntoAttrs (
           pkgs.lib.genAttrs nativeBignumGhcNames (
             name: compiler.${name}.override { enableNativeBignum = true; }
           )
         );
+
+      microhs-boot = callPackage ../development/compilers/microhs/boot.nix {
+        microhs-src = bb.compiler.microhs_0_15_4_0;
+      };
+
+      microhs_0_15_4_0 = callPackage ../development/compilers/microhs/0.15.4.0.nix {
+        inherit (bb.compiler) microhs-boot;
+      };
     }
     // chooseDefaultVersions compiler
     // pkgs.lib.optionalAttrs config.allowAliases {
@@ -295,6 +314,11 @@ in
         ghc = bh.compiler.ghc9123;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
       };
+      ghc9124 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc9124;
+        ghc = bh.compiler.ghc9124;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
+      };
       ghc9141 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9141;
         ghc = bh.compiler.ghc9141;
@@ -319,6 +343,13 @@ in
             buildHaskellPackages = bh.packages.native-bignum.${name};
           }
         );
+
+      microhs_0_15_4_0 = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.microhs_0_15_4_0;
+        ghc = bh.compiler.microhs_0_15_4_0;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-microhs.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
     }
     // chooseDefaultVersions packages
     // pkgs.lib.optionalAttrs config.allowAliases {

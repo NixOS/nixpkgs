@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.2.0";
+  version = "2.3.4";
 
   bundler = bundler.override { ruby = ruby_3_4; };
 
@@ -24,10 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-QKGIcLdyIeYcHXA3TRv7PS9V2mok3Y8UOuqCdnCpNfM=";
+    hash = "sha256-JKV0xAtEbGETprC5zYEcmCVcUFrW4h/+lbYayzWefKs=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
+
+  patches = [
+    # Drop setxid calls in non-root mode (fails under strict seccomp).
+    # https://github.com/docusealco/docuseal/pull/593
+    ./only-switch-uid-when-root.patch
+  ];
 
   rubyEnv = bundlerEnv {
     name = "docuseal-gems";
@@ -46,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       inherit (finalAttrs) src;
-      hash = "sha256-WypnmgUbt+qlJivg1oWX6dabD/1o0H6c3ODcv+S5Ptw=";
+      hash = "sha256-AvdaSIXO31t15wWysTvFISqmKCAi1Q8CJgO0J2DqM6M=";
     };
 
     nativeBuildInputs = [
@@ -95,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/public/packs
-    cp -r ${finalAttrs.src}/* $out
+    cp -r ./* $out
     cp -r ${finalAttrs.docusealWeb}/* $out/public/packs
 
     bundle exec bootsnap precompile --gemfile app/ lib/

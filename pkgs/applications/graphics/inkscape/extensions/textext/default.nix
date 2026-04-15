@@ -19,7 +19,7 @@ let
     ./__main__.py $*
   '';
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "textext";
   version = "1.13.0";
   format = "setuptools";
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-fEPSpI9uO+r3d5p+gV1XcorYvUPw0sLgG9nHUPeTtYs=";
   };
 
@@ -124,4 +124,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.raboof ];
     platforms = lib.platforms.all;
   };
-}
+})

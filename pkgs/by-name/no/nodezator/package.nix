@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nodezator";
-  version = "1.5.4";
+  version = "1.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IndieSmiths";
     repo = "nodezator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kdkOAJB7cVaayJOzof7dV9EBczEoEKXzCM7TcY8Ex5g=";
+    hash = "sha256-9lEizhTwihv909xDgmcel9eCL7VfVDrWDtWghdjSH90=";
   };
 
   build-system = with python3Packages; [ setuptools ];

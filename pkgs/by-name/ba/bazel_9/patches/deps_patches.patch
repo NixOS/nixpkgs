@@ -1,0 +1,47 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+index d845a0e98d..be0aa7bd7c 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -22,16 +22,30 @@ bazel_dep(name = "googleapis", version = "0.0.0-20250604-de157ca3")
+ bazel_dep(name = "googletest", version = "1.17.0.bcr.2", repo_name = "com_google_googletest")
+ bazel_dep(name = "grpc-java", version = "1.71.0")
+ bazel_dep(name = "grpc", version = "1.76.0.bcr.1", repo_name = "com_github_grpc_grpc")
++single_version_override(
++    module_name = "grpc",
++    patches = ["//third_party:grpc.patch"],
++    patch_strip = 1,
++)
+ bazel_dep(name = "platforms", version = "1.0.0")
+ bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
+ bazel_dep(name = "re2", version = "2025-11-05.bcr.1")
+ bazel_dep(name = "rules_graalvm", version = "0.11.1")
+ bazel_dep(name = "rules_java", version = "9.0.3")
++single_version_override(
++    module_name = "rules_java",
++    patches = ["//third_party:rules_java.patch"],
++)
+ bazel_dep(name = "bazel_features", version = "1.42.1")
+ bazel_dep(name = "rules_jvm_external", version = "6.6")
+ bazel_dep(name = "rules_license", version = "1.0.0")
+ bazel_dep(name = "rules_pkg", version = "1.1.0")
+ bazel_dep(name = "rules_python", version = "1.7.0")
++single_version_override(
++    module_name = "rules_python",
++    patches = ["//third_party:rules_python.patch"],
++    patch_strip = 1,
++)
+ bazel_dep(name = "rules_shell", version = "0.6.1")
+ bazel_dep(name = "rules_testing", version = "0.9.0")
+ bazel_dep(name = "stardoc", version = "0.8.0", repo_name = "io_bazel_skydoc")
+@@ -42,6 +56,11 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
+ # Depend on apple_support second after rules_cc so that the Xcode toolchain
+ # from apple_support does not win over the generic Unix toolchain from rules_cc.
+ bazel_dep(name = "rules_cc", version = "0.2.17")
++single_version_override(
++    module_name = "rules_cc",
++    patches = ["//third_party:rules_cc.patch"],
++    patch_strip = 1,
++)
+ bazel_dep(name = "apple_support", version = "1.24.5")
+ 
+ # The starlark rules in @rules_cc are hidden behind macros but docgen needs to

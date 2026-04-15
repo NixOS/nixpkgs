@@ -86,7 +86,7 @@ in
           `.config/transmission-daemon/settings.json`
           (each time the service starts).
 
-          See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
+          See [Transmission's documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
           for documentation of settings not explicitly covered by this module.
         '';
         default = { };

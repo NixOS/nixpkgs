@@ -31,7 +31,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "8.5.0",
+  version ? "8.6.0",
 }:
 
 let
@@ -45,7 +45,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-L8gnWpQAeHMUbydrrEtZ6WGIzhunDBWCNWMA+3dAKT0=";
+    hash = "sha256-W22eB0IzHNZe3xaF8AZOkUTDCic3NXkypdqSDY61Su0=";
     stripRoot = false;
   };
 
@@ -77,6 +77,7 @@ let
     #        ],
     #     )
     [
+      bash # see https://github.com/NixOS/nixpkgs/pull/489519
       coreutils
       diffutils
       file
@@ -87,6 +88,7 @@ let
       gnused
       gnutar
       gzip
+      python3 # see https://github.com/NixOS/nixpkgs/pull/489519
       unzip
       which
       zip
@@ -204,6 +206,11 @@ stdenv.mkDerivation rec {
     # and we need to do a silly patch
     (replaceVars ./patches/usr_bin_env.patch {
       usrBinEnv = "${coreutils}/bin/env";
+    })
+
+    # Bazel tries to run "/bin/true" to test if linux-sandbox works.
+    (replaceVars ./patches/linux_sandbox.patch {
+      binTrue = "${coreutils}/bin/true";
     })
 
     # Provide default JRE for Bazel process by setting --server_javabase=

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wakatime-cli";
-  version = "1.139.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yqEoFXVP64WcGCCAtMd1bYStCnsd9T8chQWgjaVkwkk=";
+    hash = "sha256-TOdAcT+IS6XONIfkASRvd7oTSSW5VX8w5q5ASvJlQb8=";
   };
 
-  vendorHash = "sha256-1BtTtR8wPVzzOEGv3te3hOeKakZX7cS+HYvoCLnuZ/c=";
+  vendorHash = "sha256-HngszNLX2b2EVvh8ovouIEvjBOJL1jA5AhA6Y11ke9Y=";
 
   ldflags = [
     "-s"

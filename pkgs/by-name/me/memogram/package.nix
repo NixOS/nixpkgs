@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "memogram";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "telegram-integration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b7y3+Qfa6NWX58gMmIPXSZxfl/d40xUQDQN9EBaewaY=";
+    hash = "sha256-OkNx5qAF7Gxk50S9a31NUWRoC9uHPUwUHG3jA8gy7AQ=";
   };
 
-  vendorHash = "sha256-G3ZkjpmZjIGyCwZvxWDQGW33n/AbuN9hXlvdLo85M6Q=";
+  vendorHash = "sha256-iSJU/FyyEbZlpTT3isJlsEvDzNpg3ylE5367KPBeUxM=";
 
   subPackages = [ "bin/memogram" ];
 

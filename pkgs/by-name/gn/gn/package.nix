@@ -11,11 +11,11 @@
   version ?
     # This is a workaround for update-source-version to be able to update this
     let
-      _version = "0-unstable-2025-10-08";
+      _version = "0-unstable-2026-01-07";
     in
     _version,
-  rev ? "07d3c6f4dc290fae5ca6152ebcb37d6815c411ab",
-  hash ? "sha256-kIPhfuJBQSISdRjloe0N2JrqvuVrEkNijb92/9zSE9I=",
+  rev ? "5550ba0f4053c3cbb0bff3d60ded9d867b6fa371",
+  hash ? "sha256-SoXVnpCuNee80N4YdsTEHQd3jZNoHOwKVP6O8a67Ym0=",
 }:
 
 stdenv.mkDerivation {

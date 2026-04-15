@@ -10,7 +10,7 @@
   python3Packages,
   autoPatchelfHook,
   python3,
-  openssl_1_1,
+  openssl,
 }:
 
 {
@@ -73,6 +73,7 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
     hash = "sha256-4akS+zbaKxFrs0x0uKP/xX28WyK5KLduOkgZaBYeANM=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
+    pythonRelaxDeps = [ "isodate" ];
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
   };
@@ -173,16 +174,18 @@
 
   confcom = mkAzExtension rec {
     pname = "confcom";
-    version = "1.2.6";
+    version = "1.8.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    hash = "sha256-kyJ4AkPcpP/10nf4whJiuraC7hn0E6iBkhRIn43E9J0=";
+    hash = "sha256-rKEECrGR4VIKTgPzInGhFrbrXDtYqayAzYWLKclE1tg=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ openssl_1_1 ];
+    buildInputs = [ openssl ];
+    pythonRelaxDeps = [ "tqdm" ];
     propagatedBuildInputs = with python3Packages; [
-      pyyaml
       deepdiff
       docker
+      pydantic
+      pyyaml
       tqdm
     ];
     postInstall = ''
@@ -213,9 +216,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.3.0b1";
+    version = "1.3.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-gEFo2qBqQ19SSIMx1BWPoc19xv7lCUkuZMSUz9qPqrE=";
+    hash = "sha256-Br/cfKFTkqcjGRCXAbHqfwTe4g49F3zbj/tzp/O+giI=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -269,6 +272,10 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/rdbms_connect-${version}-py2.py3-none-any.whl";
     hash = "sha256-66mX1K1azQvbuApyKBwvVuiKCbLaqezCDdrv0lhvVD0=";
     description = "Support for testing connection to Azure Database for MySQL & PostgreSQL servers";
+    pythonRelaxDeps = [
+      "mycli"
+      "pgcli"
+    ];
     propagatedBuildInputs =
       (with python3Packages; [
         pgcli
@@ -278,6 +285,18 @@
       ])
       ++ [ mycli ];
     meta.maintainers = with lib.maintainers; [ obreitwi ];
+  };
+
+  redisenterprise = mkAzExtension rec {
+    pname = "redisenterprise";
+    version = "1.4.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/redisenterprise-${version}-py3-none-any.whl";
+    hash = "sha256-vMKLLC/q39SZ2MbqxmcjUiylr01D1olaLujQ1LbFqak=";
+    description = "Microsoft Azure Command-Line Tools RedisEnterprise Extension";
+    propagatedBuildInputs = with python3Packages; [
+      redis
+      pyjwt
+    ];
   };
 
   serial-console = mkAzExtension {
@@ -302,6 +321,7 @@
       oras
       oschmod
     ];
+    pythonRelaxDeps = true;
     meta = {
       maintainers = with lib.maintainers; [ gordon-bp ];
       changelog = "https://github.com/Azure/azure-cli-extensions/blob/ssh-${version}/src/ssh/HISTORY.md";
@@ -320,9 +340,9 @@
 
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "2.1.3";
+    version = "2.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    hash = "sha256-atqfMIN0FjLZjSIRh+T9MBxt34y6VWpxexCEBFsPTaM=";
+    hash = "sha256-ppsK4rJa/nFFkO2XJvjnK0PIRp9/haVwWfqfF7oN5WQ=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = [ ];
@@ -352,6 +372,7 @@
   deidservice = throw "The 'deidservice' extension for azure-cli was moved under healthcareapis"; # Added 2024-11-19, https://github.com/Azure/azure-cli-extensions/pull/8224
   hdinsightonaks = throw "The 'hdinsightonaks' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/8956
   logz = throw "The 'logz' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8459
+  mobile-network = throw "The 'mobile-network' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9453
   pinecone = throw "The 'pinecone' extension for azure-cli was removed upstream"; # Added 2025-06-03, https://github.com/Azure/azure-cli-extensions/pull/8763
   playwright-cli-extension = throw "The 'playwright-cli-extension' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9156
   sap-hana = throw "The 'sap-hana' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8904

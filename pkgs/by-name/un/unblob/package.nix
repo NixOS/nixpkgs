@@ -3,7 +3,6 @@
   libiconv,
   python3,
   fetchFromGitHub,
-  gitUpdater,
   makeWrapper,
   rustPlatform,
   stdenvNoCC,
@@ -47,26 +46,24 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "25.5.26";
+  version = "26.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-vTakXZFAcD3cmd+y4CwYg3X4O4NmtOzuqMLWLMX2Duk=";
+    hash = "sha256-wYWuKvxAagctlmdO5Fi9/WzfJ4zkDgfXejgDTJPHsTI=";
     forceFetchGit = true;
     fetchLFS = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-NirDPuAcKuNquMs9mBZoEkQf+QJ+cMd7JXjj1anB9Zw=";
+    hash = "sha256-wjN4QPOUYFWWYMWL9aAgGqEucM7q+H6YyoS9Mv2dpp4=";
   };
 
   strictDeps = true;
-
-  build-system = with python3.pkgs; [ poetry-core ];
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libiconv ];
 
@@ -78,10 +75,13 @@ python3.pkgs.buildPythonApplication rec {
     dissect-cstruct
     lark
     lief.py
+    lzallright
     python3.pkgs.lz4 # shadowed by pkgs.lz4
     plotext
     pluggy
+    pydantic
     pyfatfs
+    pymdown-extensions
     pyperscan
     python-magic
     pyzstd
@@ -104,8 +104,6 @@ python3.pkgs.buildPythonApplication rec {
     "ubi-reader"
   ];
 
-  pythonRelaxDeps = [ "lz4" ];
-
   pythonImportsCheck = [ "unblob" ];
 
   makeWrapperArgs = [
@@ -115,23 +113,26 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python3.pkgs;
     [
+      pexpect
+      psutil
+      pytest-cov-stub
       pytestCheckHook
-      pytest-cov # cannot use stub
       versionCheckHook
     ]
     ++ runtimeDeps;
 
   pytestFlags = [
-    "--no-cov"
+    "--with-e2e" # Not that slow: increases test time by ~5s
   ];
 
   disabledTests = [
     # https://github.com/tytso/e2fsprogs/issues/152
     "test_all_handlers[filesystem.extfs]"
+    # regression in erofs-utils 1.9 https://github.com/onekey-sec/unblob/commit/c7c9f20dd871a5694d41a95ca3041eb0c98e257a
+    "test_all_handlers[filesystem.android.erofs]"
   ];
 
   passthru = {
-    updateScript = gitUpdater { };
     # helpful to easily add these to a nix-shell environment
     inherit runtimeDeps;
   };

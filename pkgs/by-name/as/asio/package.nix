@@ -29,6 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/asio";
 
+  patches = [
+    # Linking against `boost_system` fails because the stub compiled library
+    # of Boost.System, which has been a header-only library since 1.69, was
+    # removed in 1.89.
+    # Upstream issue: https://github.com/chriskohlhoff/asio/issues/1716
+    ./boost-1.89.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

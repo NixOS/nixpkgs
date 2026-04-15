@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "operator-sdk";
-  version = "1.42.0";
+  version = "1.42.2";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = "operator-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iXLAFFO7PCxA8QuQ9pMmQ/GBbVM5wBy9cVzSQRHHPrg=";
+    hash = "sha256-jBSHrSqeUVePQ6ZOF2cooHImoplsMgxgpXdvQ/3zxrA=";
   };
 
-  vendorHash = "sha256-F2ZYEEFG8hqCcy16DUmP9ilG6e20nXBiJnB6U+wezAo=";
+  vendorHash = "sha256-0cggdw8UC7iTgYXEgxcIp+Xyvu4FDUhg/tTGwx7kqxI=";
 
   nativeBuildInputs = [
     makeWrapper

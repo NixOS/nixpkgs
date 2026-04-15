@@ -30,8 +30,8 @@ let
     "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.10".sha256 = "sha256-v1+0nypC82s+AD0uTSNDhq3fB9ndjKhjRlaSfMls4SU=";
     "2.6.0".sha256 = "sha256-CkvVsByI5rRcLwWWBdJyirk3emUpsupiKnq7W6LWkcY=";
+    "2.6.1".sha256 = "sha256-XyzVu30+bZFJpZwFrNhCmzvhhJIRdp5aN0UdAB4ZbX8=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other

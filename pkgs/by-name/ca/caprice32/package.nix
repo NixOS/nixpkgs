@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  patches = [ ./string.patch ];
+  patches = [
+    ./string.patch
+    ./cstdint.patch
+  ];
 
   makeFlags = [
     "APP_PATH=${placeholder "out"}/share/caprice32"

@@ -153,7 +153,7 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
 
 ### `broken` {#var-meta-broken}
 
-If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless the environment variable [`NIXPKGS_ALLOW_BROKEN`](#opt-allowBroken) is set.
+If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless [explicitly allowed](#sec-allow-broken).
 Such unconditionally-broken packages should be removed from Nixpkgs eventually unless they are fixed.
 
 The value of this attribute can depend on a package's arguments, including `stdenv`.
@@ -180,6 +180,15 @@ This means that `broken` can be used to express constraints, for example:
 
 This makes `broken` strictly more powerful than `meta.badPlatforms`.
 However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
+
+Underneath, `meta.broken = true;` is the same as
+```nix
+{
+  meta.problems.broken.message = "This package is broken.";
+}
+```
+
+By specifying this manually, the error message can be customised.
 
 ## `knownVulnerabilities` {#var-meta-knownVulnerabilities}
 
@@ -249,6 +258,10 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
 
+### `lib.sourceTypes.obfuscatedCode` {#lib.sourceTypes.obfuscatedCode}
+
+Code which is intentionally obfuscated by a third party, for example by using a code obfuscator or by being distributed in an obfuscated form.
+
 ## Software identifiers {#sec-meta-identifiers}
 
 Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
@@ -278,14 +291,17 @@ Some of them are as follows:
 * *vendor* - can point to the source of the package, or to Nixpkgs itself
 * *product* - name of the package
 * *version* - version of the package
-* *update* - name of the latest update, can be a patch version for semantically versioned packages
-* *edition* - any additional specification about the version
+* *update* - vendor-specific string part of the version string of the latest update (e.g. `rc1`, `beta`, etc...)
+* *edition* - deprecated and should be set to `*`
 
 You can find information about all of these attributes in the [official specification](https://csrc.nist.gov/projects/security-content-automation-protocol/specifications/cpe/naming) (heading 5.3.3, pages 11-13).
 
-Any fields that don't have a value are set to either `-` if the value is not available or `*` when the field can match any value.
+Any fields that don't have a value are set to either:
 
-For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40:1:*:*:*:*:*:*`.
+* `*` (ANY) when the field can match any value
+* `-` (NA) when the value is not meaningful or not used in the description
+
+For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40.1:*:*:*:*:*:*:*`.
 
 #### `meta.identifiers.cpeParts` {#var-meta-identifiers-cpeParts}
 
@@ -301,14 +317,13 @@ It is up to the package author to make sure all parts are correct and match expe
 Following functions help with filling out `version` and `update` fields:
 
 * [`lib.meta.cpeFullVersionWithVendor`](#function-library-lib.meta.cpeFullVersionWithVendor)
-* [`lib.meta.cpePatchVersionInUpdateWithVendor`](#function-library-lib.meta.cpePatchVersionInUpdateWithVendor)
 
 For many packages to make CPE available it should be enough to specify only:
 
 ```nix
 {
   # ...
-  meta.identifiers.cpeParts = lib.meta.cpePatchVersionInUpdateWithVendor vendor version;
+  meta.identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor vendor version;
 }
 ```
 

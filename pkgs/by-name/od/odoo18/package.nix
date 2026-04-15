@@ -35,6 +35,8 @@ python.pkgs.buildPythonApplication rec {
     }"
   ];
 
+  pythonRemoveDeps = [ "PyPDF2" ];
+
   build-system = with python.pkgs; [
     setuptools
     distutils
@@ -57,6 +59,7 @@ python.pkgs.buildPythonApplication rec {
     jinja2
     libsass
     lxml
+    lxml-html-clean
     markupsafe
     num2words
     ofxparse
@@ -68,7 +71,7 @@ python.pkgs.buildPythonApplication rec {
     psycopg2
     pydot
     pyopenssl
-    pypdf2
+    pypdf
     pyserial
     python-dateutil
     python-ldap
@@ -94,7 +97,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo;
+      inherit (nixosTests) odoo18;
     };
   };
 

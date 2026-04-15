@@ -8,11 +8,12 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-eqCQwBP/QLxBwjGvksFwNwNSCng/pf19DiBQ+tA4a7M=";
+    hash = "sha256-yV+8P6V9QDDmIekJsa3kUt8Qv2Y/Zfeq2aqcQIGNubg=";
   };
 
-  cargoHash = "sha256-0CxlvTetxXM+xe6r98T6hzoD/IGfYkI9TqqUe+u1U2I=";
+  cargoHash = "sha256-bqJ9beO+AZlz9GZkO5cAk45B4bxyfYq+pLMFWj8pWwg=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    inherit (nixosTests) tor;
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 

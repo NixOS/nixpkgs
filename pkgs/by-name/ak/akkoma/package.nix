@@ -9,9 +9,9 @@
 }:
 
 let
-  beamPackages = beam_minimal.packages.erlang_26.extend (
+  beamPackages = beam_minimal.packages.erlang_27.extend (
     self: super: {
-      elixir = self.elixir_1_16;
+      elixir = self.elixir_1_17;
       rebar3 = self.rebar3WithPlugins {
         plugins = with self; [ pc ];
       };
@@ -20,14 +20,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.17.0";
+  version = "3.18.1";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     tag = "v${version}";
-    hash = "sha256-RXKqeaS+cvOGQNMU/g2lbAk/V1JbkU2XXqITqv1U/wU=";
+    hash = "sha256-4HIIgTNcNAMCpHyT6zBcmxXeFbMrt38Z7PtT9Onvz+U=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -47,9 +47,9 @@ beamPackages.mixRelease rec {
   ];
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
+    pname = "mix-deps-akkoma";
     inherit src version;
-    hash = "sha256-DqSeMjom9UjgGjjfJomWCr7jQhXEkqVrDCvW3+pDtcQ=";
+    hash = "sha256-igXEX6I+7G7tNCLjEf0VBOaii0r7jXCdF6x78LMcUv0=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \

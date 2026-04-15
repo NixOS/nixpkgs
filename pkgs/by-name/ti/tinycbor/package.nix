@@ -22,6 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cbordump";
     homepage = "https://github.com/intel/tinycbor";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 })

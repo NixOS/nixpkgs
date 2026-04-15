@@ -212,9 +212,17 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w answers
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
@@ -261,11 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--jobs 1"
   ];
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
-
   pythonPath = [
     python3Packages.dnspython
     python3Packages.markdown
@@ -273,6 +276,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  hardeningDisable = [ "strictflexarrays1" ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"

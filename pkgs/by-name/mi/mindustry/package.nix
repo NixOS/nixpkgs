@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "153";
+  version = "155.4";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-yVrOHZOCZrI5SsmMdo7Eh+zS0PXv2X67zLCdLOWcPVc=";
+    hash = "sha256-NHI+YLh4ptuAEff6NM9ZgN2haB+iZ9np7nf6iRMzgHw=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-JyiFxzdZtU0ILytTCfZrhBU2oZ3gF1kzMbSdjxqvTYs=";
+    hash = "sha256-9nUj9aP1yAvZEDBuJPfE4ZzGEbZOSuVK+KbD1kUG+dM=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's arc-core/build.gradle
-    tag = "v0.11";
-    hash = "sha256-jybIILdK3cqyZ2LIuoWDfZWocVTbKszekKCLil0WXRY=";
+    tag = "2025.12.01";
+    hash = "sha256-I+VZW34eRGn1RJmK8e9nVSXIFSOK/pER+xEhmXeUB4Y=";
   };
 
   desktopItem = makeDesktopItem {
@@ -92,16 +92,17 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  patches = [
-    ./0001-fix-include-path-for-SDL2-on-linux.patch
-  ];
-
   postPatch = ''
     # Ensure the prebuilt shared objects don't accidentally get shipped
     rm -r Arc/natives/natives-*/libs/*
     rm -r Arc/backends/backend-*/libs/*
+    rm -f Arc/arc-core/unsafe/unsafe.jar
 
     cd Mindustry
+
+    # Fix duplicate class entries in arc-core jar with newer Gradle
+    substituteInPlace ../Arc/arc-core/build.gradle \
+      --replace-fail 'jar{' 'jar{ duplicatesStrategy = DuplicatesStrategy.EXCLUDE'
 
     # Remove unbuildable iOS stuff
     sed -i '/^project(":ios"){/,/^}/d' build.gradle
@@ -149,26 +150,30 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
+
+    pushd ../Arc
+    gradle :arc-core:recompileUnsafe
+    popd
   ''
   + lib.optionalString enableServer ''
     gradle server:dist
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
-    # unsupported platforms need to be excluded because their native build tools aren't available
-    gradle jnigenBuild -x jnigenBuildAndroid -x jnigenBuildWindows -x jnigenBuildWindows64
-    gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf backends/backend-sdl/build/Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed "$glewlib" \
-      --add-needed "$sdllib"
-    # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/build/Arc/arc-core/libs/*/* natives/natives-desktop/libs/
-    cp backends/backend-sdl/build/Arc/backends/backend-sdl/libs/*/* natives/natives-desktop/libs/
-    # below target dirs are based on Arc upstream: Arc/extensions/../build.gradle
+    gradle jnigenBuildLinux64
+    # Copy freshly-built libraries to where Gradle resource dirs expect them.
+    # Using jnigenBuildLinux64 skips the postJni tasks, so we copy manually.
+    # arc-core uses relative libsDir, others use absolute which causes path doubling.
+    cp arc-core/libs/linux64/* natives/natives-desktop/libs/
+    cp -r backends/backend-sdl/build/Arc/backends/backend-sdl/libs/* backends/backend-sdl/libs/
     cp extensions/freetype/build/Arc/extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
     cp extensions/filedialogs/build/Arc/extensions/filedialogs/libs/*/* natives/natives-filedialogs/libs/
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed "$glewlib" \
+      --add-needed "$sdllib"
+    gradle jnigenJarNativesDesktop
     popd
 
     gradle desktop:dist

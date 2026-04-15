@@ -13,7 +13,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10_29_2,
 
   _7zz,
   electron,
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
 
+    pnpm = pnpm_10_29_2;
+
     # let's just be safe and add these explicitly to nativeBuildInputs
     # even though the fetcher already uses them in its implementation
     nativeBuildInputs = [
@@ -76,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pnpmConfigHook
-    pnpm
+    pnpm_10_29_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems

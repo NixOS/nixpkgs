@@ -9,6 +9,7 @@
   glib,
   libsecret,
   webkitgtk_4_1,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
+    imagemagick
   ];
 
   installPhase = ''
@@ -70,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
           ]
         } \
         --run "mkdir -p /tmp/SWT-GDBusServer"
-    install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
+    mkdir -p $out/share/icons/hicolor/48x48/apps
+    magick icon.xpm $out/share/icons/hicolor/48x48/apps/apache-directory-studio.png
     install -D -t "$out/share/applications" ${finalAttrs.desktopItem}/share/applications/*
   '';
 

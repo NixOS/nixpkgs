@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.58-dev_2025-10-06_20-40";
 
   src = fetchurl {
-    url = "http://xmage.today/files/mage-full_${finalAttrs.version}.zip";
+    url = "https://xmage.today/files/mage-full_${finalAttrs.version}.zip";
     sha256 = "sha256-UOtxV+ykDIH+PLjLrC66Rut92IIw2iDHWwvJ2ytmUAs=";
   };
 

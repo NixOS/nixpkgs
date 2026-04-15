@@ -172,6 +172,8 @@ in
 
   go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
 
+  lake = callPackage ../build-support/lake/test { };
+
   pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
@@ -186,6 +188,11 @@ in
   overriding = callPackage ./overriding.nix { };
 
   texlive = recurseIntoAttrs (callPackage ./texlive { });
+
+  # TODO: Temporarily disabled recursion so we can see the performance comparison in the PR,
+  # which only runs if there's exactly the same packages before and after, and this would add packages
+  #problems = recurseIntoAttrs (callPackage ./problems { });
+  problems = callPackage ./problems { };
 
   cuda = callPackage ./cuda { };
 
@@ -227,6 +234,8 @@ in
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
+  auto-patchelf-structured-log = callPackage ./auto-patchelf-structured-log { };
+
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
@@ -257,5 +266,5 @@ in
     callPackages ../build-support/prefer-remote-fetch/tests.nix { }
   );
 
-  home-assistant-component-tests = recurseIntoAttrs pkgs.home-assistant.tests.components;
+  home-assistant-components = recurseIntoAttrs pkgs.home-assistant.tests.components;
 }

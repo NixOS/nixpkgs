@@ -38,7 +38,7 @@ let
 
       Then add this archive to the nix store with
 
-      "nix-prefetch-url file://\$PWD/${name}".
+      "nix-prefetch-url file://$PWD/${name}".
     '';
     sha256 = "0115pxdzdyma2vicxgr0j21pp82gxdyrlj090s8ihp0b50f0nlll";
   };

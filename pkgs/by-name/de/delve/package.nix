@@ -4,17 +4,18 @@
   fetchFromGitHub,
   stdenv,
   nix-update-script,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "delve";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tFd8g866nRSNUVNz+6SM6YLl4ys3AUP3c8eT1kWbjKY=";
+    hash = "sha256-j/uGkAd/4Hpspgcb2J3UOs8iThx2YydUee31Hddl9zw=";
   };
 
   patches = [
@@ -22,6 +23,8 @@ buildGoModule (finalAttrs: {
   ];
 
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/dlv" ];
 
@@ -48,6 +51,11 @@ buildGoModule (finalAttrs: {
     # add symlink for vscode golang extension
     # https://github.com/golang/vscode-go/blob/master/docs/debugging.md#manually-installing-dlv-dap
     ln $out/bin/dlv $out/bin/dlv-dap
+
+    installShellCompletion --cmd dlv \
+      --bash <($out/bin/dlv completion bash) \
+      --fish <($out/bin/dlv completion fish) \
+      --zsh <($out/bin/dlv completion zsh)
   '';
 
   # delve doesn't support --version

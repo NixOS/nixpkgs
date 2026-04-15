@@ -129,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     maintainers = with lib.maintainers; [
-      codyopel
       yarny
     ];
     platforms = lib.platforms.linux;

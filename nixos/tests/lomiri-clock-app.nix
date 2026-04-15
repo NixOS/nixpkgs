@@ -18,6 +18,12 @@
         variables = {
           UITK_ICON_THEME = "suru";
         };
+
+        # App has a somewhat small horizontal max size and a white background, while we configure IceWM to have a black background.
+        # Makes OCR less reliable, often completely fails to find the localised text. Force background to be white instead.
+        etc."icewm/prefoverride".text = ''
+          DesktopBackgroundColor=#FFFFFF
+        '';
       };
 
       i18n.supportedLocales = [ "all" ];

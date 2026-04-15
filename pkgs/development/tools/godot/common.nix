@@ -340,7 +340,7 @@ let
           }
         );
 
-      attrs = finalAttrs: rec {
+      attrs = finalAttrs: {
         pname = "godot${suffix}";
         inherit version;
 
@@ -373,14 +373,22 @@ let
         ++ lib.optional editor "man";
         separateDebugInfo = true;
 
-        # Set the build name which is part of the version. In official downloads, this
-        # is set to 'official'. When not specified explicitly, it is set to
-        # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
-        # etc.) usually set this to their name as well.
-        #
-        # See also 'methods.py' in the Godot repo and 'build' in
-        # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
-        BUILD_NAME = "nixpkgs";
+        env = {
+          # Set the build name which is part of the version. In official downloads, this
+          # is set to 'official'. When not specified explicitly, it is set to
+          # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
+          # etc.) usually set this to their name as well.
+          #
+          # See also 'methods.py' in the Godot repo and 'build' in
+          # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+          BUILD_NAME = "nixpkgs";
+        }
+        // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+          NIX_CFLAGS_COMPILE = toString [
+            "-I${lib.getDev harfbuzz-icu}/include/harfbuzz"
+            "-I${lib.getDev recastnavigation}/include/recastnavigation"
+          ];
+        };
 
         preConfigure = lib.optionalString (editor && withMono) ''
           # TODO: avoid pulling in dependencies of windows-only project
@@ -461,35 +469,28 @@ let
           (allow file-read* (subpath "/System/Library/CoreServices/SystemAppearance.bundle"))
         '';
 
-        patches = [
-          ./Linux-fix-missing-library-with-builtin_glslang-false.patch
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "4.6") [
-          # https://github.com/godotengine/godot/pull/115450
-          (fetchpatch {
-            name = "fix-tls-handshake-fail-preventing-assetlib-use.patch";
-            url = "https://github.com/godotengine/godot/commit/29acd734c71f06268d6ef4715d7df70b14731f48.patch";
-            hash = "sha256-wxkr6jPtutUTG+mYrXoxcDcWIIZghlSJ79XqhFh/0P4=";
-          })
-        ]
-        ++ lib.optionals (lib.versionOlder version "4.4") [
-          (fetchpatch {
-            name = "wayland-header-fix.patch";
-            url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
-            hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
-          })
-          (fetchpatch {
-            name = "thorvg-header-fix.patch";
-            url = "https://github.com/godotengine/godot/commit/1823460787a6c1bb8e4eaf21ac2a3f90d24d5ee0.patch";
-            hash = "sha256-PcHEMXd0v2c3j6Eitxt5uWi6cD+OmsBAn3TNMNRNPog=";
-          })
-          # Fix a crash in the mono test project build. It no longer seems to
-          # happen in 4.4, but an existing fix couldn't be identified.
-          ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
-        ]
-        ++ lib.optional (
-          stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "4.4"
-        ) ./fix-moltenvk-detection.patch;
+        patches =
+          lib.optionals (lib.versionOlder version "4.6") [
+            ./Linux-fix-missing-library-with-builtin_glslang-false.patch
+          ]
+          ++ lib.optionals (lib.versionOlder version "4.4") [
+            (fetchpatch {
+              name = "wayland-header-fix.patch";
+              url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
+              hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
+            })
+            (fetchpatch {
+              name = "thorvg-header-fix.patch";
+              url = "https://github.com/godotengine/godot/commit/1823460787a6c1bb8e4eaf21ac2a3f90d24d5ee0.patch";
+              hash = "sha256-PcHEMXd0v2c3j6Eitxt5uWi6cD+OmsBAn3TNMNRNPog=";
+            })
+            # Fix a crash in the mono test project build. It no longer seems to
+            # happen in 4.4, but an existing fix couldn't be identified.
+            ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
+          ]
+          ++ lib.optional (
+            stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "4.4"
+          ) ./fix-moltenvk-detection.patch;
 
         postPatch = ''
           # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE
@@ -551,13 +552,6 @@ let
           buildPackages.stdenv.cc
           pkg-config
         ];
-
-        env.NIX_CFLAGS_COMPILE = toString (
-          lib.optionals stdenv.hostPlatform.isDarwin [
-            "-I${lib.getDev harfbuzz-icu}/include/harfbuzz"
-            "-I${lib.getDev recastnavigation}/include/recastnavigation"
-          ]
-        );
 
         buildInputs =
           lib.optionals (!withBuiltins) (
@@ -772,8 +766,9 @@ let
             "aarch64-darwin"
           ];
           maintainers = with lib.maintainers; [
-            shiryel
             corngood
+            shiryel
+            superherointj
           ];
           mainProgram = "godot${suffix}";
         };

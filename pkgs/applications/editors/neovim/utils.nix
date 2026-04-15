@@ -6,12 +6,8 @@
   config,
   vimUtils,
   vimPlugins,
-  nodejs,
   neovim-unwrapped,
-  bundlerEnv,
-  ruby,
   lua,
-  python3Packages,
   wrapNeovimUnstable,
 }:
 let
@@ -79,51 +75,49 @@ let
     plugins:
 
     let
-      pluginsNormalized = normalizePlugins plugins;
+      neovimConfig =
+        structuredConfigure:
+        let
+          module = import ./plugin-submodule.nix;
+          # Generate init.vim configuration
+          cfg = (
+            lib.evalModules {
+              modules = [
+                module
+                structuredConfigure
+              ];
+            }
+          );
+        in
+        cfg.config;
+
+      checked_cfg = neovimConfig {
+        inherit plugins;
+        _file = "pkgs/applications/editors/neovim/plugin-submodule.nix";
+      };
+
+      pluginsNormalized = checked_cfg.plugins;
 
       vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
 
-      userPluginViml = lib.foldl (
-        acc: p: if p.config != null then acc ++ [ p.config ] else acc
-      ) [ ] pluginsNormalized;
-
-      pluginAdvisedLua =
-        let
-          op =
-            acc: normalizedPlugin:
-            acc
-            ++ lib.optional (
-              normalizedPlugin.plugin.passthru ? initLua
-            ) normalizedPlugin.plugin.passthru.initLua;
-        in
-        lib.foldl' op [ ] pluginsNormalized;
-
-      getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
-
-      requiredPlugins = vimUtils.requiredPluginsForPackage vimPackage;
-      pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
     in
     {
-      # plugins' python dependencies
-      inherit pluginPython3Packages;
 
       # viml config set by the user along with the plugin
-      inherit userPluginViml;
-
-      # recommended configuration set in vim plugins ".passthru.initLua"
-      inherit pluginAdvisedLua;
+      inherit (checked_cfg)
+        userPluginViml # redefine via userPluginConfigs
+        runtimeDeps
+        pluginAdvisedLua
+        pluginPython3Packages
+        luaDependencies
+        userPluginConfigs
+        ;
 
       # A Vim "package", see ':h packages'
       # You most likely want to use vimPackage as follows:
       #     packpathDirs.myNeovimPackages = vimPackage;
       #     finalPackdir = neovimUtils.packDir packpathDirs;
       inherit vimPackage;
-
-      runtimeDeps =
-        let
-          op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [ ];
-        in
-        lib.foldl' op [ ] pluginsNormalized;
 
     };
 
@@ -149,45 +143,38 @@ let
     let
       luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
     in
-    attrs
-    // {
-      neovimRcContent = customRC;
-      luaRcContent =
-        if attrs ? luaRcContent then
-          lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
-        else
-          customLuaRC;
-      wrapperArgs = lib.optionals (luaEnv != null) [
-        "--prefix"
-        "LUA_PATH"
-        ";"
-        (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
-        "--prefix"
-        "LUA_CPATH"
-        ";"
-        (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
-      ];
-    };
+    lib.warn
+      "neovimUtils.makeNeovimConfig is deprecated. Use wrapNeovim or wrapNeovimUnstable directly."
+      (
+        attrs
+        // {
+          neovimRcContent = customRC;
+          luaRcContent =
+            if attrs ? luaRcContent then
+              lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
+            else
+              customLuaRC;
+          wrapperArgs = lib.optionals (luaEnv != null) [
+            "--prefix"
+            "LUA_PATH"
+            ";"
+            (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+            "--prefix"
+            "LUA_CPATH"
+            ";"
+            (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+          ];
+        }
+      );
 
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper =
     neovim:
     {
       extraMakeWrapperArgs ? "",
-      # the function you would have passed to python.withPackages
-      extraPythonPackages ? (_: [ ]),
-      # the function you would have passed to python.withPackages
-      withPython3 ? true,
-      extraPython3Packages ? (_: [ ]),
-      # the function you would have passed to lua.withPackages
-      extraLuaPackages ? (_: [ ]),
-      withNodeJs ? false,
-      withRuby ? false,
-      vimAlias ? false,
-      viAlias ? false,
       configure ? { },
-      extraName ? "",
-    }:
+      ...
+    }@attrs:
     let
 
       # we convert from the old configure.format to
@@ -208,27 +195,18 @@ let
           optional = true;
         }) opt);
 
-      res = makeNeovimConfig {
-        inherit withPython3;
-        inherit extraPython3Packages;
-        inherit extraLuaPackages;
-        inherit
-          withNodeJs
-          withRuby
-          viAlias
-          vimAlias
-          ;
-        customRC = configure.customRC or "";
-        customLuaRC = configure.customLuaRC or "";
-        inherit plugins;
-        inherit extraName;
-      };
     in
     wrapNeovimUnstable neovim (
-      res
+      attrs
       // {
-        wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-        wrapRc = (configure != { });
+        neovimRcContent = configure.customRC or "";
+        luaRcContent = configure.customLuaRC or "";
+        inherit plugins;
+
+        wrapperArgs = lib.escapeShellArgs (attrs.wrapperArgs or [ ]) + " " + extraMakeWrapperArgs;
+
+        wrapRc = configure != { };
+        legacyWrapper = true;
       }
     );
 
@@ -243,9 +221,9 @@ let
   */
   generateProviderRc =
     {
-      withPython3 ? true,
+      withPython3 ? false,
       withNodeJs ? false,
-      withRuby ? true,
+      withRuby ? false,
       # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
       withPerl ? false,
 

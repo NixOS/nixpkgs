@@ -2,20 +2,45 @@
   lib,
   dbus,
   fetchFromGitHub,
+  nixosTests,
   python3,
+  sphinxHook,
+  withDocs ? true,
+  withMan ? true,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
-  version = "9.0.1";
+  version = "10.1.0";
   pyproject = true;
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals withDocs [ "doc" ]
+  ++ lib.optionals withMan [ "man" ];
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "autosuspend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PVxsdCPGu+bhjfAF5Hu4Xa3lETARitbBUKuy7ursAUE=";
+    hash = "sha256-4mByuJ75hd5TEoKxVglAHlYXZSlbAldMwnIianSw8O4=";
   };
+
+  postPatch = ''
+    # This mapping triggers network access on docs generation
+    substituteInPlace doc/source/conf.py \
+      --replace-fail 'intersphinx_mapping' '# intersphinx_mapping'
+  '';
+
+  nativeBuildInputs = lib.optionals (withDocs || withMan) (
+    [
+      sphinxHook
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.docs
+  );
+
+  sphinxBuilders = lib.optionals withDocs [ "html" ] ++ lib.optionals withMan [ "man" ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -27,14 +52,24 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     jsonpath-ng
     lxml
     mpd2
-    portalocker
     psutil
+    pygobject3
     python-dateutil
     requests
     requests-file
     tzdata
     tzlocal
   ];
+
+  optional-dependencies = {
+    docs = with python3.pkgs; [
+      furo
+      recommonmark
+      sphinx-autodoc-typehints
+      sphinx-issues
+      sphinxcontrib-plantuml
+    ];
+  };
 
   nativeCheckInputs = with python3.pkgs; [
     dbus
@@ -52,6 +87,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "test_smoke"
     "test_multiple_sessions"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) autosuspend;
+  };
 
   meta = {
     description = "Daemon to automatically suspend and wake up a system";

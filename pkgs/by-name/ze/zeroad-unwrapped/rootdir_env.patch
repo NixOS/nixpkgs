@@ -1,10 +1,13 @@
 diff --git a/source/ps/GameSetup/Paths.cpp b/source/ps/GameSetup/Paths.cpp
-index 474364e..bf084b4 100644
+index 4a692713..c393e7d5 100644
 --- a/source/ps/GameSetup/Paths.cpp
 +++ b/source/ps/GameSetup/Paths.cpp
-@@ -155,32 +155,8 @@ Paths::Paths(const CmdLineArgs& args)
+@@ -166,34 +166,9 @@ Paths::Paths(const CmdLineArgs& args)
+ }
  
- /*static*/ OsPath Paths::Root(const OsPath& argv0)
+ 
+-/*static*/ OsPath Paths::Root(const OsPath& argv0)
++/*static*/ OsPath Paths::Root([[maybe_unused]] const OsPath& argv0)
  {
 -#if OS_ANDROID
 -	return OsPath("/sdcard/0ad"); // TODO: this is kind of bogus
@@ -32,8 +35,7 @@ index 474364e..bf084b4 100644
 -	return pathname;
 -
 -#endif
-+        UNUSED2(argv0);
 +        return OsPath(getenv("ZEROAD_ROOTDIR"));
  }
  
- /*static*/ OsPath Paths::RootData(const OsPath& argv0)
+ /*static*/ OsPath Paths::RootData([[maybe_unused]] const OsPath& argv0)

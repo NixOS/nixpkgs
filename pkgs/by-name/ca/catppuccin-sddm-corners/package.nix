@@ -21,11 +21,12 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   dontWrapQtApps = true;
 
-  propagatedUserEnvPkgs = with qt6; [
-    qt5compat
-    qtwayland
-    qtquick3d
-    qtsvg
+  propagatedBuildInputs = with qt6; [
+    # avoid .dev outputs propagation
+    qt5compat.out
+    qtwayland.out
+    qtquick3d.out
+    qtsvg.out
   ];
 
   installPhase = ''

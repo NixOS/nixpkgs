@@ -66,9 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
 
-    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \
-        -Dant.home=\$ANT_HOME -Dant.library.dir="\$ANT_LIB" \
-        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \
+    if [ -n "\$ANT_LIB" ]; then
+        ANT_LIB_ARG="-Dant.library.dir=\$ANT_LIB"
+    fi
+
+    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \\
+        -Dant.home=\$ANT_HOME \''${ANT_LIB_ARG:+"\$ANT_LIB_ARG"} \\
+        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \\
         -cp "\$CLASSPATH" "\$@"
     EOF
 

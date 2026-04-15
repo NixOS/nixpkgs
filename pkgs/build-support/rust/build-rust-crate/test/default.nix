@@ -8,6 +8,7 @@
   runCommandCC,
   stdenv,
   symlinkJoin,
+  testers,
   writeTextFile,
   pkgsCross,
 }:
@@ -91,9 +92,15 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (
+        removeAttrs crateArgs [
+          "expectedTestOutputs"
+          "expectedTestBinaries"
+        ]
+      );
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
+      expectedTestBinaries = crateArgs.expectedTestBinaries or [ ];
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
       isLib = crateArgs ? libName || crateArgs ? libPath;
       crateName = crateArgs.crateName or "nixtestcrate";
@@ -134,6 +141,10 @@ let
           ''
         else if stdenv.hostPlatform == stdenv.buildPlatform then
           ''
+            ${lib.concatMapStringsSep "\n" (
+              b:
+              "test -x ${crate}/tests/${lib.escapeShellArg b} || { echo 'expected test binary \"${b}\" not found in:'; ls ${crate}/tests; exit 23; }"
+            ) expectedTestBinaries}
             for file in ${crate}/tests/*; do
               $file 2>&1 >> $out
             done
@@ -419,10 +430,100 @@ rec {
             ];
           };
           buildTests = true;
+          # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main.
+          expectedTestBinaries = [
+            "foo"
+            "bar"
+          ];
           expectedTestOutputs = [
             "test src_main ... ok"
             "test tests_foo ... ok"
             "test tests_bar ... ok"
+          ];
+        };
+        rustBinTestsFlatMainSuffix = {
+          # A flat-style test whose name happens to end in _main must keep
+          # its suffix — only tests/<dir>/main.rs gets the _main stripped.
+          src = symlinkJoin {
+            name = "rust-bin-tests-flat-main-suffix";
+            paths = [
+              (mkTestFileWithMain "src/main.rs" "src_main")
+              (mkTestFile "tests/foo_main.rs" "flat_test")
+            ];
+          };
+          buildTests = true;
+          expectedTestBinaries = [ "foo_main" ];
+          expectedTestOutputs = [
+            "test src_main ... ok"
+            "test flat_test ... ok"
+          ];
+        };
+        rustBinTestsCargoBinExe = {
+          # Integration tests locate the crate's own binary via
+          # `env!("CARGO_BIN_EXE_<name>")`, which cargo sets automatically.
+          crateName = "my-crate";
+          src = symlinkJoin {
+            name = "rust-bin-tests-cargo-bin-exe";
+            paths = [
+              (mkFile "src/main.rs" ''
+                fn main() { println!("hello from my-crate"); }
+              '')
+              (mkFile "tests/run_bin.rs" ''
+                #[test]
+                fn runs_binary() {
+                    let bin = env!("CARGO_BIN_EXE_my-crate");
+                    let out = std::process::Command::new(bin)
+                        .output()
+                        .expect("spawn");
+                    assert!(out.status.success());
+                    assert_eq!(
+                        String::from_utf8_lossy(&out.stdout).trim(),
+                        "hello from my-crate"
+                    );
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test runs_binary ... ok"
+          ];
+        };
+        rustBinTestsCargoBinExeAutoDetect = {
+          # Verify CARGO_BIN_EXE_<name> is also set for auto-detected
+          # src/bin/*.rs binaries, not just src/main.rs or explicit
+          # crateBin entries.
+          crateName = "multi-bin";
+          src = symlinkJoin {
+            name = "rust-bin-tests-cargo-bin-exe-auto";
+            paths = [
+              (mkFile "src/lib.rs" "")
+              (mkFile "src/bin/tool-a.rs" ''
+                fn main() { println!("tool-a ran"); }
+              '')
+              (mkFile "src/bin/tool-b.rs" ''
+                fn main() { println!("tool-b ran"); }
+              '')
+              (mkFile "tests/run_tools.rs" ''
+                #[test]
+                fn runs_both() {
+                    for (bin, want) in [
+                        (env!("CARGO_BIN_EXE_tool-a"), "tool-a ran"),
+                        (env!("CARGO_BIN_EXE_tool-b"), "tool-b ran"),
+                    ] {
+                        let out = std::process::Command::new(bin)
+                            .output()
+                            .expect("spawn");
+                        assert!(out.status.success());
+                        assert_eq!(String::from_utf8_lossy(&out.stdout).trim(), want);
+                    }
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test runs_both ... ok"
           ];
         };
         linkAgainstRlibCrate = {
@@ -477,6 +578,7 @@ rec {
           crateName = "build-script-feature-env";
           features = [
             "some-feature"
+            "some-c++17-thing"
             "crate/another_feature"
           ];
           src = symlinkJoin {
@@ -488,6 +590,10 @@ rec {
                 fn feature_not_visible() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_err());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_err());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
                 fn main() {}
               '')
@@ -495,6 +601,10 @@ rec {
                 fn main() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_ok());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_ok());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
               '')
             ];
@@ -726,6 +836,26 @@ rec {
             ];
           };
         };
+        # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
+        # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
+        # entries are emitted first so that higher-priority specific lints
+        # can override them. Here `-D unused` (priority -1) is followed by
+        # `-A dead_code` (default priority 0); the build only succeeds if
+        # both flags reach rustc in that order.
+        lintsPriority = {
+          lints.rust = {
+            unused = {
+              level = "deny";
+              priority = -1;
+            };
+            dead_code = "allow";
+          };
+          src = mkFile "src/lib.rs" ''
+            #![allow(nonstandard_style)]
+            fn dead() {}
+            pub fn alive() {}
+          '';
+        };
       };
       brotliCrates = (callPackage ./brotli-crates.nix { });
       rcgenCrates = callPackage ./rcgen-crates.nix {
@@ -892,6 +1022,25 @@ rec {
           ''
             test -e ${pkg}/bin/brotli-decompressor && touch $out
           '';
+
+      # A `deny` lint from the lints table should actually fail the build.
+      lintsDenyFails =
+        let
+          crate = mkHostCrate {
+            crateName = "lintsDenyFails";
+            lints.rust.dead_code = "deny";
+            src = mkFile "src/lib.rs" ''
+              fn dead() {}
+              pub fn alive() {}
+            '';
+          };
+          failed = testers.testBuildFailure crate;
+        in
+        runCommand "assert-lintsDenyFails" { inherit failed; } ''
+          grep -q 'function .dead. is never used' "$failed/testBuildFailure.log"
+          grep -q '\-D dead.code' "$failed/testBuildFailure.log"
+          touch $out
+        '';
 
       rcgenTest =
         let

@@ -211,7 +211,6 @@ sub pciCheck {
         ($device eq "0xfd3e" || $device eq "0x7d1d" || $device eq "0xad1d" ||
          $device eq "0x643e" || $device eq "0xb03e"))
     {
-        push @imports, "(modulesPath + \"/hardware/cpu/intel-npu.nix\")";
         push @attrs, "hardware.cpu.intel.npu.enable = true;";
     }
 

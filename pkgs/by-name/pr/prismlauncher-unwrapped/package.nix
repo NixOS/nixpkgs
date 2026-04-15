@@ -14,6 +14,7 @@
   qrencode,
   stripJavaArchivesHook,
   tomlplusplus,
+  vulkan-headers,
   zlib,
   msaClientID ? null,
 }:
@@ -21,19 +22,19 @@ let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "531449ba1c930c98e0bcf5d332b237a8566f9d78";
-    hash = "sha256-qhmjaRkt+O7A+gu6HjUkl7QzOEb4r8y8vWZMG2R/C6o=";
+    rev = "3538933614059f0f44388a2b16f3db25ce42285b";
+    hash = "sha256-6/8clF2yNhfonV16cfIkxVIzuB9i9ThxoLMxAo/fDuY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "10.0.2";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-Nfo0IaN7kdvaY7ER/BOTfAz2YQL2Jjfiu8vzcKz3n0s=";
+    hash = "sha256-5OMDvGEVbF317gzq8w0LasecrEga1gkmSQ6FwwL7AOc=";
   };
 
   postUnpack = ''
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     qrencode
     tomlplusplus
+    vulkan-headers
     zlib
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux gamemode;

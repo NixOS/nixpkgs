@@ -88,6 +88,24 @@ stdenv.mkDerivation rec {
       --replace-fail \
         "LIBSAM3_MAKE_PARAMS =" \
         "LIBSAM3_MAKE_PARAMS = CC=$CC AR=$AR"
+
+    # openpgpsdk uses 'bool' as a variable name, which became a C23 keyword.
+    # Rename it to avoid compile errors with GCC 14+ which defaults to c23.
+    substituteInPlace openpgpsdk/src/openpgpsdk/packet-print.c \
+      --replace-fail \
+        "static void print_boolean(const char *name, unsigned char bool)" \
+        "static void print_boolean(const char *name, unsigned char bool_val)" \
+      --replace-fail "    if(bool)" "    if(bool_val)"
+    # The C source inconsistently uses 'limited_read (bool,' (with a space) on line 1600
+    substituteInPlace openpgpsdk/src/openpgpsdk/packet-parse.c \
+      --replace-fail "unsigned char bool[1]=" 'unsigned char bool_val[1]=' \
+      --replace-fail "limited_read(bool," "limited_read(bool_val," \
+      --replace-fail "limited_read (bool," "limited_read (bool_val," \
+      --replace-fail "!!bool[0]" "!!bool_val[0]"
+
+    # Update cmake version for supportlibs to fix build with newer cmake
+    substituteInPlace supportlibs/udp-discovery-cpp/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   postInstall = ''

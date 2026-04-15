@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-NbFFHAAvMGpvIryhEbktN5w03Cpay9lEqelqkUT9dpQ=";
+    hash = "sha256-LC0lnYetV7RPVw92zew6za6bDH4zmnERXUM4MVaRVtc=";
   };
 
   strictDeps = true;
@@ -45,11 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x bin/*
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   postInstall = ''
     rm $out/bin/hipify-perl

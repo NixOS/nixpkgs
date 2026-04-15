@@ -29,14 +29,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "zulip-term";
-  version = "0.7.0-unstable-2025-05-19";
+  version = "0.7.0-unstable-2026-02-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-terminal";
-    rev = "8e5c0357c8746df64ac427d5db3d2cb0f002f975";
-    hash = "sha256-DW3GZ1hY/wZ6P/djPUlAvNIFcBV994FLJ3aiPfDVUBM=";
+    rev = "6a799870eccc00d612e25ff881d18f4ff66d92fa";
+    hash = "sha256-saimbccJ5iJITs/Bw97bOkGrVcko1kAl61nlxNwBrms=";
   };
 
   patches = [
@@ -99,6 +99,9 @@ buildPythonApplication rec {
     homepage = "https://github.com/zulip/zulip-terminal";
     changelog = "https://github.com/zulip/zulip-terminal/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      erooke
+    ];
   };
 }

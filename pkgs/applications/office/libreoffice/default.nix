@@ -4,9 +4,11 @@
   fetchurl,
   fetchgit,
   fetchpatch2,
+  fetchFromGitLab,
   lib,
   pam,
   python3,
+  python3Packages,
   libxslt,
   perl,
   perlPackages,
@@ -28,6 +30,8 @@
   flex,
   zip,
   unzip,
+  fast-float,
+  md4c,
   gtk3,
   libmspack,
   getopt,
@@ -35,9 +39,12 @@
   cairo,
   which,
   icu,
+  boost,
+  boost188,
   jdk21,
   ant,
   cups,
+  libixion,
   libxtst,
   libxi,
   libxinerama,
@@ -77,7 +84,8 @@
   clucene-core_2,
   libcdr,
   lcms2,
-  unixODBC,
+  unixodbc,
+  mdds,
   sane-backends,
   mythes,
   libexttextcat,
@@ -107,6 +115,7 @@
   libepubgen,
   libetonyek,
   libpng,
+  liborcus,
   libxcrypt,
   langs ? [
     "ar"
@@ -157,7 +166,7 @@
   liberation-sans-narrow,
   liberation_ttf_v2,
   libertine,
-  libertine-g,
+  linux-libertine-g,
   noto-fonts,
   noto-fonts-lgc-plus,
   noto-fonts-cjk-sans,
@@ -186,15 +195,6 @@ let
     optionalString
     ;
 
-  notoSubset =
-    suffixes:
-    runCommand "noto-fonts-subset" { } ''
-      mkdir -p "$out/share/fonts/noto/"
-      ${concatMapStrings (x: ''
-        cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
-      '') suffixes}
-    '';
-
   fontsConf = makeFontsConf {
     fontDirectories = [
       amiri
@@ -206,10 +206,9 @@ let
       liberation-sans-narrow
       liberation_ttf_v2
       libertine
-      libertine-g
-      # Font priority issues in some tests in Still
+      linux-libertine-g
       noto-fonts-lgc-plus
-      (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))
+      noto-fonts
       noto-fonts-cjk-sans
     ];
   };
@@ -220,6 +219,90 @@ let
       "java.desktop"
       "java.logging"
       "java.sql"
+    ];
+  };
+
+  mdds_2_1 = mdds.overrideAttrs {
+    version = "2.1.1";
+    src = fetchFromGitLab {
+      owner = "mdds";
+      repo = "mdds";
+      rev = "2.1.1";
+      hash = "sha256-a412LpgDiYM8TMToaUrTlHtblYS1HehzrDOwvIAAxiA=";
+    };
+  };
+
+  # required for libreoffice-collabora version 25.04.9-4
+  libixion_0_19 = libixion.overrideAttrs {
+    version = "0.19.0";
+
+    src = fetchFromGitLab {
+      owner = "ixion";
+      repo = "ixion";
+      rev = "0.19.0";
+      hash = "sha256-BrexWRaxrLTWuoU62kqws3tlSqVOHecSV5MXc4ZezFs=";
+    };
+
+    buildInputs = [
+      boost188
+      mdds_2_1
+      python3
+    ];
+
+    patches = [
+      # fix build with gcc 15, Add a missing <cstdint> include
+      (fetchpatch2 {
+        url = "https://gitlab.com/ixion/ixion/-/merge_requests/70.patch";
+        hash = "sha256-FzU/aejcMktrDQql5pzobiq6BJXryIXQXZTBWCkyqtU=";
+      })
+    ];
+  };
+
+  # required for libreoffice-collabora version 25.04.9-4
+  liborcus_0_19 = liborcus.overrideAttrs {
+    version = "0.19.2";
+
+    src = fetchFromGitLab {
+      owner = "orcus";
+      repo = "orcus";
+      rev = "0.19.2";
+      hash = "sha256-+9C52H99c/kL5DEIoXV+WcLnTftRbicRLQN/FdIXBw8=";
+    };
+
+    buildInputs = [
+      boost188
+      libixion_0_19
+      mdds_2_1
+      python3
+      zlib
+    ];
+
+    patches = [
+      # fix build with gcc 15, Add missing <cstdint> includes
+      (fetchpatch2 {
+        url = "https://gitlab.com/orcus/orcus/-/merge_requests/200.patch";
+        hash = "sha256-CZVw1+ri6UO56Bg/Y27W6G8JkGU6xDInd7fABr6i+7g=";
+      })
+    ];
+  };
+
+  # required for libreoffice-still version 25.8.5.2
+  liborcus_0_20 = liborcus.overrideAttrs {
+    version = "0.20.1";
+
+    src = fetchFromGitLab {
+      owner = "orcus";
+      repo = "orcus";
+      rev = "0.20.1";
+      hash = "sha256-+YTK0EPgGHN4yKurJjuWWrAHzgtbc1dOvtppcvuRei4=";
+    };
+
+    buildInputs = [
+      boost188
+      libixion
+      mdds
+      python3
+      zlib
     ];
   };
 
@@ -314,47 +397,25 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
-
+  ]
+  ++ lib.optionals (variant != "collabora") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
   ]
-  ++ lib.optionals (lib.versionOlder version "25.8.2.1") [
+  ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.09
     (fetchpatch2 {
       url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
       includes = [ "sdext/*" ];
       hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
     })
+
     # Fix build with Poppler 25.10
     (fetchpatch2 {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
       hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
     })
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "25.8.2.2") [
-    # Fix build with Poppler 25.10
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/f7b0e4385108b95c134599502a7bccf0a41925c8/poppler-25.10.patch";
-      hash = "sha256-KMsjDtRRH8Vy/FXaVwxUo0Ww10PCE0sK8+ZL0Ja2kJQ=";
-    })
-  ]
-  ++ lib.optionals (variant == "collabora") [
-    # Backport patch to fix build with Poppler 25.05
-    (fetchpatch2 {
-      url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
-      includes = [ "sdext/*" ];
-      hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
-    })
-    # Currently included in the condition above
-    # Uncomment if Collabora is again the only version needing it
-    # Remove if Collabora is updated far enough not to need it anymore
-    ## Fix build with Poppler 25.10
-    #(fetchpatch2 {
-    #  url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
-    #  hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
-    #})
-  ]
-  ++ lib.optionals (variant == "collabora") [
+
     ./fix-unpack-collabora.patch
   ];
 
@@ -401,6 +462,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJava [
     ant
     jdk21
+  ]
+  ++ optionals (lib.versionAtLeast version "26.2.1.2") [
+    python3Packages.afdko
   ];
 
   buildInputs =
@@ -414,6 +478,7 @@ stdenv.mkDerivation (finalAttrs: {
       coinmp
       abseil-cpp
       bluez5
+      boost
       box2d_2
       cairo
       clucene-core_2
@@ -479,6 +544,7 @@ stdenv.mkDerivation (finalAttrs: {
       libzmf
       libwebp
       lp_solve
+      mdds
       mythes
       ncurses
       neon
@@ -491,7 +557,7 @@ stdenv.mkDerivation (finalAttrs: {
       libpq
       python3
       sane-backends
-      unixODBC
+      unixodbc
       util-linux
       which
       xmlsec
@@ -505,6 +571,20 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals withJava [
       jre'
+    ]
+    ++ optionals (variant == "collabora") [
+      fast-float
+      liborcus_0_19
+      mdds_2_1
+      md4c
+    ]
+    ++ optionals (variant == "still") [
+      liborcus_0_20
+    ]
+    ++ optionals (variant == "fresh") [
+      fast-float
+      liborcus
+      md4c
     ];
 
   preConfigure = ''
@@ -547,6 +627,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-buildconfig-recorded"
 
     (lib.withFeature withHelp "help")
+    "--with-boost=${getDev boost}"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-vendor=NixOS"
     "--disable-report-builder"
     "--disable-online-update"
@@ -573,8 +655,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withFonts "fonts")
     "--without-doxygen"
 
+    "--with-system-afdko"
     "--with-system-cairo"
     "--with-system-coinmp"
+    "--with-system-fast-float"
     "--with-system-headers"
     "--with-system-libabw"
     "--with-system-libcmis"
@@ -584,6 +668,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-libs"
     "--with-system-libwps"
     "--with-system-lpsolve"
+    "--with-system-mdds"
     "--with-system-openldap"
     "--with-system-openssl"
     "--with-system-orcus"
@@ -603,12 +688,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-dragonbox"
     "--without-system-libfixmath"
 
-    # TODO: bump this to 0.20
-    "--without-system-orcus"
-
-    # TODO: bump this to 3.0 (#382851)
-    "--without-system-mdds"
-
     # requires an oddly specific, old version
     "--without-system-hsqldb"
 
@@ -617,9 +696,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # is packaged but headers can't be found because there is no pkg-config file
     "--without-system-zxcvbn"
-
-    # cannot find headers, no idea why
-    "--without-system-boost"
 
     "--without-system-java-websocket"
   ]
@@ -716,7 +792,7 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
       gst-plugins-ugly
-      gstreamer
+      gstreamer.out
     ];
     qmlPackages = [
       kdePackages.ki18n

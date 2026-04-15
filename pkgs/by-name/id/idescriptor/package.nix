@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
   copyDesktopItems,
   makeDesktopItem,
   cmake,
@@ -27,13 +28,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "idescriptor";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "iDescriptor";
     repo = "iDescriptor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pj/8PCZUTPu28MQd3zL8ceDsQy4+55348ZOCpiQaiEo=";
+    hash = "sha256-tBTAJqXDqWAqrxQlEEi2kDcVqrB6WrBquxvKV2dkpQ4=";
     fetchSubmodules = true;
   };
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "ipatool-go";
       inherit (finalAttrs) version src;
       modRoot = "lib/ipatool-go";
-      vendorHash = "sha256-4ZCNgLAcZtEd7zDbIu3kyP/Cyp6TaBM9gyZEohgzCk8=";
+      vendorHash = "sha256-SGdyyZU8Ze/1lJS4tKbHyfCv2yYleGcqoyA9Uzb8r/k=";
       proxyVendor = true;
       doCheck = false;
       env.GOWORK = "off";
@@ -114,6 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     })
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    goModules = finalAttrs.ipatool-go-modules;
+  };
 
   meta = {
     homepage = "https://github.com/iDescriptor/iDescriptor";

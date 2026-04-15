@@ -43,7 +43,6 @@ stdenv.mkDerivation {
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [
-      dezgeg
       tkerber
     ];
   };

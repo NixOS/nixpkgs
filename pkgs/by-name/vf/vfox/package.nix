@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vfox";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "version-fox";
     repo = "vfox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pPsHR4kO4/b0VDz7y+iMwalJibjAzu6A2QwkBMTys7E=";
+    hash = "sha256-wpMxqt9m2Bh4oYSVmxG8AYZx3kzwmjBZC54UlBKWZz4=";
   };
 
   vendorHash = "sha256-494nqL6KiUk4VeKlG9YHFpgACgaYC3SR1I1EViD71Jw=";

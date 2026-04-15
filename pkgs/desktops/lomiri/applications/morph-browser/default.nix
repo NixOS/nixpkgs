@@ -15,42 +15,44 @@
   lomiri-ui-toolkit,
   mesa,
   pkg-config,
-  qqc2-suru-style,
+  qqc2-suru-style ? null,
+  qt5compat ? null,
   qtbase,
   qtdeclarative,
-  qtquickcontrols2,
-  qtsystems,
+  qtquickcontrols2 ? null,
+  qtsystems ? null,
   qttools,
   qtwebengine,
   wrapQtAppsHook,
   xvfb-run,
+  withDocumentation ? true,
 }:
 
 let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
   listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.99.2";
+  version = "1.99.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-pi9tot6F9Kfpv4AN2kDnkVZRo310w/iEWJ5f7aJl1iE=";
+    hash = "sha256-zSpgcOiudt1UIsW5tRGA5AmguJn2q4+XR/G8UCqxePk=";
   };
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
   postPatch = ''
     substituteInPlace src/Morph/CMakeLists.txt \
       --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt''${QT_VERSION_MAJOR}/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    substituteInPlace src/Ubuntu/CMakeLists.txt \
-      --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
       --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
@@ -59,20 +61,21 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail 'COMMAND ''${QDOC_BIN} -qt5' 'COMMAND ''${QDOC_BIN}'
   ''
-  # Being worked on upstream and temporarily disabled, but they still mostly work fine right now
-  + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+  + lib.optionalString (!withDocumentation) ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail '#add_subdirectory(tests)' 'add_subdirectory(tests)'
+      --replace-fail 'add_subdirectory(doc)' 'message(WARNING "[Nix] Not building documentation")'
   '';
 
-  strictDeps = true;
+  strictDeps = !withQt6;
 
   nativeBuildInputs = [
     cmake
     gettext
     pkg-config
-    qttools # qdoc
     wrapQtAppsHook
+  ]
+  ++ lib.optionals withDocumentation [
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -87,9 +90,20 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-content-hub
     lomiri-ui-extras
     lomiri-ui-toolkit
+  ]
+  ++ lib.optionals (!withQt6) [
+    # Not ported to Qt6 yet, explicitly disabled in the Qt6 build
+    # https://gitlab.com/ubports/development/core/morph-browser/-/blob/4f20c943e78694818d1b80b5563bd89901230e75/src/app/browserapplication.cpp#L196
     qqc2-suru-style
+
+    # Folded into qtdeclarative in Qt6
     qtquickcontrols2
+
+    # Will prolly want this in the future, but needs porting to Qt6
     qtsystems
+  ]
+  ++ lib.optionals withQt6 [
+    qt5compat
   ];
 
   nativeCheckInputs = [
@@ -100,18 +114,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CLICK_MODE" false)
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
-    (lib.cmakeBool "WERROR" true)
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "WERROR" (!withQt6)) # Porting WIP
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # Hard dependency on Qt5 still
+    && (!withQt6);
 
   disabledTests = [
     # Don't care about linter failures
     "flake8"
-
-    # Temporarily broken while upstream is working on porting to Qt6
-    "tst_QmlTests"
 
     # Flaky
     "tst_HistoryModelTests"
@@ -126,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
           lomiri-ui-toolkit
           qtwebengine
           qtdeclarative
+        ]
+        ++ lib.optionals (!withQt6) [
           qtquickcontrols2
           qtsystems
         ]
@@ -139,24 +155,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/share/{morph-browser,icons/hicolor/scalable/apps}/morph-browser.svg
     ln -s $out/share/{morph-browser/morph-browser-splash.svg,lomiri-app-launch/splash/morph-browser.svg}
-  ''
-  # This got broken when QML files got duplicated & split into Qt version-specific subdirs in source tree
-  # Symlinks get installed as-is, and they currently point relatively to the versioned subdirs
-  + ''
-    for link in $(find $out/${qtbase.qtQmlPrefix}/Ubuntu -type l); do
-      ln -vfs "$(readlink "$link" | sed -e 's|/qml-qt5||g')" "$link"
-    done
-  ''
-  # Link target for this one just doesn't get installed ever it seems, yeet it
-  + ''
-    rm -v $out/${qtbase.qtQmlPrefix}/Ubuntu/Web/handle@27.png
   '';
 
   passthru = {
     updateScript = gitUpdater { };
+  }
+  // lib.optionalAttrs withQt6 {
     tests = {
       # Test of morph-browser itself
-      standalone = nixosTests.morph-browser;
+      standalone = if withQt6 then nixosTests.morph-browser.qt6 else nixosTests.morph-browser.qt5;
 
       # Interactions between the Lomiri ecosystem and this browser
       inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;

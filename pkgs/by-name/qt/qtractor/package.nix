@@ -7,7 +7,7 @@
   fetchurl,
   flac,
   libjack2,
-  ladspaH,
+  ladspa-header,
   ladspaPlugins,
   liblo,
   libmad,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     dssi
     flac
     libjack2
-    ladspaH
+    ladspa-header
     ladspaPlugins
     liblo
     libmad

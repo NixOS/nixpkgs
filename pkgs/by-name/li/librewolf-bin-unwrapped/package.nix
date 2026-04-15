@@ -36,7 +36,7 @@ let
 
   pname = "librewolf-bin-unwrapped";
 
-  version = "147.0.3-2";
+  version = "149.0-1";
 in
 
 stdenv.mkDerivation {
@@ -46,8 +46,8 @@ stdenv.mkDerivation {
     url = "https://codeberg.org/api/packages/librewolf/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
     hash =
       {
-        x86_64-linux = "sha256-BBrZUlbA569mktjDMayR4Nb05ilhbsANKZ6yY2jZZ34=";
-        aarch64-linux = "sha256-m4EkgutlR3QgEDVgtKmYkVvj7jzaZjl0cn2X4UJ6GJg=";
+        x86_64-linux = "sha256-pW10vDNZMFmNx43yI3dsSO0FNQFS16NVBu2X9NAa+Uo=";
+        aarch64-linux = "sha256-2mOleX25KcNG8+2jSgXI2rTDvZ6jVwgVYOooIOHqqJE=";
       }
       .${stdenv.hostPlatform.system} or throwSystem;
   };

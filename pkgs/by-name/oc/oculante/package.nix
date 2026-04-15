@@ -21,7 +21,7 @@
   wrapGAppsHook3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oculante";
   version = "0.9.2.1-unstable-2025-10-08";
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Bn2HxmFiqOeb3oUnUL/K0SahcFWRlY9RrbGU4orQz+Y=";
 
-  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
 
   patchFlags = [
     "-p1"
-    "--directory=../${pname}-${version}-vendor"
+    "--directory=../${finalAttrs.pname}-${finalAttrs.version}-vendor/source-registry-0"
   ];
 
   postInstall = ''
@@ -98,11 +98,11 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
-    changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/woelper/oculante/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "oculante";
     maintainers = with lib.maintainers; [
       dit7ya
     ];
   };
-}
+})

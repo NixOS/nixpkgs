@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
+
+    # This missing include broke the build on GCC 15
+    # This can be removed once we switch to a newer version
+    ./include_cstdint.patch
   ];
 
   postPatch = ''

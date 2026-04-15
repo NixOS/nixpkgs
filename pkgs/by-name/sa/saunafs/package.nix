@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   cmake,
-  asciidoc,
+  asciidoctor,
   pkg-config,
   db,
   curl,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "5.3.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pT12m50q6unqx9IzRHRs8WE7ygVJW8bi0IKUHu8bGCs=";
+    hash = "sha256-XXv+gCjRoMrufpRKDGmwuZUTAVioZXb7mTEKlZ2SuAk=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    asciidoc
+    asciidoctor
     pkg-config
   ];
   buildInputs = [

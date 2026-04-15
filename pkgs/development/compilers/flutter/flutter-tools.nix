@@ -1,86 +1,74 @@
 {
-  lib,
-  stdenv,
-  systemPlatform,
   buildDartApplication,
-  runCommand,
-  writeTextFile,
-  git,
-  which,
   dart,
-  version,
-  flutterSrc,
-  patches ? [ ],
+  flutterSource,
+  lib,
+  patches,
   pubspecLock,
-  engineVersion,
+  runCommand,
+  stdenv,
+  version,
+  which,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  # https://github.com/flutter/flutter/blob/17c92b7ba68ea609f4eb3405211d019c9dbc4d27/engine/src/flutter/tools/engine_tool/test/commands/stamp_command_test.dart#L125
-  engine_stamp = writeTextFile {
-    name = "engine_stamp";
-    text = builtins.toJSON {
-      build_date = "2025-06-27T12:30:00.000Z";
-      build_time_ms = 1751027400000;
-      git_revision = engineVersion;
-      git_revision_date = "2025-06-27T17:11:53-07:00";
-      content_hash = "1111111111111111111111111111111111111111";
-    };
+  dartEntryPoints = {
+    "flutter_tools.snapshot" = "bin/flutter_tools.dart";
   };
-
-  dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
 in
-buildDartApplication.override { inherit dart; } {
+buildDartApplication.override { inherit dart; } (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
   pname = "flutter-tools";
-  inherit version dartEntryPoints;
+  inherit
+    version
+    patches
+    pubspecLock
+    dartEntryPoints
+    ;
+
+  src = flutterSource;
+
+  sourceRoot = "${finalAttrs.src.name}/packages/flutter_tools";
+
   dartOutputType = "jit-snapshot";
 
-  src = flutterSrc;
-  sourceRoot = "${flutterSrc.name}/packages/flutter_tools";
+  dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${stdenv.hostPlatform.system}" ];
 
-  inherit patches;
   # The given patches are made for the entire SDK source tree.
   prePatch = ''
     chmod --recursive u+w "../.."
     pushd "../.."
   '';
+
   postPatch = ''
+    echo -n "${version}" > version
     popd
   ''
-  # Use arm64 instead of arm64e.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace lib/src/ios/xcodeproj.dart \
-      --replace-fail arm64e arm64
-  ''
-  # need network
-  + lib.optionalString (lib.versionAtLeast version "3.35.0") ''
-    cp ${engine_stamp} ../../bin/cache/engine_stamp.json
-    substituteInPlace lib/src/flutter_cache.dart \
-      --replace-fail "registerArtifact(FlutterEngineStamp(this, logger));" ""
+      --replace-fail "arm64e" "arm64"
   '';
 
   # When the JIT snapshot is being built, the application needs to run.
   # It attempts to generate configuration files, and relies on a few external
   # tools.
   nativeBuildInputs = [
-    git
     which
+    writableTmpDirAsHomeHook
   ];
-  preConfigure = ''
-    export HOME=.
-    export FLUTTER_ROOT="$(realpath ../../)"
-    mkdir --parents "$FLUTTER_ROOT/bin/cache"
-    ln --symbolic '${dart}' "$FLUTTER_ROOT/bin/cache/dart-sdk"
-  '';
 
-  dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${systemPlatform}" ];
+  preConfigure = ''
+    export FLUTTER_ROOT=$(realpath ../../)
+    mkdir --parents "$FLUTTER_ROOT/bin/cache"
+    ln --symbolic "${dart}" "$FLUTTER_ROOT/bin/cache/dart-sdk"
+  '';
 
   # The Dart wrapper launchers are useless for the Flutter tool - it is designed
   # to be launched from a snapshot by the SDK.
   postInstall = ''
-    pushd "$out"
-    rm ${builtins.concatStringsSep " " (builtins.attrNames dartEntryPoints)}
-    popd
+    rm "$out"/${builtins.concatStringsSep " " (builtins.attrNames dartEntryPoints)}
   '';
 
   sdkSourceBuilders = {
@@ -90,7 +78,7 @@ buildDartApplication.override { inherit dart; } {
       runCommand "dart-sdk-${name}" { passthru.packageRoot = "."; } ''
         for path in '${dart}/pkg/${name}'; do
           if [ -d "$path" ]; then
-            ln -s "$path" "$out"
+            ln --symbolic "$path" "$out"
             break
           fi
         done
@@ -101,6 +89,4 @@ buildDartApplication.override { inherit dart; } {
         fi
       '';
   };
-
-  inherit pubspecLock;
-}
+})

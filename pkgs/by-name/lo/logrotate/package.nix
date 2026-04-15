@@ -57,7 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Rotates and compresses system logs";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.tobim ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "logrotate";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "logrotate_project" finalAttrs.version;
   };
 })

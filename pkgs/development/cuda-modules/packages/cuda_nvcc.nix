@@ -189,6 +189,42 @@ buildRedist (finalAttrs: {
           --replace-fail \
             "rsqrtf(float x);" \
             "rsqrtf(float x) noexcept (true);"
+
+        # math_functions.hpp has the same functions wrapped in __func__() macros.
+        # These also need throw() annotations to match glibc 2.42's declarations.
+        nixLog "Patching math_functions.hpp signatures to match glibc's ones"
+        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.hpp" \
+          --replace-fail \
+            "__func__(double rsqrt(const double a))" \
+            "__func__(double rsqrt(const double a) throw())" \
+          --replace-fail \
+            "__func__(double sinpi(double a))" \
+            "__func__(double sinpi(double a) throw())" \
+          --replace-fail \
+            "__func__(double cospi(double a))" \
+            "__func__(double cospi(double a) throw())" \
+          --replace-fail \
+            "__func__(float rsqrtf(const float a))" \
+            "__func__(float rsqrtf(const float a) throw())" \
+          --replace-fail \
+            "__func__(float sinpif(const float a))" \
+            "__func__(float sinpif(const float a) throw())" \
+          --replace-fail \
+            "__func__(float cospif(const float a))" \
+            "__func__(float cospif(const float a) throw())"
+      ''
+      # Fix clang CUDA compilation: host_defines.h redefines __noinline__ as
+      # __attribute__((noinline)), which conflicts with libstdc++ >=12 using
+      # __attribute__((__noinline__)) — the macro expands to
+      # __attribute__((__attribute__((noinline)))) which is invalid.
+      # Clang natively understands __noinline__ as an attribute so the macro
+      # is unnecessary. Skip it when clang is the compiler.
+      + lib.optionalString (cudaOlder "13.0") ''
+        nixLog "Patching host_defines.h to skip __noinline__ macro under clang"
+        substituteInPlace "''${!outputInclude:?}/include/crt/host_defines.h" \
+          --replace-fail \
+            '#if defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)' \
+            '#if (defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)) && !defined(__clang__)'
       ''
     );
 

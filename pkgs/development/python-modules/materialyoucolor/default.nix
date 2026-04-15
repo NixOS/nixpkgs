@@ -1,31 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchurl,
-  fetchPypi,
+  fetchFromGitHub,
+
   setuptools,
   pybind11,
-  requests,
-  rich,
+
   pillow,
+
+  psutil,
+  rich,
 }:
 
-let
-  test-image = fetchurl {
-    name = "test-image.jpg";
-    url = "https://unsplash.com/photos/u9tAl8WR3DI/download";
-    hash = "sha256-shGNdgOOydgGBtl/JCbTJ0AYgl+2xWvCgHBL+bEoTaE=";
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "materialyoucolor";
-  version = "2.0.10";
+  version = "3.0.2";
   pyproject = true;
 
-  # PyPI sources contain additional vendored sources
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-MbTUB7mk/UtUswVZsNAxP21tofnRm3VUbtZdpSZx6nY=";
+  src = fetchFromGitHub {
+    owner = "T-Dynamos";
+    repo = "materialyoucolor-python";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CCpYrNp79gdnj5TYcQ7fEiLsFW/kbuZ+3/cHZF4Bv/s=";
   };
 
   build-system = [
@@ -33,15 +29,23 @@ buildPythonPackage (finalAttrs: {
     pybind11
   ];
 
-  nativeCheckInputs = [
-    requests
-    rich
+  dependencies = [
     pillow
+  ];
+
+  nativeCheckInputs = [
+    psutil
+    rich
   ];
 
   checkPhase = ''
     runHook preCheck
-    python tests/test_all.py ${test-image} 1
+
+    # test script taken from .github/workflows/cibuildwheel.yml
+    python -c "from PIL import Image; Image.new('RGB', (128, 128), (70, 120, 180)).save('test_image.jpg')"
+    python tests/test_all.py --image test_image.jpg --quality 1 --method pillow --tonal-spot
+    python tests/test_all.py --image test_image.jpg --quality 1 --method cpp --tonal-spot
+
     runHook postCheck
   '';
 

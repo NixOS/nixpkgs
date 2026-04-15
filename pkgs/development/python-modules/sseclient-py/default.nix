@@ -2,32 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sseclient-py";
-  version = "1.8.0";
-  format = "setuptools";
+  version = "1.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpetazzoni";
     repo = "sseclient";
-    rev = "sseclient-py-${version}";
-    hash = "sha256-rNiJqR7/e+Rhi6kVBY8gZJZczqSUsyszotXkb4OKfWk=";
+    tag = "sseclient-py-${finalAttrs.version}";
+    hash = "sha256-AIldZFElGgSbw38aZWCWI1N35MiE+b9D1s/XhD7aIvo=";
   };
+
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sseclient" ];
 
-  enabledTestPaths = [ "tests/unittests.py" ];
-
   meta = {
     description = "Pure-Python Server Side Events (SSE) client";
     homepage = "https://github.com/mpetazzoni/sseclient";
-    changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${version}";
+    changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

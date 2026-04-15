@@ -82,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
     ];
     maintainers = with lib.maintainers; [
-      lovek323
       eleanor
     ];
     platforms = lib.platforms.all;

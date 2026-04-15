@@ -7,7 +7,7 @@
   zip,
   gettext,
   perl,
-  wxGTK32,
+  wxwidgets_3_2,
   libxext,
   libxi,
   libxt,
@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     perl
     pkg-config
-    wxGTK32
+    wxwidgets_3_2
     zip
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     curl
     qrencode
     openssl
@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://pwsafe.org/";
     maintainers = with lib.maintainers; [
-      c0bw3b
       pjones
     ];
     platforms = lib.platforms.unix;

@@ -11,7 +11,7 @@
   gsl,
   intltool,
   kdePackages,
-  ladspaH,
+  ladspa-header,
   libbs2b,
   libebur128,
   libmysofa,
@@ -35,7 +35,7 @@
   webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
-  wrapGAppsNoGuiHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -59,16 +59,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.1.2";
+  version = "8.1.8";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tz14pjI5pNJOQH0KFaf9mJkFdup1GVxlkMnzVQusx/M=";
+    hash = "sha256-U0+OGxej5my2KpqzRTiHrB80arkWT1mxHOSxOCDsnb0=";
   };
-
-  patches = [ ./qmlmodule-fix.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     ninja
     pkg-config
-    wrapGAppsNoGuiHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -95,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     kiconthemes
     kirigami
     kirigami-addons
-    ladspaH
+    ladspa-header
     qqc2-desktop-style
     libbs2b
     libebur128

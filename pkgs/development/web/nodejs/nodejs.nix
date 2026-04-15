@@ -58,7 +58,6 @@
 }:
 
 {
-  enableNpm ? true,
   version,
   sha256,
   patches ? [ ],
@@ -69,7 +68,7 @@ let
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
 
-  pname = if enableNpm then "nodejs" else "nodejs-slim";
+  pname = "nodejs-slim";
 
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   emulator = stdenv.hostPlatform.emulator buildPackages;
@@ -179,6 +178,8 @@ let
     builtins.attrNames sharedLibDeps
   );
 
+  bundlesCorepack = !lib.versionAtLeast version "25.0.0";
+
   # Currently stdenv sets CC/LD/AR/etc environment variables to program names
   # instead of absolute paths. If we add cctools to nativeBuildInputs, that
   # would shadow stdenv’s bintools and potentially break other parts of the
@@ -279,7 +280,9 @@ let
       outputs = [
         "out"
         "libv8"
+        "npm"
       ]
+      ++ lib.optional bundlesCorepack "corepack"
       ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "dev" ];
       setOutputFlags = false;
       moveToDev = false;
@@ -304,7 +307,6 @@ let
         "--emulator=${emulator}"
       ]
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
-      ++ lib.optionals (!enableNpm) [ "--without-npm" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
@@ -347,22 +349,24 @@ let
 
       passthru.interpreterName = "nodejs";
 
-      passthru.pkgs = callPackage ../../node-packages/default.nix {
-        nodejs = self;
-      };
-
       setupHook = ./setup-hook.sh;
 
       pos = builtins.unsafeGetAttrPos "version" args;
 
       inherit patches;
 
-      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      postPatch = ''
+        substituteInPlace tools/install.py \
+          --replace-fail '  corepack_files(options, action)' "  oip=options.install_path;options.install_path='$corepack';corepack_files(options, action);options.install_path=oip" \
+          --replace-fail '  npm_files(options, action)' "  oip=options.install_path;options.install_path='$npm';npm_files(options, action);options.install_path=oip"
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         substituteInPlace test/parallel/test-macos-app-sandbox.js \
           --subst-var-by codesign '${darwin.sigtool}/bin/codesign'
       '';
 
       __darwinAllowLocalNetworking = true; # for tests
+      __structuredAttrs = true; # for outputChecks
 
       doCheck = canExecute;
 
@@ -453,10 +457,6 @@ let
             ++ lib.optionals (!lib.versionAtLeast version "22") [
               "test-tls-multi-key"
             ]
-            ++ lib.optionals useSharedAdaAndSimd [
-              # Different versions of Ada affect the WPT tests
-              "test-url"
-            ]
             ++ lib.optionals stdenv.hostPlatform.is32bit [
               # utime (actually utimensat) fails with EINVAL on 2038 timestamp
               "test-fs-utimes-y2K38"
@@ -503,6 +503,35 @@ let
         }"
       ];
 
+      outputChecks = {
+        out = {
+          disallowedReferences = [
+            "libv8"
+            "npm"
+          ]
+          ++ lib.optional bundlesCorepack "corepack";
+        };
+        corepack = {
+          disallowedReferences = [
+            "libv8"
+            "npm"
+          ];
+        };
+        libv8 = {
+          disallowedReferences = [
+            "out"
+            "npm"
+          ]
+          ++ lib.optional bundlesCorepack "corepack";
+        };
+        npm = {
+          disallowedReferences = [
+            "libv8"
+          ]
+          ++ lib.optional bundlesCorepack "corepack";
+        };
+      };
+
       sandboxProfile = ''
         (allow file-read*
           (literal "/Library/Keychains/System.keychain")
@@ -540,24 +569,14 @@ let
         ''
         + ''
 
-          HOST_PATH=$out/bin patchShebangs --host $out
-
           ${lib.optionalString canExecute ''
             $out/bin/node --completion-bash > node.bash
             installShellCompletion node.bash
           ''}
 
-          ${lib.optionalString enableNpm ''
-            mkdir -p $out/share/bash-completion/completions
-            ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
-              $out/share/bash-completion/completions/npm
-            for dir in "$out/lib/node_modules/npm/man/"*; do
-              mkdir -p $out/share/man/$(basename "$dir")
-              for page in "$dir"/*; do
-                ln -rs $page $out/share/man/$(basename "$dir")
-              done
-            done
-          ''}
+          mkdir -p $npm/share/bash-completion/completions
+          ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
+            $npm/share/bash-completion/completions/npm
 
           # install the missing headers for node-gyp
           # TODO: use propagatedBuildInputs instead of copying headers.
@@ -595,6 +614,17 @@ let
         + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
           cp -r $out/include $dev/include
         '';
+
+      postFixup = ''
+        HOST_PATH=$out/bin patchShebangs --host $out ${lib.optionalString bundlesCorepack "$corepack"} $npm
+
+        for dir in "$npm/lib/node_modules/npm/man/"*; do
+          mkdir -p $npm/share/man/$(basename "$dir")
+          for page in "$dir"/*; do
+            ln -rs $page $npm/share/man/$(basename "$dir")
+          done
+        done
+      '';
 
       passthru.tests = {
         version = testers.testVersion {

@@ -14,6 +14,7 @@ in
   name = "systemd-initrd-luks-unl0kr";
   meta = {
     maintainers = [ ];
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
   };
 
   # TODO: Fix OCR: #302965
@@ -74,14 +75,20 @@ in
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
         virtualisation.fileSystems."/".autoFormat = true;
         # test mounting device unlocked in initrd after switching root
-        virtualisation.fileSystems."/cryptroot2".device = "/dev/mapper/cryptroot2";
+        virtualisation.fileSystems."/cryptroot2" = {
+          device = "/dev/mapper/cryptroot2";
+          fsType = "auto";
+        };
       };
     };
 
   testScript = ''
-    # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
+
     machine.succeed("echo -n ${passphrase} | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
+    machine.succeed("echo -n ${passphrase} | cryptsetup luksOpen   -q               /dev/vdb cryptroot")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
+
     machine.succeed("echo -n ${passphrase} | cryptsetup luksFormat -q --iter-time=1 /dev/vdc -")
     machine.succeed("echo -n ${passphrase} | cryptsetup luksOpen   -q               /dev/vdc cryptroot2")
     machine.succeed("mkfs.ext4 /dev/mapper/cryptroot2")

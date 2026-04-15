@@ -103,7 +103,12 @@ in
   chroot = makeTest {
     name = "systemd-binfmt-chroot";
     nodes.machine =
-      { pkgs, lib, ... }:
+      {
+        pkgs,
+        lib,
+        config,
+        ...
+      }:
       {
         boot.binfmt.emulatedSystems = [
           "aarch64-linux"
@@ -120,6 +125,13 @@ in
             chroot /tmp/chroot /busybox uname -m | grep aarch64
             echo 42 | chroot /tmp/chroot /yaml2json | grep 42
           '')
+        ];
+
+        assertions = [
+          {
+            assertion = config.nix.settings.extra-sandbox-paths == [ ];
+            message = "Using binfmt_misc with static emulators, nix.settings.extra-sandbox-paths should be empty";
+          }
         ];
       };
     testScript = ''

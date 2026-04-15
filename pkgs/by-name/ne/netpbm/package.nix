@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   pname = "netpbm";
-  version = "11.13.0";
+  version = "11.13.2";
 
   outputs = [
     "bin"
@@ -31,9 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "5141";
-    sha256 = "sha256-WfmUfP/uc2k8qPki5Gh7WrTH6nIeyhACcn+F5GaFJCE=";
+    rev = "5156";
+    sha256 = "sha256-obA/bjWGLmZ5i4SYfLsHwLbmq7BG16hEWoB7ZSCFpxw=";
   };
+
+  patches = [
+    # Sent to maintainer 2026-02-22.
+    ./c23.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -55,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   enableParallelBuilding = true;
-
-  # Environment variables
-  STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
 
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
@@ -102,7 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
+  env = {
+    STRIPPROG = "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 

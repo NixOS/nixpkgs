@@ -126,7 +126,7 @@ stdenv.mkDerivation {
 
     # Install other files
     install -Dm644 data/app.m0rf30.cieid.desktop -t "$out/share/applications"
-    install -Dm755 data/app.m0rf30.cieid.svg -t "$out/share/pixmaps"
+    install -Dm755 data/app.m0rf30.cieid.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm644 LICENSE "$out/share/licenses/cieid/LICENSE"
   '';
 

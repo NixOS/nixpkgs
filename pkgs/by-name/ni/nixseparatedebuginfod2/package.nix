@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
+  doCheck = stdenv.hostPlatform.isLinux;
   nativeCheckInputs = [
     bubblewrap
     elfutils
@@ -48,8 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";
     homepage = "https://github.com/symphorien/nixseparatedebuginfod2";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.symphorien ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      symphorien
+      feyorsh
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "nixseparatedebuginfod2";
   };
 })

@@ -13,11 +13,11 @@
   rocm-device-libs,
   rocm-comgr,
   rocm-runtime,
-  rocm-toolchain,
   rocm-core,
   roctracer,
   rocminfo,
   rocm-smi,
+  rocprofiler-register,
   symlinkJoin,
   numactl,
   libffi,
@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.1.1";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -82,10 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "clr";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ofsq1uqMixtum5C6cp/UgTDpgGPfj+rAd6PoDx5iLLw=";
+    sparseCheckout = [
+      "projects/clr"
+      "shared"
+    ];
+    hash = "sha256-8V2WbyaJZbEcKZpF/xvg0p+3oX9f/zy/45rkKZT9R3o=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/clr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -108,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     zstd
     zlib
+    rocprofiler-register
   ];
 
   propagatedBuildInputs = [
@@ -132,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
     "-DROCM_PATH=${rocminfo}"
     "-DBUILD_ICD=ON"
-    "-DHIP_ENABLE_ROCPROFILER_REGISTER=OFF" # circular dep - may need -minimal and -full builds?
     "-DAMD_ICD_LIBRARY_DIR=${khronos-ocl-icd-loader}"
 
     # Temporarily set variables to work around upstream CMakeLists issue
@@ -148,8 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-find-x11-libgl.patch
     (fetchpatch {
       # [PATCH] rocclr: Extend HIP ISA compatibility checks
-      sha256 = "sha256-InUSIFI1MgkfocBEoZjO2BCgXNyfF10ehh9jkTtAPXs=";
-      url = "https://github.com/GZGavinZhao/rocm-systems/commit/937dcfdd316b589509c061809186fe5451d22431.patch";
+      hash = "sha256-3MsDL+OQg24wH1RDhbao74RuIbzEAmduwla9KOPzQ/M=";
+      url = "https://github.com/GZGavinZhao/rocm-systems/commit/039cb23b24d739adb8c0f9de8b550d9f557de031.patch";
       relative = "projects/clr";
     })
   ];
@@ -207,6 +212,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${hipClang} $out/llvm
   '';
 
+  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution,
+  # same pattern with libhiprtc.so, so add own lib directory to all .so's
+  # RPATHs so they can find themselves and neighbouring libs
+  # Must be in postFixup so it runs after patchelf --shrink-rpath which removes
+  # the apparently useless rpath
+  postFixup = ''
+    patchelf --add-rpath "$out/lib" "$out"/lib/*.so
+  '';
+
   disallowedRequisites = [
     gcc-unwrapped
   ];
@@ -246,19 +260,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit hipClangPath;
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-      page = "tags?per_page=4";
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
 
     impureTests = {
+      # bash $(nix-build -A rocmPackages.clr.impureTests.rocm-smi)
       rocm-smi = callPackage ./test-rocm-smi.nix {
         inherit rocm-smi;
         clr = finalAttrs.finalPackage;
       };
-      opencl-example = callPackage ./test-opencl-example.nix {
+      # Simple subset of opencl-cts test_basic
+      opencl-cts = callPackage ./test-opencl-cts.nix {
         clr = finalAttrs.finalPackage;
       };
       generic-arch = callPackage ./test-isa-compat.nix {
@@ -288,6 +299,10 @@ stdenv.mkDerivation (finalAttrs: {
           "amdgcnspirv"
         ];
       };
+      hiprtc-type-traits = callPackage ./test-hiprtc-type-traits.nix {
+        clr = finalAttrs.finalPackage;
+        inherit rocm-smi;
+      };
     };
 
     selectGpuTargets =
@@ -309,7 +324,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm/clr";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/clr";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

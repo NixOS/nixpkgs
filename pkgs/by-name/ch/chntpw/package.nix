@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "140201";
 
   src = fetchurl {
-    url = "http://pogostick.net/~pnh/ntpasswd/chntpw-source-${version}.zip";
+    url = "https://pogostick.net/~pnh/ntpasswd/chntpw-source-${version}.zip";
     sha256 = "1k1cxsj0221dpsqi5yibq2hr7n8xywnicl8yyaicn91y8h2hkqln";
   };
 

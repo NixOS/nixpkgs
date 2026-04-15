@@ -11,7 +11,7 @@
   copyDesktopItems,
 }:
 let
-  version = "2.65.4";
+  version = "2.66.2";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-dBJmtKZD2MvQjLhz2Jcn/ldAEbo0wllXDItQu5pyrW8=";
+    hash = "sha256-LXmmbgnm1CZzwNtNj0TEaKh3xN6np5SseE1hoP25Emc=";
   };
 
   desktopItems = [
@@ -110,11 +110,9 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/share/pixmaps
     mkdir -p $out/share/icons/hicolor/64x64/apps/
 
     cp -r dist/pyfa $out/share/
-    cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
     cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/pyfa.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
 

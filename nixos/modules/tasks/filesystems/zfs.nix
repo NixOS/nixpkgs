@@ -158,16 +158,8 @@ let
     }:
     lib.nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
-      # We wait for systemd-udev-settle to ensure devices are available,
-      # but don't *require* it, because mounts shouldn't be killed if it's stopped.
-      # In the future, hopefully someone will complete this:
-      # https://github.com/zfsonlinux/zfs/pull/4943
-      wants = [
-        "systemd-udev-settle.service"
-      ]
-      ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      wants = lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
-        "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
       ]
@@ -695,6 +687,10 @@ in
             should be a zfs dataset name, like `device = "pool/data/set"`.
             This error can be triggered by using an absolute path, such as `"/dev/disk/..."`.
           '';
+        }
+        {
+          assertion = cfgZED.enableMail -> config.services.mail.sendmailSetuidWrapper.enable;
+          message = "services.zfs.zed.enableMail requires services.mail.sendmailSetuidWrapper.enable to be enabled as otherwise no mail can be sent.";
         }
       ];
 

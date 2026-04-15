@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     echo "fn main() {}" > build.rs
   '';
 
-  VERGEN_GIT_SEMVER = "v${finalAttrs.version}";
+  env.VERGEN_GIT_SEMVER = "v${finalAttrs.version}";
 
   # Test require network access
   doCheck = false;

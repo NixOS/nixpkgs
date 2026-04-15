@@ -1,7 +1,7 @@
 import ./generic-builder.nix {
-  version = "1.20.0-rc.1";
-  hash = "sha256-FuTZHDI8ZNe6SHjiaPDZh21Ah7ek4kHqlYVvx0ybqI4=";
-  # https://hexdocs.pm/elixir/1.20.0-rc.1/compatibility-and-deprecations.html#between-elixir-and-erlang-otp
-  minimumOTPVersion = "26";
-  maximumOTPVersion = "28";
+  version = "1.20.0-rc.4";
+  hash = "sha256-sboB+GW3T+t9gEcOGtd6NllmIlyWio1+cgWyyxE+484=";
+  # https://hexdocs.pm/elixir/1.20.0-rc.4/compatibility-and-deprecations.html#between-elixir-and-erlang-otp
+  minimumOTPVersion = "27";
+  maximumOTPVersion = "29";
 }

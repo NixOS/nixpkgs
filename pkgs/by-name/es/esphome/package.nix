@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2026.1.5";
+  version = "2026.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-leQkNa2FK7Wagpr+TKbfg/qkRMII03+dnWXoFZwwn9w=";
+    hash = "sha256-yMPHz6IZIGM4oJw1wspEL3lIIiPv4WZALUJ7J1UWukY=";
   };
 
   patches = [
@@ -68,8 +68,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.46" "wheel"
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.47" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -98,6 +98,7 @@ python.pkgs.buildPythonApplication rec {
     requests
     resvg-py
     ruamel-yaml
+    smpclient
     tornado
     tzdata
     tzlocal
@@ -116,7 +117,9 @@ python.pkgs.buildPythonApplication rec {
         git
       ]
     }"
-    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
+    # The dashboard requires esphome to be importable
+    # dependencies are added to show better error messages
+    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
     # https://github.com/NixOS/nixpkgs/issues/362193
@@ -172,6 +175,7 @@ python.pkgs.buildPythonApplication rec {
     # tries to use esptool, which is wrapped in an fhsenv
     "test_upload_using_esptool_path_conversion"
     "test_upload_using_esptool_with_file_path"
+    "test_upload_using_esptool_passes_crystal_callback"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
     # Expects a full git clone

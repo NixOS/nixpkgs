@@ -15,20 +15,23 @@
 assert lib.assertMsg (
   !(lib.elem "default" features || lib.elem "llvm_backend" features)
 ) "LLVM support has been dropped due to LLVM 12 EOL.";
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "frawk";
   version = "0.4.8";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
   };
 
   cargoHash = "sha256-VraFR3Mp4mPh+39hw88R0q1p5iNkcQzvhRVNPwSxzU0=";
 
   patches = [
-    # This patch comes from https://github.com/ezrosent/frawk/pull/120, which was squash-merged.
+    # Remove these two patches after frawk is updated to a version including this fix
+    # This patch comes from https://github.com/ezrosent/frawk/pull/120
     ./fix-some-compiler-warnings-errors.patch
+    # From https://github.com/ezrosent/frawk/commit/35a79dc04933f38f98a7c8f6fc89ca09724702ab
+    ./fix-prefetch-read-data.patch
   ];
 
   buildInputs = [
@@ -51,11 +54,11 @@ rustPlatform.buildRustPackage rec {
     description = "Small programming language for writing short programs processing textual data";
     mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
-    changelog = "https://github.com/ezrosent/frawk/releases/tag/v${version}";
+    changelog = "https://github.com/ezrosent/frawk/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = [ ];
   };
-}
+})

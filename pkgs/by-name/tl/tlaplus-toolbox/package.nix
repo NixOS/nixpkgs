@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --set-interpreter ${bintools.dynamicLinker} \
       "$(find "$out/libexec/toolbox" -name jspawnhelper)"
 
+    # Populate gappsWrapperArgs now instead of in a preFixupPhase.
+    gappsWrapperArgsHook
+
     makeShellWrapper $out/libexec/toolbox/toolbox $out/bin/tla-toolbox \
       --chdir "$out/libexec/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \

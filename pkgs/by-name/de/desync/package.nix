@@ -21,8 +21,29 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
-  doCheck = false;
+  # required for TestHTTPHandlerReadWrite and other tests
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestExtract" # block cloning fails on ZFS
+        "TestExtractCommand/extract_while_regenerating_the_corrupted_seed" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_seed_directory" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_single_seed" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_single_seed,_explicit_data_directory_and_unexpected_seed_options" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_single_seed_and_explicit_data_directory" # block cloning fails on ZFS
+        "TestExtractWithNonStaticSeeds" # block cloning fails on ZFS
+        "TestMountIndex" # FUSE does not work in sandbox
+        "TestSeed/extract_repetitive_file" # block cloning fails on ZFS
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # sendfile is not permitted in Darwin sandbox
+        "TestS3StoreGetChunk/fail"
+        "TestS3StoreGetChunk/recover"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd desync \

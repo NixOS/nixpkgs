@@ -1,4 +1,8 @@
-{ stdenvNoCC, fetchzip }:
+{
+  stdenvNoCC,
+  fetchzip,
+  installFonts,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "mph-2b-damase";
@@ -9,13 +13,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-4x78D+c3ZBxfhTQQ4+gyxvrsuztHF2ItXLh4uA0PxvU=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = { };
 }

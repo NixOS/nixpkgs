@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -19,6 +20,9 @@
   pytestCheckHook,
   requests,
 
+  man,
+  util-linux,
+
   coreutils,
 
   nix-update-script,
@@ -28,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.20.0";
+  version = "0.22.8";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -36,7 +40,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-Wd75BMJUi8JfiBM1gekylR4+qJOQm3k3vqJILOr0xnE=";
+    hash = "sha256-NOQs21Ahp2oMx1Lw1ekvb2aqUWwIXw1WyC9ZE5V9wJI=";
   };
 
   build-system = [
@@ -60,48 +64,54 @@ buildPythonPackage rec {
     pytest-subprocess
     pytestCheckHook
     requests
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
+    # required by test_man_completion
+    man
+    util-linux
   ];
 
   disabledTests = [
     # fails on sandbox
-    "test_bsd_man_page_completions"
     "test_colorize_file"
-    "test_loading_correctly"
-    "test_no_command_path_completion"
     "test_xonsh_activator"
 
-    # fails on non-interactive shells
-    "test_bash_and_is_alias_is_only_functional_alias"
-    "test_capture_always"
-    "test_casting"
-    "test_command_pipeline_capture"
-    "test_dirty_working_directory"
-    "test_man_completion"
-    "test_vc_get_branch"
-
-    # flaky tests
-    "test_alias_stability"
-    "test_alias_stability_exception"
-    "test_complete_import"
+    # flaky tests in test_integrations.py
     "test_script"
+    "test_catching_system_exit"
+    "test_catching_exit_signal"
+    "test_alias_stability"
+    "test_captured_subproc_is_not_affected_next_command"
+    "test_spec_decorator_alias"
+    "test_alias_stability_exception"
+
+    # flaky tests in test_python.py
+    "test_complete_import"
+
+    # flaky tests in test_pipelines.py
+    "test_command_pipeline_capture"
+    "test_remove_hide_escape"
+
+    # flaky tests in test_specs.py
+    "test_capture_always"
+    "test_callias_captured_redirect"
+    "test_interrupted_process_returncode"
+    "test_proc_raise_subproc_error"
+    "test_specs_with_suspended_captured_process_pipeline"
     "test_subproc_output_format"
 
-    # broken tests
-    "test_repath_backslash"
-
-    # https://github.com/xonsh/xonsh/issues/5569
-    "test_spec_decorator_alias_output_format"
-    "test_trace_in_script"
-  ];
-
-  disabledTestPaths = [
-    # fails on sandbox
-    "tests/completers/test_command_completers.py"
-    "tests/shell/test_ptk_highlight.py"
-
-    # fails on non-interactive shells
-    "tests/prompt/test_gitstatus.py"
-    "tests/completers/test_bash_completer.py"
+    # flaky tests in test_vc.py
+    "test_vc_get_branch"
+    "test_dirty_working_directory"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # fails on Darwin
+    "test_bash_and_is_alias_is_only_functional_alias"
+    "test_complete_command"
+    "test_man_completion"
+    "test_on_command_not_found_replacement"
+    "test_skipper_command"
+    "test_xonsh_lexer_no_win"
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/248978
@@ -130,7 +140,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://xon.sh/";
     description = "Python-ish, BASHwards-compatible shell";
-    changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
+    changelog = "https://github.com/xonsh/xonsh/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ bsd3 ];
     mainProgram = "xonsh";
     maintainers = with lib.maintainers; [ samlukeyes123 ];

@@ -4,30 +4,32 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  mysql80,
+  mysql84,
   openssl,
   pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.33";
+  version = "9.6.0";
   format = "setuptools";
 
   setupPyBuildFlags = [
-    "--with-mysql-capi=${mysql80}"
+    "--with-mysql-capi=${mysql84}"
     "--with-openssl-include-dir=${openssl.dev}/include"
     "--with-openssl-lib-dir=${lib.getLib openssl}/lib"
     "-L"
-    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib"
+    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql84}/lib"
   ];
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
-    rev = version;
-    hash = "sha256-GtMq7E2qBqFu54hjUotzPyxScTKXNdEQcmgHnS7lBhc=";
+    tag = version;
+    hash = "sha256-EwdJpiyplck26Tc9SiczxGieJ3GcTGMQva/fDzhzWn4=";
   };
+
+  sourceRoot = "${src.name}/mysql-connector-python";
 
   patches = [
     # mysql-connector overrides MACOSX_DEPLOYMENT_TARGET to 11.
@@ -38,14 +40,18 @@ buildPythonPackage rec {
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
   ];
 
-  nativeBuildInputs = [ mysql80 ];
+  nativeBuildInputs = [ mysql84 ];
+
+  buildInputs = [
+    mysql84
+    openssl
+    pkgs.zlib
+    pkgs.zstd
+  ];
 
   propagatedBuildInputs = [
     dnspython
     protobuf
-    mysql80
-    openssl
-    pkgs.zstd
   ];
 
   pythonImportsCheck = [ "mysql" ];
@@ -60,7 +66,7 @@ buildPythonPackage rec {
       implements the DB API v2.0 specification.
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
-    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
+    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${src.tag}/CHANGES.txt";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       neosimsim

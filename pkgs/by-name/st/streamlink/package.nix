@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "8.1.2";
+  version = "8.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0ICZ+hsWm61KmR0xsquJ8EugixMZ7R9b0OrYVH1MWtM=";
+    hash = "sha256-r6Jlgsq/ND9Jcz154ryaW76QrsfbskbsX5d5ZJnGN+4=";
   };
 
   patches = [
@@ -78,7 +78,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd2;
     mainProgram = "streamlink";
     maintainers = with lib.maintainers; [
-      dezgeg
       zraexy
       DeeUnderscore
     ];

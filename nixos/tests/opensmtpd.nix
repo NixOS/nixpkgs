@@ -149,7 +149,7 @@ import ./make-test-python.nix {
     client.wait_for_unit("network-online.target")
     smtp1.wait_for_unit("opensmtpd")
     smtp2.wait_for_unit("opensmtpd")
-    smtp2.wait_for_unit("dovecot2")
+    smtp2.wait_for_unit("dovecot")
 
     # To prevent sporadic failures during daemon startup, make sure
     # services are listening on their ports before sending requests

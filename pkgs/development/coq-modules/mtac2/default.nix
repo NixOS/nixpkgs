@@ -15,10 +15,15 @@ mkCoqDerivation {
     with lib.versions;
     lib.switch coq.version [
       {
+        case = isEq "9.1";
+        out = "1.4-rocq${coq.coq-version}";
+      }
+      {
         case = range "8.19" "9.0";
         out = "1.4-coq${coq.coq-version}";
       }
     ] null;
+  release."1.4-rocq9.1".hash = "sha256-A+ac84ZfDMW2NhS/NrGIfdairXmzXxZIYGNmJIz0ReM=";
   release."1.4-coq9.0".sha256 = "sha256-pAPBRCW7M46UZPJ+v/0xAT8mpQURN8czMmlrfYz/MVU=";
   release."1.4-coq8.20".sha256 = "sha256-3nu/8zDvdnl6WzGtw46mVcdqgkRgc6Xy8/I+lUOrSIY=";
   release."1.4-coq8.19".sha256 = "sha256-G9eK0eLyECdT20/yf8yyz7M8Xq2WnHHaHpxVGP0yTtU=";

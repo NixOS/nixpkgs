@@ -44,6 +44,7 @@ jdk.overrideAttrs (
     postPatch =
       let
         extra_config = builtins.concatStringsSep " " extraConfig;
+        jdk_configure_flags = "'" + builtins.concatStringsSep "', '" oldAttrs.configureFlags + "'";
       in
       (oldAttrs.postPatch or "")
       + ''
@@ -70,6 +71,12 @@ jdk.overrideAttrs (
           substituteInPlace $file --replace-warn "workingDir '/usr/bin'" "workingDir '.'"
         done
 
+        # Prepend corresponding OpenJDK flags to Corretto's own configure flags.
+        # This will provide us with the version-specific fixes (see
+        # openjdk/generic.nix) while giving Corretto's flags precedence.
+        # Note that the OpenJdK flags contain "--with-boot-jdk=..."!
+        substituteInPlace build.gradle --replace-fail "correttoCommonFlags = [" "correttoCommonFlags = [${jdk_configure_flags} ,"
+        # Finally, *append* nix-corretto-version specific flags.
         gradleFlagsArray+=(-Pcorretto.extra_config="${extra_config}")
       '';
 
@@ -130,14 +137,12 @@ jdk.overrideAttrs (
         };
       };
 
-    # Some of the OpenJDK derivation set their `pos` by hand. We need to
-    # overwrite this in order to point to Corretto, not OpenJDK.
-    pos = __curPos;
     meta = oldAttrs.meta // {
       homepage = "https://aws.amazon.com/corretto";
       license = lib.licenses.gpl2Only;
       description = "Amazon's distribution of OpenJDK";
       maintainers = with lib.maintainers; [ rollf ];
+      platforms = lib.platforms.linux;
       teams = [ ];
     };
   }

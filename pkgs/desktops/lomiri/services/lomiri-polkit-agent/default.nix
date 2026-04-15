@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JKU2lm5wco9aC2cu3lgJ9OfGAzKQO/wQXFPEdb9Uz3Y=";
   };
 
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/17 merged & in release
+    ./1001-Fix-compat-with-libnotify-0.8.8.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

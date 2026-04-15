@@ -5,7 +5,6 @@
   libiconv,
   bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
-  gnulib,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -15,18 +14,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.25.1";
+  version = "0.26";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    hash = "sha256-dG+VXULXHrac52OGnLkmgvCaQGZSjQGLbKej9ICJoIU=";
+    hash = "sha256-Oaz0sDcemxELYABVYqrOWzYx/tmxu57Mz8f1bli7HX8=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-    ./memory-safety.patch
   ];
 
   outputs = [
@@ -70,20 +68,6 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
-  ''
-  + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    for gnulib in \
-      ./libtextstyle/lib \
-      ./gettext-tools/libgettextpo \
-      ./gettext-tools/gnulib-lib \
-      ./gettext-runtime/libasprintf/gnulib-lib \
-      ./gettext-runtime/intl/gnulib-lib \
-      ./gettext-runtime/gnulib-lib
-    do
-      cd "$gnulib"
-      patch -p2 < ${gnulib.patches.memcpy-fix}
-      cd -
-    done
   '';
 
   strictDeps = true;

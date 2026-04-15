@@ -1,26 +1,51 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromBitbucket,
+  nix-update-script,
+  autoconf,
+  automake,
+  libtool,
+  re2c,
   sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.4.1";
+  version = "3.5.0";
   pname = "libzdb";
 
-  src = fetchurl {
-    url = "https://www.tildeslash.com/libzdb/dist/libzdb-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-W0Yz/CoWiA93YZf0BF9i7421Bi9jAw+iIQEdS4XXNss=";
+  src = fetchFromBitbucket {
+    owner = "tildeslash";
+    repo = "libzdb";
+    tag = "release-${lib.replaceString "." "-" finalAttrs.version}";
+    hash = "sha256-fZSTu/BGIFsbEHSB/+2SObb9myg+Iyc1IDxnpv/EEhU=";
   };
 
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    re2c
+  ];
   buildInputs = [ sqlite ];
 
+  strictDeps = true;
+
+  preConfigure = "sh ./bootstrap";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(\\d+)-(\\d+)-(\\d+)"
+    ];
+  };
+
   meta = {
-    homepage = "http://www.tildeslash.com/libzdb/";
     description = "Small, easy to use Open Source Database Connection Pool Library";
-    license = lib.licenses.gpl3;
+    homepage = "http://www.tildeslash.com/libzdb/";
+    downloadPage = "https://bitbucket.org/tildeslash/libzdb/";
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ maevii ];
   };
 })

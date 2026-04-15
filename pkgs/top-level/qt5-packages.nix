@@ -66,8 +66,6 @@ makeScopeWithSplicing' {
 
         accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
-        appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
-
         dxflib = callPackage ../development/libraries/dxflib { };
 
         drumstick = callPackage ../development/libraries/drumstick { };
@@ -118,6 +116,14 @@ makeScopeWithSplicing' {
 
         libqofono = callPackage ../development/libraries/libqofono { };
 
+        libqtdbusmock = callPackage ../development/libraries/libqtdbusmock {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
+
+        libqtdbustest = callPackage ../development/libraries/libqtdbustest {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
+
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
@@ -162,6 +168,10 @@ makeScopeWithSplicing' {
         qcustomplot = callPackage ../development/libraries/qcustomplot { };
 
         qjson = callPackage ../development/libraries/qjson { };
+
+        qmenumodel = callPackage ../development/libraries/qmenumodel {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 

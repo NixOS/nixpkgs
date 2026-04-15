@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
     maintainers = with lib.maintainers; [
-      codyopel
       rnhmjoj
     ];
     platforms = lib.platforms.unix;

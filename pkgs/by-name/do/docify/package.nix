@@ -6,18 +6,18 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "docify";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "AThePeanut4";
+    owner = "atoerien";
     repo = "docify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pENahqprTf6weP6qi9CyeQPdNOqr9c/q7j6GO9Lq3N4=";
+    hash = "sha256-xp8VsDv2Wf8g2mUMPmBgWoyWpJna/r1xPgqO3SUqcR0=";
   };
 
   build-system = with python3Packages; [
-    pdm-backend
+    hatchling
   ];
 
   dependencies = with python3Packages; [
@@ -31,9 +31,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/AThePeanut4/docify/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/atoerien/docify/releases/tag/v${finalAttrs.version}";
     description = "Script to add docstrings to Python type stubs using reflection";
-    homepage = "https://github.com/AThePeanut4/docify";
+    homepage = "https://github.com/atoerien/docify";
     license = lib.licenses.mit;
     mainProgram = "docify";
     maintainers = with lib.maintainers; [ dotlambda ];

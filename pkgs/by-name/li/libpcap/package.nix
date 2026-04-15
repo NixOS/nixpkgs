@@ -10,7 +10,9 @@
   libnl,
   libxcrypt,
   pkg-config,
+  rdma-core,
   withBluez ? false,
+  withRdma ? false,
   withRemote ? false,
 
   # for passthru.tests
@@ -46,14 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     bash
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-  ++ lib.optionals withRemote [ libxcrypt ];
+  ++ lib.optionals withRdma [ rdma-core ]
+  ++ lib.optionals withRemote [ libxcrypt ]
+  ++ lib.optionals withBluez [ bluez ];
 
   nativeBuildInputs = [
     flex
     bison
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-  ++ lib.optionals withBluez [ bluez.dev ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
@@ -62,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-universal"
+  ]
+  ++ lib.optionals withRdma [
+    "--enable-rdma"
   ]
   ++ lib.optionals withRemote [
     "--enable-remote"

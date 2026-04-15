@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  pythonAtLeast,
   pytestCheckHook,
   dotnetCorePackages,
   setuptools,
@@ -13,17 +14,25 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.7.post0";
+  version = "0.2.10";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-t6iz+PuxvLu2OC2IfiHRdC1PELXqIJ5K2VVo/pfhx8Y=";
+    hash = "sha256-gfEUr7xQBbr8Xv5a8TQdQA4iE34nWwQqiXnz/rn8lEY=";
   };
-  patches = [ ./dotnet-8-upgrade.patch ];
   # This stops msbuild from picking up $version from the environment
   postPatch = ''
     echo '<Project><PropertyGroup><Version/></PropertyGroup></Project>' > \
       Directory.Build.props
+
+    substituteInPlace example/example.csproj \
+      --replace-fail 'net8.0;netstandard2.0' 'net10.0;netstandard2.0'
+
+    substituteInPlace tests/test_common.py \
+      --replace-fail 'return build_example(tmp_path_factory, "net8.0")' \
+        'return build_example(tmp_path_factory, "net10.0")' \
+      --replace-fail 'def test_coreclr_properties(example_netcore: Path):' \
+        'def test_coreclr_properties(example_netcore: Path, example_netstandard: Path):'
   '';
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -33,7 +42,6 @@ let
       pname
       version
       src
-      patches
       postPatch
       ;
     projectFile = [
@@ -41,7 +49,7 @@ let
       "example/example.csproj"
     ];
     nugetDeps = ./deps.json;
-    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+    dotnet-sdk = dotnetCorePackages.sdk_10_0;
   };
 in
 buildPythonPackage {
@@ -49,19 +57,20 @@ buildPythonPackage {
     pname
     version
     src
-    patches
     postPatch
     ;
 
+  disabled = pythonAtLeast "3.14";
+
   pyproject = true;
 
-  buildInputs = dotnetCorePackages.sdk_8_0.packages ++ dotnet-build.nugetDeps;
+  buildInputs = dotnetCorePackages.sdk_10_0.packages ++ dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     wheel
-    dotnetCorePackages.sdk_8_0
+    dotnetCorePackages.sdk_10_0
   ];
 
   propagatedBuildInputs = [ cffi ];
@@ -94,6 +103,5 @@ buildPythonPackage {
     homepage = "https://pythonnet.github.io/clr-loader/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdarocha ];
-    broken = true;
   };
 }

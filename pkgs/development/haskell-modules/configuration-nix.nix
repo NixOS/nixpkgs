@@ -352,7 +352,7 @@ builtins.intersectAttrs super {
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
   # These require postgres and pass the connection string manually via the CLI in tests.
-  consumers = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+  consumers = dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook) (
     overrideCabal (drv: {
       preCheck = ''
         export postgresqlTestUserOptions="LOGIN SUPERUSER"
@@ -368,23 +368,25 @@ builtins.intersectAttrs super {
       ];
     }) super.consumers
   );
-  hpqtypes-extras = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
-    overrideCabal (drv: {
-      preCheck = ''
-        export postgresqlTestUserOptions="LOGIN SUPERUSER"
-        export PGDATABASE=hpqtypes-extras
-      '';
-      testToolDepends = drv.testToolDepends or [ ] ++ [
-        pkgs.postgresql
-        pkgs.postgresqlTestHook
-      ];
-      testTargets = [
-        "hpqtypes-extras-tests"
-        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
-      ];
-    }) super.hpqtypes-extras
-  );
-  hpqtypes = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+  hpqtypes-extras =
+    dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook)
+      (
+        overrideCabal (drv: {
+          preCheck = ''
+            export postgresqlTestUserOptions="LOGIN SUPERUSER"
+            export PGDATABASE=hpqtypes-extras
+          '';
+          testToolDepends = drv.testToolDepends or [ ] ++ [
+            pkgs.postgresql
+            pkgs.postgresqlTestHook
+          ];
+          testTargets = [
+            "hpqtypes-extras-tests"
+            "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+          ];
+        }) super.hpqtypes-extras
+      );
+  hpqtypes = dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook) (
     overrideCabal (drv: {
       preCheck = ''
         export postgresqlTestUserOptions="LOGIN SUPERUSER"
@@ -400,26 +402,28 @@ builtins.intersectAttrs super {
       ];
     }) (super.hpqtypes.override { libpq = pkgs.libpq; })
   );
-  hpqtypes-effectful = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
-    overrideCabal
-      (drv: {
-        preCheck = ''
-          export postgresqlTestUserOptions="LOGIN SUPERUSER"
-          export PGDATABASE=hpqtypes-effectful
-        '';
-        testToolDepends = drv.testToolDepends or [ ] ++ [
-          pkgs.postgresql
-          pkgs.postgresqlTestHook
-        ];
-      })
+  hpqtypes-effectful =
+    dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook)
       (
-        super.hpqtypes-effectful.overrideAttrs (drv: {
-          postgresqlTestSetupPost = ''
-            export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
-          '';
-        })
-      )
-  );
+        overrideCabal
+          (drv: {
+            preCheck = ''
+              export postgresqlTestUserOptions="LOGIN SUPERUSER"
+              export PGDATABASE=hpqtypes-effectful
+            '';
+            testToolDepends = drv.testToolDepends or [ ] ++ [
+              pkgs.postgresql
+              pkgs.postgresqlTestHook
+            ];
+          })
+          (
+            super.hpqtypes-effectful.overrideAttrs (drv: {
+              postgresqlTestSetupPost = ''
+                export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
+              '';
+            })
+          )
+      );
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
@@ -438,10 +442,10 @@ builtins.intersectAttrs super {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "1d21f73a2d563ffbb924a4244c29b35e898caefe";
-        hash = "sha256-N6c3NozYqAGwmjf+k5GHOZzlcquDntrJwsZQ7O2sqtQ=";
+        rev = "f63998a6c81fab86e840dbab483d387dee5ffc0a";
+        hash = "sha256-paUnCU08wDZ3bS0Fa4QhtjWMcpWgcTRwO/ee3wT28Nw=";
       };
-      version = "1.0.1-unstable-2025-05-28";
+      version = "1.1.0-unstable-2026-03-26";
     })
 
     (overrideCabal (old: {
@@ -453,6 +457,9 @@ builtins.intersectAttrs super {
       };
     }))
   ];
+
+  # Wants to execute cabal-install
+  ghci-quickfix = dontCheck super.ghci-quickfix;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -495,18 +502,46 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Some test cases require network access
+  hpack_0_39_1 = doDistribute (
+    overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
+        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+      ];
+    }) super.hpack_0_39_1
+  );
+
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
-  # The curl executable is required for withApplication tests.
-  warp = addTestToolDepend pkgs.curl super.warp;
+  warp = lib.pipe super.warp [
+    # The curl executable is required for withApplication tests.
+    (addTestToolDepend pkgs.curl)
+    # Avoids much closure size of downstream deps on macOS: https://github.com/yesodweb/wai/pull/1044
+    (disableCabalFlag "include-warp-version")
+  ];
 
   lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
-  safe-exceptions = overrideCabal (drv: {
-    # Fix strictDeps build error "could not execute: hspec-discover"
-    testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
-  }) super.safe-exceptions;
+  # Package does not declare tool dependency hspec-discover
+  hspec-wai = addTestToolDepends [ self.hspec-discover ] super.hspec-wai;
+
+  # Package does not declare tool dependency hspec-discover
+  http-date = addTestToolDepends [ self.hspec-discover ] super.http-date;
+
+  # Package does not declare tool dependency hspec-discover
+  http-types = addTestToolDepends [ self.hspec-discover ] super.http-types;
+
+  # Package does not declare tool dependency hspec-discover
+  safe-exceptions = addTestToolDepends [ self.hspec-discover ] super.safe-exceptions;
+
+  # Package does not declare tool dependency hspec-discover
+  unliftio = addTestToolDepends [ self.hspec-discover ] super.unliftio;
+
+  # Package does not declare tool dependency hspec-discover
+  word8 = addTestToolDepends [ self.hspec-discover ] super.word8;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
@@ -539,7 +574,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   # Test suite requires a running postgresql server,
@@ -597,8 +632,8 @@ builtins.intersectAttrs super {
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
-  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
+  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxwidgets_3_2; };
+  wxcore = super.wxcore.override { wxGTK = pkgs.wxwidgets_3_2; };
 
   shellify = enableSeparateBinOutput super.shellify;
   specup = enableSeparateBinOutput super.specup;
@@ -897,6 +932,10 @@ builtins.intersectAttrs super {
   splitmix = dontCheck super.splitmix;
   splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
+  # Break infinite recursion
+  # hedgehog (dep)→ async (dep)→ unordered-containers (test)→ nothunks (test)→ hedgehog
+  nothunks = dontCheck super.nothunks;
+
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
 
@@ -931,13 +970,17 @@ builtins.intersectAttrs super {
     ];
   }) super.liquid-fixpoint;
 
-  # overrideCabal because the tests need to execute the built executable "liquid"
+  # overrideCabal because
+  # - tests need to execute the built executable "liquid"
+  # - LiquidHaskell needs an SMT solver. We use Z3.
+  # - LiquidHaskell clash with Haddock as of now, see https://github.com/ucsd-progsys/liquidhaskell/issues/2188
   liquidhaskell = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/liquid:$PATH
     ''
     + (drv.preCheck or "");
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
   }) super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
@@ -1026,6 +1069,8 @@ builtins.intersectAttrs super {
     (disableCabalFlag "no-exe")
     enableSeparateBinOutput
     (addBuildDepend self.optparse-applicative)
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepend self.hspec-discover)
   ];
 
   # Compile manpages (which are in RST and are compiled with Sphinx).
@@ -1181,8 +1226,7 @@ builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
-  pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
-  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
+  pantry_0_11_2 = doDistribute (dontCheck super.pantry_0_11_2);
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -1313,7 +1357,8 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
-    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+    doCheck =
+      drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
   }) super.relocant;
 
   # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
@@ -1326,8 +1371,11 @@ builtins.intersectAttrs super {
       (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
       pkgs.postgresqlTestHook
     ];
-    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+    doCheck =
+      drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
   }) super.haskell-pgmq;
+  # Needs pgmq available at test time with somehow preinitialized database (?)
+  stakhanov = dontCheck super.stakhanov;
 
   migrant-postgresql-simple = lib.pipe super.migrant-postgresql-simple [
     (overrideCabal {
@@ -1339,7 +1387,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   postgresql-simple-migration = overrideCabal (drv: {
@@ -1352,7 +1400,8 @@ builtins.intersectAttrs super {
       pkgs.postgresqlTestHook
     ];
     jailbreak = true;
-    doCheck = drv.doCheck or true && !(pkgs.postgresqlTestHook.meta.broken);
+    doCheck =
+      drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
   }) super.postgresql-simple-migration;
 
   postgresql-simple = lib.pipe super.postgresql-simple [
@@ -1360,7 +1409,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   beam-postgres = lib.pipe super.beam-postgres [
@@ -1374,7 +1423,7 @@ builtins.intersectAttrs super {
       pkgs.postgresql
       pkgs.postgresqlTestHook
     ])
-    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
   ];
 
   esqueleto =
@@ -1400,7 +1449,11 @@ builtins.intersectAttrs super {
         ];
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
+      (
+        dontCheckIf (
+          !lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook
+        ) super.esqueleto
+      );
 
   persistent-postgresql =
     # TODO: move this override to configuration-nix.nix
@@ -1422,7 +1475,11 @@ builtins.intersectAttrs super {
         ];
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
+      (
+        dontCheckIf (
+          !lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook
+        ) super.persistent-postgresql
+      );
 
   # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
   haskell-bee-redis = overrideCabal (drv: {
@@ -1908,30 +1965,6 @@ builtins.intersectAttrs super {
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
-
-  tailwind =
-    addBuildDepend
-      # Overrides for tailwindcss copied from:
-      # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.tailwindcss.overrideAttrs (old: {
-        plugins = [
-          pkgs.nodePackages."@tailwindcss/aspect-ratio"
-          pkgs.nodePackages."@tailwindcss/forms"
-          pkgs.nodePackages."@tailwindcss/line-clamp"
-          pkgs.nodePackages."@tailwindcss/typography"
-        ];
-        # Added a shim for the `tailwindcss` CLI entry point
-        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
-        postInstall = (old.postInstall or "") + ''
-          nodePath=""
-          for p in "$out" "${pkgs.postcss}" $plugins; do
-            nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
-          done
-          makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
-          unset nodePath
-        '';
-      }))
-      super.tailwind;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 

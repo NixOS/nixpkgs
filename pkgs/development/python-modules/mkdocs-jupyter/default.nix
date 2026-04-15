@@ -11,22 +11,30 @@
   pygments,
   pytestCheckHook,
   pytest-cov-stub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.25.1";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-DpJy/0lH4OxoPJJCOkv7QqJkd8EDqxpquCd+LcyPev4=";
+    hash = "sha256-fIDA05U96R5bQKDTIJIzeVyPgAJDqymOTsOOBQTtpjA=";
   };
 
-  pythonRelaxDeps = [ "nbconvert" ];
+  pythonRelaxDeps = [
+    "ipykernel"
+    "nbconvert"
+  ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   dependencies = [
     ipykernel

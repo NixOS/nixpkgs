@@ -304,6 +304,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    bzip2 = {
+      spdxId = "bzip2-1.0.6";
+      fullName = "bzip2 and libbzip2 License v1.0.6";
+    };
+
     cal10 = {
       spdxId = "CAL-1.0";
       fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
@@ -970,6 +975,11 @@ lib.mapAttrs mkLicense (
       fullName = "libtiff License";
     };
 
+    liliq-p-11 = {
+      spdxId = "LiLiQ-P-1.1";
+      fullName = "Licence Libre du Québec – Permissive version 1.1";
+    };
+
     llgpl21 = {
       fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
       url = "https://opensource.franz.com/preamble.html";
@@ -1416,7 +1426,7 @@ lib.mapAttrs mkLicense (
 
     tsl = {
       shortName = "TSL";
-      fullName = "Timescale License Agreegment";
+      fullName = "Timescale License Agreement";
       url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
       free = false;
     };

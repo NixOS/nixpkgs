@@ -48,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "initrd-init"
     "find-etc"
     "resolve-in-root"
+    "env-generator"
   ];
 
   postInstall = ''

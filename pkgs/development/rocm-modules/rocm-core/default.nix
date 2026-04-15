@@ -17,14 +17,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocm-core";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-3WQPR7v7LRoo4ioCXzkUEqnJdXA3uxSgoZZQvEG5Gqg=";
+    sparseCheckout = [
+      "projects/rocm-core"
+      "shared"
+    ];
+    hash = "sha256-Y3WuDwruD5zKN2epwfUCZAGq5vgxCT27awJN8JxmOsY=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocm-core";
 
   patches = [
     ./env-rocm-path.patch
@@ -41,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DROCM_VERSION=${finalAttrs.version}"
     "-DBUILD_ID=${finalAttrs.env.BUILD_ID}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
   ];
@@ -77,16 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.ROCM_LIBPATCH_VERSION = finalAttrs.env.ROCM_LIBPATCH_VERSION;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-    page = "tags?per_page=4";
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Utility for getting the ROCm release version";
-    homepage = "https://github.com/ROCm/rocm-core";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-core";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    literalExpression
     maintainers
     mkEnableOption
     mkIf
@@ -79,10 +78,44 @@ in
       type = types.bool;
       description = "Use ping to check online status of devices instead of mDNS";
     };
+
+    environment = mkOption {
+      default = { };
+      type = types.attrsOf types.str;
+      description = ''
+        Extra environment variables to pass to ESPHome. Secrets should be passed
+        using the {option}`services.esphome.environmentFile` option.
+      '';
+      example = {
+        USERNAME = "reimu";
+        PASSWORD = "gensokyo9";
+      };
+    };
+
+    environmentFile = mkOption {
+      default = null;
+      type = types.nullOr types.path;
+      description = ''
+        Path to an environment file.
+        Use this option for setting the dashboard password.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [ cfg.port ];
+
+    # Use a static system user instead of DynamicUser.
+    # DynamicUser creates a /var/lib/esphome -> /var/lib/private/esphome symlink
+    # which breaks PlatformIO's path resolution during firmware compilation.
+    # See: https://github.com/NixOS/nixpkgs/issues/339557
+    users.users.esphome = {
+      isSystemUser = true;
+      home = stateDir;
+      group = "esphome";
+    };
+
+    users.groups.esphome = { };
 
     systemd.services.esphome = {
       description = "ESPHome dashboard";
@@ -91,14 +124,17 @@ in
       path = [ cfg.package ];
 
       environment = {
-        # platformio fails to determine the home directory when using DynamicUser
+        # Set PLATFORMIO_CORE_DIR to a real path (not a symlink) so PlatformIO
+        # and its downloaded toolchains can resolve paths correctly.
         PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+        # platformio needs a writable HOME for its configuration
+        HOME = stateDir;
       }
-      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
+      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; }
+      // cfg.environment;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
-        DynamicUser = true;
         User = "esphome";
         Group = "esphome";
         WorkingDirectory = stateDir;
@@ -107,6 +143,8 @@ in
         Restart = "on-failure";
         RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ReadWritePaths = [ stateDir ];
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -115,9 +153,8 @@ in
         DevicePolicy = "closed";
         DeviceAllow = map (d: "${d} rw") cfg.allowedDevices;
         SupplementaryGroups = [ "dialout" ];
-        #NoNewPrivileges = true; # Implied by DynamicUser
-        PrivateUsers = true;
-        #PrivateTmp = true; # Implied by DynamicUser
+        NoNewPrivileges = true;
+        PrivateTmp = true;
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -128,7 +165,7 @@ in
         ProtectProc = "invisible";
         ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";
-        #RemoveIPC = true; # Implied by DynamicUser
+        RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
@@ -137,7 +174,7 @@ in
         ];
         RestrictNamespaces = false; # Required by platformio for chroot
         RestrictRealtime = true;
-        #RestrictSUIDSGID = true; # Implied by DynamicUser
+        RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"

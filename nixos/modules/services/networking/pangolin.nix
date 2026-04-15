@@ -201,10 +201,13 @@ in
           isSystemUser = true;
         };
       };
-      groups.fossorial.members = [
-        "pangolin"
-        "gerbil"
-      ];
+      groups.fossorial = {
+        members = [
+          "pangolin"
+          "gerbil"
+          "traefik"
+        ];
+      };
     };
     # order is as follows
     # "pangolin.service"
@@ -428,9 +431,9 @@ in
 
     services.traefik = {
       enable = true;
-      supplementaryGroups = [ "fossorial" ];
+      group = "fossorial";
       dataDir = "${cfg.dataDir}/config/traefik";
-      static.settings = {
+      staticConfigOptions = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
           pollInterval = "5s";
@@ -468,7 +471,7 @@ in
           };
         };
       };
-      dynamic.files."pangolin".settings = {
+      dynamicConfigOptions = {
         http = {
           middlewares.redirect-to-https.redirectScheme.scheme = "https";
           routers = {

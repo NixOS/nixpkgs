@@ -38,6 +38,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.coq-version [
+      (case (range "9.0" "9.1") "2.16")
       (case (range "8.19" "8.20") "2.15")
       (case (range "8.15" "8.19") "2.14")
       (case (range "8.15" "8.17") "2.13")
@@ -45,6 +46,7 @@ mkCoqDerivation {
       (case (range "8.13" "8.15") "2.9")
       (case (range "8.12" "8.13") "2.8")
     ] null;
+  release."2.16".sha256 = "sha256-/IlFLiojtuENHE9d+j55Z2rYw5HUkltwVim75w/UFVE=";
   release."2.15".sha256 = "sha256-51k2W4efMaEO4nZ0rdkRT9rA8ZJLpot1YpFmd6RIAXw=";
   release."2.14".sha256 = "sha256-NHc1ZQ2VmXZy4lK2+mtyeNz1Qr9Nhj2QLxkPhhQB7Iw=";
   release."2.13".sha256 = "sha256-i6rvP3cpayBln5KHZOpeNfraYU5h0O9uciBQ4jRH4XA=";
@@ -62,10 +64,9 @@ mkCoqDerivation {
   ''
   +
     lib.optionalString
-      (coq.coq-version != null && coq.coq-version != "dev" && lib.versions.isLe "8.20" coq.coq-version)
+      (coq.coq-version != null && coq.coq-version != "dev" && lib.versions.isLe "9.1" coq.coq-version)
       ''
         substituteInPlace Makefile \
-          --replace-fail 'COQVERSION= ' 'COQVERSION= 8.20.1 or-else 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
           --replace-fail 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
       '';
 
@@ -74,9 +75,9 @@ mkCoqDerivation {
     "COMPCERT=inst_dir"
     "COMPCERT_INST_DIR=${compcert.lib}/lib/coq/${coq.coq-version}/user-contrib/compcert"
     "INSTALLDIR=$(out)/lib/coq/${coq.coq-version}/user-contrib/VST"
-  ]
-  ++ lib.optional (coq.coq-version == "dev") "IGNORECOQVERSION=true"
-  ++ lib.optional (coq.coq-version == "dev") "IGNORECOMPCERTVERSION=true";
+    "IGNORECOQVERSION=true"
+    "IGNORECOMPCERTVERSION=true"
+  ];
 
   postInstall = ''
     for d in msl veric floyd sepcomp progs64

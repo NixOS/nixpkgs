@@ -158,8 +158,11 @@ rec {
         assert (f'.payload != null) == (f.payload != null);
         f.payload != null;
       hasWrapped =
-        assert (f'.wrapped != null) == (f.wrapped != null);
-        f.wrapped != null;
+        let
+          hasWrappedNonNull = set: set ? "wrapped" && set.wrapped != null;
+        in
+        assert (hasWrappedNonNull f') == (hasWrappedNonNull f);
+        hasWrappedNonNull f;
 
       typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
       typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
@@ -1180,12 +1183,19 @@ rec {
       };
     };
 
+  optionDeclaration = mkOptionType {
+    name = "optionDeclaration";
+    description = "option declaration";
+    descriptionClass = "noun";
+    check = opt: isType "option" opt && !(opt ? value);
+  };
+
   # The type of a type!
   optionType = mkOptionType {
     name = "optionType";
     description = "optionType";
     descriptionClass = "noun";
-    check = value: value._type or null == "option-type";
+    check = isType "option-type";
     merge =
       loc: defs:
       if length defs == 1 then

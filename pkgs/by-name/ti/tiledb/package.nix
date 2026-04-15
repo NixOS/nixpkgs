@@ -26,7 +26,6 @@
   nlohmann_json,
   c-blosc2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
-  libpqxx,
 }:
 
 let
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wzeWLwwsZXtrKsmlglZG7YvIki/ba7IwsDBq+40ltcg=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
+  patches = [ ./0001-fix-cross-compilation-with-capnproto.patch ];
 
   postPatch = ''
     substituteInPlace tiledb/sm/misc/test/unit_parse_argument.cc \
@@ -69,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
+    capnproto
     clang-tools
     cmake
     python3
@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     file
     libpng
-    libpqxx
     lz4
     nlohmann_json
     onetbb
@@ -95,6 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ];
+
+  preBuild = ''
+    cmake --build . --target update-serialization
+  '';
 
   nativeCheckInputs = [
     gtest

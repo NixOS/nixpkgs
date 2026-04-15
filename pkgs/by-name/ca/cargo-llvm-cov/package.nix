@@ -25,7 +25,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.8.3";
+  version = "0.8.5";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-XMv0li/zBNE3FJpcIpja6SqNp4f5GPOET5rfPWLIzRw=";
+    sha256 = "sha256-acd2qauvcVPxDjMuFXkaUxDL4kXoDSCVKDG7ki2pK/Y=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -57,10 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
-  # `cargo-llvm-cov` reads these environment variables to find these binaries,
-  # which are needed to run the tests
-  LLVM_COV = "${llvm}/bin/llvm-cov";
-  LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  env = {
+    # `cargo-llvm-cov` reads these environment variables to find these binaries,
+    # which are needed to run the tests
+    LLVM_COV = "${llvm}/bin/llvm-cov";
+    LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  };
 
   nativeCheckInputs = [
     gitMinimal

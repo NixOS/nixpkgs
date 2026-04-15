@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.135.0";
+  version = "1.140.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQjha7ZVR/hFllN+vWd58eVjLR70axtKqOYu4SelwQM=";
+    hash = "sha256-f/qcUSf/JMfe0rTUY5qT9k7MCVqsZCwRzsCv6puz6tw=";
   };
 
   vendorHash = null;
@@ -87,7 +87,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp
-      ivan
       leona
       shawn8901
       ryan4yin

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-7i76JPg6MAk4/sO8/JI4ody4iYFJPeLkD2SWncFhT4o=";
   };
 
-  GIT_HASH = "000000000000000000000000000000000000000000000000000";
+  env.GIT_HASH = "000000000000000000000000000000000000000000000000000";
 
   checkFlags = [
     # skip failing test due to nix build timestamps

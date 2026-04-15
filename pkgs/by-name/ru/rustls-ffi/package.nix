@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rustls-ffi";
-  version = "0.15.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "rustls-ffi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m92kWH+J8wuGmI0msrp2aginY1K51iqgi3+u4ncmfts=";
+    hash = "sha256-OrseS6PxAGhO+mdlRrjQAZ5L5GbNekeVg+IW5VyL928=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-gqc6en59QQpD14hOgRuGEPWLvrkyGn9tPR9vQmRAxIg=";
+    hash = "sha256-eNY6mpEFFJEdaJyHY8RHOerg/cDa3QbPjsNj3iZNqJ0=";
   };
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl = curl.override {
       opensslSupport = false;
       rustlsSupport = true;
+      http3Support = false; # rustls-ffi doesn't yet support QUIC
       rustls-ffi = finalAttrs.finalPackage;
     };
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -76,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       isc
     ];
-    maintainers = [ lib.maintainers.lesuisse ];
+    maintainers = [
+      lib.maintainers.lesuisse
+      lib.maintainers.cpu
+    ];
   };
 })

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_10,
+  pnpm_10_29_2,
   pnpmConfigHook,
   python3,
   electron_39,
@@ -26,14 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
     hash = "sha256-s/KllzT46L2o4SWS3z3Z7FDQD6FEEEAnPdM6tsfGRUo=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10
+    pnpm_10_29_2
     pnpmConfigHook
     makeBinaryWrapper
     copyDesktopItems

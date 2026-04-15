@@ -90,6 +90,8 @@ buildGoModule (finalAttrs: {
     src
     ;
 
+  proxyVendor = true;
+
   outputs = [
     "out"
     "doc"
@@ -198,7 +200,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

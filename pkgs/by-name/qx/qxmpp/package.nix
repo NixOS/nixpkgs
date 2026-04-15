@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
-  version = "1.13.0";
+  version = "1.14.4";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "qxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2gZiQmjxvgBp0DqP7apUnbHeVRk0hd5XoCPLgh3zAho=";
+    hash = "sha256-ltk707viMBDbi7LID0jdLylWkd6Z7Iy6bpORXzODjYc=";
   };
 
   nativeBuildInputs = [

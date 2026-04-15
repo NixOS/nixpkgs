@@ -12,30 +12,20 @@
   boost,
   python3Packages,
   buildDocs ? false, # Needs internet
-  useOpenCL ? false,
   useCPU ? false,
   gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname =
-    "rpp-"
-    + (
-      if (!useOpenCL && !useCPU) then
-        "hip"
-      else if (!useOpenCL && !useCPU) then
-        "opencl"
-      else
-        "cpu"
-    );
+  pname = "rpp-${if useCPU then "cpu" else "hip"}";
 
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ZlJRV57ybPsczvoWwd5vr2n7EKje0vj2GJYsvVY+qas=";
+    hash = "sha256-6e4JHKFC2dvtSGo9xbQKzIdUwlHB09pr5C/5xHwP3l4=";
   };
 
   nativeBuildInputs = [
@@ -59,21 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DBACKEND=${if useCPU then "CPU" else "HIP"}"
   ]
   ++ lib.optionals (gpuTargets != [ ]) [
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ]
-  ++ lib.optionals (!useOpenCL && !useCPU) [
-    "-DBACKEND=HIP"
-  ]
-  ++ lib.optionals (useOpenCL && !useCPU) [
-    "-DBACKEND=OCL"
-  ]
-  ++ lib.optionals useCPU [
-    "-DBACKEND=CPU"
   ];
 
-  postPatch = lib.optionalString (!useOpenCL && !useCPU) ''
+  postPatch = lib.optionalString (!useCPU) ''
     # Bad path
     substituteInPlace CMakeLists.txt \
       --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
@@ -83,11 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Comprehensive high-performance computer vision library for AMD processors";
@@ -95,6 +73,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
-    broken = useOpenCL;
   };
 })

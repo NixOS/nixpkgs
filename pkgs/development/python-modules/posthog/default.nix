@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.8.3";
+  version = "7.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JDt4lLocX+i1WAuY1SUqzmGX5Mt0CcktAsyuGSsTs6Y=";
+    hash = "sha256-GmwFI23HUp9/p6o+UFCES7WwvnexrBrVTDhLd/YYWOs=";
   };
 
   build-system = [ setuptools ];
@@ -65,6 +65,8 @@ buildPythonPackage (finalAttrs: {
     "test_upload"
     # AssertionError: 2 != 3
     "test_flush_interval"
+    # len(client.distinct_ids_feature_flags_reported) = 101 != i % 100 + 1
+    "test_capture_multiple_users_doesnt_out_of_memory"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # Pydantic V1 functionality isn't compatible with Python 3.14

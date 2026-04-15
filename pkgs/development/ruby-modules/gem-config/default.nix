@@ -31,7 +31,7 @@
   which,
   libiconv,
   libpq,
-  nodejs,
+  nodejs-slim,
   clang,
   sqlite,
   zlib,
@@ -125,6 +125,7 @@
   libsysprof-capture,
   imlib2,
   autoSignDarwinBinariesHook,
+  systemd,
 }@args:
 
 let
@@ -262,7 +263,9 @@ in
   };
 
   dep-selector-libgecode = attrs: {
-    USE_SYSTEM_GECODE = true;
+    env = attrs.env or { } // {
+      USE_SYSTEM_GECODE = true;
+    };
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
@@ -326,7 +329,9 @@ in
   };
 
   mimemagic = attrs: {
-    FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    env = attrs.env or { } // {
+      FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    };
   };
 
   mini_magick = attrs: {
@@ -338,7 +343,7 @@ in
 
   mini_racer = attrs: {
     buildFlags = [
-      "--with-v8-dir=\"${nodejs.libv8}\""
+      "--with-v8-dir=\"${nodejs-slim.libv8}\""
     ];
     dontBuild = false;
     postPatch = ''
@@ -477,63 +482,17 @@ in
     meta.mainProgram = "rbprettier";
   };
 
-  prometheus-client-mmap =
-    attrs:
-    {
-      dontBuild = false;
-      postPatch =
-        let
-          getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
-        in
-        ''
-          substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
-        '';
-    }
-    // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-      cargoDeps = rustPlatform.fetchCargoVendor {
-        src = stdenv.mkDerivation {
-          inherit (buildRubyGem { inherit (attrs) gemName version source; })
-            name
-            src
-            unpackPhase
-            nativeBuildInputs
-            ;
-          dontBuilt = true;
-          installPhase = ''
-            cp -R ext/fast_mmaped_file_rs $out
-            rm $out/Cargo.lock
-            cp Cargo.lock $out
-          '';
-        };
-        hash = "sha256-mukk+tWWeG62q4GcDzkk8TyxVsDjShz30wEj82cElt4=";
-      };
-
-      nativeBuildInputs = [
-        cargo
-        rustc
-        rustPlatform.cargoSetupHook
-        rustPlatform.bindgenHook
-      ];
-
-      disallowedReferences = [
-        rustc.unwrapped
-      ];
-
-      preInstall = ''
-        export CARGO_HOME="$PWD/../.cargo/"
-      '';
-
-      postInstall = ''
-        find $out -type f -name .rustc_info.json -delete
-      '';
-    };
-
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [
       glib
       libsysprof-capture
       pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux
+      libselinux
+      libsepol
     ];
   };
 
@@ -542,12 +501,13 @@ in
       binutils
       pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       util-linux
       libselinux
       libsepol
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+      systemd
+    ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -699,7 +659,7 @@ in
   };
 
   execjs = attrs: {
-    propagatedBuildInputs = [ nodejs.libv8 ];
+    propagatedBuildInputs = [ nodejs-slim.libv8 ];
   };
 
   libxml-ruby = attrs: {
@@ -1079,7 +1039,9 @@ in
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
-    SASS_LIBSASS_PATH = toString libsass;
+    env = attrs.env or { } // {
+      SASS_LIBSASS_PATH = toString libsass;
+    };
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
@@ -1165,6 +1127,13 @@ in
 
   treetop = attrs: {
     meta.mainProgram = "tt";
+  };
+
+  trilogy = attrs: {
+    postInstall = ''
+      installPath=$(cat "$out/nix-support/gem-meta/install-path")
+      ln -s contrib/ruby/trilogy.gemspec "$installPath/trilogy.gemspec"
+    '';
   };
 
   typhoeus = attrs: {

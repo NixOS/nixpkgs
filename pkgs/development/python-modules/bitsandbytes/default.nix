@@ -26,9 +26,6 @@
 }:
 
 let
-  pname = "bitsandbytes";
-  version = "0.49.1";
-
   brokenConditions = lib.attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
@@ -73,15 +70,16 @@ let
     paths = cuda-common-redist;
   };
 in
-buildPythonPackage {
-  inherit pname version;
+buildPythonPackage (finalAttrs: {
+  pname = "bitsandbytes";
+  version = "0.49.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
-    tag = version;
-    hash = "sha256-nNhxDJITXNIZMXuZdzpF5dl1K1kFEVQ0gbTqZnOf/sI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z7C159ZpdthQppXibzA06rAglfM3Hmwd7LX4bPjk1Eo=";
   };
 
   patches = [
@@ -163,11 +161,14 @@ buildPythonPackage {
 
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
-  CUDA_HOME = lib.optionalString cudaSupport "${cuda-native-redist}";
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${cuda-native-redist}/include"
-    "-L${cuda-native-redist}/lib"
-  ];
+
+  env = lib.optionalAttrs cudaSupport {
+    CUDA_HOME = cuda-native-redist;
+    NVCC_PREPEND_FLAGS = toString [
+      "-I${cuda-native-redist}/include"
+      "-L${cuda-native-redist}/lib"
+    ];
+  };
 
   preBuild = ''
     make -j $NIX_BUILD_CORES
@@ -201,11 +202,11 @@ buildPythonPackage {
   meta = {
     description = "8-bit CUDA functions for PyTorch";
     homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
-    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
+    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bcdarwin
       jk
     ];
   };
-}
+})

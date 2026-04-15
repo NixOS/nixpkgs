@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.aescrypt.com/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      lovek323
       qknight
     ];
     platforms = lib.platforms.all;

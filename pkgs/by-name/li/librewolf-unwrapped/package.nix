@@ -31,6 +31,7 @@ in
     maintainers = with lib.maintainers; [
       dwrege
       fpletz
+      hythera
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;

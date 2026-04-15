@@ -239,13 +239,9 @@ let
           ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3"
           ++ [
           ]
-          ++ ops stdenv.hostPlatform.isDarwin [
-            # on darwin, we have /usr/include/tk.h -- so the configure script detects
-            # that tk is installed
-            "--with-out-ext=tk"
-            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-            "--with-setjmp-type=setjmp"
-          ]
+          # on darwin, we have /usr/include/tk.h -- so the configure script detects
+          # that tk is installed
+          ++ lib.optional stdenv.hostPlatform.isDarwin "--with-out-ext=tk"
           ++ ops stdenv.hostPlatform.isFreeBSD [
             "rb_cv_gnu_qsort_r=no"
             "rb_cv_bsd_qsort_r=yes"
@@ -411,8 +407,8 @@ in
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "1" "";
-    hash = "sha256-OSS+LQXbMPTjX4Wb8Ci+hfS33QFxQUL9gj5K9d4vr50=";
+    version = rubyVersion "4" "0" "2" "";
+    hash = "sha256-UVArJrULaN9JYzNspB42jN6SySj6+RZU3kxMF5H4Kqw=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "symbolicator";
-  version = "26.1.0";
+  version = "26.2.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = finalAttrs.version;
-    hash = "sha256-sqfp48lDpFwxgKL4CduBVbsYxxpaAugaybp7JKFLuX8=";
+    hash = "sha256-CuG/rfwuJeKibsYWo1lNDcJkuKXMrXSv8hk+hIjYy74=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-7L75EFVU+5YygOuv/7KlD4JXfBKOW9vTumE0aNmLRyU=";
+  cargoHash = "sha256-YddQ3E6YlcFkoQEglTNJ1lK6ivxJYtwhouFT32kV1hI=";
 
   nativeBuildInputs = [
     pkg-config

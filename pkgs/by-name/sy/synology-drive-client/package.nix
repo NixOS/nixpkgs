@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  writeScript,
   qt5,
   fetchurl,
   autoPatchelfHook,
@@ -13,6 +12,10 @@
   gtk3,
   pango,
   libxcb,
+  dbus,
+  procps,
+  runCommand,
+  xwayland-run,
 }:
 let
   pname = "synology-drive-client";
@@ -84,7 +87,46 @@ let
       substituteInPlace $out/bin/synology-drive --replace /opt $out/opt
     '';
 
-    passthru = { inherit updateScript; };
+    passthru = {
+      inherit updateScript;
+      tests = {
+        wl =
+          runCommand "${pname}-wayland"
+            {
+              nativeBuildInputs = [
+                linux
+                (xwayland-run.override {
+                  withDbus = true;
+                })
+                procps
+              ];
+            }
+            ''
+              export HOME=$TMPDIR
+              export QT_QPA_PLATFORM=xcb
+
+              xwfb-run -c weston -- \
+                dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- sh -c '
+                echo "Starting Synology Drive..."
+                synology-drive
+
+                sleep 5
+
+                echo "Checking synology sub-processes..."
+                if pgrep -f cloud-drive-connec[t] > /dev/null; then
+                  echo "Synology sub-processes found."
+                  exit 0
+                fi
+
+                echo "Error: synology sub-processes not found."
+                ps -ef | grep "cloud-drive" | grep -v "grep" || echo "No cloud-drive processes found at all."
+                exit 1
+              '
+
+              touch $out
+            '';
+      };
+    };
   });
 
   darwin = stdenv.mkDerivation (finalAttrs: {

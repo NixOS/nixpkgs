@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation {
   pname = "bodoni-moda";
@@ -14,14 +15,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-OQi+KKBM+BrmA2pDit6dib5krrQBba5dVCBd2/G5sIM=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp fonts/*/*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://indestructibletype.com/Bodoni.html";

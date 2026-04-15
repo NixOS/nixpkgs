@@ -85,7 +85,6 @@ let
               AndersonTorres
               adisbladis
               jwiegley
-              lovek323
               panchoh
             ];
             "macport" = with lib.maintainers; [

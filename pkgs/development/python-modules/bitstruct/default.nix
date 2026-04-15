@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.22.0";
+  version = "8.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "bitstruct";
     tag = version;
-    hash = "sha256-4pfRmgi2KYnrKFGyMJc4bV7FwjFn7KVJ36lYm3XOAIk=";
+    hash = "sha256-Egiac+1x3HaaGV6ThjChfjKbT0WvQDb1EMuyOxLY7Kg=";
   };
 
   build-system = [

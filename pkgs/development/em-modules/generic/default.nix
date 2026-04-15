@@ -37,8 +37,10 @@ wrapDerivation (
     ]
     ++ nativeBuildInputs;
 
-    # fake conftest results with emscripten's python magic
-    EMCONFIGURE_JS = 2;
+    env = args.env or { } // {
+      # fake conftest results with emscripten's python magic
+      EMCONFIGURE_JS = 2;
+    };
 
     # removes archive indices
     dontStrip = args.dontStrip or true;

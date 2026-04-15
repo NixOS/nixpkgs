@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "brax";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-08t5hYG9aAY1Adp2QO9vmkcH0fH09Dr213pfvdhAaGY=";
+    hash = "sha256-/oznBa44xKl+9T1YrTVhCbuKZj16V1BTlnmCGRbF45g=";
   };
 
   build-system = [
@@ -88,6 +88,11 @@ buildPythonPackage (finalAttrs: {
     "testModelEncoding1"
     "testTrain"
     "testTrainDomainRandomize"
+
+    # ValueError: Error: no decoder found for mesh file 'meshes/pyramid.stl'
+    "test_convex_convex"
+    "test_dumps"
+    "test_dumps_invalidstate_raises"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # Flaky:
@@ -100,9 +105,7 @@ buildPythonPackage (finalAttrs: {
     "brax/generalized/constraint_test.py"
   ];
 
-  pythonImportsCheck = [
-    "brax"
-  ];
+  pythonImportsCheck = [ "brax" ];
 
   meta = {
     changelog = "https://github.com/google/brax/blob/main/docs/release-notes/${finalAttrs.src.tag}.md";

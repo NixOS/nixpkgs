@@ -1,7 +1,6 @@
 {
   lib,
-  async-timeout,
-  attrs,
+  aiohttp,
   buildPythonPackage,
   faust-cchardet,
   fetchFromGitHub,
@@ -16,29 +15,28 @@
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "66";
+  version = "68";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "axis";
     tag = "v${version}";
-    hash = "sha256-h3ySZeGlWeWIywtZoK8LcnxaqRe6lvJ7VTds1J+Jc3M=";
+    hash = "sha256-2a7zGgWc0QxxjCCg5yCfcepzLhEfvASv/Y8mDgl4y8M=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel==0.46.1" "wheel"
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel==0.46.3" "wheel"
   '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    async-timeout
-    attrs
+    aiohttp
     faust-cchardet
     httpx
     orjson

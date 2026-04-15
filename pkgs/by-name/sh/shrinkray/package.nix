@@ -12,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shrinkray";
-  version = "26.2.4.1";
+  version = "26.3.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DRMacIver";
     repo = "shrinkray";
     tag = "v${version}";
-    hash = "sha256-y8NZJ80KM+wW58YAWT7Cx3uh08imI7sbs487GbANyJg=";
+    hash = "sha256-1sdUfgT/2fC6zpFR20okmaueqdjJ5nWwUl3n8nsGXTU=";
   };
   postPatch = ''
     substituteInPlace tests/test_main.py \
@@ -38,6 +38,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail 'which("clang-format")' '"${lib.getExe' clang-tools "clang-format"}"'
     substituteInPlace src/shrinkray/passes/clangdelta.py \
       --replace-fail 'which("clang_delta")' '"${cvise}/libexec/cvise/clang_delta"'
+    substituteInPlace src/shrinkray/subprocess/client.py \
+      --replace-fail 'sys.executable,
+                "-m",
+                "shrinkray.subprocess.worker"' "\"$out/bin/shrinkray-worker\""
   '';
 
   build-system = [ python3.pkgs.setuptools ];
@@ -77,6 +81,8 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_clang_delta.py::test_find_clang_delta_when_found_in_path"
     "tests/test_clang_delta.py::test_find_clang_delta_when_not_found_anywhere"
     "tests/test_formatting.py::test_default_formatter_python_files_without_black"
+    # This test is too timing sensitive
+    "tests/test_validation.py::test_validation_output_streams_immediately"
   ];
 
   meta = {

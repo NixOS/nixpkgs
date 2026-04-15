@@ -58,7 +58,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     "--enable-shared"
   ];
 
-  doCheck = true;
+  doCheck = lib.meta.availableOn stdenv.hostPlatform postgresqlTestHook;
 
   enableParallelBuilding = true;
 

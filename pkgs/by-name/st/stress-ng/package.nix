@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stress-ng";
-  version = "0.20.00";
+  version = "0.21.00";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-KbsxZhsS5q/MZ2laA16ideicRu7oezH12yzmEBMyzVc=";
+    hash = "sha256-kFIrbt/jJuQnuWmQUBuiFGuAfBb2pUtujhj6bwpDF4k=";
   };
 
   postPatch = ''
@@ -95,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${finalAttrs.version}/debian/changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      c0bw3b
       dbeley
     ];
     platforms = lib.platforms.unix;

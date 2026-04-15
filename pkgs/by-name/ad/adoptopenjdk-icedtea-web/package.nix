@@ -62,8 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     touch $XDG_CONFIG_HOME/icedtea-web/deployment.properties
   '';
 
-  HOME = "/build";
-  XDG_CONFIG_HOME = "/build";
+  env = {
+    HOME = "/build";
+    XDG_CONFIG_HOME = "/build";
+  };
 
   configureFlags = [
     "--with-itw-libs=DISTRIBUTION"

@@ -4,28 +4,27 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jkqtplotter";
-  version = "5.0.0-unstable-2025-10-13";
+  version = "5.0.0-unstable-2025-12-26";
 
   src = fetchFromGitHub {
     owner = "jkriege2";
     repo = "JKQtPlotter";
-    rev = "d243218119b1632987df26baea0d4bc6ccdee533";
-    hash = "sha256-fLkZGl4LYr9zdGjxxhcU6IZkpXV/Sex4TC9DFPyw43M=";
+    rev = "ff89c53057ab15ac6dd7b9ebfd6713cef0ce9676";
+    hash = "sha256-rx1TWDAXHFo+LgylfkPqWIiHAJ9FKsQ4s9QSFHiBHC8=";
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qttools
+    qt6.qttools
   ];
 
   meta = {

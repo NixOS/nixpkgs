@@ -49,6 +49,7 @@ buildGoModule (finalAttrs: {
         "${finalAttrs.passthru.frontend}/altcha.umd.js:/public/static/altcha.umd.js"
         "static/email-templates"
         "${finalAttrs.passthru.frontend}/admin:/admin"
+        "${finalAttrs.passthru.email-builder}:/admin/static/email-builder"
         "i18n:/i18n"
       ];
     in
@@ -59,11 +60,14 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     frontend = callPackage ./frontend.nix { inherit (finalAttrs) meta version src; };
+    email-builder = callPackage ./email-builder.nix { inherit (finalAttrs) meta version src; };
     tests = { inherit (nixosTests) listmonk; };
     updateScript = nix-update-script {
       extraArgs = [
         "-s"
         "frontend"
+        "-s"
+        "email-builder"
       ];
     };
   };

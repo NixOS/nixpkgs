@@ -5,6 +5,7 @@
   writers,
   python3Packages,
   cargo,
+  gitMinimal,
   nix-prefetch-git,
   cacert,
 }:
@@ -26,6 +27,7 @@ let
       with python3Packages;
       [
         requests
+        tomli-w
       ]
       ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
     flakeIgnore = [
@@ -61,9 +63,12 @@ let
       nativeBuildInputs = [
         fetchCargoVendorUtil
         cacert
-        # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
-        # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
-        (nix-prefetch-git.override { git-lfs = null; })
+        (nix-prefetch-git.override {
+          git = gitMinimal;
+          # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
+          # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
+          git-lfs = null;
+        })
       ]
       ++ nativeBuildInputs;
 

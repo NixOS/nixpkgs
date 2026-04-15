@@ -30,18 +30,19 @@
   httpretty,
   pytest-mock,
   pytest-xdist,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.2.1";
+  version = "2.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-oPHRDYci4lrZBY3MC4QU1juwbMJYFDJjARg1Y8us4FQ=";
+    hash = "sha256-2qREmUJpoOPh8QHQErLwn9M5TuEzjoruHJ8qmwlEjyI=";
   };
 
   build-system = [
@@ -50,12 +51,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  pythonRelaxDeps = [
-    "dulwich"
-    "keyring"
-    "pbs-installer"
   ];
 
   dependencies = [
@@ -100,6 +95,7 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+    responses
   ];
 
   preCheck = (

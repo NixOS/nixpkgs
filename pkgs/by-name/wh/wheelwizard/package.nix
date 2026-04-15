@@ -14,13 +14,13 @@
 }:
 buildDotnetModule rec {
   pname = "wheelwizard";
-  version = "2.3.5";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
     tag = version;
-    hash = "sha256-VEoj0h+YTEPWmYz2jtFnLzcMbMNeSt8yTuOwbfNt9t0=";
+    hash = "sha256-WJVEofU41ZoOYLgD2TMPy50KQ44SPuLKS2piRmI9wV8=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json

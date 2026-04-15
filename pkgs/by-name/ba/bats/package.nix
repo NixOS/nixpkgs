@@ -18,6 +18,7 @@
   symlinkJoin,
   makeWrapper,
   runCommand,
+  writeText,
   doInstallCheck ? true,
   # packages that use bats (for update testing)
   bash-preexec,
@@ -151,63 +152,65 @@ resholve.mkDerivation rec {
         wrapProgram "$out/bin/bats" \
           --suffix BATS_LIB_PATH : "$out/share/bats"
       '';
+
+      inherit meta;
     };
 
   passthru.tests = {
     libraries =
-      runCommand "${bats.name}-with-libraries-test"
-        {
-          testScript = ''
-            setup() {
-              bats_load_library bats-support
-              bats_load_library bats-assert
-              bats_load_library bats-file
-              bats_load_library bats-detik/detik.bash
+      let
+        testScript = writeText "bats-libraries-test-script" ''
+          setup() {
+            bats_load_library bats-support
+            bats_load_library bats-assert
+            bats_load_library bats-file
+            bats_load_library bats-detik/detik.bash
 
-              bats_require_minimum_version 1.5.0
+            bats_require_minimum_version 1.5.0
 
-              TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
-            }
+            TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
+          }
 
-            teardown() {
-              temp_del "$TEST_TEMP_DIR"
-            }
+          teardown() {
+            temp_del "$TEST_TEMP_DIR"
+          }
 
-            @test echo_hi {
-              run -0 echo hi
-              assert_output "hi"
-            }
+          @test echo_hi {
+            run -0 echo hi
+            assert_output "hi"
+          }
 
-            @test cp_failure {
-              run ! cp
-              assert_line --index 0 "cp: missing file operand"
-              assert_line --index 1 "Try 'cp --help' for more information."
-            }
+          @test cp_failure {
+            run ! cp
+            assert_line --index 0 "cp: missing file operand"
+            assert_line --index 1 "Try 'cp --help' for more information."
+          }
 
-            @test file_exists {
-              echo "hi" > "$TEST_TEMP_DIR/hello.txt"
-              assert_file_exist "$TEST_TEMP_DIR/hello.txt"
-              run cat "$TEST_TEMP_DIR/hello.txt"
-              assert_output "hi"
-            }
-          '';
-          passAsFile = [ "testScript" ];
-        }
-        ''
-          ${
-            bats.withLibraries (p: [
-              p.bats-support
-              p.bats-assert
-              p.bats-file
-              p.bats-detik
-            ])
-          }/bin/bats "$testScriptPath"
-          touch "$out"
+          @test file_exists {
+            echo "hi" > "$TEST_TEMP_DIR/hello.txt"
+            assert_file_exist "$TEST_TEMP_DIR/hello.txt"
+            run cat "$TEST_TEMP_DIR/hello.txt"
+            assert_output "hi"
+          }
         '';
+        batsWithLibraries = bats.withLibraries (p: [
+          p.bats-support
+          p.bats-assert
+          p.bats-file
+          p.bats-detik
+        ]);
+      in
+      runCommand "${bats.name}-with-libraries-test" { } ''
+        ${lib.getExe batsWithLibraries} "${testScript}"
+        touch "$out"
+      '';
 
     upstream = bats.unresholved.overrideAttrs (old: {
       name = "${bats.name}-tests";
       dontInstall = true; # just need the build directory
+      # after 411981, make-symlinks-relative breaks a parallelization test:
+      # "setup_file is not over parallelized"
+      dontRewriteSymlinks = true;
       nativeInstallCheckInputs = [
         ncurses
         parallel # skips some tests if it can't detect
@@ -243,13 +246,15 @@ resholve.mkDerivation rec {
     # to see when updates would break things, include packages
     # that use nixpkgs' bats for testing (as long as they
     # aren't massive builds)
-    inherit bash-preexec locate-dominating-file packcc;
+    inherit bash-preexec locate-dominating-file;
     resholve = resholve.tests.cli;
   }
   // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    # TODO: kikit's kicad dependency is marked broken on darwin atm
-    # may be able to fold this up if that resolves.
-    inherit kikit;
+    # TODO:
+    # - kikit's kicad dependency is marked broken on darwin atm
+    #   may be able to fold this up if that resolves.
+    # - packcc's tests currently broken on darwin (apr 2026)
+    inherit kikit packcc;
   };
 
   meta = {

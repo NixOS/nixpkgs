@@ -1,0 +1,49 @@
+diff --git a/thinc/backends/cblas.pxd b/thinc/backends/cblas.pxd
+index c608d87..1ae1281 100644
+--- a/thinc/backends/cblas.pxd
++++ b/thinc/backends/cblas.pxd
+@@ -2,21 +2,21 @@ from libcpp.memory cimport shared_ptr
+ 
+ ctypedef void (*sgemm_ptr)(bint transA, bint transB, int M, int N, int K,
+                            float alpha, const float* A, int lda, const float* B,
+-                           int ldb, float beta, float* C, int ldc) nogil
++                           int ldb, float beta, float* C, int ldc) noexcept nogil
+ ctypedef void (*dgemm_ptr)(bint transA, bint transB, int M, int N, int K,
+                            double alpha, const double* A, int lda, const double* B,
+-                           int ldb, double beta, double* C, int ldc) nogil
++                           int ldb, double beta, double* C, int ldc) noexcept nogil
+ 
+ 
+ ctypedef void (*saxpy_ptr)(int N, float alpha, const float* X, int incX,
+-                           float *Y, int incY) nogil
++                           float *Y, int incY) noexcept nogil
+ 
+ 
+ ctypedef void (*daxpy_ptr)(int N, double alpha, const double* X, int incX,
+-                           double *Y, int incY) nogil
++                           double *Y, int incY) noexcept nogil
+ 
+-ctypedef void (*sscal_ptr)(int N, float alpha, float* X, int incX) nogil
+-ctypedef void (*dscal_ptr)(int N, double alpha, double* X, int incX) nogil
++ctypedef void (*sscal_ptr)(int N, float alpha, float* X, int incX) noexcept nogil
++ctypedef void (*dscal_ptr)(int N, double alpha, double* X, int incX) noexcept nogil
+ 
+ # Forward-declaration of the BlasFuncs struct. This struct must be opaque, so
+ # that consumers of the CBlas class cannot become dependent on its size or
+diff --git a/thinc/backends/cblas.pyx b/thinc/backends/cblas.pyx
+index 896b604..9a9e63e 100644
+--- a/thinc/backends/cblas.pyx
++++ b/thinc/backends/cblas.pyx
+@@ -5,10 +5,10 @@ from libcpp.memory cimport make_shared
+ 
+ 
+ # Single- and double-precision wrappers for `blis.cy.scalv`
+-cdef void blis_sscal(int N, float alpha, float* X, int incX) nogil:
++cdef void blis_sscal(int N, float alpha, float* X, int incX) noexcept nogil:
+     blis.cy.scalv(blis.cy.NO_CONJUGATE, N, alpha, X, incX)
+ 
+-cdef void blis_dscal(int N, double alpha, double* X, int incX) nogil:
++cdef void blis_dscal(int N, double alpha, double* X, int incX) noexcept nogil:
+     blis.cy.scalv(blis.cy.NO_CONJUGATE, N, alpha, X, incX)
+ 
+ 

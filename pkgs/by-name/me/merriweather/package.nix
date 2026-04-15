@@ -2,29 +2,29 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "merriweather";
-  version = "2.005";
+  version = "2.200";
 
   src = fetchFromGitHub {
     owner = "SorkinType";
     repo = "Merriweather";
-    rev = "4fd88c9299009d1c1d201e7da3ff75cf1de5153a";
-    sha256 = "1ndycja2jzhcfbqbm0p6ka2zl1i1pdbkf0crw2lp3pi4k89wlm29";
+    rev = "6e3263d6241aeb747ebfcdd4af3ff8bd1013bb49";
+    sha256 = "sha256-mpVJpxI98VxHpZMFFyTHjxTPcUTB1kK8XCGa32znMcQ=";
   };
 
   # TODO: it would be nice to build this from scratch, but lots of
   # Python dependencies to package (fontmake, gftools)
 
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/opentype/${pname} fonts/otf/*.otf
-    install -m444 -Dt $out/share/fonts/truetype/${pname} fonts/ttfs/*.ttf
-    install -m444 -Dt $out/share/fonts/woff/${pname} fonts/woff/*.woff
-    install -m444 -Dt $out/share/fonts/woff2/${pname} fonts/woff2/*.woff2
-    # TODO: install variable version?
-  '';
+  nativeBuildInputs = [ installFonts ];
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   meta = {
     homepage = "https://github.com/SorkinType/Merriweather";
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ emily ];
   };
-}
+})

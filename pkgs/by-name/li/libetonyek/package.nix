@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchFromGitLab,
   autoreconfHook,
   pkg-config,
   boost,
@@ -14,16 +15,26 @@
   mdds,
   zlib,
 }:
-
+let
+  mdds_2_1 = mdds.overrideAttrs {
+    version = "2.1.1";
+    src = fetchFromGitLab {
+      owner = "mdds";
+      repo = "mdds";
+      rev = "2.1.1";
+      hash = "sha256-a412LpgDiYM8TMToaUrTlHtblYS1HehzrDOwvIAAxiA=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libetonyek";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
     rev = "libetonyek-${finalAttrs.version}";
-    hash = "sha256-dvYbV+7IakgOkGsZ+zaW+qgn/QoD6Jwq/juaE+7iYug=";
+    hash = "sha256-Dr4QhzZQzLNHf7OMMjUaR6WbnIQbu18LIiAjPD0sCsY=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     liblangtag
     librevenge
     libxml2
-    mdds
+    mdds_2_1
     zlib
   ];
 

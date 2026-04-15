@@ -3,6 +3,7 @@
   lib,
   jre_headless,
   fetchFromGitHub,
+  fetchpatch,
   maven,
   makeWrapper,
   nix-update-script,
@@ -10,7 +11,7 @@
 
 let
   jre = jre_headless;
-  version = "7.18.0";
+  version = "7.21.0";
   mainProgram = "openapi-generator-cli";
   this = maven.buildMavenPackage {
     inherit version;
@@ -21,10 +22,18 @@ let
       owner = "OpenAPITools";
       repo = "openapi-generator";
       tag = "v${version}";
-      hash = "sha256-D7F4fbgXqUMH0ZOsnGtB3gVWmans0MPdD7ix6ImXsfA=";
+      hash = "sha256-3e2JrZ+k88t3CyrkBzwkijs0yZGGwB9Se2CeSB02x6c=";
     };
 
-    mvnHash = "sha256-17siKb+TIYAuY1p7+1mcc3QY+Rfnsoy+CJiWT5LFM0w=";
+    patches = [
+      # Achieve reproducible mvnHash by pinning develocity plugin.
+      (fetchpatch {
+        url = "https://github.com/OpenAPITools/openapi-generator/commit/ff66e1bc7fe33dcee89de7296eb7bcd5e2a11cc6.patch";
+        hash = "sha256-E1VgtaIW1V+8ch2RpW850fVNl5Iqitjog+0b8DKFgZw=";
+      })
+    ];
+
+    mvnHash = "sha256-iWVWVEiwvCwc0ayVjH9joiDchyyNUOhEZjJTMH9CCEE=";
     mvnParameters = "-Duser.home=$TMPDIR";
     doCheck = false;
 

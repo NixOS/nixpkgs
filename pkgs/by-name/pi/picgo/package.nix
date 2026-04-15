@@ -6,28 +6,29 @@
   pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_38,
+  electron_40,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "2.5.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M3cA17DoPXfldvq1vjF3P9HEXGkd+TXFuTr95iqIWsQ=";
+    hash = "sha256-4Ih7PPBo6scJoUS8yTAR0iyG5vxNc/c0CCw5FGaIbHM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
     pname = "picgo";
-    hash = "sha256-BfKTZy9NBfBj0MwREoxYmyvhfXP4FlADam2SwNTOJ2U=";
+    hash = "sha256-tILvWDoHAN5XT1F/cJYgfeMzowuO/fhiughI+0FvHzc=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3
   };
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create startup script
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe electron_38} $out/bin/picgo \
+    makeWrapper ${lib.getExe electron_40} $out/bin/picgo \
       --add-flags "$out/lib/picgo/.launcher.cjs" \
       --add-flags "--name picgo" \
       --set NODE_ENV production \
@@ -103,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "picgo";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple tool for uploading pictures";

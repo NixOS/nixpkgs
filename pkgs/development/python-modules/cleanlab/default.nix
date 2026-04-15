@@ -90,6 +90,9 @@ buildPythonPackage (finalAttrs: {
     "test_duplicate_points_have_similar_scores"
     # AssertionError: assert 'Annotators [1] did not label any examples.'
     "test_label_quality_scores_multiannotator"
+    # AttributeError: module 'numpy' has no attribute 'in1d' (deprecated since numpy 2.x)
+    "test_bad_input_find_label_issues_internal"
+    "test_return_issues_ranked_by_scores"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # AttributeError: 'called_once_with' is not a valid assertion.

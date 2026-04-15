@@ -24,16 +24,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.110.0";
+  version = "0.112.1";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = finalAttrs.version;
-    hash = "sha256-iytTJZ70kg2Huwj/BSwDX4h9DVDTlJR2gEHAB2pGn/k=";
+    hash = "sha256-y0EfP95XEVvse0xaSWK5Yr748tTVYRG7Bx+Qf5JrlYY=";
   };
 
-  cargoHash = "sha256-a/N0a9ZVqXAjAl5Z7BdEsIp0He3h0S/owS0spEPb3KI=";
+  cargoHash = "sha256-Y/yaWj2akccehFVxrGHrsjzZd02L8qE9KoSSwzAeEwg=";
 
   nativeBuildInputs = [
     pkg-config

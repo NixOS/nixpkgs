@@ -15,26 +15,23 @@
   stdenv,
   stestr,
   stevedore,
-  writeText,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
     tag = version;
-    hash = "sha256-1mMON/aVJon7t/zfYVhFpuB78b+DmOEVhvIFaTBRqfo=";
+    hash = "sha256-Z6qzyT6tmQP2Y4q+hqvna7nRJmmLxEL6XKGrTJu9Ymw=";
   };
 
-  postPatch = ''
-    # TODO: somehow bring this to upstreams attention
-    substituteInPlace pyproject.toml \
-      --replace-fail '"osc_lib"' '"osc_lib", "osc_lib.api", "osc_lib.cli", "osc_lib.command", "osc_lib.test", "osc_lib.tests", "osc_lib.tests.api", "osc_lib.tests.cli", "osc_lib.tests.command", "osc_lib.tests.utils", "osc_lib.utils"'
-  '';
+  patches = [
+    ./fix-pyproject.diff
+  ];
 
   env.PBR_VERSION = version;
 
@@ -79,7 +76,19 @@ buildPythonPackage rec {
       runHook postCheck
     '';
 
-  pythonImportsCheck = [ "osc_lib" ];
+  pythonImportsCheck = [
+    "osc_lib"
+    "osc_lib.api"
+    "osc_lib.cli"
+    "osc_lib.command"
+    "osc_lib.test"
+    "osc_lib.tests"
+    "osc_lib.tests.api"
+    "osc_lib.tests.cli"
+    "osc_lib.tests.command"
+    "osc_lib.tests.utils"
+    "osc_lib.utils"
+  ];
 
   meta = {
     description = "OpenStackClient Library";

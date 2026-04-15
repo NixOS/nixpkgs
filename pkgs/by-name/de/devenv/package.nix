@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
+  applyPatches,
   gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
@@ -11,50 +13,46 @@
   nixVersions,
   openssl,
   dbus,
+  protobuf,
+  sqlite,
   pkg-config,
   glibcLocalesUtf8,
+  boehmgc,
+  llvmPackages,
+  nixd,
+  bash,
   devenv, # required to run version test
 }:
 
 let
-  version = "1.11.2";
-  devenvNixVersion = "2.30.4";
+  version = "2.0.6";
+  devenvNixVersion = "2.32";
+  devenvNixRev = "e127c1c94cefe02d8ca4cca79ef66be4c527510e";
 
-  devenv_nix =
-    let
-      components = (
-        nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
-          owner = "cachix";
-          repo = "nix";
-          rev = "devenv-${devenvNixVersion}";
-          hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-        })
-      );
-    in
-    # Support for mdbook >= 0.5, https://github.com/NixOS/nix/issues/14628
-    (
-      (components.appendPatches [
-        (fetchpatch2 {
-          name = "nix-2.30-14695-mdbook-0.5-support.patch";
-          url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
-          excludes = [ "doc/manual/package.nix" ];
-          hash = "sha256-GYaTOG9wZT9UI4G6za535PkLyjHKSxwBjJsXbjmI26g=";
-        })
-      ]).overrideScope
-      (
-        finalScope: prevScope: {
-          version = devenvNixVersion;
-        }
-      )
-    ).nix-everything.overrideAttrs
-      (old: {
-        pname = "devenv-nix";
-        version = devenvNixVersion;
-        doCheck = false;
-        doInstallCheck = false;
-        # do override src, but the Nix way so the warning is unaware of it
-        __intentionallyOverridingVersion = true;
-      });
+  devenvNixSrc = applyPatches {
+    name = "devenv-nix-${devenvNixVersion}-source";
+    src = fetchFromGitHub {
+      owner = "cachix";
+      repo = "nix";
+      rev = devenvNixRev;
+      hash = "sha256-MRNVInSmvhKIg3y0UdogQJXe+omvKijGszFtYpd5r9k=";
+    };
+    patches = [
+      # Lowdown 3.0 compatibility; devenv's nix fork (2.32-based) predates
+      # the upstream fix.
+      (fetchpatch {
+        name = "nix-lowdown-3.0-support.patch";
+        url = "https://github.com/NixOS/nix/commit/472c35c561bd9e8db1465e0677f1efe2cb88c568.patch";
+        hash = "sha256-ZCQgI/euBN8t9rgdCsGRgrcEWG3T5MUc+bQc4tIcHuI=";
+      })
+    ];
+  };
+
+  nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
+    finalScope: prevScope: {
+      version = devenvNixVersion;
+    }
+  );
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -64,33 +62,71 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-8Ivbm9ltg0hUGQYMuRDOI8hbHUzqB9xKZ9ubKAzzwE8=";
+    hash = "sha256-i1G6n/7Z5fO9RhplzXQSTiLyh1Cs0GhoCoEStFLARtA=";
   };
 
-  cargoHash = "sha256-mMmobDZeNqrByowwrDXojVnHeUyC/YbhERpF8iOCZ0s=";
+  cargoHash = "sha256-p5kI7HlG6RVxCCEb/J0L2gh36jkm/atAV98ny3h4vqo=";
 
-  buildAndTestSubdir = "devenv";
+  # Upstream tagged v2.0.6 with Cargo.toml already bumped to 2.0.7
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail 'version = "2.0.7"' 'version = "${version}"'
+  '';
+
+  env = {
+    RUSTFLAGS = "--cfg tracing_unstable";
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    DEVENV_IS_RELEASE = true;
+  };
+
+  cargoBuildFlags = [
+    "-p"
+    "devenv"
+    "-p"
+    "devenv-run-tests"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
     pkg-config
+    protobuf
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
+    sqlite
     dbus
+    llvmPackages.clang-unwrapped
+    nix_components.nix-expr-c
+    nix_components.nix-store-c
+    nix_components.nix-util-c
+    nix_components.nix-flake-c
+    nix_components.nix-cmd-c
+    nix_components.nix-fetchers-c
+    nix_components.nix-main-c
   ];
 
   nativeCheckInputs = [
     gitMinimal
+    bash
   ];
 
   preCheck = ''
-    git init
+    # Initialize git repo for tests that use git-root-relative imports
+    pushd $NIX_BUILD_TOP/source
+    git init -b main
     git config user.email "test@example.com"
     git config user.name "Test User"
+    git add -A
+    popd
   '';
+
+  useNextest = true;
+  cargoTestFlags = [
+    "-p"
+    "devenv"
+  ];
 
   postInstall =
     let
@@ -100,16 +136,20 @@ rustPlatform.buildRustPackage {
     in
     ''
       wrapProgram $out/bin/devenv \
-        --prefix PATH ":" "$out/bin:${cachix}/bin" \
-        --set DEVENV_NIX ${devenv_nix} \
+        --prefix PATH ":" "$out/bin:${lib.getBin cachix}/bin:${lib.getBin nixd}/bin" \
+        ${setDefaultLocaleArchive}
+
+      wrapProgram $out/bin/devenv-run-tests \
+        --prefix PATH ":" "$out/bin:${lib.getBin cachix}/bin:${lib.getBin nixd}/bin" \
         ${setDefaultLocaleArchive}
 
       # Generate manpages
       cargo xtask generate-manpages --out-dir man
       installManPage man/*
 
-      # Generate shell completions
+      # Generate shell completions (devenv must be in PATH)
       compdir=./completions
+      export PATH="$out/bin:$PATH"
       for shell in bash fish zsh; do
         cargo xtask generate-shell-completion $shell --out-dir $compdir
       done
@@ -128,7 +168,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
-    changelog = "https://github.com/cachix/devenv/releases/tag/v${version}";
+    changelog = "https://github.com/cachix/devenv/releases";
     description = "Fast, Declarative, Reproducible, and Composable Developer Environments";
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;

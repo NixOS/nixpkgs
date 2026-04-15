@@ -41,6 +41,14 @@ in
       [VLAN]
       ${attrsToSection def.vlanConfig}
     ''
+    + optionalString (def.macvlanConfig != { }) ''
+      [MACVLAN]
+      ${attrsToSection def.macvlanConfig}
+    ''
+    + optionalString (def.macvtapConfig != { }) ''
+      [MACVTAP]
+      ${attrsToSection def.macvtapConfig}
+    ''
     + optionalString (def.ipvlanConfig != { }) ''
       [IPVLAN]
       ${attrsToSection def.ipvlanConfig}
@@ -49,14 +57,50 @@ in
       [IPVTAP]
       ${attrsToSection def.ipvtapConfig}
     ''
-    + optionalString (def.macvlanConfig != { }) ''
-      [MACVLAN]
-      ${attrsToSection def.macvlanConfig}
-    ''
     + optionalString (def.vxlanConfig != { }) ''
       [VXLAN]
       ${attrsToSection def.vxlanConfig}
     ''
+    + optionalString (def.geneveConfig != { }) ''
+      [GENEVE]
+      ${attrsToSection def.geneveConfig}
+    ''
+    + optionalString (def.hsrConfig != { }) ''
+      [HSR]
+      ${attrsToSection def.hsrConfig}
+    ''
+    + optionalString (def.bareUDPConfig != { }) ''
+      [BareUDP]
+      ${attrsToSection def.bareUDPConfig}
+    ''
+    + optionalString (def.l2tpConfig != { }) ''
+      [L2TP]
+      ${attrsToSection def.l2tpConfig}
+    ''
+    + flip concatMapStrings def.l2tpSessions (x: ''
+      [L2TPSession]
+      ${attrsToSection x}
+    '')
+    + optionalString (def.macsecConfig != { }) ''
+      [MACsec]
+      ${attrsToSection def.macsecConfig}
+    ''
+    + optionalString (def.macsecConfig != { }) ''
+      [MACsec]
+      ${attrsToSection def.macsecConfig}
+    ''
+    + flip concatMapStrings def.macsecReceiveChannels (x: ''
+      [MACsecReceiveChannel]
+      ${attrsToSection x}
+    '')
+    + flip concatMapStrings def.macsecTransmitAssociations (x: ''
+      [MACsecTransmitAssociation]
+      ${attrsToSection x}
+    '')
+    + flip concatMapStrings def.macsecReceiveAssociations (x: ''
+      [MACsecReceiveAssociation]
+      ${attrsToSection x}
+    '')
     + optionalString (def.tunnelConfig != { }) ''
       [Tunnel]
       ${attrsToSection def.tunnelConfig}
@@ -69,6 +113,10 @@ in
       [Peer]
       ${attrsToSection def.peerConfig}
     ''
+    + optionalString (def.vxcanConfig != { }) ''
+      [VXCAN]
+      ${attrsToSection def.vxcanConfig}
+    ''
     + optionalString (def.tunConfig != { }) ''
       [Tun]
       ${attrsToSection def.tunConfig}
@@ -77,14 +125,6 @@ in
       [Tap]
       ${attrsToSection def.tapConfig}
     ''
-    + optionalString (def.l2tpConfig != { }) ''
-      [L2TP]
-      ${attrsToSection def.l2tpConfig}
-    ''
-    + flip concatMapStrings def.l2tpSessions (x: ''
-      [L2TPSession]
-      ${attrsToSection x}
-    '')
     + optionalString (def.wireguardConfig != { }) ''
       [WireGuard]
       ${attrsToSection def.wireguardConfig}
@@ -105,13 +145,17 @@ in
       [VRF]
       ${attrsToSection def.vrfConfig}
     ''
-    + optionalString (def.wlanConfig != { }) ''
-      [WLAN]
-      ${attrsToSection def.wlanConfig}
-    ''
     + optionalString (def.batmanAdvancedConfig != { }) ''
       [BatmanAdvanced]
       ${attrsToSection def.batmanAdvancedConfig}
+    ''
+    + optionalString (def.ipoibConfig != { }) ''
+      [IPoIB]
+      ${attrsToSection def.ipoibConfig}
+    ''
+    + optionalString (def.wlanConfig != { }) ''
+      [WLAN]
+      ${attrsToSection def.wlanConfig}
     ''
     + def.extraConfig;
 
@@ -121,6 +165,10 @@ in
     + optionalString (def.linkConfig != { }) ''
       [Link]
       ${attrsToSection def.linkConfig}
+    ''
+    + optionalString (def.sriovConfig != { }) ''
+      [SR-IOV]
+      ${attrsToSection def.sriovConfig}
     ''
     + ''
       [Network]
@@ -147,20 +195,23 @@ in
     + optionalString (def.vrf != [ ]) ''
       ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
     ''
-    + optionalString (def.vlan != [ ]) ''
-      ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
-    ''
     + optionalString (def.macvlan != [ ]) ''
       ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+    ''
+    + optionalString (def.ipvlan != [ ]) ''
+      ${concatStringsSep "\n" (map (s: "IPVLAN=${s}") def.ipvlan)}
     ''
     + optionalString (def.macvtap != [ ]) ''
       ${concatStringsSep "\n" (map (s: "MACVTAP=${s}") def.macvtap)}
     ''
-    + optionalString (def.vxlan != [ ]) ''
-      ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
-    ''
     + optionalString (def.tunnel != [ ]) ''
       ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+    ''
+    + optionalString (def.vlan != [ ]) ''
+      ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
+    ''
+    + optionalString (def.vxlan != [ ]) ''
+      ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
     ''
     + optionalString (def.xfrm != [ ]) ''
       ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
@@ -170,8 +221,20 @@ in
       [Address]
       ${attrsToSection x}
     '')
+    + flip concatMapStrings def.neighbors (x: ''
+      [Neighbor]
+      ${attrsToSection x}
+    '')
+    + flip concatMapStrings def.ipv6AddressLabels (x: ''
+      [IPv6AddressLabel]
+      ${attrsToSection x}
+    '')
     + flip concatMapStrings def.routingPolicyRules (x: ''
       [RoutingPolicyRule]
+      ${attrsToSection x}
+    '')
+    + flip concatMapStrings def.nextHops (x: ''
+      [NextHop]
       ${attrsToSection x}
     '')
     + flip concatMapStrings def.routes (x: ''
@@ -198,14 +261,14 @@ in
       [DHCPServer]
       ${attrsToSection def.dhcpServerConfig}
     ''
+    + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
+      [DHCPServerStaticLease]
+      ${attrsToSection x}
+    '')
     + optionalString (def.ipv6SendRAConfig != { }) ''
       [IPv6SendRA]
       ${attrsToSection def.ipv6SendRAConfig}
     ''
-    + flip concatMapStrings def.ipv6PREF64Prefixes (x: ''
-      [IPv6PREF64Prefix]
-      ${attrsToSection x}
-    '')
     + flip concatMapStrings def.ipv6Prefixes (x: ''
       [IPv6Prefix]
       ${attrsToSection x}
@@ -214,8 +277,8 @@ in
       [IPv6RoutePrefix]
       ${attrsToSection x}
     '')
-    + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
-      [DHCPServerStaticLease]
+    + flip concatMapStrings def.ipv6PREF64Prefixes (x: ''
+      [IPv6PREF64Prefix]
       ${attrsToSection x}
     '')
     + optionalString (def.bridgeConfig != { }) ''
@@ -329,6 +392,14 @@ in
     + optionalString (def.hierarchyTokenBucketClassConfig != { }) ''
       [HierarchyTokenBucketClass]
       ${attrsToSection def.hierarchyTokenBucketClassConfig}
+    ''
+    + optionalString (def.classfulMultiQueueingConfig != { }) ''
+      [ClassfulMultiQueueing]
+      ${attrsToSection def.classfulMultiQueueingConfig}
+    ''
+    + optionalString (def.bandMultiQueueingConfig != { }) ''
+      [BandMultiQueueing]
+      ${attrsToSection def.bandMultiQueueingConfig}
     ''
     + optionalString (def.heavyHitterFilterConfig != { }) ''
       [HeavyHitterFilter]

@@ -5,6 +5,7 @@
   buildPythonPackage,
   chalice,
   channels,
+  cross-web,
   daphne,
   django,
   email-validator,
@@ -43,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.278.0";
+  version = "0.289.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = version;
-    hash = "sha256-GNjjSD40fhbMqfvuYSuP3tU8lfOqBGJIsoGWZCfj6C4=";
+    hash = "sha256-eiIyAYId5MHKWmn87Cj/TCNN4YU5KkAWMEMhoMIR8xM=";
   };
 
   postPatch = ''
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    cross-web
     graphql-core
     python-dateutil
     typing-extensions
@@ -152,7 +154,6 @@ buildPythonPackage rec {
     "tests/schema/test_lazy/"
     "tests/sanic/test_file_upload.py"
     "tests/test_dataloaders.py"
-    "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
     "tests/litestar/"
   ];

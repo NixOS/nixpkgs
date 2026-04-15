@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     description = "Convert YAML <=> TOML <=> JSON <=> HCL";
     license = lib.licenses.asl20;
     mainProgram = "yj";
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
     homepage = "https://github.com/sclevine/yj";
   };
 })

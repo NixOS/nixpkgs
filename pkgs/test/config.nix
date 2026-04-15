@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   pkgs,
   ...
 }:
@@ -17,7 +18,7 @@ lib.recurseIntoAttrs {
     let
       pkgs' = import ../.. {
         system = pkgs.stdenv.hostPlatform.system;
-        config = {
+        config = config // {
           permittedInsecurePackages = builtins.seq pkgs'.glibc.version [ ];
         };
       };

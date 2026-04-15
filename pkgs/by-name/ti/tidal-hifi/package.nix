@@ -92,13 +92,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
-  version = "6.1.0";
+  version = "6.3.1-Mavy";
 
   src = fetchFromGitHub {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = finalAttrs.version;
-    hash = "sha256-wNYcjFbePWhtkPqR4byGE+FlRNEUv2/EoTYQE2JRAyE=";
+    hash = "sha256-IOC6LQ6kLQGBTB1Ng6TWCsW9zvsJ3/Yb1515dGbV1EU=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-OTETAe9RW3tBkGS7AlboxX/hUiGax7lxbtdXwRnr9X8=";
+  npmDepsHash = "sha256-rsZCy0W1B+beH6bSqOSp4Pu6h3hknrLCfUb8a0F4nFg=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -219,7 +219,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gerg-l
-      qbit
       spikespaz
     ];
     # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.

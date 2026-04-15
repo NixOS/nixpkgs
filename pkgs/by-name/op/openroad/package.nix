@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   yaml-cpp,
 
   # nativeBuildInputs
@@ -53,6 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DMyoqDse9W6ahOajEINzFpgLsSKam/I1mQkRSSKepI8=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-openroad-commit-2a8b2c7.patch";
+      url = "https://github.com/The-OpenROAD-Project/OpenROAD/commit/2a8b2c7dcda87679a69df323b2ada5f3a21554ea.patch";
+      hash = "sha256-vgmVpr+vHbOd8UUUUyJ8sTKi0Y7CWYatF006WX4+zFI=";
+    })
+  ];
+
   nativeBuildInputs = [
     bison
     cmake
@@ -98,10 +107,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs etc/
 
-    # C++20 Fixes
-    sed -e '39i #include <cstdint>' -i src/gpl/src/placerBase.h
-    sed -e '37i #include <cstdint>' -i src/gpl/src/routeBase.h
+    # Disable CutGTests because it misses core manager implementation
+    # and fails under strict Nix linking. Filed as issue #9563.
+    if [ -f src/cut/test/cpp/CMakeLists.txt ]; then
+      echo "" > src/cut/test/cpp/CMakeLists.txt
+    fi
   ''
+
   # Disable failing PSM tests on aarch64
   + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     if [ -f src/psm/test/CMakeLists.txt ]; then

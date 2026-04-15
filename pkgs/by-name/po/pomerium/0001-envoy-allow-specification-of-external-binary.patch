@@ -4,46 +4,41 @@ Date: Sun, 26 May 2024 12:17:01 -0500
 Subject: [PATCH] envoy: allow specification of external binary
 
 ---
- pkg/envoy/envoy.go | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ pkg/envoy/envoy.go | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/pkg/envoy/envoy.go b/pkg/envoy/envoy.go
 index 85c725629..4a726a44b 100644
 --- a/pkg/envoy/envoy.go
 +++ b/pkg/envoy/envoy.go
-@@ -8,9 +8,9 @@ import (
+@@ -8,10 +8,10 @@ import (
  	"errors"
  	"fmt"
  	"io"
 +	"io/fs"
+ 	"net"
+ 	"net/http"
+ 	"net/url"
  	"os"
  	"os/exec"
 -	"path"
  	"path/filepath"
- 	"regexp"
- 	"runtime"
-@@ -36,8 +36,17 @@ import (
- 
- const (
+@@ -44,6 +44,11 @@ const (
  	configFileName = "envoy-config.yaml"
-+	workingDirectoryName = ".pomerium-envoy"
-+	embeddedEnvoyPermissions     fs.FileMode = 0o700
  )
- 
+
 +var OverrideEnvoyPath = ""
 +
-+type serverOptions struct {
-+	services string
-+	logLevel config.LogLevel
-+}
++const workingDirectoryName = ".pomerium-envoy"
++const embeddedEnvoyPermissions fs.FileMode = 0o700
 +
  // A Server is a pomerium proxy implemented via envoy.
  type Server struct {
  	ServerOptions
-@@ -95,14 +104,17 @@ func NewServer(ctx context.Context, src config.Source, builder *envoyconfig.Buil
+@@ -100,14 +105,17 @@ func NewServer(
  		log.Ctx(ctx).Debug().Err(err).Msg("couldn't preserve RLIMIT_NOFILE before starting Envoy")
  	}
- 
+
 -	envoyPath, err := Extract()
 +	envoyPath := OverrideEnvoyPath
 +	wd := filepath.Join(os.TempDir(), workingDirectoryName)
@@ -53,14 +48,14 @@ index 85c725629..4a726a44b 100644
 -		return nil, fmt.Errorf("extracting envoy: %w", err)
 +		return nil, fmt.Errorf("error creating temporary working directory for envoy: %w", err)
  	}
- 
+
  	srv := &Server{
- 		ServerOptions: options,
--		wd:            path.Dir(envoyPath),
-+		wd:            wd,
- 		builder:       builder,
- 		grpcPort:      src.GetConfig().GRPCPort,
- 		httpPort:      src.GetConfig().HTTPPort,
--- 
+ 		ServerOptions:        options,
+-		wd:                   path.Dir(envoyPath),
++		wd:                   wd,
+ 		builder:              builder,
+ 		grpcPort:             src.GetConfig().GRPCPort,
+ 		httpPort:             src.GetConfig().HTTPPort,
+--
 2.49.0
 

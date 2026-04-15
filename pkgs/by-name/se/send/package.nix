@@ -28,13 +28,13 @@ buildNpmPackage rec {
 
   env = {
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
   };
 
   makeCacheWritable = true;
 
   npmPackFlags = [ "--ignore-scripts" ];
-
-  NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall = ''
     cp -r dist $out/lib/node_modules/send/

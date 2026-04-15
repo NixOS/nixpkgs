@@ -5,7 +5,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -35,9 +34,8 @@ let
   ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "20.20.0";
-  sha256 = "5294d9d2915620e819e6892fd7e545b98d650bad36dae54e6527eaac482add98";
+  version = "20.20.2";
+  sha256 = "7aeeacdb858299e09a3e0510d4bb8b266923894a9e3ac0058ba89d4ecf4a4cca";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch

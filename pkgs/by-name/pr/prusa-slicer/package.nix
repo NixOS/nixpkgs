@@ -19,7 +19,6 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libpng,
   mpfr,
   nanosvg,
@@ -29,7 +28,7 @@
   openvdb,
   qhull,
   onetbb,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   libbgcode,
   heatshrink,
@@ -56,7 +55,7 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
+  wxGTK-override' = if wxGTK-override == null then wxwidgets_3_2 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
@@ -78,6 +77,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
     ./allow_wayland.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -93,6 +94,18 @@ clangStdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
         --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
+    ''
+    # Make PrusaSlicer handle the url "prusaslicer://"
+    + ''
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'Exec=prusa-slicer %F' \
+        'Exec=prusa-slicer %U'
+
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
     ''
   );
 
@@ -119,7 +132,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
-    ilmbase
     libpng
     mpfr
     nanosvg-fltk
@@ -202,10 +214,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/lib"
     mv -v $out/bin/*.* $out/lib/
-
-    mkdir -p "$out/share/pixmaps/"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
 
     mkdir -p "$out"/share/mime/packages
     cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml

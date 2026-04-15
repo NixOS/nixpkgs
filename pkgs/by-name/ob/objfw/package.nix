@@ -3,7 +3,8 @@
   autogen,
   automake,
   clangStdenv,
-  fetchfossil,
+  fetchFromGitea,
+  gitUpdater,
   lib,
   objfw,
   writeTextDir,
@@ -11,12 +12,14 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
-  version = "1.3.2";
+  version = "1.5.1";
 
-  src = fetchfossil {
-    url = "https://objfw.nil.im/home";
+  src = fetchFromGitea {
+    domain = "git.nil.im";
+    owner = "ObjFW";
+    repo = "ObjFW";
     rev = "${finalAttrs.version}-release";
-    hash = "sha256-cFYsiNG60FyDXAeiuBZn/u/1dEawVAxF7EDFBZRYt7w=";
+    hash = "sha256-5ECvNsDU3MagbS2tVq2sJCRMQHBkCuMQHqpWlB6tbR8=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +38,8 @@ clangStdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     build-hello-world = (import ./test-build-and-run.nix) { inherit clangStdenv objfw writeTextDir; };
   };
+
+  passthru.updateScript = gitUpdater { rev-suffix = "-release"; };
 
   meta = {
     description = "Portable framework for the Objective-C language";

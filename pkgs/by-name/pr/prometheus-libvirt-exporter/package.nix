@@ -29,6 +29,7 @@ buildGoModule (finalAttrs: {
     description = "Prometheus metrics exporter for libvirt";
     homepage = "https://github.com/Tinkoff/libvirt-exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ farcaller ];
+    maintainers = [ ];
+    mainProgram = "libvirt-exporter";
   };
 })

@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "deterministic-zip";
-  version = "6.0.0";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "timo-reymann";
     repo = "deterministic-zip";
     tag = finalAttrs.version;
-    hash = "sha256-ew1R2twyl5hX+UA7nZoMnelwCDHwunNphBQZFqP6izs=";
+    hash = "sha256-YQCJ2nAE9/wt+KiU2eXdGXVxFiHZzBMyNX+1sSPtxt4=";
   };
 
   vendorHash = "sha256-hEPZrS2D6YqlaaJXF8uyt+fJ38Adi3WvOq7v9dZuovI=";
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     description = "Simple (almost drop-in) replacement for zip that produces deterministic files";
     mainProgram = "deterministic-zip";
     homepage = "https://github.com/timo-reymann/deterministic-zip";
-    license = lib.licenses.unfreeRedistributable;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
 })

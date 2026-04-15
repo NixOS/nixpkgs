@@ -44,9 +44,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,libexec,share/pixmaps}
+    mkdir -p $out/{bin,libexec}
 
-    ln -s "${icon}" "$out/share/pixmaps/winbox.png"
+    install -D "${icon}" "$out/share/icons/hicolor/128x128/apps/winbox.png"
 
     makeWrapper ${lib.getExe wine} $out/bin/winbox \
       --add-flags $src

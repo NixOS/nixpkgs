@@ -41,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   # fix build on darwin (see https://github.com/NixOS/nixpkgs/pull/422218#issuecomment-3039181870 and https://github.com/aristocratos/btop/pull/1173)
   cmakeFlags = [
     (lib.cmakeBool "BTOP_LTO" (!stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "BTOP_STATIC" (stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BTOP_FORTIFY" (!stdenv.hostPlatform.isStatic))
   ];
+
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isStatic [ "fortify" ];
 
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)

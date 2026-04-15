@@ -64,7 +64,7 @@ buildGoModule (finalAttrs: {
   # As Wails calls a compiler, certain apps and libraries need to be made available.
   postFixup = ''
     wrapProgram $out/bin/wails \
-      --prefix PATH : ${
+      --suffix PATH : ${
         lib.makeBinPath [
           pkg-config
           go
@@ -72,7 +72,7 @@ buildGoModule (finalAttrs: {
           nodejs
         ]
       } \
-      --prefix LD_LIBRARY_PATH : "${
+      --suffix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath (
           lib.optionals stdenv.hostPlatform.isLinux [
             gtk3

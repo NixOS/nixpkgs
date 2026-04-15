@@ -18,7 +18,7 @@
   xdotool,
   setxkbmap,
   wl-clipboard,
-  wxGTK32,
+  wxwidgets_3_2,
   makeWrapper,
   securityWrapperPath ? null,
   nix-update-script,
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extra-cmake-modules
     pkg-config
     makeWrapper
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libpng
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl

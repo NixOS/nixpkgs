@@ -5,6 +5,7 @@
   blurhash,
   cryptography,
   decorator,
+  fetchpatch,
   graphemeu,
   http-ece,
   python-dateutil,
@@ -29,6 +30,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-i3HMT8cabSl664UK3eopJQ9bDBpGCgbHTvBJkgeoxd8=";
   };
+
+  patches = [
+    # Switch dependency from unmaintained `grapheme` to `graphemeu`
+    (fetchpatch {
+      url = "https://github.com/halcy/Mastodon.py/commit/939c7508414e950922c518260a9ba5a5853aeef2.patch";
+      hash = "sha256-XBiAFxYUBNyynld++UwPGIIg9j+3/EF2jGqiysVqYRM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

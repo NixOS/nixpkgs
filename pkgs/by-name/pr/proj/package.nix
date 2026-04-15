@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.7.1";
+  version = "9.8.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     tag = finalAttrs.version;
-    hash = "sha256-xXtqbLPS2Hu9gC06b72HDjnNRh4m0ism97hP8FFYOMo=";
+    hash = "sha256-LvzQ2sW+h5uHJg+6z8/Nf99EVIPUQfWoaNr0iFUpD/0=";
   };
 
   patches = [
@@ -59,9 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNLOHMANN_JSON_ORIGIN=external"
     "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
-  CXXFLAGS = [
+
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
-    "-include cstdint"
+    "-include"
+    "cstdint"
   ];
 
   preCheck =

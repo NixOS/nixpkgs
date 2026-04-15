@@ -1,28 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
-  fetchPypi,
+  fetchFromGitHub,
   agate,
+  setuptools,
   sqlalchemy,
-  crate,
   pytestCheckHook,
   geojson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "agate-sql";
-  version = "0.7.2";
-  format = "setuptools";
+  version = "0.7.3";
+  pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mxswKEpXP9QWdZQ3Jz3MXIECK98vrLJLSqAppir9U7A=";
+  src = fetchFromGitHub {
+    owner = "wireservice";
+    repo = "agate-sql";
+    tag = finalAttrs.version;
+    hash = "sha256-YPpvLMidW0RnNz1x6FK1QwhOIc9AhwnSm6vxUzbLLBM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     agate
     sqlalchemy
   ];
@@ -45,4 +46,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
-}
+})

@@ -239,6 +239,10 @@ rec {
     config = "m68k-unknown-linux-gnu";
   };
 
+  arc = {
+    config = "arc-unknown-linux-gnu";
+  };
+
   s390 = {
     config = "s390-unknown-linux-gnu";
   };
@@ -335,6 +339,24 @@ rec {
     config = "x86_64-apple-darwin";
     xcodePlatform = "MacOSX";
     platform = { };
+  };
+
+  #
+  # UEFI
+  #
+
+  x86_64-unknown-uefi = {
+    config = "x86_64-unknown-uefi";
+    libc = null;
+    useLLVM = true;
+    linker = "lld";
+  };
+
+  aarch64-unknown-uefi = {
+    config = "aarch64-unknown-uefi";
+    libc = null;
+    useLLVM = true;
+    linker = "lld";
   };
 
   #

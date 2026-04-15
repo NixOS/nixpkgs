@@ -28,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/drdo/redu";
     changelog = "https://github.com/drdo/redu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alexfmpe ];
+    maintainers = with lib.maintainers; [
+      alexfmpe
+      drdo
+    ];
     mainProgram = "redu";
   };
 })

@@ -4,7 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchpatch,
-  rocmUpdateScript,
+  fetchurl,
   runCommand,
   pkg-config,
   cmake,
@@ -23,6 +23,7 @@
   half,
   boost,
   sqlite,
+  symlinkJoin,
   bzip2,
   lbzip2,
   nlohmann_json,
@@ -43,7 +44,7 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.1.1";
+  version = "7.2.1";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -65,44 +66,6 @@ let
     "gfx1201"
   ] gpuTargets;
 
-  kdbTargets = lib.intersectLists [
-    "gfx900"
-    "gfx906"
-    "gfx908"
-    "gfx90a"
-    "gfx942"
-    "gfx1030"
-  ] gpuTargets;
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "MIOpen";
-    rev = "rocm-${version}";
-    hash = "sha256-g0AEpuUiwKCu/doiRh9mW34W04m4ynHoarSyl6tR/aE=";
-    fetchLFS = true;
-    fetchSubmodules = true;
-    # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream
-    leaveDotGit = true;
-    # FIXME: if someone can reduce the level of awful here that would be really nice
-    postFetch = ''
-      export HOME=$(mktemp -d)
-      cd $out
-      git remote add origin $url
-      git fetch origin +refs/tags/rocm-${version}:refs/tags/rocm-${version}
-      git clean -fdx
-      git switch -c rocm-${version} refs/tags/rocm-${version}
-      git config lfs.fetchexclude "none"
-      rm .lfsconfig
-      git lfs install
-      git lfs track "*.kdb.bz2"
-      git lfs fetch --include="src/kernels/**"
-      git lfs pull --include="src/kernels/**"
-      git lfs checkout
-
-      rm -rf .git
-    '';
-  };
-
   latex = lib.optionalAttrs buildDocs (
     texliveSmall.withPackages (
       ps: with ps; [
@@ -120,24 +83,56 @@ let
     )
   );
 
-  kernelDatabases = lib.genAttrs kdbTargets (
-    target:
-    runCommand "miopen-${target}.kdb" { preferLocalBuild = true; } ''
-      ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/${target}.kdb.bz2 > $out
-    ''
+  # for hiprtcCompileProgram (dropout kernels require rocrand in -I at runtime)
+  hiprtcCompileRocmPath = symlinkJoin {
+    name = "miopen-hiprtc-compile-rocm-path";
+    paths = [
+      clr
+      rocrand
+    ];
+  };
+
+  # Kernel databases moved from Git LFS to DVC (anonymous s3 bucket s3://therock-dvc/rocm-libraries)
+  fetchKdb =
+    name:
+    { url, hash }:
+    runCommand "miopen-${name}.kdb" { preferLocalBuild = true; } ''
+      ${lbzip2}/bin/lbzip2 -ckd ${
+        fetchurl {
+          inherit url hash;
+          name = "${name}.kdb.bz2";
+        }
+      } > $out
+    '';
+
+  kdbs = lib.mapAttrs fetchKdb (
+    lib.filterAttrs (name: _: lib.elem name supportedTargets) (import ./kdbs.nix)
   );
 
   linkKDBsTo =
     targetPath:
     lib.concatStringsSep "" (
-      map (target: ''
-        ln -sf ${kernelDatabases.${target}} ${targetPath}/${target}.kdb
-      '') kdbTargets
+      lib.mapAttrsToList (name: kdb: ''
+        ln -sf ${kdb} ${targetPath}/${name}.kdb
+      '') kdbs
     );
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit version src;
+  inherit version;
   pname = "miopen";
+
+  src = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "rocm-libraries";
+    rev = "rocm-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/miopen"
+      "shared"
+    ];
+    fetchSubmodules = true;
+    hash = "sha256-plZpBTbEBVMa5CasjfbUsu45xP/BYstrEpWKK2H7QQ4=";
+  };
+  sourceRoot = "${finalAttrs.src.name}/projects/miopen";
 
   env.CFLAGS = cFlags;
   env.CXXFLAGS = cFlags;
@@ -153,14 +148,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
       hash = "sha256-ST4snUcTmmSI1Ogx815KEX9GdMnmubsavDzXCGJkiKs=";
     })
-    # FIXME: We need to rebase or drop this arch compat patch
-    # https://github.com/ROCm/MIOpen/issues/3540 suggests that
-    # arch compat patching doesn't work correctly for gfx1031
-    # (fetchpatch {
-    #   name = "Extend-MIOpen-ISA-compatibility.patch";
-    #   url = "https://github.com/GZGavinZhao/MIOpen/commit/416088b534618bd669a765afce59cfc7197064c1.patch";
-    #   hash = "sha256-OwONCA68y8s2GqtQj+OtotXwUXQ5jM8tpeM92iaD4MU=";
-    # })
+    (fetchpatch {
+      # [miopen] Extend HIP ISA compatibility
+      name = "Extend-MIOpen-ISA-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/02f0fedffdc197f146dd45f41e10990a00cde3ee.patch";
+      hash = "sha256-My32iZw75rvB4fyvUJJ2kw2bU9/39awGteFGjzijixw=";
+      relative = "projects/miopen";
+    })
   ];
 
   outputs = [
@@ -219,7 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" supportedTargets}"
     "-DGPU_TARGETS=${lib.concatStringsSep ";" supportedTargets}"
     "-DGPU_ARCHS=${lib.concatStringsSep ";" supportedTargets}"
-    "-DMIOPEN_USE_SQLITE_PERFDB=ON"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
     "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
     "-DCMAKE_BUILD_TYPE=Release"
@@ -258,6 +251,9 @@ stdenv.mkDerivation (finalAttrs: {
       return()'
 
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
+
+    substituteInPlace src/comgr.cpp \
+      --replace-fail '"/opt/rocm"' '"${hiprtcCompileRocmPath}"'
   ''
   + linkKDBsTo "src/kernels"
   + ''
@@ -297,6 +293,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.impureTests = {
+    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv) etc
+    bnorm = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "bnorm";
+      testScript = "MIOpenDriver bnorm -n 16 -c 16 -H 512 -W 512 -m 1 -F 1 -s 1 -r 1";
+    };
+    conv = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "conv";
+      testScript = "MIOpenDriver conv -n 1 -c 1 -H 4 -W 4 -k 1 -y 3 -x 3 -p 0 -q 0 -V 0";
+    };
+    dropout = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "dropout";
+      testScript = "MIOpenDriver dropout -d 64,32,14,14";
+    };
+    pool = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "pool";
+      testScript = "MIOpenDriver pool -W 1x1x4x4 -y 2 -x 2 -p 0 -q 0 -F 1 -V 0";
+    };
+  };
   passthru.tests = {
     # Ensure all .tn.model files can be loaded by whatever version of frugally-deep we have
     # This is otherwise hard to verify as MIOpen will only use these models on specific,
@@ -308,15 +327,11 @@ stdenv.mkDerivation (finalAttrs: {
       inherit frugally-deep nlohmann_json;
     };
   };
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Machine intelligence library for ROCm";
-    homepage = "https://github.com/ROCm/MIOpen";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

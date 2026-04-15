@@ -14,16 +14,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-network-connectivity";
-  version = "2.13.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "google_cloud_network_connectivity";
-    hash = "sha256-Fad8oso2ulaA6Nqna7AlBe9whycHzDLyFKK9wqylfzA=";
+    hash = "sha256-PqkPw7HNOZUHjIPUp7tbFDlY0d7jDlGeqhIwMZVr1OY=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

@@ -480,24 +480,24 @@
         "path": "androidx/collection/collection-jvm/1.5.0/collection-jvm-1.5.0.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0-rc01/runtime-annotation-jvm-1.10.0-rc01.jar",
+        "url": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0/runtime-annotation-jvm-1.10.0.jar",
         "hash": "f89dda8bcd73876d0fc16568844b2bd79443ee7ca62810874d25c7dcaa394bd6",
-        "path": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0-rc01/runtime-annotation-jvm-1.10.0-rc01.jar"
+        "path": "androidx/compose/runtime/runtime-annotation-jvm/1.10.0/runtime-annotation-jvm-1.10.0.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-desktop/1.10.0-rc01/runtime-desktop-1.10.0-rc01.jar",
+        "url": "androidx/compose/runtime/runtime-desktop/1.10.0/runtime-desktop-1.10.0.jar",
         "hash": "b195860542f612de0512b54a75353e0f6d58815f0c9530a03bc5b0e734474829",
-        "path": "androidx/compose/runtime/runtime-desktop/1.10.0-rc01/runtime-desktop-1.10.0-rc01.jar"
+        "path": "androidx/compose/runtime/runtime-desktop/1.10.0/runtime-desktop-1.10.0.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-retain-desktop/1.10.0-rc01/runtime-retain-desktop-1.10.0-rc01.jar",
+        "url": "androidx/compose/runtime/runtime-retain-desktop/1.10.0/runtime-retain-desktop-1.10.0.jar",
         "hash": "463ee9c1e93d1b913458bfecc96d128a3574a802f41c8c9781d7320c3b55ed8b",
-        "path": "androidx/compose/runtime/runtime-retain-desktop/1.10.0-rc01/runtime-retain-desktop-1.10.0-rc01.jar"
+        "path": "androidx/compose/runtime/runtime-retain-desktop/1.10.0/runtime-retain-desktop-1.10.0.jar"
     },
     {
-        "url": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0-rc01/runtime-saveable-desktop-1.10.0-rc01.jar",
+        "url": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0/runtime-saveable-desktop-1.10.0.jar",
         "hash": "ef24e24cc8c9c3b9871007fbdf589ed9aaaecf95979a66b7484806f9f0e24d91",
-        "path": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0-rc01/runtime-saveable-desktop-1.10.0-rc01.jar"
+        "path": "androidx/compose/runtime/runtime-saveable-desktop/1.10.0/runtime-saveable-desktop-1.10.0.jar"
     },
     {
         "url": "androidx/lifecycle/lifecycle-common-jvm/2.9.4/lifecycle-common-jvm-2.9.4.jar",
@@ -525,9 +525,9 @@
         "path": "androidx/lifecycle/lifecycle-viewmodel-savedstate-desktop/2.9.4/lifecycle-viewmodel-savedstate-desktop-2.9.4.jar"
     },
     {
-        "url": "androidx/navigationevent/navigationevent-desktop/1.0.0/navigationevent-desktop-1.0.0.jar",
-        "hash": "8283896d87f6d3e21dd5b12785e6c7ca3b7f15cbc4d0391b20ad23e54b520515",
-        "path": "androidx/navigationevent/navigationevent-desktop/1.0.0/navigationevent-desktop-1.0.0.jar"
+        "url": "androidx/navigationevent/navigationevent-desktop/1.0.1/navigationevent-desktop-1.0.1.jar",
+        "hash": "43deeb5774fd737fa945e09a47f93b6f1a508d17fac8f3b65f1c863e7f7d0660",
+        "path": "androidx/navigationevent/navigationevent-desktop/1.0.1/navigationevent-desktop-1.0.1.jar"
     },
     {
         "url": "androidx/savedstate/savedstate-compose-desktop/1.3.2/savedstate-compose-desktop-1.3.2.jar",
@@ -5715,11 +5715,6 @@
         "path": "org/jeasy/easy-random-core/4.2.0/easy-random-core-4.2.0.jar"
     },
     {
-        "url": "org/jetbrains/annotations/13.0/annotations-13.0.jar",
-        "hash": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
-        "path": "org/jetbrains/annotations/13.0/annotations-13.0.jar"
-    },
-    {
         "url": "org/jetbrains/annotations/26.0.1/annotations-26.0.1.jar",
         "hash": "2037be378980d3ba9333e97955f3b2cde392aa124d04ca73ce2eee6657199297",
         "path": "org/jetbrains/annotations/26.0.1/annotations-26.0.1.jar"
@@ -5735,14 +5730,14 @@
         "path": "org/jetbrains/apple-notary-api-kotlin-client/2.0.1/apple-notary-api-kotlin-client-2.0.1.jar"
     },
     {
-        "url": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0-rc01/animation-core-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0/animation-core-desktop-1.10.0.jar",
         "hash": "41c0220ddbc55cb897feb0d5816b748f9c11162171f12743c04b50d0d84db628",
-        "path": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0-rc01/animation-core-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/animation/animation-core-desktop/1.10.0/animation-core-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/animation/animation-desktop/1.10.0-rc01/animation-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/animation/animation-desktop/1.10.0/animation-desktop-1.10.0.jar",
         "hash": "3ec5254288b1e872263009221f677063ea728f90969598f399a5b02500ebc014",
-        "path": "org/jetbrains/compose/animation/animation-desktop/1.10.0-rc01/animation-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/animation/animation-desktop/1.10.0/animation-desktop-1.10.0.jar"
     },
     {
         "url": "org/jetbrains/compose/compiler/compiler-hosted/1.5.14/compiler-hosted-1.5.14.jar",
@@ -5750,14 +5745,14 @@
         "path": "org/jetbrains/compose/compiler/compiler-hosted/1.5.14/compiler-hosted-1.5.14.jar"
     },
     {
-        "url": "org/jetbrains/compose/components/components-resources-desktop/1.10.0-rc01/components-resources-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/components/components-resources-desktop/1.10.0/components-resources-desktop-1.10.0.jar",
         "hash": "7dbbe06683befa8110b4ac926a7432b7e2ee446ed156adf55ad17e9c868ae0e2",
-        "path": "org/jetbrains/compose/components/components-resources-desktop/1.10.0-rc01/components-resources-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/components/components-resources-desktop/1.10.0/components-resources-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/components/components-resources/1.10.0-rc01/components-resources-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/components/components-resources/1.10.0/components-resources-1.10.0.jar",
         "hash": "7d2f02d5ecc865b8c9b81cc3026db4c0ba2ccf180c1be6844896e56581045b9a",
-        "path": "org/jetbrains/compose/components/components-resources/1.10.0-rc01/components-resources-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/components/components-resources/1.10.0/components-resources-1.10.0.jar"
     },
     {
         "url": "org/jetbrains/compose/components/components-ui-tooling-preview-desktop/1.9.0/components-ui-tooling-preview-desktop-1.9.0.jar",
@@ -5765,59 +5760,59 @@
         "path": "org/jetbrains/compose/components/components-ui-tooling-preview-desktop/1.9.0/components-ui-tooling-preview-desktop-1.9.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0-rc01/foundation-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0/foundation-desktop-1.10.0.jar",
         "hash": "f988ef9d9517dc26b360943349bf1412d5735beb8ecf4f5304f10ecfe6ca05db",
-        "path": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0-rc01/foundation-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/foundation/foundation-desktop/1.10.0/foundation-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0-rc01/foundation-layout-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0/foundation-layout-desktop-1.10.0.jar",
         "hash": "bd086a9f5ce453967ea1124bb709612bca14a4fbb6522a6023092a8866ee4ef0",
-        "path": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0-rc01/foundation-layout-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/foundation/foundation-layout-desktop/1.10.0/foundation-layout-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0-rc01/ui-backhandler-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0/ui-backhandler-desktop-1.10.0.jar",
         "hash": "1babf68f5a05cbe1ba8cf934f0e575bb0d0b184444514e6aa7ec1f8004c9ce33",
-        "path": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0-rc01/ui-backhandler-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-backhandler-desktop/1.10.0/ui-backhandler-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-desktop/1.10.0-rc01/ui-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-desktop/1.10.0/ui-desktop-1.10.0.jar",
         "hash": "c699d8571082a7f507fbede0b9d567c661f47013a4f3f9b68109b8a0bd828ea8",
-        "path": "org/jetbrains/compose/ui/ui-desktop/1.10.0-rc01/ui-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-desktop/1.10.0/ui-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0-rc01/ui-geometry-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0/ui-geometry-desktop-1.10.0.jar",
         "hash": "cdbfdabccac8abef2d9bc0420ec0c4be7a880f6d26b2d1cc4e2317c0d252ee27",
-        "path": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0-rc01/ui-geometry-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-geometry-desktop/1.10.0/ui-geometry-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0-rc01/ui-graphics-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0/ui-graphics-desktop-1.10.0.jar",
         "hash": "d1710a4a15b115fc4c37878b32b10a476a0ec3b8399fa1fb588181dba83dbdd2",
-        "path": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0-rc01/ui-graphics-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-graphics-desktop/1.10.0/ui-graphics-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0-rc01/ui-test-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0/ui-test-desktop-1.10.0.jar",
         "hash": "b7d61af17254d98ffb858ceb80bd38597c2486eead80c2cfe0a37ba3ee9724b2",
-        "path": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0-rc01/ui-test-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-test-desktop/1.10.0/ui-test-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0-rc01/ui-test-junit4-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0/ui-test-junit4-desktop-1.10.0.jar",
         "hash": "de2f63543b8f646b85c789e3bf53121e4e6d89d3c7c0afc0358954cc27316a71",
-        "path": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0-rc01/ui-test-junit4-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-test-junit4-desktop/1.10.0/ui-test-junit4-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0-rc01/ui-text-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0/ui-text-desktop-1.10.0.jar",
         "hash": "6ee18433659f389621386e759217b3ed5ef0f1e22ea177cad705457dc75aa27b",
-        "path": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0-rc01/ui-text-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-text-desktop/1.10.0/ui-text-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0-rc01/ui-unit-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0/ui-unit-desktop-1.10.0.jar",
         "hash": "f0f3439928b3d9132f07cb2d7a86091696372ebc8354d16b48830b6ce15e8161",
-        "path": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0-rc01/ui-unit-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-unit-desktop/1.10.0/ui-unit-desktop-1.10.0.jar"
     },
     {
-        "url": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0-rc01/ui-util-desktop-1.10.0-rc01.jar",
+        "url": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0/ui-util-desktop-1.10.0.jar",
         "hash": "7bfc93a8cad2974cdfd5a2c817e3083e0e3c48ef99e4dbba51eb98a14c92ed2d",
-        "path": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0-rc01/ui-util-desktop-1.10.0-rc01.jar"
+        "path": "org/jetbrains/compose/ui/ui-util-desktop/1.10.0/ui-util-desktop-1.10.0.jar"
     },
     {
         "url": "org/jetbrains/dokka/analysis-kotlin-descriptors/2.0.0/analysis-kotlin-descriptors-2.0.0.jar",
@@ -6400,11 +6395,6 @@
         "path": "org/jetbrains/intellij/deps/trove4j/1.0.20200330/trove4j-1.0.20200330.jar"
     },
     {
-        "url": "org/jetbrains/intellij/deps/trove4j/1.0.20200330/trove4j-1.0.20200330.jar",
-        "hash": "c5fd725bffab51846bf3c77db1383c60aaaebfe1b7fe2f00d23fe1b7df0a439d",
-        "path": "org/jetbrains/intellij/deps/trove4j/1.0.20200330/trove4j-1.0.20200330.jar"
-    },
-    {
         "url": "org/jetbrains/intellij/deps/trove4j/1.0.20221201/trove4j-1.0.20221201.jar",
         "hash": "3d1ce86790d123de204215c4b2b8896afaed63abfdece24393e2183df5394c32",
         "path": "org/jetbrains/intellij/deps/trove4j/1.0.20221201/trove4j-1.0.20221201.jar"
@@ -6425,14 +6415,14 @@
         "path": "org/jetbrains/intellij/plugins/structure-intellij/3.316/structure-intellij-3.316.jar"
     },
     {
-        "url": "org/jetbrains/jediterm/jediterm-core/3.59/jediterm-core-3.59.jar",
-        "hash": "83247c676405d5c5c1764454d35f2bec4f70b72f1b75046d4c43bdbc49eb9587",
-        "path": "org/jetbrains/jediterm/jediterm-core/3.59/jediterm-core-3.59.jar"
+        "url": "org/jetbrains/jediterm/jediterm-core/3.62/jediterm-core-3.62.jar",
+        "hash": "2c7eb9f888ed6c0e247d9eca44931c286cd6bd4eb6cc5508ea257d2f6e3beed5",
+        "path": "org/jetbrains/jediterm/jediterm-core/3.62/jediterm-core-3.62.jar"
     },
     {
-        "url": "org/jetbrains/jediterm/jediterm-ui/3.59/jediterm-ui-3.59.jar",
-        "hash": "e94b38d2e49e405a93eff2b264692d148fc996d3e72051e145d31215326186a9",
-        "path": "org/jetbrains/jediterm/jediterm-ui/3.59/jediterm-ui-3.59.jar"
+        "url": "org/jetbrains/jediterm/jediterm-ui/3.62/jediterm-ui-3.62.jar",
+        "hash": "056dd0d54495434625f006197b0d078b732f4feacc97dfcf0c6f58b7e1d2f3b3",
+        "path": "org/jetbrains/jediterm/jediterm-ui/3.62/jediterm-ui-3.62.jar"
     },
     {
         "url": "org/jetbrains/jetCheck/0.2.2/jetCheck-0.2.2.jar",
@@ -6445,84 +6435,79 @@
         "path": "org/jetbrains/jps/jps-javac-extension/10/jps-javac-extension-10.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-87/allopen-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-119/allopen-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "f7374912dbbcfc18686114a78804a7f4ba91aa54b6f3bf4be10a54bb643f8a61",
-        "path": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-87/allopen-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/2.3.20-ij253-119/allopen-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-87/analysis-api-fe10-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-119/analysis-api-fe10-for-ide-2.3.20-ij253-119.jar",
         "hash": "a43d956c010eedbf6df9e7050705c13abade18f3803264ac26cfa3fc00c72dd7",
-        "path": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-87/analysis-api-fe10-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-fe10-for-ide/2.3.20-ij253-119/analysis-api-fe10-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-87/analysis-api-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-119/analysis-api-for-ide-2.3.20-ij253-119.jar",
         "hash": "956c4e4e9c423e4a3a4f90a6436aabc6f377765621bfdc9eb862207160216b02",
-        "path": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-87/analysis-api-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-for-ide/2.3.20-ij253-119/analysis-api-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-87/analysis-api-impl-base-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-119/analysis-api-impl-base-for-ide-2.3.20-ij253-119.jar",
         "hash": "4954ca1501a0963e7e0ac3c9ef633e1976f795e8c6bf1c52d0a28b08e5751ffb",
-        "path": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-87/analysis-api-impl-base-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-impl-base-for-ide/2.3.20-ij253-119/analysis-api-impl-base-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-87/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-119/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-119.jar",
         "hash": "c6deada2fac53b8ea6523dbda77597b128006674616f140f04df23264c6d1aa3",
-        "path": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-87/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-impl-base-tests-for-ide/2.3.20-ij253-119/analysis-api-impl-base-tests-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-87/analysis-api-k2-for-ide-2.3.20-ij253-87.jar",
-        "hash": "fa5e5854a339d3c76c89987f638df5b64b27b888272ec7162763981fae7d06ae",
-        "path": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-87/analysis-api-k2-for-ide-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-119/analysis-api-k2-for-ide-2.3.20-ij253-119.jar",
+        "hash": "a2bfd7be2cbb7e2644e32ee44637cb4b2b71b1e711c8d920d9d5e8e98d3b2bbd",
+        "path": "org/jetbrains/kotlin/analysis-api-k2-for-ide/2.3.20-ij253-119/analysis-api-k2-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-87/analysis-api-k2-tests-for-ide-2.3.20-ij253-87.jar",
-        "hash": "725800ece6c76c3de403c1a936e415770a8bd5512d138b8491eb5433c5cd666d",
-        "path": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-87/analysis-api-k2-tests-for-ide-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-119/analysis-api-k2-tests-for-ide-2.3.20-ij253-119.jar",
+        "hash": "6c86b40290e48e5d05d9a9863a755e3b2441bcf3c2b9b90bcb84552e49aa5683",
+        "path": "org/jetbrains/kotlin/analysis-api-k2-tests-for-ide/2.3.20-ij253-119/analysis-api-k2-tests-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-87/analysis-api-platform-interface-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-119/analysis-api-platform-interface-for-ide-2.3.20-ij253-119.jar",
         "hash": "33db5c2be1f298109a32c67efc9ff9f2351812cd18b1d3e3b6142b8c1f6562a0",
-        "path": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-87/analysis-api-platform-interface-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/analysis-api-platform-interface-for-ide/2.3.20-ij253-119/analysis-api-platform-interface-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-87/assignment-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-119/assignment-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "a1c99ebaca3f02a43d27c295ff6481a860c8e1e9f3b5a67dca2d6a01d5d977e5",
-        "path": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-87/assignment-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/assignment-compiler-plugin-for-ide/2.3.20-ij253-119/assignment-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-87/compose-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
-        "hash": "32ce7920a16422638113923f434afffa11f1e65306548ed4044bab4be9ee17be",
-        "path": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-87/compose-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-119/compose-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
+        "hash": "72c22e9d2b44ab4e3c2c7065b6abee94e99a5a4cde0b4559580eb01753b214bf",
+        "path": "org/jetbrains/kotlin/compose-compiler-plugin-for-ide/2.3.20-ij253-119/compose-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-87/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-119/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-119.jar",
         "hash": "9d2369a7e71ff367dbed384ee50976c25743b09e4be68a58f9412ad165d8e0d7",
-        "path": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-87/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/incremental-compilation-impl-tests-for-ide/2.3.20-ij253-119/incremental-compilation-impl-tests-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-87/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-119/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "c3c265fa976e6e50758aece13351510a9b9a7f0de3ac476f5de7d617e926d3f4",
-        "path": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-87/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/js-plain-objects-compiler-plugin-for-ide/2.3.20-ij253-119/js-plain-objects-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-87/kotlin-build-common-tests-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-119/kotlin-build-common-tests-for-ide-2.3.20-ij253-119.jar",
         "hash": "d0d925a63436683c9ba594cdef82902d0186c38b28d40489f358ca94989012f1",
-        "path": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-87/kotlin-build-common-tests-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-build-common-tests-for-ide/2.3.20-ij253-119/kotlin-build-common-tests-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-87/kotlin-compiler-cli-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-119/kotlin-compiler-cli-for-ide-2.3.20-ij253-119.jar",
         "hash": "fb52f096c512486941155004f0f90522eda247f61014235860a7d95011600f56",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-87/kotlin-compiler-cli-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-cli-for-ide/2.3.20-ij253-119/kotlin-compiler-cli-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-87/kotlin-compiler-common-for-ide-2.3.20-ij253-87.jar",
-        "hash": "777ab6852e6054d338ab20b59aa75f92244a116a465d247e8366571e231f7968",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-87/kotlin-compiler-common-for-ide-2.3.20-ij253-87.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar",
-        "hash": "9fa8cdd1de0dccffe154c997d423ec6b5f53cd6d9177e3a77a9b0de03fb1bc81",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-119/kotlin-compiler-common-for-ide-2.3.20-ij253-119.jar",
+        "hash": "9c77dd206366e2ddb0eb54395684978e7138df4bca59b7a01a651f9374ff92e0",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-common-for-ide/2.3.20-ij253-119/kotlin-compiler-common-for-ide-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar",
@@ -6535,24 +6520,24 @@
         "path": "org/jetbrains/kotlin/kotlin-compiler-embeddable/2.0.21/kotlin-compiler-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-87/kotlin-compiler-fe10-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-119/kotlin-compiler-fe10-for-ide-2.3.20-ij253-119.jar",
         "hash": "862a7043999f5212182d41840e25c81f7bb837302d7d7ad1907c82154900ef92",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-87/kotlin-compiler-fe10-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-fe10-for-ide/2.3.20-ij253-119/kotlin-compiler-fe10-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-87/kotlin-compiler-fir-for-ide-2.3.20-ij253-87.jar",
-        "hash": "c1246e36061a25d2d33ac251b57c017b180b2c00dff873a58bd28d82ac5391f2",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-87/kotlin-compiler-fir-for-ide-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-119/kotlin-compiler-fir-for-ide-2.3.20-ij253-119.jar",
+        "hash": "625870d24e4314d042315c2c3b3afc0d7ec4488185ad28d05113e3d7ebb571b9",
+        "path": "org/jetbrains/kotlin/kotlin-compiler-fir-for-ide/2.3.20-ij253-119/kotlin-compiler-fir-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-87/kotlin-compiler-ir-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-119/kotlin-compiler-ir-for-ide-2.3.20-ij253-119.jar",
         "hash": "3e864a41449ef1e2f106473953950d34e6278aa1350b5671357b30e7afbb1be1",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-87/kotlin-compiler-ir-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-ir-for-ide/2.3.20-ij253-119/kotlin-compiler-ir-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-87/kotlin-compiler-tests-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-119/kotlin-compiler-tests-for-ide-2.3.20-ij253-119.jar",
         "hash": "f3e930788cd79cb3e5123b7b95d34ed8dc2deedfd42e9565ba097c953e32674d",
-        "path": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-87/kotlin-compiler-tests-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-compiler-tests-for-ide/2.3.20-ij253-119/kotlin-compiler-tests-for-ide-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-compose-compiler-plugin/2.2.20/kotlin-compose-compiler-plugin-2.2.20.jar",
@@ -6570,14 +6555,9 @@
         "path": "org/jetbrains/kotlin/kotlin-daemon-embeddable/2.0.21/kotlin-daemon-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-daemon-embeddable/2.0.21/kotlin-daemon-embeddable-2.0.21.jar",
-        "hash": "b1a0a73c5022f8dd05a638c6b76b2bd7361818a1f3860ff2644133b1dd2bdb03",
-        "path": "org/jetbrains/kotlin/kotlin-daemon-embeddable/2.0.21/kotlin-daemon-embeddable-2.0.21.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-87/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-119/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "5be504a59ebb1faaad1b947e70da101b79554cee42c6f7c4738bffed5babedcf",
-        "path": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-87/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-dataframe-compiler-plugin-for-ide/2.3.20-ij253-119/kotlin-dataframe-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-dist-for-ide/2.2.20/kotlin-dist-for-ide-2.2.20.jar",
@@ -6595,14 +6575,14 @@
         "path": "org/jetbrains/kotlin/kotlin-gradle-plugin-idea/1.9.20-dev-8162/kotlin-gradle-plugin-idea-1.9.20-dev-8162.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-87/kotlin-gradle-statistics-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-119/kotlin-gradle-statistics-for-ide-2.3.20-ij253-119.jar",
         "hash": "5ed51fde2e2c308a5e51c93f0c306e2df361d995358fe320e0fee3eafd88d0a7",
-        "path": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-87/kotlin-gradle-statistics-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-gradle-statistics-for-ide/2.3.20-ij253-119/kotlin-gradle-statistics-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-87/kotlin-jps-common-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-119/kotlin-jps-common-for-ide-2.3.20-ij253-119.jar",
         "hash": "4c42b6d0419bbdcb988df9ee3bd1d4f10fd90a3b1985966f66a9400d9c7a4ab0",
-        "path": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-87/kotlin-jps-common-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlin-jps-common-for-ide/2.3.20-ij253-119/kotlin-jps-common-for-ide-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.2.0/kotlin-jps-plugin-classpath-2.2.0.jar",
@@ -6615,9 +6595,9 @@
         "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.2.20/kotlin-jps-plugin-classpath-2.2.20.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-87/kotlin-jps-plugin-classpath-2.3.20-ij253-87.jar",
-        "hash": "c398467118f90fa52609c09fd853bbab73fa826fb6ba3193581d93007d3793d0",
-        "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-87/kotlin-jps-plugin-classpath-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-119/kotlin-jps-plugin-classpath-2.3.20-ij253-119.jar",
+        "hash": "9edc9a7dcccb7f32650e6e560f39eb298b4a86eca275eaf4aa2c5e62a1c72e2a",
+        "path": "org/jetbrains/kotlin/kotlin-jps-plugin-classpath/2.3.20-ij253-119/kotlin-jps-plugin-classpath-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-jps-plugin-tests-for-ide/2.2.20/kotlin-jps-plugin-tests-for-ide-2.2.20.jar",
@@ -6645,11 +6625,6 @@
         "path": "org/jetbrains/kotlin/kotlin-project-model/1.6.0/kotlin-project-model-1.6.0.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-reflect/1.6.10/kotlin-reflect-1.6.10.jar",
-        "hash": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203",
-        "path": "org/jetbrains/kotlin/kotlin-reflect/1.6.10/kotlin-reflect-1.6.10.jar"
-    },
-    {
         "url": "org/jetbrains/kotlin/kotlin-reflect/1.8.10/kotlin-reflect-1.8.10.jar",
         "hash": "99672410459045090d062a0194ed87008e2371f06946b6bfa7287c697f924bea",
         "path": "org/jetbrains/kotlin/kotlin-reflect/1.8.10/kotlin-reflect-1.8.10.jar"
@@ -6658,11 +6633,6 @@
         "url": "org/jetbrains/kotlin/kotlin-reflect/1.9.21/kotlin-reflect-1.9.21.jar",
         "hash": "a133e049f0a4e249651582428e166de4dfac9546adf436b6172119255ede510f",
         "path": "org/jetbrains/kotlin/kotlin-reflect/1.9.21/kotlin-reflect-1.9.21.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlin/kotlin-reflect/2.0.21/kotlin-reflect-2.0.21.jar",
-        "hash": "3ad2fcad0c09ddc0922debab4444d612144b7b465b75a8bb7587e20ddfafd799",
-        "path": "org/jetbrains/kotlin/kotlin-reflect/2.0.21/kotlin-reflect-2.0.21.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-reflect/2.2.20/kotlin-reflect-2.2.20.jar",
@@ -6675,24 +6645,14 @@
         "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.0.21/kotlin-script-runtime-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.0.21/kotlin-script-runtime-2.0.21.jar",
-        "hash": "9c111f8d08ade455566272d561921adc2b2cb6b7a4ccee38d9829c5e3a1ca6a3",
-        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.0.21/kotlin-script-runtime-2.0.21.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.0.21/kotlin-script-runtime-2.0.21.jar",
-        "hash": "9c111f8d08ade455566272d561921adc2b2cb6b7a4ccee38d9829c5e3a1ca6a3",
-        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.0.21/kotlin-script-runtime-2.0.21.jar"
-    },
-    {
         "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.2.20/kotlin-script-runtime-2.2.20.jar",
         "hash": "5c8bd5dd7ae1ea2eeb2778fdbeaa19a562184975f6cab8a0bb6779e4190731ae",
         "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.2.20/kotlin-script-runtime-2.2.20.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-87/kotlin-script-runtime-2.3.20-ij253-87.jar",
-        "hash": "4708769225877c79239dfae72bf61947ef9834615d73d9e770e867ff2f4a5f10",
-        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-87/kotlin-script-runtime-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-119/kotlin-script-runtime-2.3.20-ij253-119.jar",
+        "hash": "71d5e2a358327446cca5c8ecdc7b4227963cee1d9f24b06865e35263e67b7eae",
+        "path": "org/jetbrains/kotlin/kotlin-script-runtime/2.3.20-ij253-119/kotlin-script-runtime-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.0.21/kotlin-scripting-common-2.0.21.jar",
@@ -6700,9 +6660,9 @@
         "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.0.21/kotlin-scripting-common-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-87/kotlin-scripting-common-2.3.20-ij253-87.jar",
-        "hash": "4232986f099ea03551b0090173ac8712eb0b154782cb3cb340073487f9b4b52e",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-87/kotlin-scripting-common-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-119/kotlin-scripting-common-2.3.20-ij253-119.jar",
+        "hash": "ffb488572cd71bbd9212059e9db13a57a0cebabfe4b4b37122a89e9639a1967f",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-common/2.3.20-ij253-119/kotlin-scripting-common-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/2.0.21/kotlin-scripting-compiler-embeddable-2.0.21.jar",
@@ -6715,14 +6675,14 @@
         "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl-embeddable/2.0.21/kotlin-scripting-compiler-impl-embeddable-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-87/kotlin-scripting-compiler-impl-2.3.20-ij253-87.jar",
-        "hash": "284946efda62391471de3d4d7d64b4a807ce1f0f9fc7c31b049aed4d00e78a24",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-87/kotlin-scripting-compiler-impl-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-119/kotlin-scripting-compiler-impl-2.3.20-ij253-119.jar",
+        "hash": "6fd1143a1ba01ffa1fb106142c62babc48452645074fd7486a927b9be688545d",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-compiler-impl/2.3.20-ij253-119/kotlin-scripting-compiler-impl-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-87/kotlin-scripting-dependencies-2.3.20-ij253-87.jar",
-        "hash": "8614dddf67f21aa730e3030dbe3d58e92986660043e470c4c5b4c136a5254710",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-87/kotlin-scripting-dependencies-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-119/kotlin-scripting-dependencies-2.3.20-ij253-119.jar",
+        "hash": "122d60bd8aabadb8265b0d168d71268cb7deddc66ce1ffe6e3d69da54feb4d58",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-dependencies/2.3.20-ij253-119/kotlin-scripting-dependencies-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.0.21/kotlin-scripting-jvm-2.0.21.jar",
@@ -6730,9 +6690,9 @@
         "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.0.21/kotlin-scripting-jvm-2.0.21.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-87/kotlin-scripting-jvm-2.3.20-ij253-87.jar",
-        "hash": "92c88ac1306aeffa70e74eb65d5b1c2cce32c963cae728284c5a22d96bb30019",
-        "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-87/kotlin-scripting-jvm-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-119/kotlin-scripting-jvm-2.3.20-ij253-119.jar",
+        "hash": "ed5bdec1d7034eccb8bed4226c8cff22059ff80d786a3442c77c38fb858908a4",
+        "path": "org/jetbrains/kotlin/kotlin-scripting-jvm/2.3.20-ij253-119/kotlin-scripting-jvm-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-stdlib-common/1.7.20/kotlin-stdlib-common-1.7.20.jar",
@@ -6748,11 +6708,6 @@
         "url": "org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.7.20/kotlin-stdlib-jdk8-1.7.20.jar",
         "hash": "1da0d306c995945e1f807240ef64b5cd2dd5ac58612afb1a8596143d10b7ded5",
         "path": "org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.7.20/kotlin-stdlib-jdk8-1.7.20.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlin/kotlin-stdlib/2.0.21/kotlin-stdlib-2.0.21.jar",
-        "hash": "f31cc53f105a7e48c093683bbd5437561d1233920513774b470805641bedbc09",
-        "path": "org/jetbrains/kotlin/kotlin-stdlib/2.0.21/kotlin-stdlib-2.0.21.jar"
     },
     {
         "url": "org/jetbrains/kotlin/kotlin-stdlib/2.2.20/kotlin-stdlib-2.2.20.jar",
@@ -6775,44 +6730,44 @@
         "path": "org/jetbrains/kotlin/kotlin-tooling-core/1.9.20-dev-8162/kotlin-tooling-core-1.9.20-dev-8162.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-87/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-119/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "7810d0e3a97b3722d380c5a95e13936b3320acabd1123b80214bde25ea21345b",
-        "path": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-87/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/kotlinx-serialization-compiler-plugin-for-ide/2.3.20-ij253-119/kotlinx-serialization-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-87/lombok-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-119/lombok-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "8bc0ca5c9bb47b4ae74ab75306e8c0481d2748b3165dc850165d72d199540653",
-        "path": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-87/lombok-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/2.3.20-ij253-119/lombok-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-87/low-level-api-fir-for-ide-2.3.20-ij253-87.jar",
-        "hash": "2014b8257d0ecc50c3204a716028d629c6b31052922e6a8662ec02812fb7ada6",
-        "path": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-87/low-level-api-fir-for-ide-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-119/low-level-api-fir-for-ide-2.3.20-ij253-119.jar",
+        "hash": "7630bf98643864a6f420375e1c49fbd851b9a284e6e691f1e60fb55a21426898",
+        "path": "org/jetbrains/kotlin/low-level-api-fir-for-ide/2.3.20-ij253-119/low-level-api-fir-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-87/noarg-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-119/noarg-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "261a90d908355e185f0a291aa71b3ce1f4e3c67aa31411244ef8c124958b0c77",
-        "path": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-87/noarg-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/noarg-compiler-plugin-for-ide/2.3.20-ij253-119/noarg-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-87/parcelize-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
-        "hash": "c4e51a757d46f19bdc2264c7be0cba0cc52eb52c9047c0be9b1df91eb8195f4e",
-        "path": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-87/parcelize-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "url": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-119/parcelize-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
+        "hash": "5aeded4499d6d8a99b5392944a93b8948b7721d7f13ddefd6046b22294f08408",
+        "path": "org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/2.3.20-ij253-119/parcelize-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-87/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-119/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "98457d26126f1095049a8769d78168ff7d0907f0b472ee28967073709b4b4607",
-        "path": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-87/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/sam-with-receiver-compiler-plugin-for-ide/2.3.20-ij253-119/sam-with-receiver-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-87/scripting-compiler-plugin-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-119/scripting-compiler-plugin-for-ide-2.3.20-ij253-119.jar",
         "hash": "75048ae78a873e992533ba3c376a65701cff28fbcafd79d587efc999a638e0bd",
-        "path": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-87/scripting-compiler-plugin-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/scripting-compiler-plugin-for-ide/2.3.20-ij253-119/scripting-compiler-plugin-for-ide-2.3.20-ij253-119.jar"
     },
     {
-        "url": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-87/symbol-light-classes-for-ide-2.3.20-ij253-87.jar",
+        "url": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-119/symbol-light-classes-for-ide-2.3.20-ij253-119.jar",
         "hash": "298e61756dab332adc36712f14803e47f65f114f736c41cace04eaef2cce380e",
-        "path": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-87/symbol-light-classes-for-ide-2.3.20-ij253-87.jar"
+        "path": "org/jetbrains/kotlin/symbol-light-classes-for-ide/2.3.20-ij253-119/symbol-light-classes-for-ide-2.3.20-ij253-119.jar"
     },
     {
         "url": "org/jetbrains/kotlinx/atomicfu-jvm/0.20.2/atomicfu-jvm-0.20.2.jar",
@@ -6833,16 +6788,6 @@
         "url": "org/jetbrains/kotlinx/kotlinx-collections-immutable-jvm/0.4.0/kotlinx-collections-immutable-jvm-0.4.0.jar",
         "hash": "d767014ad0c9a27d27d26fd38e7afa030aee0d141338f108781ff02ecf2fdab5",
         "path": "org/jetbrains/kotlinx/kotlinx-collections-immutable-jvm/0.4.0/kotlinx-collections-immutable-jvm-0.4.0.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.6.4/kotlinx-coroutines-core-jvm-1.6.4.jar",
-        "hash": "c24c8bb27bb320c4a93871501a7e5e0c61607638907b197aef675513d4c820be",
-        "path": "org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.6.4/kotlinx-coroutines-core-jvm-1.6.4.jar"
-    },
-    {
-        "url": "org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.6.4/kotlinx-coroutines-core-jvm-1.6.4.jar",
-        "hash": "c24c8bb27bb320c4a93871501a7e5e0c61607638907b197aef675513d4c820be",
-        "path": "org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.6.4/kotlinx-coroutines-core-jvm-1.6.4.jar"
     },
     {
         "url": "org/jetbrains/kotlinx/kotlinx-datetime-jvm/0.6.2/kotlinx-datetime-jvm-0.6.2.jar",

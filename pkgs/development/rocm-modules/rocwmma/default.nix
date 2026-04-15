@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "7.1.1";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -36,10 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocWMMA";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6hvdq3J8UhldcyNqXxi9UEF+P0RgG8o5YdIZLzvpgXw=";
+    sparseCheckout = [
+      "projects/rocwmma"
+      "shared"
+    ];
+    hash = "sha256-eoF8a7zknpgvDOSDzolOrdtszUJ5tC7Ur2sRShiQEO0=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocwmma";
 
   patches = lib.optionals (buildTests || buildBenchmarks) [
     ./0000-dont-fetch-googletest.patch
@@ -99,15 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Mixed precision matrix multiplication and accumulation";
-    homepage = "https://github.com/ROCm/rocWMMA";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocwmma";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

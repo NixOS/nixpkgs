@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commons-logging";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchurl {
     url = "mirror://apache/commons/logging/binaries/commons-logging-${finalAttrs.version}-bin.tar.gz";
-    sha256 = "sha256-4s/DfNYp/CXSIAtUAUHC2GReQrmlhpN8tRwvpHmB2G0=";
+    sha256 = "sha256-7+wHpv5x63E2u4KEStKz17DIOfqokYzwp/Q1/tBOBxE=";
   };
 
   installPhase = ''

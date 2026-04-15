@@ -70,14 +70,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "a676499add42941ff6af1e8d3f0504416dac7429";
-    hash = "sha256-zIYdHFbHyP2V6dkx6Ueb6NBqWu8tJji2hSWF9zWEJa4=";
-    sparseCheckout = [ "projects/hipblaslt" ];
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-+xMmPKb32NP9U35dHCXfXWwa6exfiL5TezfXERVDfe4=";
+    sparseCheckout = [
+      "projects/hipblaslt"
+      "shared"
+    ];
+    # Compress the 5ish GiB of yaml files so this .src is under output size limit
+    postFetch = ''
+      find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${lib.getExe zstd} --rm {} \;
+    '';
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipblaslt";
   env.CXX = compiler;
@@ -118,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./TensileCreateLibrary-refactor.patch
     ./Tensile-interning.patch
   ];
+
+  preConfigure = ''
+    find . -name '*.yaml.zst' -path '*/Tensile/Logic/*' -exec zstd -d --rm {} \;
+  '';
 
   postPatch = ''
     # git isn't needed and we have no .git
@@ -203,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Move binaries to appropriate outputs and delete leftover /bin
     + ''
       mkdir -p $benchmark/bin
-      mv $out/bin/hipblaslt-{api-overhead,sequence,bench*} $out/bin/*.yaml $out/bin/*.py $benchmark/bin
+      mv $out/bin/hipblaslt-{api-overhead,bench*} $out/bin/*.yaml $out/bin/*.py $benchmark/bin
       ${lib.optionalString buildTests ''
         mkdir -p $test/bin
         mv $out/bin/hipblas-test $test/bin
@@ -234,13 +245,10 @@ stdenv.mkDerivation (finalAttrs: {
   # and are fine ignoring it at runtime if it's not supported
   # so we have to support building an empty hipblaslt
   passthru.supportsTargetArches = supportsTargetArches;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
   meta = {
     description = "Library that provides general matrix-matrix operations with a flexible API";
-    homepage = "https://github.com/ROCm/hipBLASlt";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblaslt";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

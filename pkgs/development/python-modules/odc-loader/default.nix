@@ -23,16 +23,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "odc-loader";
-  version = "0.5.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-loader";
-    tag = "v${version}";
-    hash = "sha256-yBCityE9e29wUnPuD09MTeyyVY/o9X/1lUq3Su8sd6g=";
+    tag = finalAttrs.version;
+    hash = "sha256-nJSC93+uPzsZY0ZHmrodPkCIk2FZnZ2ksfJIvr+x0As=";
   };
 
   build-system = [
@@ -47,21 +47,22 @@ buildPythonPackage rec {
     xarray
   ];
 
-  optional-dependencies = {
+  optional-dependencies = lib.fix (self: {
     botocore = [ botocore ];
     zarr = [ zarr ];
-    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
-  };
+    all = self.botocore ++ self.zarr;
+  });
 
   nativeCheckInputs = [
     geopandas
     pytestCheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Require internet access
     "test_mem_reader"
+    "test_memreader_aux"
     "test_memreader_zarr"
   ];
 
@@ -72,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for constructing xarray objects from parsed metadata";
     homepage = "https://github.com/opendatacube/odc-loader/";
-    changelog = "https://github.com/opendatacube/odc-loader/releases/tag/${version}";
+    changelog = "https://github.com/opendatacube/odc-loader/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

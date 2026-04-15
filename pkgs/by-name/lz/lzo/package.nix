@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
   meta = {
     description = "Real-time data (de)compression library";
     longDescription = ''

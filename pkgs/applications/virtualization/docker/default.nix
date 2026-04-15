@@ -367,6 +367,8 @@ let
           # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
           inherit moby-src;
           tests = lib.optionalAttrs (!clientOnly) { inherit (nixosTests) docker; };
+          # run with: nix-shell ./maintainers/scripts/update.nix --argstr package docker
+          updateScript = ./update.sh;
         };
 
         meta = docker-meta // {
@@ -436,18 +438,18 @@ in
 
   docker_29 =
     let
-      version = "29.2.0";
+      version = "29.4.0";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-GbXPe8DlhV4WnwJO8OVAdbXZ18IOUlXszenMGvPvSMQ=";
+      cliHash = "sha256-ObuRuiC1+2E7PMMgoXC6SEi6zsdRqVvGCDvP7J/Ws28=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-Uilc5cxKuctSkjVxY3R5aezlmGHhLhHY4opVkTYRVIY=";
-      runcRev = "v1.3.4";
-      runcHash = "sha256-1IfY08sBoDpbLrwz1AKBRSTuCZyOgQzYPHTDUI6fOZ8=";
-      containerdRev = "v2.2.1";
-      containerdHash = "sha256-fDOfN0XESrBTDW7Nxj9niqU93BQ5/JaGLwAR3u6Xaik=";
+      mobyHash = "sha256-Pot3N+AvxIYG5Vg3AQK3I0jegCW4bmC0OimsGnVCiuQ=";
+      runcRev = "v1.3.5";
+      runcHash = "sha256-Swphxbu/OLkUrfRjLMZIVGwYb7AN0xHdyxm0ysAVam0=";
+      containerdRev = "v2.2.2";
+      containerdHash = "sha256-1jYiyNHR1sXBwXdS33KWE+IB1tOZbiJyUxhsVeXwSrc=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

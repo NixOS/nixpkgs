@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snowemu";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "twvd";
     repo = "snow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oBMzkN4cHk0KywIiKLcjE58T/9lOIM6fRbCZOR6zON8=";
+    hash = "sha256-/arxD1bShXqsC2If2v7ARBsjdlnhlg0wK6MLX0q4xiI=";
     fetchSubmodules = true;
   };
-  cargoHash = "sha256-cuxbjyjdQNkluRfPQtro9OPr4V/trT1VqgbHjfZUScQ=";
+  cargoHash = "sha256-7cyhpiT6RL+5x+xslQzhA5W71rcZ9TJPmfUHKl7TC/M=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mv $out/bin/snow_frontend_egui $out/bin/snowemu
 
-    install -Dm644 docs/images/snow_icon.png $out/share/icons/hicolor/apps/snowemu.png
+    install -Dm644 assets/snow_icon.png $out/share/icons/hicolor/1024x1024/apps/snowemu.png
 
     wrapProgram $out/bin/snowemu \
       --prefix LD_LIBRARY_PATH : ${

@@ -58,10 +58,6 @@ in
           assertion = config.boot.postBootCommands == "";
           message = "nixos-init cannot be used with boot.postBootCommands";
         }
-        {
-          assertion = config.powerManagement.powerUpCommands == "";
-          message = "nixos-init cannot be used with powerManagement.powerUpCommands";
-        }
       ];
     })
   ];

@@ -62,5 +62,6 @@ buildPythonPackage rec {
       dotlambda
     ];
     changelog = "https://github.com/libfuse/pyfuse3/blob/${src.tag}/Changes.rst";
+    platforms = lib.platforms.linux;
   };
 }

@@ -41,7 +41,6 @@ let
         nodes."${name}" = machine;
 
         meta.maintainers = with lib.maintainers; [
-          synthetica
           turion
         ];
 

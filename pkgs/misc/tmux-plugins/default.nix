@@ -384,12 +384,12 @@ in
   harpoon = mkTmuxPlugin {
     pluginName = "harpoon";
     rtpFilePath = "harpoon.tmux";
-    version = "0.4.0";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner = "chaitanyabsprip";
       repo = "tmux-harpoon";
-      rev = "v0.4.0";
-      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+      rev = "v0.5.0";
+      hash = "sha256-eqzf3hEaliF1t7zwZlj1YDGvn0jKdbBTgy5PoOPVMEU=";
     };
     meta = {
       homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
@@ -979,12 +979,12 @@ in
 
   tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "tmux-session-manager";
-    version = "1.1.1";
+    version = "1.1.2";
     src = fetchFromGitHub {
       owner = "PhilVoel";
       repo = "tmux-session-manager";
       tag = "v${version}";
-      hash = "sha256-WzzqfMRAF8vxrnYnudD6CZVn52bZyCSRaByQRRRK9X8=";
+      hash = "sha256-3uXl9N0LkS1txjaG8I+i1ACAW55tSNFzv358i3aRd/U=";
     };
     rtpFilePath = "session_manager.tmux";
     meta = {

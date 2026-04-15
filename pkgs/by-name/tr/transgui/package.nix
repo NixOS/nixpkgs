@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transgui";
-  version = "5.18.0-unstable-2024-10-03";
+  version = "5.18.0-unstable-2026-02-24";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gui";
     repo = "transgui";
-    rev = "8854357ece266e749e8981a93c8002465a93d8f2";
-    hash = "sha256-8ycivjjPeXBdPbqNNlO2hcre6T9sFhqg6vUfCREtd8k=";
+    rev = "da71b860d4920f7ab847a48bd8d804725ddbad7b";
+    hash = "sha256-ZrzC0Pnf4HXC/XqOCzPfhAhfUvuchW2CgX3izfQAALo=";
   };
 
   nativeBuildInputs = [

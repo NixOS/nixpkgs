@@ -86,7 +86,7 @@ rec {
         output = node1.succeed("crm_resource -r cat --locate")
         match = re.search("is running on: (.+)", output)
         if match:
-          for machine in machines:
+          for machine in machines_qemu:
             if machine.name == match.group(1):
               current_node = machine
           break
@@ -96,7 +96,7 @@ rec {
       current_node.crash()
 
       # pick another node that's still up
-      for machine in machines:
+      for machine in machines_qemu:
         if machine.booted:
           check_node = machine
       # find where the service has been started next
@@ -105,7 +105,7 @@ rec {
         match = re.search("is running on: (.+)", output)
         # output will remain the old current_node until the crash is detected by pacemaker
         if match and match.group(1) != current_node.name:
-          for machine in machines:
+          for machine in machines_qemu:
             if machine.name == match.group(1):
               next_node = machine
           break

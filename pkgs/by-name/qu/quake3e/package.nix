@@ -19,15 +19,15 @@
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Quake3e";
-  version = "2024-09-02-dev";
+  version = "2025-10-14";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = "Quake3e";
-    rev = "b6e7ce4f78711e1c9d2924044a9a9d8a9db7020f";
-    sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-3Ij0GEPXdl7Lhp9o1Zdwg1tcLgFEay686QjhSlh8iAo=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +60,6 @@ stdenv.mkDerivation {
     sed -i -e 's#"libcurl.so.4"#"${curl.out}/lib/libcurl.so.4"#' code/client/cl_curl.h
   '';
 
-  # Default value for `USE_SDL` changed (from 0 to 1) in 5f8ce6d (2020-12-26)
-  # Setting `USE_SDL=0` in `makeFlags` doesn't work
-  preConfigure = ''
-    sed -i 's/USE_SDL *= 1/USE_SDL = 0/' Makefile
-  '';
-
   installPhase = ''
     runHook preInstall
     make install DESTDIR=$out/lib
@@ -93,4 +87,4 @@ stdenv.mkDerivation {
       alx
     ];
   };
-}
+})

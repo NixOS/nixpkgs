@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       cfg = ''
         # Aeolus system wide default options
         # Ignored if ~/.aeolusrc with local options exists
-        -u -S ${aeolus-stops}/${aeolus-stops.subdir}
+        -u -S ${aeolus-stops}/share/Aeolus/stops
       '';
     in
     ''

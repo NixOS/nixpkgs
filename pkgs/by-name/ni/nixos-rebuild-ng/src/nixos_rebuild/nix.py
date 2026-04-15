@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import sys
 import textwrap
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -24,7 +25,7 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import SSH_DEFAULT_OPTS, run_wrapper
+from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
@@ -191,9 +192,7 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    extra_env = {
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))
-    }
+    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
@@ -204,31 +203,37 @@ def copy_closure(
                 host.host,
                 closure,
             ],
-            extra_env=extra_env,
+            append_local_env=env,
         )
 
-    def nix_copy(to_host: Remote, from_host: Remote) -> None:
+    def nix_copy(to_host: Remote | None, from_host: Remote | None) -> None:
+        host_flags = []
+        if from_host is not None:
+            host_flags += ["--from", f"{from_host.store_type}://{from_host.host}"]
+        if to_host is not None:
+            host_flags += ["--to", f"{to_host.store_type}://{to_host.host}"]
+
         run_wrapper(
             [
                 "nix",
                 *FLAKE_FLAGS,
                 "copy",
                 *dict_to_flags(copy_flags),
-                "--from",
-                f"ssh://{from_host.host}",
-                "--to",
-                f"ssh://{to_host.host}",
+                *host_flags,
                 closure,
             ],
-            extra_env=extra_env,
+            append_local_env=env,
         )
 
     match (to_host, from_host):
         case (x, y) if x == y:
             return
-        case (Remote(_) as host, None) | (None, Remote(_) as host):
+        # nix-copy-closure doesn't support store types other than "ssh".
+        case (Remote(_) as host, None) | (None, Remote(_) as host) if (
+            host.store_type == "ssh"
+        ):
             nix_copy_closure(host, to=bool(to_host))
-        case (Remote(_), Remote(_)):
+        case (Remote(_), _) | (_, Remote(_)):
             nix_copy(to_host, from_host)
 
 
@@ -265,8 +270,8 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
-        stdout=PIPE,
         check=False,
+        capture_output=True,
     )
     if r.returncode:
         return None
@@ -313,6 +318,7 @@ def get_build_image_name_flake(
     r = run_wrapper(
         [
             "nix",
+            *FLAKE_FLAGS,
             "eval",
             "--json",
             flake.to_attr(
@@ -364,6 +370,7 @@ def get_build_image_variants_flake(
     r = run_wrapper(
         [
             "nix",
+            *FLAKE_FLAGS,
             "eval",
             "--json",
             flake.to_attr("config.system.build.images"),
@@ -435,7 +442,10 @@ def get_generations(profile: Profile) -> list[Generation]:
         )
 
     return sorted(
-        [parse_path(p, profile) for p in profile.path.parent.glob("system-*-link")],
+        [
+            parse_path(p, profile)
+            for p in profile.path.parent.glob(f"{profile.name}-*-link")
+        ],
         key=lambda d: d.id,
     )
 
@@ -536,6 +546,26 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             key=lambda x: x["generation"],
             reverse=True,
         )
+
+
+def diff_closures(
+    current_config: Path,
+    new_config: Path,
+    target_host: Remote | None = None,
+) -> None:
+    print(f"<<< {current_config}\n>>> {new_config}", file=sys.stderr)
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "store",
+            "diff-closures",
+            current_config,
+            new_config,
+        ],
+        remote=target_host,
+        stdout=sys.stderr,
+    )
 
 
 def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
@@ -680,9 +710,19 @@ def switch_to_configuration(
 
     run_wrapper(
         [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
+        env={
+            "LOCALE_ARCHIVE": PRESERVE_ENV,
+            "NIXOS_NO_CHECK": PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
+        },
         remote=target_host,
         sudo=sudo,
+        # switch-to-configuration is not expected to produce meaningful
+        # stdout, but if it (or any of its children) does, it would leak
+        # into our stdout and break the "only the store path on stdout"
+        # contract documented in services.py (see print_result). Redirect
+        # its stdout to our stderr defensively.
+        stdout=sys.stderr,
     )
 
 

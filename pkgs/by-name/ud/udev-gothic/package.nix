@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "udev-gothic";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchzip {
     url = "https://github.com/yuru7/udev-gothic/releases/download/v${version}/UDEVGothic_v${version}.zip";
-    hash = "sha256-9gwBT0GVNPVWoiFIKBUf5sNGkhfJCWhMFRRIGvj5Wto=";
+    hash = "sha256-x6nM35UM7v4WQn6DINuEgXQmSQ4ysPS4omY9ePDTAhA=";
   };
 
   installPhase = ''

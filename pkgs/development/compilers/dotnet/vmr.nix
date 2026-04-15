@@ -24,6 +24,7 @@
   xmlstarlet,
   nodejs,
   cpio,
+  ninja,
   callPackage,
   unzip,
   yq,
@@ -33,6 +34,7 @@
   bootstrapSdk,
   releaseManifestFile,
   tarballHash,
+  hasRuntime,
 }:
 
 let
@@ -49,7 +51,8 @@ let
   inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
-  inherit (releaseManifest) release sourceRepository tag;
+  inherit (releaseManifest) sourceRepository tag;
+  release = releaseManifest.${if hasRuntime then "release" else "sdkVersion"};
 
   buildRid = dotnetCorePackages.systemToDotnetRid buildPlatform.system;
   targetRid = dotnetCorePackages.systemToDotnetRid targetPlatform.system;
@@ -94,6 +97,9 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (lib.versionAtLeast version "10") [
     cpio
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "11") [
+    ninja
   ]
   ++ lib.optionals isDarwin [
     getconf
@@ -142,7 +148,13 @@ stdenv.mkDerivation {
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
-    ];
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "11") (
+      [
+        ./fix-skiperroronprebuilts.patch
+      ]
+      ++ lib.optional isDarwin ./fix-cmake-darwin.patch
+    );
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
@@ -184,14 +196,14 @@ stdenv.mkDerivation {
       -u //_:Project/_:PropertyGroup/_:BuildNumber -v 0 \
       src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
   ''
-  + ''
+  + lib.optionalString hasRuntime ''
 
     # this fixes compile errors with clang 15 (e.g. darwin)
     substituteInPlace \
       src/runtime/src/native/libs/CMakeLists.txt \
       --replace-fail 'add_compile_options(-Weverything)' 'add_compile_options(-Wall)'
   ''
-  + lib.optionalString (lib.versionAtLeast version "9") (
+  + lib.optionalString (lib.versionAtLeast version "9" && hasRuntime) (
     ''
       # repro.csproj fails to restore due to missing freebsd packages
       xmlstarlet ed \
@@ -241,7 +253,7 @@ stdenv.mkDerivation {
         src/aspnetcore/eng/DotNetBuild.props
     ''
   )
-  + lib.optionalString isLinux (
+  + lib.optionalString (isLinux && hasRuntime) (
     ''
       substituteInPlace \
         src/runtime/src/native/libs/System.Security.Cryptography.Native/opensslshim.c \
@@ -268,7 +280,7 @@ stdenv.mkDerivation {
         --replace-warn 'libicui18nName[64]' 'libicui18nName[256]'
     ''
   )
-  + lib.optionalString isDarwin (
+  + lib.optionalString (isDarwin && hasRuntime) (
     ''
       substituteInPlace \
         src/runtime/src/native/libs/System.Globalization.Native/CMakeLists.txt \
@@ -293,7 +305,7 @@ stdenv.mkDerivation {
         -s \$prev -t elem -n SkipInstallerBuild -v true \
         src/runtime/Directory.Build.props
     ''
-    + lib.optionalString (lib.versionAtLeast version "10") ''
+    + lib.optionalString (lib.versionAtLeast version "10" && hasRuntime) ''
       xmlstarlet ed \
         --inplace \
         -s //Project -t elem -n PropertyGroup \
@@ -315,7 +327,9 @@ stdenv.mkDerivation {
       substituteInPlace \
         src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
     ''
-    + lib.optionalString (lib.versionAtLeast version "9") "  src/runtime/src/native/managed/native-library.targets \\\n"
+    + lib.optionalString (
+      lib.versionAtLeast version "9" && hasRuntime
+    ) "  src/runtime/src/native/managed/native-library.targets \\\n"
     + ''
         --replace-fail ' -no_code_signature_warning' ""
 
@@ -323,9 +337,11 @@ stdenv.mkDerivation {
       substituteInPlace \
         src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
     ''
-    + lib.optionalString (lib.versionOlder version "10") "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
+    + lib.optionalString (
+      lib.versionOlder version "10" && hasRuntime
+    ) "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
     + "  --replace-fail 'Include=\"-ld_classic\"' \"\"\n"
-    + lib.optionalString (lib.versionOlder version "9") ''
+    + lib.optionalString (lib.versionOlder version "9" && hasRuntime) ''
       # [...]/build.proj(123,5): error : Did not find PDBs for the following SDK files:
       # [...]/build.proj(123,5): error : sdk/8.0.102/System.Resources.Extensions.dll
       # [...]/build.proj(123,5): error : sdk/8.0.102/System.CodeDom.dll
@@ -346,7 +362,6 @@ stdenv.mkDerivation {
     "--no-prebuilts"
     "--with-packages"
     bootstrapSdk.artifacts
-
   ]
   # https://github.com/dotnet/source-build/issues/5286#issuecomment-3097872768
   ++ lib.optional (lib.versionAtLeast version "10") "-p:SkipArcadeSdkImport=true";
@@ -370,11 +385,21 @@ stdenv.mkDerivation {
     ''
     + ''
       ${prepScript} $prepFlags
+    ''
+    + lib.optionalString (!hasRuntime) ''
+      mkdir .shared-components
+      cp -r "${bootstrapSdk.artifacts}"/* .shared-components/
+      chmod +w -R .shared-components/
+      # zip dependencies unzipped in bootstrap installPhase, so they can be found
+      find .shared-components/assets . -name \*.tar -exec gzip -f --fast {} \;
+      buildFlags+=\ --with-shared-components\ "$PWD"/.shared-components
+    ''
+    + ''
 
       runHook postConfigure
     '';
 
-  postConfigure = lib.optionalString (lib.versionAtLeast version "9") ''
+  postConfigure = lib.optionalString (lib.versionAtLeast version "9" && hasRuntime) ''
     # see patch-npm-packages.proj
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
   '';
@@ -406,7 +431,12 @@ stdenv.mkDerivation {
     "--"
     "-p:PortableBuild=true"
   ]
-  ++ lib.optional (targetRid != buildRid) "-p:TargetRid=${targetRid}";
+  ++ lib.optional (targetRid != buildRid) "-p:TargetRid=${targetRid}"
+  # https://github.com/dotnet/source-build/issues/5521
+  ++ lib.optionals (version == "11.0.0-preview.2") [
+    "--branding"
+    "repodefault "
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -458,6 +488,12 @@ stdenv.mkDerivation {
       done
       popd
 
+    ''
+    # unzip tarballs so we don't break dependency detection
+    + lib.optionalString (lib.versionAtLeast version "10") ''
+      find "$out"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/assets . -name \*.gz -exec gunzip {} \;
+    ''
+    + ''
       local -r unpacked="$PWD/.unpacked"
       for nupkg in $out/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
           rm -rf "$unpacked"

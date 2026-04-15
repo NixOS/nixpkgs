@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
   };
 
+  patches = [
+    # Fix EdDSA signature verification accepting out-of-range s values
+    # https://git.tartarus.org/?p=simon/putty.git;a=commit;h=af996b5ec27ab79bae3882071b9d6acf16044549
+    ./eddsa-verify-check-out-of-range-s.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     perl
@@ -63,6 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    maintainers = with lib.maintainers; [ aprl ];
     description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix

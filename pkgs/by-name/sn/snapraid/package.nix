@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IoK37ZXlMRLDPjzsLUqcfcu4asdstFJYgHc2wAg9lno=";
   };
 
-  VERSION = finalAttrs.version;
+  env.VERSION = finalAttrs.version;
 
   doCheck = true;
 

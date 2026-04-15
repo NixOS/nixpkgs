@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
-  HY_VERSION = version;
+  env.HY_VERSION = version;
 
   build-system = [ setuptools ];
 

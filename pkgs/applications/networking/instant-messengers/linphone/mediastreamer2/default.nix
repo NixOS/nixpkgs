@@ -70,7 +70,7 @@ mkLinphoneDerivation (finalAttrs: {
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
   ];
 
-  NIX_LDFLAGS = "-lXext";
+  env.NIX_LDFLAGS = "-lXext";
 
   meta = {
     description = "Powerful and lightweight streaming engine specialized for voice/video telephony applications. Part of the Linphone project";

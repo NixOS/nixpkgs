@@ -7,6 +7,7 @@
   fetchPypi,
   fsspec,
   hatchling,
+  hatch-vcs,
   pandas,
   pyarrow,
   python-dateutil,
@@ -16,15 +17,18 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "3.17.1";
+  version = "3.25.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jlS6qjOG2syTpsY/jNkplOULiDPXR3cmWSMa5O9EGPc=";
+    hash = "sha256-YOc1YTRUZxNT+Iqa2vZH8QwdwQ2mdJGaDVmTOSsFt6s=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     boto3

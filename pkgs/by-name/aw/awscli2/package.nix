@@ -54,28 +54,29 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.33.2"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.34.24"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-dAtcYDdrZASrwBjQfnZ4DUR4F5WhY59/UX92QcILavs=";
+    hash = "sha256-PDoztQYKfH6FjdSyMQGsT8No3LB56naQ/AxTPN/dslQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'flit_core>=3.7.1,<3.9.1' 'flit_core>=3.7.1' \
+      --replace-fail 'flit_core>=3.7.1,<3.12.1' 'flit_core>=3.7.1' \
       --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
-      --replace-fail 'ruamel.yaml>=0.15.0,<=0.17.21' 'ruamel.yaml>=0.15.0' \
-      --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0'
+      --replace-fail 'ruamel_yaml>=0.15.0,<=0.19.1' 'ruamel_yaml>=0.15.0' \
+      --replace-fail 'ruamel_yaml_clib>=0.2.0,<=0.2.15' 'ruamel_yaml_clib>=0.2.0' \
+      --replace-fail 'wcwidth<0.3.0' 'wcwidth>=0.3.0'
 
     substituteInPlace requirements-base.txt \
-      --replace-fail "wheel==0.43.0" "wheel>=0.43.0"
+      --replace-fail "wheel==0.46.3" "wheel>=0.46.3"
 
     # Upstream needs pip to build and install dependencies and validates this
     # with a configure script, but we don't as we provide all of the packages
@@ -125,9 +126,15 @@ py.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    cat > aws.zsh <<EOF
+    #compdef aws
+    autoload -U +X bashcompinit && bashcompinit
+    complete -C $out/bin/aws_completer aws
+    EOF
+
     installShellCompletion --cmd aws \
       --bash <(echo "complete -C $out/bin/aws_completer aws") \
-      --zsh $out/bin/aws_zsh_completer.sh
+      --zsh aws.zsh
   ''
   + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/aws.cmd

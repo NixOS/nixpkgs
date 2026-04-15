@@ -10,6 +10,10 @@ let
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
   phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+
+  env = {
+    ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+  };
 in
 {
   options.services.roundcube = {
@@ -186,6 +190,7 @@ in
             priority = 1100;
             extraConfig = ''
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
+              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
           locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
@@ -263,7 +268,7 @@ in
         "catch_workers_output" = true;
       };
       phpPackage = phpWithPspell;
-      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+      phpEnv = env;
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
@@ -281,6 +286,8 @@ in
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        environment = env;
 
         path = [
           (if localDB then config.services.postgresql.package else pkgs.postgresql)

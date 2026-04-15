@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brioche";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "brioche-dev";
     repo = "brioche";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tMVBpFCTxesrkj7Z3huVD86baw1tYAtPdPAzYJzTCnA=";
+    hash = "sha256-j0Hi75olubvlHEOzVbW0cMAslZFWCzHiwXaBqmkXzmE=";
   };
 
-  cargoHash = "sha256-LPHJHS69oUvmTaYoMSINCcyYIHYMq++UCUMh9KrCm/0=";
+  cargoHash = "sha256-3UvggE45Gvus5ghd64ZK+Nh/VB3NJBmZNrbStl/xJu0=";
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -42,16 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  checkFlags = [
-    # Require internet access
-    "--skip=test_bake_process"
-  ];
-
-  nativeCheckInputs = [
-    # Otherwise, some tests fail with:
-    # Error: failed to find time zone `Etc/Unknown` since there is no time zone database configured at line 1 column 415
-    tzdata
-  ];
+  # Tests require network access and CA certificates, which are unavailable in the nix sandbox
+  doCheck = false;
 
   nativeInstallCheckInputs = [
     versionCheckHook

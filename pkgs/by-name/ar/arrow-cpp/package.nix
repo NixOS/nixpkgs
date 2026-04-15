@@ -33,7 +33,6 @@
   gtest,
   libbacktrace,
   lz4,
-  minio,
   ninja,
   nlohmann_json,
   openssl,
@@ -69,8 +68,8 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "9a02925d1ba80bd493b6d4da6e8a777588d57ac4";
-    hash = "sha256-dEFCkeQpQrU61uCwJp/XB2umbQHjXtzado36BGChoc0=";
+    rev = "19dda67f485ffb3ffa92f4c6fa083576ef052d58";
+    hash = "sha256-mna6I/a5ZxMLdWN0QfCsgsre6yMeuSv4syX5ePGLhfg=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -81,7 +80,7 @@ let
     hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
   };
 
-  version = "22.0.0";
+  version = "23.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -91,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-i4Smt43oi4sddUt3qH7ePjensBSfPW+w/ExLVcVNKic=";
+    hash = "sha256-BluUlbtGJwvlrpN/c/KziOfFh5dvzZyuCy4JZkkFea4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -120,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
       ARROW_XSIMD_URL = fetchFromGitHub {
         owner = "xtensor-stack";
         repo = "xsimd";
-        tag = "13.0.0";
-        hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
+        tag = "14.0.0";
+        hash = "sha256-ijNoHb6xC+OHJbUB4j1PRsoHMzjrnOHVoDRe/nKguDo=";
       };
 
       ARROW_SUBSTRAIT_URL = fetchFromGitHub {
@@ -132,10 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
       # apache-orc looks for things in caps
-      LZ4_ROOT = lz4;
-      ZSTD_ROOT = zstd.dev;
-    }
-    // lib.optionalAttrs finalAttrs.doInstallCheck {
+      LZ4_HOME = lz4;
+      PROTOBUF_HOME = protobuf;
+      SNAPPY_HOME = snappy.dev;
+      ZSTD_HOME = zstd.dev;
       ARROW_TEST_DATA = "${arrow-testing}/data";
       PARQUET_TEST_DATA = "${parquet-testing}/data";
       GTEST_FILTER =
@@ -155,6 +154,11 @@ stdenv.mkDerivation (finalAttrs: {
               "TestMinioServer.Connect"
               "TestS3FS.*"
               "TestS3FSGeneric.*"
+              "TestS3FSHTTPS.*" # Needs Minio
+            ]
+            ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+              # https://github.com/apache/arrow/issues/41505
+              "TestAzuriteGeneric.Empty"
             ];
         in
         "-${lib.concatStringsSep ":" filteredTests}";
@@ -288,7 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
     which
     sqlite
   ]
-  ++ lib.optionals enableS3 [ minio ]
   ++ lib.optionals enableFlight [ python3 ]
   ++ lib.optionals enableAzure [ azurite ];
 
@@ -308,10 +311,6 @@ stdenv.mkDerivation (finalAttrs: {
         # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
         "arrow-flight-internals-test"
         "arrow-flight-sql-test"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        # https://github.com/apache/arrow/issues/41505
-        "TestAzuriteGeneric.Empty"
       ];
     in
     ''
@@ -322,7 +321,11 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
+  __structuredAttrs = true;
+
   meta = {
+    # https://hydra.nixos.org/job/nixpkgs/unstable/arrow-cpp.x86_64-darwin/all
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     changelog = "https://arrow.apache.org/release/${finalAttrs.version}.html";

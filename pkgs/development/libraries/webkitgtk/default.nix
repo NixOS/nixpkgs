@@ -29,6 +29,7 @@
   libjxl,
   at-spi2-core,
   cairo,
+  expat,
   libxml2,
   libsoup_3,
   libsecret,
@@ -50,6 +51,7 @@
   libintl,
   lcms2,
   libmanette,
+  librice,
   geoclue2,
   flite,
   fontconfig,
@@ -59,7 +61,6 @@
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
-  woff2,
   bubblewrap,
   libseccomp,
   libbacktrace,
@@ -84,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.5";
+  version = "2.52.2";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -99,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hzdjG6w+nHrT5SCPk3DgdsCdnEWzmYACHOVO2tzG+U8=";
+    hash = "sha256-Bd4rRIdLotraV1X4mM+1N4PDFz+RtGNo+i3MxYSXKrs=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -115,6 +116,13 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
+    })
+
+    # Fix FTBFS on platforms that don't use Skia
+    # https://bugs.webkit.org/show_bug.cgi?id=312160
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/36df921c686c07f2b20e3eed20afad5471b96897.patch";
+      hash = "sha256-iYOs1V/p02XHtytw+r1+TyW08pk6PgUH76U1fXG8w34=";
     })
   ];
 
@@ -142,7 +150,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     cairo # required even when using skia
     enchant
+    expat
     flite
+    freetype
     libavif
     libepoxy
     libjxl
@@ -171,12 +181,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     nettle
     p11-kit
     sqlite
-    woff2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
-    freetype
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
@@ -197,6 +205,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    librice
     # For ENABLE_WEBXR
     openxr-loader
   ]
@@ -219,7 +228,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]

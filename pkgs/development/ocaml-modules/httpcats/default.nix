@@ -19,13 +19,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "httpcats";
-  version = "0.1.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "robur-coop";
     repo = "httpcats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t3gSfv73XYntle1dd4k9bv893pGStk1NHz62mAvcHAs=";
+    hash = "sha256-I7u/n49WOnpc0EaagsjC4Ts/kz0Xj6YHZv6+QZKLrC4=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +48,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   meta = {
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/robur-coop/httpcats/";
     description = "A simple HTTP client / server using h1, h2, and miou";
     changelog = "https://github.com/robur-coop/httpcats/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.bsd3;

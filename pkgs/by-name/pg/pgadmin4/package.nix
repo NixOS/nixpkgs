@@ -8,26 +8,20 @@
   postgresql,
   yarn-berry_4,
   nodejs,
-  autoconf,
-  automake,
-  libtool,
-  libpng,
-  nasm,
-  pkg-config,
   stdenv,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.11";
-  yarnHash = "sha256-x8EbZPQxCRBfeBXJGHW1tyN3tWzTqlMGvftizspfBRw=";
+  version = "9.14";
+  yarnHash = "sha256-j/5qoCrhC7xBPaS6NhZFFQtJ7ThL/wkFXoCtyreLHco=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-t+TdudbCq68fXJrcAzyESZTiA4qVkQgwF4efc4IJrl0=";
+    hash = "sha256-NQe1ZN8jQEJE5qSpL5MjgLwWLGrGXCIHaCd8zLpsx3s=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -58,7 +52,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # from Dockerfile
-  CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
+  env.CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
 
   format = "setuptools";
 
@@ -217,7 +211,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = !postgresqlTestHook.meta.broken;
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
   # for replication testing in regression tests for PostgreSql >= 17
   env.postgresqlExtraSettings = "wal_level = logical";

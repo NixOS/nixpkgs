@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
-  version = "0.9.1";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/hanatos/vkdt/releases/download/${version}/vkdt-${version}.tar.xz";
-    hash = "sha256-+oVPZRI01IxMSPXOjvUXJutYXftQM7GxwVLG8wqoaY4=";
+    hash = "sha256-oLJ5IlWOJoe2vUBaI9nyAhfjuw/lF63ZCdhMSF5D0pE=";
   };
 
   cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version;
     inherit src cargoRoot;
-    hash = "sha256-DTC9I4y01bofjgjuGn5asyxhin1yrO6JlASGZtq8z60=";
+    hash = "sha256-8+gJVe9A1w9VlQpKjVnO/ZX44GKvh4yXKlGf4HqyW2M=";
   };
 
   strictDeps = true;
@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "DESTDIR=$(out)"
     "prefix="
+    "VKDT_USE_MCRAW=false" # TODO: support mcraw
   ];
 
   passthru.tests.version = testers.testVersion {

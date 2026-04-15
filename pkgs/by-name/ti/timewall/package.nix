@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "timewall";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "timewall";
     tag = finalAttrs.version;
-    hash = "sha256-+jQ8cQENxTgCyekF65tr4d2a7OwbJvagUX01DiJ8ytg=";
+    hash = "sha256-6tcIFdDJ297EbP/2wF1AR95Gb4z5ygbjNIT94ccIgxQ=";
   };
 
-  cargoHash = "sha256-HjwBpUhepF2bGQvzIMrNuwjNuh48V+Uv9eS4/ZbxT1c=";
+  cargoHash = "sha256-hM8sTzYqoybSO3I2cwUpQE0YOO9PEBNYndR1o1+Bx/U=";
 
   nativeBuildInputs = [
     pkg-config

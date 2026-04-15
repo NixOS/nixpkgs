@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
@@ -14,12 +13,15 @@ let
     elem
     isList
     literalExpression
+    mapAttrs'
+    mapAttrsToList
     mkIf
     mkMerge
     mkOption
     mkOrder
     mkRenamedOptionModule
     mkRemovedOptionModule
+    nameValuePair
     optionalAttrs
     types
     ;
@@ -132,6 +134,27 @@ in
         };
       };
 
+      dnsDelegates = mkOption {
+        description = ''
+          dns-delegate files to be created.
+          See {manpage}`systemd.dns-delegate(5)` for more info.
+        '';
+        default = { };
+        type = types.attrsOf (
+          types.submodule {
+            options.Delegate = mkOption {
+              description = ''
+                Settings option for systemd dns-delegate files.
+                See {manpage}`systemd.dns-delegate(5)` for all available options.
+              '';
+              type = types.submodule {
+                freeformType = types.attrsOf unitOption;
+              };
+            };
+          }
+        );
+      };
+
     };
 
     boot.initrd.services.resolved.enable = mkOption {
@@ -167,7 +190,12 @@ in
       systemd.services.systemd-resolved = {
         wantedBy = [ "sysinit.target" ];
         aliases = [ "dbus-org.freedesktop.resolve1.service" ];
-        reloadTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+        reloadTriggers = [
+          config.environment.etc."systemd/resolved.conf".source
+        ]
+        ++ mapAttrsToList (
+          name: _: config.environment.etc."systemd/dns-delegate.d/${name}.dns-delegate".source
+        ) cfg.dnsDelegates;
         stopIfChanged = false;
       };
 
@@ -180,7 +208,13 @@ in
       }
       // optionalAttrs dnsmasqResolve {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-      };
+      }
+      // mapAttrs' (
+        name: value:
+        nameValuePair "systemd/dns-delegate.d/${name}.dns-delegate" {
+          text = settingsToSections (transformSettings value);
+        }
+      ) cfg.dnsDelegates;
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";

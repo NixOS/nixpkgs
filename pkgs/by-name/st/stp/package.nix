@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # TODO: Remove these CFLAGS when they update to the version that pulls `abc` in with a submodule.
   # https://github.com/stp/stp/issues/498#issuecomment-2611251631
-  CFLAGS = [ "-fsigned-char" ];
+  env.CFLAGS = toString [ "-fsigned-char" ];
 
   outputs = [
     "dev"

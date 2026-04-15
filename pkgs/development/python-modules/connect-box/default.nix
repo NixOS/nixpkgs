@@ -41,7 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connect_box" ];
 
-  pytestFlags = [ "--vcr-record=none" ];
+  pytestFlagsArray = [
+    "--vcr-record=none"
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   meta = {
     description = "Interact with a Compal CH7465LG cable modem/router";

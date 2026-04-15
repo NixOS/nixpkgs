@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
+  rename,
   nixosTests,
   variants ? [ ],
   suffix ? "",
@@ -22,14 +23,18 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts${suffix}";
-  version = "2026.02.01";
+  version = "2026.04.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
     tag = "noto-monthly-release-${finalAttrs.version}";
-    hash = "sha256-vhu3jojG6QlgY5gP4bCbpJznsQ1gExAfcRT42FcZUp4=";
+    hash = "sha256-f5A9vFTO+TgZTarN0cDmRZfBQxeqedzJp3KdCnua4Yw=";
   };
+
+  nativeBuildInputs = [
+    rename
+  ];
 
   outputs = [
     "out"
@@ -71,7 +76,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           fi
         done
       ''
-  );
+  )
+  + ''
+    rename 's/\[.*\]//' $out/share/fonts/noto/*
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "noto-monthly-release-";

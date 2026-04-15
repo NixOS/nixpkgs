@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.80.0";
+  version = "1.82.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable.1";
-    hash = "sha256-W1tckXXQ9PlqTW5S4ml0X5rcPXSCioubDaSkQxHQrMY=";
+    tag = "v${version}-stable";
+    hash = "sha256-oeaK8Flt/oSX9nA7tFHyBp+hvsDeRK+w16zljyA9vdE=";
   };
 
   build-system = [ poetry-core ];

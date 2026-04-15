@@ -185,7 +185,37 @@ let
       cl-ana_dot_hdf-cffi = super.cl-ana_dot_hdf-cffi.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.hdf5 ];
         nativeLibs = [ pkgs.hdf5 ];
-        NIX_LDFLAGS = [ "-lhdf5" ];
+        env = o.env or { } // {
+          NIX_LDFLAGS = toString [ "-lhdf5" ];
+        };
+      });
+      # The antik source archive contains a broken documentation.pdf symlink
+      # pointing to documentation/build/latex/Antik.pdf which doesn't exist.
+      # All packages built from this archive need the symlink removed.
+      antik = super.antik.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      antik-base = super.antik-base.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      foreign-array = super.foreign-array.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      physical-dimension = super.physical-dimension.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
+      });
+      science-data = super.science-data.overrideLispAttrs (o: {
+        postInstall = (o.postInstall or "") + ''
+          rm -f $out/documentation.pdf
+        '';
       });
       gsll = super.gsll.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.gsl ];

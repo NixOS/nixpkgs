@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprand";
-  version = "7.1.1";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -25,10 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "hipRAND";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-yypKwJ5p2aSAqapEHre9eOjjaFAI8Q1dDYWhwfrrdhg=";
+    sparseCheckout = [
+      "projects/hiprand"
+      "shared"
+    ];
+    hash = "sha256-bjcwjN1dNukhoDAbiSpATlK6dtAwM8bOJTe3IjhdwwY=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/hiprand";
 
   nativeBuildInputs = [
     cmake
@@ -61,15 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "HIP wrapper for rocRAND and cuRAND";
-    homepage = "https://github.com/ROCm/hipRAND";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hiprand";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

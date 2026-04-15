@@ -13,19 +13,20 @@
   nixosTests,
   nix-update-script,
   yq-go,
+  cctools,
 }:
 let
   nodejs = nodejs_24;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "43.4.0";
+  version = "43.91.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-REJHbpVKvyD7dpp1smfW+uLwKFcoe8nOJs2KdYnCbeg=";
+    hash = "sha256-HW0rI9qN/eUgEnPJPJk0m5x4S/69RgaoA/+I7GoGUyc=";
   };
 
   postPatch = ''
@@ -41,13 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools # contains libtool, required by better-sqlite3
+  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-rzFbz5PONCXrqXN2WPxlP7O2pOwdFHvUmjIrIRXXiUQ=";
+    hash = "sha256-R+4TswBHCv/z5MMiLgT3M5E4b9oeIWb/wWs9PXFk3s4=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

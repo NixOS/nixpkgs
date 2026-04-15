@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mcstatus";
-  version = "12.2.0";
+  version = "13.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = "mcstatus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dBnUf4Hu2FgUI8CNr+cGIE7iAsM+FoRX5xRl2C6E9Mg=";
+    hash = "sha256-Btnv5caqZXh7aLGHH7WBduX4CJ+OhcCKgvD0uLC0mPg=";
   };
 
   build-system = [

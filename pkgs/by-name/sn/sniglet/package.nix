@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,14 +16,14 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-fLT2hZT9o1Ka30EB/6oWwmalhVJ+swXLRFG99yRWd2c=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  preInstall = "rm webfonts/Sniglet-webfont.ttf";
 
-    install -D -m444 -t $out/share/fonts/truetype $src/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
-  '';
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   meta = {
     description = "Fun rounded display face that’s great for headlines";

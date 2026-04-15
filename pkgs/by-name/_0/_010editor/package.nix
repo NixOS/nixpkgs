@@ -4,17 +4,19 @@
   fetchzip,
   fetchurl,
   autoPatchelfHook,
+  copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
   cups,
   qt6,
   undmg,
   xkeyboard-config,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "16.0.2";
+  version = "16.0.4";
 
   src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
@@ -27,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+      copyDesktopItems
       makeWrapper
       qt6.wrapQtAppsHook
     ]
@@ -54,55 +57,64 @@ stdenv.mkDerivation (finalAttrs: {
           --unset QT_PLUGIN_PATH \
           --set XKB_CONFIG_ROOT ${xkeyboard-config}/share/X11/xkb
 
-        # Install icon + desktop entry
+        # Install icon
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png
-        install -D $desktopItem/share/applications/* -t $out/share/applications/
       '';
     in
     ''
       runHook preInstall
-      ${
-        if stdenv.hostPlatform.isDarwin then
-          darwinInstall
-        else if stdenv.hostPlatform.isLinux then
-          linuxInstall
-        else
-          "echo 'Unsupported Platform' && exit 1"
-      }
+      ${if stdenv.hostPlatform.isDarwin then darwinInstall else linuxInstall}
       runHook postInstall
     '';
 
-  desktopItem = makeDesktopItem {
-    name = "010editor";
-    exec = "010editor %f";
-    icon = "010";
-    desktopName = "010 Editor";
-    genericName = "Text and hex editor";
-    categories = [ "Development" ];
-    mimeTypes = [
-      "text/html"
-      "text/plain"
-      "text/x-c++hdr"
-      "text/x-c++src"
-      "text/xml"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "010editor";
+      exec = "010editor %f";
+      icon = "010";
+      desktopName = "010 Editor";
+      genericName = "Text and hex editor";
+      categories = [ "Development" ];
+      mimeTypes = [
+        "text/html"
+        "text/plain"
+        "text/x-c++hdr"
+        "text/x-c++src"
+        "text/xml"
+      ];
+    })
+  ];
 
   passthru.srcs = {
     x86_64-linux = fetchzip {
       url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-      hash = "sha256-sFTP/z+aann3KdEVW+RSWhi/uyLZB4q3kBXaBkwHkKE=";
+      hash = "sha256-M1D2Bmi45sYiB0Ci+0X0AxyIeR+On60xt4jP1Jsy5tA=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-Ky7IvLeFogx6R2YAirASNNIClEL9/M0eEyCxbGAt0sU=";
+      hash = "sha256-vsI0VgcJGleJTQ5C1JaiCkELfWfwgFhyCx+6j5mldIk=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-gtfTq/e/BHSxkCv/Qg/o8Naoao+I8fzKOmGB1PXPSwI=";
+      hash = "sha256-+yU5JdPNS2BfiZLsBLyyC+ieVNqbIWba3teBlTIDWtk=";
     };
+  };
+
+  passthru = {
+    updateScript = writeScript "update-010editor" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Version: major.minor.patchlevel
+      newVersion="$(curl -s https://sweetscape.com/download/010editor/ | pcre2grep -o1 'Version: ([0-9]+\.[0-9]+\.[0-9]+)' | sort -u)"
+      for platform in ${toString finalAttrs.meta.platforms}; do
+        update-source-version _010editor "$newVersion" --source-key=passthru.srcs.$platform --ignore-same-version
+      done
+    '';
   };
 
   meta = {

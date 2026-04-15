@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tyGlc69jF4TyfMtS5xnm0Sh9nTlRrVbTFtOPfs+oGqI=";
   };
 
-  JARNAME = "leiningen-${finalAttrs.version}-standalone.jar";
+  env.JARNAME = "leiningen-${finalAttrs.version}-standalone.jar";
 
   dontUnpack = true;
 

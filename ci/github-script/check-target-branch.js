@@ -25,6 +25,16 @@ async function checkTargetBranch({ github, context, core, dry }) {
    *   changed: string[],
    *   removed: string[],
    *  },
+   *  attrdiffByKernel: Record<string, {
+   *   added: string[],
+   *   changed: string[],
+   *   removed: string[],
+   *  }>,
+   *  attrdiffByPlatform: Record<string, {
+   *   added: string[],
+   *   changed: string[],
+   *   removed: string[],
+   *  }>,
    *  labels: Record<string, boolean>,
    *  rebuildCountByKernel: Record<string, number>,
    *  rebuildsByKernel: Record<string, string[]>,

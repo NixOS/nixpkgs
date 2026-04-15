@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.27.1";
+  version = "5.28.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9SPRt1R36pvsGOS0UUH3Ts/3D7W46nPnLbRc2XnU0xE=";
+    hash = "sha256-REQ9+II6MFZ64FlJudRRhmXA4/Cb017XrsrZFZBY7R0=";
   };
 
   build-system = [

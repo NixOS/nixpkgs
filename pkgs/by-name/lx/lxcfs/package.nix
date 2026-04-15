@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxcfs";
-  version = "6.0.5";
+  version = "6.0.6";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mRTM06QyWcB4XOi0w2qvyDABGuu1SPJX0gjlBktDOac=";
+    hash = "sha256-lEXXbYDxnOi4Xa/fO1Uy/aVLjVfzYeZm6qzR4XBMBsY=";
   };
 
   patches = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FUSE filesystem for LXC";
     mainProgram = "lxcfs";
     homepage = "https://linuxcontainers.org/lxcfs";
-    changelog = "https://linuxcontainers.org/lxcfs/news/";
+    changelog = "https://github.com/lxc/lxcfs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxc ];

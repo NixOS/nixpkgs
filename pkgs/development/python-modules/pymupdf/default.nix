@@ -42,16 +42,16 @@ let
   mupdf-cxx-lib = toPythonModule (lib.getLib mupdf-cxx);
   mupdf-cxx-dev = lib.getDev mupdf-cxx;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
-  version = "1.26.7";
+  version = "1.27.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    tag = version;
-    hash = "sha256-7OidTOG3KAx7EaQ3Bu4i1Fw007oXVAipBHeYNkmbIcA=";
+    tag = finalAttrs.version;
+    hash = "sha256-o70IMa64jjX+b83uW4gISOiNrWtefQ8nc8Z99DfqrQI=";
   };
 
   patches = [
@@ -122,6 +122,7 @@ buildPythonPackage rec {
     "test_codespell"
     "test_pylint"
     "test_flake8"
+    "test_4751"
     # Upstream recommends disabling these when not using bundled MuPDF build
     "test_color_count"
     "test_3050"
@@ -135,11 +136,16 @@ buildPythonPackage rec {
     "test_4702"
     # Not a git repository, so git ls-files fails
     "test_open2"
+    # Segfaults in test_general.py::test_4907 with system MuPDF
+    "test_4907"
   ];
 
   disabledTestPaths = [
     # mad about markdown table formatting
     "tests/test_tables.py::test_markdown"
+
+    # Do not lint code
+    "tests/test_typing.py"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin [
     # Trace/BPT trap: 5 when getting widget options
@@ -164,9 +170,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
-    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ sarahec ];
     platforms = lib.platforms.unix;
   };
-}
+})

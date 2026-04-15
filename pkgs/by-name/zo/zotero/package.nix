@@ -19,6 +19,7 @@
   wrapGAppsHook3,
   nix-update-script,
   xvfb-run,
+  makeBinaryWrapper,
   doCheck ? false,
 }:
 let
@@ -26,13 +27,13 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "8.0.2";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
-    hash = "sha256-zGcTZjrbFYbE4qJH5g3betnSLCdxYU2nZBOU55HunYU=";
+    hash = "sha256-Amk2ehdzrQjFhx1eEHcnq+Z+un+2bT/u4kpbWqD5Sbc=";
     fetchSubmodules = true;
   };
 
@@ -174,6 +175,11 @@ buildNpmPackage (finalAttrs: {
     gawk
     rsync
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.targetPlatform.isDarwin [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals (!stdenv.targetPlatform.isDarwin) [
     wrapGAppsHook3
   ];
 
@@ -310,17 +316,21 @@ buildNpmPackage (finalAttrs: {
     })
   '';
 
+  postFixup = lib.optionalString stdenv.targetPlatform.isDarwin ''
+    mkdir -p $out/bin
+    makeWrapper $out/Applications/Zotero.app/Contents/MacOS/zotero $out/bin/zotero
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
+    changelog = "https://www.zotero.org/support/changelog";
     mainProgram = "zotero";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      atila
-      justanotherariel
       mynacol
     ];
   };

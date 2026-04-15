@@ -13,6 +13,7 @@
   libpulseaudio,
   mpv-unwrapped,
   mimalloc,
+  imagemagick,
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
@@ -129,6 +130,7 @@ flutter338.buildFlutterApplication {
   nativeBuildInputs = [
     autoPatchelfHook
     desktop-file-utils
+    imagemagick
   ];
 
   buildInputs = [
@@ -141,8 +143,9 @@ flutter338.buildFlutterApplication {
   ];
 
   postInstall = ''
+    mkdir -p $out/share/icons/hicolor/128x128/apps
     ln --symbolic --no-dereference --force ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/oneanime/lib/libmpv.so.2
-    install -D --mode=0644 assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
+    magick assets/images/logo/logo_android_2.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/oneanime.png
     desktop-file-edit oneAnime.desktop \
       --set-key="Icon" --set-value="oneanime"
     install -D --mode=0644 oneAnime.desktop --target-directory $out/share/applications

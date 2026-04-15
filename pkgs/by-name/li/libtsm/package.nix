@@ -12,22 +12,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtsm";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "libtsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DWy7kgBbXUEt2Htcugo8PaVoHE23Nu22EIrB5f6/P30=";
+    hash = "sha256-AKwS088lP3dByKh3dQRW76+L6ouD8EmVms2qWIC5IiE=";
   };
 
-  buildInputs = [ libxkbcommon ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  buildInputs = [
+    libxkbcommon
+    check
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    check
   ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };

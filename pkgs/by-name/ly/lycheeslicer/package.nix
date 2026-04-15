@@ -9,11 +9,11 @@
 }:
 let
   pname = "lycheeslicer";
-  version = "7.6.1";
+  version = "7.6.4";
 
   src = fetchurl {
     url = "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-649Lf6bh1Saee0NrHZ+wqoOUgpy4lxMD2DV7lh6ZNik=";
+    hash = "sha256-lLE40ByNdfK7GkLjfbEEX0nmhL0+E51qPDe+whIJqEM=";
   };
 
   desktopItem = makeDesktopItem {
@@ -22,7 +22,7 @@ let
     comment = "All-in-one 3D slicer for Resin and Filament";
     desktopName = "LycheeSlicer";
     noDisplay = false;
-    exec = "lychee";
+    exec = "lycheeslicer";
     terminal = false;
     mimeTypes = [ "model/stl" ];
     categories = [ "Graphics" ];

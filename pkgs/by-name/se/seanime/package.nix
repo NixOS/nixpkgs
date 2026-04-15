@@ -2,66 +2,47 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  buildNpmPackage,
-  inter,
   ffmpeg,
+  nodejs,
+  npmHooks,
+  fetchNpmDeps,
+  nix-update-script,
 }:
-let
-  version = "3.4.3";
+buildGoModule (finalAttrs: {
+  pname = "seanime";
+  version = "3.5.2";
+
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
-    rev = "v${version}";
-    hash = "sha256-MrO8SuS6d1v3SKmnGBDXGHmxhYdPxr11FdKKZrGU9Hc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ejXWQPUROIzu6RlUJIaKaiJfPb59kupQDhqWU83EqP4=";
   };
 
-  seanime-web = buildNpmPackage {
-    pname = "seanime-web";
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
 
-    inherit src version;
-
-    sourceRoot = "${src.name}/seanime-web";
-
-    patches = [ ./default-disable-update-check.patch ];
-
-    npmDepsHash = "sha256-rRgp8nXuRvCSOLo040i4ZL+0GCYkEEnkxpgwqDBt/EY=";
-
-    # nextjs seems to require relative paths
-    postPatch = ''
-      cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
-
-      substituteInPlace ./src/app/layout.tsx \
-        --replace-fail 'import { Inter } from "next/font/google"' 'import localFont from "next/font/local"' \
-        --replace-fail 'const inter = Inter({ subsets: ["latin"] })' 'const inter = localFont({ src: "./Inter.ttf" })'
-
-      substituteInPlace './src/app/(main)/entry/_containers/torrent-stream/torrent-stream-overlay.tsx' \
-        --replace-fail 'import { Inter } from "next/font/google"' 'import localFont from "next/font/local"' \
-        --replace-fail 'const inter = Inter({ subsets: ["latin"] })' 'const inter = localFont({ src: "../../../../Inter.ttf" })'
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r out $out/web
-
-      runHook postInstall
-    '';
+  env = {
+    npmRoot = "seanime-web";
+    npmDeps = fetchNpmDeps {
+      src = "${finalAttrs.src}/seanime-web";
+      hash = "sha256-fWlK2h0RQF9GnEogXW3bwM01RCCDVij/9S2sn2BA3S4=";
+    };
   };
-in
-buildGoModule {
-  pname = "seanime";
 
-  inherit src version;
-
-  vendorHash = "sha256-LFilsAAuPbNg2KI4aPUbNYjufPk1P3VLcAv1qfMu0p0=";
+  patches = [ ./default-disable-update-check.patch ];
 
   preBuild = ''
-    cp -r ${seanime-web}/web .
+    npm run build --prefix seanime-web
+    cp -r seanime-web/out web
 
     # .github scripts redeclare main
     rm -rf .github
   '';
+
+  vendorHash = "sha256-TN9shH4B7XVDIa541+7MHTNQs1IKPRJW1dn8tmES5jg=";
 
   subPackages = [ "." ];
 
@@ -72,6 +53,7 @@ buildGoModule {
     "-w"
   ];
 
+  # for transcoding
   makeWrapperArgs = [
     "--prefix PATH : ${
       lib.makeBinPath [
@@ -79,6 +61,8 @@ buildGoModule {
       ]
     }"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source media server for anime and manga";
@@ -88,4 +72,4 @@ buildGoModule {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ thegu5 ];
   };
-}
+})

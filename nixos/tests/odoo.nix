@@ -1,14 +1,11 @@
 {
   package,
   lib,
-  pkgs,
   ...
 }:
 {
   name = "odoo";
   meta.maintainers = with lib.maintainers; [ mkg20001 ];
-
-  _module.args.package = lib.mkDefault pkgs.odoo;
 
   nodes.server = {
     services.nginx = {

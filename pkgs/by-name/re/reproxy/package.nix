@@ -2,20 +2,23 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "reproxy";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "reproxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pnmm/JEMcQ5UQUwUqGdzC/BphrH4tBz79Bq3c13GqbA=";
+    hash = "sha256-nJAE2oEoIzuRFRlgypRROXZYfQy3y2m14QbBUUGQBSg=";
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
@@ -30,6 +33,7 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/{app,reproxy}
+    installShellCompletion completions/*
   '';
 
   __darwinAllowLocalNetworking = true;

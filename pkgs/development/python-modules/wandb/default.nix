@@ -16,6 +16,7 @@
   ## wandb
   buildPythonPackage,
   replaceVars,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -75,12 +76,12 @@
 }:
 
 let
-  version = "0.24.0";
+  version = "0.25.1";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-dICa/sIFEHI59gJxrvWyI9Uc3rbwXi+Xh60O/hElZh0=";
+    hash = "sha256-jrHj+dNW/eUMcqT5XJbiAz1tlviVBhdtroJ8dA7GBr4=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -90,7 +91,7 @@ let
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    cargoHash = "sha256-iZinowkbBc3nuE0uRS2zLN2y97eCMD1mp/MKVKdnXaE=";
+    cargoHash = "sha256-yzvXJYkQTNOScOI3yfVBH6IGZzcFduuXqW3pI5hEZGw=";
 
     checkFlags = [
       # fails in sandbox
@@ -107,7 +108,7 @@ let
     };
   };
 
-  wandb-core = buildGoModule rec {
+  wandb-core = buildGoModule {
     pname = "wandb-core";
     inherit src version;
 
@@ -162,6 +163,13 @@ buildPythonPackage (finalAttrs: {
     (replaceVars ./hardcode-git-path.patch {
       git = lib.getExe gitMinimal;
     })
+
+    # https://github.com/wandb/wandb/pull/11552
+    (fetchpatch {
+      name = "add-protobuf-7-compatibility";
+      url = "https://github.com/wandb/wandb/commit/4ef09f3dd1ee408eb9194ea8b7feea2b1128839c.patch";
+      hash = "sha256-6weMJI51cWXz2mCxOGWYGrh0QCxtMGqz6HAVRF5b1xs=";
+    })
   ];
 
   postPatch =
@@ -189,6 +197,11 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     hatchling
+  ];
+
+  # Protobuf 7 is not compatible with the current version of wandb
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
   dependencies = [

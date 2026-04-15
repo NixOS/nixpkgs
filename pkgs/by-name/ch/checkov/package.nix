@@ -33,21 +33,20 @@ let
     };
   };
 in
-with py.pkgs;
-
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.2.501";
+  version = "3.2.521";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
-    tag = version;
-    hash = "sha256-kvUPhCuKWcklrrTnzbNWIg2Vqhv5dFP52+QkYas3kww=";
+    tag = finalAttrs.version;
+    hash = "sha256-xRVA5VPDevdq4LIcJRl/fbCn9iZA+pnw2hvDfHi0MIo=";
   };
 
   pythonRelaxDeps = [
+    "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
@@ -66,6 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
     "rustworkx"
     "schema"
+    "tabulate"
     "termcolor"
     "urllib3"
   ];
@@ -106,6 +106,7 @@ python3.pkgs.buildPythonApplication rec {
     networkx
     openai
     packaging
+    platformdirs
     policyuniverse
     prettytable
     pycep-parser
@@ -158,6 +159,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_sast_js_filtered_files_by_ts"
     # Timing sensitive
     "test_non_multiline_pair_time_limit_creating_report"
+    # Tests want to run bash script
+    "test_entrypoint"
   ];
 
   disabledTestPaths = [
@@ -194,7 +197,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
-    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
+    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${finalAttrs.version}";
     longDescription = ''
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
@@ -206,4 +209,4 @@ python3.pkgs.buildPythonApplication rec {
       fab
     ];
   };
-}
+})

@@ -42,8 +42,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # https://github.com/jupyter/jupyter-sphinx/issues/280"
+    # https://github.com/jupyter/jupyter-sphinx/issues/280
     "test_builder_priority"
+  ];
+
+  pytestFlags = [
+    # https://github.com/jupyter/jupyter-sphinx/issues/287
+    "-Wignore::sphinx.deprecation.RemovedInSphinx11Warning"
   ];
 
   preCheck = ''

@@ -143,7 +143,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "nvidia-${if useFabricmanager then "dc" else "x11"}-${version}${nameSuffix}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}${nameSuffix}";
+  pname = "nvidia-${if useFabricmanager then "dc" else "x11"}";
 
   builder = ./builder.sh;
 

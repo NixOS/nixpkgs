@@ -73,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/app $out/share/applications $out/share/pixmaps $out/share/licenses/windterm
+    mkdir -p $out/app $out/share/applications $out/share/licenses/windterm
     cp --recursive --no-preserve=mode . $out/app/windterm
     cat > $out/app/windterm/profiles.config <<EOF
     ${builtins.toJSON profiles}
     EOF
     install -Dm644 $out/app/windterm/license.txt $out/share/licenses/windterm/license.txt
-    install -Dm644 $out/app/windterm/windterm.png $out/share/pixmaps/windterm.png
+    install -Dm644 $out/app/windterm/windterm.png -t $out/share/icons/hicolor/1024x1024/apps
     substituteInPlace $out/app/windterm/windterm.desktop \
       --replace-fail "/usr/bin/" ""
     install -Dm644 $out/app/windterm/windterm.desktop $out/share/applications/windterm.desktop

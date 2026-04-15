@@ -35,13 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm; # This may be different than pkgs.pnpm
-    fetcherVersion = 1;
+    fetcherVersion = 3;
     hash = pnpmDepsHash;
   };
 
   postPatch = ''
+    NL=$'\n'
+    LINE_BEFORE_HOST='allowedHosts: ["login.example.com", ...allowedHosts],'
+
     substituteInPlace ./vite.config.ts \
-      --replace 'outDir: "../internal/server/public_html"' 'outDir: "dist"'
+      --replace-fail 'outDir: "../internal/server/public_html"' 'outDir: "dist"' \
+      --replace-fail "$LINE_BEFORE_HOST" "$LINE_BEFORE_HOST$NL"'            host: "127.0.0.1",'
   '';
 
   postBuild = ''

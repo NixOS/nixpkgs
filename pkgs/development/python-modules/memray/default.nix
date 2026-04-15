@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "memray";
-  version = "1.19.1";
+  version = "1.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RdOtgNSkFIVl8Uve2iaJ7G0X1IHJ/Yo4h8hWP3pTV8g=";
+    hash = "sha256-A9XbVpuW/MlMNdFq5bbpg90GFh5c1aEWQOvGAOXyUgc=";
   };
 
   build-system = [

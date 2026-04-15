@@ -10,27 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.4";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WtNnBw0/eAz/uO/dlD2yRZHW38CXIT8zhh4lZ3HaIFs=";
+    hash = "sha256-26OoAy/IiTEqESABqjLMI9zsmHgBbwmIazzoP8Au4nM=";
   };
 
-  cargoHash = "sha256-8SLBsYtO6qVihc/C9R3ZptHCKgl2iXiQrOWqgDBXdTc=";
-
-  cargoPatches = [ ./Cargo.patch ];
-
-  patches = [
-    ./unbounded-shifts.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace clash-lib/Cargo.toml \
-      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
-  '';
+  cargoHash = "sha256-UPCXc0uB0pg4ioBIpYQKwtyTWsMH/248WDyO9qB2jwA=";
 
   nativeBuildInputs = [
     cmake
@@ -46,8 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg tokio_unstable";
-    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
   buildFeatures = [ "plus" ];

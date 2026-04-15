@@ -43,7 +43,6 @@ stdenv.mkDerivation {
     mate-panel.man
   ]
   ++ selectedApplets;
-  passAsFile = [ "paths" ];
 
   nativeBuildInputs = [
     glib
@@ -68,7 +67,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    for i in $(cat $pathsPath); do
+    for i in "''${paths[@]}"; do
       ${lndir}/bin/lndir -silent $i $out
     done
 
@@ -83,6 +82,8 @@ stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath marco}"
     )
   '';
+
+  __structuredAttrs = true;
 
   inherit (mate-panel) meta;
 }

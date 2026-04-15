@@ -2,6 +2,7 @@
   autoPatchelfHook,
   common-updater-scripts,
   curl,
+  expat,
   fetchurl,
   ffmpeg,
   lib,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (
       qt5.wrapQtAppsHook
     ];
     buildInputs = [
+      expat
       ffmpeg
       openssl
       qt5.qtbase

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-aws";
-  version = "0.45.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Nt4737CUgRBSOQBW5LBADR2PXC6YBbV3Msgogpp2OuI=";
+    hash = "sha256-QHAa8kbTZRSS5qLpX5zk4Fcal2Ah6yXv6satwfNFVLo=";
   };
 
-  vendorHash = "sha256-8vomPbsBuJtwGYg5eJ+Xmcrj6FK+fYiGkI8PUFmFZQo=";
+  vendorHash = "sha256-+FxNOrC5iYVb+PPIPTClXmnPTrm7hqT+VLrgcBHWWD4=";
 
   postPatch = ''
     # some automation for creating new releases on GitHub, which we don't need

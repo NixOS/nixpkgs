@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     llvmPackages.libclang
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   passthru.update-script = nix-update-script { };
   meta = {

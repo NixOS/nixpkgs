@@ -11,20 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.1.2";
+  version = "1.1.2-unstable-2026-03-28";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
-    tag = finalAttrs.version;
-    hash = "sha256-sSGoF2c5HfPM2FBrBJwJ9NvExYijGx6JH1bJp3epfe0=";
+    rev = "a97c341e39e3f89e99f65d2a35d4e060b3b0168a";
+    hash = "sha256-FWpO2cp8licwevpAP25fmiIUEehkQp61E4A7RmsKJH0=";
   };
 
-  cargoHash = "sha256-9XbrIY1VwnHtqi/ZfS952SyjNjA/TJRdOqCsPReZI8o=";
-
-  patches = [
-    ./remove-install-paths.patch
-  ];
+  cargoHash = "sha256-xcCnzDN/U3sp12UwznaYjalzcKxo8Eo4vHnO/Sf++Zk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,8 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace speakersafetyd.service \
-      --replace-fail "User=speakersafetyd" \
-                     "" \
       --replace-fail "/usr" \
                      "$out"
 
@@ -50,7 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "UNITDIR=lib/systemd/system"
     "UDEVDIR=lib/udev/rules.d"
     "SHAREDIR=share"
-    "TMPFILESDIR=lib/tmpfiles.d"
   ];
 
   dontCargoInstall = true;

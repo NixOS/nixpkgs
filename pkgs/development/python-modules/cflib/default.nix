@@ -7,7 +7,6 @@
   libusb-package,
   numpy,
   packaging,
-  pyserial,
   pyusb,
   scipy,
   pytestCheckHook,
@@ -17,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cflib";
-  version = "0.1.28";
+  version = "0.1.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitcraze";
     repo = "crazyflie-lib-python";
     tag = version;
-    hash = "sha256-vGqwQVD80NcFJosVAmqj66uxYNoVtAqzVhVQiuWP5yM=";
+    hash = "sha256-PYAkN52dx1qeRKoe5FwpKj1A4oJNYb7Dx8vko9Pwspw=";
   };
 
   strictDeps = true;
@@ -43,13 +42,13 @@ buildPythonPackage rec {
     libusb-package
     numpy
     packaging
-    pyserial
     pyusb
     scipy
   ];
 
   disabledTestPaths = [
     # exception: Cannot find a Crazyradio Dongle (HW required)
+    "examples/radio/radio_test.py"
     "sys_test/single_cf_grounded/"
     "sys_test/swarm_test_rig/"
   ];
@@ -85,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Crazyflie quadcopter by Bitcraze";
     homepage = "https://github.com/bitcraze/crazyflie-lib-python";
-    changelog = "https://github.com/bitcraze/crazyflie-lib-python/releases/tag/${version}";
+    changelog = "https://github.com/bitcraze/crazyflie-lib-python/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.brianmcgillion ];
     platforms = lib.platforms.linux;

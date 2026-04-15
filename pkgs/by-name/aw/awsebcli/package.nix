@@ -17,6 +17,7 @@ let
           inherit pname version;
           hash = "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
         };
+        patches = [ ];
         build-system = old.build-system or [ ] ++ (with python.pkgs; [ setuptools ]);
         doCheck = false;
       });
@@ -24,17 +25,17 @@ let
   };
 in
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awsebcli";
-  version = "3.26";
+  version = "3.27.1";
   pyproject = true;
   doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
-    tag = version;
-    hash = "sha256-HiVRlXND1ErZhmQow+VV4HkY4Auhbcq1afR1Lf8ITPI=";
+    tag = finalAttrs.version;
+    hash = "sha256-5SmV+V+B3GYDnuOH8abh+NzGTZpMId41ZrJ7Fr6cXZo=";
   };
 
   pythonRelaxDeps = [
@@ -46,6 +47,7 @@ python.pkgs.buildPythonApplication rec {
     "six"
     "termcolor"
     "urllib3"
+    "wcwidth"
   ];
 
   dependencies = with python.pkgs; [
@@ -62,6 +64,7 @@ python.pkgs.buildPythonApplication rec {
     setuptools
     tabulate
     termcolor
+    wcwidth
     websocket-client
   ];
 
@@ -105,9 +108,9 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
-    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
-}
+})

@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "opencommit";
-  version = "3.2.12";
+  version = "3.2.18";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
     rev = "v${version}";
-    hash = "sha256-jtumHDDsoc/jJZf+V0bzTTS6dmgwKcIDNkDidXa8eYY=";
+    hash = "sha256-AhybkTAUojFPuw8RETGHoxDCWXcgb1zclfvh2h7bokM=";
     postFetch = ''
       cd $out
       # Fix lockfile issues with bundled dependencies
@@ -22,7 +22,7 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-oqmRUzAptEurwEFux6kvxUC2TexWaXftSILjWDwakYU=";
+  npmDepsHash = "sha256-Kk0sPgxkWvbjGT8I3RDeniGN+8sQkwNYAXCTt009LbY=";
 
   passthru.updateScript = nix-update-script { };
 

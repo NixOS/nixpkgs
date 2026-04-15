@@ -22,7 +22,7 @@ let
       src = fetchFromGitHub {
         owner = "varnish";
         repo = "varnish-modules";
-        rev = version;
+        tag = version;
         inherit hash;
       };
 
@@ -58,5 +58,9 @@ in
   modules26 = common {
     version = "0.26.0";
     hash = "sha256-xKMOkqm6/GoBve0AhPqyVMQv/oh5Rtj6uCeg/yId7BU=";
+  };
+  modules27 = common {
+    version = "0.27.0";
+    hash = "sha256-1hE+AKsC6Td+Al7LFN6bgPicU8dtWd3A8PP7VKZLvYM=";
   };
 }

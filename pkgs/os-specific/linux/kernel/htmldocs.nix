@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       tools/net/ynl/pyynl/ynl_gen_rst.py
   '';
 
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ ];
   };
 

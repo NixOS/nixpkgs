@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.20-unstable-2025-12-31";
+  version = "1.0.21-unstable-2026-02-11";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "libsodium";
-    rev = "d44593f1a5b7d31b5122689605b489577356f7e8";
-    hash = "sha256-6DC9JJLUwAoZHrYdCIiqOtAlWOEczec2r2FmaBbsa/Q=";
+    rev = "e18eee6532f5dc4b0f7ee99024e24bf4c8e12fc2";
+    hash = "sha256-S/uQtt4m5OyGo9yBb4UARV0Xcwtd/I6tCRJilcx8XBM=";
   };
 
   outputs = [
@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       mdaniels5757
-      raskin
     ];
+    teams = [ lib.teams.security-review ];
     pkgConfigModules = [ "libsodium" ];
     platforms = lib.platforms.all;
   };

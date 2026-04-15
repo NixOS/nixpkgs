@@ -12,25 +12,8 @@
   xarray,
 
   # optional-dependencies
-  black,
-  build,
-  isort,
-  mypy,
-  pre-commit,
-  cloudpickle,
   h5netcdf,
-  jupyter-sphinx,
-  myst-nb,
-  myst-parser,
-  numpydoc,
-  sphinx,
-  sphinx-book-theme,
-  sphinx-copybutton,
-  sphinx-design,
   netcdf4,
-  pytest,
-  pytest-cov,
-  scipy,
   zarr,
 
   # tests
@@ -61,40 +44,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    check = [
-      black
-      build
-      # docstub
-      isort
-      mypy
-      pre-commit
-    ];
-    ci = [
-      cloudpickle
-      pre-commit
-    ];
-    doc = [
-      h5netcdf
-      jupyter-sphinx
-      myst-nb
-      myst-parser
-      numpydoc
-      sphinx
-      sphinx-book-theme
-      sphinx-copybutton
-      sphinx-design
-    ];
     h5netcdf = [
       h5netcdf
     ];
     netcdf4 = [
       netcdf4
-    ];
-    test = [
-      pytest
-      pytest-cov
-      scipy
-      xarray
     ];
     zarr = [
       zarr

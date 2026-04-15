@@ -30,9 +30,9 @@
   extraPackages ? _: [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-core";
-  version = "2.20.0";
+  version = "2.20.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -40,13 +40,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible";
-    tag = "v${version}";
-    hash = "sha256-4kTBzDHDfdHR/W4edxrGtWhg6TRLMtdEgUZYcn8cFQg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7KsxZH1d5FfdnsYfKSNGCmdYuBi8KzZxyZbG2WNAM9Y=";
   };
 
-  # ansible_connection is already wrapped, so don't pass it through
-  # the python interpreter again, as it would break execution of
-  # connection plugins.
   postPatch = ''
     patchShebangs --build packaging/cli-doc/build.py
 
@@ -98,11 +95,15 @@ buildPythonPackage rec {
     installManPage man/*
   '';
 
+  postFixup = ''
+    patchPythonScript $out/${python.sitePackages}/ansible/cli/scripts/ansible_connection_cli_stub.py
+  '';
+
   # internal import errors, missing dependencies
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
+    changelog = "https://github.com/ansible/ansible/blob/v${finalAttrs.version}/changelogs/CHANGELOG-v${lib.versions.majorMinor finalAttrs.version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = lib.licenses.gpl3Plus;
@@ -111,4 +112,4 @@ buildPythonPackage rec {
       robsliwi
     ];
   };
-}
+})

@@ -45,14 +45,14 @@ self: super: {
     '';
   });
 
-  kak-ansi = stdenv.mkDerivation rec {
+  kak-ansi = stdenv.mkDerivation (finalAttrs: {
     pname = "kak-ansi";
     version = "0.2.4";
 
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-ansi";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       sha256 = "kFjTYFy0KF5WWEHU4hHFAnD/03/d3ptjqMMbTSaGImE=";
     };
 
@@ -77,16 +77,16 @@ self: super: {
       ];
       platforms = lib.platforms.all;
     };
-  };
+  });
 
-  kak-plumb = stdenv.mkDerivation rec {
+  kak-plumb = stdenv.mkDerivation (finalAttrs: {
     pname = "kak-plumb";
     version = "0.1.1";
 
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-plumb";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       sha256 = "1rz6pr786slnf1a78m3sj09axr4d2lb5rg7sfa4mfg1zcjh06ps6";
     };
 
@@ -110,7 +110,7 @@ self: super: {
       ];
       platforms = lib.platforms.all;
     };
-  };
+  });
 
   kakoune-rainbow = super.kakoune-rainbow.overrideAttrs (oldAttrs: {
     preFixup = ''

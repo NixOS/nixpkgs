@@ -13,12 +13,12 @@
 
 let
   pname = "uhk-agent";
-  version = "9.0.1";
+  version = "9.0.2";
 
   src = fetchurl {
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-/DgXushqByEbvbQhmzwXIdmaKWEJL40X6HpV6SUKieY=";
+    sha256 = "sha256-4lOyLbz5QIzO9iEyYhE32ujZql2yNQd/EIAv4VOuRlA=";
   };
 
   appimageContents = appimageTools.extract {

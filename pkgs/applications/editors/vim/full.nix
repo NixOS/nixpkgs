@@ -81,7 +81,7 @@ let
     endif
   '';
 
-  common = callPackage ./common.nix { };
+  common = callPackage ./common.nix { inherit stdenv; };
 
 in
 stdenv.mkDerivation {

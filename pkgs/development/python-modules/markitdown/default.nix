@@ -107,6 +107,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/microsoft/markitdown";
     changelog = "https://github.com/microsoft/markitdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ malik ];
   };
 })

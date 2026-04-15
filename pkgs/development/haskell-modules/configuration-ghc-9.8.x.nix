@@ -64,7 +64,7 @@ in
   Win32 = null;
 
   # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_2_0_8;
+  os-string = doDistribute self.os-string_2_0_10;
 
   # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
   ghc-internal = null;

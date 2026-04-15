@@ -163,7 +163,7 @@ let
 in
 
 buildFHSEnv {
-  name = "nordpass";
+  inherit (thisPackage) pname version;
   targetPkgs = _: deps ++ [ thisPackage ];
   runScript = "nordpass";
 

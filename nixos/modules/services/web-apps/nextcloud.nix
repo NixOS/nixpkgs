@@ -157,6 +157,7 @@ let
             --uid=nextcloud \
             --same-dir \
             --pty \
+            --pipe \
             --wait \
             --collect \
             --service-type=exec \
@@ -464,8 +465,8 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud31"
         "nextcloud32"
+        "nextcloud33"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {
@@ -1194,7 +1195,7 @@ in
       {
         warnings =
           let
-            latest = 32;
+            latest = 33;
             upgradeWarning = major: nixos: ''
               A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
@@ -1226,7 +1227,8 @@ in
           ++ (lib.optional (lib.versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
-          ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"));
+          ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
@@ -1235,12 +1237,12 @@ in
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if lib.versionOlder stateVersion "25.05" then
-            pkgs.nextcloud30
           else if lib.versionOlder stateVersion "25.11" then
             pkgs.nextcloud31
-          else
+          else if lib.versionOlder stateVersion "26.05" then
             pkgs.nextcloud32
+          else
+            pkgs.nextcloud33
         );
 
         services.nextcloud.phpOptions = lib.mkMerge [
@@ -1471,21 +1473,12 @@ in
             # NOTE: In contrast to the occ wrapper script running phpCli directly will not
             #       set NEXTCLOUD_CONFIG_DIR by itself currently.
             environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
-              ${phpCli} -f ${webroot}/cron.php
-            '';
             serviceConfig = {
               Type = "exec";
               User = "nextcloud";
               KillMode = "process";
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
+              ExecStart = "${phpCli} -f ${webroot}/cron.php";
               LoadCredential = runtimeSystemdCredentials;
             };
           };
@@ -1502,14 +1495,6 @@ in
           nextcloud-update-db = {
             after = [ "nextcloud-setup.service" ];
             script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
               ${lib.getExe occ} db:add-missing-columns
               ${lib.getExe occ} db:add-missing-indices
               ${lib.getExe occ} db:add-missing-primary-keys
@@ -1518,6 +1503,7 @@ in
               Type = "exec";
               User = "nextcloud";
               LoadCredential = runtimeSystemdCredentials;
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
             };
           };
 
@@ -1789,5 +1775,5 @@ in
   );
 
   meta.doc = ./nextcloud.md;
-  meta.maintainers = lib.teams.nextcloud.members;
+  meta.teams = [ lib.teams.nextcloud ];
 }

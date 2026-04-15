@@ -14,6 +14,7 @@
   pkg-config,
   callPackage,
   applyPatches,
+  installShellFiles,
 }:
 let
   tusVersion = "0.0.16";
@@ -70,13 +71,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terminusdb";
-  version = "12.0.2";
+  version = "12.0.4";
 
   src = fetchFromGitHub {
     owner = "terminusdb";
     repo = "terminusdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l573Drc76KSUXxhdleU/IBscDTul8VtgkZdrRPvNuNc=";
+    hash = "sha256-vJifp0U4FrbtI86M8pt022BQWIIeK8jWWFG1Ch1m7IQ=";
     leaveDotGit = true;
     postFetch = ''
       # Will be used for `TERMINUSDB_GIT_HASH`
@@ -89,17 +90,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-zF506S4SiWx/uYyN2Trm4XPVUIU2K/qoNSjfKthLVuw=";
+    hash = "sha256-SvWS18amC4FHuXc/N6e+tomwnVfJ/KlTLIACfl72Nqc=";
   };
 
-  # TODO: remove if/when merged upstream https://github.com/terminusdb/terminusdb/pull/2360
-  patches = [
-    # Avoid building bundled GMP/MPFR/MPC in gmp-mpfr-sys during the Rust build
-    (fetchpatch2 {
-      url = "https://github.com/terminusdb/terminusdb/commit/b84dc6b28ef3fd0ef76db2cf7f69537b95af07cc.patch?full_index=1";
-      hash = "sha256-L3U/MHZgMSoXIy6j+1+gKKY2+2obKgaJ3HdJOoMe2Sw=";
-    })
-  ];
+  postPatch = ''
+    # Fix MAKEFLAGS order in vendored tikv-jemalloc-sys
+    # TODO: remove when tikv-jemalloc-sys 0.6.2+ is released
+    # equivalent to https://github.com/tikv/jemallocator/pull/152
+    substituteInPlace $cargoDepsCopy/*/tikv-jemalloc-sys-*/build.rs \
+      --replace-fail 'format!("{orig_makeflags} {makeflags}")' \
+                     'format!("{makeflags} {orig_makeflags}")'
+  '';
 
   strictDeps = true;
 
@@ -109,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       bindgenHook # provides libclang
     ])
     cargo
+    installShellFiles
     protobuf
     swi-prologWithDeps
   ];
@@ -120,11 +122,16 @@ stdenv.mkDerivation (finalAttrs: {
     libmpc
   ];
 
-  # Darwin: gmp-mpfr-sys (use-system-libs) runs raw `$CC ... -lgmp` probes without
-  # propagating `CFLAGS`/`CPPFLAGS`, so we must provide include/lib paths via
-  # compiler-native env vars
-  # https://gitlab.com/tspiteri/gmp-mpfr-sys/-/blob/v1.5.3/build.rs#L187
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = {
+    # Use system GMP/MPFR/MPC
+    # Overrides FEATURES ?= in Makefile.rust
+    FEATURES = "--features terminusdb-community/use-system-gmp";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Darwin: gmp-mpfr-sys (use-system-libs) runs raw `$CC ... -lgmp` probes without
+    # propagating `CFLAGS`/`CPPFLAGS`, so we must provide include/lib paths via
+    # compiler-native env vars
+    # https://gitlab.com/tspiteri/gmp-mpfr-sys/-/blob/v1.5.3/build.rs#L187
     C_INCLUDE_PATH = lib.makeSearchPath "include" [
       (lib.getDev gmp)
       (lib.getDev mpfr)
@@ -153,7 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 terminusdb -t $out/bin
+    installBin terminusdb
+    installManPage $src/docs/terminusdb.1
     runHook postInstall
   '';
 

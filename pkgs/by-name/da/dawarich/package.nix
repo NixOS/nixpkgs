@@ -64,10 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = sources.npmHash;
   };
 
-  RAILS_ENV = "production";
-  NODE_ENV = "production";
-  REDIS_URL = ""; # build error if not defined
-  TAILWINDCSS_INSTALL_DIR = "${tailwindcss_3}/bin";
+  env = {
+    RAILS_ENV = "production";
+    NODE_ENV = "production";
+    REDIS_URL = ""; # build error if not defined
+    TAILWINDCSS_INSTALL_DIR = "${tailwindcss_3}/bin";
+  };
 
   nativeBuildInputs = [
     nodejs
@@ -136,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       diogotcorreia
+      tmarkus
     ];
     platforms = lib.platforms.linux;
   };

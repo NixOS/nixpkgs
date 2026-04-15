@@ -603,7 +603,7 @@ stdenvNoCC.mkDerivation {
       installPhase =
         if targetPlatform.isCygwin then
           ''
-            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_bin}/lib" >> $out
+            echo addToSearchPath "_linkDeps_inputPath" "${cc_solib}/bin" >> $out
             # Work around build failure caused by the gnulib workaround for
             # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after
             # gnulib is updated in core packages (e.g. iconv, gnupatch, gnugrep)

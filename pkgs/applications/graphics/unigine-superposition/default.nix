@@ -31,11 +31,11 @@ let
   pname = "unigine-superposition";
   version = "1.1";
 
-  superposition = stdenv.mkDerivation rec {
+  superposition = stdenv.mkDerivation (finalAttrs: {
     inherit pname version;
 
     src = fetchurl {
-      url = "https://assets.unigine.com/d/Unigine_Superposition-${version}.run";
+      url = "https://assets.unigine.com/d/Unigine_Superposition-${finalAttrs.version}.run";
       hash = "sha256-dJThxzv1nvIWFRPV1cudm/+9hHmSnUl2rFO2lV3lgPg=";
     };
 
@@ -82,7 +82,7 @@ let
     postPatchMkspecs = ''
       cp -f $name/bin/superposition $out/lib/unigine/superposition/bin/superposition
     '';
-  };
+  });
 
   desktopItem = makeDesktopItem {
     name = "Superposition";

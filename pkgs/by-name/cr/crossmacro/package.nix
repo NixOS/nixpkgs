@@ -29,16 +29,16 @@
 
 buildDotnetModule rec {
   pname = "crossmacro";
-  version = "0.9.7";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "alper-han";
     repo = "CrossMacro";
     tag = "v${version}";
-    hash = "sha256-qVKlch9GxEfB9thqXdiwWgF25ljX+b5on+bZmcAjAzw=";
+    hash = "sha256-ki5zEFqa9wSGw2jidGoN0Zb69to7ilXgb9fqrjo40ks=";
   };
 
-  projectFile = "src/CrossMacro.UI/CrossMacro.UI.csproj";
+  projectFile = "src/CrossMacro.UI.Linux/CrossMacro.UI.Linux.csproj";
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;

@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
   ];
 
-  WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
+  env.WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
 
   postInstall = ''
     # Install themes

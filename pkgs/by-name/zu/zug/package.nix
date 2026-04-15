@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   catch2,
@@ -10,24 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zug";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "arximboldi";
     repo = "zug";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ti0EurhGQgWSXzSOlH9/Zsp6kQ/+qGjWbfHGTPpfehs=";
+    hash = "sha256-0HrvCpbVnxEvwvG4btXu0hRzdcHsGwM/HUWES/fmxrs=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/arximboldi/zug/commit/c8c74ada30d931e40636c13763b892f20d3ce1ae.patch";
-      hash = "sha256-0x+ScRnziBeyHWYJowcVb2zahkcK2qKrMVVk2twhtHA=";
-    })
-
-    # https://github.com/arximboldi/zug/issues/45
-    ./gcc15.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -47,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/arximboldi/zug";
     description = "Library for functional interactive c++ programs";
-    maintainers = with lib.maintainers; [ nek0 ];
+    maintainers = [ ];
     license = lib.licenses.boost;
   };
 })

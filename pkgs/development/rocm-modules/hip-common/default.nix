@@ -7,14 +7,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip-common";
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "HIP";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-aI41HdyzyE5HtCbzFmTQYGMiFyQELM/MTVOAbQsg8So=";
+    sparseCheckout = [
+      "projects/hip"
+      "shared"
+    ];
+    hash = "sha256-orfTXKjcZJ5E73cmXEyltZVYhCQo8FLExVHM3J/rqUM=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/hip";
 
   dontConfigure = true;
   dontBuild = true;
@@ -28,15 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "C++ Heterogeneous-Compute Interface for Portability";
-    homepage = "https://github.com/ROCm/HIP";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/hip";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

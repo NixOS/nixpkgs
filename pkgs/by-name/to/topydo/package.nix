@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     substituteInPlace test/test_revert_command.py --replace 'test_revert_ls' 'dont_test_revert_ls'
   '';
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = {
     description = "Cli todo application compatible with the todo.txt format";

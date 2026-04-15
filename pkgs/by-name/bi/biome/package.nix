@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
-  version = "2.3.15";
+  version = "2.4.11";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "@biomejs/biome@${finalAttrs.version}";
-    hash = "sha256-HRiQohI6bnV+U9c+XILOWmjGb1tQDJd3CBFNGzJuJ/4=";
+    hash = "sha256-EPrbr0FOYlP+HKa9YkNi4cw2oisoHRkQAahMIoq9QIo=";
   };
 
-  cargoHash = "sha256-l1eew5KmT0tpVSLmWquodoYlMavQYbyxmZxl6IRnC48=";
+  cargoHash = "sha256-SxHTeZ3snOeBsYmjN4to9UoGVnH0mSXtWtAOv85Ztxs=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -43,6 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=commands::format::print_json_pretty"
     "--skip=commands::format::should_format_files_in_folders_ignored_by_linter"
     "--skip=cases::migrate_v2::should_successfully_migrate_sentry"
+    "--skip=cases::help::check_help"
+    "--skip=cases::help::ci_help"
+    "--skip=cases::help::format_help"
+    "--skip=cases::help::lint_help"
+    "--skip=cases::help::lsp_proxy_help"
+    "--skip=cases::help::migrate_help"
+    "--skip=cases::help::rage_help"
+    "--skip=cases::help::start_help"
   ];
 
   env = {
@@ -75,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       isabelroses
       wrbbz
       eveeifyeve # Schema
+      SchahinRohani
     ];
     mainProgram = "biome";
   };

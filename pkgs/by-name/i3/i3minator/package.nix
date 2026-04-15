@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     sha256 = "07dic5d2m0zw0psginpl43xn0mpxw7wilj49d02knz69f7c416lm";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
   build-system = [

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
-  version = "2025.4.1";
+  version = "2025.9.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jsonschema_specifications";
     inherit version;
-    hash = "sha256-YwFZyfTb6hYaaiIFwwEcxPGP84Gxif/0i7Obm/Jq5gg=";
+    hash = "sha256-tUCYfyOedFYTx6kXbz7bcrgypKxGXPAnEiiDl4MrXo0=";
   };
 
   nativeBuildInputs = [

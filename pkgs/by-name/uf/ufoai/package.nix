@@ -30,12 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1drhh08cqqkwv1yz3z4ngkplr23pqqrdx6cp8c3isy320gy25cvb";
   };
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: r_gl.h:52: multiple definition of `qglGenBuffers';
-  #     r_gl.h:52: first defined here
-  # TODO: drop once release contains upstream fix:
-  #   https://github.com/ufoai/ufoai/commit/8a3075fffdad294e
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env = {
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: r_gl.h:52: multiple definition of `qglGenBuffers';
+    #     r_gl.h:52: first defined here
+    # TODO: drop once release contains upstream fix:
+    #   https://github.com/ufoai/ufoai/commit/8a3075fffdad294e
+    NIX_CFLAGS_COMPILE = "-fcommon";
+    NIX_CFLAGS_LINK = toString [
+      # to avoid occasional runtime error in finding libgcc_s.so.1
+      "-lgcc_s"
+      # tests are underlinked against libm:
+      # ld: release-linux-x86_64/testall/client/sound/s_mix.c.o: undefined reference to symbol 'acos@@GLIBC_2.2.5'
+      "-lm"
+    ];
+  };
 
   preConfigure = ''tar xvf "${finalAttrs.srcData}"'';
 
@@ -58,14 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     gettext
     cunit
-  ];
-
-  NIX_CFLAGS_LINK = [
-    # to avoid occasional runtime error in finding libgcc_s.so.1
-    "-lgcc_s"
-    # tests are underlinked against libm:
-    # ld: release-linux-x86_64/testall/client/sound/s_mix.c.o: undefined reference to symbol 'acos@@GLIBC_2.2.5'
-    "-lm"
   ];
 
   meta = {

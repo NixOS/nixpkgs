@@ -16,13 +16,13 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.11.5";
+    version = "1.11.6";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-XosT6Ccnp2qqrJyqeFawLx7ckpGAOhiMNLiw5LTLxg0=";
+      hash = "sha256-H+noiYY/Nv7DfUTWbvsCnKbjOc2494FVn7Fqos/3ThU=";
     };
 
     vendorHash = "sha256-WO5OtKwluks5nuSHJ4NO1+EKhtCrJE9MuMGmu5fYKM4=";
@@ -32,10 +32,6 @@ let
       "-X"
       "github.com/opentofu/opentofu/version.dev=no"
     ];
-
-    postPatch = ''
-      substituteInPlace go.mod --replace-fail 'go 1.25.6' 'go 1.25.5'
-    '';
 
     nativeBuildInputs = [ installShellFiles ];
     patches = [ ./provider-path-0_15.patch ];

@@ -1,6 +1,8 @@
 {
   dri-pkgconfig-stub,
   egl-wayland,
+  epoll-shim,
+  evdev-proto,
   bash,
   libepoxy,
   fetchurl,
@@ -54,11 +56,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwayland";
-  version = "24.1.9";
+  version = "24.1.10";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xwayland-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8pevJ6hFCNubgNHLvMacOAHaOOtkxy87W1D1gkWa/dA=";
+    hash = "sha256-RZdivo6gRslDhmh9d6h63WBzhovuFPApE+r+u5RbeqA=";
   };
 
   postPatch = ''
@@ -98,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxres
     libxt
     libdrm
-    libtirpc
     libxcb
     libxkbfile
     libxshmfence
@@ -106,13 +107,20 @@ stdenv.mkDerivation (finalAttrs: {
     mesa-gl-headers
     openssl
     pixman
-    systemd
     wayland
     wayland-protocols
     xkbcomp
     xorgproto
     xtrans
     zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libtirpc
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    epoll-shim
+    evdev-proto
   ]
   ++ lib.optionals withLibunwind [
     libunwind
@@ -141,6 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
       emantor
       k900
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

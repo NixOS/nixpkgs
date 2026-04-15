@@ -3,8 +3,11 @@
 {
   lib,
   stdenv,
+  meson,
+  ninja,
   pkg-config,
   xorg-server,
+  fetchurl,
   dri-pkgconfig-stub,
   libdrm,
   libGL,
@@ -18,6 +21,7 @@
   libxkbfile,
   libxshmfence,
   mesa-gl-headers,
+  mesa,
   openssl,
   pixman,
   libxcb-util,
@@ -29,19 +33,29 @@
   xkeyboard-config,
   xorgproto,
   xtrans,
+  font-util,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvfb";
 
-  inherit (xorg-server) src version;
+  #FIXME: go back to xorg-server version on nixpkgs staging
+  #inherit (xorg-server) src version;
+  version = "21.1.21";
+  src = fetchurl {
+    url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
+    hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+  };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
-    dri-pkgconfig-stub
-    libdrm
+    font-util
     libGL
     libx11
     libxau
@@ -62,18 +76,37 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-wm
     xorgproto
     xtrans
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    dri-pkgconfig-stub
+    libdrm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    mesa
   ];
 
-  configureFlags = [
-    "--enable-xvfb"
-    "--disable-xorg"
-    "--disable-xquartz"
-    "--disable-xwayland"
-    "--with-xkb-bin-directory=${xkbcomp}/bin"
-    "--with-xkb-path=${xkeyboard-config}/share/X11/xkb"
-    "--with-xkb-output=$out/share/X11/xkb/compiled"
+  mesonFlags = [
+    "-Dxvfb=true"
+    "-Dxephyr=false"
+    "-Dxorg=false"
+    "-Dxnest=false"
+    "-Dsecure-rpc=false"
+    "-Dudev=false"
+    "-Dudev_kms=false"
+
+    "-Dlog_dir=/var/log"
+    "-Ddefault_font_path="
+
+    "-Dxkb_bin_dir=${xkbcomp}/bin"
+    "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
+    "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "--without-dtrace";
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "-Dxcsecurity=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Ddtrace=false"
+  ];
 
   meta = {
     description = "X virtual framebuffer";

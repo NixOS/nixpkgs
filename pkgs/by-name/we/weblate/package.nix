@@ -9,23 +9,46 @@
   gdk-pixbuf,
   glib,
   gobject-introspection,
-  askalono,
   borgbackup,
   writeText,
+  postgresqlTestHook,
+  postgresql,
+  redisTestHook,
+  fontconfig,
   nixosTests,
+
+  # runtime inputs
+  gitSVN,
+  subversion,
+
+  #optional runtime inputs
+  git-review,
+  tesseract,
+  licensee,
+  mercurial,
+  openssh,
 }:
 
 let
   python = python3.override {
-    packageOverrides = final: prev: {
+    packageOverrides = _final: prev: {
       django = prev.django_5;
     };
   };
-in
-python.pkgs.buildPythonApplication rec {
-  pname = "weblate";
-  version = "5.15.2";
+  python3Packages = python3.pkgs;
 
+  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
+    pango
+    harfbuzz
+    librsvg
+    gdk-pixbuf
+    glib
+    gobject-introspection
+  ];
+in
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "weblate";
+  version = "5.16.2";
   pyproject = true;
 
   outputs = [
@@ -36,11 +59,15 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    tag = "weblate-${version}";
-    hash = "sha256-qNv3aaPyQ/bOrPbK7u9vtq8R1MFqXLJzvLUZfVgjMK0=";
+    tag = "weblate-${finalAttrs.version}";
+    hash = "sha256-er3KtCAFtHh3UtM58Kni/PTBfXpWW/GOarRGJeAanL8=";
   };
 
-  build-system = with python.pkgs; [ setuptools ];
+  postPatch = ''
+    sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
+  '';
+
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [ gettext ];
 
@@ -54,23 +81,24 @@ python.pkgs.buildPythonApplication rec {
         # So we don't need postgres dependencies
         DATABASES = {}
       '';
+      manage = "DJANGO_SETTINGS_MODULE='weblate.settings_static' ${python.pythonOnBuildForHost.interpreter} manage.py";
     in
     ''
       mkdir $static
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
-      export DJANGO_SETTINGS_MODULE="weblate.settings_static"
-      ${python.pythonOnBuildForHost.interpreter} manage.py compilemessages
-      ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input
-      ${python.pythonOnBuildForHost.interpreter} manage.py compress
+      ${manage} compilemessages
+      ${manage} collectstatic --no-input
+      ${manage} compress
     '';
 
   pythonRelaxDeps = [
     "certifi"
-    "urllib3"
+    "crispy-bootstrap5"
+    "dateparser"
   ];
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     [
       aeidon
       ahocorasick-rs
@@ -95,9 +123,9 @@ python.pkgs.buildPythonApplication rec {
       django-cors-headers
       django-crispy-forms
       django-filter
-      django-redis
-      django-otp
       django-otp-webauthn
+      django-otp
+      django-redis
       django
       djangorestframework-csv
       djangorestframework
@@ -129,6 +157,7 @@ python.pkgs.buildPythonApplication rec {
       qrcode
       rapidfuzz
       redis
+      regex
       requests
       ruamel-yaml
       sentry-sdk
@@ -141,6 +170,7 @@ python.pkgs.buildPythonApplication rec {
       unidecode
       urllib3
       user-agents
+      weblate-fonts
       weblate-language-data
       weblate-schemas
     ]
@@ -152,20 +182,100 @@ python.pkgs.buildPythonApplication rec {
     ++ urllib3.optional-dependencies.brotli
     ++ urllib3.optional-dependencies.zstd;
 
-  optional-dependencies = {
-    postgres = with python.pkgs; [ psycopg ];
+  # Commented entries are not packaged yet
+  optional-dependencies = with python3Packages; {
+    alibaba = [
+      aliyun-python-sdk-alimt
+      aliyun-python-sdk-core
+    ];
+    amazon = [ boto3 ];
+    # gelf = [ logging-gelf ];
+    # gerrit = [ git-review ];
+    google = [
+      google-cloud-storage
+      google-cloud-translate
+    ];
+    ldap = [ django-auth-ldap ];
+    # mercurial = [ mercurial ];
+    mysql = [ mysqlclient ];
+    openai = [ openai ];
+    postgres = [ psycopg ];
+    saml = [ python3-saml ];
+    # saml2idp = [ djangosaml2idp ];
+    # wlhosted = [ wlhosted ];
+    wsgi = [ granian ];
+    # zxcvbn = [ django-zxcvbn-password-validator ];
   };
 
   # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
-  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
-    pango
-    harfbuzz
-    librsvg
-    gdk-pixbuf
-    glib
-    gobject-introspection
-  ];
+  env = {
+    inherit GI_TYPELIB_PATH;
+  };
+
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
+
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      postgresqlTestHook
+      postgresql
+      redisTestHook
+      pytest-cov-stub
+      pytest-django
+      pytest-xdist
+      responses
+      respx
+      selenium
+      standardwebhooks
+
+      gitSVN
+      subversion
+      gettext
+      fontconfig
+      borgbackup
+
+      #optional
+      git-review
+      tesseract
+      licensee
+      mercurial
+      openssh
+    ]
+    ++ social-auth-core.optional-dependencies.saml
+    ++ (lib.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies));
+
+  env = {
+    CI_DATABASE = "postgresql";
+    DJANGO_SETTINGS_MODULE = "weblate.settings_test";
+
+    # Only needed to make weblate/settings_test.py happy
+    CI_DB_PORT = "";
+    CI_DB_PASSWORD = "";
+    CI_REDIS_HOST = "";
+    CI_REDIS_PORT = "";
+  };
+
+  # pytest-xdist wants to create an additional database per test group
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
+
+  postgresqlTestSetupPost = ''
+    export CI_DB_HOST="$PGHOST"
+    export CI_DB_USER="$PGUSER"
+    export CI_DB_NAME="$PGDATABASE"
+
+    echo "CACHES[\"avatar\"][\"LOCATION\"] = \"unix://$NIX_BUILD_TOP/run/redis.sock\"" \
+      >> weblate/settings_test.py
+
+    ${python.pythonOnBuildForHost.interpreter} manage.py migrate --noinput
+    ${python.pythonOnBuildForHost.interpreter} manage.py check
+  '';
+
+  disabledTests = [
+    # Tries to download things from GitHub
+    "test_ocr"
+    "test_ocr_backend"
+  ];
 
   passthru = {
     inherit python;
@@ -179,7 +289,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${src.tag}";
+    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Plus
       mit
@@ -188,4 +298,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "weblate";
   };
-}
+})

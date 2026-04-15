@@ -71,7 +71,7 @@ rec {
     # Type
 
     ```
-    isOption :: a -> Bool
+    isOption :: Any -> Bool
     ```
   */
   isOption = lib.isType "option";
@@ -258,7 +258,7 @@ rec {
     # Type
 
     ```
-    mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
+    mkPackageOption :: Pkgs -> (String | [String]) -> { nullable? :: Bool; default? :: String | [String]; example? :: Null | String | [String]; extraDescription? :: String; pkgsText? :: String; } -> Option
     ```
 
     # Examples
@@ -525,7 +525,7 @@ rec {
     # Type
 
     ```
-    getValues :: [ { value :: a; } ] -> [a]
+    getValues :: [{ value :: a; ... }] -> [a]
     ```
 
     # Examples
@@ -547,7 +547,7 @@ rec {
     # Type
 
     ```
-    getFiles :: [ { file :: a; } ] -> [a]
+    getFiles :: [{ file :: a; ... }] -> [a]
     ```
 
     # Examples
@@ -589,11 +589,16 @@ rec {
             renderOptionValue opt.example
           );
         }
-        // optionalAttrs (opt ? defaultText || opt ? default) {
-          default = builtins.addErrorContext "while evaluating the ${
-            if opt ? defaultText then "defaultText" else "default value"
-          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-        }
+        //
+          optionalAttrs (opt ? defaultText || opt ? default || ((opt.type or { }).emptyValue or { }) ? value)
+            {
+              default =
+                builtins.addErrorContext
+                  "while evaluating the ${
+                    if opt ? defaultText then "defaultText" else "default value"
+                  } of option `${name}`"
+                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+            }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
           inherit (opt) relatedPackages;
         };
@@ -885,7 +890,7 @@ rec {
     # Type
 
     ```
-    showDefsSep :: { files :: [ String ]; loc :: [ String ]; ... } -> string
+    showOptionWithDefLocs :: { files :: [String]; loc :: [String]; ... } -> String
     ```
   */
   showOptionWithDefLocs = opt: ''

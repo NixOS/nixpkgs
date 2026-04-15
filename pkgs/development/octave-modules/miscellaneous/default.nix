@@ -1,7 +1,8 @@
 {
   buildOctavePackage,
   lib,
-  fetchurl,
+  fetchFromGitHub,
+  nix-update-script,
   # Build-time dependencies
   ncurses, # >= 5
   units,
@@ -9,11 +10,13 @@
 
 buildOctavePackage rec {
   pname = "miscellaneous";
-  version = "1.3.1";
+  version = "1.3.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VxIReiXTHRJmADZGpA6B59dCdDPCY2bkJt/6mrir1kg=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-miscellaneous";
+    tag = "release-${version}";
+    sha256 = "sha256-IF5kBd7RD2+gooRTNtv2XDPJcpIZlsu8QXlO3f3nD/Q=";
   };
 
   buildInputs = [
@@ -24,10 +27,17 @@ buildOctavePackage rec {
     units
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
+
   meta = {
     homepage = "https://gnu-octave.github.io/packages/miscellaneous/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Miscellaneous tools that don't fit somewhere else";
   };
 }

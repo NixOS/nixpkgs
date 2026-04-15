@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       raskin
-      synthetica
     ];
     broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.all;

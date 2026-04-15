@@ -7,6 +7,7 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
+  imagemagick,
   libxtst,
   libxrandr,
   libxinerama,
@@ -73,6 +74,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     copyDesktopItems
+    imagemagick
     ninja
   ];
 
@@ -147,7 +149,8 @@ stdenv.mkDerivation {
 
     install -Dm755 SID_artefacts/Release/Standalone/SID $out/bin
 
-    install -Dm444 $src/plugin/Resources/icon.png $out/share/pixmaps/SID.png
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $src/plugin/Resources/icon.png -resize 256x256 $out/share/icons/hicolor/256x256/apps/SID.png
 
     runHook postInstall
   '';

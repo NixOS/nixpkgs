@@ -36,11 +36,22 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Vjv62cYDIuTLE7MxRt4Havy7DMOiMTyIixbs4LGFGGs=";
   };
 
+  # TypeError: NDArray.record() missing 1 required keyword-only argument: 'in_warmup'
+  postPatch = ''
+    substituteInPlace bambi/backend/pymc.py \
+      --replace-fail \
+        "strace.record(point=dict(zip(varnames, value)))" \
+        "strace.record(point=dict(zip(varnames, value)), in_warmup=False)"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "sparse"
+  ];
   dependencies = [
     arviz-plots
     formulae
@@ -73,6 +84,12 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert (<xarray.DataArray 'yield' ()> Size: 1B\narray(False) & <xarray.DataArray 'yield' ()> Size: 1B\narray(False))
     # https://github.com/bambinos/bambi/issues/888
     "test_beta_regression"
+
+    # Failing since blackjax was updated to 1.4
+    # ValueError: cannot select an axis to squeeze out which has size not equal to one,
+    # got shape=(4, 2) and dimensions=(0,)
+    "test_blackjax_method"
+    "test_legacy_nuts_blackjax_warning"
 
     # Tests require network access
     "test_alias_equal_to_name"

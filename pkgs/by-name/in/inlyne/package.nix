@@ -16,6 +16,7 @@
   libGL,
   openssl,
   oniguruma,
+  vulkan-loader,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,7 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
   };
 
-  cargoHash = "sha256-jSUqpryUgOL0qo0gbbH4s24krrPsLOSNc6FQUEUeeUQ=";
+  cargoHash = "sha256-6TwMZNYvW1bBE+9PJUXQxP5Uz7VYsjyLabmaxcX9Mbk=";
+
+  cargoPatches = [
+    # update metrics dependency to fix Rust 1.94 compatibility
+    ./update-metrics.patch
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -72,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
+      --add-needed ${lib.getLib vulkan-loader}/lib/libvulkan.so \
       --add-rpath ${
         lib.makeLibraryPath [
           libGL

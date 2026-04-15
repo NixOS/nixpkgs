@@ -72,6 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     LIRC_LIBS = "-L ${lib.getLib lirc}/lib -llirc_client";
   };
 
+  postPatch = ''
+    substituteInPlace src/common/getopt.h \
+      --replace-fail 'extern int getopt ();' 'extern int getopt (int ___argc, char *const *___argv, const char *__shortopts);'
+  '';
+
   strictDeps = true;
 
   meta = {

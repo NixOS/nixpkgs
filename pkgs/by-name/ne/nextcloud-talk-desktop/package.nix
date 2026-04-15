@@ -28,14 +28,15 @@
   patchelf,
   undmg,
   makeWrapper,
+  libpulseaudio,
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.0.6"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.1.1"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-eEYNfVnM+qCYnirHdBG6oqBQzDio39J7tmh4BSTAF9g=";
-    darwin = "sha256-2A4Jjz0XoXxTdKq6xP0xhlBneysAkBHMbqfgaftJGFQ=";
+    linux = "sha256-s6+p21KLoDvcQz0EgV7WYIwYc9JolZpqkxZ8iIol8Yg=";
+    darwin = "sha256-rp6+bYb3Y8yEXYUY+cuDo7Lw6cq/EUnPjLIqscKeULc=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -102,11 +103,17 @@ let
       libxrandr
       libxfixes
       libxcursor
+      libpulseaudio
     ];
 
-    # Required to launch the application and proceed past the zygote_linux fork() process
-    # Fixes `Zygote could not fork`
-    runtimeDependencies = [ systemd ];
+    runtimeDependencies = [
+      # Required to launch the application and proceed past the zygote_linux fork() process
+      # Fixes `Zygote could not fork`
+      systemd
+
+      # Fixes input/output audio device selection
+      libpulseaudio
+    ];
 
     desktopItems = [
       (makeDesktopItem {

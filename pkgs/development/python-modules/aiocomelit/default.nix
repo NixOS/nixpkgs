@@ -5,7 +5,7 @@
   colorlog,
   fetchFromGitHub,
   pint,
-  poetry-core,
+  setuptools,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiocomelit";
-  version = "2.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,10 +22,10 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiocomelit";
     tag = "v${version}";
-    hash = "sha256-gk/WYeSl+962Nd0V3VQOy1aYDaSH82qjW1VU2siqU98=";
+    hash = "sha256-k/p6z+flMvmuwwHqPH9Aw/ai761kbT+HQUXVNKeqk0U=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp

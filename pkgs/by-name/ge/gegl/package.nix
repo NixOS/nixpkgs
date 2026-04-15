@@ -29,7 +29,7 @@
   gexiv2,
   libwebp,
   luajit,
-  openexr_2,
+  openexr,
   suitesparse,
   withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
   gimp,
@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.64";
+  version = "0.4.68";
 
   outputs = [
     "out"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DeHJ3SLBYNXkvfw4jSkvA0R8ymJYVBuaEv7Xg9DPfGA=";
+    hash = "sha256-UAIwm5pwEmBljos6YVQP1Wc4h875mDOOGZJSSjOyOuM=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libraw
     libwebp
     gexiv2
-    openexr_2
+    openexr
     suitesparse
   ]
   ++ lib.optionals stdenv.cc.isClang [
@@ -104,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
+    # Selecting platform default is broken by -Dauto_features.
+    "-Drelocatable=disabled"
   ]
   ++ lib.optionals (!withLuaJIT) [
     "-Dlua=disabled"

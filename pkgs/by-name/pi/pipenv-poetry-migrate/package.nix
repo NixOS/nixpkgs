@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pipenv-poetry-migrate";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iSBN8ZcQORxDao1JKX/cOStNAJ9P7tP/JshUeDrMwh4=";
+    hash = "sha256-q+W+UyyL+sanLOYW6wTj4GVx756m0LZf/K2YOFIEyxY=";
   };
 
   build-system = [ python3Packages.poetry-core ];

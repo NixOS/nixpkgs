@@ -2,29 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pint,
-  poetry-core,
-  poetry-dynamic-versioning,
   psychrolib,
   pytest-asyncio,
   pytestCheckHook,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyweatherflowudp";
-  version = "1.5.0";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "briis";
     repo = "pyweatherflowudp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-mo42Y6vPREuH5EaoALTJdzoaQLVEvfTeuJqV+N+PFRE=";
+    tag = finalAttrs.version;
+    hash = "sha256-4zS6YQmceGfJMGR++VdymIfNq7NAB9jKDT6bVl0wHAc=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    uv-dynamic-versioning
   ];
 
   dependencies = [

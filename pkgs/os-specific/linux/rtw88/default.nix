@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "0-unstable-2025-12-28";
+  version = "0-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "2dd31d98c8a26e156f06bbcfb7a957fb452e2f83";
-    hash = "sha256-vqOBRfbzMtQ27T9Bmeop8KDw7c83scM4c/n3VjKKHSI=";
+    rev = "4e777cb6088f95c16ab3da9458ef78db43010d04";
+    hash = "sha256-8qDSDz6pliZMal1Nt/KufZ42TYHlQuMgZwhm23Qr9pk=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -49,7 +49,6 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [
       tvorog
-      atila
     ];
     platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "4.20";

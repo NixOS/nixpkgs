@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vcpkg";
-  version = "2025.10.17";
+  version = "2026.03.18";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
     tag = finalAttrs.version;
-    hash = "sha256-prWpMtvXWZ53y2gzr7IIqL/5kQZRfErnynEHMqi15/A=";
+    hash = "sha256-vcs7F8darR/PNJEihebA7AqLWglefGxIacr1fqL36eM=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -39,12 +39,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace scripts/toolchains/linux.cmake \
-      --replace-fail "aarch64-linux-gnu-as"  "aarch64-unknown-linux-gnu-as" \
-      --replace-fail "aarch64-linux-gnu-gcc" "aarch64-unknown-linux-gnu-gcc" \
-      --replace-fail "aarch64-linux-gnu-g++" "aarch64-unknown-linux-gnu-g++" \
-      --replace-fail "arm-linux-gnueabihf-as"  "armv7l-unknown-linux-gnueabihf-as" \
-      --replace-fail "arm-linux-gnueabihf-gcc" "armv7l-unknown-linux-gnueabihf-gcc" \
-      --replace-fail "arm-linux-gnueabihf-g++" "armv7l-unknown-linux-gnueabihf-g++"
+      --replace-fail "\''${CMAKE_SYSTEM_PROCESSOR}-linux-gnu" "\''${CMAKE_SYSTEM_PROCESSOR}-unknown-linux-gnu" \
+      --replace-fail "arm-linux-gnueabihf" "armv7l-unknown-linux-gnueabihf"
     # If we don’t turn this off, then you won’t be able to run binaries that
     # are installed by vcpkg.
     find triplets -name '*linux*.cmake' -exec bash -c 'echo "set(X_VCPKG_RPATH_KEEP_SYSTEM_PATHS ON)" >> "$1"' -- {} \;

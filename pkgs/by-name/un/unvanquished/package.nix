@@ -3,7 +3,7 @@
   stdenv,
   fetchzip,
   fetchFromGitHub,
-  SDL2,
+  sdl3,
   buildFHSEnv,
   cmake,
   copyDesktopItems,
@@ -34,15 +34,15 @@
 }:
 
 let
-  version = "0.55.3";
-  binary-deps-version = "10";
+  version = "0.56.1";
+  binary-deps-version = "11";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-wOFSPPEu7AGsEcqHG7xFWzFlYZRWAIvvfTj5FLZ3HFc=";
+    hash = "sha256-MIsHW56RYkh5xtidHpBOEwQQSsvGMEdAdGt5fQvqXxQ=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -51,8 +51,8 @@ let
     version = binary-deps-version;
 
     src = fetchzip {
-      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz ";
-      hash = "sha256-5n8gRvTuke4e7EaZ/5G+dtCG6qmnawhtA1IXIFQPkzA=";
+      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz";
+      hash = "sha256-1PPqQYnMBFR7Jr48qiqQEduEjiFWx3XyvfPBwX/PzIY=";
     };
 
     dontPatchELF = true;
@@ -121,7 +121,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-6v6NO4Ad4rMFziWAO9x22CHtm/nfOuT0ptBEVhCMqZo=";
+    outputHash = "sha256-HnWdOvi7fcKmktLVbdUfMnB8v3iHb1t7jEERUcYcxNg=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -149,7 +149,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    unvanquished-binary-deps
     copyDesktopItems
   ];
 
@@ -162,7 +161,7 @@ stdenv.mkDerivation rec {
     lua5
     nettle
     curl
-    SDL2
+    sdl3
     freetype
     glew
     openal
@@ -177,10 +176,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_CGAME=NO"
-    "-DBUILD_SGAME=NO"
+    "-DBUILD_CGAME=FALSE"
+    "-DBUILD_SGAME=FALSE"
     "-DUSE_HARDENING=TRUE"
     "-DUSE_LTO=TRUE"
+    "-DUSE_OPENMP=TRUE"
+    "-DUSE_EXTERNAL_DEPS_LIBS=FALSE"
     "-DOpenGL_GL_PREFERENCE=LEGACY" # https://github.com/DaemonEngine/Daemon/issues/474
   ];
 
