@@ -24,6 +24,11 @@ in
         --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
         --libvirt.uri ${cfg.libvirtUri} ${lib.concatStringsSep " " cfg.extraFlags}
       '';
+      RestrictAddressFamilies = [
+        "AF_UNIX"
+        "AF_INET"
+        "AF_INET6"
+      ];
     };
   };
 }

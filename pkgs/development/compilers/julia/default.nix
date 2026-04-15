@@ -1,4 +1,6 @@
 {
+  stdenv,
+  lib,
   callPackage,
   fetchpatch2,
   gcc14Stdenv,
@@ -43,12 +45,12 @@ in
   );
   julia_112-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.12.5";
+      version = "1.12.6";
       sha256 = {
-        x86_64-linux = "1rxsb2bnk2wgd2nkzxwpj1xj8gbpblczm4lyxprzp5jfgrr4vf21";
-        aarch64-linux = "1qp8ydagd39c1rcj9ryrq0y1hcimw1dgmaaviaqbyqj4x92fhp9f";
-        x86_64-darwin = "1b8mdpy6ww89xngsl1q3ym245iyw59alki9cvnplcbg3iqjhgdz4";
-        aarch64-darwin = "01fli18s43p74hb7z2fcv8sv72pijp3k1azba6rjjpgfic7f1h0z";
+        x86_64-linux = "16h77px97qpzfcf5lfrj8kj8baq6fs07sxjasbdsj8cly6zg7axv";
+        aarch64-linux = "16a8gkaqzsxw5z8axdyp13qdlqxapg9q11csgxigs3xxayw976q2";
+        x86_64-darwin = "0b34hb93pyqj4yfljy4krzf182dkwmlj6wkf4j5c7fnn0v3bfw0s";
+        aarch64-darwin = "0cbarn632dxn1x1zi68k31plimvrr4yizr5kcc4rvagdsbxq4z97";
       };
     }) { }
   );
@@ -87,12 +89,21 @@ in
   julia_112 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.12.5";
-        hash = "sha256-3jvzaT2TjX4VU5pcOsIXfFRqzQ17e8TjJ+MNanI48eM=";
+        version = "1.12.6";
+        hash = "sha256-cR86qNbsXJAEWT6489U+NWTNdZrLqK1K2ulnr8IDMsw=";
+        patches = lib.optionals stdenv.hostPlatform.isDarwin [
+          ./patches/1.12/0001-zlib-rpath.patch
+          ./patches/1.12/0002-lbt-blas-detection.patch
+        ];
       })
-      {
-        stdenv = gcc14Stdenv;
-        gfortran = gfortran14;
-      }
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
   );
 }

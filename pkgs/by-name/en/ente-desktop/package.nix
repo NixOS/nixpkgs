@@ -26,7 +26,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-desktop";
-  version = "1.7.21";
+  version = "1.7.22";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       "rust"
     ];
     tag = "photosd-v${finalAttrs.version}";
-    hash = "sha256-nkI2wfjpQPWPmu+IKbNMQuqby2odRG3Dbyzd7cSxmYY=";
+    hash = "sha256-iEPUlWe1dmXm0dkl12faKbfqffu8LCm8JTa+uVIBwrA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
@@ -52,18 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-ftb0h5MOHyQ2iec6iE7/WdHXgrviLCy8oIqFXv5OTq8=";
+    hash = "sha256-/FkAxi9KpW/Z6sdo7gfxvCmaAe0JzjubScrcGjbLD88=";
   };
   offlineCache = fetchYarnDeps {
     name = "ente-desktop-${finalAttrs.version}-offline-cache";
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-dnjTH68lNqSD/RIiaYdip0U8a2RXCNanqF05WnhzjEA=";
+    hash = "sha256-OnqrowsT0Yion563QD4RA5whN///q4RbkgMDWXs9icg=";
   };
   webOfflineCache = fetchYarnDeps {
     name = "ente-desktop-${finalAttrs.version}-web-offline-cache";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-NhpSwesQ9B5gEeBQVjEEAKO4A68wfmBoQ3ga/baieNE=";
+    hash = "sha256-bWOwIa7SD0z2StoUg9HlQGTBq2xXltLgQ2ft8umjg/Y=";
   };
 
   nativeBuildInputs = [

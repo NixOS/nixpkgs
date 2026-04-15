@@ -5,7 +5,7 @@
   nixosTests,
   testers,
   sqlite3-to-mysql,
-  mysql80,
+  mysql84,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tabulate
     unidecode
     packaging
-    mysql80
+    mysql84
     python-dateutil
     sqlglot
   ];

@@ -6,19 +6,19 @@
   pkg-config,
   imagemagick,
   libimagequant,
-  lua,
+  luajit,
   makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cwal";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "nitinbhat972";
     repo = "cwal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CvC7I0/Obn/IEXmbr8Hs7YqUk6NPgduJpDCNCHwU8lA=";
+    hash = "sha256-/5l/Wc85ElB0V1j2tCW5CXKJKvhz6vb6V696d8UPM0c=";
   };
 
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     imagemagick
     libimagequant
-    lua
+    luajit
   ];
 
   postFixup = ''

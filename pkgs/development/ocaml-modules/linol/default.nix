@@ -10,7 +10,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "linol";
-  version = "0.10";
+  version = "0.11";
 
   minimalOCamlVersion = "4.14";
 
@@ -18,7 +18,7 @@ buildDunePackage (finalAttrs: {
     owner = "c-cube";
     repo = "linol";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G/5nTJd+MxPgNObKW2Hmmwn4HejQ81c3f4oVXjpNSZg=";
+    hash = "sha256-9n610J62IPUXYQ/u+WjGTtowYFKQ45wE8M7UkLdEKVM=";
   };
 
   propagatedBuildInputs = [

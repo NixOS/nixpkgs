@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fluss-api";
-  version = "0.1.9.20";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fluss";
     repo = "Fluss_Python_Library";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g5LZWlz8QZWUb6UFyY1wQIHqC2lCTpCsaWgrkPCoDOw=";
+    hash = "sha256-zAhxx2X1DnfXlf+OzyACx6e3bQkoagffBPPnEe05xbM=";
   };
 
   build-system = [ setuptools ];

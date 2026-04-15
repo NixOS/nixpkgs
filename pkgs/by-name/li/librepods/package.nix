@@ -9,15 +9,15 @@
   lib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librepods";
-  version = "0.1.0-unstable-2025-12-07";
+  version = "0.2.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "kavishdevar";
     repo = "librepods";
-    rev = "0e1f784737122913c21b429810d059aadfb4479e";
-    hash = "sha256-nXEMIyQWEDMjyKGPAleqqSttznNmrdSHKT4Kr2tLHBY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-37dLiXC+eO4f5waLKgMMpHXH1m6W54O/l2axJsnyU5M=";
   };
 
   sourceRoot = "source/linux";
@@ -41,6 +41,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kavishdevar/librepods";
     description = "AirPods liberated from Apple's ecosystem";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.thefossguy ];
+    mainProgram = "librepods";
+    maintainers = with lib.maintainers; [
+      thefossguy
+      Cameo007
+    ];
   };
-}
+})

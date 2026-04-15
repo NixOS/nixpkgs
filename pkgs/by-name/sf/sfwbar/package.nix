@@ -11,6 +11,7 @@
   libpulseaudio,
   libmpdclient,
   libxkbcommon,
+  pipewire,
   alsa-lib,
   makeWrapper,
   docutils,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfwbar";
-  version = "1.0_beta16.1";
+  version = "1.0_beta17";
 
   src = fetchFromGitHub {
     owner = "LBCrion";
     repo = "sfwbar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WA9BXX+0VR8eSdHOYLs+DoazBqVwMllQSxkubq4SkWo=";
+    hash = "sha256-xenXcGo5kdntOsSOlXaYA9WZ9Ed0hncGlb5Jgv6rbio=";
   };
 
   buildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libmpdclient
     libxkbcommon
+    pipewire
     alsa-lib
     docutils # for rst2man
   ];

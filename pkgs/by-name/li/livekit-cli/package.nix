@@ -2,28 +2,37 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "livekit-cli";
-  version = "1.5.1";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-J5tg3nm2pEemEZcIpObcxH+G4ByzvUtoSyy92CcWr6M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qGxRNsVnrDl8N0hAh8WjumDvaL7Zs90HaRmXORvUWZs=";
   };
 
-  vendorHash = "sha256-ywHTIuiZaoY3p7hTsnImcCpuwMXHQZcnRsWerIlOU4o=";
+  vendorHash = "sha256-6posDd3z2seRvGuWLsmPD5wOz4RVF4ulvmfTqWN29hE=";
 
-  subPackages = [ "cmd/livekit-cli" ];
+  subPackages = [ "cmd/lk" ];
+
+  passthru.updateScript = nix-update-script { };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Command line interface to LiveKit";
     homepage = "https://livekit.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mgdelacroix ];
-    mainProgram = "livekit-cli";
+    maintainers = with lib.maintainers; [
+      mgdelacroix
+      faukah
+      carschandler
+    ];
+    mainProgram = "lk";
   };
 })

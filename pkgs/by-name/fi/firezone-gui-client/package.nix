@@ -135,8 +135,6 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Otherwise blank screen, see https://github.com/tauri-apps/tauri/issues/9304
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --prefix PATH ":" ${
         lib.makeBinPath [
           zenity

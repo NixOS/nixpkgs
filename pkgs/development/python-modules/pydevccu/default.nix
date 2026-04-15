@@ -1,15 +1,18 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
+  pytest-asyncio,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pydevccu";
-  version = "0.1.21";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -18,22 +21,21 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "pydevccu";
     tag = finalAttrs.version;
-    hash = "sha256-RroFOnGOU7JDpe2mv44jKhyduT4jg8ySYtdhhPrSfvw=";
+    hash = "sha256-dOk0Sb7RR21Mzke+wkhEca8HMVt7pcU5eXs/hzojFBQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.6.0" setuptools
-  '';
-
-  pythonRelaxDeps = [ "orjson" ];
 
   build-system = [ setuptools ];
 
-  dependencies = [ orjson ];
+  dependencies = [ aiohttp ];
 
-  # Module has no tests
-  doCheck = false;
+  optional-dependencies = {
+    fast = [ orjson ];
+  };
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pydevccu" ];
 

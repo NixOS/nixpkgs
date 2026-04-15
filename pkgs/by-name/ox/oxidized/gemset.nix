@@ -229,7 +229,6 @@
       "ed25519"
       "net-ftp"
       "net-http-digest_auth"
-      "net-scp"
       "net-ssh"
       "net-telnet"
       "psych"
@@ -243,10 +242,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1s7v9w357bc5xb89an4kclqmfjv2j6p9gnvsf7s2mnrgg482j76v";
+      sha256 = "0g2a60bwpjidwkksai6l2ndnq3qbvqj33jv53c800m7m4hgr5r0n";
       type = "gem";
     };
-    version = "0.35.0";
+    version = "0.36.0";
   };
   oxidized-script = {
     dependencies = [

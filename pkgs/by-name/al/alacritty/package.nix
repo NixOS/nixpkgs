@@ -49,7 +49,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src =
     # by default we want the official package
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         owner = "alacritty";
         repo = "alacritty";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-IOPhnJ76kZ2djJjxJEUwWPvHDeeXbJAn1ClipTH7nWs=";
+        hash = "sha256-iZtCH2DrSs6o3AG2koI2TyC3116aMlawHFkCd0TYhas=";
       }
     # optionally we want to build the sixels feature fork
     else
@@ -66,14 +66,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         owner = "ayosec";
         repo = "alacritty";
         tag = "v${finalAttrs.version}-graphics";
-        hash = "sha256-e+o0GLy05qXEY4T57dCuqhukTKBSm1WIHzPUV8uswRI=";
+        hash = "sha256-DdiioNKMVg9u4E4h7AysvaGJ6ys36ykTyJgjHWjIjjY=";
       };
 
   cargoHash =
     if !withGraphics then
-      "sha256-OBhrd4q44LCUGnjDEedhrOuoSC2UFR90IKSQfEPY/Q4="
+      "sha256-BX4PjZXr19SScEZhb0gWkMiJUYq8ByEuVh9RpJSRCHI="
     else
-      "sha256-VR+URXqsB9zCOSow/f/aWXUlrp6j2XeK0zKESQGzMek=";
+      "sha256-xWW0X4dCgnNMT4T6BNsYmxOOFIK8MIHwUMKVtIHAFYc=";
 
   nativeBuildInputs = [
     cmake

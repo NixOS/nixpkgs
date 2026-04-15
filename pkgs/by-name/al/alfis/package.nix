@@ -5,30 +5,35 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
+  libayatana-appindicator,
   webkitgtk_4_1,
+  xdotool,
   zenity,
   withGui ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alfis";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gRk4kvIV+5cCUFaJvGbTAR44678Twa28iMGZ75lJz2c=";
+    hash = "sha256-r3QIj9/Qv6y7qWltIjh1WCAZyFKMK2aN4vCsAUJB6PQ=";
   };
 
-  cargoHash = "sha256-Ge0+7ClXlJFT6CyluHF7k4stsX+KuYp/riro1pvrcKM=";
+  cargoHash = "sha256-lOSGZIGztZumt/cymMNyBoBl6objrS8F5Nkk1e7T9NE=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
 
-  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_1;
+  buildInputs = lib.optionals (withGui && stdenv.hostPlatform.isLinux) [
+    webkitgtk_4_1
+    xdotool
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
@@ -38,6 +43,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=dns::client::tests::test_tcp_client"
     "--skip=dns::client::tests::test_udp_client"
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
 
   postInstall = lib.optionalString (withGui && stdenv.hostPlatform.isLinux) ''
     wrapProgram $out/bin/alfis \

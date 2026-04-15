@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "argonaut";
-  version = "2.15.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "darksworm";
     repo = "argonaut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LDw2/8l/jipCVIMYeco08LukIfx3Kk1ROXkvU69SK5g=";
+    hash = "sha256-F67DyH0aJ4SmlCIj1i65yB5rFXZB0j5BREssS3V3WZQ=";
   };
 
-  vendorHash = "sha256-xln/WmZbi0+rHqMMHRgt0ar/EaBDNscCsd/NckJZnMw=";
+  vendorHash = "sha256-4AmciHL4CGtEwDAs7eAtjfWlzjoCLXAN2HEatev8gZg=";
   proxyVendor = true;
   subPackages = [ "cmd/app" ];
   ldflags = [

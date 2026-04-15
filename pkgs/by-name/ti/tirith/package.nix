@@ -8,15 +8,15 @@
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "tirith";
-  version = "0.2.10";
+  version = "0.2.12";
   src = fetchFromGitHub {
     owner = "sheeki03";
     repo = "tirith";
     tag = "v${final.version}";
-    hash = "sha256-1i2cZt/12tSZAs4rXY2OoBZBShhsT8EMRCf76Zdb2OQ=";
+    hash = "sha256-O0IRWiNib7sc6y17NdHcFfxKW5M37l/87kBEAJiTMWs=";
   };
 
-  cargoHash = "sha256-ETJoYsG4CueIoj9wCq37TsEJjlUsDnOnc3/Hck/ngxU=";
+  cargoHash = "sha256-mIQ1zvAh+a7EyyNoYEZFdYUaQ9drIE2WfHmFHvgFUFM=";
 
   cargoBuildFlags = [
     "-p"

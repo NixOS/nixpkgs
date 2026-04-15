@@ -247,6 +247,12 @@ buildPythonPackage (finalAttrs: {
     "test_float_cast_to_unsigned_underflow"
     "test_int8"
     "test_int8_to_uint16_negative"
+
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_conv2d_fused_half"
+    "test_conv2d_half"
+    "test_gemm_fp16"
+    "test_softmax_dtype"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky (pass when running a smaller set of tests: tests/unit/*, but not within the full test suite)

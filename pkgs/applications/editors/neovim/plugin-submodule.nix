@@ -11,6 +11,7 @@ let
         plugin = null;
         config = null;
         optional = false;
+        type = "viml";
       };
     in
     map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) plugins;
@@ -24,6 +25,15 @@ let
           description = "viml configuration associated with this plugin.";
           default = null;
           example = "set title";
+        };
+
+        type = lib.mkOption {
+          type = lib.types.either (lib.types.enum [
+            "lua"
+            "viml"
+          ]) lib.types.str;
+          description = "Language used in config. Configurations are aggregated per-language.";
+          default = "viml";
         };
 
         optional = mkEnableOption "optional" // {
@@ -78,9 +88,17 @@ in
 
     userPluginViml = lib.mkOption {
       readOnly = true;
-      type = lib.types.listOf lib.types.lines;
+      type = lib.types.nullOr lib.types.lines;
       description = ''
         The viml config set by the user.
+      '';
+    };
+
+    userPluginConfigs = lib.mkOption {
+      readOnly = true;
+      type = lib.types.attrsOf lib.types.lines;
+      description = ''
+        The user configurations (viml, lua, ...) set by the user.
       '';
     };
 
@@ -106,6 +124,13 @@ in
   config =
     let
       pluginsNormalized = config.plugins;
+
+      userPluginConfigs =
+        let
+          grouped = lib.groupBy (x: x.type) pluginsNormalized;
+          configsOnly = lib.foldl (acc: p: if p.config != null then acc ++ [ p.config ] else acc) [ ];
+        in
+        lib.mapAttrs (_name: vals: lib.concatStringsSep "\n" (configsOnly vals)) grouped;
     in
     {
       pluginAdvisedLua =
@@ -125,9 +150,9 @@ in
         in
         lib.foldl' op [ ] pluginsNormalized;
 
-      userPluginViml = lib.foldl (
-        acc: p: if p.config != null then acc ++ [ p.config ] else acc
-      ) [ ] pluginsNormalized;
+      userPluginViml = userPluginConfigs.viml or null;
+
+      inherit userPluginConfigs;
 
       pluginPython3Packages = map (plugin: plugin.python3Dependencies or (_: [ ])) pluginsNormalized;
 

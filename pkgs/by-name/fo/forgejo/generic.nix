@@ -12,6 +12,7 @@
   bash,
   brotli,
   buildGoModule,
+  fetchpatch,
   forgejo,
   git,
   gzip,
@@ -82,8 +83,15 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "14") [
+    # Backport fix for flaky TestBleveDeleteIssue test from v15.
+    # https://codeberg.org/forgejo/forgejo/pulls/11686
+    (fetchpatch {
+      url = "https://codeberg.org/forgejo/forgejo/commit/a32b0da87c10bb628a9d2203b700f0683e1ae966.patch";
+      hash = "sha256-mY1b35aKsiLNU56Ut/qiLrYj+IR8M2W8dZQiDqkDNxg=";
+    })
   ];
-
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
   '';

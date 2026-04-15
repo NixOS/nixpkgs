@@ -165,6 +165,7 @@ python3Packages.buildPythonApplication rec {
     importlib-metadata
     importlib-resources
     joserfc
+    keras # via tensorflow.keras
     librosa
     markupsafe
     memray

@@ -28,14 +28,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.7.2";
+  version = "2.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xQg7skgf0uFD8dLxESbbO1C341+I6BJXK716pX5xbNA=";
+    hash = "sha256-XRBrBd7X8HewrUJ7K8wQMcVJz3ITPKzyKpyCi7detsE=";
   };
 
   build-system = with python3Packages; [

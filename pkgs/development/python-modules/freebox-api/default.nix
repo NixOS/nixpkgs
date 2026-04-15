@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "freebox-api";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "freebox-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3rmOIHneGUtaLw+0Z0UTKoCSoJs70KKLjDPi0gOtV6I=";
+    hash = "sha256-3M29mboTZMG9lZSt816PvAXzl2DaqiC2nhikcpn+gqU=";
   };
 
   build-system = [ poetry-core ];

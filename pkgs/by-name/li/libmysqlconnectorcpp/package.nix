@@ -5,7 +5,7 @@
   cmake,
   boost,
   openssl,
-  mysql80,
+  mysql84,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    mysql80
+    mysql84
   ];
 
   buildInputs = [
     boost
     openssl
-    mysql80
+    mysql84
   ];
 
   strictDeps = true;

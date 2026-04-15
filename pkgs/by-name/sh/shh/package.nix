@@ -4,10 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   installShellFiles,
-  python3,
   strace,
   systemd,
-  iproute2,
   stdenv,
   enableDocumentationFeature ? true,
   enableDocumentationGeneration ? true,
@@ -18,16 +16,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shh";
-  version = "2026.1.27";
+  version = "2026.3.8";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "shh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RGxxpAr8E2KriwheWXcsxRRBhZST27Xp6LSdgzxsuUM=";
+    hash = "sha256-PWbPyhn103eLHelhf+m1iIIaKDCooiIRMzrn9xPTzoA=";
   };
 
-  cargoHash = "sha256-GjUu7QDLMs/E4l3tjMBqmfoGkdQJMzdM/Ovg04pIctU=";
+  cargoHash = "sha256-zE4qRXrQHqppTmZ9rHeqt4mvMgoRIzX73/CPf4IRgYo=";
 
   patches = [
     ./fix_run_checks.patch
@@ -35,35 +33,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     SHH_STRACE_BIN_PATH = lib.getExe strace;
+    # RUST_BACKTRACE = 1;
   };
 
-  buildFeatures = lib.optional enableDocumentationFeature "generate-extra";
-
-  checkFlags = [
-    # no access to system modules in build env
-    "--skip=run_ls_modules"
-    # missing systemd daemon in build env
-    "--skip=run_systemctl"
-    # no raw socket cap in nix build
-    "--skip=run_ping_4"
-    "--skip=run_ping_6"
-  ];
-
-  buildInputs = [
-    strace
-    systemd
-  ];
+  buildFeatures = lib.optional enableDocumentationFeature "generate-extras";
 
   nativeBuildInputs = [
     installShellFiles
     systemd
-    strace
-  ];
-
-  nativeCheckInputs = [
-    python3
-    iproute2
-  ];
+  ]
+  ++ (lib.optional (!isNativeDocgen) strace);
 
   # todo elvish
   postInstall = lib.optionalString enableDocumentationGeneration ''
@@ -73,13 +52,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       if isNativeDocgen then
         ''
           $out/bin/shh gen-man-pages target/mangen
-          $out/bin/shh gen-shell-complete target/shellcomplete
+          $out/bin/shh gen-shell-completions target/shellcomplete
         ''
       else
         ''
           unset SHH_STRACE_BIN_PATH
-          cargo run --features generate-extra -- gen-man-pages target/mangen
-          cargo run --features generate-extra -- gen-shell-complete target/shellcomplete
+          cargo run --features generate-extras -- gen-man-pages target/mangen
+          cargo run --features generate-extras -- gen-shell-completions target/shellcomplete
         ''
     }
 
@@ -89,8 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       target/shellcomplete/${finalAttrs.meta.mainProgram}.{bash,fish} \
       --zsh target/shellcomplete/_${finalAttrs.meta.mainProgram}
   '';
-
-  # RUST_BACKTRACE = 1;
 
   passthru.updateScript = nix-update-script { };
 

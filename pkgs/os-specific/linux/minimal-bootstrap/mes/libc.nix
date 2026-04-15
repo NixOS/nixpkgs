@@ -18,7 +18,7 @@ let
     }
     .${buildPlatform.system};
 
-  sources = (import ./sources.nix).${arch}.linux.gcc;
+  sources = (lib.importJSON ./sources.json).${arch}.linux.gcc;
   inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
 
   # Concatenate all source files into a convenient bundle

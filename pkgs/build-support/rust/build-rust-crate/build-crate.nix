@@ -70,6 +70,25 @@ let
   binRustcOpts = lib.concatStringsSep " " baseRustcOpts;
 
   build_bin = if buildTests then "build_bin_test" else "build_bin";
+
+  # Shell snippet that builds a binary target to target/cargo-bin-exe/
+  # so integration tests can exec it via CARGO_BIN_EXE_<name>.
+  buildBinForTests = bin: ''
+    mkdir -p target/cargo-bin-exe
+    BIN_NAME='${bin.name or crateName}'
+    ${
+      if !bin ? path then
+        ''
+          BIN_PATH=""
+          search_for_bin_path "$BIN_NAME"
+        ''
+      else
+        ''
+          BIN_PATH='${bin.path}'
+        ''
+    }
+    build_bin "$BIN_NAME" "$BIN_PATH" target/cargo-bin-exe
+  '';
 in
 ''
   runHook preBuild
@@ -88,13 +107,60 @@ in
 
   if [[ -e "$LIB_PATH" ]]; then
      build_lib "$LIB_PATH"
-     ${lib.optionalString buildTests ''build_lib_test "$LIB_PATH"''}
   elif [[ -e src/lib.rs ]]; then
      build_lib src/lib.rs
-     ${lib.optionalString buildTests "build_lib_test src/lib.rs"}
   fi
 
+  ${
+    # When building tests, first build the real (non-test) binaries so
+    # integration tests can exec them via CARGO_BIN_EXE_<name>. They go
+    # to target/cargo-bin-exe/ to avoid colliding with the --test
+    # harnesses written to target/bin/. After building, populate the
+    # CARGO_BIN_EXE_ENV array so subsequent rustc invocations see the
+    # env vars (via `env` prefix in lib.sh, which unlike bash `export`
+    # accepts hyphenated names).
+    lib.optionalString buildTests (
+      lib.concatMapStringsSep "\n" (
+        bin:
+        let
+          haveRequiredFeature =
+            if bin ? requiredFeatures then
+              lib.intersectLists bin.requiredFeatures crateFeatures == bin.requiredFeatures
+            else
+              true;
+        in
+        lib.optionalString haveRequiredFeature (buildBinForTests bin)
+      ) crateBin
+      + lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
+        if [[ -e src/main.rs ]]; then
+          mkdir -p target/cargo-bin-exe
+          build_bin ${crateName} src/main.rs target/cargo-bin-exe
+        fi
+        for i in src/bin/*.rs; do
+          [ -e "$i" ] || continue
+          mkdir -p target/cargo-bin-exe
+          build_bin "$(basename $i .rs)" "$i" target/cargo-bin-exe
+        done
+      ''
+      + ''
+        if [ -d target/cargo-bin-exe ]; then
+          for b in target/cargo-bin-exe/*; do
+            [ -x "$b" ] || continue
+            name=$(basename "$b")
+            CARGO_BIN_EXE_ENV+=("CARGO_BIN_EXE_$name=$out/bin/$name")
+          done
+        fi
+      ''
+    )
+  }
 
+  ${lib.optionalString buildTests ''
+    if [[ -e "$LIB_PATH" ]]; then
+       build_lib_test "$LIB_PATH"
+    elif [[ -e src/lib.rs ]]; then
+       build_lib_test src/lib.rs
+    fi
+  ''}
 
   ${lib.optionalString (lib.length crateBin > 0) (
     lib.concatMapStringsSep "\n" (

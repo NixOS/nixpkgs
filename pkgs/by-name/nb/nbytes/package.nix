@@ -2,7 +2,6 @@
   lib,
   cmake,
   fetchFromGitHub,
-  fetchpatch2,
   gtest,
   nix-update-script,
   stdenv,
@@ -12,34 +11,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbytes";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "nbytes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-10l/YrvZPwEdEh/Q170WhZUQzdFEpjy7zeKKzYfyoYc=";
+    hash = "sha256-etCRWjak7tKL6dKlQR7SD6HXx/mn/8gnR4l+CAjoQgA=";
   };
-
-  patches = [
-    # Use `gtest` from Nixpkgs to allow an offline build
-    ./use-nix-googletest.patch
-  ];
-
-  outputs = [
-    "out"
-  ];
 
   nativeBuildInputs = [
     cmake
     validatePkgConfig
   ];
-  buildInputs = [
+
+  doCheck = true;
+  checkInputs = [
     gtest
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "NBYTES_ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   passthru = {

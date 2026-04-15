@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "peakrdl-regblock";
-  version = "1.3.0";
+  version = "1.3.1";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SystemRDL";
     repo = "PeakRDL-regblock";
     tag = "v${version}";
-    hash = "sha256-tIQJfz4MeRbu/TvKdAnswRft7u0xoJcoFIXAV+alUes=";
+    hash = "sha256-UyDM8+hnZP5G9JqprBjVaL1kr5NyJXITaBVCfNEs2Cs=";
   };
 
   build-system = [

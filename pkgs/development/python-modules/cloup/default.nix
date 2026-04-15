@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cloup";
-  version = "3.0.8";
+  version = "3.0.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+RwICnJRlt33T+q9YlAmb0Zul/wW3+Iadiz2vGvrPss=";
+    hash = "sha256-UZ9STTxkBA5JoIZrX8C/1q8+rA09aksrULM6sCR9stc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

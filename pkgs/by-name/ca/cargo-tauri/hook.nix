@@ -41,6 +41,9 @@ makeSetupHook {
         --prefix WEBKIT_GST_ALLOWED_URI_PROTOCOLS : "asset"
         # Not picked up automatically by the wrappers from the propagatedBuildInputs.
         --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${cargo-tauri.gst-plugin}/lib/gstreamer-1.0/"
+        # fix NVIDIA issues with Tauri
+        # https://github.com/tauri-apps/tauri/issues/9394#issuecomment-3795449374
+        --set-default __NV_DISABLE_EXPLICIT_SYNC 1
       )
     '';
 

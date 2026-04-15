@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.12.2";
+  version = "3.12.4";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-CuWueXEq77Nr6aVbXo3BJVsYU+UWwBZRz//zBToLwN0=";
+    hash = "sha256-CxLs3rMW++FGF7WV9EMIb+69ZrnV2MadEHD/NMyXBIw=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for

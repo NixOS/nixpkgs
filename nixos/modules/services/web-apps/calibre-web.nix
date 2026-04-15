@@ -250,5 +250,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ pborzenkov ];
+  meta.maintainers = [ ];
 }

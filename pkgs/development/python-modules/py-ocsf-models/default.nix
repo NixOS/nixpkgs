@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-ocsf-models";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "py-ocsf-models";
     tag = finalAttrs.version;
-    hash = "sha256-Wtls4Ei1160hxvZjdyH0rJCQWEN/CwpxfllwgGTzMog=";
+    hash = "sha256-MdDpCr6FuPEt67PUjF0MjWXiA+ZyKLiACc/XPp+NoII=";
   };
 
   pythonRelaxDeps = true;

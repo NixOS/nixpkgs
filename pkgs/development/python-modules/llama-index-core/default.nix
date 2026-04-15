@@ -13,7 +13,6 @@
   hatchling,
   jsonpath-ng,
   llama-index-workflows,
-  llamaindex-py-client,
   nest-asyncio,
   networkx,
   nltk-data,
@@ -83,7 +82,6 @@ buildPythonPackage (finalAttrs: {
     fsspec
     jsonpath-ng
     llama-index-workflows
-    llamaindex-py-client
     nest-asyncio
     networkx
     nltk

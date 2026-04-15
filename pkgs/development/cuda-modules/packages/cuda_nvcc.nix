@@ -213,6 +213,19 @@ buildRedist (finalAttrs: {
             "__func__(float cospif(const float a))" \
             "__func__(float cospif(const float a) throw())"
       ''
+      # Fix clang CUDA compilation: host_defines.h redefines __noinline__ as
+      # __attribute__((noinline)), which conflicts with libstdc++ >=12 using
+      # __attribute__((__noinline__)) — the macro expands to
+      # __attribute__((__attribute__((noinline)))) which is invalid.
+      # Clang natively understands __noinline__ as an attribute so the macro
+      # is unnecessary. Skip it when clang is the compiler.
+      + lib.optionalString (cudaOlder "13.0") ''
+        nixLog "Patching host_defines.h to skip __noinline__ macro under clang"
+        substituteInPlace "''${!outputInclude:?}/include/crt/host_defines.h" \
+          --replace-fail \
+            '#if defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)' \
+            '#if (defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)) && !defined(__clang__)'
+      ''
     );
 
   brokenAssertions = [

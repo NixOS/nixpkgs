@@ -50,4 +50,8 @@ buildEnv {
         }"
     done
   '';
+
+  meta = {
+    inherit (kodi.meta) mainProgram;
+  };
 }

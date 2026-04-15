@@ -13,13 +13,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-workflows";
-  version = "1.20.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_workflows";
     inherit (finalAttrs) version;
-    hash = "sha256-aicI4O1m3L3gtnZ3eslGSKsFKyVTnWyr0SjNJdWxcfQ=";
+    hash = "sha256-GaM/fyIJSHJ0r/8cz2aDYGGdIWw+LXgmnlRFKuv7e2I=";
   };
 
   build-system = [ setuptools ];

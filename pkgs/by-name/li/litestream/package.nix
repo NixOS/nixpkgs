@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "litestream";
-  version = "0.3.14";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rTPw1BnZPtcWzhwR9mCzoE4LXdlaFfRCIDMHlN/SRzk=";
+    hash = "sha256-xp1Ic7sF3yzpR4FgMOfx/uRp/jv/qzTgSlItOIrl2pI=";
   };
 
   ldflags = [
@@ -21,9 +21,7 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-sYIY3Z3VrCqbjEbQtEY7q6Jljg8jMoa2qWEB/IkDjzM=";
-
-  patches = [ ./fix-cve-2024-41254.patch ];
+  vendorHash = "sha256-e2fsgK/fZNIos5W/Gc3u72uzoT2igs6BgzYtz1PyI10=";
 
   passthru.tests = { inherit (nixosTests) litestream; };
 

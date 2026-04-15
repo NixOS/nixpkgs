@@ -32,6 +32,13 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (subproject != "library") [ jabcode ];
 
+  postPatch = ''
+    substituteInPlace src/jabcode/Makefile src/jabcodeReader/Makefile src/jabcodeWriter/Makefile \
+      --replace-fail "CC 	= \$(PREFIX)gcc" ""
+    # remove bundled library binaries to force using system libraries
+    rm -rf src/jabcode/lib
+  '';
+
   preConfigure = "cd src/${subdir}";
 
   installPhase =
@@ -53,6 +60,5 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

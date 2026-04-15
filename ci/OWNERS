@@ -294,9 +294,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/databases/mysql.nix     @6543
 /nixos/modules/services/backup/mysql-backup.nix @6543
 
-# Hardened profile & related modules
-/pkgs/os-specific/linux/kernel/hardened/        @fabianhjr
-
 # Home Automation
 /nixos/modules/services/home-automation/home-assistant.nix @mweinelt
 /nixos/modules/services/home-automation/zigbee2mqtt.nix @mweinelt
@@ -306,8 +303,14 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/es/esphome @mweinelt
 
 # Linux kernel
-/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/doc/packages/linux.section.md @NixOS/linux-kernel
+/lib/kernel.nix @NixOS/linux-kernel
+/nixos/doc/manual/configuration/linux-kernel.chapter.md @NixOS/linux-kernel
+/nixos/modules/system/boot/kernel.nix @NixOS/linux-kernel
+/nixos/tests/kernel-generic/ @NixOS/linux-kernel
+/pkgs/build-support/kernel/ @NixOS/linux-kernel
 /pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
@@ -469,9 +472,8 @@ nixos/tests/incus/                      @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 
-# ExpidusOS, Flutter
+# Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy
-/pkgs/desktops/expidus              @RossComputerGuy
 
 # GNU Tar & Zip
 /pkgs/tools/archivers/gnutar        @RossComputerGuy
@@ -489,7 +491,7 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 
 # Darwin
 /pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
-/pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
+/pkgs/os-specific/darwin                       @NixOS/darwin-core
 /pkgs/stdenv/darwin                            @NixOS/darwin-core
 
 # BEAM

@@ -323,7 +323,7 @@ def build_and_activate_system(
     if args.diff:
         if current_config.exists():
             nix.diff_closures(
-                current_config=current_config.readlink(),
+                current_config=current_config,
                 new_config=path_to_config,
                 target_host=target_host,
             )

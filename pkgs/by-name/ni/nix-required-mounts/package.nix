@@ -17,6 +17,7 @@
       "/dev/nvidia*"
     ];
     nvidia-gpu.unsafeFollowSymlinks = true;
+    nvidia-gpu.safePrefixes = [ builtins.storeDir ];
   },
   callPackage,
   extraWrapperArgs ? [ ],
@@ -37,11 +38,21 @@ python3Packages.buildPythonApplication {
   inherit pname version;
   pyproject = true;
 
-  src = lib.cleanSource ./.;
+  src = lib.sourceByRegex ./. [
+    "^pyproject.toml$"
+    "^.*nix_required_mounts.py$" # app and unit test file
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     python3Packages.setuptools
+  ];
+
+  checkInputs = [
+    python3Packages.pytestCheckHook
+  ];
+  pythonImportsCheck = [
+    "nix_required_mounts"
   ];
 
   postFixup = ''

@@ -12,15 +12,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigquery-logging";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_logging";
-    inherit version;
-    hash = "sha256-2ENcmRKghxKocDtYOjZgsvOfQ2GooC/RpoSdKSVhBV0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-jgXYORisIBuJxLVgyd0Dig1aFR8CYWfjuBWsi+VgDew=";
   };
 
   build-system = [ setuptools ];
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bigquery logging client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-bigquery-logging";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-logging-v${version}/packages/google-cloud-bigquery-logging/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-logging-v${finalAttrs.version}/packages/google-cloud-bigquery-logging/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

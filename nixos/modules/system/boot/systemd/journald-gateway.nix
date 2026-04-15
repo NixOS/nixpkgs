@@ -21,6 +21,13 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "journald" "enableHttpGateway" ]
+      [ "services" "journald" "gateway" "enable" ]
+    )
+  ];
+
   meta.maintainers = [ lib.maintainers.raitobezarius ];
   options.services.journald.gateway = {
     enable = lib.mkEnableOption "the HTTP gateway to the journal";

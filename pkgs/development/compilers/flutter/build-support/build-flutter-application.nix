@@ -54,39 +54,32 @@ lib.extendMkDerivation {
       ...
     }:
     let
-      hasEngine = flutter ? engine && flutter.engine != null && flutter.engine.meta.available;
-      flutterMode' = args.flutterMode or (if hasEngine then flutter.engine.runtimeMode else "release");
-
-      flutterFlags = lib.optional hasEngine "--local-engine host_${flutterMode'}${
-        lib.optionalString (!flutter.engine.isOptimized) "_unopt"
-      }";
+      flutterMode' = args.flutterMode or "release";
 
       flutterBuildFlags' = [
         "--${flutterMode'}"
       ]
-      ++ (args.flutterBuildFlags or [ ])
-      ++ flutterFlags;
+      ++ (args.flutterBuildFlags or [ ]);
 
       universal = args // {
         flutterMode = flutterMode';
-        flutterFlags = flutterFlags;
         flutterBuildFlags = flutterBuildFlags';
 
+        # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
+        # https://github.com/dart-lang/sdk/blob/3.1.0/runtime/bin/security_context_linux.cc#L48
+        #
+        # Dart does not respect SSL_CERT_FILE...
+        # https://github.com/dart-lang/sdk/issues/48506
+        # ...and Flutter does not support --root-certs-file, so the path cannot be manually set.
+        # https://github.com/flutter/flutter/issues/56607
+        # https://github.com/flutter/flutter/issues/113594
+        #
+        # libredirect is of no use either, as Flutter does not pass any
+        # environment variables (including LD_PRELOAD) to the Pub process.
+        #
+        # Instead, Flutter is patched to allow the path to the Dart binary used for
+        # Pub commands to be overriden.
         sdkSetupScript = ''
-          # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
-          # https://github.com/dart-lang/sdk/blob/3.1.0/runtime/bin/security_context_linux.cc#L48
-          #
-          # Dart does not respect SSL_CERT_FILE...
-          # https://github.com/dart-lang/sdk/issues/48506
-          # ...and Flutter does not support --root-certs-file, so the path cannot be manually set.
-          # https://github.com/flutter/flutter/issues/56607
-          # https://github.com/flutter/flutter/issues/113594
-          #
-          # libredirect is of no use either, as Flutter does not pass any
-          # environment variables (including LD_PRELOAD) to the Pub process.
-          #
-          # Instead, Flutter is patched to allow the path to the Dart binary used for
-          # Pub commands to be overriden.
           export NIX_FLUTTER_PUB_DART="${
             runCommand "dart-with-certs" { nativeBuildInputs = [ makeWrapper ]; } ''
               mkdir -p "$out/bin"
@@ -96,13 +89,11 @@ lib.extendMkDerivation {
           }/bin/dart"
 
           export HOME="$NIX_BUILD_TOP"
-          flutter config $flutterFlags --no-analytics &>/dev/null # mute first-run
-          flutter config $flutterFlags --enable-linux-desktop >/dev/null
+          # flutter config --no-analytics &>/dev/null # mute first-run
+          flutter config --enable-linux-desktop >/dev/null
         '';
 
-        pubGetScript =
-          args.pubGetScript
-            or "flutter${lib.optionalString hasEngine " --local-engine $flutterMode"} pub get";
+        pubGetScript = args.pubGetScript or "flutter pub get";
 
         sdkSourceBuilders = {
           # https://github.com/dart-lang/pub/blob/68dc2f547d0a264955c1fa551fa0a0e158046494/lib/src/sdk/flutter.dart#L81

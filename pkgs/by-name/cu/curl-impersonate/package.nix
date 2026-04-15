@@ -27,7 +27,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
-  version = "1.5.1";
+  version = "1.5.2";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "lexiforest";
     repo = "curl-impersonate";
     tag = "v${version}";
-    hash = "sha256-8zfHsV08wa+2NInhRT3/ihAVhyBMoRC7K0Rdmehr+xM=";
+    hash = "sha256-ca6YZBYN9WMaXL9nFC5TdX/rRTclu6i0ssQlSBMlteM=";
   };
 
   # Disable blanket -Werror to fix build on `gcc-13` related to minor
@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
       curl
       mit
     ];
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate";
   };

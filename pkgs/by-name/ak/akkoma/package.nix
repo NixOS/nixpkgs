@@ -9,9 +9,9 @@
 }:
 
 let
-  beamPackages = beam_minimal.packages.erlang_26.extend (
+  beamPackages = beam_minimal.packages.erlang_27.extend (
     self: super: {
-      elixir = self.elixir_1_16;
+      elixir = self.elixir_1_17;
       rebar3 = self.rebar3WithPlugins {
         plugins = with self; [ pc ];
       };

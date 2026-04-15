@@ -23,21 +23,26 @@ REPOS = [
         ( "fcitx", "fcitx5-table-extra" ),
         ( "fcitx", "fcitx5-table-other" ),
         ( "fcitx", "fcitx5-unikey" ),
-        ( "fcitx", "fcitx5-unikey" )
+        ( "fcitx", "fcitx5-unikey" ),
 
         ( "ray2501", "fcitx5-array" )
         ]
 
-OWNER = "fcitx"
+QT_REPOS = [
+        "fcitx5-chinese-addons",
+        "fcitx5-configtool",
+        "fcitx5-qt",
+        "fcitx5-unikey",
+        ]
 
-def get_latest_tag(repo, owner=OWNER):
+def get_latest_tag(repo, owner):
     r = requests.get('https://api.github.com/repos/{}/{}/tags'.format(owner,repo))
     return r.json()[0].get("name")
 
 def main():
     for (owner, repo) in REPOS:
         rev = get_latest_tag(repo, owner)
-        if repo == "fcitx5-qt":
+        if repo in QT_REPOS:
             subprocess.run(["nix-update", "--commit", "--version", rev, "qt6Packages.{}".format(repo)])
         else:
             subprocess.run(["nix-update", "--commit", "--version", rev, repo])

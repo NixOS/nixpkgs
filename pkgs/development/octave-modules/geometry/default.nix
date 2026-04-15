@@ -29,7 +29,7 @@ buildOctavePackage rec {
       gpl3Plus
       boost
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Library for extending MatGeom functionality";
   };
 }

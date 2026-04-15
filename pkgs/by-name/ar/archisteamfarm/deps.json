@@ -11,268 +11,268 @@
   },
   {
     "pname": "Humanizer",
-    "version": "3.0.1",
-    "hash": "sha256-eOZrpj3KmJ0XpfoJMTv0Fritbm2xzw4wQtN0QOl7IKI="
+    "version": "3.0.10",
+    "hash": "sha256-oNSXK5LLMNiK8iA/0H+zQeoDcbrDuTp/+zw0LGTECNA="
   },
   {
     "pname": "Humanizer.Core",
-    "version": "3.0.1",
-    "hash": "sha256-Wxqf1FRXtsQulLFtbfsfYu4oZmrCuOZAikMcY2i6Dww="
+    "version": "3.0.10",
+    "hash": "sha256-mflSENjDof1Av9M9RLGEQcl4V4keVfH3qIxy/uxJ6FE="
   },
   {
     "pname": "Humanizer.Core.af",
-    "version": "3.0.1",
-    "hash": "sha256-+kSKJGbalrzonEgrpOmZ+crY0zUbdQujx/phxT2eGYA="
+    "version": "3.0.10",
+    "hash": "sha256-xGTmr9yqMZ1kjwffnodCE8Km/tflzOUmmw5XPcq865w="
   },
   {
     "pname": "Humanizer.Core.ar",
-    "version": "3.0.1",
-    "hash": "sha256-NAeMsvW7X5RWfPKQqBj76VhzgddGsth5KH7fFeqnzpk="
+    "version": "3.0.10",
+    "hash": "sha256-1H3wZwppgyt3Q9wXdDvig/wSTYgQVtlT45d4gU5UpEM="
   },
   {
     "pname": "Humanizer.Core.az",
-    "version": "3.0.1",
-    "hash": "sha256-WYD9EFaqyIRwRrMsf8uTu7Mfg3F+F4RukN5tNIeU2rQ="
+    "version": "3.0.10",
+    "hash": "sha256-JCWEMrspXiE0zfvUtZHxHuLzo461mtXZmct3EhgoHHE="
   },
   {
     "pname": "Humanizer.Core.bg",
-    "version": "3.0.1",
-    "hash": "sha256-9oMA+uYovUtbrlOV54LfoIJhEJOd9UrdYdvvUrCRhWs="
+    "version": "3.0.10",
+    "hash": "sha256-vSzpVvSGXKdmsVv7457WsDFEW0N0vVM430dhHRnsz7M="
   },
   {
     "pname": "Humanizer.Core.bn",
-    "version": "3.0.1",
-    "hash": "sha256-HSMAEjv/TMckJSKl/5YIR1dmFz/7bf1sDs8bAMsNbfA="
+    "version": "3.0.10",
+    "hash": "sha256-vJkiXSfOHXR9iW11Glk6vRcSied+tRExMcgl3/6dRDo="
   },
   {
     "pname": "Humanizer.Core.ca",
-    "version": "3.0.1",
-    "hash": "sha256-vCxGyB2GnH5MicydzjwXmtt7389YlN7cA3vwnDlYB88="
+    "version": "3.0.10",
+    "hash": "sha256-Se/BAQJ2ZiEqGX6Mjlu8BwfHMdYyOGwEnTyGjq5+2vA="
   },
   {
     "pname": "Humanizer.Core.cs",
-    "version": "3.0.1",
-    "hash": "sha256-/Qdyktl/Nh33CmuCK6wDyjZfGc5MmIHxMJTwU+3MSyY="
+    "version": "3.0.10",
+    "hash": "sha256-jaXEgeXdewcc6+Tc03dDK23TcmxIjTx2ECdp7rsgyOc="
   },
   {
     "pname": "Humanizer.Core.da",
-    "version": "3.0.1",
-    "hash": "sha256-u0QiFgEg3ezPgTjQTAxqaNEnuNikg+zsJ7A0wu85dTE="
+    "version": "3.0.10",
+    "hash": "sha256-htjzVIzEn7v86zt/ZrV4D1kC5Xcm4TjQobbiOCBqNjE="
   },
   {
     "pname": "Humanizer.Core.de",
-    "version": "3.0.1",
-    "hash": "sha256-b1BYLeOmy4Wg1DgNSWdZpEdsMCPrIfI3LC+xCnSd4aw="
+    "version": "3.0.10",
+    "hash": "sha256-sOjZBlr18olsdH1dWOrVSzNBhopqXBvF7DAUS3aQSeo="
   },
   {
     "pname": "Humanizer.Core.el",
-    "version": "3.0.1",
-    "hash": "sha256-dH0OOK3tGMDF/wt+SdzmJvOE/6TrmXCe4Srq8PW44W4="
+    "version": "3.0.10",
+    "hash": "sha256-UfVCjRvsWrwoN4RAJXVx+5Ik0vlh3UqZ1a8lNG0MQmo="
   },
   {
     "pname": "Humanizer.Core.es",
-    "version": "3.0.1",
-    "hash": "sha256-AXSfMmXKEmQeZ1IPtGGSSroIE6CVuC6sW8pl355dbRs="
+    "version": "3.0.10",
+    "hash": "sha256-oWmtwMXZopmLkfbP4A8Kdlh5R20f3jXRsU4RWN8pSUs="
   },
   {
     "pname": "Humanizer.Core.fa",
-    "version": "3.0.1",
-    "hash": "sha256-F0VtmKADyVNztOZIkCbt6s5N5+N+7aFWP+t2n8pEL70="
+    "version": "3.0.10",
+    "hash": "sha256-g4xRBGmv2VFhBzQGiVRdg9OnpQbAEYt9sEYA2E4pCjo="
   },
   {
     "pname": "Humanizer.Core.fi",
-    "version": "3.0.1",
-    "hash": "sha256-3ufuXJCy/m7wQs+xDfPWjqoWXvzjSLqdxb8PmS01BTM="
+    "version": "3.0.10",
+    "hash": "sha256-EdtSXsL0tL7cRhy1vW+ZPQkEBDEih1NXxOU5jlYuJnU="
   },
   {
     "pname": "Humanizer.Core.fil",
-    "version": "3.0.1",
-    "hash": "sha256-Fsesly0CWMzn46k6LBzMlJgkced618aliVJ1zWxjaR0="
+    "version": "3.0.10",
+    "hash": "sha256-xpis1kNQQBmh84/b0owiznL9bMdubzzctkiUxpwWKAo="
   },
   {
     "pname": "Humanizer.Core.fr",
-    "version": "3.0.1",
-    "hash": "sha256-eaW4Lqjg7lwkCvKu7bThZGLUHdhtaU34ZFzz/fQtJ98="
+    "version": "3.0.10",
+    "hash": "sha256-4+JXuvCoRV1lAK+621QJ2tNWRZ0drUU8Ph+hQDm4468="
   },
   {
     "pname": "Humanizer.Core.he",
-    "version": "3.0.1",
-    "hash": "sha256-3nsZrfHqPaZ8U2OuqPaejHpRmjjorBRtstxqWWgJ0kc="
+    "version": "3.0.10",
+    "hash": "sha256-s5OlsY9+UpjfbRWRZzXsV2NTHjSuhZaLUI01QciC0Mc="
   },
   {
     "pname": "Humanizer.Core.hr",
-    "version": "3.0.1",
-    "hash": "sha256-q2Plb4DewyQnMy6RwXmTQil9LigzKmcI6q7hhbXxM4Y="
+    "version": "3.0.10",
+    "hash": "sha256-UJTrsiLTEz0Vod9KV9VoJE3aq8XkiwOwScbfxkuvmsI="
   },
   {
     "pname": "Humanizer.Core.hu",
-    "version": "3.0.1",
-    "hash": "sha256-VCFS7nZ+Bj+boofum2mGX1CoN4aBekO9uLSzDQX0hsQ="
+    "version": "3.0.10",
+    "hash": "sha256-k7cdsRyX1pJx2LuUuaxGmQWbLkhIWEAIVDt/j7vVlG0="
   },
   {
     "pname": "Humanizer.Core.hy",
-    "version": "3.0.1",
-    "hash": "sha256-A+t0PDY5yUHy9qkwwcbJrisdgulpjaSkFxA0Xfvj5Cs="
+    "version": "3.0.10",
+    "hash": "sha256-8reWvHEbigIRePV1gwo4cYzqf9VHhLbXirGGu78zCe0="
   },
   {
     "pname": "Humanizer.Core.id",
-    "version": "3.0.1",
-    "hash": "sha256-XF71+XxuhaVCrnhLh0RJWGzdQ3Y0EEDVUec2aqdk1II="
+    "version": "3.0.10",
+    "hash": "sha256-W1Iy56CaNhMqYflVVauWZ9bP8l0jaAuNYu3z0Qovz8E="
   },
   {
     "pname": "Humanizer.Core.is",
-    "version": "3.0.1",
-    "hash": "sha256-drGjtmT8FCcgKYTiwXOIdtCr1oHDzveWlPmqSCiltkU="
+    "version": "3.0.10",
+    "hash": "sha256-UZr0sAftzuUvoBtS8oJp/g0Z51JyYBGlKP/JpZOpUno="
   },
   {
     "pname": "Humanizer.Core.it",
-    "version": "3.0.1",
-    "hash": "sha256-tFSl2sFocpt5pj2kIBjkQLB+1CH3wVwe9ggSXEcCRSc="
+    "version": "3.0.10",
+    "hash": "sha256-CO6fEacSaT9RUuKSUybDMU3lkPFa+BHxNWG/qiKQp6E="
   },
   {
     "pname": "Humanizer.Core.ja",
-    "version": "3.0.1",
-    "hash": "sha256-OnAyLlJLYJP0fpvtdjfmEhOCUsfFMvbUpzbqpkyFbfU="
+    "version": "3.0.10",
+    "hash": "sha256-fZuZW2mU6bWyKCe7hc3HCSjz+zjPABFcFEj6OADzflY="
   },
   {
     "pname": "Humanizer.Core.ko",
-    "version": "3.0.1",
-    "hash": "sha256-zudrcq9bEYzY/MNbLh8dIiDScejgudL7HqpMiEKTTAU="
+    "version": "3.0.10",
+    "hash": "sha256-ZNhEvvSuy0WRHGftIhr62+pAKkmzsDT26SkLj9mxYxU="
   },
   {
     "pname": "Humanizer.Core.ku",
-    "version": "3.0.1",
-    "hash": "sha256-5pWSOFGYX1lsydFracLvG1Hc0W8+MhZsGDh617bR/wA="
+    "version": "3.0.10",
+    "hash": "sha256-m1AZja0G0SEJiurLTJkfYvi5pSQtmbvpCG7SfdmuU84="
   },
   {
     "pname": "Humanizer.Core.lb",
-    "version": "3.0.1",
-    "hash": "sha256-dUOsH6kVeogOQRQSVOs/qKAmQchh/HUJ5fhIUMIh7w4="
+    "version": "3.0.10",
+    "hash": "sha256-6KYZJrDQUjHZYyn5/WUtfyG8/qlnIooqbHoQ9kGDyYA="
   },
   {
     "pname": "Humanizer.Core.lt",
-    "version": "3.0.1",
-    "hash": "sha256-5cI1ProlMg9Bqt8iP33swY96zF1yta1v/yvMJVRqVaM="
+    "version": "3.0.10",
+    "hash": "sha256-BjDh3EjfEgYFFIRLPMvpC08s8gHsHYVMVkUfzG0cVqI="
   },
   {
     "pname": "Humanizer.Core.lv",
-    "version": "3.0.1",
-    "hash": "sha256-n+BaNRjdCU1n9ZPcB8O4gKpDHAY5ro78Ci3oLt7OiDY="
+    "version": "3.0.10",
+    "hash": "sha256-o/AMiJus7vU46p1YzasRpeeYx1fPw6isUpd3ELOUXNk="
   },
   {
     "pname": "Humanizer.Core.ms",
-    "version": "3.0.1",
-    "hash": "sha256-wMYZ3+DlCvjFl5rfVHDZQoi7HDnycQzLmB2mjjzIpSQ="
+    "version": "3.0.10",
+    "hash": "sha256-CXCnfUDG0Q0ntYB/eZgc8sOdGlSGFrysvoUKTrQmBLw="
   },
   {
     "pname": "Humanizer.Core.mt",
-    "version": "3.0.1",
-    "hash": "sha256-VKgjavQDh5MloLLxpmwO9J750fmegOrV3JHsITGHdOs="
+    "version": "3.0.10",
+    "hash": "sha256-2L7c25OD7qWoNWdr2le7fzhC87i0+Y2Tzwv+yH4fHZA="
   },
   {
     "pname": "Humanizer.Core.nb",
-    "version": "3.0.1",
-    "hash": "sha256-oxBpG5g8I82TQLmJa2C4Zaj4uKjoKSc9uAMF0YB/EeM="
+    "version": "3.0.10",
+    "hash": "sha256-ynaCWJiu5y3B5LeiLQrvsnQrmEVavYvfeKKMpzWZ6fw="
   },
   {
     "pname": "Humanizer.Core.nl",
-    "version": "3.0.1",
-    "hash": "sha256-5rJ02zcUC4Tpr71amzuwPkK3k+ayIFo6MZAza2tPUtc="
+    "version": "3.0.10",
+    "hash": "sha256-y/ZVEsDzz9EMCXuJSZn0MVolf6TqIU4Wky6bydN2i+U="
   },
   {
     "pname": "Humanizer.Core.pl",
-    "version": "3.0.1",
-    "hash": "sha256-JJwLF8QXpBPoOJMVJ+cZutckom8wFbROqFJyw0XZbJM="
+    "version": "3.0.10",
+    "hash": "sha256-r3Din3MXaoCFj431eV+WAOZURvu6D4X0td5HBaMWTGg="
   },
   {
     "pname": "Humanizer.Core.pt",
-    "version": "3.0.1",
-    "hash": "sha256-JFQQa2jMZwdS0hndgTN6ZkUg54frgL3Rk1WiWyeNEfI="
+    "version": "3.0.10",
+    "hash": "sha256-7Qroz0YH8Xeev69pSVwoIBHAwPxH0J09z56anZyo1zE="
   },
   {
     "pname": "Humanizer.Core.pt-BR",
-    "version": "3.0.1",
-    "hash": "sha256-fEnvb7a/tyF9YOqaUD42yqqDmtSe89VNzWOb5gorlQo="
+    "version": "3.0.10",
+    "hash": "sha256-PruVTpqXRfkVlOm2pp7rPK8L89S99qH+GOXS0Yf+upA="
   },
   {
     "pname": "Humanizer.Core.ro",
-    "version": "3.0.1",
-    "hash": "sha256-JepamwRjFhFeCKFPm4teJJeD4qgq90RJP3ng59AD6dA="
+    "version": "3.0.10",
+    "hash": "sha256-kP7za7JYDjtZY6Kp5oJjsLsTEj0MAM4qeK46ZqhRFtQ="
   },
   {
     "pname": "Humanizer.Core.ru",
-    "version": "3.0.1",
-    "hash": "sha256-t923GhCciZOMi8jlGlgZTIb7P0MxxmluKF0UQbH63Ow="
+    "version": "3.0.10",
+    "hash": "sha256-J0PK+pu6o+YroXE0e20O9G4lEIgGBDdJII692FxLZk0="
   },
   {
     "pname": "Humanizer.Core.sk",
-    "version": "3.0.1",
-    "hash": "sha256-7oXYgZUTmWOGMgca0mpTsTYls9kkYoVfGB+Vomic/ZE="
+    "version": "3.0.10",
+    "hash": "sha256-NRcAyFu6risHg48Q9fUuskPaFD6UmXY2EgYNgsikqdo="
   },
   {
     "pname": "Humanizer.Core.sl",
-    "version": "3.0.1",
-    "hash": "sha256-ABkYADMAcR1BtxD9YNV3Xt98ESQLkh64O3xP2ZjjKZ0="
+    "version": "3.0.10",
+    "hash": "sha256-+ORKUxuQ0MV4DpVjTQjT9uKSJ/DyDu6b43G3rnSiehw="
   },
   {
     "pname": "Humanizer.Core.sr",
-    "version": "3.0.1",
-    "hash": "sha256-JdMqnjISHXPRtlf9uXEXK57AaRtlAiqM01n8I/im18Y="
+    "version": "3.0.10",
+    "hash": "sha256-f+0uX2h8pwWjLvu4R0QO18pq7GqVQfWMasrPKcDE0bs="
   },
   {
     "pname": "Humanizer.Core.sr-Latn",
-    "version": "3.0.1",
-    "hash": "sha256-7GTzSVTMm+0IzJfpW3aRhEQAX9XeVtSEO7qUtRMTflM="
+    "version": "3.0.10",
+    "hash": "sha256-7bnQYxRimOhiQyDnzfYir4VYhOVZtONR93JFQblPgZc="
   },
   {
     "pname": "Humanizer.Core.sv",
-    "version": "3.0.1",
-    "hash": "sha256-n4pksskdlvSuMwJJKFSsEsJEzgJ4FF4pVxgBaqlGdKc="
+    "version": "3.0.10",
+    "hash": "sha256-ylHxvW1IEyJdBJLpyyPy9VD791DmO37d3j6owbTVSQ8="
   },
   {
     "pname": "Humanizer.Core.th",
-    "version": "3.0.1",
-    "hash": "sha256-hS3hzhvP3fYp6ThWma+kQ5kCrci4Fs+PIp0ZrCdznyI="
+    "version": "3.0.10",
+    "hash": "sha256-wJbLhDyBsSxc8hll7Lo4p+1/6QIFIFlrputMX2GsJK8="
   },
   {
     "pname": "Humanizer.Core.tr",
-    "version": "3.0.1",
-    "hash": "sha256-gULMcnt+tcKNo0+TAmHM7nqGCPS6aiNhkFzqbsTSZ+Q="
+    "version": "3.0.10",
+    "hash": "sha256-dzkulsKQ+TuyfekNdBqen3hQCrHKjF/m/8RzFUJv8so="
   },
   {
     "pname": "Humanizer.Core.uk",
-    "version": "3.0.1",
-    "hash": "sha256-DWOmYJJFO80jtvinzlD7AyrjuZHlmC7ziN7yyG1zSaI="
+    "version": "3.0.10",
+    "hash": "sha256-gbRduE17zU1VpcG/HVeovmNX4u/7q+wsU2Jl55GZ7ec="
   },
   {
     "pname": "Humanizer.Core.uz-Cyrl-UZ",
-    "version": "3.0.1",
-    "hash": "sha256-QG2yPPoD9FQ+YAW77h+nA7sWZS8p0e2VbXu314km3bs="
+    "version": "3.0.10",
+    "hash": "sha256-gakls/P9MWDjzlti+VpOEBiBDIxDQI7bsj1H5jIyyoI="
   },
   {
     "pname": "Humanizer.Core.uz-Latn-UZ",
-    "version": "3.0.1",
-    "hash": "sha256-l/UK9ZZUGjWUneIWPKkItxNwJxirtrk+mGWDInwRSW4="
+    "version": "3.0.10",
+    "hash": "sha256-FVLNW7mB0FrrqNB2EwR/bhky1SajxoIMQfrDRI3wj/E="
   },
   {
     "pname": "Humanizer.Core.vi",
-    "version": "3.0.1",
-    "hash": "sha256-Tul4p5C4Ym9lJ2AmbVJ7g+aWudyFGnTLl1bm5IMlzyk="
+    "version": "3.0.10",
+    "hash": "sha256-qDsr6x2uUnFbprY6TPeY2UAAZQ9OFGrjkdeUQXyGH/U="
   },
   {
     "pname": "Humanizer.Core.zh-CN",
-    "version": "3.0.1",
-    "hash": "sha256-ZrQa03KHViiug9n2koymN+jNqGnN0w3XXwL/Q7A5CEU="
+    "version": "3.0.10",
+    "hash": "sha256-aX/xEks4b0+GAuFXtGsipr+PbpMdl3Mxh307EHFzujU="
   },
   {
     "pname": "Humanizer.Core.zh-Hans",
-    "version": "3.0.1",
-    "hash": "sha256-vBbeK4jW1NgyY07SLy5P768R5Iiyn1VRotyefb4lU3I="
+    "version": "3.0.10",
+    "hash": "sha256-+sK8itdEx7wzJbgKHZYLOwbh+qPY79Jur+TbROKbp3A="
   },
   {
     "pname": "Humanizer.Core.zh-Hant",
-    "version": "3.0.1",
-    "hash": "sha256-mU6FrpqLSMgmyqH4BxBQRDu/J7lOYkZbxHN4EXvHYnQ="
+    "version": "3.0.10",
+    "hash": "sha256-Zg0Lthx9LtUZgQCybl5R3qKtSluRdrQdrVlQkRUczKE="
   },
   {
     "pname": "JetBrains.Annotations.Sources",
@@ -281,8 +281,8 @@
   },
   {
     "pname": "Markdig.Signed",
-    "version": "1.0.0",
-    "hash": "sha256-wheTLXU+IO6TSvI/ab4MZIZ24vX6jQ2et19heytvr/8="
+    "version": "1.1.2",
+    "hash": "sha256-I2d1n2NTV0xr+qasoTt7FdUArCPrinvLVqR4ZB5uWtI="
   },
   {
     "pname": "Microsoft.ApplicationInsights",
@@ -291,8 +291,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.OpenApi",
-    "version": "10.0.3",
-    "hash": "sha256-j7lAYuz2585j/j24XkptImH7WHx9rBp+tY8ZXqpC77k="
+    "version": "10.0.5",
+    "hash": "sha256-CQXAu6Tm8nOy/rrZksIKGaLW7USEP/N1kwKBMLoh7js="
   },
   {
     "pname": "Microsoft.CodeAnalysis.ResxSourceGenerator",
@@ -335,6 +335,11 @@
     "hash": "sha256-9iodXP39YqgxomnOPOxd/mzbG0JfOSXzFoNU3omT2Ps="
   },
   {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
+  },
+  {
     "pname": "Microsoft.Extensions.DependencyModel",
     "version": "8.0.2",
     "hash": "sha256-PyuO/MyCR9JtYqpA1l/nXGh+WLKCq34QuAXN9qNza9Q="
@@ -365,6 +370,11 @@
     "hash": "sha256-BnhgGZc01HwTSxogavq7Ueq4V7iMA3wPnbfRwQ4RhGk="
   },
   {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
+  },
+  {
     "pname": "Microsoft.Extensions.Logging.Configuration",
     "version": "10.0.0",
     "hash": "sha256-7/TWO1aq8hdgbcTEKDBWIjgSC9KpFN3kRnMX+12bOkU="
@@ -386,23 +396,23 @@
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "8.16.0",
-    "hash": "sha256-OpTFQpTtg1A8I1bBIOqv/n9pwYXTqzMI8ZLXLZDti5w="
+    "version": "8.17.0",
+    "hash": "sha256-AU+EMOZArc3rTdsnKYzAufFAtspuYQM3XYi8/VsQAio="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "8.16.0",
-    "hash": "sha256-Cctf2iuIXLMklTuCvzWv721v2mHs0HEBA47BqAKhp9I="
+    "version": "8.17.0",
+    "hash": "sha256-MH7vdhCNAae32p6UTvaDtmyvFDxa/W71qTsEQ6yC9xM="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "8.16.0",
-    "hash": "sha256-355u+3LIn/QfiCHFMXD+3ipdRTnbXLAQNzC4sWEFapQ="
+    "version": "8.17.0",
+    "hash": "sha256-IM6jsPMz+l9JA0cye/v2ke51xlfP0u5HtWBqc2aKDYM="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "8.16.0",
-    "hash": "sha256-6s8ZLnKw32W6+KbnahCVe1v9YzpoemnpHNQ3VbFSV4M="
+    "version": "8.17.0",
+    "hash": "sha256-XcA0KXJbqMWt0I5LuHHMRLpgVQ18KcBej1BoySHeA1A="
   },
   {
     "pname": "Microsoft.NET.Test.Sdk",
@@ -511,18 +521,18 @@
   },
   {
     "pname": "NLog",
-    "version": "6.1.0",
-    "hash": "sha256-VetdjDZIr6JseO6VXXqvfO25Nl5ux/TyRqLnqaafmoI="
+    "version": "6.1.1",
+    "hash": "sha256-4pxy5z5FyRxBmZNBw+n32SjgEQzMsgSHTuSSn+vxLzk="
   },
   {
     "pname": "NLog.Extensions.Logging",
-    "version": "6.1.1",
-    "hash": "sha256-v2KIBN+hSKbx19+ku2ckEQdpOlM6Y0X6i9jTfHh9pGA="
+    "version": "6.1.2",
+    "hash": "sha256-H8Wu5NlzMrbQ3IlTD0hutb9ZAg73YBynnjjtTp9NMqk="
   },
   {
     "pname": "NLog.Web.AspNetCore",
-    "version": "6.1.1",
-    "hash": "sha256-zFJPxSJP/8CX4POLZlELo6GWrhtq+qoox5v8zxgI+IM="
+    "version": "6.1.2",
+    "hash": "sha256-m/MF3dljgRIeGdYdh5m20lKMaQkMadUgXBBp2k5OtaQ="
   },
   {
     "pname": "OpenTelemetry",
@@ -551,8 +561,8 @@
   },
   {
     "pname": "OpenTelemetry.Instrumentation.AspNetCore",
-    "version": "1.15.0",
-    "hash": "sha256-mjjHxz5Dzo1ybzfkH2FYnVtAjVTuMaIZ9ZhmPPmjcSI="
+    "version": "1.15.1",
+    "hash": "sha256-72oILNRkqztOpRTNC/SjIrqe63ihs33ZwTvgKeP7rws="
   },
   {
     "pname": "OpenTelemetry.Instrumentation.Http",
@@ -576,8 +586,8 @@
   },
   {
     "pname": "Scalar.AspNetCore",
-    "version": "2.12.47",
-    "hash": "sha256-qkZ6+Ewo0Iz4lC3j55/iOmR2qrBzwZBIO/uTyy2QAbI="
+    "version": "2.13.15",
+    "hash": "sha256-kT5XPl+ZuqMByeH3gLe3EKd3G3yzXViCnehC0fag0lM="
   },
   {
     "pname": "SteamKit2",
@@ -586,33 +596,33 @@
   },
   {
     "pname": "System.Composition",
-    "version": "10.0.3",
-    "hash": "sha256-81CJpH6NkGt7WhvKc8KD8ou7cH9BQu7NLZix/pWkPEQ="
+    "version": "10.0.5",
+    "hash": "sha256-+Vi5vhZm+McB1aYmUtvPiJDgylwB06PNiFMyCXz435g="
   },
   {
     "pname": "System.Composition.AttributedModel",
-    "version": "10.0.3",
-    "hash": "sha256-FhZN6OSjc4tNeNjkifqxkfMvPiQEcAG+T7NRhTpXWuw="
+    "version": "10.0.5",
+    "hash": "sha256-z81DulJ1fL+UBve882LNCyz/+/vaI4ZIN2FnGWuDTDk="
   },
   {
     "pname": "System.Composition.Convention",
-    "version": "10.0.3",
-    "hash": "sha256-whirt1+xCPnBS3Sj1fZL7/RIJIuS58qox3GleD98ac8="
+    "version": "10.0.5",
+    "hash": "sha256-bG/OoFHQ2Uq3Ez+G6UKZrDCAoY+5kgeEBNAIIf7ClGc="
   },
   {
     "pname": "System.Composition.Hosting",
-    "version": "10.0.3",
-    "hash": "sha256-V0PMVPXrUUE1veGa9V4qanVs689hOm7DGoAuzw0yaQg="
+    "version": "10.0.5",
+    "hash": "sha256-lWMeuR0MrTf/lahN/Sk7g0bppJ3VZvYAmbBFE3Zd73Y="
   },
   {
     "pname": "System.Composition.Runtime",
-    "version": "10.0.3",
-    "hash": "sha256-IWDg2bHhwrKxHyDWbWtFdhCgVo8bOE1nK6HceOyHo2E="
+    "version": "10.0.5",
+    "hash": "sha256-uzEeZ4NA4b9O2hVVUuR3haRYGUt/OROelrwis+spu94="
   },
   {
     "pname": "System.Composition.TypedParts",
-    "version": "10.0.3",
-    "hash": "sha256-JZFr57s6U4bIsblK+G1fUVDMns8j7jHz06trXEJQDvU="
+    "version": "10.0.5",
+    "hash": "sha256-nIWGm5I+eR5kx+VL+1PsOFXYgvKd2vwB7s/gPYOxKfI="
   },
   {
     "pname": "System.IO.Hashing",
@@ -621,13 +631,13 @@
   },
   {
     "pname": "System.Security.Cryptography.ProtectedData",
-    "version": "10.0.3",
-    "hash": "sha256-JF/WTKv00v/C4ml4g/VL3j4JMPpZa1HBmVMvUnphHr4="
+    "version": "10.0.5",
+    "hash": "sha256-Zyqq70EacxdKIx78p49cZ2rveGLxzU9VZxJsPtB2bK0="
   },
   {
     "pname": "Tmds.DBus.Protocol",
-    "version": "0.90.3",
-    "hash": "sha256-jK/98C0WrkVqPPNMx+xkdGK7vhcFmDsMqX7hUmALAWM="
+    "version": "0.91.1",
+    "hash": "sha256-L7L4zp8NtS+VvLVjgqgBkVzCxElxfGSCTJwC5gWbq9A="
   },
   {
     "pname": "ZstdSharp.Port",

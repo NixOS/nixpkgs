@@ -1,24 +1,21 @@
 {
   lib,
   stdenv,
-  alsa-lib,
   appstream-glib,
   blueprint-compiler,
-  cargo,
   desktop-file-utils,
   fetchFromGitHub,
-  json-glib,
   glib,
+  gst_all_1,
   gtk4,
+  json-glib,
   libadwaita,
   meson,
   ninja,
   nix-update-script,
   pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
   vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,20 +33,20 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     appstream-glib
     blueprint-compiler
-    cargo
     desktop-file-utils
     glib
     gtk4
     meson
     ninja
     pkg-config
-    rustc
     wrapGAppsHook4
     vala
   ];
 
   buildInputs = [
-    alsa-lib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
     json-glib
     libadwaita
   ];

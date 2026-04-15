@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   nix-update-script,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   stdenv,
   versionCheckHook,
@@ -17,17 +17,17 @@ buildGoModule (
   in
   {
     pname = "fmd-server";
-    version = "0.14.1";
+    version = "0.14.2";
     src = fetchFromGitLab {
       owner = "fmd-foss";
       repo = "fmd-server";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-UmiYtriLC9qztv7nW+1tFpYv9I0NAOsApAJWP72OINg=";
+      hash = "sha256-zAGwKOfPu7AEYhaDxx1P3EoA1K9p/f3Vwh7GrynqKho=";
     };
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (ui) pname;
-      inherit pnpm;
+      inherit (ui) pname src;
+      inherit pnpm_10;
       sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
       fetcherVersion = 3;
       hash = "sha256-fgqNaFQ4+uJxXzDJJq+D0+EFaLaYR+WUzi5kGq5ezjs=";
@@ -51,7 +51,7 @@ buildGoModule (
       nativeBuildInputs = [
         nodejs
         pnpmConfigHook
-        pnpm
+        pnpm_10
       ];
 
       buildPhase = ''

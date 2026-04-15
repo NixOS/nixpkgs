@@ -8,16 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "berkeley_upc";
-  version = "2020.12.0";
+  version = "2022.10.0";
 
   src = fetchurl {
     url = "https://upc.lbl.gov/download/release/berkeley_upc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JdpFORlXHpCQE+TivoQQnjQlxQN7C8BNfHvTOSwXbYQ=";
+    hash = "sha256-ZckvdxDixr06BTzJ0ErEdtmR4G05llIUsVgLEUR65LU=";
   };
 
   postPatch = ''
     patchShebangs .
   '';
+
+  # gcc 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   # Used during the configure phase
   env.ENVCMD = "${coreutils}/bin/env";

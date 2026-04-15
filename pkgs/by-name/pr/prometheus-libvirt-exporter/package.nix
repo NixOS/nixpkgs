@@ -30,5 +30,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Tinkoff/libvirt-exporter";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    mainProgram = "libvirt-exporter";
   };
 })

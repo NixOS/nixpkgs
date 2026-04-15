@@ -7,20 +7,26 @@
 
 buildGoModule (finalAttrs: {
   pname = "certspotter";
-  version = "0.21.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "SSLMate";
     repo = "certspotter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cJIjJyWvy/prx97jUvVToJsEdMa0MpqATD9rO8G2biY=";
+    hash = "sha256-OmukbtHOvyfjRb7WdAc3A3I5FlWmQD515dNeJ5JiJ0k=";
   };
 
-  vendorHash = "sha256-CLq/QFnZ5OLv7wT+VYr5SkSgmwt1g6cBYcAlB4Z/3wE=";
+  vendorHash = "sha256-F7qNpvjWqywPPLTKw90bfy6V83/LMQcV+Gml2n1Wd2A=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.Source=software.sslmate.com/src/certspotter"
+  ];
+
+  checkFlags = [
+    "-skip=TestParseFromURL" # requires network access
   ];
 
   nativeBuildInputs = [ lowdown-unsandboxed ];

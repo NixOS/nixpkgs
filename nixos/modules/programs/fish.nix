@@ -48,7 +48,7 @@ let
     path: name:
     pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
-    } "babelfish < ${path} > $out;";
+    } "exec -a ${lib.getExe pkgs.babelfish} babelfish < ${path} > $out;";
 in
 {
   options = {

@@ -8,24 +8,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.0.60";
+  version = "0.0.67";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-PSSH8uytCPtTgxte/wc0TfTiKD96DiVrWFJN9QjuHo8=";
+    hash = "sha256-/irCQgMDuO2boitdTyl4OlkMvuyFPfsTx8Jo/VhLYuw=";
   };
 
-  cargoHash = "sha256-PqINghZ88FsXj4HEFp0ugFH30lbQfBcoiv86PPOCzLI=";
+  cargoHash = "sha256-oAIF+ekKzvfT7WzQ+PE4RWUUMMDkBOFBdgwUMXBZsFk=";
 
   cargoBuildFlags = [
     "--package=iwe"
     "--package=iwes"
   ];
 
-  postPatch = ''
-    substituteInPlace crates/iwe/tests/common/mod.rs --replace-fail \
+  preCheck = ''
+    substituteInPlace crates/iwe/tests/common.rs --replace-fail \
       'binary_path.push("target");' \
       'binary_path.push("target/${stdenv.hostPlatform.rust.rustcTarget}");'
   '';

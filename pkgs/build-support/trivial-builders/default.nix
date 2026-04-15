@@ -80,8 +80,8 @@ rec {
         inherit buildCommand name;
         passAsFile = [ "buildCommand" ] ++ (derivationArgs.passAsFile or [ ]);
       }
-      // lib.optionalAttrs (!derivationArgs ? meta) {
-        pos =
+      // {
+        ${if !derivationArgs ? meta then "pos" else null} =
           let
             args = builtins.attrNames derivationArgs;
           in
@@ -89,11 +89,9 @@ rec {
             builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
           else
             null;
+        ${if runLocal then "preferLocalBuild" else null} = true;
+        ${if runLocal then "allowSubstitutes" else null} = false;
       }
-      // (lib.optionalAttrs runLocal {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-      })
       // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
@@ -567,8 +565,8 @@ rec {
           ${postBuild}
         '';
       }
-      // lib.optionalAttrs (!args ? meta) {
-        pos =
+      // {
+        ${if !args ? meta then "pos" else null} =
           if args ? pname then
             builtins.unsafeGetAttrPos "pname" args
           else
@@ -930,14 +928,7 @@ rec {
         outputHash = hash_;
         preferLocalBuild = true;
         builder = writeScript "restrict-message" ''
-          source ${stdenvNoCC}/setup
-          cat <<_EOF_
-
-          ***
-          ${msg}
-          ***
-
-          _EOF_
+          printf '%s' ${lib.escapeShellArg msg}
           exit 1
         '';
       }
@@ -1047,7 +1038,7 @@ rec {
         passthru = extraPassthru // finalAttrs.src.passthru or { };
 
         # Carry (and merge) information from the underlying `src` if present.
-        meta = lib.optionalAttrs (src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
+        meta = lib.optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
       };
   };
 

@@ -111,6 +111,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings =
+      lib.optional (lib.versionOlder cfg.package.version "360" && cfg.settings.WebService.LoginTo or true)
+        ''
+          The current Cockpit version is older than 360, and logging into other
+          hosts is enabled. This makes the system vulnerable to CVE-2026-4631,
+          which allows unauthenticated users on the network that can reach Cockpit
+          to gain code execution on the machine. Please upgrade your Cockpit
+          package or disable logging into other hosts by setting the option:
+
+            services.cockpit.settings.WebService.LoginTo = false;
+        '';
 
     environment.etc = {
       # generate cockpit settings
@@ -151,7 +162,7 @@ in
     };
 
     # Enable connecting to remote hosts from the login page
-    systemd.services = mkIf (cfg.settings ? LoginTo -> cfg.settings.LoginTo) {
+    systemd.services = mkIf (cfg.settings.WebService.LoginTo or false) {
       "cockpit-wsinstance-http".path = [
         config.programs.ssh.package
         cfg.package
@@ -174,8 +185,10 @@ in
       "https://localhost:${toString config.services.cockpit.port}"
     ];
 
-    services.cockpit.settings.WebService.Origins =
-      builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
+    services.cockpit.settings.WebService = {
+      Origins = builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
+      LoginTo = lib.mkDefault false;
+    };
   };
 
   meta.maintainers = pkgs.cockpit.meta.maintainers;

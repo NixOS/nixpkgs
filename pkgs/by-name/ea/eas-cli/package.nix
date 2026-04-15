@@ -7,6 +7,7 @@
   yarnBuildHook,
   nodejs,
   jq,
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eas-cli";
@@ -29,6 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     yarnBuildHook
     nodejs
     jq
+    makeWrapper
   ];
 
   postPatch = ''
@@ -52,6 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p $out/bin
     ln -sf $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run $out/bin/eas
+    wrapProgram $out/bin/eas --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   meta = {

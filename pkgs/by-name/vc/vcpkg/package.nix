@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vcpkg";
-  version = "2026.01.16";
+  version = "2026.03.18";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
     tag = finalAttrs.version;
-    hash = "sha256-fT1EADy3wXm1JIpAbOmS2LWCJCK/kbsiaN9ILgQuZek=";
+    hash = "sha256-vcs7F8darR/PNJEihebA7AqLWglefGxIacr1fqL36eM=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"

@@ -48,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin; # ld: unknown option: --disable-new-dtags
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${finalAttrs.src.tag}/CHANGELOG.md";

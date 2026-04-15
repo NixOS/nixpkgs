@@ -95,15 +95,12 @@ runs:
           // This would fail without --refetch, because the we had a partial clone before, but changed it above.
           await run('git', 'fetch', '--depth=1', '--refetch', 'origin', ...(commits.map(({ sha }) => sha)))
 
-          // Checking out onto tmpfs takes 1s and is faster by at least factor 10x.
+          // On Linux, checking out onto tmpfs takes 1s and is faster by at least 10x.
+          // Currently, on Darwin we can only allocate 3.5GB, which isn't enough.
+          // See https://github.com/NixOS/nixpkgs/pull/506437
           await run('mkdir', 'nixpkgs')
-          switch (process.env.RUNNER_OS) {
-            case 'macOS':
-              await run('sudo', 'mount_tmpfs', 'nixpkgs')
-              break
-            case 'Linux':
-              await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
-              break
+          if (process.env.RUNNER_OS === 'Linux') {
+            await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
           }
 
           // Create all worktrees in parallel.
@@ -134,3 +131,6 @@ runs:
               await rm('pin-bump.patch')
             }
           }
+
+          console.log('final disk usage:')
+          await run('df', '-h')

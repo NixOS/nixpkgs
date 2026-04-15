@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     "MSYSTEM=1"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -103,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preBuild
 
       for component in Bundles/{Alone,Alone2,Alone7z,Format7zF,SFXCon} UI/Console; do
-        make -j $NIX_BUILD_CORES -C CPP/7zip/$component -f ${makefile} $makeFlags
+        make -j $NIX_BUILD_CORES -C CPP/7zip/$component -f ${makefile} "''${makeFlags[@]}"
       done
 
       runHook postBuild

@@ -2,16 +2,21 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
   rust-jemalloc-sys-unprefixed,
   sqlite,
+  bash,
+  coreutils,
   iproute2,
   iptables,
   nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
+    bash
+    coreutils
     iproute2
     iptables
   ];
@@ -32,9 +37,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
       --replace-fail 'PATH=' 'PATH=${binPath}:'
+
+    substituteInPlace binaries/geph5-client/src/vpn/linux.rs \
+      --replace-fail 'Command::new("sh")' 'Command::new("${bash}/bin/sh")' \
+      --replace-fail '/usr/bin/env ' '${lib.getExe' coreutils "env"} '
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
@@ -63,6 +75,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::test_generate_secret_key"
     "--skip=tests::ping_pong"
   ];
+
+  postFixup = ''
+    for program in $out/bin/*; do
+      wrapProgram "$program" --prefix PATH : ${binPath}
+    done
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

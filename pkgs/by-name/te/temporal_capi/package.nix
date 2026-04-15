@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "temporal_capi";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aAe8gaMAkUrVcEbe8PJfo1Mn8wEwriH4PPjbgNdcUkY=";
+    hash = "sha256-wD4pTVgQZrGONgSTDm9Eq3fo3Ez7aIC0/n4Rqgksad4=";
   };
 
-  cargoHash = "sha256-25NBtoWc/YrBjvRT/AqMYwFVBuGuEyn3Nrq+ZlzTIXQ=";
+  cargoHash = "sha256-8m4fWMEZxQ4g3h+81K9KnQvHHewmExOq0nouJ7wec8M=";
 
   postPatch = ''
     # Force crate-type to include staticlib

@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "battery-state-card";
-  version = "4.0.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "maxwroc";
     repo = "battery-state-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mwyOdNlGMHK1xrwRL85R0i5s9g5I44WjHcbNTAY/fkw=";
+    hash = "sha256-IP1l9/WJphXQlLDVSYK59WEiG5/+D30WUqVP3uybeIE=";
   };
 
-  npmDepsHash = "sha256-vhjH7AePShgrzLRgCEn5sO0jJzOstDzMDQaog2UCarM=";
+  npmDepsHash = "sha256-Hsldl3tATfEPw5GsrhdnLXj3Smy2cAmBA2NIeY1sNK0=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

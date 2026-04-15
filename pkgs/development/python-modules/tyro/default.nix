@@ -9,71 +9,72 @@
 
   # dependencies
   docstring-parser,
-  rich,
-  shtab,
   typeguard,
   typing-extensions,
 
   # tests
   attrs,
-  flax,
-  jax,
   ml-collections,
   msgspec,
   omegaconf,
   pydantic,
   pytestCheckHook,
-  torch,
+  shtab,
   universal-pathlib,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "tyro";
-  version = "1.0.10";
+  version = "1.0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brentyi";
     repo = "tyro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k8f0eSeBBCROSsf7WooapDIFoy1G4Guxpbb7eNbj6ps=";
+    hash = "sha256-e4LIJzZ7lIkvhqbOz/EGHgPo9ri1HNiMp0j+I1S0/J4=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     docstring-parser
-    rich
-    shtab
     typeguard
     typing-extensions
   ];
 
+  # Upstream's neural-network integration tests are optional and skipped when
+  # flax/torch are unavailable, so keep the lightweight dev extras only.
   nativeCheckInputs = [
     attrs
-    flax
-    jax
     ml-collections
     msgspec
     omegaconf
     pydantic
     pytestCheckHook
-    torch
+    shtab
     universal-pathlib
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # Bash path completion relies on the programmable-completion builtin `compgen`,
-    # which is unavailable in the stdenv build shell.
-    "test_bash_path_completion_marker"
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.13") [
+      # The bash path-completion functional test still returns no file
+      # completions in the Nix build environment.
+      "test_bash_path_completion_marker"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.14") [
+      # Upstream checks that the literal substring `bc` never appears in the
+      # help text, but under Nix the `python -m pytest` runner path can include
+      # that substring in the store hash used for `sys.argv[0]`.
+      "test_suppress_subcommand"
+    ];
 
-    # In Nix builds, the long `python -m pytest` argv[0] path gets line-wrapped in
-    # argparse error output, splitting `class-b` and `)` so this literal-match fails.
-    "test_similar_arguments_subcommands_multiple_contains_match"
-
-    # Same wrapped-output literal-match issue as above for the cascading-args variant.
-    "test_similar_arguments_subcommands_multiple_contains_match_cascading"
-  ];
+  # Keep argparse help output on a single line where possible so the
+  # literal-output tests do not fail due to terminal line wrapping.
+  preCheck = ''
+    export COLUMNS=200
+    export LINES=200
+  '';
 
   pythonImportsCheck = [ "tyro" ];
 

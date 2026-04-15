@@ -24,7 +24,7 @@ let
         gawk
         gnugrep
         gnused
-        jdk
+        jdk_headless
         python3
         which
       ]

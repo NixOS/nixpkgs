@@ -16,13 +16,13 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.47";
+  version = "1.0.73";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     rev = "v${version}";
-    hash = "sha256-1wn3WIflrhH3IMBeGFwcHi0zOREakuk/5gqwPY720eA=";
+    hash = "sha256-xNmJ1XvnLTKhicVchzG9CQtRVoZjRkBEvfn/WWesDRU=";
     fetchSubmodules = true;
   };
 
@@ -111,10 +111,14 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   nativeCheckInputs = with python3Packages; [
+    aiohttp
+    pytest-asyncio
     pytestCheckHook
     pytest-cov-stub
+    pytest-mock
     pytest-qt
     pytest-xvfb
+    rapidfuzz
   ];
 
   doCheck = true;
@@ -126,7 +130,7 @@ stdenv.mkDerivation {
   '';
 
   disabledTestPaths = [
-    # requires network
+    # requires network (clones GitHub: Community-Rules-Database, Steam-Workshop-Database)
     "tests/models/metadata/test_metadata_factory.py"
   ];
 

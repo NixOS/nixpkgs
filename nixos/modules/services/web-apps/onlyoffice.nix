@@ -50,7 +50,7 @@ in
 
     package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
-    x2t = lib.mkPackageOption pkgs "x2t" { };
+    x2t = lib.mkPackageOption pkgs "onlyoffice-documentserver.passthru.x2t" { };
 
     port = lib.mkOption {
       type = lib.types.port;

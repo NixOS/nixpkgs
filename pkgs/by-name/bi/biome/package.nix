@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
-  version = "2.4.9";
+  version = "2.4.11";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "@biomejs/biome@${finalAttrs.version}";
-    hash = "sha256-Fv+jqgwI4UZNwsy5oC+ekXmnJpIqIXWY+ttRbIu+lQg=";
+    hash = "sha256-EPrbr0FOYlP+HKa9YkNi4cw2oisoHRkQAahMIoq9QIo=";
   };
 
-  cargoHash = "sha256-vU7yFXNx3r0aCDdMVra1omo+HgK5OwCohgbjyP3Q5VI=";
+  cargoHash = "sha256-SxHTeZ3snOeBsYmjN4to9UoGVnH0mSXtWtAOv85Ztxs=";
 
   nativeBuildInputs = [ pkg-config ];
 

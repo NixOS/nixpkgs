@@ -204,19 +204,6 @@ let
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
     ];
-    trane = [
-      # TraneConfigFlow doesn't support step reauth
-      "tests/components/trane/test_init.py::test_setup_auth_error"
-    ];
-    tuya = [
-      # entity ordering in diagnostics is non-deterministic; fixed upstream in
-      # https://github.com/home-assistant/core/pull/164819 (landing in HA 2026.4)
-      "tests/components/tuya/test_diagnostics.py"
-    ];
-    youtube = [
-      # outdated snapshot
-      "tests/components/youtube/test_sensor.py::test_sensor"
-    ];
   };
 
   extraDisabledTests = {
@@ -224,12 +211,14 @@ let
       # intent fixture mismatch
       "test_error_no_device_on_floor"
     ];
-    homewizard = [
-      # Messages don't match expected due to a change in Homewizard's outputs
-      "test_identify_button"
-      "test_number_entities"
-      "test_select_request_error"
-      "test_switch_entities"
+    ecovacs = [
+      # Translation not found for vacuum
+      "test_raise_segment_changed_issue"
+    ];
+    roborock = [
+      # Translation not found for vacuum
+      "test_clean_segments_mixed_maps"
+      "test_segments_changed_issue"
     ];
     sensor = [
       # Failed: Translation not found for sensor
@@ -246,11 +235,9 @@ let
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
-    tuya = [
-      # snapshot mismatches: PyPI sdist translations differ from strings.json
-      # ("Power-on behavior" vs "Power on behavior"); expected to resolve in HA 2026.4
-      "test_device_diagnostics[tdq_9htyiowaf5rtdhrv]"
-      "test_platform_setup_and_discovery"
+    vacuum = [
+      # Translation not found for vacuum
+      "test_segments_changed_issue"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox

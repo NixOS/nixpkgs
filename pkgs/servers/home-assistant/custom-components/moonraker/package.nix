@@ -34,6 +34,12 @@ buildHomeAssistantComponent rec {
   ]
   ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
 
+  disabledTests = [
+    # tests try to open sockets
+    "test_thumbnail_camera_from_img_to_none"
+    "test_bad_connection_config_flow"
+  ];
+
   #skip phases with nothing to do
   dontConfigure = true;
 

@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5m5nNVsaBabUuKPHErBr+LQWfCvjG9b2CjwdK9mASF0=";
+    hash = "sha256-3N2qj8aoUFQgQlYKEqUCKpMXwfn9XvdxLcB3wT3WOqY=";
   };
 
   postPatch = ''
@@ -88,6 +88,12 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: assert 'a string!' == 'a metadata!'
     "test_save_load_memmap"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_to"
+    "test_casts"
+    "test_td_params_cast"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs due to the use of a pool

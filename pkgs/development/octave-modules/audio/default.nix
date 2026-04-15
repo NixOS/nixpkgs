@@ -12,13 +12,13 @@
 
 buildOctavePackage rec {
   pname = "audio";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-audio";
     tag = "release-${version}";
-    sha256 = "sha256-v7FKj9GSlX86zpOcw1xKxy150ivUxpjU/rvg+3OGs2s=";
+    sha256 = "sha256-Qy9It6IiLJTvTlet3L/EP7qL58U0AUKHilmSKa2nATU=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/audio/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Audio and MIDI Toolbox for GNU Octave";
     platforms = lib.platforms.linux; # Because of run-time dependency on jack2 and alsa-lib
   };

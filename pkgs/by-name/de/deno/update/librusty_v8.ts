@@ -26,7 +26,7 @@ const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
     async (arch: Architecture): Promise<PrefetchResult> => {
       log("Fetching:", arch.nix);
       const sha256 = await run("nix-prefetch-url", [
-        `https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${arch.rust}.a.gz`
+        `https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_simdutf_release_${arch.rust}.a.gz`
       ]);
       const sha256_sri = await run("nix-hash", ["--type", "sha256", "--to-sri", sha256]);
       log("Done:    ", arch.nix);

@@ -28,7 +28,7 @@ buildOctavePackage rec {
       gpl3Plus
       publicDomain
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Statistics package for GNU Octave";
   };
 }

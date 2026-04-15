@@ -12,16 +12,6 @@ in
 let
   self = packages // (overrides self packages);
   packages = with self; {
-    zipper = builder {
-      name = "zipper";
-      version = "1.1.0";
-      src = fetchHex {
-        pkg = "zipper";
-        version = "1.1.0";
-        sha256 = "sha256-RkTIOug+88CYYMte1Zewx1n7vNZK1bAKYvUa5IrvdTU=";
-      };
-      beamDeps = [ ];
-    };
     katana_code = builder {
       name = "katana_code";
       version = "2.4.3";
@@ -44,16 +34,13 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "5.0.2";
+      version = "5.0.3";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "5.0.2";
-        sha256 = "sha256-SFa4TuS6ENxtjKBAoS2tZ5yXAuBRFIADvTsfsYUTxdc=";
+        version = "5.0.3";
+        sha256 = "sha256-nGWgQqVCYwB0K4mueG9ynWshjyFFyzYLi7x807Powmw=";
       };
-      beamDeps = [
-        katana_code
-        zipper
-      ];
+      beamDeps = [ katana_code ];
     };
   };
 in

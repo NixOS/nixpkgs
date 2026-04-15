@@ -108,7 +108,7 @@ let
         '';
       };
 
-      gitlab_query_language = attrs: {
+      gitlab_query_language = attrs: rec {
         cargoDeps = rustPlatform.fetchCargoVendor {
           src = stdenv.mkDerivation {
             inherit (buildRubyGem { inherit (attrs) gemName version source; })
@@ -119,12 +119,29 @@ let
               ;
             installPhase = ''
               mkdir -p $out
-              cp -R ext $out
-              cp Cargo.* $out
+              cp Cargo.lock $out
+              cp -R ext/gitlab_query_language/* $out
             '';
           };
-          hash = "sha256-XnNIcEoAs/cSIsd3BdEtTAPNbiyfdVmlO7tSIL/9d3w=";
+
+          # GitLab publishes a Cargo.lock for gitlab_query_lanaguage that does not contain the `source` attribute
+          # for the `glql` dependency. This is an intentional choice by them that is documented in the README.
+          # This code refetches this hash and exposes the lockfile, so that it can be used in later stages.
+          nativeBuildInputs = [ cargo ];
+          postPatch = ''
+            export CARGO_HOME="$PWD/../.cargo/"
+            cargo fetch
+          '';
+          postBuild = ''
+            cp Cargo.lock $out
+          '';
+
+          hash = "sha256-YQEldpT1pCJe5hBJmLTVyvOjnilH10mGhgYfKDSOY3k=";
         };
+
+        postPatch = ''
+          cp ${cargoDeps}/Cargo.lock .
+        '';
 
         dontBuild = false;
 

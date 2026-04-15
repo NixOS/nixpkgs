@@ -436,6 +436,24 @@ let
         '';
       };
 
+    fail2ban =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          exitOnError = true;
+        };
+        metricProvider = {
+          services.fail2ban.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("fail2ban.service")
+          wait_for_unit("prometheus-fail2ban-exporter.service")
+          wait_for_open_port(9191)
+          succeed("curl -sSf http://localhost:9191/metrics | grep 'f2b_errors'")
+        '';
+      };
+
     fastly =
       { pkgs, ... }:
       {
@@ -1537,26 +1555,6 @@ let
           wait_for_unit("prometheus-restic-exporter.service")
           wait_for_open_port(9753)
           wait_until_succeeds("curl -sSf localhost:9753/metrics | grep 'restic_check_success 1.0'")
-        '';
-      };
-
-    rspamd =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          services.rspamd.enable = true;
-        };
-        exporterTest = ''
-          wait_for_unit("rspamd.service")
-          wait_for_unit("prometheus-rspamd-exporter.service")
-          wait_for_open_port(11334)
-          wait_for_open_port(7980)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:7980/probe?target=http://localhost:11334/stat' | grep 'rspamd_scanned{host=\"rspamd\"} 0'"
-          )
         '';
       };
 

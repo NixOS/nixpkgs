@@ -10,6 +10,7 @@
   maven,
   wrapGAppsHook3,
   nix-update-script,
+  freetype,
 }:
 
 let
@@ -86,6 +87,7 @@ maven.buildMavenPackage rec {
         lib.makeLibraryPath [
           fuse3
           libayatana-appindicator
+          freetype
         ]
       }" \
       --set JAVA_HOME "${jdk.home}"
@@ -119,6 +121,7 @@ maven.buildMavenPackage rec {
     glib
     jdk
     libayatana-appindicator
+    freetype
   ];
 
   passthru.updateScript = nix-update-script { };

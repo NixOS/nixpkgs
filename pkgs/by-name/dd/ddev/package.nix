@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   };
 
   postPatch = ''
-    (cd vendor/github.com/docker/cli && patch ${./cli-system-plugin-dir-from-env.patch})
+    (cd vendor/github.com/docker/cli && patch -p1 < ${./cli-system-plugin-dir-from-env.patch})
   '';
 
   nativeBuildInputs = [

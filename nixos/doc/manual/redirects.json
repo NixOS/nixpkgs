@@ -151,6 +151,9 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "sec-boot-problems-scripted-stage-1": [
+    "index.html#sec-boot-problems-scripted-stage-1"
+  ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],

@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OgXnNGIgWZDIChRdEfmHwvl+oQM03V3a/HnndGLjcHk=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set(ver_patch 0)" "set(ver_patch 1)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   meta = {

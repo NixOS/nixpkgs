@@ -1,10 +1,8 @@
 {
   boost,
   cargo,
-  fetchpatch,
   fetchurl,
   fstrm,
-  h2o,
   lib,
   libbpf,
   libcap,
@@ -28,21 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M3Trplpco8+5/Fl5HEflA1FJ/lIcy7ztX4NKF/RWQb8=";
+    hash = "sha256-oiklC4GcQNVRc6+nIC7x7yprco+Fx1Bol6Hxymq1cUk=";
   };
-
-  patches = [
-    # Fix build error when only protobuf is enabled
-    (fetchpatch {
-      url = "https://github.com/PowerDNS/pdns/commit/daece82818d7f83b26dcf724ec1864644bc3f854.patch";
-      hash = "sha256-Ag65Gjmm2m4yvRfqMjSo1EEJg/2EHWDBg15vSL5DKCU=";
-      stripLen = 2;
-    })
-  ];
 
   nativeBuildInputs = [
     cargo
@@ -52,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pyyaml
     rustPlatform.cargoSetupHook
   ];
+
   buildInputs = [
     boost
     fstrm # Required for DNSTAP
-    h2o
     libbpf
     libcap
     libedit
@@ -91,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) cargoRoot src;
-    hash = "sha256-nDAvgM3xb+95dcGIHiSKlFo4/0Rs5Evf1vvR5vF4MXs=";
+    hash = "sha256-OU24ahqFc4DivCpO451rsHV8rofyHv+LnLgkVsFPMG4=";
   };
 
   cargoRoot = "dnsdist-rust-lib/rust";

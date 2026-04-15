@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_39,
+  electron_41,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.7.12";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-76pp0ON36aRBDnU4rsg/jTr+kNV+JsOMIclkxKp4JQk=";
+    hash = "sha256-ybxJCCdam5g43Ycf+Ro3ptOr+4+49Fw+y0rqG4fEzBc=";
   };
 
-  npmDepsHash = "sha256-UkgNfuIwDWc/5zn3m5cvcNgZVRYJdKb6XkncF5CCowU=";
+  npmDepsHash = "sha256-+VwOlzR+80m+qQS4L0IPmFTn4xuPM7aX7EtSd50D9KM=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,7 +46,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_39.dist} electron-dist
+    cp -r ${electron_41.dist} electron-dist
     chmod -R u+w electron-dist
   ''
   # Electron builder complains about symlink in electron-dist
@@ -61,7 +61,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_39.version} \
+        -c.electronVersion=${electron_41.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -83,7 +83,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_39}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils

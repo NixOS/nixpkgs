@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "siomon";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "level1techs";
     repo = "siomon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ox4J2YKTN2Hf51+gyl6TKiS/6HIMbgplwv73tVAHFd0=";
+    hash = "sha256-XpVlfSIN7O0V2AeH8eeHg/jkLSCW+pWEHqo/xa7XWW0=";
   };
 
-  cargoHash = "sha256-PC8G/FQjIwdyUBtG6DBon/4ZseihrBUZ/L65Agh6hhY=";
+  cargoHash = "sha256-dUAuoIOW3pQKvb4LbJTss4RWLwHNrGefNzrV+eMjcO4=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

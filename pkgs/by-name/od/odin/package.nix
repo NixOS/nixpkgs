@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-02";
+  version = "dev-2026-04";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-TiXHFFmXzSyENFeTtQoskGrU7oWAHXR7eGgne0w1vEE=";
+    hash = "sha256-vUQKXyVKZRLzAPeCileAOIfWXvKLrIjYIHXTdMGnG3k=";
   };
 
   patches = [
@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
+      atomicptr
       diniamo
     ];
     platforms = lib.platforms.unix;

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evisum";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0tlND/ZvB/07Ze1rccF9T+HMpoL1TPDDDaFAb1Kvtag=";
+    sha256 = "XuND4zidLkkah3kYYBc7ZLG4r3QvnKpc34NFxA7NR9c=";
   };
 
   nativeBuildInputs = [

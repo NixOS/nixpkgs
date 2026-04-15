@@ -1,6 +1,5 @@
 {
   beam,
-  elixir_1_17,
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
@@ -16,7 +15,7 @@
 }:
 
 let
-  beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
+  beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
@@ -205,6 +204,18 @@ beamPackages.mixRelease rec {
             mkdir config
             cp ${cfgFile} config/config.exs
           '';
+      };
+
+      # mochiweb is unused by still in mix.lock
+      # work around OTP 27+ incompat by forcing our build to use a newer version
+      mochiweb = prev.mochiweb.override rec {
+        version = "3.3.0";
+
+        src = fetchHex {
+          pkg = "mochiweb";
+          version = "${version}";
+          sha256 = "sha256-qoW3d/sj6ZcuvEJOQLXTUQbxm8mYhz4Cbe3Ydt+O5Qw=";
+        };
       };
     };
   };

@@ -17,7 +17,6 @@
   pytestCheckHook,
   safetensors,
   transformers,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -31,10 +30,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     sha256 = "sha256-7cCtrLy80LUlo+og7F98bexDcLim3lY/MVa7HHYlsfE=";
   };
-
-  # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
-  # https://github.com/skorch-dev/skorch/issues/1080
-  disabled = pythonAtLeast "3.13";
 
   build-system = [ setuptools ];
 

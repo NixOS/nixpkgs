@@ -25,7 +25,7 @@ declare -A requestedBuildMethods
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
-        --max-jobs|-j|--cores|-I|--substituters)
+        --max-jobs|-j|--cores|-I|--substituters|--log-format)
             j="$1"; shift 1
             extraBuildFlags+=("$i" "$j")
             ;;

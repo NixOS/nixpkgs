@@ -156,7 +156,7 @@ makeScope newScope (
     miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
 
     msh = callPackage ../development/octave-modules/msh {
-      # PLACEHOLDER until KarlJoad gets dolfin packaged.
+      # PLACEHOLDER until ravenjoad gets dolfin packaged.
       dolfin = null;
     };
 

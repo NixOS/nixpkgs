@@ -159,11 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
+  }
+  // lib.optionalAttrs withQt6 {
     tests = {
       # Test of morph-browser itself
       standalone = if withQt6 then nixosTests.morph-browser.qt6 else nixosTests.morph-browser.qt5;
-    }
-    // lib.optionalAttrs withQt6 {
+
       # Interactions between the Lomiri ecosystem and this browser
       inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;
     };

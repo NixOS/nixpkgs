@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.14.5";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MxFHCjtIUESuvDkNvEEcZdWXTLAxGFH9ZJ1wx8E4N14=";
+    hash = "sha256-+mYVg4IuoU/GEK/L3qXUfO224eWMrRtoXTTi8RhOJk4=";
   };
 
   build-system = [ hatchling ];

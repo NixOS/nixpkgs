@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zcc-helper";
-  version = "3.7";
+  version = "3.8";
   pyproject = true;
 
   src = fetchFromBitbucket {
     owner = "mark_hannon";
     repo = "zcc";
     rev = "release_${version}";
-    hash = "sha256-KMa0RfG3cT1sw5ujnecYtx+A4qjujUPiq6pM3PwNSLM=";
+    hash = "sha256-8jbDhlYIgmC0U6w9UY6PGvCnSDFiC/uBib08fikeabk=";
   };
 
   build-system = [ setuptools ];

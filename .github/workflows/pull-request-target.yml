@@ -37,7 +37,7 @@ jobs:
           sparse-checkout: |
             ci/github-script
       - id: prepare
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           retries: 10
           # The default for this includes code 422, which happens regularly for us when comparing commits:
@@ -126,7 +126,7 @@ jobs:
     permissions:
       statuses: write
     steps:
-      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           RESULTS: ${{ toJSON(needs.*.result) }}
         with:

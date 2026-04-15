@@ -39,7 +39,6 @@ let
   inherit (lib.meta)
     availableOn
     cpeFullVersionWithVendor
-    tryCPEPatchVersionInUpdateWithVendor
     ;
 
   inherit (lib.generators)
@@ -491,7 +490,6 @@ let
       success = true;
       value = cpeFullVersionWithVendor vendor version;
     })
-    tryCPEPatchVersionInUpdateWithVendor
   ];
 
   # The meta attribute is passed in the resulting attribute set,

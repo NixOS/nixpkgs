@@ -5,7 +5,7 @@
   coreutils,
   bash,
   nix-update-script,
-  fetchpatch,
+  u-root-cmds,
 
   linuxManualConfig,
   fetchurl,
@@ -14,21 +14,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "u-root";
-  version = "0.15.0-unstable-2026-02-12";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "u-root";
-    rev = "0f23b8374acf4f00b457c69c13c3fe73dd5bab86";
-    hash = "sha256-RwEegwzBpw0r0fPyNhB35hyaAcqSt8dUmYf2N5WrpQQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QHLVkQJkgTSB9a/QLgl4SKrWje0OhtBpa56zGQK8m+o=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/u-root/u-root/commit/aeeb2aafd6a35416d5941b496e44a94594021424.patch";
-      hash = "sha256-h+b/s9NkreQfFWezEup1DpQjfyiJpHQGTD/RyKmkF8s=";
-    })
-  ];
 
   vendorHash = null;
 
@@ -62,6 +55,7 @@ buildGoModule (finalAttrs: {
       allowImportFromDerivation = true;
     };
     updateScript = nix-update-script { };
+    tests.u-root-cmds = u-root-cmds;
   };
 
   meta = {
@@ -70,6 +64,8 @@ buildGoModule (finalAttrs: {
       u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
 
       The package exposes `u-root.kernel-amd64` passthru for a minimal and pre-configured kernel to be used locally with QEMU.
+
+      The u-root commands are available as `u-root-cmds`.
     '';
     homepage = "https://u-root.org/";
     downloadPage = "https://github.com/u-root/u-root";

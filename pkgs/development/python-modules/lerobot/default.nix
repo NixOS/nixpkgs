@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -20,6 +21,7 @@
   huggingface-hub,
   imageio,
   jsonlines,
+  numpy,
   opencv-python-headless,
   packaging,
   pynput,
@@ -39,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.4.3";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3z8gyK9bx5GpFXM/kLbxume/e8F2U84yUTUhmn57mLs=";
+    hash = "sha256-i4szKM8b766mAA0AxCHB4s1wEEZbGeBKGeGpLICVsrM=";
   };
 
   build-system = [
@@ -57,18 +59,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "av"
-    "datasets"
     "diffusers"
     "draccus"
-    "gymnasium"
-    "huggingface-hub"
-    "opencv"
+    "numpy"
+    "opencv-python-headless"
     "rerun-sdk"
     "torch"
+    "torchcodec"
     "torchvision"
     "wandb"
   ];
-
   dependencies = [
     accelerate
     av
@@ -83,6 +83,7 @@ buildPythonPackage (finalAttrs: {
     huggingface-hub
     imageio
     jsonlines
+    numpy
     opencv-python-headless
     packaging
     pynput
@@ -124,17 +125,25 @@ buildPythonPackage (finalAttrs: {
 
     # Require internet access
     "test_act_backbone_lr"
+    "test_all_items_have_subtask"
     "test_backward_compatibility"
     "test_convert_image_to_video_dataset"
     "test_convert_image_to_video_dataset_subset_episodes"
     "test_dataset_initialization"
     "test_factory"
     "test_from_pretrained_nonexistent_path"
+    "test_getitem_has_subtask_index"
+    "test_getitem_returns_subtask_string"
     "test_load_config_nonexistent_path_tries_hub"
     "test_make_env_from_hub_async"
     "test_make_env_from_hub_with_trust"
     "test_policy_defaults"
     "test_save_and_load_pretrained"
+    "test_subtask_dataset_loads"
+    "test_subtask_index_in_features"
+    "test_subtask_index_maps_to_valid_subtask"
+    "test_subtask_metadata_loaded"
+    "test_task_and_subtask_coexist"
 
     # TypeError: stack(): argument 'tensors' (position 1) must be tuple of Tensors, not Column
     "test_check_timestamps_sync_slightly_off"
@@ -161,6 +170,12 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: 'NoneType' object is not subscriptable
     "test_pi0_rtc_inference_with_prev_chunk"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_complementary_data_float_dtype_conversion"
+    "test_float_dtype_conversion"
+    "test_float_dtype_with_mixed_tensors"
   ];
 
   disabledTestPaths = [

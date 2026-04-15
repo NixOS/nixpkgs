@@ -10,13 +10,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-workflows";
-  version = "2.16.1";
+  version = "2.17.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_workflows";
     inherit (finalAttrs) version;
-    hash = "sha256-L2viI69AcITu8GS8vsj2CuTdAR2aBGMYh86YYlj6xYo=";
+    hash = "sha256-hfbc2/IUcAqwdB3DIlrU6q8ckP2fDggliKpwxHNbJsM=";
   };
 
   postPatch = ''

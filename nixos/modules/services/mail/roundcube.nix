@@ -190,6 +190,7 @@ in
             priority = 1100;
             extraConfig = ''
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
+              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
           locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {

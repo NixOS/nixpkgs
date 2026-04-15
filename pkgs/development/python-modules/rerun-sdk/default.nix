@@ -102,17 +102,20 @@ buildPythonPackage {
     "test_isolated_streams"
     "test_send_dataframe_roundtrip"
     "test_server_failed_table_creation_does_not_leak_entry"
+    "test_server_version_info"
     "test_server_with_dataset_files"
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"
 
     # TypeError: 'Snapshot' object is not callable
+    "test_chunk_record_batch"
     "test_schema_recording"
   ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
+    "tests/python/log_benchmark/test_micro_benchmark.py"
 
     # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
     "rerun_py/tests/e2e_redap_tests"
