@@ -41,7 +41,7 @@
   ninja,
   pcre2,
   pkg-config,
-  plasma5Packages,
+  kdePackages,
   python3,
   rtaudio_6,
   rtmidi,
@@ -200,8 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}/glib-2.0/schemas/"
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${plasma5Packages.breeze-icons}/share"
+      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/zrythm-${finalAttrs.version}/glib-2.0/schemas/"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${kdePackages.breeze-icons}/share"
     )
   '';
 
