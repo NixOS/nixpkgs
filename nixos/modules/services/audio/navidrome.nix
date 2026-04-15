@@ -46,6 +46,7 @@ in
         description = "List of Navidrome plugins";
         example = literalExpression ''
           with pkgs.navidromePlugins; [
+            listenbrainz-daily-playlist
           ];
         '';
       };
