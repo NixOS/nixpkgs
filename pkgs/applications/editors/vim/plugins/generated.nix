@@ -8420,6 +8420,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mellow-nvim = buildVimPlugin {
+    pname = "mellow.nvim";
+    version = "0-unstable-2026-03-30";
+    src = fetchFromGitHub {
+      owner = "mellow-theme";
+      repo = "mellow.nvim";
+      rev = "6273b7f0ddf6ac2b75021b3bc0bd8b3305cfeef1";
+      hash = "sha256-0w4gPMXz3ZlSgt9Pffjy1D5aplog6MD1aKvqObAhqOI=";
+    };
+    meta.homepage = "https://github.com/mellow-theme/mellow.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   messenger-nvim = buildVimPlugin {
     pname = "messenger.nvim";
     version = "2024-07-18";
