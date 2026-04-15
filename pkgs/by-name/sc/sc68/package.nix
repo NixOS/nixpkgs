@@ -15,15 +15,22 @@
 
 stdenv.mkDerivation {
   pname = "sc68";
-  version = "unstable-2022-11-24";
+  version = "2.2.1-unstable-2024-09-09";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/sc68/code/";
-    rev = "695";
-    sha256 = "sha256-RO3Yhjalu49BUM0fYOZtI2l6KbuUuw03whRxlKneabo=";
+    rev = "713";
+    sha256 = "sha256-kiOHUixsf/2mFMzi6P7oC7ujyydLO7K3w7Vwr/GMOvY=";
   };
 
-  preConfigure = "tools/svn-bootstrap.sh";
+  postPatch = ''
+    substituteInPlace vcversion.sh \
+      --replace-fail 'date -u "+%Y%m%d"' 'date -u --date=@$SOURCE_DATE_EPOCH "+%Y%m%d"'
+  '';
+
+  preConfigure = ''
+    tools/svn-bootstrap.sh
+  '';
 
   enableParallelBuilding = true;
 
@@ -41,6 +48,9 @@ stdenv.mkDerivation {
     libao
     zlib
   ];
+
+  # Doesn't specify any standard target, but it's >20yo code
+  env.CFLAGS = "-std=c99";
 
   meta = {
     description = "Atari ST and Amiga music player";
