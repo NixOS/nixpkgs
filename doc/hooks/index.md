@@ -20,6 +20,7 @@ ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
+installFonts.section.md
 julec.section.md
 just.section.md
 libglycin.section.md
