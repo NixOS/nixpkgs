@@ -38,6 +38,11 @@ let
       );
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
       detectvirt = lib.getExe' config.systemd.package "systemd-detect-virt";
+      bcachefs =
+        if pkgs.bcachefs-tools.meta.broken then
+          lib.getExe' pkgs.coreutils "false"
+        else
+          lib.getExe pkgs.bcachefs-tools;
       btrfs = lib.getExe pkgs.btrfs-progs;
       inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
       xserverEnabled = config.services.xserver.enable;
