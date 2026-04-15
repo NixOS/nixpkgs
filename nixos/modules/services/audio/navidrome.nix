@@ -7,13 +7,18 @@
 
 let
   inherit (lib)
+    literalExpression
+    mkDefault
     mkEnableOption
     mkPackageOption
     mkOption
     maintainers
     ;
   inherit (lib.types)
+    addCheck
     bool
+    listOf
+    package
     port
     str
     submodule
@@ -28,6 +33,36 @@ in
       enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
+
+      plugins = mkOption {
+        type = listOf (
+          addCheck package (p: p.isNavidromePlugin or false)
+          // {
+            name = "navidrome plugin";
+            description = "package that is a navidrome plugin";
+          }
+        );
+        default = [ ];
+        description = "List of Navidrome plugins";
+        example = literalExpression ''
+          with pkgs.navidromePlugins; [
+          ];
+        '';
+      };
+
+      finalPackage = mkOption {
+        type = package;
+        readOnly = true;
+        default = cfg.package.override {
+          inherit (cfg) plugins;
+        };
+        defaultText = literalExpression ''
+          config.services.navidrome.package.override {
+            inherit (config.services.navidrome) plugins;
+          }
+        '';
+        description = "The final navidrome package including all selected plugins.";
+      };
 
       settings = mkOption {
         type = submodule {
@@ -50,6 +85,21 @@ in
               default = false;
               description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
               type = bool;
+            };
+
+            Plugins = {
+              Enabled = mkOption {
+                default = (builtins.length cfg.plugins) != 0;
+                defaultText = literalExpression "builtins.length config.services.navidrome.plugins != 0";
+                description = "Enable plugins in navidrome (auto-enable if plugins array has plugins)";
+              };
+              Folder = mkOption {
+                default = "${cfg.finalPackage}/share/plugins";
+                description = "The folder containing navidrome plugins.";
+                readOnly = true;
+                type = str;
+                defaultText = literalExpression "\"\${config.services.navidrome.finalPackage}/share/plugins\"";
+              };
             };
           };
         };
@@ -78,7 +128,7 @@ in
         description = "Whether to open the TCP port in the firewall";
       };
 
-      environmentFile = lib.mkOption {
+      environmentFile = mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         description = "Environment file, used to set any secret ND_* environment variables.";
@@ -114,7 +164,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = ''
-              ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+              ${getExe cfg.finalPackage} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
             '';
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
