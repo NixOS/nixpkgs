@@ -105,7 +105,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/google/brax/blob/main/docs/release-notes/${finalAttrs.version}.md";
+    changelog = "https://github.com/google/brax/blob/main/docs/release-notes/${finalAttrs.src.tag}.md";
     description = "Massively parallel rigidbody physics simulation on accelerator hardware";
     homepage = "https://github.com/google/brax";
     license = lib.licenses.asl20;
