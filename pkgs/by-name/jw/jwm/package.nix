@@ -27,14 +27,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jwm";
   version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-odGqHdm8xnjEcXmpKMy51HEhbjcROLL3hRSdlbmTr2g=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.romildo ];
     mainProgram = "jwm";
   };
-}
+})
