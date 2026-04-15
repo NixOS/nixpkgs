@@ -6841,6 +6841,8 @@ self: super: with self; {
 
   gz-msgs = callPackage ../development/python-modules/gz-msgs { };
 
+  gz-sim = callPackage ../development/python-modules/gz-sim { };
+
   gz-transport = callPackage ../development/python-modules/gz-transport { };
 
   h11 = callPackage ../development/python-modules/h11 { };
