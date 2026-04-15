@@ -30,14 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-x2FHzgbxxHJEYlCK0bi5j7WdAqAlcocLYW20y2ionBc=";
   };
 
-  cargoPatches = [
-    # The lockfile references two different revisions of the same internal repository cosmic-settings,
-    # which likely is unintentional and currently causing issues with fetchCargoVendor.
-    # Upstream already resolved this because of a general dependency update, so this can be removed on the
-    # next update.
-    ./dedup-cosmic-settings.patch
-  ];
-
   cargoHash = "sha256-R9d7slLid3x7NYXkMfcRRa4zY8/RxW+QLMZGsvHdfCw=";
 
   nativeBuildInputs = [
