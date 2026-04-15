@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,16 +9,20 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wrtag";
-  version = "0.20.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "wrtag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LSYrkXDbl0W7V+wDixIKGlOlSE/t10m/7cdgUYUNcr0=";
+    hash = "sha256-ba3HrAUaI9onuRFns9q2fkJxZWhadqJjd8rAmlIVvg4=";
   };
 
-  vendorHash = "sha256-u2HM1J535SgB7RrDfVjKFa7QpcK06gqr5+DZaNTxcmA=";
+  vendorHash = "sha256-S0emGAQJi9MLvyU3lL/Vrc4SZ10w6MOqND0LsBI7lg8=";
+
+  # Tests check that cover.PNG does not exist after lowercasing to cover.png,
+  # which fails on case-insensitive filesystems (macOS HFS+/APFS default).
+  doCheck = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs = [ installShellFiles ];
 
