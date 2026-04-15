@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
+  rustPlatform,
   mpv,
   makeWrapper,
   installShellFiles,
@@ -11,24 +11,18 @@
   radioboat,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radioboat";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4k+WK2Cxu1yBWgvEW9LMD2RGfiY7XDAe0qqph82zvlI=";
+    hash = "sha256-mPktliuWyrXuNzMCdMFZk5Q7lIkRk+y4nX3IBnCc5Mc=";
   };
 
-  vendorHash = "sha256-H2vo5gngXUcrem25tqz/1MhOgpNZcN+IcaQHZrGyjW8=";
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/slashformotion/radioboat/internal/buildinfo.Version=${finalAttrs.version}"
-  ];
+  cargoHash = "sha256-fRF1FvwtvVJSTCK8DcZib6wMLpo73YtV7j+kjt4nVTo=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -50,7 +44,7 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = radioboat;
-      command = "radioboat version";
+      command = "radioboat --version";
     };
   };
 
@@ -59,7 +53,10 @@ buildGoModule (finalAttrs: {
     mainProgram = "radioboat";
     homepage = "https://github.com/slashformotion/radioboat";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      zendo
+      slashformotion
+    ];
   };
 })
