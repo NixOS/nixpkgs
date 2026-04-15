@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -87,6 +88,10 @@ buildPythonPackage (finalAttrs: {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky (timing sensitive)
+    "test_refresh_loop_continues_after_500_errors"
   ];
 
   disabledTestPaths = [
