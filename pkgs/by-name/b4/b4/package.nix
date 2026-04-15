@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-5IxEu1efraux/D8Vvxh0r9chvBpj+6EMlvVovB9HzLM=";
+    hash = "sha256-uBXyrtIohxjP4qFMdkIaALxPCRjqMrRd0WRcmZ/dpp0=";
   };
 
   # tests make dns requests and fails
