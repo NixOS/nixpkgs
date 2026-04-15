@@ -26,6 +26,7 @@ let
       zaninime
       kashw2
       w-lfchen
+      prince213
     ];
 
     platforms = [
