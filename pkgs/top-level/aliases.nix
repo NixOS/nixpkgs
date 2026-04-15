@@ -707,6 +707,7 @@ mapAliases {
   firefox-wayland = throw "'firefox-wayland' has been renamed to/replaced by 'firefox'"; # Converted to throw 2025-10-27
   firmwareLinuxNonfree = throw "'firmwareLinuxNonfree' has been renamed to/replaced by 'linux-firmware'"; # Converted to throw 2025-10-27
   fishfight = throw "'fishfight' has been renamed to/replaced by 'jumpy'"; # Converted to throw 2025-10-27
+  fishMinimal = throw "'fishMinimal' has been renamed to 'fish.minimal'"; # Converted 2026-04-15
   fit-trackee = throw "'fit-trackee' has been renamed to/replaced by 'fittrackee'"; # Converted to throw 2025-10-27
   flashrom-stable = throw "'flashrom-stable' has been renamed to/replaced by 'flashprog'"; # Converted to throw 2025-10-27
   flatbuffers_2_0 = throw "'flatbuffers_2_0' has been renamed to/replaced by 'flatbuffers'"; # Converted to throw 2025-10-27
