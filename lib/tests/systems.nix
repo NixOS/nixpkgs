@@ -170,6 +170,7 @@ lib.runTests (
       "armv7l-linux"
       "i686-linux"
       "loongarch64-linux"
+      "hppa-linux"
       "m68k-linux"
       "microblaze-linux"
       "microblazeel-linux"

@@ -39,6 +39,7 @@ let
     "armv7l-linux"
     "i686-linux"
     "loongarch64-linux"
+    "hppa-linux"
     "m68k-linux"
     "microblaze-linux"
     "microblazeel-linux"
@@ -145,6 +146,7 @@ in
   or1k = filterDoubles predicates.isOr1k;
   m68k = filterDoubles predicates.isM68k;
   arc = filterDoubles predicates.isArc;
+  hppa = filterDoubles predicates.isHppa;
   s390 = filterDoubles predicates.isS390;
   s390x = filterDoubles predicates.isS390x;
   loongarch64 = filterDoubles predicates.isLoongArch64;
