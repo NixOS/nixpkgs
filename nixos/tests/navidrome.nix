@@ -5,7 +5,9 @@
   nodes.machine =
     { ... }:
     {
-      services.navidrome.enable = true;
+      services.navidrome = {
+        enable = true;
+      };
     };
 
   testScript = ''
