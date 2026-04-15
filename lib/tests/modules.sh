@@ -868,6 +868,9 @@ checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitio
 # attrListOf does not support type merging
 checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is already declared in .*/declare-attrList-type-merge.nix' config.merged ./declare-attrList-type-merge.nix
 
+# contracts: basic want -> instances -> results round-trip (no mkContract or mkProviderType)
+checkConfigOutput '^6$' config.contracts.basic.results.consumer.x.value ./contracts-basic.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
