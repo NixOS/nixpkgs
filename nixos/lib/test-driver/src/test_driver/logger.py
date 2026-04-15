@@ -18,9 +18,10 @@ from junit_xml import TestCase, TestSuite
 
 
 class LogLevel(IntEnum):
-    INFO = 1
-    WARNING = 2
-    ERROR = 3
+    DEBUG = 1
+    INFO = 2
+    WARNING = 3
+    ERROR = 4
 
 
 class AbstractLogger(ABC):
@@ -36,6 +37,10 @@ class AbstractLogger(ABC):
     @abstractmethod
     @contextmanager
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+        pass
+
+    @abstractmethod
+    def debug(self, *args, **kwargs) -> None:
         pass
 
     @abstractmethod
@@ -101,6 +106,10 @@ class JunitXMLLogger(AbstractLogger):
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
         self.log(message)
         yield
+
+    def debug(self, *args, **kwargs) -> None:
+        if self._log_level <= LogLevel.DEBUG:
+            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def info(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.INFO:
@@ -171,6 +180,10 @@ class CompositeLogger(AbstractLogger):
                 stack.enter_context(logger.nested(message, attributes))
             yield
 
+    def debug(self, *args, **kwargs) -> None:
+        for logger in self.logger_list:
+            logger.debug(*args, **kwargs)
+
     def info(self, *args, **kwargs) -> None:
         for logger in self.logger_list:
             logger.info(*args, **kwargs)
@@ -237,6 +250,12 @@ class TerminalLogger(AbstractLogger):
         toc = time.time()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
+    def debug(self, *args, **kwargs) -> None:
+        if self._log_level <= LogLevel.DEBUG:
+            self._eprint(
+                Style.DIM + self.maybe_prefix(args[0], kwargs) + Style.RESET_ALL  # ty: ignore[unsupported-operator]
+            )
+
     def info(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.INFO:
             self.log(*args, **kwargs)
@@ -295,6 +314,10 @@ class XMLLogger(AbstractLogger):
         self.xml.startElement("line", attrs=AttributesImpl(attributes))
         self.xml.characters(message)
         self.xml.endElement("line")
+
+    def debug(self, *args, **kwargs) -> None:
+        if self._log_level <= LogLevel.DEBUG:
+            self.log(*args, **kwargs)
 
     def info(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.INFO:
