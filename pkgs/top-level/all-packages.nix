@@ -8245,6 +8245,8 @@ with pkgs;
   font-awesome_7 = (callPackage ../data/fonts/font-awesome { }).v7;
   font-awesome = font-awesome_7;
 
+  inherit (callPackage ../by-name/go/google-fonts-full/package.nix { }) google-fonts;
+
   palenight-theme = callPackage ../data/themes/gtk-theme-framework { theme = "palenight"; };
 
   amarena-theme = callPackage ../data/themes/gtk-theme-framework { theme = "amarena"; };
