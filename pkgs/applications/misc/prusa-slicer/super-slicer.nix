@@ -21,6 +21,8 @@ let
     })
     ./super-slicer-use-boost186.patch
     ./super-slicer-fix-cereal-1.3.1.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
   ];
 
   wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
