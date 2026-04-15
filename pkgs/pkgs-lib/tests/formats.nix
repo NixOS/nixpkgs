@@ -196,17 +196,17 @@ runBuildTests {
     expected = ''
       attrs:
         foo: null
-      'false': false
+      "false": false
       float: 3.141
       list:
-      - null
-      - null
-      no: no
-      'null': null
+        - null
+        - null
+      "no": "no"
+      "null": null
       path: ${./testfile}
       str: foo
-      time: 22:30:00
-      'true': true
+      time: "22:30:00"
+      "true": true
     '';
   };
 
@@ -701,6 +701,8 @@ runBuildTests {
       [attrs]
       foo = "foo"
 
+      [level1]
+      [level1.level2]
       [level1.level2.level3]
       level4 = "deep"
     '';
