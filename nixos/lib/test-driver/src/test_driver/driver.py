@@ -8,6 +8,7 @@ import threading
 import traceback
 from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 from unittest import TestCase
@@ -63,19 +64,64 @@ def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
+@dataclass
+class VsockPair:
+    guest: Path
+    host: Path
+    cid: int
+
+
+class VHostDeviceVsock:
+    def __init__(self, tmp_dir: Path, machines: list[str]):
+        self.temp_dir_handle = tempfile.TemporaryDirectory(dir=tmp_dir)
+        self.temp_dir = Path(self.temp_dir_handle.name)
+        self.sockets = {
+            machine: VsockPair(
+                self.temp_dir / f"{machine}_guest.socket",
+                self.temp_dir / f"{machine}_host.socket",
+                cid,
+            )
+            for cid, machine in enumerate(machines, start=3)
+        }
+
+        self.vhost_proc = subprocess.Popen(
+            [
+                "vhost-device-vsock",
+                *(
+                    arg
+                    for vsock_pair in self.sockets.values()
+                    for arg in (
+                        "--vm",
+                        f"guest-cid={vsock_pair.cid},socket={vsock_pair.guest},uds-path={vsock_pair.host}",
+                    )
+                ),
+            ]
+        )
+
+    def __del__(self) -> None:
+        self.vhost_proc.kill()
+        self.temp_dir_handle.cleanup()
+
+
 class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
 
     tests: str
-    vlans: list[VLan]
-    machines_qemu: list[QemuMachine]
-    machines_nspawn: list[NspawnMachine]
+    vlans: list[VLan] = []
+    machines_qemu: list[QemuMachine] = []
+    machines_nspawn: list[NspawnMachine] = []
     polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
+    vm_start_scripts: dict[str, str]
+    container_start_scripts: dict[str, str]
+    vlan_ids: list[int]
+    keep_machine_state: bool
     logger: AbstractLogger
     debug: DebugAbstract
+    vhost_vsock: VHostDeviceVsock | None = None
+    enable_ssh_backdoor: bool
 
     def __init__(
         self,
@@ -90,36 +136,62 @@ class Driver:
         keep_machine_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
+        enable_ssh_backdoor: bool = False,
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
-        self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
         self.debug = debug
+        self.vlan_ids = list(set(vlans))
+        self.polling_conditions = []
+        self.keep_machine_state = keep_machine_state
+        self.global_timeout = global_timeout
+        self.vm_start_scripts = dict(zip(vm_names, vm_start_scripts))
+        self.container_start_scripts = dict(
+            zip(container_names, container_start_scripts)
+        )
+        self.enable_ssh_backdoor = enable_ssh_backdoor
 
+    def __enter__(self) -> "Driver":
+        self.race_timer = threading.Timer(self.global_timeout, self.terminate_test)
         tmp_dir = get_tmp_dir()
 
         with self.logger.nested("start all VLans"):
-            vlans = list(set(vlans))
-            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
+            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in self.vlan_ids]
 
         self.polling_conditions = []
+
+        if self.enable_ssh_backdoor and self.vm_start_scripts:
+            with self.logger.nested("start vhost-device-vsock"):
+                self.vhost_vsock = VHostDeviceVsock(
+                    tmp_dir, list(self.vm_start_scripts.keys())
+                )
 
         self.machines_qemu = [
             QemuMachine(
                 name=name,
                 start_command=vm_start_script,
-                keep_machine_state=keep_machine_state,
+                keep_machine_state=self.keep_machine_state,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
                 logger=self.logger,
+                vsock_host=(
+                    self.vhost_vsock.sockets[name].host
+                    if self.vhost_vsock is not None
+                    else None
+                ),
+                vsock_guest=(
+                    self.vhost_vsock.sockets[name].guest
+                    if self.vhost_vsock is not None
+                    else None
+                ),
             )
-            for name, vm_start_script in zip(vm_names, vm_start_scripts)
+            for name, vm_start_script in self.vm_start_scripts.items()
         ]
 
-        if len(container_start_scripts) > 0:
+        if len(self.container_start_scripts) > 0:
             self._init_nspawn_environment()
 
         self.machines_nspawn = [
@@ -128,15 +200,14 @@ class Driver:
                 start_command=container_start_script,
                 tmp_dir=tmp_dir,
                 logger=self.logger,
-                keep_machine_state=keep_machine_state,
+                keep_machine_state=self.keep_machine_state,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
             )
-            for name, container_start_script in zip(
-                container_names,
-                container_start_scripts,
-            )
+            for name, container_start_script in self.container_start_scripts.items()
         ]
+
+        return self
 
     def _init_nspawn_environment(self) -> None:
         assert os.geteuid() == 0, (
@@ -193,9 +264,6 @@ class Driver:
         machines.sort(key=lambda machine: machine.name)
         return machines
 
-    def __enter__(self) -> "Driver":
-        return self
-
     def __exit__(self, *_: Any) -> None:
         with self.logger.nested("cleanup"):
             self.race_timer.cancel()
@@ -210,6 +278,14 @@ class Driver:
                     vlan.stop()
                 except Exception as e:
                     self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
+
+            if self.enable_ssh_backdoor:
+                try:
+                    del self.vhost_vsock
+                except Exception as e:
+                    self.logger.error(
+                        f"Error during cleanup of vhost-device-vsock process: {e}"
+                    )
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
@@ -248,6 +324,7 @@ class Driver:
             NspawnMachine=NspawnMachine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
+            dump_machine_ssh=self.dump_machine_ssh,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -267,18 +344,28 @@ class Driver:
         )
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
-    def dump_machine_ssh(self, offset: int) -> None:
-        print("SSH backdoor enabled, the machines can be accessed like this:")
-        print(
-            f"{Style.BRIGHT}Note:{Style.RESET_ALL} vsocks require {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
-        )
-        longest_name = len(max((machine.name for machine in self.machines), key=len))
-        for index, machine in enumerate(self.machines, start=offset + 1):
-            name = machine.name
-            spaces = " " * (longest_name - len(name) + 2)
+    def dump_machine_ssh(self) -> None:
+        if not self.enable_ssh_backdoor:
+            return
+
+        assert self.vhost_vsock is not None
+
+        if self.machines:
+            print("SSH backdoor enabled, the machines can be accessed like this:")
             print(
-                f"    {name}:{spaces}{Style.BRIGHT}{machine.ssh_backdoor_command(index)}{Style.RESET_ALL}"
+                f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
             )
+            longest_name = len(
+                max((machine.name for machine in self.machines), key=len)
+            )
+            for index, machine in enumerate(self.machines):
+                name = machine.name
+                spaces = " " * (longest_name - len(name) + 2)
+                print(
+                    f"    {name}:{spaces}{Style.BRIGHT}{machine.ssh_backdoor_command()}{Style.RESET_ALL}"
+                )
+        else:
+            print("SSH backdoor enabled, but no machines defined")
 
     def test_script(self) -> None:
         """Run the test script"""
@@ -396,6 +483,10 @@ class Driver:
         """
         tmp_dir = get_tmp_dir()
 
+        if self.enable_ssh_backdoor:
+            self.logger.warning(
+                f"create_machine({name}): not enabling SSH backdoor, this is not supported for VMs created with create_machine!"
+            )
         return QemuMachine(
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
