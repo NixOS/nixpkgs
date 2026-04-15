@@ -2,6 +2,7 @@
   cups,
   fetchurl,
   lib,
+  pkg-config,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -13,10 +14,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-v61/5HY25cvhVbHF+dXOOGrDfZZzvvicJEy7MKTAG10=";
   };
 
-  nativeBuildInputs = [ cups ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ cups ];
 
+  # configure unconditionally derives CUPS_DATADIR/CUPS_SERVERBIN from
+  # pkg-config, which points into the cups store path; override at make time
+  # so the filter and PPD are installed into $out instead.
   makeFlags = [
     "CUPS_DATADIR=${placeholder "out"}/share/cups"
     "CUPS_SERVERBIN=${placeholder "out"}/lib/cups"
