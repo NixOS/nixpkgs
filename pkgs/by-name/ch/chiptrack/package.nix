@@ -1,22 +1,13 @@
 {
-  clangStdenv,
+  stdenv,
   rustPlatform,
   lib,
-  linkFarm,
-  fetchgit,
   fetchFromGitHub,
-  runCommand,
   alsa-lib,
   brotli,
   cmake,
-  expat,
   fontconfig,
-  freetype,
-  gn,
-  harfbuzz,
-  icu,
   libglvnd,
-  libjpeg,
   libxkbcommon,
   libx11,
   libxcursor,
@@ -24,23 +15,21 @@
   libxi,
   libxrandr,
   makeWrapper,
-  ninja,
   pkg-config,
   python3,
-  removeReferencesTo,
   wayland,
   zlib,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage {
   pname = "chiptrack";
-  version = "0.5";
+  version = "0.5-unstable-2026-02-09";
 
   src = fetchFromGitHub {
     owner = "jturcotte";
     repo = "chiptrack";
-    tag = "v${version}";
-    hash = "sha256-yQP5hFM5qBWdaF192PBvM4il6qpmlgUCeuwDCiw/LaQ=";
+    rev = "3cb0caa5bbc23d0579cdad8187c4371bdf0723a3";
+    hash = "sha256-jqtWmhP8h8v8bMPVgVZtraWOXRpEir6WnSoCg5EJKs0=";
   };
 
   strictDeps = true;
@@ -51,59 +40,18 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     makeWrapper
     pkg-config
     python3
-    removeReferencesTo
   ];
 
   buildInputs = [
-    expat
     fontconfig
-    freetype
-    harfbuzz
-    icu
-    libjpeg
   ]
-  ++ lib.optionals clangStdenv.hostPlatform.isLinux [ alsa-lib ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   # Has git dependencies
 
-  cargoHash = "sha256-3LRyAY5NmXiJRrN+jwaUX65ArBCl8BiFoaWU2fVRMA8=";
+  cargoHash = "sha256-C9sNSD51Q0U4f4xhnTQI/457uk/yFSrEdok81bDgcc0=";
 
-  env = {
-    SKIA_SOURCE_DIR =
-      let
-        repo = fetchFromGitHub {
-          owner = "rust-skia";
-          repo = "skia";
-          # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-          tag = "m129-0.77.1";
-          hash = "sha256-WRVuQpfRnYrE7KGFRFx66fXtMFmtJbC3xUcRPK1JoOM=";
-        };
-        # The externals for skia are taken from skia/DEPS
-        # Reduced to only what's necessary
-        externals = linkFarm "skia-externals" (
-          lib.mapAttrsToList (name: value: {
-            inherit name;
-            path = fetchgit value;
-          }) (lib.importJSON ./skia-externals.json)
-        );
-      in
-      runCommand "source" { } ''
-        cp -R ${repo} $out
-        chmod -R +w $out
-        ln -s ${externals} $out/third_party/externals
-      '';
-    SKIA_GN_COMMAND = lib.getExe gn;
-    SKIA_NINJA_COMMAND = lib.getExe ninja;
-    SKIA_USE_SYSTEM_LIBRARIES = "1";
-
-    NIX_CFLAGS_COMPILE = "-I${lib.getDev harfbuzz}/include/harfbuzz";
-  };
-
-  # library skia embeds the path to its sources
   postFixup = ''
-    remove-references-to -t "$SKIA_SOURCE_DIR" \
-      $out/bin/chiptrack
-
     wrapProgram $out/bin/chiptrack \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath (
@@ -111,7 +59,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
             brotli
             zlib
           ]
-          ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
             libglvnd
             libxkbcommon
             libx11
@@ -125,8 +73,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       }
   '';
 
-  disallowedReferences = [ env.SKIA_SOURCE_DIR ];
-
   meta = {
     description = "Programmable cross-platform sequencer for the Game Boy Advance sound chip";
     homepage = "https://github.com/jturcotte/chiptrack";
@@ -137,6 +83,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     mainProgram = "chiptrack";
     maintainers = with lib.maintainers; [ OPNA2608 ];
     # Various issues with wrong max macOS version & misparsed target conditional checks, can't figure out the magic combination for this
-    broken = clangStdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
