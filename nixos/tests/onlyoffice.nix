@@ -1,3 +1,6 @@
+{
+  package ? null,
+}:
 let
   port = 8000;
 in
@@ -5,7 +8,7 @@ in
   name = "onlyoffice";
 
   nodes.machine =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       services.onlyoffice = {
         enable = true;
@@ -14,7 +17,8 @@ in
         securityNonceFile = "${pkgs.writeText "nixos-test-onlyoffice-nonce.conf" ''
           set $secure_link_secret "nixostest";
         ''}";
-      };
+      }
+      // lib.optionalAttrs (package != null) { inherit package; };
 
       networking.hosts = {
         "::1" = [ "office.example.com" ];
