@@ -1,0 +1,62 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+  libGLU,
+  libGL,
+  libglut,
+  zlib,
+  cmake,
+  libx11,
+  libxml2,
+  libpng,
+  libxxf86vm,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "freepv";
+  version = "0.3.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/freepv/freepv-${finalAttrs.version}.tar.gz";
+    sha256 = "1w19abqjn64w47m35alg7bcdl1p97nf11zn64cp4p0dydihmhv56";
+  };
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    libjpeg
+    libGLU
+    libGL
+    libglut
+    zlib
+    libx11
+    libxml2
+    libpng
+    libxxf86vm
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.4.0)" "cmake_minimum_required(VERSION 3.10)"
+
+    sed -i -e '/GECKO/d' CMakeLists.txt
+    sed -i -e '/mozilla/d' src/CMakeLists.txt
+    sed -i -e '1i \
+      #include <cstdio>' src/libfreepv/OpenGLRenderer.cpp
+    sed -i -e '1i \
+      #include <cstring>' src/libfreepv/Image.cpp
+    substituteInPlace src/libfreepv/Action.h \
+      --replace NULL nullptr
+    substituteInPlace src/libfreepv/pngReader.cpp \
+      --replace png_set_gray_1_2_4_to_8 png_set_expand_gray_1_2_4_to_8
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-narrowing";
+
+  meta = {
+    description = "Open source panorama viewer using GL";
+    homepage = "https://freepv.sourceforge.net/";
+    license = [ lib.licenses.lgpl21 ];
+  };
+})

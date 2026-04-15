@@ -1,0 +1,75 @@
+diff --git a/tests/test_legacy.py b/tests/test_legacy.py
+index 33790b9..0577262 100644
+--- a/tests/test_legacy.py
++++ b/tests/test_legacy.py
+@@ -101,8 +101,8 @@ gui/
+         sample-project/
+             icons/
+                 coffee.svg
+-                heart.svg
+                 email.svg
++                heart.svg
+                 help.svg\
+ """
+
+diff --git a/tests/test_ui.py b/tests/test_ui.py
+index 0774672..3764fda 100644
+--- a/tests/test_ui.py
++++ b/tests/test_ui.py
+@@ -60,22 +60,22 @@ def test_ui_builder(tmp_path: Path):
+
+     expected_file_structure = """\
+ gui/
++    forms/
++        __init__.py
++        qt5/
++            __init__.py
++            dialog.py
++        qt6/
++            __init__.py
++            dialog.py
+     resources/
+         __init__.py
+         sample-project/
+             icons/
+                 coffee.svg
+-                heart.svg
+                 email.svg
+-                help.svg
+-    forms/
+-        __init__.py
+-        qt6/
+-            __init__.py
+-            dialog.py
+-        qt5/
+-            __init__.py
+-            dialog.py\
++                heart.svg
++                help.svg\
+ """
+
+     config = Config(test_project_root / "addon.json")
+@@ -136,8 +136,8 @@ gui/
+         sample-project/
+             icons/
+                 coffee.svg
+-                heart.svg
+                 email.svg
++                heart.svg
+                 help.svg\
+ """
+
+diff --git a/tests/util.py b/tests/util.py
+index a682bcd..a4aa7de 100644
+--- a/tests/util.py
++++ b/tests/util.py
+@@ -40,6 +40,9 @@ def list_files(startpath: Path):
+     ret = []
+
+     for root, dirs, files in os.walk(path):
++        dirs.sort()
++        files.sort()
++
+         level = root.replace(path, "").count(os.sep)
+         indent = " " * 4 * (level)
+         ret.append("{}{}/".format(indent, os.path.basename(root)))

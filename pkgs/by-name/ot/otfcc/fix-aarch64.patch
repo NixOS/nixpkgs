@@ -1,0 +1,22 @@
+diff --git a/premake5.lua b/premake5.lua
+index 997fd79..54a20a0 100644
+--- a/premake5.lua
++++ b/premake5.lua
+@@ -49,7 +49,7 @@ end
+ workspace "otfcc"
+ 	configurations { "release", "debug" }
+ 	
+-	platforms { "x64", "x86" }
++	platforms { "x64", "x86", "arm" }
+ 	filter "action:xcode4"
+ 		platforms { "x64" }
+ 	filter {}
+@@ -67,6 +67,8 @@ workspace "otfcc"
+ 		architecture "x86"
+ 	filter "platforms:x64"
+ 		architecture "x64"
++	filter "platforms:arm"
++		architecture "arm"
+ 	filter {}
+ 	
+ 	filter "action:vs2017"

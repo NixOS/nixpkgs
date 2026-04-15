@@ -1,0 +1,381 @@
+# Run with:
+#   cd nixpkgs
+#   nix-build -A nixosTests.ec2-image
+
+{
+  config,
+  lib,
+  hostPkgs,
+  ...
+}:
+
+let
+  inherit (lib) mkAfter mkForce;
+  pkgs = config.node.pkgs;
+
+  imdsServer = import ./common/imds-server.nix { inherit pkgs; };
+
+  # Build an EC2 image configuration
+  imageCfg =
+    (import ../lib/eval-config.nix {
+      system = null;
+      modules = [
+        ../maintainers/scripts/ec2/amazon-image.nix
+        ../modules/testing/test-instrumentation.nix
+        ../modules/profiles/qemu-guest.nix
+        {
+          amazonImage.format = "qcow2";
+
+          # In a NixOS test the serial console is occupied by the "backdoor"
+          # (see testing/test-instrumentation.nix) and is incompatible with
+          # the configuration in virtualisation/amazon-image.nix.
+          systemd.services."serial-getty@ttyS0".enable = mkForce false;
+
+          # Make /dev/console point to serial console for proper capture
+          # test-instrumentation.nix adds console=tty0, so we need to add console=ttyS0 AFTER it
+          # The last console= parameter takes precedence for /dev/console
+          boot.kernelParams = mkAfter [ "console=ttyS0" ];
+
+          # Configure VLAN networking to match test framework setup
+          networking.interfaces.eth0 = {
+            ipv4.addresses = [
+              {
+                address = config.nodes.machine.networking.primaryIPAddress;
+                prefixLength = 24;
+              }
+            ];
+          };
+
+          # Packages needed for IPv6 IMDS fallback test
+          environment.systemPackages = [
+            pkgs.socat
+            imdsServer
+            pkgs.iptables
+          ];
+
+          nixpkgs.pkgs = pkgs;
+        }
+      ];
+    }).config;
+
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
+
+in
+{
+  name = "ec2-image";
+  meta = {
+    maintainers = with lib.maintainers; [
+      roberth
+      arianvp
+    ];
+    timeout = 600;
+  };
+  nodes = {
+    machine = { ... }: { }; # Dummy node for network config - won't be launched
+    client =
+      { ... }:
+      {
+        # Configure SSH client for non-interactive, strict authentication
+        programs.ssh.extraConfig = ''
+          Host *
+            PasswordAuthentication no
+            ChallengeResponseAuthentication no
+            HostbasedAuthentication no
+            BatchMode yes
+            PubkeyAuthentication yes
+            StrictHostKeyChecking yes
+        '';
+      };
+  };
+
+  testScript = ''
+    import os
+    import re
+    import subprocess
+    import tempfile
+
+    # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
+    # TODO: Use 'latest' metadata version instead of '1.0'
+    # TODO: [Test matrix] also test providing the host key through IMDS
+    #       - i.e. a test module argument to select between writing or reading the host key
+    def create_ec2_metadata_dir(temp_dir, client_pubkey):
+        """Create fake EC2 metadata directory structure with mock data"""
+        metadata_dir = os.path.join(temp_dir.name, "ec2-metadata")
+
+        # Create directory structure
+        os.makedirs(os.path.join(metadata_dir, "1.0", "meta-data", "public-keys", "0"), exist_ok=True)
+        os.makedirs(os.path.join(metadata_dir, "latest", "api"), exist_ok=True)
+
+        # Metadata version 1.0 endpoints (what fetch-ec2-metadata.sh actually fetches)
+        with open(os.path.join(metadata_dir, "1.0", "meta-data", "hostname"), "w") as f:
+            f.write("test-instance")
+        with open(os.path.join(metadata_dir, "1.0", "meta-data", "ami-manifest-path"), "w") as f:
+            f.write("(test)")
+        with open(os.path.join(metadata_dir, "1.0", "meta-data", "instance-id"), "w") as f:
+            f.write("i-1234567890abcdef0")
+        with open(os.path.join(metadata_dir, "1.0", "user-data"), "w") as f:
+            f.write("")
+        with open(os.path.join(metadata_dir, "1.0", "meta-data", "public-keys", "0", "openssh-key"), "w") as f:
+            f.write(client_pubkey)
+
+        # IMDSv2 token endpoint - return a fake token
+        with open(os.path.join(metadata_dir, "latest", "api", "token"), "w") as f:
+            f.write("test-token-12345")
+
+        return metadata_dir
+
+    def generate_client_ssh_key():
+        """Generate SSH key pair on VM host for client authentication"""
+        # Use temporary directory for key generation
+        import tempfile
+        with tempfile.TemporaryDirectory() as key_dir:
+            private_key = os.path.join(key_dir, "id_ed25519")
+            public_key = os.path.join(key_dir, "id_ed25519.pub")
+
+            # Generate key pair using host SSH tools
+            ret = os.system(f"${hostPkgs.openssh}/bin/ssh-keygen -t ed25519 -f {private_key} -N \"\"")
+            if ret != 0:
+                raise Exception("Failed to generate SSH key pair")
+
+            # Read the generated public key
+            with open(public_key, "r") as f:
+                client_pubkey = f.read().strip()
+
+            # Read the private key
+            with open(private_key, "r") as f:
+                client_private_key = f.read()
+
+            return client_pubkey, client_private_key
+
+    def setup_client_ssh_key(client, client_private_key):
+        """Install the pre-generated SSH private key on client"""
+        client.succeed("mkdir -p /root/.ssh")
+        client.succeed(f"cat > /root/.ssh/id_ed25519 << 'EOF'\n{client_private_key}\nEOF")
+        client.succeed("chmod 600 /root/.ssh/id_ed25519")
+
+    def setup_machine(temp_dir, client_pubkey):
+        """Initialize EC2 machine with disk image, metadata server, and networking"""
+        # Set up disk image
+        image_dir = os.path.join(
+            os.environ.get("TMPDIR", tempfile.gettempdir()), "tmp", "vm-state-machine"
+        )
+        os.makedirs(image_dir, mode=0o700, exist_ok=True)
+        disk_image = os.path.join(image_dir, "machine.qcow2")
+        subprocess.check_call([
+            "qemu-img", "create", "-f", "qcow2", "-F", "qcow2",
+            "-o", "backing_file=${image}", disk_image
+        ])
+        subprocess.check_call(["qemu-img", "resize", disk_image, "10G"])
+
+        # Create fake EC2 metadata in temporary directory with client's public key
+        metadata_dir = create_ec2_metadata_dir(temp_dir, client_pubkey)
+
+        # Add both VLAN networking (matching test framework) and EC2 metadata server
+        vlan_net = (
+            " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:01:02"
+            + ' -netdev vde,id=vlan1,sock="$QEMU_VDE_SOCKET_1"'
+        )
+        metadata_net = (
+            " -device virtio-net-pci,netdev=ec2meta"
+            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
+        )
+
+        start_command = (
+            "qemu-kvm -m 1024"
+            + f" -drive file={disk_image},if=virtio,werror=report"
+            + vlan_net
+            + metadata_net
+            + " $QEMU_OPTS"
+        )
+
+        return create_machine(start_command), metadata_dir
+
+    def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
+        """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
+        test_marker = f"{format_name}-decompression-test"
+        with open(user_data_path, "wb") as f:
+            f.write(compressed_data)
+        machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
+        result = machine.succeed("cat /etc/ec2-metadata/user-data")
+        assert test_marker in result, f"Expected '{test_marker}' in decompressed {format_name} content, got: {result}"
+        journal = machine.succeed("journalctl -u fetch-ec2-metadata --no-pager -b")
+        assert "decompressing:" in journal, f"Expected decompression log in journal for {format_name}"
+
+    # Create temporary directory for metadata (scoped for cleanup)
+    temp_dir = tempfile.TemporaryDirectory()
+
+    # Start client first (but don't wait for it to boot)
+    client.start()
+
+    # Generate SSH key pair on VM host before starting machine
+    client_pubkey, client_private_key = generate_client_ssh_key()
+
+    # Set up machine with client's public key in metadata service
+    machine, metadata_dir = setup_machine(temp_dir, client_pubkey)
+    user_data_path = os.path.join(metadata_dir, "1.0", "user-data")
+
+    try:
+        machine.start()
+
+        # Wait for services to be ready
+        machine.wait_for_unit("sshd.service")
+        machine.wait_for_unit("print-host-key.service")
+        machine.wait_for_unit("apply-ec2-data.service")
+
+        # Extract shared variables outside subtests
+        machine_ip = "${config.nodes.machine.networking.primaryIPAddress}"
+
+        with subtest("EC2 metadata service connectivity"):
+            # Obtain an IMDSv2 token, then use it to fetch metadata
+            imds_token = machine.succeed(
+                "curl -sf -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 600'"
+                " http://169.254.169.254/latest/api/token"
+            ).strip()
+            assert imds_token, "Failed to obtain IMDSv2 token"
+            hostname_response = machine.succeed(
+                f"curl -sf -H 'X-aws-ec2-metadata-token: {imds_token}'"
+                " http://169.254.169.254/1.0/meta-data/hostname"
+            )
+            assert "test-instance" in hostname_response, f"Expected 'test-instance', got: {hostname_response}"
+
+        with subtest("SSH host key extraction from console"):
+            console_log = machine.get_console_log()
+            assert "-----BEGIN SSH HOST KEY FINGERPRINTS-----" in console_log
+            assert "-----END SSH HOST KEY FINGERPRINTS-----" in console_log
+            assert "-----BEGIN SSH HOST KEY KEYS-----" in console_log
+            assert "-----END SSH HOST KEY KEYS-----" in console_log
+
+            keys_pattern = r"-----BEGIN SSH HOST KEY KEYS-----(.*?)-----END SSH HOST KEY KEYS-----"
+            keys_match = re.search(keys_pattern, console_log, re.DOTALL)
+            assert keys_match, "Could not find SSH host keys section"
+            keys_content = keys_match.group(1).strip()
+            assert "ssh-" in keys_content, "SSH keys should contain ssh- prefix"
+
+        with subtest("Network connectivity"):
+            client.succeed(f"ping -c 1 {machine_ip}")
+
+        with subtest("SSH connectivity with strict host key checking"):
+            # Install the pre-generated private key on client
+            setup_client_ssh_key(client, client_private_key)
+
+            # Get console log and extract host keys
+            console_log = machine.get_console_log()
+            keys_pattern = r"-----BEGIN SSH HOST KEY KEYS-----(.*?)-----END SSH HOST KEY KEYS-----"
+            keys_match = re.search(keys_pattern, console_log, re.DOTALL)
+            assert keys_match, "Could not find SSH host keys section"
+
+            # Create known_hosts file from console-extracted host keys
+            keys_content = keys_match.group(1).strip()
+            known_hosts_entries = []
+            for line in keys_content.split('\n'):
+                if line.strip() and line.startswith('ssh-'):
+                    known_hosts_entries.append(f"{machine_ip} {line.strip()}")
+
+            assert known_hosts_entries, "No SSH host keys found for known_hosts generation"
+
+            known_hosts_content = '\n'.join(known_hosts_entries)
+            client.succeed(f"cat > /root/.ssh/known_hosts << 'EOF'\n{known_hosts_content}\nEOF")
+
+            # Test SSH connectivity with strict host key checking
+            ssh_result = client.succeed(f"ssh -o ConnectTimeout=60 -o BatchMode=yes -i /root/.ssh/id_ed25519 root@{machine_ip} 'echo Hello from $(hostname)'")
+            assert "Hello from test-instance" in ssh_result, f"Unexpected SSH result: {ssh_result}"
+
+        with subtest("Basic EC2 functionality"):
+            machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+
+        with subtest("Decompression of gzip-compressed user-data"):
+            import gzip as gzip_mod
+            test_data = b"#!/bin/bash\necho gzip-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, gzip_mod.compress(test_data), "gzip")
+
+        with subtest("Decompression of bzip2-compressed user-data"):
+            import bz2
+            test_data = b"#!/bin/bash\necho bzip2-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, bz2.compress(test_data), "bzip2")
+
+        with subtest("Decompression of xz-compressed user-data"):
+            import lzma
+            test_data = b"#!/bin/bash\necho xz-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, lzma.compress(test_data), "xz")
+
+        with subtest("Decompression of zstd-compressed user-data"):
+            test_data = b"#!/bin/bash\necho zstd-decompression-test\n"
+            proc = subprocess.run(
+                ["${hostPkgs.zstd}/bin/zstd", "-c"],
+                input=test_data, capture_output=True, check=True,
+            )
+            test_userdata_decompression(machine, user_data_path, proc.stdout, "zstd")
+
+        with subtest("Decompression of lzip-compressed user-data"):
+            test_data = b"#!/bin/bash\necho lzip-decompression-test\n"
+            proc = subprocess.run(
+                ["${hostPkgs.lzip}/bin/lzip", "-c"],
+                input=test_data, capture_output=True, check=True,
+            )
+            test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
+
+        with subtest("IPv6 IMDS fallback"):
+            # Save hostname fetched via IPv4 for later comparison
+            original_hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()
+
+            # Assign the EC2 IPv6 IMDS address to loopback
+            machine.succeed("ip -6 addr add fd00:ec2::254/128 dev lo")
+
+            # Create metadata directory structure for the IPv6 endpoint
+            machine.succeed(
+                "mkdir -p /tmp/ipv6-metadata/1.0/meta-data/public-keys/0"
+                " && mkdir -p /tmp/ipv6-metadata/latest/api"
+                " && cp /etc/ec2-metadata/hostname /tmp/ipv6-metadata/1.0/meta-data/hostname"
+                " && cp /etc/ec2-metadata/ami-manifest-path /tmp/ipv6-metadata/1.0/meta-data/ami-manifest-path"
+                " && echo i-1234567890abcdef0 > /tmp/ipv6-metadata/1.0/meta-data/instance-id"
+                " && echo ipv6-test-token > /tmp/ipv6-metadata/latest/api/token"
+                " && touch /tmp/ipv6-metadata/1.0/user-data"
+            )
+            machine.execute(
+                "test -f /etc/ec2-metadata/public-keys-0-openssh-key"
+                " && cp /etc/ec2-metadata/public-keys-0-openssh-key"
+                " /tmp/ipv6-metadata/1.0/meta-data/public-keys/0/openssh-key"
+            )
+
+            # Serve metadata on the IPv6 IMDS address via socat + imds-server (inetd-style)
+            machine.succeed(
+                "systemd-run --unit=ipv6-imds --"
+                " socat TCP6-LISTEN:80,bind=[fd00:ec2::254],fork,reuseaddr"
+                " SYSTEM:'${lib.getExe imdsServer} /tmp/ipv6-metadata'"
+            )
+
+            # Wait for IPv6 IMDS to become reachable (token endpoint doesn't require auth)
+            machine.wait_until_succeeds(
+                "curl -sf -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 600'"
+                " http://[fd00:ec2::254]/latest/api/token"
+            )
+
+            # Block IPv4 IMDS to force fallback to IPv6
+            machine.succeed(
+                "iptables -I OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REJECT"
+            )
+
+            # Verify IPv4 IMDS is now unreachable
+            machine.fail(
+                "curl -sf --connect-timeout 2 http://169.254.169.254/1.0/meta-data/hostname"
+            )
+
+            # Clear fetched metadata and re-run the fetcher
+            machine.succeed("rm -f /etc/ec2-metadata/*")
+            machine.succeed("systemctl restart fetch-ec2-metadata")
+
+            # Verify metadata was successfully re-fetched via IPv6
+            hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()
+            assert hostname == original_hostname, f"Expected '{original_hostname}', got '{hostname}'"
+
+            # Clean up: restore IPv4 IMDS access
+            machine.succeed(
+                "iptables -D OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REJECT"
+            )
+            machine.succeed("systemctl stop ipv6-imds")
+
+    finally:
+        machine.shutdown()
+        temp_dir.cleanup()
+  '';
+}

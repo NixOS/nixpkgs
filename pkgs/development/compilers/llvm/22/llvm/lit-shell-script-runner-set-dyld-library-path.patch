@@ -1,0 +1,14 @@
+diff --git a/utils/lit/lit/TestRunner.py b/utils/lit/lit/TestRunner.py
+index 7a233b238f7e..23aa87fdb097 100644
+--- a/utils/lit/lit/TestRunner.py
++++ b/utils/lit/lit/TestRunner.py
+@@ -1341,6 +1341,9 @@ def executeScript(test, litConfig, tmpBase, commands, cwd):
+             f.write("@echo on\n")
+             f.write("\n@if %ERRORLEVEL% NEQ 0 EXIT\n".join(commands))
+     else:
++        if "DYLD_LIBRARY_PATH" in test.config.environment:
++            f.write(f'export DYLD_LIBRARY_PATH="{test.config.environment["DYLD_LIBRARY_PATH"]}"\n')
++
+         for i, ln in enumerate(commands):
+             match = re.fullmatch(kPdbgRegex, ln)
+             if match:

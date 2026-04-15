@@ -1,0 +1,70 @@
+Backported from <https://github.com/openjdk/jfx/pull/1259>.
+
+Original author: Alexander Matveev <alexander.matveev@oracle.com>
+
+diff --git a/build.gradle b/build.gradle
+index 82dc7a7fa9..d1ae3b401f 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -3342,6 +3342,7 @@
+             media name: "ffmpeg-3.3.3", ext: "tar.gz"
+             media name: "ffmpeg-4.0.2", ext: "tar.gz"
+             media name: "ffmpeg-5.1.2", ext: "tar.gz"
++            media name: "ffmpeg-6.0", ext: "tar.gz"
+         }
+         implementation project(":base")
+         implementation project(":graphics")
+@@ -3484,7 +3485,7 @@
+             if (t.name == "linux") {
+                 // Pre-defined command line arguments
+                 def cfgCMDArgs = ["sh", "configure"]
+-                def commonCfgArgs = ["--enable-shared", "--disable-debug", "--disable-static", "--disable-yasm", "--disable-doc", "--disable-programs", "--disable-everything"]
++                def commonCfgArgs = ["--enable-shared", "--disable-debug", "--disable-static", "--disable-asm", "--disable-doc", "--disable-programs", "--disable-everything"]
+                 def codecsCfgArgs = ["--enable-decoder=aac,mp3,mp3float,h264", "--enable-parser=aac,h264", "--enable-demuxer=aac,h264,mpegts,mpegtsraw"]
+ 
+                 def copyLibAVStubs = {String fromDir, String toDir ->
+@@ -3688,8 +3689,8 @@
+                     doLast {
+                         project.ext.libav = [:]
+                         project.ext.libav.basedir = "${buildDir}/native/linux/ffmpeg"
+-                        project.ext.libav.versions = [ "3.3.3", "4.0.2", "5.1.2" ]
+-                        project.ext.libav.versionmap = [ "3.3.3" : "57", "4.0.2" : "58", "5.1.2" : "59" ]
++                        project.ext.libav.versions = [ "3.3.3", "4.0.2", "5.1.2", "6.0" ]
++                        project.ext.libav.versionmap = [ "3.3.3" : "57", "4.0.2" : "58", "5.1.2" : "59", "6.0" : "60" ]
+ 
+                         libav.versions.each { version ->
+                             def libavDir = "${libav.basedir}/ffmpeg-${version}"
+@@ -3769,7 +3770,7 @@
+                             project.ext.libav.libavffmpeg.versions = [ "56" ]
+                             project.ext.libav.ffmpeg = [:]
+                             project.ext.libav.ffmpeg.basedir = "${buildDir}/native/linux/ffmpeg/ffmpeg"
+-                            project.ext.libav.ffmpeg.versions = [ "57", "58", "59" ]
++                            project.ext.libav.ffmpeg.versions = [ "57", "58", "59", "60" ]
+ 
+                             project.ext.libav.versions.each { version ->
+                                 def libavDir = "${project.ext.libav.basedir}-${version}"
+diff --git a/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java b/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java
+index 05f98ad3d1..b05bb68341 100644
+--- a/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java
++++ b/modules/javafx.media/src/main/java/com/sun/media/jfxmediaimpl/NativeMediaManager.java
+@@ -125,6 +125,7 @@
+                     dependencies.add("avplugin-ffmpeg-57");
+                     dependencies.add("avplugin-ffmpeg-58");
+                     dependencies.add("avplugin-ffmpeg-59");
++                    dependencies.add("avplugin-ffmpeg-60");
+                 }
+                 if (HostUtils.isMacOSX()) {
+                     dependencies.add("fxplugins");
+diff --git a/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c b/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
+index 9f67de9062..ee64e4bafd 100644
+--- a/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
++++ b/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
+@@ -146,7 +146,7 @@
+ // For ffmpeg (libavcodec-ffmpeg.so)
+ static const int AVCODEC_FFMPEG_EXPLICIT_VERSIONS[] = { 56 };
+ // For libav or ffmpeg (libavcodec.so)
+-static const int AVCODEC_EXPLICIT_VERSIONS[] = { 57, 58, 59 };
++static const int AVCODEC_EXPLICIT_VERSIONS[] = { 57, 58, 59, 60 };
+ 
+ /*
+  * Callback passed to dl_iterate_phdr(): finds the path of
