@@ -118,12 +118,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-knXAK3mW0tDz5ukuYkAZMv/zF9NLR8pofc3ujabcsys=";
+    hash = "sha256-iJolR8iS2go0doO96ibyseCeMunFL+XPoQ25NbX6oOA=";
   };
 
   patches = [
@@ -131,6 +131,9 @@ stdenv'.mkDerivation (finalAttrs: {
     # ceres-solver dependency propagates eigen 3 and appears to be incompatible
     # with more recent versions.
     ./eigen-3-compat.patch
+    # Required due to `-Werror=format-security` in nixpkgs
+    # https://projects.blender.org/blender/blender/commit/470127ede2448de50a6936b8484b3c382c76d596
+    ./fix-quite-clog-warning.patch
   ]
   # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
   ++ lib.optionals rocmSupport [
