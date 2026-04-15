@@ -20,7 +20,7 @@ let
         in
         with lib.versions;
         lib.switch coq.coq-version [
-          (case (range "8.20" "8.20") "2.0.7")
+          (case (range "8.20" "8.20") "1.19.2")
           (case (range "8.18" "8.19") "1.18.1")
           (case (range "8.16" "8.17") "1.17.0")
           (case "8.15" "1.15.0")
@@ -29,7 +29,10 @@ let
           (case "8.11" "1.11.4")
         ] coq.ocamlPackages.elpi.version
       );
-  elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
+  elpi = coq.ocamlPackages.elpi.override {
+    version = default-elpi-version;
+    ppx_deriving_0_33 = coq.ocamlPackages.ppx_deriving;
+  };
   propagatedBuildInputs_wo_elpi = [
     coq.ocamlPackages.findlib
   ];
@@ -44,7 +47,7 @@ let
       in
       with lib.versions;
       lib.switch coq.coq-version [
-        (case (range "8.20" "8.20") "2.6.0")
+        (case (range "8.20" "8.20") "2.2.0")
         (case (range "8.20" "8.20") "2.5.2")
         (case "8.19" "2.0.1")
         (case "8.18" "2.0.0")
