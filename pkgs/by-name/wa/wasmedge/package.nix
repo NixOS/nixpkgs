@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-h98gjBITAYpD6pdrlgfOC0cAYdJA6i9fWdD0bMsuEK4=";
+    sha256 = "sha256-x1osq/ZmStPHf+iODr9oZRyy5DVLC8iMIO0lmcSp3PQ=";
   };
 
   nativeBuildInputs = [
