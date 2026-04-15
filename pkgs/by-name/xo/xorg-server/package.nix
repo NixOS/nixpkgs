@@ -57,6 +57,9 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorg-server";
+  # `xvfb` inherits `version` and `src` from here, leading to many rebuilds. If
+  # necessary, these can be moved out of lockstep in order to merge updates
+  # quickly.
   version = "21.1.22";
 
   outputs = [
