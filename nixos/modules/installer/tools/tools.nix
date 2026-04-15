@@ -30,15 +30,15 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     replacements = {
-      perl = "${
+      perl = lib.getExe (
         pkgs.perl.withPackages (p: [
           p.FileSlurp
           p.ConfigIniFiles
         ])
-      }/bin/perl";
+      );
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      detectvirt = lib.getExe' config.systemd.package "systemd-detect-virt";
+      btrfs = lib.getExe pkgs.btrfs-progs;
       inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
       xserverEnabled = config.services.xserver.enable;
     };
