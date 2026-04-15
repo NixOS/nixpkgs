@@ -32,10 +32,6 @@ ignore_missing_imports = true
 module = "ptpython.*"
 ignore_missing_imports = true
 
-[[tool.mypy.overrides]]
-module = "junit_xml.*"
-ignore_missing_imports = true
-
 [tool.mypy]
 warn_redundant_casts = true
 disallow_untyped_calls = true
