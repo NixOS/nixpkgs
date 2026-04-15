@@ -1,58 +1,44 @@
 {
   buildGoModule,
-  fetchFromGitHub,
-  go,
   lib,
-  makeWrapper,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "revive";
-  version = "1.11.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = "revive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-89BlSc2tgxAJUGZM951fF+0H+SOsl0+xz/G18neRZxI=";
-    # populate values that require us to use git. By doing this in postFetch we
-    # can delete .git afterwards and maintain better reproducibility of the src.
-    leaveDotGit = true;
-    postFetch = ''
-      date -u -d "@$(git -C $out log -1 --pretty=%ct)" "+%Y-%m-%d %H:%M UTC" > $out/DATE
-      git -C $out rev-parse HEAD > $out/COMMIT
-      rm -rf $out/.git
-    '';
+    hash =
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-SfMI9qLk/L4Zh5kgqEO0QoqonBQTl5JCuickpe1Q3lU=" # For some reason there is a hash mismatch on darwin.
+      else
+        "sha256-38NFrKNkVp3hvv5/4bT2JR6mi5Pb7Atx/1xbx5HmOX4=";
   };
-  vendorHash = "sha256-ZxTBGcGSRWlYFBz0+5wR/9d8p7lvjJjyId5VNIVW9rQ=";
+
+  vendorHash = "sha256-KxDWd+fd30eOttNEB6kQDxc2Lnf5Rj2zTCohjyfjMnU=";
+
+  # Only build the revive package at the root.
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/mgechev/revive/cli.version=${finalAttrs.version}"
+    "-w" # Best practice for removing debugging information in a production environment.
+    "-X github.com/mgechev/revive/cli.version=${finalAttrs.version}" # Necessary for the executable to be aware of its own version.
     "-X github.com/mgechev/revive/cli.builtBy=nix"
   ];
 
-  # ldflags based on metadata from git and source
-  preBuild = ''
-    ldflags+=" -X github.com/mgechev/revive/cli.commit=$(cat COMMIT)"
-    ldflags+=" -X 'github.com/mgechev/revive/cli.date=$(cat DATE)'"
-  '';
-
-  allowGoReference = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  postFixup = ''
-    wrapProgram $out/bin/revive \
-      --prefix PATH : ${lib.makeBinPath [ go ]}
-  '';
-
   meta = {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
-    mainProgram = "revive";
+    longDescription = "Drop-in replacement for golint. Revive provides a framework for development of custom rules, and lets you define a strict preset for enhancing your development & code review processes";
     homepage = "https://revive.run";
+    downloadPage = "https://github.com/mgechev/revive";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ andrewfield ];
+    mainProgram = "revive";
   };
 })
