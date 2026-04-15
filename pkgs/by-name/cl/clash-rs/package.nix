@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5o98Yj8a30Tn/Cf3QMZ5EaCjCgD3XttqaHHuIjBWg4s=";
+    hash = "sha256-26OoAy/IiTEqESABqjLMI9zsmHgBbwmIazzoP8Au4nM=";
   };
 
-  cargoHash = "sha256-tRAkA64D2UOEqLbkKiSBDbNlvX7tejSJwYF7+VwicAk=";
+  cargoHash = "sha256-UPCXc0uB0pg4ioBIpYQKwtyTWsMH/248WDyO9qB2jwA=";
 
   nativeBuildInputs = [
     cmake
