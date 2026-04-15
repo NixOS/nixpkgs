@@ -26,13 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-np1syOfFqL6eZpnlwNb8WOXB0oqSkxIshX0JiyDlN1A=";
   };
 
-  cargoPatches = [
-    # The lockfile references two different revisions of the same internal repository dbus-settings-bindings,
-    # which likely is unintentional and currently causing issues with fetchCargoVendor.
-    # Upstream PR: https://github.com/pop-os/cosmic-settings-daemon/pull/139
-    ./dedup-dbus-settings-bindings.patch
-  ];
-
   postPatch = ''
     substituteInPlace src/battery.rs \
       --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
