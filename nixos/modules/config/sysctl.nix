@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   sysctlOption = lib.mkOptionType {
@@ -87,6 +92,28 @@ in
       # the value below is used by default on several other distros.
       "fs.inotify.max_user_instances" = lib.mkDefault 524288;
       "fs.inotify.max_user_watches" = lib.mkDefault 524288;
+
+      # Maximise address space randomisation.
+      "vm.mmap_rnd_bits" = lib.mkMerge [
+        (lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 (
+          let
+            kernel = config.boot.kernelPackages.kernel;
+            isYes = kernel.config.isYes or (_: false);
+          in
+          lib.mkDefault (
+            if isYes "ARM64_64K_PAGES" then
+              29
+            else if isYes "ARM64_16K_PAGES" then
+              31
+            else
+              33
+          )
+        ))
+        (lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 (lib.mkDefault 32))
+      ];
+      "vm.mmap_rnd_compat_bits" = lib.mkIf (
+        pkgs.stdenv.hostPlatform.isx86_64 || pkgs.stdenv.hostPlatform.isAarch64
+      ) (lib.mkDefault 16);
     };
   };
 }
