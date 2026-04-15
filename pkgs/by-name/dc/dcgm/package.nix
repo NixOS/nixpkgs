@@ -12,7 +12,7 @@
   ninja,
   cudaPackages_12,
   boost186,
-  fmt_10,
+  fmt,
   git,
   jsoncpp,
   libevent,
@@ -87,6 +87,7 @@ stdenv.mkDerivation {
     ./remove-cuda-11.patch
     ./dynamic-libs.patch
     ./fix-gcc15.patch
+    ./fmt12.patch
     (replaceVars ./fix-paths.patch {
       inherit coreutils;
       inherit util-linux;
@@ -120,7 +121,7 @@ stdenv.mkDerivation {
     plog.dev
     tclap_1_4
 
-    fmt_10
+    fmt
     yaml-cpp
     jsoncpp
     libevent
@@ -148,7 +149,7 @@ stdenv.mkDerivation {
     "Sysmon: initialize module"
     # Test assumes plugins are installed relative to the binary with a
     # populated `cudaless/` directory
-    "GetPluginCudalessDir returns cudaless directory in plugin directory"
+    "Scenario: GetPluginCudalessDir returns cudaless directory in plugin directory"
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.

@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     ffmpeg_6
     frei0r
     opencolorio
-    openimageio'
+    openimageio
     imath
     openexr
     portaudio
