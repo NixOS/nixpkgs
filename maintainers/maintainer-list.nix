@@ -9453,6 +9453,12 @@
     githubId = 33058747;
     name = "Gaetan Lepage";
   };
+  Gako358 = {
+    email = "merrinx@proton.me";
+    github = "Gako358";
+    githubId = 42249650;
+    name = "Knut Oien";
+  };
   gal_bolle = {
     email = "florent.becker@ens-lyon.org";
     github = "FlorentBecker";
