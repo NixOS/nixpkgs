@@ -5,7 +5,7 @@
   fetchPypi,
   libredirect,
   nodejs,
-  python312,
+  python3,
   gettext,
   nixosTests,
   pretix,
@@ -13,7 +13,7 @@
 }:
 
 let
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = self: super: {
       django = super.django_5;
