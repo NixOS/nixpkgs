@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitex";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "mitex-rs";
     repo = "mitex";
     tag = finalAttrs.version;
-    hash = "sha256-ec/vocq+gU3zbFU2zNTLuHWmte9t8riYlgpS8BzxJBE=";
+    hash = "sha256-LoGgRiIQQEKvyYIVjvEjg7OuzDl5hmPsrnunDMPfPLI=";
   };
 
-  cargoHash = "sha256-AKQrIehctDlG06R21Ia14IC7Yj2/mq/VKPOyIdDBS2g=";
+  cargoHash = "sha256-Y/RCUAPohQ7lKPUM07zXM/2/RQpqUmF7cr19GUVVk4Y=";
 
   nativeBuildInputs = [ typst ];
 
