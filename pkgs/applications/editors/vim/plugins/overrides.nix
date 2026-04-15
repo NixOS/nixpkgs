@@ -328,6 +328,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  blink-cmp-latex = super.blink-cmp-latex.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-nixpkgs-maintainers = super.blink-cmp-nixpkgs-maintainers.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
@@ -2973,7 +2977,6 @@ assertNoAdditions {
   openscad-nvim = super.openscad-nvim.overrideAttrs {
     buildInputs = [
       zathura
-      htop
       openscad
     ];
 
@@ -2985,7 +2988,6 @@ assertNoAdditions {
     ];
     patches = [
       (replaceVars ./patches/openscad.nvim/program_paths.patch {
-        htop = lib.getExe htop;
         openscad = lib.getExe openscad;
       })
     ];
