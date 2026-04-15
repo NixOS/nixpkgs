@@ -20,11 +20,9 @@ llama-cpp.overrideAttrs (oa: {
     '';
   };
 
-  npmDepsHash = "sha256-RAFtsbBGBjteCt5yXhrmHL39rIDJMCFBETgzId2eRRk=";
+  npmDepsHash = "sha256-f13UBug5CGvMAge+ArkgRzNYCeOeIbIOVLdjgobMhJM=";
 
   strictDeps = true;
-
-  __structuredAttrs = false;
 
   cmakeFlags = oa.cmakeFlags ++ [
     # Disables automatic use of ccache or sccache — compiler caching tools that speed up rebuilds by caching compilation results
@@ -53,7 +51,7 @@ llama-cpp.overrideAttrs (oa: {
     homepage = "https://github.com/AmesianX/TurboQuant";
     license = lib.licenses.mit;
     mainProgram = "llama";
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
