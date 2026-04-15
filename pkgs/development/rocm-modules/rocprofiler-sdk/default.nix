@@ -12,6 +12,7 @@
   rocprof-trace-decoder,
   aqlprofile,
   rocm-comgr,
+  rocmUpdateScript,
   rccl,
   python3,
   python3Packages,
@@ -200,6 +201,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/cmake $dev/lib/
     mv $out/share/rocprofiler-sdk/{samples,tests} $dev/share/rocprofiler-sdk/
   '';
+
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm GPU performance analysis SDK";
