@@ -685,7 +685,8 @@ let
       FANOTIFY = yes;
       FANOTIFY_ACCESS_PERMISSIONS = yes;
 
-      FS_DAX = yes;
+      # DAX requires 64BIT via ZONE_DEVICE and MEMORY_HOTPLUG.
+      FS_DAX = lib.mkIf stdenv.hostPlatform.is64bit yes;
 
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;

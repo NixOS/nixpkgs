@@ -26,14 +26,14 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VKpwKV+B2e5z1V1XAdvk6K4/4C3ISPsSiwZ05w5XTBU=";
+    hash = "sha256-aYQp9vEVQJgF1n/KsfnDvLQf5nD0/gsG+RAgVlhk7t8=";
   };
 
   postPatch = ''

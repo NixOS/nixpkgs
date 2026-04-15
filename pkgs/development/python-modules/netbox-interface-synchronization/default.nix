@@ -1,16 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  django,
   fetchFromGitHub,
-  netaddr,
-  netbox,
-  numpy,
-  requests,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  django,
+  netaddr,
+  numpy,
+  psycopg,
+  requests,
+
+  # tests
+  netbox,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-interface-synchronization";
   version = "4.1.7";
   pyproject = true;
@@ -18,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NetTech2001";
     repo = "netbox-interface-synchronization";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-02fdfE1BwpWsh21M0oP65kMAbFxDxYHsAEWA64rUl18=";
   };
 
@@ -29,6 +36,7 @@ buildPythonPackage rec {
     netaddr
     requests
     numpy
+    psycopg # not specified in pyproject.toml, but required at import time
   ];
 
   # netbox is required for the pythonImportsCheck; plugin does not provide unit tests
@@ -43,9 +51,9 @@ buildPythonPackage rec {
   meta = {
     description = "Netbox plugin to compare and synchronize interfaces between devices and device types";
     homepage = "https://github.com/NetTech2001/netbox-interface-synchronization";
-    changelog = "https://github.com/NetTech2001/netbox-interface-synchronization/releases/tag/${src.tag}";
+    changelog = "https://github.com/NetTech2001/netbox-interface-synchronization/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

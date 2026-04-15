@@ -1,11 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  django,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  django,
   netaddr,
   netbox,
-  poetry-core,
+  psycopg,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,6 +35,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     django
     netaddr
+    psycopg # not specified in pyproject.toml, but required at import time
   ];
 
   nativeCheckInputs = [ netbox ];

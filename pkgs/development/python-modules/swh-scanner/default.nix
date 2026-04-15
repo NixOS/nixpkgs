@@ -3,20 +3,27 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
+  pythonAtLeast,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  requests,
-  ndjson,
+
+  # dependencies
   flask,
   importlib-metadata,
+  ndjson,
+  requests,
+  swh-auth,
   swh-core,
   swh-model,
-  swh-auth,
   swh-web-client,
+
+  # tests
   beautifulsoup4,
-  pytestCheckHook,
   pytest-flask,
   pytest-mock,
+  pytestCheckHook,
   types-beautifulsoup4,
   types-pyyaml,
   types-requests,
@@ -42,13 +49,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    requests
-    ndjson
     flask
     importlib-metadata
+    ndjson
+    requests
+    swh-auth
     swh-core
     swh-model
-    swh-auth
     swh-web-client
   ];
 
@@ -56,9 +63,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     beautifulsoup4
-    pytestCheckHook
     pytest-flask
     pytest-mock
+    pytestCheckHook
     swh-core
     swh-model
     types-beautifulsoup4
@@ -66,12 +73,19 @@ buildPythonPackage (finalAttrs: {
     types-requests
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Failed: Failed to start the server after 5 seconds.
-    "test_add_provenance_with_release"
-    "test_add_provenance_with_revision"
-    "test_scanner_result"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.14") [
+      # _pickle.PicklingError: Can't pickle local object
+      "test_add_provenance_with_release"
+      "test_add_provenance_with_revision"
+      "test_scanner_result"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Failed: Failed to start the server after 5 seconds.
+      "test_add_provenance_with_release"
+      "test_add_provenance_with_revision"
+      "test_scanner_result"
+    ];
 
   disabledTestPaths = [
     # pytestRemoveBytecodePhase fails with: "error (ignored): error: opening directory "/tmp/nix-build-python3.12-swh-scanner-0.8.3.drv-5/build/pytest-of-nixbld/pytest-0/test_randomdir_policy_info_cal0/big-directory/dir/dir/dir/ ......"
