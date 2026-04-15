@@ -80,9 +80,9 @@ rustPlatform.buildRustPackage.override
       if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
         ''
           installShellCompletion --cmd cargo \
-            --bash <(CARGO_COMPLETE=bash cargo) \
-            --fish <(CARGO_COMPLETE=fish cargo) \
-            --zsh <(CARGO_COMPLETE=zsh cargo)
+            --bash <(CARGO_COMPLETE=bash $out/bin/cargo) \
+            --fish <(CARGO_COMPLETE=fish $out/bin/cargo) \
+            --zsh <(CARGO_COMPLETE=zsh $out/bin/cargo)
         ''
       else
         ''
