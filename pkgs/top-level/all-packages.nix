@@ -10126,8 +10126,6 @@ with pkgs;
     // (config.profanity or { })
   );
 
-  psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
-
   pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
 
   puredata-with-plugins =
