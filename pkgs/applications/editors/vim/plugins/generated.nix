@@ -11350,6 +11350,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-dap-docker = buildVimPlugin {
+    pname = "nvim-dap-docker";
+    version = "0.2.0-unstable-2026-04-15";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "nvim-dap-docker";
+      rev = "a7a6d22b786bff09c382d721d2d065fdd64a58ee";
+      hash = "sha256-5uHdDTVdfdJk6WLM6gvVDgEndFkP9SmqrqhHzaalH/k=";
+    };
+    meta.homepage = "https://github.com/docker/nvim-dap-docker/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-dap-go = buildVimPlugin {
     pname = "nvim-dap-go";
     version = "0-unstable-2025-07-11";
