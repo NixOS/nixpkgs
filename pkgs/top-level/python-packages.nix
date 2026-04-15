@@ -18066,6 +18066,8 @@ self: super: with self; {
 
   solc-select = callPackage ../development/python-modules/solc-select { };
 
+  solders = callPackage ../development/python-modules/solders { };
+
   solidpython2 = callPackage ../development/python-modules/solidpython2 { };
 
   solo-python = callPackage ../development/python-modules/solo-python { };
