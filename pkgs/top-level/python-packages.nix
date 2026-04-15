@@ -17433,6 +17433,8 @@ self: super: with self; {
 
   sdflit = callPackage ../development/python-modules/sdflit { };
 
+  sdformat = callPackage ../development/python-modules/sdformat { };
+
   sdjson = callPackage ../development/python-modules/sdjson { };
 
   sdkmanager = callPackage ../development/python-modules/sdkmanager { };
