@@ -31,16 +31,16 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.3.3";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
-    tag = version;
-    hash = "sha256-yMPHz6IZIGM4oJw1wspEL3lIIiPv4WZALUJ7J1UWukY=";
+    tag = finalAttrs.version;
+    hash = "sha256-LgTLZenEQg3rYdqaEBtufK964Ksyj5sv0BR/WEzqQN8=";
   };
 
   patches = [
@@ -119,7 +119,7 @@ python.pkgs.buildPythonApplication rec {
     }"
     # The dashboard requires esphome to be importable
     # dependencies are added to show better error messages
-    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}"
+    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
     # https://github.com/NixOS/nixpkgs/issues/362193
@@ -173,9 +173,10 @@ python.pkgs.buildPythonApplication rec {
     "test_clean_all"
     "test_clean_all_partial_exists"
     # tries to use esptool, which is wrapped in an fhsenv
-    "test_upload_using_esptool_path_conversion"
-    "test_upload_using_esptool_with_file_path"
     "test_upload_using_esptool_passes_crystal_callback"
+    "test_upload_using_esptool_path_conversion"
+    "test_upload_using_esptool_skips_missing_extra_flash_images"
+    "test_upload_using_esptool_with_file_path"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
     # Expects a full git clone
@@ -190,7 +191,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
+    changelog = "https://github.com/esphome/esphome/releases/tag/${finalAttrs.src.tag}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with lib.licenses; [
@@ -204,4 +205,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "esphome";
   };
-}
+})
