@@ -17212,6 +17212,12 @@
     githubId = 2971615;
     name = "Marius Bergmann";
   };
+  mcbsmartboy = {
+    email = "mcb2720838051@gmail.com";
+    github = "MCB-SMART-BOY";
+    githubId = 177301053;
+    name = "mcb";
+  };
   mccartykim = {
     email = "mccartykim@zoho.com";
     github = "mccartykim";
