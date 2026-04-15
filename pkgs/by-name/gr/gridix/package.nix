@@ -10,6 +10,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "gridix";
   version = "5.0.0";
 
