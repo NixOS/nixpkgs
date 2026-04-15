@@ -13,6 +13,16 @@ from typing import Optional
 from loguru import logger
 from semver.version import Version
 
+# Shared verifier (single source of truth with the build-time setup hook),
+# resolved relative to the repository root, which is the working directory the
+# script already assumes for all `nix eval -f .` calls.
+VERIFY_SCRIPT = "pkgs/applications/editors/vscode/extensions/verify-vsix-signature.sh"
+
+
+def _env_flag(name: str) -> bool:
+    """True when environment variable `name` is set to a truthy value."""
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes"}
+
 
 class VSCodeExtensionUpdater:
     """
@@ -40,16 +50,46 @@ class VSCodeExtensionUpdater:
         self.parser.add_argument(
             "--commit", action="store_true", help="commit the updated package"
         )
+        self.parser.add_argument(
+            "--with-signature",
+            action="store_true",
+            help="fetch, add, and verify signatureHash (runs vsce-sign on every "
+            "platform); also via VSCODE_EXTENSION_WITH_SIGNATURE=1",
+        )
+        self.parser.add_argument(
+            "--skip-verify",
+            action="store_true",
+            help="with --with-signature, populate signatureHash without running "
+            "vsce-sign; also via VSCODE_EXTENSION_SKIP_VERIFY=1",
+        )
+        self.parser.add_argument(
+            "--force",
+            action="store_true",
+            help="force update even if version is the same (useful for hash-only updates)",
+        )
         self.args = self.parser.parse_args()
         self.attribute_path = self.args.attribute
         if not self.attribute_path:
             logger.error("Error: Attribute path is required.")
             sys.exit(1)
+        self._has_platform_source_cache: Optional[bool] = None
+        self._vsce_sign_exe_cache: Optional[str] = None
         self.target_vscode_version = self._get_nix_vscode_version()
         self.current_version = self._get_nix_vscode_extension_version()
         self.override_filename = self.args.override_filename
         self.allow_pre_release = self.args.pre_release
         self.commit = self.args.commit
+        # Flags are also accepted via env vars, since update runners (nix-update,
+        # update.py) pass the environment through but cannot forward CLI args.
+        self.with_signature = self.args.with_signature or _env_flag(
+            "VSCODE_EXTENSION_WITH_SIGNATURE"
+        )
+        self.force = self.args.force
+        skip_verify = self.args.skip_verify or _env_flag("VSCODE_EXTENSION_SKIP_VERIFY")
+        # Verify only when signatures are explicitly managed, never on routine/
+        # auto-detected updates, so automated updaters (r-ryantm) don't pull the
+        # unfree vsce-sign.
+        self.should_verify = self.with_signature and not skip_verify
         self.extension_publisher = self._get_nix_vscode_extension_publisher()
         self.extension_name = self._get_nix_vscode_extension_name()
         self.extension_marketplace_id = (
@@ -130,22 +170,15 @@ class VSCodeExtensionUpdater:
         return ([system] if system is not None else []) + extra_platforms
 
     def _has_platform_source(self) -> bool:
-        source_url = self._get_nix_attribute(f"{self.attribute_path}.src.url")
-        return "targetPlatform=" in source_url
+        if self._has_platform_source_cache is None:
+            source_url = self._get_nix_attribute(f"{self.attribute_path}.src.url")
+            self._has_platform_source_cache = "targetPlatform=" in source_url
+        return self._has_platform_source_cache
 
-    def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
-        url = self.execute_command([
-            "nix",
-            "--extra-experimental-features",
-            "nix-command",
-            "eval",
-            "--raw",
-            "-f",
-            ".",
-            f"{self.attribute_path}.src.url",
-            "--system",
-            system,
-        ])
+    def _prefetch_url_sri(self, url: str) -> str:
+        """
+        Fetches a URL and returns its SRI hash.
+        """
         sha256 = self.execute_command(["nix-prefetch-url", url])
         return self.execute_command([
             "nix",
@@ -159,6 +192,109 @@ class VSCodeExtensionUpdater:
             "sha256",
             sha256,
         ])
+
+    def _prefetch_url_path(self, url: str) -> str:
+        """
+        Fetches a URL into the Nix store and returns its store path.
+        """
+        output = self.execute_command(["nix-prefetch-url", "--print-path", url])
+        return output.splitlines()[-1].strip()
+
+    def _src_url(self, system: str) -> str:
+        """
+        Retrieves the extension's VSIX download URL for a given Nix system.
+        """
+        return self.execute_command([
+            "nix",
+            "--extra-experimental-features",
+            "nix-command",
+            "eval",
+            "--raw",
+            "-f",
+            ".",
+            f"{self.attribute_path}.src.url",
+            "--system",
+            system,
+        ])
+
+    def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
+        return self._prefetch_url_sri(self._src_url(system))
+
+    def _signature_url(self, version: str, target_platform: Optional[str] = None) -> str:
+        """
+        Builds the VsixSignature asset URL for an extension version.
+        """
+        platform_suffix = f"?targetPlatform={target_platform}" if target_platform else ""
+        return (
+            f"https://{self.extension_publisher}.gallery.vsassets.io/_apis/public/gallery/"
+            f"publisher/{self.extension_publisher}/extension/{self.extension_name}/{version}/"
+            f"assetbyname/Microsoft.VisualStudio.Services.VsixSignature{platform_suffix}"
+        )
+
+    def _fetch_signature_hash(self, version: str, target_platform: Optional[str] = None) -> Optional[str]:
+        """
+        Fetches the signature hash for an extension version from the VS Code Marketplace.
+        Returns the SRI hash or None if fetch fails.
+        """
+        try:
+            sri_hash = self._prefetch_url_sri(self._signature_url(version, target_platform))
+            logger.info(f"Fetched signature hash: {sri_hash}")
+            return sri_hash
+        except subprocess.CalledProcessError:
+            logger.warning("Failed to fetch signature hash")
+            return None
+
+    def _vsce_sign_exe(self) -> str:
+        """
+        Returns the path to vsce-sign (bundled with the unfree vscode), building
+        vscode if needed. Errors with guidance when unfree is disallowed.
+        """
+        if self._vsce_sign_exe_cache is None:
+            logger.info("Realizing vsce-sign (from vscode) for signature verification...")
+            try:
+                self.execute_command([
+                    "nix", "--extra-experimental-features", "nix-command",
+                    "build", "--no-link", "-f", ".", "vscode",
+                ])
+                self._vsce_sign_exe_cache = self.execute_command([
+                    "nix", "--extra-experimental-features", "nix-command",
+                    "eval", "--raw", "-f", ".", "vscode-utils.vsceSignExe",
+                ])
+            except subprocess.CalledProcessError as error:
+                logger.error(
+                    "Could not realize vsce-sign for signature verification. It "
+                    "ships with the unfree vscode; allow unfree (e.g. "
+                    "NIXPKGS_ALLOW_UNFREE=1) or pass --skip-verify.\n"
+                    f"{error.stderr or error.stdout}"
+                )
+                sys.exit(1)
+        return self._vsce_sign_exe_cache
+
+    def _verify_signature(
+        self, version: str, system: str, target_platform: Optional[str]
+    ) -> None:
+        """
+        Verifies the pinned VSIX against its pinned signature for one platform,
+        using the shared verify-vsix-signature.sh. For opt-out extensions this is
+        the only place a signature is ever checked, so a failure aborts the
+        update rather than shipping an unverified hash.
+        """
+        vsix_path = self._prefetch_url_path(self._src_url(system))
+        signature_path = self._prefetch_url_path(
+            self._signature_url(version, target_platform)
+        )
+        logger.info(f"Verifying signature for {system}...")
+        try:
+            output = self.execute_command([
+                "bash", VERIFY_SCRIPT, self._vsce_sign_exe(), vsix_path, signature_path,
+            ])
+            logger.info(output)
+        except subprocess.CalledProcessError as error:
+            logger.error(
+                f"Signature verification failed for {system}:\n"
+                f"{error.stderr or error.stdout}"
+            )
+            sys.exit(1)
 
     def get_target_platform(self, nix_system: str) -> str:
         """
@@ -357,6 +493,122 @@ class VSCodeExtensionUpdater:
         )
         Path(self.override_filename).write_text(updated_content, encoding="utf-8")
 
+    def _find_block_end(self, content: str, brace_start: int) -> Optional[int]:
+        """
+        Given the position of an opening '{', find the matching closing '}'.
+        Returns the index of the closing brace, or None on mismatch.
+        """
+        count = 0
+        pos = brace_start
+        while pos < len(content):
+            if content[pos] == "{":
+                count += 1
+            elif content[pos] == "}":
+                count -= 1
+                if count == 0:
+                    return pos
+            pos += 1
+        return None
+
+    def _insert_signature_hash_in_block(
+        self, content: str, block_start_pattern: re.Pattern, signature_hash: str
+    ) -> Optional[str]:
+        """
+        Finds a block matching `block_start_pattern` in `content` and inserts or
+        updates its `signatureHash` field. Returns the updated content, or None
+        if the block or its hash line could not be located.
+        """
+        block_match = block_start_pattern.search(content)
+        if not block_match:
+            return None
+
+        brace_start = content.rfind("{", 0, block_match.end())
+        if brace_start == -1:
+            return None
+        block_end = self._find_block_end(content, brace_start)
+        if block_end is None:
+            return None
+
+        block_text = content[brace_start:block_end + 1]
+
+        sig_pattern = re.compile(r'(\s*)(signatureHash\s*=\s*")([^"]+)(";)')
+        if sig_pattern.search(block_text):
+            new_block_text = sig_pattern.sub(
+                rf'\g<1>signatureHash = "{signature_hash}";', block_text
+            )
+            logger.info("Updated existing signatureHash")
+        else:
+            hash_pattern = re.compile(r'([ \t]*)(hash|sha256)\s*=\s*"[^"]+";')
+            hash_match = hash_pattern.search(block_text)
+            if not hash_match:
+                return None
+            indent = hash_match.group(1)
+            insert_pos = hash_match.end()
+            new_line = f'\n{indent}signatureHash = "{signature_hash}";'
+            new_block_text = (
+                block_text[:insert_pos] + new_line + block_text[insert_pos:]
+            )
+            logger.info("Added signatureHash after hash line")
+
+        return content[:brace_start] + new_block_text + content[block_end + 1:]
+
+    def _has_existing_signature_hash(self) -> bool:
+        """
+        Returns True if the extension's source file already declares a
+        `signatureHash` attribute. Used to auto-enable signature fetching.
+        """
+        if not self.override_filename:
+            return False
+        try:
+            content = Path(self.override_filename).read_text(encoding="utf-8")
+        except (FileNotFoundError, OSError):
+            return False
+        return bool(
+            re.search(
+                r'^\s*(?:signatureHash|"signatureHash")\s*=\s*"',
+                content,
+                re.MULTILINE,
+            )
+        )
+
+    def update_signature_hash(
+        self, signature_hash: str, nix_system: Optional[str] = None
+    ) -> bool:
+        """
+        Adds or updates signatureHash in the extension's definition. If `nix_system`
+        is given, targets the per-system block (e.g. `x86_64-linux = { ... };`) used
+        by multi-platform extensions. Otherwise, targets the `mktplcRef = { ... }`
+        block used by single-platform extensions.
+
+        Returns True on success, False otherwise.
+        """
+        if not self.override_filename:
+            logger.warning("No override filename set, cannot update signature hash")
+            return False
+
+        content = Path(self.override_filename).read_text(encoding="utf-8")
+
+        if nix_system is not None:
+            # Match both bare and quoted attribute keys: `x86_64-linux = {`
+            # and `"x86_64-linux" = {`.
+            block_pattern = re.compile(
+                rf'"?{re.escape(nix_system)}"?\s*=\s*\{{', re.MULTILINE
+            )
+            description = f"per-system block '{nix_system}'"
+        else:
+            block_pattern = re.compile(r'mktplcRef\s*=\s*\{', re.MULTILINE)
+            description = "mktplcRef block"
+
+        updated = self._insert_signature_hash_in_block(
+            content, block_pattern, signature_hash
+        )
+        if updated is None:
+            logger.warning(f"Could not update signatureHash in {description}")
+            return False
+
+        Path(self.override_filename).write_text(updated, encoding="utf-8")
+        return True
+
     def run_nix_update(self, new_version: str, system: str) -> None:
         """
         Builds and executes the nix-update command.
@@ -431,11 +683,49 @@ class VSCodeExtensionUpdater:
             self.get_target_platform(self.nix_vscode_extension_platforms[0]),
         )
         if not Version.parse(self.current_version).match(f"<{self.new_version}"):
-            logger.info("Already up to date or new version is older!")
-            sys.exit(0)
+            if not self.force:
+                logger.info("Already up to date or new version is older!")
+                sys.exit(0)
+            logger.info(f"Force mode: re-fetching even though version unchanged ({self.current_version})")
         for i, system in enumerate(self.nix_vscode_extension_platforms):
             version = self.new_version if i == 0 else "skip"
             self.run_nix_update(version, system)
+        if not self.with_signature and self._has_existing_signature_hash():
+            logger.info(
+                "Detected existing signatureHash in source; "
+                "auto-fetching updated signature."
+            )
+            self.with_signature = True
+
+        # Fetch and add signature hash if requested
+        if self.with_signature:
+            logger.info("Fetching signature hash...")
+            if self._has_platform_source():
+                # Multi-platform: fetch and update a signatureHash for each platform.
+                for system in self.nix_vscode_extension_platforms:
+                    target_platform = self.get_target_platform(system)
+                    signature_hash = self._fetch_signature_hash(
+                        self.new_version, target_platform
+                    )
+                    if not signature_hash:
+                        logger.error(f"Failed to fetch signature hash for {system}")
+                        sys.exit(1)
+                    self.update_signature_hash(signature_hash, nix_system=system)
+                    # Verify the bytes we just pinned actually carry a valid
+                    # Microsoft signature, for every platform (explicit opt-in).
+                    if self.should_verify:
+                        self._verify_signature(
+                            self.new_version, system, target_platform
+                        )
+            else:
+                # Single-platform: fetch once and update the mktplcRef block.
+                signature_hash = self._fetch_signature_hash(self.new_version)
+                if not signature_hash:
+                    logger.error("Failed to fetch signature hash")
+                    sys.exit(1)
+                self.update_signature_hash(signature_hash)
+                if self.should_verify:
+                    self._verify_signature(self.new_version, self.nix_system, None)
         if self.commit:
             self.execute_command(["git", "add", self.override_filename])
             self.execute_command([
