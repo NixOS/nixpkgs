@@ -336,6 +336,8 @@ let
             "riscv"
           else if final.isSh4 then
             "sh"
+          else if final.isHppa then
+            "parisc"
           else if final.isS390 then
             "s390"
           else if final.isLoongArch64 then
