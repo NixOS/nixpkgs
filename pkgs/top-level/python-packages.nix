@@ -16277,6 +16277,8 @@ self: super: with self; {
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
+  pywebtransport = callPackage ../development/python-modules/pywebtransport { };
+
   pywebview = callPackage ../development/python-modules/pywebview { };
 
   pywemo = callPackage ../development/python-modules/pywemo { };
