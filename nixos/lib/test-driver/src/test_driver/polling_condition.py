@@ -25,7 +25,7 @@ class PollingCondition:
         seconds_interval: float = 2.0,
         description: str | None = None,
     ):
-        self.condition = condition  # type: ignore
+        self.condition = condition  # ty: ignore[invalid-assignment]
         self.seconds_interval = seconds_interval
         self.logger = logger
 
@@ -33,7 +33,7 @@ class PollingCondition:
             if condition.__doc__:
                 self.description = condition.__doc__
             else:
-                self.description = condition.__name__
+                self.description = condition.__name__  # ty: ignore[unresolved-attribute]
         else:
             self.description = str(description)
 
@@ -54,7 +54,7 @@ class PollingCondition:
 
             self.logger.info(last_message)
             try:
-                res = self.condition()  # type: ignore
+                res = self.condition()
             except Exception:
                 res = False
             res = res is None or res
@@ -89,7 +89,7 @@ class PollingCondition:
     def __enter__(self) -> None:
         self.entry_count += 1
 
-    def __exit__(self, exc_type, exc_value, traceback) -> None:  # type: ignore
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
         assert self.entered
         self.entry_count -= 1
         self.last_called = time.monotonic()

@@ -23,7 +23,7 @@ class EnvDefault(argparse.Action):
     environment variable as the flags default value.
     """
 
-    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):
         if not default and envvar:
             if envvar in os.environ:
                 if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
@@ -37,7 +37,7 @@ class EnvDefault(argparse.Action):
             required = False
         super().__init__(default=default, required=required, nargs=nargs, **kwargs)
 
-    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+    def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, values)
 
 
@@ -219,7 +219,7 @@ def main() -> None:
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,
-            )  # type:ignore
+            )
         else:
             tic = time.time()
             driver.run_tests()
