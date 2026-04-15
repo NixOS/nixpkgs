@@ -12,6 +12,7 @@
   python,
   ruff,
   remote-pdb,
+  pytest,
 
   netpbm,
   nixosTests,
@@ -46,6 +47,7 @@ buildPythonApplication {
     junit-xml
     ptpython
     remote-pdb
+    pytest
   ]
   ++ extraPythonPackages python.pkgs;
 
