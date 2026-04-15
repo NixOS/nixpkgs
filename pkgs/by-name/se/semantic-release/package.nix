@@ -24,7 +24,8 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   nativeBuildInputs = [
-    python3, setuptools
+    python3
+    setuptools
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
 
