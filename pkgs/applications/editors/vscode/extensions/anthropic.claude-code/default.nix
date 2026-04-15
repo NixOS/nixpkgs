@@ -6,6 +6,7 @@
   alsa-lib,
   testers,
   vscode-utils,
+  vscode-extension-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
