@@ -32,6 +32,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./musl.patch
+    # CVE-2026-32316: integer overflow in jvp_string_append allows heap buffer overflow
+    (fetchurl {
+      url = "https://github.com/jqlang/jq/commit/e47e56d226519635768e6aab2f38f0ab037c09e5.patch";
+      hash = "sha256-33WZJ3Klw7wwHz68yh/4qPWV8V4MFfqzBR332phtiY4=";
+    })
+    # CVE-2026-33948: NUL truncation in CLI JSON input path
+    (fetchurl {
+      url = "https://github.com/jqlang/jq/commit/6374ae0bcdfe33a18eb0ae6db28493b1f34a0a5b.patch";
+      hash = "sha256-jXilw3tjsju1KlMyBrlo5CaKrRz38ONHgITDsbTjtEw=";
+    })
+    # CVE-2026-39979: out-of-bounds read in jv_parse_sized() error formatting
+    (fetchurl {
+      url = "https://github.com/jqlang/jq/commit/2f09060afab23fe9390cce7cb860b10416e1bf5f.patch";
+      hash = "sha256-jB7fbllnvf++zRiiYk2jxuDkG9fnZO7acT+GMaQk/Mg=";
+    })
+    # CVE-2026-40164: hash collision DoS via hardcoded MurmurHash3 seed
+    (fetchurl {
+      url = "https://github.com/jqlang/jq/commit/0c7d133c3c7e37c00b6d46b658a02244fdd3c784.patch";
+      hash = "sha256-Sgrtm/090o+eBrzE1vj3VIkP+W+5VwJnYsMCM/rn0E8=";
+    })
+    # CVE-2026-33947: unbounded recursion in jv_setpath/jv_getpath/delpaths_sorted
+    # Test hunk removed: depends on tests added after 1.8.1 (upstream commit fdf8ef0f)
+    ./CVE-2026-33947.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [
     # needed because epoch conversion test here is right at the end of 32 bit integer space
