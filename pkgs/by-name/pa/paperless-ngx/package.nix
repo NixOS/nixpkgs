@@ -174,6 +174,7 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "django-allauth"
     "django-auditlog"
+    "django-cachalot"
     "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
