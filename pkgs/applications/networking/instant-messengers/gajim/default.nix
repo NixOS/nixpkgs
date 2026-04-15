@@ -113,6 +113,7 @@ python3.pkgs.buildPythonApplication rec {
       sqlalchemy
       emoji
       httpx
+      httpx.optional-dependencies.socks
       h2
       truststore
     ]
