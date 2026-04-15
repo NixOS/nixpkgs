@@ -1,0 +1,113 @@
+diff --git a/include/gz/sim/EventManager.hh b/include/gz/sim/EventManager.hh
+index 1237b801da..9101383260 100644
+--- a/include/gz/sim/EventManager.hh
++++ b/include/gz/sim/EventManager.hh
+@@ -17,8 +17,10 @@
+ #ifndef GZ_SIM_EVENTMANAGER_HH_
+ #define GZ_SIM_EVENTMANAGER_HH_
+ 
++#include <cstring>
+ #include <functional>
+ #include <memory>
++#include <string>
+ #include <typeinfo>
+ #include <unordered_map>
+ #include <utility>
+@@ -75,19 +77,13 @@ namespace gz
+                   this->events[typeid(E)] = std::make_unique<E>();
+                 }
+ 
+-                E *eventPtr = dynamic_cast<E *>(this->events[typeid(E)].get());
+-                // All values in the map should be derived from Event,
+-                // so this shouldn't be an issue, but it doesn't hurt to check.
+-                if (eventPtr != nullptr)
+-                {
+-                  return eventPtr->Connect(_subscriber);
+-                }
+-                else
+-                {
+-                  gzerr << "Failed to connect event: "
+-                    << typeid(E).name() << std::endl;
+-                  return nullptr;
+-                }
++                // static_cast is used instead of dynamic_cast because
++                // dynamic_cast fails across shared-library boundaries when
++                // plugins are loaded with RTLD_LOCAL and hidden visibility
++                // (the RTTI type_info pointers differ per dylib on macOS).
++                // The map key guarantees the correct type by construction.
++                E *eventPtr = static_cast<E *>(this->events[typeid(E)].get());
++                return eventPtr->Connect(_subscriber);
+               }
+ 
+       /// \brief Emit an event signal to connected subscribers.
+@@ -107,18 +103,9 @@ namespace gz
+                   return;
+                 }
+ 
+-                E *eventPtr = dynamic_cast<E *>(this->events[typeid(E)].get());
+-                // All values in the map should be derived from Event,
+-                // so this shouldn't be an issue, but it doesn't hurt to check.
+-                if (eventPtr != nullptr)
+-                {
+-                  eventPtr->Signal(std::forward<Args>(_args) ...);
+-                }
+-                else
+-                {
+-                  gzerr << "Failed to signal event: "
+-                    << typeid(E).name() << std::endl;
+-                }
++                // static_cast: see Connect() comment on RTTI across dylibs.
++                E *eventPtr = static_cast<E *>(this->events[typeid(E)].get());
++                eventPtr->Signal(std::forward<Args>(_args) ...);
+               }
+ 
+       /// \brief Get connection count for a particular event
+@@ -132,30 +119,23 @@ namespace gz
+                   return 0u;
+                 }
+ 
+-                E *eventPtr = dynamic_cast<E *>(this->events[typeid(E)].get());
+-                // All values in the map should be derived from Event,
+-                // so this shouldn't be an issue, but it doesn't hurt to check.
+-                if (eventPtr != nullptr)
+-                {
+-                  return eventPtr->ConnectionCount();
+-                }
+-                else
+-                {
+-                  gzerr << "Failed to get connection count for event: "
+-                    << typeid(E).name() << std::endl;
+-                  return 0u;
+-                }
++                // static_cast: see Connect() comment on RTTI across dylibs.
++                E *eventPtr = static_cast<E *>(this->events[typeid(E)].get());
++                return eventPtr->ConnectionCount();
+               }
+ 
+       /// \brief Convenience type for storing typeinfo references.
+       private: using TypeInfoRef = std::reference_wrapper<const std::type_info>;
+ 
+       /// \brief Hash functor for TypeInfoRef
++      /// \details Uses name-based hashing so that the same type loaded
++      /// across shared-library boundaries (RTLD_LOCAL) hashes to the same
++      /// bucket on macOS where typeid() pointer identity differs per dylib.
+       private: struct Hasher
+                {
+                  std::size_t operator()(TypeInfoRef _code) const
+                  {
+-                   return _code.get().hash_code();
++                   return std::hash<std::string>{}(_code.get().name());
+                  }
+                };
+ 
+@@ -164,7 +144,9 @@ namespace gz
+                {
+                  bool operator()(TypeInfoRef _lhs, TypeInfoRef _rhs) const
+                  {
+-                   return _lhs.get() == _rhs.get();
++                   return _lhs.get() == _rhs.get() ||
++                          std::strcmp(_lhs.get().name(),
++                                     _rhs.get().name()) == 0;
+                  }
+                };
+ 

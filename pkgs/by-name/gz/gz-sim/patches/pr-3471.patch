@@ -1,0 +1,23 @@
+diff --git a/src/SimulationRunner.cc b/src/SimulationRunner.cc
+index c7f8c288dd..040ed2b4d6 100644
+--- a/src/SimulationRunner.cc
++++ b/src/SimulationRunner.cc
+@@ -54,6 +54,7 @@
+ #include "gz/sim/components/PhysicsEnginePlugin.hh"
+ #include "gz/sim/components/Recreate.hh"
+ #include "gz/sim/components/RenderEngineGuiPlugin.hh"
++#include "gz/sim/components/RenderEngineServerApiBackend.hh"
+ #include "gz/sim/components/RenderEngineServerHeadless.hh"
+ #include "gz/sim/components/RenderEngineServerPlugin.hh"
+ #include "gz/sim/Conversions.hh"
+@@ -1728,6 +1729,10 @@ void SimulationRunner::CreateEntities()
+       components::RenderEngineGuiPlugin(
+       this->serverConfig.RenderEngineGui()));
+ 
++  this->entityCompMgr.CreateComponent(worldEntity,
++      components::RenderEngineServerApiBackend(
++      this->serverConfig.RenderEngineServerApiBackend()));
++
+   // Load the world entities from SDF
+   creator->CreateEntities(&this->sdfWorld, worldEntity);
+ 
