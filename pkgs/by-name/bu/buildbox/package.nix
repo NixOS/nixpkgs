@@ -11,7 +11,7 @@
   gbenchmark,
   gtest,
   protobuf,
-  glog,
+  abseil-cpp,
   nlohmann_json,
   zlib,
   openssl,
@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "buildbox";
-  version = "1.3.54";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "BuildGrid";
     repo = "buildbox/buildbox";
     tag = finalAttrs.version;
-    hash = "sha256-5IJHXgDeedh0FMxupokB0BRo0ZrchEo/Lba6ifeeFBg=";
+    hash = "sha256-yZux8uXjv9kQPGGL+y0p+1pURauFHhLpCAfjvOVMGmg=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    abseil-cpp
     bubblewrap
     curl
     fuse3
     gbenchmark
-    glog
     grpc
     gtest
     libuuid
