@@ -71,7 +71,9 @@ let
       config.nodeDefaults
       {
         key = "base-qemu";
-        virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+        virtualisation.qemu = {
+          inherit (testModuleArgs.config.qemu) package forceAccel;
+        };
         virtualisation.host.pkgs = hostPkgs;
       }
       testModuleArgs.config.extraBaseNodeModules

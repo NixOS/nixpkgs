@@ -2261,6 +2261,9 @@
   "test-opt-passthru": [
     "index.html#test-opt-passthru"
   ],
+  "test-opt-qemu.forceAccel": [
+    "index.html#test-opt-qemu.forceAccel"
+  ],
   "test-opt-qemu.package": [
     "index.html#test-opt-qemu.package"
   ],
