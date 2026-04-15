@@ -109,6 +109,13 @@ rustPlatform.buildRustPackage.override
       runHook postInstallCheck
     '';
 
+    # Make sure our build rustc/cargo never make it into our runtime closure
+    disallowedReferences = [
+      rustPlatform.rust.cargo
+      rustPlatform.rust.rustc
+      rustPlatform.rust.rustc.unwrapped
+    ];
+
     meta = {
       homepage = "https://crates.io";
       description = "Downloads your Rust project's dependencies and builds your project";
