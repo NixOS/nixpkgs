@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_TESTING=OFF"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Configure Logitech devices on Linux (Options+ clone)";
     homepage = "https://github.com/mmaher88/logitune";
