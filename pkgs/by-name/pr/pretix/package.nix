@@ -96,6 +96,7 @@ python.pkgs.buildPythonApplication rec {
     "css-inline"
     "django-bootstrap3"
     "django-compressor"
+    "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
