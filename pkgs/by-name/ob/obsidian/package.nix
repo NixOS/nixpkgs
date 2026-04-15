@@ -27,6 +27,7 @@ let
       qbit
       kashw2
       w-lfchen
+      prince213
     ];
   };
 
