@@ -15,6 +15,7 @@
   azure-identity,
   cyclopts,
   exceptiongroup,
+  griffelib,
   httpx,
   jsonref,
   jsonschema-path,
@@ -49,20 +50,23 @@
   opentelemetry-sdk,
   psutil,
   pytest-asyncio,
+  pytest-examples,
   pytest-httpx,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
-    owner = "jlowin";
+    owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YfFAJvfKLOgfGFWyQmR4FGHrRc066Y0mAYhXJqJ9vyw=";
+    hash = "sha256-rJpxPvqAaa6/vXhG1+R9dI32cY/54e6I+F/zyBVoqBM=";
   };
 
   build-system = [
@@ -70,14 +74,11 @@ buildPythonPackage (finalAttrs: {
     uv-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "py-key-value-aio"
-    "pydocket"
-  ];
   dependencies = [
     authlib
     cyclopts
     exceptiongroup
+    griffelib
     httpx
     jsonref
     jsonschema-path
@@ -118,7 +119,21 @@ buildPythonPackage (finalAttrs: {
     ++ fakeredis.optional-dependencies.lua;
   };
 
+  pythonRelaxDeps = [ "py-key-value-aio" ];
+
   pythonImportsCheck = [ "fastmcp" ];
+
+  # The mcp library spawns subprocess servers with a minimal environment
+  # (HOME, LOGNAME, PATH, SHELL, TERM, USER) that excludes PYTHONPATH.
+  # This means the subprocess's Python interpreter cannot find fastmcp.
+  # Inject PYTHONPATH into the env dicts used by tests that spawn MCP
+  # server subprocesses.
+  postPatch = ''
+    substituteInPlace src/fastmcp/client/transports/stdio.py \
+      --replace-fail \
+        'self.env = env' \
+        'self.env = (env or {}) | {"PYTHONPATH": os.environ.get("PYTHONPATH", "")}'
+  '';
 
   nativeCheckInputs = [
     dirty-equals
@@ -129,69 +144,38 @@ buildPythonPackage (finalAttrs: {
     opentelemetry-sdk
     psutil
     pytest-asyncio
+    pytest-examples
     pytest-httpx
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ finalAttrs.passthru.optional-dependencies.anthropic
-  ++ finalAttrs.passthru.optional-dependencies.azure
-  ++ finalAttrs.passthru.optional-dependencies.code-mode
-  ++ finalAttrs.passthru.optional-dependencies.gemini
-  ++ finalAttrs.passthru.optional-dependencies.openai
-  ++ inline-snapshot.optional-dependencies.dirty-equals;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
-    # RuntimeError: Client failed to connect: Connection closed
-    "test_keep_alive_maintains_session_across_multiple_calls"
-    "test_keep_alive_false_starts_new_session_across_multiple_calls"
-    "test_keep_alive_false_exit_scope_kills_server"
-    "test_keep_alive_starts_new_session_if_manually_closed"
-    "test_keep_alive_true_exit_scope_kills_client"
-    "test_keep_alive_maintains_session_if_reentered"
-    "test_close_session_and_try_to_use_client_raises_error"
-    "test_parallel_calls"
-    "test_run_mcp_config"
-    "test_settings_from_environment_issue_1749"
+    # Requires uv binary
     "test_uv_transport"
     "test_uv_transport_module"
+
+    # Requires network access
     "test_github_api_schema_performance"
 
     # Hang forever
     "test_nested_streamable_http_server_resolves_correctly"
 
-    # RuntimeError: Client failed to connect: Timed out while waiting for response
-    "test_timeout"
-    "test_timeout_tool_call_overrides_client_timeout_even_if_lower"
-
-    # Requires prefab-ui (optional dependency)
-    "test_auto_registers_renderer_resource"
-    "test_equivalent_to_app_true"
-
-    # Requires pydocket (tasks optional dependency, not in test inputs)
-    "test_mounted_server_does_not_have_docket"
-    "test_get_tasks_returns_task_eligible_tools"
-    "test_task_teardown_does_not_hang"
+    # 'builtins.BurnerRedis' object has no attribute 'get_next_client_id'
     "test_background_task_can_read_snapshotted_request_headers"
     "test_background_task_current_http_dependencies_restore_headers"
-    "test_task_execution_auto_populated_for_task_enabled_tool"
-    "test_function_tool_task_config_still_works"
-    "test_async_partial_with_task_true_does_not_raise"
-    "test_sync_partial_with_task_true_raises"
-    "test_is_docket_available"
-    "test_require_docket_passes_when_installed"
+    "test_sync_context_functions_work_in_background_without_deps"
 
-    # Shared dependency caching differs in sandbox
-    "TestSharedDependencies"
+    # Imports from fastmcp.apps.* (prefab-ui) and google_genai are unavailable
+    "test_doc_examples_quality"
 
-    # AssertionError: assert 'INFO' == 'DEBUG'
+    # Strict string search for `env={'KEY': 'val'}`, which breaks due
+    # to env patching to fix transport tests.
+    "test_stdio_transport_with_env"
+
+    # assert 'INFO' == 'DEBUG' — environment-sensitive log-level default
     "test_temporary_settings"
-
-    # Subprocess-based multi-client tests fail in sandbox
-    "test_multi_client"
-    "test_multi_server"
-    "test_single_server_config_include_tags_filtering"
-    "test_server_starts_without_auth"
-    "test_canonical_multi_client_with_transforms"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
@@ -202,14 +186,9 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Requires prefab-ui (optional dependency)
     "tests/apps"
+    "tests/test_apps.py"
     "tests/test_apps_prefab.py"
     "tests/test_fastmcp_app.py"
-    # Subprocess crash recovery tests are flaky in sandbox
-    "tests/client/test_stdio.py"
-    # Requires pydocket/fakeredis (tasks optional dependency, not in test inputs)
-    "tests/server/tasks"
-    "tests/server/test_server_docket.py"
-    "tests/client/tasks"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
@@ -224,8 +203,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Fast, Pythonic way to build MCP servers and clients";
-    changelog = "https://github.com/jlowin/fastmcp/releases/tag/${finalAttrs.src.tag}";
-    homepage = "https://github.com/jlowin/fastmcp";
+    changelog = "https://github.com/PrefectHQ/fastmcp/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/PrefectHQ/fastmcp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
