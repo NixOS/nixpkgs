@@ -46,6 +46,13 @@
         services.userborn.enable = lib.mkForce true;
         users.users.intruder.enable = true;
       };
+
+      # The migration service must be removable from the closure.
+      userborn-without-import.configuration = {
+        services.userborn.enable = lib.mkForce true;
+        services.userborn.importLegacyState = false;
+        users.users.intruder.enable = true;
+      };
     };
   };
 
@@ -129,5 +136,9 @@
               "systemctl show -p ConditionResult userborn-import-legacy.service"
           ).strip()
           t.assertEqual(result, "ConditionResult=no")
+
+      with subtest("legacy import service can be excluded"):
+          switch("userborn-without-import")
+          machine.fail("systemctl cat userborn-import-legacy.service")
     '';
 }
