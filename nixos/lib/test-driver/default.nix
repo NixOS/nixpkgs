@@ -73,6 +73,7 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
+    python.pkgs.pytest
     ruff
     ty
   ];
@@ -84,5 +85,7 @@ buildPythonApplication {
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
+    echo -e "\x1b[32m## run pytest\x1b[0m"
+    pytest
   '';
 }
