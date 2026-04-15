@@ -8843,6 +8843,11 @@ with pkgs;
   font-awesome_7 = (callPackage ../data/fonts/font-awesome { }).v7;
   font-awesome = font-awesome_7;
 
+  inherit (callPackages ../data/fonts/google-fonts { })
+    google-fonts
+    google-fonts-full
+    ;
+
   palenight-theme = callPackage ../data/themes/gtk-theme-framework { theme = "palenight"; };
 
   amarena-theme = callPackage ../data/themes/gtk-theme-framework { theme = "amarena"; };
