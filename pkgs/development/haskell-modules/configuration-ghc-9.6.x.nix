@@ -164,8 +164,8 @@ in
       (pkgs.fetchpatch {
         # https://github.com/jgoerzen/configfile/pull/12
         name = "ConfigFile-pr-12.patch";
-        url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.diff?full_index=1";
-        hash = "sha256-Pt4DqsmFSBbgiLJybDC2/o8g7gdH/c/Iyfsee2e7kC4=";
+        url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.patch";
+        sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
       })
     ];
   }) super.ConfigFile;

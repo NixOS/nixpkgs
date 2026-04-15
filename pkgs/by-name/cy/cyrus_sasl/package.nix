@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ./cyrus-sasl-ac-try-run-fix.patch
     # make compatible with openssl3. can probably be dropped with any release after 2.1.28
     (fetchpatch {
-      url = "https://github.com/cyrusimap/cyrus-sasl/compare/cb549ef71c5bb646fe583697ebdcaba93267a237...dfaa62392e7caecc6ecf0097b4d73738ec4fc0a8.diff?full_index=1";
+      url = "https://github.com/cyrusimap/cyrus-sasl/compare/cb549ef71c5bb646fe583697ebdcaba93267a237...dfaa62392e7caecc6ecf0097b4d73738ec4fc0a8.patch";
       hash = "sha256-pc0cZqj1QoxDqgd/j/5q3vWONEPrTm4Pr6MzHlfjRCc=";
     })
     # Fix build with gcc15

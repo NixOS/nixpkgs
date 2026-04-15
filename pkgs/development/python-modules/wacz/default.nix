@@ -29,8 +29,8 @@ buildPythonPackage rec {
     # <https://github.com/webrecorder/py-wacz/pull/47>
     (fetchpatch {
       name = "clean-up-deps.patch";
-      url = "https://github.com/webrecorder/py-wacz/compare/1e8f724a527f28855eedeb0d969ee39b00b2a80a...9d3ad60f125247b8a4354511d9123b85ce6a23c5.diff?full_index=1";
-      hash = "sha256-6sKOJVGPKepT94fMJ+Xy3aH21K1a1USgqBlO1aZDh4o=";
+      url = "https://github.com/webrecorder/py-wacz/compare/1e8f724a527f28855eedeb0d969ee39b00b2a80a...9d3ad60f125247b8a4354511d9123b85ce6a23c5.patch";
+      hash = "sha256-zH6BKhsq9ybjzaWcNbVkk1sWh8vVCkv7Qxuwl0MQhNM=";
     })
   ];
 

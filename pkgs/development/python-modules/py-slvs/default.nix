@@ -24,7 +24,7 @@ buildPythonPackage rec {
     # https://github.com/realthunder/slvs_py/pull/11
     (fetchpatch {
       name = "cmake-4.patch";
-      url = "https://github.com/realthunder/slvs_py/compare/ab95814397c67d02bb751bd7b7055f51a0bf846e...ad0e1f7a37025721312bfbd63dc8c2bec049d8a0.diff?full_index=1";
+      url = "https://github.com/realthunder/slvs_py/compare/ab95814...ad0e1f7.patch";
       hash = "sha256-LqDDx7uWq5VOkbE/aRu1JAau/DVfr40KK+L8PbBeGoU=";
     })
   ];
