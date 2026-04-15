@@ -26,3 +26,7 @@ build mcporter
 upload mcporter
 build nexa
 upload nexa
+build cudatoolkit
+upload cudatoolkit
+build rocmPackages.rocm-smi
+upload rocmPackages.rocm-smi
