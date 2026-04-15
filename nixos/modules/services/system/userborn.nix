@@ -35,6 +35,7 @@ let
   };
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
+
   userbornStaticFiles =
     pkgs.runCommand "static-userborn" { }
       "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
@@ -134,6 +135,35 @@ in
               _username: opts: opts.enable && opts.createHome && opts.home != "/var/empty"
             ) userCfg.users
           );
+
+      # One-shot migration from update-users-groups.pl state. Runs strictly
+      # before userborn so that stub entries for previously-removed users are
+      # already in /etc/passwd when userborn allocates new ids.
+      # Remove once the perl path has been dropped for two releases.
+      services.userborn-import-legacy = lib.mkIf (!cfg.static) {
+        wantedBy = [ "sysinit.target" ];
+        requiredBy = [ "userborn.service" ];
+        before = [
+          "userborn.service"
+          "shutdown.target"
+        ];
+        after = [ "systemd-remount-fs.service" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig = {
+          Description = "Import legacy update-users-groups.pl state for userborn";
+          DefaultDependencies = false;
+          ConditionPathExists = [
+            "/var/lib/nixos/uid-map"
+            "!/var/lib/userborn/.legacy-imported"
+          ];
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          StateDirectory = "userborn";
+          ExecStart = "${lib.getExe pkgs.userborn-import-legacy} --nogroup-gid ${toString config.ids.gids.nogroup} ${cfg.passwordFilesLocation}";
+        };
+      };
 
       services.userborn = lib.mkIf (!cfg.static) {
         wantedBy = [ "sysinit.target" ];
