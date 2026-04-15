@@ -652,6 +652,13 @@ self: super:
   # xvfb is used by a bunch of things to run tests
   # so try to reduce its reverse closure
   xvfb = super.xorgserver.overrideAttrs (old: {
+    #FIXME: go back to xorg-server version on nixpkgs staging-25.11
+    version = "21.1.21";
+    src = fetchurl {
+      url = "mirror://xorg/individual/xserver/xorg-server-21.1.21.tar.xz";
+      hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+    };
+
     configureFlags = [
       "--enable-xvfb"
       "--disable-xorg"
