@@ -9509,8 +9509,6 @@ with pkgs;
 
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
-  mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
-
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
