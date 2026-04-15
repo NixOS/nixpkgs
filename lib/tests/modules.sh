@@ -840,6 +840,10 @@ checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
 
+checkConfigOutput '2' config.bar.baz ./evalOption.nix
+checkConfigError 'not of type' config.foo.boo.bar ./extendOption.nix
+checkConfigError 'not of type' config.foo.boo.bar ./extendSubmodule.nix
+
 # specialArgs._class
 checkConfigOutput '"nixos"' config.nixos.config.foo ./specialArgs-class.nix
 checkConfigOutput '"bar"' config.conditionalImportAsNixos.config.foo ./specialArgs-class.nix

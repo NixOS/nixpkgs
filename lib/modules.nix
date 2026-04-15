@@ -1446,6 +1446,48 @@ let
     };
 
   /**
+    Run the module-system property pipeline (`mkMerge` / `mkIf`
+    discharging followed by `mkOverride` priority filtering) on a list
+    of definitions.
+
+    Intended for option types that handle their own per-leaf priority
+    composition - e.g. tree-shaped types like `nestedAttrsOf` whose
+    `merge` walks into sub-paths that the top-level pipeline (run by
+    `mergeDefinitions`) doesn't reach. Returns the same shape as
+    `filterOverrides'`: a `values` list of definitions stripped of
+    their override wrappers, plus the surviving `highestPrio`.
+
+    `lib.modules.applyLeafProperties :: [{ file; value }] -> { values; highestPrio }`
+
+    # Inputs
+
+    `defs`
+
+    : 1\. List of `{ file, value }` definitions for one logical leaf.
+
+    # Example
+
+    ```nix
+    # Inside an option type's `merge`:
+    let
+      processed = lib.modules.applyLeafProperties subDefs;
+    in
+    elemType.merge loc processed.values
+    ```
+  */
+  applyLeafProperties =
+    defs:
+    filterOverrides' (
+      concatMap (
+        d:
+        map (v: {
+          inherit (d) file;
+          value = v;
+        }) (dischargeProperties d.value)
+      ) defs
+    );
+
+  /**
     Sort a list of properties.  The sort priority of a property is
     defaultOrderPriority by default, but can be overridden by wrapping the property
     using mkOrder.
@@ -2121,6 +2163,153 @@ let
     config = lib.importTOML file;
   };
 
+  /**
+    Evaluate a configuration in the context of a corresponding module system option.
+
+    lib.evalOption :: option -> attrs -> attrs
+
+    # Inputs
+
+    `option`
+
+    : 1\. Module system option in which to evaluate the configuration
+
+    `conf`
+
+    : 2\. Configuration to evaluate within the option
+
+    # Example
+
+    ```nix
+    lib.evalOption
+      (lib.mkOption {
+        default = { };
+        type = lib.types.submodule {
+          options.foo = lib.mkOption { type = lib.types.int; };
+        };
+      })
+      { foo = 1; }
+    # => { foo = 1; }
+    ```
+  */
+  evalOption =
+    option: conf:
+    (evalModules {
+      modules = [
+        {
+          options.opt = option;
+          config.opt = conf;
+        }
+      ];
+    }).config.opt;
+
+  /**
+    Extend a (sub-)module option with a set of overrides.
+
+    lib.extendOption :: attrs -> option -> option
+
+    # Inputs
+
+    `overrides`
+
+    : 1\. A (recursive) attrset of fields to add to the option
+
+    `opt`
+
+    : 2\. Option to extend with `overrides`
+
+    # Example
+
+    ```nix
+    lib.extendOption
+      { bar.default = 10; }
+      (lib.mkOption {
+        type = lib.types.submodule {
+          options.bar = lib.mkOption { type = lib.types.int; };
+        };
+      })
+    ```
+  */
+  extendOption =
+    overrides: opt:
+    let
+      inherit (opt) type;
+      isSubmodule = lib.isOptionType type && type.name == "submodule";
+      # (deduplicated) keys from submodules to iterate over
+      # we don't need the values, but attrset offers O(1) containment checks
+      subOptions = optionalAttrs isSubmodule (
+        lib.attrsets.mergeAttrsList (map (mod: mod.options or { }) type.getSubModules)
+      );
+      subOverrides = lib.filterAttrs (k: _: subOptions ? ${k}) overrides;
+      directOverrides = lib.filterAttrs (k: _: !(subOptions ? ${k})) overrides;
+    in
+    mkOption (
+      # re-wrap existing option attributes
+      (removeAttrs opt [ "_type" ])
+      # if we are annotating something that isn't a sub-module,
+      # just override relevant attributes on the option
+      // directOverrides
+      # to annotate a sub-module, presume we should just annotate its sub-options,
+      # which we iterate over to reconstruct with relevant annotations.
+      // optionalAttrs isSubmodule {
+        default = { };
+        type = lib.types.submoduleWith (
+          # meta we will not change
+          type.functor.payload
+          # modules are the parameter that will change as per our overrides
+          // {
+            modules = [
+              {
+                options = mapAttrs (
+                  k: _:
+                  let
+                    # option for the attribute in question: for now presume just one sub-module had it
+                    attrOpt = (head (filter (m: (m.options or { }) ? ${k}) type.getSubModules)).options.${k};
+                    # any overrides for the attribute in question
+                    attrOverrides = subOverrides.${k} or { };
+                  in
+                  # recurse until we have no more overrides to annotate the option with
+                  if attrOverrides != { } then extendOption attrOverrides attrOpt else attrOpt
+                ) subOptions;
+              }
+            ];
+          }
+        );
+      }
+    );
+
+  /**
+    Extend a (sub-)module type with a set of overrides.
+
+    lib.extendSubmodule :: attrs -> optionType -> optionType
+
+    # Inputs
+
+    `overrides`
+
+    : 1\. A (recursive) attrset of fields to add to the option
+
+    `mod`
+
+    : 2\. A (sub-)module type to extend with `overrides`
+
+    # Example
+
+    ```nix
+    lib.extendSubmodule
+      { bar.default = 10; }
+      (lib.types.submodule {
+        options.bar = lib.mkOption { type = lib.types.int; };
+      })
+    ```
+  */
+  extendSubmodule =
+    overrides: mod:
+    (extendOption overrides (mkOption {
+      default = { };
+      type = mod;
+    })).type;
+
   private =
     mapAttrs
       (
@@ -2270,11 +2459,15 @@ private
   #       are just needed by types.nix, but are not meant to be consumed
   #       externally.
   inherit
+    applyLeafProperties
     defaultOrderPriority
     defaultOverridePriority
     doRename
     evalModules
+    evalOption
     evalOptionValue # for use by lib.types
+    extendOption
+    extendSubmodule
     filterOverrides
     filterOverrides'
     fixMergeModules
