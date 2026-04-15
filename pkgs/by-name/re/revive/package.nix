@@ -1,30 +1,33 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  go,
   lib,
-  makeWrapper,
+  stdenv,
+  testers,
+  revive,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "revive";
-  version = "1.11.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = "revive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-89BlSc2tgxAJUGZM951fF+0H+SOsl0+xz/G18neRZxI=";
-    # populate values that require us to use git. By doing this in postFetch we
-    # can delete .git afterwards and maintain better reproducibility of the src.
-    leaveDotGit = true;
+    hash = "sha256-FA3IP8TNY911CasYI+m+qpNCvFgMcJ0jUeT1Gk8frAw=";
+
     postFetch = ''
-      date -u -d "@$(git -C $out log -1 --pretty=%ct)" "+%Y-%m-%d %H:%M UTC" > $out/DATE
-      git -C $out rev-parse HEAD > $out/COMMIT
-      rm -rf $out/.git
+      # The repository currently has a 'v1' and 'V1' directory.
+      # On Darwin these are treated as the same. To prevent a hash mismatch, remove the directory.
+      rm -r $out/testdata/package_directory_mismatch/api
     '';
   };
-  vendorHash = "sha256-ZxTBGcGSRWlYFBz0+5wR/9d8p7lvjJjyId5VNIVW9rQ=";
+
+  vendorHash = "sha256-KxDWd+fd30eOttNEB6kQDxc2Lnf5Rj2zTCohjyfjMnU=";
+
+  # Only build the revive package at the root.
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -33,26 +36,40 @@ buildGoModule (finalAttrs: {
     "-X github.com/mgechev/revive/cli.builtBy=nix"
   ];
 
-  # ldflags based on metadata from git and source
-  preBuild = ''
-    ldflags+=" -X github.com/mgechev/revive/cli.commit=$(cat COMMIT)"
-    ldflags+=" -X 'github.com/mgechev/revive/cli.date=$(cat DATE)'"
-  '';
+  passthru.tests = {
+    version = testers.testVersion { package = revive; };
+    simple-execution = testers.runCommand {
+      name = "Executes the linter";
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
+      script = ''
+        # Write a simple go program.
+        cat > main.go << EOF
+        // The main package
+        package main
 
-  allowGoReference = true;
+        import "fmt"
 
-  nativeBuildInputs = [ makeWrapper ];
+        func main() {
+          fmt.Println("Hello World")
+        }
+        EOF
 
-  postFixup = ''
-    wrapProgram $out/bin/revive \
-      --prefix PATH : ${lib.makeBinPath [ go ]}
-  '';
+        # This will return an exit status of 1 if there are errors and the test will fail.
+        revive -set_exit_status main.go
+
+        # Test successful.
+        touch $out
+      '';
+    };
+  };
 
   meta = {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
     mainProgram = "revive";
+    longDescription = "Drop-in replacement for golint. Revive provides a framework for development of custom rules, and lets you define a strict preset for enhancing your development & code review processes";
     homepage = "https://revive.run";
+    downloadPage = "https://github.com/mgechev/revive";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ andrewfield ];
   };
 })
