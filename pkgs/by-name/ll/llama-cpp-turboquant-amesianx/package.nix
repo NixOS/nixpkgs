@@ -53,7 +53,7 @@ llama-cpp.overrideAttrs (oa: {
     homepage = "https://github.com/AmesianX/TurboQuant";
     license = lib.licenses.mit;
     mainProgram = "llama";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ superherointj ];
     platforms = lib.platforms.unix;
   };
 })
