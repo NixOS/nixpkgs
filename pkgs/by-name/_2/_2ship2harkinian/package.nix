@@ -300,7 +300,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
     mainProgram = "2s2h";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ qubitnano ];
+    maintainers = with lib.maintainers; [
+      qubitnano
+      matteopacini
+    ];
     license = with lib.licenses; [
       # OTRExporter, ZAPDTR, libultraship, libgfxd, thread_pool
       mit
