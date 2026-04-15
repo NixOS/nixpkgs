@@ -86,19 +86,18 @@ let
       src =
         if stdenv.hostPlatform.isDarwin then
           fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+            url = "https://www.mrc-lmb.cam.ac.uk/harry/imosflm/ver${
               builtins.replaceStrings [ "." ] [ "" ] version
-            }/pre-built/mosflm-osx-64-noX11.zip";
-            sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
+            }/downloads/mosflm-${version}-osx-64.zip";
+            hash = "sha256-0sXgA3zSIjhy9+zTiv+K/51yZsIgGorMtKVjdRjW+AM=";
           }
         else
           fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+            url = "https://www.mrc-lmb.cam.ac.uk/harry/imosflm/ver${
               builtins.replaceStrings [ "." ] [ "" ] version
-            }/pre-built/mosflm-linux-64-noX11.zip";
-            hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
+            }/downloads/imosflm-${version}-linux-64.zip";
+            hash = "sha256-2we0K09W31LKgn9SHLGti50EA/zhbX+CWWuQGCSKW18=";
           };
-      mosflmBinary = if stdenv.hostPlatform.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in
     stdenv.mkDerivation {
       pname = "mosflm";
@@ -112,13 +111,11 @@ let
         makeWrapper
       ];
 
-      sourceRoot = ".";
-
       # mosflm statically links against its own libccp4, which as the syminfo.lib environment variable problem.
       # Here, we circumvent it by creating a little wrapper script that calls mosflm after setting the SYMINFO variable.
       installPhase = ''
         mkdir -p $out/bin
-        cp ${mosflmBinary} $out/bin/mosflm-raw
+        cp bin/mosflm $out/bin/mosflm-raw
         makeWrapper $out/bin/mosflm-raw $out/bin/mosflm --set SYMINFO ${libccp4}/share/syminfo.lib --add-flags -n
       '';
     };
