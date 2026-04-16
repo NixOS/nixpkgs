@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Desktop automation utility for Linux with Wayland support";
     homepage = "https://github.com/dlk3/autokey-wayland";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ enderbsd ];
     platforms = lib.platforms.linux;
     mainProgram = "autokey-qt";
   };
