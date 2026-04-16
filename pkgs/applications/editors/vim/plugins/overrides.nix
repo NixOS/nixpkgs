@@ -2798,10 +2798,14 @@ assertNoAdditions {
     nvimSkipModules = [ "install_parsers" ];
   };
 
-  # TODO: raise warning at 26.04; drop at 26.11
-  nvim-treesitter-legacy = super.nvim-treesitter-legacy.overrideAttrs (
-    callPackage ./nvim-treesitter-legacy/overrides.nix { } self super
-  );
+  # TODO: raise warning at 26.05; drop at 26.11
+  nvim-treesitter-legacy =
+    let
+      drv = super.nvim-treesitter-legacy.overrideAttrs (
+        callPackage ./nvim-treesitter-legacy/overrides.nix { } self super
+      );
+    in
+    lib.warnOnInstantiate "nvim-treesitter-legacy is deprecated, please migrate to the new version. This will become an error in 26.11" drv;
 
   nvim-treesitter-pairs = super.nvim-treesitter-pairs.overrideAttrs {
     dependencies = [ self.nvim-treesitter-legacy ];
