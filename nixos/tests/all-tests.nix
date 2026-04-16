@@ -815,6 +815,7 @@ in
   };
   kafka = handleTest ./kafka { };
   kaidan = runTest ./kaidan;
+  kanata-modular = runTest ./kanata-modular.nix;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
