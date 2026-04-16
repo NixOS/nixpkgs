@@ -22,6 +22,7 @@
   # can set this parameter to override these occurrences with your own url. Must include the schema.
   # Example: https://my-ente.example.com
   enteMainUrl ? null,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -104,57 +105,60 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  passthru.updateScript = writeScript "update-ente-web" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p coreutils nix-update gnugrep gnused curl
+  passthru = {
+    tests = { inherit (nixosTests) ente; };
+    updateScript = writeScript "update-ente-web" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p coreutils nix-update gnugrep gnused curl
 
-    set -eu -o pipefail
+      set -eu -o pipefail
 
-    # Assume the current working directory is Nixpkgs
-    file_path="./pkgs/by-name/en/ente-web/package.nix"
+      # Assume the current working directory is Nixpkgs
+      file_path="./pkgs/by-name/en/ente-web/package.nix"
 
-    # Extract version, then update
-    old_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
-    if [[ -z "$old_version" ]]; then
-      echo "Failed to extract old version from $file_path"
-      exit 1
-    fi
+      # Extract version, then update
+      old_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+      if [[ -z "$old_version" ]]; then
+        echo "Failed to extract old version from $file_path"
+        exit 1
+      fi
 
-    nix-update ente-web --version-regex 'photos-v(.*)'
+      nix-update ente-web --version-regex 'photos-v(.*)'
 
-    new_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
-    if [[ -z "$new_version" ]]; then
-      echo "Failed to extract new version from $file_path"
-      exit 1
-    fi
+      new_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+      if [[ -z "$new_version" ]]; then
+        echo "Failed to extract new version from $file_path"
+        exit 1
+      fi
 
-    if [[ "$old_version" == "$new_version" ]]; then
-      echo "No update"
-      exit 0
-    fi
+      if [[ "$old_version" == "$new_version" ]]; then
+        echo "No update"
+        exit 0
+      fi
 
-    echo "Updated to version $new_version, checking wasm-bindgen..."
+      echo "Updated to version $new_version, checking wasm-bindgen..."
 
-    # Fetch Cargo.lock from GitHub instead of cloning repository
-    cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
+      # Fetch Cargo.lock from GitHub instead of cloning repository
+      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
 
-    wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
+      wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
 
-    if [[ -z "$wasm_bindgen_version" ]]; then
-      echo "Failed to find wasm-bindgen version in Cargo.lock from $cargo_lock_url"
-      exit 1
-    fi
+      if [[ -z "$wasm_bindgen_version" ]]; then
+        echo "Failed to find wasm-bindgen version in Cargo.lock from $cargo_lock_url"
+        exit 1
+      fi
 
-    echo "Found wasm-bindgen version: $wasm_bindgen_version"
+      echo "Found wasm-bindgen version: $wasm_bindgen_version"
 
-    # Construct new attribute name
-    wasm_bindgen_attr="wasm-bindgen-cli_''${wasm_bindgen_version//./_}"
+      # Construct new attribute name
+      wasm_bindgen_attr="wasm-bindgen-cli_''${wasm_bindgen_version//./_}"
 
-    # Replace old attribute name in file
-    sed -i "s/wasm-bindgen-cli_[0-9_]\+/$wasm_bindgen_attr/g" "$file_path"
+      # Replace old attribute name in file
+      sed -i "s/wasm-bindgen-cli_[0-9_]\+/$wasm_bindgen_attr/g" "$file_path"
 
-    echo "Successfully updated wasm-bindgen-cli to $wasm_bindgen_attr"
-  '';
+      echo "Successfully updated wasm-bindgen-cli to $wasm_bindgen_attr"
+    '';
+  };
 
   meta = {
     description = "Ente application web frontends";
