@@ -60,7 +60,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/sectore/timr-tui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "timr-tui";
-    maintainers = [ lib.maintainers.flokkq ];
+    maintainers = with lib.maintainers; [
+      flokkq
+      sectore
+    ];
     platforms = lib.platforms.unix;
   };
 })
