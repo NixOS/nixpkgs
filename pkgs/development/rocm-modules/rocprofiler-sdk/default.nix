@@ -12,6 +12,7 @@
   rocprof-trace-decoder,
   aqlprofile,
   rocm-comgr,
+  rocmUpdateScript,
   rccl,
   python3,
   python3Packages,
@@ -45,7 +46,7 @@
 # rocprofiler-sdk is the home of rocprofv3
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-sdk";
-  version = "7.2.1";
+  version = "7.2.2";
 
   outputs = [
     "out"
@@ -56,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-P8c1/HtkdLlZRTMaOFhFF7a/0SlsOabnUwci1w1Svfc=";
+    hash = "sha256-SQjV1FnAgnK1LS5SiApgfvDSjB3AKpucja+PBZSmLvQ=";
     fetchSubmodules = true;
     sparseCheckout = [
       "projects/rocprofiler-sdk"
@@ -200,6 +201,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/cmake $dev/lib/
     mv $out/share/rocprofiler-sdk/{samples,tests} $dev/share/rocprofiler-sdk/
   '';
+
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm GPU performance analysis SDK";
