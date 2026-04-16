@@ -7,6 +7,7 @@
   neovim,
   neovimUtils,
   runCommand,
+  runCommandLocal,
   vimPlugins,
   writableTmpDirAsHomeHook,
 }:
@@ -22,7 +23,11 @@ let
       requires ? [ ],
     }:
     vimUtils.toVimPlugin (
-      runCommand "nvim-treesitter-queries-${language}"
+      # Just mkdir + ln -s; cheaper to build than to substitute (and not
+      # on cache.nixos.org anyway since release.nix doesn't recurse into
+      # passthru.queries). With ~300 languages under withAllGrammars,
+      # round-tripping each to a remote builder is very slow.
+      runCommandLocal "nvim-treesitter-queries-${language}"
         {
           passthru = {
             inherit language requires;
