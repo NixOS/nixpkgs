@@ -314,6 +314,27 @@ in
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;
       })
+      (
+        { config, ... }:
+        {
+          options.system.tools.nixos-rebuild.enableRun0Elevation = lib.mkEnableOption ''
+            support for being targeted by `nixos-rebuild --elevate=run0
+            --ask-elevate-password`.
+
+            This enables polkit and adds {command}`polkit-stdin-agent` to
+            {option}`environment.systemPackages` so that a deploying host
+            can find a target-architecture agent at
+            {file}`<toplevel>/sw/bin/polkit-stdin-agent` after copying the
+            closure (which is required for cross-architecture deploys and
+            mismatched nixpkgs revisions to work).
+          '';
+
+          config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
+            security.polkit.enable = lib.mkDefault true;
+            environment.systemPackages = [ pkgs.polkit-stdin-agent ];
+          };
+        }
+      )
       (mkToolModule {
         name = "nixos-version";
         package = nixos-version;

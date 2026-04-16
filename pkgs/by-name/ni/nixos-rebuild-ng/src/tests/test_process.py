@@ -8,24 +8,41 @@ import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
 
-def test_remote_shell_script() -> None:
-    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV}) == (
-        '''exec env -i PATH="${PATH-}" "$@"'''
-    )
-    assert p._remote_shell_script(
+def test_remote_env_shell_argv() -> None:
+    assert e._remote_env_shell_argv([], {"PATH": e.PRESERVE_ENV}, ["cmd"]) == [
+        "/bin/sh",
+        "-c",
+        '''exec /usr/bin/env -i PATH="${PATH-}" "$@"''',
+        "sh",
+        "cmd",
+    ]
+    assert e._remote_env_shell_argv(
+        ["sudo"],
         {
-            "PATH": p.PRESERVE_ENV,
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "PATH": e.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "0",
-        }
-    ) == (
-        """exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
-        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'''
-    )
-    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV, "FOO": "some value"}) == (
-        '''exec env -i PATH="${PATH-}" FOO='some value' "$@"'''
-    )
+        },
+        ["cmd", "arg"],
+    ) == [
+        "sudo",
+        "/bin/sh",
+        "-c",
+        """exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
+        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"''',
+        "sh",
+        "cmd",
+        "arg",
+    ]
+    assert e._remote_env_shell_argv(
+        [], {"PATH": e.PRESERVE_ENV, "FOO": "some value"}, []
+    ) == [
+        "/bin/sh",
+        "-c",
+        '''exec /usr/bin/env -i PATH="${PATH-}" FOO='some value' "$@"''',
+        "sh",
+    ]
 
 
 @patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
@@ -123,7 +140,7 @@ def test_run_wrapper(mock_run: Any) -> None:
             "--",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" "$@"'""",
+            """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
             "sh",
             "test",
             "--with",
@@ -156,7 +173,7 @@ def test_run_wrapper(mock_run: Any) -> None:
             "--stdin",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" FOO=bar "$@"'""",
+            """'exec /usr/bin/env -i PATH="${PATH-}" FOO=bar "$@"'""",
             "sh",
             "test",
             "--with",
@@ -248,6 +265,82 @@ def test_ssh_host() -> None:
         assert remote.store_type == "ssh-ng"
 
 
+@patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_run_wrapper_run0(mock_run: Any) -> None:
+    p.run_wrapper(["cmd", "arg"], elevate=e.Run0Elevator())
+    mock_run.assert_called_with(
+        ["run0", "--", "cmd", "arg"],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input=None,
+    )
+
+    run0_script = (
+        "exec systemd-run --uid=0 --pipe --quiet --wait --collect "
+        "--service-type=exec --send-sighup "
+        '--setenv=PATH="${PATH-}" -- "$@"'
+    )
+
+    p.run_wrapper(
+        ["cmd", "arg"],
+        elevate=e.Run0Elevator(),
+        remote=m.Remote("user@host", [], "ssh"),
+    )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            *p.SSH_DEFAULT_OPTS,
+            "user@host",
+            "--",
+            "/bin/sh",
+            "-c",
+            p._quote_remote_arg(run0_script),
+            "sh",
+            "cmd",
+            "arg",
+        ],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input=None,
+    )
+
+    p.run_wrapper(
+        ["cmd"],
+        elevate=e.Run0Elevator().with_password("pw"),
+        remote=m.Remote("user@host", [], "ssh"),
+    )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            *p.SSH_DEFAULT_OPTS,
+            "user@host",
+            "--",
+            "/bin/sh",
+            "-c",
+            p._quote_remote_arg(e.Run0Elevator._AGENT_PICKER),
+            "sh",
+            # No toplevel bound, so the only candidate is PATH lookup.
+            "polkit-stdin-agent",
+            "--",
+            "/bin/sh",
+            "-c",
+            p._quote_remote_arg(run0_script),
+            "sh",
+            "cmd",
+        ],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input="pw\n",
+    )
+
+
 @patch("subprocess.run", autospec=True)
 def test_custom_sudo_args(mock_run: Any) -> None:
     with patch.dict(
@@ -298,7 +391,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
             "--args",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" "$@"'""",
+            """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
             "sh",
             "test",
         ],

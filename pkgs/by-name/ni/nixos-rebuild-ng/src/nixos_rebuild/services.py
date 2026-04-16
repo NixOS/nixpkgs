@@ -298,6 +298,11 @@ def build_and_activate_system(
             copy_flags=grouped_nix_args.copy_flags,
         )
     elif args.rollback:
+        if target_host is not None:
+            # The elevated `nix-env --rollback` runs before path_to_config
+            # is known, so point the elevator at the profile to find a
+            # target-arch helper in the *current* generation's sw/bin.
+            args.elevator = args.elevator.for_target_config(profile.path)
         path_to_config = _rollback_system(
             action=action,
             args=args,
@@ -314,6 +319,11 @@ def build_and_activate_system(
             build_attr=build_attr,
             grouped_nix_args=grouped_nix_args,
         )
+
+    if target_host is not None and not args.rollback:
+        # Prefer the helper from the toplevel we just copied to the
+        # target (correct arch, independent of re-exec / nixpkgs pin).
+        args.elevator = args.elevator.for_target_config(path_to_config)
 
     current_config = Path("/run/current-system")
     if args.diff:

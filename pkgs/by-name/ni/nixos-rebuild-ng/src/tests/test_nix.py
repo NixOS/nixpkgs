@@ -767,8 +767,8 @@ def test_switch_to_configuration_without_systemd_run(
     mock_run.assert_called_with(
         [profile_path / "bin/switch-to-configuration", "switch"],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "0",
         },
         elevate=e.NO_ELEVATOR,
@@ -809,8 +809,8 @@ def test_switch_to_configuration_without_systemd_run(
             "test",
         ],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "1",
         },
         elevate=SUDO,
@@ -845,8 +845,8 @@ def test_switch_to_configuration_with_systemd_run(
             "switch",
         ],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "0",
         },
         elevate=e.NO_ELEVATOR,
@@ -875,8 +875,8 @@ def test_switch_to_configuration_with_systemd_run(
             "test",
         ],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "1",
         },
         elevate=SUDO,

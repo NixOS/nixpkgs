@@ -14,7 +14,7 @@ from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
-from .elevate import NO_ELEVATOR, Elevator
+from .elevate import NO_ELEVATOR, PRESERVE_ENV, Elevator
 from .models import (
     Action,
     BuildAttr,
@@ -26,7 +26,7 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import PRESERVE_ENV, SSH_DEFAULT_OPTS, run_wrapper
+from .process import SSH_DEFAULT_OPTS, run_wrapper
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
