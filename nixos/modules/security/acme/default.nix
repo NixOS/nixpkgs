@@ -441,21 +441,6 @@ let
               chown -R ${user}:${data.group} "$fixpath"
             fi
           done
-
-          ${lib.optionalString (data.webroot != null) ''
-            # Ensure the webroot exists.
-            # Lego will fail if the webroot does not exist at all.
-            (
-              # If creating the webroot dir, make it world-readable so that the
-              # web server can access it regardless of whether the certificate
-              # is actually being generated for this web server.
-              umask 0022 \
-              && mkdir -p '${data.webroot}/.well-known/acme-challenge'
-            ) || (
-              echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by the user ${user}.' \
-              && exit 1
-            )
-          ''}
         '';
       };
 
