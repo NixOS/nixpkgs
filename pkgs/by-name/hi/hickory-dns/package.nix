@@ -38,7 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust based DNS client, server, and resolver";
     homepage = "https://hickory-dns.org/";
     changelog = "https://github.com/hickory-dns/hickory-dns/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ colinsane ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      colinsane
+    ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
       asl20
