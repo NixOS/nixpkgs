@@ -71,41 +71,31 @@
 
       preSwitchChecks.switchInhibitors =
         let
-          realpath = lib.getExe' pkgs.coreutils "realpath";
-          mktemp = lib.getExe' pkgs.coreutils "mktemp";
-          rm = lib.getExe' pkgs.coreutils "rm";
-          jq = lib.getExe' pkgs.jq "jq";
+          jq = lib.getExe pkgs.jq;
+          empty = pkgs.writeText "empty-inhibitors" "{}";
         in
         # bash
         ''
           incoming="''${1-}"
           action="''${2-}"
 
-          if [ "$action" == "boot" ]; then
-            echo "Not checking switch inhibitors (action = $action)"
-            exit
-          fi
+          case "$action" in
+            boot|dry-activate)
+              echo "Not checking switch inhibitors (action = $action)"
+              exit
+              ;;
+          esac
 
           echo -n "Checking switch inhibitors..."
 
-          # Create a temporary file that we use in case a generation does not have
-          # the switch-inhibitors file.
-          empty="$(${mktemp} -t switch_inhibit.XXXX)"
-          # shellcheck disable=SC2329
-          clean_up() {
-            ${rm} -f "$empty"
-          }
-          trap clean_up EXIT
-          echo "{}" > "$empty"
-
-          current_inhibitors="$(${realpath} /run/current-system)/switch-inhibitors"
+          current_inhibitors="/run/current-system/switch-inhibitors"
           if [ ! -f "$current_inhibitors" ]; then
-            current_inhibitors="$empty"
+            current_inhibitors="${empty}"
           fi
 
-          new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
+          new_inhibitors="$incoming/switch-inhibitors"
           if [ ! -f "$new_inhibitors" ]; then
-            new_inhibitors="$empty"
+            new_inhibitors="${empty}"
           fi
 
           diff="$(
@@ -115,8 +105,8 @@
               --rawfile current "$current_inhibitors" \
               --rawfile newgen "$new_inhibitors" \
             '
-              $current | try fromjson catch {} as $old |
-              $newgen | try fromjson catch {} as $new |
+              ($current | fromjson) as $old |
+              ($newgen | fromjson) as $new |
               $old |
               to_entries |
               map(
