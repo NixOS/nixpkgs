@@ -77,7 +77,7 @@ let
           for dir in tools runtimes/*/native; do
             [[ ! -d "$dir" ]] || chmod -R +x "$dir"
           done
-          echo {} > .nupkg.metadata
+          createNupkgMetadata .
         )
 
         popd
