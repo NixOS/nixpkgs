@@ -37,6 +37,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyanloutre
       nickcao
     ];
