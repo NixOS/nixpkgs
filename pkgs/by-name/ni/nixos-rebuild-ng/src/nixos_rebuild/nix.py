@@ -14,6 +14,7 @@ from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
+from .elevate import NO_ELEVATOR, Elevator
 from .models import (
     Action,
     BuildAttr,
@@ -453,7 +454,7 @@ def get_generations(profile: Profile) -> list[Generation]:
 def get_generations_from_nix_env(
     profile: Profile,
     target_host: Remote | None = None,
-    sudo: bool = False,
+    elevate: Elevator = NO_ELEVATOR,
 ) -> list[Generation]:
     """Get all NixOS generations from profile with nix-env. Needs root.
 
@@ -468,7 +469,7 @@ def get_generations_from_nix_env(
         ["nix-env", "-p", profile.path, "--list-generations"],
         stdout=PIPE,
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
     )
 
     def parse_line(line: str) -> Generation:
@@ -600,12 +601,12 @@ def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     )
 
 
-def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
+def rollback(profile: Profile, target_host: Remote | None, elevate: Elevator) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
     run_wrapper(
         ["nix-env", "--rollback", "-p", profile.path],
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
     )
     # Rollback config PATH is the own profile
     return profile.path
@@ -614,11 +615,11 @@ def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
 def rollback_temporary_profile(
     profile: Profile,
     target_host: Remote | None,
-    sudo: bool,
+    elevate: Elevator,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
     generations = get_generations_from_nix_env(
-        profile, target_host=target_host, sudo=sudo
+        profile, target_host=target_host, elevate=elevate
     )
     previous_gen_id = None
     for generation in generations:
@@ -635,7 +636,7 @@ def set_profile(
     profile: Profile,
     path_to_config: Path,
     target_host: Remote | None,
-    sudo: bool,
+    elevate: Elevator,
 ) -> None:
     "Set a path as the current active Nix profile."
     if not os.environ.get(
@@ -668,7 +669,7 @@ def set_profile(
     run_wrapper(
         ["nix-env", "-p", profile.path, "--set", path_to_config],
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
     )
 
 
@@ -676,7 +677,7 @@ def switch_to_configuration(
     path_to_config: Path,
     action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
-    sudo: bool,
+    elevate: Elevator,
     install_bootloader: bool = False,
     specialisation: str | None = None,
 ) -> None:
@@ -716,7 +717,7 @@ def switch_to_configuration(
             "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
         },
         remote=target_host,
-        sudo=sudo,
+        elevate=elevate,
         # switch-to-configuration is not expected to produce meaningful
         # stdout, but if it (or any of its children) does, it would leak
         # into our stdout and break the "only the store path on stdout"
@@ -728,7 +729,7 @@ def switch_to_configuration(
 
 def upgrade_channels(
     all_channels: bool = False,
-    sudo: bool = False,
+    elevate: Elevator = NO_ELEVATOR,
     channels_dir: Path = Path("/nix/var/nix/profiles/per-user/root/channels/"),
 ) -> None:
     """Upgrade channels for classic Nix.
@@ -736,10 +737,10 @@ def upgrade_channels(
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
-    if not sudo and os.geteuid() != 0:
+    if not elevate.elevates and os.geteuid() != 0:
         raise NixOSRebuildError(
             "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
-            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+            "also pass '--elevate' or run the command as root"
         )
 
     channel_updated = False
@@ -752,7 +753,7 @@ def upgrade_channels(
             run_wrapper(
                 ["nix-channel", "--update", channel_path.name],
                 check=False,
-                sudo=sudo,
+                elevate=elevate,
             )
             channel_updated = True
 

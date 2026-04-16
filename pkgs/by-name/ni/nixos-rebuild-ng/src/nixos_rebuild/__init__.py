@@ -6,6 +6,7 @@ from typing import Final, assert_never
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_SHELL_FILES
+from .elevate import NO_ELEVATOR, SudoElevator
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -321,7 +322,7 @@ def execute(argv: list[str]) -> None:
     args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(args.upgrade_all, args.sudo)
+        nix.upgrade_channels(args.upgrade_all, args.elevator)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
@@ -339,6 +340,13 @@ def execute(argv: list[str]) -> None:
     profile = Profile.from_arg(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
     build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
+    args.elevator = (
+        SudoElevator(
+            password=target_host.sudo_password if target_host else None,
+        )
+        if args.sudo
+        else NO_ELEVATOR
+    )
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 

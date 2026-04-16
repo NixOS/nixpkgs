@@ -12,7 +12,7 @@ from ipaddress import AddressValueError, IPv6Address
 from typing import Final, Literal, Self, TextIO, TypedDict, Unpack, override
 
 from . import tmpdir
-from .elevate import NO_ELEVATOR, Elevator, SudoElevator
+from .elevate import NO_ELEVATOR, Elevator
 
 logger: Final = logging.getLogger(__name__)
 
@@ -132,15 +132,9 @@ def run_wrapper(
     append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
     elevate: Elevator = NO_ELEVATOR,
-    sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
-    # Back-compat shim while callers are migrated to ``elevate=``;
-    # removed in the next commit.
-    if sudo:
-        elevate = SudoElevator(password=remote.sudo_password if remote else None)
-
     process_input = None
     run_args: list[Arg] = list(args)
     final_args: list[Arg]
