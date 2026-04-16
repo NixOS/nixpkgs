@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appImageContents}/volanta.desktop $out/share/applications/volanta.desktop
     install -m 444 -D ${appImageContents}/volanta.png \
-      $out/share/icons/hicolor/1024x1024/apps/volanta.png
+      $out/share/icons/volanta.png
     substituteInPlace $out/share/applications/volanta.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=env APPIMAGE=true volanta'
     wrapProgram $out/bin/volanta \

@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
     mv * $out/opt/bluemail
     ln -s $out/opt/bluemail/bluemail $out/bin/bluemail
 
-    mkdir -p $out/share/icons/hicolor/1024x1024/apps
-    ln -s $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png $out/share/icons/hicolor/1024x1024/apps/bluemail.png
+    mkdir -p $out/share/icons
+    ln -s $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png $out/share/icons/bluemail.png
 
     runHook postInstall
   '';

@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       --add-flags "-d $out/share/bombsquad"
 
-    install -Dm755 ${bombsquadIcon} $out/share/icons/hicolor/1024x1024/apps/bombsquad.png
+    install -Dm755 ${bombsquadIcon} $out/share/icons/bombsquad.png
 
     runHook postInstall
   '';
