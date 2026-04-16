@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uefitool";
-  version = "A73";
+  version = "A74";
 
   src = fetchFromGitHub {
     owner = "LongSoft";
     repo = "uefitool";
     tag = finalAttrs.version;
-    hash = "sha256-XZGddj0i/r1rqntEcqU2AK6ihvqwN031TR12qmEmKLk=";
+    hash = "sha256-pgtlVv5hXzQzOJInHB96jb1OK7QU3TMWmw1h8H4lNuU=";
   };
 
   buildInputs = [ qt6.qtbase ];
