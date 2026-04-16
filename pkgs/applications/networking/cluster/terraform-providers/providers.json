@@ -932,11 +932,11 @@
     "vendorHash": "sha256-cvnxSUCiu6S5lkT9VAyn9K6lmridRb0WZyrrvMv+B48="
   },
   "namecheap_namecheap": {
-    "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
+    "hash": "sha256-eV2K3KHTEXEEt1WXwfYfNMK+gLUY0EoHFQg9kLdAI3s=",
     "homepage": "https://registry.terraform.io/providers/namecheap/namecheap",
     "owner": "namecheap",
     "repo": "terraform-provider-namecheap",
-    "rev": "v2.2.0",
+    "rev": "v2.3.2",
     "spdx": "Apache-2.0",
     "vendorHash": null
   },

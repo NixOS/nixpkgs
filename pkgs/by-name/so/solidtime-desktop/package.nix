@@ -34,8 +34,8 @@ buildNpmPackage (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postInstall = ''
-    mkdir -p $out/share/icons/hicolor/1024x1024
-    cp -a build/icon.png $out/share/icons/hicolor/1024x1024/solidtime-desktop.png
+    mkdir -p $out/share/icons
+    cp -a build/icon.png $out/share/icons/solidtime-desktop.png
     cp -a . $out/share/solidtime-desktop
 
     makeWrapper ${lib.getExe electron} $out/bin/solidtime-desktop \
