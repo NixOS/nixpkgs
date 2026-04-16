@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fast-histogram";
   version = "0.14";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = "fast-histogram";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast 1D and 2D histogram functions in Python";
     homepage = "https://github.com/astrofrog/fast-histogram";
-    changelog = "https://github.com/astrofrog/fast-histogram/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/astrofrog/fast-histogram/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ifurther ];
   };
-}
+})
