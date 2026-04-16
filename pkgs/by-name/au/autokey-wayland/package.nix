@@ -9,6 +9,7 @@
   libappindicator-gtk3,
   libnotify,
   libsForQt5,
+  versionCheckHook,
   zenity,
   wmctrl,
   kdePackages,
@@ -22,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dlk3";
     repo = "autokey-wayland";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aS1X+YKV5VtuMUjkkQIwARPWxoagXHKUFaPuy3qq/fI=";
   };
 
@@ -79,7 +80,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
   '';
 
-  doCheck = false;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Desktop automation utility for Linux with Wayland support";
@@ -87,6 +89,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ enderbsd ];
     platforms = lib.platforms.linux;
-    mainProgram = "autokey-qt";
+    mainProgram = "autokey-headless";
   };
 })
