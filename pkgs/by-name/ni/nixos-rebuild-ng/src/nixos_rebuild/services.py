@@ -35,11 +35,7 @@ def reexec(
         return
 
     drv = None
-    # Parsing the args here but ignore ask_sudo_password since it is not
-    # needed and we would end up asking sudo password twice
-    if flake := Flake.from_arg(
-        args.flake, Remote.from_arg(args.target_host, ask_sudo_password=None)
-    ):
+    if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host)):
         drv = nix.build_flake(
             NIXOS_REBUILD_ATTR,
             flake,

@@ -6,7 +6,7 @@ from typing import Final, assert_never
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_SHELL_FILES
-from .elevate import NO_ELEVATOR, ElevateError, ElevatorKind
+from .elevate import NO_ELEVATOR, ElevatorKind
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -266,8 +266,8 @@ def parse_args(
         parser_warn("--use-remote-sudo is deprecated, use --elevate=sudo instead")
 
     # Map the elevate flags onto an Elevator. The password itself is
-    # attached later via Elevator.with_password() once the target host
-    # (used in the prompt) is known.
+    # attached later via Elevator.with_prompted_password() once the
+    # target host (used in the prompt) is known.
     if args.elevate is not None:
         args.elevator = ElevatorKind.from_name(args.elevate)
     elif args.sudo or args.use_remote_sudo or args.ask_sudo_password:
@@ -368,13 +368,12 @@ def execute(argv: list[str]) -> None:
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
-    target_host = Remote.from_arg(args.target_host, args.ask_elevate_password)
-    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
-    if target_host and target_host.sudo_password:
-        try:
-            args.elevator = args.elevator.with_password(target_host.sudo_password)
-        except ElevateError as ex:
-            sys.exit(f"error: {ex}")
+    target_host = Remote.from_arg(args.target_host)
+    build_host = Remote.from_arg(args.build_host, validate_opts=False)
+    args.elevator = args.elevator.with_prompted_password(
+        ask=args.ask_elevate_password,
+        host_label=target_host.host if target_host else "localhost",
+    )
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 

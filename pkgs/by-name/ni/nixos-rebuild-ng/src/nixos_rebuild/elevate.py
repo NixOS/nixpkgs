@@ -10,6 +10,7 @@ prefix and stdin.
 
 from __future__ import annotations
 
+import getpass
 import os
 import shlex
 from abc import ABC, abstractmethod
@@ -70,6 +71,17 @@ class Elevator(ABC):
         :class:`ElevateError` with a hint pointing at the alternative
         (e.g. a polkit rule).
         """
+
+    def with_prompted_password(self, *, ask: bool, host_label: str) -> Self:
+        """Prompt locally for a password and return a copy carrying it.
+
+        No-op when *ask* is false. May raise :class:`ElevateError` (e.g.
+        on :class:`NoElevator`).
+        """
+        if not ask:
+            return self
+        password = getpass.getpass(f"[{self.name}] password for {host_label}: ")
+        return self.with_password(password)
 
     def on_remote_failure(self) -> str | None:
         """Optional hint to print when a remote elevated command fails."""

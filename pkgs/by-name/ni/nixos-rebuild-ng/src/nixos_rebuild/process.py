@@ -1,5 +1,4 @@
 import atexit
-import getpass
 import logging
 import os
 import re
@@ -46,14 +45,12 @@ type EnvValue = str | Literal[_Env.PRESERVE_ENV]
 class Remote:
     host: str
     opts: list[str]
-    sudo_password: str | None
     store_type: str
 
     @classmethod
     def from_arg(
         cls,
         host: str | None,
-        ask_sudo_password: bool | None,
         validate_opts: bool = True,
     ) -> Self | None:
         if not host:
@@ -66,25 +63,21 @@ class Remote:
 
         opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
-            cls._validate_opts(opts, ask_sudo_password)
-        sudo_password = None
-        if ask_sudo_password:
-            sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
-        return cls(host, opts, sudo_password, store_type)
+            cls._validate_opts(opts)
+        return cls(host, opts, store_type)
 
     @staticmethod
-    def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
+    def _validate_opts(opts: list[str]) -> None:
         for o in opts:
             if o in ["-t", "-tt", "RequestTTY=yes", "RequestTTY=force"]:
                 logger.warning(
                     f"detected option '{o}' in NIX_SSHOPTS. SSH's TTY may "
                     "cause issues, it is recommended to remove this option"
                 )
-                if not ask_sudo_password:
-                    logger.warning(
-                        "if you want to prompt for sudo password use "
-                        "'--ask-sudo-password' option instead"
-                    )
+                logger.warning(
+                    "if you want to prompt for a password for remote "
+                    "elevation use '--ask-elevate-password' instead"
+                )
 
     def ssh_host(self) -> str:
         """Fix up host string for SSH.
