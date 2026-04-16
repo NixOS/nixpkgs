@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   openssl,
   setuptools,
   cryptography,
@@ -25,6 +26,21 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-QF511MVyjfddmkTd2H7RNJeoWs+e0me4i55YGP4t910=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-27459.patch";
+      url = "https://github.com/pyca/pyopenssl/commit/57f09bb4bb051d3bc2a1abd36e9525313d5cd408.patch";
+      excludes = [ "CHANGELOG.rst" ];
+      hash = "sha256-pj1T6E8+wbLGeu9BinX95XUayn1CAm31QlvrNocKdDc=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-27448.patch";
+      url = "https://github.com/pyca/pyopenssl/commit/d41a814759a9fb49584ca8ab3f7295de49a85aa0.patch";
+      excludes = [ "CHANGELOG.rst" ];
+      hash = "sha256-tpFgG92PxeAr2aN1NalqcV5CCPt8SJe68VacEXSFMUw=";
+    })
+  ];
 
   outputs = [
     "out"
