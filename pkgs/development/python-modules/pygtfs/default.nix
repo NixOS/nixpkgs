@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pygtfs";
-  version = "0.1.10";
+  version = "0.1.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bOG/bXz97eWM77AprQvEgtl9g2fQbbKcwniF1fAC0d0=";
+    hash = "sha256-NaSGjzBBFK3mqHibcKV2gQIQoWn+qZay7KJasjcwxW4=";
   };
 
   build-system = [
