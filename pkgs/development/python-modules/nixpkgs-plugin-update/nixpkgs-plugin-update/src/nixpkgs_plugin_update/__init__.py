@@ -24,7 +24,7 @@ from datetime import datetime, date
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
@@ -132,48 +132,23 @@ class Repo:
         return loaded["rev"], updated
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def resolve_tag(self, tag: str) -> tuple[str, datetime]:
+        return self.resolve_ref(f"{GIT_TAGS_PREFIX}{tag}")
+
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def resolve_ref(self, ref: str) -> tuple[str, datetime]:
+        loaded = self._prefetch(ref)
+        updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
+        return loaded["rev"], updated
+
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
-            # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
-            # an ancestor of the default branch.
-            cmd = ["git", "ls-remote", "--tags", "--refs", self.uri]
-            log.debug("Fetching tags with: %s", cmd)
-            output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=10)
-            lines = output.decode("utf-8").strip().split("\n")
-
-            if not lines or lines[0] == "":
-                log.debug("No tags found for %s", self.uri)
+            tags = self._get_branch_merged_tags()
+            latest_tag = select_latest_release_tag(tags)
+            if latest_tag is None:
+                log.debug("No usable branch-merged release tags found for %s", self.uri)
                 return None
-
-            tags = []
-            for line in lines:
-                if "\t" in line:
-                    tag_ref = line.split("\t")[1]
-                    if tag_ref.startswith(GIT_TAGS_PREFIX):
-                        tag_name = tag_ref[len(GIT_TAGS_PREFIX) :]
-                        tags.append(tag_name)
-
-            if not tags:
-                return None
-
-            valid_versions = []
-            invalid_tags = []
-
-            for tag in tags:
-                try:
-                    version = parse_version(tag)
-                    valid_versions.append((tag, version))
-                except InvalidVersion:
-                    invalid_tags.append(tag)
-
-            if valid_versions:
-                latest_tag = max(valid_versions, key=lambda x: x[1])[0]
-            elif invalid_tags:
-                latest_tag = max(invalid_tags)
-            else:
-                log.debug("No tags found for %s", self.uri)
-                return None
-
             log.debug("Found latest tag: %s", latest_tag)
             return latest_tag
         except subprocess.CalledProcessError as e:
@@ -182,6 +157,38 @@ class Repo:
         except Exception as e:
             log.warning("Unexpected error fetching tags for %s: %s", self.uri, e)
             return None
+
+    def _get_branch_merged_tags(self) -> list[str]:
+        with TemporaryDirectory(prefix="nixpkgs-plugin-update-") as git_dir:
+            init_cmd = ["git", "init", "--bare", git_dir]
+            log.debug("Initializing temporary git dir with: %s", init_cmd)
+            subprocess.check_output(init_cmd, stderr=subprocess.STDOUT, timeout=10)
+
+            fetch_cmd = [
+                "git",
+                f"--git-dir={git_dir}",
+                "fetch",
+                "--quiet",
+                "--filter=tree:0",
+                "--tags",
+                self.uri,
+                self.branch,
+            ]
+            log.debug("Fetching branch history and tags with: %s", fetch_cmd)
+            subprocess.check_output(fetch_cmd, stderr=subprocess.STDOUT, timeout=30)
+
+            merged_tags_cmd = [
+                "git",
+                f"--git-dir={git_dir}",
+                "tag",
+                "--merged",
+                "FETCH_HEAD",
+            ]
+            log.debug("Listing merged tags with: %s", merged_tags_cmd)
+            output = subprocess.check_output(
+                merged_tags_cmd, stderr=subprocess.STDOUT, timeout=10
+            )
+            return [line for line in output.decode("utf-8").splitlines() if line]
 
     def _prefetch(self, ref: str | None):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
@@ -261,147 +268,19 @@ class RepoGitHub(Repo):
             )
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
-
-    def _execute_graphql(self, query: str, variables: dict) -> dict:
-        graphql_url = "https://api.github.com/graphql"
-
-        payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
-
-        req = make_request(graphql_url, self.token)
-        req.add_header("Content-Type", "application/json")
-        req.data = payload
-
-        with urllib.request.urlopen(req, timeout=10) as response:
-            return json.load(response)
-
-    def _extract_commit_date(self, target: dict) -> datetime | None:
-        commit_date_str = None
-        if "committedDate" in target:
-            commit_date_str = target["committedDate"]
-        elif "target" in target and "committedDate" in target["target"]:
-            commit_date_str = target["target"]["committedDate"]
-
-        if commit_date_str:
-            return datetime.fromisoformat(commit_date_str.replace("Z", "+00:00"))
-        return None
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def resolve_ref(self, ref: str) -> tuple[str, datetime]:
+        if ref == self.branch:
+            return self.latest_commit()
+        self._check_ref_redirect(ref)
+        return super().resolve_ref(ref)
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
-    def get_latest_tag(self) -> str | None:
-        try:
-            if not self.token or self.token == "":
-                log.info(
-                    "No GitHub token available for %s/%s, using git ls-remote fallback",
-                    self.owner,
-                    self.repo,
-                )
-                return super().get_latest_tag()
-
-            # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
-            # an ancestor of the default branch.
-            query = """
-            query GetLatestVersionInfo($owner: String!, $name: String!) {
-              repository(owner: $owner, name: $name) {
-                refs(refPrefix: "refs/tags/", first: 5, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
-                  nodes {
-                    name
-                    target {
-                      ... on Commit {
-                        committedDate
-                      }
-                      ... on Tag {
-                        target {
-                          ... on Commit {
-                            committedDate
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            """
-
-            data = self._execute_graphql(
-                query, {"owner": self.owner, "name": self.repo}
-            )
-
-            if "errors" in data:
-                log.warning(
-                    "GraphQL errors for %s/%s: %s",
-                    self.owner,
-                    self.repo,
-                    data["errors"],
-                )
-                return None
-
-            if "data" not in data or not data["data"]:
-                log.warning(
-                    "No data in GraphQL response for %s/%s", self.owner, self.repo
-                )
-                return None
-
-            repo = data["data"]["repository"]
-            if not repo:
-                log.debug(
-                    "Repository %s/%s not found or inaccessible", self.owner, self.repo
-                )
-                return None
-
-            valid_versions = []
-            invalid_tags = []
-            for ref_node in repo["refs"]["nodes"]:
-                tag_name = ref_node["name"]
-                commit_date = self._extract_commit_date(ref_node["target"])
-                if not commit_date:
-                    continue
-
-                try:
-                    version = parse_version(tag_name)
-                    valid_versions.append((tag_name, version, commit_date))
-                except InvalidVersion:
-                    invalid_tags.append((tag_name, None, commit_date))
-
-            def get_version(tag_tuple):
-                _, version, _ = tag_tuple
-                return version
-
-            def get_date(tag_tuple):
-                _, _, date = tag_tuple
-                return date or datetime.min
-
-            def get_max_versions(versions, sort_key):
-                return max(versions, key=sort_key, default=(None, None, None))
-
-            max_valid_tag, _, max_valid_date = get_max_versions(
-                valid_versions, get_version
-            )
-            max_invalid_tag, _, max_invalid_date = get_max_versions(
-                invalid_tags, get_date
-            )
-            if max_valid_tag and max_invalid_tag:
-                return (
-                    max_invalid_tag
-                    if (max_invalid_date or datetime.min)
-                    > (max_valid_date or datetime.min)
-                    else max_valid_tag
-                )
-            elif max_valid_tag:
-                return max_valid_tag
-            elif max_invalid_tag:
-                return max_invalid_tag
-            else:
-                return None
-
-        except Exception as e:
-            log.warning(
-                "Error fetching version info for %s/%s: %s",
-                self.owner,
-                self.repo,
-                e,
-                exc_info=True,
-            )
-            return None
+    def _check_ref_redirect(self, ref: str) -> None:
+        ref_url = self.url(f"tree/{urllib.parse.quote(ref, safe='')}")
+        ref_req = make_request(ref_url, self.token)
+        with urllib.request.urlopen(ref_req, timeout=10) as req:
+            self._check_for_redirect(ref_url, req)
 
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
@@ -543,6 +422,46 @@ class Plugin:
         copy = self.__dict__.copy()
         del copy["date"]
         return copy
+def normalize_release_version(tag: str) -> str | None:
+    version = tag[1:] if tag.startswith(("v", "V")) else tag
+    if version and version[0].isdigit():
+        return version
+    return None
+
+
+def select_latest_release_tag(tags: list[str]) -> str | None:
+    release_tags = []
+    for tag in tags:
+        normalized = normalize_release_version(tag)
+        if normalized is None:
+            continue
+
+        try:
+            version = parse_version(normalized)
+        except InvalidVersion:
+            continue
+
+        release_tags.append((tag, version))
+
+    if not release_tags:
+        return None
+
+    return max(
+        release_tags,
+        key=lambda x: (x[1], x[0].count("."), len(x[0])),
+    )[0]
+
+
+def make_unstable_version(date: datetime, last_tag: str | None) -> str:
+    date_str = date.strftime("%Y-%m-%d")
+
+    tag_part = "0"
+    if last_tag:
+        normalized_tag = normalize_release_version(last_tag)
+        if normalized_tag is not None:
+            tag_part = normalized_tag
+
+    return f"{tag_part}-unstable-{date_str}"
 
 
 def load_plugins_from_csv(
