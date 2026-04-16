@@ -66,17 +66,20 @@ def function_docstrings(functions: list[ast.FunctionDef]) -> str | None:
 def machine_methods(
     class_name: str, class_definitions: list[ast.ClassDef]
 ) -> list[ast.FunctionDef]:
-    """Given a class name and a list of class definitions, returns the list of function definitions
-    for the class matching the given name.
+    """
+    Given a class name and a list of class definitions, returns the list of
+    function definitions for the class matching the given name.
     """
     machine_class = next(filter(lambda x: x.name == class_name, class_definitions))
     assert machine_class is not None
 
-    function_definitions = [
-        node for node in machine_class.body if isinstance(node, ast.FunctionDef)
-    ]
-    function_definitions.sort(key=lambda x: x.name)
-    return function_definitions
+    methods = [node for node in machine_class.body if isinstance(node, ast.FunctionDef)]
+    methods.sort(key=lambda x: x.name)
+
+    # Do not document internal functions prefixed with underscore
+    methods = [m for m in methods if not m.name.startswith("_")]
+
+    return methods
 
 
 def main() -> None:
