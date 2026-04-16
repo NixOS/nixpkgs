@@ -5,7 +5,7 @@
   nix-update-script,
   openssl,
   perl,
-  zig,
+  zig_0_15,
   pkg-config,
   stdenv,
   vimUtils,
@@ -59,7 +59,7 @@ let
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
 
-      ZIG = lib.getExe zig; # zlob requires zig
+      ZIG = lib.getExe zig_0_15; # zlob requires zig
     };
   };
 in
